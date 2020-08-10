@@ -63,7 +63,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9145c', $result['data'][1]['uuid']);
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9145d', $result['data'][2]['uuid']);
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9146d', $result['data'][3]['uuid']);
-        $this->assertEquals(9, $result['total']);
+        $this->assertEquals(10, $result['total']);
     }
 
     public function testGetFileListWithWorkflowButNoUserIdInRoute() {
@@ -77,7 +77,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals('3f20b5c5-0124-11ea-a8a0-22e8105c0778', $result['data'][0]['workflowInstanceId']);
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9145c', $result['data'][1]['uuid']);
         $this->assertEquals('entity1', $result['data'][1]['entity_name']);
-        $this->assertEquals(8, $result['total']);
+        $this->assertEquals(9, $result['total']);
     }
 
     public function testGetFileListWithWorkflowButNoUserIdInRoute2() {
@@ -151,7 +151,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals("Completed",$result['data'][1]['status']);
         $this->assertEquals("Completed",$result['data'][2]['status']);
         $this->assertEquals("Completed",$result['data'][3]['status']);
-        $this->assertEquals(6,$result['total']);
+        $this->assertEquals(7,$result['total']);
     }
 
     public function testGetFileListWithWorkflowStatusCheckNegative() {
@@ -302,7 +302,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -312,7 +312,7 @@ class FileServiceTest extends AbstractServiceTest
             $entityId = $sqlQuery2Result[0]['entity_id'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-            $this->assertEquals(10,$finalCount);
+            $this->assertEquals(11,$finalCount);
             $this->assertEquals(1,$entityId);
         }
             else{
@@ -333,7 +333,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId );
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -343,7 +343,7 @@ class FileServiceTest extends AbstractServiceTest
             $formId = $sqlQuery2Result[0]['form_id'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertEquals(1,$formId);
             }
             else{
@@ -364,7 +364,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -374,7 +374,7 @@ class FileServiceTest extends AbstractServiceTest
             $formId = $sqlQuery2Result[0]['form_id'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertEquals(null,$formId);
             }
             else{
@@ -395,7 +395,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'uuid' => '7369c4e9-90bf-41d7-b774-605469294aae');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -405,7 +405,7 @@ class FileServiceTest extends AbstractServiceTest
             $uuid = $sqlQuery2Result[0]['uuid'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertEquals('7369c4e9-90bf-41d7-b774-605469294aae',$uuid);
             }
             else{
@@ -426,7 +426,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -436,7 +436,7 @@ class FileServiceTest extends AbstractServiceTest
             $uuid = $sqlQuery2Result[0]['uuid'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertNotEquals('d13d0c68-98c9-11e9-adc5-308d99c9145b',$uuid);
             }
             else{
@@ -457,7 +457,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -467,7 +467,7 @@ class FileServiceTest extends AbstractServiceTest
             $uuid = $sqlQuery2Result[0]['uuid'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertNotEmpty($uuid);
             }
             else{
@@ -488,7 +488,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'app_id' => $appUuid, 'entity_name' => 'entity1');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -498,7 +498,7 @@ class FileServiceTest extends AbstractServiceTest
             $entityId = $sqlQuery2Result[0]['entity_id'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertEquals(1,$entityId);
             }
             else{
@@ -519,7 +519,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -529,7 +529,7 @@ class FileServiceTest extends AbstractServiceTest
             $entityId = $sqlQuery2Result[0]['entity_id'];
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11  ,$finalCount);
                 $this->assertEquals(1,$entityId);
             }
             else{
@@ -550,7 +550,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'field3' => 3, 'field4' => 'something' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -565,7 +565,7 @@ class FileServiceTest extends AbstractServiceTest
             $this->assertEquals(2,$fieldValues[0]); //Fields that exist
             $this->assertEquals(1,$fieldValues[1]);
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertEquals(1,$entityId);
             }
             else{
@@ -586,7 +586,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'form_id' => $formId,'workflowInstanceId' => 'something' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -600,7 +600,7 @@ class FileServiceTest extends AbstractServiceTest
             $this->assertArrayNotHasKey('form_id',$data); //Fields that exist
             $this->assertArrayNotHasKey('workflowInstanceId',$data);
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertEquals(1,$entityId);
             }
             else{
@@ -621,7 +621,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'field3' => 3, 'non_persistent_field' => 'something' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
@@ -701,7 +701,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         if(isset($queryResult[0]['count'])) {
             $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(9,$initialCount);
+            $this->assertEquals(10,$initialCount);
             $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
             $result = $this->fileService->updateFile($data, $fileId);
             $this->assertEquals(1,$result);
@@ -710,7 +710,7 @@ class FileServiceTest extends AbstractServiceTest
             $sqlQuery2Result = $this->runQuery($sqlQuery2);
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(10,$finalCount);
+                $this->assertEquals(11,$finalCount);
                 $this->assertEquals(1, $sqlQuery2Result[0]['form_id']);
             }
             else{
@@ -824,6 +824,71 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals($sqlFieldQueryResult[0]['field_value'],'200000');
         $this->assertEquals($sqlFieldQueryResult[0]['field_value_text'],'200000');
         $this->assertEquals($sqlIndexedQueryResult,array());
+    }
+
+    public function testRecursiveLogicOnCreate() {
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $entityId = $dataset['ox_app_entity'][3]['id'];
+        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
+        $queryResult = $this->runQuery($sqlQuery);
+        if(isset($queryResult[0]['count'])) {
+            $initialCount = $queryResult[0]['count'];
+            $this->assertEquals(10,$initialCount);
+            $data = array('datagrid' => array(0 => array('firstname' => 'Sagar','lastname' => 'lastname','padi' =>1700), 1 => array('firstname' => 'mark','lastname' => 'hamil', 'padi' => 322)), 'entity_id' => $entityId, 'app_id' => $appUuid);
+            $result = $this->fileService->createFile($data);
+            $this->assertEquals(1,$result);
+            $sqlQuery2 = 'SELECT entity_id FROM ox_file order by id DESC LIMIT 1';
+            $sqlQuery3 = 'SELECT field_id,field_value,sequence from ox_file_attribute where field_id in (10,11,12,13) order by id DESC LIMIT 7';
+            $newQueryResult = $this->runQuery($sqlQuery);
+            $sqlQuery2Result = $this->runQuery($sqlQuery2);
+            $sqlQuery3Result = $this->runQuery($sqlQuery3);
+            $entityId = $sqlQuery2Result[0]['entity_id'];
+            $finalCount = $newQueryResult[0]['count'];
+            $this->assertEquals('hamil',$sqlQuery3Result[0]['field_value']); //Fields that exist
+            $this->assertEquals(1,$sqlQuery3Result[0]['sequence']);
+            $this->assertEquals('lastname',$sqlQuery3Result[3]['field_value']);
+            $this->assertEquals(0,$sqlQuery3Result[3]['sequence']);
+            $this->assertEquals('[{"firstname":"Sagar","lastname":"lastname","padi":1700},{"firstname":"mark","lastname":"hamil","padi":322}]',$sqlQuery3Result[6]['field_value']);
+            $this->assertEquals(null,$sqlQuery3Result[6]['sequence']);
+            if(isset($newQueryResult[0]['count'])) {
+                $this->assertEquals(11,$finalCount);
+                $this->assertEquals(4,$entityId);
+            }
+            else{
+                $this->fail("Final count has not been generated");
+            }
+        }
+        else{
+            $this->fail("Initial count has not been generated");
+        }
+    }
+
+    public function testRecursiveLogicOnUpdate() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][9]['uuid'];
+        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
+        $queryResult = $this->runQuery($sqlQuery);
+        if(isset($queryResult[0]['count'])) {
+            $initialCount = $queryResult[0]['count'];
+            $this->assertEquals(10,$initialCount);
+            $data = array('datagrid' => array(0 => array('firstname' => 'manduk','lastname' => 'lastname','padi' =>1700), 1 => array('firstname' => 'marmade','lastname' => 'hamil', 'padi' => 322)));
+            $result = $this->fileService->updateFile($data,$fileId);
+            $dataSqlQuery = "SELECT data FROM ox_file where uuid ='".$fileId."'";
+            $queryResult = $this->runQuery($dataSqlQuery);
+            $this->assertEquals('{"datagrid":[{"padi":1700,"firstname":"manduk","lastname":"lastname"},{"padi":322,"firstname":"marmade","lastname":"hamil"}]}',$queryResult[0]['data']);
+            $newQueryResult = $this->runQuery($sqlQuery);
+            $finalCount = $newQueryResult[0]['count'];
+            if(isset($newQueryResult[0]['count'])) {
+                $this->assertEquals(10,$finalCount);
+            }
+            else{
+                $this->fail("Final count has not been generated");
+            }
+        }
+        else{
+            $this->fail("Initial count has not been generated");
+        }
     }
 
 }

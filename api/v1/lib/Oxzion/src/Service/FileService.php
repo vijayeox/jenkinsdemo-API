@@ -250,7 +250,6 @@ class FileService extends AbstractService
 
                 $queryIndexed = "delete from ox_indexed_file_attribute where file_id = :fileId";
                 $resultIndexed = $this->executeQueryWithBindParameters($queryIndexed, $queryWhere);
-
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields['validFields']);
                 $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
                 if(count($validFields['indexedFields']) > 0 ){
@@ -412,7 +411,6 @@ class FileService extends AbstractService
             inner join ox_app_entity on ox_app_entity.id = ox_field.entity_id
             left join ox_field childFieldsTable on ox_field.id = childFieldsTable.parent_id
             where ox_app_entity.id=? and ox_field.parent_id is NULL group by ox_field.id;";
-
             $where = array($entityId);
             $this->logger->debug("Executing query - $query with  params" . json_encode($where));
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
@@ -421,7 +419,7 @@ class FileService extends AbstractService
             $this->logger->debug("No Entity ID");
             throw new ServiceException("Invalid Entity", "entity.invalid");
         }
-        $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=?";
+        $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=? and sequence is null";
         $whereParams = array($fileId);
         $this->logger->debug("Executing query - $sqlQuery with  params" . json_encode($whereParams));
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery, $whereParams)->toArray();
@@ -523,7 +521,7 @@ class FileService extends AbstractService
         return array('validFields' => $keyValueFields,'indexedFields' => $indexedFields);
     }
 
-    private function generateFieldPayload($dataType,$field,$fieldData,&$fieldvalue,$entityId,$fileId,$fileArray){
+    private function generateFieldPayload($dataType,$field,$fieldData,&$fieldvalue,$entityId,$fileId,$fileArray,&$rowNumber =0){
         switch ($dataType) {
             case 'text':
                 $fieldData['field_value_type'] = 'TEXT';
@@ -627,7 +625,7 @@ class FileService extends AbstractService
             if(is_string($fieldvalue)){
                 $fieldvalue = json_decode($fieldvalue,true);
             }
-            $fieldData['childFields'] = $this->getChildFieldsData($field,$fieldvalue,$field['child_fields'],$entityId,$fileId,$fileArray);
+            $fieldData['childFields'] = $this->getChildFieldsData($field,$fieldvalue,$field['child_fields'],$entityId,$fileId,$fileArray,$rowNumber);
             $fieldData['data'] = $fieldvalue;
             if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
                 foreach ($fieldData['childFields']['childFields'] as $childfield) {
@@ -641,7 +639,7 @@ class FileService extends AbstractService
         return $fieldData;
     }
 
-    public function getChildFieldsData($parentField,&$fieldvalue,$fieldsString,$entityId,$fileId,$fileArray){
+    public function getChildFieldsData($parentField,&$fieldvalue,$fieldsString,$entityId,$fileId,$fileArray,&$rowNumber){
         $query = "SELECT ox_field.*,group_concat(childFieldsTable.name order by childFieldsTable.name separator ',') child_fields from ox_field
             inner join ox_app_entity on ox_app_entity.id = ox_field.entity_id
             left join ox_field childFieldsTable on childFieldsTable.parent_id=ox_field.id
@@ -656,6 +654,7 @@ class FileService extends AbstractService
                 $i = 0;
                 foreach ($fieldvalue as $k => $value) {
                     $childFieldValues = array();
+                    $key = false;
                     foreach ($childFields as $field) {
                         if (($key = array_search($field['id'], array_column($fileArray, 'field_id'))) > -1) {
                             $childFieldsArray[$i]['id'] = $fileArray[$key]['id'];
@@ -666,13 +665,13 @@ class FileService extends AbstractService
                         $childFieldsArray[$i]['field_id'] = $field['id'];
                         $val = isset($value[$field['name']]) ? (is_array($value[$field['name']]) ? json_encode($value[$field['name']]) : $value[$field['name']]) : null;
                         $childFieldsArray[$i]['field_value']=$val;
-                        $childFieldsArray[$i]['sequence'] = $i;
+                        $childFieldsArray[$i]['sequence'] = $rowNumber;
                         $childFieldsArray[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                         $childFieldsArray[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
                         $childFieldsArray[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
                         $childFieldsArray[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
                         $childFieldsArray[$i]['date_modified'] = date('Y-m-d H:i:s');
-                        $childFieldsArray[$i] = array_merge($childFieldsArray[$i],$this->generateFieldPayload($field['data_type'],$field,$childFieldsArray[$i],$val,$entityId,$fileId,$fileArray));
+                        $childFieldsArray[$i] = array_merge($childFieldsArray[$i],$this->generateFieldPayload($field['data_type'],$field,$childFieldsArray[$i],$val,$entityId,$fileId,$fileArray,$rowNumber));
                         if(count($childFieldsArray[$i]['childFields']) > 0){
                             foreach ($childFieldsArray[$i]['childFields'] as $childField) {
                                 array_push($grandChildren, $childField);
@@ -688,6 +687,7 @@ class FileService extends AbstractService
                         $i++;
                     }
                     $fieldvalue[$k] = $childFieldValues;
+                    $rowNumber ++;
                 }
             }
             if(isset($grandChildren) && count($grandChildren)>0){
