@@ -86,7 +86,7 @@ class ImportService extends AbstractService
                 $body = array();
                 foreach ($header as $col) {
                     if (strtoupper($data[$idx]) == 'NULL') {
-                        $data[$idx] = '';
+                        $data[$idx] = null;
                     }
                     if (isset($type[$col])) {
                         switch ($type[$col]) {
