@@ -1,5 +1,5 @@
-name: 'Dive Store'
-description: 'View Dive Store Policy'
+name: 'Individual Professional Liability'
+description: 'View Individual Professional Liability Policy'
 content:
         -
             type: RenderButtons
@@ -47,6 +47,7 @@ content:
                                                 <div class="form-group">
                                                     <label>Policy Status </label>
                                                     <p> {data.policyStatus}</p>
+                                                                    <p> {moment(data.start_date).format("MM-DD-YYYY")} - {moment(data.end_date).format("MM-DD-YYYY")}</p>
                                                 </div></div></div><div class="row">
                                                 <div class="col">
                                                     <div class="card">
@@ -63,23 +64,19 @@ content:
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Coverage Premium</label>
-                                                                    <p class="uppercase"> {data.careerCoveragePrice}</p>
+                                                                    <p class="uppercase"> ${data.careerCoveragePrice}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Cylinder Premium</label>
-                                                                    <p class="uppercase"> {data.cylinderPrice}</p>
+                                                                    <p class="uppercase"> ${data.cylinderPrice}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Equipment Premium</label>
-                                                                    <p class="uppercase"> {data.equipmentPrice}</p>
+                                                                    <p class="uppercase"> ${data.equipmentPrice}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Excess Liability Premium</label>
-                                                                    <p class="uppercase"> {data.excessLiabilityPrice}</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Policy Period</label>
-                                                                    <p> {moment(data.start_date).format("MM-DD-YYYY")} - {moment(data.end_date).format("MM-DD-YYYY")}</p>
+                                                                    <p class="uppercase"> ${data.excessLiabilityPrice}</p>
                                                                 </div>
                                                         </div>
                                                     </div>
