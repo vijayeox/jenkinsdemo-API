@@ -160,6 +160,15 @@ public function execute(array $data,Persistence $persistenceService)
             }else{
                 $policy['update_date'] = $data['update_date'] = $update_date;
             }
+            if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                foreach ($data['additionalInsured'] as $key => $value) {
+                    if(!isset($value['effectiveDate'])){
+                        $data['additionalInsured'][$key]['effectiveDate'] = $data['start_date'];
+                        $data['additionalInsured'][$key]['start_date'] = date_format(date_create($data['start_date']),'Y-m-d');
+                    }
+                }
+                $data['previous_additionalInsured'] = $data['additionalInsured'];
+            }
             $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
             $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
             $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
@@ -173,6 +182,17 @@ public function execute(array $data,Persistence $persistenceService)
             $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
             $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
             $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
+            if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
+                $policy['previous_combinedSingleLimitDS'] = 1000000;
+            } else if($data['excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
+                $policy['previous_combinedSingleLimitDS'] = 2000000;
+            } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
+                $policy['previous_combinedSingleLimitDS'] = 3000000;
+            } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
+                $policy['previous_combinedSingleLimitDS'] = 4000000;
+            } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
+                $policy['previous_combinedSingleLimitDS'] = 9000000;
+            }
             $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
             $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
             $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];

@@ -118,7 +118,11 @@ class RegenerateDocuments extends PolicyDocument
                 }
 
             }
-
+            if($param == 'propertyDS'){
+                 $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
+                 $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                 $this->generateDiveStorePropertyDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
+            }
         }
     }
 
@@ -130,4 +134,6 @@ class RegenerateDocuments extends PolicyDocument
         $temp = $fileData;
         $this->processData($temp);
     }
+
+ 
 }

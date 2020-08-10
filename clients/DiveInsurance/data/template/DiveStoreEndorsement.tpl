@@ -72,8 +72,11 @@
             <p>+NON-Owned Auto Liability now applies as of the Effective date on this Endorsement ($1,000,000 Limit)</p>
           {/if}
 
-          {if isset($increased_liability_limit) && $increased_liability_limit == true}
-            <p>+Liability Limits have been increased by {$increased_liability_limit} as of the Effective date of this Endorsement</p>
+          {if isset($increased_liability_limit) && $liabilityChanges == true}
+            <p>+Liability Limits have been increased by ${$increased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
+          {/if}
+          {if isset($decreased_liability_limit) && $liabilityChanges == true}
+            <p>+Liability Limits have been decreased by ${$decreased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
           {/if}
           {if isset($increased_travelEnO)}
             <p>Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
@@ -98,6 +101,84 @@
       </div>
       {/if}
 
+
+     <!--  Please do not remove 
+     {if $newAddInsured != "" || $removedAddInsured != ""}
+      <div class = "box">
+        <center><b><u>***Additional Insured Schedule***</u></b></center>
+        {if $newAddInsured != ""}
+          {assign var=list value=$newAddInsured|json_decode:true}
+          {foreach from=$list item=$additional}
+            {if isset($additional.name) && ($additional.name != '')}
+            <p class = "ai_list" style = "font-size:15px;">
+              <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
+              {if $additional.businessRelation == "confinedWaterTrainingLocation"}
+                Confined Water Training Location 
+              {elseif $additional.businessRelation == "openWaterTrainingLocation"} 
+                Open Water Training Location 
+              {elseif $additional.businessRelation == "diveBoatOwner"} 
+                Dive Boat Owner
+              {elseif $additional.businessRelation == "mortgageeLossPayee"} 
+                Mortgagee / Loss Payee
+              {elseif $additional.businessRelation == "landlord"}
+                Landlord
+              {elseif $additional.businessRelation == "governmentEntityPermitRequirement"} 
+                  Government Entity - Permit Requirement
+              {elseif $additional.businessRelation == "diveStore"} 
+                 Dive Store
+              {elseif $additional.businessRelation == "trainingAgency"} 
+                 Training Agency
+              {elseif $additional.businessRelation == "cruiseLine"} 
+                 Cruise Line
+              {elseif $additional.businessRelation == "landOwner"} 
+                 Land Owner
+              {elseif $additional.businessRelation == "bookingAgent"} 
+                 Booking Agent
+              {elseif $additional.businessRelation == "other"}                     {$additional.businessRelationOther}
+              {/if})
+              {/if} </span>:  Added as of {$additional.start_date|date_format:"%m/%d/%Y"}
+            </p>
+            {/if}
+          {/foreach}
+        {/if}
+        {if $removedAddInsured != ""}
+          {assign var=list1 value=$removedAddInsured|json_decode:true}
+          {foreach from=$list1 item=$additional}
+            {if isset($additional.name) && ($additional.name != '')}
+            <p class = "ai_list" style = "font-size:15px;">
+              <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
+              {if $additional.businessRelation == "confinedWaterTrainingLocation"}
+                Confined Water Training Location 
+              {elseif $additional.businessRelation == "openWaterTrainingLocation"} 
+                Open Water Training Location 
+              {elseif $additional.businessRelation == "diveBoatOwner"} 
+                Dive Boat Owner
+              {elseif $additional.businessRelation == "mortgageeLossPayee"} 
+                Mortgagee / Loss Payee
+              {elseif $additional.businessRelation == "landlord"}
+                Landlord
+              {elseif $additional.businessRelation == "governmentEntityPermitRequirement"} 
+                  Government Entity - Permit Requirement
+              {elseif $additional.businessRelation == "diveStore"} 
+                 Dive Store
+              {elseif $additional.businessRelation == "trainingAgency"} 
+                 Training Agency
+              {elseif $additional.businessRelation == "cruiseLine"} 
+                 Cruise Line
+              {elseif $additional.businessRelation == "landOwner"} 
+                 Land Owner
+              {elseif $additional.businessRelation == "bookingAgent"} 
+                 Booking Agent
+              {elseif $additional.businessRelation == "other"}                     {$additional.businessRelationOther}
+              {/if})
+              {/if} </span>: Removed as of {$update_date|date_format:"%m/%d/%Y"}.
+            </p>
+            {/if}
+          {/foreach}
+        {/if}
+      </div>
+      {/if}
+ -->
       <div class = "box">
 
     <b><p>Store/Location Number: {$business_padi}</p></b>

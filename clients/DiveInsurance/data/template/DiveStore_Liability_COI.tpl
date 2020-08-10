@@ -142,7 +142,7 @@
 		{/if}
 
 		<hr class="addIn"></hr>
-		<b><center><p class="addIn">{if !empty($additionalInsured)}
+		<b><center><p class="addIn">{if $additional_insured_select == "addAdditionalInsureds"}
 			Certificate has Additional Insureds (See Attached)
 			{else}
 			Certificate Does Not Have Additional Insured.
