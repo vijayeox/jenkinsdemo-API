@@ -364,7 +364,16 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 $tempSkip = $skip;
             }
             if (isset($value[$childKey]) && !empty($value[$childKey])) {
-                array_push($parsedData, [$value[$childKey] . ""]);
+                if (isset($fieldConfig['returnValue'])) {
+                    if (isset($fieldConfig['returnValue'][$value[$childKey]])) {
+                        array_push(
+                            $parsedData,
+                            [$fieldConfig['returnValue'][$value[$childKey]] . ""]
+                        );
+                    }
+                } else {
+                    array_push($parsedData, [$value[$childKey] . ""]);
+                }
             } else {
                 array_push($parsedData, []);
             }

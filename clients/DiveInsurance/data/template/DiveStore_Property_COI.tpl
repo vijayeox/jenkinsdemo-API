@@ -11,7 +11,7 @@
       <hr class = "s_hrtag"></hr>
 		<div class="section_col">
 			<div class ="sec1">
-				<p class ="title">Propery Coverages</p>
+				<p class ="title">Property Coverages</p>
 			</div>
 			<div class ="sec2">
 				<p class ="title">Limits</p>
@@ -80,11 +80,9 @@ County Texas locations. Mechanical breakdown is $2500. All other perils is {if $
                            $2,500
                         {elseif $propertyDeductibles == "propertyDeductibles5000"}
                            $5,000
-                        {else}
-                           $0.00
                         {/if}.</p></div>
 		<hr></hr>
-		<b><center><p class="addIn">{if !empty($lossPayees)}
+		<b><center><p class="addIn">{if $lossPayeesSelect == "yes"}
 			Certificate has Loss Payees (See Attached)
 			{else}
 			Certificate Does Not Have Loss Payees.
@@ -293,7 +291,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
 				<center><p class = "notice">both of
-					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">

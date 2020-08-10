@@ -104,6 +104,59 @@
 		"inputType": "number",
 		"lockKey": true
 	}, {
+		"label": "Effective Date",
+		"displayInTimezone": "utc",
+		"allowInput": false,
+		"format": "MM-dd-yyyy",
+		"tableView": false,
+		"enableMinDateInput": false,
+		"datePicker": {
+			"disableWeekends": false,
+			"disableWeekdays": false,
+			"datepickerMode": "day"
+		},
+		"enableMaxDateInput": false,
+		"enableTime": false,
+		"timePicker": {
+			"showMeridian": false
+		},
+		"clearOnHide": false,
+		"allowCalculateOverride": true,
+		"validate": {
+			"required": true,
+			"custom": "if (data.cancellationDate){ \n  valid = ((moment(data.cancellationDate).diff(moment(data['start_date'])) >=0) && (moment(data.cancellationDate).diff(moment(data.end_date)) <=0)) ? true : \"Effective date should not be between policy period\";\n}"
+		},
+		"key": "cancellationDate",
+		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse {\n  show = false;\n}",
+		"type": "datetime",
+		"input": true,
+		"widget": {
+			"type": "calendar",
+			"displayInTimezone": "utc",
+			"language": "en",
+			"useLocaleSettings": false,
+			"allowInput": false,
+			"mode": "single",
+			"enableTime": false,
+			"noCalendar": false,
+			"format": "MM-dd-yyyy",
+			"hourIncrement": 1,
+			"minuteIncrement": 1,
+			"time_24hr": true,
+			"minDate": null,
+			"disableWeekends": false,
+			"disableWeekdays": false,
+			"maxDate": null
+		},
+		"hideOnChildrenHidden": false
+	}, {
+		"label": "CancelDate",
+		"calculateValue": "value = data['cancellationDate'] ? moment(data['cancellationDate']).format(\"YYYY-MM-DD\") : moment().format(\"YYYY-MM-DD\");",
+		"key": "cancelDate",
+		"type": "hidden",
+		"input": true,
+		"tableView": false
+	}, {
 		"label": "Cancellation Status:",
 		"optionsLabelPosition": "right",
 		"inline": false,
@@ -182,41 +235,6 @@
 		"input": true,
 		"tableView": false
 	}, {
-		"type": "panel",
-		"title": "Cancel Confirmation",
-		"components": [{
-			"key": "page7Content2",
-			"label": "Content",
-			"input": false,
-			"attrs": [{
-				"value": "",
-				"attr": ""
-			}],
-			"content": "This is not a binder of insurance coverage, and does not bind the insurer or Thomas Wilson, a division of Insurance Service Company, until approved by the insurer and a premium is paid by the applicant and all required documents are received. We (I) acknowledge that this policy does not cover in water accidents and that we (I) have or require Professional Liability in place for in water accidents. No coverage is provided under this policy for Liquor Liability. It is your duty to correct any wrong information and to complete any omitted information on this application. Concealment, misrepresenting, or stating falsely on this application may result in your policy being voided or rescinded at any time, even after a loss",
-			"type": "htmlelement",
-			"hideLabel": true,
-			"tableView": false
-		}, {
-			"label": "I have read and agree to Terms of Service, Cancellation Policy and Privacy Policy.",
-			"tableView": true,
-			"defaultValue": false,
-			"validate": {
-				"required": true,
-				"customMessage": "Confirmation Required"
-			},
-			"key": "userAgreement",
-			"type": "checkbox",
-			"input": true,
-			"dataGridLabel": false
-		}],
-		"input": false,
-		"key": "cancelConfirmation",
-		"theme": "primary",
-		"tableView": false,
-		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_MY_POLICY_READ']? true : false;\n}\nelse{\n  show = false;\n}",
-		"lockKey": true,
-		"label": "Panel"
-	}, {
 		"label": "Policy Status",
 		"calculateValue": "if(data.privileges && data.privileges['MANAGE_MY_POLICY_READ']){\n  value = 'Cancellation Approval Pending';\n}",
 		"key": "policyStatus",
@@ -231,7 +249,7 @@
 		"type": "button"
 	}],
 	"revisions": "original",
-	"_vid": 112,
+	"_vid": 127,
 	"title": "Cancel Policy Generic",
 	"display": "form",
 	"access": [{
@@ -245,7 +263,7 @@
 	"path": "cancelpolicygeneric",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-08T05:30:33.387Z",
-	"modified": "2020-06-17T10:26:59.359Z",
+	"modified": "2020-08-07T15:07:09.843Z",
 	"machineName": "testdivehub:cancelPolicyGeneric",
 	"controller": ""
 }

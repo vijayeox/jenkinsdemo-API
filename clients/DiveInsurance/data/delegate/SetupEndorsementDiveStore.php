@@ -147,6 +147,7 @@ public function execute(array $data,Persistence $persistenceService)
         $endorsementLiabilityCoverageOption = array();
         $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
         $data['upgradeStatus'] = true;
+        $data['entity_name'] = $data['product'];
        if($data['initiatedByUser'] == false){
             $endorsementCoverage = array();
             $endorsementGroupCoverage = array();
@@ -209,6 +210,9 @@ public function execute(array $data,Persistence $persistenceService)
                 }
             }
             if(isset($groupExcessLiability)){
+                if(is_array($groupExcessLiability)){
+                    $groupExcessLiability = '';
+                }
                 $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$groupExcessLiability."' AND start_date <= '".$policy['update_date']."' AND end_date >= '".$policy['update_date']."'";
                     $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Boat".$selectCoverage);
                     $resultCoverage = $persistenceService->selectQuery($selectCoverage);

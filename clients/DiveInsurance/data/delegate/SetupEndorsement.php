@@ -61,7 +61,12 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             if(isset($policy['previous_careerCoverage'])){
                 $endorsementCoverages = array();
-                $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['careerCoverage']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                if(isset($privileges['MANAGE_MY_POLICY_READ']) && $privileges['MANAGE_MY_POLICY_READ'] == true && isset($policy['previous_careerCoverage'])){
+                    $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['careerCoverage']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                }else{     
+                    $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND coverage_category='INSURED_STATUS' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+                }
+                
                 $this->logger->info("Executing Endorsement Rate Card Query".$select);
                 $result = $persistenceService->selectQuery($select);
                 while ($result->next()) {
@@ -119,7 +124,7 @@ class SetupEndorsement extends AbstractAppDelegate
                     $phWhereClause = " and CAST(rc.previous_key as UNSIGNED)>= CAST(pkc.previous_key as UNSIGNED)";
                     $selectExcessLiability = "select rc.* from premium_rate_card rc $fromClause  WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' $phWhereClause order by CAST(rc.previous_key as UNSIGNED) ASC";
                 } else {
-                    $selectExcessLiability = "select rc.* from premium_rate_card rc premium_rate_card  WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' order by CAST(rc.previous_key as UNSIGNED) ASC";
+                    $selectExcessLiability = "select rc.* from premium_rate_card rc WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' order by CAST(rc.previous_key as UNSIGNED) ASC";
                 }
 
                 $this->logger->info("Executing Endorsement Rate Card ExcessLiability Query ".$selectExcessLiability);
@@ -305,6 +310,16 @@ class SetupEndorsement extends AbstractAppDelegate
                 unset($rate);
             }
             $data['endorsementExcessLiability'] = $endorsementExcessLiability;
+
+            $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND coverage_category='INSURED_STATUS' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+            $this->logger->info("Executing Endorsement Rate Card Query".$select);
+            $result = $persistenceService->selectQuery($select);
+            while ($result->next()) {
+                $rate = $result->current();
+                $endorsementCoverages[$rate['key']] = $rate['coverage'];
+                unset($rate);
+            }
+            $data['endorsementCoverage'] = $endorsementCoverages;
         }
         unset($privileges);
         $this->logger->info("SETUP ENDOR".print_r($data,true));

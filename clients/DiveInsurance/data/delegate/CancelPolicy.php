@@ -41,6 +41,9 @@ class CancelPolicy extends PolicyDocument
     public function execute(array $data,Persistence $persistenceService) 
     {
         $this->logger->info("Executing Cancel Policy with data- ".json_encode($data));
+        if (isset($data['cancellationDate'])) {
+            $data['cancellationDate'] ="";
+        }
         $options = array();
         foreach($data as $key => $row){
             if(is_array($row)){
@@ -52,17 +55,16 @@ class CancelPolicy extends PolicyDocument
         $data['reinstateDocuments'] = $data['documents'];
         $data['reasonforRejection'] = isset($data['reasonforRejection'])?$data['reasonforRejection']:"Not Specified";
         $Canceldate = isset($Canceldate) ? $Canceldate : date_create();
-        $data['CancelDate'] = isset($data['CancelDate']) ? $data['CancelDate']: $Canceldate->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";
         $data['confirmReinstatePolicy'] = '';
         if($data['reasonforCsrCancellation'] == 'nonPaymentOfPremium'){
             $this->logger->info("Processing nonPaymentOfPremium");
-            $temp = $Canceldate;
+            $temp = date_create();
             $data['ReinstatePolicyPeriod'] = $temp->add(new DateInterval("P10D"))->format("Y-m-d");
         }
         else if($data['reasonforCsrCancellation'] == 'padiMembershipNotCurrent'){
             $this->logger->info("Processing padiMembershipNotCurrent");
-            $temp = $Canceldate;
+            $temp = date_create();
             $data['ReinstatePolicyPeriod'] = $temp->add(new DateInterval("P45D"))->format("Y-m-d");
         }
         if(isset($data['state'])){

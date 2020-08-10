@@ -30,6 +30,14 @@ content:
                             type: DocumentViewer
                             url: 'file/{{uuid}}/document'
                 -
+                    name: Endorsement
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'            
+                -
                     name: 'Upgrade To IPL'
                     rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
                     details:

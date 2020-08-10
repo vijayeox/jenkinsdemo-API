@@ -19,7 +19,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','initial_combinedSingleLimit','initial_annualAggregate','state_in_short','padi','update_date','group_carrier','dba'];
+     var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','city','state','country','zip','group_certificate_no','business_padi','end_date','group_policy_id','address1','address2','initial_combinedSingleLimit','initial_annualAggregate','state_in_short','padi','update_date','group_carrier','dba','business_name'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -83,7 +83,7 @@
       <div class ="content1">
           <b class = "grp_caption">Agent information</b>
           <div class = "grp_caption1">
-            <p class ="grp_info1" id="nameVal"></p>
+            <p class ="grp_info3" id="nameVal"></p>
             <p class ="grp_info2" id ="addressLineVal"></p>
 						<p class ="grp_info2" id = "addressLine2Val"></p>
             <p class ="grp_info"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
@@ -120,6 +120,7 @@
       </div>
     </div>
     <hr class="grp_hr_value"></hr>
+    <div>&nbsp</div>
       <div class="gi_type">
         <hr class="ghr_value"></hr>
           <div class="gi_type1">

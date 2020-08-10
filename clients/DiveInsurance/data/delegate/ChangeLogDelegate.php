@@ -16,7 +16,7 @@ class ChangeLogDelegate extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
         $rateArray = array();
-        if(isset($data['activityInstanceId'])){
+        if(isset($data['activityInstanceId']) && $data['activityInstanceId'] != "{{activityInstanceId}}"){
             $fileData = $this->getFileDataByActivityInstanceId($data['activityInstanceId']);
             $product = json_decode($fileData['data'],true);
             $data['product'] = $product['product'];
