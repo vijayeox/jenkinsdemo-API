@@ -37,7 +37,7 @@ class Visualization extends Entity
             return;
         else
         {
-            $errors = array('data' => 'Type must be Aggregate, Bar, Line or Pie');
+            $errors = array('data' => 'Type must be chart, inline, table or html');
             $validationException = new ValidationException();
             $validationException->setErrors($errors);
             throw $validationException;
