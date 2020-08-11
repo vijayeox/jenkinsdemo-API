@@ -1701,6 +1701,49 @@ class FileService extends AbstractService
         }
         return $return;
     }
+    public function reIndexFile($params){
+        $whereQuery = array();
+        if(isset($params['entity_id'])){
+            $entityId = isset($params['entity_id']) ? $params['entity_id'] : null;
+        }
+        if (!isset($entityId) && isset($params['entity_name'])) {
+            $entitySelect = "select id from ox_app_entity where name = :entityName";
+            $entityParams = array('entityName' => $params['entity_name']);
+            $result = $this->executeQuerywithBindParameters($entitySelect, $entityParams)->toArray();
+            if (count($result) > 0) {
+                $entityId = $result[0]['id'];
+            }
+        }
+        if(isset($entityId)){
+            $whereQuery[] = " entity_id=:entityId ";
+            $queryParams['entityId'] = $entityId;
+        }
+        // print_r($whereQuery);
+        $select = "SELECT ox_file.* from ox_file where ".implode(" and ", $whereQuery);
+        // print_r($select);exit;
+        $files = $this->executeQuerywithBindParameters($select,$queryParams)->toArray();
+        foreach ($files as $k => $file) {
+            $fileData = $this->cleanData(json_decode($file['data'],true));
+            $validFields = $this->checkFields($file['entity_id'], $fileData, $file['id']);
+            unset($validFields['validFields']['data']);
+            if ($validFields && !empty($validFields)) {
+                $query = "delete from ox_file_attribute where file_id = :fileId";
+                $queryWhere = array("fileId" => $file['id']);
+                $result = $this->executeQueryWithBindParameters($query, $queryWhere);
+
+                $queryIndexed = "delete from ox_indexed_file_attribute where file_id = :fileId";
+                $resultIndexed = $this->executeQueryWithBindParameters($queryIndexed, $queryWhere);
+                $this->multiInsertOrUpdate('ox_file_attribute', $validFields['validFields']);
+                $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
+                if(count($validFields['indexedFields']) > 0 ){
+                    $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
+                }
+            }
+            unset($files[$k]['data']);
+            unset($files[$k]['id']);
+        }
+        return $files;
+    }
 
     public function getWorkflowInstanceStartDataFromFileId($fileId){
         $select = "SELECT start_data from ox_workflow_instance oxwi inner join ox_file on ox_file.last_workflow_instance_id = oxwi.id where ox_file.uuid=:fileId";
