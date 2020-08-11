@@ -62,7 +62,7 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             if(isset($policy['previous_careerCoverage'])){
                 $premiumRateCardDetails = array();
-                $endorsementCoverages = $this->coverageSelection($data,$policy,$data['careerCoverage'],$persistenceService,$premiumRateCardDetails);
+                $endorsementCoverages = $this->coverageSelection($data,$policy,$data['careerCoverage'],$persistenceService,$premiumRateCardDetails,$privileges);
                 $data['endorsementCoverage'] = $endorsementCoverages;
             }
             if(isset($policy['previous_cylinder'])){
@@ -286,7 +286,7 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             $data['endorsementExcessLiability'] = $endorsementExcessLiability;
 
-            $endorsementCoverages = $this->coverageSelection($data,$data['previous_policy_data'][0],$data['previous_policy_data'][0]['previous_careerCoverage'],$persistenceService,$premiumRateCardDetails);
+            $endorsementCoverages = $this->coverageSelection($data,$data['previous_policy_data'][0],$data['previous_policy_data'][0]['previous_careerCoverage'],$persistenceService,$premiumRateCardDetails,$privileges);
             $data['endorsementCoverage'] = $endorsementCoverages;
         }
         $returnArray = array_merge($data,$premiumRateCardDetails);
@@ -344,7 +344,7 @@ class SetupEndorsement extends AbstractAppDelegate
         }
     }
 
-    protected function coverageSelection(&$data,$policy,$previous_key,$persistenceService,&$premiumRateCardDetails){
+    protected function coverageSelection(&$data,$policy,$previous_key,$persistenceService,&$premiumRateCardDetails,$privileges){
             $endorsementCoverages = array();
             $whereClause = "";
             if(isset($privileges['MANAGE_MY_POLICY_READ']) && $privileges['MANAGE_MY_POLICY_READ'] == true && isset($policy['previous_careerCoverage'])){
