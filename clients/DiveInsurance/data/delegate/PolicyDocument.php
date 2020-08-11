@@ -1243,7 +1243,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['quoteDocuments'] = array();
             $documents = array();
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
-            if($data['product'] == 'Dive Store') {
+            if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability') {
                 $documents['coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             }
             if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
