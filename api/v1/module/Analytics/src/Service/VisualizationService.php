@@ -65,8 +65,8 @@ class VisualizationService extends AbstractService
         $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         $form->exchangeWithSpecificKey($data,'value',true);
         $form->updateValidate();
-        if(isset($data['name']))
-            $form->validateType($data['name']);
+        if(isset($data['type']))
+            $form->validateType($data['type']);
         $count = 0;
         try {
             $count = $this->table->save2($form);
