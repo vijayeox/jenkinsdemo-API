@@ -109,10 +109,10 @@
 										{else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
 												<td>$1,000,000</td>
 										{else}
-												<td>Not Included</td>
+												<td>Excluded</td>
 										{/if}
 										{else}
-												<td>Not Included</td>
+												<td>Excluded</td>
 												{/if}
 					</p>
 					<p class = "sec_title2">
@@ -126,7 +126,7 @@
 						{if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
 								<td>$1,000,000</td>
 						{else}
-								<td>Not Included</td>
+								<td>Excluded</td>
 						{/if}
 					</p>
 				</div></b>
