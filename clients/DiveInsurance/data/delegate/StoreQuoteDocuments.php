@@ -80,6 +80,7 @@ class StoreQuoteDocuments extends PolicyDocument
                     ),
         'Group Professional Liability'
             => array(
+                     'template' => 'DiveCenterProposal', 
                      'cover_letter' => 'GPL_Quote_Cover_Letter',
                      'lheader' => 'letter_header.html',
                      'lfooter' => 'letter_footer.html',
