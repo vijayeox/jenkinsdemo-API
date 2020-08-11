@@ -211,13 +211,17 @@ namespace ProcessExcel
                 int rowindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Row;
                 int colindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Column;
 
+                int f = 0;
                 foreach (List<string> row in values)
                 {
                     if (macro != "" && vStatic==false)
                     {
-                        Worksheet ws = (wbCarrier.Worksheets[vDestSheet] as Worksheet);
-                        ws.Activate();
-                        wbCarrier.Application.Run(macro);
+                        if(row.Count() > 0 && f!=0)
+                        {
+                            Worksheet ws = (wbCarrier.Worksheets[vDestSheet] as Worksheet);
+                            ws.Activate();
+                            wbCarrier.Application.Run(macro);
+                        }
                     }
                     int i = colindex;
                     foreach (string value in row)
@@ -241,7 +245,7 @@ namespace ProcessExcel
                             wbCarrier.Application.Run(macro);
                         }
                     }
-                    
+                    f++;
                 }
             } catch 
             {
