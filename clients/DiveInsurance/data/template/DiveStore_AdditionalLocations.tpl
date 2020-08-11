@@ -12,7 +12,6 @@
     <div>
     <br>
     {if isset($additionalLocationDataItem.name) && $additionalLocationDataItem.name != ""} <p class = "info"><b>Store/Location Description : </b>{$additionalLocationDataItem.name}</p>{/if}
-    {if isset($additionalLocationDataItem.padiNumberAL) && $additionalLocationDataItem.padiNumberAL != "" && $additionalLocationDataItem.padiNumberAL != null} <p class = "info"><b>Store/Location Number: </b>{$additionalLocationDataItem.padiNumberAL}</p>{/if}
 
     {if isset($additional_named_insureds_option) && $additional_named_insureds_option =='yes'}
     {assign var=list value=$additionalNamedInsured|json_decode:true}
@@ -23,6 +22,7 @@
         </p>
     {/foreach}
     {/if}
+    {if isset($additionalLocationDataItem.padiNumberAL) && $additionalLocationDataItem.padiNumberAL != "" && $additionalLocationDataItem.padiNumberAL != null} <p class = "info"><b>Store/Location Number: </b>{$additionalLocationDataItem.padiNumberAL}</p>{/if}
     {if (isset($additionalLocationDataItem.address) && $additionalLocationDataItem.address != "") ||
     (isset($additionalLocationDataItem.country) && $additionalLocationDataItem.country != "") ||
     ( isset($additionalLocationDataItem.city)  && $additionalLocationDataItem.city != "" ) ||
@@ -167,20 +167,6 @@
                                   {/if}
                     </tr>
                     <tr>
-                          <td class = "info">NON-Owned Auto:</td>
-                          {if isset($doYouWantToApplyForNonOwnerAuto) && ($doYouWantToApplyForNonOwnerAuto == true || $doYouWantToApplyForNonOwnerAuto == "true")}
-                          {if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
-                          <td>$100,000</td>
-                          {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
-                          <td>$1,000,000</td>
-                          {else}
-                          <td>Not Included</td>
-                          {/if}
-                          {else}
-                          <td>Not Included</td>
-                          {/if}
-                    </tr>
-                    <tr>
                         <td class = "info">Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
@@ -189,13 +175,6 @@
                         {else}
                                 <td>Not Included</td>
                         {/if}
-                    </tr>
-                    <tr>
-                        <td class = "info">Medical Expenses:</td>
-                    {if isset($medicalPayment) && ($medicalPayment == "true" || $medicalPayment == true || $medicalPayment == 1) }
-                            <td>$5000</td>
-                        {else}
-                            <td>Excluded</td>{/if}
                     </tr>
                 </tbody>
             </table>

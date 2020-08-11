@@ -1315,22 +1315,50 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $temp['liabilityChanges'] = false;
                 if(isset($data['excessLiabilityCoverage']) && isset($policy['previous_excessLiabilityCoverage'])){
+                    if(isset($temp['increased_liability_limit'])){
+                        unset($temp['increased_liability_limit']);
+                    }
+                    if(isset($temp['decreased_liability_limit'])){
+                        unset($temp['decreased_liability_limit']);
+                    }
+                    if(!isset($policy['previous_combinedSingleLimitDS'])){
+                        if($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
+                            $policy['previous_combinedSingleLimitDS'] = 1000000;
+                        } else if($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
+                            $policy['previous_combinedSingleLimitDS'] = 2000000;
+                        } else if ($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
+                            $policy['previous_combinedSingleLimitDS'] = 3000000;
+                        } else if ($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
+                            $policy['previous_combinedSingleLimitDS'] = 4000000;
+                        } else if ($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
+                            $policy['previous_combinedSingleLimitDS'] = 9000000;
+                        }
+                        $data['previous_policy_data']['previous_combinedSingleLimitDS'] = $policy['previous_combinedSingleLimitDS'];
+                    }
                     if($policy['previous_excessLiabilityCoverage'] == $data['excessLiabilityCoverage']){
-                        $data['increased_liability_limit'] = false;
+                        $temp['increased_liability_limit'] = false;
+                        $temp['decreased_liability_limit'] = false;
                     } else {
                         $temp['liabilityChanges'] = true;
                         if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
-                            $temp['increased_liability_limit'] = "$1,000,000";
+                            $data['combinedSingleLimitDS'] = 1000000;
                         } else if($data['excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
-                            $temp['increased_liability_limit'] = "$2,000,000";
+                            $data['combinedSingleLimitDS'] = 2000000;
                         } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
-                            $temp['increased_liability_limit'] = "$3,000,000";
+                            $data['combinedSingleLimitDS'] = 3000000;
                         } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
-                            $temp['increased_liability_limit'] = "$4,000,000";
+                            $data['combinedSingleLimitDS'] = 4000000;
                         } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
-                            $temp['increased_liability_limit'] = "$9,000,000";
+                            $data['combinedSingleLimitDS'] = 9000000;
                         }
-                    }
+
+                        $excessLiabilityDiff = (int)$data['combinedSingleLimitDS'] - (int)$policy['previous_combinedSingleLimitDS'];
+                        if($excessLiabilityDiff < 0){
+                            $temp['decreased_liability_limit'] = abs($excessLiabilityDiff);
+                        }else{
+                            $temp['increased_liability_limit'] = $excessLiabilityDiff;
+                        }
+                    }  
                 }
                 if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
                     if($policy['previous_nonOwnedAutoLiabilityPL'] == $data['nonOwnedAutoLiabilityPL']){
@@ -1354,6 +1382,27 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                 }
+                //Please do not remove
+                // if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                //     if(isset($data['previous_additionalInsured'])){
+                //         foreach($data['previous'])
+                //         $temp['newAddInsured'] = "";
+                //         $temp['removedAddInsured'] = "";
+                //         $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $data['previous_additionalInsured']));
+                //         $newAddInsured = array_map('unserialize', $diff);
+                //         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
+                //         if(sizeof($newAddInsured) > 0){
+                //             $temp['newAddInsured'] = json_encode($newAddInsured);
+                //         }
+                //         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($temp['newAddInsured'],true));
+                //         $diff = array_diff(array_map('serialize',$data['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
+                //         $removedAddInsured = array_map('unserialize', $diff);
+                //         $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :".print_r($removedAddInsured,true));
+                //         if(sizeof($removedAddInsured) > 0){
+                //             $temp['removedAddInsured'] = json_encode($removedAddInsured);
+                //         }
+                //     }
+                // }
          }
 
         private function regenerationIPL($data,$previous_data,$persistenceService,$destinationLocation){   
@@ -1470,9 +1519,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          }
 
 
-         protected function generateDiveStoreLiabilityDocument(&$data,&$documents,$temp,$dest,$options,$persistenceService){
+        protected function generateDiveStoreLiabilityDocument(&$data,&$documents,$temp,$dest,$options,$persistenceService){
             $this->getDSLiabilityPolicyDetails($data,$temp,$persistenceService);
             $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+        }
+
+        protected function generateDiveStorePropertyDocument(&$data,&$documents,$temp,$dest,$options,$persistenceService){
+            $this->getDSLiabilityPolicyDetails($data,$temp,$persistenceService);
+            $documents['property_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
         }
 
         private function getDSLiabilityPolicyDetails(&$data,&$temp,$persistenceService){
@@ -1480,6 +1534,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if($liabilityPolicyDetails){
                $temp['liability_policy_id'] = $data['liability_policy_id'] = $liabilityPolicyDetails['policy_number'];
                $temp['liability_carrier'] = $data['liability_carrier'] = $liabilityPolicyDetails['carrier'];
+            }
+            $propertyPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'PROPERTY');
+            if($propertyPolicyDetails){
+                $data['property_policy_id'] = $temp['property_policy_id'] = $propertyPolicyDetails['policy_number'];
+                $data['property_carrier'] = $temp['property_policy_id'] = $propertyPolicyDetails['carrier'];
             }
         }
 

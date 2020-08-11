@@ -1935,7 +1935,7 @@
 										"inputFormat": "plain",
 										"redrawOn": "data",
 										"clearOnHide": false,
-										"calculateValue": "var total = ((parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0));\nif(total > 0){\n  value = total;\n} else {\n  value = 0;\n}",
+										"calculateValue": "var total = ((parseFloat(data['careerCoveragePrice'])||0)+(parseFloat(data['scubaFitPrice'])||0)+ (parseFloat(data['equipmentPrice'])||0) +  (parseFloat(data['cylinderPrice'])||0) +(parseFloat(data['excessLiabilityPricePayable'])||0));\nvalue = total;",
 										"key": "endorsementTotal",
 										"properties": {
 											"render": "page6"
@@ -2007,13 +2007,13 @@
 									"pull": 0,
 									"size": "md"
 								}],
+								"hideLabel": true,
 								"tableView": false,
 								"key": "columns1",
 								"customConditional": "show = data.CSRReviewRequired;",
 								"type": "columns",
 								"input": false,
-								"path": "columns1",
-								"hideLabel": true
+								"path": "columns1"
 							}, {
 								"label": "userGrandTotal",
 								"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
@@ -3317,20 +3317,6 @@
 			"type": "htmlelement",
 			"input": false,
 			"hideLabel": true
-		}, {
-			"label": "Please process the refund and approve",
-			"attrs": [{
-				"attr": "",
-				"value": ""
-			}],
-			"content": "<h4>Please process the refund of <b>${{data.balanceEndor * -1}}</b> and approve</h4>",
-			"refreshOnChange": false,
-			"tableView": false,
-			"key": "pleaseProcessTheRefundAndApprove",
-			"customConditional": "show = ((parseFloat(data.balanceEndor) < 0) &&(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ;",
-			"type": "htmlelement",
-			"input": false,
-			"hideLabel": true
 		}],
 		"input": false,
 		"path": "page6",
@@ -3370,13 +3356,20 @@
 				"attr": "",
 				"value": ""
 			}],
-			"content": "<h4>Please process the refund of <b>${{data.balanceEndor * -1}}</b> and approve</h4>",
+			"content": "<div style=\"background-color: lightgrey;padding: 2%;\n  margin: 20px;\"><h3><b>Please process the refund of <b>${{data.refundAmount * -1}}</b> and approve</b></h4></div>",
 			"refreshOnChange": false,
 			"tableView": false,
 			"key": "page6Pleaseprocesstherefundandapprove",
-			"customConditional": "show = (parseFloat(data.balanceEndor) < 0);",
+			"customConditional": "show = (parseFloat(data.refundAmount) < 0);",
 			"type": "htmlelement",
 			"input": false
+		}, {
+			"label": "refundAmount",
+			"calculateValue": "if((parseFloat(data.balanceEndor) < 0) && (data.CSRReviewRequired)){\n  value = data.balanceEndor;\n}\nif((parseFloat(data.endorsementTotal) < 0) && (!data.CSRReviewRequired)){\n  value = data.endorsementTotal;\n}",
+			"key": "refundAmount",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"title": "Approve/Reject the Application",
 			"theme": "primary",
@@ -3498,7 +3491,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 310,
+	"_vid": 318,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3519,6 +3512,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-06T13:38:31.220Z",
+	"modified": "2020-08-11T07:33:36.036Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
