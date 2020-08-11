@@ -184,7 +184,7 @@ content:
                 -
                     title: Name
                     field: entity_name
-                    cell: '<td>{item.product == "Dive Store" ? item.business_name + " - " + item.entity_name : item.firstname + " " + item.lastname + " - " + item.entity_name}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.product == "Group Professional Liability" ? item.business_name :(item.firstname + " " + item.lastname)}</td>'
                 -
                     title: 'Policy Status'
                     cell: '<td>{moment(item.start_date).isAfter(moment()) ? "Effective From " + moment(item.start_date).format("MM-DD-YYYY") : item.policyStatus}</td>'
