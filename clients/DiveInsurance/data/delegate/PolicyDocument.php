@@ -1321,7 +1321,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($temp['decreased_liability_limit'])){
                         unset($temp['decreased_liability_limit']);
                     }
-                    if(!isset($policy['previous_combinedSingleLimitDS'])){
+                    if(isset($policy['previous_combinedSingleLimitDS'])){
                         if($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
                             $policy['previous_combinedSingleLimitDS'] = 1000000;
                         } else if($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
@@ -1333,6 +1333,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         } else if ($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
                             $policy['previous_combinedSingleLimitDS'] = 9000000;
                         }
+                        if(!isset($policy['previous_combinedSingleLimitDS'])){
+                            $policy['previous_combinedSingleLimitDS'] = 1000000;
+                        }
+                        $data['previous_policy_data']['previous_combinedSingleLimitDS'] = $policy['previous_combinedSingleLimitDS'];
+                    } else {
                         $data['previous_policy_data']['previous_combinedSingleLimitDS'] = $policy['previous_combinedSingleLimitDS'];
                     }
                     if($policy['previous_excessLiabilityCoverage'] == $data['excessLiabilityCoverage']){
@@ -1341,15 +1346,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     } else {
                         $temp['liabilityChanges'] = true;
                         if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
-                            $data['combinedSingleLimitDS'] = 1000000;
-                        } else if($data['excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
                             $data['combinedSingleLimitDS'] = 2000000;
-                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
+                        } else if($data['excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
                             $data['combinedSingleLimitDS'] = 3000000;
-                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
+                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
                             $data['combinedSingleLimitDS'] = 4000000;
+                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
+                            $data['combinedSingleLimitDS'] = 5000000;
                         } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
-                            $data['combinedSingleLimitDS'] = 9000000;
+                            $data['combinedSingleLimitDS'] = 10000000;
                         }
 
                         $excessLiabilityDiff = (int)$data['combinedSingleLimitDS'] - (int)$policy['previous_combinedSingleLimitDS'];
