@@ -503,14 +503,14 @@ class WorkflowInstanceService extends AbstractService
         $queryParams = array("uuid" => $workflowId,"latest" => 1);
         $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         $entityId = null;
-        if(isset($params['entity_name'])){
+        if(isset($params['entity_name']) && !empty($params['entity_name'])){
             $select  = "SELECT ox_app_entity.id from ox_app_entity WHERE ox_app_entity.name = :name";
             $queryParams = array('name' => $params['entity_name']);
             $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
             if(isset($result[0]['id'])) {
                 $entityId = $result[0]['id'];
             } else {
-                throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed");
+                throw new ServiceException("Invalid entity property set", "workflow.instance.failed");
             }
         }
         elseif(isset($workflowResultSet) && !empty($workflowResultSet)){
