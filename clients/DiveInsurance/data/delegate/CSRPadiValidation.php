@@ -24,7 +24,7 @@ class CSRPadiValidation extends AbstractAppDelegate
       return $data;
     }
     $select =
-      "Select firstname, MI as initial, lastname, email, address1, address2, city, state, country_code, zip, home_phone, work_phone, num as mobilephone, rating as certificateLevel,business_name FROM padi_data WHERE member_number ='" .
+      "Select firstname, MI as initial, lastname, email, address1, address2, city, state, country_code, zip, home_phone, work_phone, num as mobilephone, rating ,business_name FROM padi_data WHERE member_number ='" .
       $data['member_number'] .
       "'";
     $result = $persistenceService->selectQuery($select);
@@ -33,6 +33,7 @@ class CSRPadiValidation extends AbstractAppDelegate
       while ($result->next()) {
         $response[] = $result->current();
       }
+      $response[0]['certificateLevel'] = implode(',',array_column($response, 'rating'));
       $returnArray = array_merge($data, $response[0]);
       if (isset($returnArray['country_code'])) {
         $returnArray['country'] = Country::codeToCountryName(
