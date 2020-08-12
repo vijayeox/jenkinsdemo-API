@@ -807,6 +807,23 @@ return [
                     ],
                 ],
             ],
+            'reindexfile' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/reindex',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'reIndex',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

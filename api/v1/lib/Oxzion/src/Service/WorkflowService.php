@@ -508,12 +508,11 @@ class WorkflowService extends AbstractService
                                 $whereQuery .= " ( ".$subQuery." ) $filterlogic ";
                             }
                       } else {
-                          $filterFromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
                           $filterOperator = $this->fileService->processFilters($val);
                           if ($val['field'] == 'entity_name') {
-                              $subQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
-                              continue;
-                          }
+                              $subQuery .= " ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                          } else {
+                            $filterFromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
                             $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             $subQuery .= " (CASE  WHEN (" .$tablePrefix . ".field_value_type='TEXT') THEN " . $tablePrefix . ".field_value_text $queryString ";
 
@@ -526,15 +525,16 @@ class WorkflowService extends AbstractService
                             if(is_bool($val['value'])){
                                 $subQuery .= "  WHEN (" .$tablePrefix . ".field_value_type='BOOLEAN') THEN " . $tablePrefix . ".field_value_boolean $queryString  ";
                             }
-                            $subQuery .= " END ) $filterlogic ";
+                            $subQuery .= " END ) ";
+                          }
                       }
                     }
                     if ($subQuery != "") {
-                        $where = " (" . $subQuery . ")";
+                        $where = " (" . $subQuery . ") $filterlogic";
                     }
                     $prefix += 1;
                 }
-                $subQuery = rtrim($subQuery, $filterlogic);
+                $where = rtrim($where, $filterlogic);
             }
             if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
                 $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
@@ -579,6 +579,7 @@ class WorkflowService extends AbstractService
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $filterFromQuery $whereQuery";
+        // print_r($countQuery);exit;
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
         $querySet = "SELECT distinct ox_workflow.name as workflow_name, `of`.uuid,`of`.data,
     ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,`of`.id,
