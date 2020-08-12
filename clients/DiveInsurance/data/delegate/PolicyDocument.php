@@ -25,7 +25,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'footer' => 'COIfooter.html',
                 'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
-                'policy' => 'Individual_Professional_Liability_Policy.pdf',
+                'policy' => '2020-2021_Individual_Professional_Liability_Policy.pdf',
                 'aiTemplate' => 'Individual_PL_AI',
                 'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
                 'aiheader' => 'IPL_AI_header.html',
@@ -485,11 +485,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }else if($this->type == 'policy' && $data['product'] == 'Dive Store'){
                 $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+                $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 if($temp['propertyCoverageSelect'] == 'yes'){
                     $this->logger->info("DOCUMENT property_coi_document");
                     $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
-                    // $this->logger->info("DOCUMENT property_policy_document");
-                    // $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+                    $this->logger->info("DOCUMENT property_policy_document");
+                    $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 }
             }else if($data['product'] == 'Dive Store' && $this->type == 'endorsementQuote'){
                 $this->diveStoreEndorsement($data,$temp);
@@ -524,17 +525,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 }
             }
-                // if($this->type != 'quote' && $this->type != 'endorsementQuote')
-                // {
-                //     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
-                //     if(is_array($policyDocuments)){
-                //         foreach ($policyDocuments as $key => $value) {
-                //             $documents[$key] = $value;
-                //         }
-                //     } else {
-                //         $documents['policy_document'] = $policyDocuments;
-                //     }
-                // }
+           
             if($this->type == 'lapse'){
                 $this->logger->info("DOCUMENT lapse");
                 return $this->generateDocuments($data,$dest,$options,'ltemplate','lheader','lfooter');
@@ -549,7 +540,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
                 $docs = array();
-
+                $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
                 if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
 
                     if(isset($data['documents'])){
