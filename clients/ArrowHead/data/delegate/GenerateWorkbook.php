@@ -237,7 +237,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
         }
 
-        print_r(json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        // print_r(json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         // exit();
 
         if (count($excelData) > 0) {
