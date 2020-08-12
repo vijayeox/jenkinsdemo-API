@@ -9425,13 +9425,6 @@
 				"input": false,
 				"hideLabel": true
 			}, {
-				"label": "Excluded Operation",
-				"autoExpand": false,
-				"tableView": true,
-				"key": "groupExcludedOperation",
-				"type": "textarea",
-				"input": true
-			}, {
 				"label": "groupExcessLiabilityLimit",
 				"redrawOn": "data",
 				"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
@@ -10766,6 +10759,13 @@
 					}],
 					"path": "page7Panel"
 				}]
+			}, {
+				"label": "Excluded Operation",
+				"autoExpand": false,
+				"tableView": true,
+				"key": "groupExcludedOperation",
+				"type": "textarea",
+				"input": true
 			}, {
 				"label": "Table",
 				"cellAlignment": "left",
@@ -14713,6 +14713,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-12T08:23:37.549Z",
+	"modified": "2020-08-12T11:02:30.124Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }

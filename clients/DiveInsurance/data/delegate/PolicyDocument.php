@@ -25,7 +25,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'footer' => 'COIfooter.html',
                 'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
-                'policy' => 'Individual_Professional_Liability_Policy.pdf',
+                'policy' => '2020-2021_Individual_Professional_Liability_Policy.pdf',
                 'aiTemplate' => 'Individual_PL_AI',
                 'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
                 'aiheader' => 'IPL_AI_header.html',
@@ -76,7 +76,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'psFooter' => 'DiveStore_DCPS_footer.html',
                         'card' => 'PocketCard',
                         'slWording' => 'SL_Wording.pdf',
-                        'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
+                        'policy' => array('liability' => '2020-2021_Dive_Store_General_Liability_Policy.pdf','property' => '2020-2021_Dive_Store_Property_Policy.pdf'),
                         'cover_letter' => 'Dive_Store_Cover_Letter',
                         'lheader' => 'letter_header.html',
                         'lfooter' => 'letter_footer.html',
@@ -107,13 +107,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'alTemplate' => 'DiveStore_AdditionalLocations',
                         'GLblanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
                         'blanketForm' => 'GL_AI_Blanket.pdf',
-                        'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
+                        'travelAgentEO' => '2020-2021_Dive_Store_Travel_E&O.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf',
-                        'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf',
+                        'AutoLiability'=>'2020-2021_Dive_Store_Non-Owned_Auto_Liability.pdf',
                         'roster' => 'Roster_Certificate',
                         'rosterHeader' => 'Roster_header_DS.html',
                         'rosterFooter' => 'Roster_footer.html',
-                        'rosterPdf' => 'Roster.pdf'),
+                        'rosterPdf' => 'Roster.pdf',
+                        'groupPolicy' => "2020-2021_Group_Professional_Liability_Policy.pdf"),
             'Group Professional Liability'
                 => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                         'cover_letter' => 'Group_Professional_liability_Cover_Letter',
@@ -161,7 +162,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'roster' => 'Roster_Certificate',
                         'rosterHeader' => 'Roster_header_DS.html',
                         'rosterFooter' => 'Roster_footer.html',
-                        'rosterPdf' => 'Roster.pdf'),
+                        'rosterPdf' => 'Roster.pdf',
+                        'groupPolicy' => "2020-2021_Group_Professional_Liability_Policy.pdf"),
             'Emergency First Response'
                 => array('template' => 'Emergency_First_Response_COI',
                 'header' => 'EFR_header.html',
@@ -488,9 +490,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($temp['propertyCoverageSelect'] == 'yes'){
                     $this->logger->info("DOCUMENT property_coi_document");
                     $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
-                    // $this->logger->info("DOCUMENT property_policy_document");
-                    // $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 }
+                $this->additionalDocumentsDS($temp,$documents,$dest);
             }else if($data['product'] == 'Dive Store' && $this->type == 'endorsementQuote'){
                 $this->diveStoreEndorsement($data,$temp);
                 $this->diveStoreEnorsementQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
@@ -499,6 +500,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
                 $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 array_push($documents['endorsement_coi_document'], $endorsementDoc);
+                $this->additionalDocumentsDS($temp,$documents,$dest);
             }else if($data['product'] == 'Dive Boat' && ($this->type == 'endorsement' || $this->type == 'endorsementQuote')){
                 if($this->type == 'endorsement'){
                     if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) || ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true'))){
@@ -524,17 +526,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 }
             }
-                // if($this->type != 'quote' && $this->type != 'endorsementQuote')
-                // {
-                //     $policyDocuments = $this->copyDocuments($temp,$dest['relativePath'],'policy');
-                //     if(is_array($policyDocuments)){
-                //         foreach ($policyDocuments as $key => $value) {
-                //             $documents[$key] = $value;
-                //         }
-                //     } else {
-                //         $documents['policy_document'] = $policyDocuments;
-                //     }
-                // }
+           
             if($this->type == 'lapse'){
                 $this->logger->info("DOCUMENT lapse");
                 return $this->generateDocuments($data,$dest,$options,'ltemplate','lheader','lfooter');
@@ -549,7 +541,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->logger->info("Documents :".print_r($documents,true));
             if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){
                 $docs = array();
-
+                $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
                 if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
 
                     if(isset($data['documents'])){
@@ -1188,6 +1180,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
             }
+            $documents['group_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'groupPolicy');
         }
     }
 
@@ -1672,6 +1665,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['previous_policy_data'] = json_encode($data['previous_policy_data']);
                     }
                 }
+        }
+
+        protected function additionalDocumentsDS($temp,&$documents,$dest){
+            $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
+            if($temp['propertyCoverageSelect'] == 'yes'){
+                    $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+            }
+
+            if($temp['doYouWantToApplyForNonOwnerAuto'] == true || $temp['doYouWantToApplyForNonOwnerAuto'] == "true"){
+                $documents['nonOwnedAutoLiabilityPL'] = $this->copyDocuments($temp,$dest['relativePath'],'AutoLiability');
+            }
+            if($temp['travelAgentEoPL'] == true  ||  $temp['travelAgentEoPL'] == "true"){
+                $documents['travelAgentEO'] = $this->copyDocuments($temp,$dest['relativePath'],'travelAgentEO');
+            }
         }
 
 }

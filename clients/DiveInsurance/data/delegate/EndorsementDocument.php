@@ -41,7 +41,7 @@ class EndorsementDocument extends PolicyDocument
            'cover_letter' => 'Dive_Store_Cover_Letter',
            'lheader' => 'letter_header.html',
            'lfooter' => 'letter_footer.html',
-           'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
+           'policy' => array('liability' => '2020-2021_Dive_Store_General_Liability_Policy.pdf','property' => '2020-2021_Dive_Store_Property_Policy.pdf'),
            'aiTemplate' => 'DiveStore_AI',
            'aiheader' => 'DiveStore_AI_header.html',
            'aifooter' => 'DiveStore_AI_footer.html',
@@ -71,10 +71,10 @@ class EndorsementDocument extends PolicyDocument
            'gaiheader' => 'Group_AI_header.html',
            'gaifooter' => 'Group_AI_footer.html',
            'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
-           'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
+           'travelAgentEO' => '2020-2021_Dive_Store_Travel_E&O.pdf',
            'groupExclusions' => 'Group_Exclusions.pdf',
-           'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'
-     ),
+           'AutoLiability'=>'2020-2021_Dive_Store_Non-Owned_Auto_Liability.pdf',
+           'groupPolicy' => '2020-2021_Group_Professional_Liability_Policy.pdf'),
       'Group Professional Liability'
       => array(
            'template' => 'DiveStoreEndorsement',
@@ -114,7 +114,8 @@ class EndorsementDocument extends PolicyDocument
            'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
            'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
            'groupExclusions' => 'Group_Exclusions.pdf',
-           'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf'
+           'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf',
+           'groupPolicy' => "2020-2021_Group_Professional_Liability_Policy.pdf"
      ));
 }
 }
