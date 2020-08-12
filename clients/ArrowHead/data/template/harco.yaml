@@ -1014,43 +1014,43 @@
 -
    Source Worksheet: New Sales
    pageName: Q-Umb
-   cell: 'E29'
+   cell: 'E24'
    key: harcoExcelData*checknewcarsales
 -
    Source Worksheet: Used Sales
    pageName: Q-Umb
-   cell: 'I29'
+   cell: 'I24'
    key: harcoExcelData*checkusedCarSales
--
-   Source Worksheet: Finance/Insurance
-   pageName: Q-Umb
-   cell: 'M31'
-   key: harcoExcelData*checkfISales
 -
    Source Worksheet: Service/Repair
    pageName: Q-Umb
-   cell: 'E30'
+   cell: 'E25'
    key: harcoExcelData*checkserviceRepairSales
--
-   Source Worksheet: Auto Body
-   pageName: Q-Umb
-   cell: 'M32'
-   key: harcoExcelData*checkautoBodySales
 -
    Source Worksheet: Parts
    pageName: Q-Umb
-   cell: 'I30'
+   cell: 'I25'
    key: harcoExcelData*checkpartsSales
--
-   Source Worksheet: FI sales
-   pageName: Q-Umb
-   cell: 'E32'
-   key: harcoExcelData*OthersFISalesDescription
 -
    Source Worksheet: Auto body
    pageName: Q-Umb
-   cell: 'E31'
+   cell: 'E26'
    key: harcoExcelData*OthersAutoBodyDescription
+-
+   Source Worksheet: FI sales
+   pageName: Q-Umb
+   cell: 'E27'
+   key: harcoExcelData*OthersFISalesDescription
+-
+   Source Worksheet: Finance/Insurance
+   pageName: Q-Umb
+   cell: 'M26'
+   key: harcoExcelData*checkfISales
+-
+   Source Worksheet: Auto Body
+   pageName: Q-Umb
+   cell: 'M27'
+   key: harcoExcelData*checkautoBodySales
 -
    Source Worksheet: Limit
    pageName: Q-Umb
@@ -1059,7 +1059,7 @@
 -
    Source Worksheet: Umbrella - Name
    pageName: Q-Umb
-   cell: B21
+   cell: B18
    key: UmbrellaCoverageAdditional_umbrellaCoverageAdditionalName
    method: simpleDatagrid
    type: DataGrid
@@ -1068,7 +1068,7 @@
 -
    Source Worksheet: Umbrella - Ownership %
    pageName: Q-Umb
-   cell: 'I21'
+   cell: 'I18'
    key: UmbrellaCoverageAdditional_ownershipPercentage
    method: simpleDatagrid
    type: DataGrid
