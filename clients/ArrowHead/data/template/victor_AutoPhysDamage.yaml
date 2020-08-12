@@ -20,7 +20,8 @@
    pageName: Insured Information
    cell: 'E18:Q18'
 -
-   key: state
+   key: state_abbreviation
+   method: pulloutChild
    Source Worksheet: State
    pageName: Insured Information
    cell: E20

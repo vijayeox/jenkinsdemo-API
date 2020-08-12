@@ -1024,6 +1024,10 @@
    pageName: Property
    cell: AJ40
    type: DataGrid
+   returnValue:
+      replacementCost: Replacement Cost
+      actualCashValue: Actual Cash Value
+      reconstructionCost: ""
 -
    key: genericData*locationScheduleGridData_coinsuranceamount
    method: simpleDatagrid
