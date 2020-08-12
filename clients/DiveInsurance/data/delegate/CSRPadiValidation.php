@@ -36,9 +36,7 @@ class CSRPadiValidation extends AbstractAppDelegate
       $response[0]['certificateLevel'] = implode(',',array_column($response, 'rating'));
       $returnArray = array_merge($data, $response[0]);
       if (isset($returnArray['country_code'])) {
-        $returnArray['country'] = Country::codeToCountryName(
-          $response[0]['country_code']
-        );
+        $returnArray['country'] = (Country::codeToCountryName($response[0]['country_code']) != false) ? Country::codeToCountryName($response[0]['country_code']) : $response[0]['country_code'];
       }
       if (isset($returnArray['state'])) {
         $selectQuery =
