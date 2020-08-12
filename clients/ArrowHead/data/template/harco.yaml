@@ -41,6 +41,15 @@
    pageName: A-Gen
    cell: 'F16'
    key: type
+   returnValue:
+      auto : Auto
+      truck : Truck
+      equipment : Equipment
+      trailer : Trailer
+      rv : RV
+      motorcycle : Motorcycle
+      nonFranchised : 'Non-Franchised'
+      lronly : 'L&R only'
 -
    Source Worksheet: Business Phone
    pageName: A-Gen
@@ -56,11 +65,11 @@
    pageName: A-Gen
    cell: 'D21'
    key: dealerName
--
-   Source Worksheet: '% of ownership'
-   pageName: A-Gen
-   cell: 'K21'
-   key: dealerOwnershipPercentage
+# -
+#    Source Worksheet: '% of ownership'
+#    pageName: A-Gen
+#    cell: 'K21'
+#    key: dealerOwnershipPercentage
 -
    Source Worksheet: 'Effective Date:'
    pageName: A-Gen
@@ -91,6 +100,15 @@
    pageName: A-Gen
    cell: E19
    key: type
+   returnValue:
+      auto : Auto
+      truck : Truck
+      equipment : Equipment
+      trailer : Trailer
+      rv : RV
+      motorcycle : Motorcycle
+      nonFranchised : 'Non-Franchised'
+      lronly : 'L&R only'
 -
    Source Worksheet: 'Named Insured schedule'
    pageName: A-Gen
@@ -268,23 +286,32 @@
    pageName: E-Prop
    cell: I8
    key: bppcoinsurance
+   returnValue: 
+      80 : '0.8'
+      90 : '0.9'
+      100 : '1'
 -
    Source Worksheet: Building Co-Insurance %
    pageName: E-Prop
    cell: 'G8'
    key: buildingCoinsurance
+   returnValue: 
+      80 : '0.8'
+      90 : '0.9'
+      100 : '1'
 -
    Source Worksheet: Deductible
    pageName: E-Prop
    cell: 'G7'
    key: propertyCoverageDeductible
--
-   Source Worksheet: Bi Monthly Limitation
-   pageName: E-Prop
-   cell: 'M9'
-   method: simpleDatagrid
-   type: DataGrid
-   key: genericData*locationScheduleGridData_bimonthlylimitation
+# -
+#    Source Worksheet: Bi Monthly Limitation
+#    pageName: E-Prop
+#    cell: 'M9'
+#    method: simpleDatagrid
+#    type: DataGrid
+#    key: genericData*locationScheduleGridData_bimonthlylimitation
+#    note: wrong mapping
 -
    Source Worksheet: Equipment Breakdown
    pageName: E-Prop
@@ -324,7 +351,9 @@
    key: genericData*locationScheduleGridData_blanketcoveragebpp1
    method: simpleDatagrid
    type: DataGrid
-   returnBoolean: 'Yes|No'
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
    Note: It’s a table in template
 -
    Source Worksheet: Blanket Coverage Business Income
@@ -333,7 +362,9 @@
    key: genericData*locationScheduleGridData_income1
    method: simpleDatagrid
    type: DataGrid
-   returnBoolean: 'Yes|No'
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
 -
    Source Worksheet: Building Limit
    key:  genericData*locationScheduleGridData_buildingLimit
@@ -386,7 +417,8 @@
 -
    Source Worksheet: Accounts Receivable
    pageName: G-IM
-   cell: E24
+   cell: 'Coverage Selection'
+   offset: '3,-1'
    key: harcoExcelData*GIMGridTwo
    type: DataGrid
    macro: G_AddIMMiscLoc
@@ -894,7 +926,7 @@
    Source Worksheet: epa
    pageName: P-Pollution
    cell: "Who disposes of hazardous waste? Please provide transport company's name and EPA #."
-   offset: "1,7"
+   offset: "1,10"
    key: epaDetails_epaNumber
    method: simpleDatagrid
    type: DataGrid
@@ -949,6 +981,7 @@
    cell: "Within the last five (5) years, has the applicant been the subject of third party liability claims as a result of a pollution event from a non-owned disposal facility? If “Yes,” please attach details associated with the claim and the claim status. "
    offset: '0,6'
    method: pulloutChild
+   returnBoolean: 'Yes|No'
    key: pollutionLiabilityUnderwritingSurvey_withinTheLastFive5YearsHasTheApplicantBeenTheSubjectOfThirdPartyLiabilityClaims
 -
    Source Worksheet: Are there any abandoned tanks on site?
@@ -1011,6 +1044,7 @@
    pageName: P-Pollution
    cell: I8
    key: eachoccurrence
+   note: Wrong validation issue
 -
    Source Worksheet: New Sales
    pageName: Q-Umb
@@ -1441,6 +1475,7 @@
    pageName: UW Q's
    cell: 'E54'
    key: titlesearchdescribe
+   note: wrong mapping. its a description field cant map to yes or no
 -
    Source Worksheet: Does applicant subcontract any work?
    pageName: UW Q's
