@@ -62,12 +62,12 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     public function execute(array $data, Persistence $persistenceService)
     {
-        $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data));
+        $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
         $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
-        $this->logger->info("GenerateWorkbook Dest" . json_encode($fileDestination));
+        $this->logger->info("GenerateWorkbook Dest" . json_encode($fileDestination,JSON_UNESCAPED_SLASHES));
         $generatedDocumentsList = array();
         $excelData = array();
         if (isset($data['genericData'])) {
@@ -126,6 +126,9 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                     }
                                 }
                             } else if (isset($fieldConfig['returnValue'])) {
+                                if(!is_string($userInputValue)){
+                                    $userInputValue = "".$userInputValue;
+                                }
                                 if (array_key_exists($userInputValue, $fieldConfig['returnValue'])) {
                                     $tempFieldConfig['value'] = $fieldConfig['returnValue'][$userInputValue];
                                 } else {
@@ -140,6 +143,9 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                             if (!isset($tempFieldConfig['macro'])) {
                                 $tempFieldConfig['macro'] = "";
                             }
+                            if (!isset($tempFieldConfig['offset'])) {
+                                $tempFieldConfig['offset'] = "";
+                            }
                             if (!$tempFieldConfig['value'] == "") {
                                 array_push($templateData, [
                                     "pageName" => $tempFieldConfig['pageName'],
@@ -147,7 +153,8 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                     "key" => $tempFieldConfig['key'],
                                     "macro" => $tempFieldConfig['macro'],
                                     "type" => $tempFieldConfig['type'],
-                                    "value" => $tempFieldConfig['value']
+                                    "value" => $tempFieldConfig['value'],
+                                    "offset" => $tempFieldConfig['offset']
                                 ]);
                             }
                         }
@@ -211,7 +218,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                         }
                     }
                     $pdfData = array_filter($pdfData);
-                    $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT));
+                    $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ));
                     $this->documentBuilder->fillPDFForm(
                         $selectedTemplate["template"],
                         $pdfData,
@@ -230,11 +237,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
         }
 
-        // print_r(json_encode($excelData, JSON_PRETTY_PRINT));
+        print_r(json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         // exit();
 
         if (count($excelData) > 0) {
-            file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", json_encode($excelData, JSON_PRETTY_PRINT));
+            file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
             array_push(
                 $generatedDocumentsList,
                 array(
@@ -250,7 +257,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             $data["status"] = "Generated";
         }
         $data["documents"] = $generatedDocumentsList;
-        $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
+        $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         // $this->saveFile($data, $data['$fileUUID']);
 
