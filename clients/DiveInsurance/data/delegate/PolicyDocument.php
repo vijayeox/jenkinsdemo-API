@@ -688,7 +688,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['regeneratePolicy'] = "";
             }
 
-
+            if($this->type == "endorsement"){
+                $data['endorsementInProgress'] = false;
+            }
             $data['isRenewalFlow'] = false;
             $this->logger->info("Policy Document Generation",print_r($data,true));
             return $data;
@@ -1321,37 +1323,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($temp['decreased_liability_limit'])){
                         unset($temp['decreased_liability_limit']);
                     }
-                    if(!isset($policy['previous_combinedSingleLimitDS'])){
-                        if($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
-                            $policy['previous_combinedSingleLimitDS'] = 1000000;
-                        } else if($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
-                            $policy['previous_combinedSingleLimitDS'] = 2000000;
-                        } else if ($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
-                            $policy['previous_combinedSingleLimitDS'] = 3000000;
-                        } else if ($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
-                            $policy['previous_combinedSingleLimitDS'] = 4000000;
-                        } else if ($policy['previous_excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
-                            $policy['previous_combinedSingleLimitDS'] = 9000000;
-                        }
-                        $data['previous_policy_data']['previous_combinedSingleLimitDS'] = $policy['previous_combinedSingleLimitDS'];
+                    if(!isset($policy['previous_combinedSingleLimitDS'])) {
+                        $liabilityLimit = array();
+                        $liabilityLimit = $this->getLiabilityLimit($policy,'previous_combinedSingleLimitDS','previous_combinedSingleLimitDS','previous_excessLiabilityCoverage');
+                        $policy['previous_combinedSingleLimitDS'] = $liabilityLimit['combinedSingleLimit'];
+                        $policy['previous_annualAggregateDS'] = $liabilityLimit['annualAggregate'];
+                        $data['previous_policy_data'][$length]['previous_combinedSingleLimitDS'] = $policy['previous_combinedSingleLimitDS'];
+                        $data['previous_policy_data'][$length]['previous_annualAggregateDS'] = $policy['previous_annualAggregateDS'];
                     }
                     if($policy['previous_excessLiabilityCoverage'] == $data['excessLiabilityCoverage']){
                         $temp['increased_liability_limit'] = false;
                         $temp['decreased_liability_limit'] = false;
                     } else {
                         $temp['liabilityChanges'] = true;
-                        if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
-                            $data['combinedSingleLimitDS'] = 1000000;
-                        } else if($data['excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
-                            $data['combinedSingleLimitDS'] = 2000000;
-                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
-                            $data['combinedSingleLimitDS'] = 3000000;
-                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
-                            $data['combinedSingleLimitDS'] = 4000000;
-                        } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
-                            $data['combinedSingleLimitDS'] = 9000000;
-                        }
-
+                        $liabilityLimit = array();
+                        $liabilityLimit = $this->getLiabilityLimit($data,'combinedSingleLimitDS','annualAggregateDS','excessLiabilityCoverage');
+                        $data['combinedSingleLimitDS'] = $liabilityLimit['combinedSingleLimit'];
+                        $data['annualAggregateDS'] = $liabilityLimit['annualAggregate'];
                         $excessLiabilityDiff = (int)$data['combinedSingleLimitDS'] - (int)$policy['previous_combinedSingleLimitDS'];
                         if($excessLiabilityDiff < 0){
                             $temp['decreased_liability_limit'] = abs($excessLiabilityDiff);
@@ -1404,6 +1392,31 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 //     }
                 // }
          }
+
+        private function getLiabilityLimit($data,$combinedLimit,$annualAggregate,$liabilityKey){
+            $liabilityLimit = array();
+            if($data[$liabilityKey]=='excessLiabilityCoverage1M'){
+                $data[$combinedLimit] = 2000000;
+                $data[$annualAggregate] = 3000000;
+            } else if($data[$liabilityKey]=='excessLiabilityCoverage2M'){
+                $data[$combinedLimit] = 3000000;
+                $data[$annualAggregate] = 4000000;
+            } else if ($data[$liabilityKey]=='excessLiabilityCoverage3M'){
+                $data[$combinedLimit] = 4000000;
+                $data[$annualAggregate] = 5000000;
+            } else if ($data[$liabilityKey]=='excessLiabilityCoverage4M'){
+                $data[$combinedLimit] = 5000000;
+                $data[$annualAggregate] = 6000000;
+            } else if ($data[$liabilityKey]=='excessLiabilityCoverage9M'){
+                $data[$combinedLimit] = 10000000;
+                $data[$annualAggregate] = 11000000;
+            } else{
+                $data[$combinedLimit] = 1000000;
+                $data[$annualAggregate] = 2000000;
+            }
+            $liabilityLimit = array('combinedSingleLimit' => $data[$combinedLimit],'annualAggregate' => $data[$annualAggregate]);
+            return $liabilityLimit;
+        }
 
         private function regenerationIPL($data,$previous_data,$persistenceService,$destinationLocation){   
             $options = array(); 
