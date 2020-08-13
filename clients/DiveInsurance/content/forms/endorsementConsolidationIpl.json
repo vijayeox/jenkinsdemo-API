@@ -1207,14 +1207,16 @@
 						"placeholder": " ",
 						"tableView": true,
 						"validate": {
+							"pattern": "^\\d+$",
 							"customMessage": "Please enter a valid Fax number"
 						},
 						"errorLabel": "Fax",
 						"key": "fax",
-						"type": "phoneNumber",
+						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"inputType": "tel"
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
@@ -3431,7 +3433,7 @@
 			"input": false
 		}, {
 			"label": "refundAmount",
-			"calculateValue": "if((parseFloat(data.balanceEndor) < 0) && (data.CSRReviewRequired)){\n  value = data.balanceEndor;\n}\nif((parseFloat(data.endorsementTotal) < 0) && (!data.CSRReviewRequired)){\n  value = data.endorsementTotal;\n}",
+			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) < 0){\n  value = data.balanceEndor;\n  }\n  if(parseFloat(data.endorsementTotal) < 0){\n\tvalue = data.endorsementTotal;\n  }\n}\nif((parseFloat(data.endorsementTotal) < 0) && (!data.CSRReviewRequired)){\n  value = data.endorsementTotal;\n}",
 			"key": "refundAmount",
 			"type": "hidden",
 			"input": true,
@@ -3557,7 +3559,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 321,
+	"_vid": 324,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3578,6 +3580,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-12T13:28:34.595Z",
+	"modified": "2020-08-13T05:03:53.102Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
