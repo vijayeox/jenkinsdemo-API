@@ -358,6 +358,20 @@ public function execute(array $data,Persistence $persistenceService)
                         if(!isset($value['effectiveDate'])){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                         }
+                        $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
+                        $result = $persistenceService->selectQuery($select);
+                        if($result->count() > 0){
+                            $response = array();
+                            while ($result->next()) {
+                                $response[] = $result->current();
+                            }
+                            if(count($response) > 0){
+                                $response[0]['rating'] = implode(",",array_column($response, 'rating'));
+                            }
+                            $data['groupPL'][$key]['rating'] = $response[0]['rating'];
+                        } else {
+                            $data['groupPL'][$key]['rating'] = $response[0]['rating'];
+                        }
                     }
                 }
             }
