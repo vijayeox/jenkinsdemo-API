@@ -80,8 +80,10 @@ class SetupEndorsement extends AbstractAppDelegate
             }
             $data['endorsementExcessLiability'] = $endorsementExcessLiability;
 
-            $endorsementCoverages = $this->coverageSelection($data,$data['previous_policy_data'][0],$data['previous_policy_data'][0]['previous_careerCoverage'],$persistenceService,$premiumRateCardDetails,$privileges);
-            $data['endorsementCoverage'] = $endorsementCoverages;
+            if($data['product'] == 'Individual Professional Liability'){
+                $endorsementCoverages = $this->coverageSelection($data,$data['previous_policy_data'][0],$data['previous_policy_data'][0]['previous_careerCoverage'],$persistenceService,$premiumRateCardDetails,$privileges);
+                $data['endorsementCoverage'] = $endorsementCoverages;
+            }
             $data['previous_policy_data'][0]['update_date'] = $data['update_date'];
         }
         $returnArray = array_merge($data,$premiumRateCardDetails);
