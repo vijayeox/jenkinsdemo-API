@@ -283,6 +283,12 @@ class SetupEndorsement extends AbstractAppDelegate
         if(isset($data['endorAmount'])){
             $data['endorAmount'] = 0;
         }
+         if(isset($data['csrGrandTotal'])){
+            $data['csrGrandTotal'] = 0;
+        }
+         if(isset($data['userGrandTotal'])){
+            $data['userGrandTotal'] = 0;
+        }
         if(isset($data['endor_cylinderInstructor_attachments'])){
             $data['endor_cylinderInstructor_attachments']=array();
         }
