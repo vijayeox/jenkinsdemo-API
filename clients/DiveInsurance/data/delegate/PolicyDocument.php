@@ -679,6 +679,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['regeneratePolicy'])){
                 $data['regeneratePolicy'] = "";
             }
+            if(isset($data['refundAmount'])){
+                $data['refundAmount'] = "";
+            }
+
 
             if($this->type == "endorsement" || $data['product'] == 'Individual Professional Liability'){
                 $data['endorsementInProgress'] = false;
