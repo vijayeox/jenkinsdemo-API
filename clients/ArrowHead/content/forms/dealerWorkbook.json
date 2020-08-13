@@ -57,6 +57,7 @@
 				}, {
 					"components": [{
 						"label": "Date",
+						"displayInTimezone": "utc",
 						"format": "MM/dd/yyyy",
 						"placeholder": "MM/DD/YYYY",
 						"tableView": true,
@@ -83,7 +84,7 @@
 						"hideOnChildrenHidden": false,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": true,
@@ -571,16 +572,6 @@
 				"layoutFixed": false,
 				"enableRowGroups": false,
 				"tableView": false,
-				"defaultValue": [{
-					"genfirstname": "",
-					"genlastname": "",
-					"phone": "",
-					"email": "",
-					"accounting": "",
-					"lossControl": "",
-					"mvrPolicyDocs": "",
-					"fullName": " "
-				}],
 				"validate": {
 					"minLength": 1
 				},
@@ -849,6 +840,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Effective Date",
+						"displayInTimezone": "utc",
 						"format": "MM/dd/yyyy ",
 						"placeholder": "MM/DD/YYYY",
 						"tableView": true,
@@ -866,7 +858,7 @@
 						"hideOnChildrenHidden": false,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": true,
@@ -892,6 +884,7 @@
 				}, {
 					"components": [{
 						"label": "Need by Date",
+						"displayInTimezone": "utc",
 						"format": "MM/dd/yyyy",
 						"placeholder": "MM/DD/YYYY",
 						"tableView": true,
@@ -913,7 +906,7 @@
 						"hideOnChildrenHidden": false,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": true,
@@ -1047,6 +1040,22 @@
 				"type": "selectboxes",
 				"input": true,
 				"inputType": "checkbox"
+			}, {
+				"label": "New Business Checklist File",
+				"tableView": false,
+				"storage": "url",
+				"webcam": false,
+				"fileTypes": [{
+					"label": "",
+					"value": ""
+				}],
+				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+				"fileMaxSize": "10MB",
+				"key": "newBusinessChecklistFile",
+				"customConditional": "show = data.newBusinessChecklist.narrative \n|| data.newBusinessChecklist.dealerSov \n|| data.newBusinessChecklist.employeeNonEmployeeList \n|| data.newBusinessChecklist.lossRuns5Years \n|| data.newBusinessChecklist.financials \n|| data.newBusinessChecklist.otherDecPagesFilings",
+				"type": "file",
+				"input": true,
+				"url": "/file/attachment"
 			}]
 		}, {
 			"title": "General Questions",
@@ -1455,11 +1464,6 @@
 			"layoutFixed": false,
 			"enableRowGroups": false,
 			"tableView": false,
-			"defaultValue": [{
-				"insuname": "",
-				"descriptionOfOperations": "",
-				"applicatbleLocations": ""
-			}],
 			"key": "namedInsuredSchedule",
 			"type": "datagrid",
 			"input": true,
@@ -2698,6 +2702,7 @@
 																"required": true
 															},
 															"key": "businesspersonal",
+															"customConditional": "show = row.occupancyType != \"bldgLeasedToOthers\";",
 															"type": "number",
 															"decimalLimit": 2,
 															"input": true,
@@ -6012,6 +6017,7 @@
 												}, {
 													"components": [{
 														"label": "Installation Date",
+														"displayInTimezone": "utc",
 														"format": "MM/dd/yyyy",
 														"placeholder": "MM/DD/YYYY",
 														"tableView": false,
@@ -6030,7 +6036,7 @@
 														"input": true,
 														"widget": {
 															"type": "calendar",
-															"displayInTimezone": "viewer",
+															"displayInTimezone": "utc",
 															"language": "en",
 															"useLocaleSettings": false,
 															"allowInput": true,
@@ -6972,6 +6978,7 @@
 				}, {
 					"components": [{
 						"label": "Date of completion of last audit of cash & accounts",
+						"displayInTimezone": "utc",
 						"format": "MM/dd/yyyy",
 						"placeholder": "MM/DD/YYYY",
 						"tableView": true,
@@ -6995,7 +7002,7 @@
 						"hideOnChildrenHidden": false,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": true,
@@ -7029,6 +7036,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Date of completion of last audit of inventory",
+						"displayInTimezone": "utc",
 						"format": "MM/dd/yyyy",
 						"placeholder": "MM/DD/YYYY",
 						"tableView": true,
@@ -7052,7 +7060,7 @@
 						"hideOnChildrenHidden": false,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": true,
@@ -7079,7 +7087,9 @@
 					"components": [{
 						"label": "Audit report is sent to",
 						"widget": "choicesjs",
+						"placeholder": "Please choose all that apply",
 						"tableView": true,
+						"multiple": true,
 						"data": {
 							"values": [{
 								"value": "owners",
@@ -7093,6 +7103,9 @@
 							}]
 						},
 						"selectThreshold": 0.3,
+						"validate": {
+							"multiple": true
+						},
 						"key": "auditreportissentto",
 						"type": "select",
 						"indexeddb": {
@@ -9011,6 +9024,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"validate": {
+								"required": true,
 								"min": 0,
 								"max": 100
 							},
@@ -9041,6 +9055,9 @@
 								"label": "No",
 								"shortcut": ""
 							}],
+							"validate": {
+								"required": true
+							},
 							"key": "dealerreviewsdocuments",
 							"type": "radio",
 							"input": true,
@@ -9074,6 +9091,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"validate": {
+								"required": true,
 								"min": 0,
 								"max": 100
 							},
@@ -9104,6 +9122,9 @@
 								"label": "No",
 								"shortcut": ""
 							}],
+							"validate": {
+								"required": true
+							},
 							"key": "controlsareinplacetoprevent",
 							"type": "radio",
 							"input": true,
@@ -9135,6 +9156,9 @@
 								"label": "No",
 								"shortcut": ""
 							}],
+							"validate": {
+								"required": true
+							},
 							"key": "customersinsuranceverified",
 							"type": "radio",
 							"input": true,
@@ -9161,6 +9185,9 @@
 								"label": "No",
 								"shortcut": ""
 							}],
+							"validate": {
+								"required": true
+							},
 							"key": "regularlythroughouttermofloan",
 							"type": "radio",
 							"input": true,
@@ -13047,7 +13074,7 @@
 					"size": "md"
 				}, {
 					"components": [{
-						"label": "Auto Fill Driver Names",
+						"label": "Auto Fill Designated Persons",
 						"action": "event",
 						"showValidations": false,
 						"theme": "warning",
@@ -14593,6 +14620,11 @@
 				"collapsible": false,
 				"tableView": false,
 				"key": "managerialAndSupervisoryPersonnel",
+				"conditional": {
+					"show": true,
+					"when": "humanresourcesmanual",
+					"eq": "yes"
+				},
 				"type": "panel",
 				"label": "Managerial and Supervisory Personnel",
 				"input": false,
@@ -15889,6 +15921,7 @@
 				"columns": [{
 					"components": [{
 						"label": "Retroactive Date",
+						"displayInTimezone": "utc",
 						"format": "MM/dd/yyyy",
 						"placeholder": "MM/DD/YYYY",
 						"tableView": true,
@@ -15911,7 +15944,7 @@
 						"hideOnChildrenHidden": false,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": true,
@@ -17230,6 +17263,7 @@
 					}, {
 						"components": [{
 							"label": "Date installed or last replaced",
+							"displayInTimezone": "utc",
 							"format": "MM/dd/yyyy",
 							"placeholder": "MM/DD/YYYY",
 							"tableView": true,
@@ -17256,7 +17290,7 @@
 							"hideOnChildrenHidden": false,
 							"widget": {
 								"type": "calendar",
-								"displayInTimezone": "viewer",
+								"displayInTimezone": "utc",
 								"language": "en",
 								"useLocaleSettings": false,
 								"allowInput": true,
@@ -18370,6 +18404,7 @@
 				}, {
 					"components": [{
 						"label": "Retro Date",
+						"displayInTimezone": "utc",
 						"format": "MM/dd/yyyy",
 						"placeholder": "MM/DD/YYYY",
 						"tableView": true,
@@ -18393,7 +18428,7 @@
 						"hideOnChildrenHidden": false,
 						"widget": {
 							"type": "calendar",
-							"displayInTimezone": "viewer",
+							"displayInTimezone": "utc",
 							"language": "en",
 							"useLocaleSettings": false,
 							"allowInput": true,
@@ -19390,11 +19425,13 @@
 			},
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"persistent": false
 		}, {
 			"label": "RPS Cyber PDF Data",
+			"persistent": true,
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "var tempAllEmployees = 0;\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map((buildingItem) => {\n        tempAllEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees +\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n      });\n    });\n  }\n}\n\nvalue = {\n  \" of Employees\": tempAllEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership ? data.numYearsOfOwnership : 0\n};\n\nconsole.log(value);",
+			"calculateValue": "var tempAllEmployees = 0;\nvar checkofRecordsContaining = '';\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map((buildingItem) => {\n        tempAllEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees +\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n      });\n    });\n  }\n}\n\nif(data.ofRecordsContaining > 0){\n    if(data.ofRecordsContaining < 100000){\n        checkofRecordsContaining = '1-100,000';\n    }\n    else if(data.ofRecordsContaining > 100000 && data.ofRecordsContaining < 250000){\n        checkofRecordsContaining = '100,000-250,000';\n    }\n    else if(data.ofRecordsContaining > 250000 && data.ofRecordsContaining < 500000){\n        checkofRecordsContaining = '250,000-500,000';\n    }\n    else if(data.ofRecordsContaining > 500000 && data.ofRecordsContaining < 750000){\n        checkofRecordsContaining = '500,000-750,000';\n    }\n    else if(data.ofRecordsContaining > 750000 && data.ofRecordsContaining < 1000000){\n        checkofRecordsContaining = '750,000-1,000,000';\n    }\n    else{\n        checkofRecordsContaining = '1,000,000+';\n    }\n}\n\nvalue = {\n  \"# of Records\":  checkofRecordsContaining,\n  \"State\": data.state.name,\n  \" of Employees\": tempAllEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership ? data.numYearsOfOwnership : 0\n};\n\nconsole.log(value);",
 			"key": "rpsCyberPDFData",
 			"properties": {
 				"data_type": "json"
@@ -19404,8 +19441,9 @@
 			"tableView": false
 		}, {
 			"label": "GAIC Epli PDF Data",
+			"persistent": true,
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "var tempFullTimeEmployees = 0;\nvar tempPartTimeEmployees = 0;\nvar tempContractDrivers = 0;\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map(buildingItem => {\n        tempFullTimeEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees;\n        tempPartTimeEmployees +=\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n        tempContractDrivers += buildingItem.contractDriversNonEmployees;\n      });\n    });\n  }\n}\n\nvalue = {\n  \"City, State, Zip\": data.city + \",\" + data.state + \",\" + data.zip,\n  \"a  full time employees\": tempFullTimeEmployees,\n  \"b  part time employees\": tempPartTimeEmployees,\n  Name: data.hrRepresentative,\n  \"c leasedcontract employees\": tempContractDrivers,\n  Date: moment().format(\"YYYY-MM-DD\"),\n  Group25:\n    data.noticetoinsurer == \"notApplicable\"\n      ? \"Choice1\"\n      : data.noticetoinsurer == \"yes\"\n      ? \"2\"\n      : \"3\",\n  Group26:\n    data.nonrenewedcoverage == \"notApplicable\"\n      ? \"Choice1\"\n      : data.nonrenewedcoverage == \"yes\"\n      ? \"2\"\n      : \"Choice3\"\n};",
+			"calculateValue": "var tempFullTimeEmployees = 0;\nvar tempPartTimeEmployees = 0;\nvar tempContractDrivers = 0;\nvar Phone = \"\";\nvar Email = \"\";\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem) => {\n      locationItem.buildingDetails.map(buildingItem => {\n        tempFullTimeEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto ? buildingItem.fTEmployeesFurnishedAnAuto : 0 +\n          buildingItem.fTEmployeesWhoAreNotFurnished ? buildingItem.fTEmployeesWhoAreNotFurnished : 0 +\n          buildingItem.fTAllOtherEmployees ? buildingItem.fTAllOtherEmployees : 0;\n        tempPartTimeEmployees +=\n          buildingItem.pTEmployeesFurnishedAnAuto ? buildingItem.pTEmployeesFurnishedAnAuto : 0 +\n          buildingItem.pTEmployeesWhoAreNotFurnished ? buildingItem.pTEmployeesWhoAreNotFurnished : 0 +\n          buildingItem.pTAllOtherEmployees ? buildingItem.pTAllOtherEmployees : 0;\n        tempContractDrivers += buildingItem.contractDriversNonEmployees ? buildingItem.contractDriversNonEmployees : 0;\n      });\n    });\n  }\n}\ndata.insurancecontactdataGrid.some(item => {\n  if (item.genfullName == data.hrRepresentative) {\n    Phone = item.genphone;\n    Email = item.genemail;\n    return true;\n  } else {\n    return false;\n  }\n});\n\nvalue = {\n  \"City, State, Zip\": data.city + \",\" + data.state.name + \",\" + data.zip,\n  \"a  full time employees\": tempFullTimeEmployees,\n  \"b  part time employees\": tempPartTimeEmployees,\n  \"Employees  Within the US\": tempFullTimeEmployees + tempPartTimeEmployees,\n  Name: data.hrRepresentative,\n  Phone: Phone,\n  Email: Email,\n  'Within the US': data.locationSchedule.length,\n  \"c leasedcontract employees\": tempContractDrivers,\n  Date: moment().format(\"YYYY-MM-DD\"),\n  Group25:\n    data.noticetoinsurer == \"notApplicable\"\n      ? \"Choice1\"\n      : data.noticetoinsurer == \"yes\"\n      ? \"2\"\n      : \"3\",\n  Group26:\n    data.nonrenewedcoverage == \"notApplicable\"\n      ? \"Choice1\"\n      : data.nonrenewedcoverage == \"yes\"\n      ? \"2\"\n      : \"Choice3\"\n};\nconsole.log(value);",
 			"key": "gaicEpliPdfData",
 			"properties": {
 				"data_type": "json"
@@ -19425,8 +19463,9 @@
 			"tableView": false
 		}, {
 			"label": "Franchised Auto Dealer",
+			"persistent": false,
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "value = {\r\n  CityStateZip: data.city + \",\" + data.state + \",\" + data.zip,\r\n  InsuranceContactNameandPhone: data.insurancecontactdataGrid\r\n    ? data.insurancecontactdataGrid[0].genfirstname +\r\n      \" \" +\r\n      data.insurancecontactdataGrid[0].genlastname +\r\n      \",\" +\r\n      data.insurancecontactdataGrid[0].phone\r\n    : \"\",\r\n  checkSecurityGuards: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolsecguards == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkdolpostnchain: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolEntranceQuestions.postChain == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checknumberofservicebays: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.numberofservicebays == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  formalsafetymeetingsNone: data.formalsafetymeetings == \"none\" ? \"No\" : \"Yes\",\r\n  formalsafetymeetingsMonthly:\r\n    data.formalsafetymeetings == \"monthly\" ? \"true\" : \"false\",\r\n  checkrepairpercentlabor:\r\n    data.repairpercentlabor == 95 || data.repairpercentlabor == 85\r\n      ? 90\r\n      : data.repairpercentlabor,\r\n  checkauditfrequencyannual: data.auditfrequency == \"annual\" ? \"true\" : \"false\",\r\n  checkauditfrequencysemiAnnual:\r\n    data.auditfrequency == \"semiAnnual\" ? \"true\" : \"false\",\r\n  checkauditfrequencyquarterly:\r\n    data.auditfrequency == \"quarterly\" ? \"true\" : \"false\",\r\n  checkauditreportissenttoowners:\r\n    data.auditreportissentto == \"owners\" ? \"true\" : \"false\",\r\n  checkauditreportissenttopartners:\r\n    data.auditreportissentto == \"partners\" ? \"true\" : \"false\",\r\n  checkauditreportissenttoboardOfDirectors:\r\n    data.auditreportissentto == \"boardOfDirectors\" ? \"true\" : \"false\",\r\n  checkwhodeliversvehiclesonemployee:\r\n    data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\r\n  checkwhodeliversvehiclesonindependentContractor:\r\n    data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\"\r\n};\r\nconsole.log(value);",
+			"calculateValue": "value = {\r\n  CityStateZip: data.city + \",\" + data.state.name + \",\" + data.zip,\r\n  InsuranceContactNameandPhone: data.insurancecontactdataGrid\r\n    ? data.insurancecontactdataGrid[0].genfirstname +\r\n      \" \" +\r\n      data.insurancecontactdataGrid[0].genlastname +\r\n      \",\" +\r\n      data.insurancecontactdataGrid[0].genphone\r\n    : \"\",\r\n  checkSecurityGuards: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolsecguards == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkdolpostnchain: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolEntranceQuestions.postChain == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  checknumberofservicebays: data.genericData.locationScheduleGridData.some(\r\n    (locationItem) => {\r\n      if (locationItem.numberofservicebays == \"yes\") {\r\n        return true;\r\n      } else {\r\n        return false;\r\n      }\r\n    }\r\n  ),\r\n  formalsafetymeetingsNone: data.formalsafetymeetings == \"none\" ? \"No\" : \"Yes\",\r\n  formalsafetymeetingsMonthly:\r\n    data.formalsafetymeetings == \"monthly\" ? \"true\" : \"false\",\r\n  checkrepairpercentlabor:\r\n    data.repairpercentlabor == 95 || data.repairpercentlabor == 85\r\n      ? 90\r\n      : data.repairpercentlabor,\r\n  checkauditfrequencyannual: data.auditfrequency == \"annual\" ? \"true\" : \"false\",\r\n  checkauditfrequencysemiAnnual:\r\n    data.auditfrequency == \"semiAnnual\" ? \"true\" : \"false\",\r\n  checkauditfrequencyquarterly:\r\n    data.auditfrequency == \"quarterly\" ? \"true\" : \"false\",\r\n  checkauditreportissenttoowners:\r\n    data.auditreportissentto == \"owners\" ? \"true\" : \"false\",\r\n  checkauditreportissenttopartners:\r\n    data.auditreportissentto == \"partners\" ? \"true\" : \"false\",\r\n  checkauditreportissenttoboardOfDirectors:\r\n    data.auditreportissentto == \"boardOfDirectors\" ? \"true\" : \"false\",\r\n  checkwhodeliversvehiclesonemployee:\r\n    data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\r\n  checkwhodeliversvehiclesonindependentContractor:\r\n    data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\"\r\n};\r\nconsole.log(value);",
 			"key": "franchisedAutoDealer",
 			"properties": {
 				"data_type": "json"
@@ -19443,7 +19482,8 @@
 			},
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"persistent": false
 		}, {
 			"label": "Harco EXCEL Data",
 			"redrawOn": "workbooksToBeGenerated",
@@ -19454,13 +19494,14 @@
 			},
 			"type": "hidden",
 			"input": true,
-			"tableView": false
+			"tableView": false,
+			"persistent": false
 		}],
 		"input": false
 	}],
 	"controller": "function insertAfter(referenceNode, newNode) {\r\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\r\n}\r\n\r\nvar s = document.createElement(\"script\");\r\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\r\ns.onload = function (e) {\r\n  var appendCustomButtonTimer = setInterval(() => {\r\n    if (\r\n      document.getElementById(\r\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n      )\r\n    ) {\r\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\r\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\r\n        clone.children[0].textContent = \"Save Draft\";\r\n        clone.children[0].id = \"saveDraftCustomButton\";\r\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\r\n        saveDraftCustomButton.onclick = function () {\r\n          var closeForm = confirm(\r\n            \"Do you want to close the form after saving the data?\"\r\n          );\r\n          let ev = new CustomEvent(\"customButtonAction\", {\r\n            detail: {\r\n              timerVariable: appendCustomButtonTimer,\r\n              formData: data,\r\n              commands:\r\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\r\n              exit: closeForm,\r\n              notification: \"Form saved successfully\",\r\n            },\r\n            bubbles: false,\r\n          });\r\n          document\r\n            .getElementById(\r\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n            )\r\n            .dispatchEvent(ev);\r\n        };\r\n      }\r\n      var dataGridDeleteIcons = document.getElementsByClassName(\r\n        \"fa-times-circle-o\"\r\n      );\r\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\r\n      if (dataGridDeleteIcons.length > 0) {\r\n        dataGridDeleteIcons.map((item) => {\r\n          item.classList.add(\"fa-times-circle\");\r\n          item.classList.remove(\"fa-times-circle-o\");\r\n        });\r\n      }\r\n    } else {\r\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\r\n    }\r\n  }, 1000);\r\n\r\n//   var appendCustomAutoSave = setInterval(() => {\r\n//     console.log(\"autosave start\");\r\n//     if (\r\n//       document.getElementById(\r\n//         \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n//       )\r\n//     ) {\r\n//       let ev2 = new CustomEvent(\"customButtonAction\", {\r\n//         detail: {\r\n//           timerVariable: appendCustomAutoSave,\r\n//           formData: data,\r\n//           commands:\r\n//             '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\r\n//           exit: false,\r\n//           notification: \"Form Saved\",\r\n//         },\r\n//         bubbles: false,\r\n//       });\r\n//       document\r\n//         .getElementById(\"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\")\r\n//         .dispatchEvent(ev2);\r\n//     } else {\r\n//       appendCustomAutoSave ? clearInterval(appendCustomAutoSave) : null;\r\n//     }\r\n//   }, 15000);\r\n};\r\ndocument.head.appendChild(s);",
 	"revisions": "original",
-	"_vid": 682,
+	"_vid": 704,
 	"title": "Dealer Workbook",
 	"display": "wizard",
 	"access": [{
@@ -19543,6 +19584,6 @@
 	"path": "dealerworkbook",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-06-25T07:04:35.147Z",
-	"modified": "2020-08-12T13:14:42.364Z",
+	"modified": "2020-08-13T11:54:45.116Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }

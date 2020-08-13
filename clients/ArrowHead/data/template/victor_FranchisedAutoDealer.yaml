@@ -829,20 +829,26 @@
    cell: Check Box 8
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditreportissenttoowners
+   key: auditreportissentto_owners
    pageName: Crime (printable)
    cell: Check Box 5
    type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
 -
-   key: franchisedAutoDealer*checkauditreportissenttopartners
+   key: auditreportissentto_partners
    pageName: Crime (printable)
    cell: Check Box 7
    type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
 -
-   key: franchisedAutoDealer*checkauditreportissenttoboardOfDirectors
+   key: auditreportissentto_boardOfDirectors
    pageName: Crime (printable)
    cell: Check Box 9
    type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
 -
    key: genericData*locationScheduleGridData_locationNum
    method: simpleDatagrid

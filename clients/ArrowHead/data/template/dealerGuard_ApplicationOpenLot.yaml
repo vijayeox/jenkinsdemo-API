@@ -117,6 +117,12 @@
    method: checkbox_X
    cell: B47
 -
+   Source Worksheet: accident Investigation
+   pageName: APPLICATION
+   key: accidentInvestigation
+   method: checkbox_X
+   cell: B44
+-
    Source Worksheet: >-
       Formal safety meetings:( If at least quarterly, please attach copy of
       minutes from last meeting)
@@ -225,11 +231,39 @@
    pageName: APPLICATION
    key: dolcompdeduc
    cell: 'C27'
+   returnValue:
+      '5002500' : '500 / 2,500'
+      '10005000' : '1,000 / 5,000'
+      '100025000' : '1,000 / 2,5000'
+      '15007500' : '1,500 / 7,500'
+      '150025000' : '1,500 / 25,000'
+      '250010000' : '2,500 / 12,500'
+      '250012500' : '2,500 / 12,500'
+      '250025000' : '2,500 / 25,000'
+      '500025000' : '5,000 / 25,000'
+      '750037500' : '7,500 / 37,500'
+      '1000050000' : '10,000 / 50,000'
+      '25000125000' : '25,000 / 125,000'
+      '50000250000' : '50,000 / 250,000'
 -
    Source Worksheet: 'Comp Deductible:'
    pageName: APPLICATION
    key: dolcompdeduc
    cell: 'C29'
+   returnValue:
+      '5002500' : '500 / 2,500'
+      '10005000' : '1,000 / 5,000'
+      '100025000' : '1,000 / 2,5000'
+      '15007500' : '1,500 / 7,500'
+      '150025000' : '1,500 / 25,000'
+      '250010000' : '2,500 / 12,500'
+      '250012500' : '2,500 / 12,500'
+      '250025000' : '2,500 / 25,000'
+      '500025000' : '5,000 / 25,000'
+      '750037500' : '7,500 / 37,500'
+      '1000050000' : '10,000 / 50,000'
+      '25000125000' : '25,000 / 125,000'
+      '50000250000' : '50,000 / 250,000'
 -
    Source Worksheet: 'Wind/Hail Deductible: '
    pageName: APPLICATION

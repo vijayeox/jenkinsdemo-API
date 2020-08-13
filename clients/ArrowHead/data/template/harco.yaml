@@ -1040,12 +1040,6 @@
    method: simpleDatagrid
    type: DataGrid
 -
-   Source Worksheet: Each Occurrence
-   pageName: P-Pollution
-   cell: I8
-   key: eachoccurrence
-   note: Wrong validation issue
--
    Source Worksheet: New Sales
    pageName: Q-Umb
    cell: 'E24'
