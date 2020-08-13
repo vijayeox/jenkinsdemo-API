@@ -58,11 +58,6 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
-                Controller\FileCallbackController::class => function ($container) {
-                    return new Controller\FileCallbackController(
-                        $container->get(\Oxzion\Service\FileService::class)
-                    );
-                },
             ],
         ];
     }

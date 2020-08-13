@@ -44,20 +44,6 @@ return [
                     ],
                 ],
             ],
-            'fileCallbackUpdate' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/callback/file/update',
-                    'defaults' => [
-                        'controller' => Controller\FileCallbackController::class,
-                        'method' => 'POST',
-                        'action' => 'updateFile',
-                        'access'=>[
-                            // SET ACCESS CONTROL
-                        ],
-                    ],
-                ],
-            ],
         ],
     ],
     'view_manager' => [
