@@ -15,6 +15,7 @@
    key: legalEntity
    method: simpleDatagrid
    type: DataGrid
+   note: wrong mapping Add returnValue
 -
    Source Worksheet: Mailing Address
    pageName: A-Gen
@@ -60,16 +61,6 @@
    pageName: A-Gen
    cell: 'F14'
    key: website
--
-   Source Worksheet: 'Dealer Name:'
-   pageName: A-Gen
-   cell: 'D21'
-   key: dealerName
-# -
-#    Source Worksheet: '% of ownership'
-#    pageName: A-Gen
-#    cell: 'K21'
-#    key: dealerOwnershipPercentage
 -
    Source Worksheet: 'Effective Date:'
    pageName: A-Gen
@@ -118,6 +109,19 @@
    type: DataGrid
    skip: '1_1'
    macro: A_AddOthNmdInsd_Click
+-
+   Source Worksheet: 'Dealer Name:'
+   pageName: A-Gen
+   cell: 'D21'
+   key: dealershipPersonnel_name
+   method: simpleDatagrid
+   macro: 'A_AddDlrPers_Click'
+-
+   Source Worksheet: '% of ownership'
+   pageName: A-Gen
+   cell: 'K21'
+   key: dealershipPersonnel_ownershipPercentage
+   method: simpleDatagrid
 -
    pageName: C-Locs&AIs
    cell: I24
