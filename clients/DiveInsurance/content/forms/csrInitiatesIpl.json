@@ -2590,7 +2590,7 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = \"0\";\n    }\n}",
+									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) != 0){\n      value = total;\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -4778,6 +4778,19 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
+			"label": "Please process the payment and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the Refund of <b>${{data.balance * -1}}</b> and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page6Pleaseprocessthepaymentandapprove2",
+			"customConditional": "show = (parseFloat(data.balance) < 0);",
+			"type": "htmlelement",
+			"input": false
+		}, {
 			"label": "aw",
 			"tableView": false,
 			"key": "aw",
@@ -4975,7 +4988,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 578,
+	"_vid": 580,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4996,6 +5009,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-29T06:41:21.711Z",
+	"modified": "2020-08-13T11:05:39.733Z",
 	"machineName": "testdivehub:csrInitiates"
 }
