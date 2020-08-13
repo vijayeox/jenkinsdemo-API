@@ -37,36 +37,27 @@ class RegenerateDocuments extends PolicyDocument
         $temp = array();
         $dest = "";
         $documents = $fileData['documents'];
-        if ($fileData[$param] == 'withTecRecEndorsementForSelectionAbove') {
-            $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
-             if(isset($data['previous_policy_data'])){
-                $previous_data = array();
-                $previous_data = is_string($data['previous_policy_data']) ? json_decode($data['previous_policy_data'],true) : $data['previous_policy_data'];
-                $length = sizeof($previous_data);
-            }else{
-                $previous_data = array();
-            }
-            if (is_string($documents)) {
-                $documents = json_decode($documents,true);
-            }
-            $this->setCoverageDetails($fileData,$previous_data,$temp,$documents,$persistenceService); 
-            $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-            $this->policyCOI($policyDocuments,$temp,$documents); 
+        if($param == "tecRecEndorsment"){
+            if ($fileData[$param] == 'withTecRecEndorsementForSelectionAbove') {
+                $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
+                 if(isset($data['previous_policy_data'])){
+                    $previous_data = array();
+                    $previous_data = is_string($data['previous_policy_data']) ? json_decode($data['previous_policy_data'],true) : $data['previous_policy_data'];
+                    $length = sizeof($previous_data);
+                }else{
+                    $previous_data = array();
+                }
+                if (is_string($documents)) {
+                    $documents = json_decode($documents,true);
+                }
+                $this->setCoverageDetails($fileData,$previous_data,$temp,$documents,$persistenceService); 
+                $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                $this->policyCOI($policyDocuments,$temp,$documents); 
 
+            }
         }
         if ($param == 'medicalPayment') {
-            foreach ($fileData as $key => $value) {
-                if(is_string($value)){
-                    $tempValue = json_decode($value,true);
-                    if(isset($tempValue)){
-                        $fileData[$key] = $tempValue;
-                    }else if($value === "false"){
-                        $fileData[$key] = 0;
-                    }else if($value === "true"){
-                        $fileData[$key] = 1;
-                    }
-                }
-            }
+            $this->processFileData($fileData,$documents);
             if($fileData[$param] == 1){
                 if(!isset($fileData['MedicalExpenseFP'])){
                     $fileData['MedicalExpenseFP'] = 0;
@@ -119,9 +110,10 @@ class RegenerateDocuments extends PolicyDocument
 
             }
             if($param == 'propertyDS'){
-                 $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
-                 $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-                 $this->generateDiveStorePropertyDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
+                $this->processFileData($fileData,$documents);
+                $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
+                $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                $this->generateDiveStorePropertyDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
             }
         }
     }
@@ -135,5 +127,19 @@ class RegenerateDocuments extends PolicyDocument
         $this->processData($temp);
     }
 
- 
+    private function processFileData(&$fileData,&$documents){
+        foreach ($fileData as $key => $value) {
+            if(is_string($value)){
+                $tempValue = json_decode($value,true);
+                if(isset($tempValue)){
+                    $fileData[$key] = $tempValue;
+                }else if($value === "false"){
+                    $fileData[$key] = 0;
+                }else if($value === "true"){
+                    $fileData[$key] = 1;
+                }
+            }
+        }
+        $documents = $fileData['documents'];
+    }
 }
