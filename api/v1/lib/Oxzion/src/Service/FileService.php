@@ -1545,7 +1545,7 @@ class FileService extends AbstractService
             } else {
                 $sort .= "," . $value['field'] . " " . $dir;
             }
-            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $value['field'];
+            $field .= " , (select CASE WHEN " . $sortTable . ".field_value_type = 'TEXT' THEN ". $sortTable .".field_value_text WHEN ". $sortTable . ".field_value_type = 'DATE' THEN ". $sortTable .".field_value_date WHEN " . $sortTable . ".field_value_type = 'NUMERIC' THEN ". $sortTable .".field_value_numeric WHEN ". $sortTable . ".field_value_type = 'BOOLEAN' THEN ". $sortTable .".field_value_boolean END as field_value from ox_indexed_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=of.id) as " . $value['field'];
             $sortCount += 1;
         }
         return $sort;

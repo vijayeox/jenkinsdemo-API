@@ -537,7 +537,7 @@ class WorkflowService extends AbstractService
                 $where = rtrim($where, $filterlogic);
             }
             if (isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])) {
-                $sort = $this->buildSortQuery($filterParamsArray[0]['sort'], $field);
+                $sort = $this->fileService->buildSortQuery($filterParamsArray[0]['sort'], $field);
             }
         }
         $fromQuery = "FROM ox_workflow
