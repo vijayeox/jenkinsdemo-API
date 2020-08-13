@@ -58,7 +58,7 @@ ox_field:
   - id: 2
     name: "field2"
     app_id: 99
-    data_type: "text"
+    data_type: "integer"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 1
@@ -76,7 +76,7 @@ ox_field:
   - id: 4
     name: "padi_number"
     app_id: 99
-    data_type: "text"
+    data_type: "integer"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 4
@@ -86,17 +86,15 @@ ox_field:
     name: "policy_document"
     app_id: 99
     data_type: "document"
-    type: "document"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 5
     entity_id: 1
     index: 0
   - id: 6
-    name: "coi_attachment"
+    name: "coi_number"
     app_id: 99
-    data_type: "file"
-    type: "document"
+    data_type: "document"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 6
@@ -105,7 +103,7 @@ ox_field:
   - id: 7
     name: "field1"
     app_id: 99
-    data_type: "numeric"
+    data_type: "integer"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 2
@@ -125,7 +123,7 @@ ox_field:
     name: "coverage"
     text: "Coverage"
     app_id: 99
-    data_type: "numeric"
+    data_type: "text"
     template: '100000'
     required: 1
     sequence: 7
@@ -135,7 +133,6 @@ ox_field:
     name: "datagrid"
     app_id: 99
     data_type: "json"
-    type: 'datagrid'
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 1
@@ -150,7 +147,7 @@ ox_field:
     sequence: 1
     parent_id: 10
     entity_id: 4
-    index: 0
+    index: 1
   - id: 12
     name: "firstname"
     app_id: 99
@@ -165,17 +162,6 @@ ox_field:
     name: "lastname"
     app_id: 99
     data_type: "text"
-    template: '{"persistent" : "true"}'
-    required: 1
-    sequence: 1
-    parent_id: 10
-    entity_id: 4
-    index: 0
-  - id: 14
-    name: "id_document"
-    app_id: 99
-    data_type: "file"
-    type: "document"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 1
@@ -543,7 +529,7 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: 32552
     field_id: 1
-    sequence: null
+    sequence: 0
   - id: 2
     file_id: 11
     org_id: 1
@@ -551,7 +537,7 @@ ox_file_attribute:
     field_value_type: "DATE"
     field_value_date: "2019-10-01"
     field_id: 3
-    sequence: null
+    sequence: 0
   - id: 3
     file_id: 12
     org_id: 1
@@ -559,7 +545,7 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: 32552
     field_id: 1
-    sequence: null
+    sequence: 0
   - id: 4
     file_id: 13
     org_id: 1
@@ -567,7 +553,7 @@ ox_file_attribute:
     field_value_type: "DATE"
     field_value_date: "2020-01-01"
     field_id: 3
-    sequence: null
+    sequence: 0
   - id: 5
     file_id: 13
     org_id: 1
@@ -575,7 +561,7 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: 32552
     field_id: 1
-    sequence: null
+    sequence: 0
   - id: 6
     file_id: 14
     org_id: 1
@@ -583,7 +569,7 @@ ox_file_attribute:
     field_value_type: "DATE"
     field_value_date: "2030-06-20"
     field_id: 3
-    sequence: null
+    sequence: 0
   - id: 7
     file_id: 14
     org_id: 1
@@ -591,47 +577,47 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: 32552
     field_id: 1
-    sequence: null
+    sequence: 0
   - id: 8
     file_id: 11
     org_id: 1
     field_value: 1
-    field_value_type: "TEXT"
-    field_value_text: "some text"
+    field_value_type: "NUMERIC"
+    field_value_numeric: 1
     field_id: 2
-    sequence: null
+    sequence: 0
   - id: 9
     file_id: 12
     org_id: 1
     field_value: 8
-    field_value_type: "TEXT"
-    field_value_text: 8
+    field_value_type: "NUMERIC"
+    field_value_numeric: 8
     field_id: 2
-    sequence: null
+    sequence: 0
   - id: 10
     file_id: 14
     org_id: 1
     field_value: 8
-    field_value_type: "TEXT"
-    field_value_text: 8
+    field_value_type: "NUMERIC"
+    field_value_numeric: 8
     field_id: 2
-    sequence: null
+    sequence: 0
   - id: 11
     file_id: 11
     org_id: 1
     field_value: 47
-    field_value_type: "OTHER"
-    field_value_text: "[]"
+    field_value_type: "NUMERIC"
+    field_value_numeric: 47
     field_id: 5
-    sequence: null
+    sequence: 0
   - id: 12
     file_id: 11
     org_id: 1
     field_value: 6
-    field_value_type: "OTHER"
-    field_value_text: "[]"
+    field_value_type: "NUMERIC"
+    field_value_numeric: 6
     field_id: 6
-    sequence: null
+    sequence: 0
   - id: 13
     file_id: 15
     org_id: 1
@@ -639,7 +625,7 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-    sequence: null
+    sequence: 0
   - id: 16
     file_id: 16
     org_id: 1
@@ -647,13 +633,13 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-    sequence: null
+    sequence: 0
   - id: 17
     file_id: 16
     org_id: 1
     field_value: 8
-    field_value_type: "TEXT"
-    field_value_text: 8
+    field_value_type: "NUMERIC"
+    field_value_numeric: 8
     field_id: 2
     sequence: 0
   - id: 18
@@ -663,7 +649,7 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-    sequence: null
+    sequence: 0
   - id: 19
     file_id: 11
     org_id: 1
@@ -671,7 +657,7 @@ ox_file_attribute:
     field_value_type: "TEXT"
     field_value_text: "1year"
     field_id: 8
-    sequence: null
+    sequence: 0
   - id: 20
     file_id: 11
     org_id: 1
@@ -679,14 +665,14 @@ ox_file_attribute:
     field_value_type: "NUMERIC"
     field_value_numeric: 100000
     field_id: 9
-    sequence: null
+    sequence: 0
   - id: 21
     file_id: 20
     org_id: 1
     field_value: '{"some sample json"}'
     field_value_type: "OTHER"
     field_id: 10
-    sequence: null
+    sequence: 0
   - id: 22
     file_id: 20
     org_id: 1
@@ -714,20 +700,12 @@ ox_file_attribute:
   - id: 25
     file_id: 20
     org_id: 1
-    field_value: "[{}]"
-    field_value_type: "OTHER"
-    field_value_text: null
-    field_id: 14
-    sequence: 0
-  - id: 26
-    file_id: 20
-    org_id: 1
     field_value: 32552
     field_value_type: "TEXT"
     field_value_text: 32552
     field_id: 11
     sequence: 1
-  - id: 27
+  - id: 26
     file_id: 20
     org_id: 1
     field_value: 32552
@@ -735,7 +713,7 @@ ox_file_attribute:
     field_value_text: 32552
     field_id: 12
     sequence: 1
-  - id: 28
+  - id: 27
     file_id: 20
     org_id: 1
     field_value: 32552
@@ -743,39 +721,6 @@ ox_file_attribute:
     field_value_text: 32552
     field_id: 13
     sequence: 1
-  - id: 29
-    file_id: 20
-    org_id: 1
-    field_value: "[{}]"
-    field_value_type: "OTHER"
-    field_value_text: null
-    field_id: 14
-    sequence: 1
-ox_file_document:
-  - id: 1
-    file_id: 20
-    org_id: 1
-    field_value: "[{}]"
-    field_id: 14
-    sequence: 0
-  - id: 2
-    file_id: 20
-    org_id: 1
-    field_value: "[{}]"
-    field_id: 14
-    sequence: 1  
-  - id: 3
-    file_id: 11
-    org_id: 1
-    field_value: "[{}]"
-    field_id: 5
-    sequence: null
-  - id: 4
-    file_id: 11
-    org_id: 1
-    field_value: "[{}]"
-    field_id: 6
-    sequence: null
 ox_wf_user_identifier:
   - id: 1
     user_id: 1
@@ -839,24 +784,60 @@ ox_indexed_file_attribute:
     field_value_text: 32552
     field_id: 1
   - id: 8
+    file_id: 11
+    org_id: 1
+    field_value_type: "NUMERIC"
+    field_value_numeric: 1
+    field_id: 2
+  - id: 9
+    file_id: 12
+    org_id: 1
+    field_value_type: "NUMERIC"
+    field_value_numeric: 8
+    field_id: 2
+  - id: 10
+    file_id: 14
+    org_id: 1
+    field_value_type: "NUMERIC"
+    field_value_numeric: 8
+    field_id: 2
+  - id: 11
+    file_id: 11
+    org_id: 1
+    field_value_type: "NUMERIC"
+    field_value_numeric: 47
+    field_id: 5
+  - id: 12
+    file_id: 11
+    org_id: 1
+    field_value_type: "NUMERIC"
+    field_value_numeric: 6
+    field_id: 6
+  - id: 13
     file_id: 15
     org_id: 1
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-  - id: 9
+  - id: 16
     file_id: 16
     org_id: 1
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-  - id: 10
+  - id: 17
+    file_id: 16
+    org_id: 1
+    field_value_type: "NUMERIC"
+    field_value_numeric: 8
+    field_id: 2
+  - id: 18
     file_id: 18
     org_id: 1
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-  - id: 11
+  - id: 19
     file_id: 11
     org_id: 1
     field_value_type: "TEXT"
