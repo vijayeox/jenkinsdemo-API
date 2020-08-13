@@ -518,12 +518,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                  $check = $this->endorsementOptionsFlag($temp);
                 }
 
-                if ((!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) ))) {
-                    if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
-                        $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-                        $this->policyCOI($policyDocuments,$temp,$documents);
-                     }
+                if($data['product'] != 'Group Professional Liability'){
+                    if ((!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) ))) {
+                        if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
+                            $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                            $this->policyCOI($policyDocuments,$temp,$documents);
+                         }
 
+                    }
                 }
             }
            
@@ -1656,7 +1658,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
         protected function generateDiveStorePropertyDocument(&$data,&$documents,$temp,$dest,$options,$persistenceService){
             $this->getDSLiabilityPolicyDetails($data,$temp,$persistenceService);
-            $documents['property_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
+            $documents['property_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
         }
 
         private function getDSLiabilityPolicyDetails(&$data,&$temp,$persistenceService){
@@ -1668,7 +1670,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $propertyPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'PROPERTY');
             if($propertyPolicyDetails){
                 $data['property_policy_id'] = $temp['property_policy_id'] = $propertyPolicyDetails['policy_number'];
-                $data['property_carrier'] = $temp['property_policy_id'] = $propertyPolicyDetails['carrier'];
+                $data['property_carrier'] = $temp['property_carrier'] = $propertyPolicyDetails['carrier'];
             }
         }
 
@@ -1684,6 +1686,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         }
         protected function policyCOI($policyDocuments,$temp,&$documents){ 
+            print_r($policyDocuments);exit;
            if(is_array($policyDocuments)){  
                 foreach ($policyDocuments as $key => $value) {  
                     $documents[$key] = $value;  
@@ -1691,6 +1694,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){    
                 $documents['coi_document']  = array($policyDocuments);  
             }else if($temp['product'] == 'Dive Store'){ 
+                print("NEHA3");
                 $documents['liability_coi_document']  = $policyDocuments;   
             }else{  
                 $documents['coi_document']  = $policyDocuments; 

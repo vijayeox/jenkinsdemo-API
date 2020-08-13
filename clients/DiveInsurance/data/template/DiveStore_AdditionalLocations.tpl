@@ -193,6 +193,8 @@
                            $2,500
                         {elseif $propertyDeductibles == "propertyDeductibles5000"}
                            $5,000
+                        {else}
+                           $1,000
                         {/if}
                             </td>
                     </tr>
