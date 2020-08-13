@@ -206,9 +206,9 @@
 
             <!-- Alarm Calc -->
 
-                {if isset($ALcentralStationAlarm) && $ALcentralStationAlarm != "yes"}
+                {if isset($additionalLocationDataItem.ALcentralStationAlarm) && $additionalLocationDataItem.ALcentralStationAlarm != "yes"}
                     <div style="margin: 2% 0;">
-                        {if isset($centralStationAlarm) && $centralStationAlarm != "yes"}
+                        {if isset($additionalLocationDataItem.centralStationAlarm) && $additionalLocationDataItem.centralStationAlarm != "yes"}
                         <center>
                             <b>
                                 <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>

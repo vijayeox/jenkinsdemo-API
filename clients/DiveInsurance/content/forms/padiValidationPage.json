@@ -52,7 +52,7 @@
                     "inputFormat": "plain",
                     "validate": {
                         "required": true,
-                        "customMessage": "Max Length is 6",
+                        "customMessage": "Please provide a valid PADI Number",
                         "max": null
                     },
                     "key": "padi",
@@ -471,7 +471,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 16,
+    "_vid": 18,
     "title": "Padi Validation Page",
     "display": "form",
     "access": [{
@@ -485,6 +485,6 @@
     "path": "padivalidationpage",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-05T14:48:12.008Z",
-    "modified": "2020-08-12T10:44:22.956Z",
+    "modified": "2020-08-12T13:02:37.139Z",
     "machineName": "testdivehub:padiValidationPage1"
 }

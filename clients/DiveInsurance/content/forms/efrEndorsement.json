@@ -1107,7 +1107,7 @@
 				}, {
 					"components": [{
 						"label": "update_date",
-						"redrawOn": "effectiveDate",
+						"redrawOn": "endoEffectiveDate",
 						"calculateValue": "value = moment(data.endoEffectiveDate).format(\"YYYY-MM-DD\");",
 						"key": "update_date",
 						"type": "hidden",
@@ -2392,7 +2392,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 214,
+	"_vid": 215,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2413,7 +2413,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-08-13T04:29:57.620Z",
+	"modified": "2020-08-13T07:49:30.627Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

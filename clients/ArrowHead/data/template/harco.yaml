@@ -41,6 +41,15 @@
    pageName: A-Gen
    cell: 'F16'
    key: type
+   returnValue:
+      auto : Auto
+      truck : Truck
+      equipment : Equipment
+      trailer : Trailer
+      rv : RV
+      motorcycle : Motorcycle
+      nonFranchised : 'Non-Franchised'
+      lronly : 'L&R only'
 -
    Source Worksheet: Business Phone
    pageName: A-Gen
@@ -56,11 +65,11 @@
    pageName: A-Gen
    cell: 'D21'
    key: dealerName
--
-   Source Worksheet: '% of ownership'
-   pageName: A-Gen
-   cell: 'K21'
-   key: dealerOwnershipPercentage
+# -
+#    Source Worksheet: '% of ownership'
+#    pageName: A-Gen
+#    cell: 'K21'
+#    key: dealerOwnershipPercentage
 -
    Source Worksheet: 'Effective Date:'
    pageName: A-Gen
@@ -91,6 +100,15 @@
    pageName: A-Gen
    cell: E19
    key: type
+   returnValue:
+      auto : Auto
+      truck : Truck
+      equipment : Equipment
+      trailer : Trailer
+      rv : RV
+      motorcycle : Motorcycle
+      nonFranchised : 'Non-Franchised'
+      lronly : 'L&R only'
 -
    Source Worksheet: 'Named Insured schedule'
    pageName: A-Gen
@@ -268,23 +286,32 @@
    pageName: E-Prop
    cell: I8
    key: bppcoinsurance
+   returnValue: 
+      80 : '0.8'
+      90 : '0.9'
+      100 : '1'
 -
    Source Worksheet: Building Co-Insurance %
    pageName: E-Prop
    cell: 'G8'
    key: buildingCoinsurance
+   returnValue: 
+      80 : '0.8'
+      90 : '0.9'
+      100 : '1'
 -
    Source Worksheet: Deductible
    pageName: E-Prop
    cell: 'G7'
    key: propertyCoverageDeductible
--
-   Source Worksheet: Bi Monthly Limitation
-   pageName: E-Prop
-   cell: 'M9'
-   method: simpleDatagrid
-   type: DataGrid
-   key: genericData*locationScheduleGridData_bimonthlylimitation
+# -
+#    Source Worksheet: Bi Monthly Limitation
+#    pageName: E-Prop
+#    cell: 'M9'
+#    method: simpleDatagrid
+#    type: DataGrid
+#    key: genericData*locationScheduleGridData_bimonthlylimitation
+#    note: wrong mapping
 -
    Source Worksheet: Equipment Breakdown
    pageName: E-Prop
@@ -324,7 +351,9 @@
    key: genericData*locationScheduleGridData_blanketcoveragebpp1
    method: simpleDatagrid
    type: DataGrid
-   returnBoolean: 'Yes|No'
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
    Note: It’s a table in template
 -
    Source Worksheet: Blanket Coverage Business Income
@@ -333,7 +362,9 @@
    key: genericData*locationScheduleGridData_income1
    method: simpleDatagrid
    type: DataGrid
-   returnBoolean: 'Yes|No'
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
 -
    Source Worksheet: Building Limit
    key:  genericData*locationScheduleGridData_buildingLimit
@@ -386,7 +417,8 @@
 -
    Source Worksheet: Accounts Receivable
    pageName: G-IM
-   cell: E24
+   cell: 'Coverage Selection'
+   offset: '3,-1'
    key: harcoExcelData*GIMGridTwo
    type: DataGrid
    macro: G_AddIMMiscLoc
@@ -894,7 +926,7 @@
    Source Worksheet: epa
    pageName: P-Pollution
    cell: "Who disposes of hazardous waste? Please provide transport company's name and EPA #."
-   offset: "1,7"
+   offset: "1,10"
    key: epaDetails_epaNumber
    method: simpleDatagrid
    type: DataGrid
@@ -949,6 +981,7 @@
    cell: "Within the last five (5) years, has the applicant been the subject of third party liability claims as a result of a pollution event from a non-owned disposal facility? If “Yes,” please attach details associated with the claim and the claim status. "
    offset: '0,6'
    method: pulloutChild
+   returnBoolean: 'Yes|No'
    key: pollutionLiabilityUnderwritingSurvey_withinTheLastFive5YearsHasTheApplicantBeenTheSubjectOfThirdPartyLiabilityClaims
 -
    Source Worksheet: Are there any abandoned tanks on site?
@@ -1011,46 +1044,47 @@
    pageName: P-Pollution
    cell: I8
    key: eachoccurrence
+   note: Wrong validation issue
 -
    Source Worksheet: New Sales
    pageName: Q-Umb
-   cell: 'E29'
+   cell: 'E24'
    key: harcoExcelData*checknewcarsales
 -
    Source Worksheet: Used Sales
    pageName: Q-Umb
-   cell: 'I29'
+   cell: 'I24'
    key: harcoExcelData*checkusedCarSales
--
-   Source Worksheet: Finance/Insurance
-   pageName: Q-Umb
-   cell: 'M31'
-   key: harcoExcelData*checkfISales
 -
    Source Worksheet: Service/Repair
    pageName: Q-Umb
-   cell: 'E30'
+   cell: 'E25'
    key: harcoExcelData*checkserviceRepairSales
--
-   Source Worksheet: Auto Body
-   pageName: Q-Umb
-   cell: 'M32'
-   key: harcoExcelData*checkautoBodySales
 -
    Source Worksheet: Parts
    pageName: Q-Umb
-   cell: 'I30'
+   cell: 'I25'
    key: harcoExcelData*checkpartsSales
--
-   Source Worksheet: FI sales
-   pageName: Q-Umb
-   cell: 'E32'
-   key: harcoExcelData*OthersFISalesDescription
 -
    Source Worksheet: Auto body
    pageName: Q-Umb
-   cell: 'E31'
+   cell: 'E26'
    key: harcoExcelData*OthersAutoBodyDescription
+-
+   Source Worksheet: FI sales
+   pageName: Q-Umb
+   cell: 'E27'
+   key: harcoExcelData*OthersFISalesDescription
+-
+   Source Worksheet: Finance/Insurance
+   pageName: Q-Umb
+   cell: 'M26'
+   key: harcoExcelData*checkfISales
+-
+   Source Worksheet: Auto Body
+   pageName: Q-Umb
+   cell: 'M27'
+   key: harcoExcelData*checkautoBodySales
 -
    Source Worksheet: Limit
    pageName: Q-Umb
@@ -1059,7 +1093,7 @@
 -
    Source Worksheet: Umbrella - Name
    pageName: Q-Umb
-   cell: B21
+   cell: B18
    key: UmbrellaCoverageAdditional_umbrellaCoverageAdditionalName
    method: simpleDatagrid
    type: DataGrid
@@ -1068,7 +1102,7 @@
 -
    Source Worksheet: Umbrella - Ownership %
    pageName: Q-Umb
-   cell: 'I21'
+   cell: 'I18'
    key: UmbrellaCoverageAdditional_ownershipPercentage
    method: simpleDatagrid
    type: DataGrid
@@ -1111,21 +1145,23 @@
    type: Checkbox
    key: policyDeclined
    Note: It’s the check boxes in UW Q's sheet with options
--
-   Source Worksheet: 'If YES, please explain:'
-   pageName: UW Q's
-   cell: 'E19'
-   key: policyDeclinedExplain
+# -
+#    Source Worksheet: 'If YES, please explain:'
+#    pageName: UW Q's
+#    cell: 'E19'
+#    key: policyDeclinedExplain
 -
    Source Worksheet: Does applicant perform body work and spray painting?
    pageName: UW Q's
    cell: 'E38'
    key: spraypainting
+   returnBoolean: Yes|No
 -
    Source Worksheet: Is there a different employee handling each aspect of inventory (ordering,
       receiving, auditing)?
    pageName: UW Q's
    cell: 'E77'
+   returnBoolean: Yes|No
    method: pulloutChild
    key: underwritesurvey_isThereADifferentEmployeeHandlingEachAspectOfInventoryOrderingReceivingAuditing
 -
@@ -1133,12 +1169,14 @@
       access to cash/credit card receipts/disbursements?
    pageName: UW Q's
    cell: 'E78'
+   returnBoolean: Yes|No
    method: pulloutChild
    key: underwritesurvey_areBankCreditCardStatementsReconciledMonthlyBySomeoneWithNoAccessToCashCreditCardReceiptsDisbursements
 -
    Source Worksheet: Are two (2) employees required to sign off on all purchase orders?
    pageName: UW Q's
    cell: 'E79'
+   returnBoolean: Yes|No
    method: pulloutChild
    key: underwritesurvey_areTwo2EmployeesRequiredToSignOffOnAllPurchaseOrders
 -
@@ -1146,6 +1184,7 @@
       mailed to customers by someone other than the peson responsible
    pageName: UW Q's
    cell: 'E81'
+   returnBoolean: Yes|No
    method: pulloutChild
    key: underwritesurvey_areMonthlyAccountsReceivableStatementsReviewedByManagementAndMailedToCustomersBySomeoneOtherThanThePersonResponsible
 -
@@ -1174,17 +1213,20 @@
    pageName: UW Q's
    cell: 'E75'
    key: theftloss
+   returnBoolean: Yes|No
 -
    Source Worksheet: Are criminal background checks performed on all employees?
    pageName: UW Q's
    cell: 'E59'
    key: criminalbackgroundcheck
+   returnBoolean: Yes|No
 -
    Source Worksheet: Does dealership have a Buy Here / Pay Here (BH/PH) operation? If Yes,
       please complete the below questions
    pageName: UW Q's
    cell: 'E94'
    key: doesdealershiphaveabuyhere
+   returnBoolean: Yes|No
 -
    Source Worksheet: '% of sales done through the BH/PH operation?'
    pageName: UW Q's
@@ -1203,6 +1245,7 @@
    pageName: UW Q's
    cell: 'E96'
    key: controlsareinplacetoprevent
+   returnBoolean: Yes|No
 -
    Source Worksheet: What is the average percentage of loans in default?
    pageName: UW Q's
@@ -1213,18 +1256,21 @@
    pageName: UW Q's
    cell: 'E98'
    key: customersinsuranceverified
+   # returnBoolean: Yes|No
    note: If both rows 18 & 19 are answered YES, indicate YES on the Harco
       app.
 -
    Source Worksheet: Regularly throughout term of loan?
    pageName: UW Q's
    cell: 'E98'
+   # returnBoolean: Yes|No
    key: regularlythroughouttermofloan
 -
    Source Worksheet: 'Are repossessions handled by:'
    pageName: UW Q's
    cell: 'E99'
    key: repossessionshandledby
+   returnBoolean: Yes|No
    Note: 'Notes: If Third Party is selected, indicate YES on the Harco app.'
 -
    Source Worksheet: Demo / Furnished auto agreement?
@@ -1258,27 +1304,32 @@
    pageName: UW Q's
    cell: 'E25'
    key: mvrsonalldriversreviewedannually
+   returnBoolean: Yes|No
 -
    Source Worksheet: Accident review procedures w/detailed action plan?
    pageName: UW Q's
    cell: 'E30'
    key: accidentreviewprocedures
+   returnBoolean: Yes|No
 -
    Source Worksheet: Do EE's use own vehicle for business purposes?
    pageName: UW Q's
    cell: 'E24'
    key: doEEsuseownvehicleforbusiness
+   returnBoolean: Yes|No
 -
    Source Worksheet: Defensive driver training on all drivers? (If YES, attach defensive driver
       training documentation with submission)
    pageName: UW Q's
    cell: 'E26'
    key: defensivedrivertrainingonalldrivers
+   returnBoolean: Yes|No
 -
    Source Worksheet: Employees NOT furnished a company vehicle allowed to take vehicles home
       overnight?
    pageName: UW Q's
    cell: 'E22'
+   returnBoolean: Yes|No
    key: employeenotfurnishedacompany
 -
    Source Worksheet: 'Total # of service vehicles:'
@@ -1306,43 +1357,52 @@
    pageName: UW Q's
    cell: 'E111'
    key: anytowforhire
+   returnBoolean: Yes|No
 -
    Source Worksheet: Documented OEM training on all service techs?
    pageName: UW Q's
    cell: 'E39'
    key: documentoemtrainingonallservicestools
+   returnBoolean: Yes|No
 -
    Source Worksheet: Procedures/action plan for comebacks?
    pageName: UW Q's
    cell: 'E42'
    key: produceractionplanforcomebacks
+   returnBoolean: Yes|No
    Note: 'Wrongly mapped '
 -
    Source Worksheet: All work orders signed by customer? (incl refused work)
    pageName: UW Q's
    cell: 'E40'
    key: allworkorderssignedbycustomer
+   returnBoolean: Yes|No
 -
    Source Worksheet: Formal safety meetings:( If at least quarterly, please attach copy of
       minutes from last meeting)
    pageName: UW Q's
    cell: 'E36'
    key: formalsafetymeetings
+   note: mapping monthly for now - change to yes/no
+   # returnBoolean: Yes|No
 -
    Source Worksheet: Does applicant reposess their own vehicles?
    pageName: UW Q's
    cell: 'E99'
    key: doesapplicantreposestheirownvehicles
+   returnBoolean: Yes|No
 -
    Source Worksheet: Does the insured have a certificate of insurance for repo company?
    pageName: UW Q's
    cell: 'E100'
    key: certificateofinsuranceforrepocompany
+   returnBoolean: Yes|No
 -
    Source Worksheet: Does the insured service buses?
    pageName: UW Q's
    cell: 'E84'
    key: doestheinsuredservicebuses
+   returnBoolean: Yes|No
 -
    Source Worksheet: Test drives always accompanied by employee?
    pageName: UW Q's
@@ -1353,6 +1413,7 @@
    pageName: UW Q's
    cell: 'E22'
    key: overnighttestdrivesallowed
+   returnBoolean: Yes|No
 -
    Source Worksheet: 'Test Drive Procedures:'
    pageName: UW Q's
@@ -1364,22 +1425,23 @@
       selected the system will map 'YES' to Sheet!UW-Q E29. If Sales Person
       Always Accompanies is selected the system will map YES to Sheet!UW-Q
       E28
-# -
-#    pageName: UW Q's
-#    cell: 'E29'
-#    key: testdriveprocedures_copyOfDriversLicense && testdriveprocedures_copyOfInsuranceCard
-#    returnBoolean: 'Yes|No'
+-
+   pageName: UW Q's
+   cell: 'E29'
+   key: harcoExcelData*checktestdriveprocedures
 -
    Source Worksheet: Is a Loaner  or Rental contract used? Please include a copy of contract
       used.
    pageName: UW Q's
    cell: 'E27'
    key: loanerrentalcontractused
+   returnBoolean: Yes|No
 -
    Source Worksheet: Are Drivers License and Insurance verified?
    pageName: UW Q's
    cell: 'E29'
    key: aredriverslicenseinsuredverified
+   returnBoolean: Yes|No
 -
    Source Worksheet: Checklist used to inspect vehicles prior to sale?
    pageName: UW Q's
@@ -1395,31 +1457,37 @@
    pageName: UW Q's
    cell: 'E50'
    key: fulldisclosuretocustomer
+   returnBoolean: Yes|No
 -
    Source Worksheet: Does customer sign disclosure for acknowledgment?
    pageName: UW Q's
    cell: 'E51'
+   returnBoolean: Yes|No
    key: doescustomersigndisclosure
 -
    Source Worksheet: Is a title search service used?
    pageName: UW Q's
    cell: 'E52'
+   returnBoolean: Yes|No
    key: isatitlesearchserviceused
 -
    Source Worksheet: 'If YES, describe:'
    pageName: UW Q's
    cell: 'E54'
    key: titlesearchdescribe
+   note: wrong mapping. its a description field cant map to yes or no
 -
    Source Worksheet: Does applicant subcontract any work?
    pageName: UW Q's
    cell: 'E44'
    key: applicantsubcontractanywork
+   returnBoolean: Yes|No
 -
    Source Worksheet: All work by sub-contractors governed by signed contracts that include
       favorable indemnification provisions?
    pageName: UW Q's
    cell: 'E44'
+   returnBoolean: Yes|No
    key: allworkbysubcontractgoverned
 -
    Source Worksheet: All sub-contractors/vendors required to provide evidence of at least
@@ -1427,27 +1495,32 @@
    pageName: UW Q's
    cell: 'E45'
    key: allsubcontractorsvendorsprovideevidence
+   returnBoolean: Yes|No
 -
    Source Worksheet: Dealer requires being added as Additional Insured on sub-contractorsand
       vendorsinsurance policies?
    pageName: UW Q's
    cell: 'E46'
+   returnBoolean: Yes|No
    key: dealerrequiresbeingadded
 -
    Source Worksheet: Formal employment application/interview process?
    pageName: UW Q's
    cell: 'E58'
    key: empapplication
+   returnBoolean: Yes|No
 -
    Source Worksheet: Arbitration agreement signed by all employees?
    pageName: UW Q's
    cell: 'E60'
    key: arbitrationagreement
+   returnBoolean: Yes|No
 -
    Source Worksheet: Performance reviews done annually?
    pageName: UW Q's
    cell: 'E65'
    key: performancereview
+   returnBoolean: Yes|No
 -
    Source Worksheet: 'Drug-testing programs: pre employment'
    pageName: UW Q's
@@ -1506,80 +1579,80 @@
    pageName: UW Q's
    cell: 'E33'
    key: garagekeeperUnderwritingApplicantStoresVehicles
+   returnBoolean: Yes|No
 -
    Source Worksheet: 'Any vehicles valued in excess of $100,000 per unit?\r\n\r\n If YES, attach a current schedule'
    pageName: UW Q's
    cell: 'E33'
    key: dolVehicleValuedInExcess
-# -
-#    Source Worksheet: 'Spot Delivery Procedures:'
-#    pageName: UW Q's
-#    cell: E98
-#    key: dolspotdeliveryprocedures_insuranceVerification
-#    method: 
-#    note: If written insurance verification is selected the system will map
-#       'Yes' to sheet!UW-Q's E98-G98
-#    returnBoolean: 'Yes|No'
-# -
-#    Source Worksheet: After Hours Lighting
-#    pageName: UW Q's
-#    cell: Check Box 16
-#    key: locationScheduleGridData_dolaftrhrslighting
-#    type: Checkbox
-#    method: 
-# -
-#    Source Worksheet: Security Guards
-#    pageName: UW Q's
-#    cell: Check Box 18
-#    key: locationScheduleGridData_dolsecguards
-#    type: Checkbox
-#    method: 
-# -
-#    Source Worksheet: Alarm System
-#    pageName: UW Q's
-#    cell: Check Box 20
-#    key: locationScheduleGridData_dolalrmsys
-#    type: Checkbox
-#    method: 
-# -
-#    Source Worksheet: Surveill. Cameras not monitored
-#    pageName: UW Q's
-#    cell: Check Box 17
-#    key: locationScheduleGridData_dolsurcamnotmoniotrd
-#    type: Checkbox
-#    method: 
-   # note: If at least 1 of the Surveillance Camera questions are selected map
-   #    'Yes' to the applicable carrier app.
-# -
-#    Source Worksheet: Surveill. Cameras monitored / intruder notification
-#    pageName: UW Q's
-#    cell: Check Box 17
-#    key: locationScheduleGridData_dolsurvcammoniintrunotifi
-#    type: Checkbox
-#    method: 
-   # note: If at least 1 of the Surveillance Camera questions are selected map
-   #    'Yes' to the applicable carrier app.
-# -
-#    Source Worksheet: Guard Dogs
-#    pageName: UW Q's
-#    cell: Check Box 19
-#    key: locationScheduleGridData_dolguarddogs
-#    type: Checkbox
-#    method: 
-# -
-#    Source Worksheet: Blocked Entrances
-#    pageName: UW Q's
-#    cell: Check Box 15
-#    key: locationScheduleGridData_dolblckdentrances
-#    type: Checkbox
-#    method: 
-# -
-#    Source Worksheet: Fully Fenced Premises
-#    pageName: UW Q's
-#    cell: Check Box 14
-#    key: locationScheduleGridData_dolflyfencdpremises
-#    type: Checkbox
-#    method: 
+   returnBoolean: Yes|No
+-
+   Source Worksheet: 'Spot Delivery Procedures:'
+   pageName: UW Q's
+   cell: E98
+   key: dolspotdeliveryprocedures_insuranceVerification
+   method: checkInArray
+   returnBoolean: 'Yes|No'
+-
+   Source Worksheet: After Hours Lighting
+   pageName: UW Q's
+   cell: Check Box 16
+   key: harcoExcelData*checkdolaftrhrslighting
+   type: Checkbox
+   method: 
+-
+   Source Worksheet: Security Guards
+   pageName: UW Q's
+   cell: Check Box 18
+   key: harcoExcelData*checkdolsecguards
+   type: Checkbox
+   method: 
+-
+   Source Worksheet: Alarm System
+   pageName: UW Q's
+   cell: Check Box 20
+   key: harcoExcelData*checkdolalrmsys
+   type: Checkbox
+   method: 
+-
+   Source Worksheet: Surveill. Cameras not monitored
+   pageName: UW Q's
+   cell: Check Box 17
+   key: harcoExcelData*checkdolsurcamnotmoniotrd
+   type: Checkbox
+   method: 
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      'Yes' to the applicable carrier app.
+-
+   Source Worksheet: Surveill. Cameras monitored / intruder notification
+   pageName: UW Q's
+   cell: Check Box 17
+   key: harcoExcelData*checkdolsurvcammoniintrunotifi
+   type: Checkbox
+   method: 
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      'Yes' to the applicable carrier app.
+-
+   Source Worksheet: Guard Dogs
+   pageName: UW Q's
+   cell: Check Box 19
+   key: harcoExcelData*checkdolguarddogs
+   type: Checkbox
+   method: 
+-
+   Source Worksheet: Blocked Entrances
+   pageName: UW Q's
+   cell: Check Box 15
+   key: harcoExcelData*checkDolBlockedEntrances
+   type: Checkbox
+   method: 
+-
+   Source Worksheet: Fully Fenced Premises
+   pageName: UW Q's
+   cell: Check Box 14
+   key: harcoExcelData*checkDolFullyFencedPremises
+   type: Checkbox
+   method: 
 # -
 #    Source Worksheet: Other (type in)
 #    pageName: UW Q's
@@ -1609,21 +1682,10 @@
    pageName: UW Q's
    cell: E71
    key: formalpolicy
+   returnBoolean: Yes|No
 -
    Source Worksheet: How does applicant limit access to sensitive personal information for
       employees and customers?
    pageName: UW Q's
    cell: E72
    key: applicantlimitaccess
--
-   Source Worksheet: Lightpoles
-   pageName: NOT MENTIONED
-   cell: 'F9'
-   key: locationScheduleGridData_lightpoles
-   Note: Sheet is not mentioned
--
-   Source Worksheet: 'Awanings & Canopies'
-   pageName: NOT MENTIONED
-   cell: F9
-   key: locationScheduleGridData_awaningsscanopies
-   Note: Sheet is not mentioned

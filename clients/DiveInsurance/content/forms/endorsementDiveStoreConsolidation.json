@@ -304,7 +304,7 @@
 				}, {
 					"components": [{
 						"label": "update_date",
-						"redrawOn": "effectiveDate",
+						"redrawOn": "endoEffectiveDate",
 						"calculateValue": "value = moment(data.endoEffectiveDate).format(\"YYYY-MM-DD\");",
 						"key": "update_date",
 						"type": "hidden",
@@ -5467,11 +5467,52 @@
 								"inDataGrid": true
 							}]
 						}, {
-							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel",
-							"input": false,
+							"label": "Do you want to apply Property Coverage?",
+							"widget": "choicesjs",
+							"tableView": true,
+							"data": {
+								"values": [{
+									"label": "Yes",
+									"value": "yes"
+								}, {
+									"label": "No",
+									"value": "no"
+								}]
+							},
+							"selectThreshold": 0.3,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Please select an option"
+							},
+							"errorLabel": "Property Coverage",
+							"key": "ALpropertyCoverageSelect",
+							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
+							"input": true
+						}, {
 							"title": "Property Information",
 							"theme": "primary",
+							"breadcrumbClickable": true,
+							"buttonSettings": {
+								"previous": true,
+								"cancel": true,
+								"next": true
+							},
+							"collapsible": false,
+							"dataGridLabel": false,
 							"tableView": false,
+							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel",
+							"conditional": {
+								"show": true,
+								"when": "ALpropertyCoverageSelect",
+								"eq": "yes"
+							},
+							"type": "panel",
+							"label": "Property Information",
+							"input": false,
 							"components": [{
 								"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelPanel",
 								"input": false,
@@ -5568,7 +5609,6 @@
 									"value": "no",
 									"shortcut": ""
 								}],
-								"clearOnHide": false,
 								"validate": {
 									"required": true
 								},
@@ -5589,7 +5629,6 @@
 									"value": "no",
 									"shortcut": ""
 								}],
-								"clearOnHide": false,
 								"validate": {
 									"required": true
 								},
@@ -5615,7 +5654,8 @@
 										"key": "distanceFromOceanOrGulf",
 										"type": "number",
 										"input": true,
-										"hideOnChildrenHidden": false
+										"hideOnChildrenHidden": false,
+										"inputType": "number"
 									}, {
 										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsContent",
 										"label": "Content",
@@ -5793,7 +5833,8 @@
 												"lockKey": true,
 												"labelWidth": null,
 												"labelMargin": null,
-												"hideOnChildrenHidden": false
+												"hideOnChildrenHidden": false,
+												"defaultValue": 0
 											}, {
 												"label": "Business Income",
 												"prefix": "$",
@@ -5865,9 +5906,6 @@
 										"hideOnChildrenHidden": false
 									}, {
 										"label": "Columns",
-										"input": false,
-										"tableView": false,
-										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"columns": [{
 											"components": [{
 												"label": "What is the replacement value?",
@@ -5904,9 +5942,6 @@
 													"customMessage": "Please enter the area of the building in sq ft"
 												},
 												"key": "squarefootageofyourbuildingAL",
-												"conditional": {
-													"show": true
-												},
 												"type": "number",
 												"input": true,
 												"labelWidth": null,
@@ -5940,6 +5975,7 @@
 													"required": true,
 													"customMessage": "The year in which the building was built is required"
 												},
+												"errorLabel": "Year built of building",
 												"key": "built_year1",
 												"type": "select",
 												"indexeddb": {
@@ -5950,15 +5986,11 @@
 											}, {
 												"label": "Updates on plumbing, electrical, roof, etc.",
 												"tableView": true,
-												"clearOnHide": false,
 												"validate": {
 													"required": true,
 													"customMessage": "Updates on plumbing,roof,etc. is required"
 												},
 												"key": "updatesOnPlumbingElectricalRoofEtcAL",
-												"conditional": {
-													"show": true
-												},
 												"type": "textfield",
 												"input": true,
 												"lockKey": true,
@@ -5972,13 +6004,17 @@
 											"pull": 0,
 											"size": "md"
 										}],
-										"type": "columns",
 										"hideLabel": true,
+										"tableView": false,
+										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"conditional": {
-											"show": "true",
-											"when": "additionalLocationDoYouOwntheBuilding",
+											"show": true,
+											"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
 											"eq": "yes"
-										}
+										},
+										"customConditional": "if(row['additionalLocationDoYouOwntheBuilding'] == \"yes\") {\n  show = true;\n} else {\n  show = false;\n}",
+										"type": "columns",
+										"input": false
 									}, {
 										"label": "Please explain location",
 										"tableView": true,
@@ -6002,14 +6038,8 @@
 								"type": "columns",
 								"hideLabel": true
 							}],
-							"type": "panel",
-							"conditional": {
-								"show": "true",
-								"when": "page4PanelSelect"
-							},
 							"inDataGrid": true,
-							"lockKey": true,
-							"label": "Panel"
+							"lockKey": true
 						}, {
 							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2",
 							"input": false,
@@ -14709,10 +14739,10 @@
 		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"settings": {},
-	"name": "endorsementDiveStoreConsolidation",
+	"name": "diveStoreEndorsement3",
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-12T11:02:30.124Z",
+	"modified": "2020-08-13T10:18:27.831Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
