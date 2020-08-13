@@ -1388,6 +1388,7 @@
 						"properties": {
 							"delegate": "SetupEndorsement"
 						},
+						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 						"type": "datetime",
 						"input": true,
 						"widget": {
@@ -1418,7 +1419,7 @@
 				}, {
 					"components": [{
 						"label": "update_date",
-						"redrawOn": "effectiveDate",
+						"redrawOn": "endoEffectiveDate",
 						"calculateValue": "value = moment(data.endoEffectiveDate).format(\"YYYY-MM-DD\");",
 						"key": "update_date",
 						"type": "hidden",
@@ -3559,7 +3560,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 324,
+	"_vid": 325,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3580,6 +3581,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-13T05:03:53.102Z",
+	"modified": "2020-08-13T07:48:18.801Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
