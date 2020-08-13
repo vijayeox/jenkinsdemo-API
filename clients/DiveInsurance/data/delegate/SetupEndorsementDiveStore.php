@@ -197,6 +197,10 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_combinedSingleLimitDS'] = 1000000;
                     $policy['previous_annualAggregateDS'] = 2000000;
                 }
+                $policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
+                $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
+                $policy['previous_dspropTotal'] = $data['dspropTotal'];
+                $policy['previous_lossPayees'] = $data['lossPayees'];
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
@@ -211,6 +215,8 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_AddILocTax'] = $data['AddILocTax'];
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
+                $policy['previous_medicalPayment'] = $data['medicalPayment'];
+                $policy['previous_additionalLocations'] = $data['additionalLocations'];
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
                 $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];

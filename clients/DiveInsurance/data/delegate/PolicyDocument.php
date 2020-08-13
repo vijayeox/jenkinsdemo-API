@@ -493,10 +493,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $this->additionalDocumentsDS($temp,$documents,$dest);
             }else if($data['product'] == 'Dive Store' && $this->type == 'endorsementQuote'){
-                $this->diveStoreEndorsement($data,$temp);
+                $this->diveStoreEndorsement($data,$temp,$persistenceService);
                 $this->diveStoreEnorsementQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
             }else if($data['product'] == 'Dive Store' && $this->type == 'endorsement'){
-                $this->diveStoreEndorsement($data,$temp);
+                $this->diveStoreEndorsement($data,$temp,$persistenceService);
                 $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
                 $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 array_push($documents['endorsement_coi_document'], $endorsementDoc);
@@ -1299,7 +1299,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             $data['quoteDocuments'] = $documents;
          }
-         protected function diveStoreEndorsement(&$data,&$temp){
+         protected function diveStoreEndorsement(&$data,&$temp,$persistenceService){
                 $policy = array();
                 if(is_string($data['previous_policy_data'])){
                     $policy = json_decode($data['previous_policy_data'],true);
@@ -1316,6 +1316,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
                 $temp['liabilityChanges'] = false;
+                $temp['liabilityCoverageChanges'] = false;
+                if(isset($data['liabilityCoverageOption']) && isset($policy['previous_liabilityCoverageOption'])){
+                    if($policy['previous_liabilityCoverageOption'] != $data['liabilityCoverageOption']){
+                        $temp['liabilityCoverageChanges'] = true;
+                        $coverage= $this->getCoverageName(array($data['liabilityCoverageOption']),$data['product'],$persistenceService);
+                        if(is_string($coverage)){
+                            $coverageVal = json_decode($coverage,true);
+                            $temp['increasedCoverage'] = $coverageVal[$data['liabilityCoverageOption']];
+                        }
+                    }
+                }
                 if(isset($data['excessLiabilityCoverage']) && isset($policy['previous_excessLiabilityCoverage'])){
                     if(isset($temp['increased_liability_limit'])){
                         unset($temp['increased_liability_limit']);
@@ -1348,6 +1359,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }  
                 }
+
+                if(isset($data['medicalPayment']) && isset($policy['previous_medicalPayment'])){
+                    if($policy['previous_medicalPayment'] != $data['medicalPayment']){
+                        $data['increased_medicalPayment_limit'] = false;
+                    } else {
+                        $temp['liabilityChanges'] = true;
+                        if($data['medicalPayment']==true || $data['medicalPayment']=='true'){
+                            $temp['increased_medicalPayment_limit'] = "$5,000";
+                        }
+                    }
+                }
                 if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
                     if($policy['previous_nonOwnedAutoLiabilityPL'] == $data['nonOwnedAutoLiabilityPL']){
                         $data['increased_non_owned_liability_limit'] = false;
@@ -1370,27 +1392,126 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                 }
+                $temp['propertyChanges'] = false;
+                if(isset($data['dspropreplacementvalue']) && isset($policy['previous_dspropreplacementvalue'])){
+                    if($data['dspropreplacementvalue'] != $policy['previous_dspropreplacementvalue']){
+                        $temp['propertyChanges'] = true;
+                        if(isset($temp['increased_buildingLimit'])){
+                            unset($temp['increased_buildingLimit']);
+                        }
+                        if(isset($temp['decreased_buildingLimit'])){
+                            unset($temp['decreased_buildingLimit']);
+                        }
+                        $buildingLimit = (int)$data['dspropreplacementvalue'] - (int)$policy['previous_dspropreplacementvalue'];
+                        if($buildingLimit < 0){
+                            $temp['decreased_buildingLimit'] = abs($buildingLimit);
+                        }else{
+                            $temp['increased_buildingLimit'] = $buildingLimit;
+                        }
+                    }
+                }
+                if(isset($data['lossOfBusIncome']) && isset($policy['previous_lossOfBusIncome'])){
+                    if($data['lossOfBusIncome'] != $policy['previous_lossOfBusIncome']){
+                        $temp['propertyChanges'] = true;
+                        if(isset($temp['increased_lossOfBusIncome'])){
+                            unset($temp['increased_lossOfBusIncome']);
+                        }
+                        if(isset($temp['decreased_lossOfBusIncome'])){
+                            unset($temp['decreased_lossOfBusIncome']);
+                        }
+                        $lossOfBusIncome = (int)$data['lossOfBusIncome'] - (int)$policy['previous_lossOfBusIncome'];
+                        if($lossOfBusIncome < 0){
+                            $temp['decreased_lossOfBusIncome'] = abs($lossOfBusIncome);
+                        }else{
+                            $temp['increased_lossOfBusIncome'] = $lossOfBusIncome;
+                        }
+                    }
+                }
+                if(isset($data['dspropTotal']) && isset($policy['previous_dspropTotal'])){
+                    if($data['dspropTotal'] != $policy['previous_dspropTotal']){
+                        $temp['propertyChanges'] = true;
+                        if(isset($temp['increased_dspropTotal'])){
+                            unset($temp['increased_dspropTotal']);
+                        }
+                        if(isset($temp['decreased_dspropTotal'])){
+                            unset($temp['decreased_dspropTotal']);
+                        }
+                        $dspropTotal = (int)$data['dspropTotal'] - (int)$policy['previous_dspropTotal'];
+                        if($dspropTotal < 0){
+                            $temp['decreased_dspropTotal'] = abs($dspropTotal);
+                        }else{
+                            $temp['increased_dspropTotal'] = $dspropTotal;
+                        }
+                    }
+                }
                 //Please do not remove
-                // if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                //     if(isset($data['previous_additionalInsured'])){
-                //         foreach($data['previous'])
-                //         $temp['newAddInsured'] = "";
-                //         $temp['removedAddInsured'] = "";
-                //         $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $data['previous_additionalInsured']));
-                //         $newAddInsured = array_map('unserialize', $diff);
-                //         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
-                //         if(sizeof($newAddInsured) > 0){
-                //             $temp['newAddInsured'] = json_encode($newAddInsured);
-                //         }
-                //         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($temp['newAddInsured'],true));
-                //         $diff = array_diff(array_map('serialize',$data['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
-                //         $removedAddInsured = array_map('unserialize', $diff);
-                //         $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :".print_r($removedAddInsured,true));
-                //         if(sizeof($removedAddInsured) > 0){
-                //             $temp['removedAddInsured'] = json_encode($removedAddInsured);
-                //         }
-                //     }
-                // }
+                if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                    if(isset($data['previous_additionalInsured'])){
+                        // foreach($data['previous'])
+                        $temp['newAddInsured'] = "";
+                        $temp['removedAddInsured'] = "";
+                        $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $data['previous_additionalInsured']));
+                        $newAddInsured = array_map('unserialize', $diff);
+                        $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
+                        if(sizeof($newAddInsured) > 0){
+                            $temp['newAddInsured'] = json_encode($newAddInsured);
+                        }
+                        $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($temp['newAddInsured'],true));
+                        $diff = array_diff(array_map('serialize',$data['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
+                        $removedAddInsured = array_map('unserialize', $diff);
+                        $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :".print_r($removedAddInsured,true));
+                        if(sizeof($removedAddInsured) > 0){
+                            $temp['removedAddInsured'] = json_encode($removedAddInsured);
+                        }
+                    }
+                }
+                if($data['lossPayeesSelect'] == "yes"){
+                    if(isset($policy['previous_lossPayees'])){
+                        // foreach($data['previous_lossPayees'])
+                        $temp['newlossPayees'] = "";
+                        $temp['removedlossPayees'] = "";
+                        $diff = array_diff(array_map('serialize', $data['lossPayees']), array_map('serialize', $policy['previous_lossPayees']));
+                        $newlossPayees = array_map('unserialize', $diff);
+                        $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($newlossPayees,true));
+                        if(sizeof($newlossPayees) > 0){
+                            $temp['newlossPayees'] = json_encode($newlossPayees);
+                        }
+                        $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($temp['newlossPayees'],true));
+                        $diff = array_diff(array_map('serialize',$policy['previous_lossPayees']), array_map('serialize', $data['lossPayees']));
+                        $removedlossPayees = array_map('unserialize', $diff);
+                        $this->logger->info("ARRAY DIFF OF Removed Loss Payees :".print_r($removedlossPayees,true));
+                        if(sizeof($removedlossPayees) > 0){
+                            $temp['removedlossPayees'] = json_encode($removedlossPayees);
+                        }
+                    }
+                }
+                if($data['additionalLocationsSelect'] == "yes"){
+                    if(isset($policy['previous_additionalLocations'])){
+                        // foreach($data['previous_additionalLocations'])
+                        $temp['newAdditionalLocations'] = "";
+                        $temp['removedadditionalLocations'] = "";
+                        $diff = array_diff(array_map('serialize', $data['additionalLocations']), array_map('serialize', $policy['previous_additionalLocations']));
+                        $newAdditionalLocations = array_map('unserialize', $diff);
+                        $this->logger->info("ARRAY DIFF OF Additional Locations :".print_r($newAdditionalLocations,true));
+                        if(sizeof($newAdditionalLocations) > 0){
+                            $temp['newAdditionalLocations'] = json_encode($newAdditionalLocations);
+                        }
+                        $this->logger->info("ARRAY DIFF OF Additional Locations :".print_r($temp['newAdditionalLocations'],true));
+                        $diff = array_diff(array_map('serialize',$policy['previous_additionalLocations']), array_map('serialize', $data['additionalLocations']));
+                        $removedadditionalLocations = array_map('unserialize', $diff);
+                        $this->logger->info("ARRAY DIFF OF Removed Additional Locations :".print_r($removedadditionalLocations,true));
+                        if(sizeof($removedadditionalLocations) > 0){
+                            $temp['removedadditionalLocations'] = json_encode($removedadditionalLocations);
+                        }
+                    } else {
+                        $temp['newAdditionalLocations'] = "";
+                        $temp['removedadditionalLocations'] = "";
+                        $this->logger->info("ARRAY DIFF OF Additional Locations :".print_r($data['additionalLocations'],true));
+                        if(sizeof($data['additionalLocations']) > 0){
+                            $temp['newAdditionalLocations'] = json_encode($data['additionalLocations']);
+                        }
+                    }
+                }
          }
 
         private function getLiabilityLimit($data,$combinedLimit,$annualAggregate,$liabilityKey){
