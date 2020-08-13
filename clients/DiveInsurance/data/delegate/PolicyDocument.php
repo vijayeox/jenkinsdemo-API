@@ -682,6 +682,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['refundAmount'])){
                 $data['refundAmount'] = "";
             }
+            if(isset($data['balanceEndor'])){
+                $data['balanceEndor'] = "";
+            }
 
 
             if($this->type == "endorsement" || $data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response'){

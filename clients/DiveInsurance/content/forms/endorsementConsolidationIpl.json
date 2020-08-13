@@ -3434,6 +3434,7 @@
 			"input": false
 		}, {
 			"label": "refundAmount",
+			"redrawOn": "data",
 			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) < 0){\n  value = data.balanceEndor;\n  }\n  if(parseFloat(data.endorsementTotal) < 0){\n\tvalue = data.endorsementTotal;\n  }\n}\nif((parseFloat(data.endorsementTotal) < 0) && (!data.CSRReviewRequired)){\n  value = data.endorsementTotal;\n}",
 			"key": "refundAmount",
 			"type": "hidden",
@@ -3560,7 +3561,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 325,
+	"_vid": 326,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3581,6 +3582,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-13T07:48:18.801Z",
+	"modified": "2020-08-13T09:14:45.859Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
