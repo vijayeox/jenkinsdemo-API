@@ -19429,7 +19429,7 @@
 			"persistent": false
 		}, {
 			"label": "RPS Cyber PDF Data",
-			"persistent": true,
+			"persistent": false,
 			"redrawOn": "workbooksToBeGenerated",
 			"calculateValue": "var tempAllEmployees = 0;\nvar checkofRecordsContaining = '';\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem, locationIndex) => {\n      locationItem.buildingDetails.map((buildingItem) => {\n        tempAllEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto +\n          buildingItem.fTEmployeesWhoAreNotFurnished +\n          buildingItem.fTAllOtherEmployees +\n          buildingItem.pTEmployeesFurnishedAnAuto +\n          buildingItem.pTEmployeesWhoAreNotFurnished +\n          buildingItem.pTAllOtherEmployees;\n      });\n    });\n  }\n}\n\nif(data.ofRecordsContaining > 0){\n    if(data.ofRecordsContaining < 100000){\n        checkofRecordsContaining = '1-100,000';\n    }\n    else if(data.ofRecordsContaining > 100000 && data.ofRecordsContaining < 250000){\n        checkofRecordsContaining = '100,000-250,000';\n    }\n    else if(data.ofRecordsContaining > 250000 && data.ofRecordsContaining < 500000){\n        checkofRecordsContaining = '250,000-500,000';\n    }\n    else if(data.ofRecordsContaining > 500000 && data.ofRecordsContaining < 750000){\n        checkofRecordsContaining = '500,000-750,000';\n    }\n    else if(data.ofRecordsContaining > 750000 && data.ofRecordsContaining < 1000000){\n        checkofRecordsContaining = '750,000-1,000,000';\n    }\n    else{\n        checkofRecordsContaining = '1,000,000+';\n    }\n}\n\nvalue = {\n  \"# of Records\":  checkofRecordsContaining,\n  \"State\": data.state.name,\n  \" of Employees\": tempAllEmployees,\n  \"Firewalls?\":\n    data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n      ? \"Yes\"\n      : \"No\",\n  \"Year Established\": moment().format(\"YYYY\") - data.numYearsOfOwnership ? data.numYearsOfOwnership : 0\n};\n\nconsole.log(value);",
 			"key": "rpsCyberPDFData",
@@ -19441,7 +19441,7 @@
 			"tableView": false
 		}, {
 			"label": "GAIC Epli PDF Data",
-			"persistent": true,
+			"persistent": false,
 			"redrawOn": "workbooksToBeGenerated",
 			"calculateValue": "var tempFullTimeEmployees = 0;\nvar tempPartTimeEmployees = 0;\nvar tempContractDrivers = 0;\nvar Phone = \"\";\nvar Email = \"\";\nif (data.locationSchedule) {\n  if (data.locationSchedule.length > 0) {\n    data.locationSchedule.map((locationItem) => {\n      locationItem.buildingDetails.map(buildingItem => {\n        tempFullTimeEmployees +=\n          buildingItem.fTEmployeesFurnishedAnAuto ? buildingItem.fTEmployeesFurnishedAnAuto : 0 +\n          buildingItem.fTEmployeesWhoAreNotFurnished ? buildingItem.fTEmployeesWhoAreNotFurnished : 0 +\n          buildingItem.fTAllOtherEmployees ? buildingItem.fTAllOtherEmployees : 0;\n        tempPartTimeEmployees +=\n          buildingItem.pTEmployeesFurnishedAnAuto ? buildingItem.pTEmployeesFurnishedAnAuto : 0 +\n          buildingItem.pTEmployeesWhoAreNotFurnished ? buildingItem.pTEmployeesWhoAreNotFurnished : 0 +\n          buildingItem.pTAllOtherEmployees ? buildingItem.pTAllOtherEmployees : 0;\n        tempContractDrivers += buildingItem.contractDriversNonEmployees ? buildingItem.contractDriversNonEmployees : 0;\n      });\n    });\n  }\n}\ndata.insurancecontactdataGrid.some(item => {\n  if (item.genfullName == data.hrRepresentative) {\n    Phone = item.genphone;\n    Email = item.genemail;\n    return true;\n  } else {\n    return false;\n  }\n});\n\nvalue = {\n  \"City, State, Zip\": data.city + \",\" + data.state.name + \",\" + data.zip,\n  \"a  full time employees\": tempFullTimeEmployees,\n  \"b  part time employees\": tempPartTimeEmployees,\n  \"Employees  Within the US\": tempFullTimeEmployees + tempPartTimeEmployees,\n  Name: data.hrRepresentative,\n  Phone: Phone,\n  Email: Email,\n  'Within the US': data.locationSchedule.length,\n  \"c leasedcontract employees\": tempContractDrivers,\n  Date: moment().format(\"YYYY-MM-DD\"),\n  Group25:\n    data.noticetoinsurer == \"notApplicable\"\n      ? \"Choice1\"\n      : data.noticetoinsurer == \"yes\"\n      ? \"2\"\n      : \"3\",\n  Group26:\n    data.nonrenewedcoverage == \"notApplicable\"\n      ? \"Choice1\"\n      : data.nonrenewedcoverage == \"yes\"\n      ? \"2\"\n      : \"Choice3\"\n};\nconsole.log(value);",
 			"key": "gaicEpliPdfData",
@@ -19574,7 +19574,7 @@
 	}],
 	"settings": {},
 	"properties": {
-		"submission_commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" },{\"command\" : \"delegate\", \"delegate\" : \"GenerateWorkbook\"},{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\"}]",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"GenerateWorkbook\"}]",
 		"showPrevious": "true",
 		"showCancel": "true",
 		"showBreadcrumbs": "true",
@@ -19584,6 +19584,6 @@
 	"path": "dealerworkbook",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-06-25T07:04:35.147Z",
-	"modified": "2020-08-13T11:54:45.116Z",
+	"modified": "2020-08-13T12:05:25.798Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
