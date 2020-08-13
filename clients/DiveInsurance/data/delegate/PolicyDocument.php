@@ -1686,7 +1686,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         }
         protected function policyCOI($policyDocuments,$temp,&$documents){ 
-            print_r($policyDocuments);exit;
            if(is_array($policyDocuments)){  
                 foreach ($policyDocuments as $key => $value) {  
                     $documents[$key] = $value;  
@@ -1694,7 +1693,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){    
                 $documents['coi_document']  = array($policyDocuments);  
             }else if($temp['product'] == 'Dive Store'){ 
-                print("NEHA3");
                 $documents['liability_coi_document']  = $policyDocuments;   
             }else{  
                 $documents['coi_document']  = $policyDocuments; 
