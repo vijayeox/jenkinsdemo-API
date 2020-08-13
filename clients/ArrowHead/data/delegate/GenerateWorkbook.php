@@ -65,14 +65,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
 
-        if (!(isset($data['fileId']) || isset($data['uuid']))) {
-
-            //Create new file record
-            $data['entity_name'] = 'Dealer Policy';
-            $newFile = $this->saveFile($data);
-            unset($data['entity_name']);
-            $data['fileId'] = $newFile['fileId'];
-        }
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
         $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
