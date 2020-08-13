@@ -158,9 +158,8 @@ class StorePreviewDocument extends PolicyDocument
             $this->logger->info("DOCUMENT blanketForm");
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
-        if ($this->type != 'endorsement') {
-            if($temp['product'] == 'Dive Store')
-                $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+        if($temp['product'] == 'Dive Store'){
+            $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
             if($temp['propertyCoverageSelect'] == 'yes'){
                 $this->logger->info("DOCUMENT property_coi_document");
                 $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
@@ -172,7 +171,9 @@ class StorePreviewDocument extends PolicyDocument
               array_push($documents['endorsement_coi_document'], $endorsementDoc);
         }
         $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
-        $this->additionalDocumentsDS($temp,$documents,$dest);
+        if($temp['product'] == 'Dive Store'){
+            $this->additionalDocumentsDS($temp,$documents,$dest);    
+        }
         $originalData['finalDocuments'] = $documents;
         return $originalData;
     }
