@@ -680,7 +680,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['regeneratePolicy'] = "";
             }
 
-            if($this->type == "endorsement"){
+            if($this->type == "endorsement" || $data['product'] == 'Individual Professional Liability'){
                 $data['endorsementInProgress'] = false;
             }
             $data['isRenewalFlow'] = false;
@@ -1573,7 +1573,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }   
         }
 
-        protected function setCoverageDetails($data,$previous_data,&$temp,&$documents,$persistenceService,$dest=null){
+        protected function setCoverageDetails(&$data,$previous_data,&$temp,&$documents,$persistenceService,$dest=null){
               if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])|| isset($data['excessLiability'])){
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();

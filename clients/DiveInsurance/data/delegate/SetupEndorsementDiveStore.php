@@ -146,8 +146,8 @@ public function execute(array $data,Persistence $persistenceService)
         $data['endorsementInProgress'] = isset($data['endorsementInProgress']) ? $data['endorsementInProgress'] : false;
         $data['entity_name'] = $data['product'];
        if($data['initiatedByUser'] == false){
-            $policy =  array();
             if($data['endorsementInProgress'] == false){
+                $policy =  array();
                 $update_date =  date("Y-m-d");
                 $start_date = date($data['start_date']);
                 if($start_date  > $update_date){
@@ -224,12 +224,14 @@ public function execute(array $data,Persistence $persistenceService)
                 $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
                 $data['endorsementInProgress'] = true;
             }
-            $this->getRates($data,$policy,$persistenceService);
+            $this->getRates($data,$persistenceService);
         }
         return $data;
     }
 
-    private function getRates(&$data,$policy,$persistenceService){
+    private function getRates(&$data,$persistenceService){
+        $length = sizeof($data['previous_policy_data']) - 1;
+        $policy = $data['previous_policy_data'][$length];
         $endorsementCoverage = array();
         $endorsementGroupCoverage = array();
         $endorsementGroupLiability = array();
@@ -368,7 +370,6 @@ public function execute(array $data,Persistence $persistenceService)
             if(isset($data['transactionId'])){
                 unset($data['transactionId']);
             }
-            $length = sizeof($data['previous_policy_data']) - 1;
             $data['previous_policy_data'][$length]['update_date'] = $data['update_date'];
     }
 }
