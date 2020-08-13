@@ -61,6 +61,7 @@ class ImportService extends AbstractService
 
     public function importToElastic($fileName, $data)
     {
+        $type = array();
         if (!isset($data['index'])) {
             throw new Exception('Index Not Specified');
         } else {
@@ -69,21 +70,44 @@ class ImportService extends AbstractService
         $index = (substr($index, -6) != "_index") ? $index . '_index' : $index;
         $file = fopen($fileName, "r");
         $header = fgetcsv($file);
+        foreach($header as $key=>$headercol) {
+            $colarray = explode(":",$headercol);
+            if (isset($colarray['1'])) {                
+                $header[$key] = $colarray[0];
+                $type[$colarray[0]]=$colarray[1];
+            }
+        }
         $params = array();
         // $finalArray = array();
         $i = 0;
         try {
-            while (($data = fgetcsv($file, 1000, ",")) !== false) {
+            while (($data = fgetcsv($file, 0, ",")) !== false) {
                 $idx = 0;
                 $body = array();
                 foreach ($header as $col) {
                     if (strtoupper($data[$idx]) == 'NULL') {
-                        $data[$idx] = '';
+                        $data[$idx] = null;
                     }
-                    if (is_numeric($data[$idx])) {
-                        $body[$col] = (float) $data[$idx];
+                    if (isset($type[$col])) {
+                        switch ($type[$col]) {
+                            case "numeric":
+                                $body[$col] = (float) $data[$idx];    
+                                break;
+                            case "text":
+                                $body[$col] = (string) $data[$idx];    
+                                break;
+                            case "date":
+                                $body[$col] = date("Y/m/d",strtotime($data[$idx])); 
+                                break;
+                            default:                               
+                                $body[$col] = $data[$idx]; 
+                          }
                     } else {
-                        $body[$col] = $data[$idx];
+                        if (is_numeric($data[$idx])) {
+                            $body[$col] = (float) $data[$idx];
+                        } else {
+                            $body[$col] = $data[$idx];
+                        }
                     }
                     $idx++;
                     // print_r($data);

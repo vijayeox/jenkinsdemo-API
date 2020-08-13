@@ -27,7 +27,8 @@
 -
    Source Worksheet: State
    pageName: APPLICATION
-   key: state
+   key: state_abbreviation
+   method: pulloutChild
    cell: 'W5'
 -
    Source Worksheet: Zip

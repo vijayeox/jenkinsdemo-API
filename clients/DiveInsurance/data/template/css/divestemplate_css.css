@@ -545,3 +545,7 @@ table.proposal_table td:last-child {
 	letter-spacing: 1px;
 	width:80%;
 }
+.box{
+  margin:10px;
+  border: 1px solid black;
+}

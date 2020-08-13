@@ -141,60 +141,111 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
 public function execute(array $data,Persistence $persistenceService)
 {
         $this->logger->info("Executing Endorsement Setup - Dive Store".print_r($data,true));
+        $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
+        $data['upgradeStatus'] = true;
+        $data['endorsementInProgress'] = isset($data['endorsementInProgress']) ? $data['endorsementInProgress'] : false;
+        $data['entity_name'] = $data['product'];
+       if($data['initiatedByUser'] == false){
+            if($data['endorsementInProgress'] == false){
+                $policy =  array();
+                $update_date =  date("Y-m-d");
+                $start_date = date($data['start_date']);
+                if($start_date  > $update_date){
+                    $policy['update_date'] = $data['update_date'] = $data['start_date'];
+                }else{
+                    $policy['update_date'] = $data['update_date'] = $update_date;
+                }
+                $data['endoEffectiveDate'] = $data['update_date'];
+                if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                    // foreach ($data['additionalInsured'] as $key => $value) {
+                    //     if(!isset($value['effectiveDate'])){
+                    //         $data['additionalInsured'][$key]['effectiveDate'] = $data['start_date'];
+                    //         $data['additionalInsured'][$key]['start_date'] = date_format(date_create($data['start_date']),'Y-m-d');
+                    //     }
+                    // }
+                    $data['previous_additionalInsured'] = $data['additionalInsured'];
+                }
+                $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
+                $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
+                $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
+                $policy['previous_groupTaxPercentage'] = isset($data['groupTaxPercentage']) ? $data['groupTaxPercentage'] : 0;
+                $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
+                $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
+                $policy['previous_groupPAORfee'] = isset($data['groupPAORfee']) ? $data['groupPAORfee'] : 0;
+                $policy['groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
+                $policy['previous_groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
+                $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
+                $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
+                $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
+                $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
+                if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
+                    $policy['previous_combinedSingleLimitDS'] = 2000000;
+                    $policy['previous_annualAggregateDS'] = 3000000;
+                } else if($data['excessLiabilityCoverage']=='excessLiabilityCoverage2M'){
+                    $policy['previous_combinedSingleLimitDS'] = 3000000;
+                    $policy['previous_annualAggregateDS'] = 4000000;
+                } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage3M'){
+                    $policy['previous_combinedSingleLimitDS'] = 4000000;
+                    $policy['previous_annualAggregateDS'] = 5000000;
+                } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage4M'){
+                    $policy['previous_combinedSingleLimitDS'] = 5000000;
+                    $policy['previous_annualAggregateDS'] = 6000000;
+                } else if ($data['excessLiabilityCoverage']=='excessLiabilityCoverage9M'){
+                    $policy['previous_combinedSingleLimitDS'] = 10000000;
+                    $policy['previous_annualAggregateDS'] = 11000000;
+                } else {
+                    $policy['previous_combinedSingleLimitDS'] = 1000000;
+                    $policy['previous_annualAggregateDS'] = 2000000;
+                }
+                $policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
+                $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
+                $policy['previous_dspropTotal'] = $data['dspropTotal'];
+                $policy['previous_lossPayees'] = $data['lossPayees'];
+                $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
+                $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
+                $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
+                $policy['previous_propertyCoveragesTotalPL'] = isset($data['propertyCoveragesTotalPL'])?$data['propertyCoveragesTotalPL']:0;
+                $policy['previous_liabilityPropertyCoveragesTotalPL'] = $data['liabilityPropertyCoveragesTotalPL'];
+                $policy['previous_liabilityProRataPremium'] = isset($data['liabilityProRataPremium'])?$data['liabilityProRataPremium']:0;
+                $policy['previous_propertyProRataPremium'] = isset($data['propertyProRataPremium'])?$data['propertyProRataPremium']:0;
+                $policy['previous_ProRataPremium'] = $data['ProRataPremium'];
+                $policy['previous_PropTax'] = $data['PropTax'];
+                $policy['previous_LiaTax'] = $data['LiaTax'];
+                $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
+                $policy['previous_AddILocTax'] = $data['AddILocTax'];
+                $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
+                $policy['previous_padiFeePL'] = $data['padiFeePL'];
+                $policy['previous_medicalPayment'] = $data['medicalPayment'];
+                $policy['previous_additionalLocations'] = $data['additionalLocations'];
+                $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
+                $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
+                $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
+                if(isset($data['PAORFee'])){
+                    $policy['previous_PAORFee'] = $data['PAORFee'];
+                }
+                $policy['previous_totalAmount'] = isset($data['totalAmount'])?$data['totalAmount']:0;
+               
+                array_push($data['previous_policy_data'],$policy);
+
+                $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
+                $data['endorsementInProgress'] = true;
+            }
+            $this->getRates($data,$persistenceService);
+        }
+        return $data;
+    }
+
+    private function getRates(&$data,$persistenceService){
+        $length = sizeof($data['previous_policy_data']) - 1;
+        $policy = $data['previous_policy_data'][$length];
+        $endorsementCoverage = array();
+        $endorsementGroupCoverage = array();
+        $endorsementGroupLiability = array();
         $endorsementPropertyDeductibles = array();
         $endorsementExcessLiabilityCoverage = array();
         $endorsementNonOwnedAutoLiabilityPL = array();
         $endorsementLiabilityCoverageOption = array();
-        $data['initiatedByUser'] = isset($data['initiatedByUser']) ? $data['initiatedByUser'] : false;
-        $data['upgradeStatus'] = true;
-        $data['entity_name'] = $data['product'];
-       if($data['initiatedByUser'] == false){
-            $endorsementCoverage = array();
-            $endorsementGroupCoverage = array();
-            $endorsementGroupLiability = array();
-            $policy =  array();
-            $update_date =  date("Y-m-d");
-            $start_date = date($data['start_date']);
-            if($start_date  > $update_date){
-                $policy['update_date'] = $data['update_date'] = $data['start_date'];
-            }else{
-                $policy['update_date'] = $data['update_date'] = $update_date;
-            }
-            $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
-            $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
-            $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
-            $policy['previous_groupTaxPercentage'] = isset($data['groupTaxPercentage']) ? $data['groupTaxPercentage'] : 0;
-            $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
-            $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
-            $policy['previous_groupPAORfee'] = isset($data['groupPAORfee']) ? $data['groupPAORfee'] : 0;
-            $policy['groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
-            $policy['previous_groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
-            $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
-            $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
-            $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
-            $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
-            $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
-            $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
-            $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
-            $policy['previous_propertyCoveragesTotalPL'] = $data['propertyCoveragesTotalPL'];
-            $policy['previous_liabilityPropertyCoveragesTotalPL'] = $data['liabilityPropertyCoveragesTotalPL'];
-            $policy['previous_liabilityProRataPremium'] = isset($data['liabilityProRataPremium'])?$data['liabilityProRataPremium']:0;
-            $policy['previous_propertyProRataPremium'] = isset($data['propertyProRataPremium'])?$data['propertyProRataPremium']:0;
-            $policy['previous_ProRataPremium'] = $data['ProRataPremium'];
-            $policy['previous_PropTax'] = $data['PropTax'];
-            $policy['previous_LiaTax'] = $data['LiaTax'];
-            $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
-            $policy['previous_AddILocTax'] = $data['AddILocTax'];
-            $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
-            $policy['previous_padiFeePL'] = $data['padiFeePL'];
-            $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
-            $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
-            $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
-            if(isset($data['PAORFee'])){
-                $policy['previous_PAORFee'] = $data['PAORFee'];
-            }
-            $policy['previous_totalAmount'] = $data['totalAmount'];
-            if(isset($policy['previous_groupCoverageSelect'])){
+         if(isset($policy['previous_groupCoverageSelect'])){
                 $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_groupCoverageSelect']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                 $this->logger->info("Executing Endorsement Rate Card Group Coverage - Dive Store".$selectCoverage);
                 $resultCoverage = $persistenceService->selectQuery($selectCoverage);
@@ -213,7 +264,7 @@ public function execute(array $data,Persistence $persistenceService)
                 if(is_array($groupExcessLiability)){
                     $groupExcessLiability = '';
                 }
-                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$groupExcessLiability."' AND start_date <= '".$policy['update_date']."' AND end_date >= '".$policy['update_date']."'";
+                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$groupExcessLiability."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
                     $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Boat".$selectCoverage);
                     $resultCoverage = $persistenceService->selectQuery($selectCoverage);
                     while ($resultCoverage->next()) {
@@ -286,14 +337,13 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($rate);
                 }
             }
-            
+
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
             $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
             $data['endorsementExcessLiabilityCoverage'] = $endorsementExcessLiabilityCoverage;
             $data['endorsementNonOwnedAutoLiabilityPL'] = $endorsementNonOwnedAutoLiabilityPL;
             $data['endorsementLiabilityCoverageOption'] = $endorsementLiabilityCoverageOption;
-            array_push($data['previous_policy_data'],$policy);
             $data['initial_combinedSingleLimit'] = $data['previous_policy_data'][0]['previous_combinedSingleLimit'];
             $data['initial_annualAggregate'] = $data['previous_policy_data'][0]['previous_annualAggregate'];
             $unsetOptions = $this->unsetOptions;
@@ -302,33 +352,30 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($data[$unsetOptions[$i]]);
                 }
             }
-            $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
-        }
-
-        if(isset($data['groupPL'])){
-            if($data['groupPL'] != ""){
-                foreach ($data['groupPL'] as $key => $value) {
-                    if(!isset($value['effectiveDate'])){
-                        $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+            if(isset($data['groupPL'])){
+                if($data['groupPL'] != ""){
+                    foreach ($data['groupPL'] as $key => $value) {
+                        if(!isset($value['effectiveDate'])){
+                            $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                        }
                     }
                 }
             }
-        }
-        if(isset($data['paymentOptions'])){
-            unset($data['paymentOptions']);
-        }
-        if(isset($data['chequeNumber'])){
-            unset($data['chequeNumber']);
-        }
-        if(isset($data['chequeConsentFile'])){
-            unset($data['chequeConsentFile']);
-        }
-        if(isset($data['orderId'])){
-            unset($data['orderId']);
-        }
-        if(isset($data['transactionId'])){
-            unset($data['transactionId']);
-        }
-        return $data;
+            if(isset($data['paymentOptions'])){
+                unset($data['paymentOptions']);
+            }
+            if(isset($data['chequeNumber'])){
+                unset($data['chequeNumber']);
+            }
+            if(isset($data['chequeConsentFile'])){
+                unset($data['chequeConsentFile']);
+            }
+            if(isset($data['orderId'])){
+                unset($data['orderId']);
+            }
+            if(isset($data['transactionId'])){
+                unset($data['transactionId']);
+            }
+            $data['previous_policy_data'][$length]['update_date'] = $data['update_date'];
     }
 }

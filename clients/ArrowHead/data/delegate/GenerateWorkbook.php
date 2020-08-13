@@ -7,6 +7,7 @@ use Oxzion\Utils\YMLUtils;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 
+use Oxzion\AppDelegate\FileTrait;
 use Oxzion\AppDelegate\HttpClientTrait;
 use Oxzion\AppDelegate\HTTPMethod;
 
@@ -14,20 +15,21 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 {
 
     use HttpClientTrait;
+    use FileTrait;
     protected $ExcelTemplateMapperServiceURL = "http://54.161.224.59:5000/api/FileUpload";
 
     protected $carrierTemplateList = array(
-        "harco" => array(
-            "type" => "excel",
-            "excelFile" => "Harco.xlsm",
-            "template" => "harco.yaml",
-            "customData" => "harcoExcelData"
-        ),
         "dealerGuard_ApplicationOpenLot" => array(
             "type" => "excel",
             "template" => "dealerGuard_ApplicationOpenLot.yaml",
             "excelFile" => "DealerGuard_Application_Open_Lot.xlsx",
             "customData" => "dealerguardOpenLot"
+        ),
+        "harco" => array(
+            "type" => "excel",
+            "excelFile" => "Harco.xlsm",
+            "template" => "harco.yaml",
+            "customData" => "harcoExcelData"
         ),
         "victor_FranchisedAutoDealer" => array(
             "type" => "excel",
@@ -60,12 +62,12 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     public function execute(array $data, Persistence $persistenceService)
     {
-        $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data));
+        $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
         $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
-        $this->logger->info("GenerateWorkbook Dest" . json_encode($fileDestination));
+        $this->logger->info("GenerateWorkbook Dest" . json_encode($fileDestination,JSON_UNESCAPED_SLASHES));
         $generatedDocumentsList = array();
         $excelData = array();
         if (isset($data['genericData'])) {
@@ -123,19 +125,36 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                         $tempFieldConfig['value'] = $trueValue;
                                     }
                                 }
+                            } else if (isset($fieldConfig['returnValue'])) {
+                                if(!is_string($userInputValue)){
+                                    $userInputValue = "".$userInputValue;
+                                }
+                                if (array_key_exists($userInputValue, $fieldConfig['returnValue'])) {
+                                    $tempFieldConfig['value'] = $fieldConfig['returnValue'][$userInputValue];
+                                } else {
+                                    $tempFieldConfig['value'] = $userInputValue;
+                                }
                             } else {
                                 $tempFieldConfig['value'] = $userInputValue;
                             }
                             if (!isset($tempFieldConfig['type'])) {
                                 $tempFieldConfig['type'] = "";
                             }
+                            if (!isset($tempFieldConfig['macro'])) {
+                                $tempFieldConfig['macro'] = "";
+                            }
+                            if (!isset($tempFieldConfig['offset'])) {
+                                $tempFieldConfig['offset'] = "";
+                            }
                             if (!$tempFieldConfig['value'] == "") {
                                 array_push($templateData, [
                                     "pageName" => $tempFieldConfig['pageName'],
                                     "cell" => $tempFieldConfig['cell'],
                                     "key" => $tempFieldConfig['key'],
+                                    "macro" => $tempFieldConfig['macro'],
                                     "type" => $tempFieldConfig['type'],
-                                    "value" => $tempFieldConfig['value']
+                                    "value" => $tempFieldConfig['value'],
+                                    "offset" => $tempFieldConfig['offset']
                                 ]);
                             }
                         }
@@ -143,15 +162,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
                     array_push(
                         $excelData,
-                        array(
-                            "filename" => $selectedTemplate["excelFile"],
-                            "data" => $templateData
-                        )
-                    );
-
-                    $response = $this->makeRequest(
-                        HTTPMethod::POST,
-                        $this->ExcelTemplateMapperServiceURL,
                         [
                             "fileId" => $fileUUID,
                             "appId" => $data['appId'],
@@ -163,7 +173,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
                         ]
                     );
-                    $this->logger->info("Excel Mapper POST Request\n" . $response);
                 } else {
                     $pdfData = array();
                     foreach ($fieldTypeMappingPDF[$key]["text"] as  $formField => $pdfField) {
@@ -209,7 +218,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                         }
                     }
                     $pdfData = array_filter($pdfData);
-                    $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT));
+                    $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ));
                     $this->documentBuilder->fillPDFForm(
                         $selectedTemplate["template"],
                         $pdfData,
@@ -228,11 +237,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
         }
 
-        // print_r(json_encode($excelData, JSON_PRETTY_PRINT));
+        // print_r(json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         // exit();
 
         if (count($excelData) > 0) {
-            file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", json_encode($excelData, JSON_PRETTY_PRINT));
+            file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
             array_push(
                 $generatedDocumentsList,
                 array(
@@ -248,7 +257,19 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             $data["status"] = "Generated";
         }
         $data["documents"] = $generatedDocumentsList;
-        $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT));
+        $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+        // $this->saveFile($data, $data['$fileUUID']);
+
+        foreach ($excelData as $excelItem) {
+            $response = $this->makeRequest(
+                HTTPMethod::POST,
+                $this->ExcelTemplateMapperServiceURL,
+                $excelItem
+            );
+            $this->logger->info("Excel Mapper POST Request for " . $excelItem["fileId"] . "\n" . $response);
+            sleep(5);
+        }
         return $data;
     }
 
