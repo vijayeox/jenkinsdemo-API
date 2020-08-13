@@ -107,7 +107,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'alTemplate' => 'DiveStore_AdditionalLocations',
                         'GLblanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
                         'blanketForm' => 'GL_AI_Blanket.pdf',
-                        'travelAgentEO' => '2020-2021_Dive_Store_Travel_E&O.pdf',
+                        'travelAgentEO' => '2020-2021_Dive_Store_Travel_EO.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf',
                         'AutoLiability'=>'2020-2021_Dive_Store_Non-Owned_Auto_Liability.pdf',
                         'roster' => 'Roster_Certificate',
