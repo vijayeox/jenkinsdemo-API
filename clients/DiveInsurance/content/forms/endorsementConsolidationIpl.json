@@ -3435,7 +3435,7 @@
 		}, {
 			"label": "refundAmount",
 			"redrawOn": "data",
-			"calculateValue": "if(data.CSRReviewRequired){\n  if(parseFloat(data.balanceEndor) < 0){\n  value = data.balanceEndor;\n  }else{\n    value = 0;\n  }\n  if(parseFloat(data.endorsementTotal) < 0){\n\tvalue = data.endorsementTotal;\n  }else{\n    value = 0;\n  }\n}\nif((parseFloat(data.endorsementTotal) < 0) && (!data.CSRReviewRequired)){\n  value = data.endorsementTotal;\n}else{\n  value = 0;\n}",
+			"calculateValue": "if (data.CSRReviewRequired) {\n\tif (parseFloat(data.balanceEndor) < 0) {\n\t\tvalue = data.balanceEndor;\n\t} else if (parseFloat(data.endorsementTotal) < 0) {\n\t\tvalue = data.endorsementTotal;\n\t} else {\n\t\tvalue = 0;\n\t}\n} else {\n\tif ((parseFloat(data.endorsementTotal) < 0)) {\nvalue = data.endorsementTotal;\n\t}\n}",
 			"key": "refundAmount",
 			"type": "hidden",
 			"input": true,
@@ -3561,7 +3561,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 327,
+	"_vid": 328,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3582,6 +3582,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-13T10:24:22.687Z",
+	"modified": "2020-08-13T10:45:41.186Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
