@@ -293,11 +293,10 @@ class FileService extends AbstractService
         if (isset($data['last_workflow_instance_id'])) {
            $fileObject['last_workflow_instance_id'] = $data['last_workflow_instance_id'];
         }
-        $this->beginTransaction();
         $count = 0;
         try {
+            $this->beginTransaction();
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
-
             $file->exchangeArray($fileObject);
             $file->validate();
             $count = $this->table->save($file);
@@ -307,13 +306,13 @@ class FileService extends AbstractService
                 $query = "delete from ox_indexed_file_attribute where file_id = :fileId";
                 $result = $this->executeQueryWithBindParameters($query, $queryWhere);
                 $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
-                if(count($validFields['indexedFields']) > 0 ){
+                if($validFields['indexedFields'] && count($validFields['indexedFields']) > 0 ){
                     $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
                 }
                 $query = "delete from ox_file_document where file_id = :fileId";
                 $result = $this->executeQueryWithBindParameters($query, $queryWhere);
                 $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
-                if(count($validFields['documentFields']) > 0 ){
+                if($validFields['documentFields'] && count($validFields['documentFields']) > 0 ){
                     $this->multiInsertOrUpdate('ox_file_document', $validFields['documentFields']);
                 }
             }
