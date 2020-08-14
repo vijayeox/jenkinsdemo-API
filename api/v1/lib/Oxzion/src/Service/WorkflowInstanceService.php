@@ -161,11 +161,10 @@ class WorkflowInstanceService extends AbstractService
     {
         try {
             $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id 
-            from ox_workflow_instance as oxi
-            join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
-             join ox_workflow as ow on wd.workflow_id = ow.id
-             where oxi.org_id=? and oxi.process_instance_id=?";
-
+                        from ox_workflow_instance as oxi
+                        join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
+                         join ox_workflow as ow on wd.workflow_id = ow.id
+                         where oxi.org_id=? and oxi.process_instance_id=?";
             // $query = "SELECT * from ox_workflow_instance where org_id=? and process_instance_id=?";
             $queryParams = array(AuthContext::get(AuthConstants::ORG_ID), $id);
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
@@ -397,6 +396,7 @@ class WorkflowInstanceService extends AbstractService
                 "activityInstanceId" => $activityInstance['id']);
             $updateQueryResult = $this->executeUpdateWithBindParameters($updateQuery,$updateQueryParams);
             $params = $this->pruneFields($params, $params['workflow_instance_id']);
+            unset($params['version']);
             $workflowInstanceId = $this->activityEngine->completeActivity($activityId, $params);
 
         } else {
