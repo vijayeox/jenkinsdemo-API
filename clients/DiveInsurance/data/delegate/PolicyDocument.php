@@ -1359,7 +1359,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
 
                 if(isset($data['medicalPayment']) && isset($policy['previous_medicalPayment'])){
-                    if($policy['previous_medicalPayment'] != $data['medicalPayment']){
+                    if($policy['previous_medicalPayment'] == $data['medicalPayment']){
                         $data['increased_medicalPayment_limit'] = false;
                     } else {
                         $temp['liabilityChanges'] = true;
@@ -1444,7 +1444,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 //Please do not remove
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                    if(isset($data['previous_additionalInsured'])){
+                    if(isset($policy['previous_additionalInsured'])){
                         // foreach($data['previous'])
                         $temp['newAddInsured'] = "";
                         $temp['removedAddInsured'] = "";
