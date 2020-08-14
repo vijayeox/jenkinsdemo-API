@@ -16,6 +16,9 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Driver\Pdo\Pdo;
 use Mockery;
 use Oxzion\Db\Migration\Migration;
+use Oxzion\ServiceException;
+use Oxzion\VersionMismatchException;
+use Oxzion\EntityNotFoundException;
 
 class AppServiceTest extends AbstractServiceTest
 {
@@ -54,6 +57,50 @@ class AppServiceTest extends AbstractServiceTest
         $query = "DROP DATABASE IF EXISTS " . $database;
         $statement = Migration::createAdapter($this->getApplicationConfig(), $database)->query($query);
         $result = $statement->execute();
+    }
+
+    public function testGetAppsOfOrganizationWithApps() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $apps = $appService->getApps();
+        $this->assertEquals(7, count($apps));
+    }
+
+    public function testGetAppsOfOrganizationWithoutApps() {
+        AuthContext::put(AuthConstants::USER_ID, '5');
+        AuthContext::put(AuthConstants::ORG_ID, '2');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        try {
+            $apps = $appService->getApps();
+            $this->fail('Expected EntityNotFoundException.');
+        }
+        catch(EntityNotFoundException $e) {
+            $this->assertNotNull($e);
+        }
+    }
+
+    public function testGetAppWithValidUuid() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $uuid = '6eb3d17e-9db3-45b2-82e6-a59388d71605';
+        $app = $appService->getApp($uuid);
+        $this->assertEquals($app['uuid'], $uuid);
+        $this->assertEquals($app['name'], 'Analytics');
+    }
+
+    public function testGetAppWithInvalidUuid() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        try {
+            $app = $appService->getApp('11111111-1111-1111-1111-111111111111');
+            $this->fail('Expected EntityNotFoundException for application not found in the database.');
+        }
+        catch (\Oxzion\EntityNotFoundException $e) {
+            $this->assertNotNull($e);
+        }
     }
 
     public function testProcessEntity()
@@ -458,4 +505,42 @@ class AppServiceTest extends AbstractServiceTest
         $result3 = file_exists($templatefolder);
         $this->assertEquals($result3, 0);
     }
+
+    public function testDeleteApp() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $uuid = '6eb3d17e-9db3-45b2-82e6-a59388d71605';
+        $appService->deleteApp($uuid, 0);
+        $result = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${uuid}'");
+        $this->assertEquals(\App\Model\App::DELETED, $result[0]['status']);
+    }
+
+    public function testDeleteAppWithValidUuidAndInvalidVersion() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $uuid = '6eb3d17e-9db3-45b2-82e6-a59388d71605';
+        try {
+            $appService->deleteApp($uuid, 5000);
+            $this->fail('Expected VersionMismatchException.');
+        }
+        catch(VersionMismatchException $e) {
+            $this->assertNotNull($e);
+        }
+    }
+
+    public function testDeleteAppWithInvalidUuid() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        try {
+            $appService->deleteApp('11111111-1111-1111-1111-111111111111', 0);
+            $this->fail('Expected EntityNotFoundException.');
+        }
+        catch(EntityNotFoundException $e) {
+            $this->assertNotNull($e);
+        }
+    }
 }
+

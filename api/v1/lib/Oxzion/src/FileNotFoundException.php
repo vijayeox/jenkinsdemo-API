@@ -5,7 +5,7 @@ namespace Oxzion;
 use Throwable;
 use Oxzion\OxServiceException;
 
-class EntityNotFoundException extends OxServiceException {
+class FileNotFoundException extends OxServiceException {
     public function __construct(string $message, $contextData = NULL, 
         int $errorCode = parent::ERR_CODE_NOT_FOUND, 
         string $errorType = parent::ERR_TYPE_ERROR, 

@@ -110,8 +110,8 @@ class AppControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
 
         $this->assertEquals($content['status'], 'success');
-        $this->assertNotEmpty($content['data'][0]['uuid']);
-        $this->assertEquals($content['data'][0]['name'], 'SampleApp');
+        $this->assertNotEmpty($content['data']['uuid']);
+        $this->assertEquals($content['data']['name'], 'SampleApp');
     }
 
     public function testGetNotFound()
@@ -198,21 +198,21 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals(36, strlen($content['data']['uuid']));
+        $this->assertEquals(1, $content['data']['version']);
     }
 
-    public function testCreateWithOutTextFailure()
+    public function testCreateWithoutTextFailure()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['type' => 2, 'org_id' => 4];
         $this->dispatch('/app', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
@@ -411,7 +411,7 @@ class AppControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->assertEquals('error', $content['status']);
-        $this->assertEquals('Validation Errors', $content['message']);
+        $this->assertEquals('Validation error(s).', $content['message']);
         $errors = $content['data']['errors'];
         $this->assertEquals(2, count($errors));
         $this->assertEquals("Field padi - Value of property 'decimalLimit' is '2' expected ''", $errors[0]);
@@ -497,7 +497,7 @@ class AppControllerTest extends ControllerTest
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
         unlink(__DIR__ . '/../../sampleapp/application.yml');
@@ -600,7 +600,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp1/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -611,7 +611,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp2/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -623,7 +623,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -636,7 +636,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -869,9 +869,12 @@ class AppControllerTest extends ControllerTest
         $notExistingAppUuid = '11111111-1111-1111-1111-111111111111';
         $this->dispatch("/app/${notExistingAppUuid}/deploy", 'POST');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(406);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], "Application with APP ID ${notExistingAppUuid} not found.");
+        $this->assertResponseStatusCode(404);
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals('Entity not found.', $content['message']);
+        $data = $content['data'];
+        $this->assertEquals('App', $data['entity']);
+        $this->assertEquals($notExistingAppUuid, $data['uuid']);
     }
 
     public function testDeployApplicationWithoutAppDir() {
@@ -879,7 +882,7 @@ class AppControllerTest extends ControllerTest
         $appName = 'SampleApp';
         $config = $this->getApplicationConfig();
         $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
-        //Ensure souyrce directory does not exist.
+        //Ensure source directory does not exist.
         try {
             if (file_exists($appSourceDir)) {
                 FileUtils::deleteDirectoryContents($appSourceDir);
@@ -892,7 +895,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${sampleAppUuidFromWorkflowYml}/deploy", 'POST');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(404);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Application source directory not found.');
     }
@@ -956,17 +959,31 @@ class AppControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE');
+        $params = ['version' => 0];
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', $params);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
+    public function testDeleteWrongVersion()
+    {
+        $this->initAuthToken($this->adminUser);
+        $params = ['version' => 5000];
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', $params);
+        $this->assertResponseStatusCode(412);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals('Entity version sent by client does not match the version on server.', $content['message']);
+    }
+
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/fc97bdf0-df6f-11e9-8a34-2a2ae2dbcce4', 'DELETE');
+        $params = ['version' => 0];
+        $this->dispatch('/app/11111111-1111-1111-1111-111111111111', 'DELETE', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();

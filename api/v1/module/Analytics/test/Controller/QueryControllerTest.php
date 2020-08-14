@@ -108,17 +108,18 @@ class QueryControllerTest extends ControllerTest
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query5", 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
+        $data = ['datasource_id' => 'd08d06ce-0cae-47e7-9c4f-a6716128a303', 'ispublic' => 1];
         $this->assertEquals(16, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['datasource_id'], 'required');
+        $this->assertEquals($content['message'], 'Validation error(s).');
+        $this->assertEquals($content['data']['errors']['name'], 'required');
+        $this->assertEquals($content['data']['errors']['configuration'], 'required');
     }
 
     public function testUpdate()
@@ -142,12 +143,12 @@ class QueryControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'PUT', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testUpdateNotFound()
@@ -178,18 +179,18 @@ class QueryControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738?version=3', 'DELETE');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query/10000', 'DELETE');
+        $this->dispatch('/analytics/query/11111111-1111-1111-1111-111111111111?version=3', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');

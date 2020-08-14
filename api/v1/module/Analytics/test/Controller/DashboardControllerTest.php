@@ -103,12 +103,12 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_dashboard'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['dashboard_type'], 'required');
     }
 
@@ -151,12 +151,12 @@ class DashboardControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988', 'PUT', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testUpdateNotFound()
@@ -187,18 +187,18 @@ class DashboardControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988?version=3', 'DELETE');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard/10000', 'DELETE');
+        $this->dispatch('/analytics/dashboard/11111111-1111-1111-1111-111111111111?version=3', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');

@@ -60,12 +60,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
@@ -90,12 +90,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a', 'PUT', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testUpdateNotFound()
@@ -126,24 +126,24 @@ class DataSourceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a?version=3', 'DELETE');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/datasource/10000?version=1', 'DELETE');
+        $this->dispatch('/analytics/datasource/11111111-1111-111111111-111111111111?version=1', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'DataSource not found for uuid - 10000');
+        $this->assertEquals($content['message'], 'Entity not found.');
     }
 
     public function testGet() {

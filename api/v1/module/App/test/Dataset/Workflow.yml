@@ -5,18 +5,21 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 4
+    isdefault: 0
   - id: 100
     name: "UnassignedApp1"
     uuid: "8ab30b2d-d1da-427a-8e40-bc954b2b0f87"
     category: "OTHERS"
     type: 2
     status: 4
+    isdefault: 0
   - id: 101
     name: "UnassignedApp2"
     uuid: "8ab30b2d-d1da-427a-8e40-bc954b2b0f89"
     category: "OTHERS"
     type: 2
     status: 4
+    isdefault: 0
 ox_app_entity:
   - id: 1
     name: "entity1"

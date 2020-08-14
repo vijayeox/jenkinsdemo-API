@@ -6,6 +6,7 @@ ox_app:
         description: 'App for Dive Insurance'
         category: EXAMPLE_CATEGORY
         type: 2
+        isdefault: 0
 ox_address:
   -
     id: 8

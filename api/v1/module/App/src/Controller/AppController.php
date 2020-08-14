@@ -10,8 +10,11 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
 use Oxzion\ValidationException;
+use Oxzion\EntityNotFoundException;
+use Oxzion\InvalidInputException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\AppDelegate\AppDelegateService;
+use Oxzion\Utils\ArrayUtils;
 
 class AppController extends AbstractApiController
 {
@@ -65,17 +68,16 @@ class AppController extends AbstractApiController
      */
     public function create($data)
     {
-        $this->log->info(__CLASS__ . "-> \n Create App - " . print_r($data, true));
+        $this->log->info(__CLASS__ . "-> Create App - " . print_r($data, true));
         try {
-            $count = $this->appService->createApp($data);
-            if ($count == 0) {
-                return $this->getFailureResponse("Failed to create a new entity", $data);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $generated = $this->appService->createApp($data);
+            return $this->getSuccessResponseWithData($generated, 201);
         }
-        return $this->getSuccessResponseWithData($data, 201);
+        catch (Exception $e) {
+print($e);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -104,12 +106,15 @@ class AppController extends AbstractApiController
      */
     public function getList()
     {
-        $this->log->info(__CLASS__ . "-> \n Get App List Begin **********");
-        $result = $this->appService->getApps();
-        if ($result == 0 || empty($result)) {
-            return $this->getErrorResponse("No App found", 404);
+        $this->log->info(__CLASS__ . "-> Get app list.");
+        try {
+            $result = $this->appService->getApps();
+            return $this->getSuccessResponseWithData($result);
         }
-        return $this->getSuccessResponseWithData($result);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -137,19 +142,17 @@ class AppController extends AbstractApiController
      * </code>
      * @return array Returns a JSON Response with Status Code and Created App.
      */
-    public function update($id, $data)
+    public function update($uuid, $data)
     {
-        $this->log->info(__CLASS__ . "-> \n Update App - " . print_r($data, true));
+        $this->log->info(__CLASS__ . "-> Update App - ${uuid}, " . print_r($data, true));
         try {
-            $count = $this->appService->updateApp($id, $data);
-            if ($count == 0) {
-                return $this->getErrorResponse("App not found for id - $id", 404);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $this->appService->updateApp($uuid, $data);
+            return $this->getSuccessResponseWithData($data, 200);
         }
-        return $this->getSuccessResponseWithData($data, 200);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -157,17 +160,21 @@ class AppController extends AbstractApiController
      * @api
      * @link /app[/:appId]
      * @method DELETE
-     * @param $id ID of App to Delete
+     * @param $uuid UUID of App to Delete
      * @return array success|failure response
      */
-    public function delete($id)
+    public function delete($uuid)
     {
-        $this->log->info(__CLASS__ . "-> \n Delete App for ID- " . print_r($id, true));
-        $response = $this->appService->deleteApp($id);
-        if ($response == 0) {
-            return $this->getErrorResponse("App not found", 404, ['id' => $id]);
+        $this->log->info(__CLASS__ . "-> Delete App for ID ${uuid}.");
+        try {
+            $version = $this->getVersionFromQueryOrPost();
+            $this->appService->deleteApp($uuid, $version);
+            return $this->getSuccessResponse();
         }
-        return $this->getSuccessResponse();
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -194,14 +201,17 @@ class AppController extends AbstractApiController
      * }
      * </code>
      */
-    public function get($id)
+    public function get($uuid)
     {
-        $this->log->info(__CLASS__ . "-> \n Get App for ID- " . print_r($id, true));
-        $response = $this->appService->getApp($id);
-        if ($response == 0 || empty($response)) {
-            return $this->getErrorResponse("App not found", 404, ['id' => $id]);
+        $this->log->info(__CLASS__ . "-> Get App for ID- ${uuid}.");
+        try {
+            $response = $this->appService->getApp($uuid);
+            return $this->getSuccessResponseWithData($response);
         }
-        return $this->getSuccessResponseWithData($response);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -214,19 +224,20 @@ class AppController extends AbstractApiController
     public function applistAction()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $this->log->info(__CLASS__ . "-> \n Get App List - " . print_r($filterParams, true));
+        $this->log->info(__CLASS__ . "-> Get App List - " . print_r($filterParams, true));
         try {
             $response = $this->appService->getAppList($filterParams);
-            if ($response == 0 || empty($response)) {
-                return $this->getErrorResponse("No Apps to display", 404);
-            }
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 400);
+            return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
         }
-        return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
+/*-------------------------------------------------------------------------------------------------------------*/
+/* Removed because AppService->installAppForOrg is deprecated/removed. */
+/*-------------------------------------------------------------------------------------------------------------*/
     /**
      * POST App Install API
      * @api
@@ -236,20 +247,20 @@ class AppController extends AbstractApiController
      * ? Need to check if this can be removed
      * @return array of Apps
      */
+/*
     public function appInstallAction($data)
     {
         $data = $this->extractPostData();
         try {
             $count = $this->appService->installAppForOrg($data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 201);
     }
+*/
 
     /**
      * POST Assignment API
@@ -264,14 +275,16 @@ class AppController extends AbstractApiController
         $filterParams = $this->params()->fromQuery();
         try {
             $assignments = $this->workflowService->getAssignments($params['appId'], $filterParams);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
+            return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
+        }
+        catch (AccessDeniedException $e) {
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
-        return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -293,41 +306,35 @@ class AppController extends AbstractApiController
     public function deployAppAction()
     {
         $params = $this->extractPostData();
-        $this->log->info(__CLASS__ . "-> \n Deploy App - " . print_r($params, true));
-        if (isset($params['path'])) {
-            try {
-                $path = $params['path'];
-                $path .= substr($path, -1) == '/' ? '' : '/';
-                if(isset($params['parameters']) && !empty($params['parameters'])){
-                    $params['parameters'] = strtolower($params['parameters']);
-                    $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
-                    $params['parameters'] = rtrim($params['parameters'],",");
-                    $params['parameters'] = ltrim($params['parameters'],",");
-                    if(strpos($params['parameters'], ',') !== false){
-                        $params = explode(",",$params['parameters']);
-                    }else{
-                        $params = array($params['parameters']);
-                    }                    
-                }
-                else{
-                    $params = null;
-                }
-                $this->appService->deployApp($path, $params);
-                return $this->getSuccessResponse(200);
-            } catch (ValidationException $e) {
-                $this->log->error($e->getMessage(), $e);
-                $response = ['data' => $params, 'errors' => $e->getErrors()];
-                return $this->getErrorResponse("Validation Errors", 406, $response);
-            } catch (ServiceException $e) {
-                $this->log->error($e->getMessage(), $e);
-                return $this->getErrorResponse($e->getMessage(), 406);
-            } catch (Exception $e) {
-                $this->log->error($e->getMessage(), $e);
-                return $this->getErrorResponse($e->getMessage(), 500);
-            }
-        } else {
+        $this->log->info(__CLASS__ . "-> Deploy App - " . print_r($params, true));
+        if (!isset($params['path'])) {
             $this->log->error("Path not provided");
-            return $this->getErrorResponse("Invalid parameters", 400);
+            return $this->getErrorResponse("Invalid parameters", 406);
+        }
+
+        try {
+            $path = $params['path'];
+            $path .= substr($path, -1) == '/' ? '' : '/';
+            if(isset($params['parameters']) && !empty($params['parameters'])){
+                $params['parameters'] = strtolower($params['parameters']);
+                $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
+                $params['parameters'] = rtrim($params['parameters'],",");
+                $params['parameters'] = ltrim($params['parameters'],",");
+                if(strpos($params['parameters'], ',') !== false){
+                    $params = explode(",",$params['parameters']);
+                }else{
+                    $params = array($params['parameters']);
+                }                    
+            }
+            else{
+                $params = null;
+            }
+            $this->appService->deployApp($path, $params);
+            return $this->getSuccessResponse(200);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -346,28 +353,19 @@ class AppController extends AbstractApiController
     public function deployApplicationAction()
     {
         $routeParams = $this->params()->fromRoute();
-        $this->log->info(__CLASS__ . '-> \n Deploy Application - ' . $routeParams['appId'], true);
+        $this->log->info(__CLASS__ . '-> Deploy Application - ' . $routeParams['appId'], true);
         if (!isset($routeParams['appId'])) {
             $this->log->error('Application ID not provided.');
-            return $this->getErrorResponse('Invalid parameters', 400);
+            return $this->getErrorResponse('Invalid parameters', 406);
         }
 
         try {
             $this->appService->deployApplication($routeParams['appId']);
             return $this->getSuccessResponse(200);
         }
-        catch (ValidationException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        }
-        catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 406);
-        }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -377,7 +375,7 @@ class AppController extends AbstractApiController
         $appId = $this->params()->fromRoute()['appId'];
         $delegate = $this->params()->fromRoute()['delegate'];
         $data = array_merge($data, $this->params()->fromQuery());
-        $this->log->info(__CLASS__ . "-> \n Execute Delegate Start - " . print_r($data, true));
+        $this->log->info(__CLASS__ . "-> Execute Delegate Start - " . print_r($data, true));
         try {
             $response = $this->appDelegateService->execute($appId, $delegate, $data);
             if ($response == 1) {
@@ -385,11 +383,12 @@ class AppController extends AbstractApiController
             } elseif ($response == 2) {
                 return $this->getErrorResponse("Error while executing the delegate", 400);
             }
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 400);
+            return $this->getSuccessResponseWithData($response, 200);
         }
-        $this->log->info(__CLASS__ . "-> \n End of Delegate");
-        return $this->getSuccessResponseWithData($response, 200);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 }
+

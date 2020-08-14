@@ -20,3 +20,4 @@ class DashboardTable extends ModelTable {
         return $this->internalSave2($data->toArray());
     }
 }
+
