@@ -16,6 +16,7 @@ use Oxzion\Utils\ArtifactUtils;
 use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class FileController extends AbstractApiController
 {
@@ -55,13 +56,14 @@ class FileController extends AbstractApiController
         }
         try {
             $count = $this->fileService->createFile($data);
-            $data['version'] = 0;
-            // $count = 1;
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Unexpected Error!",500, $data);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
