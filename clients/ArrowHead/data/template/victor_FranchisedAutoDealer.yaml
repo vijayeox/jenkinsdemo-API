@@ -891,6 +891,22 @@
    pageName: Property
    cell: G40
    type: DataGrid
+   returnValue:
+      autoSalesAndService: Auto Parts & Supplies
+      autoStorageLot: Storage Lot - Auto/Truck
+      bldgLeasedToOthers: Leased to Othrs
+      bodyShop: Body Shop
+      carWash: Car Wash
+      detailShop: Detail
+      newCarShowroomAndSales: New Sales
+      office: Office
+      serviceRepair: Repair
+      usedCarSales: Used Sales
+      vacantLand: Vacant Land
+      vehicleStorageParkingGarage: Parking Lot - No Structure
+      partsWarehouseStorage: Warehouse
+      vacantBuilding: Lease & Rental
+      deliveryPrep: Sales & Service
 -
    key: genericData*locationScheduleGridData_
    method: simpleDatagrid
