@@ -1147,7 +1147,7 @@ class FileServiceTest extends AbstractServiceTest
             $this->assertEquals($queryResult1[$key]['field_value_type'],$sqlQueryResult[$key]['field_value_type']);
             $this->assertEquals($queryResult1[$key]['created_by'],$sqlQueryResult[$key]['created_by']);
             $this->assertEquals($queryResult1[$key]['date_created'],$sqlQueryResult[$key]['date_created']);
-            $this->assertEquals(1,$sqlQueryResult[$key]['modified_by']);
+            $this->assertEquals(2,$sqlQueryResult[$key]['modified_by']);
             $this->assertEquals(true,$sqlQueryResult[$key]['date_modified']!=null);
             $this->assertEquals($queryResult1[$key]['sequence'],$sqlQueryResult[$key]['sequence']);
                 
@@ -1194,6 +1194,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals($entityId, $sqlQuery1Result[1]['entity_id']);
         $this->assertEquals(1, $sqlQuery1Result[1]['sequence']);
         $sqlQueryResult = $this->runQuery($sqlQuery2);
+        //print_r($sqlQueryResult);
         foreach ($sqlQueryResult as $key => $value) {
             $fieldValue = $sqlQueryResult[$key]['field_value'];
             if($sqlQueryResult[$key]['field_value_type'] == 'OTHER'){
@@ -1221,9 +1222,9 @@ class FileServiceTest extends AbstractServiceTest
             $this->assertEquals($queryResult1[$key]['file_id'],$sqlQueryResult[$key]['file_id']);
             $this->assertEquals($queryResult1[$key]['field_id'],$sqlQueryResult[$key]['field_id']);
             $this->assertEquals($queryResult1[$key]['field_value_type'],$sqlQueryResult[$key]['field_value_type']);
-            $this->assertEquals(true,$sqlQueryResult[$key]['created_by'] != null);
+            $this->assertEquals(2,$sqlQueryResult[$key]['created_by']);
             $this->assertEquals(true,$sqlQueryResult[$key]['date_created']!=null);
-            $this->assertEquals(1,$sqlQueryResult[$key]['modified_by']);
+            $this->assertEquals(2,$sqlQueryResult[$key]['modified_by']);
             $this->assertEquals(true,$sqlQueryResult[$key]['date_modified']!=null);
             $this->assertEquals($queryResult1[$key]['sequence'],$sqlQueryResult[$key]['sequence']);
                 

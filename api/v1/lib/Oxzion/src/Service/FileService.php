@@ -150,13 +150,19 @@ class FileService extends AbstractService
             throw new EntityNotFoundException("Invalid File Id");
         }
         $obj = $obj->toArray();
-        $orgId = $obj['org_id'];
-        $orgUuid = $this->getUuidFromId('ox_organization', $orgId);
-        $this->updateOrganizationContext(['orgId' => $orgUuid]);
+        $this->updateFileUserContext($obj);
         $fields = json_decode($obj['data'], true);
         $this->updateFileAttributesInternal($obj['entity_id'], $fields, $fileId);
     }
     
+    private function updateFileUserContext($obj){
+        $orgId = $obj['org_id'];
+        $userId = $obj['modified_by'] ? $obj['modified_by'] : $obj['created_by'];
+        $orgUuid = $this->getUuidFromId('ox_organization', $orgId);
+        $userUuid = $this->getUuidFromId('ox_user', $userId);
+        $context = ['orgId' => $orgUuid, 'userId' => $userUuid];
+        $this->updateOrganizationContext($context);
+    }
     private function updateFileAttributesInternal($entityId, $fields, $fileId){
         $validFields = $this->checkFields($entityId ,$fields, $fileId);
         $validFields = $validFields['validFields'];
@@ -1861,14 +1867,15 @@ class FileService extends AbstractService
             }
         }
         if(isset($entityId)){
-            $whereQuery = "where entity_id=:entityId";
+            $whereQuery = "where f.entity_id=:entityId";
             $queryParams['entityId'] = $entityId;
         }
         // print_r($whereQuery);
-        $select = "SELECT ox_file.* from ox_file $whereQuery";
+        $select = "SELECT f.*  from ox_file f $whereQuery";
         $files = $this->executeQuerywithBindParameters($select,$queryParams)->toArray();
         foreach ($files as $k => $file) {
-            $fileData = $this->cleanData(json_decode($file['data'],true));
+            $this->updateFileUserContext($file);
+            $fileData = json_decode($file['data'],true);
             $this->updateFileAttributesInternal($entityId, $fileData, $file['id']);
             unset($files[$k]['data']);
             unset($files[$k]['id']);
