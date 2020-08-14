@@ -156,15 +156,6 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['update_date'] = $data['update_date'] = $update_date;
                 }
                 $data['endoEffectiveDate'] = $data['update_date'];
-                if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                    // foreach ($data['additionalInsured'] as $key => $value) {
-                    //     if(!isset($value['effectiveDate'])){
-                    //         $data['additionalInsured'][$key]['effectiveDate'] = $data['start_date'];
-                    //         $data['additionalInsured'][$key]['start_date'] = date_format(date_create($data['start_date']),'Y-m-d');
-                    //     }
-                    // }
-                    $data['previous_additionalInsured'] = $data['additionalInsured'];
-                }
                 $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
                 $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
                 $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
@@ -197,7 +188,9 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_combinedSingleLimitDS'] = 1000000;
                     $policy['previous_annualAggregateDS'] = 2000000;
                 }
-                $policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
+                if(isset($data['dspropreplacementvalue'])){
+                	$policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
+                }
                 $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
                 $policy['previous_dspropTotal'] = $data['dspropTotal'];
                 $policy['previous_lossPayees'] = $data['lossPayees'];
@@ -220,6 +213,9 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
                 $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
+                if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                    $policy['previous_additionalInsured'] = $data['additionalInsured'];
+                }
                 if(isset($data['PAORFee'])){
                     $policy['previous_PAORFee'] = $data['PAORFee'];
                 }

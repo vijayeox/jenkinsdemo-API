@@ -1444,18 +1444,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 //Please do not remove
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                    if(isset($data['previous_additionalInsured'])){
-                        // foreach($data['previous'])
+                    if(isset($policy['previous_additionalInsured'])){
                         $temp['newAddInsured'] = "";
                         $temp['removedAddInsured'] = "";
-                        $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $data['previous_additionalInsured']));
+                        $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $policy['previous_additionalInsured']));
                         $newAddInsured = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
                         if(sizeof($newAddInsured) > 0){
                             $temp['newAddInsured'] = json_encode($newAddInsured);
                         }
                         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($temp['newAddInsured'],true));
-                        $diff = array_diff(array_map('serialize',$data['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
+                        $diff = array_diff(array_map('serialize',$policy['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
                         $removedAddInsured = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :".print_r($removedAddInsured,true));
                         if(sizeof($removedAddInsured) > 0){
@@ -1465,7 +1464,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 if($data['lossPayeesSelect'] == "yes"){
                     if(isset($policy['previous_lossPayees'])){
-                        // foreach($data['previous_lossPayees'])
                         $temp['newlossPayees'] = "";
                         $temp['removedlossPayees'] = "";
                         $diff = array_diff(array_map('serialize', $data['lossPayees']), array_map('serialize', $policy['previous_lossPayees']));
@@ -1485,7 +1483,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 if($data['additionalLocationsSelect'] == "yes"){
                     if(isset($policy['previous_additionalLocations'])){
-                        // foreach($data['previous_additionalLocations'])
                         $temp['newAdditionalLocations'] = "";
                         $temp['removedadditionalLocations'] = "";
                         $diff = array_diff(array_map('serialize', $data['additionalLocations']), array_map('serialize', $policy['previous_additionalLocations']));
