@@ -36,7 +36,11 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						${$dspropTotal|number_format}
+						{if isset($dspropTotal) && (int)$dspropTotal != 0}
+                            ${$dspropTotal|number_format}
+                        {else}
+                            Not Included
+                        {/if}
 					</p>
 					<p></p>
 					<p class = "sec_title2">
@@ -44,13 +48,13 @@
 						{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0}
                             ${$lossOfBusIncome|number_format}
                         {else}
-                            $0
+                            Not Included
                         {/if}</p>
 					<p class = "sec_title2">
 						{if isset($dspropreplacementvalue) && $dspropownbuilding == "yes"}
                             ${$dspropreplacementvalue|number_format}
                         {else}
-                            $0
+                            Not Included
                         {/if}
 					</p>
 					<p class = "sec_title2">
