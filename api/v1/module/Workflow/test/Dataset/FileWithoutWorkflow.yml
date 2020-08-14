@@ -25,6 +25,7 @@ ox_field:
     required: 1
     sequence: 2
     entity_id: 1111
+    index: 0
   - id: 32
     name: "age"
     text: "Age"
@@ -35,6 +36,7 @@ ox_field:
     required: 1
     sequence: 1
     entity_id: 1111
+    index: 0
 ox_form:
   - id: 81
     app_id: 131
@@ -59,6 +61,7 @@ ox_file:
     entity_id: 1111
     is_active: 1
     form_id: 1
+    version: 1
 ox_file_attribute:
   - id: 1222
     file_id: 71
@@ -90,3 +93,13 @@ ox_app_page:
 ox_app_registry:
   - org_id: 1
     app_id: 131
+ox_file_audit_log:
+  - id: 71
+    org_id: 1
+    data: "New File Data Without Workflow"
+    uuid: "d13d0c68-98c9-22e9-adc5-308d99c9145c"
+    date_created: "2019-06-28 00:00:00"
+    entity_id: 1111
+    is_active: 1
+    form_id: 1
+    version: 1

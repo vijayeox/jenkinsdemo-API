@@ -32,7 +32,7 @@ class ActivityImpl implements Activity
     public function getActivity($activityId)
     { 
         try {
-            $this->logger->info("Entering the getActivity method in ActivityImpl File\n");
+            $this->logger->info("Entering the getActivity method in ActivityImpl File");
             $response =  $this->restClient->get("task/".$activityId);
             $result = json_decode($response, true);
             return $result;
@@ -45,7 +45,7 @@ class ActivityImpl implements Activity
     public function getActivitiesByUser($userId, $params=array())
     {
         try {
-            $this->logger->info("Entering the getActivitiesByUser method in ActivityImpl File\n");
+            $this->logger->info("Entering the getActivitiesByUser method in ActivityImpl File");
             $queryArray = array_merge($params, array("assignee"=>$userId));
             $response =  $this->restClient->get('task?'.http_build_query($queryArray));
             $result = json_decode($response, true);
@@ -60,7 +60,7 @@ class ActivityImpl implements Activity
     {
         $query = 'task/'.$activityId.'/claim';
         try { 
-            $this->logger->info("Entering the claimActivity method in ActivityImpl File\n");
+            $this->logger->info("Entering the claimActivity method in ActivityImpl File");
             $response =  $this->restClient->post($query, array('userId'=>$userId));
             $result = json_decode($response, true);            
         } catch (Exception $e) { 
@@ -71,7 +71,7 @@ class ActivityImpl implements Activity
     }
     public function unclaimActivity($activityId, $userId)
     {
-        $this->logger->info("Entering the unclaimActivity method in ActivityImpl File\n");
+        $this->logger->info("Entering the unclaimActivity method in ActivityImpl File");
         $query = 'task/'.$activityId.'/unclaim';
         try {
             $response =  $this->restClient->post($query, array('userId'=>$userId));
@@ -84,7 +84,7 @@ class ActivityImpl implements Activity
     }
     public function completeActivity($activityId, $parameterArray=array())
     {
-        $this->logger->info("Entering the completeActivity method in ActivityImpl File\n");
+        $this->logger->info("Entering the completeActivity method in ActivityImpl File");
         $query = 'task/'.$activityId.'/complete';
         $params = array();
         foreach ($parameterArray as $key => $value) {
@@ -101,7 +101,7 @@ class ActivityImpl implements Activity
     }
     public function submitTaskForm($activityId, $parameterArray=array())
     {
-        $this->logger->info("Entering the submitTaskForm method \n");
+        $this->logger->info("Entering the submitTaskForm method ");
         $query = 'task/'.$activityId.'/submit-form';
         $params = array();
         foreach ($parameterArray as $key => $value) {
@@ -111,7 +111,7 @@ class ActivityImpl implements Activity
             $this->logger->info("submitTaskForm parameter array -".print_r($params,true));
             $response =  $this->restClient->post($query, array('variables'=>$params));
             $result = json_decode($response, true);
-            $this->logger->info("submitTaskForm method result - $result \n");
+            $this->logger->info("submitTaskForm method result - $result ");
             return $result;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(),$e);
@@ -123,7 +123,7 @@ class ActivityImpl implements Activity
     {
         $query = 'task/'.$id.'/resolve';
         try {
-            $this->logger->info("Entering the resolveActivity method in ActivityImpl File\n");
+            $this->logger->info("Entering the resolveActivity method in ActivityImpl File");
             $response =  $this->restClient->post($query, $parameterArray);
             $result = json_decode($response, true);
             return $result;
@@ -136,7 +136,7 @@ class ActivityImpl implements Activity
     public function getActivitiesByGroup($groupId)
     {
         try {
-            $this->logger->info("Entering the resolveActivity method in ActivityImpl File\n");
+            $this->logger->info("Entering the resolveActivity method in ActivityImpl File");
             $response =  $this->restClient->post('task', array("candidateGroup"=>$groupId));
             $result = json_decode($response, true);
             return $result;

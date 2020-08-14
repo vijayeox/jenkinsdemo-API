@@ -42,6 +42,8 @@ final class Version20191118062858 extends AbstractMigration
         $this->addSql("ALTER TABLE ox_activity DROP COLUMN `workflow_id`");
         $this->addSql("ALTER TABLE ox_activity ADD COLUMN `workflow_deployment_id` int(32) NOT NULL");
         $this->addSql("ALTER TABLE ox_activity ADD CONSTRAINT FOREIGN KEY (`workflow_deployment_id`) REFERENCES ox_workflow_deployment(`id`) ");
+        $this->addSql ("ALTER TABLE ox_workflow_instance DROP FOREIGN KEY workflow_instance_references_workflow");
+        $this->addSql ("ALTER TABLE ox_workflow_instance DROP INDEX workflow_instance_references_workflow");
         $this->addSql("ALTER TABLE ox_workflow_instance CHANGE COLUMN `workflow_id` `workflow_deployment_id` int(32) NOT NULL");
         $this->addSql("ALTER TABLE ox_workflow_instance ADD CONSTRAINT FOREIGN KEY (`workflow_deployment_id`) REFERENCES ox_workflow_deployment(`id`) ");
 

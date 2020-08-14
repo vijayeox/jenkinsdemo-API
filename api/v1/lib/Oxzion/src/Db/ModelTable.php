@@ -139,16 +139,8 @@ abstract class ModelTable
         }
     }
 
-    protected function internalSave2(array $data)
+    protected function internalSave2(array &$data)
     {
-        foreach ($data as $key => $value) {
-            if(isset($value['value'])){
-                $data[$key] = $value['value'];
-            }
-            else{
-                unset($data[$key]);
-            }
-        }
         $this->init();
         $id = null;
         if ((!empty($data['id']))&&(isset($data['version']))) {
@@ -180,5 +172,6 @@ abstract class ModelTable
         } catch (Exception $e) {
             throw $e;
         }
+
     }
 }

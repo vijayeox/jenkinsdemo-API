@@ -8,16 +8,19 @@ use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Service\CommandService;
+use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Model\ServiceTaskInstanceTable;
 use Oxzion\Model\ServiceTaskInstance;
 
 class ServiceTaskService extends AbstractService
 {
     private $commandService;
-	public function __construct($config, $dbAdapter,ServiceTaskInstanceTable $table, CommandService $commandService)
+    private $workflowInstanceService;
+	public function __construct($config, $dbAdapter,ServiceTaskInstanceTable $table, CommandService $commandService, WorkflowInstanceService $workflowInstanceService)
     {
         parent::__construct($config, $dbAdapter);
         $this->commandService = $commandService;
+        $this->workflowInstanceService = $workflowInstanceService;
         $this->table = $table;
     }
 
@@ -25,6 +28,17 @@ class ServiceTaskService extends AbstractService
 		$this->commandService->updateOrganizationContext($data['variables']);
         $variables = isset($data['variables']) ? $data['variables'] : null;
         $response = $this->commandService->runCommand($variables, $request);
+        if(isset($data['processInstanceId'])){
+            if(isset($response['data']) ) {
+                if(isset($response['data']['data'])){
+                    $response['data']['data'] = $this->workflowInstanceService->pruneFields($response['data']['data'], $data['processInstanceId']);
+                }else{
+                    $response['data'] = $this->workflowInstanceService->pruneFields($response['data'], $data['processInstanceId']);
+                }
+            }else{
+                $response = $this->workflowInstanceService->pruneFields($response, $data['processInstanceId']);
+            }
+        }
         $serviceTaskInstance = $this->createServiceTaskInstance($data,$response);
         return $response;
 	}

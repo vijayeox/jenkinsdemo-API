@@ -593,7 +593,8 @@ class Module
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\ServiceTaskInstanceTable::class),
-                        $container->get(Service\CommandService::class)
+                        $container->get(Service\CommandService::class),
+                        $container->get(Service\WorkflowInstanceService::class)
                     );
                 },
                 Service\QuickBooksService::class => function ($container) {

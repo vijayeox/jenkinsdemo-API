@@ -142,6 +142,7 @@ content:
                 - product
                 - phone
                 - business_name
+                - certificate_no
             filterOperator : startswith
             placeholder: 'Search using Name or PADI or Product or Phone'
             operations:

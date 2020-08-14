@@ -45,7 +45,20 @@ content:
                         details:
                             -
                                 type: Form
-                                url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                url: entity/80b2d1f8-6929-49a6-8e46-4e027f681b77/workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                data:
+                                    product: 'Dive Store'
+                                    entity_name: 'Dive Store'
+                    -
+                        name: 'Group Professional Liability'
+                        rule: 'true'
+                        details:
+                            -
+                                type: Form
+                                url: entity/62e68b3f-abd0-4938-a82e-2ca42db1ae19/workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                data:
+                                    product: 'Group Professional Liability'
+                                    entity_name: 'Group Professional Liability'
             actions:
                 -
                     name: Review
@@ -93,17 +106,37 @@ content:
                             isDraft: true
                     icon: 'fa fa-pencil'
                 -
-                    name: Comment
-                    rule: 'true'
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{entity_name}}'' == ''Dive Store'')'
                     details:
                         -
-                            type: Document
-                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
-                            useRowData: true
+                            params:
+                                page_id: 'eb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
                         -
-                            type: Comment
-                            url: '{{uuid}}'
-                    icon: 'far fa-comment'
+                            params:
+                                page_id: 'ab018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'bb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Group Professional Liability'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'fb018dfd-be95-4c53-9a97-042f615f3623'
             columnConfig:
                 -
                     title: PADI
@@ -114,7 +147,7 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.firstname + " " + item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.product == "Group Professional Liability" ? item.business_name :(item.firstname + " " + item.lastname)}</td>'
                     multiFieldFilter:
                         - lastname
                         - business_name
@@ -140,25 +173,26 @@ content:
                             - 'Dive Boat'
                             - 'Dive Store'
                             - 'Emergency First Response'
+                            - 'Group Professional Liability'
                         placeholder: 'Select Policy'
                 -
                     title: 'Policy Start Date'
                     field: start_date
                     cell: '<td>{formatDateWithoutTimezone(item.start_date)}</td>'
                     filter: date
-                    filterFormat: MM-DD-YYYY
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Policy End Date'
                     field: end_date
                     cell: '<td>{formatDateWithoutTimezone(item.end_date)}</td>'
                     filter: date
-                    filterFormat: MM-DD-YYYY
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Submitted Date'
                     field: created_date
                     cell: '<td>{formatDateWithoutTimezone(item.created_date)}</td>'
                     filter: date
-                    filterFormat: MM-DD-YYYY
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Assigned to'
                     field: assigned_user

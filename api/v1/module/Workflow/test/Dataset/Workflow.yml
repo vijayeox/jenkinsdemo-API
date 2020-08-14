@@ -25,6 +25,7 @@ ox_field:
     required: 1
     sequence: 2
     entity_id: 1
+    index: 0
   - id: 2
     name: "age"
     text: "Age"
@@ -35,6 +36,7 @@ ox_field:
     required: 1
     sequence: 1
     entity_id: 1
+    index: 0
   - id: 3
     name: "expiry_date"
     app_id: 99
@@ -43,14 +45,16 @@ ox_field:
     required: 1
     sequence: 1
     entity_id: 1
+    index: 0
   - id: 4
     name: "padi_number"
     app_id: 99
-    data_type: "integer"
+    data_type: "text"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 4
     entity_id: 1
+    index: 1
   - id: 5
     name: "policy_document"
     app_id: 99
@@ -59,6 +63,7 @@ ox_field:
     required: 1
     sequence: 5
     entity_id: 1
+    index: 0
   - id: 6
     name: "coi_number"
     app_id: 99
@@ -67,6 +72,7 @@ ox_field:
     required: 1
     sequence: 6
     entity_id: 1
+    index: 0
   - id: 7
     name: "product"
     text: "Product"
@@ -77,6 +83,7 @@ ox_field:
     required: 1
     sequence: 7
     entity_id: 1
+    index: 0
   - id: 8
     name: "firstname"
     text: "First Name"
@@ -87,6 +94,7 @@ ox_field:
     required: 1
     sequence: 8
     entity_id: 1
+    index: 0
   - id: 9
     name: "additionalInsured"
     text: "Additional Insured"
@@ -97,6 +105,7 @@ ox_field:
     required: 1
     sequence: 9
     entity_id: 1
+    index: 0
   - id: 10
     name: "firstname"
     text: "First Name"
@@ -108,6 +117,7 @@ ox_field:
     parent_id: 9
     sequence: 10
     entity_id: 1
+    index: 0
   - id: 11
     name: "city"
     text: "City"
@@ -119,6 +129,7 @@ ox_field:
     parent_id: 9
     sequence: 11
     entity_id: 1
+    index: 0
 ox_form:
   - id: 1
     app_id: 99
@@ -163,6 +174,18 @@ ox_workflow:
     process_id: "Process_1dx3jli"
     uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"
     entity_id: 1
+  - id: 2
+    app_id: 99
+    name: "Test Workflow 2"
+    process_id: "Process_1dx3eer"
+    uuid: "3341cd2e-cb14-11e9-a32f-2a2ae2dbcc33"
+    entity_id: 1
+  - id: 3
+    app_id: 99
+    name: "Test Workflow 3"
+    process_id: "Process_1dx3w3e"
+    uuid: "ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11"
+    entity_id: 1
 ox_workflow_deployment:
   - id: 1
     workflow_id: 1
@@ -170,6 +193,19 @@ ox_workflow_deployment:
     form_id: 1
     latest: 1
     created_by: 1
+  - id: 2
+    workflow_id: 2
+    process_definition_id: "Process_1dx3eer:441b7c8b-fef7-11e9-89d4-0294414e06e4"
+    form_id: 1
+    latest: 1
+    created_by: 1
+  - id: 3
+    workflow_id: 3
+    process_definition_id: "Process_1dx3w3e:ef1b7c8b-fef7-11e9-89d4-0294414e0633"
+    form_id: 1
+    latest: 1
+    created_by: 1
+    fields: '["padi_number", "firstname"]'
 ox_activity:
   - id: 1
     app_id: 99
@@ -181,6 +217,11 @@ ox_activity:
     workflow_deployment_id: 1
     task_id: Task_1s7qwer43
     name: "Temp Task"
+  - id: 3
+    app_id: 99
+    workflow_deployment_id: 3
+    task_id: Task_1s7qwett4
+    name: "Some Task"
 ox_activity_form:
   - id: 1
     activity_id: 1
@@ -188,7 +229,7 @@ ox_activity_form:
 ox_file:
   - id: 11
     org_id: 1
-    data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     date_created: "2019-06-25 00:00:00"
     entity_id: 1
@@ -196,7 +237,7 @@ ox_file:
     form_id: 1
   - id: 12
     org_id: 1
-    data: "New File Data"
+    data: '{"firstname" : "User","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "user@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     date_created: "2019-06-28 00:00:00"
     entity_id: 1
@@ -204,7 +245,7 @@ ox_file:
     form_id: 1
   - id: 13
     org_id: 1
-    data: "New File Data - Completed"
+    data: '{"firstname" : "User 1","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "user2@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     date_created: "2019-06-26 00:00:00"
     entity_id: 1
@@ -212,7 +253,7 @@ ox_file:
     form_id: 1
   - id: 14
     org_id: 1
-    data: "New File Data - Latest Completed"
+    data: '{"firstname" : "User 3","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "user3@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
@@ -257,7 +298,16 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
-    file_id: 11
+    file_id: 13
+    start_data: ""
+  - id: 5
+    workflow_deployment_id: 1
+    app_id: 99
+    org_id: 1
+    status: "In Progress"
+    file_id: 0
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
     start_data: ""
 ox_file_attribute:
   - id: 1
@@ -315,6 +365,14 @@ ox_file_attribute:
     org_id: 1
     field_value: 6
     field_id: 6
+ox_indexed_file_attribute:
+  - id: 1
+    file_id: 11
+    field_id: 4
+    field_value_text: '1234'  
+    field_value_type: 'TEXT'
+    created_by: 1
+    org_id: 1
 ox_app_menu:
   - id: 1
     uuid: "menu1"
@@ -369,7 +427,7 @@ ox_activity_instance:
     workflow_instance_id: 1
     start_data: '{"firstname":"Sadhitha","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
     completion_data: '{"firstname":"Sadhitha","product":"P","fax" : "","additionalInsured": [{"firstname":"SHASHI","city":"City","age" : ""}]}'
-    status: "Completed"
+    status: "In Progress"
     start_date: "2019-06-26 00:00:00"
     org_id: 1
   - id: 2
@@ -385,6 +443,16 @@ ox_activity_instance:
     workflow_instance_id: 4
     status: "In Progress"
     start_date: "2019-06-26 02:00:00"
+    org_id: 1
+  - id: 4
+    activity_id: 1
+    activity_instance_id: "446622fd-0124-11ea-a8a0-22e8105c0777"
+    workflow_instance_id: 1
+    start_data: '{"firstname":"Sadhitha","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
+    completion_data: '{"firstname":"Sadhitha","product":"P","fax" : "","additionalInsured": [{"firstname":"SHASHI","city":"City","age" : ""}]}'
+    status: "Completed"
+    start_date: "2019-06-26 00:00:00"
+    submitted_date: "2019-06-27 00:00:00"
     org_id: 1
 ox_activity_instance_assignee:
   - activity_instance_id: 1

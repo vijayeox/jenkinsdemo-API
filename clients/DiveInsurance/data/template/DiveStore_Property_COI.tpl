@@ -6,12 +6,12 @@
 </head>
 <body>
 	<div class ="body_div">
-	  <hr class = "s_hrtag"></hr>
+	  <hr class = "s_hrtag" style = "margin-bottom: 0px;"></hr>
       <center><b>Store Location:&nbsp<span class ="store_location"> {$address1},{$address2},{$city},{$state},{$country},{$zip}</span></b></center>
-      <hr class = "s_hrtag"></hr>
+      <hr class = "s_hrtag" style = "margin-top: 0px;"></hr>
 		<div class="section_col">
 			<div class ="sec1">
-				<p class ="title">Propery Coverages</p>
+				<p class ="title">Property Coverages</p>
 			</div>
 			<div class ="sec2">
 				<p class ="title">Limits</p>
@@ -71,17 +71,25 @@
 				</div></b>
 			</div>
 			<div class="spacing1">&nbsp</div>
-			<div class="deduct"><b>Deductible:</b><br/>
+			<div class="deduct" style = "margin-bottom: 1px;"><b>Deductible:</b><br/>
 				<p class ="deduct1">Wind/Hail is 5% of Insured Values per location, $5000 minimum, for Florida, Hawaii, Puerto Rico, USVI, Guam and all Tier 1
 locations (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North Carolina and all Harris
-County Texas locations. Mechanical breakdown is $2500. All other perils is $1000.</p></div>
-		<hr></hr>
-		<b><center><p class="addIn">{if !empty($lossPayees)}
+County Texas locations. Mechanical breakdown is $2500. All other perils is {if $propertyDeductibles == "propertyDeductibles1000"}
+                           $1,000
+                        {elseif $propertyDeductibles == "propertyDeductibles2500"}
+                           $2,500
+                        {elseif $propertyDeductibles == "propertyDeductibles5000"}
+                           $5,000
+                        {else}
+                           $1,000
+                        {/if}.</p></div>
+		<hr style = "margin-bottom: 0px;"></hr>
+		<b><center><p class="addIn">{if $lossPayeesSelect == "yes"}
 			Certificate has Loss Payees (See Attached)
 			{else}
 			Certificate Does Not Have Loss Payees.
 			{/if}</p></center></b>
-		<hr></hr>
+		<hr style = "margin-top: 0px;"></hr>
 
 		<p  class = "policy_notice">The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688.
 The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description
@@ -277,7 +285,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
 				<center><p class = "notice">
@@ -285,7 +293,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
 				<center><p class = "notice">both of
-					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VI.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">

@@ -546,9 +546,12 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "DocumentPreview",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"StoreEndorsementDocuments\"}]"
+		},
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
-		"label": "Document Preview",
+		"label": "Documents Preview",
 		"input": false,
 		"components": [{
 			"title": "Document Preview",
@@ -560,7 +563,6 @@
 				"next": true
 			},
 			"collapsible": false,
-			"hidden": true,
 			"tableView": false,
 			"key": "page10",
 			"type": "panel",
@@ -570,7 +572,7 @@
 				"label": "finalDocuments",
 				"persistent": false,
 				"protected": true,
-				"calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}",
+				"calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}\nconsole.log(value);",
 				"key": "finalDocuments",
 				"properties": {
 					"data_type": "list"
@@ -581,7 +583,7 @@
 			}, {
 				"type": "documentviewer",
 				"key": "documents1",
-				"label": "Quote Information",
+				"label": "Store Endorsement Documents",
 				"calculateValue": "value = (data['finalDocuments'])",
 				"hideLabel": true,
 				"inputType": "documentviewer",
@@ -621,6 +623,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-07-21T05:50:03.625Z",
+	"modified": "2020-08-05T11:43:23.903Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

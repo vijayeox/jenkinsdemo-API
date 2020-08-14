@@ -1,57 +1,1123 @@
-- pageName: Coverage Selections
-  cell: I8
-  type: Checkbox
-  method: checkbox_X
-  key: websitecontent_noWebsiteStreamingVideoOrMusicContentBlog
-  value: 'true'
-- pageName: Crime (printable)
-  cell: J72
-  type: Checkbox
-  key: trainingbeenprovidedtoemployee
-  method: checkbox_X
-  value: 'true'
-- pageName: Garage Supplemental
-  cell: C5
-  key: minAge
-  value: '18'
-- pageName: Garage Supplemental
-  cell: C8
-  key: titleSearch
-  value: 'Yes'
-- pageName: Garage Supplemental
-  cell: C9
-  key: titleSearchDescription
-  value: Sample Description
-- pageName: Garage Supplemental
-  cell: B45
-  key: demoGrid
-  type: DataGrid
-  value:
-    - - ABC
-      - Father
-      - '2020-11-15'
-      - '12345'
-    - - KLM
-      - Mother
-      - '1995-11-25'
-      - '8565'
-    - - XYZ
-      - Brother
-      - '1856-10-15'
-      - A562B
-    - - PLM
-      - Son
-      - '2012-10-05'
-      - '#16ANC'
-- pageName: Garage Supplemental
-  cell: B5
-  type: SingleCellMultipleCheckboxs
-  multiItemIndex: 2
-  key: plannedRoute
-  value: 'true'
-- pageName: Garage Supplemental
-  cell: B112
-  type: SingleCellMultipleCheckboxs
-  multiItemIndex: 3
-  key: other
-  value: 'true'
+-
+   key: namedInsured
+   Source Worksheet: Named Insured
+   pageName: Property
+   cell: G25
+-
+   key: mailingAddress
+   Source Worksheet: Mailing Address
+   pageName: Property
+   cell: G26
+-
+   key: franchisedAutoDealer*CityStateZip
+   Source Worksheet: City
+   pageName: Property
+   cell: G27
+-
+   key: franchisedAutoDealer*InsuranceContactNameandPhone
+   Source Worksheet: Insurance Contact
+   pageName: Property
+   cell: G28
+-
+   key: effectiveDate
+   Source Worksheet: 'Effective Date:'
+   pageName: Property
+   cell: G29
+-
+   key: umbrellalimit
+   Source Worksheet: Limit
+   pageName: Commercial Umbrella
+   cell: E7
+-
+   key: underwritesurvey_areBankCCStatementsReconciledMonthly
+   method: pulloutChild
+   Source Worksheet: Are bank/credit card statements reconciled monthly by someone with no
+      access to cash/credit card receipts/disbursements?
+   pageName: Crime (printable)
+   cell: L86
+-
+   key: auditperformed
+   Source Worksheet: Audit is performed by = CPA
+   pageName: Crime (printable)
+   cell: I61
+   type: Checkbox
+-
+   key: criminalbackgroundcheck
+   Source Worksheet: Are criminal background checks performed on all employees?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L59
+-
+   key: prioremployerhistory
+   Source Worksheet: Is prior employer history checked?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L55
+-
+   key: financialtransaction
+   Source Worksheet: Are credit checks secured for employees with access to financial
+      transactions?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L57
+-
+   key: dateofcompletionauditcashandaccounts
+   Source Worksheet: 'Date of completion of last audit of cash & accounts:'
+   pageName: Crime (printable)
+   cell: L68
+-
+   key: lastauditofinventory
+   Source Worksheet: 'Date of completion of last audit of inventory:'
+   pageName: Crime (printable)
+   cell: L70
+-
+   key: auditreportissentto
+   Source Worksheet: 'Audit report is sent to:= Owner'
+   pageName: Crime (printable)
+   cell: H74
+-
+   key: discrepenciesloose
+   Source Worksheet: Were any discrepencies or loose practices commented upon this audit? (If
+      YES, attach copy of audit and auditor's comments)
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L76
+-
+   key: newhireschecked
+   Source Worksheet: Are references of all new hires checked with respect to employment
+      history?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L79
+-
+   key: payrollauditedannually
+   Source Worksheet: Is payroll system audited annually?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L81
+-
+   key: physicalinventory
+   Source Worksheet: Is a complete physical inventory made?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L83
+-
+   key: howoftenisphysicalinventorymade
+   Source Worksheet: 'If YES, how often:'
+   pageName: Crime (printable)
+   cell: I84
+-
+   key: employeesbeencancelled
+   Source Worksheet: Any employee(s) been cancelled for crime coverage by an insurere.?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L49
+-
+   key: countersignature
+   Source Worksheet: Is countersignature of checks required?
+   pageName: Crime (printable)
+   returnBoolean: "Yes|No"
+   cell: L88
+-
+   key: signsthecontrols
+   Source Worksheet: 'If not, who signs the controls?'
+   pageName: Crime (printable)
+   cell: I89
+-
+   key: numberOfOwners
+   Source Worksheet: '# of Owners/Officers:'
+   pageName: Crime (printable)
+   cell: L51
+-
+   key: numberOfOwners
+   Source Worksheet: '# of Owners/Officers:'
+   pageName: Garage Liability
+   cell: C27
+-
+   key: totalemployees
+   Source Worksheet: 'Total # of Employees:'
+   pageName: Crime (printable)
+   cell: L53
+-
+   key: theftblanketlimit
+   Source Worksheet: Employee Theft Blanket Limit
+   pageName: Crime (printable)
+   cell: I14
+-
+   key: theftblanketdeductible
+   Source Worksheet: Employee Theft Blanket Deductible
+   pageName: Crime (printable)
+   cell: L14
+-
+   key: alterationlimit
+   Source Worksheet: Forgery or Alteration Limit
+   pageName: Crime (printable)
+   cell: I18
+-
+   key: alterationdeductible
+   Source Worksheet: Forgery or Alteration Deductible
+   pageName: Crime (printable)
+   cell: L18
+-
+   key: theftofmoneylimit
+   Source Worksheet: Theft of Money/Securities Limit
+   pageName: Crime (printable)
+   cell: I22
+-
+   key: theftofmoneydeductible
+   Source Worksheet: Theft of Money/Securities Deductible
+   pageName: Crime (printable)
+   cell: L22
+-
+   key: propertylimit
+   Source Worksheet: Money/Securities/Other Property Limit
+   pageName: Crime (printable)
+   cell: I32
+-
+   key: propertydeductible
+   Source Worksheet: Money/Securities/Other Property Deductible
+   pageName: Crime (printable)
+   cell: L32
+-
+   key: computerlimit && fundslimit
+   Source Worksheet: Computer Fraud Limit and Funds Transfer Fraud Limit
+   pageName: Crime (printable)
+   cell: I16
+-
+   key: computerdeductible && fundsdeductible
+   Source Worksheet: Computer Fraud Deductible && Funds Transfer Fraud Deductible
+   pageName: Crime (printable)
+   cell: L16
+-
+   key: counterfeitpaperlimit
+   Source Worksheet: Money Orders/Counterfeit Paper Curr. Limit
+   pageName: Crime (printable)
+   cell: I20
+-
+   key: counterfeitpapercurrentdeductible
+   Source Worksheet: Money Orders/Counterfeit Paper Curr. Deductible
+   pageName: Crime (printable)
+   cell: L20
+   notes: 'Note: Wrongly mentioned as I16 in raw file.'
+-
+   key: totalassetvalue
+   Source Worksheet: 'Total Asset Value:'
+   pageName: Crime (printable)
+   cell: I34
+-
+   key: numberofTrusteesHandlingPlanAsset
+   Source Worksheet: '# of Trustees/Emps Handling Plan Asse'
+   pageName: Crime (printable)
+   cell: L43
+-
+   key: planparticipants
+   Source Worksheet: '# of Plan Participants'
+   pageName: Crime (printable)
+   cell: M43
+-
+   key: nameofplan
+   Source Worksheet: 'Name of Plan/Address:'
+   pageName: Crime (printable)
+   cell: F41
+-
+   key: franchisedAutoDealer*checkSecurityGuards
+   Source Worksheet: Security Guards
+   pageName: Garage Keepers Supplementary
+   cell: G16
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkNotMonitoredSurveillanceCamera
+   Source Worksheet: Surveill. Cameras not monitored
+   pageName: Garage Keepers Supplementary
+   cell: F16
+   type: Checkbox
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes"to the applicable carrier app.
+-
+   key: franchisedAutoDealer*checkMonitoredSurveillanceCamera
+   Source Worksheet: Surveill. Cameras monitored / intruder notification
+   pageName: Garage Keepers Supplementary
+   cell: F16
+   type: Checkbox
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes"to the applicable carrier app.
+-
+   key: franchisedAutoDealer*checkdolpostnchain
+   Source Worksheet: Post & Chain
+   pageName: Garage Keepers Supplementary
+   cell: D16
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkdolflyfencdpremises
+   Source Worksheet: Fully Fenced Premises
+   pageName: Garage Keepers Supplementary
+   cell: C16
+   type: Checkbox
+-
+   key: gascaddy
+   Source Worksheet: 'If YES, do they use a gas caddy?'
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C92
+-
+   key: flammablestored
+   Source Worksheet: Are flammables stored in UL approved cabinets?
+   pageName: Garage Supplemental
+   cell: B91
+   type: Checkbox
+-
+   key: spraypainting
+   Source Worksheet: Does applicant perform body work and spray painting?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C95
+-
+   key: spraypaintingysurvey_isTheSprayBoothNfpaCompliant
+   method: pulloutChild
+   Source Worksheet: Is the spray booth NFPA compliant?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C97
+-
+   key: spraypaintingysurvey_maintContractInPlaceToServiceInspectBooth
+   method: pulloutChild
+   Source Worksheet: Maint. contract in place to service/inspect booth?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C100
+-
+   key: spraypaintingysurvey_autoSprinklerDryChemFireSuppressionSystem
+   method: pulloutChild
+   Source Worksheet: Auto sprinkler/dry-chem fire suppression system?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C99
+-
+   key: spraypaintingysurvey_arePaintsStoredInUlApprovedCabinets
+   method: pulloutChild
+   Source Worksheet: Are paints stored in UL approved cabinets?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C98
+-
+   key: separatemixingroom
+   Source Worksheet: Does applicant have a separate mixing room?
+   pageName: Garage Supplemental
+   cell: C103
+   returnBoolean: "Yes|No"
+-
+   key: mixingroomsurvey_haveExplosionProofElectricalSystem
+   method: pulloutChild
+   Source Worksheet: Have explosion proof electrical system?
+   pageName: Garage Supplemental
+   cell: B106
+   type: Checkbox
+-
+   key: mixingroomsurvey_haveFireSuppressionSystem
+   method: pulloutChild
+   Source Worksheet: Have fire suppression system?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C99
+-
+   key: mixingroomsurvey_haveNfpaCompliantVentilation
+   method: pulloutChild
+   Source Worksheet: Have NFPA compliant ventilation?
+   pageName: Garage Supplemental
+   cell: B105
+   type: Checkbox
+   notes: 'Note:Wrongly mentioned as A105 in raw file.'
+-
+   key: mixingroomsurvey_areDrumsGroundedAndBondedDuringPantTransfer
+   method: pulloutChild
+   Source Worksheet: Are drums grounded and bonded during pant transfer?
+   pageName: Garage Supplemental
+   cell: B105
+   type: Checkbox
+-
+   key: mixingroomsurvey_raisedSil
+   method: pulloutChild
+   Source Worksheet: Raised Sil?
+   pageName: Garage Supplemental
+   cell: B107
+   type: Checkbox
+   notes: 'Note:Wrongly mentioned as A107 in raw file.'
+-
+   key: doesapplicantperformtowing
+   Source Worksheet: Does applicant perform towing operations?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C83
+-
+   key: ifyesnumberoftowtrucksinfleet
+   Source Worksheet: 'If YES, number of tow trucks in fleet:'
+   pageName: Garage Supplemental
+   cell: C84
+-
+   key: anytowforhire
+   Source Worksheet: Any tow for hire?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C85
+-
+   key: franchisedAutoDealer*formalsafetymeetingsNone
+   Source Worksheet: Formal safety meetings - "None"is selected the system will map "No"
+   pageName: Garage Supplemental
+   cell: C110
+-
+   key: franchisedAutoDealer*formalsafetymeetingsMonthly
+   Source Worksheet: Formal safety meetings "Monthly"
+   pageName: Garage Supplemental
+   cell: Check Box 56
+   type: Checkbox
+-
+   key: doesapplicantreposestheirownvehicles
+   Source Worksheet: Does applicant reposess their own vehicles?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C61
+-
+   key: whoperfomsthereposessions
+   Source Worksheet: 'If NO, who performs the reposessions?'
+   pageName: Garage Supplemental
+   cell: C63
+-
+   key: describeprocedure
+   Source Worksheet: 'If YES, describe procedure:'
+   pageName: Garage Supplemental
+   cell: C62
+-
+   key: certificateofinsuranceforrepocompany
+   Source Worksheet: Does the insured have a certificate of insurance for repo company?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C64
+-
+   key: applicantperformsanytowforhire
+   Source Worksheet: If Applicant performs any tow for hire, describe
+   pageName: Garage Supplemental
+   cell: C86
+-
+   key: applicanthaveanyunits
+   Source Worksheet: Does applicant have any units that will tow multiple vehicles?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C80
+-
+   key: maxnumberofvehiclesanyunitcanhaul
+   Source Worksheet: 'If YES, max # of vehicles any 1 unit can haul:'
+   pageName: Garage Supplemental
+   cell: C81
+-
+   key: doestheinsuredservicebuses
+   Source Worksheet: Does the insured service buses?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C88
+-
+   key: annualreceiptsfrombusservice
+   Source Worksheet: 'If YES, annual receipts from bus service:'
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C89
+-
+   key: franchisedAutoDealer*checktestdriveproceduresInsuranceCard
+   Source Worksheet: 'Test Drive Procedures:'
+   pageName: Garage Supplemental
+   cell: C28
+-
+   key: minage
+   Source Worksheet: Min age?
+   pageName: Garage Supplemental
+   cell: C5
+-
+   key: aretheyinsuredelsewhere
+   Source Worksheet: 'If YES, is insurance coverage placed elsewhere for this exposure?'
+   pageName: Garage Supplemental
+   cell: C22
+-
+   key: customerserviceloanerrentalprogram
+   Source Worksheet: Customer Service Loaner Rental Program?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C24
+-
+   key: customerserviceloanerrentalprogram
+   Source Worksheet: Customer Service Loaner Rental Program?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C31
+-
+   key: iffactoryidentifyprograms
+   Source Worksheet: 'If Factory, identify program(s) involved'
+   pageName: Garage Supplemental
+   cell: C32
+-
+   key: loanerrentalcontractused
+   Source Worksheet: Is a Loaner  or Rental contract used? Please include a copy of contract
+      used.
+   returnBoolean: "Yes|No"
+   pageName: Garage Supplemental
+   cell: C29
+-
+   key: minimumagetoprovideloaners
+   Source Worksheet: Minimum age to provide loaners? (please attach a customer agreement)
+   pageName: Garage Supplemental
+   cell: C27
+-
+   key: aredriverslicenseinsuredverified
+   Source Worksheet: Are Drivers License and Insurance verified?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C28
+-
+   key: doesinsuredrentvehicles
+   Source Worksheet: Does Insured rent vehicles other than rentals in conjunction with service
+      operations?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C21
+-
+   key: insuresdoanyinhouseleasing
+   Source Worksheet: Insured do any "in house"leasing?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C17
+-
+   key: minimumliabilitylimitrequired
+   Source Worksheet: 'If YES, minimum liability limit required?'
+   pageName: Garage Supplemental
+   cell: C18
+-
+   key: numberofvehiclesoutonlease
+   Source Worksheet: Number of vehicles out on Lease?
+   pageName: Garage Supplemental
+   cell: C19
+-
+   key: dealerrequiresbeingadded
+   Source Worksheet: Dealer requires being added as Additional Insured on sub-contractors' and
+      vendors' insurance policies?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C67
+-
+   key: isthereDiarySystemInPlace
+   Source Worksheet: If yes, is there a diary system in place to monitor expiration dates of
+      certificate?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C68
+-
+   key: doesTheInsuredSellAnyOfTheFollowingProducts_creditLifeOrAH
+   method: pulloutChild
+   Source Worksheet: Credit Life or A&H
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C35
+-
+   key: doesTheInsuredSellAnyOfTheFollowingProducts_physicalDamageCoverage
+   method: pulloutChild
+   Source Worksheet: Physical Damage Coverage
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C36
+-
+   key: doesTheInsuredSellAnyOfTheFollowingProducts_personalAutoCoverage
+   method: pulloutChild
+   Source Worksheet: Personal Auto Coverage
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C37
+-
+   key: numberoflicensedagents
+   Source Worksheet: '# of licensed agents:'
+   pageName: Garage Supplemental
+   cell: C39
+-
+   key: dealertradesmonthlybasis
+   Source Worksheet: How many dealer trades are performed on a monthly basis?
+   pageName: Garage Supplemental
+   cell: C114
+-
+   key: independentContractorMinimumAge
+   Source Worksheet: If Independent Contractor, what are the minimum / maximum ages of the
+      contractors
+   pageName: Garage Supplemental
+   cell: 'C118'
+-
+   key: independentcontractorMaximumAge
+   Source Worksheet: If Independent Contractor, what are the minimum / maximum ages of the
+      contractors
+   pageName: Garage Supplemental
+   cell: 'D118'
+-
+   key: locationSchedule_garagekeepersperlocation
+   method: simpleDatagrid
+   Source Worksheet: Garagekeepers (per location)
+   pageName: Garage Keepers (printable)
+   cell: C31
+   type: DataGrid
+-
+   key: locationSchedule_numberofservicebays
+   method: simpleDatagrid
+   Source Worksheet: '# of Service Bays'
+   pageName: Garage Keepers (printable)
+   cell: D31
+   type: DataGrid
+-
+   key: dolcompdeduc
+   Source Worksheet: 'Comp Deductible:'
+   pageName: Garage Keepers (printable)
+   cell: E31
+-
+   key: dolcollisiondeduc
+   Source Worksheet: 'Collision Deductible:'
+   pageName: Garage Keepers (printable)
+   cell: F31
+-
+   key: franchisedAutoDealer*checkrepairpercentlabor
+   pageName: Garage Keepers (printable)
+   cell: H31
+   note: If the producer selects an 85% or 95% option the system will select
+      90% for both.
+-
+   key: dolrepairpercenparts
+   Source Worksheet: 'Repair % - Parts:'
+   pageName: Garage Keepers (printable)
+   cell: G31
+-
+   key: garagekeepersbasis
+   Source Worksheet: 'Garagekeepers Basis:'
+   pageName: Garage Keepers (printable)
+   cell: K31
+-
+   key: garagekeeperUnderwritingKeyControl_none
+   method: pulloutChild
+   Source Worksheet: None
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 37
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingKeyControl_keyMachine
+   method: pulloutChild
+   Source Worksheet: Key Machine
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 43
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingKeyControl_keyBoard
+   method: pulloutChild
+   Source Worksheet: Key Board
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 46
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingKeyControl_lockBoxes
+   method: pulloutChild
+   Source Worksheet: Lockboxes
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 47
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingKeyControl_keysInCars
+   method: pulloutChild
+   Source Worksheet: Keys in car
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 39
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_none
+   method: pulloutChild
+   Source Worksheet: None
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 38
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_fenced
+   method: pulloutChild
+   Source Worksheet: Fenced
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 40
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_postChains
+   method: pulloutChild
+   Source Worksheet: Post and Chains
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 42
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_securityLighting
+   method: pulloutChild
+   Source Worksheet: Security Lighting
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 44
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_videoSurveillance
+   method: pulloutChild
+   Source Worksheet: Video Surveillance
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 45
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_nightWatchman
+   method: pulloutChild
+   Source Worksheet: Night watchman
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 41
+   type: Checkbox
+-
+   key: listcompaniesrepresented
+   Source Worksheet: 'List companies represented:'
+   pageName: Garage Supplemental
+   cell: 'C41'
+   type: DataGrid
+-
+   key: driverOtherCargrid_nameofdrivertobecovered
+   Source Worksheet: Name of Driver (and Spouse) to be covered
+   pageName: Garage Supplemental
+   method: simpleDatagrid
+   cell: B122
+   type: DataGrid
+-
+   key: driverOtherCargrid_driveumuim
+   Source Worksheet: UM/UIM
+   pageName: Garage Supplemental
+   method: simpleDatagrid
+   cell: C122
+   type: DataGrid
+-
+   pageName: Additional Interest
+   skip: "1_18"
+   key: namedInsuredSchedule_namedInsuredScheduleName
+   method: simpleDatagrid
+   type: DataGrid
+   cell: G9
+-
+   key: testdriveprocedures_copyOfDriversLicense
+   Source Worksheet: 'Test Drive Procedures: drivers liscence'
+   pageName: Garage Supplemental
+   method: checkInArray
+   cell: Check box 90
+   type: Checkbox
+-
+   key: testdriveprocedures_copyOfInsuranceCard
+   Source Worksheet: 'Test Drive Procedures:insurance card'
+   pageName: Garage Supplemental
+   method: checkInArray
+   cell: Check box 91
+   type: Checkbox
+-
+   key: testdriveprocedures_plannedRoute
+   Source Worksheet: 'Test Drive Procedures:planned route'
+   pageName: Garage Supplemental
+   method: checkInArray
+   cell: Check box 92
+   type: Checkbox
+-
+   key: testdriveprocedures_salespersonAlwaysAccompanies
+   Source Worksheet: 'Test Drive Procedures: Sales person'
+   pageName: Garage Supplemental
+   method: checkInArray
+   cell: Check box 93
+   type: Checkbox
+-
+   key: auditname
+   Source Worksheet: 'Name/Address of Audit Firm/Person:'
+   pageName: Crime (printable)
+   cell: K63
+-
+   key: auditaddress
+   Source Worksheet: 'Name/Address of Audit Firm/Person:'
+   pageName: Crime (printable)
+   cell: K65
+-
+   key: auditperformed_cpa
+   method: checkInArray
+   Source Worksheet: Audit is performed by = CPA
+   pageName: Crime (printable)
+   cell: Check box 1
+   type: Checkbox
+-
+   key: auditperformed_publicAccountant
+   Source Worksheet: Audit is performed by = account
+   method: checkInArray
+   pageName: Crime (printable)
+   cell: Check box 2
+   type: Checkbox
+-
+   key: auditperformed_staff
+   Source Worksheet: Audit is performed by = staff
+   method: checkInArray
+   pageName: Crime (printable)
+   cell: Check box 3
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_immediateResponse
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 97
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_factGathering
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 101
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_interviewWitnesses
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 103
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_photographs
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 105
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_rootCauseAnalysis
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 98
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_formalReporting
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 100
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_shareDiscussFindings
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 102
+   type: Checkbox
+-
+   key: accidentInvestigationIfYesCheckAllThatApply_makeChanges
+   method: checkInArray
+   pageName: Garage Supplemental
+   cell: Check box 104
+   type: Checkbox
+-
+   key: genericData*locationScheduleGridData_locationNum
+   method: simpleDatagrid
+   pageName: Garage Keepers (printable)
+   cell: A32
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_buildingNumber
+   method: simpleDatagrid
+   pageName: Garage Keepers (printable)
+   cell: B32
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkauditfrequencyannual
+   pageName: Crime (printable)
+   cell: Check Box 4
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkauditfrequencysemiAnnual
+   pageName: Crime (printable)
+   cell: Check Box 6
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkauditfrequencyquarterly
+   pageName: Crime (printable)
+   cell: Check Box 8
+   type: Checkbox
+-
+   key: auditreportissentto_owners
+   pageName: Crime (printable)
+   cell: Check Box 5
+   type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
+-
+   key: auditreportissentto_partners
+   pageName: Crime (printable)
+   cell: Check Box 7
+   type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
+-
+   key: auditreportissentto_boardOfDirectors
+   pageName: Crime (printable)
+   cell: Check Box 9
+   type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
+-
+   key: genericData*locationScheduleGridData_locationNum
+   method: simpleDatagrid
+   pageName: Property
+   cell: A40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_buildingNumber
+   method: simpleDatagrid
+   pageName: Property
+   cell: B40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_address
+   method: simpleDatagrid
+   pageName: Property
+   cell: C40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_state
+   method: simpleDatagrid
+   pageName: Property
+   cell: D40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_city
+   method: simpleDatagrid
+   pageName: Property
+   cell: E40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_zip
+   method: simpleDatagrid
+   pageName: Property
+   cell: F40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_occupancyType
+   method: simpleDatagrid
+   pageName: Property
+   cell: G40
+   type: DataGrid
+   returnValue:
+      autoSalesAndService: Auto Parts & Supplies
+      autoStorageLot: Storage Lot - Auto/Truck
+      bldgLeasedToOthers: Leased to Othrs
+      bodyShop: Body Shop
+      carWash: Car Wash
+      detailShop: Detail
+      newCarShowroomAndSales: New Sales
+      office: Office
+      serviceRepair: Repair
+      usedCarSales: Used Sales
+      vacantLand: Vacant Land
+      vehicleStorageParkingGarage: Parking Lot - No Structure
+      partsWarehouseStorage: Warehouse
+      vacantBuilding: Lease & Rental
+      deliveryPrep: Sales & Service
+-
+   key: genericData*locationScheduleGridData_
+   method: simpleDatagrid
+   pageName: Property
+   cell: H40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_constructiontype
+   method: simpleDatagrid
+   pageName: Property
+   cell: J40
+   type: DataGrid
+   returnValue:
+      frame : ISO 1 = Frame
+      joistedMasonry : ISO 2 = Masonry / Joisted Masonry
+      nonCombustible : ISO 3 = Pre-Engineered Metal / Non Combustible
+      masonryNonCombustible : ISO 4 = Steel Frame / Masonry Non-Combustible
+      modifiedFireResistive : ISO 5 = Protected Steel Frame / Modified Fire Resistive
+      fireResistive : ISO 6 = Reinforced Concrete Frame / Fire Resistive
+      heavyTimberJoistedMasonry : ""
+      superiorNonCombustible : ""
+      superiorMasonryNonCombustible : ""
+-
+   key: genericData*locationScheduleGridData_buildinginterest
+   method: simpleDatagrid
+   pageName: Property
+   cell: L40
+   type: DataGrid
+   returnValue:
+      buildinginterestowned: Owner
+      buildinginterestleased: Tenant
+-
+   key: genericData*locationScheduleGridData_yearBuilt
+   method: simpleDatagrid
+   pageName: Property
+   cell: M40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_dolhydrantfeet
+   method: simpleDatagrid
+   pageName: Property
+   cell: N40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_dolfirestamiles
+   method: simpleDatagrid
+   pageName: Property
+   cell: O40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_wiringyear
+   method: simpleDatagrid
+   pageName: Property
+   cell: P40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_roofingyear
+   method: simpleDatagrid
+   pageName: Property
+   cell: Q40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_plumbingyear
+   method: simpleDatagrid
+   pageName: Property
+   cell: R40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_heatingyear
+   method: simpleDatagrid
+   pageName: Property
+   cell: S40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_stories
+   method: simpleDatagrid
+   pageName: Property
+   cell: V40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_basement
+   method: simpleDatagrid
+   pageName: Property
+   cell: W40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_boiler
+   method: simpleDatagrid
+   pageName: Property
+   cell: Y40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_sprinklerprotected
+   method: simpleDatagrid
+   pageName: Property
+   cell: Z40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_buildingsquarefootage
+   method: simpleDatagrid
+   pageName: Property
+   cell: AG40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_firealarmmonitoring
+   method: simpleDatagrid
+   pageName: Property
+   cell: AB40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_burglaralarmmonitoring
+   method: simpleDatagrid
+   pageName: Property
+   cell: AC40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_buildingLimit
+   method: simpleDatagrid
+   pageName: Property
+   cell: AD40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_businesspersonal
+   method: simpleDatagrid
+   pageName: Property
+   cell: AL40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_businessincomelimit
+   method: simpleDatagrid
+   pageName: Property
+   cell: AR40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_valuationMethod
+   method: simpleDatagrid
+   pageName: Property
+   cell: AJ40
+   type: DataGrid
+   returnValue:
+      replacementCost: Replacement Cost
+      actualCashValue: Actual Cash Value
+      reconstructionCost: ""
+-
+   key: genericData*locationScheduleGridData_coinsuranceamount
+   method: simpleDatagrid
+   pageName: Property
+   cell: AS40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_biwaitingperiod
+   method: simpleDatagrid
+   pageName: Property
+   cell: AU40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_dolright
+   method: simpleDatagrid
+   pageName: Property
+   cell: AW40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_dolleft
+   method: simpleDatagrid
+   pageName: Property
+   cell: AX40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_dolfront
+   method: simpleDatagrid
+   pageName: Property
+   cell: AY40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_dolrear
+   method: simpleDatagrid
+   pageName: Property
+   cell: AZ40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_address
+   method: simpleDatagrid
+   pageName: Garage Keepers (printable)
+   cell: B43
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_locationNum
+   method: simpleDatagrid
+   pageName: Garage Keepers (printable)
+   cell: A43
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkwhodeliversvehiclesonemployee
+   pageName: Garage Supplemental 
+   cell: Check Box 39
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkwhodeliversvehiclesonindependentContractor
+   pageName: Garage Supplemental 
+   cell: Check Box 40
+   type: Checkbox
+-
+   key: isatitlesearchserviceused
+   pageName: Garage Supplemental 
+   cell: C8
+   returnBoolean: "Yes|No"
+-
+   key: titlesearchdescribe
+   pageName: Garage Supplemental 
+   cell: C9
+-
+   key: falsePretenseNumber
+   pageName: Garage Keepers (printable) 
+   cell: I31

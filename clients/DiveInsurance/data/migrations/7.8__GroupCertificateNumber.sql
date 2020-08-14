@@ -1,0 +1,1 @@
+INSERT INTO certificate_of_insurance_number (`product`,`year`,`sequence`) SELECT 'Group Professional Liability',2021,sequence from certificate_of_insurance_number where product = 'Dive Store' AND `year` = 2021;

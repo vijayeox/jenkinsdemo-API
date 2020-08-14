@@ -65,21 +65,15 @@ class FileControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['field1'], $data['field1']);
+        $fileId = $content['data']['uuid'];
 
-        // performed ox_file data column verification
-        $selctQuery = "SELECT data from ox_file oxf inner join ox_form oxfm on oxfm.id = oxf.form_id where oxfm.entity_id=1";
-        $selectResult = $this->executeQueryTest($selctQuery);
-        unset($data['entity_id']);
-        $this->assertEquals($selectResult[0]['data'], json_encode($data));
-
-        // Performed ox_file_attribute table data verification
-        $selctQuery = "SELECT oxf.data,oxf.version as fileVersion,ofl.name,ofa.field_value from ox_file oxf inner join ox_form oxfm on oxfm.id = oxf.form_id 
-        inner join ox_form_field off on off.form_id = oxfm.id
-        inner join ox_field ofl on ofl.id = off.field_id        
-        inner join ox_file_attribute ofa on ofa.file_id = oxf.id and ofa.field_id=ofl.id  where oxfm.entity_id=1";
+        $selctQuery = "SELECT oxf.id, oxf.data,oxf.version as fileVersion from ox_file oxf where oxf.uuid='$fileId'";
         $selectResult = $this->executeQueryTest($selctQuery); 
-        $this->assertEquals(count($selectResult), 2);
+        unset($data['entity_id']);
+        $this->assertEquals(count($selectResult), 1);
         $this->assertEquals($selectResult[0]['fileVersion'], 1);
+        $this->assertEquals(json_decode($selectResult[0]['data'], true), $data);
+
     }
 
     public function testCreateAccess()
@@ -114,7 +108,7 @@ class FileControllerTest extends ControllerTest
          // Performed ox_file_attribute table data verification
         $selctQuery = "SELECT * from ox_file oxf where oxf.uuid='d13d0c68-98c9-11e9-adc5-308d99c9145b'";
         $selectResult = $this->executeQueryTest($selctQuery);
-        $this->assertEquals($data['version']+1, $selectResult[0]['version']);
+        $this->assertEquals($content['data']['version'], $selectResult[0]['version']);
 
     }
     

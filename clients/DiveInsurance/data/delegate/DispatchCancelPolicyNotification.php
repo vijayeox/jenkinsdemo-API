@@ -15,6 +15,7 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
             'Individual Professional Liability' => 'CancelPolicyMailTemplate',
             'Emergency First Response' => 'CancelPolicyMailTemplate',
             'Dive Boat' => 'CancelPolicyMailTemplate',
+            'Group Professional Liability' => 'CancelPolicyMailTemplate',
             'NotApproved' => 'CancelPolicyNotApprovedMailTemplate',
             'Dive Store' => 'CancelPolicyMailTemplate');
         parent::__construct();

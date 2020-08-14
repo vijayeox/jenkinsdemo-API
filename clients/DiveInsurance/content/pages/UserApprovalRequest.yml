@@ -59,7 +59,7 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.product == "Group Professional Liability" ? item.business_name :(item.firstname + " " + item.lastname)}</td>'
                 -
                     title: Product
                     field: entity_name

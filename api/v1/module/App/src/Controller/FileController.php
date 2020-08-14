@@ -286,4 +286,18 @@ class FileController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($result, 200);
     }
+    public function reIndexAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            $result = $this->fileService->reIndexFile($params);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        return $this->getSuccessResponseWithData($result, 200);
+    }
 }

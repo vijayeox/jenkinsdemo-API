@@ -75,6 +75,7 @@ class PageContent extends React.Component {
   renderButtons(e, action) {
     var actionButtons = [];
     Object.keys(action).map(function (key, index) {
+      var row = e; 
       var string = this.replaceParams(action[key].rule, e);
       var _moment = moment;
       string = string.replace(/moment/g,'_moment');
@@ -344,14 +345,20 @@ class PageContent extends React.Component {
           item.cacheId,
           this.state.currentRow
         );
+        var urlPostParams = this.replaceParams(
+          item.urlPostParams,
+          this.state.currentRow
+        );
         var fileId = this.replaceParams(item.fileId, this.state.currentRow);
         content.push(
           <FormRender
             key={i}
             url={dataString}
-            urlPostParams={item.urlPostParams}
+            urlPostParams={urlPostParams}
             core={this.core}
+            proc={this.proc}
             appId={this.appId}
+            data={item.data}
             content={item.content}
             fileId={fileId}
             formId={item.form_id}
@@ -385,6 +392,10 @@ class PageContent extends React.Component {
           itemContent.route,
           this.state.currentRow
         );
+        var urlPostParams = this.replaceParams(
+          item.urlPostParams,
+          this.state.currentRow
+        );
         content.push(
           <OX_Grid
             rowTemplate={
@@ -398,7 +409,7 @@ class PageContent extends React.Component {
             data={dataString}
             pageId={this.state.pageId}
             parentData={this.state.currentRow}
-            urlPostParams={item.urlPostParams}
+            urlPostParams={urlPostParams}
             gridDefaultFilters={
               itemContent.defaultFilters
                 ? typeof itemContent.defaultFilters == "string"
@@ -443,11 +454,11 @@ class PageContent extends React.Component {
         );
       } else if (item.type == "DocumentViewer") {
         var url;
+        if(item.url){
+          url = this.replaceParams(item.url, this.state.currentRow);
+        }
         if(item.content){
           url = this.replaceParams(item.content, this.state.currentRow);
-        }
-        if(item.url){
-          url = item.url
         }
         content.push(
           <DocumentViewer

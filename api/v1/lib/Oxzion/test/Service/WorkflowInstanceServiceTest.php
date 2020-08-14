@@ -18,8 +18,6 @@ use Zend\Db\ResultSet\ResultSet;
 
 class WorkflowInstanceServiceTest extends AbstractServiceTest
 {
-    public $dataset = null;
-
     public $adapter = null;
 
     protected function setUp(): void
@@ -39,7 +37,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $this->runQuery($sqlQuery1);
             $this->processId = $data[0];
         }
-        $this->dataset = $this->parseYaml();
         $this->adapter = $this->getDbAdapter();
         $this->adapter->getDriver()->getConnection()->setResource(static::$pdo);
     }
@@ -48,11 +45,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/File.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../../module/User/test/Dataset/User.yml");
-        return $dataset;
-    }
-
-    private function parseYaml(){
-        $dataset = Yaml::parseFile(dirname(__FILE__)."/Dataset/File.yml");
         return $dataset;
     }
 
@@ -65,7 +57,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowSetupIdentityField() {
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4' ,'identifier_field' =>'id_field','id_field' => '2020', 'email' => 'brian@gmail.com', 'address1' => 'addr1', 'type' => 'INDIVIDUAL', "business_role" => "Policy Holder",
           'address2' => "", 'city' => 'city', 'state' => 'state', 'country' => 'country', 'zip' => 2323 , 'firstname' => 'brian', 'lastname' => 'test');
         if (enableCamunda == 0) {
@@ -93,7 +84,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithWrongAppId() {
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'app_id' => '8ab30b2d-d1da-427a-8e40-bc954b2b0f87');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -112,7 +102,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithCorrectAppId() {
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'app_id' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -128,8 +117,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithoutWorkflowId() {
-    	$dataset = $this->dataset;
-        $params = array('field1' => 1, 'field2' => 2);
+    	$params = array('field1' => 1, 'field2' => 2);
         try{
             $result = $this->workflowInstanceService->startWorkflow($params);
         }
@@ -139,7 +127,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithInvalidWorkflowId() {
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => 'b3d97877-9e1f-484a-907d-fb798179e43a');
         try{
             $result = $this->workflowInstanceService->startWorkflow($params);
@@ -150,7 +137,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithWorkflowId() {
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -170,7 +156,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithOrgId(){
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'orgId' => 'b0971de7-0387-48ea-8f29-5d3704d96a46');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -186,7 +171,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithoutOrgId(){
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -202,7 +186,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithCreatedBy(){
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'created_by' => 'd9890624-8f42-4201-bbf9-675ec5dc8400');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -218,7 +201,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithoutCreatedBy(){
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -234,7 +216,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithEntityId(){
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'entity_id' => 2);
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -250,7 +231,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithoutEntityId(){
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -266,7 +246,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowCleanData() {
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'uuid' => '31447b1d-c49a-4545-9b26-8d6873a0c5b9');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -283,7 +262,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithParentWorkflowInstance() {
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo', 'parentWorkflowInstanceId' => 'd321b276-9e1c-4bdf-8238-7340f9599383');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -304,7 +282,6 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowUpdateWorkflowInstanceScenario(){
-        $dataset = $this->dataset;
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');

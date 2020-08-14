@@ -29,6 +29,9 @@ abstract class Entity implements Countable
     public function __set($key, $val)
     {
         if (array_key_exists($key, $this->data)) {
+            if(isset($this->data['id']) && is_array($this->data['id'])){
+                $this->data[$key]['value'] = ($val === '') ? null : $val;
+            }
             $this->data[$key] = ($val === '') ? null : $val;
         }
     }
@@ -44,6 +47,9 @@ abstract class Entity implements Countable
             if ($this->parsedata) {
                 //return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
             } else {
+                if(isset($this->data['id']) && is_array($this->data['id'])){
+                    return $this->data[$key]['value'];
+                }
                 return $this->data[$key];
             }
         }
@@ -90,7 +96,14 @@ abstract class Entity implements Countable
 
     public function toArray()
     {
-        return $this->data;
+        $result = $this->data;
+        if(is_array($result['id'])){
+            $result = array();
+            foreach ($this->data as $key => $value) {
+                $result[$key] = $value['value'];
+            }
+        }
+        return $result;
     }
 
     public function exchangeArray($data)

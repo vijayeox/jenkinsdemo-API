@@ -31,6 +31,7 @@ class Field extends Entity
         'date_created'=>null,
         'date_modified'=>null,
         'index' => 0,
+        'sequence' => null,
     );
 
     public function validate()

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace ProcessExcel
 {
@@ -34,10 +35,10 @@ namespace ProcessExcel
     public class CallbackData
     {
         public string filename { get; set; }
-        public string fileid { get; set; }
+        public string fileId { get; set; }
         public byte status { get; set; }
-        public string appid { get; set; }
-        public string orgid { get; set; }
+        public string appId { get; set; }
+        public string orgId { get; set; }
         public List<ErrorDetails> errorlist { get; set; }
     }
     class ProcessExcel
@@ -48,7 +49,6 @@ namespace ProcessExcel
         private Settings _settings;
 
         private CallbackData _callback;
-
         public ProcessExcel(Settings settings)
         {
             _settings = settings;
@@ -68,30 +68,33 @@ namespace ProcessExcel
                 carrierfile = parsedJson["mapping"]["filename"].ToString();            
                 _callback = new CallbackData();
                 _callback.filename = carrierfile;
-                _callback.fileid = parsedJson["fileId"].ToString();
-                _callback.appid = parsedJson["appId"].ToString();
-                _callback.orgid = parsedJson["orgId"].ToString();
+                _callback.fileId = parsedJson["fileId"].ToString();
+                _callback.appId = parsedJson["appId"].ToString();
+                _callback.orgId = parsedJson["orgId"].ToString();
                 _callback.errorlist = new List<ErrorDetails>();
+                List<string> myvariables = new List<string>();
+                string mystr = _settings.postURL;
+                while (mystr.Contains("{"))
+                {
+                    string variable = mystr.Split('{', '}')[1];
+                    string prop = (string)_callback.GetType().GetProperty(variable).GetValue(_callback, null);
+                    mystr = mystr.Replace("{" + variable + "}", prop);
+                };
+                _settings.postURL = mystr;
+                LogProcess("Post URL Set to :" + _settings.postURL);
                 object data = parsedJson["mapping"]["data"];
                 IList<JToken> mappingdata = parsedJson["mapping"]["data"].Children().ToList();
                 MapData(carrierfile, mappingdata);
             }
             catch (Exception e)
             {
-                PostError(carrierfile, 0,e.Message);
-            }
-            finally
-            {
-                Process[] excelProcs = Process.GetProcessesByName("EXCEL");
-                foreach (Process proc in excelProcs)
-                {
-                    proc.Kill();
-                }
-
+                PostError(carrierfile, 0,e.StackTrace);
             }
 
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetWindowThreadProcessId(HandleRef handle, out int processId);
 
         private void MapData(string carrierfile, IList<JToken> mappingdata)
         {
@@ -100,7 +103,12 @@ namespace ProcessExcel
             string fCarrier = DateTime.Now.ToString("MMddyyyyhhmmss") + "-" + carrierfile;
             File.Copy(vFolder + "\\" + carrierfile, vFolder + "\\" + fCarrier);
             Workbook wbCarrier = excel.Workbooks.Open(vFolder + "\\" + fCarrier);
+            
+            HandleRef hwnd = new HandleRef(excel, (IntPtr)excel.Hwnd);
+            int pid;
+            GetWindowThreadProcessId(hwnd, out pid);
             wbCarrier.Activate();
+
             try
             {
                 foreach(JToken mapdata in mappingdata)
@@ -111,8 +119,6 @@ namespace ProcessExcel
                 wbCarrier.Close();
                 PostFile(vFolder, fCarrier);
                 File.Move(vFolder + "\\" + fCarrier, this.baseDirectory + "\\Processed\\" + fCarrier);
-                excel.Quit();
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
             }
             catch (Exception e)
             {
@@ -121,25 +127,51 @@ namespace ProcessExcel
                //     Logerror("Error:" + e, wbCarrier.Name);
                     wbCarrier.Close();
                 }
+
+                PostError(carrierfile, 1,e.StackTrace);
+            }
+            finally
+            {
                 excel.Quit();
-                PostError(carrierfile, 1,e.Message);
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
+                Process excelProcs = Process.GetProcessById(pid);
+                excelProcs.Kill();
             }
         }
 
         private void Copycells(Workbook wbCarrier, JToken mapdata)
         {
             string vVal;
+            string macro="";
             string vDestSheet = mapdata["pageName"].ToString();
             string vDestRange = mapdata["cell"].ToString();
             string vSpecial = mapdata["type"].ToString();
+            bool vStatic = false;
+            if (mapdata["offset"] != null)
+            {
+                if (mapdata["offset"].ToString()!="")
+                {
+                    vDestRange = FindByNameAndOffset(wbCarrier, vDestSheet, vDestRange, mapdata["offset"].ToString());
+                }
+            }
+            if (mapdata["macro"] != null)
+            {
+                macro = mapdata["macro"].ToString();
+            } 
             try
             {
                 switch (vSpecial)
                 {
-                    case "DataGrid":
+                    case "DataGridStatic":
+                        vStatic = true;
                         JToken value = mapdata["value"];
                         List<List<string>> values = mapdata["value"].ToObject<List<List<string>>>();
-                        CopyTable(wbCarrier, vDestSheet, vDestRange,values);
+                        CopyTable(wbCarrier, vDestSheet, vDestRange, values, macro,vStatic);
+                        break;
+                    case "DataGrid":
+                        JToken value2 = mapdata["value"];
+                        List<List<string>> values2 = mapdata["value"].ToObject<List<List<string>>>();
+                        CopyTable(wbCarrier, vDestSheet, vDestRange,values2,macro,vStatic);
                         break;
                     case "Checkbox":
                         vVal = mapdata["value"].ToString();
@@ -172,14 +204,25 @@ namespace ProcessExcel
 
         }
 
-        public void CopyTable(Workbook wbCarrier, string vDestSheet, string vDestRange,  List<List<string>> values)
+        public void CopyTable(Workbook wbCarrier, string vDestSheet, string vDestRange,  List<List<string>> values, string macro,bool vStatic)
         {
             try
             {
                 int rowindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Row;
                 int colindex = (wbCarrier.Worksheets[vDestSheet] as Worksheet).Range[vDestRange].Column;
+
+                int f = 0;
                 foreach (List<string> row in values)
                 {
+                    if (macro != "" && vStatic==false)
+                    {
+                        if(row.Count() > 0 && f!=0)
+                        {
+                            Worksheet ws = (wbCarrier.Worksheets[vDestSheet] as Worksheet);
+                            ws.Activate();
+                            wbCarrier.Application.Run(macro);
+                        }
+                    }
                     int i = colindex;
                     foreach (string value in row)
                     {
@@ -190,7 +233,19 @@ namespace ProcessExcel
 
                         i++;
                     }
-                    rowindex++;
+                    if (vStatic==false)
+                    {
+                        rowindex++;
+                    } else
+                    {
+                        if (macro != "")
+                        {
+                            Worksheet ws = (wbCarrier.Worksheets[vDestSheet] as Worksheet);
+                            ws.Activate();
+                            wbCarrier.Application.Run(macro);
+                        }
+                    }
+                    f++;
                 }
             } catch 
             {
@@ -234,22 +289,25 @@ namespace ProcessExcel
         {
             try
             {
-                Console.WriteLine(_settings.postURL);
-                var client = new RestClient(_settings.postURL + "app/" + _callback.appid + "/pipeline");
-                //       var client = new RestClient(_settings.postURL);
+                var client = new RestClient(_settings.postURL);
                 client.Timeout = -1;
-
                 var request = new RestRequest(Method.POST);
-                request.AddFile("outputfile", folder + "\\" + fileName);
+                request.AddFile("file", folder + "\\" + fileName);
                 // request.AddHeader("Authorization", "Bearer " + _settings.token);
                 request.AlwaysMultipartFormData = true;
                 _callback.status = 1;
-                var postCallbackData = JsonSerializer.Serialize(_callback);
-                request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                //  var postCallbackData = JsonSerializer.Serialize(_callback);
+                //  request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                request.AddParameter("orgId", _callback.orgId);
+                request.AddParameter("filename", _callback.filename);
+                request.AddParameter("fileId", _callback.fileId);
+                request.AddParameter("status", _callback.status);
+                request.AddParameter("errorlist", JsonSerializer.Serialize(_callback.errorlist));
+                LogProcess("Parameters:"+ JsonSerializer.Serialize(request.Parameters));
                 string fname = fileName.Replace(".", "-");
-                LogProcess(postCallbackData);
                 IRestResponse response = client.Execute(request);
-                LogProcess("Sending Post:" + fileName);
+                LogProcess("Sending Post:" + fileName + " to " + _settings.postURL);
+                LogProcess("Response:" + response.Content);
             } catch (Exception e) {
                 Logerror(e.Message, fileName);
             }
@@ -271,17 +329,44 @@ namespace ProcessExcel
                     worksheet = "",
                     errortype = errortype
                 };
+                _callback.status = 0;
                 _callback.errorlist = new List<ErrorDetails> { errordetail };
-                var postCallbackData = JsonSerializer.Serialize(_callback);
-
-                request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                //          var postCallbackData = JsonSerializer.Serialize(_callback);
+                //          LogProcess(postCallbackData);
+                //          request.AddParameter("data", postCallbackData, ParameterType.RequestBody);
+                request.AddParameter("orgId", _callback.orgId);
+                request.AddParameter("filename", _callback.filename);
+                request.AddParameter("fileId", _callback.fileId);
+                request.AddParameter("status", _callback.status);
+                request.AddParameter("errorlist", JsonSerializer.Serialize(_callback.errorlist));
+                LogProcess("Parameters:" + JsonSerializer.Serialize(request.Parameters));
                 IRestResponse response = client.Execute(request);
+                LogProcess("Sending Error Post:" + fileName + " to " + _settings.postURL);
             }
             catch (Exception e)
             {
                 Logerror(e.Message, fileName);
             }
         }
+
+        public string FindByNameAndOffset(Workbook wbCarrier, string vDestSheet,string text, string offset)
+        {
+            string[] offsetarry = offset.Split(",");
+            int offsetrow = int.Parse(offsetarry[0]);
+            int offsetcol = int.Parse(offsetarry[1]);
+            Worksheet sheet = (Worksheet)wbCarrier.Worksheets[vDestSheet];
+            Range range = sheet.Cells;
+            var result = range.Find(text, LookAt: XlLookAt.xlPart);
+            int rowindex = result.Row;
+            int colindex = result.Column;
+            rowindex = rowindex + offsetrow;
+            colindex = colindex + offsetcol;
+            var address = (sheet.Cells[rowindex, colindex] as Range).Address;
+            return address;
+        }
+
+
+
 
     }
 }

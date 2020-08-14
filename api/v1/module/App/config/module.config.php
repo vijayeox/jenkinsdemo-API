@@ -351,7 +351,7 @@ return [
             'startform' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/workflow/:workflowId/startform',
+                    'route' => '/app/:appId/[entity/:entityId/]workflow/:workflowId/startform',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'workflowId' => UuidUtil::UUID_PATTERN,
@@ -801,6 +801,23 @@ return [
                         'controller' => Controller\FileAttachmentController::class,
                         'method' => 'POST',
                         'action' => 'addAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'reindexfile' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/reindex',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'reIndex',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

@@ -52,6 +52,15 @@ content:
                         cell: 'formatDateWithoutTimezone(data.end_date)'
             actions:
                 -
+                    name: Policy Regeneration
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            form_id: db82e118-cbef-11ea-87d0-0242ac130003
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-file'
+                -
                     name: Endorsement
                     rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                     details:
@@ -188,6 +197,15 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     icon: 'fa fa-pencil'
                 -
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Group Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
                     name: Comment
                     rule: 'true'
                     details:
@@ -197,7 +215,7 @@ content:
                             useRowData: true
                         -
                             type: Comment
-                            url: '{{uuid}}'
+                            content: '{{uuid}}'
                     icon: 'far fa-comment'
                 -
                     name: 'View Policy'
@@ -207,6 +225,14 @@ content:
                         -
                             params:
                                 page_id: 'eb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Group Professional Liability'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'fb018dfd-be95-4c53-9a97-042f615f3623'
                 -
                     name: 'View Policy'
                     icon: 'fa fa-envelope-open'
@@ -260,6 +286,15 @@ content:
                             url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
+                    name: 'Cancel Policy'
+                    icon: 'fa fa-ban'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                -
                     name: 'Reinstate Policy'
                     details:
                         -
@@ -305,7 +340,7 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.firstname + " " + item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.product == "Group Professional Liability" ? item.business_name :(item.firstname + " " + item.lastname)}</td>'
                     multiFieldFilter:
                         - lastname
                         - business_name
@@ -320,6 +355,7 @@ content:
                             - 'Dive Boat'
                             - 'Dive Store'
                             - 'Emergency First Response'
+                            - 'Group Professional Liability'
                         placeholder: 'Select Product'
                 -
                     title: 'Policy Status'

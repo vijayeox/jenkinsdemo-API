@@ -9,6 +9,7 @@
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
 			<p class="name">{$business_name}</p>
+			{if isset($dba) && $dba != ""}<p class="name">DBA : {$dba}</p>{/if}
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
 			<p class="name">{$city}, {$state} {$zip}</p>
