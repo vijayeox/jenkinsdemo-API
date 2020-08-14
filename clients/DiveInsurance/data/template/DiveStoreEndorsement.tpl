@@ -130,7 +130,7 @@
         <center><b>Additional Insured coverage applies only with respect to liability arising out of the operations of the named insureds</b></center>
       </div>
       {/if} -->
-     {if $newAddInsured != "" || $removedAddInsured != ""}
+     {if (isset($newAddInsured) && $newAddInsured != "") || (isset($removedAddInsured) && $removedAddInsured != "")}
       <div class = "box">
         <center><b><u>***Additional Insured Schedule***</u></b></center>
         {if $newAddInsured != ""}
@@ -169,8 +169,8 @@
           {/foreach}
         {/if}
         {if $removedAddInsured != ""}
-          {assign var=list1 value=$removedAddInsured|json_decode:true}
-          {foreach from=$list1 item=$additional}
+          {assign var=removedAdditionalInsured value=$removedAddInsured|json_decode:true}
+          {foreach from=$removedAdditionalInsured item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
             <p class = "ai_list" style = "font-size:15px;">
               <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
@@ -198,7 +198,7 @@
                  Booking Agent
               {elseif $additional.businessRelation == "other"}                     {$additional.businessRelationOther}
               {/if})
-              {/if} </span>: Removed as of {$update_date|date_format:"%m/%d/%Y"}.
+              {/if} </span>
             </p>
             {/if}
           {/foreach}
@@ -207,7 +207,7 @@
       {/if}
 
 
-     {if $lossPayeesSelect=='yes' && ($newlossPayees != "" || $removedlossPayees != "")}
+     {if $lossPayeesSelect=='yes' && ((isset($newlossPayees) && $newlossPayees != "") || (isset($removedlossPayees) && $removedlossPayees != ""))}
       <div class = "box">
         <center><b><u>***Loss Payees***</u></b></center>
         {if $newlossPayees != ""}
@@ -225,7 +225,7 @@
           {foreach from=$list1 item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
             <p class = "ai_list" style = "font-size:15px;">
-              <span style = "text-transform: uppercase;">{$additional.name} </span>: Removed as of {$update_date|date_format:"%m/%d/%Y"}.
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
             </p>
             {/if}
           {/foreach}
@@ -236,7 +236,7 @@
       </div>
       {/if}
 
-     {if $additionalLocationsSelect=='yes' && ($newAdditionalLocations != "" || $removedAdditionalLocations != "")}
+     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && $removedAdditionalLocations != ""))}
       <div class = "box">
         <center><b><u>***Additional Locations***</u></b></center>
         {if $newAdditionalLocations != ""}
@@ -439,9 +439,9 @@
         </div>
     </div>
     
-	</div>
           {/foreach}
       {/if}
       {/if}
+	</div>
 </body>
 </html>
