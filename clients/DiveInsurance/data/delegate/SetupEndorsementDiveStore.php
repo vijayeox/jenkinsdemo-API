@@ -191,9 +191,13 @@ public function execute(array $data,Persistence $persistenceService)
                 if(isset($data['dspropreplacementvalue'])){
                 	$policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
                 }
-                $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
-                $policy['previous_dspropTotal'] = $data['dspropTotal'];
-                $policy['previous_lossPayees'] = $data['lossPayees'];
+                if(isset($data['lossOfBusIncome'])){
+                    $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
+                }
+                $policy['previous_dspropTotal'] = isset($data['dspropTotal']) ? $data['dspropTotal'] : 0;
+                if(isset($data['lossPayees'])){
+                    $policy['previous_lossPayees'] = $data['lossPayees'];    
+                }
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];

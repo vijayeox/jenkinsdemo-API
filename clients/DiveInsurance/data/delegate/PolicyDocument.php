@@ -825,9 +825,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
 
-
                 $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
-
                 if(!is_null($endorsementOptions)){
                     $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
                     if( count($workflowInstUuid) > 0 && (isset($workflowInstUuid[0]['process_instance_id']))){
@@ -959,6 +957,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $docDest = $dest['absolutePath'].$template.$indexKey.'.pdf';
             } else {
                 $docDest = $dest['absolutePath'].$template.'.pdf';
+                if($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement"){
+                        $updateDate = date_format(date_create($data['update_date']),'Md');
+                        $docDest = $dest['absolutePath'].$template.'_'.$updateDate.'.pdf';
+                    } 
             }
             if($template == 'Group_PL_COI' || $template == 'Group_PL_COI_DS' || $template == 'Group_PL_COI_DS_Endorsement'){
                 $options['generateOptions'] = array('disable_smart_shrinking' => 1);
@@ -1001,7 +1003,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($multiple){
                     return $dest['relativePath'].$template.$indexKey.'.pdf';
                 }
-                return $dest['relativePath'].$template.'.pdf';
+                if($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement"){
+                        $updateDate = date_format(date_create($data['update_date']),'Md');
+                        return $dest['relativePath'].$template.'_'.$updateDate.'.pdf';
+                    } else{
+                        return $dest['relativePath'].$template.'.pdf';
+                    }
             }
         }
         protected function copyDocuments(&$data,$dest,$fileKey,$indexKey =null){
@@ -1620,6 +1627,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          }
 
          protected function documentsLocation($endorsementOptions,&$data,$orgUuid){
+            print_r($this->destination);exit;
             $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
             if(!is_null($endorsementOptions)){
                 $dest = $this->endorsedDocumentsLoc($data,$dest);
