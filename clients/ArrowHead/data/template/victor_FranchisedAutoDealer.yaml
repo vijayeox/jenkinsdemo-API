@@ -871,13 +871,13 @@
    key: genericData*locationScheduleGridData_state
    method: simpleDatagrid
    pageName: Property
-   cell: D40
+   cell: E40
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_city
    method: simpleDatagrid
    pageName: Property
-   cell: E40
+   cell: D40
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_zip

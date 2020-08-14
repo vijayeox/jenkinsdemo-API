@@ -13,9 +13,11 @@
    pageName: A-Gen
    cell: 'I16'
    key: legalEntity
-   method: simpleDatagrid
-   type: DataGrid
-   note: wrong mapping Add returnValue
+   returnValue:
+      corporation: Corporation
+      llc: Limited Liability Company
+      individual: Individual
+      partnership: Partnership
 -
    Source Worksheet: Mailing Address
    pageName: A-Gen
@@ -113,6 +115,7 @@
    Source Worksheet: 'Dealer Name:'
    pageName: A-Gen
    cell: 'D21'
+   type: DataGrid
    key: dealershipPersonnel_name
    method: simpleDatagrid
    macro: 'A_AddDlrPers_Click'
@@ -120,6 +123,7 @@
    Source Worksheet: '% of ownership'
    pageName: A-Gen
    cell: 'K21'
+   type: DataGrid
    key: dealershipPersonnel_ownershipPercentage
    method: simpleDatagrid
 -
@@ -555,6 +559,22 @@
 -
    Source Worksheet: Garagekeepers (per location)
    pageName: J
+   cell: M7
+   key: medicalexpensedeductible
+   returnValue: 
+      none : ''
+      '2500' : '2,500'
+      '5000' : '5,000'
+      '10000' : '10,000'
+      '20000' : '20,000'
+      '25000' : '25,000'
+      '50000' : '50,000'
+      '75000' : '75,000'
+      '100000' : '100,000'
+      '125000' : '125,000'
+-
+   Source Worksheet: Garagekeepers (per location)
+   pageName: J
    cell: Garagekeepers
    offset: "7,1"
    key: locationSchedule_garagekeepersperlocation
@@ -742,6 +762,19 @@
 #    method: simpleDatagrid
 #    type: DataGrid 
 -
+   Source Worksheet: 'others'
+   pageName: L-DPD
+   cell: L25
+   key: dolalllocdoesnotincld_keysInCars
+   method: checkInArray
+   returnBoolean: 'Keys in Cars|'
+-
+   Source Worksheet: 'Keys in car - other'
+   pageName: L-DPD
+   cell: L25
+   key: harcoExcelData*checkkeysInCarsLabel
+   returnBoolean: 'Keys in Cars|'
+-
    Source Worksheet: 'Is there a written flood emergency plan in place?\r\n\r\nIf YES, please attach a copy of written flood emergency plan'
    pageName: L-DPD
    cell: 'Is there a written evacuation plan for flood-prone locations? '
@@ -789,18 +822,12 @@
    cell: Check Box 13
    key: harcoExcelData*checklockedInManagersOffice
    type: Checkbox
-# -
-#    Source Worksheet: 'Keys in car - other'
-#    pageName: L-DPD
-#    cell: Check Box 14
-#    key: harcoExcelData*checkkeysInCars
-#    type: Checkbox
-# -
-#    Source Worksheet: 'Keys in car - other'
-#    pageName: L-DPD
-#    cell: 'Other choice explanation:'
-#    offset: "0,1"
-#    key: harcoExcelData*checkkeysInCarsLabel
+-
+   Source Worksheet: 'Keys in car - other'
+   pageName: L-DPD
+   cell: Check Box 14
+   key: harcoExcelData*checkkeysInCars
+   type: Checkbox
 -
    Source Worksheet: 'computerized key vault'
    pageName: L-DPD
@@ -835,14 +862,6 @@
    key: dolalllocdoesnotincld_keysInCars
    method: checkInArray
    type: Checkbox
--
-   Source Worksheet: 'others'
-   pageName: L-DPD
-   cell: 'Other choice explanation:'
-   offset: "0,1"
-   key: dolalllocdoesnotincld_keysInCars
-   method: checkInArray
-   returnBoolean: 'Keys in Cars|'
 -
    Source Worksheet: 'Wind/Hail Deductible: '
    pageName: 'L-DPD '
@@ -895,6 +914,9 @@
    key: locationSchedule_description
    method: simpleDatagrid
    type: DataGrid
+   returnValue: 
+      'Vacant Land (For - Profit)' : 'VACANT LAND (FOR-PROFIT)'
+      'Bldg Leased to Others' : 'AUTOMOBILE RENTING OR LEASING COMPANIES'
 -
    Source Worksheet: Exposure Amount
    pageName: 'M-GL'

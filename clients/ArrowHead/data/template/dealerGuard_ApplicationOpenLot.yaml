@@ -1,8 +1,7 @@
 -
    Source Worksheet: Producer
    pageName: APPLICATION
-   key: producerdate
-   method: formatDate
+   key: producername
    cell: 'F8'
 -
    Source Worksheet: Named Insured
@@ -116,20 +115,21 @@
    key: employeedeductibleparticipation
    method: checkbox_X
    cell: B47
+# -
+#    Source Worksheet: accident Investigation
+#    pageName: APPLICATION
+#    key: accidentInvestigation
+#    method: checkbox_X
+#    cell: B44
 -
-   Source Worksheet: accident Investigation
-   pageName: APPLICATION
-   key: accidentInvestigation
-   method: checkbox_X
-   cell: B44
--
-   Source Worksheet: >-
-      Formal safety meetings:( If at least quarterly, please attach copy of
-      minutes from last meeting)
+   Source Worksheet: Formal safety meetings
    pageName: APPLICATION
    key: formalsafetymeetings
-   cell: A44
-   Notes: "Pre Condition: If Formal Safety Meetings  = Quarterly or Monthly then map \"X\"to:\r\n\r\nSheet!APPLICATION A44"
+   cell: B44
+   returnValue: 
+      'monthly' : 'X'
+      'quarterly' : 'X'
+      'none' : ''
 -
    Source Worksheet: Test drives always accompanied by employee?
    pageName: APPLICATION
@@ -143,6 +143,12 @@
    method: checkInArray
    returnBoolean: "X|"
    cell: B34
+-
+   Source Worksheet: Customer Service Loaner Rental Program?
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkserviceRepairSales
+   method: checkbox_X
+   cell: B32
 -
    Source Worksheet: Customer Service Loaner Rental Program?
    pageName: APPLICATION
@@ -170,8 +176,9 @@
 -
    Source Worksheet: 'Spot Delivery Procedures:'
    pageName: APPLICATION
-   key: dolspotdeliveryprocedures*insuranceVerification
-   returnBoolean: "X|"
+   key: dolspotdeliveryprocedures_insuranceVerification
+   method: checkInArray
+   returnBoolean: 'X|'
    cell: B41
 -
    Source Worksheet: 'Vehicle inventory taken:'
@@ -431,58 +438,20 @@
 -
    pageName: SOV
    skip: "25_3"
-   key: locationSchedule_address
+   key: dealerguardOpenLot*SOVFranchise_franchise
    method: simpleDatagrid
+   type: DataGrid
+   cell: C5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: dealerguardOpenLot*SOVGrid
    type: DataGrid
    cell: D5
 -
-   pageName: SOV
-   skip: "25_3"
-   key: locationSchedule_city
-   method: simpleDatagrid
-   type: DataGrid
-   cell: E5
--
-   pageName: SOV
-   skip: "25_3"
-   key: locationSchedule_state
-   method: simpleDatagrid
-   type: DataGrid
-   cell: F5
--
-   pageName: SOV
-   skip: "25_3"
-   key: locationSchedule_zip
-   method: simpleDatagrid
-   type: DataGrid
-   cell: G5
--
-   pageName: SOV
-   skip: "25_3"
-   key: dealerguardOpenLot*SOV12MothAverage
-   type: DataGrid
-   cell: H5
--
-   pageName: SOV
-   skip: "25_3"
-   key: locationSchedule_maxvalueanytime
-   method: simpleDatagrid
-   type: DataGrid
-   cell: L5
--
-   pageName: SOV
-   skip: "25_3"
-   key: locationSchedule_maxcountanytime
-   method: simpleDatagrid
-   type: DataGrid
-   cell: M5
--
-   pageName: SOV
-   skip: "25_3"
-   key: locationSchedule_maxvalueindoors
-   method: simpleDatagrid
-   type: DataGrid
-   cell: N5
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkemployees
+   cell: O46
 -
    pageName: ADDITIONAL INTEREST
    skip: "1_8"
