@@ -163,7 +163,7 @@
                  Booking Agent
               {elseif $additional.businessRelation == "other"}                     {$additional.businessRelationOther}
               {/if})
-              {/if} </span>:  Added as of {$update_date|date_format:"%m/%d/%Y"}
+              {/if} </span>
             </p>
             {/if}
           {/foreach}
@@ -215,7 +215,7 @@
           {foreach from=$list item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
             <p class = "ai_list" style = "font-size:15px;">
-              <span style = "text-transform: uppercase;">{$additional.name} </span>:  Added as of {$update_date|date_format:"%m/%d/%Y"}
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
             </p>
             {/if}
           {/foreach}
