@@ -789,18 +789,18 @@
    cell: Check Box 13
    key: harcoExcelData*checklockedInManagersOffice
    type: Checkbox
--
-   Source Worksheet: 'Keys in car - other'
-   pageName: L-DPD
-   cell: Check Box 14
-   key: harcoExcelData*checkkeysInCars
-   type: Checkbox
--
-   Source Worksheet: 'Keys in car - other'
-   pageName: L-DPD
-   cell: 'Other choice explanation:'
-   offset: "0,1"
-   key: harcoExcelData*checkkeysInCarsLabel
+# -
+#    Source Worksheet: 'Keys in car - other'
+#    pageName: L-DPD
+#    cell: Check Box 14
+#    key: harcoExcelData*checkkeysInCars
+#    type: Checkbox
+# -
+#    Source Worksheet: 'Keys in car - other'
+#    pageName: L-DPD
+#    cell: 'Other choice explanation:'
+#    offset: "0,1"
+#    key: harcoExcelData*checkkeysInCarsLabel
 -
    Source Worksheet: 'computerized key vault'
    pageName: L-DPD
