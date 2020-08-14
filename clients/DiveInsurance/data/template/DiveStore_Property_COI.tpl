@@ -71,8 +71,8 @@
 				</div></b>
 			</div>
 			<div class="spacing1">&nbsp</div>
-			<div class="deduct" style = "margin-bottom: 1px;"><b>Deductible:</b><br/>
-				<p class ="deduct1">Wind/Hail is 5% of Insured Values per location, $5000 minimum, for Florida, Hawaii, Puerto Rico, USVI, Guam and all Tier 1
+			<div class="deduct" style = "margin-bottom: 0px;"><b>Deductible:</b><br/>
+				<p class ="deduct1" style = "margin-bottom: 0px;margin-top:0px;">Wind/Hail is 5% of Insured Values per location, $5000 minimum, for Florida, Hawaii, Puerto Rico, USVI, Guam and all Tier 1
 locations (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North Carolina and all Harris
 County Texas locations. Mechanical breakdown is $2500. All other perils is {if $propertyDeductibles == "propertyDeductibles1000"}
                            $1,000
@@ -280,7 +280,7 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/TN.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Texas'}
-				<center><p class = "notice">
+				<center><p class = "notice" style = "margin-top:0px;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/TX.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Utah'}
