@@ -370,7 +370,7 @@ public function execute(array $data,Persistence $persistenceService)
                             }
                             $data['groupPL'][$key]['rating'] = $response[0]['rating'];
                         } else {
-                            $data['groupPL'][$key]['rating'] = $response[0]['rating'];
+                            // $data['groupPL'][$key]['rating'] = $response[0]['rating'];
                         }
                     }
                 }
