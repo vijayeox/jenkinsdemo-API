@@ -287,7 +287,8 @@
 -
    Source Worksheet: 'Wind Deductible:'
    pageName: E-Prop
-   cell: F24
+   cell: 'Additional comments'
+   offset: '1,0'
    key: harcoExcelData*checkWindDeductible
 -
    Source Worksheet: BPP Co-Insurance %
