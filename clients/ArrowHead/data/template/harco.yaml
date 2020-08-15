@@ -345,12 +345,7 @@
 -
    Source Worksheet: 'Earthquake Deductibles:'
    pageName: E-Prop
-   cell: J10
-   key: harco*highestEarthquakeDeductible
--
-   Source Worksheet: 'Earthquake Deductibles:'
-   pageName: E-Prop
-   key: harco*highestEarthquakeDeductible
+   key: harcoExcelData*highestEarthquakeDeductible
    cell: H10
 -
    Source Worksheet: Blanket Coverage BPP
@@ -864,7 +859,7 @@
    type: Checkbox
 -
    Source Worksheet: 'Wind/Hail Deductible: '
-   pageName: 'L-DPD '
+   pageName: 'L-DPD'
    cell: H7
    key: dolwindhaildeduc
    returnValue:
@@ -904,25 +899,7 @@
    pageName: 'M-GL'
    macro: M_AddGLClassRow_Click
    cell: 'E23'
-   key: locationSchedule_locationNum
-   method: simpleDatagrid
-   type: DataGrid
--
-   Source Worksheet: Description
-   pageName: 'M-GL'
-   cell: 'F23'
-   key: locationSchedule_description
-   method: simpleDatagrid
-   type: DataGrid
-   returnValue: 
-      'Vacant Land (For - Profit)' : 'VACANT LAND (FOR-PROFIT)'
-      'Bldg Leased to Others' : 'AUTOMOBILE RENTING OR LEASING COMPANIES'
--
-   Source Worksheet: Exposure Amount
-   pageName: 'M-GL'
-   cell: Q23
-   key: locationSchedule_exposureAmount
-   method: simpleDatagrid
+   key: harcoExcelData*MGLGrid
    type: DataGrid
 # -
 #    Source Worksheet: 'If YES, is insurance coverage placed elsewhere for this exposure?'
@@ -1282,21 +1259,12 @@
    Source Worksheet: What is the average percentage of loans in default?
    pageName: UW Q's
    cell: 'E97'
-   key: whatistheaveragepercentage
+   key: harcoExcelData*checkwhatistheaveragepercentage
 -
    Source Worksheet: Customersinsurance verified at time of sale?
    pageName: UW Q's
    cell: 'E98'
-   key: customersinsuranceverified
-   # returnBoolean: Yes|No
-   note: If both rows 18 & 19 are answered YES, indicate YES on the Harco
-      app.
--
-   Source Worksheet: Regularly throughout term of loan?
-   pageName: UW Q's
-   cell: 'E98'
-   # returnBoolean: Yes|No
-   key: regularlythroughouttermofloan
+   key: harcoExcelData*checkCustomerInsuranceValidity
 -
    Source Worksheet: 'Are repossessions handled by:'
    pageName: UW Q's
