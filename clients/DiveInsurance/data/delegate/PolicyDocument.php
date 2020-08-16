@@ -772,7 +772,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                 }
-                
+                $fileUuid = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
+                $this->saveFile($data,$fileUuid);
                 $orgUuid = $this->processDate($data);
                 if($this->type != "lapse"){
                     $license_number = $this->getLicenseNumber($data,$persistenceService);
@@ -1559,7 +1560,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->logger->info("destinationForCOIRegeneration----".print_r($destinationForCOIRegeneration,true));  
                 if (file_exists($destinationForCOIRegeneration)) {  
                     unlink($destinationForCOIRegeneration); 
-                            // FileUtils::deleteFile($fileName,$dest);  
                 }   
                 unset($data['dest']); 
                 $temp = $data;
@@ -1571,24 +1571,21 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $fileName = substr($docs['PocketCard'], strrpos($docs['PocketCard'], '/') + 1); 
                 $destinationForPCRegeneration = $dest.$docs['PocketCard'];  
                 if (file_exists($destinationForPCRegeneration)) {   
-                    FileUtils::deleteFile($fileName,$dest.dirname($docs['PocketCard']).'/');    
-                            // unlink($destinationForPCRegeneration);   
+                    FileUtils::deleteFile($fileName,$dest.dirname($docs['PocketCard']).'/');   
                 }   
             }   
             if (isset($docs['blanket_document'])) { 
                 $fileName = substr($docs['blanket_document'], strrpos($docs['blanket_document'], '/') + 1); 
                 $destinationForBlanketRegeneration = $dest.$docs['blanket_document'];   
                 if (file_exists($destinationForBlanketRegeneration)) {  
-                    FileUtils::deleteFile($fileName,$dest.dirname($docs['blanket_document']).'/');  
-                            // unlink($destinationForBlanketRegeneration);      
+                    FileUtils::deleteFile($fileName,$dest.dirname($docs['blanket_document']).'/');    
                 }   
             }   
             if (isset($data['AdditionalInsuredOption']) && ($data['AdditionalInsuredOption'] == 'addAdditionalInsureds')) { 
                 if (isset($docs['additionalInsured_document']) && isset($docs['additionalInsured_document'][0])) {  
                     $fileName = substr($docs['additionalInsured_document'][0], strrpos($docs['additionalInsured_document'][0], '/') + 1);   
                     $destinationForAIRegeneration = $dest.$docs['additionalInsured_document'][0];   
-                    if (file_exists($destinationForAIRegeneration)) {   
-                                // FileUtils::deleteFile($fileName,$dest);  
+                    if (file_exists($destinationForAIRegeneration)) {    
                         unlink($destinationForAIRegeneration);      
                     }   
                 }   
