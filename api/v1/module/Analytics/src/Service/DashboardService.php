@@ -81,7 +81,7 @@ class DashboardService extends AbstractService
         $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         $form->exchangeWithSpecificKey($data, 'value', true);
         $form->updateValidate($data);
-        $count = 0;
+        $version = $obj->version;
         try {
             if (isset($data['isdefault']) && $data['isdefault'] == 1) {
                 $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
@@ -90,11 +90,12 @@ class DashboardService extends AbstractService
                 ];
                 $this->executeUpdateWithBindParameters($query, $queryParams);
             }
-            $count = $this->table->save2($form);
-            if ($count == 0) {
+            $temp = $this->table->save2($form);
+            if ($obj->version == $temp['version']) {
                 $this->rollback();
                 return 0;
             }
+            $version = $temp['version'];
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
@@ -102,7 +103,7 @@ class DashboardService extends AbstractService
         $formArray = $form->toArray();
         return [
             'dashboard' => [
-                'version' => $formArray['version']['value'] + 1,
+                'version' => $version,
                 'data' => $data,
             ],
         ];

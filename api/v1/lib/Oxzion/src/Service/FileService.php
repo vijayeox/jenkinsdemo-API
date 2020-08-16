@@ -112,8 +112,9 @@ class FileService extends AbstractService
         $count = 0;
         try {
             $this->beginTransaction();
-            $count = $this->table->save2($file);
-
+            $result = $this->table->save2($file);
+            $count = $result['version'];
+            $data['version'] = $result['version'];
             $this->logger->info("COUNT  FILE DATA----" . $count);
             if ($count == 0) {
                 throw new ServiceException("File Creation Failed", "file.create.failed");
@@ -265,13 +266,16 @@ class FileService extends AbstractService
             }
             $obj = $obj->toArray();
         }
+        if(!isset($data['version'])){
+            $data['version'] = $obj['version'];
+        }
         $latestcheck = 0;
         if (isset($data['is_active']) && $data['is_active'] == 0) {
             $latestcheck = 1;
         }
         
-        $fileObject = is_string($obj['data']) ? json_decode($obj['data'], true) : $obj['data'];
-
+        $fileObject = json_decode($obj['data'], true);
+        
         foreach ($fileObject as $key => $fileObjectValue) {
             if (is_array($fileObjectValue)) {
                 $fileObject[$key] = json_encode($fileObjectValue);
@@ -295,10 +299,7 @@ class FileService extends AbstractService
         $selectQuery = "SELECT ox_app_entity.start_date_field,ox_app_entity.end_date_field,ox_app_entity.status_field,ox_file.version from ox_app_entity inner join ox_file on ox_file.entity_id = ox_app_entity.id WHERE ox_file.id =:fileId";
         $parameters = array('fileId' => $id);
         $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
-        $validFields = $this->checkFields($entityId ,$fields, $id);
-        $fields = array_merge($fields, array_intersect_key($validFields['validFields']['data'], $fields));
-        unset($validFields['validFields']['data']);
-        unset($validFields['indexedFields']['data']);
+        $validFields = $this->checkFields($entityId ,$fields, $id, false);
         $dataArray = $this->processMergeData($entityId, $fileObject, $fields);
         $fileObject = $obj;
         $dataArray = $this->cleanData($dataArray);
@@ -316,22 +317,23 @@ class FileService extends AbstractService
             $this->beginTransaction();
         	$this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
             $file->exchangeWithSpecificKey($fileObject, 'value');
-            $file->exchangeWithSpecificKey($data, 'value', true);
             $file->validate();
-            $count = $this->table->save2($file);
+            $result = $this->table->save2($file);
+            $count = $result['version']  - $data['version'];
+            $data['version'] = $result['version'];
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
                 $queryWhere = array("fileId" => $id);
                 $query = "delete from ox_indexed_file_attribute where file_id = :fileId";
                 $result = $this->executeQueryWithBindParameters($query, $queryWhere);
                 $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
-                if(count($validFields['indexedFields']) > 0 ){
+                if($validFields['indexedFields'] && count($validFields['indexedFields']) > 0 ){
                     $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
                 }
                 $query = "delete from ox_file_document where file_id = :fileId";
                 $result = $this->executeQueryWithBindParameters($query, $queryWhere);
                 $this->logger->info("Checking Fields update ---- " . print_r($validFields,true));
-                if(count($validFields['documentFields']) > 0 ){
+                if($validFields['documentFields'] && count($validFields['documentFields']) > 0 ){
                     $this->multiInsertOrUpdate('ox_file_document', $validFields['documentFields']);
                 }
             }
@@ -1292,6 +1294,7 @@ class FileService extends AbstractService
         unset($params['last_workflow_instance_id']);
         unset($params['inDraft']);
         unset($params['entity_name']);
+        unset($params['version']);
         return $params;
     }
 
@@ -1505,7 +1508,7 @@ class FileService extends AbstractService
         }
         $form->exchangeArray($data);
         $form->validate();
-        $count = $this->attachmentTable->save($form);
+        $count = $this->attachmentTable->save2($form);
         $id = $this->attachmentTable->getLastInsertValue();
         $data['id'] = $id;
         $file['name'] = $data['name'];

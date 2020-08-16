@@ -956,6 +956,8 @@ class FileServiceTest extends AbstractServiceTest
         $result = $this->fileService->updateFile($data,$fileId);
         $dataSqlQuery = "SELECT data FROM ox_file where uuid ='".$fileId."'";
         $queryResult2 = $this->runQuery($dataSqlQuery);
+        $this->assertEquals(2, $data['version']);
+        unset($data['version']);
         $this->assertEquals($data,json_decode($queryResult2[0]['data'], true));
         $newQueryResult = $this->runQuery($sqlQuery);
         $this->assertEquals($queryResult, $newQueryResult);

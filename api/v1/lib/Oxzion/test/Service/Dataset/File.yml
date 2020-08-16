@@ -856,60 +856,24 @@ ox_indexed_file_attribute:
     field_value_text: 32552
     field_id: 1
   - id: 8
-    file_id: 11
-    org_id: 1
-    field_value_type: "NUMERIC"
-    field_value_numeric: 1
-    field_id: 2
-  - id: 9
-    file_id: 12
-    org_id: 1
-    field_value_type: "NUMERIC"
-    field_value_numeric: 8
-    field_id: 2
-  - id: 10
-    file_id: 14
-    org_id: 1
-    field_value_type: "NUMERIC"
-    field_value_numeric: 8
-    field_id: 2
-  - id: 11
-    file_id: 11
-    org_id: 1
-    field_value_type: "NUMERIC"
-    field_value_numeric: 47
-    field_id: 5
-  - id: 12
-    file_id: 11
-    org_id: 1
-    field_value_type: "NUMERIC"
-    field_value_numeric: 6
-    field_id: 6
-  - id: 13
     file_id: 15
     org_id: 1
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-  - id: 16
+  - id: 9
     file_id: 16
     org_id: 1
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-  - id: 17
-    file_id: 16
-    org_id: 1
-    field_value_type: "NUMERIC"
-    field_value_numeric: 8
-    field_id: 2
-  - id: 18
+  - id: 10
     file_id: 18
     org_id: 1
     field_value_type: "TEXT"
     field_value_text: 32253
     field_id: 1
-  - id: 19
+  - id: 11
     file_id: 11
     org_id: 1
     field_value_type: "TEXT"

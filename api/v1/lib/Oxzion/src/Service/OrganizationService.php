@@ -10,6 +10,7 @@ use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
+use Oxzion\EntityNotFoundException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
@@ -145,10 +146,15 @@ class OrganizationService extends AbstractService
         $data['contact'] = array_merge($user->toArray(),$userProfile->toArray());
         $params = $data;
         $params['preferences'] = array();
+        $appId = null;
         if (isset($params['app_id'])){
             $appId = $this->getAppId($params['app_id']);
             $params['app_id'] = $appId;
         }
+        if(!$appId){
+            throw new EntityNotFoundException("Invalid App Id");
+        }
+        
         try{
             $this->beginTransaction();
             AuthContext::put(AuthConstants::REGISTRATION, TRUE);
@@ -212,7 +218,7 @@ class OrganizationService extends AbstractService
         }
     }
     private function addIdentifierForOrg($appId, $params){
-        if (isset($params['app_id']) && isset($params['identifier_field'])) {
+        if ($appId && isset($params['identifier_field'])) {
             $this->logger->info("Add identifier for Account");
             $query = "INSERT INTO ox_wf_user_identifier(`app_id`,`org_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:appId, :orgId, :userId, :identifierName, :identifier)";
             $queryParams = array("appId" => $appId,

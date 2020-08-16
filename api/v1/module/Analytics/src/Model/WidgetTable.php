@@ -18,6 +18,7 @@ class WidgetTable extends ModelTable {
     }
 
     public function save2(Entity $data) {
-        return $this->internalSave2($data->toArray());
+        $temp = $data->toArray();
+        return $this->internalSave2($temp);
     }
 }
