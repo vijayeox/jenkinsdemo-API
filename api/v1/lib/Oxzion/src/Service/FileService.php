@@ -129,7 +129,7 @@ class FileService extends AbstractService
             if(count($validFields['indexedFields']) > 0 ){
                 $this->multiInsertOrUpdate('ox_indexed_file_attribute', $validFields['indexedFields']);
             }
-            $this->logger->info("Checking Document Fields ---- " . print_r($validFields['documentFields'],true));
+            $this->logger->info("Checking Document Fields ---- " . json_encode($validFields['documentFields']));
             if(count($validFields['documentFields']) > 0 ){
                 $this->multiInsertOrUpdate('ox_file_document', $validFields['documentFields']);
             }
@@ -156,6 +156,7 @@ class FileService extends AbstractService
     }
 
     public function updateFileAttributes($fileId){
+        $this->logger->info("FILEID xx---".$fileId);
         $obj = $this->table->get($fileId);
         if (is_null($obj)) {
             throw new EntityNotFoundException("Invalid File Id");
@@ -212,7 +213,7 @@ class FileService extends AbstractService
                             inner join ox_file_attribute fa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id and (ifa.sequence = fa.sequence or (fa.sequence is null and ifa.sequence is null))
                             inner join ox_field f on f.id = fa.field_id 
                             set ifa.field_value = fa.field_value, ifa.modified_by = fa.modified_by, ifa.date_modified = fa.date_modified
-                            where fa.file_id = :fileId and f.type = 'document'";
+                            where fa.file_id = :fileId and f.type IN('document','file')";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
                 $query = "INSERT INTO ox_file_document (file_id, field_id, org_id, field_value, sequence,
@@ -221,12 +222,11 @@ class FileService extends AbstractService
                             fa.date_created, fa.created_by, fa.date_modified, fa.modified_by from ox_file_attribute fa 
                             inner join ox_field f on f.id = fa.field_id
                             left outer join ox_file_document ifa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id and (ifa.sequence = fa.sequence or (fa.sequence is null and ifa.sequence is null)) 
-                            where fa.file_id = :fileId and f.type = 'document' and ifa.id is null)";
+                            where fa.file_id = :fileId and f.type IN ('document','file')and ifa.id is null)";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
-            $this->updateFileData($fileId, $fields);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -504,7 +504,7 @@ class FileService extends AbstractService
         if (isset($entityId)) {
             $filter = "";
             if(!$allFields){
-                $filter = " and (ox_field.index = 1 OR ox_field.type = 'document') OR childFieldsTable.type = 'document'";
+                $filter = " and (ox_field.index = 1 OR ox_field.type IN('file','document')) OR childFieldsTable.type IN('document','file')";
             }
             $query = "SELECT ox_field.*,group_concat(childFieldsTable.name order by childFieldsTable.name separator ',') child_fields from ox_field
             inner join ox_app_entity on ox_app_entity.id = ox_field.entity_id
@@ -544,7 +544,7 @@ class FileService extends AbstractService
                 if(!in_array($field['name'], array_keys($fieldData)) ){
                     continue;
                 }
-                if (!$allFields && ($field['index'] != 0 || $field['type'] == 'document' || $field['child_fields'])) {
+                if (!$allFields && ($field['index'] != 0 || $field['type'] == 'document' || $field['type'] == 'file'|| $field['child_fields'])) {
                     $indexedField = array();
                         
                     if($field['index'] == 0){
@@ -565,7 +565,7 @@ class FileService extends AbstractService
                         unset($indexedField['sequence']);
     					unset($indexedField['childFields']);
                     }else{
-                        $indexedField['field_value']=$fieldvalue;
+                        $indexedField['field_value']=is_array($fieldvalue) ? json_encode($fieldvalue):$fieldvalue;
                         unset($indexedField['field_value_text']);
                         unset($indexedField['field_value_type']);
                         unset($indexedField['field_value_numeric']);
@@ -579,10 +579,9 @@ class FileService extends AbstractService
                         }
                         unset($indexedField['childFields']);    
                     }
-                    if(!$childFieldsPresent){
+                    if($field['type'] == 'document' || $field['type'] == 'file' || $field['index'] == 1){
                         $fileFields[] = $indexedField;
-                    }
-                    
+                    }                    
                     unset($indexedField);
                 }
                 if($allFields){
@@ -662,7 +661,7 @@ class FileService extends AbstractService
         }else if ($attributeTable != 'ox_indexed_file_attribute' && $parentId ){
             $filter = "and fa.sequence is not null and f.parent_id = :parentId order by fa.sequence asc";
             if($attributeTable == 'ox_file_document'){
-                $filter = "and f.type = 'document' $filter"; 
+                $filter = "and f.type IN ('document','file') $filter"; 
             }
             $join = "inner join ox_field f on f.id = fa.field_id";
             $whereParams['parentId'] = $parentId;
@@ -828,7 +827,7 @@ class FileService extends AbstractService
     public function getChildFieldsData($parentField,&$fieldvalue,$fieldsString,$entityId,$fileId,&$rowNumber, $allFields){
         $filter = "";
         if(!$allFields){
-            $filter = "and ox_field.type = 'document'";
+            $filter = "and ox_field.type IN ('document','file')";
         }
         $query = "SELECT ox_field.*,group_concat(childFieldsTable.name order by childFieldsTable.name separator ',') child_fields from ox_field
             inner join ox_app_entity on ox_app_entity.id = ox_field.entity_id
@@ -852,7 +851,11 @@ class FileService extends AbstractService
                     $fileArray = isset($fileAttributes[$rowNumber]) ? $fileAttributes[$rowNumber] : array();
                     foreach ($childFields as $field) {
                         $val = isset($value[$field['name']]) ? (is_array($value[$field['name']]) ? json_encode($value[$field['name']]) : $value[$field['name']]) : null;
-                        $childFieldsArray[$i]['field_value']=$val;
+                        if ($allFields) {
+                            $childFieldsArray[$i]['field_value']=$val;
+                        }else{                            
+                            $childFieldsArray[] = array();
+                        }
                         $childFieldsArray[$i] = array_merge($childFieldsArray[$i],$this->generateFieldPayload($field,$val,$entityId,$fileId,$fileArray, $allFields, $rowNumber));
                         if(count($childFieldsArray[$i]['childFields']) > 0){
                             foreach ($childFieldsArray[$i]['childFields'] as $childField) {
@@ -1115,11 +1118,9 @@ class FileService extends AbstractService
         $selectQuery = 'select distinct ox_field.text,ox_field.data_type, fd.* from ox_file
         inner join ox_file_document fd on fd.file_id = ox_file.id
         inner join ox_field on ox_field.id = fd.field_id
-        inner join ox_app on ox_field.app_id = ox_app.id
-        where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.data_type in (:dataType1 , :dataType2)
+        where ox_field.type in (:dataType1 , :dataType2)
         and ox_file.uuid=:fileUuid';
-        $selectQueryParams = array('organization' => AuthContext::get(AuthConstants::ORG_ID),
-            'appUuid' => $params['appId'],
+        $selectQueryParams = array(
             'fileUuid' => $params['fileId'],
             'dataType1' => 'document',
             'dataType2' => 'file');

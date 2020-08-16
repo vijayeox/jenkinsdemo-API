@@ -65,8 +65,15 @@ class EFRToIPLUpgrade extends PolicyCheck
                         $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
                     }
                 }
-                $new_data['careerCoverageOptions'] = $coverageOptions;
+            }else{
+                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                while ($coverageLevels->next()) {
+                    $coverage = $coverageLevels->current();
+                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                }
             }
+            $new_data['careerCoverageOptions'] = $coverageOptions;
             $new_data['address1']= isset($fileData['address1']) ? $fileData['address1'] : NULL;
             $new_data['address2']= isset($fileData['address2']) ? $fileData['address2'] : NULL;
             $new_data['city']= isset($fileData['city']) ? $fileData['city'] : NULL;

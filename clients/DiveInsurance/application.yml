@@ -101,6 +101,10 @@ entity:
                 text: 'Certificate Number'
                 data_type: text
                 index: true
+            -
+                name: name
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
         uuid: 161a3f0f-c384-4f2d-a3da-a8a7ae51622e
@@ -153,6 +157,10 @@ entity:
                 text: 'Certificate Number'
                 data_type: text
                 index: true
+            -
+                name: name
+                data_type: text
+                index: true
     -
         name: 'Dive Boat'
         uuid: 2d344a48-0e06-48b6-b586-2b60a2b14120
@@ -202,6 +210,10 @@ entity:
                 text: 'Certificate Number'
                 data_type: text
                 index: true
+            -
+                name: name
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
         uuid: f7ad1590-f008-4728-8892-9de50c51d5d5
@@ -248,6 +260,10 @@ entity:
             -
                 name: certificate_no
                 text: 'Certificate Number'
+                data_type: text
+                index: true
+            -
+                name: name
                 data_type: text
                 index: true
     -

@@ -191,8 +191,8 @@ ox_field:
   - id: 14
     name: "id_document"
     app_id: 99
-    data_type: "file"
-    type: "document"
+    data_type: "list"
+    type: "file"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 1
