@@ -97,7 +97,7 @@ abstract class Entity implements Countable
     public function toArray()
     {
         $result = $this->data;
-        if(is_array($result['id'])){
+        if(isset($result['id']) && is_array($result['id'])){
             $result = array();
             foreach ($this->data as $key => $value) {
                 $result[$key] = $value['value'];
