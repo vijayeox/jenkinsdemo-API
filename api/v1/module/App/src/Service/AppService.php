@@ -122,9 +122,9 @@ class AppService extends AbstractService
             'status' => App::IN_DRAFT
         ]);
         $app->assign($data);       //Assign user input values.
+        $app->validate();
         try {
             $this->beginTransaction();
-            $app->validate();
             $app->save2();
             $this->commit();
         }
@@ -132,7 +132,7 @@ class AppService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        return $app->getProperties(['uuid','version']);
+        return $app->getGenerated();
     }
 
     private function updateyml($yamldata, $path)
@@ -279,7 +279,7 @@ class AppService extends AbstractService
 
     private function processApp(&$yamlData, $path){
         $appData = $this->collectappfieldsdata($yamlData['app']);
-        $appUuid = $this->checkAppExists($yamlData['app']);
+        $this->checkAppExists($yamlData['app']);
         $appData['uuid'] = $yamlData['app']['uuid'];
         $this->updateymlforapp($yamlData, $appData, $path);
     }
@@ -725,32 +725,43 @@ class AppService extends AbstractService
 
     private function checkAppExists(&$appdata)
     {
-            $queryString = "Select ap.uuid,ap.name as name from ox_app as ap where ap.name = :appName";
-            $params = array("appName" => $appdata['name']);
-            if (isset($appdata['uuid'])) {
-                $queryString .= " OR ap.uuid = :appId";
-                $params['appId'] = $appdata['uuid'];
-            }
-            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-            if (count($result) == 0) {
-                $data = $this->createApp($appdata, true);
-                $appdata['uuid'] = $data['uuid'];
-            } else {
-                if (isset($appdata['uuid'])) { //If UUID is given UUID takes precedence over name.
-                    if ($appdata['uuid'] == $result[0]['uuid']) { //UUID is matching. Go ahead.
-                        if ($appdata['name'] != $result[0]['name']) { //App name is different. Therefore update the app.
-                            $this->updateApp($appdata['uuid'], $appdata);
-                        }
-                    } else { //UUID did not match.
-                        throw new EntityNotFoundException('Entity not found.', ['entity' => 'App', 'uuid' => $appdata['uuid']]);
-                    }
-                } else { //If UUID is not given and only name is given
-                    if ($appdata['name'] == $result[0]['name']) { //If the app name matches
-                        $appdata['uuid'] = $result[0]['uuid']; //Update the UUID to UUID of app with matching name.
-                    }
-                }
-            }
-            return $appdata['uuid'];
+        //UUID takes precedence over name. Therefore UUID is checked first.
+        if (isset($appdata['uuid'])) {
+            $queryString = 'SELECT app.uuid, app.name, app.version FROM ox_app AS app WHERE app.uuid=:uuid';
+            $queryParams = ['uuid' => $appdata['uuid']];
+        }
+        //Application is queried by name only if UUID is not given.
+        else {
+            $queryString = 'SELECT app.uuid, app.name, app.version FROM ox_app AS app WHERE app.name=:name';
+            $queryParams = ['name' => $appdata['name']];
+        }
+        $queryResult = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+        if (0 == count($queryResult)) {
+            //UUID is invalid. Threfore remove it.
+            unset($appdata['uuid']);
+            $generated = $this->createApp($appdata, true);
+            $appdata = array_merge($appdata, $generated);
+            return;                
+        }
+        $dbRow = $queryResult[0];
+
+        $onlyAppNameGiven = (isset($appdate['name']) && !isset($appdata['uuid']));
+        $onlyUuidGiven = (isset($appdata['uuid']) && !isset($appdata['name']));
+        $bothUuidAndAppNameGiven = (isset($appdata['uuid']) && isset($appdata['name']));
+        $appNameMatchesNameFromDb = ($appdata['name'] == $dbRow['name']);
+        if ($onlyAppNameGiven || $onlyUuidGiven || ($bothUuidAndAppNameGiven && $appNameMatchesNameFromDb)) {
+            $appdata['uuid'] = $dbRow['uuid'];
+            $appdata['name'] = $dbRow['name'];
+            $appdata['version'] = $dbRow['version'];
+            return;
+        }
+        //Update the app name and continue.
+        if ($bothUuidAndAppNameGiven && !$appNameMatchesNameFromDb) {
+            $appdata['version'] = $dbRow['version'];
+            $generated = $this->updateApp($appdata['uuid'], $appdata);
+            $appdata = array_merge($appdata, $generated);
+            return;
+        }
     }
 
     public function createAppPrivileges($yamlData)
@@ -805,7 +816,7 @@ class AppService extends AbstractService
         return array('data' => $result, 'total' => $count);
     }
 
-    public function updateApp($uuid, &$data)
+    public function updateApp($uuid, $data)
     {
         $app = new App($this->table);
         $app->loadByUuid($uuid);
@@ -820,6 +831,7 @@ class AppService extends AbstractService
             $this->rollback();
             throw $e;
         }
+        return $app->getGenerated();
     }
 
     public function deleteApp($uuid, $version)

@@ -28,7 +28,8 @@ class AppControllerTest extends ControllerTest
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
         switch($this->getName()) {
-            case 'testDeployAppWithWrongUuidInDatabase':
+            case 'testDeployAppWithWrongUuidAndDuplicateNameInDatabase':
+            case 'testDeployAppWithWrongUuidAndUniqueNameInDatabase':
             case 'testDeployAppWithWrongNameInDatabase':
             case 'testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase':
             case 'testDeployAppAddExtraPrivilegesInDatabaseFromYml':
@@ -490,16 +491,29 @@ class AppControllerTest extends ControllerTest
         $this->unlinkFolders($YmlappUuid, $appname);
     }
 
-    public function testDeployAppWithWrongUuidInDatabase()
+    public function testDeployAppWithWrongUuidAndDuplicateNameInDatabase()
     {
         copy(__DIR__ . '/../../sampleapp/application8.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
+        unlink(__DIR__ . '/../../sampleapp/application.yml');
+    }
+
+    public function testDeployAppWithWrongUuidAndUniqueNameInDatabase()
+    {
+        copy(__DIR__ . '/../../sampleapp/application14.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'success');
         unlink(__DIR__ . '/../../sampleapp/application.yml');
     }
 
@@ -916,7 +930,7 @@ class AppControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png'];
+        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png', 'version' => 0];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
@@ -924,7 +938,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertNotNull($content['data']['uuid']);
     }
 
     public function testUpdateRestricted()

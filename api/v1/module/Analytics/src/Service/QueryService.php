@@ -62,8 +62,6 @@ class QueryService extends AbstractService
         $query = new Query($this->table);
         $query->loadByUuid($uuid);
         $query->assign($data);
-        //DON'T SET modifiedBy values because there are no modified_by and date_modified columns for this entity.
-        //$form->setModifiedByAndDate(AuthContext::get(AuthConstants::USER_ID), date('Y-m-d H:i:s'));
         $query->validate();
         try {
             $this->beginTransaction();

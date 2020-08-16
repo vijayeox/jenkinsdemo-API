@@ -74,7 +74,6 @@ class AppController extends AbstractApiController
             return $this->getSuccessResponseWithData($generated, 201);
         }
         catch (Exception $e) {
-print($e);
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -146,8 +145,8 @@ print($e);
     {
         $this->log->info(__CLASS__ . "-> Update App - ${uuid}, " . print_r($data, true));
         try {
-            $this->appService->updateApp($uuid, $data);
-            return $this->getSuccessResponseWithData($data, 200);
+            $generated = $this->appService->updateApp($uuid, $data);
+            return $this->getSuccessResponseWithData($generated, 200);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);

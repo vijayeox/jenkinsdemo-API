@@ -14,7 +14,6 @@ use Oxzion\InsertFailedException;
 use Oxzion\UpdateFailedException;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
-use Oxzion\ParameterRequiredException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\DuplicateEntityException;
 use Oxzion\FileNotFoundException;

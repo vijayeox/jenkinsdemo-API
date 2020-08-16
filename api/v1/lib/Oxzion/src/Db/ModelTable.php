@@ -10,6 +10,7 @@ use Oxzion\VersionMismatchException;
 use Oxzion\InsertFailedException;
 use Oxzion\UpdateFailedException;
 use Oxzion\ServiceException;
+use Oxzion\MultipleRowException;
 use Oxzion\ParameterRequiredException;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Auth\AuthContext;
@@ -66,9 +67,14 @@ abstract class ModelTable
 
         $filter['uuid'] = $uuid;
         $rowset = $this->tableGateway->select($filter);
-
+        if (0 == count($rowset)) {
+            return NULL;
+        }
+        if (count($rowset) > 1) {
+            throw new MultipleRowException('Multiple rows found when queried by UUID.', 
+                ['table' => $this->tableGateway->getTable(), 'uuid' => $uuid]);
+        }
         $row = $rowset->current();
-
         return $row;
     }
 
@@ -166,7 +172,7 @@ abstract class ModelTable
     private function checkAndIncrementVersion(&$data) {
         $version = $data['version'];
         if(!isset($version) || is_null($version)) {
-            throw new ParameterRequiredException('Version number is required.');
+            throw new ParameterRequiredException('Version number is required.', ['version']);
         }
         try {
             $recordFromDb = $this->get($data['id'], array())->toArray();

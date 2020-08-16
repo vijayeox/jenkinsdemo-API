@@ -7,6 +7,7 @@ use Oxzion\InvalidInputException;
 use Oxzion\ValidationException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\DataCorruptedException;
+use Oxzion\ParameterRequiredException;
 
 abstract class Entity implements Countable
 {
@@ -253,63 +254,52 @@ abstract class Entity implements Countable
      * Loads data from database using UUID.
      */
     public function loadByUuid($uuid) {
-        $tableObj = $this->table->getByUuid($uuid);
-        if (is_null($tableObj) || (0 == count($tableObj))) {
+        $row = $this->table->getByUuid($uuid);
+        if (is_null($row) || (0 == count($row))) {
             throw new EntityNotFoundException('Entity not found.', ['entity' => $this->table->getTableGateway()->getTable(), 'uuid' => $uuid]);
         }
-        $this->assignInternal($tableObj->toArray(), false);
+        $this->assignInternal($row->toArray(), false);
         return $this;
     }
 
     /*
-     * Assigns values from $input to form. Honours 'readonly' flag.
+     * Assigns values from $input to form properties. Honours 'readonly' flag.
      * Keys in $input that do not exist in the form are ignored.
      */
     public function assign($input) {
+        //Make sure 'version' is set if this is update.
+        $id = $this->getProperty('id');
+        $uuid = $this->getProperty('uuid');
+        if ((!is_null($id) && (0 != $id) && !empty($id)) || 
+            (!is_null($uuid) && !empty($uuid))) {
+            if (is_null($input) || !isset($input) || !array_key_exists('version', $input)) {
+                throw new ParameterRequiredException('Version number is required.', ['version']);
+            }
+        }
+        //All ok. Go ahead and assign values.
         $this->assignInternal($input, true);
     }
 
     /*
-     * Assigns generated/modified values id, UUID and version to given array.
-     * id - is assigned only if the input array has no valid id.
-     *      Throws exception if the input array has valid id and it does not match the value in the form.
-     * uuid - is assigned only if the input array has no valid UUID.
-     *      Throws exception if the input array has valid UUID and it does not match the value in the form.
-     * version - is assigned always.
+     * Returns generated values 'uuid' and 'version' in an array.
+     * 'id' value is also returned in the array if $includeId is TRUE.
+     * 'id' value is NOT returned in the array if $includeId is not set or set to FALSE.
      */
-/*    public function assignBack(&$input, $includeId = false) {
-        if ($includeId) {
-            $this->assignBackImmutable($input, 'id');
-        }
-        $this->assignBackImmutable($input, 'uuid');
-        if (array_key_exists('version', $this->data)) {
-            $input['version'] = $this->getProperty('version');
-        }
-    }
-
-    private function assignBackImmutable(&$input, $key) {
-        $formValue = $this->getProperty($key);
-        $inputValue = array_key_exists($key, $input) ? $input[$key] : NULL;
-        if (isset($inputValue) && ($formValue != $inputValue)) {
-            throw new DataCorruptedException('Data corrupted.', 
-                ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key]);
-        }
-        $input[$key] = $formValue;
-    }
-*/
-
     public function getGenerated($includeId = false) {
         $arr = array();
         if ($includeId) {
-            if (array_key_exists('id', $this->data)) {
-                $arr['id'] = $this->getProperty('id');
+            $id = $this->getProperty('id');
+            if (!is_null($id)) {
+                $arr['id'] = $id;
             }
         }
-        if (array_key_exists('uuid', $this->data)) {
-            $arr['uuid'] = $this->getProperty('uuid');
+        $uuid = $this->getProperty('uuid');
+        if (!is_null($uuid)) {
+            $arr['uuid'] = $uuid;
         }
-        if (array_key_exists('version', $this->data)) {
-            $arr['version'] = $this->getProperty('version');
+        $version = $this->getProperty('version');
+        if (!is_null($version)) {
+            $arr['version'] = $version;
         }
         return $arr;
     }
@@ -319,6 +309,9 @@ abstract class Entity implements Countable
      * Keys in $input that do not exist in the form are ignored.
      * By default readonly properties are not set. Caller can force setting readonly values 
      * by seting $skipReadonly to FALSE.
+     * 
+     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
+     * setting properties without needed checks.
      */
     private function assignInternal($input, $skipReadOnly = true) {
         foreach ($input as $key => $value) {
@@ -341,7 +334,16 @@ abstract class Entity implements Countable
         }
     }
 
+    /*
+     * Sets a property. Throws exception if the property name is not defined in the form.
+     * 
+     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
+     * setting properties without needed checks.
+     */
     private function setProperty($key, $value) {
+        if (!array_key_exists($key, $this->data)) {
+            throw new Exception("Property name '${key}' is not defined in the form.");
+        }
         $property = &$this->data[$key];
         if (is_array($property)) {
             $property['value'] = $value;
@@ -352,6 +354,9 @@ abstract class Entity implements Countable
     }
 
     public function getProperty($key) {
+        if (!array_key_exists($key, $this->data)) {
+            return NULL;
+        }
         $property = $this->data[$key];
         if (is_array($property)) {
             return $property['value'];
@@ -361,10 +366,24 @@ abstract class Entity implements Countable
         }
     }
 
-    public function getProperties($keyArray) {
+    /*
+     * Gets properties specified in $keyArray. Gets all properties except 'id' 
+     * when $keyArray is NULL or empty. Gets 'id' also if $includeId is set to TRUE.
+     */
+    public function getProperties($keyArray = NULL, $includeId = false) {
         $returnArray = array();
-        foreach($keyArray as $key) {
-            $returnArray[$key] = $this->getProperty($key);
+        if (is_null($keyArray) || empty($keyArray)) {
+            foreach($this->data as $key => $value) {
+                if (!$includeId && ('id' == $key)) {
+                    continue;
+                }
+                $returnArray[$key] = $this->getProperty($key);
+            }
+        }
+        else {
+            foreach($keyArray as $key) {
+                $returnArray[$key] = $this->getProperty($key);
+            }
         }
         return $returnArray;
     }
@@ -403,11 +422,6 @@ abstract class Entity implements Countable
         $this->setProperty($key, $value);
     }
 
-    // public function setModifiedByAndDate($modifiedBy, $modifiedDate) {
-    //     $this->setModifiedBy($modifiedBy);
-    //     $this->setModifiedDate($modifiedDate);
-    // }
-
     public function setCreatedBy($value, $key = 'created_by') {
         $this->setProperty($key, $value);
     }
@@ -415,10 +429,5 @@ abstract class Entity implements Countable
     public function setCreatedDate($value, $key = 'date_created') {
         $this->setProperty($key, $value);
     }
-
-    // public function setCreatedByAndDate($createdBy, $createdDate) {
-    //     $this->setCreatedBy($createdBy);
-    //     $this->setCreatedDate($createdDate);
-    // }
 }
 

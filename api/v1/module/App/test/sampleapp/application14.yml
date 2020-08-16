@@ -1,5 +1,5 @@
 app:
-  name: DummyDive
+  name: UniqueAppName
   uuid: 11111111-1111-1111-1111-111111111111
   category: EXAMPLE_CATEGORY
 org:
