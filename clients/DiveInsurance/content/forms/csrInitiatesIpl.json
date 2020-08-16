@@ -1102,9 +1102,7 @@
 								"label": "Home or Work Phone",
 								"tableView": false,
 								"validate": {
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Phone Number",
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"custom": "if(data['home_phone_number'] && data['home_phone_number'] != ''){\n  if(data['home_phone_number'].length <= 15){\n      valid = (data['home_phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Home or Work Phone number';\n  }else{\n    valid = (data['home_phone_number'].length > 15) ? 'Please enter a valid Home or Work Phone number' : true;\n  }\n}",
 									"step": "any"
 								},
 								"key": "home_phone_number",
@@ -1122,6 +1120,21 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
+							}, {
+								"label": "Mobile Phone",
+								"tableView": false,
+								"validate": {
+									"required": true,
+									"custom": "if(data['phone_number'] && data['phone_number'] != ''){\n  if(data['phone_number'].length <= 15){\n      valid = (data['phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Mobile Phone number';\n  }else{\n    valid = (data['phone_number'].length > 15) ? 'Please enter a valid Mobile Phone number' : true;\n  }\n}",
+									"step": "any"
+								},
+								"key": "phone_number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
+								"input": true,
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
 							}],
 							"width": 9,
 							"offset": 0,
@@ -1169,23 +1182,6 @@
 							"size": "md"
 						}, {
 							"components": [{
-								"label": "Mobile Phone",
-								"tableView": false,
-								"validate": {
-									"required": true,
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
-									"step": "any"
-								},
-								"key": "phone_number",
-								"type": "textfield",
-								"delimiter": false,
-								"requireDecimal": false,
-								"input": true,
-								"hideOnChildrenHidden": false,
-								"inputType": "tel"
-							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
 								"key": "phone",
@@ -1218,10 +1214,8 @@
 						"placeholder": " ",
 						"tableView": true,
 						"validate": {
-							"pattern": "^\\d+$",
-							"customMessage": "Please enter a valid Fax number"
+							"custom": "if(data['fax'] && data['fax'] != ''){\n  if(data['fax'].length <= 15){\n      valid = (data['fax'].match(/^\\d+$/)) ?  true : 'Please enter a valid Fax number';\n  }else{\n    valid = (data['fax'].length > 15) ? 'Please enter a valid Fax number' : true;\n  }\n}"
 						},
-						"errorLabel": "Fax",
 						"key": "fax",
 						"type": "textfield",
 						"input": true,
@@ -4988,7 +4982,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 580,
+	"_vid": 581,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5009,6 +5003,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-08-13T11:05:39.733Z",
+	"modified": "2020-08-16T05:06:14.646Z",
 	"machineName": "testdivehub:csrInitiates"
 }
