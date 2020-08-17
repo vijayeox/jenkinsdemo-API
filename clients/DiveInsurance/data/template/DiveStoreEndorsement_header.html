@@ -44,10 +44,10 @@
               }
           }
       }
-      if(vars['liabilityChanges'] == true){
+      if(vars['liabilityChanges'] == true || vars['liabilityChanges'] == 'true'){
         document.getElementById("liabilityCoverages").style.display = "block";
       }
-      if(vars['propertyChanges'] == true){
+      if(vars['propertyChanges'] == true || vars['propertyChanges'] == 'true'){
         document.getElementById("propertyCoverages").style.display = "block";
       }
       agentInfo();
