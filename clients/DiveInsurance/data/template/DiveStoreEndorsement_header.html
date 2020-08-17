@@ -44,6 +44,12 @@
               }
           }
       }
+      if(vars['liabilityChanges'] == true){
+        document.getElementById("liabilityCoverages").style.display = "block";
+      }
+      if(vars['propertyChanges'] == true){
+        document.getElementById("propertyCoverages").style.display = "block";
+      }
       agentInfo();
   }
   </script>
@@ -91,10 +97,14 @@
         </div>
         <div>
           <hr></hr>
-          <p class = "p_margin">Liability Policy issued by &nbsp<span class ="liability_carrier"></span></p>
-          <p class = "p_margin">Liability Policy #: <span class ="liability_policy_id"></span></p>
-          <p class = "p_margin">Property Policy issued by &nbsp<span class ="property_carrier"></span></p>
-          <p class = "p_margin">Property Policy #: <span class ="property_policy_id"></span></p>
+          <span id="liabilityCoverages" style="display: none;">
+            <p class = "p_margin">Liability Policy issued by &nbsp<span class ="liability_carrier"></span></p>
+            <p class = "p_margin">Liability Policy #: <span class ="liability_policy_id"></span></p>
+          </span>
+          <span id="propertyCoverages" style="display: none;">
+            <p class = "p_margin">Property Policy issued by &nbsp<span class ="property_carrier"></span></p>
+            <p class = "p_margin">Property Policy #: <span class ="property_policy_id"></span></p>
+          </span>
           <hr></hr>
         </div>
       </div>
