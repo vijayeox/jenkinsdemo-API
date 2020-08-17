@@ -46,7 +46,11 @@ class StorePreviewDocument extends PolicyDocument
                     }
                 }
             }else{
-                $data['certificate_no'] = "123456789";
+                if(isset($data['certificate_no'])){
+                    $data['certificate_no'] = $data['certificate_no'];
+                } else {
+                    $data['certificate_no'] = "123456789";
+                }
             }
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));

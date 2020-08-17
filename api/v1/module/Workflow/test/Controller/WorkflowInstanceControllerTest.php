@@ -87,7 +87,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         }
         $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($fileAttributeCount, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $this->assertEquals($fileAttributeCount + 1, $this->getConnection()->getRowCount('ox_file_attribute'));
         $this->assertEquals($fileCount + 1, $this->getConnection()->getRowCount('ox_file'));
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
@@ -132,7 +132,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         }
         $this->dispatch("/workflow/$workflowId", 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($fileAttributeCount, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $this->assertEquals($fileAttributeCount + 3, $this->getConnection()->getRowCount('ox_file_attribute'));
         $this->assertEquals($fileCount + 1, $this->getConnection()->getRowCount('ox_file'));
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
@@ -177,7 +177,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         }
         $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($fileAttributeCount, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $this->assertEquals($fileAttributeCount+2, $this->getConnection()->getRowCount('ox_file_attribute'));
         $newFileCount = $this->getConnection()->getRowCount('ox_file');
         $this->assertEquals($fileCount, $newFileCount);
         $query = "select * from ox_workflow_instance where id > 5";
@@ -241,7 +241,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         }
         $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($fileAttributeCount, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $this->assertEquals($fileAttributeCount+2, $this->getConnection()->getRowCount('ox_file_attribute'));
         $newFileCount = $this->getConnection()->getRowCount('ox_file');
         $this->assertEquals($fileCount, $newFileCount);
         $query = "select * from ox_workflow_instance where id > 5";
