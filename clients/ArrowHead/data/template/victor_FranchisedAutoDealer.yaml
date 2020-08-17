@@ -892,7 +892,7 @@
    cell: G40
    type: DataGrid
    returnValue:
-      autoSalesAndService: Auto Parts & Supplies
+      autoSalesAndService: Sales & Service
       autoStorageLot: Storage Lot - Auto/Truck
       bldgLeasedToOthers: Leased to Othrs
       bodyShop: Body Shop
@@ -906,7 +906,7 @@
       vehicleStorageParkingGarage: Parking Lot - No Structure
       partsWarehouseStorage: Warehouse
       vacantBuilding: Lease & Rental
-      deliveryPrep: Sales & Service
+      deliveryPrep: Auto Parts & Supplies
 -
    key: genericData*locationScheduleGridData_
    method: simpleDatagrid
