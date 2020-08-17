@@ -6,7 +6,6 @@ use Oxzion\Model\Entity;
 
 class App extends Entity
 {
-
     //status for the apps
     const DELETED = 1;
     const IN_DRAFT = 2;
@@ -18,25 +17,31 @@ class App extends Entity
     const MY_APP = 2;
 
     protected $data = array(
-        'id' => null,
-        'name' => null,
-        'uuid' => 0,
-        'description' => null,
-        'type' => null,
-        'isdefault' => 0,
-        'logo' => "default_app.png",
-        'category' => null,
-        'date_created' => null,
-        'date_modified' => null,
-        'created_by' => null,
-        'modified_by' => null,
-        'status' => 1,
-        'start_options' => null,
+        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
+        'name' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'description' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
+        'type' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'isdefault' => array('type' => parent::BOOLEANVAL, 'value' => false, 'readonly' => FALSE, 'required' => TRUE),
+        'logo' => array('type' => parent::STRINGVAL, 'value' => 'default_app.png', 'readonly' => FALSE, 'required' => FALSE),
+        'category' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'date_created' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'date_modified' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'created_by' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'modified_by' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'status' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => FALSE , 'required' => TRUE),
+        'start_options' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => FALSE),
+        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE),
     );
 
     public function validate()
     {
-        $dataArray = array("name", "type", "category", "uuid", "date_created", "created_by", "status");
-        $this->validateWithParams($dataArray);
+        $this->completeValidation();
+    }
+
+    public function updateValidate()
+    {
+        $this->typeChecker();
     }
 }
+

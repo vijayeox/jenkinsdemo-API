@@ -22,3 +22,4 @@ class DashboardTable extends ModelTable {
         return $temp;
     }
 }
+

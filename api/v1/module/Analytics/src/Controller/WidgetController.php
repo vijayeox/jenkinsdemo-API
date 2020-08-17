@@ -39,18 +39,14 @@ class WidgetController extends AbstractApiController
     public function create($data)
     {
         try {
-            $result = $this->widgetService->createWidget($data);
-            $strResult = "${result}";
-            if ($strResult != '0') {
-                $data['newWidgetUuid'] = $result;
-                return $this->getSuccessResponseWithData($data, 201);
-            }
-        } catch (ValidationException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse('Validation Errors', 404, $response);
+            $generated = $this->widgetService->createWidget($data);
+            $data['newWidgetUuid'] = $generated['uuid'];
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        return $this->getFailureResponse('Failed to create a new entity', $data);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -202,18 +198,13 @@ class WidgetController extends AbstractApiController
             $data = $this->extractPostData();
             $params = array_merge($data, $this->params()->fromRoute());
             $result = $this->widgetService->copyWidget($params);
-            $strResult = "${result}";
-            if ($strResult != '0') {
-                $data['newWidgetUuid'] = $result;
-                return $this->getSuccessResponseWithData($data, 201);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse('Validation Errors', 404, $response);
-        } catch (Exception $e) {
-            $response = ['data' => $data, 'message' => $e->getMessage()];
-            return $this->getErrorResponse('Exception occured', 404, $response);
+            $data['newWidgetUuid'] = $result['uuid'];
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        return $this->getErrorResponse('Failed to copy the entity', 404, array('uuid' => $params['widgetUuid']));
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 }
+

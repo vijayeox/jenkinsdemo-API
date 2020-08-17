@@ -12,6 +12,7 @@ use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ResponseInterface;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
 use Zend\Stdlib\ArrayUtils;
 use Oxzion\Service\UserService;
 use Oxzion\Auth\AuthSuccessListener;

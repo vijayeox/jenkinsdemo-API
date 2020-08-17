@@ -2,6 +2,7 @@
 
 namespace Analytics\Controller;
 
+use Exception;
 use Analytics\Model\DataSource;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
@@ -39,15 +40,13 @@ class DataSourceController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->dataSourceService->createDataSource($data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $this->dataSourceService->createDataSource($data);
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 201);
     }
 
     /**
@@ -62,34 +61,25 @@ class DataSourceController extends AbstractApiController
     public function update($uuid, $data)
     {
         try {
-            $count = $this->dataSourceService->updateDataSource($uuid, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            $this->dataSourceService->updateDataSource($uuid, $data);
+            return $this->getSuccessResponseWithData($data, 200);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }        
     }
 
     public function delete($uuid)
     {
         $params = $this->params()->fromQuery();
-        if (isset($params['version'])) {
-            try {
-                $response = $this->dataSourceService->deleteDataSource($uuid, $params['version']);
-            } catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-            }
-            if ($response == 0) {
-                return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-            }
+        try {
+            $this->dataSourceService->deleteDataSource($uuid, $params['version']);
             return $this->getSuccessResponse();
-        } else {
-            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 

@@ -1,28 +1,26 @@
 app:
-    -
-        name: ArrowHead
-        uuid: da8f0152-b8d3-43bf-8090-40103bb98d5e
-        description: 'App for Arrow Head'
-        category: EXAMPLE_CATEGORY
-        type: 2
-        autostart: true
+    name: ArrowHead
+    uuid: da8f0152-b8d3-43bf-8090-40103bb98d5e
+    description: 'App for Arrow Head'
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
 org:
-    -
-        name: ArrowHead
-        uuid: 34bf01ab-79ca-42df-8284-965d8dbf290e
+    name: ArrowHead
+    uuid: 34bf01ab-79ca-42df-8284-965d8dbf290e
+    email: admin@arrowhead.com
+    address1: '6 bCenterpoint'
+    address2: Dr.
+    city: 'La Palma'
+    state: CA
+    zip: 90623
+    country: 'United States'
+    contact:
+        username: arrowheadAdmin
+        firstname: Admin
+        lastname: User
         email: admin@arrowhead.com
-        address1: '6 bCenterpoint'
-        address2: Dr.
-        city: 'La Palma'
-        state: CA
-        zip: 90623
-        country: 'United States'
-        contact:
-            username: arrowheadAdmin
-            firstname: Admin
-            lastname: User
-            email: admin@arrowhead.com
-        preferences: '{}'
+    preferences: '{}'
 privilege:
     -
         name: MANAGE_POLICY_APPLICATION

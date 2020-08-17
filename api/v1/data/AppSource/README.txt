@@ -1,0 +1,1 @@
+AppBuilder creates the appliction in this directory. For example an application named MyApp is created within a directory named MyApp. Each application is created inside application specific directory (application name is directory name) in this directory.

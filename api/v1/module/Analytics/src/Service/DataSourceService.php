@@ -29,86 +29,58 @@ class DataSourceService extends AbstractService
 
     public function createDataSource($data)
     {
-        $form = new DataSource();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
+        $dataSource = new DataSource($this->table);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $form->exchangeWithSpecificKey($data,'value');
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
+        $dataSource->assign($data);
+        $dataSource->validate();
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $this->beginTransaction();
+            $dataSource->save2();
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $dataSource->getGenerated();
     }
 
     public function updateDataSource($uuid, $data)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($data['version']))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $form = new DataSource();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate($data);
-        $count = 0;
+        $dataSource = new DataSource($this->table);
+        $dataSource->loadByUuid($uuid);
+        $dataSource->assign($data);
+        $dataSource->validate();
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $dataSource->save2();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $dataSource->getGenerated();
     }
 
     public function deleteDataSource($uuid,$version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($version))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $data = array('version' => $version,'isdeleted' => 1);
-        $form = new DataSource();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate($data);
-        $count = 0;
+        $dataSource = new DataSource($this->table);
+        $dataSource->loadByUuid($uuid);
+        $dataSource->assign([
+            'version' => $version, 
+            'isdeleted' => 1
+        ]);
+        $dataSource->validate();
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $dataSource->save2();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getDataSource($uuid)

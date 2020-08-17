@@ -7,7 +7,14 @@ use Oxzion\Model\Entity;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Oxzion\VersionMismatchException;
+use Oxzion\InsertFailedException;
+use Oxzion\UpdateFailedException;
 use Oxzion\ServiceException;
+use Oxzion\MultipleRowException;
+use Oxzion\ParameterRequiredException;
+use Oxzion\Utils\UuidUtil;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Exception;
 
 abstract class ModelTable
@@ -60,9 +67,14 @@ abstract class ModelTable
 
         $filter['uuid'] = $uuid;
         $rowset = $this->tableGateway->select($filter);
-
+        if (0 == count($rowset)) {
+            return NULL;
+        }
+        if (count($rowset) > 1) {
+            throw new MultipleRowException('Multiple rows found when queried by UUID.', 
+                ['table' => $this->tableGateway->getTable(), 'uuid' => $uuid]);
+        }
         $row = $rowset->current();
-
         return $row;
     }
 
@@ -139,39 +151,100 @@ abstract class ModelTable
         }
     }
 
-    protected function internalSave2(array &$data)
-    {
-        $this->init();
-        $id = null;
-        if ((!empty($data['id']))&&(isset($data['version']))) {
-            $id = $data['id'];
-            $version = $data['version'];
+    private function setCreatedByAndDate(&$data) {
+        if (array_key_exists('created_by', $data) && empty($data['created_by'])) {
+            $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        }
+        if (array_key_exists('date_created', $data) && empty($data['date_created'])) {
+            $data['date_created'] = date('Y-m-d H:i:s');
+        }
+    }
+
+    private function setModifiedByAndDate(&$data) {
+        if (array_key_exists('modified_by', $data) && empty($data['mdified_by'])) {
+            $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+        }
+        if (array_key_exists('date_modified', $data) && empty($data['date_modified'])) {
+            $data['date_modified'] = date('Y-m-d H:i:s');
+        }
+    }
+
+    private function checkAndIncrementVersion(&$data) {
+        $version = $data['version'];
+        if(!isset($version) || is_null($version)) {
+            throw new ParameterRequiredException('Version number is required.', ['version']);
         }
         try {
-            if (is_null($id) || $id === 0 || empty($id)){
-                $rows = $this->tableGateway->insert($data);
-                if (!isset($rows)) {
-                    return 0;
-                }
-                $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
-                return $rows;
-            }else {
-                $record = $this->get($id, array())->toArray();
-                if(isset($data['version'])){
-                    if($record['version'] == $version){
-                        $data['version'] = $data['version'] + 1;
-                        return $this->tableGateway->update($data, ['id' => $id, 'version' => $version]);
-                    }
-                    else{
-                        throw new \Oxzion\VersionMismatchException($record);
-                    }
-                }
-                else
-                    throw new \Oxzion\VersionMismatchException($record);
+            $recordFromDb = $this->get($data['id'], array())->toArray();
+        }
+        catch(Exception $e) {
+            throw new UpdateFailedException('Database update failed.', 
+                ['table' => $this->tableGateway->getTable(), 'data' => $data], 
+                UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
+        }
+        if ($recordFromDb['version'] != $version) {
+            throw new VersionMismatchException($recordFromDb);
+        }
+        $data['version'] = $version + 1;
+    }
+
+    protected function internalSave2(array $inputData)
+    {
+        $data = array();
+        foreach ($inputData as $key => $value) {
+            if (is_array($value)) {
+                $v = $value['value'];
             }
-        } catch (Exception $e) {
-            throw $e;
+            else {
+                $v = $value;
+            }
+            $data[$key] = $v;
         }
 
+        $this->init();
+        $id = NULL;
+        if (array_key_exists('id', $data) && isset($data['id'])) {
+            $id = $data['id'];
+        }
+
+        if (is_null($id) || $id === 0 || empty($id)) {
+            $data['uuid'] = UuidUtil::uuid();
+            $data['version'] = 1; //Starting version number when the row is inserted in the database.
+            $this->setCreatedByAndDate($data);
+            try {
+                $rows = $this->tableGateway->insert($data);
+            }
+            catch(Exception $e) {
+                throw new InsertFailedException('Database insert failed.', 
+                    ['table' => $this->tableGateway->getTable(), 'data' => $data],
+                    InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
+            }
+            if(!isset($rows) || (1 != $rows)) {
+                throw new InsertFailedException('Database insert failed.', 
+                    ['table' => $this->tableGateway->getTable(), 'data' => $data]);
+            }
+            $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
+            $data['id'] = $this->lastInsertValue;
+            return $data;
+        }
+        else {
+            $version = $data['version'];
+            $this->checkAndIncrementVersion($data);
+            $this->setModifiedByAndDate($data);
+            try {
+                $rows = $this->tableGateway->update($data, ['id' => $id, 'version' => $version]);
+            }
+            catch(Exception $e) {
+                throw new UpdateFailedException('Database update failed.', 
+                    ['table' => $this->tableGateway->getTable(), 'data' => $data], 
+                    UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
+            }
+            if (!isset($rows) || (1 != $rows)) {
+                throw new UpdateFailedException('Database update failed.', 
+                    ['table' => $this->tableGateway->getTable(), 'data' => $data]);
+            }
+            return $data;
+        }
     }
 }
+

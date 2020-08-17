@@ -18,6 +18,10 @@ class AppTable extends ModelTable
         return $this->internalSave($data->toArray());
     }
 
+    public function save2(Entity $data) {
+        return $this->internalSave2($data->toArray());
+    }
+
     public function getByName($name)
     {
         $this->init();
