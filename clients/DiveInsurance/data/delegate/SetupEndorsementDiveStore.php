@@ -197,10 +197,10 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_combinedSingleLimitDS'] = 1000000;
                     $policy['previous_annualAggregateDS'] = 2000000;
                 }
-                $policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
-                $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
-                $policy['previous_dspropTotal'] = $data['dspropTotal'];
-                $policy['previous_lossPayees'] = $data['lossPayees'];
+                $policy['previous_dspropreplacementvalue'] = isset($data['dspropreplacementvalue'])?$data['dspropreplacementvalue']:0;
+                $policy['previous_lossOfBusIncome'] = isset($data['lossOfBusIncome'])?$data['lossOfBusIncome']:0;
+                $policy['previous_dspropTotal'] = isset($data['dspropTotal'])?$data['dspropTotal']:0;
+                $policy['previous_lossPayees'] = isset($data['lossPayees'])?$data['lossPayees']:array();
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
