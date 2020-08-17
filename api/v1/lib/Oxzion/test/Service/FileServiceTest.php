@@ -406,7 +406,7 @@ class FileServiceTest extends AbstractServiceTest
             $finalCount = $newQueryResult[0]['count'];
             if(isset($newQueryResult[0]['count'])) {
                 $this->assertEquals(11,$finalCount);
-                $this->assertEquals('7369c4e9-90bf-41d7-b774-605469294aae',$uuid);
+                $this->assertNotEquals('7369c4e9-90bf-41d7-b774-605469294aae',$uuid);
             }
             else{
                 $this->fail("Final count has not been generated");
@@ -550,13 +550,15 @@ class FileServiceTest extends AbstractServiceTest
         $data = array('field1' => "Test Value", 'field2' => 2, 'field3' => 'invalid field3', 'field4' => 'invalid field4' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1', 'policy_document' => ["file" => "file1.pdf"], "coi_attachment" => ["file" => "attachment.pdf"]);
         $result = $this->fileService->createFile($data);
         $this->assertEquals(1,$result);
-        $this->assertEquals(true, $data['id'] > 0);
-        $sqlQuery2 = 'SELECT entity_id, data FROM ox_file order by id DESC LIMIT 1';
-        $sqlQuery3 = "SELECT * from ox_file_attribute where file_id = ".$data['id'];
-        $newQueryResult = $this->runQuery($sqlQuery." where id = ".$data['id']);
+        $this->assertEquals(true,isset($data['uuid']));
+        $sqlQuery2 = "SELECT id, entity_id, data FROM ox_file where uuid = '".$data['uuid']."'";
+        $sqlQuery3 = "SELECT fa.* from ox_file_attribute fa inner join ox_file f 
+                        on f.id = fa.file_id  where f.uuid = '".$data['uuid']."'";
+        $newQueryResult = $this->runQuery($sqlQuery." where uuid = '".$data['uuid']."'");
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $sqlQuery3Result = $this->runQuery($sqlQuery3);
-        $sqlQuery4 = "SELECT * from ox_file_document where file_id = ".$data['id'];
+        $sqlQuery4 = "SELECT fd.* from ox_file_document fd inner join ox_file f 
+                        on f.id = fd.file_id where f.uuid = '".$data['uuid']."'";
         $sqlQuery4Result = $this->runQuery($sqlQuery4);
         $this->assertEquals(2, count($sqlQuery4Result));
         $this->assertEquals(5, $sqlQuery4Result[0]['field_id']);
@@ -569,7 +571,8 @@ class FileServiceTest extends AbstractServiceTest
         $data1 = json_decode($sqlQuery2Result[0]['data'], true);
         $this->assertEquals(6, count($data1));
         $this->assertEquals(0,count($sqlQuery3Result)); 
-        $sqlQuery4 = "SELECT * from ox_indexed_file_attribute where file_id = ".$data['id'];
+        $sqlQuery4 = "SELECT fa.* from ox_indexed_file_attribute fa inner join ox_file f 
+                        on f.id = fa.file_id where f.uuid = '".$data['uuid']."'";
         $sqlQuery3Result = $this->runQuery($sqlQuery4);
         $this->assertEquals(1,count($sqlQuery3Result)); 
         $this->assertEquals(1, $sqlQuery3Result[0]['field_id']); 
@@ -577,7 +580,9 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals($data['field1'], $sqlQuery3Result[0]['field_value_text']); 
         $this->assertEquals(1,$newQueryResult[0]['count']);
         $this->assertEquals(1,$entityId);
-        $this->fileService->updateFileAttributes($data['id']);
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $fileId = $sqlQuery2Result[0]['id'];
+        $this->fileService->updateFileAttributes($fileId);
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $data1 = json_decode($sqlQuery2Result[0]['data'], true);
         $this->assertEquals(6, count($data1));
@@ -585,16 +590,16 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(4, count($sqlQueryResult));
         $this->assertEquals($data['field1'], $sqlQueryResult[0]['field_value']);
         $this->assertEquals(1, $sqlQueryResult[0]['field_id']);
-        $this->assertEquals($data['id'], $sqlQueryResult[0]['file_id']);
+        $this->assertEquals($fileId, $sqlQueryResult[0]['file_id']);
         $this->assertEquals($data['field2'], $sqlQueryResult[1]['field_value']);
         $this->assertEquals(2, $sqlQueryResult[1]['field_id']);
-        $this->assertEquals($data['id'], $sqlQueryResult[1]['file_id']);
+        $this->assertEquals($fileId, $sqlQueryResult[1]['file_id']);
         $this->assertEquals($data['policy_document'], json_decode($sqlQueryResult[2]['field_value'], true));
         $this->assertEquals(5, $sqlQueryResult[2]['field_id']);
-        $this->assertEquals($data['id'], $sqlQueryResult[2]['file_id']);
+        $this->assertEquals($fileId, $sqlQueryResult[2]['file_id']);
         $this->assertEquals($data['coi_attachment'], json_decode($sqlQueryResult[3]['field_value'], true));
         $this->assertEquals(6, $sqlQueryResult[3]['field_id']);
-        $this->assertEquals($data['id'], $sqlQueryResult[3]['file_id']);
+        $this->assertEquals($fileId, $sqlQueryResult[3]['file_id']);
     }
 
     public function testFileCreateWithCleanData() {
@@ -610,7 +615,7 @@ class FileServiceTest extends AbstractServiceTest
             $data = array('field1' => 1, 'field2' => 2, 'form_id' => $formId,'workflowInstanceId' => 'something' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
             $result = $this->fileService->createFile($data);
             $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT data FROM ox_file order by id DESC LIMIT 1';
+            $sqlQuery2 = "SELECT data FROM ox_file where uuid = '".$data['uuid']."'";
             $newQueryResult = $this->runQuery($sqlQuery);
             $sqlQuery2Result = $this->runQuery($sqlQuery2);
             $data = json_decode($sqlQuery2Result[0]['data'],true);
@@ -886,12 +891,13 @@ class FileServiceTest extends AbstractServiceTest
         $data = array('datagrid' => array(0 => array('firstname' => 'Sagar','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("file" => "file4.pdf"))), 1 => array('firstname' => 'mark','lastname' => 'hamil', 'padi' => 322,'id_document' => array(array("file" => "file3.pdf")))), 'entity_id' => $entityId, 'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->assertEquals(1,$result);
-        $sqlQuery2 = 'SELECT entity_id, data FROM ox_file where id = '.$data['id'];
-        $sqlQuery3 = 'SELECT * from ox_file_attribute where file_id = '.$data['id'];
-        $newQueryResult = $this->runQuery($sqlQuery." where id = ".$data['id']);
+        $sqlQuery2 = "SELECT id, entity_id, data FROM ox_file where uuid = '".$data['uuid']."'";
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $fileId = $sqlQuery2Result[0]['id'];
+        $sqlQuery3 = 'SELECT * from ox_file_attribute where file_id = '.$fileId;
+        $newQueryResult = $this->runQuery($sqlQuery." where id = ".$fileId);
         $sqlQuery3Result = $this->runQuery($sqlQuery3);
-        $sqlQuery4 = 'SELECT * from ox_file_document where file_id = '.$data['id'];
+        $sqlQuery4 = 'SELECT * from ox_file_document where file_id = '.$fileId;
         $sqlQuery4Result = $this->runQuery($sqlQuery4);
         $data1 = json_decode($sqlQuery2Result[0]['data'], true);
         $this->assertEquals(1,$newQueryResult[0]['count']);
@@ -907,10 +913,10 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(1,$sqlQuery4Result[1]['sequence']);
         $this->assertEquals($data['datagrid'][1]['id_document'],json_decode($sqlQuery4Result[1]['field_value'], true));
 
-        $sqlQuery4 = "SELECT * from ox_indexed_file_attribute where file_id = ".$data['id'];
+        $sqlQuery4 = "SELECT * from ox_indexed_file_attribute where file_id = ".$fileId;
         $sqlQueryResult = $this->runQuery($sqlQuery4);
         $this->assertEquals(0,count($sqlQueryResult)); 
-        $this->fileService->updateFileAttributes($data['id']);
+        $this->fileService->updateFileAttributes($fileId);
         $sqlQuery3Result = $this->runQuery($sqlQuery3);
         $this->assertEquals($data['datagrid'],json_decode($sqlQuery3Result[0]['field_value'], true));
         $this->assertEquals(10,$sqlQuery3Result[0]['field_id']); 

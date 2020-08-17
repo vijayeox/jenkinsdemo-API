@@ -18,8 +18,6 @@ class FileTable extends ModelTable
     }
 
     public function save2(Entity $data) {
-        $temp = $data->toArray();
-        $count = $this->internalSave2($temp);
-        return $temp;
+        return $this->internalSave2($data->toArray());
     }
 }

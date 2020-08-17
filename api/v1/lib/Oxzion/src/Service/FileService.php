@@ -5,6 +5,7 @@ use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\EntityNotFoundException;
+use Oxzion\ValidationException;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
@@ -100,29 +101,28 @@ class FileService extends AbstractService
             $data['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
             $data['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
         }
-        $file = new File();
+        $file = new File($this->table);
         if(isset($data['id'])){
             unset($data['id']);
         }
-        $file->exchangeWithSpecificKey($data, 'value');
+        $file->assign($data);
         //$this->logger->info("Data From Fileservice - " . print_r($data, true));
         $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
         $file->validate();
-        
         $count = 0;
         try {
             $this->beginTransaction();
-            $result = $this->table->save2($file);
-            $count = $result['version'];
+            $file->save2();
+            $result = $file->getGenerated(true);
             $data['version'] = $result['version'];
+            $data['uuid'] = $result['uuid'];
             $this->logger->info("COUNT  FILE DATA----" . $count);
-            if ($count == 0) {
+            $id = $result['id'];
+            if ($id == 0) {
                 throw new ServiceException("File Creation Failed", "file.create.failed");
             }
-            $id = $this->table->getLastInsertValue();
+            $count++;
             $this->logger->info("FILE ID DATA" . $id);
-            $data['id'] = $id;
-            $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id, false);
             $this->logger->debug("Check Fields Data ----- " . print_r($validFields,true));
             $this->logger->info("Checking Index Fields ---- " . print_r($validFields['indexedFields'],true));
@@ -266,9 +266,6 @@ class FileService extends AbstractService
             }
             $obj = $obj->toArray();
         }
-        if(!isset($data['version'])){
-            $data['version'] = $obj['version'];
-        }
         $latestcheck = 0;
         if (isset($data['is_active']) && $data['is_active'] == 0) {
             $latestcheck = 1;
@@ -294,8 +291,10 @@ class FileService extends AbstractService
         }
 
         $fields = $this->processMergeData($entityId, $fileObject, $data);
-        $file = new File();
-        $id = $this->getIdFromUuid('ox_file', $id);
+        $file = new File($this->table);
+        $file->loadByUuid($id);
+        $result = $file->getGenerated(true);
+        $id = $result['id'];
         $selectQuery = "SELECT ox_app_entity.start_date_field,ox_app_entity.end_date_field,ox_app_entity.status_field,ox_file.version from ox_app_entity inner join ox_file on ox_file.entity_id = ox_app_entity.id WHERE ox_file.id =:fileId";
         $parameters = array('fileId' => $id);
         $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
@@ -303,6 +302,10 @@ class FileService extends AbstractService
         $dataArray = $this->processMergeData($entityId, $fileObject, $fields);
         $fileObject = $obj;
         $dataArray = $this->cleanData($dataArray);
+        if(isset($data['version'])){
+            $fileObject['version'] = $data['version'];
+        }
+        
         $fileObject['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
@@ -313,14 +316,16 @@ class FileService extends AbstractService
            $fileObject['last_workflow_instance_id'] = $data['last_workflow_instance_id'];
         }
         $count = 0;
+        $version = $file->getProperty('version');
         try {
             $this->beginTransaction();
         	$this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
-            $file->exchangeWithSpecificKey($fileObject, 'value');
+            $file->assign($fileObject);
             $file->validate();
-            $result = $this->table->save2($file);
-            $count = $result['version']  - $data['version'];
+            $file->save2();
+            $result = $file->getGenerated();
             $data['version'] = $result['version'];
+            $count = $result['version'] - $version;
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
                 $queryWhere = array("fileId" => $id);
@@ -386,31 +391,23 @@ class FileService extends AbstractService
      */
     public function deleteFile($id,$version)
     {
-        $obj = $this->table->getByUuid($id, array());
-        if (is_null($obj)) {
-            return 0;
-        }
+        $file = new File($this->table);
+        $file->loadByUuid($id);
         if (!isset($version)) {
             throw new Exception("Version is not specified, please specify the version");
         }
         $data = array('version' => $version, 'is_active' => 0);
-        $file = new File();
-        $file->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $file->exchangeWithSpecificKey($data, 'value', true);
+        $file->assign($data);
         $file->updateValidate($data);
-        $count = 0;
         try {
-            $count = $this->table->save2($file);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
+            $this->beginTransaction();
+            $file->save2();
             $fileInfo = $file->toArray();
+            $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (isset($id)) {
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
             }
-            return 1;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;

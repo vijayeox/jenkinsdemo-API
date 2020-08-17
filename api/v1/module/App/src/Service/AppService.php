@@ -97,8 +97,8 @@ class AppService extends AbstractService
         $queryString = 'SELECT ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.category, ap.date_created,
             ap.date_modified, ap.created_by, ap.modified_by, ap.status, ar.org_id, ar.start_options 
             FROM ox_app AS ap
-            LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id 
-            WHERE ar.org_id=:orgId AND ap.status!=:statusDeleted AND ap.uuid=:uuid';
+            LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id AND ar.org_id=:orgId
+            WHERE ap.status!=:statusDeleted AND ap.uuid=:uuid';
         $queryParams = [
             'orgId' => AuthContext::get(AuthConstants::ORG_ID),
             'statusDeleted' => App::DELETED, 
@@ -492,7 +492,7 @@ class AppService extends AbstractService
             $workflowData = $yamlData['workflow'];
             foreach ($workflowData as $value) {
                 $result = 0;
-                $result = $this->checkWorkflowData($value);
+                $result = $this->checkWorkflowData($value, $appUuid);
                 if ($result == 0) {
                     $entity = $this->entityService->getEntityByName($yamlData['app']['uuid'], $value['entity']);
                     if (!$entity) {
