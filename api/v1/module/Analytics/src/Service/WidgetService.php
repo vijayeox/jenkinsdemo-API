@@ -121,60 +121,38 @@ class WidgetService extends AbstractService
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
             'uuid' => $uuid,
         ];
-        try {
-            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        } catch (Exception $e) {
-            throw $e;
-        }
-
+        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if (0 == count($resultSet)) {
-            throw new Exception("Given wiget id ${uuid} either does not exist OR user has no permission to read the widget.");
+            throw new Exception("Given wiget id ${uuid} either does not exist OR user has no permission to access the widget.");
         }
 
-        $obj = $this->table->getByUuid($uuid, array());
-        $form = new Widget();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $widget = new Widget($this->table);
+        $widget->loadByUuid($uuid);
+        $widget->assign($data);
 
         if (isset($data['visualization_uuid'])) {
             //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
-            $data['visualization_id'] = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $data['org_id']));
-            unset($data['visualization_uuid']);
+            $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $data['org_id']));
+            $widget->setForeignKey('visualization_id', $visualizationId);
         }
         if (isset($data['configuration'])) {
-            $data['configuration'] = json_encode($data['configuration']);
+            $widget->setProperty('configuration', json_encode($data['configuration']));
         }
         if (isset($data['expression'])) {
-            $data['expression'] = json_encode($data['expression']);
+            $widget->setProperty('expression', json_encode($data['expression']));
         }
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->validate();
-
-        $this->beginTransaction();
-        try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
+        $widget->validate();
 
         try {
+            $this->beginTransaction();
+            $widget->save2();
+
             $query = 'DELETE FROM ox_widget_query WHERE ox_widget_id = (SELECT id FROM ox_widget WHERE uuid = :uuid)';
             $queryParams = [
                 'uuid' => $uuid,
             ];
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
-            if ($result->count() == 0) {
-                $this->logger->error('Unexpected result from ox_widget_query cleaning statement. Transaction rolled back.', $result);
-                $this->logger->error('Query and parameters are:');
-                $this->logger->error($query);
-                $this->logger->error($queryParams);
-                $this->rollback();
-                return 0;
-            }
+
             $sequence = 0;
             foreach ($data['queries'] as $query) {
                 $queryUuid = $query['uuid'];
@@ -192,77 +170,44 @@ class WidgetService extends AbstractService
                     'created_by' => AuthContext::get(AuthConstants::USER_ID),
                     'org_id' => AuthContext::get(AuthConstants::ORG_ID),
                 ];
-                $this->logger->info('Executing query:');
-                $this->logger->info($query);
-                $this->logger->info($queryParams);
                 $result = $this->executeQueryWithBindParameters($query, $queryParams);
                 if (1 != $result->count()) {
-                    $this->logger->error('Unexpected result from ox_widget_query insert statement. Transaction rolled back.', $result);
-                    $this->logger->error('Query and parameters are:');
-                    $this->logger->error($query);
-                    $this->logger->error($queryParams);
                     $this->rollback();
-                    return 0;
+                    throw new InsertFailedException('ox_widget_query insert failed.', 
+                        ['table' => 'ox_widget_query', 'query' => $query, 'queryParams' => $queryParams]);
+
                 }
                 $sequence++;
             }
             $this->commit();
-        } catch (ZendDbException $e) {
-            $this->logger->error('Database exception occurred.');
-            $this->logger->error($e);
-            $this->logger->error("Query and params:");
-            $this->logger->error($query);
-            $this->logger->error($queryParams);
-            try {
-                $this->rollback();
-            } catch (ZendDbException $ee) {
-                $this->logger->error('Database exception occurred when rolling back transaction.');
-                $this->logger->error($ee);
-            }
-            return 0;
         }
-
-        //Query updated version back and set it in data for returning to the client.
-        $query = 'SELECT w.version from ox_widget as w where w.uuid=:uuid';
-        $queryParams = [
-            'uuid' => $uuid,
-        ];
-        try {
-            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        } catch (Exception $e) {
+        catch (Exception $e) {
+            $this->rollback();
             throw $e;
         }
-        $data['version'] = $resultSet[0]['version'];
-        return 1; //Return a number > 0 to keep the controller happy!
+
+        return $widget->getGenerated();
     }
 
     public function deleteWidget($uuid, $version)
     {
-        if (!isset($version)) {
-            throw new Exception("Version is not specified, please specify the version");
-        }
+        $widget = new Widget($this->table);
+        $widget->loadByUuid($uuid);
+        $widget->assign([
+            'version' => $version,
+            'isdeleted' => 1
+        ]);
+        $widget->validate();
 
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        $data = array('version' => $version, 'isdeleted' => 1);
-        $form = new Widget();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate($data);
-        $count = 0;
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $widget->save2();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getWidgetByName($name)

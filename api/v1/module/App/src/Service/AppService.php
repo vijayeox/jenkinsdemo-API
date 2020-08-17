@@ -736,6 +736,8 @@ class AppService extends AbstractService
             $queryParams = ['name' => $appdata['name']];
         }
         $queryResult = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+
+        //Create the app if not found.
         if (0 == count($queryResult)) {
             //UUID is invalid. Threfore remove it.
             unset($appdata['uuid']);
@@ -743,25 +745,19 @@ class AppService extends AbstractService
             $appdata = array_merge($appdata, $generated);
             return;                
         }
-        $dbRow = $queryResult[0];
 
-        $onlyAppNameGiven = (isset($appdate['name']) && !isset($appdata['uuid']));
-        $onlyUuidGiven = (isset($appdata['uuid']) && !isset($appdata['name']));
-        $bothUuidAndAppNameGiven = (isset($appdata['uuid']) && isset($appdata['name']));
-        $appNameMatchesNameFromDb = ($appdata['name'] == $dbRow['name']);
-        if ($onlyAppNameGiven || $onlyUuidGiven || ($bothUuidAndAppNameGiven && $appNameMatchesNameFromDb)) {
+        //Update the app in all other conditions.
+        $dbRow = $queryResult[0];
+        if (isset($appdata['name']) && !isset($appdata['uuid'])) {
             $appdata['uuid'] = $dbRow['uuid'];
+        }
+        if (isset($appdata['uuid']) && !isset($appdata['name'])) {
             $appdata['name'] = $dbRow['name'];
-            $appdata['version'] = $dbRow['version'];
-            return;
         }
-        //Update the app name and continue.
-        if ($bothUuidAndAppNameGiven && !$appNameMatchesNameFromDb) {
-            $appdata['version'] = $dbRow['version'];
-            $generated = $this->updateApp($appdata['uuid'], $appdata);
-            $appdata = array_merge($appdata, $generated);
-            return;
-        }
+        $appdata['version'] = $dbRow['version'];
+        $generated = $this->updateApp($appdata['uuid'], $appdata);
+        $appdata = array_merge($appdata, $generated);
+        return;
     }
 
     public function createAppPrivileges($yamlData)
