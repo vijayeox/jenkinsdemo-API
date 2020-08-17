@@ -111,6 +111,7 @@ class Home extends React.Component {
       <div style={{ height: "inherit", overflow: "auto" }}>
         {this.state.formContent ? (
           <div className="formContent">
+            <React.Suspense fallback={<div>Loading...</div>}>
             <FormRender
               postSubmitCallback={this.postSubmitCallback}
               core={this.core}
@@ -121,6 +122,7 @@ class Home extends React.Component {
               content={this.state.formContent}
               data={this.state.cacheData}
             />
+          </React.Suspense>
           </div>
         ) : this.state.showMenuPage ? (
           <LeftMenuTemplate

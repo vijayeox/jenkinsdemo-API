@@ -80,7 +80,8 @@ class StoreQuoteDocuments extends PolicyDocument
                     ),
         'Group Professional Liability'
             => array(
-                     'cover_letter' => 'Group_Professional_liability_Cover_Letter',
+                     'template' => 'DiveCenterProposal', 
+                     'cover_letter' => 'GPL_Quote_Cover_Letter',
                      'lheader' => 'letter_header.html',
                      'lfooter' => 'letter_footer.html',
                      'psTemplate' => 'Group_Proposal_Premium_Summary',
@@ -159,6 +160,7 @@ class StoreQuoteDocuments extends PolicyDocument
         $this->diveStoreQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
         $originalData['documents']=$documents;
         $originalData['quoteDocuments'] = $documents;
+        $originalData['policyStatus'] = "Quote Approval Pending";
         return $originalData;
     }
 }

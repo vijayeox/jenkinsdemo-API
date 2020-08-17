@@ -245,6 +245,83 @@
 				"type": "columns",
 				"hideLabel": true,
 				"path": "panelColumns"
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Effective Date",
+						"displayInTimezone": "utc",
+						"allowInput": false,
+						"format": "MM-dd-yyyy",
+						"tableView": false,
+						"enableMinDateInput": false,
+						"datePicker": {
+							"disableWeekends": false,
+							"disableWeekdays": false
+						},
+						"enableMaxDateInput": false,
+						"enableTime": false,
+						"timePicker": {
+							"showMeridian": false
+						},
+						"clearOnHide": false,
+						"validate": {
+							"required": true,
+							"custom": "if (data.endoEffectiveDate){ \n  valid = ((moment(data.endoEffectiveDate).diff(moment(data['start_date'])) >=0) && (moment(data.endoEffectiveDate).diff(moment(data.end_date)) <=0)) ? true : \"Effective date should be between policy period\";\n}"
+						},
+						"key": "endoEffectiveDate",
+						"properties": {
+							"delegate": "SetupEndorsementDiveStore"
+						},
+						"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+						"type": "datetime",
+						"input": true,
+						"widget": {
+							"type": "calendar",
+							"displayInTimezone": "utc",
+							"language": "en",
+							"useLocaleSettings": false,
+							"allowInput": false,
+							"mode": "single",
+							"enableTime": false,
+							"noCalendar": false,
+							"format": "MM-dd-yyyy",
+							"hourIncrement": 1,
+							"minuteIncrement": 1,
+							"time_24hr": true,
+							"minDate": null,
+							"disableWeekends": false,
+							"disableWeekdays": false,
+							"maxDate": null
+						},
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 5
+				}, {
+					"components": [{
+						"label": "update_date",
+						"redrawOn": "endoEffectiveDate",
+						"calculateValue": "value = moment(data.endoEffectiveDate).format(\"YYYY-MM-DD\");",
+						"key": "update_date",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns43",
+				"type": "columns",
+				"input": false
 			}]
 		}, {
 			"label": "initiatedByCsr",
@@ -276,6 +353,7 @@
 			"tableView": false
 		}, {
 			"label": "entity_name",
+			"calculateValue": "if(data.product == \"Dive Store\"){\n  value = \"Dive Store\";\n}else if(data.product == 'Group Professional Liability'){\n  value = 'Group Professional Liability';\n}",
 			"key": "entity_name",
 			"type": "hidden",
 			"input": true,
@@ -2219,7 +2297,8 @@
 							"labelMargin": 3,
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"defaultValue": "propertyDeductibles1000"
 						}, {
 							"key": "dspropmechbreakdown",
 							"label": "Content",
@@ -4340,6 +4419,7 @@
 						"state": {},
 						"zip": "",
 						"businessRelation": "",
+						"effectiveDate": null,
 						"businessRelationOther": "",
 						"additionalInformation": ""
 					}],
@@ -5243,6 +5323,7 @@
 						"components": [{
 							"label": "Please enter the Location's PADI Number",
 							"tableView": false,
+							"clearOnHide": false,
 							"validate": {
 								"pattern": "[0-9\\s-]*$",
 								"step": "any"
@@ -5386,11 +5467,52 @@
 								"inDataGrid": true
 							}]
 						}, {
-							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel",
-							"input": false,
+							"label": "Do you want to apply Property Coverage?",
+							"widget": "choicesjs",
+							"tableView": true,
+							"data": {
+								"values": [{
+									"label": "Yes",
+									"value": "yes"
+								}, {
+									"label": "No",
+									"value": "no"
+								}]
+							},
+							"selectThreshold": 0.3,
+							"clearOnHide": false,
+							"validate": {
+								"required": true,
+								"customMessage": "Please select an option"
+							},
+							"errorLabel": "Property Coverage",
+							"key": "ALpropertyCoverageSelect",
+							"type": "select",
+							"indexeddb": {
+								"filter": {}
+							},
+							"input": true
+						}, {
 							"title": "Property Information",
 							"theme": "primary",
+							"breadcrumbClickable": true,
+							"buttonSettings": {
+								"previous": true,
+								"cancel": true,
+								"next": true
+							},
+							"collapsible": false,
+							"dataGridLabel": false,
 							"tableView": false,
+							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel",
+							"conditional": {
+								"show": true,
+								"when": "ALpropertyCoverageSelect",
+								"eq": "yes"
+							},
+							"type": "panel",
+							"label": "Property Information",
+							"input": false,
 							"components": [{
 								"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelPanel",
 								"input": false,
@@ -5532,7 +5654,8 @@
 										"key": "distanceFromOceanOrGulf",
 										"type": "number",
 										"input": true,
-										"hideOnChildrenHidden": false
+										"hideOnChildrenHidden": false,
+										"inputType": "number"
 									}, {
 										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsContent",
 										"label": "Content",
@@ -5710,7 +5833,8 @@
 												"lockKey": true,
 												"labelWidth": null,
 												"labelMargin": null,
-												"hideOnChildrenHidden": false
+												"hideOnChildrenHidden": false,
+												"defaultValue": 0
 											}, {
 												"label": "Business Income",
 												"prefix": "$",
@@ -5782,9 +5906,6 @@
 										"hideOnChildrenHidden": false
 									}, {
 										"label": "Columns",
-										"input": false,
-										"tableView": false,
-										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"columns": [{
 											"components": [{
 												"label": "What is the replacement value?",
@@ -5821,9 +5942,6 @@
 													"customMessage": "Please enter the area of the building in sq ft"
 												},
 												"key": "squarefootageofyourbuildingAL",
-												"conditional": {
-													"show": true
-												},
 												"type": "number",
 												"input": true,
 												"labelWidth": null,
@@ -5857,6 +5975,7 @@
 													"required": true,
 													"customMessage": "The year in which the building was built is required"
 												},
+												"errorLabel": "Year built of building",
 												"key": "built_year1",
 												"type": "select",
 												"indexeddb": {
@@ -5872,9 +5991,6 @@
 													"customMessage": "Updates on plumbing,roof,etc. is required"
 												},
 												"key": "updatesOnPlumbingElectricalRoofEtcAL",
-												"conditional": {
-													"show": true
-												},
 												"type": "textfield",
 												"input": true,
 												"lockKey": true,
@@ -5888,13 +6004,17 @@
 											"pull": 0,
 											"size": "md"
 										}],
-										"type": "columns",
 										"hideLabel": true,
+										"tableView": false,
+										"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsColumns",
 										"conditional": {
-											"show": "true",
-											"when": "additionalLocationDoYouOwntheBuilding",
+											"show": true,
+											"when": "additionalLocations.additionalLocationDoYouOwntheBuilding",
 											"eq": "yes"
-										}
+										},
+										"customConditional": "if(row['additionalLocationDoYouOwntheBuilding'] == \"yes\") {\n  show = true;\n} else {\n  show = false;\n}",
+										"type": "columns",
+										"input": false
 									}, {
 										"label": "Please explain location",
 										"tableView": true,
@@ -5918,14 +6038,8 @@
 								"type": "columns",
 								"hideLabel": true
 							}],
-							"type": "panel",
-							"conditional": {
-								"show": "true",
-								"when": "page4PanelSelect"
-							},
 							"inDataGrid": true,
-							"lockKey": true,
-							"label": "Panel"
+							"lockKey": true
 						}, {
 							"key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanel2",
 							"input": false,
@@ -7147,6 +7261,7 @@
 													"timePicker": {
 														"showMeridian": false
 													},
+													"clearOnHide": false,
 													"validate": {
 														"required": true,
 														"custom": "if(row['dsgldateoftheclaim'] && row['dsgldateoftheclaim'] != ''){\n  valid = (moment(row['dsgldateoftheclaim']) < moment()) ? true : 'Please choose the date before '+moment().format('MM-DD-YYYY');\n}"
@@ -7250,6 +7365,7 @@
 													"label": "Information on Claims",
 													"autoExpand": false,
 													"tableView": true,
+													"clearOnHide": false,
 													"key": "ALclaimsInformatio",
 													"type": "textarea",
 													"input": true,
@@ -9717,7 +9833,9 @@
 									"spellcheck": false,
 									"disabled": true,
 									"tableView": false,
+									"clearOnHide": false,
 									"customDefaultValue": "if(row.effectiveDate){\n  value =row.effectiveDate;\n}",
+									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
 									"key": "existingEffectiveDate",
 									"customConditional": "if(row.effectiveDate && row.effectiveDate != \"\"){\n  show = true;\n} else {\n  show = false;\n}",
 									"type": "textfield",
@@ -9735,6 +9853,7 @@
 									},
 									"enableMaxDateInput": false,
 									"enableTime": false,
+									"clearOnHide": false,
 									"customDefaultValue": "value = moment(data['update_date']).format(\"YYYY-MM-DD\");",
 									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
 									"allowCalculateOverride": true,
@@ -10671,6 +10790,13 @@
 					"path": "page7Panel"
 				}]
 			}, {
+				"label": "Excluded Operation",
+				"autoExpand": false,
+				"tableView": true,
+				"key": "groupExcludedOperation",
+				"type": "textarea",
+				"input": true
+			}, {
 				"label": "Table",
 				"cellAlignment": "left",
 				"tableView": false,
@@ -10772,7 +10898,6 @@
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"validate": {
@@ -10809,7 +10934,7 @@
 								"actions": [{
 									"name": "Disable Manual Over ride",
 									"type": "mergeComponentSchema",
-									"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true}"
+									"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true,redraw:\"data\"}"
 								}]
 							}],
 							"type": "number",
@@ -11872,14 +11997,17 @@
 				"type": "hidden",
 				"lockKey": true
 			}, {
+				"label": "stateTaxData",
+				"persistent": false,
+				"protected": true,
+				"key": "stateTaxData",
+				"properties": {
+					"data_type": "list"
+				},
+				"type": "hidden",
 				"input": true,
 				"tableView": true,
-				"key": "stateTaxData",
-				"label": "stateTaxData",
-				"type": "hidden",
-				"lockKey": true,
-				"protected": true,
-				"persistent": false
+				"lockKey": true
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -14611,10 +14739,10 @@
 		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"settings": {},
-	"name": "endorsementDiveStoreConsolidation",
+	"name": "diveStoreEndorsement3",
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-06T07:19:32.593Z",
+	"modified": "2020-08-13T10:18:27.831Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }

@@ -154,10 +154,11 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
             $previous_data = array();
             $length = 0;
         }
-        $this->diveStoreEndorsement($data,$temp);
+        $this->diveStoreEndorsement($data,$temp,$persistenceService);
         $this->diveStoreEnorsementQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
         $originalData['documents']=$documents;
         $originalData['quoteDocuments'] = $documents;
+        $originalData['policyStatus'] = "Quote Approval Pending";
         return $originalData;
     }
 }

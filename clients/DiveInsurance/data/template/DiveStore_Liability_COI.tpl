@@ -109,10 +109,10 @@
 										{else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
 												<td>$1,000,000</td>
 										{else}
-												<td>Not Included</td>
+												<td>Excluded</td>
 										{/if}
 										{else}
-												<td>Not Included</td>
+												<td>Excluded</td>
 												{/if}
 					</p>
 					<p class = "sec_title2">
@@ -126,7 +126,7 @@
 						{if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
 								<td>$1,000,000</td>
 						{else}
-								<td>Not Included</td>
+								<td>Excluded</td>
 						{/if}
 					</p>
 				</div></b>
@@ -142,7 +142,7 @@
 		{/if}
 
 		<hr class="addIn"></hr>
-		<b><center><p class="addIn">{if !empty($additionalInsured)}
+		<b><center><p class="addIn">{if $additional_insured_select == "addAdditionalInsureds"}
 			Certificate has Additional Insureds (See Attached)
 			{else}
 			Certificate Does Not Have Additional Insured.

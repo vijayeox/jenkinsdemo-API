@@ -897,12 +897,25 @@
    pageName: Property
    cell: J40
    type: DataGrid
+   returnValue:
+      frame : ISO 1 = Frame
+      joistedMasonry : ISO 2 = Masonry / Joisted Masonry
+      nonCombustible : ISO 3 = Pre-Engineered Metal / Non Combustible
+      masonryNonCombustible : ISO 4 = Steel Frame / Masonry Non-Combustible
+      modifiedFireResistive : ISO 5 = Protected Steel Frame / Modified Fire Resistive
+      fireResistive : ISO 6 = Reinforced Concrete Frame / Fire Resistive
+      heavyTimberJoistedMasonry : ""
+      superiorNonCombustible : ""
+      superiorMasonryNonCombustible : ""
 -
    key: genericData*locationScheduleGridData_buildinginterest
    method: simpleDatagrid
    pageName: Property
    cell: L40
    type: DataGrid
+   returnValue:
+      buildinginterestowned: Owner
+      buildinginterestleased: Tenant
 -
    key: genericData*locationScheduleGridData_yearBuilt
    method: simpleDatagrid
@@ -1011,6 +1024,10 @@
    pageName: Property
    cell: AJ40
    type: DataGrid
+   returnValue:
+      replacementCost: Replacement Cost
+      actualCashValue: Actual Cash Value
+      reconstructionCost: ""
 -
    key: genericData*locationScheduleGridData_coinsuranceamount
    method: simpleDatagrid

@@ -117,7 +117,7 @@ class StorePreviewDocument extends PolicyDocument
         if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
             $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
         }
-
+        
         if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
             $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
         }
@@ -172,6 +172,7 @@ class StorePreviewDocument extends PolicyDocument
               array_push($documents['endorsement_coi_document'], $endorsementDoc);
         }
         $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
+        $this->additionalDocumentsDS($temp,$documents,$dest);
         $originalData['finalDocuments'] = $documents;
         return $originalData;
     }

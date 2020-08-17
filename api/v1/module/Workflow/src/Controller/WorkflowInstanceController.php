@@ -45,7 +45,7 @@ class WorkflowInstanceController extends AbstractApiController
             $count = $this->workflowInstanceService->startWorkflow($params);
             $this->log->info(WorkflowInstanceController::class . "ExecuteWorkflow Response  - " . print_r($count, true));
         } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         } catch (EntityNotFoundException $e) {
             $response = ['data' => $params, 'errors' => $e->getMessage()];
@@ -56,7 +56,7 @@ class WorkflowInstanceController extends AbstractApiController
             return $this->getErrorResponse("Errors", 412, $response);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            $response = ['data' => $params, 'errors' => "Unexpected error occurred, please contact support"];
             return $this->getErrorResponse("Errors", 500, $response);
         }
         return $this->getSuccessResponseWithData($params, 200);
@@ -79,9 +79,13 @@ class WorkflowInstanceController extends AbstractApiController
         } catch (EntityNotFoundException $e) {
             $response = ['data' => $params, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Entity Not Found", 404, $response);
-        } catch (Exception $e) {
+        }catch (ServiceException $e) {
             $this->log->error($e->getMessage(), $e);
             $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 412, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => "Unexpected error occurred, please contact support"];
             return $this->getErrorResponse("Errors", 500, $response);
         }
         return $this->getSuccessResponseWithData($params, 200);

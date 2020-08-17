@@ -20,7 +20,8 @@
    pageName: Insured Information
    cell: 'E18:Q18'
 -
-   key: state
+   key: state_abbreviation
+   method: pulloutChild
    Source Worksheet: State
    pageName: Insured Information
    cell: E20
@@ -122,7 +123,7 @@
    cell: E69
    type: DataGrid
 -
-   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_county1
+   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_county
    method: simpleDatagrid
    Source Worksheet: Location Details
    pageName: Locations
