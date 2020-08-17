@@ -1624,7 +1624,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          }
 
          protected function documentsLocation($endorsementOptions,&$data,$orgUuid){
-            print_r($this->destination);exit;
             $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
             if(!is_null($endorsementOptions)){
                 $dest = $this->endorsedDocumentsLoc($data,$dest);
