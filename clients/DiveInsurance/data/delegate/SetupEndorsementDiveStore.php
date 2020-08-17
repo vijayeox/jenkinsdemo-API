@@ -220,6 +220,9 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
                 $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
+                if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                    $policy['previous_additionalInsured'] = $data['additionalInsured'];
+                }
                 if(isset($data['PAORFee'])){
                     $policy['previous_PAORFee'] = $data['PAORFee'];
                 }

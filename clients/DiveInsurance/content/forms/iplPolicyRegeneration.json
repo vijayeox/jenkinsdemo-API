@@ -1109,9 +1109,7 @@
 								"label": "Home or Work Phone",
 								"tableView": false,
 								"validate": {
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Phone Number",
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"custom": "if(data['home_phone_number'] && data['home_phone_number'] != ''){\n  if(data['home_phone_number'].length <= 15){\n      valid = (data['home_phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Home or Work Phone number';\n  }else{\n    valid = (data['home_phone_number'].length > 15) ? 'Please enter a valid Home or Work Phone number' : true;\n  }\n}",
 									"step": "any"
 								},
 								"key": "home_phone_number",
@@ -1180,9 +1178,7 @@
 								"tableView": false,
 								"validate": {
 									"required": true,
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"custom": "if(data['phone_number'] && data['phone_number'] != ''){\n  if(data['phone_number'].length <= 15){\n      valid = (data['phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Mobile Phone number';\n  }else{\n    valid = (data['phone_number'].length > 15) ? 'Please enter a valid Mobile Phone number' : true;\n  }\n}",
 									"step": "any"
 								},
 								"key": "phone_number",
@@ -1225,10 +1221,8 @@
 						"placeholder": " ",
 						"tableView": true,
 						"validate": {
-							"pattern": "^\\d+$",
-							"customMessage": "Please enter a valid Fax number"
+							"custom": "if(data['fax'] && data['fax'] != ''){\n  if(data['fax'].length <= 15){\n      valid = (data['fax'].match(/^\\d+$/)) ?  true : 'Please enter a valid Fax number';\n  }else{\n    valid = (data['fax'].length > 15) ? 'Please enter a valid Fax number' : true;\n  }\n}"
 						},
-						"errorLabel": "Fax",
 						"key": "fax",
 						"type": "textfield",
 						"input": true,
@@ -3171,13 +3165,13 @@
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
-		"submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"RegenerationDelegate\"},{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"DispatchNewPolicy\"}]"
+		"submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"PolicyDocument\"},{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"DispatchNewPolicy\"}]"
 	},
 	"settings": {},
 	"name": "iplPolicyRegeneration",
 	"path": "iplpolicyregeneration",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-22T07:22:25.090Z",
-	"modified": "2020-07-29T08:03:31.222Z",
+	"modified": "2020-08-16T05:46:45.829Z",
 	"machineName": "testdivehub:iplPolicyRegeneration"
 }

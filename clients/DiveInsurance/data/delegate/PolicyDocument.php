@@ -772,7 +772,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                 }
-                
+                $fileUuid = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
+                $this->saveFile($data,$fileUuid);
                 $orgUuid = $this->processDate($data);
                 if($this->type != "lapse"){
                     $license_number = $this->getLicenseNumber($data,$persistenceService);
@@ -825,9 +826,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
 
-
                 $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
-
                 if(!is_null($endorsementOptions)){
                     $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
                     if( count($workflowInstUuid) > 0 && (isset($workflowInstUuid[0]['process_instance_id']))){
@@ -959,6 +958,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $docDest = $dest['absolutePath'].$template.$indexKey.'.pdf';
             } else {
                 $docDest = $dest['absolutePath'].$template.'.pdf';
+                if($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement"){
+                        $updateDate = date_format(date_create($data['update_date']),'Md');
+                        $docDest = $dest['absolutePath'].$template.'_'.$updateDate.'.pdf';
+                    } 
             }
             if($template == 'Group_PL_COI' || $template == 'Group_PL_COI_DS' || $template == 'Group_PL_COI_DS_Endorsement'){
                 $options['generateOptions'] = array('disable_smart_shrinking' => 1);
@@ -1001,7 +1004,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($multiple){
                     return $dest['relativePath'].$template.$indexKey.'.pdf';
                 }
-                return $dest['relativePath'].$template.'.pdf';
+                if($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement"){
+                        $updateDate = date_format(date_create($data['update_date']),'Md');
+                        return $dest['relativePath'].$template.'_'.$updateDate.'.pdf';
+                    } else{
+                        return $dest['relativePath'].$template.'.pdf';
+                    }
             }
         }
         protected function copyDocuments(&$data,$dest,$fileKey,$indexKey =null){
@@ -1359,7 +1367,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
 
                 if(isset($data['medicalPayment']) && isset($policy['previous_medicalPayment'])){
-                    if($policy['previous_medicalPayment'] == $data['medicalPayment']){
+                    if($policy['previous_medicalPayment'] != $data['medicalPayment']){
                         $data['increased_medicalPayment_limit'] = false;
                     } else {
                         $temp['liabilityChanges'] = true;
@@ -1445,17 +1453,16 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 //Please do not remove
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
                     if(isset($policy['previous_additionalInsured'])){
-                        // foreach($data['previous'])
                         $temp['newAddInsured'] = "";
                         $temp['removedAddInsured'] = "";
-                        $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $data['previous_additionalInsured']));
+                        $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $policy['previous_additionalInsured']));
                         $newAddInsured = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
                         if(sizeof($newAddInsured) > 0){
                             $temp['newAddInsured'] = json_encode($newAddInsured);
                         }
                         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($temp['newAddInsured'],true));
-                        $diff = array_diff(array_map('serialize',$data['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
+                        $diff = array_diff(array_map('serialize',$policy['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
                         $removedAddInsured = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :".print_r($removedAddInsured,true));
                         if(sizeof($removedAddInsured) > 0){
@@ -1465,7 +1472,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 if($data['lossPayeesSelect'] == "yes"){
                     if(isset($policy['previous_lossPayees'])){
-                        // foreach($data['previous_lossPayees'])
                         $temp['newlossPayees'] = "";
                         $temp['removedlossPayees'] = "";
                         $diff = array_diff(array_map('serialize', $data['lossPayees']), array_map('serialize', $policy['previous_lossPayees']));
@@ -1485,7 +1491,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 if($data['additionalLocationsSelect'] == "yes"){
                     if(isset($policy['previous_additionalLocations'])){
-                        // foreach($data['previous_additionalLocations'])
                         $temp['newAdditionalLocations'] = "";
                         $temp['removedadditionalLocations'] = "";
                         $diff = array_diff(array_map('serialize', $data['additionalLocations']), array_map('serialize', $policy['previous_additionalLocations']));
@@ -1555,7 +1560,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->logger->info("destinationForCOIRegeneration----".print_r($destinationForCOIRegeneration,true));  
                 if (file_exists($destinationForCOIRegeneration)) {  
                     unlink($destinationForCOIRegeneration); 
-                            // FileUtils::deleteFile($fileName,$dest);  
                 }   
                 unset($data['dest']); 
                 $temp = $data;
@@ -1567,24 +1571,21 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $fileName = substr($docs['PocketCard'], strrpos($docs['PocketCard'], '/') + 1); 
                 $destinationForPCRegeneration = $dest.$docs['PocketCard'];  
                 if (file_exists($destinationForPCRegeneration)) {   
-                    FileUtils::deleteFile($fileName,$dest.dirname($docs['PocketCard']).'/');    
-                            // unlink($destinationForPCRegeneration);   
+                    FileUtils::deleteFile($fileName,$dest.dirname($docs['PocketCard']).'/');   
                 }   
             }   
             if (isset($docs['blanket_document'])) { 
                 $fileName = substr($docs['blanket_document'], strrpos($docs['blanket_document'], '/') + 1); 
                 $destinationForBlanketRegeneration = $dest.$docs['blanket_document'];   
                 if (file_exists($destinationForBlanketRegeneration)) {  
-                    FileUtils::deleteFile($fileName,$dest.dirname($docs['blanket_document']).'/');  
-                            // unlink($destinationForBlanketRegeneration);      
+                    FileUtils::deleteFile($fileName,$dest.dirname($docs['blanket_document']).'/');    
                 }   
             }   
             if (isset($data['AdditionalInsuredOption']) && ($data['AdditionalInsuredOption'] == 'addAdditionalInsureds')) { 
                 if (isset($docs['additionalInsured_document']) && isset($docs['additionalInsured_document'][0])) {  
                     $fileName = substr($docs['additionalInsured_document'][0], strrpos($docs['additionalInsured_document'][0], '/') + 1);   
                     $destinationForAIRegeneration = $dest.$docs['additionalInsured_document'][0];   
-                    if (file_exists($destinationForAIRegeneration)) {   
-                                // FileUtils::deleteFile($fileName,$dest);  
+                    if (file_exists($destinationForAIRegeneration)) {    
                         unlink($destinationForAIRegeneration);      
                     }   
                 }   
@@ -1686,7 +1687,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         }
         protected function policyCOI($policyDocuments,$temp,&$documents){ 
-            print_r($policyDocuments);exit;
            if(is_array($policyDocuments)){  
                 foreach ($policyDocuments as $key => $value) {  
                     $documents[$key] = $value;  
@@ -1694,7 +1694,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else if($temp['product'] == 'Individual Professional Liability' || $temp['product'] == 'Emergency First Response'){    
                 $documents['coi_document']  = array($policyDocuments);  
             }else if($temp['product'] == 'Dive Store'){ 
-                print("NEHA3");
                 $documents['liability_coi_document']  = $policyDocuments;   
             }else{  
                 $documents['coi_document']  = $policyDocuments; 

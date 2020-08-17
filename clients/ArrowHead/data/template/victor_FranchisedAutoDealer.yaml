@@ -829,20 +829,26 @@
    cell: Check Box 8
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditreportissenttoowners
+   key: auditreportissentto_owners
    pageName: Crime (printable)
    cell: Check Box 5
    type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
 -
-   key: franchisedAutoDealer*checkauditreportissenttopartners
+   key: auditreportissentto_partners
    pageName: Crime (printable)
    cell: Check Box 7
    type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
 -
-   key: franchisedAutoDealer*checkauditreportissenttoboardOfDirectors
+   key: auditreportissentto_boardOfDirectors
    pageName: Crime (printable)
    cell: Check Box 9
    type: Checkbox
+   method: checkInArray
+   returnBoolean: 'Yes|No'
 -
    key: genericData*locationScheduleGridData_locationNum
    method: simpleDatagrid
@@ -865,13 +871,13 @@
    key: genericData*locationScheduleGridData_state
    method: simpleDatagrid
    pageName: Property
-   cell: D40
+   cell: E40
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_city
    method: simpleDatagrid
    pageName: Property
-   cell: E40
+   cell: D40
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_zip
@@ -885,6 +891,22 @@
    pageName: Property
    cell: G40
    type: DataGrid
+   returnValue:
+      autoSalesAndService: Auto Parts & Supplies
+      autoStorageLot: Storage Lot - Auto/Truck
+      bldgLeasedToOthers: Leased to Othrs
+      bodyShop: Body Shop
+      carWash: Car Wash
+      detailShop: Detail
+      newCarShowroomAndSales: New Sales
+      office: Office
+      serviceRepair: Repair
+      usedCarSales: Used Sales
+      vacantLand: Vacant Land
+      vehicleStorageParkingGarage: Parking Lot - No Structure
+      partsWarehouseStorage: Warehouse
+      vacantBuilding: Lease & Rental
+      deliveryPrep: Sales & Service
 -
    key: genericData*locationScheduleGridData_
    method: simpleDatagrid

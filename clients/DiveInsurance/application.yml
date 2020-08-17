@@ -97,6 +97,10 @@ entity:
                 text: 'Certificate Number'
                 data_type: text
                 index: true
+            -
+                name: name
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
         identifiers:
@@ -145,6 +149,10 @@ entity:
                 text: 'Certificate Number'
                 data_type: text
                 index: true
+            -
+                name: name
+                data_type: text
+                index: true
     -
         name: 'Dive Boat'
         field:
@@ -190,6 +198,10 @@ entity:
                 text: 'Certificate Number'
                 data_type: text
                 index: true
+            -
+                name: name
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
         identifiers:
@@ -232,6 +244,10 @@ entity:
             -
                 name: certificate_no
                 text: 'Certificate Number'
+                data_type: text
+                index: true
+            -
+                name: name
                 data_type: text
                 index: true
     -

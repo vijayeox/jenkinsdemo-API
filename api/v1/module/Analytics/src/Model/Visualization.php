@@ -33,11 +33,11 @@ class Visualization extends Entity
 
     public function validateType($type)
     {
-        if($type == 'Aggregate' || $type == 'Bar' || $type == 'Line' || $type == 'Pie')
+        if($type == 'chart' || $type == 'inline' || $type == 'table' || $type == 'html')
             return;
         else
         {
-            $errors = array('data' => 'Type must be Aggregate, Bar, Line or Pie');
+            $errors = array('data' => 'Type must be chart, inline, table or html');
             $validationException = new ValidationException();
             $validationException->setErrors($errors);
             throw $validationException;
