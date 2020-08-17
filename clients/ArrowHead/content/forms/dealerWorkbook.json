@@ -16824,8 +16824,28 @@
                   "delimiter": false,
                   "requireDecimal": false,
                   "inputFormat": "plain",
-                  "validate": { "required": true },
                   "key": "epaNumber",
+                  "logic": [
+                    {
+                      "name": "Check Name",
+                      "trigger": {
+                        "type": "javascript",
+                        "javascript": "result = row.pollutionname.length > 0;"
+                      },
+                      "actions": [
+                        {
+                          "name": "Set Required",
+                          "type": "property",
+                          "property": {
+                            "label": "Required",
+                            "value": "validate.required",
+                            "type": "boolean"
+                          },
+                          "state": true
+                        }
+                      ]
+                    }
+                  ],
                   "type": "number",
                   "input": true
                 }
@@ -20262,7 +20282,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\r\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\r\n}\r\n\r\nvar s = document.createElement(\"script\");\r\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\r\ns.onload = function (e) {\r\n  var appendCustomButtonTimer = setInterval(() => {\r\n    if (\r\n      document.getElementById(\r\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n      )\r\n    ) {\r\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\r\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\r\n        clone.children[0].textContent = \"Save Draft\";\r\n        clone.children[0].id = \"saveDraftCustomButton\";\r\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\r\n        saveDraftCustomButton.onclick = function () {\r\n          var closeForm = confirm(\r\n            \"Do you want to close the form after saving the data?\"\r\n          );\r\n          let ev = new CustomEvent(\"customButtonAction\", {\r\n            detail: {\r\n              timerVariable: appendCustomButtonTimer,\r\n              formData: data,\r\n              commands:\r\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\r\n              exit: closeForm,\r\n              notification: \"Form saved successfully\",\r\n            },\r\n            bubbles: false,\r\n          });\r\n          document\r\n            .getElementById(\r\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n            )\r\n            .dispatchEvent(ev);\r\n        };\r\n      }\r\n      var dataGridDeleteIcons = document.getElementsByClassName(\r\n        \"fa-times-circle-o\"\r\n      );\r\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\r\n      if (dataGridDeleteIcons.length > 0) {\r\n        dataGridDeleteIcons.map((item) => {\r\n          item.classList.add(\"fa-times-circle\");\r\n          item.classList.remove(\"fa-times-circle-o\");\r\n        });\r\n      }\r\n    } else {\r\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\r\n    }\r\n  }, 1000);\r\n\r\n//   var appendCustomAutoSave = setInterval(() => {\r\n//     console.log(\"autosave start\");\r\n//     if (\r\n//       document.getElementById(\r\n//         \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n//       )\r\n//     ) {\r\n//       let ev2 = new CustomEvent(\"customButtonAction\", {\r\n//         detail: {\r\n//           timerVariable: appendCustomAutoSave,\r\n//           formData: data,\r\n//           commands:\r\n//             '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\r\n//           exit: false,\r\n//           notification: \"Form Saved\",\r\n//         },\r\n//         bubbles: false,\r\n//       });\r\n//       document\r\n//         .getElementById(\"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\")\r\n//         .dispatchEvent(ev2);\r\n//     } else {\r\n//       appendCustomAutoSave ? clearInterval(appendCustomAutoSave) : null;\r\n//     }\r\n//   }, 15000);\r\n};\r\ndocument.head.appendChild(s);",
   "revisions": "original",
-  "_vid": 825,
+  "_vid": 826,
   "title": "Dealer Workbook",
   "display": "wizard",
   "access": [
@@ -20310,6 +20330,6 @@
   "path": "dealerworkbook",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-06-25T07:04:35.147Z",
-  "modified": "2020-08-17T22:54:09.125Z",
+  "modified": "2020-08-17T23:08:16.582Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
