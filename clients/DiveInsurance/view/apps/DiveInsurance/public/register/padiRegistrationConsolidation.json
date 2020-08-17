@@ -1354,9 +1354,7 @@
 							"label": "Home or Work Phone",
 							"tableView": false,
 							"validate": {
-								"pattern": "^\\d+$",
-								"customMessage": "Please enter valid phone number",
-								"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+								"custom": "if(data['home_phone_number'] && data['home_phone_number'] != ''){\n  if(data['home_phone_number'].length <= 15){\n      valid = (data['home_phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Home or Work Phone number';\n  }else{\n    valid = (data['home_phone_number'].length > 15) ? 'Please enter a valid Home or Work Phone number' : true;\n  }\n}",
 								"step": "any"
 							},
 							"key": "home_phone_number",
@@ -1404,6 +1402,15 @@
 										"type": "string"
 									},
 									"text": "Home or Work Phone"
+								}, {
+									"name": "Unset Required",
+									"type": "property",
+									"property": {
+										"label": "Required",
+										"value": "validate.required",
+										"type": "boolean"
+									},
+									"state": false
 								}]
 							}],
 							"type": "textfield",
@@ -1471,9 +1478,7 @@
 							"tableView": false,
 							"validate": {
 								"required": true,
-								"pattern": "^\\d+$",
-								"customMessage": "Please enter a valid Mobile Phone number",
-								"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+								"custom": "if(data['phone_number'] && data['phone_number'] != ''){\n  if(data['phone_number'].length <= 15){\n      valid = (data['phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Mobile Phone number';\n  }else{\n    valid = (data['phone_number'].length > 15) ? 'Please enter a valid Mobile Phone number' : true;\n  }\n}",
 								"step": "any"
 							},
 							"key": "phone_number",
@@ -1515,10 +1520,8 @@
 					"placeholder": " ",
 					"tableView": true,
 					"validate": {
-						"pattern": "^\\d+$",
-						"customMessage": "Please enter a valid Fax number"
+						"custom": "if(data['fax'] && data['fax'] != ''){\n  if(data['fax'].length <= 15){\n      valid = (data['fax'].match(/^\\d+$/)) ?  true : 'Please enter a valid Fax number';\n  }else{\n    valid = (data['fax'].length > 15) ? 'Please enter a valid Fax number' : true;\n  }\n}"
 					},
-					"errorLabel": "Fax",
 					"key": "fax",
 					"type": "textfield",
 					"input": true,
@@ -1573,7 +1576,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 190,
+	"_vid": 196,
 	"title": "PADI Registration Consolidation",
 	"display": "form",
 	"access": [{
@@ -1587,6 +1590,6 @@
 	"path": "padiregistrationconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-21T08:06:55.909Z",
-	"modified": "2020-08-03T12:52:38.826Z",
+	"modified": "2020-08-16T05:01:14.261Z",
 	"machineName": "testdivehub:padiRegistrationConsolidation"
 }

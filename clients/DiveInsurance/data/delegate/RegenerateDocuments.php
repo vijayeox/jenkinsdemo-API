@@ -3,6 +3,7 @@
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\FileTrait;
 use Oxzion\AppDelegate\AppDelegateTrait;
+use Oxzion\AppDelegate\WorkflowTrait;
 
 require_once __DIR__."/PolicyDocument.php"; 
 
@@ -10,6 +11,7 @@ class RegenerateDocuments extends PolicyDocument
 {
     use FileTrait;
     use AppDelegateTrait;
+    use WorkflowTrait;
     public function __construct(){
         parent::__construct();
     }
@@ -25,8 +27,8 @@ class RegenerateDocuments extends PolicyDocument
         if(isset($fileData['endorsement_options'])){
             if ($fileData['product'] == 'Individual Professional Liability') {
                 $this->logger->info("PADI NUMBER -----".print_r($fileData['padi'],true));
+                continue;
             }
-            continue;
         }        
         $fileData['fileId'] = $files[$i];
         $fileData['orgId'] = $data['orgId'];
@@ -100,22 +102,32 @@ class RegenerateDocuments extends PolicyDocument
                     $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
                     $this->generateDiveStoreLiabilityDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
                 }
-            }
-            else 
-                if($fileData[$param] == 0){
-                    $this->logger->info("FALSE MedicalPayment PADI NO :".print_r($fileData['business_padi'],true)." File ID : ".print_r($files[$i],true));
-                    $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
-                    $this->generateDiveStoreLiabilityDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
-                }
-
-            }
-            if($param == 'propertyDS'){
-                $this->processFileData($fileData,$documents);
+            }else if($fileData[$param] == 0){
+                $this->logger->info("FALSE MedicalPayment PADI NO :".print_r($fileData['business_padi'],true)." File ID : ".print_r($files[$i],true));
                 $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
-                $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-                $this->generateDiveStorePropertyDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
+                $this->generateDiveStoreLiabilityDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
             }
         }
+        if($param == 'propertyDS'){
+            $this->processFileData($fileData,$documents);
+            $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
+            $this->generateDiveStorePropertyDocument($fileData,$documents,$temp,$dest,$options,$persistenceService);
+        }
+        if($param == 'propertyDSEndo'){
+            $resultData = $this->getWorkflowInstanceDataFromFileId($fileData['fileId']);
+            foreach($resultData as $file){
+                if(!isset($file['parent_workflow_instance_id'])){
+                    $newFileData = $file['completion_data'];
+                    $newFileData =  json_decode($newFileData,true);
+                    $newFileData['fileId'] = $files[0];
+                    $newFileData['orgId'] = $data['orgId'];
+                    $this->processFileData($newFileData,$documents);
+                    $this->addAdditionalData($newFileData,$dest,$temp,$persistenceService);
+                    $this->generateDiveStorePropertyDocument($newFileData,$documents,$temp,$dest,$options,$persistenceService);        
+                }
+            }
+        }
+      }
     }
 
     private function addAdditionalData(&$fileData,&$dest,&$temp,$persistenceService){

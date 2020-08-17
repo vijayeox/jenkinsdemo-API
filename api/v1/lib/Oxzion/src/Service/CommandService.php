@@ -504,7 +504,7 @@ class CommandService extends AbstractService
         if ($result == 0) {
             throw new EntityNotFoundException("File " . $fileId . " not found");
         }
-        $data['data'] = $result['data'];
+        $data = array_merge($data,$result['data']);
         return $data;
     }
 

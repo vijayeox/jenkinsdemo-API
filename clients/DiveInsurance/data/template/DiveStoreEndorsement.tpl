@@ -130,6 +130,8 @@
         <center><b>Additional Insured coverage applies only with respect to liability arising out of the operations of the named insureds</b></center>
       </div>
       {/if} -->
+
+    {if $additional_insured_select == "addAdditionalInsureds"}
      {if $newAddInsured != "" || $removedAddInsured != ""}
       <div class = "box">
         <center><b><u>***Additional Insured Schedule***</u></b></center>
@@ -205,6 +207,7 @@
         {/if}
       </div>
       {/if}
+    {/if}
 
 
      {if $lossPayeesSelect=='yes' && ($newlossPayees != "" || $removedlossPayees != "")}
