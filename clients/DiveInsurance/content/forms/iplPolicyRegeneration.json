@@ -3165,13 +3165,13 @@
 		"showNext": "true",
 		"showPrevious": "false",
 		"clickable": "false",
-		"submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"PolicyDocument\"},{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"DispatchNewPolicy\"}]"
+		"submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"RegenerationDelegate\"},{\"command\" : \"fileSave\", \"entity_name\" : \"Individual Professional Liability\"},{\"command\" : \"delegate\", \"delegate\" : \"DispatchNewPolicy\"}]"
 	},
 	"settings": {},
 	"name": "iplPolicyRegeneration",
 	"path": "iplpolicyregeneration",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-22T07:22:25.090Z",
-	"modified": "2020-08-16T05:46:45.829Z",
+	"modified": "2020-08-18T08:37:45.671Z",
 	"machineName": "testdivehub:iplPolicyRegeneration"
 }
