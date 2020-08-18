@@ -43,7 +43,8 @@ final class Version20200618044453 extends AbstractMigration
             `org_profile_id` int(11),
             PRIMARY KEY(id),FOREIGN KEY (`user_profile_id`) REFERENCES ox_user_profile(`id`),
             FOREIGN KEY (`org_id`) REFERENCES ox_organization(`id`),
-            FOREIGN KEY (`org_profile_id`) REFERENCES ox_organization_profile(`id`));");
+            FOREIGN KEY (`org_profile_id`) REFERENCES ox_organization_profile(`id`))
+            ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
         $this->addSql("ALTER TABLE `ox_employee` ADD UNIQUE INDEX `employeeUuidIndex` (`uuid`)");
 
         //before_insert_ox_user - usr_profile new.userprofile id
