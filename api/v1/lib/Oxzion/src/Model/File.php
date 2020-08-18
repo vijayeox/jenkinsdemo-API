@@ -7,8 +7,8 @@ use Oxzion\ValidationException;
 class File extends Entity
 {
     protected $data = array(
-        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'org_id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => FALSE, 'required' => TRUE),
+        'id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE , 'required' => FALSE),
+        'org_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
         'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
         'data' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
         'form_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
@@ -27,7 +27,7 @@ class File extends Entity
     );
 
 
-        public function validate()
+    public function validate()
     {
         $this->completeValidation();
     }
