@@ -767,7 +767,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }
                          }
                          if($groupVal == true){
-                            $data['group_certificate_no'] = 'S'.$coi_number;
+                            $data['group_certificate_no'] = 'S'.$this->generateCOINumber($data,$persistenceService);
                          }
                         }
                     }
