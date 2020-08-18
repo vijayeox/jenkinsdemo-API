@@ -352,14 +352,19 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'f77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'role' => array(array('name' => 'Policy Holder', 'default' => '1', 'privileges' => array(array('privilege_name' => 'MANAGE_MY_POLICY', 'permission' => '3')),'uuid' => '703d3a09-b7f3-49e9-9c79-74d5cae7f6e7')));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
-        $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and org_id = 300";
-        $adapter = $this->getDbAdapter();
-        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
-        $statement = $adapter->query($sqlQuery);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $result = $resultSet->initialize($result)->toArray();
-        $this->assertEquals($result[0]['count'], 1);
+        $sqlQuery = "SELECT * FROM ox_role WHERE uuid = '".$data['role'][0]['uuid']."'";
+        $result = $this->executeQueryTest($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $result = $result[0];
+        $this->assertEquals($data['role'][0]['name'], $result['name']);
+        $this->assertEquals($data['role'][0]['default'], $result['default_role']);
+        $sqlQuery = "SELECT rp.* FROM ox_role_privilege rp WHERE rp.role_id = ".$result['id'];
+        $result = $this->executeQueryTest($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $result = $result[0];
+        $privilege = $data['role'][0]['privileges'][0];
+        $this->assertEquals($privilege['privilege_name'], $result['privilege_name']);
+        $this->assertEquals($privilege['permission'], $result['permission']);
     }
 
     public function testCreateRoleWithNoRoleInData()

@@ -18,12 +18,13 @@ class RoleService extends AbstractService
 {
     protected $table;
     protected $modelClass;
-
-    public function __construct($config, $dbAdapter, RoleTable $table, PrivilegeTable $privilegeTable)
+    protected $businessRoleService;
+    public function __construct($config, $dbAdapter, RoleTable $table, PrivilegeTable $privilegeTable, $businessRoleService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->modelClass = new Role();
+        $this->businessRoleService = $businessRoleService;
     }
 
     public function saveRole($params, &$data, $roleId = null)
@@ -62,9 +63,9 @@ class RoleService extends AbstractService
         $data['default'] = isset($data['default']) ? $data['default'] : (isset($data['default_role']) ? $data['default_role'] : 0);
         $this->logger->info("\n Data modified before the transaction - " . print_r($data, true));
         $count = 0;
-        $this->beginTransaction();
         try {
             //First, all the other roles are changed to default role 0, and the new record added will be default role 1
+            $this->beginTransaction();
             $clause = "";
             if($orgId){
                 $clause .= " AND org_id =" . $orgId;
@@ -81,6 +82,12 @@ class RoleService extends AbstractService
                 $result = $this->executeQuerywithParams($select)->toArray();
                 if (count($result) > 0) {
                     $roleId = $result[0]['id'];
+                }
+            }
+            if(isset($data['businessRole'])){
+                $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']);
+                if(count($temp) > 0){
+                    $data['business_role_id'] = $temp[0]['id'];
                 }
             }
             $businessRoleId = isset($data['business_role_id'])? $data['business_role_id']: 'NULL';
@@ -104,17 +111,13 @@ class RoleService extends AbstractService
                     $data['id'] = $roleId;
                 }
             }
-            if ($count > 0) {
-                if (isset($data['privileges'])) {
-                    $this->updateRolePrivileges($roleId, $data['privileges'], $orgId);
-                    $query = "select * from ox_role_privilege where role_id = :roleid";
-                    $params = array("roleid" => $roleId);
-                    $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-                }
-                $this->commit();
-            } else {
-                $this->rollback();
+            if (isset($data['privileges'])) {
+                $this->updateRolePrivileges($roleId, $data['privileges'], $orgId);
+                $query = "select * from ox_role_privilege where role_id = :roleid";
+                $params = array("roleid" => $roleId);
+                $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
             }
+            $this->commit(); 
         } catch (Exception $e) {
             $this->rollback();
             throw $e;

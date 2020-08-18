@@ -92,7 +92,8 @@ class Module
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Model\RoleTable::class),
-                        $container->get(Model\PrivilegeTable::class)
+                        $container->get(Model\PrivilegeTable::class),
+                        $container->get(Service\BusinessRoleService::class)
                     );
                 },
                 Model\RoleTable::class => function ($container) {

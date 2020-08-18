@@ -15,6 +15,7 @@ use Oxzion\Service\JobService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
+use Oxzion\Service\BusinessRoleService;
 use Oxzion\Utils\ExecUtils;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
@@ -44,11 +45,13 @@ class AppService extends AbstractService
     private $pageService;
     private $jobService;
     private $appDeployOptions;
+    private $roleService;
+    private $businessRoleService;
 
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, BusinessRoleService $businessRoleService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -62,6 +65,7 @@ class AppService extends AbstractService
         $this->menuItemService = $menuItemService;
         $this->pageService = $pageService;
         $this->jobService = $jobService;
+        $this->businessRoleService = $businessRoleService;
         $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job");
     }
 
@@ -204,14 +208,16 @@ class AppService extends AbstractService
                 if(!in_array($value, $params)){
                     continue;
                 }
-                switch ($value) {
-                    case 'initialize':  $this->processApp($ymlData, $path);
-                                        $this->createOrg($ymlData);
-                                        $this->createAppPrivileges($ymlData);
-                                        $this->createRole($ymlData);
-                                        $this->performMigration($ymlData, $path);
-                                        $this->setupAppView($ymlData, $path);
-                                        break;
+                switch ($value) { 
+                    case 'initialize':  
+                        $this->processApp($ymlData, $path);
+                        $this->processBusinessRoles($ymlData);
+                        $this->createAppPrivileges($ymlData);
+                        $this->createRole($ymlData);
+                        $this->performMigration($ymlData, $path);
+                        $this->setupAppView($ymlData, $path);
+                        $this->createOrg($ymlData);
+                        break;
                     case 'entity': $this->processEntity($ymlData);
                         break;
                     case 'workflow': $this->processWorkflow($ymlData, $path);
@@ -294,6 +300,7 @@ class AppService extends AbstractService
     public function createOrg(&$yamlData){
         if (isset($yamlData['org'])) {
             $data = $this->processOrg($yamlData['org']);
+            $this->createRole($yamlData, false);
             $orgUuid = $data['uuid'];
             $appUuid = $yamlData['app']['uuid'];
             $result = $this->createAppRegistry($appUuid, $yamlData['org']['uuid']);
@@ -678,16 +685,28 @@ class AppService extends AbstractService
         }
     }
 
-    public function createRole(&$yamlData)
+    public function processBusinessRoles(&$yamlData)
+    {   
+        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'])) {
+            $appId = $yamlData['app']['uuid'];
+            foreach ($yamlData['businessRole'] as &$businessRole) {
+                $bRole = $businessRole;
+                $result = $this->businessRoleService->saveBusinessRole($appId, $bRole);
+                $businessRole['uuid'] = $bRole['uuid'];
+            }
+        }
+    }
+    public function createRole(&$yamlData, $templateRole = true)
     {
         if (isset($yamlData['role'])) {
-            if (!(isset($yamlData['org']['uuid']))) {
-                $this->logger->warn("Organization not provided not processing roles!");
-                return;
+            $params = null;
+            if(!$templateRole){
+                if (!(isset($yamlData['org']['uuid']))) {
+                    $this->logger->warn("Organization not provided not processing roles!");
+                    return;
+                }
+                $params['orgId'] = $yamlData['org']['uuid'];
             }
-            $appUuid = $yamlData['app']['uuid'];
-            $appId = $this->getIdFromUuid('ox_app', $appUuid);
-            $params['orgId'] = $yamlData['org']['uuid'];
             foreach ($yamlData['role'] as &$roleData) {
                 $role = $roleData;
                 if (!isset($role['name'])) {
@@ -695,8 +714,13 @@ class AppService extends AbstractService
                     continue;
                 }
                 $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
-                $result = $this->roleService->saveRole($params, $role, $role['uuid']);
-                $roleData['uuid'] = $role['uuid'];
+                if($templateRole){
+                    $result = $this->roleService->saveTemplateRole($role, $role['uuid']);
+                    $roleData['uuid'] = $role['uuid'];
+                }else{
+                    $result = $this->roleService->saveRole($params, $role, $role['uuid']);
+                }
+                
             }
         }
     }
@@ -718,6 +742,7 @@ class AppService extends AbstractService
         }
         $orgdata = $orgData;
         $result = $this->organizationService->saveOrganization($orgdata);
+        //setup business offering
         if ($result == 0) {
             throw new ServiceException("Organization could not be saved", 'org.not.saved');
         }
