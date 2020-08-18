@@ -68,11 +68,13 @@
    pageName: A-Gen
    cell: J10
    key: effectiveDate
+   method: formatDate
 -
    Source Worksheet: 'Need by Date:'
    key: needByDate
    pageName: A-Gen
    cell: K10
+   method: formatDate
 -
    Source Worksheet: primary oem
    pageName: A-Gen
