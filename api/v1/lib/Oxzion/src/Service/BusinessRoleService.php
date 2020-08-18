@@ -50,4 +50,19 @@ class BusinessRoleService extends AbstractService
         $businessRole['uuid'] = $data['uuid'];
         $businessRole['version'] = $data['version'];
     }
+
+    public function getBusinessRole($id){
+        $businessRole = new BusinessRole($this->table);
+        $businessRole->loadByUuid($id);
+        return $businessRole->toArray();
+    }
+
+    public function getBusinessRoleByName($appId, $name){
+        $query = "select br.* from ox_business_role br 
+                    inner join ox_app a on a.id = br.app_id 
+                    where a.uuid = :appId and br.name = :name";
+        $params = ["appId" => $appId, "name" => $name];
+        $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
+        return $result;
+    }
 }

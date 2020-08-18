@@ -92,11 +92,42 @@ class BusinessRoleServiceTest extends AbstractServiceTest
         $this->assertEquals(1, count($queryResult));
         $this->assertEquals($dataset['ox_business_role'][0]['id'], $queryResult[0]['id']);
         $this->assertEquals($roleId, $queryResult[0]['uuid']);
-        $this->assertEquals(1, $queryResult[0]['created_by']);
+        $this->assertEquals($dataset['ox_business_role'][0]['created_by'], $queryResult[0]['created_by']);
         $this->assertEquals(1, $queryResult[0]['modified_by']);
         $this->assertEquals($dataset['ox_business_role'][0]['date_created'], $queryResult[0]['date_created']);
         $this->assertEquals(date('Y-m-d'), date_create($queryResult[0]['date_modified'])->format('Y-m-d'));
         $this->assertEquals($data['name'], $queryResult[0]['name']);
         $this->assertEquals($dataset['ox_business_role'][0]['version'] + 1, $queryResult[0]['version']);
+    }
+
+    public function testGetBusinessRole(){
+        $dataset = $this->parseYaml();
+        $roleId = $dataset['ox_business_role'][0]['uuid'];
+        $data = $this->businessRoleService->getBusinessRole($roleId);
+        $this->assertEquals($dataset['ox_business_role'][0]['id'], $data['id']);
+        $this->assertEquals($roleId, $data['uuid']);
+        $this->assertEquals($dataset['ox_business_role'][0]['created_by'], $data['created_by']);
+        $this->assertEquals(null, $data['modified_by']);
+        $this->assertEquals($dataset['ox_business_role'][0]['date_created'], $data['date_created']);
+        $this->assertEquals(null, $data['date_modified']);
+        $this->assertEquals($dataset['ox_business_role'][0]['name'], $data['name']);
+        $this->assertEquals($dataset['ox_business_role'][0]['version'], $data['version']);   
+    }
+
+    public function testGetBusinessRoleByName(){
+        $dataset = $this->parseYaml();
+        $roleName = $dataset['ox_business_role'][0]['name'];
+        $appId = $dataset['ox_app'][0]['uuid'];
+        $data = $this->businessRoleService->getBusinessRoleByName($appId, $roleName);
+        $this->assertEquals(1, count($data));
+        $data = $data[0];
+        $this->assertEquals($dataset['ox_business_role'][0]['id'], $data['id']);
+        $this->assertEquals($dataset['ox_business_role'][0]['uuid'], $data['uuid']);
+        $this->assertEquals($dataset['ox_business_role'][0]['created_by'], $data['created_by']);
+        $this->assertEquals(null, $data['modified_by']);
+        $this->assertEquals($dataset['ox_business_role'][0]['date_created'], $data['date_created']);
+        $this->assertEquals(null, $data['date_modified']);
+        $this->assertEquals($dataset['ox_business_role'][0]['name'], $data['name']);
+        $this->assertEquals($dataset['ox_business_role'][0]['version'], $data['version']);   
     }
 }
