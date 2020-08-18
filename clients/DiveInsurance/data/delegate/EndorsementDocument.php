@@ -71,7 +71,7 @@ class EndorsementDocument extends PolicyDocument
            'gaiheader' => 'Group_AI_header.html',
            'gaifooter' => 'Group_AI_footer.html',
            'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
-           'travelAgentEO' => '2020-2021_Dive_Store_Travel_E&O.pdf',
+           'travelAgentEO' => '2020-2021_Dive_Store_Travel_EO.pdf',
            'groupExclusions' => 'Group_Exclusions.pdf',
            'AutoLiability'=>'2020-2021_Dive_Store_Non-Owned_Auto_Liability.pdf',
            'groupPolicy' => '2020-2021_Group_Professional_Liability_Policy.pdf'),

@@ -1091,9 +1091,7 @@
 								"label": "Home or Work Phone",
 								"tableView": false,
 								"validate": {
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Phone Number",
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"custom": "if(data['home_phone_number'] && data['home_phone_number'] != ''){\n  if(data['home_phone_number'].length <= 15){\n      valid = (data['home_phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Home or Work Phone number';\n  }else{\n    valid = (data['home_phone_number'].length > 15) ? 'Please enter a valid Home or Work Phone number' : true;\n  }\n}",
 									"step": "any"
 								},
 								"key": "home_phone_number",
@@ -1162,9 +1160,7 @@
 								"tableView": false,
 								"validate": {
 									"required": true,
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"custom": "if(data['phone_number'] && data['phone_number'] != ''){\n  if(data['phone_number'].length <= 15){\n      valid = (data['phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Mobile Phone number';\n  }else{\n    valid = (data['phone_number'].length > 15) ? 'Please enter a valid Mobile Phone number' : true;\n  }\n}",
 									"step": "any"
 								},
 								"key": "phone_number",
@@ -1207,10 +1203,8 @@
 						"placeholder": " ",
 						"tableView": true,
 						"validate": {
-							"pattern": "^\\d+$",
-							"customMessage": "Please enter a valid Fax number"
+							"custom": "if(data['fax'] && data['fax'] != ''){\n  if(data['fax'].length <= 15){\n      valid = (data['fax'].match(/^\\d+$/)) ?  true : 'Please enter a valid Fax number';\n  }else{\n    valid = (data['fax'].length > 15) ? 'Please enter a valid Fax number' : true;\n  }\n}"
 						},
-						"errorLabel": "Fax",
 						"key": "fax",
 						"type": "textfield",
 						"input": true,
@@ -3561,7 +3555,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 328,
+	"_vid": 330,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3582,6 +3576,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-13T10:45:41.186Z",
+	"modified": "2020-08-16T09:40:38.185Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

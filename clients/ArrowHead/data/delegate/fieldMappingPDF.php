@@ -9,7 +9,7 @@ return array(
             'annualsales' => 'Sales',
             'natureofsizeexplain' => 'Explain',
             'secinsurer' => 'Insurer',
-            'columnslimit' => 'Limit',
+            'seclimit' => 'Limit',
             'columnsdeductible' => 'Deductible',
             'policyperiod' => 'Policy Period',
             'secretrodate' => 'Retro Date',
@@ -24,9 +24,7 @@ return array(
             'mailingAddress' => 'Mailing Address',
             'city' => 'City',
             'zip' => 'Zip',
-            'state' => 'State',
             'website' => 'Website',
-            'ofRecordsContaining' => '# of Records',
             'numberOfEmployees' => " of Employees"
         ],
         "radioYN" =>

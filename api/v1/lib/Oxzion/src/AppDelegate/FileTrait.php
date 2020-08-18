@@ -32,7 +32,7 @@ trait FileTrait
         return $this->fileService->getFileList($this->appId,$params,$filterparams);
     }
 
-    protected function saveFile($params,$fileId){
+    protected function saveFile($params,$fileId = null){
         $this->logger->info("SAVE FILE");
         return $this->fileService->updateFile($params,$fileId);
     }
