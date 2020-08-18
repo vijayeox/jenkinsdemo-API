@@ -735,6 +735,9 @@ class FileService extends AbstractService
                 if($field['type']=='file'){
                     $attachmentsArray = is_string($fieldvalue) ? json_decode($fieldvalue,true) : $fieldvalue;
                     $finalAttached = array();
+                    if(!isset($attachmentsArray)){
+                        $attachmentsArray = array();
+                    }
                     if(is_array($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
                             $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
@@ -759,6 +762,9 @@ class FileService extends AbstractService
                         $attachmentsArray = json_decode($fieldvalue,true);
                     } else {
                         $attachmentsArray = $fieldvalue;
+                    }
+                    if(!isset($attachmentsArray)){
+                        $attachmentsArray = array();
                     }
                     if(is_array($attachmentsArray)){
                         $finalAttached = array();
