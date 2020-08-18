@@ -993,6 +993,15 @@
    cell: W40
    type: DataGrid
 -
+   key: genericData*locationScheduleGridData_equipmentBreakdown
+   method: simpleDatagrid
+   pageName: Property
+   cell: X40
+   type: DataGrid
+   returnValue: 
+      yes: 'Yes'
+      no: 'No'
+-
    key: genericData*locationScheduleGridData_boiler
    method: simpleDatagrid
    pageName: Property
@@ -1016,17 +1025,39 @@
    pageName: Property
    cell: AB40
    type: DataGrid
+   returnValue: 
+      'none' : 'N = None'
+      'local' : 'L = Local'
+      'central' : 'C = Central'
+      'both' : 'B = Both'
 -
    key: genericData*locationScheduleGridData_burglaralarmmonitoring
    method: simpleDatagrid
    pageName: Property
    cell: AC40
    type: DataGrid
+   returnValue: 
+      'none' : 'N = None'
+      'local' : 'L = Local'
+      'central' : 'C = Central'
+      'both' : 'B = Both'
 -
    key: genericData*locationScheduleGridData_buildingLimit
    method: simpleDatagrid
    pageName: Property
    cell: AD40
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_signsnotattached
+   method: simpleDatagrid
+   pageName: Property
+   cell: AE40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*buildingCoinsurance
+   method: simpleDatagrid
+   pageName: Property
+   cell: AH40
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_businesspersonal
