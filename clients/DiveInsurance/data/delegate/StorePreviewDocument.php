@@ -163,6 +163,11 @@ class StorePreviewDocument extends PolicyDocument
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
         if($temp['product'] == 'Dive Store'){
+            if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
+                 if(isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability'){
+                    $documents['group_blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
+                }
+            }
             $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
             if($temp['propertyCoverageSelect'] == 'yes'){
                 $this->logger->info("DOCUMENT property_coi_document");
