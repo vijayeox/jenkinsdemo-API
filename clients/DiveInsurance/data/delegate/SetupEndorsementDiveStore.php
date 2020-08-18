@@ -165,6 +165,9 @@ public function execute(array $data,Persistence $persistenceService)
                     // }
                     $data['previous_additionalInsured'] = $data['additionalInsured'];
                     $policy['previous_additionalInsured'] = $data['additionalInsured'];
+                } else {
+                    $data['previous_additionalInsured'] = array();
+                    $policy['previous_additionalInsured'] = array();
                 }
                 $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
                 $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
@@ -217,7 +220,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
-                $policy['previous_additionalLocations'] = $data['additionalLocations'];
+                $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
                 $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
