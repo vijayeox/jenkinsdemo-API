@@ -492,7 +492,7 @@ class AppService extends AbstractService
             $workflowData = $yamlData['workflow'];
             foreach ($workflowData as $value) {
                 $result = 0;
-                $result = $this->checkWorkflowData($value);
+                $result = $this->checkWorkflowData($value,$appUuid);
                 if ($result == 0) {
                     $entity = $this->entityService->getEntityByName($yamlData['app']['uuid'], $value['entity']);
                     if (!$entity) {
