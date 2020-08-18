@@ -913,23 +913,23 @@
 #    pageName: N-L&R
 #    cell: 'K24'
 #    key: 
-# -
-#    Source Worksheet: Insured do any 'in house' leasing?
-#    pageName: N-L&R
-#    cell: Check Box 5
-#    key: insuresdoanyinhouseleasing
-#    type: Checkbox
-# -
-#    Source Worksheet: 'If YES, minimum liability limit required?'
-#    pageName: N-L&R
-#    cell: 'G7'
-#    key: minimumliabilitylimitrequired
-#    Note: Wrongly mapped
-# -
-#    Source Worksheet: Number of vehicles out on Lease?
-#    pageName: N-L&R
-#    cell: G17
-#    key: numberofvehiclesoutonlease
+-
+   Source Worksheet: Insured do any 'in house' leasing?
+   pageName: N-L&R
+   cell: Check Box 5
+   key: insuresdoanyinhouseleasing
+   type: Checkbox
+-
+   Source Worksheet: 'If YES, minimum liability limit required?'
+   pageName: N-L&R
+   cell: 'G7'
+   key: minimumliabilitylimitrequired
+   Note: Wrongly mapped
+-
+   Source Worksheet: Number of vehicles out on Lease?
+   pageName: N-L&R
+   cell: G17
+   key: numberofvehiclesoutonlease
 # -
 #    Source Worksheet: Rental/Leasing
 #    pageName: N-L&R
