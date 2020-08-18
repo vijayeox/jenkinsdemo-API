@@ -110,6 +110,28 @@ class Module
                         $resultSetPrototype
                     );
                 },
+                Service\BusinessRoleService::class => function ($container) {
+                    return new Service\BusinessRoleService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\BusinessRoleTable::class)
+                    );
+                },
+                Model\BusinessRoleTable::class => function ($container) {
+                    return new Model\BusinessRoleTable(
+                        $container->get(Model\BusinessRoleTableGateway::class)
+                    );
+                },
+                Model\BusinessRoleTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\BusinessRole());
+                    return new TableGateway(
+                        'ox_business_role',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
                 Service\PrivilegeService::class => function ($container) {
                     return new Service\PrivilegeService(
                         $container->get('config'),
