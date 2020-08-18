@@ -7,7 +7,7 @@ content:
             route: 'file/user/me'
             filterable: false
             sortable: false
-            defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"},{"field":"end_date","operator":"gte","value":"2020-06-30"}]}}'
+            defaultFilters: '{"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Expired"},{"field":"policyStatus","operator":"neq","value":"AutoRenewal Pending"},{"field":"end_date","operator":"gte","value":"2020-06-30"}]}}'
             resizable: true
             pageable:
                 buttonCount: 3
@@ -29,6 +29,14 @@ content:
                         -
                             type: DocumentViewer
                             url: 'file/{{uuid}}/document'
+                -
+                    name: Endorsement
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'            
                 -
                     name: 'Upgrade To IPL'
                     rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{policyStatus}}'' == ''In Force'')'
@@ -176,7 +184,7 @@ content:
                 -
                     title: Name
                     field: entity_name
-                    cell: '<td>{item.product == "Dive Store" ? item.business_name + " - " + item.entity_name : item.firstname + " " + item.lastname + " - " + item.entity_name}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.product == "Group Professional Liability" ? item.business_name :(item.firstname + " " + item.lastname)}</td>'
                 -
                     title: 'Policy Status'
                     cell: '<td>{moment(item.start_date).isAfter(moment()) ? "Effective From " + moment(item.start_date).format("MM-DD-YYYY") : item.policyStatus}</td>'

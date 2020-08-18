@@ -11,7 +11,7 @@
 
     <div class="body_div">
         <!-- header Line -->
-        <div class="spacer" style="margin-top: 3%"></div>
+        <div class="spacer" style="margin-top: 5%"></div>
         <center>
             <b>
                 <p style="margin-top: 5px;" class="info">Store Location: <span class="storeLocation uppercase">{$address1}, {$address2}, {$city}, {$state},
@@ -389,7 +389,7 @@
                 {elseif $state == 'Utah'}
                 <center>
                     <p class="notice">
-                        <b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+                        <b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
                     </p>
                 </center>
                 {elseif $state == 'Virginia'}

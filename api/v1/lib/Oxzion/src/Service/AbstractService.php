@@ -286,16 +286,27 @@ abstract class AbstractService extends AbstractBaseService
     {
         try {
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
-            if (!isset($orgId) && isset($data['orgId'])) {
+            if (isset($data['orgId'])) {
                 AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
                 $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
                 AuthContext::put(AuthConstants::ORG_ID, $orgId);
-                $select = "SELECT ou.id,ou.uuid from ox_user as ou join ox_organization as org on org.contactid = ou.id where org.id = :orgId";
-                $params = array("orgId" => $orgId);
-                $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
-                if (isset($result[0])) {
-                    AuthContext::put(AuthConstants::USER_ID, $result[0]['id']);
-                    AuthContext::put(AuthConstants::USER_UUID, $result[0]['uuid']);
+                $userId = AuthContext::get(AuthConstants::USER_ID);
+                $userUuid = AuthContext::get(AuthConstants::USER_UUID);
+                if(isset($data['userId'])){
+                    $userUuid = $data['userId'];
+                    $userId = $this->getIdFromUuid('ox_user', $userUuid);
+                }else if(!$userId){
+                    $select = "SELECT ou.id,ou.uuid from ox_user as ou join ox_organization as org on org.contactid = ou.id where org.id = :orgId";
+                    $params = array("orgId" => $orgId);
+                    $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
+                    if (isset($result[0])) {
+                        $userId = $result[0]['id'];
+                        $userUuid = $result[0]['uuid'];
+                    }
+                }
+                if (isset($userId)) {
+                    AuthContext::put(AuthConstants::USER_ID, $userId);
+                    AuthContext::put(AuthConstants::USER_UUID, $userUuid);
                 }
             }
         } catch (Exception $e) {

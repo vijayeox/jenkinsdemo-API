@@ -2,6 +2,6 @@ name: 'Unbilled Revenue'
 description: 'Unbilled Revenue'
 content:
     -
-        type: Dashboard
+        type: DashboardManager
         content:
             uuid: 6a285707-b541-4b99-874d-b682c01cca56

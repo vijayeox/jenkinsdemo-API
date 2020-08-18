@@ -41,10 +41,14 @@
                     </tr>
                     <tr>
                         <td>Contents Limit:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>${$dspropTotal|number_format}</td>
                         {else}
                             <td>$0</td>
+                        {/if}
+                        {else}
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                     <tr>
@@ -53,14 +57,19 @@
                     </tr>
                     <tr>
                         <td>Business Income:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>{if isset($lossOfBusIncome) && (int)$lossOfBusIncome != 0} ${$lossOfBusIncome|number_format}{else}$0{/if}</td>
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         {if isset($dspropownbuilding) && $dspropownbuilding != "no"}
                             {if isset($dspropreplacementvalue)}
@@ -74,81 +83,120 @@
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         {if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}
                             <td>Included</td>
                         {else}
-                            <td>Not Included</td>
+                            <td>Excluded</td>
                         {/if}
                     {else}
-                        <td>Not Included</td>
+                        <td>Excluded</td>
                     {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Business Income from dependant properties:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$5,000</td>
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Inside):</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$2,500</td>
                         {else}
                             <td>$0</td>
+                        {/if}
+                        {else}
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Outside):</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$2,500</td>
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Transit Coverage (Locked Vehicle):</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$10,000</td>
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>EmployeeTheft Limit:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$5,000</td>
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Property of Others:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$25,000</td>
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Off premises:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$10,000</td>
                         {else}
                             <td>$0</td>
                         {/if}
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Glass:</td>
+                        {if $product == 'Dive Store'}
                         {if $propertyCoverageSelect != "no"}
                         <td>$5,000</td>
                         {else}
                             <td>$0</td>
+                        {/if}
+                        {else}
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                 </tbody>
@@ -162,71 +210,87 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {if $product == 'Dive Store'}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$10,000,000</td>
                         {else}
                             <td>$1,000,000</td>
+                        {/if}{else}
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {if $product == 'Dive Store'}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$2,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$10,000,000</td>
                         {else}
                             <td>$1,000,000</td>
+                        {/if}{else}
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {if $product == 'Dive Store'}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$6,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$11,000,000</td>
                         {else}
                             <td>$2,000,000</td>
+                        {/if}{else}
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {if $product == 'Dive Store'}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$3,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$4,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$5,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$6,000,000</td>
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL != false && $excessLiabilityCoveragePrimarylimit1000000PL != "false"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             <td>$11,000,000</td>
                         {else}
                             <td>$2,000,000</td>
+                        {/if}{else}
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Damage to premises rented to you:</td>
+                        {if $product == 'Dive Store'}
                         <td>$1,000,000</td>
+                        {else}
+                            <td>Excluded</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Medical Expense:</td>
@@ -243,10 +307,10 @@
                         {else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
                             <td>$1,000,000</td>
                         {else}
-                            <td>Not Included</td>
+                            <td>Excluded</td>
                         {/if}
                         {else}
-                            <td>Not Included</td>
+                            <td>Excluded</td>
                             {/if}
                     </tr>
                     <tr>
@@ -254,7 +318,7 @@
                         {if isset($nonDivingPoolAmount) && (int)$nonDivingPoolAmount > 0}
                             <td>$1,000,000</td>
                         {else}
-                            <td>Not Included</td>
+                            <td>Excluded</td>
                         {/if}
                     </tr>
                     <tr>
@@ -264,7 +328,7 @@
                         {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
                             <td>$1,000,000</td>
                         {else}
-                            <td>Not Included</td>
+                            <td>Excluded</td>
                         {/if}
                     </tr>
 
@@ -317,7 +381,15 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is {if isset($PropDeductibleCredit)}${$PropDeductibleCredit}{else}$0.00{/if}
+                            Mechanical breakdown is $2500. All other perils is {if $propertyDeductibles == "propertyDeductibles1000"}
+                           $1,000
+                        {elseif $propertyDeductibles == "propertyDeductibles2500"}
+                           $2,500
+                        {elseif $propertyDeductibles == "propertyDeductibles5000"}
+                           $5,000
+                        {else}
+                           $0.00
+                        {/if}
                             </td>
                     </tr>
                 </tbody>

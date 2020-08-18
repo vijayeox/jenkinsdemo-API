@@ -341,19 +341,19 @@ class CommandService extends AbstractService
     {
         try {
             $this->logger->info("File Save Service Start" . print_r($data, true));
-            if(isset($data['workflow_instance_id'])){
+            $fileId = isset($data['fileId']) ? $data['fileId'] : (isset($data['uuid']) ? $data['uuid'] : NULL);
+            if($fileId){
+                $file = $this->fileService->updateFile($data, $fileId);
+            }else if(isset($data['workflow_instance_id'])){
                 $select = "Select ox_file.uuid from ox_file join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where ox_workflow_instance.id=:workflowInstanceId;";
                 $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
+                $this->logger->info("Executing query $select using params - ".json_encode($selectParams));
                 $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
                 if (count($result) == 0) {
                     $this->logger->info("File Save ---- Workflow Instance Id Not Found");
                     throw new EntityNotFoundException("Workflow Instance Id Not Found");
                 }
                 $file = $this->fileService->updateFile($data, $result[0]['uuid']);
-            }else if(isset($data['fileId'])){
-                $file = $this->fileService->updateFile($data, $data['fileId']);
-            }else if(isset($data['uuid'])){
-                $file = $this->fileService->updateFile($data, $data['uuid']);
             }else{
                 $filedata = $data;
                 $file = $this->fileService->createFile($filedata);
@@ -504,7 +504,7 @@ class CommandService extends AbstractService
         if ($result == 0) {
             throw new EntityNotFoundException("File " . $fileId . " not found");
         }
-        $data['data'] = $result['data'];
+        $data = array_merge($data,$result['data']);
         return $data;
     }
 
@@ -542,8 +542,9 @@ class CommandService extends AbstractService
         if (isset($data['workflow_id']) && isset($data['appId'])) {
             $workFlowId = $data['workflow_id'];
             $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
-            // print_r($result);exit;
-            $data['template'] = $result['template'];
+            if(isset($result['template'])){
+                $data['template'] = $result['template'];
+            }
             $data['formName'] = $result['formName'];
             $data['id'] = $result['id'];
             return $data;

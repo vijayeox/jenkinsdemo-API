@@ -2,6 +2,6 @@ name: 'Revenue v.s Pay'
 description: 'Revenue v.s Pay'
 content:
     -
-        type: Dashboard
+        type: DashboardManager
         content:
             uuid: 639a1d83-b01c-49c0-a91a-f3d60f1280b1

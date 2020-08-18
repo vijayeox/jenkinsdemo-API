@@ -29,7 +29,7 @@ class PolicyCheck extends FileDelegate
             $data['policy_exists'] = true;
             if(count($policyList['data']) == 1){
                 $fileData = json_decode($policyList['data'][0]['data'],true);
-                if($fileData['padiEmployee'] == "true" || $fileData['padiEmployee'] == true){
+                if(isset($fileData['padiEmployee']) && ($fileData['padiEmployee'] == "true" || $fileData['padiEmployee'] == true)){
                     $data['policy_exists'] = false;           
                 }
             }

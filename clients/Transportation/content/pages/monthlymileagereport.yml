@@ -2,6 +2,6 @@ name: 'Monthly Mileage'
 description: 'Monthly Mileage'
 content:
     -
-        type: Dashboard
+        type: DashboardManager
         content:
             uuid: 7da49137-324a-477d-94d0-7b566e6274c7

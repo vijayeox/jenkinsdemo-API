@@ -58,9 +58,11 @@
 				{assign var=initialCylinderCoverage value=$previousPolicyData.$policyIndex.previous_cylinder}
 				{assign var=initialCylinderCoverageLabel value=$previousPolicyData.$policyIndex.previous_cylinderLabel}
 				{assign var=initialScubaFit value=$previousPolicyData.$policyIndex.previous_scubaFit}
+				{assign var=initialTecRec value=$previousPolicyData.$policyIndex.previous_tecRecEndorsment}
 										{else}
 				{assign var=careerCov value=$careerCoverageVal}
 				{assign var=previous_scubaFit value=""}
+				{assign var=previous_tecRecEndorsment value=""}
 				{/if}
 		{/if}
 		<div>
@@ -73,7 +75,16 @@
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">COVERAGE:</b></th>
-								<td><p class = "ins_font">Insured's Status: {if isset($careerCov)}
+								<td><p class = "ins_font">Insured's Status: 
+										{if isset($initialTecRec)}
+											{if $initialTecRec != "tecRecDeclined"}
+											<span> TecRec </span>
+											{/if}
+										{else}
+											{if $tecRecEndorsment != "tecRecDeclined"} <span> TecRec </span>
+											{/if}
+										{/if}
+										{if isset($careerCov)}
 											{$careerCov}
 										{else}
 											{$careerCoverageVal}

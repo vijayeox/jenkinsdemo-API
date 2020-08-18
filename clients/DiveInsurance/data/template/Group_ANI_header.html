@@ -19,7 +19,7 @@
           }
       }
     
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','state_in_short','padi','group_carrier'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','group_certificate_no','business_padi','end_date','group_policy_id','business_address1','business_address2','state_in_short','padi','group_carrier','dba'];
        for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -40,6 +40,11 @@
                 moment(vars[css_selector_classes[css_class]]).format(
                   "D MMMM YYYY"
                 ) + " - 12:01:00 AM";
+            }
+            if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
             }
           }
         }
@@ -80,6 +85,7 @@
           </div>
           <b class = "caption2">Named Insured and Mailing Address:</b>
           <p class = "details"><span class ="business_name"></span></p>
+          <p class = "details" id = "dbaName" style = "display:none;">DBA:<span class ="dba"></span></p>
           <p class = "details"><span class ="business_address1"></span></p>
           <p class = "details"><span class ="business_address2"></span></p>
           <p class = "details"><span class ="business_city"></span>, <span class ="state_in_short"></span> <span class ="business_zip"></span></p>
@@ -106,6 +112,7 @@
       </div>
       </div>
     </div>
+    <div style = "margin-bottom: 2%"></div>
     <hr class="grp_hr_value"></hr>
     <div class = "div_spacing">
   </div>

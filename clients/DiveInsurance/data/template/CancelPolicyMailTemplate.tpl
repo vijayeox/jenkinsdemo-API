@@ -3,7 +3,7 @@
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
             <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, <br/><br/>
-			<p>Your PADI Endorsed Professional Liability insurance has been canceled effective 12:01 a.m. {$CancelDate|date_format:"%m/%d/%Y"} due to {if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
+			<p>Your PADI Endorsed Professional Liability insurance has been canceled effective 12:01 a.m. {$cancelDate|date_format:"%m/%d/%Y"} due to {if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
 				Non-payment of installment premium. 
 			{elseif $reasonforCsrCancellation == 'padiMembershipNotCurrent'}
 				PADI Membership is not current.

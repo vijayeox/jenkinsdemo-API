@@ -59,7 +59,7 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
         $query = "SELECT ox_file.data from ox_file inner join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where process_instance_id = '".$data['processInstanceId']."'";
         $queryResult = $this->executeQueryTest($query);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($queryResult[0]['data'], '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}');
+        $this->assertEquals($queryResult[0]['data'], '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}');
     }
     public function testcompleteWorkflowInstanceFail()
     {
@@ -75,7 +75,7 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
 
     public function testinitiateWorkflow()
     {
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","variables" => array("firstname" => "Neha","policy_period" => "1year","card_expiry_date" => "10/24","city" => "Bangalore","orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" => "1","card_no" => "1234","state" => "karnataka","app_id" => "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" => "560030","coverage" => "100000","product" => "Individual Professional Liability","address2" => "dhgdhdh","address1" => "hjfjhfjfjfhfg","expiry_date" => "2020-06-30","form_id" =>"0","entity_id" => "1","created_by"=> "1","expiry_year" => "2019","orgId" => "53012471-2863-4949-afb1-e69b0891c98a","lastname" => "Rai","isexcessliability" => "1","workflow_instance_id" => "1","credit_card_type" => "credit","workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925","email" => 'bharat@gmail.com'),"parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","variables" => array("firstname" => "Neha","policy_period" => "1year","card_expiry_date" => "10/24","city" => "Bangalore","orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" => "1","fileId"=>"d13d0c68-98c9-11e9-adc5-308d99c9146d","uuid"=>"d13d0c68-98c9-11e9-adc5-308d99c9146d","card_no" => "1234","state" => "karnataka","app_id" => "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" => "560030","coverage" => "100000","product" => "Individual Professional Liability","address2" => "dhgdhdh","address1" => "hjfjhfjfjfhfg","expiry_date" => "2020-06-30","form_id" =>"0","entity_id" => "1","created_by"=> "1","expiry_year" => "2019","orgId" => "53012471-2863-4949-afb1-e69b0891c98a","lastname" => "Rai","isexcessliability" => "1","workflow_instance_id" => "5","credit_card_type" => "credit","workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925","email" => 'bharat@gmail.com'),"parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflowinstance/start', 'POST',$data);
         $this->assertResponseStatusCode(200);
@@ -83,6 +83,12 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $query = "select * from ox_workflow_instance where id = 5";
+        $result = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($data['processInstanceId'], $result[0]['process_instance_id']);
+        $this->assertEquals(14, $result[0]['file_id']);
+        
     }
 
     public function testinitiateWorkflowInvalidData()
