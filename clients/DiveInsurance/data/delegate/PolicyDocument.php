@@ -154,8 +154,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         'alheader' => 'DiveStore_AL_header.html',
                         'alfooter' => 'DiveStore_AL_footer.html',
                         'alTemplate' => 'DiveStore_AdditionalLocations',
-                        'GLblanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
-                        'blanketForm' => 'GL_AI_Blanket.pdf',
+                        'blanketForm' => 'DS_GROUP_AI_Blanket_Endorsement.pdf',
                         'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
                         'groupExclusions' => 'Group_Exclusions.pdf',
                         'AutoLiability'=>'DS_NonOwned_Auto_Liability.pdf',
@@ -407,6 +406,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($this->template[$temp['product']]['blanketForm'])){
                         $this->logger->info("DOCUMENT blanketForm");
                         $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+                    }
+
+                    if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
+                        if(isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability'){
+                            $this->logger->info("DOCUMENT GLblanketForm");
+                            $documents['group_blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
+                        }
                     }
 
                     if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
@@ -1297,9 +1303,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
-                if(isset($this->template[$temp['product']]['GLblanketForm'])){
+                if(isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability'){
                     $this->logger->info("DOCUMENT GLblanketForm");
-                    $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
+                    $documents['group_blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
                 }
             }
 
