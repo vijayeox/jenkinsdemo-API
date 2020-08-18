@@ -1456,6 +1456,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['newAddInsured'] = "";
                         $temp['removedAddInsured'] = "";
                         $temp['liabilityChanges'] = true;
+                        if(!is_array($policy['previous_additionalInsured'])){
+                            $policy['previous_additionalInsured'] = array();
+                        }
+                        if(!is_array($data['additionalInsured'])){
+                            $data['additionalInsured'] = array();
+                        }
                         $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $policy['previous_additionalInsured']));
                         $newAddInsured = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
@@ -1474,6 +1480,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['newAddInsured'] = "";
                             $temp['removedAddInsured'] = "";
                             $temp['liabilityChanges'] = true;
+                            if(!is_array($policy['previous_additionalInsured'])){
+                                if(is_string($policy['previous_additionalInsured'])){
+                                    $policy['previous_additionalInsured'] = json_decode($policy['previous_additionalInsured'],true);
+                                } else {
+                                    $policy['previous_additionalInsured'] = array();
+                                }
+                            }
+                            if(!is_array($data['additionalInsured'])){
+                                if(is_string($data['additionalInsured'])){
+                                    $data['additionalInsured'] = json_decode($data['additionalInsured'],true);
+                                } else {
+                                    $data['additionalInsured'] = array();
+                                }
+                            }
                             $diff = array_diff(array_map('serialize', $data['additionalInsured']), array_map('serialize', $data['previous_additionalInsured']));
                             $newAddInsured = array_map('unserialize', $diff);
                             $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
@@ -1498,6 +1518,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['newlossPayees'] = "";
                         $temp['removedlossPayees'] = "";
                         $temp['propertyChanges'] = true;
+                        if(!is_array($policy['previous_lossPayees'])){
+                            if(is_string($data['lossPayees'])){
+                                $policy['previous_lossPayees'] = json_decode($policy['previous_lossPayees'],true);
+                            } else {
+                                $policy['previous_lossPayees'] = array();
+                            }
+                        }
+                        if(!is_array($data['lossPayees'])){
+                            if(is_string($data['lossPayees'])){
+                                $data['lossPayees'] = json_decode($data['lossPayees'],true);
+                            } else {
+                                $data['lossPayees'] = array();
+                            }
+                        }
                         $diff = array_diff(array_map('serialize', $data['lossPayees']), array_map('serialize', $policy['previous_lossPayees']));
                         $newlossPayees = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($newlossPayees,true));
@@ -1522,6 +1556,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['removedadditionalLocations'] = "";
                         $temp['propertyChanges'] = true;
                         $temp['liabilityChanges'] = true;
+                        if(!is_array($policy['previous_additionalLocations'])){
+                            if(is_string($policy['previous_additionalLocations'])){
+                                $policy['previous_additionalLocations'] = json_decode($policy['previous_additionalLocations'],true);
+                            } else {
+                                $policy['previous_additionalLocations'] = array();
+                            }
+                        }
+                        if(!is_array($data['additionalLocations'])){
+                            if(is_string($data['additionalLocations'])){
+                                $data['additionalLocations'] = json_decode($data['additionalLocations'],true);
+                            } else {
+                                $data['additionalLocations'] = array();
+                            }
+                        }
                         $diff = array_diff(array_map('serialize', $data['additionalLocations']), array_map('serialize', $policy['previous_additionalLocations']));
                         $newAdditionalLocations = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Additional Locations :".print_r($newAdditionalLocations,true));
