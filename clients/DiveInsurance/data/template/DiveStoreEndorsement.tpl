@@ -5,7 +5,7 @@
 </head>
 <body>
   <div class ="body_div_endo">
-       {if isset($liabilityCoverageChanges) && $liabilityCoverageChanges}
+       <!-- {if isset($liabilityCoverageChanges) && $liabilityCoverageChanges}
        <div class = "box">
           <center><b><u>+Policy has been changed to {$increasedCoverage} as of the Effective date of this Endorsement</u></b></center>
           <center><table>
@@ -63,7 +63,7 @@
             </tr>
           </table></center>
       </div>
-      {/if}
+      {/if} -->
       {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit)|| (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO))}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
