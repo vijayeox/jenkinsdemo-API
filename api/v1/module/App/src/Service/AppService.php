@@ -728,12 +728,12 @@ class AppService extends AbstractService
     {
         //UUID takes precedence over name. Therefore UUID is checked first.
         if (isset($appdata['uuid'])) {
-            $queryString = 'SELECT app.uuid, app.name, app.version FROM ox_app AS app WHERE app.uuid=:uuid';
+            $queryString = 'SELECT app.uuid, app.name FROM ox_app AS app WHERE app.uuid=:uuid';
             $queryParams = ['uuid' => $appdata['uuid']];
         }
         //Application is queried by name only if UUID is not given.
         else {
-            $queryString = 'SELECT app.uuid, app.name, app.version FROM ox_app AS app WHERE app.name=:name';
+            $queryString = 'SELECT app.uuid, app.name FROM ox_app AS app WHERE app.name=:name';
             $queryParams = ['name' => $appdata['name']];
         }
         $queryResult = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
@@ -755,7 +755,6 @@ class AppService extends AbstractService
         if (isset($appdata['uuid']) && !isset($appdata['name'])) {
             $appdata['name'] = $dbRow['name'];
         }
-        $appdata['version'] = $dbRow['version'];
         $generated = $this->updateApp($appdata['uuid'], $appdata);
         $appdata = array_merge($appdata, $generated);
         return;
@@ -830,13 +829,12 @@ class AppService extends AbstractService
         return $app->getGenerated();
     }
 
-    public function deleteApp($uuid, $version)
+    public function deleteApp($uuid)
     {
         $app = new App($this->table);
         $app->loadByUuid($uuid);
         $app->assign([
-            'status' => App::DELETED,
-            'version' => $version
+            'status' => App::DELETED
         ]);
         try {
             $this->beginTransaction();

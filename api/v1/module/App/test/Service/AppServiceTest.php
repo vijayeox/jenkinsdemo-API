@@ -515,20 +515,6 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertEquals(\App\Model\App::DELETED, $result[0]['status']);
     }
 
-    public function testDeleteAppWithValidUuidAndInvalidVersion() {
-        AuthContext::put(AuthConstants::USER_ID, 6);
-        AuthContext::put(AuthConstants::ORG_ID, 300);
-        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
-        try {
-            $appService->deleteApp($uuid, 5000);
-            $this->fail('Expected VersionMismatchException.');
-        }
-        catch(VersionMismatchException $e) {
-            $this->assertNotNull($e);
-        }
-    }
-
     public function testDeleteAppWithInvalidUuid() {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ORG_ID, '1');

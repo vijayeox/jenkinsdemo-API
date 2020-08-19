@@ -166,8 +166,7 @@ class AppController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Delete App for ID ${uuid}.");
         try {
-            $version = $this->getVersionFromQueryOrPost();
-            $this->appService->deleteApp($uuid, $version);
+            $this->appService->deleteApp($uuid);
             return $this->getSuccessResponse();
         }
         catch (Exception $e) {

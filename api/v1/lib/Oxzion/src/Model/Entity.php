@@ -290,9 +290,10 @@ abstract class Entity implements Countable
         $uuid = $this->data['uuid'];
         $isIdValid = (!is_null($id) && (0 != $id) && !empty($id));
         $isUuidValid = (!is_null($uuid) && !empty($uuid));
+        $isVersionInModel = array_key_exists('version', $this->data);
         $isVersionSet = !is_null($input) && isset($input) && array_key_exists('version', $input);
         //Existence of valid id and UUID means record is being updated. Therefore version is needed.
-        if (($isIdValid || $isUuidValid) && !$isVersionSet) {
+        if ($isVersionInModel && ($isIdValid || $isUuidValid) && !$isVersionSet) {
             throw new ParameterRequiredException('Version number is required.', ['version']);
         }
         //All ok. Go ahead and assign values.
@@ -316,9 +317,11 @@ abstract class Entity implements Countable
         if (isset($uuid) && !is_null($uuid)) {
             $arr['uuid'] = $uuid;
         }
-        $version = $this->data['version'];
-        if (isset($version) && !is_null($version)) {
-            $arr['version'] = $version;
+        if (array_key_exists('version', $this->data)) {
+            $version = $this->data['version'];
+            if (isset($version) && !is_null($version)) {
+                $arr['version'] = $version;
+            }
         }
         return $arr;
     }
@@ -366,7 +369,9 @@ abstract class Entity implements Countable
         if (!isset($uuid) || is_null($uuid) || empty($uuid)) {
             $this->data['uuid'] = $data['uuid'];
         }
-        $this->data['version'] = $data['version'];
+        if (array_key_exists('version', $this->data)) {
+            $this->data['version'] = $data['version'];
+        }
     }
 
     public function setForeignKey($key, $value, $force = false) {
