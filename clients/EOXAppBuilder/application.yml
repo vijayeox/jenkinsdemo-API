@@ -1,0 +1,71 @@
+app:
+    name: EOXAppBuilder
+    description: 'App for EOX AppBuilder'
+    category: EXAMPLE_CATEGORY
+    type: 1
+    autostart: true
+    version: 1
+    uuid: 41b77ef3-41db-4a52-8eb8-ba3ac9a9d771
+org:
+    name: 'EOXAPP setup'
+    uuid: 3409c252-74ed-4512-932d-649da0f2f62d
+    email: eoxapp2@vantageagora.com
+    address1: '23611 Chagrin Blvd'
+    address2: 'Ste 320, Beachwood, Ohio 44122'
+    city: Beachwood
+    state: OH
+    zip: 44122
+    contact:
+        username: supportadmin
+        firstname: Support
+        lastname: Admin
+        email: eoxapp2@vantageagora.com
+    preferences:
+        currency: USD
+        timezone: America/New_York
+        dateformat: mm/dd/yy
+    country: 'United States'
+privilege:
+    -
+        name: MANAGE_APPLICATION
+        permission: 1
+role:
+    -
+        name: 'App Developer'
+        privileges:
+            -
+                privilege_name: MANAGE_APPLICATION
+                permission: 1
+        uuid: 33818081-b18d-456d-a74d-0493a20a2887
+pages:
+    -
+        page_name: HomePage.yml
+        uuid: d5b33dce-df14-4193-adfe-de27a6d37ddf
+menu:
+    -
+        name: 'Manage EOX Apps'
+        icon: 'fas fa-home'
+        page_uuid: d5b33dce-df14-4193-adfe-de27a6d37ddf
+        uuid: 2f6aef7e-d0a4-11ea-87d0-0242ac130003
+        privilege: MANAGE_APPLICATION_READ
+entity:
+    -
+        name: 'App Description'
+        override_data: true
+        field:
+            -
+                name: status
+                text: Status
+                index: true
+                data_type: text
+            -
+                name: documents
+                text: Documents
+                data_type: document
+form:
+    -
+        name: 'EOX App Form1'
+        uuid: 1fa0d5c0-b428-499a-a490-37e4349c1060
+        description: 'Sample form for eox apps'
+        template_file: eoxApp.json
+        entity: 'App Description'

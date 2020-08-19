@@ -1,0 +1,57 @@
+name: 'Home Page'
+description: 'Shows a list of users'
+content:
+    -
+        type: List
+        content:
+            route: 'app/a'
+            disableAppId: true
+            filterable: true
+            defaultFilters: 
+                filter:
+                    logic: and
+                    filters:
+                        - 
+                            field: type
+                            operator: eq
+                            value: 2                
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            operations:
+                title: "Create App"
+                actions:
+                    -
+                        name: Create App
+                        rule: "true"
+                        details:
+                            -
+                                type: Form
+                                form_id: 2f6afb40-d0a4-11ea-87d0-0242ac130003
+            
+            sortable: 
+                allowUnsort: true
+                mode: single
+            actions:
+                -
+                    name: Edit
+                    rule: '''{{status}}'' !== ''Processing'' && ''{{status}}'' !== ''Queued'''
+                    details:
+                        -
+                            type: Form
+                            form_id: 2f6afb40-d0a4-11ea-87d0-0242ac130003
+                            appId: '{{appId}}'
+                    icon: 'far fa-pencil-alt'
+                -
+                    name: 'Please Wait'
+                    rule: '''{{status}}'' == ''Processing'' || ''{{status}}'' == ''Queued'''
+                    icon: 'fad fa-circle-notch fa-spin'
+            columnConfig:
+                -
+                    title: App Name
+                    field: name
