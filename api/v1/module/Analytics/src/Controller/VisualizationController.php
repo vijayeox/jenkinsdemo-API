@@ -42,7 +42,6 @@ class VisualizationController extends AbstractApiController
             return $this->getSuccessResponseWithData($data, 201);
         }
         catch (Exception $e) {
-print($e);
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

@@ -38,7 +38,7 @@ class VisualizationControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Line','configuration' => '{"data":"config"}','renderer' => 'chart','type' => 'Chart'];
+        $data = ['name' => 'Line','configuration' => '{"data":"config"}','renderer' => 'chart','type' => 'chart'];
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_visualization'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/visualization', 'POST', $data);
