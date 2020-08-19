@@ -9623,7 +9623,7 @@
 										"name": "enable",
 										"trigger": {
 											"type": "javascript",
-											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.effectiveDate) >= moment(data.update_date))){\n  result = true;\n}"
+											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
 										},
 										"actions": [{
 											"name": "enable",
@@ -14739,6 +14739,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-14T09:37:12.611Z",
+	"modified": "2020-08-19T09:42:41.247Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
