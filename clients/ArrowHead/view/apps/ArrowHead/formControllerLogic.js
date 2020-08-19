@@ -54,3 +54,14 @@ s.onload = function (e) {
   }, 1000);
 };
 document.head.appendChild(s);
+
+setTimeout(function () {
+  data.workbooksToBeGenerated = {
+    epli: false,
+    rpsCyber: false,
+    harco: false,
+    dealerGuard_ApplicationOpenLot: false,
+    victor_FranchisedAutoDealer: false,
+    victor_AutoPhysDamage: false
+  };
+}, 2000);
