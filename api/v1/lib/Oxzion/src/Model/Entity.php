@@ -360,17 +360,17 @@ abstract class Entity implements Countable
 
     public function save() {
         $this->validate();
-        $data = $this->table->internalSave2($this->data);
+        $savedData = $this->table->internalSave2($this->data);
         $id = $this->data['id'];
         if (!isset($id) || is_null($id) || empty($id)) {
-            $this->data['id'] = $data['id'];
+            $this->data['id'] = $savedData['id'];
         }
         $uuid = $this->data['uuid'];
         if (!isset($uuid) || is_null($uuid) || empty($uuid)) {
-            $this->data['uuid'] = $data['uuid'];
+            $this->data['uuid'] = $savedData['uuid'];
         }
         if (array_key_exists('version', $this->data)) {
-            $this->data['version'] = $data['version'];
+            $this->data['version'] = $savedData['version'];
         }
     }
 
