@@ -393,17 +393,6 @@ class WidgetService extends AbstractService
                     $data = $this->evaluteExpression($data, $expression);
                 }
             }
-
-            if (is_array($data)) {
-                $data = $this->getTargets($uuid,$data,1);
-            }
-            else {
-                $targets = $this->getTargets($uuid,$data,0);
-                if ($targets) {
-                    $response['widget']['targets'] = $targets;
-                }
-            }
-            
             if (isset($data[0]['calculated']) && count($data) == 1) {
                 //Send only the calculated value if left oprand not specified and aggregate values
                 $response['widget']['data'] = $data[0]['calculated'];
@@ -413,57 +402,6 @@ class WidgetService extends AbstractService
 
         }
         return $response;
-    }
-
-
-    public function getTargets($uuid,$data,$isaggregate) {
-        $query = 'SELECT wt.group_key,t.type, t.red_limit, t.yellow_limit, t.green_limit  FROM ox_widget w JOIN ox_widget_target wt on w.id=wt.widget_id JOIN ox_target t ON t.id=wt.target_id WHERE w.uuid=:uuid';
-        $queryParams = [
-            'uuid' => $uuid,
-        ];
-        try {
-            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (count($resultSet) == 0) {
-                if ($isaggregate)
-                    return $data;
-                else 
-                    return null;
-            } 
-            if ($isaggregate) {
-                if (count($resultSet)>1) {
-                    $targets = [];
-                    foreach($resultSet as $row) {
-                        $targets[$row['group_key']]['red_limit'] = $row['red_limit'];
-                        $targets[$row['group_key']]['yellow_limit'] = $row['yellow_limit'];
-                        $targets[$row['group_key']]['green_limit'] = $row['green_limit'];
-                    }
-                } 
-                $cols = array_keys($data[0]);
-                $group_key = $cols[0];            
-                foreach ($data as $key1 => $dataset) {
-                    if (count($resultSet)>1) {
-                        $keyvalue = $dataset[$group_key];
-                        $data[$key1]['red_limit'] = $targets[$keyvalue]['red_limit'];
-                        $data[$key1]['yellow_limit'] = $targets[$keyvalue]['yellow_limit'];
-                        $data[$key1]['green_limit'] = $targets[$keyvalue]['green_limit'];
-                    } else {
-                        $data[$key1]['red_limit'] = $resultSet[0]['red_limit'];
-                        $data[$key1]['yellow_limit'] = $resultSet[0]['yellow_limit'];
-                        $data[$key1]['green_limit'] = $resultSet[0]['green_limit'];
-                    }
-                }
-                return $data;                
-            } else {
-                $color = TargetService::checkRYG($data,$resultSet[0]['type'],$resultSet[0]['red_limit'],$resultSet[0]['yellow_limit'],$resultSet[0]['green_limit']);
-                return ['red_limit'=>$resultSet[0]['red_limit'],'yellow_limit'=>$resultSet[0]['yellow_limit'],'green_limit'=>$resultSet[0]['green_limit'],'color'=>$color];
-            }
-
-        } catch (Exception $e){
-            if ($isaggregate)
-                return $data;
-            else 
-                return null;
-        }
     }
 
     public function evaluteExpression($data, $expression)
