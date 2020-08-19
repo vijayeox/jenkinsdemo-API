@@ -157,12 +157,6 @@ public function execute(array $data,Persistence $persistenceService)
                 }
                 $data['endoEffectiveDate'] = $data['update_date'];
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                    // foreach ($data['additionalInsured'] as $key => $value) {
-                    //     if(!isset($value['effectiveDate'])){
-                    //         $data['additionalInsured'][$key]['effectiveDate'] = $data['start_date'];
-                    //         $data['additionalInsured'][$key]['start_date'] = date_format(date_create($data['start_date']),'Y-m-d');
-                    //     }
-                    // }
                     $data['previous_additionalInsured'] = $data['additionalInsured'];
                     $policy['previous_additionalInsured'] = $data['additionalInsured'];
                 } else {
