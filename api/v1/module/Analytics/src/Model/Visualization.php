@@ -2,45 +2,55 @@
 
 namespace Analytics\Model;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class Visualization extends Entity
-{
-    protected $data = array(
-        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE , 'required' => FALSE),
-        'name' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'created_by' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'date_created' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE , 'required' => FALSE),
-        'org_id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'isdeleted' => array('type' => parent::BOOLEANVAL, 'value' => false, 'readonly' => FALSE , 'required' => FALSE),
-        'configuration' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'renderer' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'type' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE)
-    );
+class Visualization extends Entity {
+    protected static $MODEL = [
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => TRUE ,    'required' => FALSE],
+        'name' =>           ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE ,    'required' => FALSE],
+        'org_id' =>         ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
+        'isdeleted' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE ,   'required' => FALSE, 'value' => FALSE],
+        'configuration' =>  ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'renderer' =>       ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'type' =>           ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'version' =>        ['type' => Type::INTEGER,   'readonly' => FALSE,    'required' => FALSE]
+    ];
 
-    public function validate()
-    {
-        $this->completeValidation();
+    public function &getModel() {
+        return self::$MODEL;
     }
 
-    public function updateValidate()
-    {
-        $this->typeChecker();
+    public function validate() {
+        $errors = array();
+        try {
+            parent::validate();
+        }
+        catch (ValidationException $e) {
+            $validationException = $e;
+            $errors = $e->getErrors();
+        }
+        try {
+            $this->validateType();
+        }
+        catch (ValidationException $e) {
+            $errors = array_merge($errors, $e->getErrors());
+        }
+        if (count($errors) > 0) {
+            throw new ValidationException($errors);
+        }
     }
 
-    public function validateType($type)
+    public function validateType()
     {
-        if($type == 'chart' || $type == 'inline' || $type == 'table' || $type == 'html')
-            return;
-        else
-        {
-            $errors = array('data' => 'Type must be chart, inline, table or html');
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
+        $allowedValues = ['chart', 'html', 'inline', 'table'];
+        if (!in_array($this->data['type'], $allowedValues)) {
+            throw new ValidationException(['type' => ['value' => $this->data['type'], 'error' => 'Not one of ' . json_encode($allowedValues)]]);
         }
     }
 }
+

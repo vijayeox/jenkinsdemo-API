@@ -5,12 +5,14 @@ ox_app:
       category: "OTHERS"
       type: 2
       status: 1
+      isdefault: 0
     - id: 200
       name: "ox_client_app"
       uuid: "8765765"
       category: "OTHERS"
       type: 2
       status: 1
+      isdefault: 0
 
 ox_app_registry:
     - org_id: 1

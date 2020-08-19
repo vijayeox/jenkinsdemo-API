@@ -4,12 +4,11 @@ namespace Analytics\Service;
 use Oxzion\Service\AbstractService;
 use Analytics\Model\VisualizationTable;
 use Analytics\Model\Visualization;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Exception;
 
 class VisualizationService extends AbstractService
@@ -25,89 +24,55 @@ class VisualizationService extends AbstractService
 
     public function createVisualization($data)
     {
-        $form = new Visualization();
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $form->exchangeWithSpecificKey($data,'value');
-        $form->validate();
-        $form->validateType($data['type']);
-        $this->beginTransaction();
-        $count = 0;
+        $visualization = new Visualization($this->table);
+        $visualization->assign($data);
+        $visualization->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID)); //When org_id is defined as readonly in the model.
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $this->beginTransaction();
+            $visualization->save2();
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $visualization->getGenerated();
     }
 
     public function updateVisualization($uuid, $data)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($data['version']))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $form = new Visualization();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate();
-        if(isset($data['type']))
-            $form->validateType($data['type']);
-        $count = 0;
+        $visualization = new Visualization($this->table);
+        $visualization->loadByUuid($uuid);
+        $visualization->assign($data);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $visualization->save2();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $visualization->getGenerated();
     }
 
     public function deleteVisualization($uuid,$version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($version))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $data = array('version' => $version,'isdeleted' => 1);
-        $form = new Visualization();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate($data);
-        $count = 0;
+        $visualization = new Visualization($this->table);
+        $visualization->loadByUuid($uuid);
+        $visualization->assign([
+            'version' => $version, 
+            'isdeleted' => 1
+        ]);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $visualization->save2();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getVisualization($uuid)

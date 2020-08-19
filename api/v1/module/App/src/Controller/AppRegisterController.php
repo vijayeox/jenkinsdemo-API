@@ -38,16 +38,13 @@ class AppRegisterController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         $this->log->info(__CLASS__ . "-> \n Create App Registry- " . print_r($data, true));
         try {
-            $count = $this->appService->registerApps($data);
+            $this->appService->registerApps($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Failed to Register", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -63,7 +60,7 @@ class AppRegisterController extends AbstractApiControllerHelper
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         if ($count == 0) {

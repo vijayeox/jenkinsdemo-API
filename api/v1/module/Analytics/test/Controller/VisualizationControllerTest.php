@@ -59,13 +59,13 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_visualization'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/visualization', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('visualization');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['name'], 'required');
+        $this->assertEquals($content['message'], 'Validation error(s).');
+        $this->assertEquals($content['data']['errors']['name']['error'], 'required');
     }
 
     public function testUpdate()
@@ -88,12 +88,12 @@ class VisualizationControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817', 'PUT', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('visualization');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testUpdateNotFound()
@@ -220,7 +220,7 @@ class VisualizationControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/visualization/10000?version=1', 'DELETE');
+        $this->dispatch('/analytics/visualization/11111111-1111-1111-1111-111111111111?version=1', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('visualization');
@@ -232,11 +232,11 @@ class VisualizationControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817?version=3', 'DELETE');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('visualization');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 }

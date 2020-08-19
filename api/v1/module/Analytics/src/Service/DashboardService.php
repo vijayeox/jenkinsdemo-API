@@ -23,29 +23,57 @@ class DashboardService extends AbstractService
 
     public function createDashboard($data)
     {
-        $form = new Dashboard();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $check = null;
+        $dashboard = new Dashboard($this->table);
+        $dashboard->assign(['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+        $dashboard->assign($data);
+
+        $foundDefaultDashboard = false;
         try {
-            $query = 'Select id from ox_dashboard where isdefault = 1 and org_id=:org_id';
+            //Check whether there is a default dashboard. If not, make this dashboard default one.
+            $query = 'select id from ox_dashboard where isdefault = 1 and org_id=:org_id';
             $queryParams = [
                 'org_id' => AuthContext::get(AuthConstants::ORG_ID),
             ];
             $check = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (count($check) == 0) {
-                $data['isdefault'] = 1;
+            if (0 == count($check)) {
+                $foundDefaultDashboard = false;
+                $dashboard->assign(['isdefault' => 1]);
             }
-        } catch (Exception $e) {
+            else {
+                $foundDefaultDashboard = true;
+            }
+        }
+        catch (Exception $e) {
             throw $e;
         }
-        $form->exchangeWithSpecificKey($data, 'value');
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
         try {
+            $this->beginTransaction();
+            //If default dashboard already exists and if this dashboard has default set to TRUE, clear default setting of existing default dashboard.
+            if ($foundDefaultDashboard && isset($data['isdefault']) && $data['isdefault']) {
+                $query = 'update ox_dashboard set isdefault = 0 where isdefault = 1 and org_id=:org_id';
+                $queryParams = [
+                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+                ];
+                $this->executeUpdateWithBindParameters($query, $queryParams);
+            }
+            $dashboard->save2();
+            $this->commit();
+            return $dashboard->getGenerated();
+        }
+        catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function updateDashboard($uuid, $data)
+    {
+        $dashboard = new Dashboard($this->table);
+        $dashboard->loadByUuid($uuid);
+        $dashboard->assign($data);
+
+        try {
+            $this->beginTransaction();
             if (isset($data['isdefault']) && ($data['isdefault'] == 1)) {
                 $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
                 $queryParams = [
@@ -53,87 +81,39 @@ class DashboardService extends AbstractService
                 ];
                 $this->executeUpdateWithBindParameters($query, $queryParams);
             }
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $dashboard->save2();
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $data['uuid'];
-    }
-
-    public function updateDashboard($uuid, $data)
-    {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if (!isset($data['version'])) {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $form = new Dashboard();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate($data);
-        $count = 0;
-        try {
-            if (isset($data['isdefault']) && $data['isdefault'] == 1) {
-                $query = 'Update ox_dashboard SET isdefault = 0 where isdefault = 1 and org_id=:org_id';
-                $queryParams = [
-                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-                ];
-                $this->executeUpdateWithBindParameters($query, $queryParams);
-            }
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
-        $formArray = $form->toArray();
         return [
             'dashboard' => [
-                'version' => $formArray['version']['value'] + 1,
-                'data' => $data,
+                'version' => $dashboard->getProperty('version'),
+                'data' => $data
             ],
         ];
     }
 
     public function deleteDashboard($uuid, $version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if (!isset($version)) {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $data = array('version' => $version, 'isdeleted' => 1);
-        $form = new Dashboard();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate($data);
-        $count = 0;
+        $dashboard = new Dashboard($this->table);
+        $dashboard->loadByUuid($uuid);
+        $dashboard->assign([
+            'version' => $version,
+            'isdeleted' => 1
+        ]);
+
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $dashboard->save2();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getDashboard($uuid)
