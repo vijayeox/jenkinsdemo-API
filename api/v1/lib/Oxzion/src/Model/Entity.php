@@ -247,22 +247,6 @@ abstract class Entity implements Countable
     }
 
     /*
-     * Sets a property. Throws exception if the property name is not defined in the form.
-     * 
-     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
-     * setting properties without needed checks.
-     */
-    private function setProperty($property, $value) {
-        if (!array_key_exists($property, $this->data)) {
-            throw new Exception("Property '${property}' is not defined in the form.");
-        }
-        if ($this->isReadOnly($property)) {
-            throw new Exception("Property '${property}' is read-only.");
-        }
-        $this->data[$property] = $this->validateAndConvert($property, $value);
-    }
-
-    /*
      * Loads data from database using UUID.
      */
     public function loadByUuid($uuid) {
@@ -281,8 +265,8 @@ abstract class Entity implements Countable
      */
     public function assign($input) {
         //Make sure 'version' is set if this is update.
-        $id = $this->getProperty('id');
-        $uuid = $this->getProperty('uuid');
+        $id = $this->data['id'];
+        $uuid = $this->data['uuid'];
         $isIdValid = (!is_null($id) && (0 != $id) && !empty($id));
         $isUuidValid = (!is_null($uuid) && !empty($uuid));
         $isVersionSet = !is_null($input) && isset($input) && array_key_exists('version', $input);
@@ -302,17 +286,17 @@ abstract class Entity implements Countable
     public function getGenerated($includeId = false) {
         $arr = array();
         if ($includeId) {
-            $id = $this->getProperty('id');
-            if (!is_null($id)) {
+            $id = $this->data['id'];
+            if (isset($id) && !is_null($id)) {
                 $arr['id'] = $id;
             }
         }
-        $uuid = $this->getProperty('uuid');
-        if (!is_null($uuid)) {
+        $uuid = $this->data['uuid'];
+        if (isset($uuid) && !is_null($uuid)) {
             $arr['uuid'] = $uuid;
         }
-        $version = $this->getProperty('version');
-        if (!is_null($version)) {
+        $version = $this->data['version'];
+        if (isset($version) && !is_null($version)) {
             $arr['version'] = $version;
         }
         return $arr;
@@ -350,7 +334,7 @@ abstract class Entity implements Countable
         return $returnArray;
     }
 
-    public function save2() {
+    public function save() {
         $this->validate();
         $data = $this->table->internalSave2($this->data);
         $id = $this->data['id'];

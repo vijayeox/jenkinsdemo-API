@@ -54,7 +54,7 @@ class WidgetService extends AbstractService
 
         try {
             $this->beginTransaction();
-            $widget->save2();
+            $widget->save();
             $generated = $widget->getGenerated();
 
             //Insert the queries related to this widget.
@@ -143,7 +143,7 @@ class WidgetService extends AbstractService
 
         try {
             $this->beginTransaction();
-            $widget->save2();
+            $widget->save();
 
             $query = 'DELETE FROM ox_widget_query WHERE ox_widget_id = (SELECT id FROM ox_widget WHERE uuid = :uuid)';
             $queryParams = [
@@ -198,7 +198,7 @@ class WidgetService extends AbstractService
 
         try {
             $this->beginTransaction();
-            $widget->save2();
+            $widget->save();
             $this->commit();
         }
         catch (Exception $e) {

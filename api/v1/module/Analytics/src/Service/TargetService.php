@@ -31,7 +31,7 @@ class TargetService extends AbstractService
         $target->assign($data);
         try {
             $this->beginTransaction();
-            $target->save2();
+            $target->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -48,14 +48,14 @@ class TargetService extends AbstractService
         $target->assign($data);
         try {
             $this->beginTransaction();
-            $target->save2();
+            $target->save();
             $this->commit();
         }
         catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $target->getGenerated()['version'];
+        return $target->getProperty('version');
     }
 
     public function deleteTarget($uuid,$version)
@@ -68,7 +68,7 @@ class TargetService extends AbstractService
         ]);
         try {
             $this->beginTransaction();
-            $target->save2();
+            $target->save();
             $this->commit();
         }
         catch (Exception $e) {

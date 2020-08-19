@@ -124,7 +124,7 @@ class AppService extends AbstractService
         $app->assign($data);       //Assign user input values.
         try {
             $this->beginTransaction();
-            $app->save2();
+            $app->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -820,7 +820,7 @@ class AppService extends AbstractService
         $app->assign($data);
         try {
             $this->beginTransaction();
-            $app->save2();
+            $app->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -840,7 +840,7 @@ class AppService extends AbstractService
         ]);
         try {
             $this->beginTransaction();
-            $app->save2();
+            $app->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -960,7 +960,7 @@ class AppService extends AbstractService
                     ]);
                     $appObj->setCreatedBy(1);
                     $appObj->setCreatedDate(date('Y-m-d H:i:s'));
-                    $appObj->save2();
+                    $appObj->save();
                 } else {
                     $start_options = isset($app['options']) ? json_encode($app['options']) : null;
                     $category = isset($app['category']) ? $app['category'] : null;
