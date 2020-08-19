@@ -17,40 +17,26 @@ class Visualization extends Entity {
         'isdeleted' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE ,   'required' => FALSE, 'value' => FALSE],
         'configuration' =>  ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
         'renderer' =>       ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
-        'type' =>           ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'type' =>           ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE, 
+            //Dynamic validation code is run using PHP eval function. It runs in the context of Entity. 
+            //Dynamic code has access to following implicit variables:
+            //      $data - Arraay containing all the properties of this entity.
+            //      $value - Value of the property being validated.
+            //      $property - Name of the property being validated.
+            //Dynamically evaluated code should return:
+            //      NULL if validation passes.
+            //      Validation error message if validation fails.
+            //Dynamically evaluated code may also throw InvalidPropertyValueException 
+            //(\Oxzion\InvalidPropertyValueException) if validation fails.
+            'dynamicValidation' => '
+                $allowedValues = ["chart", "html", "inline", "table"];
+                return in_array($value, $allowedValues) ? 
+                    NULL : "Value not in list:" . json_encode($allowedValues);
+            '],
         'version' =>        ['type' => Type::INTEGER,   'readonly' => FALSE,    'required' => FALSE]
     ];
 
     public function &getModel() {
         return self::$MODEL;
     }
-
-    public function validate() {
-        $errors = array();
-        try {
-            parent::validate();
-        }
-        catch (ValidationException $e) {
-            $validationException = $e;
-            $errors = $e->getErrors();
-        }
-        try {
-            $this->validateType();
-        }
-        catch (ValidationException $e) {
-            $errors = array_merge($errors, $e->getErrors());
-        }
-        if (count($errors) > 0) {
-            throw new ValidationException($errors);
-        }
-    }
-
-    public function validateType()
-    {
-        $allowedValues = ['chart', 'html', 'inline', 'table'];
-        if (!in_array($this->data['type'], $allowedValues)) {
-            throw new ValidationException(['type' => ['value' => $this->data['type'], 'error' => 'Not one of ' . json_encode($allowedValues)]]);
-        }
-    }
 }
-

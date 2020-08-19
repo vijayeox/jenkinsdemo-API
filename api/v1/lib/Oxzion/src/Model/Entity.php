@@ -3,6 +3,7 @@ namespace Oxzion\Model;
 
 use Countable;
 use Exception;
+use ParseError;
 use Oxzion\Type;
 use Oxzion\InvalidInputException;
 use Oxzion\ValidationException;
@@ -134,6 +135,25 @@ abstract class Entity implements Countable
         return NULL;
     }
 
+    private function runDynamicValidationIfExists($property, $value, $propDef) {
+        if (!array_key_exists('dynamicValidation', $propDef)) {
+            return;
+        }
+        $code = $propDef['dynamicValidation'];
+        $data = $this->data;
+        try {
+            $result = eval("use \Oxzion\InvalidPropertyValueException;\r\n" . $code);
+            if (isset($result) && !is_null($result)) {
+                throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
+                ['property' => $property, 'value' => $value, 'error' => $result]);
+            }
+        }
+        catch(ParseError $e) {
+            throw new InvalidPropertyValueException("Validator code parse error for property '${property}'.",
+                ['property' => $property, 'error' => 'Validator code parse error:' . $e->getMessage()]);
+        }
+    }
+
     private function validateAndConvert($property, $value) {
         $model = &$this->getModel();
         if (!isset($model) || is_null($model)) {
@@ -143,6 +163,7 @@ abstract class Entity implements Countable
         if (!isset($propDef) || is_null($propDef)) {
             return $value; //Any value is valid when the property definition is not set for a property.
         }
+        $this->runDynamicValidationIfExists($property, $value, $propDef);
         try {
             $convertedValue = Type::convert($value, $propDef['type']);
         }
