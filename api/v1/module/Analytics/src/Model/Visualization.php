@@ -4,6 +4,7 @@ namespace Analytics\Model;
 
 use Oxzion\Type;
 use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
 
 class Visualization extends Entity {
     protected static $MODEL = [
@@ -23,4 +24,33 @@ class Visualization extends Entity {
     public function &getModel() {
         return self::$MODEL;
     }
+
+    public function validate() {
+        $errors = array();
+        try {
+            parent::validate();
+        }
+        catch (ValidationException $e) {
+            $validationException = $e;
+            $errors = $e->getErrors();
+        }
+        try {
+            $this->validateType();
+        }
+        catch (ValidationException $e) {
+            $errors = array_merge($errors, $e->getErrors());
+        }
+        if (count($errors) > 0) {
+            throw new ValidationException($errors);
+        }
+    }
+
+    public function validateType()
+    {
+        $allowedValues = ['chart', 'html', 'inline', 'table'];
+        if (!in_array($this->data['type'], $allowedValues)) {
+            throw new ValidationException(['type' => ['value' => $this->data['type'], 'error' => 'Not one of ' . json_encode($allowedValues)]]);
+        }
+    }
 }
+

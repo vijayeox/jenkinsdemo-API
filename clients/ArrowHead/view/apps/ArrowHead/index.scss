@@ -54,6 +54,18 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     border-color: $secondary;
   }
 
+  .btn-secondary.formio-button-remove-row{
+    background-color: #F04124;
+    border-color: #F04124;
+  }
+
+  .formio-component-multiple{
+    .btn-secondary{
+      background-color: #F04124;
+      border-color: #F04124;
+    }    
+  }
+
   .bg-primary {
     background-color: $primary-color !important;
   }
@@ -95,6 +107,25 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   }
   .formio-dialog-buttons button.formio-dialog-button {
     background-color: $secondary;
+  }
+
+  .formio-component-modal-wrapper.formio-component-modal-wrapper-panel{
+    .formio-dialog-close.float-right.btn.btn-secondary{
+      background-color:$primary-color;
+      border: solid 4px lightgray;
+    }
+    .formio-dialog-close:before{
+      font-size:25px;
+      font-weight:bolder;
+      color:white;
+    }
+    .formio-dialog{
+      .formio-dialog-buttons{
+        .btn-success.formio-dialog-button{
+          float: left;
+        }
+      }
+    }
   }
 
   #floater {

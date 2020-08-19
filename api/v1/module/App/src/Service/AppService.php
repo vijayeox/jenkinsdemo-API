@@ -491,7 +491,7 @@ class AppService extends AbstractService
             $workflowData = $yamlData['workflow'];
             foreach ($workflowData as $value) {
                 $result = 0;
-                $result = $this->checkWorkflowData($value);
+                $result = $this->checkWorkflowData($value,$appUuid);
                 if ($result == 0) {
                     $entity = $this->entityService->getEntityByName($yamlData['app']['uuid'], $value['entity']);
                     if (!$entity) {
@@ -507,7 +507,7 @@ class AppService extends AbstractService
         }
     }
 
-    private function checkWorkflowData(&$data)
+    private function checkWorkflowData(&$data,$appUuid)
     {
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         if (!(isset($data['bpmn_file']))) {
@@ -519,7 +519,9 @@ class AppService extends AbstractService
             $data['name'] = str_replace(' ', '_', $data['bpmn_file']); // Replaces all spaces
             $data['name'] = preg_replace('/[^A-Za-z0-9\_]/', '', $data['name'], -1); // Removes special chars.
         }
-        if (!isset($data['entity'])) {
+        if (isset($data['entity'])) {
+            $this->assignWorkflowToEntityMapping($data['entity'], $data['uuid'],$appUuid);
+        } else {
             $this->logger->warn("Entity not given, deploy failed ! ");
             return 1;
         }
@@ -1029,6 +1031,30 @@ class AppService extends AbstractService
                     $entityData['child'] = $childEntityData['entity'];
                 }
             }
+        }
+    }
+
+    private function assignWorkflowToEntityMapping($entityArray ,$workflowUuid, $appUuid) {
+        try {
+            $data = array();
+            $workflowId = $this->getIdFromUuid('ox_workflow',$workflowUuid);
+            $entityArray = is_array($entityArray) ? $entityArray : array($entityArray);
+            foreach ($entityArray as $entityName) {
+                $entityData = $this->entityService->getEntityByName($appUuid,$entityName);
+                if($entityData == null)
+                    continue;
+                $individualEntry = array(
+                    'workflow_id' => $workflowId,
+                    'entity_id' => $entityData['id']
+                );
+                array_push($data, $individualEntry);
+            }
+            if(!empty($data)) {
+                $this->multiInsertOrUpdate('ox_workflow_entity_mapper', $data);
+            }
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
     }
 

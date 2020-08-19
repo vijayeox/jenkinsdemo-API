@@ -655,6 +655,17 @@ ox_indexed_file_attribute:
     field_value_text: "Dive Store"
     field_value_type: 'TEXT'
     field_id: 7 
+ox_file_document:
+  - id: 1
+    file_id: 11
+    org_id: 1
+    field_value: "[array1]"
+    field_id: 5
+  - id: 2
+    file_id: 11
+    org_id: 1
+    field_value: "[array]"
+    field_id: 6
 ox_wf_user_identifier:
   - id: 1
     user_id: 1

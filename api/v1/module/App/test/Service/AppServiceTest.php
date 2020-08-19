@@ -31,7 +31,6 @@ class AppServiceTest extends AbstractServiceTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/AppServiceTest.yml");
-        // print_r($dataset);
         return $dataset;
     }
 
@@ -81,13 +80,13 @@ class AppServiceTest extends AbstractServiceTest
     }
 
     public function testGetAppWithValidUuid() {
-        AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::USER_ID, 6);
+        AuthContext::put(AuthConstants::ORG_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $uuid = '6eb3d17e-9db3-45b2-82e6-a59388d71605';
+        $uuid = 'p77ea120-b028-479b-8c6e-60476b6a4459';
         $app = $appService->getApp($uuid);
         $this->assertEquals($app['uuid'], $uuid);
-        $this->assertEquals($app['name'], 'Analytics');
+        $this->assertEquals($app['name'], 'DummyApp');
     }
 
     public function testGetAppWithInvalidUuid() {
@@ -507,20 +506,20 @@ class AppServiceTest extends AbstractServiceTest
     }
 
     public function testDeleteApp() {
-        AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::USER_ID, 6);
+        AuthContext::put(AuthConstants::ORG_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $uuid = '6eb3d17e-9db3-45b2-82e6-a59388d71605';
+        $uuid = 'p77ea120-b028-479b-8c6e-60476b6a4459';
         $appService->deleteApp($uuid, 0);
         $result = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${uuid}'");
         $this->assertEquals(\App\Model\App::DELETED, $result[0]['status']);
     }
 
     public function testDeleteAppWithValidUuidAndInvalidVersion() {
-        AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::USER_ID, 6);
+        AuthContext::put(AuthConstants::ORG_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $uuid = '6eb3d17e-9db3-45b2-82e6-a59388d71605';
+        $uuid = 'p77ea120-b028-479b-8c6e-60476b6a4459';
         try {
             $appService->deleteApp($uuid, 5000);
             $this->fail('Expected VersionMismatchException.');

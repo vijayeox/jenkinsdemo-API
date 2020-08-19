@@ -62,9 +62,11 @@ class AppDelegateService extends AbstractService
         $this->fileService = $fileService;
     }
 
-    // public function getFileservice(){
-    //     return $this->fileService;
-    // }
+    public function setAppDelegateService(){
+        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService);
+        return $appDelegateService;
+    }
+
     public function execute($appId, $delegate, $dataArray = array())
     {
         $this->logger->info(AppDelegateService::class . "EXECUTE DELEGATE ---");
@@ -122,6 +124,9 @@ class AppDelegateService extends AbstractService
                 }
                 if (method_exists($obj, "setCommentService")) {
                     $obj->setCommentService($this->commentService);
+                }
+                if (method_exists($obj, "setAppDelegateService")) {
+                    $obj->setAppDelegateService($this->setAppDelegateService());
                 }
                 $persistenceService = $this->getPersistence($appId);
 

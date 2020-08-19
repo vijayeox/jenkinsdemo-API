@@ -12,6 +12,9 @@ class StorePreviewDocument extends PolicyDocument
     public function execute(array $data,Persistence $persistenceService)
     {
         $originalData = $data;
+        $this->processSurplusYear($data);
+        $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
+        $data['license_number'] = $this->getLicenseNumber($data,$persistenceService);
         $options = array();
         if(isset($data['endorsement_options'])){
             $endorsementOptions = is_array($data['endorsement_options']) ?  $data['endorsement_options'] : json_decode($data['endorsement_options'],true);
@@ -43,7 +46,11 @@ class StorePreviewDocument extends PolicyDocument
                     }
                 }
             }else{
-                $data['certificate_no'] = "123456789";
+                if(isset($data['certificate_no'])){
+                    $data['certificate_no'] = $data['certificate_no'];
+                } else {
+                    $data['certificate_no'] = "123456789";
+                }
             }
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));
@@ -114,7 +121,7 @@ class StorePreviewDocument extends PolicyDocument
         if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
             $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
         }
-
+        
         if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
             $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
         }
@@ -155,7 +162,12 @@ class StorePreviewDocument extends PolicyDocument
             $this->logger->info("DOCUMENT blanketForm");
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
-        if ($this->type != 'endorsement') {
+        if($temp['product'] == 'Dive Store'){
+            if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
+                 if(isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability'){
+                    $documents['group_blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
+                }
+            }
             $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
             if($temp['propertyCoverageSelect'] == 'yes'){
                 $this->logger->info("DOCUMENT property_coi_document");
@@ -167,9 +179,9 @@ class StorePreviewDocument extends PolicyDocument
               $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
               array_push($documents['endorsement_coi_document'], $endorsementDoc);
         }
-
-        if($this->type == 'policy'){
-            $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
+        $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
+        if($temp['product'] == 'Dive Store'){
+            $this->additionalDocumentsDS($temp,$documents,$dest);    
         }
         $originalData['finalDocuments'] = $documents;
         return $originalData;

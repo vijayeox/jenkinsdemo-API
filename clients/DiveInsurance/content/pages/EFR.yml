@@ -1,5 +1,5 @@
-name: 'Dive Store'
-description: 'View Dive Store Policy'
+name: 'Emergency First Response'
+description: 'View Emergency First Response Policy'
 content:
         -
             type: ButtonAction

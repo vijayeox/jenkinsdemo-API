@@ -43,10 +43,10 @@ final class Version20200414082217 extends AbstractMigration
 
     public function down(Schema $schema) : void
     {
+        $this->addSql("ALTER TABLE `ox_file_audit_log` drop COLUMN `assoc_id`;");
+              $this->addSql("ALTER TABLE ox_file_audit_log drop COLUMN `entity_id`;");
+              $this->addSql("ALTER TABLE `ox_file_audit_log` drop COLUMN `is_active`;");
         // this down() migration is auto-generated, please modify it to your needs
-        // $this->addSql("DROP TRIGGER IF EXISTS `ox_file_insert`");
-        // $this->addSql("DROP TRIGGER IF EXISTS `ox_file_update`");
-        // $this->addSql("DROP TRIGGER IF EXISTS `ox_file_delete`");
 
     }
 }
