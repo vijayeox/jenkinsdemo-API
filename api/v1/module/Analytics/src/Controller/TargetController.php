@@ -6,6 +6,7 @@ use Analytics\Model\Target;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class TargetController extends AbstractApiController
 {
@@ -37,15 +38,13 @@ class TargetController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->targetService->createTarget($data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $generated = $this->targetService->createTarget($data);
+            return $this->getSuccessResponseWithData($generated, 201);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 201);
     }
 
     /**
@@ -60,34 +59,25 @@ class TargetController extends AbstractApiController
     public function update($uuid, $data)
     {
         try {
-            $count = $this->targetService->updateTarget($uuid, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            $version = $this->targetService->updateTarget($uuid, $data);
+            return $this->getSuccessResponseWithData(['version' => $version], 200);
+        } 
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Target not found for uuid - $uuid", 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
     }
 
     public function delete($uuid)
     {
         $params = $this->params()->fromQuery();
-        if (isset($params['version'])) {
-            try {
-                $response = $this->targetService->deleteTarget($uuid, $params['version']);
-            } catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-            }
-            if ($response == 0) {
-                return $this->getErrorResponse("Target for uuid - $uuid", 404, ['uuid' => $uuid]);
-            }
+        try {
+            $this->targetService->deleteTarget($uuid, $params['version']);
             return $this->getSuccessResponse();
-        } else {
-            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 

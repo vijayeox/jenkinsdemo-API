@@ -64,7 +64,7 @@ class DashboardController extends AbstractApiController
         try {
             $result = $this->dashboardService->updateDashboard($uuid, $data);
             return $this->getSuccessResponseWithData($result, 200);
-        } 
+        }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
