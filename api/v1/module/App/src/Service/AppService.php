@@ -122,7 +122,6 @@ class AppService extends AbstractService
             'status' => App::IN_DRAFT
         ]);
         $app->assign($data);       //Assign user input values.
-        $app->validate();
         try {
             $this->beginTransaction();
             $app->save2();
@@ -817,7 +816,6 @@ class AppService extends AbstractService
         $app = new App($this->table);
         $app->loadByUuid($uuid);
         $app->assign($data);
-        $app->validate();
         try {
             $this->beginTransaction();
             $app->save2();
@@ -960,7 +958,6 @@ class AppService extends AbstractService
                     ]);
                     $appObj->setCreatedBy(1);
                     $appObj->setCreatedDate(date('Y-m-d H:i:s'));
-                    $appObj->validate();
                     $appObj->save2();
                 } else {
                     $start_options = isset($app['options']) ? json_encode($app['options']) : null;

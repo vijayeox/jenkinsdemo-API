@@ -65,7 +65,7 @@ class VisualizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
-        $this->assertEquals($content['data']['errors']['name'], 'required');
+        $this->assertEquals($content['data']['errors']['name']['error'], 'required');
     }
 
     public function testUpdate()

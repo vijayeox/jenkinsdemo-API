@@ -109,7 +109,7 @@ class DashboardControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
-        $this->assertEquals($content['data']['errors']['dashboard_type'], 'required');
+        $this->assertEquals($content['data']['errors']['dashboard_type']['error'], 'required');
     }
 
     public function testUpdate()

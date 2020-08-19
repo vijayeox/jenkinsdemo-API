@@ -51,7 +51,6 @@ class WidgetService extends AbstractService
             $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $orgId));
             $widget->setForeignKey('visualization_id', $visualizationId);
         }
-        $widget->validate();
 
         try {
             $this->beginTransaction();
@@ -141,7 +140,6 @@ class WidgetService extends AbstractService
         if (isset($data['expression'])) {
             $widget->setProperty('expression', json_encode($data['expression']));
         }
-        $widget->validate();
 
         try {
             $this->beginTransaction();
@@ -197,7 +195,6 @@ class WidgetService extends AbstractService
             'version' => $version,
             'isdeleted' => 1
         ]);
-        $widget->validate();
 
         try {
             $this->beginTransaction();

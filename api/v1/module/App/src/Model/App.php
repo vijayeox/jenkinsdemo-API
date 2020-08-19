@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity;
 
-class App extends Entity
-{
+class App extends Entity {
     //status for the apps
     const DELETED = 1;
     const IN_DRAFT = 2;
@@ -16,32 +16,25 @@ class App extends Entity
     const PRE_BUILT = 1;
     const MY_APP = 2;
 
-    protected $data = array(
-        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'name' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
-        'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
-        'description' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE),
-        'type' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
-        'isdefault' => array('type' => parent::BOOLEANVAL, 'value' => false, 'readonly' => FALSE, 'required' => TRUE),
-        'logo' => array('type' => parent::STRINGVAL, 'value' => 'default_app.png', 'readonly' => FALSE, 'required' => FALSE),
-        'category' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
-        'date_created' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
-        'date_modified' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
-        'created_by' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
-        'modified_by' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
-        'status' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => FALSE , 'required' => TRUE),
-        'start_options' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => FALSE),
-        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE),
-    );
+    protected static $MODEL = [
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
+        'name' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => TRUE,  'required' => FALSE],
+        'description' =>    ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'type' =>           ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
+        'isdefault' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => TRUE, 'value' => FALSE],
+        'logo' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE, 'value' => 'default_app.png'],
+        'category' =>       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'date_modified' =>  ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
+        'modified_by' =>    ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
+        'status' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE, 'value' => 0],
+        'start_options' =>  ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'version' =>        ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE]
+    ];
 
-    public function validate()
-    {
-        $this->completeValidation();
-    }
-
-    public function updateValidate()
-    {
-        $this->typeChecker();
+    public function &getModel() {
+        return self::$MODEL;
     }
 }
-

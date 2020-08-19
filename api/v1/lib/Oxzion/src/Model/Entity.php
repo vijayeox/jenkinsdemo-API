@@ -2,29 +2,33 @@
 namespace Oxzion\Model;
 
 use Countable;
-use Oxzion\InputConverter;
+use Exception;
+use Oxzion\Type;
 use Oxzion\InvalidInputException;
 use Oxzion\ValidationException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\DataCorruptedException;
 use Oxzion\ParameterRequiredException;
+use Oxzion\InvalidPropertyValueException;
 
 abstract class Entity implements Countable
 {
-    protected $data;
-    const INTVAL = 'int';
-    const FLOATVAL = 'float';
-    const DATETYPEVAL = 'datetype';
-    const UUIDVAL = 'uuid';
-    const TIMESTAMPVAL = 'timestamp';
-    const STRINGVAL = 'string';
-    const BOOLEANVAL = 'boolean';
-
+    protected $data = NULL;
     protected $table;
 
     public function __construct($table = NULL)
     {
         $this->table = $table;
+        if (!isset($this->data) || is_null($this->data)) {
+            $this->data = [];
+            $model = &$this->getModel();
+            if (!isset($model) || is_null($model)) {
+                return;
+            }
+            foreach($model as $propName => $propDef) {
+                $this->data[$propName] = array_key_exists('value', $propDef) ? $propDef['value'] : NULL;
+            }
+        }
     }
 
     public function count()
@@ -78,14 +82,6 @@ abstract class Entity implements Countable
         return $data;
     }
 
-    /**
-     * This method should be overridden by base classes to perform field level validations
-     * this method should throw ValidationException if there are any errors
-     */
-    public function validate()
-    {
-    }
-
     public function import($data)
     {
         foreach ($data as $key => $val) {
@@ -110,33 +106,6 @@ abstract class Entity implements Countable
         }
     }
 
-    public function exchangeWithSpecificKey($data, $keyname, $validation = false)
-    {
-        $errors = array();
-        foreach ($data as $key => $value) {
-            if (!array_key_exists($key, $this->data)) {
-                continue;
-            }
-            if ($validation == true) {
-                if (array_key_exists('readonly', $this->data[$key])) {
-                    $this->data[$key][$keyname] = $value;
-                } else {
-                    $errors[$key] = 'readonly';
-                }
-
-            } else {
-                $this->data[$key][$keyname] = $value;
-            }
-        }
-        if (count($errors) > 0) {
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
-        } else {
-            return;
-        }
-    }
-
     //This function is to check if the data passed through the post command has NULL, "" and empty Value. If it has any of these then an error message is shown
     public function validateWithParams($dataArray)
     {
@@ -155,99 +124,142 @@ abstract class Entity implements Countable
         }
     }
 
-    public function completeValidation()
-    {
-        $this->typeChecker();
-        $this->checkRequireFields();
+    /*
+     * Child classes must override this method. $MODEL instance should be
+     * returned by reference.
+     * 
+     * TODO:Convert this method to abstract method when all the child classes have been migrated.
+     */
+    protected function &getModel() {
+        return NULL;
     }
 
-    public function typeChecker()
-    {
-        $data = $this->data;
+    private function validateAndConvert($property, $value) {
+        $model = &$this->getModel();
+        if (!isset($model) || is_null($model)) {
+            return $value; //Any value is valid when model is not set.
+        }
+        $propDef = $model[$property];
+        if (!isset($propDef) || is_null($propDef)) {
+            return $value; //Any value is valid when the property definition is not set for a property.
+        }
+        try {
+            $convertedValue = Type::convert($value, $propDef['type']);
+        }
+        catch (InvalidInputException $e) {
+            throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
+                ['property' => $property, 'value' => $value, 'error' => 'type']);
+        }
+        if ($this->isRequired($property) && $this->isEmpty($convertedValue)) {
+            throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
+                ['property' => $property, 'value' => $value, 'error' => 'required']);
+        }
+        return $convertedValue;
+    }
+
+    /*
+     * This method only runs 'required' checks because data type is validated when 
+     * the values are assigned to $data array in this class.
+     */
+    public function validate() {
         $errors = array();
-        $inputConverter = new InputConverter();
-        foreach ($data as $key => $value) {
+        foreach($this->data as $property => $value) {
+            if ($this->isRequired($property) && $this->isEmpty($value)) {
+                $errors[$property] = ['error' => 'required', 'value' => $this->data[$property]];
+            }
+        }
+        if (count($errors) > 0) {
+            throw new ValidationException($errors);
+        }
+    }
+
+    private function isEmpty($value) {
+        if (!isset($value) || is_null($value)) {
+            return true;
+        }
+        switch(gettype($value)) {
+            case 'string':
+                return ((0 == strlen($value)) || (0 == strlen(trim($value, " \t\n\r\0\x0B")))) ? true : false;
+            break;
+            case 'boolean':
+                return $value;
+            break;
+            default:
+                $strVal = print_r($value, true);
+                return (0 == strlen($strVal)) ? true : false;
+        }
+    }
+
+    private function isReadOnly($property) {
+        $model = &$this->getModel();
+        if (!isset($model) || is_null($model)) {
+            return false; //Everything is read-write when model is not set.
+        }
+        $propDef = $model[$property];
+        if (!isset($propDef) || is_null($propDef)) {
+            return false; //Property is read-write when property definition is not set in the model.
+        }
+        return $propDef['readonly'] ? true : false;
+    }
+
+    private function isRequired($property) {
+        $model = &$this->getModel();
+        if (!isset($model) || is_null($model)) {
+            return false; //Everything is optional when model is not set.
+        }
+        $propDef = $model[$property];
+        if (!isset($propDef) || is_null($propDef)) {
+            return false; //Property is optional when property definition is not set in the model.
+        }
+        return $propDef['required'] ? true : false;
+    }
+
+    /*
+     * Assigns values from $input to form. Allows caller to control whether to honour 'readonly' flag.
+     * Keys in $input that do not exist in the form are ignored.
+     * By default readonly properties are not set. Caller can force setting readonly values 
+     * by seting $skipReadonly to FALSE.
+     * 
+     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
+     * setting properties without needed checks.
+     */
+    private function assignInternal($input, $skipReadOnly = true) {
+        $errors = array();
+        foreach ($input as $property => $value) {
+            //Ignore properties in input which don't exist in the form.
+            if (!array_key_exists($property, $this->data)) {
+                continue;
+            }
+            //Ignore read-only properties - if $skipReadOnly is true.
+            if ($skipReadOnly && $this->isReadOnly($property)) {
+                continue;
+            }
             try {
-                if (!array_key_exists($key, $data)) {
-                    throw new InvalidInputException("Property ${key} is not specified in the form.", "err.${key}.invalid");
-                }
-
-                switch ($data[$key]['type']) {
-                    case Entity::INTVAL:
-                        $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::INTVAL);
-                        break;
-                    case Entity::FLOATVAL:
-                        $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::FLOATVAL);
-                        break;
-                    case Entity::DATETYPEVAL:
-                        $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::DATETYPEVAL);
-                        break;
-                    case Entity::UUIDVAL:
-                        $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::UUIDVAL);
-                        break;
-                    case Entity::TIMESTAMPVAL:
-                        $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::TIMESTAMPVAL);
-                        break;
-                    case Entity::STRINGVAL:
-                        $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::STRINGVAL);
-                        break;
-                    case Entity::BOOLEANVAL:
-                        $data[$key]['value'] = $inputConverter->checkType($key, $data[$key], 'value', $data[$key]['value'], self::BOOLEANVAL);
-                        break;
-                    default:
-                        throw new InvalidInputException("Parameter ${key} is not a proper value.", "err.${key}.invalid");
-                        break;
-                }
+                $this->data[$property] = $this->validateAndConvert($property, $value);
             }
-            catch (InvalidInputException $e) {
-                array_push($errors, array('message' => $e->getMessage(), 'messageCode' => $e->getMessageCode()));
+            catch (InvalidPropertyValueException $e) {
+                $errors[$property] = ['value' => $value, 'error' => $e->getContextData()['error']];
             }
         }
         if (count($errors) > 0) {
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
+            throw new ValidationException($errors);
         }
     }
 
-    public function checkRequireFields()
-    {
-        $data = $this->data;
-        $errors = array();
-        foreach ($data as $key => $element) {
-            if ($element['required']) {
-                $value = $element['value'];
-                if (!isset($value) || is_null($value)) {
-                    $errors[$key] = 'required';
-                    continue;
-                }
-                //These types need special handling because PHP considers values like 0 (int), 0.0 (float), "0" (string) as empty.
-                switch($element['type']) {
-                    case Entity::INTVAL:
-                    case Entity::FLOATVAL:
-                    case Entity::BOOLEANVAL:
-                        $expv = var_export($value, true);
-                        if (0 == strlen($expv)) {
-                            $errors[$key] = 'required';
-                        }
-                    break;
-                    case Entity::STRINGVAL:
-                        if ((0 == strlen($value)) || (0 == strlen(trim($value, " \t\n\r\0\x0B")))) {
-                            $errors[$key] = 'required';
-                        }
-                    break;
-                    default:
-                        if (empty($value)) {
-                            $errors[$key] = 'required';
-                        }
-                }
-            }
+    /*
+     * Sets a property. Throws exception if the property name is not defined in the form.
+     * 
+     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
+     * setting properties without needed checks.
+     */
+    private function setProperty($property, $value) {
+        if (!array_key_exists($property, $this->data)) {
+            throw new Exception("Property '${property}' is not defined in the form.");
         }
-        if (count($errors) > 0) {
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
+        if ($this->isReadOnly($property)) {
+            throw new Exception("Property '${property}' is read-only.");
         }
+        $this->data[$property] = $this->validateAndConvert($property, $value);
     }
 
     /*
@@ -265,16 +277,18 @@ abstract class Entity implements Countable
     /*
      * Assigns values from $input to form properties. Honours 'readonly' flag.
      * Keys in $input that do not exist in the form are ignored.
+     * Throws ParameterRequiredException if 'version' is not set in $input.
      */
     public function assign($input) {
         //Make sure 'version' is set if this is update.
         $id = $this->getProperty('id');
         $uuid = $this->getProperty('uuid');
-        if ((!is_null($id) && (0 != $id) && !empty($id)) || 
-            (!is_null($uuid) && !empty($uuid))) {
-            if (is_null($input) || !isset($input) || !array_key_exists('version', $input)) {
-                throw new ParameterRequiredException('Version number is required.', ['version']);
-            }
+        $isIdValid = (!is_null($id) && (0 != $id) && !empty($id));
+        $isUuidValid = (!is_null($uuid) && !empty($uuid));
+        $isVersionSet = !is_null($input) && isset($input) && array_key_exists('version', $input);
+        //Existence of valid id and UUID means record is being updated. Therefore version is needed.
+        if (($isIdValid || $isUuidValid) && !$isVersionSet) {
+            throw new ParameterRequiredException('Version number is required.', ['version']);
         }
         //All ok. Go ahead and assign values.
         $this->assignInternal($input, true);
@@ -304,130 +318,93 @@ abstract class Entity implements Countable
         return $arr;
     }
 
-    /*
-     * Assigns values from $input to form. Allows caller to control whether to honour 'readonly' flag.
-     * Keys in $input that do not exist in the form are ignored.
-     * By default readonly properties are not set. Caller can force setting readonly values 
-     * by seting $skipReadonly to FALSE.
-     * 
-     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
-     * setting properties without needed checks.
-     */
-    private function assignInternal($input, $skipReadOnly = true) {
-        foreach ($input as $key => $value) {
-            //Ignore keys in input which don't exist in the form.
-            if (!array_key_exists($key, $this->data)) {
-                continue;
-            }
-            $property = &$this->data[$key];
-            if (is_array($property)) {
-                if ($skipReadOnly && array_key_exists('readonly', $property) && $property['readonly']) {
-                    continue;
-                }
-                else {
-                    $property['value'] = $value;
-                }
-            }
-            else {
-                $property = $value;
-            }
+    public function getProperty($property) {
+        if (!array_key_exists($property, $this->data)) {
+            throw new Exception("Property '${property}' is not defined in the form.");
         }
-    }
-
-    /*
-     * Sets a property. Throws exception if the property name is not defined in the form.
-     * 
-     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
-     * setting properties without needed checks.
-     */
-    private function setProperty($key, $value) {
-        if (!array_key_exists($key, $this->data)) {
-            throw new Exception("Property name '${key}' is not defined in the form.");
-        }
-        $property = &$this->data[$key];
-        if (is_array($property)) {
-            $property['value'] = $value;
-        }
-        else {
-            $property = $value;
-        }
-    }
-
-    public function getProperty($key) {
-        if (!array_key_exists($key, $this->data)) {
-            return NULL;
-        }
-        $property = $this->data[$key];
-        if (is_array($property)) {
-            return $property['value'];
-        }
-        else {
-            return $property;
-        }
+        return $this->data[$property];
     }
 
     /*
      * Gets properties specified in $keyArray. Gets all properties except 'id' 
      * when $keyArray is NULL or empty. Gets 'id' also if $includeId is set to TRUE.
      */
-    public function getProperties($keyArray = NULL, $includeId = false) {
+    public function getProperties($propArray = NULL, $includeId = false) {
         $returnArray = array();
-        if (is_null($keyArray) || empty($keyArray)) {
+        if (!isset($propArray) || is_null($propArray) || empty($propArray)) {
             foreach($this->data as $key => $value) {
                 if (!$includeId && ('id' == $key)) {
                     continue;
                 }
-                $returnArray[$key] = $this->getProperty($key);
+                $returnArray[$key] = $this->data[$key];
             }
         }
         else {
-            foreach($keyArray as $key) {
-                $returnArray[$key] = $this->getProperty($key);
+            foreach($propArray as $prop) {
+                if (!$includeId && ('id' == $prop)) {
+                    continue;
+                }
+                $returnArray[$prop] = $this->data[$prop];
             }
         }
         return $returnArray;
     }
 
     public function save2() {
-        $data = $this->table->save2($this);
-        $id = $this->getProperty('id');
-        if (!isset($id) || empty($id)) {
-            $this->setProperty('id', $data['id']);
+        $this->validate();
+        $data = $this->table->internalSave2($this->data);
+        $id = $this->data['id'];
+        if (!isset($id) || is_null($id) || empty($id)) {
+            $this->data['id'] = $data['id'];
         }
-        $uuid = $this->getProperty('uuid');
-        if (!isset($uuid) || empty($uuid)) {
-            $this->setProperty('uuid', $data['uuid']);
+        $uuid = $this->data['uuid'];
+        if (!isset($uuid) || is_null($uuid) || empty($uuid)) {
+            $this->data['uuid'] = $data['uuid'];
         }
-        $this->setProperty('version', $data['version']);
-        return $data;
+        $this->data['version'] = $data['version'];
     }
 
-    public function setForeignKey($key, $value) {
-        $existingValue = $this->getProperty($key);
-        if (!isset($existingValue) || empty($existingValue)) {
-            $this->setProperty($key, $value);
+    public function setForeignKey($key, $value, $force = false) {
+        if (!array_key_exists($key, $this->data)) {
+            throw new Exception("Property '${key}' is not defined in the form.");
         }
-        else if ($existingValue != $value) {
-            throw new DataCorruptedException('Data corrupted.', 
-                ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key, 
-		'existingValue' => $existingValue, 'newValue' => $newValue]);
+        $existingValue = $this->data[$key];
+        $convertedValue = $this->validateAndConvert($key, $value);
+        if (isset($existingValue) && !is_null($existingValue)) {
+            if (!$force && ($existingValue != $convertedValue)) {
+                throw new DataCorruptedException('Data corrupted.', 
+                    ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key, 
+                    'existingValue' => $existingValue, 'newValue' => $value]);
+            }
         }
+        $this->data[$key] = $convertedValue;
     }
 
-    public function setModifiedBy($value, $key = 'modified_by') {
-        $this->setProperty($key, $value);
+    public function setModifiedBy($value, $property = 'modified_by') {
+        if (!array_key_exists($property, $this->data)) {
+            throw new Exception("Property '${property}' is not defined in the form.");
+        }
+        $this->data[$property] = $this->validateAndConvert($property, $value);
     }
 
-    public function setModifiedDate($value, $key = 'date_modified') {
-        $this->setProperty($key, $value);
+    public function setModifiedDate($value, $property = 'date_modified') {
+        if (!array_key_exists($property, $this->data)) {
+            throw new Exception("Property '${property}' is not defined in the form.");
+        }
+        $this->data[$property] = $this->validateAndConvert($property, $value);
     }
 
-    public function setCreatedBy($value, $key = 'created_by') {
-        $this->setProperty($key, $value);
+    public function setCreatedBy($value, $property = 'created_by') {
+        if (!array_key_exists($property, $this->data)) {
+            throw new Exception("Property '${property}' is not defined in the form.");
+        }
+        $this->data[$property] = $this->validateAndConvert($property, $value);
     }
     
-    public function setCreatedDate($value, $key = 'date_created') {
-        $this->setProperty($key, $value);
+    public function setCreatedDate($value, $property = 'date_created') {
+        if (!array_key_exists($property, $this->data)) {
+            throw new Exception("Property '${property}' is not defined in the form.");
+        }
+        $this->data[$property] = $this->validateAndConvert($property, $value);
     }
 }
-

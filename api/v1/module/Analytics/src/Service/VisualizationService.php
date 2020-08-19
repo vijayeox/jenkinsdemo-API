@@ -27,7 +27,6 @@ class VisualizationService extends AbstractService
         $visualization = new Visualization($this->table);
         $visualization->assign($data);
         $visualization->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID)); //When org_id is defined as readonly in the model.
-        $visualization->validate();
         try {
             $this->beginTransaction();
             $visualization->save2();
@@ -45,7 +44,6 @@ class VisualizationService extends AbstractService
         $visualization = new Visualization($this->table);
         $visualization->loadByUuid($uuid);
         $visualization->assign($data);
-        $visualization->validate();
         try {
             $this->beginTransaction();
             $visualization->save2();
@@ -66,7 +64,6 @@ class VisualizationService extends AbstractService
             'version' => $version, 
             'isdeleted' => 1
         ]);
-        $visualization->validate();
         try {
             $this->beginTransaction();
             $visualization->save2();

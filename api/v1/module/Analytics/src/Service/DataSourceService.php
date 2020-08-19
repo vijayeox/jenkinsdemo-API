@@ -32,7 +32,6 @@ class DataSourceService extends AbstractService
         $dataSource = new DataSource($this->table);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $dataSource->assign($data);
-        $dataSource->validate();
         try {
             $this->beginTransaction();
             $dataSource->save2();
@@ -50,7 +49,6 @@ class DataSourceService extends AbstractService
         $dataSource = new DataSource($this->table);
         $dataSource->loadByUuid($uuid);
         $dataSource->assign($data);
-        $dataSource->validate();
         try {
             $this->beginTransaction();
             $dataSource->save2();
@@ -71,7 +69,6 @@ class DataSourceService extends AbstractService
             'version' => $version, 
             'isdeleted' => 1
         ]);
-        $dataSource->validate();
         try {
             $this->beginTransaction();
             $dataSource->save2();

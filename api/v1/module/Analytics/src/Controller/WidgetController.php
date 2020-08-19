@@ -76,6 +76,7 @@ class WidgetController extends AbstractApiController
         $params = $this->params()->fromQuery();
         try {
             $this->widgetService->deleteWidget($uuid, $params['version']);
+            return $this->getSuccessResponse();
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
