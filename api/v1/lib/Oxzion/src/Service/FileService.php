@@ -112,7 +112,7 @@ class FileService extends AbstractService
         $count = 0;
         try {
             $this->beginTransaction();
-            $file->save2();
+            $file->save();
             $result = $file->getGenerated(true);
             $data['version'] = $result['version'];
             $data['uuid'] = $result['uuid'];
@@ -322,7 +322,7 @@ class FileService extends AbstractService
         	$this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
             $file->assign($fileObject);
             $file->validate();
-            $file->save2();
+            $file->save();
             $result = $file->getGenerated();
             $data['version'] = $result['version'];
             $count = $result['version'] - $version;
@@ -398,10 +398,9 @@ class FileService extends AbstractService
         }
         $data = array('version' => $version, 'is_active' => 0);
         $file->assign($data);
-        $file->updateValidate($data);
         try {
             $this->beginTransaction();
-            $file->save2();
+            $file->save();
             $fileInfo = $file->toArray();
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW

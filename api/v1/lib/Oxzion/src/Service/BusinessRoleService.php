@@ -36,10 +36,9 @@ class BusinessRoleService extends AbstractService
             }
         }
         $bRole->assign($data);
-        $bRole->validate();
         try {
             $this->beginTransaction();
-            $bRole->save2();
+            $bRole->save();
             $this->commit();
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);

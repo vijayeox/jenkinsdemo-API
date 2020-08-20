@@ -289,7 +289,7 @@ class FileServiceTest extends AbstractServiceTest
             $this->fail("Validation Exception should have been thrown with message \'Validation Errors\'");
         }
         catch (ValidationException $e) {
-            $this->assertEquals(array('entity_id' => 'required'), $e->getErrors());
+            $this->assertEquals(array('entity_id' => ['error' => 'required', 'value' => null]), $e->getErrors());
         }
     }
 
