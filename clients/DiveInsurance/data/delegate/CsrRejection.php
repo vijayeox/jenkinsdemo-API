@@ -4,6 +4,7 @@ use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Encryption\Crypto;
 use Oxzion\AppDelegate\CommentTrait;
+use Oxzion\AppDelegate\FileTrait;
 
 require_once __DIR__."/DispatchNotification.php";
 
@@ -11,6 +12,7 @@ require_once __DIR__."/DispatchNotification.php";
 class CsrRejection extends DispatchNotification {
 
     use CommentTrait;
+    use FileTrait;
     public $template;
 
     public function __construct(){
@@ -26,6 +28,8 @@ class CsrRejection extends DispatchNotification {
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Rejection Policy Notification");
+        $fileData = $this->getFile($data['fileId'],false,$data['orgId']);
+        $data = array_merge($data,$fileData['data']);
         $data['template'] = $this->template[$data['product']];
         if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
             $subject = 'Dive Store Insurance Application on Hold - '.$data['business_padi'];
