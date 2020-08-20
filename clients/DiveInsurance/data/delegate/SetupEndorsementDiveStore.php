@@ -156,6 +156,13 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['update_date'] = $data['update_date'] = $update_date;
                 }
                 $data['endoEffectiveDate'] = $data['update_date'];
+                if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                    $data['previous_additionalInsured'] = $data['additionalInsured'];
+                    $policy['previous_additionalInsured'] = $data['additionalInsured'];
+                } else {
+                    $data['previous_additionalInsured'] = array();
+                    $policy['previous_additionalInsured'] = array();
+                }
                 $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
                 $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
                 $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
@@ -188,16 +195,10 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_combinedSingleLimitDS'] = 1000000;
                     $policy['previous_annualAggregateDS'] = 2000000;
                 }
-                if(isset($data['dspropreplacementvalue'])){
-                	$policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
-                }
-                if(isset($data['lossOfBusIncome'])){
-                    $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
-                }
-                $policy['previous_dspropTotal'] = isset($data['dspropTotal']) ? $data['dspropTotal'] : 0;
-                if(isset($data['lossPayees'])){
-                    $policy['previous_lossPayees'] = $data['lossPayees'];    
-                }
+                $policy['previous_dspropreplacementvalue'] = isset($data['dspropreplacementvalue'])?$data['dspropreplacementvalue']:0;
+                $policy['previous_lossOfBusIncome'] = isset($data['lossOfBusIncome'])?$data['lossOfBusIncome']:0;
+                $policy['previous_dspropTotal'] = isset($data['dspropTotal'])?$data['dspropTotal']:0;
+                $policy['previous_lossPayees'] = isset($data['lossPayees'])?$data['lossPayees']:array();
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
@@ -213,13 +214,10 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
-                $policy['previous_additionalLocations'] = $data['additionalLocations'];
+                $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
                 $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
-                if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                    $policy['previous_additionalInsured'] = $data['additionalInsured'];
-                }
                 if(isset($data['PAORFee'])){
                     $policy['previous_PAORFee'] = $data['PAORFee'];
                 }
@@ -357,6 +355,20 @@ public function execute(array $data,Persistence $persistenceService)
                     foreach ($data['groupPL'] as $key => $value) {
                         if(!isset($value['effectiveDate'])){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                        }
+                        $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
+                        $result = $persistenceService->selectQuery($select);
+                        if($result->count() > 0){
+                            $response = array();
+                            while ($result->next()) {
+                                $response[] = $result->current();
+                            }
+                            if(count($response) > 0){
+                                $response[0]['rating'] = implode(",",array_column($response, 'rating'));
+                            }
+                            $data['groupPL'][$key]['rating'] = $response[0]['rating'];
+                        } else {
+                            // $data['groupPL'][$key]['rating'] = $response[0]['rating'];
                         }
                     }
                 }

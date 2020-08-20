@@ -126,10 +126,9 @@ class AppService extends AbstractService
             'status' => App::IN_DRAFT
         ]);
         $app->assign($data);       //Assign user input values.
-        $app->validate();
         try {
             $this->beginTransaction();
-            $app->save2();
+            $app->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -772,15 +771,17 @@ class AppService extends AbstractService
     {
         //UUID takes precedence over name. Therefore UUID is checked first.
         if (isset($appdata['uuid'])) {
-            $queryString = 'SELECT app.uuid, app.name, app.version FROM ox_app AS app WHERE app.uuid=:uuid';
+            $queryString = 'SELECT app.uuid, app.name FROM ox_app AS app WHERE app.uuid=:uuid';
             $queryParams = ['uuid' => $appdata['uuid']];
         }
         //Application is queried by name only if UUID is not given.
         else {
-            $queryString = 'SELECT app.uuid, app.name, app.version FROM ox_app AS app WHERE app.name=:name';
+            $queryString = 'SELECT app.uuid, app.name FROM ox_app AS app WHERE app.name=:name';
             $queryParams = ['name' => $appdata['name']];
         }
         $queryResult = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+
+        //Create the app if not found.
         if (0 == count($queryResult)) {
             //UUID is invalid. Threfore remove it.
             unset($appdata['uuid']);
@@ -788,25 +789,18 @@ class AppService extends AbstractService
             $appdata = array_merge($appdata, $generated);
             return;                
         }
-        $dbRow = $queryResult[0];
 
-        $onlyAppNameGiven = (isset($appdate['name']) && !isset($appdata['uuid']));
-        $onlyUuidGiven = (isset($appdata['uuid']) && !isset($appdata['name']));
-        $bothUuidAndAppNameGiven = (isset($appdata['uuid']) && isset($appdata['name']));
-        $appNameMatchesNameFromDb = ($appdata['name'] == $dbRow['name']);
-        if ($onlyAppNameGiven || $onlyUuidGiven || ($bothUuidAndAppNameGiven && $appNameMatchesNameFromDb)) {
+        //Update the app in all other conditions.
+        $dbRow = $queryResult[0];
+        if (isset($appdata['name']) && !isset($appdata['uuid'])) {
             $appdata['uuid'] = $dbRow['uuid'];
+        }
+        if (isset($appdata['uuid']) && !isset($appdata['name'])) {
             $appdata['name'] = $dbRow['name'];
-            $appdata['version'] = $dbRow['version'];
-            return;
         }
-        //Update the app name and continue.
-        if ($bothUuidAndAppNameGiven && !$appNameMatchesNameFromDb) {
-            $appdata['version'] = $dbRow['version'];
-            $generated = $this->updateApp($appdata['uuid'], $appdata);
-            $appdata = array_merge($appdata, $generated);
-            return;
-        }
+        $generated = $this->updateApp($appdata['uuid'], $appdata);
+        $appdata = array_merge($appdata, $generated);
+        return;
     }
 
     public function createAppPrivileges($yamlData)
@@ -866,10 +860,9 @@ class AppService extends AbstractService
         $app = new App($this->table);
         $app->loadByUuid($uuid);
         $app->assign($data);
-        $app->validate();
         try {
             $this->beginTransaction();
-            $app->save2();
+            $app->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -879,17 +872,16 @@ class AppService extends AbstractService
         return $app->getGenerated();
     }
 
-    public function deleteApp($uuid, $version)
+    public function deleteApp($uuid)
     {
         $app = new App($this->table);
         $app->loadByUuid($uuid);
         $app->assign([
-            'status' => App::DELETED,
-            'version' => $version
+            'status' => App::DELETED
         ]);
         try {
             $this->beginTransaction();
-            $app->save2();
+            $app->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -1009,8 +1001,7 @@ class AppService extends AbstractService
                     ]);
                     $appObj->setCreatedBy(1);
                     $appObj->setCreatedDate(date('Y-m-d H:i:s'));
-                    $appObj->validate();
-                    $appObj->save2();
+                    $appObj->save();
                 } else {
                     $start_options = isset($app['options']) ? json_encode($app['options']) : null;
                     $category = isset($app['category']) ? $app['category'] : null;

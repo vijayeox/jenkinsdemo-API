@@ -85,6 +85,23 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Visualization());
                     return new TableGateway('ox_visualization', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\TargetService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $config = $container->get('config');
+                    $table = $container->get(Model\TargetTable::class);
+                    $queryService = $container->get(Service\QueryService::class);
+                    return new Service\TargetService($config, $dbAdapter, $table, $queryService);
+                },
+                Model\TargetTable::class => function($container) {
+                    $tableGateway = $container->get(Model\TargetTableGateway::class);
+                    return new Model\TargetTable($tableGateway);
+                },
+                Model\TargetTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Target());
+                    return new TableGateway('ox_target', $dbAdapter, null, $resultSetPrototype);
+                },
                 Service\WidgetService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $config = $container->get('config');
@@ -138,6 +155,10 @@ class Module implements ConfigProviderInterface {
                 Controller\VisualizationController::class => function($container) {
                     return new Controller\VisualizationController(
                         $container->get(Service\VisualizationService::class));
+                },
+                Controller\TargetController::class => function($container) {
+                    return new Controller\TargetController(
+                        $container->get(Service\TargetService::class));
                 },
                 Controller\WidgetController::class => function($container) {
                     return new Controller\WidgetController(

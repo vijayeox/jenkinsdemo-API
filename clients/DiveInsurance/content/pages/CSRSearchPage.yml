@@ -186,7 +186,7 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.firstname + " " + item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.product == "Group Professional Liability" ? item.business_name :(item.firstname + " " + item.lastname)}</td>'
                     multiFieldFilter:
                         - lastname
                         - business_name
@@ -208,3 +208,13 @@ content:
             passColumnConfig :
                 -
                     lastname
+                -
+                    business_padi
+                -
+                    name
+                -
+                    business_name
+                -
+                    product
+                -
+                    identifier_field

@@ -127,6 +127,17 @@ class RegenerateDocuments extends PolicyDocument
                 }
             }
         }
+        if($param == "policyPdf"){
+            $this->processFileData($fileData,$documents);
+            $orgUuid = $this->processDate($fileData);
+            $dest = $this->documentsLocation(null,$fileData,$orgUuid);
+            $this->additionalDocumentsDS($fileData,$documents,$dest);
+            if($fileData['groupProfessionalLiabilitySelect'] == "yes"){
+                $documents['group_policy_document'] = $this->copyDocuments($fileData,$dest['relativePath'],'groupPolicy');    
+            }
+            $fileData['documents'] = $documents;
+            $this->saveFile($fileData,$fileData['fileId']);
+        }
       }
     }
 

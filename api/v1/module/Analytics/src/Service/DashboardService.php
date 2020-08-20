@@ -46,7 +46,6 @@ class DashboardService extends AbstractService
         catch (Exception $e) {
             throw $e;
         }
-        $dashboard->validate();
         try {
             $this->beginTransaction();
             //If default dashboard already exists and if this dashboard has default set to TRUE, clear default setting of existing default dashboard.
@@ -57,7 +56,7 @@ class DashboardService extends AbstractService
                 ];
                 $this->executeUpdateWithBindParameters($query, $queryParams);
             }
-            $dashboard->save2();
+            $dashboard->save();
             $this->commit();
             return $dashboard->getGenerated();
         }
@@ -72,7 +71,6 @@ class DashboardService extends AbstractService
         $dashboard = new Dashboard($this->table);
         $dashboard->loadByUuid($uuid);
         $dashboard->assign($data);
-        $dashboard->validate();
 
         try {
             $this->beginTransaction();
@@ -83,7 +81,7 @@ class DashboardService extends AbstractService
                 ];
                 $this->executeUpdateWithBindParameters($query, $queryParams);
             }
-            $dashboard->save2();
+            $dashboard->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -106,11 +104,10 @@ class DashboardService extends AbstractService
             'version' => $version,
             'isdeleted' => 1
         ]);
-        $dashboard->validate();
 
         try {
             $this->beginTransaction();
-            $dashboard->save2();
+            $dashboard->save();
             $this->commit();
         }
         catch (Exception $e) {

@@ -201,7 +201,6 @@ class AppControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(36, strlen($content['data']['uuid']));
-        $this->assertEquals(1, $content['data']['version']);
     }
 
     public function testCreateWithoutTextFailure()
@@ -214,7 +213,7 @@ class AppControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
-        $this->assertEquals($content['data']['errors']['name'], 'required');
+        $this->assertEquals($content['data']['errors']['name']['error'], 'required');
     }
 
     public function testCreateAccess()
@@ -1092,7 +1091,7 @@ class AppControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png', 'version' => 0];
+        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
@@ -1135,31 +1134,17 @@ class AppControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $params = ['version' => 0];
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', $params);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', NULL);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteWrongVersion()
-    {
-        $this->initAuthToken($this->adminUser);
-        $params = ['version' => 5000];
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', $params);
-        $this->assertResponseStatusCode(412);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals('error', $content['status']);
-        $this->assertEquals('Entity version sent by client does not match the version on server.', $content['message']);
-    }
-
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $params = ['version' => 0];
-        $this->dispatch('/app/11111111-1111-1111-1111-111111111111', 'DELETE', $params);
+        $this->dispatch('/app/11111111-1111-1111-1111-111111111111', 'DELETE', NULL);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();

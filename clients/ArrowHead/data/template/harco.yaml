@@ -68,11 +68,13 @@
    pageName: A-Gen
    cell: J10
    key: effectiveDate
+   method: formatDate
 -
    Source Worksheet: 'Need by Date:'
    key: needByDate
    pageName: A-Gen
    cell: K10
+   method: formatDate
 -
    Source Worksheet: primary oem
    pageName: A-Gen
@@ -155,6 +157,12 @@
    key: genericData*locationScheduleGridData_roofingyear
    method: simpleDatagrid
    pageName: C-Locs&AIs
+   cell: Q11
+   type: DataGrid
+-
+   key: genericData*locationScheduleGridData_roofingyear
+   method: simpleDatagrid
+   pageName: C-Locs&AIs
    cell: R11
    type: DataGrid
 -
@@ -182,7 +190,7 @@
    cell: V11
    type: DataGrid
    returnValue:
-      autoSalesAndService: Auto Parts & Supplies
+      autoSalesAndService: Sales & Service
       autoStorageLot: Storage Lot - Auto/Truck
       bldgLeasedToOthers: Leased to Othrs
       bodyShop: Body Shop
@@ -196,7 +204,7 @@
       vehicleStorageParkingGarage: Parking Lot - No Structure
       partsWarehouseStorage: Warehouse
       vacantBuilding: Lease & Rental
-      deliveryPrep: Sales & Service
+      deliveryPrep: Auto Parts & Supplies
 -
    key: genericData*locationScheduleGridData_constructiontype
    method: simpleDatagrid
@@ -907,23 +915,23 @@
 #    pageName: N-L&R
 #    cell: 'K24'
 #    key: 
-# -
-#    Source Worksheet: Insured do any 'in house' leasing?
-#    pageName: N-L&R
-#    cell: Check Box 5
-#    key: insuresdoanyinhouseleasing
-#    type: Checkbox
-# -
-#    Source Worksheet: 'If YES, minimum liability limit required?'
-#    pageName: N-L&R
-#    cell: 'G7'
-#    key: minimumliabilitylimitrequired
-#    Note: Wrongly mapped
-# -
-#    Source Worksheet: Number of vehicles out on Lease?
-#    pageName: N-L&R
-#    cell: G17
-#    key: numberofvehiclesoutonlease
+-
+   Source Worksheet: Insured do any 'in house' leasing?
+   pageName: N-L&R
+   cell: Check Box 5
+   key: insuresdoanyinhouseleasing
+   type: Checkbox
+-
+   Source Worksheet: 'If YES, minimum liability limit required?'
+   pageName: N-L&R
+   cell: 'G7'
+   key: minimumliabilitylimitrequired
+   Note: Wrongly mapped
+-
+   Source Worksheet: Number of vehicles out on Lease?
+   pageName: N-L&R
+   cell: G17
+   key: numberofvehiclesoutonlease
 # -
 #    Source Worksheet: Rental/Leasing
 #    pageName: N-L&R
@@ -1379,13 +1387,15 @@
    key: allworkorderssignedbycustomer
    returnBoolean: Yes|No
 -
-   Source Worksheet: Formal safety meetings:( If at least quarterly, please attach copy of
-      minutes from last meeting)
+   Source Worksheet: Formal safety meetings
    pageName: UW Q's
    cell: 'E36'
    key: formalsafetymeetings
    note: mapping monthly for now - change to yes/no
-   # returnBoolean: Yes|No
+   returnValue: 
+      monthly: Yes
+      quarterly: Yes
+      none: No
 -
    Source Worksheet: Does applicant reposess their own vehicles?
    pageName: UW Q's

@@ -61,6 +61,15 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'fa fa-file'
                 -
+                    name: Policy Regeneration
+                    rule: '((row.policyStatus == "Rejected" || row.policyStatus == "In Force") && row.entity_name == "Dive Store" && row.endorsement_options == undefined)'
+                    details:
+                        -
+                            type: Form
+                            form_id: e139cef3-d1e4-4b6f-8f20-51dec19f694e
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-file'
+                -
                     name: Endorsement
                     rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                     details:

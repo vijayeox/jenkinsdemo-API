@@ -30,8 +30,6 @@ abstract class ModelTable
         $this->adapter = $tableGateway->getAdapter();
     }
 
-    abstract public function save(Entity $data);
-
     public function fetchAll(array $filter = null)
     {
         $this->init();
@@ -188,7 +186,7 @@ abstract class ModelTable
         $data['version'] = $version + 1;
     }
 
-    protected function internalSave2(array $inputData)
+    public function internalSave2(array $inputData)
     {
         $data = array();
         foreach ($inputData as $key => $value) {
@@ -207,9 +205,11 @@ abstract class ModelTable
             $id = $data['id'];
         }
 
-        if (is_null($id) || $id === 0 || empty($id)) {
+        if (!isset($id) || is_null($id) || (0 == $id) || empty($id)) {
             $data['uuid'] = UuidUtil::uuid();
-            $data['version'] = 1; //Starting version number when the row is inserted in the database.
+            if (array_key_exists('version', $data)) {
+                $data['version'] = 1; //Starting version number when the row is inserted in the database.
+            }
             $this->setCreatedByAndDate($data);
             try {
                 $rows = $this->tableGateway->insert($data);
@@ -228,11 +228,15 @@ abstract class ModelTable
             return $data;
         }
         else {
-            $version = $data['version'];
-            $this->checkAndIncrementVersion($data);
+            $whereCondition = ['id' => $id];
+            if (array_key_exists('version', $data)) {
+                //IMPORTANT: version property in $whereCondition should be set before calling checkAndIncrementVersion
+                $whereCondition['version'] = $data['version'];
+                $this->checkAndIncrementVersion($data);
+            }
             $this->setModifiedByAndDate($data);
             try {
-                $rows = $this->tableGateway->update($data, ['id' => $id, 'version' => $version]);
+                $rows = $this->tableGateway->update($data, $whereCondition);
             }
             catch(Exception $e) {
                 throw new UpdateFailedException('Database update failed.', 

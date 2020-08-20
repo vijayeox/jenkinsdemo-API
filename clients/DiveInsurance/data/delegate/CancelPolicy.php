@@ -54,7 +54,7 @@ class CancelPolicy extends PolicyDocument
         $data['reasonforCsrCancellation'] = $value['value'];
         $data['reinstateDocuments'] = $data['documents'];
         $data['reasonforRejection'] = isset($data['reasonforRejection'])?$data['reasonforRejection']:"Not Specified";
-        $Canceldate = isset($Canceldate) ? $Canceldate : date_create();
+        $data['cancelDate'] = isset($data['cancelDate']) ? $data['cancelDate'] : date_create()->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";
         $data['confirmReinstatePolicy'] = '';
         if($data['reasonforCsrCancellation'] == 'nonPaymentOfPremium'){

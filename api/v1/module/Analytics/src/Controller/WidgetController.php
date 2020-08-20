@@ -61,37 +61,26 @@ class WidgetController extends AbstractApiController
     public function update($uuid, $data)
     {
         try {
-            $count = $this->widgetService->updateWidget($uuid, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (VersionMismatchException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            $generated = $this->widgetService->updateWidget($uuid, $data);
+            $data['version'] = $generated['version'];
+            return $this->getSuccessResponseWithData($data, 200);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Widget not found for uuid - $uuid", 404);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 200);
     }
 
     public function delete($uuid)
     {
         $params = $this->params()->fromQuery();
-        if (isset($params['version'])) {
-            try {
-                $response = $this->widgetService->deleteWidget($uuid, $params['version']);
-            } catch (VersionMismatchException $e) {
-                $this->log->error($e->getMessage(), $e);
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-            }
-            if ($response == 0) {
-                return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-            }
+        try {
+            $this->widgetService->deleteWidget($uuid, $params['version']);
             return $this->getSuccessResponse();
-        } else {
-            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 

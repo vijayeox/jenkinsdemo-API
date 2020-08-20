@@ -4,7 +4,7 @@ content:
     -
         type: List
         content:
-            route: 'file'
+            route: 'file/user/me'
             filterable: true
             defaultFilters: 
                 sort:
@@ -12,6 +12,7 @@ content:
                         field: date_created
                         dir: desc                 
             resizable: true
+            refreshButton: true
             pageable:
                 buttonCount: 3
                 pageSizes:
@@ -25,7 +26,7 @@ content:
             actions:
                 -
                     name: Edit
-                    rule: '''{{status}}'' !== ''Processing'' && ''{{status}}'' !== ''Queued'''
+                    rule: 'row.status == "In Progress"'
                     details:
                         -
                             type: Form
@@ -33,8 +34,20 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
                 -
+                    name: 'Export'
+                    rule: '''{{status}}'' == ''Generated'''
+                    icon: 'far fa-file-download'
+                    details:
+                        -
+                            type: Document
+                            content: '<h5>Insured Name: {data.namedInsured}</h5>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+                -
                     name: 'Please Wait'
-                    rule: '''{{status}}'' == ''Processing'' || ''{{status}}'' == ''Queued'''
+                    rule: '''{{status}}'' == ''Processing'''
                     icon: 'fad fa-circle-notch fa-spin'
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:
@@ -52,8 +65,11 @@ content:
                     title: Insured
                     field: namedInsured
                 -
-                    title: 'Producer'
-                    field: producername
+                    title: 'Producer Date'
+                    field: producerdate
+                    cell: '<td>{formatDate(item.producerdate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Effective Date'
                     field: effectiveDate
@@ -61,8 +77,13 @@ content:
                     filter: date
                     filterFormat: YYYY-MM-DD
                 -
-                    title: 'Producer Date'
-                    field: producerdate
-                    cell: '<td>{formatDate(item.producerdate)}</td>'
-                    filter: date
-                    filterFormat: YYYY-MM-DD
+                    title: 'Status'
+                    field: status
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Generated'
+                            - 'Processing'
+                            - 'In Progress'
+                        placeholder: 'Select Status'
+                    cell: '<td>{item.status}</td>'

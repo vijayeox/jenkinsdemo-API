@@ -546,7 +546,7 @@ class WorkflowService extends AbstractService
                       }
                     }
                     if ($subQuery != "") {
-                        $where = " (" . $subQuery . ") $filterlogic";
+                        $where .= " (" . $subQuery . ") $filterlogic";
                     }
                     $prefix += 1;
                 }

@@ -51,7 +51,7 @@ class EndorsementDocument extends PolicyDocument
            'alheader' => 'DiveStore_AL_header.html',
            'alfooter' => 'DiveStore_AL_footer.html',
            'aniTemplate' => 'DiveStore_ANI',
-           'aniheader' => 'DS_Quote_ANI_header.html',
+           'aniheader' => 'DiveStore_ANI_header.html',
            'anifooter' => null,
            'alTemplate' => 'DiveStore_AdditionalLocations',
            'gtemplate' => 'Group_PL_COI_DS_Endorsement',

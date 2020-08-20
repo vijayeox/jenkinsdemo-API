@@ -2,7 +2,7 @@ ox_app:
     -
         id: 299
         name: DummyApp
-        uuid: 'f77ea120-b028-479b-8c6e-60476b6a4459'
+        uuid: a77ea120-b028-479b-8c6e-60476b6a4459
         description: 'App for Dive Insurance'
         category: EXAMPLE_CATEGORY
         type: 2

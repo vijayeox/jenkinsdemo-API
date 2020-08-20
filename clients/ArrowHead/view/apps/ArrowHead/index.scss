@@ -59,6 +59,13 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     border-color: #F04124;
   }
 
+  .formio-component-multiple{
+    .btn-secondary{
+      background-color: #F04124;
+      border-color: #F04124;
+    }    
+  }
+
   .bg-primary {
     background-color: $primary-color !important;
   }

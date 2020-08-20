@@ -40,10 +40,9 @@ class QueryService extends AbstractService
         $query->assign($data);
         $query->setForeignKey('org_id', $orgId); //org_id is defined as readonly in the model.
         $query->setForeignKey('datasource_id', $dataSourceId); //datasource_id is defined as readonly in the model.
-        $query->validate();
         try {
             $this->beginTransaction();
-            $query->save2();
+            $query->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -62,10 +61,9 @@ class QueryService extends AbstractService
         $query = new Query($this->table);
         $query->loadByUuid($uuid);
         $query->assign($data);
-        $query->validate();
         try {
             $this->beginTransaction();
-            $query->save2();
+            $query->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -83,11 +81,9 @@ class QueryService extends AbstractService
             'version' => $version,
             'isdeleted' => 1
         ]);
-        $query->validate();
-
         try {
             $this->beginTransaction();
-            $query->save2();
+            $query->save();
             $this->commit();
         }
         catch (Exception $e) {

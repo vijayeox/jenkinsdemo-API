@@ -23,6 +23,7 @@
    Source Worksheet: 'Effective Date:'
    pageName: Property
    cell: G29
+   method: formatDate
 -
    key: umbrellalimit
    Source Worksheet: Limit
@@ -219,40 +220,6 @@
    Source Worksheet: 'Name of Plan/Address:'
    pageName: Crime (printable)
    cell: F41
--
-   key: franchisedAutoDealer*checkSecurityGuards
-   Source Worksheet: Security Guards
-   pageName: Garage Keepers Supplementary
-   cell: G16
-   type: Checkbox
--
-   key: franchisedAutoDealer*checkNotMonitoredSurveillanceCamera
-   Source Worksheet: Surveill. Cameras not monitored
-   pageName: Garage Keepers Supplementary
-   cell: F16
-   type: Checkbox
-   note: If at least 1 of the Surveillance Camera questions are selected map
-      "Yes"to the applicable carrier app.
--
-   key: franchisedAutoDealer*checkMonitoredSurveillanceCamera
-   Source Worksheet: Surveill. Cameras monitored / intruder notification
-   pageName: Garage Keepers Supplementary
-   cell: F16
-   type: Checkbox
-   note: If at least 1 of the Surveillance Camera questions are selected map
-      "Yes"to the applicable carrier app.
--
-   key: franchisedAutoDealer*checkdolpostnchain
-   Source Worksheet: Post & Chain
-   pageName: Garage Keepers Supplementary
-   cell: D16
-   type: Checkbox
--
-   key: franchisedAutoDealer*checkdolflyfencdpremises
-   Source Worksheet: Fully Fenced Premises
-   pageName: Garage Keepers Supplementary
-   cell: C16
-   type: Checkbox
 -
    key: gascaddy
    Source Worksheet: 'If YES, do they use a gas caddy?'
@@ -569,11 +536,41 @@
    Source Worksheet: 'Comp Deductible:'
    pageName: Garage Keepers (printable)
    cell: E31
+   returnValue:
+      '5002500' : '$1,000 / $2,500'
+      '10005000' : '$1,000 / $5,000'
+      '100025000' : '$1,000 / $5,000'
+      '15007500' : '$1,500 / $10,000'
+      '150025000' : '$1,500 / $10,000'
+      '250010000' : '$2,500 / $10,000'
+      '250012500' : '$2,500 / $10,000'
+      '250025000' : '$2,500 / $10,000'
+      '500025000' : '$5,000 / $25,000'
+      '750037500' : '$10,000 / $50,000'
+      '1000050000' : '$10,000 / $50,000'
+      '25000125000' : '$10,000 / $50,000'
+      '50000250000' : '$10,000 / $50,000'
 -
    key: dolcollisiondeduc
    Source Worksheet: 'Collision Deductible:'
    pageName: Garage Keepers (printable)
    cell: F31
+   returnValue: 
+      '500' : '1000'
+      '750' : '1000'
+      '1000' : '1000'
+      '1500' : '2500'
+      '2500' : '2500'
+      '5000' : '5000'
+      '10000' : '10000'
+      '10005000' : '1000'
+      '15007500' : '2500'
+      '250012500' : '2500'
+      '500025000' : '5000'
+      '750037500' : '10000'
+      '1000050000' : '10000'
+      '25000125000' : '10000'
+      '50000250000' : '10000'
 -
    key: franchisedAutoDealer*checkrepairpercentlabor
    pageName: Garage Keepers (printable)
@@ -585,11 +582,59 @@
    Source Worksheet: 'Repair % - Parts:'
    pageName: Garage Keepers (printable)
    cell: G31
+   returnValue:
+      '65' : '0.75'
+      '75' : '0.75'
+      '90' : '0.90'
+      '100' : '0.90'
 -
    key: garagekeepersbasis
    Source Worksheet: 'Garagekeepers Basis:'
    pageName: Garage Keepers (printable)
    cell: K31
+   returnValue:
+      legalLiability: 'GK Legal Liability'
+      directPrimary: 'Limited Direct Primary'
+-
+   key: franchisedAutoDealer*checkSecurityGuards
+   Source Worksheet: Security Guards
+   pageName: Garage Keepers Supplementary
+   cell: Check Box 41
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkNotMonitoredSurveillanceCamera
+   Source Worksheet: Surveill. Cameras not monitored
+   pageName: Garage Keepers Supplementary
+   cell: Check Box 45
+   type: Checkbox
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes"to the applicable carrier app.
+-
+   key: franchisedAutoDealer*checkMonitoredSurveillanceCamera
+   Source Worksheet: Surveill. Cameras monitored / intruder notification
+   pageName: Garage Keepers Supplementary
+   cell: Check Box 45
+   type: Checkbox
+   note: If at least 1 of the Surveillance Camera questions are selected map
+      "Yes"to the applicable carrier app.
+-
+   key: franchisedAutoDealer*checkdolpostnchain
+   Source Worksheet: Post & Chain
+   pageName: Garage Keepers Supplementary
+   cell: Check Box 42
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkdolaftrhrslighting
+   Source Worksheet: after hours Lighting
+   pageName: Garage Keepers Supplementary
+   cell: Check Box 44
+   type: Checkbox
+-
+   key: franchisedAutoDealer*checkdolflyfencdpremises
+   Source Worksheet: Fully Fenced Premises
+   pageName: Garage Keepers Supplementary
+   cell: Check Box 40
+   type: Checkbox
 -
    key: garagekeeperUnderwritingKeyControl_none
    method: pulloutChild
@@ -668,11 +713,10 @@
    cell: Check Box 41
    type: Checkbox
 -
-   key: listcompaniesrepresented
+   key: franchisedAutoDealer*checklistcompaniesrepresented_result
    Source Worksheet: 'List companies represented:'
    pageName: Garage Supplemental
    cell: 'C41'
-   type: DataGrid
 -
    key: driverOtherCargrid_nameofdrivertobecovered
    Source Worksheet: Name of Driver (and Spouse) to be covered
@@ -802,18 +846,6 @@
    cell: Check box 104
    type: Checkbox
 -
-   key: genericData*locationScheduleGridData_locationNum
-   method: simpleDatagrid
-   pageName: Garage Keepers (printable)
-   cell: A32
-   type: DataGrid
--
-   key: genericData*locationScheduleGridData_buildingNumber
-   method: simpleDatagrid
-   pageName: Garage Keepers (printable)
-   cell: B32
-   type: DataGrid
--
    key: franchisedAutoDealer*checkauditfrequencyannual
    pageName: Crime (printable)
    cell: Check Box 4
@@ -850,10 +882,10 @@
    method: checkInArray
    returnBoolean: 'Yes|No'
 -
-   key: genericData*locationScheduleGridData_locationNum
+   key: franchisedAutoDealer*locationBuildingIndex_result
    method: simpleDatagrid
    pageName: Property
-   cell: A40
+   cell: A41
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_buildingNumber
@@ -892,7 +924,7 @@
    cell: G40
    type: DataGrid
    returnValue:
-      autoSalesAndService: Auto Parts & Supplies
+      autoSalesAndService: Sales & Service
       autoStorageLot: Storage Lot - Auto/Truck
       bldgLeasedToOthers: Leased to Othrs
       bodyShop: Body Shop
@@ -906,13 +938,29 @@
       vehicleStorageParkingGarage: Parking Lot - No Structure
       partsWarehouseStorage: Warehouse
       vacantBuilding: Lease & Rental
-      deliveryPrep: Sales & Service
+      deliveryPrep: Auto Parts & Supplies
 -
-   key: genericData*locationScheduleGridData_
+   key: genericData*locationScheduleGridData_occupancyType
    method: simpleDatagrid
    pageName: Property
    cell: H40
    type: DataGrid
+   returnValue:
+      autoSalesAndService: Occupied
+      autoStorageLot: Occupied
+      bldgLeasedToOthers: Occupied
+      bodyShop: Occupied
+      carWash: Occupied
+      detailShop: Occupied
+      newCarShowroomAndSales: Occupied
+      office: Occupied
+      serviceRepair: Occupied
+      usedCarSales: Occupied
+      vacantLand: ''
+      vehicleStorageParkingGarage: Occupied
+      partsWarehouseStorage: Occupied
+      vacantBuilding: Vacant
+      deliveryPrep: Occupied
 -
    key: genericData*locationScheduleGridData_constructiontype
    method: simpleDatagrid
@@ -993,11 +1041,23 @@
    cell: W40
    type: DataGrid
 -
+   key: genericData*locationScheduleGridData_equipmentBreakdown
+   method: simpleDatagrid
+   pageName: Property
+   cell: X40
+   type: DataGrid
+   returnValue: 
+      yes: 'Yes'
+      no: 'No'
+-
    key: genericData*locationScheduleGridData_boiler
    method: simpleDatagrid
    pageName: Property
    cell: Y40
    type: DataGrid
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
 -
    key: genericData*locationScheduleGridData_sprinklerprotected
    method: simpleDatagrid
@@ -1016,18 +1076,44 @@
    pageName: Property
    cell: AB40
    type: DataGrid
+   returnValue: 
+      'none' : 'N = None'
+      'local' : 'L = Local'
+      'central' : 'C = Central'
+      'both' : 'B = Both'
 -
    key: genericData*locationScheduleGridData_burglaralarmmonitoring
    method: simpleDatagrid
    pageName: Property
    cell: AC40
    type: DataGrid
+   returnValue: 
+      'none' : 'N = None'
+      'local' : 'L = Local'
+      'central' : 'C = Central'
+      'both' : 'B = Both'
 -
    key: genericData*locationScheduleGridData_buildingLimit
    method: simpleDatagrid
    pageName: Property
    cell: AD40
    type: DataGrid
+-
+   key: genericData*locationScheduleGridData_signsnotattached
+   method: simpleDatagrid
+   pageName: Property
+   cell: AE40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkbuildingCoinsurance_result
+   method: simpleDatagrid
+   pageName: Property
+   cell: AI40
+   type: DataGrid
+   returnValue: 
+      '80': '0.80'
+      '90' : '0.90'
+      '100' : '1'
 -
    key: genericData*locationScheduleGridData_businesspersonal
    method: simpleDatagrid
@@ -1041,15 +1127,17 @@
    cell: AR40
    type: DataGrid
 -
-   key: genericData*locationScheduleGridData_valuationMethod
+   key: franchisedAutoDealer*checkbuildingValuation_result
    method: simpleDatagrid
    pageName: Property
    cell: AJ40
    type: DataGrid
-   returnValue:
-      replacementCost: Replacement Cost
-      actualCashValue: Actual Cash Value
-      reconstructionCost: ""
+-
+   key: franchisedAutoDealer*checkbuildingValuation_result
+   method: simpleDatagrid
+   pageName: Property
+   cell: AN40
+   type: DataGrid
 -
    key: genericData*locationScheduleGridData_coinsuranceamount
    method: simpleDatagrid
@@ -1087,18 +1175,6 @@
    cell: AZ40
    type: DataGrid
 -
-   key: genericData*locationScheduleGridData_address
-   method: simpleDatagrid
-   pageName: Garage Keepers (printable)
-   cell: B43
-   type: DataGrid
--
-   key: genericData*locationScheduleGridData_locationNum
-   method: simpleDatagrid
-   pageName: Garage Keepers (printable)
-   cell: A43
-   type: DataGrid
--
    key: franchisedAutoDealer*checkwhodeliversvehiclesonemployee
    pageName: Garage Supplemental 
    cell: Check Box 39
@@ -1118,6 +1194,6 @@
    pageName: Garage Supplemental 
    cell: C9
 -
-   key: falsePretenseNumber
+   key: franchisedAutoDealer*checkfalsePretenseLimit
    pageName: Garage Keepers (printable) 
    cell: I31

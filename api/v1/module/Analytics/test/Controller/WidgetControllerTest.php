@@ -167,12 +167,12 @@ class WidgetControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?version=3', 'DELETE');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('analytics_widget');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testDeleteNotFound()
