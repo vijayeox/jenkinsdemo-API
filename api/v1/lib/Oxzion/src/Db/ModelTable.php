@@ -207,7 +207,9 @@ abstract class ModelTable
 
         if (!isset($id) || is_null($id) || (0 == $id) || empty($id)) {
             $data['uuid'] = UuidUtil::uuid();
-            $data['version'] = 1; //Starting version number when the row is inserted in the database.
+            if (array_key_exists('version', $data)) {
+                $data['version'] = 1; //Starting version number when the row is inserted in the database.
+            }
             $this->setCreatedByAndDate($data);
             try {
                 $rows = $this->tableGateway->insert($data);
@@ -226,11 +228,15 @@ abstract class ModelTable
             return $data;
         }
         else {
-            $version = $data['version'];
-            $this->checkAndIncrementVersion($data);
+            $whereCondition = ['id' => $id];
+            if (array_key_exists('version', $data)) {
+                //IMPORTANT: version property in $whereCondition should be set before calling checkAndIncrementVersion
+                $whereCondition['version'] = $data['version'];
+                $this->checkAndIncrementVersion($data);
+            }
             $this->setModifiedByAndDate($data);
             try {
-                $rows = $this->tableGateway->update($data, ['id' => $id, 'version' => $version]);
+                $rows = $this->tableGateway->update($data, $whereCondition);
             }
             catch(Exception $e) {
                 throw new UpdateFailedException('Database update failed.', 

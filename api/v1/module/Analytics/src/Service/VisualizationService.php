@@ -29,7 +29,7 @@ class VisualizationService extends AbstractService
         $visualization->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID)); //When org_id is defined as readonly in the model.
         try {
             $this->beginTransaction();
-            $visualization->save2();
+            $visualization->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -46,7 +46,7 @@ class VisualizationService extends AbstractService
         $visualization->assign($data);
         try {
             $this->beginTransaction();
-            $visualization->save2();
+            $visualization->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -66,7 +66,7 @@ class VisualizationService extends AbstractService
         ]);
         try {
             $this->beginTransaction();
-            $visualization->save2();
+            $visualization->save();
             $this->commit();
         }
         catch (Exception $e) {

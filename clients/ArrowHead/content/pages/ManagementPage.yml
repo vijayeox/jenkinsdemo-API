@@ -1,10 +1,10 @@
 name: 'Agent Workbooks'
-description: 'Shows a list of users policies'
+description: 'Shows a list of all policies'
 content:
     -
         type: List
         content:
-            route: 'file/user/me'
+            route: 'file'
             filterable: true
             defaultFilters: 
                 sort:
@@ -26,7 +26,7 @@ content:
             actions:
                 -
                     name: Edit
-                    rule: 'row.status == "In Progress"'
+                    rule: 'row.status == "In Progress" || row.status == "Generated"'
                     details:
                         -
                             type: Form
@@ -40,7 +40,7 @@ content:
                     details:
                         -
                             type: Document
-                            content: '<h5>Insured Name: {data.namedInsured}</h5>'
+                            content: '<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>'
                             useRowData: true
                         -
                             type: DocumentViewer
@@ -55,7 +55,7 @@ content:
                 actions:
                     -
                         name: Create New Workbook
-                        rule: "true"
+                        rule: "profile.privileges.MANAGE_POLICY_APPLICATION_CREATE ==true"
                         details:
                             -
                                 type: Form
@@ -64,6 +64,9 @@ content:
                 -
                     title: Insured
                     field: namedInsured
+                -
+                    title: 'Producer'
+                    field: producername
                 -
                     title: 'Producer Date'
                     field: producerdate

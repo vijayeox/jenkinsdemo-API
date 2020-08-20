@@ -42,7 +42,7 @@ class QueryService extends AbstractService
         $query->setForeignKey('datasource_id', $dataSourceId); //datasource_id is defined as readonly in the model.
         try {
             $this->beginTransaction();
-            $query->save2();
+            $query->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -63,7 +63,7 @@ class QueryService extends AbstractService
         $query->assign($data);
         try {
             $this->beginTransaction();
-            $query->save2();
+            $query->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -83,7 +83,7 @@ class QueryService extends AbstractService
         ]);
         try {
             $this->beginTransaction();
-            $query->save2();
+            $query->save();
             $this->commit();
         }
         catch (Exception $e) {

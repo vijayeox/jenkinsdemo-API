@@ -2,47 +2,44 @@
 
 namespace Analytics\Controller;
 
-use Exception;
-use Analytics\Model\Dashboard;
+use Analytics\Model\Target;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
-class DashboardController extends AbstractApiController
+class TargetController extends AbstractApiController
 {
 
-    private $dashboardService;
+    private $targetService;
 
     /**
      * @ignore __construct
      */
-    public function __construct($dashboardService)
+    public function __construct($targetService)
     {
-        parent::__construct(null, __class__, Dashboard::class);
-        $this->setIdentifierName('dashboardUuid');
-        $this->dashboardService = $dashboardService;
+        parent::__construct(null, __class__, Target::class);
+        $this->setIdentifierName('targetUuid');
+        $this->targetService = $targetService;
     }
 
     /**
-     * Create Dashboard API
+     * Create Target API
      * @api
-     * @link /analytics/dashboard
+     * @link /analytics/Target
      * @method POST
      * @param array $data Array of elements as shown
      * <code> {
-     *               name : string
-     *               dashboard_type : string
-     *               ispublic : integer(binary)
-     *               description : string
+     *               type : string
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Dashboard.
+     * @return array Returns a JSON Response with Status Code and Created Target.
      */
     public function create($data)
     {
+        $data = $this->params()->fromPost();
         try {
-            $returnData = $this->dashboardService->createDashboard($data);
-            array_merge($data, $returnData);
-            return $this->getSuccessResponseWithData($data, 201);
+            $generated = $this->targetService->createTarget($data);
+            return $this->getSuccessResponseWithData($generated, 201);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -51,31 +48,31 @@ class DashboardController extends AbstractApiController
     }
 
     /**
-     * Update Dashboard API
+     * Update Target API
      * @api
-     * @link /analytics/dashboard/:dashboardUuid
+     * @link /analytics/Target/:TargetUuid
      * @method PUT
-     * @param array $uuid ID of Dashboard to update
+     * @param array $uuid ID of Target to update
      * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created Dashboard.
+     * @return array Returns a JSON Response with Status Code and Created Target.
      */
     public function update($uuid, $data)
     {
         try {
-            $result = $this->dashboardService->updateDashboard($uuid, $data);
-            return $this->getSuccessResponseWithData($result, 200);
-        }
+            $version = $this->targetService->updateTarget($uuid, $data);
+            return $this->getSuccessResponseWithData(['version' => $version], 200);
+        } 
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        }        
+        }
     }
 
     public function delete($uuid)
     {
         $params = $this->params()->fromQuery();
         try {
-            $this->dashboardService->deleteDashboard($uuid, $params['version']);
+            $this->targetService->deleteTarget($uuid, $params['version']);
             return $this->getSuccessResponse();
         }
         catch (Exception $e) {
@@ -85,19 +82,15 @@ class DashboardController extends AbstractApiController
     }
 
     /**
-     * GET Dashboard API
+     * GET Target API
      * @api
-     * @link /analytics/dashboard/:dashboardUuid
+     * @link /analytics/Target/:TargetUuid
      * @method GET
-     * @param array $dataget of Dashboard
+     * @param array $dataget of Target
      * @return array $data
      * {
-     *              id: integer,
      *              uuid : string,
-     *              name : string,
-     *              ispublic : integer,
-     *              description : string,
-     *              dashboard_type : string,
+     *              type : string,
      *              created_by: integer,
      *              date_created: date,
      *              org_id: integer,
@@ -107,17 +100,17 @@ class DashboardController extends AbstractApiController
      */
     public function get($uuid)
     {
-        $result = $this->dashboardService->getDashboard($uuid);
+        $result = $this->targetService->getTarget($uuid);
         if ($result == 0) {
-            return $this->getErrorResponse("Dashboard not found", 404, ['uuid' => $uuid]);
+            return $this->getErrorResponse("Target not found", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }
 
     /**
-     * GET Dashboard API
+     * GET Target API
      * @api
-     * @link /analytics/dashboard
+     * @link /analytics/Target
      * @method GET
      * @param      integer      $limit   (number of rows to fetch)
      * @param      integer      $skip    (number of rows to skip)
@@ -125,12 +118,8 @@ class DashboardController extends AbstractApiController
      * @param      array[json]  $filter  (filter with logic and filters)
      * @return array $dataget list of Datasource
      * <code>status : "success|error",
-     *              id: integer,
-     *              uuid : string,
      *              name : string,
-     *              ispublic : integer,
-     *              description : string,
-     *              dashboard_type : string,
+     *              type : string,
      *              created_by: integer,
      *              date_created: date,
      *              org_id: integer,
@@ -140,7 +129,14 @@ class DashboardController extends AbstractApiController
     public function getList()
     {
         $params = $this->params()->fromQuery();
-        $result = $this->dashboardService->getDashboardList($params);
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        $result = $this->targetService->getTargetList($params);
+        return $this->getSuccessResponseWithData($result);
+    }
+
+    public function getKRAResultAction() 
+    {
+        $params = $this->params()->fromQuery();
+        $result = $this->targetService->getKRAResult($params);
+        return $this->getSuccessResponseWithData($result);
     }
 }

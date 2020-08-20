@@ -72,7 +72,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $generatedDocumentsList = array();
         $excelData = array();
         $tempData = $data;
-        if (isset($data['genericData'])) {
+        if (isset($data['genericData']) && !empty($data['genericData)'])) {
             foreach ($this->checkJSON(
                 $data['genericData']
             ) as $customKey => $customValue) {

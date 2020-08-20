@@ -34,7 +34,7 @@ class DataSourceService extends AbstractService
         $dataSource->assign($data);
         try {
             $this->beginTransaction();
-            $dataSource->save2();
+            $dataSource->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -51,7 +51,7 @@ class DataSourceService extends AbstractService
         $dataSource->assign($data);
         try {
             $this->beginTransaction();
-            $dataSource->save2();
+            $dataSource->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -71,7 +71,7 @@ class DataSourceService extends AbstractService
         ]);
         try {
             $this->beginTransaction();
-            $dataSource->save2();
+            $dataSource->save();
             $this->commit();
         }
         catch (Exception $e) {

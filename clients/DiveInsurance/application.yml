@@ -582,6 +582,12 @@ form:
         description: 'Lets CSR regenerate the policy document'
         template_file: iplPolicyRegeneration.json
         entity: 'Individual Professional Liability'
+    -
+        name: 'Dive Store Policy Regeneration'
+        uuid: e139cef3-d1e4-4b6f-8f20-51dec19f694e
+        description: 'Lets CSR regenerate the policy document'
+        template_file: diveStoreRegeneration.json
+        entity: 'Dive Store'
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03

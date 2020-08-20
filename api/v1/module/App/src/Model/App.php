@@ -30,8 +30,7 @@ class App extends Entity {
         'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
         'modified_by' =>    ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
         'status' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE, 'value' => 0],
-        'start_options' =>  ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'version' =>        ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE]
+        'start_options' =>  ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
     ];
 
     public function &getModel() {

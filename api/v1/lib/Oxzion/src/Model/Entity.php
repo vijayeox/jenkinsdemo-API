@@ -3,6 +3,7 @@ namespace Oxzion\Model;
 
 use Countable;
 use Exception;
+use ParseError;
 use Oxzion\Type;
 use Oxzion\InvalidInputException;
 use Oxzion\ValidationException;
@@ -134,6 +135,25 @@ abstract class Entity implements Countable
         return NULL;
     }
 
+    private function runDynamicValidationIfExists($property, $value, $propDef) {
+        if (!array_key_exists('dynamicValidation', $propDef)) {
+            return;
+        }
+        $code = $propDef['dynamicValidation'];
+        $data = $this->data;
+        try {
+            $result = eval("use \Oxzion\InvalidPropertyValueException;\r\n" . $code);
+            if (isset($result) && !is_null($result)) {
+                throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
+                ['property' => $property, 'value' => $value, 'error' => $result]);
+            }
+        }
+        catch(ParseError $e) {
+            throw new InvalidPropertyValueException("Validator code parse error for property '${property}'.",
+                ['property' => $property, 'error' => 'Validator code parse error:' . $e->getMessage()]);
+        }
+    }
+
     private function validateAndConvert($property, $value) {
         $model = &$this->getModel();
         if (!isset($model) || is_null($model)) {
@@ -143,6 +163,7 @@ abstract class Entity implements Countable
         if (!isset($propDef) || is_null($propDef)) {
             return $value; //Any value is valid when the property definition is not set for a property.
         }
+        $this->runDynamicValidationIfExists($property, $value, $propDef);
         try {
             $convertedValue = Type::convert($value, $propDef['type']);
         }
@@ -247,22 +268,6 @@ abstract class Entity implements Countable
     }
 
     /*
-     * Sets a property. Throws exception if the property name is not defined in the form.
-     * 
-     * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
-     * setting properties without needed checks.
-     */
-    private function setProperty($property, $value) {
-        if (!array_key_exists($property, $this->data)) {
-            throw new Exception("Property '${property}' is not defined in the form.");
-        }
-        if ($this->isReadOnly($property)) {
-            throw new Exception("Property '${property}' is read-only.");
-        }
-        $this->data[$property] = $this->validateAndConvert($property, $value);
-    }
-
-    /*
      * Loads data from database using UUID.
      */
     public function loadByUuid($uuid) {
@@ -281,13 +286,14 @@ abstract class Entity implements Countable
      */
     public function assign($input) {
         //Make sure 'version' is set if this is update.
-        $id = $this->getProperty('id');
-        $uuid = $this->getProperty('uuid');
+        $id = $this->data['id'];
+        $uuid = $this->data['uuid'];
         $isIdValid = (!is_null($id) && (0 != $id) && !empty($id));
         $isUuidValid = (!is_null($uuid) && !empty($uuid));
+        $isVersionInModel = array_key_exists('version', $this->data);
         $isVersionSet = !is_null($input) && isset($input) && array_key_exists('version', $input);
         //Existence of valid id and UUID means record is being updated. Therefore version is needed.
-        if (($isIdValid || $isUuidValid) && !$isVersionSet) {
+        if ($isVersionInModel && ($isIdValid || $isUuidValid) && !$isVersionSet) {
             throw new ParameterRequiredException('Version number is required.', ['version']);
         }
         //All ok. Go ahead and assign values.
@@ -302,18 +308,20 @@ abstract class Entity implements Countable
     public function getGenerated($includeId = false) {
         $arr = array();
         if ($includeId) {
-            $id = $this->getProperty('id');
-            if (!is_null($id)) {
+            $id = $this->data['id'];
+            if (isset($id) && !is_null($id)) {
                 $arr['id'] = $id;
             }
         }
-        $uuid = $this->getProperty('uuid');
-        if (!is_null($uuid)) {
+        $uuid = $this->data['uuid'];
+        if (isset($uuid) && !is_null($uuid)) {
             $arr['uuid'] = $uuid;
         }
-        $version = $this->getProperty('version');
-        if (!is_null($version)) {
-            $arr['version'] = $version;
+        if (array_key_exists('version', $this->data)) {
+            $version = $this->data['version'];
+            if (isset($version) && !is_null($version)) {
+                $arr['version'] = $version;
+            }
         }
         return $arr;
     }
@@ -350,18 +358,20 @@ abstract class Entity implements Countable
         return $returnArray;
     }
 
-    public function save2() {
+    public function save() {
         $this->validate();
-        $data = $this->table->internalSave2($this->data);
+        $savedData = $this->table->internalSave2($this->data);
         $id = $this->data['id'];
         if (!isset($id) || is_null($id) || empty($id)) {
-            $this->data['id'] = $data['id'];
+            $this->data['id'] = $savedData['id'];
         }
         $uuid = $this->data['uuid'];
         if (!isset($uuid) || is_null($uuid) || empty($uuid)) {
-            $this->data['uuid'] = $data['uuid'];
+            $this->data['uuid'] = $savedData['uuid'];
         }
-        $this->data['version'] = $data['version'];
+        if (array_key_exists('version', $this->data)) {
+            $this->data['version'] = $savedData['version'];
+        }
     }
 
     public function setForeignKey($key, $value, $force = false) {

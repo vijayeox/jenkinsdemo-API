@@ -580,7 +580,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->fileService->updateFileAttributes($data['id']);
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $data1 = json_decode($sqlQuery2Result[0]['data'], true);
-        $this->assertEquals(4, count($data1));
+        $this->assertEquals(6, count($data1));
         $sqlQueryResult = $this->runQuery($sqlQuery3);
         $this->assertEquals(4, count($sqlQueryResult));
         $this->assertEquals($data['field1'], $sqlQueryResult[0]['field_value']);

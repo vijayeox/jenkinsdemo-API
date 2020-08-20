@@ -110,16 +110,18 @@ class StorePreviewDocument extends PolicyDocument
         }
 
         if(isset($this->template[$temp['product']]['cover_letter'])){
-            $this->logger->info("DOCUMENT cover_letter");
-            $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
+                $this->logger->info("DOCUMENT cover_letter");
+                $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
         }
-        if(isset($this->template[$data['product']]['instruct'])){
-            $this->logger->info("DOCUMENT instruct");
-            $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
-        }
+        if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
+            if(isset($this->template[$data['product']]['instruct'])){
+                $this->logger->info("DOCUMENT instruct");
+                $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
+            }
 
-        if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
-            $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+            if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
+                $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
+            }
         }
         
         if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
@@ -158,14 +160,18 @@ class StorePreviewDocument extends PolicyDocument
             }
         }
 
-        if(isset($this->template[$temp['product']]['blanketForm'])){
-            $this->logger->info("DOCUMENT blanketForm");
-            $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+        if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
+            if(isset($this->template[$temp['product']]['blanketForm'])){
+                $this->logger->info("DOCUMENT blanketForm");
+                $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
+            }
         }
         if($temp['product'] == 'Dive Store'){
-            if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
-                 if(isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability'){
-                    $documents['group_blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
+            if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
+                if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
+                     if(isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability'){
+                        $documents['group_blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'GLblanketForm');
+                    }
                 }
             }
             $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
@@ -181,7 +187,9 @@ class StorePreviewDocument extends PolicyDocument
         }
         $documents['premium_summary_document'] = $this->generateDocuments($temp,$dest,$options,'psTemplate','psHeader','psFooter');
         if($temp['product'] == 'Dive Store'){
-            $this->additionalDocumentsDS($temp,$documents,$dest);    
+            if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
+                $this->additionalDocumentsDS($temp,$documents,$dest);    
+            }
         }
         $originalData['finalDocuments'] = $documents;
         return $originalData;
