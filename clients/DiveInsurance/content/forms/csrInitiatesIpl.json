@@ -1374,7 +1374,7 @@
 						"allowCalculateOverride": true,
 						"validate": {
 							"required": true,
-							"custom": "if(data.start_date && data.start_date != \"\"){\n  valid = (moment(data.start_date).diff(moment(),'days') > 60) ? \"Sorry! You cannot purchase an insurance with an effective date beyond 60 days from the current date. Please try again\" : true;\n}else {\n  valid = (data.start_date_range && data.start_date_range != \"\") ? true : \"Please select the Policy Start Date\";\n}"
+							"customMessage": "Please select the Policy Start Date"
 						},
 						"key": "csrPolicyPeriod",
 						"properties": {
@@ -4981,7 +4981,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 590,
+	"_vid": 591,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5002,6 +5002,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-08-20T04:50:22.906Z",
+	"modified": "2020-08-20T07:21:56.103Z",
 	"machineName": "testdivehub:csrInitiates"
 }
