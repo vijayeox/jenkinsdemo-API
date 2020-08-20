@@ -18,13 +18,11 @@ class RoleService extends AbstractService
 {
     protected $table;
     protected $modelClass;
-    protected $businessRoleService;
-    public function __construct($config, $dbAdapter, RoleTable $table, PrivilegeTable $privilegeTable, $businessRoleService)
+    public function __construct($config, $dbAdapter, RoleTable $table, PrivilegeTable $privilegeTable)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->modelClass = new Role();
-        $this->businessRoleService = $businessRoleService;
     }
 
     public function saveRole($params, &$data, $roleId = null)
@@ -84,12 +82,7 @@ class RoleService extends AbstractService
                     $roleId = $result[0]['id'];
                 }
             }
-            if(isset($data['businessRole'])){
-                $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']);
-                if(count($temp) > 0){
-                    $data['business_role_id'] = $temp[0]['id'];
-                }
-            }
+
             $businessRoleId = isset($data['business_role_id'])? $data['business_role_id']: 'NULL';
             if (isset($roleId)) {
                 $update = "UPDATE `ox_role` SET `name`= '" . $data['name'] . "', business_role_id = $businessRoleId, `description`= '" . 
@@ -112,7 +105,9 @@ class RoleService extends AbstractService
                 }
             }
             if (isset($data['privileges'])) {
-                $this->updateRolePrivileges($roleId, $data['privileges'], $orgId);
+                $privileges = $data['privileges'];
+                $appId = isset($data['app_id']) ? $data['app_id'] : null;
+                $this->updateRolePrivileges($roleId, $data['privileges'], $orgId, $appId);
                 $query = "select * from ox_role_privilege where role_id = :roleid";
                 $params = array("roleid" => $roleId);
                 $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
@@ -125,13 +120,12 @@ class RoleService extends AbstractService
         return $count;
     }
 
-    protected function updateRolePrivileges($roleId, &$privileges, $orgId = null)
+    protected function updateRolePrivileges($roleId, &$privileges, $orgId = null, $appId = null)
     {
         try {
             $delete = "DELETE from `ox_role_privilege` where role_id =" . $roleId . "";
             $result = $this->runGenericQuery($delete);
             for ($i = 0; $i < sizeof($privileges); $i++) {
-                $appId = isset($privileges[$i]['app_id']) ? $privileges[$i]['app_id'] : 'NULL';
                 $insert = "INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`)
                         SELECT " . $roleId . ",'" . $privileges[$i]['privilege_name'] . "', CASE WHEN permission_allowed >" . $privileges[$i]['permission'] . " THEN " . $privileges[$i]['permission'] . " ELSE permission_allowed END ," . ($orgId ? $orgId : 'NULL') .
                     ", app_id from ox_privilege where name = '" . $privileges[$i]['privilege_name'] . "'";
@@ -336,9 +330,16 @@ class RoleService extends AbstractService
         }
     }
 
-    public function createBasicRoles($orgid, array $businessRoleId = NULL)
+    public function createBasicRoles($orgid, array $businessRoleId = NULL, $defaultRoles = true)
     {
-        $basicRoles = $this->getRolesByOrgid(null, $businessRoleId);
+        $basicRoles = [];
+        if($defaultRoles){
+            $basicRoles = $this->getRolesByOrgid(null);
+        }
+        if($businessRoleId){
+            $temp = $this->getRolesByOrgid(null, $businessRoleId);
+            $basicRoles = array_merge($basicRoles, $temp);
+        }
         try {
             foreach ($basicRoles as $basicRole) {
                 unset($basicRole['id']);

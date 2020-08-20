@@ -12,6 +12,7 @@ use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\Service\AbstractService;
+use Oxzion\Service\EntityService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
@@ -29,6 +30,7 @@ class OrganizationService extends AbstractService
     private $messageProducer;
     private $privilegeService;
     private $orgProfileService;
+    private $entityService;
     static $userField = array('name' => 'ox_user.name', 'id' => 'ox_user.id', 'city' => 'ox_address.city', 'country' => 'ox_address.country', 'address' => 'ox_address.address1', 'address2' => 'ox_address.address2', 'state' => 'ox_address.state');
     static $groupField = array('name' => 'oxg.name', 'description' => 'oxg.description');
     static $projectField = array('name' => 'oxp.name', 'description' => 'oxp.description', 'date_created' => 'oxp.date_created');
@@ -44,7 +46,7 @@ class OrganizationService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, RoleService $roleService, PrivilegeService $privilegeService, OrganizationProfileService $orgProfileService, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, RoleService $roleService, PrivilegeService $privilegeService, OrganizationProfileService $orgProfileService, EntityService $entityService, MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -54,6 +56,7 @@ class OrganizationService extends AbstractService
         $this->privilegeService = $privilegeService;
         $this->messageProducer = $messageProducer;
         $this->orgProfileService = $orgProfileService;
+        $this->entityService = $entityService;
     }
 
     /**
@@ -179,19 +182,57 @@ class OrganizationService extends AbstractService
 
         return $appId;
     }
+
+    private function setupBusinessOfferings(&$params){
+        if (!isset($params['app_id']) || !isset($params['businessOffering'])){
+            return;
+        }
+        $appId = $params['app_id'];
+        $offerings = $params['businessOffering'];
+        $params['business_role_id'] = array();
+        foreach ($offerings as $offering) {
+            $offering['app_id'] = $appId;
+            $offering['id'] = $params['id'];
+            $this->setupBusinessRole($offering);
+            if(isset($appId) && isset($offering['org_business_role_id']) && count($offering['org_business_role_id']) > 0){
+                $orgBusinessRoleId = $offering['org_business_role_id'][0];
+                $this->setupOrgOffering($appId, $orgBusinessRoleId, $offering['entity']);
+                $params['business_role_id'][] = $offering['business_role_id'][0];
+            }
+        }
+        
+    }
+
+    private function setupOrgOffering($appId, $orgBusinessRoleId, $offerings){
+        $query = "DELETE FROM ox_org_offering where org_business_role_id = :orgBusinessRoleId";
+        $params = array("orgBusinessRoleId" => $orgBusinessRoleId);
+        $this->executeUpdateWithBindParameters($query, $params);
+        $query = "INSERT INTO ox_org_offering (org_business_role_id, entity_id) VALUES 
+                    (:orgBusinessRoleId, :entityId)";
+        
+        foreach ($offerings as $value) {
+            $entity = $this->entityService->getEntityByName($appId, $value);
+            if(!$entity){
+                continue;
+            }
+            $params['entityId'] = $entity['id'];
+            $this->executeUpdateWithBindParameters($query, $params);
+        }
+        
+    }
     private function setupBusinessRole(&$params){
-        if (!isset($params['app_id']) || !isset($params['business_role'])){
+        if (!isset($params['app_id']) || !isset($params['businessRole'])){
             return;
         }
         $appId = $this->getAppId($params['app_id']);
         $query = "delete from ox_org_business_role where org_id = :orgId";
         $queryParams = ["orgId" => $params['id']];
         $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
-        if(is_string($params['business_role'])){
-            $businessRole = json_decode($params['business_role'], true);
-            $businessRole = [$params['business_role']];
+        if(is_string($params['businessRole'])){
+            $businessRole = json_decode($params['businessRole'], true);
+            $businessRole = [$params['businessRole']];
         }
-        $businessRole = isset($businessRole) ? $businessRole : $params['business_role'];
+        $businessRole = isset($businessRole) ? $businessRole : $params['businessRole'];
         $bRole = "";
         $queryParams = ['appId'=> $appId];
         foreach ($businessRole as $key => $value) {
@@ -209,12 +250,14 @@ class OrganizationService extends AbstractService
                     WHERE app_id = :appId and name in $bRole";
         $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
         $this->executeUpdateWithBindParameters($query, $queryParams);
-        $query = "SELECT business_role_id from ox_org_business_role where org_id = :orgId";
+        $query = "SELECT id, business_role_id from ox_org_business_role where org_id = :orgId";
         $queryParams = ["orgId" => $params['id']];
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         $params['business_role_id'] = array();
+        $params['org_business_role_id'] = array();
         foreach ($result as $value) {
             $params['business_role_id'][] = $value['business_role_id'];
+            $params['org_business_role_id'][] = $value['id'];
         }
     }
     private function addIdentifierForOrg($appId, $params){
@@ -243,7 +286,12 @@ class OrganizationService extends AbstractService
         $data['preferences'] = json_decode($data['preferences'], true);
         $data['id'] = $form->id;
         $this->setupBusinessRole($data);
-        $userId = $this->setupBasicOrg($data, $data['contact'], $data['preferences']);
+        $defaultRoles = true;
+        if(isset($data['business_role_id'])){
+            $defaultRoles = false;
+        }
+        $this->setupBusinessOfferings($data);
+        $userId = $this->setupBasicOrg($data, $data['contact'], $data['preferences'], $defaultRoles);
         unset($data['business_role_id']);
         if (isset($userId)) {
             $data['contact']['id'] = $userId;
@@ -301,10 +349,10 @@ class OrganizationService extends AbstractService
         }
     }
 
-    private function setupBasicOrg($org, $contactPerson, $orgPreferences)
+    private function setupBasicOrg($org, $contactPerson, $orgPreferences, $defaultRoles)
     {
         // adding basic roles
-        $returnArray['roles'] = $this->roleService->createBasicRoles($org['id'], isset($org['business_role_id']) ? $org['business_role_id'] : NULL);
+        $returnArray['roles'] = $this->roleService->createBasicRoles($org['id'], isset($org['business_role_id']) ? $org['business_role_id'] : NULL, $defaultRoles);
         // adding a user
         $returnArray['user'] = $this->userService->createAdminForOrg($org, $contactPerson, $orgPreferences);
         return $returnArray['user'];
@@ -315,7 +363,7 @@ class OrganizationService extends AbstractService
         $create = true;
         if (isset($orgData['uuid'])) {
             try {
-                $result = $this->updateOrganization($orgData['uuid'], $orgData);
+                $result = $this->updateOrganization($orgData['uuid'], $orgData, null);
                 $create = false;
             } catch (ServiceException $e) {
                 if ($e->getMessageCode() != 'org.not.found') {
@@ -333,10 +381,6 @@ class OrganizationService extends AbstractService
             }
         }
 
-            // YET TO BE IMPLEMENTED
-        // if (isset($orgData['associations'])){
-        //     $this->setUpOrgAssociationRelation($orgData);
-        // }
         return $result;
     }
 

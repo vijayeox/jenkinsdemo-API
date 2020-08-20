@@ -59,7 +59,7 @@ class Module implements ConfigProviderInterface
                                                 $container->get(\Oxzion\Service\FieldService::class), 
                                                 $container->get(\Oxzion\Service\JobService::class), 
                                                 $container->get(\Oxzion\Service\OrganizationService::class), 
-                                                $container->get(Service\EntityService::class), 
+                                                $container->get(\Oxzion\Service\EntityService::class), 
                                                 $container->get(\Oxzion\Service\PrivilegeService::class), 
                                                 $container->get(\Oxzion\Service\RoleService::class), 
                                                 $container->get(\App\Service\MenuItemService::class), 
@@ -104,20 +104,6 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Page());
                     return new TableGateway('ox_app_page', $dbAdapter, null, $resultSetPrototype);
-                },
-                Service\EntityService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\EntityService($container->get('config'), $container->get(\Oxzion\Service\WorkflowService::class), $dbAdapter, $container->get(Model\EntityTable::class));
-                },
-                Model\EntityTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\EntityTableGateway::class);
-                    return new Model\EntityTable($tableGateway);
-                },
-                Model\EntityTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Entity());
-                    return new TableGateway('ox_app_entity', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\PageContentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -255,8 +241,8 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\EntityController::class => function ($container) {
                     return new Controller\EntityController(
-                        $container->get(Model\EntityTable::class),
-                        $container->get(Service\EntityService::class),
+                        $container->get(\Oxzion\Model\App\EntityTable::class),
+                        $container->get(\Oxzion\Service\EntityService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

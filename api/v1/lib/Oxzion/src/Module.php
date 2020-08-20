@@ -92,8 +92,7 @@ class Module
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Model\RoleTable::class),
-                        $container->get(Model\PrivilegeTable::class),
-                        $container->get(Service\BusinessRoleService::class)
+                        $container->get(Model\PrivilegeTable::class)
                     );
                 },
                 Model\RoleTable::class => function ($container) {
@@ -238,6 +237,22 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Field());
                     return new TableGateway('ox_field', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\EntityService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\EntityService($container->get('config'), 
+                                                     $dbAdapter, 
+                                                     $container->get(Model\App\EntityTable::class));
+                },
+                Model\App\EntityTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\App\EntityTableGateway::class);
+                    return new Model\App\EntityTable($tableGateway);
+                },
+                Model\App\EntityTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\App\Entity());
+                    return new TableGateway('ox_app_entity', $dbAdapter, null, $resultSetPrototype);
+                },
                 Service\OrganizationService::class => function ($container) {
                     return new Service\OrganizationService(
                         $container->get('config'),
@@ -247,6 +262,7 @@ class Module
                         $container->get(Service\RoleService::class),
                         $container->get(Service\PrivilegeService::class),
                         $container->get(Service\OrganizationProfileService::class),
+                        $container->get(Service\EntityService::class),
                         $container->get(Messaging\MessageProducer::class)
                     );
                 },

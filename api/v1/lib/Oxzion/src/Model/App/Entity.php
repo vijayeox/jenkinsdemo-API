@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace Oxzion\Model\App;
 
 use Oxzion\Model\Entity as OxzionEntity;
 use Oxzion\ValidationException;

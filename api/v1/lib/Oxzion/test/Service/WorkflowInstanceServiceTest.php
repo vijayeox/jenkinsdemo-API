@@ -57,7 +57,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowSetupIdentityField() {
-        $params = array('app_id' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4' ,'identifier_field' =>'id_field','id_field' => '2020', 'email' => 'brian@gmail.com', 'address1' => 'addr1', 'type' => 'INDIVIDUAL', "business_role" => "Policy Holder",
+        $params = array('app_id' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4' ,'identifier_field' =>'id_field','id_field' => '2020', 'email' => 'brian@gmail.com', 'address1' => 'addr1', 'type' => 'INDIVIDUAL', "businessRole" => "Policy Holder",
           'address2' => "", 'city' => 'city', 'state' => 'state', 'country' => 'country', 'zip' => 2323 , 'firstname' => 'brian', 'lastname' => 'test');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
@@ -80,7 +80,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->assertEquals($newQueryResult[0]['firstname']." ".$newQueryResult[0]['lastname'], $orgResult[0]['name']);
         $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
         $this->assertEquals($params['type'], $orgResult[0]['type']);
-        $this->assertEquals($params['business_role'], $bussRoleResult[0]['name']);
+        $this->assertEquals($params['businessRole'], $bussRoleResult[0]['name']);
     }
 
     public function testStartWorkflowWithWrongAppId() {

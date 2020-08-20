@@ -1,25 +1,23 @@
 <?php
-namespace App\Service;
+namespace Oxzion\Service;
 
-use App\Model\Entity;
-use App\Model\EntityTable;
+use Oxzion\Model\App\Entity;
+use Oxzion\Model\App\EntityTable;
 use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\EntityNotFoundException;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
-use Oxzion\Service\WorkflowService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
 
 class EntityService extends AbstractService
 {
-    public function __construct($config, WorkflowService $workflowService, $dbAdapter, EntityTable $table)
+    public function __construct($config, $dbAdapter, EntityTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->workflowService = $workflowService;
     }
 
     public function saveEntity($appUuid, &$data)
@@ -132,27 +130,6 @@ class EntityService extends AbstractService
         return $result[0];
     }
 
-    public function deployWorkflow($appId, $id, $params, $file = null)
-    {
-        $baseFolder = $this->config['UPLOAD_FOLDER'];
-        try {
-            $entity = $this->getEntity($appId, $id);
-            if ($entity) {
-                if (isset($file)) {
-                    $workFlowStorageFolder = $baseFolder . "app/" . $appId . "/entity/";
-                    $fileName = FileUtils::storeFile($file, $workFlowStorageFolder);
-                    return $this->workflowService->deploy($workFlowStorageFolder . $fileName, $appId, $params, $entity['id']);
-                } else {
-                    return 0;
-                }
-            } else {
-                return 0;
-            }
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
     public function saveIdentifiers($entityId,$identifiers){
         $this->logger->info("Save Entity Identifiers - $entityId ".print_r($identifiers,true));
         try{
@@ -164,6 +141,30 @@ class EntityService extends AbstractService
                 $insert = "INSERT INTO ox_entity_identifier(`entity_id`,`identifier`) 
                             VALUES (:entityId,:identifier)";
                 $params["identifier"] = $value['identifier'];
+                $result = $this->executeQueryWithBindParameters($insert, $params);
+            }
+            $this->commit();
+        }
+        catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function saveParticipantRoles($entityId, $appId, $data){
+        $this->logger->info("Save Participant Roles for Entity - $entityId ".print_r($data,true));
+        try{
+            $this->beginTransaction();
+            $delete = "DELETE FROM ox_entity_participant_role WHERE entity_id= :entityId";
+            $params = array("entityId" => $entityId);
+            $result = $this->executeUpdateWithBindParameters($delete, $params);
+            $params['appId'] = $appId;
+            foreach ($data as $value) {
+                $insert = "INSERT INTO ox_entity_participant_role(`entity_id`,`business_role_id`) 
+                            (SELECT :entityId, br.id from ox_business_role br
+                            INNER JOIN ox_app a on a.id = br.app_id 
+                            where a.uuid = :appId and br.name = :bRole)";
+                $params["bRole"] = $value['businessRole'];
                 $result = $this->executeQueryWithBindParameters($insert, $params);
             }
             $this->commit();

@@ -4,9 +4,9 @@ namespace App\Controller;
 /**
  * Entity Api
  */
-use App\Model\Entity;
-use App\Model\EntityTable;
-use App\Service\EntityService;
+use Oxzion\Model\App\Entity;
+use Oxzion\Model\App\EntityTable;
+use Oxzion\Service\EntityService;
 use Exception;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\EntityNotFoundException;
@@ -170,31 +170,31 @@ class EntityController extends AbstractApiController
      * <code> status : "success|error"
      * </code>
      */
-    public function workflowDeployAction()
-    {
-        $data = $this->extractPostData();
-        $params = array_merge($data, $this->params()->fromRoute());
-        $this->log->info(__CLASS__ . "-> \n Deploy Workflow - " . print_r($params, true));
-        $files = isset($_FILES['files']) ? $_FILES['files'] : null;
-        try {
-            if ($files && isset($params['name'])) {
-                $response = $this->entityService->deployWorkflow($params['appId'], $params['entityId'], $params, $files);
-                if ($response == 0) {
-                    return $this->getErrorResponse("Error Creating workflow");
-                }
-                if ($response == 1) {
-                    return $this->getErrorResponse("Error Parsing BPMN");
-                }
-                if ($response == 2) {
-                    return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
-                }
-                return $this->getSuccessResponse($response);
-            } else {
-                return $this->getErrorResponse("Files cannot be uploaded");
-            }
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 417);
-        }
-    }
+    // public function workflowDeployAction()
+    // {
+    //     $data = $this->extractPostData();
+    //     $params = array_merge($data, $this->params()->fromRoute());
+    //     $this->log->info(__CLASS__ . "-> \n Deploy Workflow - " . print_r($params, true));
+    //     $files = isset($_FILES['files']) ? $_FILES['files'] : null;
+    //     try {
+    //         if ($files && isset($params['name'])) {
+    //             $response = $this->entityService->deployWorkflow($params['appId'], $params['entityId'], $params, $files);
+    //             if ($response == 0) {
+    //                 return $this->getErrorResponse("Error Creating workflow");
+    //             }
+    //             if ($response == 1) {
+    //                 return $this->getErrorResponse("Error Parsing BPMN");
+    //             }
+    //             if ($response == 2) {
+    //                 return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
+    //             }
+    //             return $this->getSuccessResponse($response);
+    //         } else {
+    //             return $this->getErrorResponse("Files cannot be uploaded");
+    //         }
+    //     } catch (Exception $e) {
+    //         $this->log->error($e->getMessage(), $e);
+    //         return $this->getErrorResponse($e->getMessage(), 417);
+    //     }
+    // }
 }

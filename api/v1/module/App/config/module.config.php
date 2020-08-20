@@ -99,20 +99,6 @@ return [
                     ],
                 ],
             ],
-            'appupload' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/entity/:entityId/deployworkflow[/:workflowId]',
-                    'constraints' => [
-                        'workflowId' => UuidUtil::UUID_PATTERN,
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\EntityController::class,
-                        'action' => 'workflowDeploy',
-                        'method' => 'post',
-                    ],
-                ],
-            ],
             'appregister' => [
                 'type' => Segment::class,
                 'options' => [
