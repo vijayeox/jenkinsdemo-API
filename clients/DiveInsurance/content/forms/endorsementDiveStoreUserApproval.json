@@ -35,7 +35,7 @@
 		}, {
 			"type": "documentviewer",
 			"key": "quoteDocuments",
-			"label": "Store Documents",
+			"label": "Policy Documents",
 			"calculateValue": "value = (data['documents'])",
 			"hideLabel": true,
 			"inputType": "documentviewer",
@@ -623,6 +623,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-08-05T11:43:23.903Z",
+	"modified": "2020-08-20T07:00:09.472Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
