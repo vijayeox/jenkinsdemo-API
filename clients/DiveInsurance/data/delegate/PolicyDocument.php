@@ -1561,6 +1561,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($newlossPayees,true));
                         if(sizeof($newlossPayees) > 0){
                             $temp['newlossPayees'] = json_encode($newlossPayees);
+                        } else {
+                            $temp['newlossPayees'] = "";
                         }
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($temp['newlossPayees'],true));
                         $diff = array_diff(array_map('serialize',$policy['previous_lossPayees']), array_map('serialize', $data['lossPayees']));
@@ -1568,6 +1570,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Removed Loss Payees :".print_r($removedlossPayees,true));
                         if(sizeof($removedlossPayees) > 0){
                             $temp['removedlossPayees'] = json_encode($removedlossPayees);
+                        } else {
+                            $temp['removedlossPayees'] = "";
                         }
                     } else {
                         $temp['newlossPayees'] = "";
