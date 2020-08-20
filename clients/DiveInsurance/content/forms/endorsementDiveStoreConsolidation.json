@@ -73,7 +73,7 @@
 						"actions": [{
 							"name": "Hide ",
 							"type": "mergeComponentSchema",
-							"schemaDefinition": "schema =  {values:[{value: \"modify_personalInformation\",label: \"Business and Policy Information\", shortcut: \"\" },{ value: \"modify_additionalCoverages\",label: \"Additional Coverages\", shortcut: \"\" }, { value: \"modify_groupProfessionalLiability\", label: \"Group Professional Liability\", shortcut: \"\"}]};"
+							"schemaDefinition": "schema =  {values:[{value: \"modify_personalInformation\",label: \"Business and Policy Information\", shortcut: \"\" },{ value: \"modify_groupProfessionalLiability\", label: \"Group Professional Liability\", shortcut: \"\"}]};"
 						}]
 					}],
 					"type": "selectboxes",
@@ -14739,6 +14739,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-19T11:03:17.579Z",
+	"modified": "2020-08-20T11:36:13.098Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
