@@ -23,7 +23,7 @@
    Source Worksheet: 'Effective Date:'
    pageName: Property
    cell: G29
-   method: formatDate
+   # method: formatDate
 -
    key: umbrellalimit
    Source Worksheet: Limit
@@ -130,10 +130,16 @@
    pageName: Crime (printable)
    cell: L51
 -
-   key: numberOfOwners
-   Source Worksheet: '# of Owners/Officers:'
+   key: franchisedAutoDealer*garageLiabilityGrid
    pageName: Garage Liability
    cell: C27
+   type: DataGrid
+-
+   key: locationSchedule_garagenumberofdealerplates
+   pageName: Garage Liability
+   cell: L27
+   method: simpleDatagrid
+   type: DataGrid   
 -
    key: totalemployees
    Source Worksheet: 'Total # of Employees:'
@@ -293,7 +299,6 @@
    pageName: Garage Supplemental
    cell: B105
    type: Checkbox
-   notes: 'Note:Wrongly mentioned as A105 in raw file.'
 -
    key: mixingroomsurvey_areDrumsGroundedAndBondedDuringPantTransfer
    method: pulloutChild
