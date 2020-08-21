@@ -1,0 +1,37 @@
+ox_widget_target:
+  -
+    id: 1
+    target_id: 10
+    widget_id: 120
+    trigger_query_id: null
+    group_key: 'john'
+  -
+    id: 2
+    target_id: 11
+    widget_id: 120
+    trigger_query_id: null
+    group_key: 'jane'
+  -
+    id: 3
+    target_id: 12
+    widget_id: 120
+    trigger_query_id: null
+    group_key: 'mark'
+  -
+    id: 4
+    target_id: 12
+    widget_id: 121
+    trigger_query_id: null
+    group_key: ''
+  -
+    id: 5
+    target_id: 10
+    widget_id: 119
+    trigger_query_id: null
+    group_key: ''
+  -
+    id: 6
+    target_id: 11
+    widget_id: 126
+    trigger_query_id: null
+    group_key: ''
