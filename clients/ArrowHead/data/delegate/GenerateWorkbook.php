@@ -63,6 +63,14 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
+        // Add logs for created by id and producer name who triggered submission
+        if (isset($data['submittedBy']) && !empty($data['submittedBy'])) {
+            if ($data['submittedBy'] == 'accountExecutive') {
+                return $data;
+            }
+        } else {
+            return $data;
+        }
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
 
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
@@ -72,7 +80,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $generatedDocumentsList = array();
         $excelData = array();
         $tempData = $data;
-        if (isset($data['genericData'])) {
+        if (isset($data['genericData']) && !empty($data['genericData'])) {
             foreach ($this->checkJSON(
                 $data['genericData']
             ) as $customKey => $customValue) {
