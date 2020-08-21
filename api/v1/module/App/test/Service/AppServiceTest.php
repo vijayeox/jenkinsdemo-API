@@ -473,6 +473,11 @@ class AppServiceTest extends AbstractServiceTest
     
     public function testProcessSymlinks()
     {
+        if (enableExecUtils == 0) {
+            $mockBosUtils = Mockery::mock('alias:\Oxzion\Utils\ExecUtils');
+            $mockBosUtils->expects('randomPassword')->withAnyArgs()->once()->andReturn('12345678');
+            $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
+        }
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'));        
         $path = __DIR__ . '/../sampleapp/';
