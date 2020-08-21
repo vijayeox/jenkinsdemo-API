@@ -39,7 +39,7 @@ class TargetControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['type' => '1','period_type' => 'monthly','red_limit' => 10,'version' => 1];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_target'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_target'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/target', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -48,8 +48,9 @@ class TargetControllerTest extends ControllerTest
         $this->assertMatchedRouteName('target');        
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['period_type'], $data['period_type']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_target'));
+        $this->assertEquals($content['data']['version'], 1);
+        $this->assertNotNull($content['data']['uuid']);
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_target'));
     }
 
 
@@ -121,14 +122,14 @@ class TargetControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 2);
+        $this->assertEquals(count($content['data']['data']), 3);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-3434-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['period_type'], 'monthly');
-        $this->assertEquals($content['data']['data'][0]['red_limit'], '10');
+        $this->assertEquals($content['data']['data'][0]['red_limit'], '1000');
         $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-3434-48df-8888-c58520005817');
         $this->assertEquals($content['data']['data'][1]['period_type'], 'daily');
-        $this->assertEquals($content['data']['data'][1]['red_limit'], '15');
-        $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals($content['data']['data'][1]['red_limit'], '10000');
+        $this->assertEquals($content['data']['total'],3);
     }
 
 
@@ -141,14 +142,14 @@ class TargetControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-3434-48df-96b9-c58520005817');
-        $this->assertEquals($content['data']['data'][1]['period_type'], 'monthly');
-        $this->assertEquals($content['data']['data'][1]['red_limit'], '10');
+        $this->assertEquals(count($content['data']['data']), 3);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-3434-48df-8888-c58520005817');
         $this->assertEquals($content['data']['data'][0]['period_type'], 'daily');
-        $this->assertEquals($content['data']['data'][0]['red_limit'], '15');
-        $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals($content['data']['data'][0]['red_limit'], '10000');
+        $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-3434-48df-96b9-c58520005817');
+        $this->assertEquals($content['data']['data'][1]['period_type'], 'monthly');
+        $this->assertEquals($content['data']['data'][1]['red_limit'], '1000');
+        $this->assertEquals($content['data']['total'],3);
     }
 
      public function testGetListSortWithPageSize()
@@ -159,11 +160,11 @@ class TargetControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 1);
+        $this->assertEquals(count($content['data']['data']), 2);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-3434-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['period_type'], 'monthly');
-        $this->assertEquals($content['data']['data'][0]['red_limit'], '10');
-        $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals($content['data']['data'][0]['red_limit'], '1000');
+        $this->assertEquals($content['data']['total'],3);
     }
 
 

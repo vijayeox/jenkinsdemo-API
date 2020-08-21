@@ -82,6 +82,8 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Visualization.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetCalcFilter.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetQueryCalcFilter.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetTarget.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Target.yml");
         return $dataset;
     }
 
@@ -343,7 +345,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
-        $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000},{"owner_username":"mark","industry":"Insurance","budget_amount":3000},{"owner_username":"mark","industry":"Insurance","budget_amount":3000},{"owner_username":"jane","industry":"Insurance","budget_amount":5000},{"owner_username":"john","industry":"Software","budget_amount":2000}]');
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","industry":"Insurance","budget_amount":3000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","industry":"Insurance","budget_amount":3000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"jane","industry":"Insurance","budget_amount":5000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"john","industry":"Software","budget_amount":2000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"}]');
     }
 
     public function testSortingWithGroup() {
@@ -358,7 +360,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
-        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":1500},{"owner_username":"mark","budget_amount":3000},{"owner_username":"jane","budget_amount":5000}]');
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":1500,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","budget_amount":3000,"red_limit":"2000","yellow_limit":"3000","green_limit":"4000"},{"owner_username":"jane","budget_amount":5000,"red_limit":"10000","yellow_limit":"25000","green_limit":"35000"}]');
     }
 
     public function testCombineWithMultiCount() {
@@ -473,6 +475,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($jsoncontent, '{"red_limit":"10000","yellow_limit":"25000","green_limit":"35000","color":"yellow"}');
 
     }
+    
     public function testWithPivot() {
     if (enableElastic!=0) {
         $this->setElasticData();

@@ -4,9 +4,9 @@ ox_target:
     uuid: '44f22a46-3434-48df-96b9-c58520005817'
     type: 0
     period_type: monthly
-    red_limit: 10
-    yellow_limit: 20
-    green_limit: 30
+    red_limit: 1000
+    yellow_limit: 2000
+    green_limit: 3000
     red_workflow_id: 111
     yellow_workflow_id: 222
     green_workflow_id: 333
@@ -20,9 +20,25 @@ ox_target:
     uuid: '44f22a46-3434-48df-8888-c58520005817'
     type: 0
     period_type: daily
-    red_limit: 15
-    yellow_limit: 25
-    green_limit: 35
+    red_limit: 10000
+    yellow_limit: 25000
+    green_limit: 35000
+    red_workflow_id: 444
+    yellow_workflow_id: 555
+    green_workflow_id: 666
+    trigger_after: 5
+    created_by: 1
+    org_id: 1
+    version: 1
+    isdeleted: 0
+  -
+    id: 12
+    uuid: '44f22a46-3434-48df-9999-c58520005817'
+    type: 0
+    period_type: yearly
+    red_limit: 2000
+    yellow_limit: 3000
+    green_limit: 4000
     red_workflow_id: 444
     yellow_workflow_id: 555
     green_workflow_id: 666
