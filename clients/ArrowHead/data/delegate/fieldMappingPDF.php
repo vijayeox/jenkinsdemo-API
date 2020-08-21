@@ -10,9 +10,8 @@ return array(
             'natureofsizeexplain' => 'Explain',
             'secinsurer' => 'Insurer',
             'seclimit' => 'Limit',
-            'columnsdeductible' => 'Deductible',
+            'secdeductible' => 'Deductible',
             'policyperiod' => 'Policy Period',
-            'secretrodate' => 'Retro Date',
             'secpremium' => 'Premium',
             'revenuecreditcard' => '% of rev from CC',
             'additionalcontrols' => 'Additional Controls',
@@ -25,7 +24,8 @@ return array(
             'city' => 'City',
             'zip' => 'Zip',
             'website' => 'Website',
-            'numberOfEmployees' => " of Employees"
+            'numberOfEmployees' => " of Employees",
+            "secretrodate" =>  "Retro Date"
         ],
         "radioYN" =>
         [
@@ -122,10 +122,6 @@ return array(
                 "options" => ["yes" => "Yes", "no" => "No"]
             ]
         ],
-        "date" =>
-        [
-            "secretrodate" =>  "Retro Date",
-        ],
         "checkbox" => [
             'tapeOrOtherMedia' =>  [
                 "parentKey" => "backingupandstorage",
@@ -191,7 +187,7 @@ return array(
             'officerone' => 'Number of Officers',
             'employeefive' => 'Number of employees_5',
             'officertwo' => 'Number of Officers_2',
-            'emppremium' => 'Premium',
+            'premium' => 'Premium',
             'empinsurername' => 'Insurer',
             'LimitCount' => 'Limit',
             'retentionrate' => 'Retention',
@@ -231,38 +227,6 @@ return array(
                 "fieldname" => 'Group9',
                 "options" => ["yes" => "Choice1", "no" => "2"]
             ],
-            'disabilitiesact' => [
-                "fieldname" => 'Group10',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
-            'civilrightsact' => [
-                "fieldname" => 'Group11',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
-            'familymedical' => [
-                "fieldname" => 'Group12',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
-            'prohibiteddiscriminatory' => [
-                "fieldname" => 'Group13',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
-            'empperfomev' => [
-                "fieldname" => 'Group14',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
-            'performanceevaluations' => [
-                "fieldname" => 'Group15',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
-            'sexualharassment' => [
-                "fieldname" => 'Group16',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
-            'reportingresolution' => [
-                "fieldname" => 'Group17',
-                "options" => ["yes" => "Choice1", "no" => "2"]
-            ],
             'hrmanual' => [
                 "fieldname" => 'Group18',
                 "options" => ["yes" => "Choice1", "no" => "2"]
@@ -291,6 +255,48 @@ return array(
                 "fieldname" => 'Group24',
                 "options" => ["yes" => "Choice1", "no" => "2"]
             ]
+        ],
+        "survey" => [
+            'complianceWithTheAmericansWithDisabilitiesAct' =>  [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group10',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
+            'complianceWithTitleViiOfTheCivilRightsActOf1964AndThe1992CivilRightsAct' => [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group11',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
+            'complianceWithTheFamilyMedicalLeaveAct' => [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group12',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
+            'prohibitedDiscriminatoryPracticesInHiringPromotionAndCompensation' => [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group13',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
+            'employeePerformanceEvaluations' => [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group14',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
+            'employeeDisciplinaryActionsAndDischarge' => [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group15',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
+            'sexualHarassmentAndTheWorkEnvironment' => [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group16',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
+            'employeeGrievanceReportingAndResolutionProcesses' => [
+                "parentKey" => "HRManualPoliciesandProcedures",
+                "fieldname" => 'Group17',
+                "options" => ["yes" => "Choice1", "no" => "2"]
+            ],
         ]
     ]
 );

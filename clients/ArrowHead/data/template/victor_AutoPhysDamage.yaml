@@ -95,6 +95,11 @@
    pageName: Underwriting Survey
    cell: I14
 -
+   key: victorAutoPhysicalDamage*checkMixofInventoryNew
+   Source Worksheet: 'If YES, please explain:'
+   pageName: Underwriting Survey
+   cell: E16
+-
    key: victorAutoPhysicalDamage*primarySecondaryOEM
    Source Worksheet: Map all primary OEM AND secondary OEM
    pageName: Underwriting Survey
@@ -470,7 +475,7 @@
       '15007500' : '$1,500/$7,500'
       '150025000' : '$1500/$25,000'
       '250010000' : '$2,500/$10,000'
-      '250012500' : '$2500/$25,000'
+      '250012500' : '$2,500/$10,000'
       '250025000' : '$2500/$25,000'
       '500025000' : '$5,000/$25,000'
       '750037500' : '$5,000/$25,000'

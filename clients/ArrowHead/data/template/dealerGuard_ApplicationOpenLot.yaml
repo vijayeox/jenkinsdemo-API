@@ -78,13 +78,13 @@
    Source Worksheet: 'Effective Date:'
    pageName: APPLICATION
    key: effectiveDate
-   method: formatDate
+   # method: formatDate
    cell: 'O10'
 -
    Source Worksheet: 'Need by Date:'
    pageName: APPLICATION
    key: needByDate
-   method: formatDate
+   # method: formatDate
    cell: 'D10'
 -
    Source Worksheet: DOL Target Premium
@@ -120,12 +120,6 @@
    key: employeedeductibleparticipation
    method: checkbox_X
    cell: B47
-# -
-#    Source Worksheet: accident Investigation
-#    pageName: APPLICATION
-#    key: accidentInvestigation
-#    method: checkbox_X
-#    cell: B44
 -
    Source Worksheet: Formal safety meetings
    pageName: APPLICATION

@@ -72,7 +72,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $generatedDocumentsList = array();
         $excelData = array();
         $tempData = $data;
-        if (isset($data['genericData']) && !empty($data['genericData)'])) {
+        if (isset($data['genericData'])) {
             foreach ($this->checkJSON(
                 $data['genericData']
             ) as $customKey => $customValue) {
@@ -199,10 +199,20 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                 $fieldNamePDFData = $fieldProps["fieldname"];
                                 $fieldOptions = $fieldProps["options"];
                                 $parentValues = $this->checkJSON($data[$fieldProps["parentKey"]]);
-                                if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == true) {
+                                if (!empty($parentValues[$formChildField]) && ($parentValues[$formChildField] == 'true')) {
                                     $pdfData[$fieldNamePDFData] =  $fieldOptions["true"];
-                                } else {
-                                    $pdfData[$fieldNamePDFData] =  $fieldOptions["false"];
+                                }
+                            }
+                        }
+                    }
+                    if (isset($fieldTypeMappingPDF[$key]["survey"])) {
+                        foreach ($fieldTypeMappingPDF[$key]["survey"] as  $formChildField => $fieldProps) {
+                            if (isset($data[$fieldProps["parentKey"]]) && !empty($data[$fieldProps["parentKey"]])) {
+                                $fieldNamePDFData = $fieldProps["fieldname"];
+                                $fieldOptions = $fieldProps["options"];
+                                $parentValues = $this->checkJSON($data[$fieldProps["parentKey"]]);
+                                if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == 'yes'){
+                                    $pdfData[$fieldNamePDFData] =  $fieldOptions["yes"];
                                 }
                             }
                         }
@@ -285,14 +295,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             $data = json_decode($data, true);
         }
         return $data;
-    }
-
-    private function formatDate($data, $fieldConfig = null, $formData = null)
-    {
-        return date(
-            "m-d-Y",
-            strtotime($data)
-        );
     }
 
     private function checkValue($data, $fieldConfig, $formData)
@@ -392,10 +394,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
             if (isset($value[$childKey]) && !empty($value[$childKey])) {
                 if (isset($fieldConfig['returnValue'])) {
-                    if (isset($fieldConfig['returnValue'][$value[$childKey]])) {
+                    $temp = $value[$childKey] . "";
+                    if (isset($fieldConfig['returnValue'][$temp])) {
                         array_push(
                             $parsedData,
-                            [$fieldConfig['returnValue'][$value[$childKey]] . ""]
+                            [$fieldConfig['returnValue'][$temp] . ""]
                         );
                     }
                 } else {
