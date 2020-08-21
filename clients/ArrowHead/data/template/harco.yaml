@@ -805,14 +805,16 @@
 -
    Source Worksheet: 'others'
    pageName: L-DPD
-   cell: L25
+   cell: 'Other choice explanation'
+   offset: '0,6'
    key: dolalllocdoesnotincld_keysInCars
    method: checkInArray
    returnBoolean: 'Keys in Cars|'
 -
    Source Worksheet: 'Keys in car - other'
    pageName: L-DPD
-   cell: L25
+   cell: 'Other choice explanation:'
+   offset: '0,6'
    key: harcoExcelData*checkkeysInCarsLabel
    returnBoolean: 'Keys in Cars|'
 -
