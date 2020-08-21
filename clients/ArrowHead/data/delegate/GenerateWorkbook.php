@@ -305,6 +305,14 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         return $data;
     }
 
+    private function formatDate($data, $fieldConfig = null, $formData = null)
+    {
+        return date(
+            "m-d-Y",
+            strtotime($data)
+        );
+    }
+
     private function checkValue($data, $fieldConfig, $formData)
     {
         $childValue = explode("_", $fieldConfig["key"])[1];
