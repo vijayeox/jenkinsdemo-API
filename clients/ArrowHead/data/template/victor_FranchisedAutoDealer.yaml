@@ -23,7 +23,7 @@
    Source Worksheet: 'Effective Date:'
    pageName: Property
    cell: G29
-   # method: formatDate
+   method: formatDate
 -
    key: umbrellalimit
    Source Worksheet: Limit
@@ -36,12 +36,6 @@
       access to cash/credit card receipts/disbursements?
    pageName: Crime (printable)
    cell: L86
-# -
-#    key: auditperformed
-#    Source Worksheet: Audit is performed by = CPA
-#    pageName: Crime (printable)
-#    cell: I61
-#    type: Checkbox
 -
    key: criminalbackgroundcheck
    Source Worksheet: Are criminal background checks performed on all employees?

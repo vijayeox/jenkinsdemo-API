@@ -63,13 +63,6 @@
    pageName: Insured Information
    cell: D23
 -
-   key: insurancecontactdataGrid_genphone
-   Source Worksheet: 'Phone:'
-   pageName: Insured Information
-   method: simpleDatagrid
-   type: DataGrid
-   cell: E22
--
    key: insurancecontactdataGrid_genemail
    Source Worksheet: 'Email:'
    pageName: Insured Information
@@ -81,6 +74,7 @@
    Source Worksheet: 'Effective Date:'
    pageName: Insured Information
    cell: E14
+   method: formatDate
    Note: Wrongly mapped shows E15 in requirement sheet
 -
    key: policyDeclined

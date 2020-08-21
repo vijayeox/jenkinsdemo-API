@@ -78,13 +78,13 @@
    Source Worksheet: 'Effective Date:'
    pageName: APPLICATION
    key: effectiveDate
-   # method: formatDate
+   method: formatDate
    cell: 'O10'
 -
    Source Worksheet: 'Need by Date:'
    pageName: APPLICATION
    key: needByDate
-   # method: formatDate
+   method: formatDate
    cell: 'D10'
 -
    Source Worksheet: DOL Target Premium

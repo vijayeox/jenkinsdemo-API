@@ -24,8 +24,7 @@ return array(
             'city' => 'City',
             'zip' => 'Zip',
             'website' => 'Website',
-            'numberOfEmployees' => " of Employees",
-            "secretrodate" =>  "Retro Date"
+            'numberOfEmployees' => " of Employees"
         ],
         "radioYN" =>
         [
@@ -121,6 +120,10 @@ return array(
                 "fieldname" => "Firewalls?",
                 "options" => ["yes" => "Yes", "no" => "No"]
             ]
+        ],
+        "date" =>
+        [
+            "secretrodate" =>  "Retro Date",
         ],
         "checkbox" => [
             'tapeOrOtherMedia' =>  [
