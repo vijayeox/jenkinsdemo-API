@@ -19,6 +19,8 @@ use Oxzion\Db\Migration\Migration;
 use Oxzion\ServiceException;
 use Oxzion\VersionMismatchException;
 use Oxzion\EntityNotFoundException;
+use App\Model\App;
+use Symfony\Component\Yaml\Yaml;
 
 class AppServiceTest extends AbstractServiceTest
 {
@@ -87,6 +89,81 @@ class AppServiceTest extends AbstractServiceTest
         $app = $appService->getApp($uuid);
         $this->assertEquals($app['uuid'], $uuid);
         $this->assertEquals($app['name'], 'DummyApp');
+    }
+
+    public function testCreateAppPreBuilt() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appData = [
+            'name' => 'DummyApp-New',
+            'description' => 'Dummy app for testing.',
+            'category' => 'DUMMY_CATEGORY',
+            'type' => App::PRE_BUILT
+        ];
+        $returnedAppData = $appService->createApp($appData);
+        $this->assertTrue(array_key_exists('uuid', $returnedAppData));
+        $appUuid = $returnedAppData['uuid'];
+        $appData['uuid'] = $appUuid;
+        $rows = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${appUuid}'");
+        $row = $rows[0];
+        $this->assertEquals($appData['name'], $row['name']);
+        $this->assertEquals($appData['description'], $row['description']);
+        $this->assertEquals($appData['category'], $row['category']);
+        $this->assertEquals($appData['type'], $row['type']);
+        $this->assertEquals($appData['name'], $returnedAppData['name']);
+        $this->assertEquals($appData['description'], $returnedAppData['description']);
+        $this->assertEquals($appData['category'], $returnedAppData['category']);
+        $this->assertEquals($appData['type'], $returnedAppData['type']);
+
+        $config = $this->getApplicationConfig();
+        $sourceAppDirectory = AppDirectoryStrategy::getSourceAppDirectory($config, $appData);
+        if (file_exists($sourceAppDirectory)) {
+            $this->fail("Source app directory ${sourceAppDirectory} SHOULD NOT be created.");
+        }
+    }
+
+    public function testCreateAppMyApp() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appData = [
+            'name' => 'DummyApp-New',
+            'description' => 'Dummy app for testing.',
+            'category' => 'DUMMU_CATEGORY',
+            'type' => App::MY_APP
+        ];
+        $returnedAppData = $appService->createApp($appData);
+        $this->assertTrue(array_key_exists('uuid', $returnedAppData));
+        $appUuid = $returnedAppData['uuid'];
+        $appData['uuid'] = $appUuid;
+        $rows = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${appUuid}'");
+        $row = $rows[0];
+        $this->assertEquals($appData['name'], $row['name']);
+        $this->assertEquals($appData['description'], $row['description']);
+        $this->assertEquals($appData['category'], $row['category']);
+        $this->assertEquals($appData['type'], $row['type']);
+        $this->assertEquals($appData['name'], $returnedAppData['name']);
+        $this->assertEquals($appData['description'], $returnedAppData['description']);
+        $this->assertEquals($appData['category'], $returnedAppData['category']);
+        $this->assertEquals($appData['type'], $returnedAppData['type']);
+
+        $config = $this->getApplicationConfig();
+        $sourceAppDirectory = AppDirectoryStrategy::getSourceAppDirectory($config, $appData);
+        if (!file_exists($sourceAppDirectory)) {
+            $this->fail("Source app directory ${sourceAppDirectory} is not created.");
+        }
+        $applicationYamlFilePath = $sourceAppDirectory . '/' . AppService::APPLICATION_YAML_FILE_NAME;
+        if (!file_exists($applicationYamlFilePath)) {
+            $this->fail("Application descriptor YAML file ${applicationYamlFilePath} is not created.");
+        }
+        $yamlAppData = Yaml::parse(file_get_contents($applicationYamlFilePath));
+        $this->assertEquals($appData['name'], $yamlAppData['name']);
+        $this->assertEquals($appData['description'], $yamlAppData['description']); 
+        $this->assertEquals($appData['category'], $yamlAppData['category']);
+        $this->assertEquals($appData['type'], $yamlAppData['type']);
+        $this->assertEquals($appUuid, $yamlAppData['uuid']);
+        FileUtils::deleteDirectoryContents($sourceAppDirectory);
     }
 
     public function testGetAppWithInvalidUuid() {

@@ -31,6 +31,7 @@ use Oxzion\Document\Parser\Form\FormRowMapper;
 class AppService extends AbstractService
 {
     const EOX_RESERVED_APP_NAME = 'SampleApp';
+    const APPLICATION_YAML_FILE_NAME = 'application.yml';
 
     protected $config;
     private $table;
@@ -125,25 +126,47 @@ class AppService extends AbstractService
         try {
             $this->beginTransaction();
             $app->save();
+
+            //Commit only after application setup is successful.
+            $data['uuid'] = $app->getProperty('uuid');
+            if (App::MY_APP == $app->getProperty('type')) {
+                $this->setupApplication($data);
+            }
+
             $this->commit();
         }
         catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $app->getGenerated();
+        return $data;
+    }
+
+    private function setupApplication($appData) {
+        $appSourceDir = AppDirectoryStrategy::getSourceAppDirectory($this->config, $appData);
+        if (!file_exists($appSourceDir)) {
+            if (!mkdir($appSourceDir)) {
+                $this->logger->error("Failed to create application source directory ${appSourceDir}.");
+                throw new ServiceException('Failed to create application source directory.', 'E_APP_SOURCE_DIR_CREATE_FAIL', 0);
+            }
+        }
+        $yamlFilePath = $appSourceDir . '/' . self::APPLICATION_YAML_FILE_NAME;
+        $yamlText = Yaml::dump($appData);
+        $yamlWriteResult = file_put_contents($yamlFilePath, $yamlText);
+        if (!$yamlWriteResult) {
+            $this->logger->error("Failed to create application YAML file ${yamlFilePath}.");
+            throw new ServiceException('Failed to create application YAML file.', 'E_APP_YAML_CREATE_FAIL', 0);
+        }
     }
 
     private function updateyml($yamldata, $path)
     {
-        $filename = "application.yml";
         $new_yaml = Yaml::dump($yamldata, 20);
-        file_put_contents($path . $filename, $new_yaml);
+        file_put_contents($path . self::APPLICATION_YAML_FILE_NAME, $new_yaml);
     }
 
     private function updateymlforapp(&$yamldata, $modifieddata, $path)
     {
-        $filename = "application.yml";
         if (!(array_key_exists('uuid', $yamldata['app']))) {
             $yamldata['app']['uuid'] = $modifieddata['uuid'];
         }
@@ -151,7 +174,7 @@ class AppService extends AbstractService
             $yamldata['app']['category'] = $modifieddata['category'];
         }
         $new_yaml = Yaml::dump($yamldata, 20);
-        file_put_contents($path . $filename, $new_yaml);
+        file_put_contents($path . self::APPLICATION_YAML_FILE_NAME, $new_yaml);
     }
 
     private function collectappfieldsdata(&$data)
@@ -172,25 +195,22 @@ class AppService extends AbstractService
     private function loadAppDescriptor($path)
     {
         //check if directory exists
-        $filename = "application.yml";
+        $filename = self::APPLICATION_YAML_FILE_NAME;
         if (!(file_exists($path))) {
             throw new FileNotFoundException('Directory not found.', $path);
-        } else { //check if filename exists
-            if (!(file_exists($path . $filename))) {
-                throw new FileNotFoundException('File not found.', $path . $filename);
-            } else {
-                $yaml = Yaml::parse(file_get_contents($path . $filename));
-                if (empty($yaml)) {
-                    throw new FileContentException('File is empty.', $path . $filename);
-                } else {
-                    if (!(isset($yaml['app']))) {
-                        throw new FileContentException('Application information not found in application descriptor YAML file.', $path . $filename);
-                    } else {
-                        return $yaml;
-                    }
-                }
-            }
         }
+        //check if filename exists
+        if (!(file_exists($path . $filename))) {
+            throw new FileNotFoundException('File not found.', $path . $filename);
+        }
+        $yaml = Yaml::parse(file_get_contents($path . $filename));
+        if (empty($yaml)) {
+            throw new FileContentException('File is empty.', $path . $filename);
+        }
+        if (!(isset($yaml['app']))) {
+            throw new FileContentException('Application information not found in application descriptor YAML file.', $path . $filename);
+        }
+        return $yaml;
     }
 
     public function deployApp($path, $params = null)
@@ -245,35 +265,35 @@ class AppService extends AbstractService
      */
     public function deployApplication($appId)
     {
-        $query = 'SELECT name, uuid, description FROM ox_app WHERE uuid=:appId';
+        $query = 'SELECT name, uuid, type, description FROM ox_app WHERE uuid=:appId';
         $queryParams = array('appId' => $appId);
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if(!isset($result) || empty($result) || (count($result) != 1)) {
             $this->logger->error("Application with APP ID ${appId} not found.");
             throw new EntityNotFoundException('Entity not found.', ['entity' => 'App', 'uuid' => $appId]);
         }
-        $appName = $result[0]['name'];
-        $uuid = $result[0]['uuid'];
-        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . $appName . '_' . $uuid;
+        $appData = $result[0];
+
+        $appSourceDir = AppDirectoryStrategy::getSourceAppDirectory($this->config, $appData);
         if (!file_exists($appSourceDir)) {
             $this->logger->error("Application source directory ${appSourceDir} not found.");
             throw new FileNotFoundException('Application source directory not found.', $appSourceDir);
         }
-        $appDestDir = $this->config['EOX_APP_DEPLOY_DIR'] . $appName . '_' . $uuid;
-        if (!file_exists($appDestDir)) {
-            if (!mkdir($appDestDir)) {
-                $this->logger->error("Failed to create application deployment directory ${appDestDir}.");
+        $appDeployDir = AppDirectoryStrategy::getDeployAppDirectory($this->config, $appData);
+        if ((App::MY_APP == $appData['type']) && !file_exists($appDeployDir)) {
+            if (!mkdir($appDeployDir)) {
+                $this->logger->error("Failed to create application deployment directory ${appDeployDir}.");
                 throw new ServiceException('Failed to create application deployment directory.', 'E_APP_DEPLOY_DIR_CREATE_FAIL', 0);
             }
-            $appTemplateDir = $this->config['DATA_FOLDER'] . '/eoxapps';
+            $appTemplateDir = AppDirectoryStrategy::getTemplateAppDirectory($this->config);
             if (!file_exists($appTemplateDir)) {
                 $this->logger->error("Template application directory ${appTemplateDir} not found.");
                 throw new FileNotFoundException('Template application not found.', $appTemplateDir);
             }
-            FileUtils::copyDir($appTemplateDir, $appDestDir);
+            FileUtils::copyDir($appTemplateDir, $appSourceDir);
         }
-        FileUtils::copyDir($appSourceDir, $appDestDir);
-        $this->deployApp($appDestDir);
+        FileUtils::copyDir($appSourceDir, $appDeployDir);
+        $this->deployApp($appDeployDir);
     }
 
     private function processApp(&$yamlData, $path){
