@@ -45,6 +45,27 @@
 							"customMessage": "Please enter Producer"
 						},
 						"key": "producername",
+						"logic": [{
+							"name": "Check Producer",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "if(data.privileges){\n  result = data.privileges.MANAGE_MY_POLICY_WRITE == true;\n} else {\n  result = false\n}"
+							},
+							"actions": [{
+								"name": "Disable Field",
+								"type": "property",
+								"property": {
+									"label": "Disabled",
+									"value": "disabled",
+									"type": "boolean"
+								},
+								"state": true
+							}, {
+								"name": "Set Producer Name",
+								"type": "value",
+								"value": "value = data.userprofile.name;"
+							}]
+						}],
 						"type": "textfield",
 						"input": true,
 						"hideOnChildrenHidden": false
@@ -109,6 +130,43 @@
 				}],
 				"type": "columns",
 				"hideLabel": true
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Status",
+						"customDefaultValue": "value = \"In Progress\";",
+						"key": "status",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Submitted By",
+						"calculateValue": "if(data.privileges){\n  value = data.privileges.MANAGE_MY_POLICY_WRITE == true ? \"accountExecutive\" : \"management\";  \n}",
+						"key": "submittedBy",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns46",
+				"type": "columns",
+				"input": false
 			}],
 			"input": false
 		}, {
@@ -280,6 +338,7 @@
 							"isNew": false
 						}, {
 							"label": "State JSON",
+							"protected": true,
 							"calculateValue": "value =  [\n    {\n        \"name\": \"Alabama\",\n        \"abbreviation\": \"AL\"\n    },\n    {\n        \"name\": \"Arizona\",\n        \"abbreviation\": \"AZ\"\n    },\n    {\n        \"name\": \"Arkansas\",\n        \"abbreviation\": \"AR\"\n    },\n    {\n        \"name\": \"California\",\n        \"abbreviation\": \"CA\"\n    },\n    {\n        \"name\": \"Colorado\",\n        \"abbreviation\": \"CO\"\n    },\n    {\n        \"name\": \"Connecticut\",\n        \"abbreviation\": \"CT\"\n    },\n    {\n        \"name\": \"Delaware\",\n        \"abbreviation\": \"DE\"\n    },\n    {\n        \"name\": \"District Of Columbia\",\n        \"abbreviation\": \"DC\"\n    },\n    {\n        \"name\": \"Florida\",\n        \"abbreviation\": \"FL\"\n    },\n    {\n        \"name\": \"Georgia\",\n        \"abbreviation\": \"GA\"\n    },\n    {\n        \"name\": \"Hawaii\",\n        \"abbreviation\": \"HI\"\n    },\n    {\n        \"name\": \"Idaho\",\n        \"abbreviation\": \"ID\"\n    },\n    {\n        \"name\": \"Illinois\",\n        \"abbreviation\": \"IL\"\n    },\n    {\n        \"name\": \"Indiana\",\n        \"abbreviation\": \"IN\"\n    },\n    {\n        \"name\": \"Iowa\",\n        \"abbreviation\": \"IA\"\n    },\n    {\n        \"name\": \"Kansas\",\n        \"abbreviation\": \"KS\"\n    },\n    {\n        \"name\": \"Kentucky\",\n        \"abbreviation\": \"KY\"\n    },\n    {\n        \"name\": \"Louisiana\",\n        \"abbreviation\": \"LA\"\n    },\n    {\n        \"name\": \"Maine\",\n        \"abbreviation\": \"ME\"\n    },\n    {\n        \"name\": \"Maryland\",\n        \"abbreviation\": \"MD\"\n    },\n    {\n        \"name\": \"Massachusetts\",\n        \"abbreviation\": \"MA\"\n    },\n    {\n        \"name\": \"Michigan\",\n        \"abbreviation\": \"MI\"\n    },\n    {\n        \"name\": \"Minnesota\",\n        \"abbreviation\": \"MN\"\n    },\n    {\n        \"name\": \"Mississippi\",\n        \"abbreviation\": \"MS\"\n    },\n    {\n        \"name\": \"Missouri\",\n        \"abbreviation\": \"MO\"\n    },\n    {\n        \"name\": \"Montana\",\n        \"abbreviation\": \"MT\"\n    },\n    {\n        \"name\": \"Nebraska\",\n        \"abbreviation\": \"NE\"\n    },\n    {\n        \"name\": \"Nevada\",\n        \"abbreviation\": \"NV\"\n    },\n    {\n        \"name\": \"New Hampshire\",\n        \"abbreviation\": \"NH\"\n    },\n    {\n        \"name\": \"New Jersey\",\n        \"abbreviation\": \"NJ\"\n    },\n    {\n        \"name\": \"New Mexico\",\n        \"abbreviation\": \"NM\"\n    },\n    {\n        \"name\": \"New York\",\n        \"abbreviation\": \"NY\"\n    },\n    {\n        \"name\": \"North Carolina\",\n        \"abbreviation\": \"NC\"\n    },\n    {\n        \"name\": \"North Dakota\",\n        \"abbreviation\": \"ND\"\n    },\n    {\n        \"name\": \"Ohio\",\n        \"abbreviation\": \"OH\"\n    },\n    {\n        \"name\": \"Oklahoma\",\n        \"abbreviation\": \"OK\"\n    },\n    {\n        \"name\": \"Oregon\",\n        \"abbreviation\": \"OR\"\n    },\n    {\n        \"name\": \"Pennsylvania\",\n        \"abbreviation\": \"PA\"\n    },\n    {\n        \"name\": \"Rhode Island\",\n        \"abbreviation\": \"RI\"\n    },\n    {\n        \"name\": \"South Carolina\",\n        \"abbreviation\": \"SC\"\n    },\n    {\n        \"name\": \"South Dakota\",\n        \"abbreviation\": \"SD\"\n    },\n    {\n        \"name\": \"Tennessee\",\n        \"abbreviation\": \"TN\"\n    },\n    {\n        \"name\": \"Texas\",\n        \"abbreviation\": \"TX\"\n    },\n    {\n        \"name\": \"Utah\",\n        \"abbreviation\": \"UT\"\n    },\n    {\n        \"name\": \"Vermont\",\n        \"abbreviation\": \"VT\"\n    },\n    {\n        \"name\": \"Virginia\",\n        \"abbreviation\": \"VA\"\n    },\n    {\n        \"name\": \"Washington\",\n        \"abbreviation\": \"WA\"\n    },\n    {\n        \"name\": \"West Virginia\",\n        \"abbreviation\": \"WV\"\n    },\n    {\n        \"name\": \"Wisconsin\",\n        \"abbreviation\": \"WI\"\n    },\n    {\n        \"name\": \"Wyoming\",\n        \"abbreviation\": \"WY\"\n    }\n]",
 							"key": "stateListJson",
 							"type": "hidden",
@@ -295,8 +354,6 @@
 					}, {
 						"components": [{
 							"label": "Zip Code",
-							"placeholder": "12345",
-							"inputMask": "99999",
 							"tableView": true,
 							"validate": {
 								"required": true,
@@ -528,6 +585,9 @@
 					"enableRowGroups": false,
 					"tableView": false,
 					"validateOn": "blur",
+					"validate": {
+						"minLength": 1
+					},
 					"key": "dealershipPersonnel",
 					"type": "datagrid",
 					"input": true,
@@ -1657,6 +1717,18 @@
 				"minLength": 1
 			},
 			"key": "locationSchedule",
+			"logic": [{
+				"name": "Reset First Value",
+				"trigger": {
+					"type": "event",
+					"event": "LocationAddressNotSameAsMailingAddress"
+				},
+				"actions": [{
+					"name": "Empty Fields",
+					"type": "value",
+					"value": "value = data.locationSchedule.map((i,index)=>{\n  if(index == 0){\n    var a = {...i};\n    a.zip = \"\";\n    a.stateName = \"\";\n    a.county = \"\";\n    a.address = \"\";\n    a.city = \"\";\n    return a\n  } else {\n    return i\n  }\n});\nconsole.log(value);"
+				}]
+			}],
 			"type": "datagrid",
 			"input": true,
 			"components": [{
@@ -1669,32 +1741,95 @@
 						"type": "well",
 						"input": false,
 						"components": [{
-							"label": "Is the Location Address same as Mailing Address ?",
+							"label": "Columns",
+							"columns": [{
+								"components": [{
+									"label": "Click if the Location Address is same as Mailing Address",
+									"action": "event",
+									"showValidations": false,
+									"theme": "info",
+									"leftIcon": "fad fa-check-circle",
+									"tableView": false,
+									"key": "clickIfTheLocationAddressSameAsMailingAddress",
+									"customConditional": "show = !row.isTheLocationAddressSameAsMailingAddress;",
+									"type": "button",
+									"event": "LocationAddressSameAsMailingAddress",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}, {
+									"label": "Click if the Location Address isn't the same as Mailing Address",
+									"action": "event",
+									"showValidations": false,
+									"theme": "info",
+									"leftIcon": "fad fa-times-circle",
+									"tableView": false,
+									"key": "clickIfTheLocationAddressNotSameAsMailingAddress",
+									"customConditional": "show = row.isTheLocationAddressSameAsMailingAddress;",
+									"type": "button",
+									"event": "LocationAddressNotSameAsMailingAddress",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "isTheLocationAddressSameAsMailingAddress",
+									"hidden": true,
+									"hideLabel": true,
+									"tableView": false,
+									"defaultValue": false,
+									"clearOnHide": false,
+									"key": "isTheLocationAddressSameAsMailingAddress",
+									"logic": [{
+										"name": "Set Value",
+										"trigger": {
+											"type": "event",
+											"event": "LocationAddressSameAsMailingAddress"
+										},
+										"actions": [{
+											"name": "Set Value",
+											"type": "value",
+											"value": "value = true;"
+										}]
+									}, {
+										"name": "Remove Value",
+										"trigger": {
+											"type": "event",
+											"event": "LocationAddressNotSameAsMailingAddress"
+										},
+										"actions": [{
+											"name": "Set Value",
+											"type": "value",
+											"value": "value = false;"
+										}]
+									}],
+									"type": "checkbox",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 6,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}],
 							"tableView": false,
-							"defaultValue": false,
-							"key": "isTheLocationAddressSameAsMailingAddress",
-							"customConditional": "show = data.locationSchedule[0].locationNum == row.locationNum;",
-							"type": "checkbox",
-							"input": true
-						}, {
-							"label": "Location UUID",
-							"customDefaultValue": "function uuidv4() {\n  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>\n    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n  );\n}\n\nvalue = uuidv4();",
-							"key": "locationUUID",
-							"type": "hidden",
-							"input": true,
-							"tableView": false,
-							"hideOnChildrenHidden": false
+							"key": "columns49",
+							"customConditional": "show = rowIndex == 0;",
+							"type": "columns",
+							"input": false
 						}, {
 							"label": "Columns",
-							"input": false,
-							"tableView": false,
-							"key": "page7Columns",
 							"columns": [{
 								"components": [{
 									"label": "Location #",
 									"disabled": true,
 									"tableView": true,
-									"calculateValue": "// if(data.locationSchedule){\n//   if(data.locationSchedule.length > 0){\n//     data.locationSchedule.map((item, index) =>{\n//       if(item.locationUUID == row.locationUUID){\n//         value = index + 1;\n//       }\n//     })\n//   }\n// }\nvalue = rowIndex + 1;",
+									"calculateValue": "value = rowIndex + 1;",
 									"validate": {
 										"required": true,
 										"customMessage": "Please enter Location #"
@@ -1706,23 +1841,54 @@
 									"lockKey": true
 								}, {
 									"label": "County",
+									"tabindex": "3",
 									"tableView": true,
 									"validate": {
 										"required": true
 									},
 									"key": "county",
 									"logic": [{
-										"name": "check disabled",
+										"name": "check enabled",
 										"trigger": {
 											"type": "javascript",
-											"javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
+											"javascript": "result = row.isTheLocationAddressSameAsMailingAddress"
 										},
 										"actions": [{
-											"name": "clear field",
+											"name": "disable field",
+											"type": "property",
+											"property": {
+												"label": "Disabled",
+												"value": "disabled",
+												"type": "boolean"
+											},
+											"state": true
+										}, {
+											"name": "Set value",
 											"type": "value",
-											"value": "if(value == data.county){\n  value = \"\";\n}"
+											"value": "if (value != data.county) {\n  value = data.county;\n}"
 										}]
-									}, {
+									}],
+									"type": "textfield",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"width": 4,
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md"
+							}, {
+								"components": [{
+									"label": "Location Address",
+									"tabindex": "1",
+									"tableView": true,
+									"redrawOn": "locationSchedule.isTheLocationAddressSameAsMailingAddress",
+									"validate": {
+										"required": true,
+										"customMessage": "Please enter Location Address"
+									},
+									"key": "address",
+									"logic": [{
 										"name": "check enabled",
 										"trigger": {
 											"type": "javascript",
@@ -1740,58 +1906,7 @@
 										}, {
 											"name": "set value",
 											"type": "value",
-											"value": "if(value!=data.county)\n{value = data.county;}"
-										}]
-									}],
-									"type": "textfield",
-									"input": true,
-									"hideOnChildrenHidden": false
-								}],
-								"width": 4,
-								"offset": 0,
-								"push": 0,
-								"pull": 0,
-								"size": "md"
-							}, {
-								"components": [{
-									"label": "Location Address",
-									"tableView": true,
-									"redrawOn": "locationSchedule.isTheLocationAddressSameAsMailingAddress",
-									"validate": {
-										"required": true,
-										"customMessage": "Please enter Location Address"
-									},
-									"key": "address",
-									"logic": [{
-										"name": "check disabled",
-										"trigger": {
-											"type": "javascript",
-											"javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
-										},
-										"actions": [{
-											"name": "clear field",
-											"type": "value",
-											"value": "if(value == data.mailingAddress){\n  value = \"\";\n}"
-										}]
-									}, {
-										"name": "check enabled",
-										"trigger": {
-											"type": "javascript",
-											"javascript": "result = (row.isTheLocationAddressSameAsMailingAddress)"
-										},
-										"actions": [{
-											"name": "disable field",
-											"type": "property",
-											"property": {
-												"label": "Disabled",
-												"value": "disabled",
-												"type": "boolean"
-											},
-											"state": true
-										}, {
-											"name": "set value",
-											"type": "value",
-											"value": "if(value!=data.mailingAddress)\n{value = data.mailingAddress;}"
+											"value": "if (value != data.mailingAddress) {\n  value = data.mailingAddress;\n}"
 										}]
 									}],
 									"type": "textfield",
@@ -1801,6 +1916,7 @@
 								}, {
 									"label": "State",
 									"widget": "choicesjs",
+									"tabindex": "4",
 									"tableView": true,
 									"dataSrc": "custom",
 									"data": {
@@ -1819,17 +1935,6 @@
 									},
 									"key": "stateName",
 									"logic": [{
-										"name": "check disabled",
-										"trigger": {
-											"type": "javascript",
-											"javascript": "result =\n  !row.isTheLocationAddressSameAsMailingAddress &&\n  row.stateName.name == data.state.name &&\n  !(Object.keys(row.stateName).length === 0 && row.stateName.constructor === Object) &&\n  row.stateName !== \"\" &&\n  row.stateName !== undefined && \n  row.stateName !== null;"
-										},
-										"actions": [{
-											"name": "clear field",
-											"type": "value",
-											"value": "value = {};"
-										}]
-									}, {
 										"name": "check enabled",
 										"trigger": {
 											"type": "javascript",
@@ -1845,9 +1950,9 @@
 											},
 											"state": true
 										}, {
-											"name": "set value",
+											"name": "Set value",
 											"type": "value",
-											"value": "if(value!=data.state)\n{value = data.state;}"
+											"value": "if (value != data.state) {\n  value = data.state;\n}"
 										}]
 									}],
 									"type": "select",
@@ -1875,6 +1980,7 @@
 							}, {
 								"components": [{
 									"label": "City",
+									"tabindex": "2",
 									"tableView": true,
 									"validate": {
 										"required": true,
@@ -1882,62 +1988,6 @@
 									},
 									"key": "city",
 									"logic": [{
-										"name": "check disabled",
-										"trigger": {
-											"type": "javascript",
-											"javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
-										},
-										"actions": [{
-											"name": "clear field",
-											"type": "value",
-											"value": "if(value == data.city){\n  value = \"\";\n}"
-										}]
-									}, {
-										"name": "check enabled",
-										"trigger": {
-											"type": "javascript",
-											"javascript": "result = row.isTheLocationAddressSameAsMailingAddress;"
-										},
-										"actions": [{
-											"name": "disable field",
-											"type": "property",
-											"property": {
-												"label": "Disabled",
-												"value": "disabled",
-												"type": "boolean"
-											},
-											"state": true
-										}, {
-											"name": "set value",
-											"type": "value",
-											"value": "if(value!=data.city)\n{value = data.city;}"
-										}]
-									}],
-									"type": "textfield",
-									"input": true,
-									"hideOnChildrenHidden": false,
-									"lockKey": true
-								}, {
-									"label": "Zip Code",
-									"spellcheck": false,
-									"tableView": false,
-									"validate": {
-										"required": true,
-										"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
-									},
-									"key": "zip",
-									"logic": [{
-										"name": "check disabled",
-										"trigger": {
-											"type": "javascript",
-											"javascript": "result = !row.isTheLocationAddressSameAsMailingAddress"
-										},
-										"actions": [{
-											"name": "clear field",
-											"type": "value",
-											"value": "if(value == data.zip){\n  value = \"\";\n}"
-										}]
-									}, {
 										"name": "check enabled",
 										"trigger": {
 											"type": "javascript",
@@ -1953,9 +2003,44 @@
 											},
 											"state": true
 										}, {
-											"name": "set value",
+											"name": "Set value",
 											"type": "value",
-											"value": "if(value!=data.zip)\n{value = data.zip;}"
+											"value": "if (value != data.city) {\n  value = data.city;\n}"
+										}]
+									}],
+									"type": "textfield",
+									"input": true,
+									"hideOnChildrenHidden": false,
+									"lockKey": true
+								}, {
+									"label": "Zip Code",
+									"tabindex": "5",
+									"spellcheck": false,
+									"tableView": false,
+									"validate": {
+										"required": true,
+										"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+									},
+									"key": "zip",
+									"logic": [{
+										"name": "check enabled",
+										"trigger": {
+											"type": "javascript",
+											"javascript": "result = row.isTheLocationAddressSameAsMailingAddress"
+										},
+										"actions": [{
+											"name": "disable field",
+											"type": "property",
+											"property": {
+												"label": "Disabled",
+												"value": "disabled",
+												"type": "boolean"
+											},
+											"state": true
+										}, {
+											"name": "Set value",
+											"type": "value",
+											"value": "if (value != data.zip) {\n  value = data.zip;\n}"
 										}]
 									}],
 									"type": "textfield",
@@ -1969,8 +2054,12 @@
 								"pull": 0,
 								"size": "md"
 							}],
-							"type": "columns",
 							"hideLabel": true,
+							"dataGridLabel": false,
+							"tableView": false,
+							"key": "page7Columns",
+							"type": "columns",
+							"input": false,
 							"inDataGrid": true
 						}],
 						"hideOnChildrenHidden": false
@@ -2011,14 +2100,6 @@
 								"label": "Building Details",
 								"columns": [{
 									"components": [{
-										"label": "Building UUID",
-										"customDefaultValue": "function uuidv4() {\n  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>\n    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)\n  );\n}\n\nvalue = uuidv4();",
-										"key": "buildingUuid",
-										"type": "hidden",
-										"input": true,
-										"tableView": false,
-										"hideOnChildrenHidden": false
-									}, {
 										"label": "Columns",
 										"columns": [{
 											"components": [{
@@ -2026,7 +2107,7 @@
 												"disabled": true,
 												"tableView": true,
 												"clearOnHide": false,
-												"calculateValue": "var locationResult = data.locationSchedule.find((item) => {\n  if (item.buildingDetails) {\n    if (item.buildingDetails.length > 0) {\n      return (\n        item.buildingDetails.filter(\n          (buildingData) => buildingData.buildingUuid == row.buildingUuid\n        ).length > 0\n      );\n    }\n  }\n});\n\nvalue = locationResult ? locationResult.locationNum : \"\";",
+												"calculateValue": "value = parseInt(instance.path.replace(/^\\D+|\\D.*$/g, \"\")) + 1;",
 												"key": "locationDuplicate",
 												"type": "textfield",
 												"input": true,
@@ -3386,7 +3467,8 @@
 															"inputFormat": "plain",
 															"validate": {
 																"required": true,
-																"min": 0
+																"min": 0,
+																"max": 12
 															},
 															"key": "financialstatement",
 															"type": "number",
@@ -3797,14 +3879,16 @@
 													"columns": [{
 														"components": [{
 															"label": "Business Electronic Equipment Hardware",
+															"prefix": "$",
 															"mask": false,
 															"spellcheck": true,
 															"tableView": false,
 															"delimiter": true,
-															"requireDecimal": false,
+															"requireDecimal": true,
 															"inputFormat": "plain",
 															"key": "businesselectronicequipment",
 															"type": "number",
+															"decimalLimit": 2,
 															"input": true,
 															"hideOnChildrenHidden": false
 														}],
@@ -3815,13 +3899,19 @@
 														"size": "md"
 													}, {
 														"components": [{
-															"label": "Ordinance/Law Coverage",
-															"tableView": true,
+															"label": "Ordinance / Law Coverage",
+															"prefix": "$",
+															"mask": false,
+															"spellcheck": true,
+															"tableView": false,
+															"delimiter": true,
+															"requireDecimal": true,
+															"inputFormat": "plain",
 															"key": "ordinancelawcoverage",
-															"type": "textfield",
+															"type": "number",
 															"input": true,
 															"hideOnChildrenHidden": false,
-															"lockKey": true
+															"decimalLimit": 2
 														}],
 														"width": 4,
 														"offset": 0,
@@ -3831,16 +3921,18 @@
 													}, {
 														"components": [{
 															"label": "Fences",
+															"prefix": "$",
 															"mask": false,
 															"spellcheck": true,
 															"tableView": false,
 															"delimiter": true,
-															"requireDecimal": false,
+															"requireDecimal": true,
 															"inputFormat": "plain",
 															"key": "fences",
 															"type": "number",
 															"input": true,
-															"hideOnChildrenHidden": false
+															"hideOnChildrenHidden": false,
+															"decimalLimit": 2
 														}],
 														"size": "md",
 														"width": 4,
@@ -3860,7 +3952,7 @@
 													"key": "page3PanelColumns10",
 													"columns": [{
 														"components": [{
-															"label": "Sign(s) <10k attached to the building",
+															"label": "Sign(s) <10k attached to the bldg",
 															"prefix": "$",
 															"mask": false,
 															"spellcheck": true,
@@ -13861,6 +13953,7 @@
 								}],
 								"custom": "values = data.stateListJson;"
 							},
+							"valueProperty": "abbreviation",
 							"template": "<span>{{ item.name }}</span>",
 							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
@@ -13926,6 +14019,7 @@
 								}],
 								"custom": "values = data.stateListJson;"
 							},
+							"valueProperty": "abbreviation",
 							"template": "<span>{{ item.name }}</span>",
 							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
@@ -13985,6 +14079,7 @@
 								}],
 								"custom": "values = data.stateListJson;"
 							},
+							"valueProperty": "abbreviation",
 							"template": "<span>{{ item.name }}</span>",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
@@ -19606,6 +19701,7 @@
 		"properties": {
 			"commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]"
 		},
+		"customConditional": "if(data.privileges){\n  show = !data.privileges.MANAGE_MY_POLICY_WRITE == true;  \n} else {\n  show = true;\n}",
 		"type": "panel",
 		"label": "Generate Workbooks",
 		"components": [{
@@ -19667,7 +19763,7 @@
 		}, {
 			"label": "RPS Cyber PDF Data",
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "if (data.workbooksToBeGenerated.rpsCyber == true) {\n  var tempAllEmployees = 0;\n  var checkofRecordsContaining = \"\";\n  if (data.locationSchedule) {\n    if (data.locationSchedule.length > 0) {\n      data.locationSchedule.map((locationItem, locationIndex) => {\n        locationItem.buildingDetails.map((buildingItem) => {\n          tempAllEmployees +=\n            buildingItem.fTEmployeesFurnishedAnAuto +\n            buildingItem.fTEmployeesWhoAreNotFurnished +\n            buildingItem.fTAllOtherEmployees +\n            buildingItem.pTEmployeesFurnishedAnAuto +\n            buildingItem.pTEmployeesWhoAreNotFurnished +\n            buildingItem.pTAllOtherEmployees;\n        });\n      });\n    }\n  }\n\n  if (data.ofRecordsContaining > 0) {\n    if (data.ofRecordsContaining < 100000) {\n      checkofRecordsContaining = \"1-100,000\";\n    } else if (\n      data.ofRecordsContaining > 100000 &&\n      data.ofRecordsContaining < 250000\n    ) {\n      checkofRecordsContaining = \"100,000-250,000\";\n    } else if (\n      data.ofRecordsContaining > 250000 &&\n      data.ofRecordsContaining < 500000\n    ) {\n      checkofRecordsContaining = \"250,000-500,000\";\n    } else if (\n      data.ofRecordsContaining > 500000 &&\n      data.ofRecordsContaining < 750000\n    ) {\n      checkofRecordsContaining = \"500,000-750,000\";\n    } else if (\n      data.ofRecordsContaining > 750000 &&\n      data.ofRecordsContaining < 1000000\n    ) {\n      checkofRecordsContaining = \"750,000-1,000,000\";\n    } else {\n      checkofRecordsContaining = \"1,000,000+\";\n    }\n  }\n\n  value = {\n    \"# of Records\": checkofRecordsContaining,\n    State: data.state.name,\n    \" of Employees\": tempAllEmployees,\n    \"Firewalls?\":\n      data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n        ? \"Yes\"\n        : \"No\",\n    \"Year Established\":\n      moment().format(\"YYYY\") - data.numYearsOfOwnership\n        ? data.numYearsOfOwnership\n        : 0\n  };\n\n  console.log(value);\n}",
+			"calculateValue": "if (data.workbooksToBeGenerated.rpsCyber == true) {\n    var tempAllEmployees = 0;\n    var checkofRecordsContaining = \"\";\n    if (data.locationSchedule) {\n      if (data.locationSchedule.length > 0) {\n        data.locationSchedule.map((locationItem, locationIndex) => {\n          locationItem.buildingDetails.map((buildingItem) => {\n            tempAllEmployees +=\n              (buildingItem.fTEmployeesFurnishedAnAuto ? buildingItem.fTEmployeesFurnishedAnAuto : 0)  +\n              (buildingItem.fTEmployeesWhoAreNotFurnished ? buildingItem.fTEmployeesWhoAreNotFurnished : 0)  +\n              (buildingItem.fTAllOtherEmployees ? buildingItem.fTAllOtherEmployees : 0)  +\n              (buildingItem.pTEmployeesFurnishedAnAuto ? buildingItem.pTEmployeesFurnishedAnAuto : 0)  +\n              (buildingItem.pTEmployeesWhoAreNotFurnished ? buildingItem.pTEmployeesWhoAreNotFurnished : 0)  +\n              (buildingItem.pTAllOtherEmployees ? buildingItem.pTAllOtherEmployees : 0) ;\n          });\n        });\n      }\n    }\n  \n    if (data.ofRecordsContaining > 0) {\n      if (data.ofRecordsContaining < 100000) {\n        checkofRecordsContaining = \"1-100,000\";\n      } else if (\n        data.ofRecordsContaining > 100000 &&\n        data.ofRecordsContaining < 250000\n      ) {\n        checkofRecordsContaining = \"100,000-250,000\";\n      } else if (\n        data.ofRecordsContaining > 250000 &&\n        data.ofRecordsContaining < 500000\n      ) {\n        checkofRecordsContaining = \"250,000-500,000\";\n      } else if (\n        data.ofRecordsContaining > 500000 &&\n        data.ofRecordsContaining < 750000\n      ) {\n        checkofRecordsContaining = \"500,000-750,000\";\n      } else if (\n        data.ofRecordsContaining > 750000 &&\n        data.ofRecordsContaining < 1000000\n      ) {\n        checkofRecordsContaining = \"750,000-1,000,000\";\n      } else {\n        checkofRecordsContaining = \"1,000,000+\";\n      }\n    }\n  \n    value = {\n      \"# of Records\": checkofRecordsContaining,\n      State: data.state.abbreviation,\n      \" of Employees\": tempAllEmployees ? tempAllEmployees : 0,\n      \"Firewalls?\":\n        data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n          ? \"Yes\"\n          : \"No\",\n      \"Year Established\":\n        moment().format(\"YYYY\") - data.numYearsOfOwnership\n          ? data.numYearsOfOwnership\n          : 0\n    };\n  \n    console.log(value);\n  }",
 			"key": "rpsCyberPDFData",
 			"properties": {
 				"data_type": "json"
@@ -19678,7 +19774,7 @@
 		}, {
 			"label": "GAIC Epli PDF Data",
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "if (data.workbooksToBeGenerated.epli == true) {\n  var tempFullTimeEmployees = 0;\n  var tempPartTimeEmployees = 0;\n  var tempContractDrivers = 0;\n  var Phone = \"\";\n  var Email = \"\";\n  if (data.locationSchedule) {\n    if (data.locationSchedule.length > 0) {\n      data.locationSchedule.map((locationItem) => {\n        locationItem.buildingDetails.map((buildingItem) => {\n          tempFullTimeEmployees += buildingItem.fTEmployeesFurnishedAnAuto\n            ? buildingItem.fTEmployeesFurnishedAnAuto\n            : 0 + buildingItem.fTEmployeesWhoAreNotFurnished\n            ? buildingItem.fTEmployeesWhoAreNotFurnished\n            : 0 + buildingItem.fTAllOtherEmployees\n            ? buildingItem.fTAllOtherEmployees\n            : 0;\n          tempPartTimeEmployees += buildingItem.pTEmployeesFurnishedAnAuto\n            ? buildingItem.pTEmployeesFurnishedAnAuto\n            : 0 + buildingItem.pTEmployeesWhoAreNotFurnished\n            ? buildingItem.pTEmployeesWhoAreNotFurnished\n            : 0 + buildingItem.pTAllOtherEmployees\n            ? buildingItem.pTAllOtherEmployees\n            : 0;\n          tempContractDrivers += buildingItem.contractDriversNonEmployees\n            ? buildingItem.contractDriversNonEmployees\n            : 0;\n        });\n      });\n    }\n  }\n  data.insurancecontactdataGrid.some((item) => {\n    if (item.genfullName == data.hrRepresentative) {\n      Phone = item.genphone;\n      Email = item.genemail;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  value = {\n    \"City, State, Zip\": data.city + \",\" + data.state.name + \",\" + data.zip,\n    \"a  full time employees\": tempFullTimeEmployees,\n    \"b  part time employees\": tempPartTimeEmployees,\n    \"Employees  Within the US\": tempFullTimeEmployees + tempPartTimeEmployees,\n    Name: data.hrRepresentative,\n    Phone: Phone,\n    Email: Email,\n    \"Within the US\": data.locationSchedule.length,\n    \"c leasedcontract employees\": tempContractDrivers,\n    Date: moment().format(\"YYYY-MM-DD\"),\n    Group25:\n      data.noticetoinsurer == \"notApplicable\"\n        ? \"Choice1\"\n        : data.noticetoinsurer == \"yes\"\n        ? \"2\"\n        : \"3\",\n    Group26:\n      data.nonrenewedcoverage == \"notApplicable\"\n        ? \"Choice1\"\n        : data.nonrenewedcoverage == \"yes\"\n        ? \"2\"\n        : \"Choice3\"\n  };\n  console.log(value);\n}",
+			"calculateValue": "if (data.workbooksToBeGenerated.epli == true) {\n  var tempFullTimeEmployees = 0;\n  var tempPartTimeEmployees = 0;\n  var tempContractDrivers = 0;\n  var Phone = \"\";\n  var Email = \"\";\n  if (data.locationSchedule) {\n    if (data.locationSchedule.length > 0) {\n      data.locationSchedule.map((locationItem) => {\n        locationItem.buildingDetails.map((buildingItem) => {\n          tempFullTimeEmployees += buildingItem.fTEmployeesFurnishedAnAuto\n            ? buildingItem.fTEmployeesFurnishedAnAuto\n            : 0 + buildingItem.fTEmployeesWhoAreNotFurnished\n            ? buildingItem.fTEmployeesWhoAreNotFurnished\n            : 0 + buildingItem.fTAllOtherEmployees\n            ? buildingItem.fTAllOtherEmployees\n            : 0;\n          tempPartTimeEmployees += buildingItem.pTEmployeesFurnishedAnAuto\n            ? buildingItem.pTEmployeesFurnishedAnAuto\n            : 0 + buildingItem.pTEmployeesWhoAreNotFurnished\n            ? buildingItem.pTEmployeesWhoAreNotFurnished\n            : 0 + buildingItem.pTAllOtherEmployees\n            ? buildingItem.pTAllOtherEmployees\n            : 0;\n          tempContractDrivers += buildingItem.contractDriversNonEmployees\n            ? buildingItem.contractDriversNonEmployees\n            : 0;\n        });\n      });\n    }\n  }\n  data.insurancecontactdataGrid.some((item) => {\n    if (item.genfullName == data.hrRepresentative) {\n      Phone = item.genphone;\n      Email = item.genemail;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  value = {\n    \"City, State, Zip\": data.city + \",\" + data.state.abbreviation + \",\" + data.zip,\n    \"a  full time employees\": tempFullTimeEmployees,\n    \"b  part time employees\": tempPartTimeEmployees,\n    \"Employees  Within the US\": tempFullTimeEmployees + tempPartTimeEmployees,\n    Name: data.hrRepresentative,\n    Phone: Phone,\n    Email: Email,\n    \"Within the US\": data.locationSchedule.length,\n    \"c leasedcontract employees\": tempContractDrivers,\n    Date: moment().format(\"YYYY-MM-DD\"),\n    Group25:\n      data.noticetoinsurer == \"notApplicable\"\n        ? \"Choice1\"\n        : data.noticetoinsurer == \"yes\"\n        ? \"2\"\n        : \"3\",\n    Group26:\n      data.nonrenewedcoverage == \"notApplicable\"\n        ? \"Choice1\"\n        : data.nonrenewedcoverage == \"yes\"\n        ? \"2\"\n        : \"Choice3\"\n  };\n  console.log(value);\n}",
 			"key": "gaicEpliPdfData",
 			"properties": {
 				"data_type": "json"
@@ -19699,7 +19795,7 @@
 		}, {
 			"label": "Franchised Auto Dealer",
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {\n  var falsePretenseLimit = 0;\n\n  if (data.falsePretenseNumber <= 0) {\n    falsePretenseLimit = \"None\";\n  } else if (data.falsePretenseNumber <= 25000) {\n    falsePretenseLimit = 25000;\n  } else if (data.falsePretenseNumber <= 50000) {\n    falsePretenseLimit = 50000;\n  } else if (data.falsePretenseNumber <= 75000) {\n    falsePretenseLimit = 75000;\n  } else if (data.falsePretenseNumber <= 100000) {\n    falsePretenseLimit = 100000;\n  } else if (data.falsePretenseNumber <= 150000) {\n    falsePretenseLimit = 150000;\n  } else if (data.falsePretenseNumber <= 200000) {\n    falsePretenseLimit = 200000;\n  } else {\n    falsePretenseLimit = 250000;\n  }\n\n  value = {\n    checkfalsePretenseLimit: falsePretenseLimit,\n    locationBuildingIndex: data.genericData.locationScheduleGridData\n      .map((i, index) => (index == 0 ? \"invalid\" : { result: i.locationNum }))\n      .filter((i) => i !== \"invalid\"),\n    checkbuildingCoinsurance: data.genericData.locationScheduleGridData.map(\n      (item) => {\n        return item.occupancyType == \"vacantLand\"\n          ? { result: \"\" }\n          : { result: data.buildingCoinsurance };\n      }\n    ),\n    checkbuildingValuation: data.genericData.locationScheduleGridData.map(\n      (i) => {\n        return { result: \"Replacement Cost\" };\n      }\n    ),\n    checklistcompaniesrepresented: data.listcompaniesrepresented\n      ? data.listcompaniesrepresented.length > 0\n        ? data.listcompaniesrepresented.map((i) => {\n            return { result: i };\n          })\n        : \"\"\n      : \"\",\n    CityStateZip: data.city + \",\" + data.state.name + \",\" + data.zip,\n    InsuranceContactNameandPhone: data.insurancecontactdataGrid\n      ? data.insurancecontactdataGrid[0].genfirstname +\n        \" \" +\n        data.insurancecontactdataGrid[0].genlastname +\n        \",\" +\n        data.insurancecontactdataGrid[0].genphone\n      : \"\",\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsecguards == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolaftrhrslighting: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolaftrhrslighting == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.postChain == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checknumberofservicebays: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.numberofservicebays == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    formalsafetymeetingsNone:\n      data.formalsafetymeetings == \"none\" ? \"No\" : \"Yes\",\n    formalsafetymeetingsMonthly:\n      data.formalsafetymeetings == \"monthly\" ? \"true\" : \"false\",\n    checkrepairpercentlabor:\n      data.repairpercentlabor == 95 || data.repairpercentlabor == 85\n        ? 90\n        : data.repairpercentlabor,\n    checkauditfrequencyannual:\n      data.auditfrequency == \"annual\" ? \"true\" : \"false\",\n    checkauditfrequencysemiAnnual:\n      data.auditfrequency == \"semiAnnual\" ? \"true\" : \"false\",\n    checkauditfrequencyquarterly:\n      data.auditfrequency == \"quarterly\" ? \"true\" : \"false\",\n    checkauditreportissenttoowners:\n      data.auditreportissentto == \"owners\" ? \"true\" : \"false\",\n    checkauditreportissenttopartners:\n      data.auditreportissentto == \"partners\" ? \"true\" : \"false\",\n    checkauditreportissenttoboardOfDirectors:\n      data.auditreportissentto == \"boardOfDirectors\" ? \"true\" : \"false\",\n    checkwhodeliversvehiclesonemployee:\n      data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\n    checkwhodeliversvehiclesonindependentContractor:\n      data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\"\n  };\n  console.log(value);\n}",
+			"calculateValue": "if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {\n  var falsePretenseLimit = 0;\n\n  if (data.falsePretenseNumber <= 0) {\n    falsePretenseLimit = \"None\";\n  } else if (data.falsePretenseNumber <= 25000) {\n    falsePretenseLimit = 25000;\n  } else if (data.falsePretenseNumber <= 50000) {\n    falsePretenseLimit = 50000;\n  } else if (data.falsePretenseNumber <= 75000) {\n    falsePretenseLimit = 75000;\n  } else if (data.falsePretenseNumber <= 100000) {\n    falsePretenseLimit = 100000;\n  } else if (data.falsePretenseNumber <= 150000) {\n    falsePretenseLimit = 150000;\n  } else if (data.falsePretenseNumber <= 200000) {\n    falsePretenseLimit = 200000;\n  } else {\n    falsePretenseLimit = 250000;\n  }\n\n  value = {\n    checkfalsePretenseLimit: falsePretenseLimit,\n    locationBuildingIndex: data.genericData.locationScheduleGridData\n      .map((i, index) => (index == 0 ? \"invalid\" : { result: i.locationNum }))\n      .filter(i => i !== \"invalid\"),\n    checkbuildingCoinsurance: data.genericData.locationScheduleGridData.map(\n      item => {\n        return item.occupancyType == \"vacantLand\"\n          ? { result: \"\" }\n          : { result: data.buildingCoinsurance };\n      }\n    ),\n    checkbuildingValuation: data.genericData.locationScheduleGridData.map(i => {\n      return { result: \"Replacement Cost\" };\n    }),\n    checklistcompaniesrepresented: data.listcompaniesrepresented\n      ? data.listcompaniesrepresented.length > 0\n        ? data.listcompaniesrepresented.map(i => {\n            return { result: i };\n          })\n        : \"\"\n      : \"\",\n    CityStateZip: data.city + \",\" + data.state.name + \",\" + data.zip,\n    InsuranceContactNameandPhone: data.insurancecontactdataGrid\n      ? data.insurancecontactdataGrid[0].genfirstname +\n        \" \" +\n        data.insurancecontactdataGrid[0].genlastname +\n        \",\" +\n        data.insurancecontactdataGrid[0].genphone\n      : \"\",\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolsecguards == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolaftrhrslighting: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolaftrhrslighting == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolEntranceQuestions.postChain == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checknumberofservicebays: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.numberofservicebays == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    garageLiabilityGrid: data.locationSchedule.map(locationItem => {\n      var oneItem = 0;\n      var twoItem = 0;\n      var threeItem = 0;\n      var fourItem = 0;\n      var fiveItem = 0;\n      var sixItem = 0;\n      var sevenItem = 0;\n      var eightItem = 0;\n      var nineItem = 0;\n      locationItem.buildingDetails.map(item => {\n        oneItem +=\n          item.fTEmployeesFurnishedAnAuto > 0\n            ? item.fTEmployeesFurnishedAnAuto\n            : 0;\n        twoItem +=\n          item.pTEmployeesFurnishedAnAuto > 0\n            ? item.pTEmployeesFurnishedAnAuto\n            : 0;\n        threeItem +=\n          item.fTEmployeesWhoAreNotFurnished > 0\n            ? item.fTEmployeesWhoAreNotFurnished\n            : 0;\n        fourItem +=\n          item.pTEmployeesWhoAreNotFurnished > 0\n            ? item.pTEmployeesWhoAreNotFurnished\n            : 0;\n        fiveItem += item.fTAllOtherEmployees > 0 ? item.fTAllOtherEmployees : 0;\n        sixItem += item.pTAllOtherEmployees > 0 ? item.pTAllOtherEmployees : 0;\n        sevenItem +=\n          item.nonEmployeesUnderTheAge > 0 ? item.nonEmployeesUnderTheAge : 0;\n        eightItem +=\n          item.nonEmployeesYearsOldorolder > 0\n            ? item.nonEmployeesYearsOldorolder\n            : 0;\n        nineItem +=\n          item.contractDriversNonEmployees > 0\n            ? item.contractDriversNonEmployees\n            : 0;\n      });\n      return [\n        oneItem,\n        twoItem,\n        threeItem,\n        fourItem,\n        fiveItem,\n        sixItem,\n        sevenItem,\n        eightItem,\n        nineItem\n      ];\n    }),\n    checkEmployeetoolsOnPremises: data.genericData.locationScheduleGridData.map(\n      item => {\n        return {\n          result:\n            (item.businesselectronicequipment > 0\n              ? item.businesselectronicequipment\n              : 0) +\n            (item.employeetools > 0 ? item.employeetools : 0) +\n            (item.lightpoles > 0 ? item.lightpoles : 0) +\n            (item.signsLessThan > 0 ? item.signsLessThan : 0) +\n            (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +\n            (item.valulablePapers > 0 ? item.valulablePapers : 0) +\n            (item.accountsreceivable > 0 ? item.accountsreceivable : 0) +\n            (item.awaningsscanopies > 0 ? item.awaningsscanopies : 0)\n        };\n      }\n    ),\n    checkTotalbuildinglimit: data.genericData.locationScheduleGridData.map(\n      item => {\n        return {\n          result:\n            (item.signsLessThan > 0 ? item.signsLessThan : 0) +\n            (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +\n            (item.buildingLimit > 0 ? item.buildingLimit : 0)\n        };\n      }\n    ),\n    checkOrdinanceAndUtility: data.genericData.locationScheduleGridData.map(\n      item => {\n        return {\n          result:\n            (item.utilityservices > 0\n              ? \"Utility Services Time Element: \" + item.utilityservices\n              : 0) +\n            (item.utilityservices > 0 && item.ordinancelawcoverage > 0\n              ? \", \"\n              : \"\") + (\n              item.ordinancelawcoverage > 0\n                ? \"Ordinance Law: \" + item.ordinancelawcoverage\n                : 0\n            )\n        };\n      }\n    ),\n    formalsafetymeetingsNone:\n      data.formalsafetymeetings == \"none\" ? \"No\" : \"Yes\",\n    formalsafetymeetingsMonthly:\n      data.formalsafetymeetings == \"monthly\" ? \"true\" : \"false\",\n    checkrepairpercentlabor:\n      data.repairpercentlabor == 95 || data.repairpercentlabor == 85\n        ? 90\n        : data.repairpercentlabor,\n    checkauditfrequencyannual:\n      data.auditfrequency == \"annual\" ? \"true\" : \"false\",\n    checkauditfrequencysemiAnnual:\n      data.auditfrequency == \"semiAnnual\" ? \"true\" : \"false\",\n    checkauditfrequencyquarterly:\n      data.auditfrequency == \"quarterly\" ? \"true\" : \"false\",\n    checkauditreportissenttoowners:\n      data.auditreportissentto == \"owners\" ? \"true\" : \"false\",\n    checkauditreportissenttopartners:\n      data.auditreportissentto == \"partners\" ? \"true\" : \"false\",\n    checkauditreportissenttoboardOfDirectors:\n      data.auditreportissentto == \"boardOfDirectors\" ? \"true\" : \"false\",\n    checkwhodeliversvehiclesonemployee:\n      data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\n    checkwhodeliversvehiclesonindependentContractor:\n      data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\"\n  };\n  console.log(value);\n}",
 			"key": "franchisedAutoDealer",
 			"properties": {
 				"data_type": "json"
@@ -19709,7 +19805,7 @@
 			"tableView": false
 		}, {
 			"label": "Victor Auto Physical Damage",
-			"calculateValue": "if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {\n  var sumNonEmployeesfurnishedAuto = 0;\n  var indexValue = 0;\n  var primarySecondaryOEM = [];\n  var primarySecondaryOEM2 = [];\n  var uniqueKeyControls = [];\n\n  data.genericData.locationScheduleGridData.map((item) => {\n    if (\n      item.occupancyType == \"autoSalesAndService\" ||\n      item.occupancyType == \"newCarShowroomAndSales\" ||\n      item.occupancyType == \"vehicleStorageParkingGarage\" ||\n      item.occupancyType == \"autoStorageLot\"\n    ) {\n      primarySecondaryOEM2 = [\n        ...primarySecondaryOEM2,\n        item.primaryOEM,\n        ...item.secondaryOEM\n      ];\n    }\n  });\n\n  var DealershipStorageLocationsArray = data.locationSchedule\n    .map((locationItem) => {\n      var resultOccupancyType = \"\";\n      var resultPrimaryOEM = \"\";\n      locationItem.buildingDetails.some((buildingItem) => {\n        if (\n          buildingItem.occupancyType == \"autoSalesAndService\" ||\n          buildingItem.occupancyType == \"newCarShowroomAndSales\"\n        ) {\n          resultOccupancyType = \"Dealership\";\n          return true;\n        } else if (\n          buildingItem.occupancyType == \"vehicleStorageParkingGarage\" ||\n          buildingItem.occupancyType == \"autoStorageLot\"\n        ) {\n          resultOccupancyType = \"Storage\";\n        } else {\n          resultOccupancyType =\n            resultOccupancyType == \"\" ? undefined : resultOccupancyType;\n        }\n      });\n      var furnishedAutoEmployee = 0;\n      var nonEmployeesfurnishedAuto = 0;\n      locationItem.buildingDetails.map((building) => {\n        furnishedAutoEmployee +=\n          building.fTEmployeesFurnishedAnAuto +\n          building.pTEmployeesFurnishedAnAuto +\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n        nonEmployeesfurnishedAuto +=\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n      });\n      resultOccupancyType\n        ? (sumNonEmployeesfurnishedAuto += nonEmployeesfurnishedAuto)\n        : null;\n      tempSecondaryOEM = [];\n      resultPrimaryOEM =\n        [\n          ...new Set(\n            locationItem.buildingDetails\n              .map((i) => (i.primaryOEM ? \" \" + i.primaryOEM : false))\n              .filter((i) => i)\n          )\n        ] + \"\";\n      var copylocationItem = { ...locationItem };\n      copylocationItem.buildingDetails = \"\";\n\n      return resultOccupancyType\n        ? {\n            ...copylocationItem,\n            checkAvgExposure:\n              (locationItem.monthAvgNew > 0 ? locationItem.monthAvgNew : 0) +\n              (locationItem.monthAvgUsed > 0 ? locationItem.monthAvgUsed : 0) +\n              (locationItem.monthAvgRoadDemosFurnishedAutos > 0\n                ? locationItem.monthAvgRoadDemosFurnishedAutos\n                : 0) +\n              (locationItem.monthAvgRoadLoanersShopService > 0\n                ? locationItem.monthAvgRoadLoanersShopService\n                : 0),\n            indexValue: (indexValue += 1),\n            PrimaryOEMList: resultPrimaryOEM,\n            DOLOccupancy: resultOccupancyType,\n            furnishedAutoEmployee: furnishedAutoEmployee,\n            nonEmployeesfurnishedAuto: nonEmployeesfurnishedAuto\n          }\n        : false;\n    })\n    .filter((filterItem) => (filterItem ? filterItem : false));\n\n  data.dolkeycntrlsameallloc == \"no\"\n    ? DealershipStorageLocationsArray.map((item) => {\n        if (item.locationGarageLiabilityKeyControls) {\n          item.locationGarageLiabilityKeyControls.none\n            ? uniqueKeyControls.push(\"None\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.lockbox\n            ? uniqueKeyControls.push(\"Lockboxs\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.computerizedKeyVault\n            ? uniqueKeyControls.push(\"Key Machine\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.lockingKeyCabinet\n            ? uniqueKeyControls.push(\"Key Board\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.dailyKeyInventory\n            ? uniqueKeyControls.push(\"Unknown Text Fix\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.lockedInManagersOffice\n            ? uniqueKeyControls.push(\"Key Board\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.keysInCars\n            ? uniqueKeyControls.push(\"Keys in Cars\")\n            : \"\";\n        }\n      })\n    : null;\n\n  value = {\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsecguards == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolaftrhrslighting == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.postChain == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkfloodloss: data.dolflodlossdescib\n      ? data.dolflodlossdescib.length > 0\n        ? \"true\"\n        : \"false\"\n      : \"\",\n    DealershipStorageLocationsArray: DealershipStorageLocationsArray,\n    sumNonEmployeesfurnished: sumNonEmployeesfurnishedAuto,\n    primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + \"\",\n    uniqueKeyControls:\n      uniqueKeyControls.length > 0 ? [...new Set(uniqueKeyControls)] + \"\" : \"\"\n  };\n\n  console.log(value);\n}",
+			"calculateValue": "if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {\n  var sumNonEmployeesfurnishedAuto = 0;\n  var indexValue = 0;\n  var primarySecondaryOEM = [];\n  var primarySecondaryOEM2 = [];\n  var uniqueKeyControls = [];\n  var MixofInventoryNew = 0;\n  var NewFloowPlan = 0;\n  var checkMixofInventoryNew = 0;\n\n  data.locationSchedule.map((row) => {\n    MixofInventoryNew +=\n      (row.monthAvgNew ? row.monthAvgNew : 0) -\n      (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0) +\n      ((row.monthAvgUsed ? row.monthAvgUsed : 0) -\n        (row.insuredThroughFloorPlanUsed\n          ? row.insuredThroughFloorPlanUsed\n          : 0));\n\n    NewFloowPlan +=\n      (row.monthAvgNew ? row.monthAvgNew : 0) -\n      (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0);\n  });\n\n  if (NewFloowPlan > 0 && MixofInventoryNew > 0) {\n    var row = NewFloowPlan / MixofInventoryNew;\n    console.log(row);\n    if (row <= 0) {\n      checkMixofInventoryNew = 0;\n    } else if (row > 0.0 && row <= 0.1) {\n      checkMixofInventoryNew = 0.1;\n    } else if (row > 0.1 && row <= 0.2) {\n      checkMixofInventoryNew = 0.2;\n    } else if (row > 0.2 && row <= 0.3) {\n      checkMixofInventoryNew = 0.3;\n    } else if (row > 0.3 && row <= 0.4) {\n      checkMixofInventoryNew = 0.4;\n    } else if (row > 0.4 && row <= 0.5) {\n      checkMixofInventoryNew = 0.5;\n    } else if (row > 0.5 && row <= 0.6) {\n      checkMixofInventoryNew = 0.6;\n    } else if (row > 0.6 && row <= 0.7) {\n      checkMixofInventoryNew = 0.7;\n    } else if (row > 0.7 && row <= 0.8) {\n      checkMixofInventoryNew = 0.8;\n    } else if (row > 0.8 && row <= 0.9) {\n      checkMixofInventoryNew = 0.9;\n    } else {\n      checkMixofInventoryNew = 1;\n    }\n  }\n\n  data.genericData.locationScheduleGridData.map((item) => {\n    if (\n      item.occupancyType == \"autoSalesAndService\" ||\n      item.occupancyType == \"newCarShowroomAndSales\" ||\n      item.occupancyType == \"vehicleStorageParkingGarage\" ||\n      item.occupancyType == \"autoStorageLot\"\n    ) {\n      primarySecondaryOEM2 = [\n        ...primarySecondaryOEM2,\n        item.primaryOEM,\n        ...item.secondaryOEM\n      ];\n    }\n  });\n\n  var DealershipStorageLocationsArray = data.locationSchedule\n    .map((locationItem) => {\n      var resultOccupancyType = \"\";\n      var resultPrimaryOEM = \"\";\n      locationItem.buildingDetails.some((buildingItem) => {\n        if (\n          buildingItem.occupancyType == \"autoSalesAndService\" ||\n          buildingItem.occupancyType == \"newCarShowroomAndSales\"\n        ) {\n          resultOccupancyType = \"Dealership\";\n          return true;\n        } else if (\n          buildingItem.occupancyType == \"vehicleStorageParkingGarage\" ||\n          buildingItem.occupancyType == \"autoStorageLot\"\n        ) {\n          resultOccupancyType = \"Storage\";\n        } else {\n          resultOccupancyType =\n            resultOccupancyType == \"\" ? undefined : resultOccupancyType;\n        }\n      });\n      var furnishedAutoEmployee = 0;\n      var nonEmployeesfurnishedAuto = 0;\n      locationItem.buildingDetails.map((building) => {\n        furnishedAutoEmployee +=\n          building.fTEmployeesFurnishedAnAuto +\n          building.pTEmployeesFurnishedAnAuto +\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n        nonEmployeesfurnishedAuto +=\n          building.nonEmployeesUnderTheAge +\n          building.nonEmployeesYearsOldorolder;\n      });\n      resultOccupancyType\n        ? (sumNonEmployeesfurnishedAuto += nonEmployeesfurnishedAuto)\n        : null;\n      tempSecondaryOEM = [];\n      resultPrimaryOEM =\n        [\n          ...new Set(\n            locationItem.buildingDetails\n              .map((i) => (i.primaryOEM ? \" \" + i.primaryOEM : false))\n              .filter((i) => i)\n          )\n        ] + \"\";\n      var copylocationItem = { ...locationItem };\n      copylocationItem.buildingDetails = \"\";\n\n      return resultOccupancyType\n        ? {\n            ...copylocationItem,\n            checkAvgExposure:\n              (locationItem.monthAvgNew > 0 ? locationItem.monthAvgNew : 0) +\n              (locationItem.monthAvgUsed > 0 ? locationItem.monthAvgUsed : 0) +\n              (locationItem.monthAvgRoadDemosFurnishedAutos > 0\n                ? locationItem.monthAvgRoadDemosFurnishedAutos\n                : 0) +\n              (locationItem.monthAvgRoadLoanersShopService > 0\n                ? locationItem.monthAvgRoadLoanersShopService\n                : 0),\n            indexValue: (indexValue += 1),\n            PrimaryOEMList: resultPrimaryOEM,\n            DOLOccupancy: resultOccupancyType,\n            furnishedAutoEmployee: furnishedAutoEmployee,\n            nonEmployeesfurnishedAuto: nonEmployeesfurnishedAuto\n          }\n        : false;\n    })\n    .filter((filterItem) => (filterItem ? filterItem : false));\n\n  data.dolkeycntrlsameallloc == \"no\"\n    ? DealershipStorageLocationsArray.map((item) => {\n        if (item.locationGarageLiabilityKeyControls) {\n          item.locationGarageLiabilityKeyControls.none\n            ? uniqueKeyControls.push(\"None\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.lockbox\n            ? uniqueKeyControls.push(\"Lockboxs\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.computerizedKeyVault\n            ? uniqueKeyControls.push(\"Key Machine\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.lockingKeyCabinet\n            ? uniqueKeyControls.push(\"Key Board\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.dailyKeyInventory\n            ? uniqueKeyControls.push(\"Unknown Text Fix\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.lockedInManagersOffice\n            ? uniqueKeyControls.push(\"Key Board\")\n            : \"\";\n          item.locationGarageLiabilityKeyControls.keysInCars\n            ? uniqueKeyControls.push(\"Keys in Cars\")\n            : \"\";\n        }\n      })\n    : null;\n\n  value = {\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsecguards == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolaftrhrslighting == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolpostnchain: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.postChain == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkfloodloss: data.dolflodlossdescib\n      ? data.dolflodlossdescib.length > 0\n        ? \"true\"\n        : \"false\"\n      : \"\",\n    DealershipStorageLocationsArray: DealershipStorageLocationsArray,\n    sumNonEmployeesfurnished: sumNonEmployeesfurnishedAuto,\n    primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + \"\",\n    checkMixofInventoryNew: checkMixofInventoryNew,\n    uniqueKeyControls:\n      uniqueKeyControls.length > 0 ? [...new Set(uniqueKeyControls)] + \"\" : \"\"\n  };\n\n  console.log(value);\n}",
 			"key": "victorAutoPhysicalDamage",
 			"properties": {
 				"data_type": "json"
@@ -19720,7 +19816,7 @@
 		}, {
 			"label": "Harco EXCEL Data",
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "if (data.workbooksToBeGenerated.harco == true) {\n  var primaryOEM = \"\";\n  var secondaryOEM = \"\";\n  var other = \"\";\n  var tempWindDeductible;\n  var highestEarthquakeDeductible = 0;\n  var FPageGridOne = [];\n  var FPageGridTwo = [];\n  var FPageGridThree = [];\n\n  var checknewcarsales = 0;\n  var checkusedCarSales = 0;\n  var checkfISales = 0;\n  var checkserviceRepairSales = 0;\n  var checkautoBodySales = 0;\n  var checkpartsSales = 0;\n\n  data.genericData.locationScheduleGridData.some((locationItem) => {\n    if (\n      locationItem.occupancyType === \"autoSalesAndService\" ||\n      locationItem.occupancyType === \"newCarShowroomAndSales\"\n    ) {\n      primaryOEM = locationItem.primaryOEM;\n      secondaryOEM = locationItem.secondaryOEM[0];\n      other = locationItem.secondaryOEM[1] ? locationItem.secondaryOEM[1] : \"\";\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map((locationItem) => {\n    if (locationItem.signsGreaterThan > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Billboards & Signs - Other\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.signsGreaterThan\n      ]);\n    }\n    if (locationItem.fences > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Fences & Arbors - Wood\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.fences\n      ]);\n    }\n    if (locationItem.awaningsscanopies > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Awnings & Canopies - Other\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.awaningsscanopies\n      ]);\n    }\n    if (locationItem.lightpoles > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Street Lights - Metal\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.lightpoles\n      ]);\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map((locationItem) => {\n    if (locationItem.businessincomelimit > 0) {\n      FPageGridTwo.push([\n        locationItem.locationBuildingNumber,\n        \"\",\n        locationItem.utilityservices,\n        \"\",\n        locationItem.utilityoptions.includes(\"waterSupply\") ? \"Yes\" : \"No\",\n        locationItem.utilityoptions.includes(\"communicationSupply\")\n          ? \"Yes\"\n          : \"No\",\n        locationItem.utilityoptions.includes(\"communicationLines\")\n          ? \"Yes\"\n          : \"No\",\n        locationItem.utilityoptions.includes(\"powerSupply\") ? \"Yes\" : \"No\",\n        locationItem.utilityoptions.includes(\"overheadPowerLines\")\n          ? \"Yes\"\n          : \"No\"\n      ]);\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map((locationItem) => {\n    if (locationItem.businesselectronicequipment > 0) {\n      FPageGridThree.push([\n        locationItem.locationBuildingNumber,\n        \"\",\n        \"\",\n        \"\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.businesselectronicequipment\n      ]);\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map((locationItem) => {\n    if (locationItem.newcarsales > 0) {\n      checknewcarsales += locationItem.newcarsales;\n    }\n    if (locationItem.usedCarSales > 0) {\n      checkusedCarSales += locationItem.usedCarSales;\n    }\n    if (locationItem.fISales > 0) {\n      checkfISales += locationItem.fISales;\n    }\n    if (locationItem.serviceRepairSales > 0) {\n      checkserviceRepairSales += locationItem.serviceRepairSales;\n    }\n    if (locationItem.autoBodySales > 0) {\n      checkautoBodySales += locationItem.autoBodySales;\n    }\n    if (locationItem.partsSales > 0) {\n      checkpartsSales += locationItem.partsSales;\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map((locationItem) => {\n    if (locationItem.earthquakedeductibles1) {\n      if (\n        parseFloat(locationItem.earthquakedeductibles1) >\n        highestEarthquakeDeductible\n      ) {\n        highestEarthquakeDeductible = parseFloat(\n          locationItem.earthquakedeductibles1\n        );\n      }\n    }\n  });\n\n  data.genericData.locationScheduleGridData.some((locationItem) => {\n    if (\n      locationItem.windDeductible &&\n      locationItem.windDeductible != \"exclude\" &&\n      locationItem.windDeductible != \"flat\"\n    ) {\n      tempWindDeductible = locationItem.windDeductible + \" %\";\n      return true;\n    } else if (locationItem.flatamount > 0) {\n      tempWindDeductible = \"$\" + locationItem.flatamount;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  value = {\n    CPAYes: data.auditperformed.cpa == \"yes\" ? \"yes\" : \"no\",\n    CrimeDeductible: Math.min(\n      data.theftofmoneydeductible,\n      data.outsidethepremisesdeductible,\n      data.burglaryofotherpropertydeductible\n    )\n      ? Math.min(\n          data.theftofmoneydeductible,\n          data.outsidethepremisesdeductible,\n          data.burglaryofotherpropertydeductible\n        )\n      : \"\",\n    checktestdriveprocedures:\n      data.testdriveprocedures.includes(\"copyOfDriversLicense\") &&\n      data.testdriveprocedures.includes(\"copyOfInsuranceCard\")\n        ? \"Yes\"\n        : \"No\",\n    CrimeLimit: Math.max(data.computerlimit, data.fundslimit)\n      ? Math.max(data.computerlimit, data.fundslimit)\n      : \"\",\n    checkWindDeductible: tempWindDeductible\n      ? \"Wind Hail Deductible \" + tempWindDeductible\n      : \"\",\n    checkReplacement: data.state.abbreviation\n      ? data.state.abbreviation == \"FL\" || data.state.abbreviation == \"CA\"\n        ? \"Replacement\"\n        : \"\"\n      : \"\",\n    checklockbox:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some((locationItem) => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls.lockbox == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkcomputerizedKeyVault:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some((locationItem) => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .computerizedKeyVault == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n\n    checkDolFullyFencedPremises: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkDolBlockedEntrances: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolEntranceQuestions.blockedEntrances == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolaftrhrslighting == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsecguards == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolalrmsys: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolalrmsys == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolsurcamnotmoniotrd: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolsurvcammoniintrunotifi: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolguarddogs: data.genericData.locationScheduleGridData.some(\n      (locationItem) => {\n        if (locationItem.dolguarddogs == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checklockingKeyCabinet:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some((locationItem) => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .lockingKeyCabinet == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkdailyKeyInventory:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some((locationItem) => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .dailyKeyInventory == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkkeysInCars:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some((locationItem) => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls.keysInCars ==\n                true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkkeysInCarsLabel:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some((locationItem) => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls.keysInCars ==\n                true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checklockedInManagersOffice:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some((locationItem) => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .lockedInManagersOffice == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    FPageGridOne: FPageGridOne.length > 0 ? FPageGridOne : \"\",\n    FPageGridTwo: FPageGridTwo.length > 0 ? FPageGridTwo : \"\",\n    FPageGridThree: FPageGridThree.length > 0 ? FPageGridThree : \"\",\n    GIMGridOne: data.locationSchedule.map((locationItem) => {\n      var employeetoolsItem = 0;\n      var accountsreceivableItem = 0;\n      var valulablePapersItem = 0;\n      locationItem.buildingDetails.map((buildingItem) => {\n        if (buildingItem.employeetools > 0) {\n          employeetoolsItem += buildingItem.employeetools;\n        }\n        if (buildingItem.accountsreceivable > 0) {\n          accountsreceivableItem += buildingItem.accountsreceivable;\n        }\n        if (buildingItem.valulablePapers > 0) {\n          valulablePapersItem += buildingItem.valulablePapers;\n        }\n      });\n      return [\n        employeetoolsItem > 0 ? employeetoolsItem : \"\",\n        \"\",\n        \"\",\n        accountsreceivableItem > 0 ? accountsreceivableItem : \"\",\n        \"\",\n        valulablePapersItem > 0 ? valulablePapersItem : \"\"\n      ];\n    }),\n    GIMGridTwo: data.locationSchedule\n      .map((locationItem) => {\n        var signsnotattachedItem = 0;\n        locationItem.buildingDetails.map((buildingItem) => {\n          if (buildingItem.signsnotattached > 0) {\n            signsnotattachedItem += buildingItem.signsnotattached;\n          }\n        });\n        return signsnotattachedItem > 0\n          ? [\n              locationItem.locationNum + \"-1\",\n              \"\",\n              \"\",\n              \"\",\n              \"\",\n              signsnotattachedItem > 0 ? signsnotattachedItem : \"\"\n            ]\n          : \"empty\";\n      })\n      .filter((item) => item != \"empty\"),\n    JGridOne: data.locationSchedule.map((locationItem) => {\n      var oneItem = 0;\n      var twoItem = 0;\n      var threeItem = 0;\n      var fourItem = 0;\n      var fiveItem = 0;\n      var sixItem = 0;\n      locationItem.buildingDetails.map((buildingItem) => {\n        if (\n          buildingItem.fTEmployeesFurnishedAnAuto +\n            buildingItem.fTEmployeesWhoAreNotFurnished >\n          0\n        ) {\n          oneItem +=\n            buildingItem.fTEmployeesFurnishedAnAuto +\n            buildingItem.fTEmployeesWhoAreNotFurnished;\n        }\n        if (\n          buildingItem.pTEmployeesFurnishedAnAuto +\n            buildingItem.pTEmployeesWhoAreNotFurnished +\n            buildingItem.contractDriversNonEmployees >\n          0\n        ) {\n          twoItem +=\n            buildingItem.pTEmployeesFurnishedAnAuto +\n            buildingItem.pTEmployeesWhoAreNotFurnished +\n            buildingItem.contractDriversNonEmployees;\n        }\n        if (buildingItem.fTAllOtherEmployees > 0) {\n          threeItem += buildingItem.fTAllOtherEmployees;\n        }\n        if (buildingItem.pTAllOtherEmployees > 0) {\n          fourItem += buildingItem.pTAllOtherEmployees;\n        }\n        if (buildingItem.nonEmployeesUnderTheAge > 0) {\n          fiveItem += buildingItem.nonEmployeesUnderTheAge;\n        }\n        if (buildingItem.nonEmployeesYearsOldorolder > 0) {\n          sixItem += buildingItem.nonEmployeesYearsOldorolder;\n        }\n      });\n      return [oneItem, twoItem, threeItem, fourItem, fiveItem, sixItem];\n    }),\n    highestEarthquakeDeductible:\n      highestEarthquakeDeductible == 0 ? \"\" : highestEarthquakeDeductible,\n    AGENPrimaryOEM: primaryOEM,\n    AGENSecondaryOEM: secondaryOEM,\n    AGENOtherOEM: other,\n    checkthirdparty: data.state\n      ? data.state.name == \"California\"\n        ? \"\"\n        : \"X\"\n      : \"X\",\n    checkthirdpartydeduc: data.state\n      ? data.state.name == \"California\"\n        ? \"\"\n        : data.thirdpartydeduc\n      : data.thirdpartydeduc,\n    locationBuildingHarcoGrid: data.genericData.locationScheduleGridData.map(\n      (item) => {\n        var individualResult = [];\n        var requiredFields = [\n          \"locationNum\",\n          \"buildingNumber\",\n          \"address\",\n          \"invalid\",\n          \"city\",\n          \"state\",\n          \"zip\",\n          \"county\"\n        ];\n        requiredFields.map((field) => {\n          if (item[field]) {\n            if (field == \"secondaryOEM\") {\n              try {\n                item[field][0].length > 1\n                  ? individualResult.push(item[field][0])\n                  : individualResult.push(\" \");\n              } catch {\n                individualResult.push(\" \");\n              }\n            } else {\n              if (item[field].length > 0 || item[field] > 0) {\n                individualResult.push(item[field]);\n              } else {\n                individualResult.push(\" \");\n              }\n            }\n          } else {\n            individualResult.push(\" \");\n          }\n        });\n        return individualResult;\n      }\n    ),\n    checknewcarsales: checknewcarsales ? checknewcarsales : \"\",\n    checkusedCarSales: checkusedCarSales ? checkusedCarSales : \"\",\n    checkfISales: checkfISales ? checkfISales : \"\",\n    checkserviceRepairSales: checkserviceRepairSales\n      ? checkserviceRepairSales\n      : \"\",\n    checkautoBodySales: checkautoBodySales ? checkautoBodySales : \"\",\n    checkpartsSales: checkpartsSales ? checkpartsSales : \"\",\n    OthersFISalesDescription: checkfISales > 0 ? \"Finance/Insurance\" : \"\",\n    OthersAutoBodyDescription: checkautoBodySales > 0 ? \"Auto Body\" : \"\",\n    MGLGrid: data.genericData.locationScheduleGridData\n      .map((item) => {\n        var individualResult = [];\n        if (\n          item.occupancyType == \"vacantLand\" ||\n          item.occupancyType == \"bldgLeasedToOthers\"\n        ) {\n          individualResult.push(item.locationBuildingNumber);\n          individualResult.push(\n            item.occupancyType == \"vacantLand\"\n              ? \"VACANT LAND (FOR-PROFIT)\"\n              : \"BUILDINGS OR PREM - LESSOR'S RISK ONLY, FOR PROFIT\"\n          );\n          [...Array(10)].map((i) => individualResult.push(\"\"));\n          individualResult.push(\n            item.exposureAmount > 0 ? item.exposureAmount : 0\n          );\n        }\n        return individualResult.length > 0 ? individualResult : \"empty\";\n      })\n      .filter((item) => item != \"empty\"),\n    checkwhatistheaveragepercentage:\n      data.whatistheaveragepercentage > 0\n        ? data.whatistheaveragepercentage / 100\n        : \"\",\n    checkCustomerInsuranceValidity:\n      data.customersinsuranceverified && data.regularlythroughouttermofloan\n        ? \"Yes\"\n        : \"No\"\n  };\n\n  console.log(value);\n}",
+			"calculateValue": "if (data.workbooksToBeGenerated.harco == true) {\n  var primaryOEM = \"\";\n  var secondaryOEM = \"\";\n  var other = \"\";\n  var tempWindDeductible;\n  var firstEarthquakeDeductible = 0;\n  var FPageGridOne = [];\n  var FPageGridTwo = [];\n  var FPageGridThree = [];\n\n  var checknewcarsales = 0;\n  var checkusedCarSales = 0;\n  var checkfISales = 0;\n  var checkserviceRepairSales = 0;\n  var checkautoBodySales = 0;\n  var checkpartsSales = 0;\n  var checkindemnitytype = \"\";\n  var checkavgOfTimesContractDriversUsedPerMonth = \"None\";\n\n  if (\n    data.avgOfTimesContractDriversUsedPerMonth > 0 &&\n    data.avgOfTimesContractDriversUsedPerMonth <= 20\n  ) {\n    checkavgOfTimesContractDriversUsedPerMonth = \"Lesser\";\n  } else if (data.avgOfTimesContractDriversUsedPerMonth > 20) {\n    checkavgOfTimesContractDriversUsedPerMonth = \"Greater\";\n  }\n\n  data.genericData.locationScheduleGridData.some(item => {\n    if (parseFloat(item.coinsuranceamount) > 0) {\n      checkindemnitytype = item.coinsuranceamount;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  if (checkindemnitytype == \"\") {\n    data.genericData.locationScheduleGridData.some(item => {\n      if (parseFloat(item.bimonthlylimitation) > 0) {\n        checkindemnitytype = item.bimonthlylimitation;\n        return true;\n      } else {\n        return false;\n      }\n    });\n  }\n\n  data.genericData.locationScheduleGridData.some(locationItem => {\n    if (\n      locationItem.occupancyType === \"autoSalesAndService\" ||\n      locationItem.occupancyType === \"newCarShowroomAndSales\"\n    ) {\n      primaryOEM = locationItem.primaryOEM;\n      secondaryOEM = locationItem.secondaryOEM[0];\n      other = locationItem.secondaryOEM[1] ? locationItem.secondaryOEM[1] : \"\";\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map(locationItem => {\n    if (locationItem.signsGreaterThan > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Billboards & Signs - Other\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.signsGreaterThan\n      ]);\n    }\n    if (locationItem.fences > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Fences & Arbors - Wood\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.fences\n      ]);\n    }\n    if (locationItem.awaningsscanopies > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Awnings & Canopies - Other\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.awaningsscanopies\n      ]);\n    }\n    if (locationItem.lightpoles > 0) {\n      FPageGridOne.push([\n        locationItem.locationBuildingNumber,\n        \"Street Lights - Metal\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.lightpoles\n      ]);\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map(locationItem => {\n    if (locationItem.businessincomelimit > 0) {\n      FPageGridTwo.push([\n        locationItem.locationBuildingNumber,\n        \"\",\n        locationItem.utilityservices,\n        \"\",\n        \"\",\n        locationItem.utilityoptions.includes(\"waterSupply\") ? \"Yes\" : \"No\",\n        locationItem.utilityoptions.includes(\"communicationSupply\")\n          ? \"Yes\"\n          : \"No\",\n        locationItem.utilityoptions.includes(\"communicationLines\")\n          ? \"Yes\"\n          : \"No\",\n        locationItem.utilityoptions.includes(\"powerSupply\") ? \"Yes\" : \"No\",\n        locationItem.utilityoptions.includes(\"overheadPowerLines\")\n          ? \"Yes\"\n          : \"No\"\n      ]);\n    }\n  });\n\n  data.genericData.locationScheduleGridData.map(locationItem => {\n    if (locationItem.businesselectronicequipment > 0) {\n      FPageGridThree.push([\n        locationItem.locationBuildingNumber,\n        \"\",\n        \"\",\n        \"\",\n        \"\",\n        \"\",\n        \"\",\n        locationItem.businesselectronicequipment\n      ]);\n    }\n  });\n\n  data.locationSchedule.map(locationItem => {\n    if (locationItem.newcarsales > 0) {\n      checknewcarsales += locationItem.newcarsales;\n    }\n    if (locationItem.usedCarSales > 0) {\n      checkusedCarSales += locationItem.usedCarSales;\n    }\n    if (locationItem.fISales > 0) {\n      checkfISales += locationItem.fISales;\n    }\n    if (locationItem.serviceRepairSales > 0) {\n      checkserviceRepairSales += locationItem.serviceRepairSales;\n    }\n    if (locationItem.autoBodySales > 0) {\n      checkautoBodySales += locationItem.autoBodySales;\n    }\n    if (locationItem.partsSales > 0) {\n      checkpartsSales += locationItem.partsSales;\n    }\n  });\n\n  data.genericData.locationScheduleGridData.some(locationItem => {\n    if (parseFloat(locationItem.earthquakedeductibles1) > 0) {\n      firstEarthquakeDeductible = locationItem.earthquakedeductibles1;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  data.genericData.locationScheduleGridData.some(locationItem => {\n    if (\n      locationItem.windDeductible &&\n      locationItem.windDeductible != \"exclude\" &&\n      locationItem.windDeductible != \"flat\"\n    ) {\n      tempWindDeductible = locationItem.windDeductible + \" %\";\n      return true;\n    } else if (locationItem.flatamount > 0) {\n      tempWindDeductible = \"$\" + locationItem.flatamount;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  value = {\n    checkeplicoverage: data.state\n      ? data.state.name != \"California\" && data.eplicoverage == \"yes\"\n        ? \"X\"\n        : \"\"\n      : \"\",\n    checkdiscriminationdeductible: data.state\n      ? data.state.name != \"California\" && data.eplicoverage == \"yes\"\n        ? \"25000\"\n        : \"\"\n      : \"\",\n    checkacterroromissions: data.state\n      ? data.state.abbreviation != \"CA\" &&\n        data.state.abbreviation != \"FL\" &&\n        data.state.abbreviation != \"MA\" &&\n        data.state.abbreviation != \"VA\" &&\n        data.eplicoverage == \"yes\"\n        ? \"X\"\n        : \"\"\n      : \"\",\n    checkthirdpartydeduc: data.state\n      ? data.state.name != \"California\" && data.eplicoverage == \"yes\"\n        ? \"15000\"\n        : \"\"\n      : \"\",\n    checkactserrorsCAOnly: data.state\n      ? data.state.name == \"California\" && data.eplicoverage == \"yes\"\n        ? \"X\"\n        : \"\"\n      : \"\",\n    checkactserrorsCAOnlyLimit: data.state\n      ? data.state.name == \"California\" && data.eplicoverage == \"yes\"\n        ? \"50000\"\n        : \"\"\n      : \"\",\n    checkactserrorsCAOnlyDeduc: data.state\n      ? data.state.name == \"California\" && data.eplicoverage == \"yes\"\n        ? \"2500\"\n        : \"\"\n      : \"\",\n    checkValuation: data.state\n      ? data.state.name == \"California\" || data.state.name == \"Florida\"\n        ? \"Replacement\"\n        : \"Reconstruction Cost\"\n      : \"\",\n    checkthirdparty: data.state\n      ? data.state.name == \"California\"\n        ? \"\"\n        : \"X\"\n      : \"X\",\n\n    checkbuildingCoinsurance: data.state\n      ? data.state.name !== \"California\" || data.state.name !== \"Florida\"\n        ? \"1\"\n        : \"\"\n      : \"\",\n    checkbppcoinsurance: data.state\n      ? data.state.name !== \"California\" || data.state.name !== \"Florida\"\n        ? \"1\"\n        : \"\"\n      : \"\",\n    checkearthquakecoverage: data.genericData.locationScheduleGridData.some(\n      i => i.earthquakecoverage == \"yes\"\n    ),\n    checkReplacement: data.state.abbreviation\n      ? data.state.abbreviation == \"FL\" || data.state.abbreviation == \"CA\"\n        ? \"Replacement\"\n        : \"\"\n      : \"\",\n    CPAYes: data.auditperformed.cpa == \"yes\" ? \"yes\" : \"no\",\n    CrimeDeductible: Math.min(\n      data.theftofmoneydeductible,\n      data.outsidethepremisesdeductible,\n      data.burglaryofotherpropertydeductible\n    )\n      ? Math.min(\n          data.theftofmoneydeductible,\n          data.outsidethepremisesdeductible,\n          data.burglaryofotherpropertydeductible\n        )\n      : \"\",\n    checktestdriveprocedures:\n      data.testdriveprocedures.includes(\"copyOfDriversLicense\") &&\n      data.testdriveprocedures.includes(\"copyOfInsuranceCard\")\n        ? \"Yes\"\n        : \"No\",\n    CrimeLimit: Math.max(data.computerlimit, data.fundslimit)\n      ? Math.max(data.computerlimit, data.fundslimit)\n      : \"\",\n    checkWindDeductible: tempWindDeductible\n      ? \"Wind Hail Deductible \" + tempWindDeductible\n      : \"\",\n\n    checklockbox:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some(locationItem => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls.lockbox == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkcomputerizedKeyVault:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some(locationItem => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .computerizedKeyVault == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n\n    checkDolFullyFencedPremises: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolEntranceQuestions.fullyFencedPremises == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkDolBlockedEntrances: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolEntranceQuestions.blockedEntrances == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolaftrhrslighting == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkSecurityGuards: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolsecguards == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolalrmsys: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolalrmsys == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolsurcamnotmoniotrd: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolsurcamnotmoniotrd == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolsurvcammoniintrunotifi: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolsurvcammoniintrunotifi == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkdolguarddogs: data.genericData.locationScheduleGridData.some(\n      locationItem => {\n        if (locationItem.dolguarddogs == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checklockingKeyCabinet:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some(locationItem => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .lockingKeyCabinet == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkdailyKeyInventory:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some(locationItem => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .dailyKeyInventory == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkkeysInCars:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some(locationItem => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls.keysInCars ==\n                true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checkkeysInCarsLabel:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some(locationItem => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls.keysInCars ==\n                true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    checklockedInManagersOffice:\n      data.dolkeycntrlsameallloc == \"no\"\n        ? data.locationSchedule.some(locationItem => {\n            if (locationItem.locationGarageLiabilityKeyControls) {\n              if (\n                locationItem.locationGarageLiabilityKeyControls\n                  .lockedInManagersOffice == true\n              ) {\n                return true;\n              }\n            } else {\n              return false;\n            }\n          })\n        : \"\",\n    FPageGridOne: FPageGridOne.length > 0 ? FPageGridOne : \"\",\n    FPageGridTwo: FPageGridTwo.length > 0 ? FPageGridTwo : \"\",\n    FPageGridThree: FPageGridThree.length > 0 ? FPageGridThree : \"\",\n    GIMGridOne: data.locationSchedule.map(locationItem => {\n      var employeetoolsItem = 0;\n      var accountsreceivableItem = 0;\n      var valulablePapersItem = 0;\n      locationItem.buildingDetails.map(buildingItem => {\n        if (buildingItem.employeetools > 0) {\n          employeetoolsItem += buildingItem.employeetools;\n        }\n        if (buildingItem.accountsreceivable > 0) {\n          accountsreceivableItem += buildingItem.accountsreceivable;\n        }\n        if (buildingItem.valulablePapers > 0) {\n          valulablePapersItem += buildingItem.valulablePapers;\n        }\n      });\n      return [\n        employeetoolsItem > 0 ? employeetoolsItem : \"\",\n        \"\",\n        \"\",\n        accountsreceivableItem > 0 ? accountsreceivableItem : \"\",\n        \"\",\n        valulablePapersItem > 0 ? valulablePapersItem : \"\"\n      ];\n    }),\n    GIMGridTwo: data.locationSchedule\n      .map(locationItem => {\n        var signsnotattachedItem = 0;\n        locationItem.buildingDetails.map(buildingItem => {\n          if (buildingItem.signsnotattached > 0) {\n            signsnotattachedItem += buildingItem.signsnotattached;\n          }\n        });\n        return signsnotattachedItem > 0\n          ? [\n              locationItem.locationNum + \"-1\",\n              \"\",\n              \"\",\n              \"\",\n              \"\",\n              signsnotattachedItem > 0 ? signsnotattachedItem : \"\"\n            ]\n          : \"empty\";\n      })\n      .filter(item => item != \"empty\"),\n    JGridOne: data.locationSchedule.map(locationItem => {\n      var oneItem = 0;\n      var twoItem = 0;\n      var threeItem = 0;\n      var fourItem = 0;\n      var fiveItem = 0;\n      var sixItem = 0;\n      locationItem.buildingDetails.map(buildingItem => {\n        if (\n          buildingItem.fTEmployeesFurnishedAnAuto +\n            buildingItem.fTEmployeesWhoAreNotFurnished >\n          0\n        ) {\n          oneItem +=\n            buildingItem.fTEmployeesFurnishedAnAuto +\n            buildingItem.fTEmployeesWhoAreNotFurnished;\n        }\n        if (\n          buildingItem.pTEmployeesFurnishedAnAuto +\n            buildingItem.pTEmployeesWhoAreNotFurnished +\n            buildingItem.contractDriversNonEmployees >\n          0\n        ) {\n          twoItem +=\n            buildingItem.pTEmployeesFurnishedAnAuto +\n            buildingItem.pTEmployeesWhoAreNotFurnished +\n            buildingItem.contractDriversNonEmployees;\n        }\n        if (buildingItem.fTAllOtherEmployees > 0) {\n          threeItem += buildingItem.fTAllOtherEmployees;\n        }\n        if (buildingItem.pTAllOtherEmployees > 0) {\n          fourItem += buildingItem.pTAllOtherEmployees;\n        }\n        if (buildingItem.nonEmployeesUnderTheAge > 0) {\n          fiveItem += buildingItem.nonEmployeesUnderTheAge;\n        }\n        if (buildingItem.nonEmployeesYearsOldorolder > 0) {\n          sixItem += buildingItem.nonEmployeesYearsOldorolder;\n        }\n      });\n      return [oneItem, twoItem, threeItem, fourItem, fiveItem, sixItem];\n    }),\n    firstEarthquakeDeductible:\n      firstEarthquakeDeductible == 0 ? \"\" : firstEarthquakeDeductible,\n    AGENPrimaryOEM: primaryOEM,\n    AGENSecondaryOEM: secondaryOEM,\n    AGENOtherOEM: other,\n    locationBuildingHarcoGrid: data.genericData.locationScheduleGridData.map(\n      item => {\n        var individualResult = [];\n        var requiredFields = [\n          \"locationNum\",\n          \"buildingNumber\",\n          \"address\",\n          \"invalid\",\n          \"city\",\n          \"state\",\n          \"zip\",\n          \"county\"\n        ];\n        requiredFields.map(field => {\n          if (item[field]) {\n            if (field == \"secondaryOEM\") {\n              try {\n                item[field][0].length > 1\n                  ? individualResult.push(item[field][0])\n                  : individualResult.push(\" \");\n              } catch {\n                individualResult.push(\" \");\n              }\n            } else {\n              if (item[field].length > 0 || item[field] > 0) {\n                individualResult.push(item[field]);\n              } else {\n                individualResult.push(\" \");\n              }\n            }\n          } else {\n            individualResult.push(\" \");\n          }\n        });\n        return individualResult;\n      }\n    ),\n    checkequipmentBreakdown: data.genericData.locationScheduleGridData.some(\n      item => {\n        if (item.equipmentBreakdown == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checknewcarsales: checknewcarsales ? checknewcarsales : \"\",\n    checkusedCarSales: checkusedCarSales ? checkusedCarSales : \"\",\n    checkfISales: checkfISales ? checkfISales : \"\",\n    checkserviceRepairSales: checkserviceRepairSales\n      ? checkserviceRepairSales\n      : \"\",\n    checkautoBodySales: checkautoBodySales ? checkautoBodySales : \"\",\n    checkpartsSales: checkpartsSales ? checkpartsSales : \"\",\n    OthersFISalesDescription: checkfISales > 0 ? \"Finance/Insurance\" : \"\",\n    OthersAutoBodyDescription: checkautoBodySales > 0 ? \"Auto Body\" : \"\",\n    MGLGrid: data.genericData.locationScheduleGridData\n      .map(item => {\n        var individualResult = [];\n        if (\n          item.occupancyType == \"vacantLand\" ||\n          item.occupancyType == \"bldgLeasedToOthers\"\n        ) {\n          individualResult.push(item.locationBuildingNumber);\n          individualResult.push(\n            item.occupancyType == \"vacantLand\"\n              ? \"VACANT LAND (FOR-PROFIT)\"\n              : \"BUILDINGS OR PREM - LESSOR'S RISK ONLY, FOR PROFIT\"\n          );\n          [...Array(10)].map(i => individualResult.push(\"\"));\n          individualResult.push(\n            item.exposureAmount > 0 ? item.exposureAmount : 0\n          );\n        }\n        return individualResult.length > 0 ? individualResult : \"empty\";\n      })\n      .filter(item => item != \"empty\"),\n    checkwhatistheaveragepercentage:\n      data.whatistheaveragepercentage > 0\n        ? data.whatistheaveragepercentage / 100\n        : \"\",\n    checkothertankcontentsExists: data.genericData.storageTankGridData.some(\n      tankItem => {\n        if (tankItem.othertankcontents.length > 0) {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n    checkothertankcontents:\n      [\n        ...new Set(\n          data.genericData.storageTankGridData\n            .map(tankItem => {\n              if (tankItem.othertankcontents.length > 0) {\n                return tankItem.othertankcontents;\n              } else {\n                return \"invalid\";\n              }\n            })\n            .filter(i => i != \"invalid\")\n        )\n      ] + \"\",\n    checkindemnitytype: checkindemnitytype == \"\" ? \"\" : checkindemnitytype,\n    checkleasedtoOthers: data.genericData.locationScheduleGridData.some(\n      i => i.occupancyType == \"bldgLeasedToOthers\"\n    ),\n    checklessThan3years: data.numYearsOfOwnership > 3 ? \"Yes\" : \"No\",\n    checkroofingyear: data.genericData.locationScheduleGridData.some(\n      i => i.roofingyear < moment().format(\"YYYY\") - 20\n    ),\n    checkbuildingLimit: data.genericData.locationScheduleGridData.map(i => {\n      return {\n        result:\n          (i.signsLessThan > 0 ? i.signsLessThan : 0) +\n          (i.buildingLimit > 0 ? i.buildingLimit : 0)\n      };\n    }),\n    checkUmbrellaNameExists: data.UmbrellaCoverageAdditional.some(\n      umbrellaItem =>\n        umbrellaItem.umbrellaCoverageAdditionalName &&\n        umbrellaItem.ownershipPercentageUmbrella > 0\n    ),\n    checkrepairpercentparts:\n      parseFloat(data.repairpercentparts) > 0 ? data.repairpercentparts : \"\",\n    checkrepairpercentlabor:\n      parseFloat(data.repairpercentlabor) > 0 ? data.repairpercentlabor : \"\",\n    checkavgOfTimesContractDriversUsedPerMonth: checkavgOfTimesContractDriversUsedPerMonth,\n    checkCustomerInsuranceValidity:\n      data.customersinsuranceverified && data.regularlythroughouttermofloan\n        ? \"Yes\"\n        : \"No\"\n  };\n\n  console.log(value);\n}",
 			"key": "harcoExcelData",
 			"properties": {
 				"data_type": "json"
@@ -19731,9 +19827,9 @@
 		}],
 		"input": false
 	}],
-	"controller": "function insertAfter(referenceNode, newNode) {\r\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\r\n}\r\n\r\nvar s = document.createElement(\"script\");\r\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\r\ns.onload = function (e) {\r\n  var appendCustomButtonTimer = setInterval(() => {\r\n    if (\r\n      document.getElementById(\r\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n      )\r\n    ) {\r\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\r\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\r\n        clone.children[0].textContent = \"Save Draft\";\r\n        clone.children[0].id = \"saveDraftCustomButton\";\r\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\r\n        saveDraftCustomButton.onclick = function () {\r\n          var closeForm = confirm(\r\n            \"Do you want to close the form after saving the data?\"\r\n          );\r\n          let ev = new CustomEvent(\"customButtonAction\", {\r\n            detail: {\r\n              timerVariable: appendCustomButtonTimer,\r\n              formData: data,\r\n              commands:\r\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\r\n              exit: closeForm,\r\n              notification: \"Form saved successfully\",\r\n            },\r\n            bubbles: false,\r\n          });\r\n          document\r\n            .getElementById(\r\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n            )\r\n            .dispatchEvent(ev);\r\n        };\r\n      }\r\n      var dataGridDeleteIcons = document.getElementsByClassName(\r\n        \"fa-times-circle-o\"\r\n      );\r\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\r\n      if (dataGridDeleteIcons.length > 0) {\r\n        dataGridDeleteIcons.map((item) => {\r\n          item.classList.add(\"fa-times-circle\");\r\n          item.classList.remove(\"fa-times-circle-o\");\r\n        });\r\n      }\r\n    } else {\r\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\r\n    }\r\n  }, 1000);\r\n\r\n//   var appendCustomAutoSave = setInterval(() => {\r\n//     console.log(\"autosave start\");\r\n//     if (\r\n//       document.getElementById(\r\n//         \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\r\n//       )\r\n//     ) {\r\n//       let ev2 = new CustomEvent(\"customButtonAction\", {\r\n//         detail: {\r\n//           timerVariable: appendCustomAutoSave,\r\n//           formData: data,\r\n//           commands:\r\n//             '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\r\n//           exit: false,\r\n//           notification: \"Form Saved\",\r\n//         },\r\n//         bubbles: false,\r\n//       });\r\n//       document\r\n//         .getElementById(\"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\")\r\n//         .dispatchEvent(ev2);\r\n//     } else {\r\n//       appendCustomAutoSave ? clearInterval(appendCustomAutoSave) : null;\r\n//     }\r\n//   }, 15000);\r\n};\r\ndocument.head.appendChild(s);",
+	"controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          var closeForm = confirm(\n            \"Do you want to close the form after saving the data?\"\n          );\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: closeForm,\n              notification: \"Form saved successfully\"\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n\nsetTimeout(function(){\ndata.workbooksToBeGenerated = {\n  epli: false,\n  rpsCyber: false,\n  harco: false,\n  dealerGuard_ApplicationOpenLot: false,\n  victor_FranchisedAutoDealer: false,\n  victor_AutoPhysDamage: false\n};\n}, 2000);",
 	"revisions": "original",
-	"_vid": 850,
+	"_vid": 948,
 	"title": "Dealer Workbook",
 	"display": "wizard",
 	"access": [{
@@ -19808,14 +19904,12 @@
 	"properties": {
 		"submission_commands": "[{\"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }, { \"command\": \"delegate\",\"delegate\": \"GenerateWorkbook\" }]",
 		"showPrevious": "true",
-		"showCancel": "true",
-		"showBreadcrumbs": "true",
-		"clickable": "true"
+		"showCancel": "true"
 	},
 	"name": "dealerWorkbook",
 	"path": "dealerworkbook",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-06-25T07:04:35.147Z",
-	"modified": "2020-08-18T13:08:03.992Z",
+	"modified": "2020-08-21T22:47:46.613Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
