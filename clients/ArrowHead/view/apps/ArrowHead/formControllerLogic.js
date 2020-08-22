@@ -48,6 +48,16 @@ s.onload = function (e) {
           item.classList.remove("fa-times-circle-o");
         });
       }
+
+      if (
+        [...document.querySelectorAll('[ref="modalSave"]')].some(
+          (i) => i.innerText == "SAVE"
+        )
+      ) {
+        [...document.querySelectorAll('[ref="modalSave"]')].map(
+          (i) => i.innerText = "OK"
+        );
+      }
     } else {
       appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;
     }
