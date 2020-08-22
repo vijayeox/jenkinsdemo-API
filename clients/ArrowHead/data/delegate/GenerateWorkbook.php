@@ -307,9 +307,10 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     private function formatDate($data, $fieldConfig = null, $formData = null)
     {
+        $date = strpos($data, "T") ? explode("T", $data)[0] : $data;
         return date(
             "m-d-Y",
-            strtotime($data)
+            strtotime($date)
         );
     }
 
