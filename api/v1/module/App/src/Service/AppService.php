@@ -62,7 +62,7 @@ class AppService extends AbstractService
         $this->menuItemService = $menuItemService;
         $this->pageService = $pageService;
         $this->jobService = $jobService;
-        $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job");
+        $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job", "migration");
     }
 
     /**
@@ -212,6 +212,8 @@ class AppService extends AbstractService
                                         $this->setupAppView($ymlData, $path);
                                         break;
                     case 'entity': $this->processEntity($ymlData);
+                        break;
+                    case 'migration': $this->performMigration($ymlData, $path);
                         break;
                     case 'workflow': $this->processWorkflow($ymlData, $path);
                         break;
