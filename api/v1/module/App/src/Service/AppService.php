@@ -45,6 +45,7 @@ class AppService extends AbstractService
     private $pageService;
     private $jobService;
     private $appDeployOptions;
+    private $roleService;
 
     /**
      * @ignore __construct
@@ -98,8 +99,8 @@ class AppService extends AbstractService
         $queryString = 'SELECT ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.category, ap.date_created,
             ap.date_modified, ap.created_by, ap.modified_by, ap.status, ar.org_id, ar.start_options 
             FROM ox_app AS ap
-            LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id 
-            WHERE ar.org_id=:orgId AND ap.status!=:statusDeleted AND ap.uuid=:uuid';
+            LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id AND ar.org_id=:orgId
+            WHERE ap.status!=:statusDeleted AND ap.uuid=:uuid';
         $queryParams = [
             'orgId' => AuthContext::get(AuthConstants::ORG_ID),
             'statusDeleted' => App::DELETED, 
@@ -223,14 +224,14 @@ class AppService extends AbstractService
                 if(!in_array($value, $params)){
                     continue;
                 }
-                switch ($value) {
-                    case 'initialize':  $this->processApp($ymlData, $path);
-                                        $this->createOrg($ymlData);
-                                        $this->createAppPrivileges($ymlData);
-                                        $this->createRole($ymlData);
-                                        $this->performMigration($ymlData, $path);
-                                        $this->setupAppView($ymlData, $path);
-                                        break;
+                switch ($value) { 
+                    case 'initialize':  
+                        $this->processApp($ymlData, $path);
+                        $this->createAppPrivileges($ymlData);
+                        $this->createRole($ymlData);
+                        $this->performMigration($ymlData, $path);
+                        $this->setupAppView($ymlData, $path);
+                        break;
                     case 'entity': $this->processEntity($ymlData);
                         break;
                     case 'workflow': $this->processWorkflow($ymlData, $path);
@@ -249,6 +250,7 @@ class AppService extends AbstractService
                        break;
                }
             }
+            $this->setupOrg($ymlData, $path);
             $this->updateyml($ymlData, $path);
             $appData = $ymlData['app'];
             $appData['status'] = App::PUBLISHED;
@@ -310,13 +312,20 @@ class AppService extends AbstractService
         $this->setupLinks($path, $appName, $appUuid, $orgUuid);
     }
 
-    public function createOrg(&$yamlData){
+    public function setupOrg(&$yamlData, $path = null){
         if (isset($yamlData['org'])) {
-            $data = $this->processOrg($yamlData['org']);
-            $orgUuid = $data['uuid'];
-            $appUuid = $yamlData['app']['uuid'];
-            $result = $this->createAppRegistry($appUuid, $yamlData['org']['uuid']);
+            $appId = $yamlData['app']['uuid'];
+            $data = $this->processOrg($yamlData['org'], $appId);
+            $orgId = $yamlData['org']['uuid'];
+            $this->installApp($orgId, $yamlData, $path);
         }
+    }
+
+    public function installApp($orgId, $yamlData, $path){
+        $appId = $yamlData['app']['uuid'];
+        $this->createRole($yamlData, false);
+        $result = $this->createAppRegistry($appId, $orgId);
+        $this->setupOrgLinks($path, $appId, $orgId);
     }
 
     public function processJob(&$yamlData) {
@@ -578,7 +587,7 @@ class AppService extends AbstractService
         }
     }
 
-    private function setupLinks($path, $appName, $appId, $orgId = null)
+    private function setupLinks($path, $appName, $appId)
     {
         $link = $this->config['DELEGATE_FOLDER'] . $appId;
         $target = $path . "data/delegate";
@@ -623,7 +632,16 @@ class AppService extends AbstractService
             $this->executeCommands($guilink);
         }
 
-        if ($orgId) {
+        $appTarget = $path . "view/apps/";
+        $themeTarget = $path."view/themes";
+        $themeLink = $this->config['THEME_FOLDER'];
+        $appLink = $this->config['APPS_FOLDER'];
+        $this->setLinkAndRunBuild($themeTarget,$themeLink);
+        $this->setLinkAndRunBuild($appTarget,$appLink);
+    }
+
+    private function setupOrgLinks($path, $appId, $orgId){
+        if ($orgId && $path) {
             $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
             $target = $path . "data/template";
             if (is_link($link)) {
@@ -633,14 +651,8 @@ class AppService extends AbstractService
                 $this->setupLink($target, $link);
             }
         }
-        $appTarget = $path . "view/apps/";
-        $themeTarget = $path."view/themes";
-        $themeLink = $this->config['THEME_FOLDER'];
-        $appLink = $this->config['APPS_FOLDER'];
-        $this->setLinkAndRunBuild($themeTarget,$themeLink);
-        $this->setLinkAndRunBuild($appTarget,$appLink);
+        
     }
-
     private function executePackageDiscover()
     {
         $app = $this->config['APPS_FOLDER'];
@@ -697,16 +709,18 @@ class AppService extends AbstractService
         }
     }
 
-    public function createRole(&$yamlData)
+    public function createRole(&$yamlData, $templateRole = true)
     {
         if (isset($yamlData['role'])) {
-            if (!(isset($yamlData['org']['uuid']))) {
-                $this->logger->warn("Organization not provided not processing roles!");
-                return;
+            $params = null;
+            if(!$templateRole){
+                if (!(isset($yamlData['org']['uuid']))) {
+                    $this->logger->warn("Organization not provided not processing roles!");
+                    return;
+                }
+                $params['orgId'] = $yamlData['org']['uuid'];
             }
-            $appUuid = $yamlData['app']['uuid'];
-            $appId = $this->getIdFromUuid('ox_app', $appUuid);
-            $params['orgId'] = $yamlData['org']['uuid'];
+            $appId = $yamlData['app']['uuid'];
             foreach ($yamlData['role'] as &$roleData) {
                 $role = $roleData;
                 if (!isset($role['name'])) {
@@ -714,13 +728,19 @@ class AppService extends AbstractService
                     continue;
                 }
                 $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
-                $result = $this->roleService->saveRole($params, $role, $role['uuid']);
-                $roleData['uuid'] = $role['uuid'];
+                $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
+                if($templateRole){
+                    $result = $this->roleService->saveTemplateRole($role, $role['uuid']);
+                    $roleData['uuid'] = $role['uuid'];
+                }else{
+                    $result = $this->roleService->saveRole($params, $role, $role['uuid']);
+                }
+                
             }
         }
     }
 
-    private function processOrg(&$orgData)
+    private function processOrg(&$orgData, $appId)
     {
         if (!isset($orgData['uuid'])) {
             $orgData['uuid'] = UuidUtil::uuid();
@@ -736,6 +756,7 @@ class AppService extends AbstractService
             $orgData['preferences'] = '{}';
         }
         $orgdata = $orgData;
+        $orgdata['app_id'] = $appId;
         $result = $this->organizationService->saveOrganization($orgdata);
         if ($result == 0) {
             throw new ServiceException("Organization could not be saved", 'org.not.saved');
