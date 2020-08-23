@@ -221,7 +221,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
 
     protected function exceptionToResponse(Exception $e) {
 	$errorType = OxServiceException::ERR_TYPE_ERROR;
-        $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR;
+    $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR;
 	$context = NULL;
         $message = NULL;
         if ($e instanceof OxServiceException) {
@@ -229,6 +229,8 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
             $errorCode = $e->getErrorCode();
             $message = $e->getMessage();
             $context = $e->getContextData();
+        } else if ($e instanceof Exception) {
+            $message = $e->getMessage();
         }
         else if ($e instanceof ValidationException) {
             $errorType = OxServiceException::ERR_TYPE_ERROR;
