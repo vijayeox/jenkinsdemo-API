@@ -26,7 +26,7 @@ content:
             actions:
                 -
                     name: Edit
-                    rule: 'row.status == "In Progress" || row.status == "Generated"'
+                    rule: 'row.status == "In Progress" || (profile.privileges.MANAGE_POLICY_APPLICATION_CREATE == true && row.status == "Generated")'
                     details:
                         -
                             type: Form
