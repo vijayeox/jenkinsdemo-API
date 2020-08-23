@@ -34,6 +34,17 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
                 -
+                    name: 'Retry'
+                    rule: '(row.status == "Processing" && row.submissionTime) ? moment().isAfter(moment(row.submissionTime).add(3,"m")) : false'
+                    icon: 'far fa-redo'
+                    updateOnly : true
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'delegate/RetryDocumentGeneration'
+                                successNotification: "Triggered Documents Regeneration"
+                -
                     name: 'Export'
                     rule: '''{{status}}'' == ''Generated'''
                     icon: 'far fa-file-download'
@@ -47,7 +58,7 @@ content:
                             url: 'file/{{uuid}}/document'
                 -
                     name: 'Please Wait'
-                    rule: '''{{status}}'' == ''Processing'''
+                    rule: '(row.status == "Processing" && row.submissionTime) ? moment().isBefore(moment(row.submissionTime).add(3,"m")) : false'
                     icon: 'fad fa-circle-notch fa-spin'
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:
@@ -89,4 +100,13 @@ content:
                             - 'Processing'
                             - 'In Progress'
                         placeholder: 'Select Status'
-                    cell: '<td>{item.status}</td>'
+                    cell: '<td>
+                           {item.status == "Processing" && item.submissionTime
+                           ? moment().isAfter(moment(item.submissionTime).add(3,"m"))
+                               ? "Error Processing - Please Retry"
+                               : item.status + " (" +
+                               (item.documentsSelectedCount - item.documentsToBeGenerated) +
+                               " of " +
+                               item.documentsSelectedCount + ")"
+                           : item.status}
+                           </td>'
