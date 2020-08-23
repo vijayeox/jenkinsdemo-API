@@ -219,7 +219,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                 $fieldNamePDFData = $fieldProps["fieldname"];
                                 $fieldOptions = $fieldProps["options"];
                                 $parentValues = $this->checkJSON($data[$fieldProps["parentKey"]]);
-                                if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == 'yes'){
+                                if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == 'yes') {
                                     $pdfData[$fieldNamePDFData] =  $fieldOptions["yes"];
                                 }
                             }
@@ -272,7 +272,10 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     "type" => "file/json"
                 )
             );
+            date_default_timezone_set('UTC');
+            $data['submissionTime'] = (new DateTime)->format('c');
             $data['documentsToBeGenerated'] = count($excelData);
+            $data['documentsSelectedCount'] = count($excelData) + count($generatedDocumentsList) - 1;
             $data["status"] = "Processing";
         } else {
             $data["status"] = "Generated";
