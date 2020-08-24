@@ -105,7 +105,7 @@ content:
                            ? moment().isAfter(moment(item.submissionTime).add(3,"m"))
                                ? "Error Processing - Please Retry"
                                : item.status + " (" +
-                               (item.documentsSelectedCount - item.documentsToBeGenerated) +
+                               (item.documentsSelectedCount - item.documentsToBeGenerated +1) +
                                " of " +
                                item.documentsSelectedCount + ")"
                            : item.status}
