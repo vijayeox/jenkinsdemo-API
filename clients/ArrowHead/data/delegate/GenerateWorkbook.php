@@ -16,7 +16,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     use HttpClientTrait;
     use FileTrait;
-    protected $ExcelTemplateMapperServiceURL = "http://54.161.224.59:5000/api/FileUpload";
 
     protected $carrierTemplateList = array(
         "dealerGuard_ApplicationOpenLot" => array(
@@ -286,14 +285,16 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $this->saveFile($data, $fileUUID);
 
         if (count($excelData) > 0) {
+            $selectQuery = "Select value FROM applicationConfig WHERE type ='excelMapperURL'";
+            $ExcelTemplateMapperServiceURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
             foreach ($excelData as $excelItem) {
                 $response = $this->makeRequest(
                     HTTPMethod::POST,
-                    $this->ExcelTemplateMapperServiceURL,
+                    $ExcelTemplateMapperServiceURL,
                     $excelItem
                 );
                 $this->logger->info("Excel Mapper POST Request for " . $excelItem["fileId"] . "\n" . $response);
-                sleep(5);
+                sleep(3);
             }
         }
 
