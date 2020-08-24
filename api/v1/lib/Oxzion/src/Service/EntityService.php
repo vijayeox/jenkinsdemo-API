@@ -26,7 +26,7 @@ class EntityService extends AbstractService
         $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $entity = new Entity();
-        $resultSet = $this->getEntity($data['app_id'],$data['uuid']);
+        $resultSet = $this->getEntity($data['uuid'], $data['app_id']);
         $this->logger->info(__CLASS__ . "-> \n Resultsert----- - " . print_r($resultSet, true));
         try {
             if ($resultSet == 0) {
@@ -65,7 +65,7 @@ class EntityService extends AbstractService
 
     public function deleteEntity($appUuid, $id)
     {
-        $result = $this->getEntity($appUuid, $id);
+        $result = $this->getEntity($id, $appUuid);
         if ($result) {
             $this->beginTransaction();
             try {
@@ -100,20 +100,24 @@ class EntityService extends AbstractService
         return $resultSet;
     }
 
-    public function getEntity($appId, $id)
+    public function getEntity($id, $appId = null)
     {
         try {
-            $where = is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ?";
-            $where.= " AND ".(is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?");
+            $where = "";
+            $queryParams = [];
+            if($appId){
+                $where .= is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ? AND ";
+                $queryParams[] = $appId;
+            }
+            $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
             $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where $where";
-            $queryParams = array($appId, $id);
+            $queryParams[] = $id;
             $this->logger->info("STATEMENT $query".print_r($queryParams,true));
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultSet) == 0) {
-                return 0;
+                throw EntityNotFoundException("Entity not found for id - $id ".($appId ? " and appId - $appId" : "") );
             }
         } catch (Exception $e) {
-            $this->rollback();
             throw $e;
         }
         return $resultSet[0];

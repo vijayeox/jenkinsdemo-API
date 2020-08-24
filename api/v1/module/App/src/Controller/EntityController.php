@@ -151,7 +151,7 @@ class EntityController extends AbstractApiController
     public function get($entityId)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $result = $this->entityService->getEntity($appUuid, $entityId);
+        $result = $this->entityService->getEntity($entityId, $appUuid);
         if ($result == 0) {
             return $this->getErrorResponse("Entity not found", 404, ['id' => $entityId]);
         }
