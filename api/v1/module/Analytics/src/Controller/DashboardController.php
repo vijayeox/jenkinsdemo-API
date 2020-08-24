@@ -2,6 +2,7 @@
 
 namespace Analytics\Controller;
 
+use Exception;
 use Analytics\Model\Dashboard;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
@@ -38,19 +39,15 @@ class DashboardController extends AbstractApiController
      */
     public function create($data)
     {
-        $count = 0;
         try {
-            $data['uuid'] = $this->dashboardService->createDashboard($data);
-            $data['version'] = 0;
-            $count = 1;
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $returnData = $this->dashboardService->createDashboard($data);
+            array_merge($data, $returnData);
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        if (empty($data['uuid'])) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 201);
     }
 
     /**
@@ -66,33 +63,24 @@ class DashboardController extends AbstractApiController
     {
         try {
             $result = $this->dashboardService->updateDashboard($uuid, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            return $this->getSuccessResponseWithData($result, 200);
         }
-        if ($result == 0) {
-            return $this->getErrorResponse("Dashboard update failed for uuid - $uuid", 404);
-        }
-        return $this->getSuccessResponseWithData($result, 200);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }        
     }
 
     public function delete($uuid)
     {
         $params = $this->params()->fromQuery();
-        if (isset($params['version'])) {
-            try {
-                $response = $this->dashboardService->deleteDashboard($uuid, $params['version']);
-            } catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-            }
-            if ($response == 0) {
-                return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-            }
+        try {
+            $this->dashboardService->deleteDashboard($uuid, $params['version']);
             return $this->getSuccessResponse();
-        } else {
-            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 

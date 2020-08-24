@@ -19,9 +19,14 @@ class DispatchExpiredNotification extends DispatchNotification {
     public function execute(array $data,Persistence $persistenceService)
     {
         $data['template'] = $this->template[$data['product']];
-        $data['subject'] = 'Policy Expired!';
+        if($data['product'] == 'Dive Store'){
+            $data['subject'] = 'PADI Endorsed Insurance Expired – '.$data['business_padi'];
+        }else{
+            $data['subject'] = 'PADI Endorsed Insurance Expired – '.$data['padi'];
+        }
         $response = $this->dispatch($data);
         return $response;
     }
 }
 ?>
+

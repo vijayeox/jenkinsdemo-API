@@ -1,47 +1,82 @@
 app:
-    -
-        name: ArrowHead
-        uuid: da8f0152-b8d3-43bf-8090-40103bb98d5e
-        description: 'App for Arrow Head'
-        category: EXAMPLE_CATEGORY
-        type: 2
-        autostart: true
+    name: ArrowHead
+    uuid: da8f0152-b8d3-43bf-8090-40103bb98d5e
+    description: 'App for Arrow Head'
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
+    version: 24
 org:
-    -
-        name: ArrowHead
-        uuid: 34bf01ab-79ca-42df-8284-965d8dbf290e
+    name: ArrowHead
+    uuid: 34bf01ab-79ca-42df-8284-965d8dbf290e
+    email: admin@arrowhead.com
+    address1: '6 bCenterpoint'
+    address2: Dr.
+    city: 'La Palma'
+    state: CA
+    zip: 90623
+    country: 'United States'
+    contact:
+        username: arrowheadAdmin
+        firstname: Admin
+        lastname: User
         email: admin@arrowhead.com
-        address1: '6 bCenterpoint'
-        address2: Dr.
-        city: 'La Palma'
-        state: CA
-        zip: 90623
-        country: 'United States'
-        contact:
-            username: arrowheadAdmin
-            firstname: Admin
-            lastname: User
-            email: admin@arrowhead.com
-        preferences: '{}'
+    preferences: '{}'
 privilege:
     -
-        name: MANAGE_POLICY_APPLICATION
-        permission: 3
+        name: MANAGE_MY_POLICY
+        permission: 7
     -
-        name: MANAGE_APPLICATION_EXPORT
-        permission: 3
+        name: MANAGE_POLICY_APPLICATION
+        permission: 7
 role:
     -
-        name: Agent
-        default: true
+        name: 'Account Executive'
+        privileges:
+            -
+                privilege_name: MANAGE_MY_POLICY
+                permission: 7
+        uuid: 85ccfbbd-f84c-4b75-8efe-80e4b02abb09
+    -
+        name: Marketing
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
                 permission: 3
+        uuid: f388d49a-48c1-4149-8029-88eb2d09b0cf
+    -
+        name: Management
+        privileges:
             -
-                privilege_name: MANAGE_APPLICATION_EXPORT
-                permission: 3
-        uuid: 76e6c9fe-3f22-4a57-808d-8dbd5dec6505
+                privilege_name: MANAGE_POLICY_APPLICATION
+                permission: 7
+        uuid: 2aaea64e-bd20-4441-8eef-4692be79b3b2
+    -
+        name: Underwriter
+        privileges:
+            -
+                privilege_name: MANAGE_POLICY_APPLICATION
+                permission: 1
+        uuid: 2dff7054-330c-4439-aade-39336a92b0a0
+menu:
+    -
+        name: Home
+        icon: 'fas fa-home'
+        page_uuid: dce7df02-7a3b-4468-bed8-edffd8216822
+        uuid: 2ba0936d-94d1-4b68-9da2-ccc60faaefe0
+        privilege: '{"eq" : "MANAGE_MY_POLICY_READ","neq" : "MANAGE_POLICY_APPLICATION_READ"}'
+    -
+        name: 'Manage Workbooks'
+        icon: 'fas fa-home'
+        page_uuid: 360088d2-372e-4bf7-bb7e-7df7440dbdff
+        uuid: 982e775c-ad80-43a9-b2ed-58037f5be281
+        privilege: MANAGE_POLICY_APPLICATION_WRITE
+    -
+        name: 'View Workbooks'
+        icon: 'fas fa-home'
+        page_uuid: 92d4de60-6fa5-4df8-a688-05490c6589f9
+        uuid: cacfbc42-3c6a-4ea4-a174-413e5de86c28
+        privilege: '{"eq" : "MANAGE_POLICY_APPLICATION_READ","neq" : "MANAGE_POLICY_APPLICATION_WRITE"}'
 entity:
     -
         name: 'Dealer Policy'
@@ -81,21 +116,11 @@ pages:
         page_name: AgentHomePage.yml
         uuid: dce7df02-7a3b-4468-bed8-edffd8216822
     -
-        page_name: ExportWorkbook.yml
-        uuid: 219b3a85-7901-4360-9a73-09ed6a659a1d
-menu:
+        page_name: ManagementPage.yml
+        uuid: 360088d2-372e-4bf7-bb7e-7df7440dbdff
     -
-        name: Home
-        icon: 'fas fa-home'
-        page_uuid: dce7df02-7a3b-4468-bed8-edffd8216822
-        uuid: 2ba0936d-94d1-4b68-9da2-ccc60faaefe0
-        privilege: MANAGE_POLICY_APPLICATION_READ
-    -
-        name: 'Export Workbooks'
-        icon: 'fad fa-book'
-        page_uuid: 219b3a85-7901-4360-9a73-09ed6a659a1d
-        uuid: 6d768db0-6e99-4480-819f-8f3522b99b5d
-        privilege: MANAGE_APPLICATION_EXPORT_READ
+        page_name: ViewWorkbooks.yml
+        uuid: 92d4de60-6fa5-4df8-a688-05490c6589f9
 form:
     -
         name: 'DealerWorkbook Form'

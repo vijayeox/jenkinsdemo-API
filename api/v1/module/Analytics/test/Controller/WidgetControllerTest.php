@@ -69,12 +69,12 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals(12, $this->getConnection()->getRowCount('ox_widget'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/widget', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('analytics_widget');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['queries'], 'required');
     }
 
@@ -104,8 +104,8 @@ class WidgetControllerTest extends ControllerTest
         $this->assertMatchedRouteName('copyWidget');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Exception occured');
-        $this->assertEquals($content['data']['message'], 'Given wiget id 51e881c3-040d-44d8-9295-f2c3130bafab either does not exist OR user has no permission to read the widget.');
+        $this->assertEquals($content['message'], 'Wiget id 51e881c3-040d-44d8-9295-f2c3130bafab either does not exist OR user has no read permission to the entity.');
+//$this->assertEquals($content['data']['message'], 'Given wiget id 51e881c3-040d-44d8-9295-f2c3130bafab either does not exist OR user has no permission to read the widget.');
     }
 
     //DO NOT ADD THIS AT IS NOT NEEDED. LEAVING THIS HERE IN CASE THE REQUIREMENT CHANGES
@@ -167,12 +167,12 @@ class WidgetControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?version=3', 'DELETE');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('analytics_widget');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Version changed');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
     }
 
     public function testDeleteNotFound()

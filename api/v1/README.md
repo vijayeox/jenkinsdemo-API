@@ -156,16 +156,43 @@ Restart the nginx, now you should be ready to go!
 
 ### MySQL Setup
 
-1) Change bind address in /etc/mysql/my.cnf
+1) We run Oxzion API development web server under docker and mysql daemon on the host running the docker within it. By default mysql daemon (mysqld / mysql server) listens only on local port (127.0.0.1 or localhost). Development web server running under docker cannot connect to mysqld on the host. Therefore we should modify mysqld configuration on the host to listen on all interfaces so that development web server running in docker can connect to mysqld on host. This is done by setting mysqld **bind-address** to **0.0.0.0**.
 
-Add the following lines:
+Different Linux distributions put *bind-address* configuration in different files. In some Linux variants it may be found under */etc/mysql/my.cnf*. In some other variants it may be in some other file under */etc/mysql*. For example in Linux Mint 19.1 (Tessa) bind-address is configured in */etc/mysql/mysql.conf.d/mysqld.cnf*. Therefore, do not blindly add *bind-address* configuration to some file like */etc/mysql/my.cnf*. grep for bind-address under */etc/mysql* and add/modify the entry in the file having the entry. If not found, grep for the configuration file containing [mysqld] section and add it under that. If existing *bind-address* entry is pointing to *127.0.0.1* or *localhost*, modify the entry to *0.0.0.0* as shown below.
+
+In file containing mysqld *bind-address* configuration:
 
 [mysqld]
+...
+...
 bind-address=0.0.0.0
+...
+...
 
-2) Grant priveleges through mysql command line
+2) Grant priveleges to mysql root user connecting from docker to host through mysql command line
 
 mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password';
 mysql> flush privileges;
 
-3) Restart mysql service
+3) Connecting as mysql root user create databases for Oxzion API and running Oxzion API tests in mysql running on the host. Create a database user for Oxzion and grant access.
+
+mysql> CREATE DATABASE oxzion_api;
+mysql> CREATE DATABASE oxzion_api_test;
+mysql> CREATE USER 'oxzion_user'@'%' IDENTIFIED BY 'oxzion_password';
+mysql> GRANT ALL PRIVILEGES ON oxzion_api.* TO 'oxzion_user'@'%';
+mysql> GRANT ALL PRIVILEGES ON oxzion_api_test.* TO 'oxzion_user'@'%';
+
+IMPORTANT: For appliction deployment *oxzion_user* should be able to create databases for applications. Therefore *oxzion_user* should be able to create databases. Grant all privileges to *oxzion_user* for that. Well, it is not a great situation to grant all privileges to *oxzion_user*, but there is no better strategy in mysql for now.
+
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'oxzion_user'@'%';
+mysql> FLUSH PRIVILEGES;
+
+4) Restart mysql service.
+
+5) Specify the database information in */api/v1/.env*
+
+DB_USERNAME=oxzion_user
+DB_PASSWORD=oxzion_password
+API_DB=oxzion_api
+TEST_API_DB=oxzion_api_test
+

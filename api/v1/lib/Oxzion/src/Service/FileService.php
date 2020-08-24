@@ -735,6 +735,9 @@ class FileService extends AbstractService
                 if($field['type']=='file'){
                     $attachmentsArray = is_string($fieldvalue) ? json_decode($fieldvalue,true) : $fieldvalue;
                     $finalAttached = array();
+                    if(!isset($attachmentsArray)){
+                        $attachmentsArray = array();
+                    }
                     if(is_array($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
                             $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
@@ -759,6 +762,9 @@ class FileService extends AbstractService
                         $attachmentsArray = json_decode($fieldvalue,true);
                     } else {
                         $attachmentsArray = $fieldvalue;
+                    }
+                    if(!isset($attachmentsArray)){
+                        $attachmentsArray = array();
                     }
                     if(is_array($attachmentsArray)){
                         $finalAttached = array();
@@ -1016,8 +1022,8 @@ class FileService extends AbstractService
                     $queryParams['identifier'] = $getIdentifier[0]['identifier'];
                     $whereQuery = " ofa.field_value_text = :identifier AND ";
                 }else{
-                    $this->logger->warn("User id mapping not found so returning no records");
-                    return array('data' => [], 'total' => 0);
+                    $whereQuery .= "`of`.created_by = :userId AND ";
+                    $queryParams['userId'] = $userId;
                 }
             } else {
                 $whereQuery = "";

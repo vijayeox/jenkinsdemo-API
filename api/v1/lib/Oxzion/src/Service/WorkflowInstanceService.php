@@ -623,7 +623,7 @@ class WorkflowInstanceService extends AbstractService
     }
 
     public function getWorkflowInstanceDataFromFileId($fileId){
-        $select = "SELECT start_data,completion_data,parent_workflow_instance_id from ox_workflow_instance oxwi inner join ox_file on ox_file.id = oxwi.file_id where ox_file.uuid=:fileId";
+        $select = "SELECT oxwi.start_data,oxwi.completion_data,oxwi.parent_workflow_instance_id from ox_workflow_instance as oxwi inner join ox_file on ox_file.id = oxwi.file_id where ox_file.uuid=:fileId ORDER BY oxwi.date_created";
         $params = array("fileId" => $fileId);
         $result = $this->executeQuerywithBindParameters($select,$params)->toArray();
         if (count($result) == 0) {

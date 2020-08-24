@@ -48,9 +48,30 @@ s.onload = function (e) {
           item.classList.remove("fa-times-circle-o");
         });
       }
+
+      if (
+        [...document.querySelectorAll('[ref="modalSave"]')].some(
+          (i) => i.innerText == "SAVE"
+        )
+      ) {
+        [...document.querySelectorAll('[ref="modalSave"]')].map(
+          (i) => i.innerText = "OK"
+        );
+      }
     } else {
       appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;
     }
   }, 1000);
 };
 document.head.appendChild(s);
+
+setTimeout(function () {
+  data.workbooksToBeGenerated = {
+    epli: false,
+    rpsCyber: false,
+    harco: false,
+    dealerGuard_ApplicationOpenLot: false,
+    victor_FranchisedAutoDealer: false,
+    victor_AutoPhysDamage: false
+  };
+}, 2000);

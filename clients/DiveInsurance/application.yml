@@ -1,28 +1,26 @@
 app:
-    -
-        name: DiveInsurance
-        uuid: d77ea120-b028-479b-8c6e-60476b6a4456
-        description: 'App for Dive Insurance'
-        category: EXAMPLE_CATEGORY
-        type: 2
-        autostart: true
+    name: DiveInsurance
+    uuid: d77ea120-b028-479b-8c6e-60476b6a4456
+    description: 'App for Dive Insurance'
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
 org:
-    -
-        name: 'Vincencia & Buckley'
-        uuid: f0033dc0-126b-40ba-89e0-d3061bdeda4c
+    name: 'Vincencia & Buckley'
+    uuid: f0033dc0-126b-40ba-89e0-d3061bdeda4c
+    email: testhub07@gmail.com
+    address1: '6 bCenterpoint'
+    address2: Dr.
+    city: 'La Palma'
+    state: CA
+    zip: 90623
+    country: 'United States'
+    contact:
+        username: testhub07.gmail.com
+        firstname: Admin
+        lastname: User
         email: testhub07@gmail.com
-        address1: '6 bCenterpoint'
-        address2: Dr.
-        city: 'La Palma'
-        state: CA
-        zip: 90623
-        country: 'United States'
-        contact:
-            username: testhub07.gmail.com
-            firstname: Admin
-            lastname: User
-            email: testhub07@gmail.com
-        preferences: '{}'
+    preferences: '{}'
 privilege:
     -
         name: MANAGE_POLICY_APPROVAL
@@ -584,6 +582,12 @@ form:
         description: 'Lets CSR regenerate the policy document'
         template_file: iplPolicyRegeneration.json
         entity: 'Individual Professional Liability'
+    -
+        name: 'Dive Store Policy Regeneration'
+        uuid: e139cef3-d1e4-4b6f-8f20-51dec19f694e
+        description: 'Lets CSR regenerate the policy document'
+        template_file: diveStoreRegeneration.json
+        entity: 'Dive Store'
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03

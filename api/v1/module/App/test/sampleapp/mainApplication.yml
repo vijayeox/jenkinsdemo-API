@@ -1,34 +1,105 @@
 app:
-    - { name: 'Dive Insurance', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
+  name: Dive Insurance
+  uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641
+  category: EXAMPLE_CATEGORY
 org:
-    - { name: 'Vincencia & Buckley',
-        uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe,
-        email: testhub07@gmail.com,
-        address1: '6 bCenterpoint',
-        address2: Dr.,
-        city: 'La Palma',
-        state: CA,
-        zip: 90623,
-        contact: { username: csradmin, firstname: CSR, lastname: admin, email: testhub07@gmail.com, phone: '' },
-        preferences: { currency: INR, timezone: Kolkata, dateformat: dd/mm/yy },
-        country: 'United States' }
+  name: Vincencia & Buckley
+  uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe
+  email: testhub07@gmail.com
+  address1: 6 bCenterpoint
+  address2: Dr.
+  city: La Palma
+  state: CA
+  zip: 90623
+  contact:
+    username: csradmin
+    firstname: CSR
+    lastname: admin
+    email: testhub07@gmail.com
+    phone: ''
+  preferences:
+    currency: INR
+    timezone: Kolkata
+    dateformat: dd/mm/yy
+  country: United States
 privilege:
-    - { name: 'MANAGE_POLICY_APPROVAL', permission: 15 }
-    - { name: 'MANAGE_MY_POLICY' }
+  - name: MANAGE_POLICY_APPROVAL
+    permission: 15
+  - name: MANAGE_MY_POLICY
 role:
-    - {name: 'Policy Holder', default: true, privileges: [name: 'MANAGE_MY_POLICY', permission: 1]}
+  - name: Policy Holder
+    default: true
+    privileges:
+      - name: MANAGE_MY_POLICY
+      - permission: 1
 dashboard:
-    - { name: Dashboard, content: content/Dashboard.txt }
+  - name: Dashboard
+    content: content/Dashboard.txt
 menu:
-    - { name: Home, group: 'Policy Holder', page: [{ name: 'My Policies', content: [{ type: LIST, content: [{ url: '', actions: [{ name: '', icon: '', page: '' }], columns: [{ field: '', title: '' }] }] }] }] }
-    - { name: 'My History', group: 'Policy Holder', page: [{ name: 'All Policies', content: [{ type: LIST, content: [{ url: '' }] }] }] }
-    - { name: Home, group: CSR, page: [{ name: Dashboard, content: [{ type: DASHBOARD, dashboard: Dashboard }] }] }
-    - { name: Requests, group: CSR, page: [{ name: Requests, content: [{ type: LIST, content: [{ url: '' }] }] }] }
-    - { name: 'Manage Policies', group: CSR, page: [{ name: 'Manage Policies', content: [{ type: List, content: [{ ur: '' }] }] }] }
+  - name: Home
+    group: Policy Holder
+    page:
+      - name: My Policies
+        content:
+          - type: LIST
+            content:
+              - url: ''
+                actions:
+                  - name: ''
+                    icon: ''
+                    page: ''
+                columns:
+                  - field: ''
+                    title: ''
+  - name: My History
+    group: Policy Holder
+    page:
+      - name: All Policies
+        content:
+          - type: LIST
+            content:
+              - url: ''
+  - name: Home
+    group: CSR
+    page:
+      - name: Dashboard
+        content:
+          - type: DASHBOARD
+            dashboard: Dashboard
+  - name: Requests
+    group: CSR
+    page:
+      - name: Requests
+        content:
+          - type: LIST
+            content:
+              - url: ''
+  - name: Manage Policies
+    group: CSR
+    page:
+      - name: Manage Policies
+        content:
+          - type: List
+            content:
+              - ur: ''
 workflow:
-    - { name: 'Individual Liability', id: f0efea9e-7863-4368-a9b2-baa1a1603067, bpmn_file: individual_liability.bpmn, entity:  }
-    - { name: 'Group Liability', id: 76dc0348-910c-4ae8-a05a-78ba47803208, bpmn_file: group_liability.bpmn }
-    - { name: 'Dive Store', id: cb99e634-de00-468d-9230-d6f77d241c5b, bpmn_file: dive_store.bpmn }
-    - { name: 'Dive Boat', id: bb15e393-11b9-48ea-bc5a-5b7616047cb1, bpmn_file: dive_boat.bpmn }
+  - name: Individual Liability
+    id: f0efea9e-7863-4368-a9b2-baa1a1603067
+    bpmn_file: individual_liability.bpmn
+    entity: null
+  - name: Group Liability
+    id: 76dc0348-910c-4ae8-a05a-78ba47803208
+    bpmn_file: group_liability.bpmn
+  - name: Dive Store
+    id: cb99e634-de00-468d-9230-d6f77d241c5b
+    bpmn_file: dive_store.bpmn
+  - name: Dive Boat
+    id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+    bpmn_file: dive_boat.bpmn
 job:
-    - { import_padi: [{ stored_procedure_name: ox_padi_verification, upload_host_name: 206.107.76.164, upload_host_user: vbinsurance, upload_user_password: '<<InsureName>>' }] }
+  - import_padi:
+      - stored_procedure_name: ox_padi_verification
+        upload_host_name: 206.107.76.164
+        upload_host_user: vbinsurance
+        upload_user_password: <<InsureName>>
+

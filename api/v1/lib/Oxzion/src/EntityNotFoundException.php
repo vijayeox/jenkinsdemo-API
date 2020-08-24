@@ -1,11 +1,21 @@
 <?php
+
 namespace Oxzion;
 
-class EntityNotFoundException extends \Exception
-{
-    
-    public function __construct(string $message,int $codeValue = 0){
-        parent::__construct($message,$codeValue);
-    }
+use Throwable;
+use Oxzion\OxServiceException;
 
+class EntityNotFoundException extends OxServiceException {
+    public function __construct(string $message, $contextData = NULL, 
+        int $errorCode = parent::ERR_CODE_NOT_FOUND, 
+        string $errorType = parent::ERR_TYPE_ERROR, 
+        Throwable $rootCause = NULL) {
+            parent::__construct($message, $contextData, 
+                empty($errorCode) ? parent::ERR_CODE_NOT_FOUND : $errorCode, 
+                empty($errorType) ? parent::ERR_TYPE_ERROR : $errorType,
+                $rootCause);
+    }
 }
+
+?>
+

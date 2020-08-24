@@ -1,28 +1,26 @@
 app:
-    -
-        name: Insurance
-        uuid: f726fded-0764-4f4e-945e-689586baf74b
-        description: 'Insurance OI Application'
-        category: Dashboards
-        type: 2
-        autostart: 'true'
+    name: Insurance
+    uuid: f726fded-0764-4f4e-945e-689586baf74b
+    description: 'Insurance OI Application'
+    category: Dashboards
+    type: 2
+    autostart: 'true'
 org:
-    -
-        name: 'EOX Vantage1'
-        uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
+    name: 'EOX Vantage1'
+    uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
+    email: helpdesk@vantageagora.com
+    address1: '23611 Chagrin Blvd, Ste 320'
+    address2: 'Beachwood, Ohio 44122'
+    city: Beachwood
+    state: OH
+    zip: 44122
+    contact:
+        username: supportadmin
+        firstname: Support
+        lastname: Admin
         email: helpdesk@vantageagora.com
-        address1: '23611 Chagrin Blvd, Ste 320'
-        address2: 'Beachwood, Ohio 44122'
-        city: Beachwood
-        state: OH
-        zip: 44122
-        contact:
-            username: supportadmin
-            firstname: Support
-            lastname: Admin
-            email: helpdesk@vantageagora.com
-        preferences: '{}'
-        country: 'United States'
+    preferences: '{}'
+    country: 'United States'
 privilege:
     -
         name: MANAGE_AGENTVIEW

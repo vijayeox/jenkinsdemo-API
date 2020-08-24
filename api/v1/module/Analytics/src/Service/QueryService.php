@@ -29,92 +29,67 @@ class QueryService extends AbstractService
 
     public function createQuery($data)
     {
-        $form = new Query();
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        if (isset($data['datasource_id'])) {
-            $data['datasource_id'] = $this->getIdFromUuid('ox_datasource', $data['datasource_id']);
-        }
+        $dataSourceUuid = $data['datasource_id'];
+        $dataSourceId = $this->getIdFromUuid('ox_datasource', $dataSourceUuid);
+        $data['datasource_id'] = $dataSourceId;
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $data['org_id'] = $orgId;
+        $orgUuid = $this->getUuidFromId('ox_datasource', $orgId);
 
-        $form->exchangeWithSpecificKey($data, 'value');
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
+        $query = new Query($this->table);
+        $query->assign($data);
+        $query->setForeignKey('org_id', $orgId); //org_id is defined as readonly in the model.
+        $query->setForeignKey('datasource_id', $dataSourceId); //datasource_id is defined as readonly in the model.
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $this->beginTransaction();
+            $query->save();
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        //$query->assignBack($data);
+        //$data['datasource_id'] = $dataSourceUuid;
+        //$data['org_id'] = $orgUuid;
+        return $query->getGenerated();
     }
 
     public function updateQuery($uuid, $data)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if (!isset($data['version'])) {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $form = new Query();
-        if (isset($data['datasource_id'])) {
-            $data['datasource_id'] = $this->getIdFromUuid('ox_datasource', $data['datasource_id']);
-        }
-
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate();
-        $count = 0;
+        unset($data['datasource_id']);
+        $query = new Query($this->table);
+        $query->loadByUuid($uuid);
+        $query->assign($data);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $query->save();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $query->getGenerated();
     }
 
     public function deleteQuery($uuid, $version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if (!isset($version)) {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $data = array('version' => $version, 'isdeleted' => 1);
-        $form = new Query();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate();
-        $count = 0;
+        $query = new Query($this->table);
+        $query->loadByUuid($uuid);
+        $query->assign([
+            'version' => $version,
+            'isdeleted' => 1
+        ]);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $query->save();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getQuery($uuid, $params)

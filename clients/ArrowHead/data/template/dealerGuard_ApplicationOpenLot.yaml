@@ -120,12 +120,6 @@
    key: employeedeductibleparticipation
    method: checkbox_X
    cell: B47
-# -
-#    Source Worksheet: accident Investigation
-#    pageName: APPLICATION
-#    key: accidentInvestigation
-#    method: checkbox_X
-#    cell: B44
 -
    Source Worksheet: Formal safety meetings
    pageName: APPLICATION

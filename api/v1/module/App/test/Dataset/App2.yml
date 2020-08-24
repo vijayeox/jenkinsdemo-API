@@ -5,6 +5,7 @@ ox_app:
     category: "EXAMPLE_CATEGORY"
     type: 2
     status: 1
+    isdefault: 0
 ox_privilege:
   - id: 300
     name: MANAGE_POLICY_APPROVAL

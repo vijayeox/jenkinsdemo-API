@@ -245,6 +245,7 @@ if(status == "onHold"){
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command": "file"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"ProcessEFRCancellation"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
