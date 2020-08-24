@@ -108,9 +108,6 @@ class RoleService extends AbstractService
                 $privileges = $data['privileges'];
                 $appId = isset($data['app_id']) ? $data['app_id'] : null;
                 $this->updateRolePrivileges($roleId, $data['privileges'], $orgId, $appId);
-                $query = "select * from ox_role_privilege where role_id = :roleid";
-                $params = array("roleid" => $roleId);
-                $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
             }
             $this->commit(); 
         } catch (Exception $e) {
