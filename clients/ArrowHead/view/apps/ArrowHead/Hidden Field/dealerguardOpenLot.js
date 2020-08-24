@@ -23,6 +23,7 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
   });
 
   value = {
+    ownershipDate: data.numYearsOfOwnership > 0 ? moment().subtract(data.numYearsOfOwnership,"years").format("MM-DD-YYYY") : moment().format("MM-DD-YYYY"),
     checkemployees: checkemployees,
     checknonemployees: checknonemployees,
     checkVehicleInventoryTaken:
@@ -186,6 +187,9 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
               individualResult.includes(buildingDetails.primaryOEM)
                 ? null
                 : individualResult.push(buildingDetails.primaryOEM);
+              buildingDetails.secondaryOEM.map(item => {
+                item.length > 0 ? individualResult.push(item) : null;
+              });
             }
           });
           var finalFranchiseItem = "";

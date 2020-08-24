@@ -20,29 +20,25 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   }
 
   value = {
+    checklistcompaniesrepresented: data.listcompaniesrepresented
+      ? data.listcompaniesrepresented.length > 0
+        ? data.listcompaniesrepresented + ""
+        : ""
+      : "",
     checkfalsePretenseLimit: falsePretenseLimit,
     locationBuildingIndex: data.genericData.locationScheduleGridData
       .map((i, index) => (index == 0 ? "invalid" : { result: i.locationNum }))
-      .filter((i) => i !== "invalid"),
+      .filter(i => i !== "invalid"),
     checkbuildingCoinsurance: data.genericData.locationScheduleGridData.map(
-      (item) => {
+      item => {
         return item.occupancyType == "vacantLand"
           ? { result: "" }
           : { result: data.buildingCoinsurance };
       }
     ),
-    checkbuildingValuation: data.genericData.locationScheduleGridData.map(
-      (i) => {
-        return { result: "Replacement Cost" };
-      }
-    ),
-    checklistcompaniesrepresented: data.listcompaniesrepresented
-      ? data.listcompaniesrepresented.length > 0
-        ? data.listcompaniesrepresented.map((i) => {
-            return { result: i };
-          })
-        : ""
-      : "",
+    checkbuildingValuation: data.genericData.locationScheduleGridData.map(i => {
+      return { result: "Replacement Cost" };
+    }),
     CityStateZip: data.city + "," + data.state.name + "," + data.zip,
     InsuranceContactNameandPhone: data.insurancecontactdataGrid
       ? data.insurancecontactdataGrid[0].genfirstname +
@@ -52,7 +48,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
         data.insurancecontactdataGrid[0].genphone
       : "",
     checkSecurityGuards: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsecguards == "yes") {
           return true;
         } else {
@@ -61,7 +57,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checkdolaftrhrslighting: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolaftrhrslighting == "yes") {
           return true;
         } else {
@@ -70,7 +66,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsurvcammoniintrunotifi == "yes") {
           return true;
         } else {
@@ -79,7 +75,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsurcamnotmoniotrd == "yes") {
           return true;
         } else {
@@ -88,7 +84,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checkdolpostnchain: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolEntranceQuestions.postChain == "yes") {
           return true;
         } else {
@@ -97,7 +93,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolEntranceQuestions.fullyFencedPremises == "yes") {
           return true;
         } else {
@@ -106,7 +102,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checknumberofservicebays: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.numberofservicebays == "yes") {
           return true;
         } else {
@@ -114,7 +110,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
         }
       }
     ),
-    garageLiabilityGrid: data.locationSchedule.map((locationItem) => {
+    garageLiabilityGrid: data.locationSchedule.map(locationItem => {
       var oneItem = 0;
       var twoItem = 0;
       var threeItem = 0;
@@ -124,7 +120,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       var sevenItem = 0;
       var eightItem = 0;
       var nineItem = 0;
-      locationItem.buildingDetails.map((item) => {
+      locationItem.buildingDetails.map(item => {
         oneItem +=
           item.fTEmployeesFurnishedAnAuto > 0
             ? item.fTEmployeesFurnishedAnAuto
@@ -167,7 +163,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       ];
     }),
     checkEmployeetoolsOnPremises: data.genericData.locationScheduleGridData.map(
-      (item) => {
+      item => {
         return {
           result:
             (item.businesselectronicequipment > 0
@@ -184,7 +180,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checkTotalbuildinglimit: data.genericData.locationScheduleGridData.map(
-      (item) => {
+      item => {
         return {
           result:
             (item.signsLessThan > 0 ? item.signsLessThan : 0) +
@@ -194,7 +190,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       }
     ),
     checkOrdinanceAndUtility: data.genericData.locationScheduleGridData.map(
-      (item) => {
+      item => {
         return {
           result:
             (item.utilityservices > 0
@@ -209,10 +205,6 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
         };
       }
     ),
-    formalsafetymeetingsNone:
-      data.formalsafetymeetings == "none" ? "No" : "Yes",
-    formalsafetymeetingsMonthly:
-      data.formalsafetymeetings == "monthly" ? "true" : "false",
     checkrepairpercentlabor:
       data.repairpercentlabor == 95 || data.repairpercentlabor == 85
         ? 90

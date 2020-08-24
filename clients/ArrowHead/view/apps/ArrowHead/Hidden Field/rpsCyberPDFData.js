@@ -4,7 +4,7 @@ if (data.workbooksToBeGenerated.rpsCyber == true) {
   if (data.locationSchedule) {
     if (data.locationSchedule.length > 0) {
       data.locationSchedule.map((locationItem, locationIndex) => {
-        locationItem.buildingDetails.map((buildingItem) => {
+        locationItem.buildingDetails.map(buildingItem => {
           tempAllEmployees +=
             (buildingItem.fTEmployeesFurnishedAnAuto
               ? buildingItem.fTEmployeesFurnishedAnAuto
@@ -66,9 +66,11 @@ if (data.workbooksToBeGenerated.rpsCyber == true) {
         ? "Yes"
         : "No",
     "Year Established":
-      moment().format("YYYY") - data.numYearsOfOwnership
-        ? data.numYearsOfOwnership
-        : 0
+      data.numYearsOfOwnership > 0
+        ? moment()
+            .subtract(data.numYearsOfOwnership, "years")
+            .format("YYYY")
+        : moment().format("YYYY")
   };
 
   console.log(value);
