@@ -6,6 +6,7 @@ content:
         content:
             route: 'file'
             filterable: true
+            autoRefresh: 10000
             defaultFilters: 
                 sort:
                     -
