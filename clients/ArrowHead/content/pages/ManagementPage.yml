@@ -42,8 +42,8 @@ content:
                         -
                             type: Update
                             params:
-                                url: 'delegate/RetryDocumentGeneration'
-                                successNotification: "Triggered Documents Regeneration"
+                                url: 'command/delegate/RetryDocumentGeneration'
+                                successNotification: "Regenerating Documents. This might take several minutes."
                 -
                     name: 'Export'
                     rule: '''{{status}}'' == ''Generated'''
