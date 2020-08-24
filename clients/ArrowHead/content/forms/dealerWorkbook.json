@@ -3132,7 +3132,6 @@
 															},
 															"selectThreshold": 0.3,
 															"validate": {
-																"required": true,
 																"multiple": true
 															},
 															"key": "utilityoptions",
@@ -3345,9 +3344,6 @@
 															"delimiter": true,
 															"requireDecimal": true,
 															"inputFormat": "plain",
-															"validate": {
-																"required": true
-															},
 															"key": "ytdtotalnetsales",
 															"type": "number",
 															"decimalLimit": 2,
@@ -3842,6 +3838,9 @@
 																"shortcut": ""
 															}],
 															"dataType": "auto",
+															"validate": {
+																"required": true
+															},
 															"key": "biwaitingperiod",
 															"type": "radio",
 															"input": true,
@@ -4670,7 +4669,6 @@
 												"requireDecimal": true,
 												"inputFormat": "plain",
 												"validate": {
-													"required": true,
 													"min": 0
 												},
 												"key": "garagekeepersperlocation",
@@ -4695,7 +4693,6 @@
 												"requireDecimal": true,
 												"inputFormat": "plain",
 												"validate": {
-													"required": true,
 													"customMessage": "Please enter Customer goods",
 													"min": 0
 												},
@@ -4728,7 +4725,6 @@
 												"requireDecimal": false,
 												"inputFormat": "plain",
 												"validate": {
-													"required": true,
 													"customMessage": "Please enter # of Dealer Plates",
 													"min": 0
 												},
@@ -4752,7 +4748,6 @@
 												"requireDecimal": false,
 												"inputFormat": "plain",
 												"validate": {
-													"required": true,
 													"customMessage": "Please enter # of Service Bays",
 													"min": 0
 												},
@@ -8700,6 +8695,9 @@
 							"label": "No",
 							"shortcut": ""
 						}],
+						"validate": {
+							"required": true
+						},
 						"key": "erisacoverage",
 						"conditional": {
 							"show": true,
@@ -12286,10 +12284,18 @@
 					"value": "personalAutoCoverage",
 					"shortcut": ""
 				}],
+				"validate": {
+					"required": true
+				},
 				"key": "doesTheInsuredSellAnyOfTheFollowingProducts",
 				"type": "selectboxes",
 				"input": true,
-				"inputType": "checkbox"
+				"inputType": "checkbox",
+				"defaultValue": {
+					"creditLifeOrAH": false,
+					"physicalDamageCoverage": false,
+					"personalAutoCoverage": false
+				}
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -12322,7 +12328,6 @@
 						"multiple": true,
 						"validateOn": "blur",
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter the list of companies represented",
 							"multiple": true
 						},
@@ -18183,7 +18188,7 @@
 					"value": "no"
 				}],
 				"redrawOn": "pleaseSelectForOther",
-				"calculateValue": "var defaultQuestions = [\n  {\n    label: \"New - Comp\",\n    value: \"newComp\"\n  },\n  {\n    label: \"New - Collision\",\n    value: \"newCollision\"\n  },\n  {\n    label: \"New - False Pretense\",\n    value: \"newFalsePretense\"\n  },\n  {\n    label: \"Used - Comp\",\n    value: \"usedComp\"\n  },\n  {\n    label: \"Used - Collision\",\n    value: \"usedCollision\"\n  },\n  {\n    label: \"Used - False Pretense\",\n    value: \"usedFalsePretense\"\n  },\n  {\n    label: \"Demo Furnished - Comp\",\n    value: \"demoFurnishedComp\"\n  },\n  {\n    label: \"Demo Furnished - Collision\",\n    value: \"demoFurnishedCollision\"\n  },\n  {\n    label: \"Demo Furnished - False Pretense\",\n    value: \"demoFurnishedFalsePretense\"\n  },\n  {\n    label: \"Service Loaners - Comp\",\n    value: \"serviceLoanersComp\"\n  },\n  {\n    label: \"Service Loaners - Collision\",\n    value: \"serviceLoanersCollision\"\n  },\n  {\n    label: \"Service Loaners - False Pretense\",\n    value: \"serviceLoanersFalsePretense\"\n  },\n  {\n    label: \"Other - Owned - Comp\",\n    value: \"otherOwnedComp\"\n  },\n  {\n    label: \"Other - Owned - Collision\",\n    value: \"otherOwnedCollision\"\n  },\n  {\n    label: \"Other - Owned - False Pretense\",\n    value: \"otherOwnedFalsePretense\"\n  },\n  {\n    label: \"Other - Non-Owned - Comp\",\n    value: \"otherNonOwnedComp\"\n  },\n  {\n    label: \"Other - Non-Owned - Collision\",\n    value: \"otherNonOwnedCollision\"\n  },\n  {\n    label: \"Other - Non-Owned - False Pretense\",\n    value: \"otherNonOwnedFalsePretense\"\n  }\n];\n\nvar finalQuestions = [];\n\nif (data.requestedCoverageQuestions) {\n  defaultQuestions.map((item) =>\n    data.requestedCoverageQuestions[item.value] == \"no\"\n      ? null\n      : finalQuestions.push(item)\n  );\n  component.questions = finalQuestions;\n}\n\nif(Array.isArray(value) && value.length == 0){\n  value = {};\n}",
+				"calculateValue": "var defaultQuestions = [\n  {\n    label: \"New - Comp\",\n    value: \"newComp\"\n  },\n  {\n    label: \"New - Collision\",\n    value: \"newCollision\"\n  },\n  {\n    label: \"New - False Pretense\",\n    value: \"newFalsePretense\"\n  },\n  {\n    label: \"Used - Comp\",\n    value: \"usedComp\"\n  },\n  {\n    label: \"Used - Collision\",\n    value: \"usedCollision\"\n  },\n  {\n    label: \"Used - False Pretense\",\n    value: \"usedFalsePretense\"\n  },\n  {\n    label: \"Demo Furnished - Comp\",\n    value: \"demoFurnishedComp\"\n  },\n  {\n    label: \"Demo Furnished - Collision\",\n    value: \"demoFurnishedCollision\"\n  },\n  {\n    label: \"Demo Furnished - False Pretense\",\n    value: \"demoFurnishedFalsePretense\"\n  },\n  {\n    label: \"Service Loaners - Comp\",\n    value: \"serviceLoanersComp\"\n  },\n  {\n    label: \"Service Loaners - Collision\",\n    value: \"serviceLoanersCollision\"\n  },\n  {\n    label: \"Service Loaners - False Pretense\",\n    value: \"serviceLoanersFalsePretense\"\n  },\n  {\n    label: \"Other - Owned - Comp\",\n    value: \"otherOwnedComp\"\n  },\n  {\n    label: \"Other - Owned - Collision\",\n    value: \"otherOwnedCollision\"\n  },\n  {\n    label: \"Other - Owned - False Pretense\",\n    value: \"otherOwnedFalsePretense\"\n  },\n  {\n    label: \"Other - Non-Owned - Comp\",\n    value: \"otherNonOwnedComp\"\n  },\n  {\n    label: \"Other - Non-Owned - Collision\",\n    value: \"otherNonOwnedCollision\"\n  },\n  {\n    label: \"Other - Non-Owned - False Pretense\",\n    value: \"otherNonOwnedFalsePretense\"\n  }\n];\n\nvar finalQuestions = [];\n\nif (data.requestedCoverageQuestions) {\n  defaultQuestions.map((item) =>\n    data.requestedCoverageQuestions[item.value] == \"no\"\n      ? null\n      : finalQuestions.push(item)\n  );\n  component.questions = finalQuestions;\n  component.hidden = finalQuestions.length == 0 ? true : false;\n}\n\nif(Array.isArray(value) && value.length == 0){\n  value = {};\n}",
 				"key": "pleaseSelectForOther",
 				"type": "survey",
 				"input": true,
@@ -18202,7 +18207,6 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"validate": {
-						"required": true,
 						"min": 0
 					},
 					"key": "doltotalnoofdemos",
@@ -18225,7 +18229,6 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"validate": {
-						"required": true,
 						"min": 0
 					},
 					"key": "vehiclesConstantlyRequiredtoInsure",
@@ -19689,7 +19692,7 @@
 	}, {
 		"title": "Generate Workbooks",
 		"theme": "primary",
-		"breadcrumbClickable": true,
+		"breadcrumb": "none",
 		"buttonSettings": {
 			"previous": true,
 			"cancel": true,
@@ -19763,7 +19766,7 @@
 		}, {
 			"label": "RPS Cyber PDF Data",
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "if (data.workbooksToBeGenerated.rpsCyber == true) {\n    var tempAllEmployees = 0;\n    var checkofRecordsContaining = \"\";\n    if (data.locationSchedule) {\n      if (data.locationSchedule.length > 0) {\n        data.locationSchedule.map((locationItem, locationIndex) => {\n          locationItem.buildingDetails.map((buildingItem) => {\n            tempAllEmployees +=\n              (buildingItem.fTEmployeesFurnishedAnAuto ? buildingItem.fTEmployeesFurnishedAnAuto : 0)  +\n              (buildingItem.fTEmployeesWhoAreNotFurnished ? buildingItem.fTEmployeesWhoAreNotFurnished : 0)  +\n              (buildingItem.fTAllOtherEmployees ? buildingItem.fTAllOtherEmployees : 0)  +\n              (buildingItem.pTEmployeesFurnishedAnAuto ? buildingItem.pTEmployeesFurnishedAnAuto : 0)  +\n              (buildingItem.pTEmployeesWhoAreNotFurnished ? buildingItem.pTEmployeesWhoAreNotFurnished : 0)  +\n              (buildingItem.pTAllOtherEmployees ? buildingItem.pTAllOtherEmployees : 0) ;\n          });\n        });\n      }\n    }\n  \n    if (data.ofRecordsContaining > 0) {\n      if (data.ofRecordsContaining < 100000) {\n        checkofRecordsContaining = \"1-100,000\";\n      } else if (\n        data.ofRecordsContaining > 100000 &&\n        data.ofRecordsContaining < 250000\n      ) {\n        checkofRecordsContaining = \"100,000-250,000\";\n      } else if (\n        data.ofRecordsContaining > 250000 &&\n        data.ofRecordsContaining < 500000\n      ) {\n        checkofRecordsContaining = \"250,000-500,000\";\n      } else if (\n        data.ofRecordsContaining > 500000 &&\n        data.ofRecordsContaining < 750000\n      ) {\n        checkofRecordsContaining = \"500,000-750,000\";\n      } else if (\n        data.ofRecordsContaining > 750000 &&\n        data.ofRecordsContaining < 1000000\n      ) {\n        checkofRecordsContaining = \"750,000-1,000,000\";\n      } else {\n        checkofRecordsContaining = \"1,000,000+\";\n      }\n    }\n  \n    value = {\n      \"# of Records\": checkofRecordsContaining,\n      State: data.state.abbreviation,\n      \" of Employees\": tempAllEmployees ? tempAllEmployees : 0,\n      \"Firewalls?\":\n        data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n          ? \"Yes\"\n          : \"No\",\n      \"Year Established\":\n        moment().format(\"YYYY\") - data.numYearsOfOwnership\n          ? data.numYearsOfOwnership\n          : 0\n    };\n  \n    console.log(value);\n  }",
+			"calculateValue": "if (data.workbooksToBeGenerated.rpsCyber == true) {\n  var tempAllEmployees = 0;\n  var checkofRecordsContaining = \"\";\n  if (data.locationSchedule) {\n    if (data.locationSchedule.length > 0) {\n      data.locationSchedule.map((locationItem, locationIndex) => {\n        locationItem.buildingDetails.map((buildingItem) => {\n          tempAllEmployees +=\n            (buildingItem.fTEmployeesFurnishedAnAuto\n              ? buildingItem.fTEmployeesFurnishedAnAuto\n              : 0) +\n            (buildingItem.fTEmployeesWhoAreNotFurnished\n              ? buildingItem.fTEmployeesWhoAreNotFurnished\n              : 0) +\n            (buildingItem.fTAllOtherEmployees\n              ? buildingItem.fTAllOtherEmployees\n              : 0) +\n            (buildingItem.pTEmployeesFurnishedAnAuto\n              ? buildingItem.pTEmployeesFurnishedAnAuto\n              : 0) +\n            (buildingItem.pTEmployeesWhoAreNotFurnished\n              ? buildingItem.pTEmployeesWhoAreNotFurnished\n              : 0) +\n            (buildingItem.pTAllOtherEmployees\n              ? buildingItem.pTAllOtherEmployees\n              : 0);\n        });\n      });\n    }\n  }\n\n  if (data.ofRecordsContaining > 0) {\n    if (data.ofRecordsContaining < 100000) {\n      checkofRecordsContaining = \"1-100,000\";\n    } else if (\n      data.ofRecordsContaining > 100000 &&\n      data.ofRecordsContaining < 250000\n    ) {\n      checkofRecordsContaining = \"100,000-250,000\";\n    } else if (\n      data.ofRecordsContaining > 250000 &&\n      data.ofRecordsContaining < 500000\n    ) {\n      checkofRecordsContaining = \"250,000-500,000\";\n    } else if (\n      data.ofRecordsContaining > 500000 &&\n      data.ofRecordsContaining < 750000\n    ) {\n      checkofRecordsContaining = \"500,000-750,000\";\n    } else if (\n      data.ofRecordsContaining > 750000 &&\n      data.ofRecordsContaining < 1000000\n    ) {\n      checkofRecordsContaining = \"750,000-1,000,000\";\n    } else {\n      checkofRecordsContaining = \"1,000,000+\";\n    }\n  }\n\n  value = {\n    \"# of Records\": checkofRecordsContaining,\n    State: data.state.abbreviation,\n    \" of Employees\": tempAllEmployees ? tempAllEmployees : 0,\n    \"Firewalls?\":\n      data.antivirussoftware == \"yes\" && data.protectedfirewalls == \"yes\"\n        ? \"Yes\"\n        : \"No\",\n    \"Year Established\":\n      moment().format(\"YYYY\") - data.numYearsOfOwnership\n        ? data.numYearsOfOwnership\n        : 0\n  };\n\n  console.log(value);\n}",
 			"key": "rpsCyberPDFData",
 			"properties": {
 				"data_type": "json"
@@ -19774,7 +19777,7 @@
 		}, {
 			"label": "GAIC Epli PDF Data",
 			"redrawOn": "workbooksToBeGenerated",
-			"calculateValue": "if (data.workbooksToBeGenerated.epli == true) {\n  var tempFullTimeEmployees = 0;\n  var tempPartTimeEmployees = 0;\n  var tempContractDrivers = 0;\n  var Phone = \"\";\n  var Email = \"\";\n  if (data.locationSchedule) {\n    if (data.locationSchedule.length > 0) {\n      data.locationSchedule.map((locationItem) => {\n        locationItem.buildingDetails.map((buildingItem) => {\n          tempFullTimeEmployees += buildingItem.fTEmployeesFurnishedAnAuto\n            ? buildingItem.fTEmployeesFurnishedAnAuto\n            : 0 + buildingItem.fTEmployeesWhoAreNotFurnished\n            ? buildingItem.fTEmployeesWhoAreNotFurnished\n            : 0 + buildingItem.fTAllOtherEmployees\n            ? buildingItem.fTAllOtherEmployees\n            : 0;\n          tempPartTimeEmployees += buildingItem.pTEmployeesFurnishedAnAuto\n            ? buildingItem.pTEmployeesFurnishedAnAuto\n            : 0 + buildingItem.pTEmployeesWhoAreNotFurnished\n            ? buildingItem.pTEmployeesWhoAreNotFurnished\n            : 0 + buildingItem.pTAllOtherEmployees\n            ? buildingItem.pTAllOtherEmployees\n            : 0;\n          tempContractDrivers += buildingItem.contractDriversNonEmployees\n            ? buildingItem.contractDriversNonEmployees\n            : 0;\n        });\n      });\n    }\n  }\n  data.insurancecontactdataGrid.some((item) => {\n    if (item.genfullName == data.hrRepresentative) {\n      Phone = item.genphone;\n      Email = item.genemail;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  value = {\n    \"City, State, Zip\": data.city + \",\" + data.state.abbreviation + \",\" + data.zip,\n    \"a  full time employees\": tempFullTimeEmployees,\n    \"b  part time employees\": tempPartTimeEmployees,\n    \"Employees  Within the US\": tempFullTimeEmployees + tempPartTimeEmployees,\n    Name: data.hrRepresentative,\n    Phone: Phone,\n    Email: Email,\n    \"Within the US\": data.locationSchedule.length,\n    \"c leasedcontract employees\": tempContractDrivers,\n    Date: moment().format(\"YYYY-MM-DD\"),\n    Group25:\n      data.noticetoinsurer == \"notApplicable\"\n        ? \"Choice1\"\n        : data.noticetoinsurer == \"yes\"\n        ? \"2\"\n        : \"3\",\n    Group26:\n      data.nonrenewedcoverage == \"notApplicable\"\n        ? \"Choice1\"\n        : data.nonrenewedcoverage == \"yes\"\n        ? \"2\"\n        : \"Choice3\"\n  };\n  console.log(value);\n}",
+			"calculateValue": "if (data.workbooksToBeGenerated.epli == true) {\n  var tempFullTimeEmployees = 0;\n  var tempPartTimeEmployees = 0;\n  var tempContractDrivers = 0;\n  var Phone = \"\";\n  var Email = \"\";\n  if (data.locationSchedule) {\n    if (data.locationSchedule.length > 0) {\n      data.locationSchedule.map((locationItem) => {\n        locationItem.buildingDetails.map((buildingItem) => {\n          tempFullTimeEmployees +=\n            (buildingItem.fTEmployeesFurnishedAnAuto\n              ? buildingItem.fTEmployeesFurnishedAnAuto\n              : 0) +\n            (buildingItem.fTEmployeesWhoAreNotFurnished\n              ? buildingItem.fTEmployeesWhoAreNotFurnished\n              : 0) +\n            (buildingItem.fTAllOtherEmployees\n              ? buildingItem.fTAllOtherEmployees\n              : 0);\n          tempPartTimeEmployees +=\n            (buildingItem.pTEmployeesFurnishedAnAuto\n              ? buildingItem.pTEmployeesFurnishedAnAuto\n              : 0) +\n            (buildingItem.pTEmployeesWhoAreNotFurnished\n              ? buildingItem.pTEmployeesWhoAreNotFurnished\n              : 0) +\n            (buildingItem.pTAllOtherEmployees\n              ? buildingItem.pTAllOtherEmployees\n              : 0);\n          tempContractDrivers += buildingItem.contractDriversNonEmployees\n            ? buildingItem.contractDriversNonEmployees\n            : 0;\n        });\n      });\n    }\n  }\n  data.insurancecontactdataGrid.some((item) => {\n    if (item.genfullName == data.hrRepresentative) {\n      Phone = item.genphone;\n      Email = item.genemail;\n      return true;\n    } else {\n      return false;\n    }\n  });\n\n  value = {\n    \"City, State, Zip\":\n      data.city + \",\" + data.state.abbreviation + \",\" + data.zip,\n    \"a  full time employees\": tempFullTimeEmployees,\n    \"b  part time employees\": tempPartTimeEmployees,\n    \"Employees  Within the US\": tempFullTimeEmployees + tempPartTimeEmployees,\n    Name: data.hrRepresentative,\n    Phone: Phone,\n    Email: Email,\n    \"Within the US\": data.locationSchedule.length,\n    \"c leasedcontract employees\": tempContractDrivers,\n    Date: moment().format(\"YYYY-MM-DD\"),\n    Group25:\n      data.noticetoinsurer == \"notApplicable\"\n        ? \"Choice1\"\n        : data.noticetoinsurer == \"yes\"\n        ? \"2\"\n        : \"3\",\n    Group26:\n      data.nonrenewedcoverage == \"notApplicable\"\n        ? \"Choice1\"\n        : data.nonrenewedcoverage == \"yes\"\n        ? \"2\"\n        : \"Choice3\"\n  };\n  console.log(value);\n}",
 			"key": "gaicEpliPdfData",
 			"properties": {
 				"data_type": "json"
@@ -19827,9 +19830,9 @@
 		}],
 		"input": false
 	}],
-	"controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          var closeForm = confirm(\n            \"Do you want to close the form after saving the data?\"\n          );\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: closeForm,\n              notification: \"Form saved successfully\"\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n\nsetTimeout(function(){\ndata.workbooksToBeGenerated = {\n  epli: false,\n  rpsCyber: false,\n  harco: false,\n  dealerGuard_ApplicationOpenLot: false,\n  victor_FranchisedAutoDealer: false,\n  victor_AutoPhysDamage: false\n};\n}, 2000);",
+	"controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          var closeForm = confirm(\n            \"Do you want to close the form after saving the data?\"\n          );\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: closeForm,\n              notification: \"Form saved successfully\"\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n\n      if (\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].some(\n          (i) => i.innerText == \"SAVE\"\n        )\n      ) {\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].map(\n          (i) => i.innerText = \"OK\"\n        );\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n\nsetTimeout(function () {\n  data.workbooksToBeGenerated = {\n    epli: false,\n    rpsCyber: false,\n    harco: false,\n    dealerGuard_ApplicationOpenLot: false,\n    victor_FranchisedAutoDealer: false,\n    victor_AutoPhysDamage: false\n  };\n}, 2000);",
 	"revisions": "original",
-	"_vid": 948,
+	"_vid": 957,
 	"title": "Dealer Workbook",
 	"display": "wizard",
 	"access": [{
@@ -19910,6 +19913,6 @@
 	"path": "dealerworkbook",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-06-25T07:04:35.147Z",
-	"modified": "2020-08-21T22:47:46.613Z",
+	"modified": "2020-08-24T01:33:19.605Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
