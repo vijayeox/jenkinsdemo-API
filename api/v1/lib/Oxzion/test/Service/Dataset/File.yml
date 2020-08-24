@@ -22,6 +22,10 @@ ox_business_role:
     uuid: "77b30b2d-d1da-427a-8e40-bc954b2b0f77"
     name: "Policy Holder"
     app_id: 99
+  - id: 101
+    uuid: "78b30b2d-d1da-427a-8e40-bc954b2b0f88"
+    name: "Agency"
+    app_id: 99
 ox_app_entity:
   - id: 1
     name: "entity1"
@@ -102,7 +106,7 @@ ox_field:
   - id: 5
     name: "policy_document"
     app_id: 99
-    data_type: "document"
+    data_type: "list"
     type: "document"
     template: '{"persistent" : "true"}'
     required: 1
@@ -112,15 +116,15 @@ ox_field:
   - id: 6
     name: "coi_attachment"
     app_id: 99
-    data_type: "file"
-    type: "document"
+    data_type: "list"
+    type: "file"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 6
     entity_id: 1
     index: 0
   - id: 7
-    name: "field1"
+    name: "field11"
     app_id: 99
     data_type: "numeric"
     template: '{"persistent" : "true"}'
@@ -882,4 +886,41 @@ ox_indexed_file_attribute:
 ox_entity_identifier:
   - entity_id: 1
     identifier: "field1"
+ox_entity_participant_role:
+  - entity_id: 1
+    business_role_id: 100
+ox_org_business_role:
+  - id: 1
+    org_id: 1
+    business_role_id: 101
+ox_org_offering:
+  - entity_id: 1
+    org_business_role_id: 1  
 
+ox_organization:
+  - id: 100
+    name: Test
+    status: Active
+    type: 'INDIVIDUAL'
+    uuid: 'fa371de7-0387-48ea-8f29-5d3704d96ac5'
+ox_user_profile:
+  - id: 100
+    uuid: a9fe8447-3b29-410d-8b22-95d337d3fbc2
+    org_id: 100
+    firstname: Test
+    lastname: Admin
+    email: 'admintest@eoxvantage.in'
+    date_of_birth: '1991-02-28'
+    phone: '1212121212'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'
+ox_user:
+  - id: 100
+    uuid: 754bc48a-3c69-4f7a-af8b-019fc984ee76
+    username: testadmin
+    name: 'Test Admin'
+    orgid: 100
+    user_profile_id: 100
+    status: 'Active'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'

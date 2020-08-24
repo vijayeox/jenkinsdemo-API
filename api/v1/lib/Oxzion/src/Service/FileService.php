@@ -11,6 +11,7 @@ use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Service\FieldService;
+use Oxzion\Service\EntityService;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ArrayUtils;
 use Oxzion\Model\FileAttachment;
@@ -21,10 +22,11 @@ class FileService extends AbstractService
 {
     protected $fieldService;
     protected $fieldDetails;
+    protected $entityService;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService,FileAttachmentTable $attachmentTable)
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService, EntityService $entityService, FileAttachmentTable $attachmentTable)
     {
         parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
@@ -34,6 +36,7 @@ class FileService extends AbstractService
         $this->fieldService = $fieldService;
         $this->fieldDetails=[];
         $this->attachmentTable = $attachmentTable;
+        $this->entityService = $entityService;
         // $emailService = new EmailService($config, $dbAdapter, Oxzion\Model\Email);
     }
 
@@ -89,10 +92,8 @@ class FileService extends AbstractService
         $data['uuid'] = $uuid;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
-        $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
         $data['data'] = $jsonData;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
@@ -105,13 +106,12 @@ class FileService extends AbstractService
         if(isset($data['id'])){
             unset($data['id']);
         }
-        $file->assign($data);
         //$this->logger->info("Data From Fileservice - " . print_r($data, true));
         $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
-        $file->validate();
         $count = 0;
         try {
             $this->beginTransaction();
+            $file->assign($data);
             $file->save();
             $result = $file->getGenerated(true);
             $data['version'] = $result['version'];
@@ -124,6 +124,7 @@ class FileService extends AbstractService
             $count++;
             $this->logger->info("FILE ID DATA" . $id);
             $validFields = $this->checkFields($data['entity_id'], $fields, $id, false);
+            $this->updateFileData($id, $fields);
             $this->logger->debug("Check Fields Data ----- " . print_r($validFields,true));
             $this->logger->info("Checking Index Fields ---- " . print_r($validFields['indexedFields'],true));
             if(count($validFields['indexedFields']) > 0 ){
@@ -134,10 +135,11 @@ class FileService extends AbstractService
                 $this->multiInsertOrUpdate('ox_file_document', $validFields['documentFields']);
             }
             $this->logger->info("Created successfully  - file record");
+            $this->setupFileParticipants($result['id'], $data);
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
-            if (isset($data['id'])) {
-                $this->messageProducer->sendQueue(json_encode(array('id' => $data['id'])), 'FILE_ADDED');
+            if (isset($result['id'])) {
+                $this->messageProducer->sendQueue(json_encode(array('id' => $result['id'])), 'FILE_ADDED');
             }
         } catch (Exception $e) {
             $this->rollback();
@@ -145,6 +147,41 @@ class FileService extends AbstractService
             throw $e;
         }
         return $count;
+    }
+
+    private function setupFileParticipants($fileId, $file){
+        $entityId = $file['entity_id'];
+        $fileData = json_decode($file['data'], true);
+        $query = "INSERT INTO ox_file_participant (file_id, org_id, business_role_id) 
+                  (SELECT $fileId, ob.org_id, ob.business_role_id
+                  from ox_org_business_role ob inner join ox_org_offering oo on ob.id = oo.org_business_role_id
+                  WHERE oo.entity_id = :entityId)";
+        $queryParams = ['entityId' => $entityId];
+        $this->executeUpdateWithBindParameters($query, $queryParams);
+        $query = "select identifier from ox_entity_identifier where entity_id = :entityId";
+        $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        $identifier = null;
+        $identifierField = null;
+        foreach ($result as $value) {
+            $identifierField = $value['identifier'];
+            if(isset($fileData[$identifierField])){
+                $identifier = $fileData[$identifierField];
+                break;
+            }
+        }
+
+        if($identifier){
+            $query = "INSERT INTO ox_file_participant (file_id, org_id, business_role_id)
+                       (SELECT $fileId, ui.org_id, ep.business_role_id
+                        FROM ox_wf_user_identifier ui inner join ox_entity_identifier ei on ei.identifier = ui.identifier_name
+                        inner join ox_entity_participant_role ep on ep.entity_id = ei.entity_id
+                        inner join ox_app_entity ae on ae.id = ep.entity_id and ui.app_id = ae.app_id
+                        where ep.entity_id = :entityId and ui.identifier_name = :identifierField 
+                        and ui.identifier = :identifier)";
+            $queryParams['identifierField'] = $identifierField;
+            $queryParams['identifier'] = $identifier;
+            $this->executeUpdateWithBindParameters($query, $queryParams);
+        }
     }
 
     private function updateFileData($id, $data)
@@ -227,6 +264,7 @@ class FileService extends AbstractService
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
+            $this->updateFileData($fileId, $fields);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -321,7 +359,6 @@ class FileService extends AbstractService
             $this->beginTransaction();
         	$this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
             $file->assign($fileObject);
-            $file->validate();
             $file->save();
             $result = $file->getGenerated();
             $data['version'] = $result['version'];
@@ -578,6 +615,7 @@ class FileService extends AbstractService
                     if($field['type'] == 'document' || $field['type'] == 'file' || $field['index'] == 1){
                         $fileFields[] = $indexedField;
                     }                    
+                    $fieldData[$field['name']] = $fieldvalue;
                     unset($indexedField);
                 }
                 if($allFields){
@@ -807,12 +845,19 @@ class FileService extends AbstractService
             break;
         }
         $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
-        if(isset($field['child_fields'])){
+        if(isset($field['child_fields']) && !empty($field['child_fields'])){
             if(is_string($fieldvalue)){
                 $fieldvalue = json_decode($fieldvalue,true);
             }
-            $fieldData['childFields'] = $this->getChildFieldsData($field,$fieldvalue,$field['child_fields'],$entityId,$fileId,$rowNumber, $allFields);
-            $fieldData['data'] = $fieldvalue;
+            $fldValue = $fieldvalue;
+            $fieldData['childFields'] = $this->getChildFieldsData($field,$fldValue,$field['child_fields'],$entityId,$fileId,$rowNumber, $allFields);
+            foreach ($fldValue as $i => $value) {
+                foreach ($value as $key => $fVal) {
+                    $temp = json_decode($fVal);
+                    $fieldvalue[$i][$key] = $temp ? $temp : $fVal;
+                }
+            }
+            
             if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
                 foreach ($fieldData['childFields']['childFields'] as $childfield) {
                     array_push($fieldData['childFields'],$childfield);
@@ -868,7 +913,7 @@ class FileService extends AbstractService
                         }
                         $childFieldValues[$field['name']] = isset($value[$field['name']]) ? $value[$field['name']] : null;
                         if($field['type'] == 'file'){
-                            $childFieldValues[$field['name']] = isset($childFieldsArray[$i][$field['name']]) ? $childFieldsArray[$i][$field['name']] : array();
+                            $childFieldValues[$field['name']] = is_array($val) ? json_encode($val) : $val;
                         }
                         unset($childFieldsArray[$i][$field['name']]);
                         $i++;
@@ -1547,7 +1592,7 @@ class FileService extends AbstractService
                 // FileUtils::deleteFile($fileAttachment['originalName'],dirname($fileLocation)."/");
                 $fileAttachment['file'] = $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
                 $fileAttachment['url'] = $this->config['baseUrl']."/". $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
-                $fileAttachment['path'] = FileUtils::truepath($targetLocation."/". $orgId . '/' . $fileUuid . '/'.$fileAttachment['name']);
+                $fileAttachment['path'] = FileUtils::truepath($targetLocation.$fileAttachment['name']);
                 $this->logger->info("File Moved- " . json_encode($fileAttachment));
                 // $count = $this->attachmentTable->delete($fileAttachment['id'], []);
             }

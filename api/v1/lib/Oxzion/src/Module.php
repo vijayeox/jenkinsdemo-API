@@ -85,7 +85,14 @@ class Module
                 },
                 \Oxzion\Service\FileService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class), $container->get(Messaging\MessageProducer::class),$container->get(\Oxzion\Service\FieldService::class),$container->get(\Oxzion\Model\FileAttachmentTable::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), 
+                                                            $dbAdapter, 
+                                                            $container->get(\Oxzion\Model\FileTable::class), 
+                                                            $container->get(\Oxzion\Service\FormService::class), 
+                                                            $container->get(Messaging\MessageProducer::class),
+                                                            $container->get(\Oxzion\Service\FieldService::class),
+                                                            $container->get(\Oxzion\Service\EntityService::class),
+                                                            $container->get(\Oxzion\Model\FileAttachmentTable::class));
                 },
                 Service\RoleService::class => function ($container) {
                     return new Service\RoleService(
