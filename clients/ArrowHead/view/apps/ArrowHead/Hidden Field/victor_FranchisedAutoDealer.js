@@ -163,9 +163,52 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
         sixItem,
         sevenItem,
         eightItem,
-        nineItem,
+        nineItem
       ];
     }),
+    checkEmployeetoolsOnPremises: data.genericData.locationScheduleGridData.map(
+      (item) => {
+        return {
+          result:
+            (item.businesselectronicequipment > 0
+              ? item.businesselectronicequipment
+              : 0) +
+            (item.employeetools > 0 ? item.employeetools : 0) +
+            (item.lightpoles > 0 ? item.lightpoles : 0) +
+            (item.signsLessThan > 0 ? item.signsLessThan : 0) +
+            (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +
+            (item.valulablePapers > 0 ? item.valulablePapers : 0) +
+            (item.accountsreceivable > 0 ? item.accountsreceivable : 0) +
+            (item.awaningsscanopies > 0 ? item.awaningsscanopies : 0)
+        };
+      }
+    ),
+    checkTotalbuildinglimit: data.genericData.locationScheduleGridData.map(
+      (item) => {
+        return {
+          result:
+            (item.signsLessThan > 0 ? item.signsLessThan : 0) +
+            (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +
+            (item.buildingLimit > 0 ? item.buildingLimit : 0)
+        };
+      }
+    ),
+    checkOrdinanceAndUtility: data.genericData.locationScheduleGridData.map(
+      (item) => {
+        return {
+          result:
+            (item.utilityservices > 0
+              ? "Utility Services Time Element: " + item.utilityservices
+              : 0) +
+            (item.utilityservices > 0 && item.ordinancelawcoverage > 0
+              ? ", "
+              : "") +
+            (item.ordinancelawcoverage > 0
+              ? "Ordinance Law: " + item.ordinancelawcoverage
+              : 0)
+        };
+      }
+    ),
     formalsafetymeetingsNone:
       data.formalsafetymeetings == "none" ? "No" : "Yes",
     formalsafetymeetingsMonthly:
@@ -189,7 +232,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
     checkwhodeliversvehiclesonemployee:
       data.whodeliversvehicleson == "employee" ? "true" : "false",
     checkwhodeliversvehiclesonindependentContractor:
-      data.whodeliversvehicleson == "independentContractor" ? "true" : "false",
+      data.whodeliversvehicleson == "independentContractor" ? "true" : "false"
   };
   console.log(value);
 }
