@@ -111,17 +111,11 @@ if (data.workbooksToBeGenerated.harco == true) {
         locationItem.utilityservices,
         "",
         "",
-        locationItem.utilityoptions.includes("waterSupply") ? "Yes" : "No",
-        locationItem.utilityoptions.includes("communicationSupply")
-          ? "Yes"
-          : "No",
-        locationItem.utilityoptions.includes("communicationLines")
-          ? "Yes"
-          : "No",
-        locationItem.utilityoptions.includes("powerSupply") ? "Yes" : "No",
-        locationItem.utilityoptions.includes("overheadPowerLines")
-          ? "Yes"
-          : "No"
+        locationItem.waterSupply == "yes" ? "Yes" : "No",
+        locationItem.communicationSupply == "yes" ? "Yes" : "No",
+        locationItem.communicationLines == "yes" ? "Yes" : "No",
+        locationItem.powerSupply == "yes" ? "Yes" : "No",
+        locationItem.overheadPowerLines == "yes" ? "Yes" : "No"
       ]);
     }
   });
