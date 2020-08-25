@@ -203,7 +203,7 @@ abstract class Entity implements Countable
                 return ((0 == strlen($value)) || (0 == strlen(trim($value, " \t\n\r\0\x0B")))) ? true : false;
             break;
             case 'boolean':
-                return $value;
+                return false;
             break;
             default:
                 $strVal = print_r($value, true);
