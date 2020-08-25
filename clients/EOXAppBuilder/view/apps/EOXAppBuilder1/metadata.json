@@ -6,6 +6,7 @@
 	"autostart":true,
 	"defaultAppforOrgs":false,
 	"server":"server.js",
+	"formio_endpoint":"https://onboarding-qeimxlbzmdfpljg.form.io",
 	"title":{"en_EN":"EOXAppBuilder1"},
 	"description":{"en_EN":"App for EOX AppBuilder"},
 	"files":["main.js","main.css"]
