@@ -94,7 +94,7 @@
 -
    Source Worksheet: 'Number of years in business under current ownership:'
    pageName: APPLICATION
-   key: ownershipDate
+   key: dealerguardOpenLot*ownershipDate
    cell: 'J4'
 -
    Source Worksheet: Any policy or coverage declined, cancelled or non-renewed during the prior

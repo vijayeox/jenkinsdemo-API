@@ -254,6 +254,11 @@
    cell: D72
    returnBoolean: "Yes|No"
 -
+   key: victorAutoPhysicalDamage*checkaretheyinsuredelsewhere
+   Source Worksheet: If they are insured elsewhere?
+   pageName: Underwriting Survey
+   cell: D73
+-
    key: numberofvehiclesindailyrentalfleet
    Source Worksheet: Number of vehicles in daily rental fleet
    pageName: Underwriting Survey
@@ -860,3 +865,51 @@
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: garagekeeperUnderwritingLotProtection_none
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 214
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: garagekeeperUnderwritingLotProtection_fenced
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 219
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: garagekeeperUnderwritingLotProtection_postChains
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 220
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: garagekeeperUnderwritingLotProtection_securityLighting
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 221
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: garagekeeperUnderwritingLotProtection_videoSurveillance
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 222
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: garagekeeperUnderwritingLotProtection_nightWatchman
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 223
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: garageKeepersCoverage
+   cell: D55
+   returnBoolean: 'Yes|No'
