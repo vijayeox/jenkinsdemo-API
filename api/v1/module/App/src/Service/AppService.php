@@ -412,7 +412,7 @@ class AppService extends AbstractService
                 $page['page_id'] = $pageData['uuid'];
                 $pageId = $page['page_id'];
                 $this->logger->info('the page data is: '.print_r($page, true));
-                $routedata = array("appId" => $appUuid, "orgId" => $yamlData['org']['uuid']);
+                $routedata = array("appId" => $appUuid);
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
             }
         }
@@ -832,8 +832,8 @@ class AppService extends AbstractService
                 $sort = $filterArray[0]['sort'];
                 $sort = FilterUtils::sortArray($sort);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 10;
+            $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
         $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
         $sort = " ORDER BY " . $sort;
@@ -841,7 +841,7 @@ class AppService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
         $count = $resultSet->toArray()[0]['count(id)'];
         if (0 == $count) {
-            throw new EntityNotFoundException('Apps not found for given filter parameters.', NULL);
+            return;
         }
         $query = "SELECT * FROM `ox_app` " . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query);
