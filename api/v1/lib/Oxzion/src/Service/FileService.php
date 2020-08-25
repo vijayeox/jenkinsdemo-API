@@ -1541,7 +1541,7 @@ class FileService extends AbstractService
         return $fileAttachment;
     }
 
-    private function buildSortQuery($sortOptions, &$field)
+    public function buildSortQuery($sortOptions, &$field)
     {
         $sortCount = 0;
         $sortTable = "tblf" . $sortCount;
