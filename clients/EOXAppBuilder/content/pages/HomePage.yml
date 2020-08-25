@@ -42,7 +42,7 @@ content:
                     details:
                         -
                             type: Form
-                            form_id: 2f6afb40-d0a4-11ea-87d0-0242ac130003
+                            form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                             appId: '{{appId}}'
                     icon: 'far fa-file-download'
                 -
@@ -51,7 +51,7 @@ content:
                     details:
                         -
                             type: Form
-                            form_id: 2f6afb40-d0a4-11ea-87d0-0242ac130003
+                            form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                             appUuid: '{{uuid}}'
                     icon: 'far fa-file-download'
                 -
@@ -60,7 +60,7 @@ content:
                     details:
                         -
                             type: Form
-                            form_id: 2f6afb40-d0a4-11ea-87d0-0242ac130003
+                            form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                             appId: '{{appId}}'
                     icon: 'fa fa-ban' 
                 -
