@@ -1,5 +1,6 @@
 <?php
 namespace Oxzion\Utils;
+use Oxzion\Utils\StringUtils;
 
 class FileUtils
 {
@@ -13,7 +14,7 @@ class FileUtils
         // create the directory.
         if (!is_dir($directory)) {
             if (!mkdir($directory, 0777, true)) {
-                throw new \Exception("Could not create directory $directory: " . error_get_last());
+                throw new \Exception("Could not create directory $directory: " . print_r(error_get_last(),true));
             }
         }
     }
@@ -85,10 +86,12 @@ class FileUtils
         if (!file_exists($dest)) self::createDirectory($dest);
         foreach (scandir($src) as $file) {
             if ($file == '.' || $file == '..') continue;
-            if (is_dir($src.'/'.$file))
-                self::copyDir($src.'/'.$file, $dest.'/'.$file);
-            elseif (!file_exists($dest.'/'.$file))
-                copy($src.'/'.$file, $dest.'/'.$file);
+            $srcCheck = self::joinPath($src);
+            $destCheck = self::joinPath($dest);
+            if (is_dir($srcCheck.$file))
+                self::copyDir($srcCheck.$file, $destCheck.$file);
+            elseif (!file_exists($destCheck.$file))
+                copy($srcCheck.$file, $destCheck.$file);
         }
     }
 
@@ -198,9 +201,7 @@ class FileUtils
     }
 
     public static function getUniqueFile($baseLocation,$file){
-        if(!endsWith($baseLocation,'/')){
-            $baseLocation .= "/";
-        }
+        $baseLocation = self::joinPath($baseLocation);
         $counter = 0;
         while(true){
             $file = ($counter == 0) ? $file : $file.$counter;
@@ -209,5 +210,12 @@ class FileUtils
             }
             $counter++;
         }
+    }
+
+    public static function joinPath($baseLocation){        
+        if(!(StringUtils::endsWith($baseLocation,'/'))){
+            $baseLocation .= "/";
+        }
+        return $baseLocation;
     }
 }
