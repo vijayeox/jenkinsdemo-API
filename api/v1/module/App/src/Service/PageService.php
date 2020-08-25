@@ -27,10 +27,7 @@ class PageService extends AbstractService
         $count = 0;
         $orgId = isset($routeData['orgId'])? $this->getIdFromUuid('ox_organization', $routeData['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
         $data['app_id'] = $this->getIdFromUuid('ox_app', $routeData['appId']);
-        $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
-        $selectQuery = array("orgId" => $orgId,"appId" => $data['app_id']);           
-        $result = $this->executeQuerywithBindParameters($select,$selectQuery)->toArray();
-        if(count($result) > 0){
+        if(isset($data['app_id'])){
             $page = null;
             $content = isset($data['content'])?$data['content']:false;
             $this->beginTransaction();
@@ -80,7 +77,7 @@ class PageService extends AbstractService
                 throw $e;
             }
         }else{
-            throw new ServiceException("App Does not belong to the org","app.fororgnot.found");
+            throw new ServiceException("App Does not Exist","app.not.found");
         }
         return $count;
     }
