@@ -42,6 +42,9 @@
 				<p class = "policy">Policy issued by &nbsp{$carrier}</p>
 				<p class = "policy2">Policy #: {$policy_id}</p>
 				<hr></hr>
+				{if $state_in_short === "NY" || $state === "New York"}
+					<p>PADI Risk Purchasing Group</p>
+				{/if}
 			</div>
 		</div>
 		<div class="spacing">&nbsp</div>
