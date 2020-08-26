@@ -234,10 +234,8 @@ public function execute(array $data,Persistence $persistenceService)
                 $this->logger->info("Set UP Edorsement Dive Store - END",print_r($data,true));
                 $data['endorsementInProgress'] = true;
             }
-            $this->logger->info("SET UP ENDORSEMENT RATE BEFORE-- ".print_r($data,true));   
             $this->getRates($data,$persistenceService);
         }
-        $this->logger->info("SET UP ENDORSEMENT RATE -- ".print_r($data,true));
         return $data;
     }
 

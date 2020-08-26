@@ -1500,15 +1500,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['removedAddInsured'] = json_encode($removedAddInsured);
                         }
                     } else {
-                        if($data['previous_additionalInsured']){
+                        if(isset($data['previous_additionalInsured'])){
                             $temp['newAddInsured'] = "";
                             $temp['removedAddInsured'] = "";
                             $temp['liabilityChanges'] = true;
-                            if(!is_array($policy['previous_additionalInsured'])){
-                                if(is_string($policy['previous_additionalInsured'])){
-                                    $policy['previous_additionalInsured'] = json_decode($policy['previous_additionalInsured'],true);
-                                } else {
-                                    $policy['previous_additionalInsured'] = array();
+                            if(isset($data['previous_additionalInsured'])){
+                                if(!is_array($data['previous_additionalInsured'])){
+                                    if(is_string($data['previous_additionalInsured'])){
+                                        $data['previous_additionalInsured'] = json_decode($data['previous_additionalInsured'],true);
+                                    } else {
+                                        $data['previous_additionalInsured'] = array();
+                                    }
                                 }
                             }
                             if(!is_array($data['additionalInsured'])){
