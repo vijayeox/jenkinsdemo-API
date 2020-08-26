@@ -24,6 +24,8 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Dispatch Cancel Policy Notification");
+        $fileData = $this->getFile($data['fileId'],false,$data['orgId']);
+        $data = array_merge($data,$fileData['data']);
         if($data['cancellationStatus'] =="approved")
         {
             $this->logger->info("Dispatch Cancel Policy Notification -- approved");
