@@ -388,7 +388,7 @@ class CommandService extends AbstractService
             $temp['commands'] = [array('command' => 'delegate', 'delegate' => $delegate)];
             $this->logger->info("EXECUTE DELEGATE ---- enqueue");
             $this->enqueue($temp, 'COMMANDS');
-            return true;
+            return $data;
         }
         else{
             $this->logger->info("DELEGATE ---- " . print_r($delegate, true));
