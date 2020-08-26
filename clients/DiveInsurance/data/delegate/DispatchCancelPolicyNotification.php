@@ -3,11 +3,12 @@ use Oxzion\AppDelegate\MailDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Encryption\Crypto;
+use Oxzion\AppDelegate\FileTrait;
 require_once __DIR__."/DispatchDocument.php";
 
 
 class DispatchCancelPolicyNotification extends DispatchDocument {
-
+    use FileTrait;
     public $template;
 
     public function __construct(){
