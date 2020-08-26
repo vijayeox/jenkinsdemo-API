@@ -251,7 +251,7 @@
       </div>
       {/if}
 
-     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && $removedAdditionalLocations != ""))}
+     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && $removedadditionalLocations != ""))}
       <div class = "box">
         <center><b><u>***Additional Locations***</u></b></center>
         {if $newAdditionalLocations != ""}
