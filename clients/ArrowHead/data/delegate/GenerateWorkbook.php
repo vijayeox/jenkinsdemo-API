@@ -299,7 +299,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     $excelItem
                 );
                 $this->logger->info("Excel Mapper POST Request for " . $excelItem["fileId"] . "\n" . $response);
-                sleep(3);
+                sleep(5);
             }
         }
 
