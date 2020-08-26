@@ -287,7 +287,12 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         if (count($excelData) > 0) {
             $selectQuery = "Select value FROM applicationConfig WHERE type ='excelMapperURL'";
             $ExcelTemplateMapperServiceURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+            
+            $selectQuery = "Select value FROM applicationConfig WHERE type ='callbackURL'";
+            $callbackURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+
             foreach ($excelData as $excelItem) {
+                $excelItem["postURL"] = $callbackURL;
                 $response = $this->makeRequest(
                     HTTPMethod::POST,
                     $ExcelTemplateMapperServiceURL,
