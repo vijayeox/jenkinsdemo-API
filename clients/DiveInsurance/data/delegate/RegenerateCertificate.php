@@ -17,8 +17,9 @@ class RegenerateCertificate extends RegenerationDelegate
     {
      
         $files = $data['fileUuid'];
+        $orgId = $data['orgId'];
         for($i = 0;$i < sizeof($files);$i ++){
-            $result = $this->getFile($files[$i],false,$data['orgId']);
+            $result = $this->getFile($files[$i],false,$orgId);
             $fileData = $result['data'];
             $fileData["regeneratePolicy"] = 'true';
             $fileData['fileId'] = $files[$i];
