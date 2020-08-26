@@ -326,21 +326,23 @@
                     cellpadding="0"
                     cellspacing="0"
                   >
-                    <tr>  
+                    <tr>
                       <td>
                         <p>Hi there,</p>
                         <br />
-                        <h5>Producer Name : {$producername}</h5>
-                        <h5>Insured Name : {$namedInsured}</h5>
-                        <h5>Insured Mailing Address : {$mailingAddress}</h5>
-                        
+                        <p>Producer Name : {$producername}</p>
+                        <p>Insured Name : {$namedInsured}</p>
+                        <p>Phone : {$businessPhone}</p>
+                        <p>Email : {$businessEmail}</p>
+
                         <br />
                         <p>
-                          The above referenced account has been submitted on the 
-                          portal. Please find the attached carrier documents.
+                          The above referenced account has been submitted on the
+                          ArrowHead portal. Please find the attached carrier
+                          documents.
                         </p>
                         <br />
-                        Thank you <br />
+                        Thank you
                         <br />
                         <br />
                         <table
