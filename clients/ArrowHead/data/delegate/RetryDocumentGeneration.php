@@ -58,15 +58,20 @@ class RetryDocumentGeneration extends MailDelegate
 
             $selectQuery = "Select value FROM applicationConfig WHERE type ='excelMapperURL'";
             $ExcelTemplateMapperServiceURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+
+            $selectQuery = "Select value FROM applicationConfig WHERE type ='callbackURL'";
+            $callbackURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+            
             if (count($excelData) > 0) {
                 foreach ($excelData as $excelItem) {
+                    $excelItem["postURL"] = $callbackURL;
                     $response = $this->makeRequest(
                         HTTPMethod::POST,
                         $ExcelTemplateMapperServiceURL,
                         $excelItem
                     );
                     $this->logger->info("Retry Excel Mapper POST Request for " . $excelItem["fileId"] . "\n" . $response);
-                    sleep(1);
+                    sleep(5);
                 }
             } else {
                 throw new Exception("Record not found. Please contact Support.", 1);
