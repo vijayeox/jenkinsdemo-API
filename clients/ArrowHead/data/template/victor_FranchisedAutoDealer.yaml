@@ -973,7 +973,7 @@
       office: Occupied
       serviceRepair: Occupied
       usedCarSales: Occupied
-      vacantLand: ''
+      vacantLand: Vacant
       vehicleStorageParkingGarage: Occupied
       partsWarehouseStorage: Occupied
       vacantBuilding: Vacant
