@@ -20158,7 +20158,7 @@
 	}],
 	"settings": {},
 	"properties": {
-		"submission_commands": "[{\"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }, { \"command\": \"delegate\",\"delegate\": \"GenerateWorkbook\" }]",
+		"submission_commands": "[{\"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }, { \"command\": \"delegate\", \"async\" : \"true\", \"entity_name\": \"Dealer Policy\",\"delegate\": \"GenerateWorkbook\" }]",
 		"showPrevious": "true",
 		"showCancel": "true"
 	},
@@ -20166,6 +20166,6 @@
 	"path": "dealerworkbook",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-06-25T07:04:35.147Z",
-	"modified": "2020-08-25T12:31:26.585Z",
+	"modified": "2020-08-26T05:00:42.407Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
