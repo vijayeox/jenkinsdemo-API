@@ -428,35 +428,31 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }
                     }
 
+                    if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
+                        if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
+                            $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+                        }
+                    }
+
+                    if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
+                        $this->logger->info("DOCUMENT lossPayees");
+                        $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+                    }
+                    if(isset($addLocations) && $temp['additionalLocationsSelect']=="yes"){
+                        if(is_string($addLocations)){
+                            $additionalLocations = json_decode($addLocations,true);
+                        } else {
+                            $additionalLocations = $addLocations;
+                        }
+                        for($i=0; $i<sizeof($additionalLocations);$i++){
+                            $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
+                            $temp["additionalLocationData"] = json_encode($additionalLocations[$i]);
+                            $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter',$i,0,true);
+                            unset($temp["additionalLocationData"]);
+                        }
+                    }
+
                     if($this->type == 'policy'){
-                        if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
-                            $this->logger->info("DOCUMENT additionalInsured");
-                            $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
-                        }
-
-                        if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
-                            if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
-                                $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
-                            }
-                        }
-
-                        if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
-                            $this->logger->info("DOCUMENT lossPayees");
-                            $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
-                        }
-                        if(isset($addLocations) && $temp['additionalLocationsSelect']=="yes"){
-                            if(is_string($addLocations)){
-                                $additionalLocations = json_decode($addLocations,true);
-                            } else {
-                                $additionalLocations = $addLocations;
-                            }
-                            for($i=0; $i<sizeof($additionalLocations);$i++){
-                                $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
-                                $temp["additionalLocationData"] = json_encode($additionalLocations[$i]);
-                                $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter',$i,0,true);
-                                unset($temp["additionalLocationData"]);
-                            }
-                        }
                         $this->generateDiveStorePremiumSummary($temp,$documents,$dest,$options);
                     }
                 }
