@@ -217,6 +217,7 @@ class FileService extends AbstractService
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
+            // The next line needs to be removed for file save to work
             $this->updateFileData($fileId, $fields);
             $this->commit();
         }catch(Exception $e){
