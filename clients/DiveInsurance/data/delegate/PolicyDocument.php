@@ -1490,7 +1490,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 //Please do not remove
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                    if(isset($policy['previous_additionalInsured'])){
+                    if(isset($policy['previous_additionalInsured']) && $policy['previous_additionalInsured']!=$data['additionalInsured']){
                         $temp['newAddInsured'] = "";
                         $temp['removedAddInsured'] = "";
                         $temp['liabilityChanges'] = true;
