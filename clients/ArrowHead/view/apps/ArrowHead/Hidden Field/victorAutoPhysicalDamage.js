@@ -219,6 +219,15 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
         }
       }
     ),
+    checkAutobody: data.genericData.locationScheduleGridData.some(
+      (locationItem) => {
+        if (locationItem.occupancyType == "bodyShop") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    ),
     checkfloodloss: data.dolflodlossdescib
       ? data.dolflodlossdescib.length > 0
         ? "true"

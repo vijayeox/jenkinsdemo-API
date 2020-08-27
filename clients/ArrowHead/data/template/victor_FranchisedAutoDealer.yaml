@@ -749,7 +749,7 @@
    cell: Check Box 41
    type: Checkbox
 -
-   key: franchisedAutoDealer*checklistcompaniesrepresented
+   key: franchisedAutoDealer*checkcompaniesrepresented
    Source Worksheet: 'List companies represented:'
    pageName: Garage Supplemental
    cell: 'C41'
@@ -997,6 +997,28 @@
       partsWarehouseStorage: Occupied
       vacantBuilding: Vacant
       deliveryPrep: Occupied
+-
+   key: genericData*locationScheduleGridData_occupancyType
+   method: simpleDatagrid
+   pageName: Property
+   cell: I40
+   type: DataGrid
+   returnValue:
+      autoSalesAndService: '100%'
+      autoStorageLot: '100%'
+      bldgLeasedToOthers: '100%'
+      bodyShop: '100%'
+      carWash: '100%'
+      detailShop: '100%'
+      newCarShowroomAndSales: '100%'
+      office: '100%'
+      serviceRepair: '100%'
+      usedCarSales: '100%'
+      vacantLand: ''
+      vehicleStorageParkingGarage: '100%'
+      partsWarehouseStorage: '100%'
+      vacantBuilding: ''
+      deliveryPrep: '100%'
 -
    key: genericData*locationScheduleGridData_constructiontype
    method: simpleDatagrid
