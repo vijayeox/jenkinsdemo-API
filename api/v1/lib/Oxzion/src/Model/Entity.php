@@ -293,6 +293,18 @@ abstract class Entity implements Countable
     }
 
     /*
+     * Loads data from database using Id.
+     */
+    public function loadById($id) {
+        $row = $this->table->get($id);
+        if (is_null($row) || (0 == count($row))) {
+            throw new EntityNotFoundException('Entity not found.', ['entity' => $this->table->getTableGateway()->getTable(), 'id' => $id]);
+        }
+        $this->assignInternal($row->toArray(), false);
+        return $this;
+    }
+
+    /*
      * Assigns values from $input to form properties. Honours 'readonly' flag.
      * Keys in $input that do not exist in the form are ignored.
      * Throws ParameterRequiredException if 'version' is not set in $input.
