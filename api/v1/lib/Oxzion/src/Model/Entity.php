@@ -103,17 +103,23 @@ abstract class Entity implements Countable
         return $this;
     }
 
+    /*
+     * This method is used by the framework. Don't remove.
+     */
     public function toArray()
     {
         return $this->data;
     }
 
+    /* 
+     * This method is used by Zend framework to set values into the model.
+     * See $resultSetPrototype->setArrayObjectPrototype in Module.php.
+     */
     public function exchangeArray($data)
     {
-        // $this->data = array_intersect_key($this->data, $data);
         foreach ($data as $key => $value) {
             if (!array_key_exists($key, $this->data)) {
-                continue; //throw new \Exception("$key field does not exist in " . __CLASS__);
+                continue;
             }
             $this->data[$key] = $value;
         }
@@ -283,12 +289,12 @@ abstract class Entity implements Countable
      * Loads data from database using UUID.
      */
     public function loadByUuid($uuid) {
-        $row = $this->table->getByUuid($uuid);
-        if (is_null($row) || (0 == count($row))) {
+        $obj = $this->table->getByUuid($uuid);
+        if (is_null($obj) || (0 == count($obj))) {
             throw new EntityNotFoundException('Entity not found.', 
             ['entity' => $this->table->getTableGateway()->getTable(), 'uuid' => $uuid]);
         }
-        $this->assignInternal($row->toArray(), false);
+        $this->assignInternal($obj->toArray(), false);
         return $this;
     }
 

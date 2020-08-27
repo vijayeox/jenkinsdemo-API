@@ -11,6 +11,7 @@ use Oxzion\InsertFailedException;
 use Oxzion\UpdateFailedException;
 use Oxzion\ServiceException;
 use Oxzion\MultipleRowException;
+use Oxzion\EntityNotFoundException;
 use Oxzion\ParameterRequiredException;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Auth\AuthContext;
@@ -167,17 +168,22 @@ abstract class ModelTable
         }
     }
 
-    private function checkAndIncrementVersion(&$data) {
+    private function checkAndIncrementVersion(array &$data) {
         $version = $data[Entity::COLUMN_VERSION];
         if(!isset($version) || is_null($version)) {
             throw new ParameterRequiredException('Version number is required.', [Entity::COLUMN_VERSION]);
         }
         try {
-            $select = $this->tableGateway->getSql()->select();
-            $select->columns([Entity::COLUMN_VERSION]); //Select only version column.
-            $select->where([Entity::COLUMN_ID => $data[Entity::COLUMN_ID]]); //Where condition for selecting the row.
-            $rowSet = $this->tableGateway->selectWith($select);
-            $row = $rowSet->current();
+            $adapter = $this->tableGateway->getAdapter();
+            $statement = $adapter->createStatement('SELECT ' . Entity::COLUMN_VERSION . ' FROM ' . $this->tableGateway->getTable() . 
+                ' WHERE ' . Entity::COLUMN_ID . '=?', [$data[Entity::COLUMN_ID]]);
+            $result = $statement->execute();
+            //count cannot be > 1 when selected on id column. Therefore we don't check for count > 1.
+            if (0 == $result->count()) { 
+                throw new EntityNotFoundException('Entity not found.', 
+                    ['entity' => $this->tableGateway->getTable(), 'id' => $data[Entity::COLUMN_ID]]);
+            }
+            $row = $result->current();
             $dbVersion = $row[Entity::COLUMN_VERSION];
         }
         catch(Exception $e) {

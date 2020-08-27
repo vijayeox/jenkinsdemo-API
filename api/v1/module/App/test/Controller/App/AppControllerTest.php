@@ -4,24 +4,35 @@ namespace App;
 use App\Controller\AppController;
 use App\Controller\AppRegisterController;
 use Mockery;
-use Oxzion\Db\Migration\Migration;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Utils\FileUtils;
+use Oxzion\App\AppArtifactNamingStrategy;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Symfony\Component\Yaml\Yaml;
+use Exception;
+use AppTest\AppTestSetUpTearDownHelper;
 
 class AppControllerTest extends ControllerTest
 {
-    public function setUp(): void
-    {
+    private $setUpTearDownHelper = NULL;
+
+    function __construct() {
+        parent::__construct();
         $this->loadConfig();
         $config = $this->getApplicationConfig();
+        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($config['db']);
+    }
+
+    public function setUp(): void
+    {
         parent::setUp();
+        $this->setUpTearDownHelper->cleanAll();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
+        $this->setUpTearDownHelper->cleanAll();
     }
 
     public function getDataSet()
@@ -63,14 +74,6 @@ class AppControllerTest extends ControllerTest
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    }
-
-    public function cleanDb($appName, $appId): void
-    {
-        $database = Migration::getDatabaseName($appName, $appId);
-        $query = "DROP DATABASE IF EXISTS " . $database;
-        $statement = Migration::createAdapter($this->getApplicationConfig(), $database)->query($query);
-        $result = $statement->execute();
     }
 
     public function testGetListOfAssignments()
@@ -235,15 +238,7 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployApp()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DiveInsuranceSample';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        copy(__DIR__ . '/../../sampleapp/application1.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application1.yml');
         $this->initAuthToken($this->adminUser);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
@@ -336,34 +331,10 @@ class AppControllerTest extends ControllerTest
                 $this->assertNotEmpty($wf['process_id']);
             }
         }
-        $this->clean($path, $yaml, $appName, $YmlappUuid);   
     }
-    private function clean($path, $yaml, $appName, $YmlappUuid){
-        unlink(__DIR__ . '/../../sampleapp/application.yml');
-        $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
-        $deletdirectoryPath = __DIR__ . '/../../../../';
-        $deletenpm = $deletdirectoryPath . '.npm';
-        if (file_exists($deletenpm)) {
-            FileUtils::deleteDirectoryContents($deletenpm);
-        }
-        $deleteconfig = $deletdirectoryPath . '.config';
-        if (file_exists($deleteconfig)) {
-            FileUtils::deleteDirectoryContents($deleteconfig);
-        }
-    }
+
     public function testDeployAppWithFieldValidation(){
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        copy(__DIR__ . '/../../sampleapp/application12.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application12.yml');
         $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
@@ -391,19 +362,10 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT count(id) as count FROM ox_form WHERE app_id = " . $appId;
         $form = $this->executeQueryTest($query);
         $this->assertEquals($form[0]['count'], 1);
-        $this->clean($path, $yaml, $appName, $YmlappUuid);
     }
 
     public function testDeployAppWithFieldValidationErrors(){
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        copy(__DIR__ . '/../../sampleapp/application13.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application13.yml');
         $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
@@ -421,9 +383,10 @@ class AppControllerTest extends ControllerTest
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
-        $this->clean($path, $yaml, $appName, $YmlappUuid);
-        
+        $query = 'SELECT uuid FROM ox_app WHERE id=(SELECT max(id) from ox_app)';
+        $newlyCreatedAppId = $this->executeQueryTest($query)[0]['uuid'];
     }
+
     private function unlinkFolders($appUuid, $appName, $orgUuid = null)
     {
         $config = $this->getApplicationConfig();
@@ -442,19 +405,23 @@ class AppControllerTest extends ControllerTest
         if (is_link($app)) {
             unlink($app);
         }
+        $appData = [
+            'name' => $appName,
+            'uuid' => $appUuid
+        ];
+        $appSrcDir = AppArtifactNamingStrategy::getSourceAppDirectory($config, $appData);
+        if (file_exists($appSrcDir)) {
+            FileUtils::rmDir($appSrcDir);
+        }
+        $appDestDir = AppArtifactNamingStrategy::getDeployAppDirectory($config, $appData);
+        if (file_exists($appDestDir)) {
+            FileUtils::rmDir($appDestDir);
+        }
     }
 
     public function testDeployAppWithoutOptionalFieldsInYml()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        copy(__DIR__ . '/../../sampleapp/application5.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application5.yml');
         $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
@@ -485,14 +452,13 @@ class AppControllerTest extends ControllerTest
         }
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
+        FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appname);
     }
 
     public function testDeployAppWithWrongUuidAndDuplicateNameInDatabase()
     {
-        copy(__DIR__ . '/../../sampleapp/application8.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application8.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -505,7 +471,7 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithWrongUuidAndUniqueNameInDatabase()
     {
-        copy(__DIR__ . '/../../sampleapp/application14.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application14.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -514,20 +480,15 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
         unlink(__DIR__ . '/../../sampleapp/application.yml');
+
+        $query = 'SELECT name, uuid FROM ox_app WHERE id=(SELECT max(id) from ox_app)';
+        $latestAppData = $this->executeQueryTest($query)[0];
     }
 
     public function testDeployAppWithWrongNameInDatabase()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
+        $this->setUpTearDownHelper->setupAppDescriptor('application9.yml');
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../../sampleapp/application9.yml', __DIR__ . '/../../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -556,23 +517,14 @@ class AppControllerTest extends ControllerTest
         }
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
+        FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../../sampleapp/application10.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application10.yml');
         $this->initAuthToken($this->adminUser);
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
@@ -603,8 +555,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
+        FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
@@ -632,7 +583,7 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppNoFileData()
     {
-        copy(__DIR__ . '/../../sampleapp/application2.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application2.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -645,7 +596,7 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppNoAppData()
     {
-        copy(__DIR__ . '/../../sampleapp/application3.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application3.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -658,16 +609,8 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppOrgDataWithoutUuidAndContactAndPreferencesInYml()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_link($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_link($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../../sampleapp/application4.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application4.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
@@ -696,23 +639,14 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
+        FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppAddExtraPrivilegesInDatabaseFromYml()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../../sampleapp/application6.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application6.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
@@ -745,23 +679,14 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
+        FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
         $config = $this->getApplicationConfig();
-        copy(__DIR__ . '/../../sampleapp/application6.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application6.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
@@ -794,22 +719,13 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
+        FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
     public function testDeployAppWithNoEntityInYml()
     {
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        $directoryName = __DIR__ . '/../../sampleapp/view/apps/Dive Insurance';
-        if (is_dir($directoryName)) {
-            FileUtils::deleteDirectoryContents($directoryName);
-        }
-        copy(__DIR__ . '/../../sampleapp/application7.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->setUpTearDownHelper->setupAppDescriptor('application7.yml');
         $this->initAuthToken($this->adminUser);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
@@ -833,8 +749,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::deleteDirectoryContents($appname);
-        $this->cleanDb($appName, $YmlappUuid);
+        FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
@@ -847,31 +762,31 @@ class AppControllerTest extends ControllerTest
         $appDestDir = $config['EOX_APP_DEPLOY_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
         try {
             if (file_exists($appSourceDir)) {
-                FileUtils::deleteDirectoryContents($appSourceDir);
+                FileUtils::rmDir($appSourceDir);
                 mkdir($appSourceDir);
             }
             $eoxSampleApp = dirname(__FILE__) . '/../../Dataset/SampleApp';
             FileUtils::copyDir($eoxSampleApp, $appSourceDir);
             $this->testDeployApp();
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             throw $e;
         }
         finally {
             try {
                 if (file_exists($appSourceDir)) {
-                    FileUtils::deleteDirectoryContents($appSourceDir);
+                    FileUtils::rmDir($appSourceDir);
                 }
             }
-            catch(\Exception $e) {
+            catch(Exception $e) {
                 print($e);
             }
             try {
                 if (file_exists($appDestDir)) {
-                    FileUtils::deleteDirectoryContents($appDestDir);
+                    FileUtils::rmDir($appDestDir);
                 }
             }
-            catch(\Exception $e) {
+            catch(Exception $e) {
                 print($e);
             }
         }
@@ -890,19 +805,14 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($notExistingAppUuid, $data['uuid']);
     }
 
-    public function testDeployApplicationWithoutAppDir() {
+    public function testDeployApplicationWithoutSourceAppDir() {
         $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         $appName = 'SampleApp';
         $config = $this->getApplicationConfig();
-        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
+        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}";
         //Ensure source directory does not exist.
-        try {
-            if (file_exists($appSourceDir)) {
-                FileUtils::deleteDirectoryContents($appSourceDir);
-            }
-        }
-        catch(\Exception $e) {
-            print($e);
+        if (file_exists($appSourceDir)) {
+            FileUtils::rmDir($appSourceDir);
         }
 
         $this->initAuthToken($this->adminUser);

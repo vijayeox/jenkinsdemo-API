@@ -7,14 +7,9 @@ use App\Model\AppTable;
 use App\Service\AppService;
 use Exception;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
-use Oxzion\ValidationException;
-use Oxzion\EntityNotFoundException;
-use Oxzion\InvalidInputException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\AppDelegate\AppDelegateService;
-use Oxzion\Utils\ArrayUtils;
 
 class AppController extends AbstractApiController
 {
@@ -327,8 +322,8 @@ class AppController extends AbstractApiController
             else{
                 $params = null;
             }
-            $this->appService->deployApp($path, $params);
-            return $this->getSuccessResponse(200);
+            $appData = $this->appService->deployApp($path, $params);
+            return $this->getSuccessResponseWithData($appData);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -358,8 +353,8 @@ class AppController extends AbstractApiController
         }
 
         try {
-            $this->appService->deployApplication($routeParams['appId']);
-            return $this->getSuccessResponse(200);
+            $appData = $this->appService->deployApplication($routeParams['appId']);
+            return $this->getSuccessResponseWithData($appData);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
