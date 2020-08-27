@@ -1,5 +1,12 @@
 if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   var falsePretenseLimit = 0;
+  var checktotalLocationSalesRevenue = 0;
+
+  data.locationSchedule.map(item => {
+    checktotalLocationSalesRevenue += item.totalLocationSalesRevenue
+      ? item.totalLocationSalesRevenue
+      : 0;
+  });
 
   if (data.falsePretenseNumber <= 0) {
     falsePretenseLimit = "None";
@@ -25,6 +32,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
         ? data.listcompaniesrepresented + ""
         : ""
       : "",
+    checktotalLocationSalesRevenue: checktotalLocationSalesRevenue,
     checkfalsePretenseLimit: falsePretenseLimit,
     locationBuildingIndex: data.genericData.locationScheduleGridData
       .map((i, index) => (index == 0 ? "invalid" : { result: i.locationNum }))

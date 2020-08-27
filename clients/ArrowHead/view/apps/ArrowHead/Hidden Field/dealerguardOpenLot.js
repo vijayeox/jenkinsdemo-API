@@ -29,7 +29,9 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
     checkVehicleInventoryTaken:
       data.dolvehicleinevtorytaken == "weekly" ||
       data.dolvehicleinevtorytaken == "biWeekly" ||
-      data.dolvehicleinevtorytaken == "monthly"
+      data.dolvehicleinevtorytaken == "monthly" || 
+      data.dolvehicleinevtorytaken == "daily" ||
+      data.dolvehicleinevtorytaken == "quarterly"
         ? "true"
         : "false",
     checkVehicleInventoryTakenWeekly:
