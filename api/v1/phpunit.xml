@@ -26,7 +26,10 @@
             <directory>./module/App/test/Controller/Cache</directory>
             <directory>./module/App/test/Controller/Delegate</directory>
             <directory>./module/App/test/Controller/Document</directory> 
-            <directory>./module/App/test/Controller/Entity</directory>
+            <directory>./module/App/test/Controller/Entity/EntityControllerTest.php</directory>
+            <directory>./module/App/test/Controller/Entity/FieldControllerTest.php</directory>
+            <directory>./module/App/test/Controller/Entity/FileControllerTest.php</directory>
+            <directory>./module/App/test/Controller/Entity/FormControllerTest.php</directory>
             <directory>./module/App/test/Controller/Job</directory>
             <directory>./module/App/test/Controller/Pipeline</directory>
             <directory>./module/App/test/Controller/Workflow</directory>
@@ -62,7 +65,10 @@
         <testsuite name="User Fixtures">
             <directory>./module/Organization/test</directory>
             <directory>./module/Alert/test</directory>
-            <directory>./module/User/test</directory>
+            <directory>./module/User/test/Controller/ForgotPasswordControllerTest.php</directory>
+            <directory>./module/User/test/Controller/ProfilePictureControllerTest.php</directory>
+            <directory>./module/User/test/Controller/UserControllerTest.php</directory>
+            <directory>./module/User/test/Controller/UserSessionControllerTest.php</directory>
             <directory>./module/Email/test</directory>
             <directory>./module/Group/test</directory>
             <directory>./module/Contact/test</directory>
