@@ -1,3 +1,48 @@
+ox_organization:
+  - id: 100
+    name: Test
+    status: Active
+    type: 'INDIVIDUAL'
+    uuid: 'fa371de7-0387-48ea-8f29-5d3704d96ac5'  
+ox_address:
+  -
+    id: 50
+    address1: 'Address1'
+    address2: 'Address2'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560007
+ox_user_profile:
+  - 
+    id: 150
+    uuid: a9fe8447-3b29-410d-8b22-95d337d3fbc2
+    firstname: Individual
+    lastname: Admin
+    email: 'admintestindividual@eoxvantage.in'
+    date_of_birth: '1991-02-28'
+    phone: '1212121212'
+    gender: 'Male'
+    address_id: 50
+    org_id: 100
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'  
+ox_user:  
+  - 
+    id: 100
+    uuid: 754bc48a-3c69-4f7a-af8b-019fc984ee76
+    username: individualadmin
+    name: 'Individual Admin'
+    orgid: 100
+    user_profile_id: 150
+    status: 'Active'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'      
+ox_user_org:
+  -
+    user_id: 100
+    org_id: 100
+
 ox_app:
   - id: 99
     name: "SampleApp"
@@ -816,6 +861,12 @@ ox_wf_user_identifier:
     user_id: 2
     identifier_name: "field1"
     identifier: "32253"
+  - id: 4
+    app_id: 99
+    org_id: 100
+    user_id: 100
+    identifier_name: 'field1'
+    identifier: 32325
 ox_indexed_file_attribute:
   - id: 1
     file_id: 11
@@ -896,31 +947,3 @@ ox_org_business_role:
 ox_org_offering:
   - entity_id: 1
     org_business_role_id: 1  
-
-ox_organization:
-  - id: 100
-    name: Test
-    status: Active
-    type: 'INDIVIDUAL'
-    uuid: 'fa371de7-0387-48ea-8f29-5d3704d96ac5'
-ox_user_profile:
-  - id: 100
-    uuid: a9fe8447-3b29-410d-8b22-95d337d3fbc2
-    org_id: 100
-    firstname: Test
-    lastname: Admin
-    email: 'admintest@eoxvantage.in'
-    date_of_birth: '1991-02-28'
-    phone: '1212121212'
-    created_by: 1
-    date_created: '2020-08-24 00:00:00'
-ox_user:
-  - id: 100
-    uuid: 754bc48a-3c69-4f7a-af8b-019fc984ee76
-    username: testadmin
-    name: 'Test Admin'
-    orgid: 100
-    user_profile_id: 100
-    status: 'Active'
-    created_by: 1
-    date_created: '2020-08-24 00:00:00'

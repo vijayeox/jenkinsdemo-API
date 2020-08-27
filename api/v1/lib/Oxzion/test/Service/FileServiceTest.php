@@ -295,13 +295,11 @@ class FileServiceTest extends AbstractServiceTest
         }
     }
 
-    public function testFileCreateWithEntityId() {
+    private function performFileAssertions($result, $data, $fileParticipantCount = 1, $indexedFields = [["field" => "field1", "id" => 1, "type" => "TEXT"]], $version = 1){
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
-        $result = $this->fileService->createFile($data);
         $this->assertEquals(1,$result);
         $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
@@ -310,86 +308,70 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals($data['data'], $sqlQuery2Result[0]['data']);
         $this->assertEquals(AuthContext::get(AuthConstants::ORG_ID), $sqlQuery2Result[0]['org_id']);
         $this->assertEquals(AuthContext::get(AuthConstants::USER_ID), $sqlQuery2Result[0]['created_by']);
-        $this->assertEquals($dataset['ox_form'][0]['id'], $sqlQuery2Result[0]['form_id']);
+        if(!isset($data['form_id'])){
+            $this->assertEquals(null, $sqlQuery2Result[0]['form_id']);
+        }else{
+            $this->assertEquals($dataset['ox_form'][0]['id'], $sqlQuery2Result[0]['form_id']);
+        }
         $this->assertEquals($entityId, $sqlQuery2Result[0]['entity_id']);
         $this->assertEquals(1, $sqlQuery2Result[0]['is_active']);
-        $this->assertEquals(1, $sqlQuery2Result[0]['version']);
+        $this->assertEquals($version, $sqlQuery2Result[0]['version']);
         $sqlQuery2 = "SELECT fa.*, f.name FROM ox_indexed_file_attribute fa 
                         inner join ox_field f on f.id = fa.field_id 
                         where file_id = $fileId";
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $fileData = json_decode($data['data'], true);
-        $this->assertEquals(1, count($sqlQuery2Result));
-        $this->assertEquals($dataset['ox_field'][0]['id'], $sqlQuery2Result[0]['field_id']);
-        $this->assertEquals($fileData['field1'], $sqlQuery2Result[0]['field_value_text']);
-        $this->assertEquals('TEXT', $sqlQuery2Result[0]['field_value_type']);
-        $sqlQuery2 = "SELECT fp.* FROM ox_file_participant fp 
-                        where file_id = $fileId";
-        $sqlQuery2Result = $this->runQuery($sqlQuery2);
-        print_r($sqlQuery2Result);
         
+        $this->assertEquals(count($indexedFields), count($sqlQuery2Result));
+
+        foreach ($indexedFields as $key => $value) {
+            $this->assertEquals($indexedFields[$key]['id'], $sqlQuery2Result[$key]['field_id']);
+            $this->assertEquals($indexedFields[$key]['type'], $sqlQuery2Result[$key]['field_value_type']);
+            if($indexedFields[$key]['type'] == 'DATE'){
+                $this->assertEquals($fileData[$indexedFields[$key]['field']], $sqlQuery2Result[$key]['field_value_date']);
+            }else{
+                $this->assertEquals($fileData[$indexedFields[$key]['field']], $sqlQuery2Result[$key]['field_value_text']);
+            }
+            
+        }
+        $sqlQuery2 = "SELECT fp.* FROM ox_file_participant fp 
+                        where file_id = $fileId order by org_id";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals($fileParticipantCount, count($sqlQuery2Result));
+        if($fileParticipantCount == 0){
+            return;
+        }
+        $this->assertEquals(1, $sqlQuery2Result[0]['org_id']);
+        $this->assertEquals($dataset['ox_business_role'][1]['id'], $sqlQuery2Result[0]['business_role_id']);
+        if($fileParticipantCount == 2){
+            $this->assertEquals($dataset['ox_organization'][0]['id'], $sqlQuery2Result[1]['org_id']);
+            $this->assertEquals($dataset['ox_business_role'][0]['id'], $sqlQuery2Result[1]['business_role_id']);
+        }
     }
 
-    public function testFileCreateWithFormId() {
+    public function testFileCreateWithEntityId() {
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $formId = $dataset['ox_form'][0]['uuid'];
+        $entityId = $dataset['ox_app_entity'][0]['id'];
+        $data = array('field1' => '32325', 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
+        $result = $this->fileService->createFile($data);
+        $this->performFileAssertions($result, $data, 2);
+           
+    }
+
+    public function testFileCreateWithoutFormIdAndUnregisteredIdentifier() {
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId );
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT form_id FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $formId = $sqlQuery2Result[0]['form_id'];
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertEquals(1,$formId);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
-    }
-
-    public function testFileCreateWithoutFormId() {
-        $dataset = $this->dataset;
-        $appUuid = $dataset['ox_app'][0]['uuid'];
-        $formId = $dataset['ox_form'][0]['uuid'];
-        $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT form_id FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $formId = $sqlQuery2Result[0]['form_id'];
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertEquals(null,$formId);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
+        $initialCount = $queryResult[0]['count'];
+        $this->assertEquals(10,$initialCount);
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
+        $result = $this->fileService->createFile($data);
+        $this->performFileAssertions($result, $data);
     }
 
     public function testFileCreateWithRandomUuid() {
@@ -397,157 +379,50 @@ class FileServiceTest extends AbstractServiceTest
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'uuid' => '7369c4e9-90bf-41d7-b774-605469294aae');
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT uuid FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $uuid = $sqlQuery2Result[0]['uuid'];
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertNotEquals('7369c4e9-90bf-41d7-b774-605469294aae',$uuid);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
+        $uuid = '7369c4e9-90bf-41d7-b774-605469294aae';
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'uuid' => $uuid);
+        $result = $this->fileService->createFile($data);
+        $this->assertNotEquals($uuid,$data['uuid']);
+        $this->performFileAssertions($result, $data);
+    
     }
 
-    public function testFileCreateWithValidUuid() {
+    public function testFileCreateWithExistingUuid() {
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b');
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT uuid FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $uuid = $sqlQuery2Result[0]['uuid'];
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertNotEquals('d13d0c68-98c9-11e9-adc5-308d99c9145b',$uuid);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
-    }
-
-    public function testFileCreateWithoutUuid() {
-        $dataset = $this->dataset;
-        $appUuid = $dataset['ox_app'][0]['uuid'];
-        $formId = $dataset['ox_form'][0]['uuid'];
-        $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT uuid FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $uuid = $sqlQuery2Result[0]['uuid'];
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertNotEmpty($uuid);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
+        $uuid = 'd13d0c68-98c9-11e9-adc5-308d99c9145b';
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'uuid' => $uuid);
+        $result = $this->fileService->createFile($data);
+        $this->assertNotEquals($uuid,$data['uuid']);
+        $this->performFileAssertions($result, $data);
+    
     }
 
     public function testFileCreateWithEntityName() {
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
-        $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'app_id' => $appUuid, 'entity_name' => 'entity1');
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT entity_id FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $entityId = $sqlQuery2Result[0]['entity_id'];
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertEquals(1,$entityId);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
+        $entityName = $dataset['ox_app_entity'][0]['name'];
+        $data = array('field1' => 1, 'field2' => 2, 'app_id' => $appUuid, 'entity_name' => $entityName);
+        $result = $this->fileService->createFile($data);
+        $this->performFileAssertions($result, $data);
+    
     }
 
     public function testFileCreateWithEntityNameAndEntityId() {
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
-        $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT entity_id FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $entityId = $sqlQuery2Result[0]['entity_id'];
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11  ,$finalCount);
-                $this->assertEquals(1,$entityId);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
+        $entityName = $dataset['ox_app_entity'][0]['name'];
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => $entityId ,'app_id' => $appUuid, 'entity_name' => $entityName);
+        $result = $this->fileService->createFile($data);
+        $this->performFileAssertions($result, $data);
+    
     }
 
-    public function testFileCreateWithCheckFields() {
+    public function testFileCreateWithFileFields() {
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
@@ -618,64 +493,16 @@ class FileServiceTest extends AbstractServiceTest
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'form_id' => $formId,'workflowInstanceId' => 'something' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = "SELECT data FROM ox_file where uuid = '".$data['uuid']."'";
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $data = json_decode($sqlQuery2Result[0]['data'],true);
-            $finalCount = $newQueryResult[0]['count'];
-            $this->assertArrayHasKey('field1',$data);  //Fields that don't exist
-            $this->assertArrayHasKey('field2',$data);
-            $this->assertArrayNotHasKey('form_id',$data); //Fields that exist
-            $this->assertArrayNotHasKey('workflowInstanceId',$data);
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertEquals(1,$entityId);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
-    }
-
-    public function testFileCreateWithCheckFieldsWithoutPersistent () {
-        $dataset = $this->dataset;
-                                                                     $appUuid = $dataset['ox_app'][0]['uuid'];
-        $formId = $dataset['ox_form'][0]['uuid'];
-        $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'field3' => 3, 'non_persistent_field' => 'something' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
-            $result = $this->fileService->createFile($data);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT entity_id FROM ox_file order by id DESC LIMIT 1';
-            $sqlQuery3 = 'SELECT field_id,field_value from ox_file_attribute where field_id in (1,2,3,4,7) order by id DESC LIMIT 5';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            try{
-                $sqlQuery3Result = $this->runQuery($sqlQuery3);
-            }
-            catch(InvalidQueryException $e)
-            {
-                print_r($e->getMessage());
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
+        $data = array('field1' => 1, 'field2' => 2, 'form_id' => $formId,'workflowInstanceId' => 'something' ,'entity_id' => 1 ,'app_id' => $appUuid, 'entity_name' => 'entity1');
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT data FROM ox_file where uuid = '".$data['uuid']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $data = json_decode($sqlQuery2Result[0]['data'],true);
+        $this->assertArrayHasKey('field1',$data);  //Fields that don't exist
+        $this->assertArrayHasKey('field2',$data);
+        $this->assertArrayNotHasKey('form_id',$data); //Fields that exist
+        $this->assertArrayNotHasKey('workflowInstanceId',$data);    
     }
 
     public function testUpdateFileWithWorkflow() {
@@ -732,29 +559,13 @@ class FileServiceTest extends AbstractServiceTest
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
         $entityId = $dataset['ox_app_entity'][0]['id'];
-        $sqlQuery = 'SELECT count(id) as count FROM ox_file';
-        $queryResult = $this->runQuery($sqlQuery);
-        if(isset($queryResult[0]['count'])) {
-            $initialCount = $queryResult[0]['count'];
-            $this->assertEquals(10,$initialCount);
-            $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
-            $result = $this->fileService->updateFile($data, $fileId);
-            $this->assertEquals(1,$result);
-            $sqlQuery2 = 'SELECT form_id FROM ox_file order by id DESC LIMIT 1';
-            $newQueryResult = $this->runQuery($sqlQuery);
-            $sqlQuery2Result = $this->runQuery($sqlQuery2);
-            $finalCount = $newQueryResult[0]['count'];
-            if(isset($newQueryResult[0]['count'])) {
-                $this->assertEquals(11,$finalCount);
-                $this->assertEquals(1, $sqlQuery2Result[0]['form_id']);
-            }
-            else{
-                $this->fail("Final count has not been generated");
-            }
-        }
-        else{
-            $this->fail("Initial count has not been generated");
-        }
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT id, entity_id, data FROM ox_file where uuid = '".$data['uuid']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1, count($sqlQuery2Result));
+        $this->assertNotEquals($fileId, $sqlQuery2Result[0]['id']);
     }
 
     public function testUpdateFileWithFileId() {
@@ -764,12 +575,15 @@ class FileServiceTest extends AbstractServiceTest
         $entityId = $dataset['ox_app_entity'][0]['id'];
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid);
         $result = $this->fileService->updateFile($data, $fileId);
-        $sqlQuery = 'SELECT uuid FROM ox_file where id = 11';
-        $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals($fileId, $sqlQueryResult[0]['uuid']);
+        $data['uuid'] = $fileId;
+        $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30 00:00:00","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","field1":1,"field2":2}';
+        $indexedFields = [['field' => 'field1', 'type' => 'TEXT', 'id' => 1],
+                          ['field' => 'expiry_date', 'type' => 'DATE', 'id' => 3],
+                          ['field' => 'policy_period', 'type' => 'TEXT', 'id' => 8]];
+        $this->performFileAssertions($result, $data, 0, $indexedFields, 2);
     }
 
-    public function testUpdateFileWithCheckFieldsWithNewFields() {
+    public function testUpdateFileWithNewFieldsAndAttachments() {
         $dataset = $this->dataset;
         $sqlQuery = 'SELECT fa.*, f.name FROM ox_file_attribute fa inner join ox_field f on f.id = fa.field_id 
                         where file_id = 11';
