@@ -140,13 +140,6 @@
    cell: F69
    type: DataGrid
 -
-   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_state
-   method: simpleDatagrid
-   Source Worksheet: Location Details
-   pageName: Valuation Survey
-   cell: F5
-   type: DataGrid
--
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_PrimaryOEMList
    method: simpleDatagrid
    Source Worksheet: Location Details

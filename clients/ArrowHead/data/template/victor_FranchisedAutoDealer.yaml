@@ -66,14 +66,9 @@
    pageName: Crime (printable)
    cell: L70
 -
-   key: auditreportissentto
-   Source Worksheet: 'Audit report is sent to:= Owner'
-   pageName: Crime (printable)
-   cell: H74
--
    key: discrepenciesloose
    Source Worksheet: Were any discrepencies or loose practices commented upon this audit? (If
-      YES, attach copy of audit and auditor's comments)
+      YES, attach copy of audit and auditors comments)
    pageName: Crime (printable)
    returnBoolean: "Yes|No"
    cell: L76
