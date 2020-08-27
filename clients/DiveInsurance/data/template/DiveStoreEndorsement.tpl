@@ -71,7 +71,7 @@
             <p>Medical Expense Liability now applies as of the Effective date on this Endorsement ({$increased_medicalPayment_limit} Limit)</p>
           {/if}
           {if isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit}
-            <p>+NON-Owned Auto Liability now applies as of the Effective date on this Endorsement ({$increased_non_owned_liability_limit} Limit)</p>
+            <p>+NON-Owned Auto Liability has been increased to {$increased_non_owned_liability_limit} as of the Effective date on this Endorsement</p>
           {/if}
 
           {if isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true}
