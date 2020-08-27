@@ -20,47 +20,39 @@ class EntityService extends AbstractService
         $this->table = $table;
     }
 
-    public function saveEntity($appUuid, &$data)
+    public function saveEntity($appUuid, &$data, $createIfNotFound = true)
     {
         $count = 0;
         $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
-        $entity = new Entity();
-        $resultSet = $this->getEntity($data['uuid'], $data['app_id']);
-        $this->logger->info(__CLASS__ . "-> \n Resultsert----- - " . print_r($resultSet, true));
-        try {
-            if ($resultSet == 0) {
-                $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $data['date_created'] = date('Y-m-d H:i:s');
-            } else {
-                $data = array_merge($resultSet, $data);
-                $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $data['date_modified'] = date('Y-m-d H:i:s');
+        $entity = new Entity($this->table);
+        try{
+            $resultSet = $this->getEntity($data['uuid'], $data['app_id']);
+            $data = array_merge($resultSet, $data);
+            $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['date_modified'] = date('Y-m-d H:i:s');
+        }catch(EntityNotFoundException $e){
+            if(!$createIfNotFound){
+                throw $e;
             }
-        } catch (Exception $e) {
-            throw $e;
+            $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['date_created'] = date('Y-m-d H:i:s');
         }
+        
         $this->logger->info(__CLASS__ . "-> \n Data Modified before the transaction - " . print_r($data, true));
         $entity->exchangeArray($data);
         $entity->validate();
-        $this->beginTransaction();
         try {
-            $count = $this->table->save($entity);
-            if (!isset($data['id'])) {
-                $id = $this->table->getLastInsertValue();
-                $data['id'] = $id;
-            }
-            if ($count == 0) {
-                $this->rollback();
-                throw new ServiceException("Entity save failed", 'entity.save.failed');
-            }
+            $this->beginTransaction();
+            $count = $entity->save($entity);
             $this->commit();
+            $temp = $entity->getGenerated(true);
+            $data['id'] = $temp['id'];
+            $data['uuid'] = $temp['uuid'];
         } catch (Exception $e) {     
             $this->rollback();
             throw $e;
         }
-        $entity->validate();
-        return $count;
     }
 
     public function deleteEntity($appUuid, $id)
@@ -106,7 +98,8 @@ class EntityService extends AbstractService
             $where = "";
             $queryParams = [];
             if($appId){
-                $where .= is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ? AND ";
+                $where .= is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ?";
+                $where .= " AND ";
                 $queryParams[] = $appId;
             }
             $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
@@ -115,7 +108,7 @@ class EntityService extends AbstractService
             $this->logger->info("STATEMENT $query".print_r($queryParams,true));
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultSet) == 0) {
-                throw EntityNotFoundException("Entity not found for id - $id ".($appId ? " and appId - $appId" : "") );
+                throw new EntityNotFoundException("Entity not found for id - $id ".($appId ? " and appId - $appId" : "") );
             }
         } catch (Exception $e) {
             throw $e;

@@ -413,7 +413,7 @@ class AppService extends AbstractService
                 $entity = $this->entityService->getEntityByName($appUuid, $data['entity']);
                 if (!$entity) {
                     $entity = array('name' => $data['entity']);
-                    $result = $this->entityService->saveEntity($appUuid, $entity);
+                    $this->entityService->saveEntity($appUuid, $entity);
                 }
                 $data['entity_id'] = $entity['id'];
                 if (isset($data['template_file'])) {
@@ -509,7 +509,7 @@ class AppService extends AbstractService
                     $entity = $this->entityService->getEntityByName($yamlData['app']['uuid'], $value['entity']);
                     if (!$entity) {
                         $entity = array('name' => $value['entity']);
-                        $result = $this->entityService->saveEntity($yamlData['app']['uuid'], $entity);
+                        $this->entityService->saveEntity($yamlData['app']['uuid'], $entity);
                     }
                     if (isset($value['uuid']) && isset($entity['id'])) {
                         $bpmnFilePath = $path . "content/workflows/" . $value['bpmn_file'];
@@ -1045,7 +1045,7 @@ class AppService extends AbstractService
             foreach ($yamlData['entity'] as &$entityData) {
                 $entity = $entityData;
                 $entity['assoc_id'] = $assoc_id;
-                $result = $this->entityService->saveEntity($appId, $entity);
+                $this->entityService->saveEntity($appId, $entity);
                 $entityData['uuid'] = $entity['uuid'];
                 if(isset($entity['identifiers'])){
                     $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);

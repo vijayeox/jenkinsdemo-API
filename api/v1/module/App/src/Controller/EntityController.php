@@ -47,10 +47,7 @@ class EntityController extends AbstractApiController
         $appUuid = $this->params()->fromRoute()['appId'];
         $this->log->info(__CLASS__ . "-> \n Create Entity - " . print_r($data, true));
         try {
-            $count = $this->entityService->saveEntity($appUuid, $data);
-            if ($count == 0) {
-                return $this->getFailureResponse("Failed to create a new entity", $data);
-            }
+            $this->entityService->saveEntity($appUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -93,18 +90,19 @@ class EntityController extends AbstractApiController
      */
     public function update($id, $data)
     {
+        print($id."\n");
         $appUuid = $this->params()->fromRoute()['appId'];
         $this->log->info(__CLASS__ . "-> \n Update- " . print_r($data, true) . "AppUUID - " . $appUuid);
         if ($id) {
-            $data['id'] = $id;
+            $data['uuid'] = $id;
         }
         try {
-            $count = $this->entityService->saveEntity($appUuid, $data, $id);
+            $this->entityService->saveEntity($appUuid, $data, false);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (EntityNotFoundException $e) {
-            $response = ['data' => $data, 'errors' => $e->getMessage()];
+            $response = ['data' => $data];
             return $this->getErrorResponse("Entity Not Found", 404, $response);
         }catch (ServiceException $e) {
             $this->log->error($e->getMessage(), $e);
@@ -130,7 +128,9 @@ class EntityController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \n Delete Entity - " . print_r($id, true) . "AppUUID - " . $appUuid);
         try {
             $response = $this->entityService->deleteEntity($appUuid, $id);
-        } catch (ServiceException $e) {
+        }catch (EntityNotFoundException $e) {
+            return $this->getErrorResponse("Entity Not Found", 404);
+        }catch (ServiceException $e) {
             return $this->getErrorResponse($e->getMessage(), 404);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -151,8 +151,9 @@ class EntityController extends AbstractApiController
     public function get($entityId)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $result = $this->entityService->getEntity($entityId, $appUuid);
-        if ($result == 0) {
+        try{
+            $result = $this->entityService->getEntity($entityId, $appUuid);
+        }catch(EntityNotFoundException $e){
             return $this->getErrorResponse("Entity not found", 404, ['id' => $entityId]);
         }
         return $this->getSuccessResponseWithData($result);
