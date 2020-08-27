@@ -243,10 +243,7 @@ abstract class ModelTable
                     ['table' => $this->tableGateway->getTable(), 'data' => $data], 
                     UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
             }
-            if (!isset($rows) || (1 != $rows)) {
-                throw new UpdateFailedException('Database update failed.', 
-                    ['table' => $this->tableGateway->getTable(), 'data' => $data]);
-            }
+            
             return $data;
         }
     }
