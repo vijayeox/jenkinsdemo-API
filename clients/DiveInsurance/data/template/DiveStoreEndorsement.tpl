@@ -122,7 +122,7 @@
           {assign var=removedAddLoc value=$removedadditionalLocations|json_decode:true}
             {foreach from=$removedAddLoc item=$location}
               {if isset($location.address)}
-              <p>Location : {if isset($location.address)} {$location.addresss} {else} {if isset($location.name)}  {$location.name} {else}  {/if}{/if} has been removed as of the Effective date of this Endorsement</p>
+              <p>Location : {if isset($location.address)} {$location.address} {else} {if isset($location.name)}  {$location.name} {else}  {/if}{/if} has been removed as of the Effective date of this Endorsement</p>
               {/if}
             {/foreach}
           {/if}
@@ -251,7 +251,7 @@
       </div>
       {/if}
 
-     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && $removedadditionalLocations != ""))}
+     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && isset($removedadditionalLocations) && $removedadditionalLocations != ""))}
       <div class = "box">
         <center><b><u>***Additional Locations***</u></b></center>
         {if $newAdditionalLocations != ""}
