@@ -742,14 +742,16 @@ class FileService extends AbstractService
                     if(!isset($attachmentsArray)){
                         $attachmentsArray = array();
                     }
-                    if(is_array($attachmentsArray)){
+                    if(is_array($attachmentsArray) && !empty($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
-                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            $attachment = is_string($attachment) ? json_decode($attachment,true) : $attachment;
+                            if(!empty($attachment)){
+                                $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            }
                         }
-                        $fieldData['field_value']=json_encode($finalAttached);
                     }
+                    $fieldData['field_value']=json_encode($finalAttached);
                     $fieldData[$field['name']] = $finalAttached;
-                    $this->logger->info("Field Created with File- " . json_encode($fieldData));
                     break;
                 } else {
                     $fieldData[$field['name']] = $fieldvalue;
@@ -767,18 +769,22 @@ class FileService extends AbstractService
                     } else {
                         $attachmentsArray = $fieldvalue;
                     }
+                    $finalAttached = array();
                     if(!isset($attachmentsArray)){
                         $attachmentsArray = array();
                     }
-                    if(is_array($attachmentsArray)){
+                    if(is_array($attachmentsArray) && !empty($attachmentsArray)){
                         $finalAttached = array();
                         foreach ($attachmentsArray as $attachment) {
-                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            $attachment = is_string($attachment) ? json_decode($attachment,true) : $attachment;
+                            if(!empty($attachment)){
+                                $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            }
                         }
-                        $fieldData['field_value']=json_encode($finalAttached);
-                        $fieldvalue = $finalAttached;
-                        $fieldData[$field['name']] = $finalAttached;
                     }
+                    $fieldData['field_value']=json_encode($finalAttached);
+                    $fieldvalue = $finalAttached;
+                    $fieldData[$field['name']] = $finalAttached;
                 } else {
                     $fieldData[$field['name']] = $fieldvalue;
                 }
