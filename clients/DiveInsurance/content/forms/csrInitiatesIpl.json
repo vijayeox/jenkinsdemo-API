@@ -2583,7 +2583,8 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) != 0){\n      value = total;\n    }\n}",
+									"redrawOn": "data",
+									"calculateValue": "console.log(\"CSR GRAND TOTAL\" + data.csrGrandTotal);\nconsole.log(\"USER GRAND TOTAL\" + data.userGrandTotal);\nvar total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n \n    if(parseFloat(total) != 0){\n      value = total;\n    }else{\n      value = 0;\n    } console.log(\"TOTAL\" + total);\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -2603,6 +2604,7 @@
 							"path": "page3PanelColumns5Columns2"
 						}, {
 							"label": "userGrandTotal",
+							"redrawOn": "data",
 							"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
 							"key": "userGrandTotal",
 							"type": "hidden",
@@ -2611,7 +2613,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "csrGrandTotal",
-							"redrawOn": "amount",
+							"redrawOn": "data",
 							"calculateValue": "if(data.CSRReviewRequired){\n  value = data.amount;\n}",
 							"key": "csrGrandTotal",
 							"type": "hidden",
@@ -4981,7 +4983,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 591,
+	"_vid": 595,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5002,6 +5004,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-08-20T07:21:56.103Z",
+	"modified": "2020-08-27T09:13:06.675Z",
 	"machineName": "testdivehub:csrInitiates"
 }
