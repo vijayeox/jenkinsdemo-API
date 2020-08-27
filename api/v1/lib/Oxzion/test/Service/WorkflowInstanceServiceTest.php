@@ -197,7 +197,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $result = $this->workflowInstanceService->startWorkflow($params);
         $sqlQuery = 'SELECT created_by FROM ox_workflow_instance order by id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(7,$newQueryResult[0]['created_by']);
+        $this->assertEquals(51,$newQueryResult[0]['created_by']);
     }
 
     public function testStartWorkflowWithoutCreatedBy(){
