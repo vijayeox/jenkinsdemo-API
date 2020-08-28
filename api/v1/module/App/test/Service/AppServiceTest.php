@@ -434,14 +434,19 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'role' => array(array('name' => 'Policy Holder', 'default' => '1', 'privileges' => array(array('privilege_name' => 'MANAGE_MY_POLICY', 'permission' => '3')),'uuid' => '703d3a09-b7f3-49e9-9c79-74d5cae7f6e7')));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
-        $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and org_id = 300";
-        $adapter = $this->getDbAdapter();
-        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
-        $statement = $adapter->query($sqlQuery);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $result = $resultSet->initialize($result)->toArray();
-        $this->assertEquals($result[0]['count'], 1);
+        $sqlQuery = "SELECT * FROM ox_role WHERE uuid = '".$data['role'][0]['uuid']."'";
+        $result = $this->executeQueryTest($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $result = $result[0];
+        $this->assertEquals($data['role'][0]['name'], $result['name']);
+        $this->assertEquals($data['role'][0]['default'], $result['default_role']);
+        $sqlQuery = "SELECT rp.* FROM ox_role_privilege rp WHERE rp.role_id = ".$result['id'];
+        $result = $this->executeQueryTest($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $result = $result[0];
+        $privilege = $data['role'][0]['privileges'][0];
+        $this->assertEquals($privilege['privilege_name'], $result['privilege_name']);
+        $this->assertEquals($privilege['permission'], $result['permission']);
     }
 
     public function testCreateRoleWithNoRoleInData()
@@ -467,7 +472,7 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::ORG_UUID, 'e1033dc0-126b-40ba-89e0-d3061bdeda4p');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('name' => 'V&B', 'uuid' => 'e1033dc0-126b-40ba-89e0-d3061bdeda4p','email' => 'vb07@gmail.com','address1' => '6 bCenterpoint','address2' => 'Dr.','city' => 'La Palma','state' => 'CA','zip' => '90623','country' => 'United States','contact' => array('username' => 'vb07.gmail.com','firstname' => 'Admin','lastname' => 'User','email' => 'vb07@gmail.com'),'preferences' => '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $appService->createOrg($data);
+        $content = $appService->setupOrg($data);
         $sqlQuery = "SELECT count(*) as count FROM ox_organization";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -484,7 +489,7 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
         $path = __DIR__ . '/../sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $appService->createOrg($data);
+        $content = $appService->setupOrg($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_organization WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -572,24 +577,16 @@ class AppServiceTest extends AbstractServiceTest
         $formfolder = $config['FORM_FOLDER']. 'a77ea120-b028-479b-8c6e-60476b6a4459' ;
         $result2 = file_exists($formfolder);
         $this->assertEquals($result2, 1);
-        $templatefolder = $config['TEMPLATE_FOLDER']. 'a77ea120-b028-479b-8c6e-60476b6a4456';
-        $result3 = file_exists($templatefolder);
-        $this->assertEquals($result3, 1);
         if (is_link($delegatefolder)){
             unlink($delegatefolder);
         };
         if (is_link($formfolder)){
             unlink($formfolder);
         };
-        if (is_link($templatefolder)){
-            unlink($templatefolder);
-        };
         $result = file_exists($delegatefolder);
         $this->assertEquals($result, 0);
         $result2 = file_exists($formfolder);
         $this->assertEquals($result2, 0);
-        $result3 = file_exists($templatefolder);
-        $this->assertEquals($result3, 0);
     }
 
     public function testDeleteApp() {
