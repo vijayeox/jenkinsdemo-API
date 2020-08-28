@@ -103,10 +103,10 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_dashboard'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['dashboard_type']['error'], 'required');

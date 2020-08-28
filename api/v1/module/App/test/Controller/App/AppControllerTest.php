@@ -912,7 +912,6 @@ class AppControllerTest extends ControllerTest
             }
         }
         
-        $this->clean($path, $yaml, $appName, $YmlappUuid);   
     }
 
     public function testDeployApplication()
