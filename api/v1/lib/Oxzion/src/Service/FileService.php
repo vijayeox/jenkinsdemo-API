@@ -218,7 +218,6 @@ class FileService extends AbstractService
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
             // The next line needs to be removed for file save to work
-            $this->updateFileData($fileId, $fields);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -301,7 +300,9 @@ class FileService extends AbstractService
             $this->beginTransaction();
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
             $file->exchangeArray($fileObject);
+
             $file->validate();
+            $this->logger->info("UPDATEd FILE CHECK DATA --".print_r($file,true));
             $count = $this->table->save($file);
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
@@ -321,6 +322,9 @@ class FileService extends AbstractService
             }
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
+            $select = "SELECT * from ox_file where id = '".$id."'";
+            $result = $this->executeQuerywithParams($select)->toArray();
+            $this->logger->info("FILE DATA CHECK AFTER DATA --".print_r($result,true));
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (($latestcheck == 1) && isset($id)) {
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
@@ -797,18 +801,20 @@ class FileService extends AbstractService
             }
             $fldValue = $fieldvalue;
             $fieldData['childFields'] = $this->getChildFieldsData($field,$fldValue,$field['child_fields'],$entityId,$fileId,$rowNumber, $allFields);
-            foreach ($fldValue as $i => $value) {
-                foreach ($value as $key => $fVal) {
-                    $temp = !is_array($fVal) ? json_decode($fVal) : $fVal;
-                    $fieldvalue[$i][$key] = $temp ? $temp : $fVal;
+            if(is_array($fldValue)){
+                foreach ($fldValue as $i => $value) {
+                    foreach ($value as $key => $fVal) {
+                        $temp = !is_array($fVal) ? json_decode($fVal) : $fVal;
+                        $fieldvalue[$i][$key] = $temp ? $temp : $fVal;
+                    }
                 }
-            }
-            
-            if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
-                foreach ($fieldData['childFields']['childFields'] as $childfield) {
-                    array_push($fieldData['childFields'],$childfield);
+                
+                if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
+                    foreach ($fieldData['childFields']['childFields'] as $childfield) {
+                        array_push($fieldData['childFields'],$childfield);
+                    }
+                    unset($fieldData['childFields']['childFields']);
                 }
-                unset($fieldData['childFields']['childFields']);
             }
         } else {
             $fieldData['childFields'] = array();
@@ -1524,7 +1530,7 @@ class FileService extends AbstractService
         return $data;
     }
     public function appendAttachmentToFile($fileAttachment,$field,$fileId,$orgId = null){
-        if(!isset($fileAttachment['file'])) {
+        if(!isset($fileAttachment['file']) && isset($fileAttachment['name'])) {
             $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_UUID);
             $fileUuid = $this->getUuidFromId('ox_file', $fileId);
             $fileLocation = $fileAttachment['path'];
