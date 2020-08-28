@@ -9,7 +9,6 @@ use Oxzion\InvalidParameterException;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
-use Oxzion\Service\OrganizationService;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Model\WorkflowInstance;
@@ -23,7 +22,6 @@ class WorkflowInstanceService extends AbstractService
     protected $workflowService;
     protected $fileService;
     protected $processEngine;
-    protected $organizationService;
     protected $activityEngine;
     protected $registratinService;
 
@@ -32,7 +30,6 @@ class WorkflowInstanceService extends AbstractService
         $dbAdapter,
         WorkflowInstanceTable $table,
         FileService $fileService,
-        OrganizationService $organizationService,
         WorkflowService $workflowService,
         WorkflowFactory $workflowFactory,
         ActivityInstanceService $activityInstanceService,
@@ -46,7 +43,6 @@ class WorkflowInstanceService extends AbstractService
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
         $this->activityEngine = $this->workFlowFactory->getActivity();
         $this->activityInstanceService = $activityInstanceService;
-        $this->organizationService = $organizationService;
         $this->registrationService = $registrationService;
     }
     public function setProcessEngine($processEngine)
