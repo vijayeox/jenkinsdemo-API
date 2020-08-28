@@ -64,7 +64,7 @@ menu:
         icon: 'fas fa-home'
         page_uuid: dce7df02-7a3b-4468-bed8-edffd8216822
         uuid: 2ba0936d-94d1-4b68-9da2-ccc60faaefe0
-        privilege: MANAGE_MY_POLICY_READ
+        privilege: '{"eq" : "MANAGE_MY_POLICY_READ","neq" : "MANAGE_POLICY_APPLICATION_READ"}'
     -
         name: 'Manage Workbooks'
         icon: 'fas fa-home'
@@ -86,6 +86,18 @@ entity:
                 name: status
                 text: Status
                 index: true
+                data_type: text
+            -
+                name: documentsToBeGenerated
+                text: documentsToBeGenerated
+                data_type: numeric
+            -
+                name: documentsSelectedCount
+                text: documentsSelectedCount
+                data_type: numeric
+            -
+                name: submissionTime
+                text: submissionTime
                 data_type: text
             -
                 name: producername

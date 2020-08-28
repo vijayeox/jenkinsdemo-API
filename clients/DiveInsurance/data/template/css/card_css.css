@@ -117,14 +117,14 @@ p.break { page-break-after: always; }
 }
 
 .name_details{
-  width:65%;
+  width:55%;
   float:left;
   margin-left:10px;
   text-transform: uppercase;
 }
 
 .certi_details{
-  width:30%;
+  width:40%;
   float:left;
   margin-left: 30px;
 }
@@ -135,8 +135,12 @@ p.break { page-break-after: always; }
 }
 
 .certi_value{
-  width:30%;
+  width:50%;
   float:left;
+}
+.sign{
+  font-size: 13px;
+  margin-top: 6%; 
 }
 .lapse_body{
   font-size: 13px;
@@ -179,6 +183,7 @@ p.break { page-break-after: always; }
 
 .name_title{
   margin-top:0px;
+  font-size: 15px;
 }
 .img{
    margin-bottom:5%;
@@ -201,7 +206,7 @@ p.break { page-break-after: always; }
 .main_div{
   height:100%;
   margin-top: 30%;
-  margin-bottom: 30%;
+  margin-bottom: 5%;
 }
 
 /* Cover Letter */

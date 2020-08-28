@@ -52,6 +52,11 @@
                   document.getElementById("dbaName").style.display = "block";
                 }
             }
+            if (css_selector_classes[css_class] == "state_in_short") {
+              if(vars["state_in_short"] == "NY") {
+                  document.getElementById("padirisk").innerHTML = "PADI Risk Purchasing Group";
+              }
+            }       
           }
         }
       agentInfo();
@@ -120,6 +125,7 @@
       </div>
     </div>
     <hr class="grp_hr_value"></hr>
+    <p class = "grpp_margin" id="padirisk"></p>
       <div class="gi_type">
         <hr class="ghr_value"></hr>
           <div class="gi_type1">

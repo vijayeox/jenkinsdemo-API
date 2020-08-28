@@ -89,10 +89,7 @@ boolean result9 = false
 boolean result10 = false
 boolean result11 = false
 
-if(startDate &gt; '2020-07-31'){
-  result11 = true
-}
-if (additionalInsured) {
+if (additionalInsured == 'addAdditionalInsureds') {
  additionalInsured.each {
   if (it.businessRelation &amp;&amp; it.businessRelation == 'other') {
     result1 = true

@@ -614,8 +614,8 @@ class FileService extends AbstractService
                     }
                     if($field['type'] == 'document' || $field['type'] == 'file' || $field['index'] == 1){
                         $fileFields[] = $indexedField;
-                    }                    
-                    $fieldData[$field['name']] = $fieldvalue;
+                    }       
+                    $fieldData[$field['name']] = $fieldvalue;             
                     unset($indexedField);
                 }
                 if($allFields){
@@ -802,14 +802,16 @@ class FileService extends AbstractService
                     if(!isset($attachmentsArray)){
                         $attachmentsArray = array();
                     }
-                    if(is_array($attachmentsArray)){
+                    if(is_array($attachmentsArray) && !empty($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
-                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            $attachment = is_string($attachment) ? json_decode($attachment,true) : $attachment;
+                            if(!empty($attachment)){
+                                $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            }
                         }
-                        $fieldData['field_value']=json_encode($finalAttached);
                     }
+                    $fieldData['field_value']=json_encode($finalAttached);
                     $fieldData[$field['name']] = $finalAttached;
-                    $this->logger->info("Field Created with File- " . json_encode($fieldData));
                     break;
                 } else {
                     $fieldData[$field['name']] = $fieldvalue;
@@ -827,18 +829,22 @@ class FileService extends AbstractService
                     } else {
                         $attachmentsArray = $fieldvalue;
                     }
+                    $finalAttached = array();
                     if(!isset($attachmentsArray)){
                         $attachmentsArray = array();
                     }
-                    if(is_array($attachmentsArray)){
+                    if(is_array($attachmentsArray) && !empty($attachmentsArray)){
                         $finalAttached = array();
                         foreach ($attachmentsArray as $attachment) {
-                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            $attachment = is_string($attachment) ? json_decode($attachment,true) : $attachment;
+                            if(!empty($attachment)){
+                                $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            }
                         }
-                        $fieldData['field_value']=json_encode($finalAttached);
-                        $fieldvalue = $finalAttached;
-                        $fieldData[$field['name']] = $finalAttached;
                     }
+                    $fieldData['field_value']=json_encode($finalAttached);
+                    $fieldvalue = $finalAttached;
+                    $fieldData[$field['name']] = $finalAttached;
                 } else {
                     $fieldData[$field['name']] = $fieldvalue;
                 }
@@ -853,7 +859,7 @@ class FileService extends AbstractService
             $fieldData['childFields'] = $this->getChildFieldsData($field,$fldValue,$field['child_fields'],$entityId,$fileId,$rowNumber, $allFields);
             foreach ($fldValue as $i => $value) {
                 foreach ($value as $key => $fVal) {
-                    $temp = json_decode($fVal);
+                    $temp = !is_array($fVal) ? json_decode($fVal) : $fVal;
                     $fieldvalue[$i][$key] = $temp ? $temp : $fVal;
                 }
             }
@@ -890,6 +896,7 @@ class FileService extends AbstractService
         }else{
             $fileAttributes = $this->getFileAttributes($fileId, 'ox_file_document', $parentField['id']);
         }
+        
         if(count($childFields) > 0){
             if(is_array($fieldvalue)){
                 $i = 0;
@@ -912,6 +919,7 @@ class FileService extends AbstractService
                             unset($childFieldsArray[$i]['childFields']);
                         }
                         $childFieldValues[$field['name']] = isset($value[$field['name']]) ? $value[$field['name']] : null;
+                            
                         if($field['type'] == 'file'){
                             $childFieldValues[$field['name']] = is_array($val) ? json_encode($val) : $val;
                         }
@@ -1601,7 +1609,7 @@ class FileService extends AbstractService
         return $fileAttachment;
     }
 
-    private function buildSortQuery($sortOptions, &$field)
+    public function buildSortQuery($sortOptions, &$field)
     {
         $sortCount = 0;
         $sortTable = "tblf" . $sortCount;

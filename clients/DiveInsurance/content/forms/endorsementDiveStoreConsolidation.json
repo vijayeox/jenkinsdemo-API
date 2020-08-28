@@ -126,62 +126,19 @@
 				"columns": [{
 					"components": [{
 						"label": "Policy Start Date",
-						"displayInTimezone": "utc",
-						"allowInput": false,
-						"format": "MM-dd-yyyy",
+						"suffix": "<i class=\"fa fa-calendar\"></i>",
+						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"minDate": "2020-06-30T00:00:00+05:30",
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
 						"clearOnHide": false,
-						"validate": {
-							"customMessage": "Please select the Policy Start Date"
-						},
-						"errorLabel": "Policy Start Date",
-						"key": "policyPeriod",
-						"properties": {
-							"delegate": "RateCard"
-						},
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "utc",
-							"language": "en",
-							"useLocaleSettings": false,
-							"allowInput": false,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": false,
-							"minDate": "2020-06-30T00:00:00+05:30",
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "start_date",
-						"calculateValue": "if(data.policyPeriod && moment(data.policyPeriod)){\n if((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) && moment(data.policyPeriod).format(\"YYYY-MM-DD\") <= '2020-07-13')\n { \n   value = moment('2020-06-30').format(\"YYYY-MM-DD\");\n }else{\n   value = moment(data.policyPeriod).format(\"YYYY-MM-DD\");\n }\n}else{\n  value = moment().format(\"YYYY-MM-DD\");\n}",
-						"key": "start_date",
+						"calculateValue": "if(data.start_date){\n  value = moment(data.start_date).format(\"MM-DD-YYYY\");\n}",
+						"key": "policyStartDate",
 						"properties": {
 							"data_type": "Date"
 						},
-						"type": "hidden",
+						"type": "textfield",
 						"input": true,
-						"tableView": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"keyModified": true
+						"hideOnChildrenHidden": false
 					}],
 					"width": 5,
 					"offset": 0,
@@ -191,49 +148,18 @@
 				}, {
 					"components": [{
 						"label": "Policy End Date",
-						"displayInTimezone": "utc",
-						"useLocaleSettings": true,
-						"allowInput": false,
-						"format": "MM-dd-yyyy",
+						"suffix": "<i class=\"fa fa-calendar\"></i>",
+						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"datepickerMode": "day"
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
 						"clearOnHide": false,
-						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nvar day = today.date();\nif(month >= 5){\n  if(month==5 && day==30){\n    value = (year + 1) + \"-06-30\";\n  } else if(month ==5 && day < 30){\n    value = (year) + \"-06-30\";\n  } else {\n    value = (year + 1) + \"-06-30\";\n  }\n}else{\nvalue = (year)+ \"-06-30\";\n}",
-						"key": "end_date",
+						"calculateValue": "if(data.end_date){\n  value = moment(data.end_date).format(\"MM-DD-YYYY\");\n}",
+						"key": "policyEndDate",
 						"properties": {
 							"data_type": "Date"
 						},
-						"type": "datetime",
+						"type": "textfield",
 						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "utc",
-							"language": "en",
-							"useLocaleSettings": true,
-							"allowInput": false,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
 						"hideOnChildrenHidden": false
 					}],
 					"width": 5,
@@ -245,6 +171,18 @@
 				"type": "columns",
 				"hideLabel": true,
 				"path": "panelColumns"
+			}, {
+				"label": "start_date",
+				"key": "start_date",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
+				"label": "end_date",
+				"key": "end_date",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -8891,7 +8829,7 @@
 												"actions": [{
 													"name": "Enable Manual Override",
 													"type": "mergeComponentSchema",
-													"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
+													"schemaDefinition": "\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\n"
 												}]
 											}, {
 												"name": "Disable Custom Tax",
@@ -9849,17 +9787,16 @@
 									},
 									"enableMaxDateInput": false,
 									"enableTime": false,
+									"redrawOn": "data",
 									"clearOnHide": false,
-									"customDefaultValue": "value = moment(data['update_date']).format(\"YYYY-MM-DD\");",
-									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
+									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(row.existingEffectiveDate).format(\"YYYY-MM-DD\"); \n}\n\nif((!row.effectiveDate || row.effectiveDate == '' || row.effectiveDate == undefined) && moment(row.newMembereffectiveDate).isBefore(moment(data.update_date))){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
-										"customMessage": "Effective date is required",
-										"custom": "if(data.effectiveDate){\n  valid = (moment(data.effectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}"
+										"custom": "if(row.newMembereffectiveDate && (!row.effectiveDate || row.effectiveDate == \"\" || row.effectiveDate == undefined)){\n  valid = (moment(row.newMembereffectiveDate).format('MM-DD-YYYY') >= moment(data['update_date']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than endorsement effective date \"+moment(data['update_date']).format('MM-DD-YYYY');\n}else if(row.newMembereffectiveDate){\n  valid = (moment(row.newMembereffectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n  valid = (!row.newMembereffectiveDate) ? \"Effective Date is required\" : true;\n}"
 									},
 									"key": "newMembereffectiveDate",
-									"customConditional": "if(!row.start_date || row.start_date == \"\"){\n  show = true;\n  console.log(\"ONE\");\n}else if(moment(row.start_date).diff(moment(data.update_date)) >= 0){\n  console.log(\"TWO\");\n  show = true;\n}else{\n  console.log(\"THREE\");\n  show = false;\n}\nconsole.log(\"RESULT\");\nconsole.log(show);\nconsole.log(moment(row.start_date).diff(moment(row.update_date)));",
+									"customConditional": "if(!row.start_date || row.start_date == \"\"){\n  show = true;\n}else if(moment(row.start_date).diff(moment(data.update_date)) >= 0){\n  show = true;\n}else{\n  show = false;\n}",
 									"type": "datetime",
 									"noCalendar": false,
 									"input": true,
@@ -9898,7 +9835,8 @@
 							}, {
 								"components": [{
 									"label": "start_date",
-									"calculateValue": "if(row['effectiveDate']){\n  value = moment(row['effectiveDate']).format(\"YYYY-MM-DD\");\n} else {\n  value = moment(row['newMembereffectiveDate']).format(\"YYYY-MM-DD\");\n}",
+									"redrawOn": "data",
+									"calculateValue": "if(row['effectiveDate']){\n  value = moment(row['effectiveDate']).format(\"YYYY-MM-DD\");\n} else if(row['newMembereffectiveDate'] && row['newMembereffectiveDate'] != undefined){\n  value = moment(row['newMembereffectiveDate']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(data.update_date).format(\"YYYY-MM-DD\");\n}\n\nif((!row.effectiveDate || row.effectiveDate == '' || row.effectiveDate == undefined) && moment(row.newMembereffectiveDate).isBefore(moment(data.update_date))){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
 									"key": "start_date",
 									"type": "hidden",
 									"input": true,
@@ -9954,7 +9892,6 @@
 									"tableView": false,
 									"enableMinDateInput": false,
 									"datePicker": {
-										"minDate": "2020-04-14T18:30:00.000Z",
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"datepickerMode": "day"
@@ -9985,7 +9922,7 @@
 										"hourIncrement": 1,
 										"minuteIncrement": 1,
 										"time_24hr": true,
-										"minDate": "2020-04-14T18:30:00.000Z",
+										"minDate": null,
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"maxDate": null
@@ -10077,15 +10014,16 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
+							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattch[0].length == 0){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
 							"key": "documentattach",
 							"type": "file",
+							"url": "/file/attachment",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"url": "/file/attachment"
+							"hideOnChildrenHidden": false
 						}, {
 							"type": "documentviewer",
 							"key": "document1",
@@ -10093,7 +10031,7 @@
 							"dtype": "documentviewer",
 							"datype": "documentviewer",
 							"dattype": "documentviewer",
-							"customConditional": "if (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+							"customConditional": "if(data.CSRReviewRequired || data.CSRReviewRequired == true) {\nif (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}}else{\nshow = false;\n}",
 							"datatype": "documentviewer",
 							"data_type": "documentviewer",
 							"label": " ",
@@ -11365,83 +11303,69 @@
 				"key": "page5PanelColumns",
 				"columns": [{
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBuildingCat",
 						"label": "limitOver500000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver500000CoverBuildingCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBuildingCat",
 						"label": "limitOver250000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver250000CoverBuildingCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBuildingCat",
 						"label": "limitOver100000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver100000CoverBuildingCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBuildingCat",
 						"label": "limitOver0CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver0CoverBuildingCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBuildingNonCat",
 						"label": "limitOver500000CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
+						"redrawOn": "data",
+						"key": "limitOver500000CoverBuildingNonCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBuildingNonCat",
 						"label": "limitOver250000CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
+						"redrawOn": "data",
+						"key": "limitOver250000CoverBuildingNonCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBuildingNonCat",
 						"label": "limitOver100000CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver100000CoverBuildingNonCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "limitOver0CoverBuildingNonCat",
+						"key": "limitOver0CoverBuildingNonCat",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "limitOver0CoverBuildingNonCat",
-						"label": "limitOver0CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -11452,85 +11376,69 @@
 					"size": "md"
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBusIncomeCat",
 						"label": "limitOver500000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver500000CoverBusIncomeCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBusIncomeCat",
 						"label": "limitOver250000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver250000CoverBusIncomeCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBusIncomeCat",
 						"label": "limitOver100000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver100000CoverBusIncomeCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBusIncomeCat",
 						"label": "limitOver0CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver0CoverBusIncomeCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBusIncomeNonCat",
 						"label": "limitOver500000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver500000CoverBusIncomeNonCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBusIncomeNonCat",
 						"label": "limitOver250000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver250000CoverBusIncomeNonCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBusIncomeNonCat",
 						"label": "limitOver100000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
+						"key": "limitOver100000CoverBusIncomeNonCat",
 						"type": "hidden",
+						"input": true,
+						"tableView": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
+						"label": "limitOver0CoverBusIncomeNonCat",
+						"defaultValue": "0.00997272",
+						"key": "limitOver0CoverBusIncomeNonCat",
+						"type": "hidden",
 						"input": true,
 						"tableView": true,
-						"key": "limitOver0CoverBusIncomeNonCat",
-						"label": "limitOver0CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
 						"lockKey": true,
-						"defaultValue": "0.00997272",
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -11995,7 +11903,6 @@
 			}, {
 				"label": "stateTaxData",
 				"persistent": false,
-				"protected": true,
 				"key": "stateTaxData",
 				"properties": {
 					"data_type": "list"
@@ -12544,8 +12451,9 @@
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else{\n  value = 0;\n}",
+						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  \nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\n\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n \n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n     value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n   \n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n   \n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n \n  value = 0;\n}\n}else{\n \n  value = 0;\n}\n",
 						"key": "ContentsFP",
 						"type": "number",
 						"input": true,
@@ -13301,7 +13209,7 @@
 						"actions": [{
 							"name": "Enable Manual Override",
 							"type": "mergeComponentSchema",
-							"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
+							"schemaDefinition": "\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\n"
 						}]
 					}, {
 						"name": "Disable Custom Tax",
@@ -14739,6 +14647,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-20T11:36:13.098Z",
+	"modified": "2020-08-27T12:09:11.336Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }

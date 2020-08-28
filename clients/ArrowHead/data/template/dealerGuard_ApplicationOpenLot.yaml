@@ -94,7 +94,7 @@
 -
    Source Worksheet: 'Number of years in business under current ownership:'
    pageName: APPLICATION
-   key: numYearsOfOwnership
+   key: dealerguardOpenLot*ownershipDate
    cell: 'J4'
 -
    Source Worksheet: Any policy or coverage declined, cancelled or non-renewed during the prior
@@ -120,12 +120,6 @@
    key: employeedeductibleparticipation
    method: checkbox_X
    cell: B47
-# -
-#    Source Worksheet: accident Investigation
-#    pageName: APPLICATION
-#    key: accidentInvestigation
-#    method: checkbox_X
-#    cell: B44
 -
    Source Worksheet: Formal safety meetings
    pageName: APPLICATION
@@ -336,19 +330,19 @@
    Source Worksheet: Demo Furnished - Comp
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverageQuestions_demoFurnishedComp
+   key: requestedCoverageQuestions_demosFurnishedAutosComp
    cell: F17
 -
    Source Worksheet: Demo Furnished - Coll
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverageQuestions_demoFurnishedCollision
+   key: requestedCoverageQuestions_demosFurnishedAutosCollision
    cell: F17
 -
    Source Worksheet: Demo Furnished - False Pretense
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverageQuestions_demoFurnishedFalsePretense
+   key: requestedCoverageQuestions_demosFurnishedAutosFalsePretense
    cell: T17
 -
    Source Worksheet: Service Loaners - Comp

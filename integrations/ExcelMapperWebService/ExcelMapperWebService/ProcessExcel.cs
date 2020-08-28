@@ -73,7 +73,7 @@ namespace ProcessExcel
                 _callback.orgId = parsedJson["orgId"].ToString();
                 _callback.errorlist = new List<ErrorDetails>();
                 List<string> myvariables = new List<string>();
-                string mystr = _settings.postURL;
+                string mystr = parsedJson["postURL"].ToString();
                 while (mystr.Contains("{"))
                 {
                     string variable = mystr.Split('{', '}')[1];

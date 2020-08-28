@@ -16,7 +16,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     use HttpClientTrait;
     use FileTrait;
-    protected $ExcelTemplateMapperServiceURL = "http://54.161.224.59:5000/api/FileUpload";
 
     protected $carrierTemplateList = array(
         "dealerGuard_ApplicationOpenLot" => array(
@@ -63,6 +62,14 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
+        // Add logs for created by id and producer name who triggered submission
+        if (isset($data['submittedBy']) && !empty($data['submittedBy'])) {
+            if ($data['submittedBy'] == 'accountExecutive') {
+                return $data;
+            }
+        } else {
+            return $data;
+        }
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
 
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
@@ -72,7 +79,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $generatedDocumentsList = array();
         $excelData = array();
         $tempData = $data;
-        if (isset($data['genericData']) && !empty($data['genericData)'])) {
+        if (isset($data['genericData']) && !empty($data['genericData'])) {
             foreach ($this->checkJSON(
                 $data['genericData']
             ) as $customKey => $customValue) {
@@ -199,10 +206,20 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                 $fieldNamePDFData = $fieldProps["fieldname"];
                                 $fieldOptions = $fieldProps["options"];
                                 $parentValues = $this->checkJSON($data[$fieldProps["parentKey"]]);
-                                if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == true) {
+                                if (!empty($parentValues[$formChildField]) && ($parentValues[$formChildField] == 'true')) {
                                     $pdfData[$fieldNamePDFData] =  $fieldOptions["true"];
-                                } else {
-                                    $pdfData[$fieldNamePDFData] =  $fieldOptions["false"];
+                                }
+                            }
+                        }
+                    }
+                    if (isset($fieldTypeMappingPDF[$key]["survey"])) {
+                        foreach ($fieldTypeMappingPDF[$key]["survey"] as  $formChildField => $fieldProps) {
+                            if (isset($data[$fieldProps["parentKey"]]) && !empty($data[$fieldProps["parentKey"]])) {
+                                $fieldNamePDFData = $fieldProps["fieldname"];
+                                $fieldOptions = $fieldProps["options"];
+                                $parentValues = $this->checkJSON($data[$fieldProps["parentKey"]]);
+                                if (!empty($parentValues[$formChildField]) && $parentValues[$formChildField] == 'yes') {
+                                    $pdfData[$fieldNamePDFData] =  $fieldOptions["yes"];
                                 }
                             }
                         }
@@ -254,7 +271,10 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     "type" => "file/json"
                 )
             );
+            date_default_timezone_set('UTC');
+            $data['submissionTime'] = (new DateTime)->format('c');
             $data['documentsToBeGenerated'] = count($excelData);
+            $data['documentsSelectedCount'] = count($excelData) + count($generatedDocumentsList) - 1;
             $data["status"] = "Processing";
         } else {
             $data["status"] = "Generated";
@@ -265,10 +285,17 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $this->saveFile($data, $fileUUID);
 
         if (count($excelData) > 0) {
+            $selectQuery = "Select value FROM applicationConfig WHERE type ='excelMapperURL'";
+            $ExcelTemplateMapperServiceURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+            
+            $selectQuery = "Select value FROM applicationConfig WHERE type ='callbackURL'";
+            $callbackURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+
             foreach ($excelData as $excelItem) {
+                $excelItem["postURL"] = $callbackURL;
                 $response = $this->makeRequest(
                     HTTPMethod::POST,
-                    $this->ExcelTemplateMapperServiceURL,
+                    $ExcelTemplateMapperServiceURL,
                     $excelItem
                 );
                 $this->logger->info("Excel Mapper POST Request for " . $excelItem["fileId"] . "\n" . $response);
@@ -289,9 +316,10 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     private function formatDate($data, $fieldConfig = null, $formData = null)
     {
+        $date = strpos($data, "T") ? explode("T", $data)[0] : $data;
         return date(
             "m-d-Y",
-            strtotime($data)
+            strtotime($date)
         );
     }
 
@@ -392,10 +420,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
             if (isset($value[$childKey]) && !empty($value[$childKey])) {
                 if (isset($fieldConfig['returnValue'])) {
-                    if (isset($fieldConfig['returnValue'][$value[$childKey]])) {
+                    $temp = $value[$childKey] . "";
+                    if (isset($fieldConfig['returnValue'][$temp])) {
                         array_push(
                             $parsedData,
-                            [$fieldConfig['returnValue'][$value[$childKey]] . ""]
+                            [$fieldConfig['returnValue'][$temp] . ""]
                         );
                     }
                 } else {
