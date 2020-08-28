@@ -49,34 +49,6 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Service\AppService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AppService($container->get('config'), 
-                                                $dbAdapter, 
-                                                $container->get(Model\AppTable::class), 
-                                                $container->get(\Oxzion\Service\WorkflowService::class), 
-                                                $container->get(\Oxzion\Service\FormService::class), 
-                                                $container->get(\Oxzion\Service\FieldService::class), 
-                                                $container->get(\Oxzion\Service\JobService::class), 
-                                                $container->get(\Oxzion\Service\OrganizationService::class), 
-                                                $container->get(\Oxzion\Service\EntityService::class), 
-                                                $container->get(\Oxzion\Service\PrivilegeService::class), 
-                                                $container->get(\Oxzion\Service\RoleService::class), 
-                                                $container->get(\App\Service\MenuItemService::class), 
-                                                $container->get(\App\Service\PageService::class),
-                                                $container->get(\Oxzion\Service\BusinessRoleService::class)
-                        );
-                },
-                Model\AppTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\AppTableGateway::class);
-                    return new Model\AppTable($tableGateway);
-                },
-                Model\AppTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\App());
-                    return new TableGateway('ox_app', $dbAdapter, null, $resultSetPrototype);
-                },
                 Service\MenuItemService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\MenuItemService($container->get('config'), $container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
@@ -130,8 +102,8 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\AppController::class => function ($container) {
                     return new Controller\AppController(
-                        $container->get(Model\AppTable::class),
-                        $container->get(Service\AppService::class),
+                        $container->get(\Oxzion\Model\AppTable::class),
+                        $container->get(\Oxzion\Service\AppService::class),
                         $container->get(AdapterInterface::class),
                         $container->get(WorkflowService::class),
                         $container->get(\Oxzion\AppDelegate\AppDelegateService::class)
@@ -139,8 +111,8 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\AppRegisterController::class => function ($container) {
                     return new Controller\AppRegisterController(
-                        $container->get(Model\AppTable::class),
-                        $container->get(Service\AppService::class),
+                        $container->get(\Oxzion\Model\AppTable::class),
+                        $container->get(\Oxzion\Service\AppService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

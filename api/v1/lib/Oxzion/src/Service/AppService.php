@@ -1,8 +1,8 @@
 <?php
-namespace App\Service;
+namespace Oxzion\Service;
 
-use App\Model\App;
-use App\Model\AppTable;
+use Oxzion\Model\App;
+use Oxzion\Model\AppTable;
 use Exception;
 use FileSystemIterator;
 use Oxzion\Auth\AuthConstants;

@@ -41,6 +41,34 @@ class Module
                 Auth\AuthSuccessListener::class => function ($container) {
                     return new Auth\AuthSuccessListener($container->get(Service\UserService::class));
                 },
+                Service\AppService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\AppService($container->get('config'), 
+                                                $dbAdapter, 
+                                                $container->get(Model\AppTable::class), 
+                                                $container->get(\Oxzion\Service\WorkflowService::class), 
+                                                $container->get(\Oxzion\Service\FormService::class), 
+                                                $container->get(\Oxzion\Service\FieldService::class), 
+                                                $container->get(\Oxzion\Service\JobService::class), 
+                                                $container->get(\Oxzion\Service\OrganizationService::class), 
+                                                $container->get(\Oxzion\Service\EntityService::class), 
+                                                $container->get(\Oxzion\Service\PrivilegeService::class), 
+                                                $container->get(\Oxzion\Service\RoleService::class), 
+                                                $container->get(\App\Service\MenuItemService::class), 
+                                                $container->get(\App\Service\PageService::class),
+                                                $container->get(\Oxzion\Service\BusinessRoleService::class)
+                        );
+                },
+                Model\AppTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\AppTableGateway::class);
+                    return new Model\AppTable($tableGateway);
+                },
+                Model\AppTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\App());
+                    return new TableGateway('ox_app', $dbAdapter, null, $resultSetPrototype);
+                },
                 Service\UserService::class => function ($container) {
                     return new Service\UserService(
                         $container->get('config'),

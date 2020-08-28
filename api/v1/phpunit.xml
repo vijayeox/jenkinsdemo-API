@@ -33,7 +33,6 @@
             <directory>./module/App/test/Controller/Job</directory>
             <directory>./module/App/test/Controller/Pipeline</directory>
             <directory>./module/App/test/Controller/Workflow</directory>
-            <directory>./module/App/test/Service</directory>
         </testsuite>
         <testsuite name="App Fixtures">
             <directory>./module/Workflow/test</directory>
@@ -49,6 +48,7 @@
             <directory>./lib/Oxzion/test/TemplateTest</directory>
             <directory>./lib/Oxzion/test/ValidationTest</directory>
             <directory>./lib/Oxzion/test/WorkflowTest</directory>
+            <directory>./lib/Oxzion/test/Service/AppServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/FileServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/FormServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/PrivilegeServiceTest.php</directory>
