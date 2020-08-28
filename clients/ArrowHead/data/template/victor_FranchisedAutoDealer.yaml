@@ -153,9 +153,18 @@
       '100000' : '$25,000 BI and PD'
       '125000' : '$25,000 BI and PD'
 -
+   key: garageumUim
+   pageName: Garage Liability
+   cell: Q27
+-
    key: franchisedAutoDealer*checktotalLocationSalesRevenue
    pageName: Garage Liability
    cell: S27
+-
+   key: garageemployeeBenefitsLiability
+   pageName: Garage Liability
+   cell: T27
+   returnBoolean: 'Yes|No'
 -
    key: totalemployees
    Source Worksheet: 'Total # of Employees:'
