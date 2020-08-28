@@ -78,8 +78,8 @@ class ProcessGeneratedFiles extends MailDelegate
             if ($fileData['documentsToBeGenerated'] == 1) {
                 $fileData['documentsToBeGenerated'] = 0;
                 $fileData['status'] = 'Generated';
-                $status = $status . "File status is Generated";
                 $policyMail = $this->triggerMail($persistenceService, $fileData);
+                $status = $status . "File status is Generated" . ($policyMail ? " and Mail sent" : " and Mail not sent");
                 $fileData['mailStatus'] = $policyMail;
             } else {
                 $fileData['documentsToBeGenerated'] = $fileData['documentsToBeGenerated'] - 1;
