@@ -99,6 +99,12 @@
    pageName: Underwriting Survey
    cell: D18
 -
+   key: victorAutoPhysicalDamage*checkAutobody
+   Source Worksheet: Map if at least one building on the quote has an Occupancy Type of Body Shop
+   pageName: Underwriting Survey
+   cell: D19
+   returnBoolean: 'Yes|No'
+-
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_indexValue
    method: simpleDatagrid
    Source Worksheet: Location Details
@@ -132,13 +138,6 @@
    Source Worksheet: Location Details
    pageName: Locations
    cell: F69
-   type: DataGrid
--
-   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_state
-   method: simpleDatagrid
-   Source Worksheet: Location Details
-   pageName: Valuation Survey
-   cell: F5
    type: DataGrid
 -
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_PrimaryOEMList
@@ -328,15 +327,15 @@
    pageName: Underwriting Survey
    cell: Check Box 120
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehicleinevtorytaken_monthly
    method: checkValue
-   Source Worksheet: 'Vehicle inventory taken:monthly'
+   Source Worksheet: 'Vehicle inventory taken - monthly'
    pageName: Underwriting Survey
    cell: Check Box 121
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehicleinevtorytaken_quarterly
    method: checkValue
@@ -344,7 +343,7 @@
    pageName: Underwriting Survey
    cell: Check Box 122
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehstrschedloc
    returnBoolean: Yes|No

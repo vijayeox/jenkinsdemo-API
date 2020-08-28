@@ -1,5 +1,15 @@
 if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   var falsePretenseLimit = 0;
+  var checktotalLocationSalesRevenue = 0;
+  var checklistCompaniesRepresented = [];
+
+  checklistCompaniesRepresented = data.companiesRepresentedList.map(item => item.listcompaniesrepresented);
+
+  data.locationSchedule.map(item => {
+    checktotalLocationSalesRevenue += item.totalLocationSalesRevenue
+      ? item.totalLocationSalesRevenue
+      : 0;
+  });
 
   if (data.falsePretenseNumber <= 0) {
     falsePretenseLimit = "None";
@@ -20,11 +30,8 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   }
 
   value = {
-    checklistcompaniesrepresented: data.listcompaniesrepresented
-      ? data.listcompaniesrepresented.length > 0
-        ? data.listcompaniesrepresented + ""
-        : ""
-      : "",
+    checkcompaniesrepresented: checklistCompaniesRepresented + '',
+    checktotalLocationSalesRevenue: checktotalLocationSalesRevenue,
     checkfalsePretenseLimit: falsePretenseLimit,
     locationBuildingIndex: data.genericData.locationScheduleGridData
       .map((i, index) => (index == 0 ? "invalid" : { result: i.locationNum }))
