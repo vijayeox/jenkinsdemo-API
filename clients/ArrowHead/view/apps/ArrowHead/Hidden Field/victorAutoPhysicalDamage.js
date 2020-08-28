@@ -151,7 +151,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             ? uniqueKeyControls.push("Key Board")
             : "";
           item.locationGarageLiabilityKeyControls.dailyKeyInventory
-            ? uniqueKeyControls.push("Unknown Text Fix")
+            ? uniqueKeyControls.push("Daily key Inventory")
             : "";
           item.locationGarageLiabilityKeyControls.lockedInManagersOffice
             ? uniqueKeyControls.push("Key Board")

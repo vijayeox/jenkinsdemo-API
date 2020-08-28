@@ -1195,11 +1195,6 @@
    cell: 'E17'
    key: harcoExcelData*checklessThan3years
 -
-   Source Worksheet: 'If less than three years, describe experience of management:'
-   pageName: UW Q's
-   cell: 'E19'
-   key: lessThan3years
--
    Source Worksheet: Any policy or coverage declined, cancelled or non-renewed during the prior
       10 years for any premises or operations?
    pageName: UW Q's
@@ -1223,11 +1218,11 @@
    type: Checkbox
    key: policyDeclined
    Note: It’s the check boxes in UW Q's sheet with options
-# -
-#    Source Worksheet: 'If YES, please explain:'
-#    pageName: UW Q's
-#    cell: 'E19'
-#    key: policyDeclinedExplain
+-
+   Source Worksheet: 'If less than three years, describe experience of management:'
+   pageName: UW Q's
+   cell: 'E19'
+   key: lessThan3years
 -
    Source Worksheet: Does applicant perform body work and spray painting?
    pageName: UW Q's
@@ -1452,12 +1447,6 @@
       monthly: No
       quarterly: Yes
       none: No
-# -
-#    Source Worksheet: Does applicant reposess their own vehicles?
-#    pageName: UW Q's
-#    cell: 'E99'
-#    key: doesapplicantreposestheirownvehicles
-#    returnBoolean: Yes|No
 -
    Source Worksheet: Does the insured have a certificate of insurance for repo company?
    pageName: UW Q's
