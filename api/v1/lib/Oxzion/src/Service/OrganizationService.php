@@ -400,6 +400,9 @@ class OrganizationService extends AbstractService
         if (isset($data['contactid'])) {
             $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
         }
+        if (isset($data['preferences']) && (!is_string($data['preferences']))) {
+            $data['preferences'] = json_encode($data['preferences']);
+        }
         $org = $obj->toArray();
         $form = new Organization();
         $changedArray = array_merge($obj->toArray(), $data);

@@ -1,5 +1,8 @@
 <?php
 namespace Oxzion\Utils;
+use Oxzion\Utils\StringUtils;
+
+use Exception;
 
 class FileUtils
 {
@@ -13,7 +16,7 @@ class FileUtils
         // create the directory.
         if (!is_dir($directory)) {
             if (!mkdir($directory, 0777, true)) {
-                throw new \Exception("Could not create directory $directory: " . error_get_last());
+                throw new Exception("Could not create directory $directory: " . print_r(error_get_last(), true));
             }
         }
     }
@@ -70,7 +73,7 @@ class FileUtils
                 chmod($directory.$file, 0777);
             }
         } catch (Exception $e) {
-            throw new \Exception('Could not upload File: ' . error_get_last());
+            throw new Exception('Could not save file. Error:' . print_r(error_get_last(), true));
         }
         return $file['name'];
     }
@@ -85,10 +88,12 @@ class FileUtils
         if (!file_exists($dest)) self::createDirectory($dest);
         foreach (scandir($src) as $file) {
             if ($file == '.' || $file == '..') continue;
-            if (is_dir($src.'/'.$file))
-                self::copyDir($src.'/'.$file, $dest.'/'.$file);
-            elseif (!file_exists($dest.'/'.$file))
-                copy($src.'/'.$file, $dest.'/'.$file);
+            $srcCheck = self::joinPath($src);
+            $destCheck = self::joinPath($dest);
+            if (is_dir($srcCheck.$file))
+                self::copyDir($srcCheck.$file, $destCheck.$file);
+            elseif (!file_exists($destCheck.$file))
+                copy($srcCheck.$file, $destCheck.$file);
         }
     }
 
@@ -97,21 +102,39 @@ class FileUtils
         return rename($source, $destination);
     }
 
-    public static function deleteDirectoryContents($dir)
+    public static function rmDir($fsObj)
     {
-        if(is_dir($dir)){
-            $files = scandir( $dir );
-            foreach( $files as $file ) {
-                if ($file !== '.' && $file !== '..')
-                self::deleteDirectoryContents( $dir.'/'.$file );
+        if(is_link($fsObj)){
+            if (!unlink($fsObj)) {
+                throw new Exception("Failed to delete symlink ${fsObj}:" . print_r(error_get_last(), true));
             }
-            rmdir( $dir );
-        } else if(file_exists($dir)){
-            unlink( $dir );
-        } else {
             return;
         }
+        if (is_file($fsObj)) {
+            if (!unlink($fsObj)) {
+                throw new Exception("Failed to delete file ${fsObj}:" . print_r(error_get_last(), true));
+            }
+            return;
+        }
+        if(is_dir($fsObj)){
+            if (DIRECTORY_SEPARATOR != $fsObj[strlen($fsObj)-1]) {
+                $fsObj = $fsObj . DIRECTORY_SEPARATOR;
+            }
+            $dirList = scandir( $fsObj );
+            foreach( $dirList as $item ) {
+                if (('.' == $item) || ('..' == $item)) {
+                    continue;
+                }
+                self::rmDir( $fsObj . $item );
+            }
+            if (!rmdir( $fsObj )) {
+                throw new Exception("Failed to delete directory ${fsObj}:" . print_r(error_get_last(), true));
+            }
+            return;
+        }
+        throw new Exception("Unexpected file system object type : ${fsObj}.");
     }
+
     public static function getFiles($directory)
     {
         // Scan the directory and create the list of uploaded files.
@@ -130,31 +153,12 @@ class FileUtils
     {
         return filesize($directory.$fileName);
     }
-    public static function rmDir($dirPath)
-    {
-        if(is_link($dirPath)){
-            unlink($dirPath);
-        }else if(is_dir($dirPath)){
-            if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-                $dirPath .= '/';
-            }
-            $files = glob($dirPath . '*', GLOB_MARK);
-            foreach ($files as $file) {
-                if (is_dir($file)) {
-                    self::rmDir($file);
-                } else {
-                    unlink($file);
-                }
-            }
-            rmDir($dirPath);
-        }
-    }
+
     public static function deleteFile($fileName, $directory)
     {
-        if (unlink($directory.$fileName)) {
-            return 1;
-        } else {
-            throw new \Exception('Could not Delete File: ' . error_get_last());
+        if (!unlink($directory.$fileName)) {
+            throw new Exception("Could not Delete File: ${fileName} under directory ${directory}." . 
+                print_r(error_get_last(), true));
         }
     }
 
@@ -165,16 +169,23 @@ class FileUtils
 
     public static function symlink($target, $link)
     {
-        return symlink($target, $link);
+        if (!symlink($target, $link)) {
+            throw new Exception("Failed to create symlink ${link} -> ${target}." . 
+                'Error:' . print_r(error_get_last(), true));
+        }
     }
 
     public static function unlink($link)
     {
         if(is_link($link))
         {
-            unlink($link);
+            if (!unlink($link)) {
+                throw new Exception("Failed to unlink ${link}." . 
+                'Error:' . print_r(error_get_last(), true));
+            }
         }
     }
+
     public static function convetImageTypetoPNG($file)
     {
         $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -198,9 +209,7 @@ class FileUtils
     }
 
     public static function getUniqueFile($baseLocation,$file){
-        if(!endsWith($baseLocation,'/')){
-            $baseLocation .= "/";
-        }
+        $baseLocation = self::joinPath($baseLocation);
         $counter = 0;
         while(true){
             $file = ($counter == 0) ? $file : $file.$counter;
@@ -209,5 +218,12 @@ class FileUtils
             }
             $counter++;
         }
+    }
+
+    public static function joinPath($baseLocation){        
+        if(!(StringUtils::endsWith($baseLocation,'/'))){
+            $baseLocation .= "/";
+        }
+        return $baseLocation;
     }
 }

@@ -7,6 +7,7 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
+use Oxzion\App\AppArtifactNamingStrategy;
 use Exception;
 
 class Migration extends AbstractService
@@ -26,7 +27,7 @@ class Migration extends AbstractService
         $this->description = $description;
         $this->appName = $appName;
         $this->appId = $appId;
-        $this->database = self::getDatabaseName($appName, $appId);
+        $this->database = AppArtifactNamingStrategy::getDatabaseName(['name' => $appName, 'uuid' => $appId]);
         $dbConfig = array_merge(array(), $config['db']);
         $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = 'mysql';
@@ -42,13 +43,6 @@ class Migration extends AbstractService
         $dbConfig['database'] = $database;
         $adapter = new Adapter($dbConfig);
         return $adapter;
-    }
-
-    public static function getDatabaseName($appName, $appId)
-    {
-        $database = $appName.'___'.$appId;
-        $database = str_replace(' ', '', $database); // Replaces all spaces with hyphens.
-        return preg_replace('/[^A-Za-z0-9\_]/', '', $database, -1); // Removes special chars.
     }
 
     //this method is used only for phpunit tests. Not required to be called otherwise
