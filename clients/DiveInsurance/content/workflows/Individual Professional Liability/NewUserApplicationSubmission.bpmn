@@ -87,8 +87,6 @@ boolean result7 = false
 boolean result8 = false
 boolean result9 = false
 boolean result10 = false
-boolean result11 = false
-
 if (additionalInsured == 'addAdditionalInsureds') {
  additionalInsured.each {
   if (it.businessRelation &amp;&amp; it.businessRelation == 'other') {
@@ -158,7 +156,6 @@ if (
     efrToIPLUpgrade == true || efrToIPLUpgrade == "true" ||
     scubaFit == "scubaFitInstructor" ||
     result5 ||
-    result11 ||
     padiNotFoundCsrReview == "true" ||
     padiNotFoundCsrReview == true)
 ) {
