@@ -327,15 +327,15 @@
    pageName: Underwriting Survey
    cell: Check Box 120
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehicleinevtorytaken_monthly
    method: checkValue
-   Source Worksheet: 'Vehicle inventory taken:monthly'
+   Source Worksheet: 'Vehicle inventory taken - monthly'
    pageName: Underwriting Survey
    cell: Check Box 121
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehicleinevtorytaken_quarterly
    method: checkValue
@@ -343,7 +343,7 @@
    pageName: Underwriting Survey
    cell: Check Box 122
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehstrschedloc
    returnBoolean: Yes|No

@@ -5,7 +5,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var primarySecondaryOEM2 = [];
   var uniqueKeyControls = [];
   var MixofInventoryNew = 0;
-  var NewFloowPlan = 0;
+  var NewFloorPlan = 0;
   var checkMixofInventoryNew = 0;
 
   data.locationSchedule.map((row) => {
@@ -17,14 +17,13 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
           ? row.insuredThroughFloorPlanUsed
           : 0));
 
-    NewFloowPlan +=
+    NewFloorPlan +=
       (row.monthAvgNew ? row.monthAvgNew : 0) -
       (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0);
   });
 
-  if (NewFloowPlan > 0 && MixofInventoryNew > 0) {
-    var row = NewFloowPlan / MixofInventoryNew;
-    console.log(row);
+  if (NewFloorPlan > 0 && MixofInventoryNew > 0) {
+    var row = NewFloorPlan / MixofInventoryNew;
     if (row <= 0) {
       checkMixofInventoryNew = 0;
     } else if (row > 0.0 && row <= 0.1) {
@@ -147,7 +146,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             ? uniqueKeyControls.push("None")
             : "";
           item.locationGarageLiabilityKeyControls.lockbox
-            ? uniqueKeyControls.push("Lockboxs")
+            ? uniqueKeyControls.push("Lock Boxes")
             : "";
           item.locationGarageLiabilityKeyControls.computerizedKeyVault
             ? uniqueKeyControls.push("Key Machine")
@@ -156,7 +155,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             ? uniqueKeyControls.push("Key Board")
             : "";
           item.locationGarageLiabilityKeyControls.dailyKeyInventory
-            ? uniqueKeyControls.push("Daily key Inventory")
+            ? uniqueKeyControls.push("Daily Key Inventory")
             : "";
           item.locationGarageLiabilityKeyControls.lockedInManagersOffice
             ? uniqueKeyControls.push("Key Board")
@@ -166,7 +165,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             : "";
         }
       })
-    : null;
+    : '';
 
   value = {
     checkaretheyinsuredelsewhere: data.aretheyinsuredelsewhere
