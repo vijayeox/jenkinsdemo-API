@@ -25,6 +25,6 @@ class TwoWayEncryption
             unset($crypted_token, $cipher_method, $enc_key, $enc_iv);
             return $token;
         }
-        return $crypted_token;
+        return null;
     }
 }
