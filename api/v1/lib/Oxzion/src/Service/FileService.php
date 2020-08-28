@@ -217,7 +217,7 @@ class FileService extends AbstractService
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
-            $this->updateFileData($fileId, $fields);
+            // The next line needs to be removed for file save to work
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -300,7 +300,9 @@ class FileService extends AbstractService
             $this->beginTransaction();
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
             $file->exchangeArray($fileObject);
+
             $file->validate();
+            $this->logger->info("UPDATEd FILE CHECK DATA --".print_r($file,true));
             $count = $this->table->save($file);
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
@@ -320,6 +322,9 @@ class FileService extends AbstractService
             }
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
+            $select = "SELECT * from ox_file where id = '".$id."'";
+            $result = $this->executeQuerywithParams($select)->toArray();
+            $this->logger->info("FILE DATA CHECK AFTER DATA --".print_r($result,true));
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (($latestcheck == 1) && isset($id)) {
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
