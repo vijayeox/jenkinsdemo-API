@@ -69,9 +69,10 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $result = $this->workflowInstanceService->startWorkflow($params);
         $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.orgid as org_id FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $sqlQuery = 'SELECT * FROM ox_organization where id = '.$newQueryResult[0]['org_id'];
+        $orgId = $newQueryResult[0]['org_id'];
+        $sqlQuery = 'SELECT * FROM ox_organization where id = '.$orgId;
         $orgResult = $this->runQuery($sqlQuery);
-        $sqlQuery = 'SELECT br.* FROM ox_org_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.org_id = '.$newQueryResult[0]['org_id'];
+        $sqlQuery = 'SELECT br.* FROM ox_org_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.org_id = '.$orgId;
         $bussRoleResult = $this->runQuery($sqlQuery);
         
         $this->assertEquals('brian',$newQueryResult[0]['firstname']);
@@ -81,6 +82,12 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
         $this->assertEquals($params['type'], $orgResult[0]['type']);
         $this->assertEquals($params['businessRole'], $bussRoleResult[0]['name']);
+        $sqlQuery = "SELECT ar.* from ox_app_registry ar inner join ox_app a on a.id = ar.app_id 
+                        where a.uuid = '".$params['app_id']."' AND org_id = $orgId";
+
+        $result = $this->runQuery($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(date('Y-m-d'), date_create($result[0]['date_created'])->format('Y-m-d'));
     }
 
     public function testStartWorkflowWithWrongAppId() {

@@ -15,6 +15,7 @@ use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Model\WorkflowInstance;
 use Oxzion\Model\WorkflowInstanceTable;
 use Oxzion\Service\ActivityInstanceService;
+use Oxzion\Service\RegistrationService;
 use Oxzion\Utils\ArrayUtils;
 
 class WorkflowInstanceService extends AbstractService
@@ -24,6 +25,7 @@ class WorkflowInstanceService extends AbstractService
     protected $processEngine;
     protected $organizationService;
     protected $activityEngine;
+    protected $registratinService;
 
     public function __construct(
         $config,
@@ -33,7 +35,8 @@ class WorkflowInstanceService extends AbstractService
         OrganizationService $organizationService,
         WorkflowService $workflowService,
         WorkflowFactory $workflowFactory,
-        ActivityInstanceService $activityInstanceService
+        ActivityInstanceService $activityInstanceService,
+        RegistrationService $registrationService
     ) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -44,6 +47,7 @@ class WorkflowInstanceService extends AbstractService
         $this->activityEngine = $this->workFlowFactory->getActivity();
         $this->activityInstanceService = $activityInstanceService;
         $this->organizationService = $organizationService;
+        $this->registrationService = $registrationService;
     }
     public function setProcessEngine($processEngine)
     {
@@ -342,7 +346,7 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("setupIdentityField");
         if (isset($params['identifier_field'])) {
             $data = $params;
-            $test = $this->organizationService->registerAccount($data);
+            $test = $this->registrationService->registerAccount($data);
         }
     }
 

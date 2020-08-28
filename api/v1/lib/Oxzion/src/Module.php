@@ -594,6 +594,15 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\ActivityInstance());
                     return new TableGateway('ox_activity_instance', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\RegistrationService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\RegistrationService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Service\OrganizationService::class),
+                        $container->get(Service\AppService::class)
+                    );
+                },
                 Service\WorkflowInstanceService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\WorkflowInstanceService(
@@ -604,7 +613,8 @@ class Module
                         $container->get(Service\OrganizationService::class),
                         $container->get(Service\WorkflowService::class),
                         $container->get(Workflow\WorkflowFactory::class),
-                        $container->get(Service\ActivityInstanceService::class)
+                        $container->get(Service\ActivityInstanceService::class),
+                        $container->get(Service\RegistrationService::class)
                     );
                 },
                 Service\ActivityInstanceService::class => function ($container) {
@@ -649,7 +659,8 @@ class Module
                         $container->get(Service\WorkflowService::class),
                         $container->get(Service\UserService::class),
                         $container->get(Service\UserCacheService::class),
-                        $container->get(Service\OrganizationService::class));
+                        $container->get(Service\OrganizationService::class),
+                        $container->get(Service\RegistrationService::class));
                 },
                 Model\ServiceTaskInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\ServiceTaskInstanceTableGateway::class);

@@ -23,6 +23,7 @@ use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Service\UserCacheService;
 use Oxzion\Service\OrganizationService;
+use Oxzion\Service\RegistrationService;
 use Oxzion\Utils\ArrayUtils;
 
 class CommandService extends AbstractService
@@ -37,6 +38,7 @@ class CommandService extends AbstractService
     private $jobService;
     private $userCacheService;
     private $organizationService;
+    private $registrationService;
     /**
      * @ignore __construct
      */
@@ -47,7 +49,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService, OrganizationService $organizationService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService, OrganizationService $organizationService, RegistrationService $registrationService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -62,6 +64,7 @@ class CommandService extends AbstractService
         $this->jobService = $jobService;
         $this->userCacheService = $userCacheService;
         $this->organizationService = $organizationService;
+        $this->registrationService = $registrationService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -234,7 +237,7 @@ class CommandService extends AbstractService
     }
 
     private function registerAccount($data) {
-        $success = $this->organizationService->registerAccount($data);
+        $success = $this->registrationService->registerAccount($data);
         if ($success) {
             $params['user'] = $data['contact'];
         } else {

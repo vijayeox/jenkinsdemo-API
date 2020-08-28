@@ -956,7 +956,7 @@ class AppService extends AbstractService
         return $this->formService->createForm($formData);
     }
 
-    private function createAppRegistry($appId, $orgId)
+    public function createAppRegistry($appId, $orgId)
     {
         $sql = $this->getSqlObject();
         //Code to check if the app is already registered for the organization
