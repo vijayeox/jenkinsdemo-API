@@ -133,7 +133,7 @@ if (excessLiability) {
   }
 }
 if(coverage || additionalIn){
-if (additionalInsured) {
+if (additionalInsured == 'addAdditionalInsureds') {
  additionalInsured.each {
   if (it.hasProperty('businessRelation') &amp;&amp; it.businessRelation == 'other') {
     result1 = true
