@@ -57,10 +57,15 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       item.occupancyType == "vehicleStorageParkingGarage" ||
       item.occupancyType == "autoStorageLot"
     ) {
+      tempSecondaryOEMStore = item.secondaryOEM
+        ? item.secondaryOEM.length > 0
+          ? item.secondaryOEM
+          : []
+        : [];
       primarySecondaryOEM2 = [
         ...primarySecondaryOEM2,
         item.primaryOEM,
-        ...item.secondaryOEM
+        ...tempSecondaryOEMStore
       ];
     }
   });
@@ -164,7 +169,11 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     : null;
 
   value = {
-    checkaretheyinsuredelsewhere: data.aretheyinsuredelsewhere ? data.aretheyinsuredelsewhere.length > 0 ? 'Yes' : 'No' : '' ,
+    checkaretheyinsuredelsewhere: data.aretheyinsuredelsewhere
+      ? data.aretheyinsuredelsewhere.length > 0
+        ? "Yes"
+        : "No"
+      : "",
     checkSecurityGuards: data.genericData.locationScheduleGridData.some(
       (locationItem) => {
         if (locationItem.dolsecguards == "yes") {
