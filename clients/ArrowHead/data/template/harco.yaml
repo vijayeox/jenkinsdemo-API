@@ -1027,6 +1027,7 @@
    cell: Check Box 11
    key: dolalllocdoesnotincld_dailyKeyInventory
    type: Checkbox
+   method: checkInArray
 -
    Source Worksheet: 'locked in managers office'
    pageName: L-DPD
