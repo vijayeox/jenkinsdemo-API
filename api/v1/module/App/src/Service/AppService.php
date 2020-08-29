@@ -10,7 +10,6 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Db\Migration\Migration;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
-use Oxzion\Service\EntityService;
 use Oxzion\Service\JobService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FormService;
@@ -30,6 +29,7 @@ use Oxzion\Document\Parser\Form\FormRowMapper;
 use Oxzion\Utils\ArrayUtils;
 use Oxzion\InvalidParameterException;
 use Oxzion\App\AppArtifactNamingStrategy;
+use Oxzion\Model\Entity;
 
 class AppService extends AbstractService
 {
@@ -128,15 +128,20 @@ class AppService extends AbstractService
             'status' => App::IN_DRAFT
         ]);
         //Assign user input values AFTER assigning default values.
-        $app->assign($data);
+        $appData = $data['app'];
+        $app->assign($appData);
+        if (array_key_exists(Entity::COLUMN_UUID, $appData)) {
+            $app->setUserGeneratedUuid($appData[Entity::COLUMN_UUID]);
+        }
         try {
             $this->beginTransaction();
             $app->save();
             //IMPORTANT: Don't commit database transaction here.
             $appProperties = $app->getProperties();
-            ArrayUtils::merge($data, $appProperties);
+            ArrayUtils::merge($appData, $appProperties);
+            $data['app'] = $appData;
             if (App::MY_APP == $app->getProperty('type')) {
-                $this->setupOrUpdateApplicationFileStructure(['app' => $data]);
+                $this->setupOrUpdateApplicationDirectoryStructure($data);
             }
             //Commit database transaction only after application setup is successful.
             $this->commit();
@@ -152,7 +157,7 @@ class AppService extends AbstractService
     //Copies contents of template application (<DATA DIRECTORY>/eoxapps) to source directory.
     //Creates application.yml file in the source directory.
     //Writes $appData contents to application.yml file.
-    private function setupOrUpdateApplicationFileStructure($descriptorData) {
+    private function setupOrUpdateApplicationDirectoryStructure($descriptorData) {
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $descriptorData['app']);
         if (!file_exists($appSourceDir)) {
             if (!mkdir($appSourceDir)) {
@@ -261,7 +266,7 @@ class AppService extends AbstractService
         $appData = &$ymlData['app'];
         $appData['status'] = App::PUBLISHED;
         $this->logger->info("\n App Data before app update - ", print_r($appData, true));
-        $this->updateApp($appData['uuid'], $appData); //Update is needed because app status changed to PUBLISHED.
+        $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.
         $this->createOrUpdateApplicationDescriptor($path, $ymlData);
         return $ymlData;
     }
@@ -788,8 +793,10 @@ class AppService extends AbstractService
         if (0 == count($queryResult)) {
             //UUID is invalid. Threfore remove it.
             unset($appdata['uuid']);
-            $this->createApp($appdata);
-            return;                
+            $temp = ['app' => $appdata];
+            $createResult = $this->createApp($temp);
+            ArrayUtils::merge($appdata, $createResult['app']);
+            return;
         }
 
         //Update the app in all other conditions.
@@ -800,7 +807,9 @@ class AppService extends AbstractService
         if (isset($appdata['uuid']) && !isset($appdata['name'])) {
             $appdata['name'] = $dbRow['name'];
         }
-        $this->updateApp($appdata['uuid'], $appdata);
+        $temp = ['app' => $appdata];
+        $updateResult = $this->updateApp($appdata['uuid'], $temp);
+        ArrayUtils::merge($appdata, $updateResult['app']);
         return;
     }
 
@@ -860,21 +869,28 @@ class AppService extends AbstractService
     {
         $app = new App($this->table);
         $app->loadByUuid($uuid);
-        if (array_key_exists('type', $data)) {
-            if ($app->getProperty('type') != $data['type']) {
+        $appData = $data['app'];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
+        if (!file_exists($appSourceDir)) {
+            throw new FileNotFoundException("Application source directory is not found.",
+            ['directory' => $appSourceDir]);
+        }
+        if (array_key_exists('type', $appData)) {
+            if ($app->getProperty('type') != $appData['type']) {
                 throw new InvalidParameterException(
                     "Application 'type' cannot be changed after creating the app.");
             }
         }
-        $app->assign($data);
+        $app->assign($appData);
         try {
             $this->beginTransaction();
             $app->save();
             //IMPORTANT: Don't commit database transaction here.
             $appProperties = $app->getProperties();
-            ArrayUtils::merge($data, $appProperties);
+            ArrayUtils::merge($appData, $appProperties);
+            $data['app'] = $appData;
             if (App::MY_APP == $app->getProperty('type')) {
-                $this->setupOrUpdateApplicationFileStructure(['app' => $data]);
+                $this->setupOrUpdateApplicationDirectoryStructure($data);
             }
             //Commit database transaction only after application setup is successful.
             $this->commit();
@@ -883,7 +899,7 @@ class AppService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        return $app->getGenerated();
+        return $data;
     }
 
     public function deleteApp($uuid)

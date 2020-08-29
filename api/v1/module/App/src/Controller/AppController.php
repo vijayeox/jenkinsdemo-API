@@ -6,6 +6,7 @@ use App\Model\App;
 use App\Model\AppTable;
 use App\Service\AppService;
 use Exception;
+use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Service\WorkflowService;
 use Zend\Db\Adapter\AdapterInterface;
@@ -65,8 +66,8 @@ class AppController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Create App - " . print_r($data, true));
         try {
-            $generated = $this->appService->createApp($data);
-            return $this->getSuccessResponseWithData($generated, 201);
+            $returnData = $this->appService->createApp($data);
+            return $this->getSuccessResponseWithData($returnData, 201);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -140,8 +141,8 @@ class AppController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Update App - ${uuid}, " . print_r($data, true));
         try {
-            $generated = $this->appService->updateApp($uuid, $data);
-            return $this->getSuccessResponseWithData($generated, 200);
+            $returnData = $this->appService->updateApp($uuid, $data);
+            return $this->getSuccessResponseWithData($returnData, 200);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);

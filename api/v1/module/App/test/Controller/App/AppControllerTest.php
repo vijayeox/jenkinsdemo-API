@@ -3,6 +3,7 @@ namespace App;
 
 use App\Controller\AppController;
 use App\Controller\AppRegisterController;
+use App\Service\AppService;
 use Mockery;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Utils\FileUtils;
@@ -37,6 +38,16 @@ class AppControllerTest extends ControllerTest
 
     public function getDataSet()
     {
+        //These tests don't need data set.
+        switch($this->getName()) {
+            case 'testCreateWithUserGeneratedUuid':
+            case 'testCreateWithServerGeneratedUuid':
+            case 'testCreateWithoutRequiredData':
+                //Return empty data set to keep framework happy!
+                return new YamlDataSet(dirname(__FILE__) . "/../../Dataset/EmptyDataSet.yml");;
+            break;
+        }
+
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
         switch($this->getName()) {
             case 'testDeployAppWithWrongUuidAndDuplicateNameInDatabase':
@@ -73,7 +84,9 @@ class AppControllerTest extends ControllerTest
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppController');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $contentTypeHeader = $this->getResponseHeader('content-type')->toString();
+        $contentTypeRegex = '/application\/json(;? *?charset=utf-8)?/i';
+        $this->assertTrue(preg_match($contentTypeRegex, $contentTypeHeader) ? true : false);
     }
 
     public function testGetListOfAssignments()
@@ -193,47 +206,154 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 10);
     }
 
-    public function testCreate()
-    {
+    public function testCreateWithUserGeneratedUuid() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'App1', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
+        $uuid = '11111111-1111-1111-1111-111111111111';
+        $query = "SELECT id, uuid, name FROM ox_app WHERE uuid='${uuid}'";
+        //Ensure there is no ox_app record matching given UUID.
+        $existingRecordSet = $this->executeQueryTest($query);
+        $this->assertTrue(empty($existingRecordSet));
+        //Send request and create the record.
+        $data = [
+            'app' => [
+                'name' => 'TestApp-1',
+                'uuid' => $uuid,
+                'description' => 'App for testing App API',
+                'category' => 'EXAMPLE_CATEGORY',
+                'type' => 2,
+                'autostart' => true
+            ]
+        ];
         $this->dispatch('/app', 'POST', $data);
+        //Assert response status etc.
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(36, strlen($content['data']['uuid']));
+        //Check new record is created in the database.
+        $newRecordSet = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($newRecordSet));
+        $newRecord = $newRecordSet[0];
+        $this->assertFalse(empty($newRecord));
+        $this->assertEquals($uuid, $newRecord['uuid']);
+        $this->assertNotEmpty($newRecord['id']);
+        $this->assertEquals($data['app']['name'], $newRecord['name']);
+        //Check returned data is as expected.
+        $returnData = $content['data'];
+        $this->assertTrue(array_key_exists('app', $returnData));
+        $appData = $returnData['app'];
+        $this->assertEquals($data['app']['name'], $appData['name']);
+        $this->assertEquals($uuid, $appData['uuid']);
+        $this->assertEquals('default_app.png', $appData['logo']);
+        $this->assertEquals(2, $appData['status']);
+        $this->assertEquals('', $appData['start_options']);
+        //Check application descriptor is created and is as expected.
+        $srcAppDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->getApplicationConfig(), $data['app']);
+        $this->assertTrue(file_exists($srcAppDir));
+        $appDescriptorFilePath = $srcAppDir . DIRECTORY_SEPARATOR . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
+        $yamlData = Yaml::parse(file_get_contents($appDescriptorFilePath));
+        $this->assertEquals($returnData, $yamlData);
     }
 
-    public function testCreateWithoutTextFailure()
+    public function testCreateWithServerGeneratedUuid()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['type' => 2, 'org_id' => 4];
+        $data = [
+            'app' => [
+                'name' => 'App1', 
+                'type' => 2, 
+                'category' => 'EXAMPLE_CATEGORY'
+            ]
+        ];
+        $query = "SELECT id, uuid, name FROM ox_app WHERE name='" . $data['app']['name'] . "'";
+        //Ensure there is no ox_app record matching given UUID.
+        $existingRecordSet = $this->executeQueryTest($query);
+        $this->assertTrue(empty($existingRecordSet));
+        //Send request and create the record.
         $this->dispatch('/app', 'POST', $data);
+        //Assert response status etc.
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'success');
+        //Check new record is created in the database.
+        $newRecordSet = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($newRecordSet));
+        $newRecord = $newRecordSet[0];
+        $this->assertFalse(empty($newRecord));
+        $this->assertNotEmpty($newRecord['uuid']);
+        $this->assertEquals(36, strlen($newRecord['uuid']));
+        $this->assertNotEmpty($newRecord['id']);
+        $this->assertEquals($data['app']['name'], $newRecord['name']);
+        //Check returned data is as expected.
+        $returnData = $content['data'];
+        $this->assertTrue(array_key_exists('app', $returnData));
+        $appData = $returnData['app'];
+        $this->assertEquals($data['app']['name'], $appData['name']);
+        $this->assertEquals($data['app']['type'], $appData['type']);
+        $this->assertEquals($data['app']['category'], $appData['category']);
+        $this->assertEquals('', $appData['description']);
+        $this->assertEquals(0, $appData['isdefault']);
+        $this->assertEquals('default_app.png', $appData['logo']);
+        $this->assertEquals(2, $appData['status']);
+        $this->assertEquals('', $appData['start_options']);
+        //Check application descriptor is created and is as expected.
+        $srcAppDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->getApplicationConfig(), $appData);
+        $this->assertTrue(file_exists($srcAppDir));
+        $appDescriptorFilePath = $srcAppDir . DIRECTORY_SEPARATOR . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
+        $yamlData = Yaml::parse(file_get_contents($appDescriptorFilePath));
+        $this->assertEquals($returnData, $yamlData);
+    }
+
+    public function testCreateWithoutRequiredData()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = [
+            'app' => [
+                'type' => 2, 
+                'org_id' => 4
+            ]
+        ];
+        $query = "SELECT id, name FROM ox_app ORDER BY id ASC";
+        //Take a snapshot of ox_app records.
+        $existingRecordSet = $this->executeQueryTest($query);
+        $this->dispatch('/app', 'POST', $data);
+        $newRecordSet = $this->executeQueryTest($query);
+        //Assert response status etc.
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['name']['error'], 'required');
+        //Take new shapshot of ox_app and ensure no deletions and additions have happened.
+        $this->assertEquals($existingRecordSet, $newRecordSet);
     }
 
-    public function testCreateAccess()
+    public function testCreateWithoutAccessPermission()
     {
         $this->initAuthToken($this->employeeUser);
-        $data = ['name' => '5c822d497f44n', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
-        $this->setJsonContent(json_encode($data));
+        $data = [
+            'app' => [
+                'name' => 'AccessPermissionCheckApp', 
+                'type' => 2, 
+                'category' => 'EXAMPLE_CATEGORY', 
+                'logo' => 'app.png'
+            ]
+        ];
+        $query = "SELECT id, name FROM ox_app ORDER BY id ASC";
+        //Take a snapshot of ox_app records.
+        $existingRecordSet = $this->executeQueryTest($query);
         $this->dispatch('/app', 'POST', $data);
+        //Assert response status etc.
         $this->assertResponseStatusCode(401);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('App');
-        $this->assertResponseHeaderContains('content-type', 'application/json');
+        $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
+        //Take new shapshot of ox_app and ensure no deletions and additions have happened.
+        $newRecordSet = $this->executeQueryTest($query);
+        $this->assertEquals($existingRecordSet, $newRecordSet);
     }
 
     public function testDeployApp()
@@ -839,15 +959,49 @@ class AppControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png'];
+        $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+        $query = "SELECT * FROM ox_app WHERE uuid='${uuid}'";
+        //Take snapshot of database record.
+        $recordSetBeforeUpdate = $this->executeQueryTest($query);
+        $recordBeforeUpdate = $recordSetBeforeUpdate[0];
+        //Setup data and update.
+        $data = [
+            'app' => [
+                'name' => 'Admin App', 
+                'type' => 2, 
+                'category' => 'Admin', 
+                'logo' => 'app.png'
+            ]
+        ];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
+        $this->dispatch("/app/${uuid}", 'PUT', null);
+        //Assert the results.
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertNotNull($content['data']['uuid']);
+        $this->setDefaultAsserts();
+        //Assert database record is updated.
+        $recordSetAfterUpdate = $this->executeQueryTest($query);
+        $recordAfterUpdate = $recordSetAfterUpdate[0];
+        $this->assertNotEquals($recordBeforeUpdate['name'], $recordAfterUpdate['name']);
+        $this->assertNotEquals($recordBeforeUpdate['category'], $recordAfterUpdate['category']);
+        $this->assertNotEquals($recordBeforeUpdate['logo'], $recordAfterUpdate['logo']);
+        $this->assertEquals($data['app']['name'], $recordAfterUpdate['name']);
+        $this->assertEquals($data['app']['category'], $recordAfterUpdate['category']);
+        $this->assertEquals($data['app']['logo'], $recordAfterUpdate['logo']);
+        //Assert returned data matches.
+        $returnData = $content['data'];
+        $appData = $returnData['app'];
+        $this->assertEquals($data['app']['name'], $appData['name']);
+        $this->assertEquals($data['app']['category'], $appData['category']);
+        $this->assertEquals($data['app']['logo'], $appData['logo']);
+        //Check application descriptor is created and is as expected.
+        $srcAppDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->getApplicationConfig(), $appData);
+        $this->assertTrue(file_exists($srcAppDir));
+        $appDescriptorFilePath = $srcAppDir . DIRECTORY_SEPARATOR . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
+        $yamlData = Yaml::parse(file_get_contents($appDescriptorFilePath));
+        $this->assertEquals($returnData, $yamlData);
     }
 
     public function testUpdateRestricted()
