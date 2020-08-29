@@ -267,9 +267,69 @@
       yes: P
       no: ""
 -
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: R7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
    Source Worksheet: Loss Control
    pageName: Contacts
    cell: M7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: R7
    key: insurancecontactdataGrid_lossControl
    method: simpleDatagrid
    type: DataGrid
@@ -290,7 +350,73 @@
 -
    Source Worksheet: MVR's & Policy Docs
    pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: R7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
    cell: O7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: R7
    key: insurancecontactdataGrid_mvrPolicyDocs
    method: simpleDatagrid
    type: DataGrid
@@ -325,7 +451,7 @@
 -
    Source Worksheet: Valuation
    pageName: E-Prop
-   cell: 'G8'
+   cell: 'G9'
    key: harcoExcelData*checkValuation
 -
    Source Worksheet: Deductible
@@ -432,13 +558,6 @@
    pageName: E-Prop
    cell: 'K20'
    key: genericData*locationScheduleGridData_businessincomelimit
-   method: simpleDatagrid
-   type: DataGrid
--
-   Source Worksheet: Damage to Rented Premises*
-   pageName: E-Prop
-   cell: 'J20'
-   key: garageLiabilityDamagetoRentedPremises
    method: simpleDatagrid
    type: DataGrid
 -
@@ -566,21 +685,6 @@
 #       Property. If the producer selects a different deductible amount for each
 #       of these coverages, the system will map over the lowest deductible option
 #       selected to the Harco App in Sheet!H-Crime H18
--
-   key: burglaryofotherpropertylimit
-   Source Worksheet: Robbery/Burglary of Other Property Limit
-   pageName: H-Crime
-   cell: K23
-# -
-#    key: burglaryofotherpropertydeductible
-#    Source Worksheet: Robbery/Burglary of Other Property Deductible
-#    pageName: H-Crime
-#    cell: H18
--
-   key: outsidethepremiseslimit
-   Source Worksheet: Outside the Premises Limit
-   pageName: H-Crime
-   cell: J23
 # -
 #    key: outsidethepremisesdeductible
 #    Source Worksheet: 'Outside the Premises Deductible '
@@ -591,6 +695,21 @@
 #    Source Worksheet: Money/Securities/Other Property Deductible
 #    pageName: H-Crime
 #    cell: J18
+# -
+#    key: burglaryofotherpropertydeductible
+#    Source Worksheet: Robbery/Burglary of Other Property Deductible
+#    pageName: H-Crime
+#    cell: H18
+-
+   key: burglaryofotherpropertylimit
+   Source Worksheet: Robbery/Burglary of Other Property Limit
+   pageName: H-Crime
+   cell: K23
+-
+   key: outsidethepremiseslimit
+   Source Worksheet: Outside the Premises Limit
+   pageName: H-Crime
+   cell: J23
 -
    key: propertylimit
    Source Worksheet: Money/Securities/Other Property Limit

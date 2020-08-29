@@ -211,6 +211,11 @@ if (data.workbooksToBeGenerated.harco == true) {
         ? "25000"
         : ""
       : "",
+    checkthirdpartylimit: data.state
+      ? data.state.name != "California" && data.eplicoverage == "yes"
+        ? "100000"
+        : ""
+      : "",
     checkacterroromissions: data.state
       ? data.state.abbreviation != "CA" &&
         data.state.abbreviation != "FL" &&
