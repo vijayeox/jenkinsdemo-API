@@ -170,7 +170,7 @@ abstract class ModelTable
 
     private function checkAndIncrementVersion(array &$data) {
         $version = $data[Entity::COLUMN_VERSION];
-        if(!isset($version) || is_null($version)) {
+        if(!isset($version)) {
             throw new ParameterRequiredException('Version number is required.', [Entity::COLUMN_VERSION]);
         }
         try {
@@ -205,8 +205,14 @@ abstract class ModelTable
             $id = $data[Entity::COLUMN_ID];
         }
 
-        if (!isset($id) || is_null($id) || (0 == $id) || empty($id)) {
-            $data[Entity::COLUMN_UUID] = UuidUtil::uuid();
+        if (!isset($id) || (0 == $id)) {
+            if (array_key_exists(Entity::COLUMN_UUID, $data)) {
+                //Check and set UUID only if user generated UUID is not set.
+                $uuid = $data[Entity::COLUMN_UUID];
+                if (!isset($uuid)) {
+                    $data[Entity::COLUMN_UUID] = UuidUtil::uuid();
+                }
+            }
             if (array_key_exists(Entity::COLUMN_VERSION, $data)) {
                 $data[Entity::COLUMN_VERSION] = 1; //Starting version number when the row is inserted in the database.
             }
@@ -243,10 +249,12 @@ abstract class ModelTable
                     ['table' => $this->tableGateway->getTable(), 'data' => $data], 
                     UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
             }
-            if (!isset($rows) || (1 != $rows)) {
-                throw new UpdateFailedException('Database update failed.', 
-                    ['table' => $this->tableGateway->getTable(), 'data' => $data]);
-            }
+            //DON'T check for return row count - because returned row count can be 0 if the 
+            //database decides there is no need to update the row as there is no data change.
+            //if (!isset($rows) || (1 != $rows)) {
+            //    throw new UpdateFailedException('Database update failed.', 
+            //        ['table' => $this->tableGateway->getTable(), 'data' => $data]);
+            //}
             return $data;
         }
     }
