@@ -1211,7 +1211,7 @@
    cell: "Schedule of Above ground Storage Tanks (AST)"
    offset: "3,0"
    key: genericData*storageTankGridData_locationNum
-   macro: M_AddGLClassRow_Click
+   macro: P_AddPollTankRow_Click
    method: simpleDatagrid
    type: DataGrid
 -
