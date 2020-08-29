@@ -206,6 +206,12 @@
       vacantBuilding: Lease & Rental
       deliveryPrep: Auto Parts & Supplies
 -
+   key: harcoExcelData*primarySecondaryOEM_result
+   method: simpleDatagrid
+   pageName: C-Locs&AIs
+   cell: W11
+   type: DataGrid
+-
    key: genericData*locationScheduleGridData_constructiontype
    method: simpleDatagrid
    pageName: C-Locs&AIs
@@ -621,21 +627,15 @@
    offset: "5,1"
    key: locationSchedule_customergoodsperlocation
    method: simpleDatagrid
-   type: DataGrid
+   type: DataGrid   
 -
-   key: repairpercentlabor
    Source Worksheet: 'Repair % - Labor:'
-   pageName: J
-   offset: "7,1"
-   cell: Customer Goods
-   returnValue:
-      '0.75': '0.85'
--
    key: harcoExcelData*checkrepairpercentlabor
    pageName: J
    cell: Customer Percentage of Repair Endorsement
    offset: 2,0
-   returnBoolean: 'Yes|No'
+   returnValue:
+      '0.75': '0.85'
 -
    key: harcoExcelData*checkrepairpercentparts
    pageName: J
@@ -747,7 +747,7 @@
    cell: 'I11'
 -
    pageName: K
-   key: medicalexpensedeductible
+   key: harcoExcelData*checkmedicalexpensedeductible
    cell: N8
 -
    key: agentseo
@@ -756,7 +756,7 @@
    cell: K8
    method: checkbox_X
 -
-   key: grosssales
+   key: harcoExcelData*checkgrosssales
    Source Worksheet: 'gross sales: '
    pageName: K
    cell: 'M11'
@@ -786,11 +786,6 @@
    method: simpleDatagrid
    type: DataGrid
    macro: K_AddDDRow_Click
--
-   Source Worksheet: Umbrella Limit
-   pageName: K
-   cell: F33
-   key: umbrellalimit
 -
    Source Worksheet: Name of Driver (and Spouse) to be covered
    pageName: K
