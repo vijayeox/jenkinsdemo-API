@@ -1237,6 +1237,7 @@
    offset: "3,3"
    key: genericData*storageTankGridData_installationdate
    method: simpleDatagrid
+   method2: formatDate
    type: DataGrid
 -
    Source Worksheet: 'Tank Capacity '
