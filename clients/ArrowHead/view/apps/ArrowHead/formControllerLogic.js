@@ -38,16 +38,6 @@ s.onload = function (e) {
             .dispatchEvent(ev);
         };
       }
-      var dataGridDeleteIcons = document.getElementsByClassName(
-        "fa-times-circle-o"
-      );
-      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);
-      if (dataGridDeleteIcons.length > 0) {
-        dataGridDeleteIcons.map((item) => {
-          item.classList.add("fa-times-circle");
-          item.classList.remove("fa-times-circle-o");
-        });
-      }
 
       if (
         [...document.querySelectorAll('[ref="modalSave"]')].some(
@@ -74,4 +64,4 @@ setTimeout(function () {
     victor_FranchisedAutoDealer: false,
     victor_AutoPhysDamage: false
   };
-}, 2000);
+}, 1000);
