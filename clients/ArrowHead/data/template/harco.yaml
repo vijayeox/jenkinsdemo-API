@@ -523,7 +523,27 @@
    Source Worksheet: Blanket Coverage BPP
    pageName: E-Prop
    cell: 'L20'
+   key: genericData*locationScheduleGridData_blanketcoverage
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: 'No'
+      no: 'No'
+-
+   Source Worksheet: Blanket Coverage BPP
+   pageName: E-Prop
+   cell: 'L20'
    key: genericData*locationScheduleGridData_blanketcoveragebpp1
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
+-
+   Source Worksheet: Blanket Coverage Business Income
+   pageName: E-Prop
+   cell: 'M20'
+   key: genericData*locationScheduleGridData_blanketcoverage
    method: simpleDatagrid
    type: DataGrid
    returnValue:
