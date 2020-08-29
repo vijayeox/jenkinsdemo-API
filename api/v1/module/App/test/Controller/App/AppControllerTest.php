@@ -957,6 +957,11 @@ class AppControllerTest extends ControllerTest
 //        $this->assertEquals($content['message'], 'Template application not found.');
 //    }
 
+    private function setupAppSourceDir($ymlData) {
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appService->setupOrUpdateApplicationDirectoryStructure($ymlData);
+    }
+
     public function testUpdate()
     {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
@@ -967,12 +972,14 @@ class AppControllerTest extends ControllerTest
         //Setup data and update.
         $data = [
             'app' => [
-                'name' => 'Admin App', 
+                'name' => 'Admin App',
+                'uuid' => $uuid,
                 'type' => 2, 
                 'category' => 'Admin', 
                 'logo' => 'app.png'
             ]
         ];
+        $this->setupAppSourceDir($data);
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch("/app/${uuid}", 'PUT', null);
@@ -1004,33 +1011,134 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($returnData, $yamlData);
     }
 
-    public function testUpdateRestricted()
+    public function testUpdateWithoutAccessPermission()
     {
-        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
+        $uuid = '11111111-1111-1111-1111-111111111111';
+        $query = "SELECT id, name FROM ox_app";
+        //Take snapshot of database record.
+        $recordSetBeforeUpdate = $this->executeQueryTest($query);
+        //Setup data and invoke the test.
+        $data = [
+            'app' => [
+                'name' => 'Admin App', 
+                'uuid' => $uuid,
+                'type' => 2, 
+                'category' => 'EXAMPLE_CATEGORY', 
+                'logo' => 'app.png'
+            ]
+        ];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'PUT', $data);
+        $this->dispatch("/app/${uuid}", 'PUT', $data);
+        //Run post test assertions.
         $this->assertResponseStatusCode(401);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('App');
-        $this->assertResponseHeaderContains('content-type', 'application/json');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
+        //Take database record snapshot after test.
+        $recordSetAfterUpdate = $this->executeQueryTest($query);
+        $this->assertEquals($recordSetBeforeUpdate, $recordSetAfterUpdate);
     }
 
-    public function testUpdateNotFound()
-    {
-        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
+    public function testUpdateWithoutExistingAppSrcDir() {
+        $uuid = '11111111-1111-1111-1111-111111111111';
+        $query = "SELECT id, name FROM ox_app";
+        //Take snapshot of database record.
+        $recordSetBeforeUpdate = $this->executeQueryTest($query);
+        //Setup data and invoke the test.
+        $data = [
+            'app' => [
+                'name' => 'Admin App', 
+                'uuid' => $uuid,
+                'type' => 2, 
+                'category' => 'EXAMPLE_CATEGORY', 
+                'logo' => 'app.png'
+            ]
+        ];
+        //Make sure app source directory does not exist.
+        $appSrcDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->getApplicationConfig(), $data['app']);
+        if (file_exists($appSrcDir)) {
+            FileUtils::rmDir($appSrcDir);
+        }
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/fc97bdf0-df6f-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
+        $this->dispatch("/app/${uuid}", 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Application source directory is not found.');
+        $errorContext = $content['data'];
+        $this->assertEquals($appSrcDir, $errorContext['directory']);
+        //Take database record snapshot after test.
+        $recordSetAfterUpdate = $this->executeQueryTest($query);
+        $this->assertEquals($recordSetBeforeUpdate, $recordSetAfterUpdate);
+    }
+
+    public function testUpdateEntityNotFound()
+    {
+        $uuid = '11111111-1111-1111-1111-111111111111';
+        $query = "SELECT id, name FROM ox_app";
+        //Take snapshot of database record.
+        $recordSetBeforeUpdate = $this->executeQueryTest($query);
+        //Setup data and invoke the test.
+        $data = [
+            'app' => [
+                'name' => 'Admin App', 
+                'uuid' => $uuid,
+                'type' => 2, 
+                'category' => 'EXAMPLE_CATEGORY', 
+                'logo' => 'app.png'
+            ]
+        ];
+        $this->setupAppSourceDir($data);
+        //Ensure entity with given UUID does not exist in the database.
+        $entityRecordSet = $this->executeQueryTest("SELECT id FROM ox_app WHERE uuid='${uuid}'");
+        $this->assertEmpty($entityRecordSet);
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch("/app/${uuid}", 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Entity not found.');
+        $errorContext = $content['data'];
+        $this->assertEquals('ox_app', $errorContext['entity']);
+        $this->assertEquals($uuid, $errorContext['uuid']);
+        //Take database record snapshot after test.
+        $recordSetAfterUpdate = $this->executeQueryTest($query);
+        $this->assertEquals($recordSetBeforeUpdate, $recordSetAfterUpdate);
+    }
+
+    public function testUpdateWithUuidMismatch()
+    {
+        $uuid1 = '11111111-1111-1111-1111-111111111111';
+        $uuid2 = '22222222-2222-2222-2222-222222222222';
+        $query = "SELECT id, name FROM ox_app";
+        //Take snapshot of database record.
+        $recordSetBeforeUpdate = $this->executeQueryTest($query);
+        //Setup data and invoke the test.
+        $data = [
+            'app' => [
+                'name' => 'Admin App', 
+                'uuid' => $uuid1,
+                'type' => 2, 
+                'category' => 'EXAMPLE_CATEGORY', 
+                'logo' => 'app.png'
+            ]
+        ];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch("/app/${uuid2}", 'PUT', null);
+        $this->assertResponseStatusCode(500);
+        $this->setDefaultAsserts();
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Unexpected error.');
+        //Take database record snapshot after test.
+        $recordSetAfterUpdate = $this->executeQueryTest($query);
+        $this->assertEquals($recordSetBeforeUpdate, $recordSetAfterUpdate);
     }
 
     public function testDelete()

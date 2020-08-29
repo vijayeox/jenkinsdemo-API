@@ -157,7 +157,7 @@ class AppService extends AbstractService
     //Copies contents of template application (<DATA DIRECTORY>/eoxapps) to source directory.
     //Creates application.yml file in the source directory.
     //Writes $appData contents to application.yml file.
-    private function setupOrUpdateApplicationDirectoryStructure($descriptorData) {
+    public function setupOrUpdateApplicationDirectoryStructure($descriptorData) {
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $descriptorData['app']);
         if (!file_exists($appSourceDir)) {
             if (!mkdir($appSourceDir)) {
@@ -176,7 +176,7 @@ class AppService extends AbstractService
 
     private function createOrUpdateApplicationDescriptor($dirPath, $descriptorData) {
         $descriptorFilePath = $dirPath . 
-            (('/' == substr($dirPath, -1 )) ? '' : '/') . self::APPLICATION_DESCRIPTOR_FILE_NAME;
+            ((DIRECTORY_SEPARATOR == substr($dirPath, -1 )) ? '' : DIRECTORY_SEPARATOR) . self::APPLICATION_DESCRIPTOR_FILE_NAME;
         if (file_exists($descriptorFilePath)) {
             $descriptorDataFromFile = $this->loadAppDescriptor($dirPath);
             ArrayUtils::merge($descriptorDataFromFile, $descriptorData);
@@ -229,7 +229,7 @@ class AppService extends AbstractService
             }
             switch ($value) {
                 case 'initialize':
-                    $this->processApp($ymlData);
+                    $this->createOrUpdateApp($ymlData);
                     $this->createAppPrivileges($ymlData);
                     $this->createRole($ymlData);
                     $this->performMigration($ymlData, $path);
@@ -304,11 +304,6 @@ class AppService extends AbstractService
         }
         FileUtils::copyDir($appSourceDir, $appDeployDir);
         return $this->deployApp($appDeployDir);
-    }
-
-    private function processApp(&$yamlData){
-        $appData = &$yamlData['app'];
-        $this->createOrUpdateApp($appData);
     }
 
     public function processSymlinks($yamlData, $path){
@@ -772,44 +767,47 @@ class AppService extends AbstractService
         return $orgData;
     }
 
-    private function createOrUpdateApp(&$appdata)
+    private function createOrUpdateApp(&$ymlData)
     {
+        $appData = &$ymlData['app'];
         //UUID takes precedence over name. Therefore UUID is checked first.
-        if (array_key_exists('uuid', $appdata) && !empty($appdata['uuid'])) {
+        if (array_key_exists('uuid', $appData) && !empty($appData['uuid'])) {
             $queryString = 'SELECT uuid, name FROM ox_app AS app WHERE uuid=:uuid';
-            $queryParams = ['uuid' => $appdata['uuid']];
+            $queryParams = ['uuid' => $appData['uuid']];
         }
         //Application is queried by name only if UUID is not given.
         else {
-            if (!array_key_exists('name', $appdata) || empty($appdata['name'])) {
+            if (!array_key_exists('name', $appData) || empty($appData['name'])) {
                 throw new ServiceException('Application UUID or name must be given.', 'ERR_INVALID_INPUT');
             }
             $queryString = 'SELECT uuid, name FROM ox_app AS app WHERE name=:name';
-            $queryParams = ['name' => $appdata['name']];
+            $queryParams = ['name' => $appData['name']];
         }
         $queryResult = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
 
         //Create the app if not found.
         if (0 == count($queryResult)) {
             //UUID is invalid. Threfore remove it.
-            unset($appdata['uuid']);
-            $temp = ['app' => $appdata];
+            unset($appData['uuid']);
+            $temp = ['app' => $appData];
             $createResult = $this->createApp($temp);
-            ArrayUtils::merge($appdata, $createResult['app']);
+            ArrayUtils::merge($appData, $createResult['app']);
             return;
         }
 
-        //Update the app in all other conditions.
+        //App is found. Update the app.
         $dbRow = $queryResult[0];
-        if (isset($appdata['name']) && !isset($appdata['uuid'])) {
-            $appdata['uuid'] = $dbRow['uuid'];
+        if (isset($appData['name']) && !isset($appData['uuid'])) {
+            $appData['uuid'] = $dbRow['uuid'];
         }
-        if (isset($appdata['uuid']) && !isset($appdata['name'])) {
-            $appdata['name'] = $dbRow['name'];
+        if (isset($appData['uuid']) && !isset($appData['name'])) {
+            $appData['name'] = $dbRow['name'];
         }
-        $temp = ['app' => $appdata];
-        $updateResult = $this->updateApp($appdata['uuid'], $temp);
-        ArrayUtils::merge($appdata, $updateResult['app']);
+
+        //Ensure app source directory is setup before calling update.
+        $this->setupOrUpdateApplicationDirectoryStructure($ymlData);
+        $updateResult = $this->updateApp($appData['uuid'], $ymlData);
+        ArrayUtils::merge($appData, $updateResult['app']);
         return;
     }
 
@@ -867,14 +865,17 @@ class AppService extends AbstractService
 
     public function updateApp($uuid, &$data)
     {
-        $app = new App($this->table);
-        $app->loadByUuid($uuid);
         $appData = $data['app'];
+        if (array_key_exists('uuid', $appData) && ($uuid != $appData['uuid'])) {
+            throw new InvalidParameterException('UUID in URL and UUID in data set are not matching.');
+        }
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
         if (!file_exists($appSourceDir)) {
             throw new FileNotFoundException("Application source directory is not found.",
             ['directory' => $appSourceDir]);
         }
+        $app = new App($this->table);
+        $app->loadByUuid($uuid);
         if (array_key_exists('type', $appData)) {
             if ($app->getProperty('type') != $appData['type']) {
                 throw new InvalidParameterException(
