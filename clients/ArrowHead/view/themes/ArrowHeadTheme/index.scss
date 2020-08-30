@@ -17,8 +17,8 @@ html {
 .osjs-root {
   font-size: 15px;
   background-image: url("./src/images/background.gif");
-  background-color: $soft!important;
-  background-size: contain!important;
+  background-color: $soft !important;
+  background-size: contain !important;
 }
 
 ::-webkit-scrollbar {
@@ -70,23 +70,23 @@ html {
   }
 
   &[data-action="minimize"] {
-  & > div {
+    & > div {
       background-position: 50% 50%;
       background-size: 14px;
-    background-image: url("./src/images/minimize.svg");
-  }
-    &:hover{
-     transform: scale(1.2);
+      background-image: url("./src/images/minimize.svg");
+    }
+    &:hover {
+      transform: scale(1.2);
     }
   }
   &[data-action="maximize"] {
-  & > div {
+    & > div {
       background-position: 50% 50%;
       background-size: 14px;
-    background-image: url("./src/images/maximize.svg");
-  }
-    &:hover{
-     transform: scale(1.2);
+      background-image: url("./src/images/maximize.svg");
+    }
+    &:hover {
+      transform: scale(1.2);
     }
   }
 
@@ -99,8 +99,8 @@ html {
       background-image: url("./src/images/close.svg");
     }
 
-    &:hover{
-     transform: scale(1.2);
+    &:hover {
+      transform: scale(1.2);
     }
   }
 }
@@ -241,7 +241,6 @@ html {
   color: white;
 }
 .osjs-panel-item[data-name="windows"] > div {
-
   font-size: 12px;
   color: white;
   background-color: rgba(255, 255, 255, 0.4);
@@ -316,48 +315,50 @@ label {
   background: $primary;
 }
 
-.k-button.k-primary, .manageIcons{
+.k-button.k-primary,
+.manageIcons {
   background-color: $secondary;
   border-color: $secondary;
-  color: white!important;
+  color: white !important;
   // color: black!important;
 }
 
-.k-button.k-primary:hover, .manageIcons:hover{
+.k-button.k-primary:hover,
+.manageIcons:hover {
   background-color: $secondary;
   border-color: $secondary;
-  color: white!important;
+  color: white !important;
   // color: black!important;
 }
-.gridOperationDropdown .k-button.k-primary{
+.gridOperationDropdown .k-button.k-primary {
   font-size: small;
 }
 
-.PageRender .breadcrumbs-item a{
+.PageRender .breadcrumbs-item a {
   font-size: 20px;
   color: $primary;
 }
-.PageRender .breadcrumbs-item a:hover{
+.PageRender .breadcrumbs-item a:hover {
   color: $primary;
 }
 
-.PageRender .breadcrumbs{
+.PageRender .breadcrumbs {
   padding: 5px 0px 5px 0px;
 }
 
-.GridCustomStyle .k-pager-numbers li a.k-state-selected{
+.GridCustomStyle .k-pager-numbers li a.k-state-selected {
   background-color: $secondary;
   border-color: $secondary;
 }
 
-.osjs-panel-item[data-name="profile"]{
-height: unset;
-padding: 10px!important;
+.osjs-panel-item[data-name="profile"] {
+  height: unset;
+  padding: 10px !important;
 }
 
-.osjs-window.Window_ArrowHead[data-maximized="true"]{
-  .osjs-window-button[data-action="maximize"]{
-    div{
+.osjs-window.Window_ArrowHead[data-maximized="true"] {
+  .osjs-window-button[data-action="maximize"] {
+    div {
       background-image: url(./src/images/restore.png);
       background-size: 25px;
     }
@@ -369,16 +370,23 @@ padding: 10px!important;
   color: white;
 }
 
-.PageRender .AppBuilderPage{
+.PageRender .AppBuilderPage {
   height: calc(100% - 45px);
 }
 
-.swal2-confirm.swal2-styled{
-  background-color: $primary!important;
-    border-left-color: $primary!important;
-    border-right-color: $primary!important;
+.swal2-confirm.swal2-styled {
+  background-color: $primary !important;
+  border-left-color: $primary !important;
+  border-right-color: $primary !important;
 }
 
-.osjs-panel-item[data-name=menu]:hover{
-  background-color: #9189ad5c!important;
+.osjs-panel-item[data-name="menu"]:hover {
+  background-color: #9189ad5c !important;
+}
+
+.Window_Preferences .tabLayout {
+  background-color: $secondary !important;
+  button {
+    border: 10px solid $secondary !important;
+  }
 }
