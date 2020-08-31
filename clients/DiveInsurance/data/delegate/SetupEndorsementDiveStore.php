@@ -219,13 +219,16 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_PropTax'] = $data['PropTax'];
                 $policy['previous_propertyCoverageSelect'] = $data['propertyCoverageSelect'];
                 $policy['previous_LiaTax'] = $data['LiaTax'];
+                $policy['previous_Non-OwnedAutoFP'] = $data['Non-OwnedAutoFP'];
+                $policy['previous_LossofBusIncomeFP'] = $data['LossofBusIncomeFP'];
+                $policy['previous_BuildingLimitFP'] = $data['BuildingLimitFP'];
                 $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
                 $policy['previous_AddILocTax'] = $data['AddILocTax'];
                 $policy['previous_propertyDeductiblesPercentage'] = $data['propertyDeductiblesPercentage'];
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
-                $policy['previous_poolLiability'] = $data['poolLiability'];
+                $policy['previous_poolLiability'] = isset($data['poolLiability'])?$data['poolLiability']:0;
                 $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
@@ -347,7 +350,9 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($rate);
                 }
             }
-
+            foreach ($policy as $key => $value) {
+                $data[$key] = $value;
+            }
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
             $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
