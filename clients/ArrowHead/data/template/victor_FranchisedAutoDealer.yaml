@@ -60,11 +60,13 @@
    Source Worksheet: 'Date of completion of last audit of cash & accounts:'
    pageName: Crime (printable)
    cell: L68
+   method: formatDate
 -
    key: lastauditofinventory
    Source Worksheet: 'Date of completion of last audit of inventory:'
    pageName: Crime (printable)
    cell: L70
+   method: formatDate
 -
    key: discrepenciesloose
    Source Worksheet: Were any discrepencies or loose practices commented upon this audit? (If
@@ -380,12 +382,26 @@
    type: Checkbox
    method: checkValue
 -
+   key: formalsafetymeetings_monthly
+   Source Worksheet: Formal safety meetings "Monthly"
+   pageName: Garage Supplemental
+   cell: C110
+   method: checkValue
+   returnBoolean: "Yes|No"
+-
    key: formalsafetymeetings_quarterly
    Source Worksheet: Formal safety meetings "quarterly"
    pageName: Garage Supplemental
    cell: Check Box 59
    type: Checkbox
-   method: checkValue 
+   method: checkValue
+-
+   key: formalsafetymeetings_quarterly
+   Source Worksheet: Formal safety meetings "quarterly"
+   pageName: Garage Supplemental
+   cell: C110
+   method: checkValue
+   returnBoolean: "Yes|No"
 -
    key: formalsafetymeetings
    Source Worksheet: Formal safety meetings "quarterly"
@@ -1195,11 +1211,37 @@
    cell: AJ40
    type: DataGrid
 -
+   key: franchisedAutoDealer*checkbppcoinsurance_result
+   method: simpleDatagrid
+   pageName: Property
+   cell: AM40
+   type: DataGrid
+   returnValue:
+      '80' : '0.8'
+      '90' : '0.9'
+      '100' : '1'
+-
    key: franchisedAutoDealer*checkbuildingValuation_result
    method: simpleDatagrid
    pageName: Property
    cell: AN40
    type: DataGrid
+-
+   key: franchisedAutoDealer*checkpropertyCoverageDeductible_result
+   method: simpleDatagrid
+   pageName: Property
+   cell: AP40
+   type: DataGrid
+   returnValue: 
+      '1000' : '2500'
+      '2500' : '2500'
+      '5000' : '5000'
+      '10000' : '10000'
+      '20000' : '25000'
+      '25000' : '25000'
+      '50000' : '25000'
+      '75000' : '25000'
+      '100000' : '25000'
 -
    key: franchisedAutoDealer*checkEmployeetoolsOnPremises_result
    method: simpleDatagrid
@@ -1207,7 +1249,7 @@
    cell: AQ40
    type: DataGrid
 -
-   key: genericData*locationScheduleGridData_coinsuranceamount
+   key: franchisedAutoDealer*checkcoinsurance_result
    method: simpleDatagrid
    pageName: Property
    cell: AS40
