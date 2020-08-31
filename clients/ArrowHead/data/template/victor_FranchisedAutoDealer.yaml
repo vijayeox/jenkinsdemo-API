@@ -1192,6 +1192,7 @@
       '80': 'Agreed Amount'
       '90' : 'Agreed Amount'
       '100' : 'Agreed Amount'
+      'Agreed Amount' : 'Agreed Amount'
 -
    key: genericData*locationScheduleGridData_businesspersonal
    method: simpleDatagrid
@@ -1220,6 +1221,7 @@
       '80' : 'Agreed Amount'
       '90' : 'Agreed Amount'
       '100' : 'Agreed Amount'
+      'Agreed Amount' : 'Agreed Amount'
 -
    key: franchisedAutoDealer*checkbuildingValuation_result
    method: simpleDatagrid
