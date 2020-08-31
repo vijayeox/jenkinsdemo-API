@@ -45,6 +45,11 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/File.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../../module/User/test/Dataset/User.yml");
+        switch($this->getName()){
+            case "testStartWorkflowSetupIdentityField":
+                $dataset->addYamlFile(dirname(__FILE__) . "/Dataset/businessRole.yml");
+                break;
+        }
         return $dataset;
     }
 
@@ -269,7 +274,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowWithParentWorkflowInstance() {
-        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo', 'parentWorkflowInstanceId' => 'd321b276-9e1c-4bdf-8238-7340f9599383');
+        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcc23', 'parentWorkflowInstanceId' => 'd321b276-9e1c-4bdf-8238-7340f9599383');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);

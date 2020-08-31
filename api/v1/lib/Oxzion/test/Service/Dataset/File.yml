@@ -4,15 +4,41 @@ ox_organization:
     status: Active
     type: 'INDIVIDUAL'
     uuid: 'fa371de7-0387-48ea-8f29-5d3704d96ac5'  
+  - id: 101
+    name: Test2
+    status: Active
+    type: 'INDIVIDUAL'
+    uuid: '1b371de7-0387-48ea-8f29-5d3704d96ad6'  
+  - id: 102
+    name: Test3
+    status: Active
+    type: 'INDIVIDUAL'
+    uuid: '2c371de7-0387-48ea-8f29-5d3704d96ae7'
 ox_address:
   -
     id: 50
-    address1: 'Address1'
-    address2: 'Address2'
+    address1: 'Address1-50'
+    address2: 'Address2-50'
     city: 'Bangalore'
     state: 'KARNATAKA'
     country: 'India'
-    zip: 560007
+    zip: 560050
+  -
+    id: 51
+    address1: 'Address1-51'
+    address2: 'Address2-51'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560051
+  -
+    id: 52
+    address1: 'Address1-52'
+    address2: 'Address2-52'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560052
 ox_user_profile:
   - 
     id: 150
@@ -27,6 +53,32 @@ ox_user_profile:
     org_id: 100
     created_by: 1
     date_created: '2020-08-24 00:00:00'  
+  - 
+    id: 151
+    uuid: bafe8447-3b29-410d-8b22-95d337d3fbd3
+    firstname: Individual2
+    lastname: Admin
+    email: 'admintestindividual2@eoxvantage.in'
+    date_of_birth: '1991-02-28'
+    phone: '1212121212'
+    gender: 'Male'
+    address_id: 51
+    org_id: 101
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'  
+  - 
+    id: 152
+    uuid: cbfe8447-3b29-410d-8b22-95d337d3fbe54
+    firstname: Individual3
+    lastname: Admin
+    email: 'admintestindividual3@eoxvantage.in'
+    date_of_birth: '1991-02-28'
+    phone: '1212121212'
+    gender: 'Male'
+    address_id: 52
+    org_id: 102
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'  
 ox_user:  
   - 
     id: 100
@@ -37,11 +89,37 @@ ox_user:
     user_profile_id: 150
     status: 'Active'
     created_by: 1
-    date_created: '2020-08-24 00:00:00'      
+    date_created: '2020-08-24 00:00:00'
+  - 
+    id: 101
+    uuid: 864bc48a-3c69-4f7a-af8b-019fc984ee87
+    username: individualadmin1
+    name: 'Individual1 Admin'
+    orgid: 101
+    user_profile_id: 151
+    status: 'Active'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'
+  - 
+    id: 102
+    uuid: 974bc48a-3c69-4f7a-af8b-019fc984ee98
+    username: individualadmin2
+    name: 'Individual2 Admin'
+    orgid: 102
+    user_profile_id: 152
+    status: 'Active'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'        
 ox_user_org:
   -
     user_id: 100
     org_id: 100
+  -
+    user_id: 101
+    org_id: 101
+  -
+    user_id: 102
+    org_id: 102        
 
 ox_app:
   - id: 99
@@ -62,15 +140,6 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 4
-ox_business_role:
-  - id: 100
-    uuid: "77b30b2d-d1da-427a-8e40-bc954b2b0f77"
-    name: "Policy Holder"
-    app_id: 99
-  - id: 101
-    uuid: "78b30b2d-d1da-427a-8e40-bc954b2b0f88"
-    name: "Agency"
-    app_id: 99
 ox_app_entity:
   - id: 1
     name: "entity1"
@@ -111,6 +180,12 @@ ox_app_entity:
 ox_app_registry:
   - org_id: 1
     app_id: 99
+  - org_id: 100
+    app_id: 99 
+  - org_id: 101
+    app_id: 99 
+  - org_id: 102
+    app_id: 99  
 ox_field:
   - id: 1
     name: "field1"
@@ -279,7 +354,7 @@ ox_workflow:
     app_id: 99
     name: "Test Workflow 2"
     process_id: "[main]1"
-    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo"
+    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcc23"
     entity_id: 1
 ox_workflow_deployment:
   - id: 1
@@ -844,24 +919,18 @@ ox_file_document:
     sequence: null
 ox_wf_user_identifier:
   - id: 1
-    user_id: 1
+    user_id: 101
     identifier_name: "field1"
     identifier: "32552"
     app_id: 99
-    org_id: 1
+    org_id: 101
   - id: 2
     app_id: 99
-    org_id: 1
-    user_id: 1
-    identifier_name: "expiry_date"
-    identifier: "2019-01-01"
-  - id: 3
-    app_id: 99
-    org_id: 1
-    user_id: 2
+    org_id: 102
+    user_id: 102
     identifier_name: "field1"
     identifier: "32253"
-  - id: 4
+  - id: 3
     app_id: 99
     org_id: 100
     user_id: 100
@@ -937,13 +1006,4 @@ ox_indexed_file_attribute:
 ox_entity_identifier:
   - entity_id: 1
     identifier: "field1"
-ox_entity_participant_role:
-  - entity_id: 1
-    business_role_id: 100
-ox_org_business_role:
-  - id: 1
-    org_id: 1
-    business_role_id: 101
-ox_org_offering:
-  - entity_id: 1
-    org_business_role_id: 1  
+

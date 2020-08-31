@@ -1028,6 +1028,85 @@ class FileService extends AbstractService
         return $dataSet[0];
     }
 
+    private function processWorkflowFilter($params, &$workflowJoin, &$workflowFilter, &$queryParams){
+        if (isset($params['workflowId'])) {
+            // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
+            $select1 = "SELECT * from ox_workflow where uuid = :uuid";
+            $selectQuery1 = array("uuid" => $params['workflowId']);
+            $worflowArray = $this->executeQuerywithBindParameters($select1, $selectQuery1)->toArray();
+
+            $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
+            if (!$workflowId) {
+                throw new ServiceException("Workflow Does not Exist", "app.forworkflownot.found");
+            } else {
+                $workflowFilter = " ow.id = :workflowId AND ";
+                $queryParams['workflowId'] = $workflowId;
+                $workflowJoin = "left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id left join ox_workflow as ow on ow.id = wd.workflow_id";
+            }
+        }
+    }
+
+    private function processCreatedDateFilter(&$params, &$createdFilter, &$queryParams){
+        if (isset($params['gtCreatedDate'])) {
+            $createdFilter .= " of.date_created >= :gtCreatedDate AND ";
+            $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
+            $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
+        }
+        if (isset($params['ltCreatedDate'])) {
+            $createdFilter .= " of.date_created < :ltCreatedDate AND ";
+            $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
+            /* modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
+             the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
+             till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
+            $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
+        }
+    }
+    private function processParticipantFiltering($orgId, &$fromQuery, &$whereQuery, &$queryParams){
+        $query = "SELECT id from ox_org_business_role where org_id = :orgId";
+        $params = ["orgId" => $orgId];
+        $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
+        if(count($result) == 0){
+            return false;
+        }
+        $fromQuery .= " INNER JOIN ox_file_participant ofp on `of`.id = ofp.file_id";
+        if($whereQuery != ""){
+            $whereQuery .= " AND ";
+        }
+
+        $whereQuery .= " ofp.org_id = :orgId";
+        $queryParams['orgId'] = $orgId;
+        return true;
+    }
+
+    private function processUserFilter($params, $appId, &$fromQuery, &$whereQuery, &$queryParams){
+        if (isset($params['userId'])) {
+            if ($params['userId'] == 'me') {
+                $userId = AuthContext::get(AuthConstants::USER_ID);
+            } else {
+                $userId = $this->getIdFromUuid('ox_user', $params['userId']);
+                if (!$userId) {
+                    throw new ServiceException("User Does not Exist", "app.forusernot.found");
+                }
+            }
+            $identifierQuery = "select identifier_name,identifier from ox_wf_user_identifier where user_id=:userId and app_id = :appId";
+            $identifierParams = array('userId'=>$userId,'appId'=>$appId);
+            $getIdentifier = $this->executeQueryWithBindParameters($identifierQuery, $identifierParams)->toArray();
+            if($whereQuery != ""){
+                $whereQuery .= " AND ";
+            }
+            if(isset($getIdentifier) && count($getIdentifier)>0){
+                $fromQuery .= " INNER JOIN ox_indexed_file_attribute ofa on (ofa.file_id = of.id) inner join ox_field as d on (ofa.field_id = d.id and d.name= :fieldName)
+                    INNER join ox_entity_identifier as oei on oei.identifier = '".$getIdentifier[0]['identifier_name']."' AND oei.entity_id = en.id ";
+                $queryParams['fieldName'] = $getIdentifier[0]['identifier_name'];
+                $queryParams['identifier'] = $getIdentifier[0]['identifier'];
+                $whereQuery .= " ofa.field_value_text = :identifier ";
+            }else{
+                $whereQuery .= " `of`.created_by = :userId";
+                $queryParams['userId'] = $userId;
+            }
+        } 
+    }
+
     public function getFileList($appUUid, $params, $filterParams = null)
     {
         $this->logger->info("Inside File List API - with params - " . json_encode($params));
@@ -1039,133 +1118,86 @@ class FileService extends AbstractService
         $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
         $selectQuery = array("orgId" => $orgId, "appId" => $appId);
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
-        if (count($result) > 0) {
-            $queryParams = array();
-            $queryParams['appId'] = $appId;
-            $statusFilter = "";
-            $createdFilter = "";
-            $entityFilter = "";
-            $whereQuery = "";
-            $this->getEntityFilter($params,$entityFilter,$queryParams);
-            $workflowJoin = "";
-            $workflowFilter = "";
-            if (isset($params['workflowId'])) {
-
-                // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
-                $select1 = "SELECT * from ox_workflow where uuid = :uuid";
-                $selectQuery1 = array("uuid" => $params['workflowId']);
-                $worflowArray = $this->executeQuerywithBindParameters($select1, $selectQuery1)->toArray();
-
-                $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
-                if (!$workflowId) {
-                    throw new ServiceException("Workflow Does not Exist", "app.forworkflownot.found");
-                } else {
-                    $workflowFilter = " ow.id = :workflowId AND ";
-                    $queryParams['workflowId'] = $workflowId;
-                    $workflowJoin = "left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id left join ox_workflow as ow on ow.id = wd.workflow_id";
-                }
-            }
-            if (isset($params['gtCreatedDate'])) {
-                $createdFilter .= " of.date_created >= :gtCreatedDate AND ";
-                $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
-                $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
-            }
-            if (isset($params['ltCreatedDate'])) {
-                $createdFilter .= " of.date_created < :ltCreatedDate AND ";
-                $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
-                /* modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
-                 the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
-                 till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
-                $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
-            }
-            $where = " $workflowFilter $entityFilter $createdFilter";
-            $fromQuery = " from ox_file as `of`
-            inner join ox_app_entity as en on en.id = `of`.entity_id
-            inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
-            if (isset($params['userId'])) {
-                if ($params['userId'] == 'me') {
-                    $userId = AuthContext::get(AuthConstants::USER_ID);
-                } else {
-                    $userId = $this->getIdFromUuid('ox_user', $params['userId']);
-                    if (!$userId) {
-                        throw new ServiceException("User Does not Exist", "app.forusernot.found");
-                    }
-                }
-                $identifierQuery = "select identifier_name,identifier from ox_wf_user_identifier where user_id=:userId and app_id = :appId";
-                $identifierParams = array('userId'=>$userId,'appId'=>$appId);
-                $getIdentifier = $this->executeQueryWithBindParameters($identifierQuery, $identifierParams)->toArray();
-                if(isset($getIdentifier) && count($getIdentifier)>0){
-                    $fromQuery .= " INNER JOIN ox_indexed_file_attribute ofa on (ofa.file_id = of.id) inner join ox_field as d on (ofa.field_id = d.id and d.name= :fieldName)
-                        INNER join ox_entity_identifier as oei on oei.identifier = '".$getIdentifier[0]['identifier_name']."' AND oei.entity_id = en.id ";
-                    $queryParams['fieldName'] = $getIdentifier[0]['identifier_name'];
-                    $queryParams['identifier'] = $getIdentifier[0]['identifier'];
-                    $whereQuery = " ofa.field_value_text = :identifier AND ";
-                }else{
-                    $whereQuery .= "`of`.created_by = :userId AND ";
-                    $queryParams['userId'] = $userId;
-                }
-            } else {
-                $whereQuery = "";
-            }
-        //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
-            $fromQuery .= "left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
-            if (isset($params['workflowStatus'])) {
-                $whereQuery .= " wi.status = '" . $params['workflowStatus'] . "'  AND ";
-            } else {
-                $whereQuery .= "";
-            }
-            $sort = "";
-            $field = "";
-            $pageSize = " LIMIT 10";
-            $offset = " OFFSET 0";
-            $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
-            $whereQuery = rtrim($whereQuery, " AND ");
-            if($whereQuery==" WHERE "){
-                $where = "";
-            } else {
-                $where .= " " . $whereQuery ;
-            }
-            $where = trim($where) != "" ? "WHERE $where" : "";
-            $where = rtrim($where, " AND ");
-            try {
-                $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id $field $fromQuery $where $sort $pageSize $offset";
-                $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
-                $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-                $countQuery = "SELECT FOUND_ROWS();";
-                $this->logger->info("Executing Filei listquery - $countQuery with params - " . json_encode($queryParams));
-                $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-                if (isset($filterParams['columns'])) {
-                    $filterParams['columns'] = json_decode($filterParams['columns'],true);
-                }
-                if ($resultSet) {
-                    $i = 0;
-                    foreach ($resultSet as $file) {
-                        if ($file['data']) {
-                            $content = json_decode($file['data'], true);
-                            if ($content) {
-                                if (isset($filterParams['columns'])) {
-                                    foreach ($filterParams['columns'] as $column){
-                                        isset($content[$column]) ? $file[$column] = $content[$column] : null;
-                                    }
-                                    if(isset($file["data"])){
-                                        unset($file["data"]);
-                                    }
-                                    $resultSet[$i] = ($file);
-                                } else{
-                                    $resultSet[$i] = array_merge($file, $content);
-                                }
-                            }
-                        }
-                        $i++;
-                    }
-                }
-                return array('data' => $resultSet, 'total' => $countResultSet[0]['FOUND_ROWS()']);
-            } catch (Exception $e) {
-                throw new ServiceException($e->getMessage(), "app.mysql.error");
-            }
-        } else {
+        
+        if (count($result) == 0) {
             throw new ServiceException("App Does not belong to the org", "app.fororgnot.found");
         }
+
+        $queryParams = array();
+        $queryParams['appId'] = $appId;
+        $statusFilter = "";
+        $createdFilter = "";
+        $entityFilter = "";
+        $whereQuery = "";
+        $this->getEntityFilter($params,$entityFilter,$queryParams);
+        $workflowJoin = "";
+        $workflowFilter = "";
+        
+        $this->processWorkflowFilter($params, $workflowJoin, $workflowFilter, $queryParams);
+        $this->processCreatedDateFilter($params, $createdFilter, $queryParams);
+
+        $where = " $workflowFilter $entityFilter $createdFilter";
+        $fromQuery = " from ox_file as `of`
+        inner join ox_app_entity as en on en.id = `of`.entity_id
+        inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
+        $this->processParticipantFiltering($orgId, $fromQuery, $whereQuery, $queryParams);
+        $this->processUserFilter($params, $appId, $fromQuery, $whereQuery, $queryParams);
+        
+        //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
+        $fromQuery .= " left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
+        if (isset($params['workflowStatus'])) {
+            $whereQuery .= ($whereQuery == "" ? "" : " AND ") . " wi.status = '" . $params['workflowStatus'] . "'";
+        }
+        $sort = "";
+        $field = "";
+        $pageSize = " LIMIT 10";
+        $offset = " OFFSET 0";
+        $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
+        $whereQuery = rtrim($whereQuery, " AND ");
+        if($whereQuery==" WHERE "){
+            $where = "";
+        } else {
+            $where .= " " . $whereQuery ;
+        }
+        $where = trim($where) != "" ? "WHERE $where" : "";
+        $where = rtrim($where, " AND ");
+        try {
+            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id $field $fromQuery $where $sort $pageSize $offset";
+            $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
+            $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+            $countQuery = "SELECT FOUND_ROWS();";
+            $this->logger->info("Executing File listquery - $countQuery with params - " . json_encode($queryParams));
+            $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
+            if (isset($filterParams['columns'])) {
+                $filterParams['columns'] = json_decode($filterParams['columns'],true);
+            }
+            if ($resultSet) {
+                $i = 0;
+                foreach ($resultSet as $file) {
+                    if ($file['data']) {
+                        $content = json_decode($file['data'], true);
+                        if ($content) {
+                            if (isset($filterParams['columns'])) {
+                                foreach ($filterParams['columns'] as $column){
+                                    isset($content[$column]) ? $file[$column] = $content[$column] : null;
+                                }
+                                if(isset($file["data"])){
+                                    unset($file["data"]);
+                                }
+                                $resultSet[$i] = ($file);
+                            } else{
+                                $resultSet[$i] = array_merge($file, $content);
+                            }
+                        }
+                    }
+                    $i++;
+                }
+            }
+            return array('data' => $resultSet, 'total' => $countResultSet[0]['FOUND_ROWS()']);
+        } catch (Exception $e) {
+            throw new ServiceException($e->getMessage(), "app.mysql.error");
+        }
+    
     }
 
     public function getFileDocumentList($params)
@@ -1666,7 +1698,7 @@ class FileService extends AbstractService
 
     public function updateFieldValueOnFiles($appUUid,$data,$fieldName,$initialFieldValue,$newFieldValue,$filterParams){
 
-        $whereQuery = " ";
+        $whereQuery = "";
         $sort = "";
         $field = "";
         $pageSize = " ";
@@ -1768,7 +1800,9 @@ class FileService extends AbstractService
                         $filterParamsArray = $filterParams;
                     }
                 }
-
+                if($whereQuery != "" ){
+                    $whereQuery .= " AND ";
+                }
                 $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
                 $cnt = 1;
                 $fieldParams = array();
