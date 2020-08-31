@@ -42,7 +42,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       item => {
         return item.occupancyType == "vacantLand"
           ? { result: "" }
-          : { result: data.buildingCoinsurance  ? data.buildingCoinsurance : ''};
+          : { result: "Agreed Amount" };
       }
     ),
     checkpropertyCoverageDeductible: data.genericData.locationScheduleGridData.map(
@@ -52,20 +52,6 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
           : { result: data.propertyCoverageDeductible  ? data.propertyCoverageDeductible : ''};
       }
     ),
-    checkbppcoinsurance: data.genericData.locationScheduleGridData.map(item => {
-      return item.occupancyType == "vacantLand"
-        ? { result: "" }
-        : item.agreedamount == "yes"
-        ? { result: "Agreed Amount" }
-        : { result: data.bppcoinsurance  ? data.bppcoinsurance : ''};
-    }),
-    checkcoinsurance: data.genericData.locationScheduleGridData.map(item => {
-      return item.occupancyType == "vacantLand"
-        ? { result: "" }
-        : item.agreedamount == "yes"
-        ? { result: "Agreed Amount" }
-        : { result: item.coinsuranceamount ? item.coinsuranceamount : '' };
-    }),
     checkbuildingValuation: data.genericData.locationScheduleGridData.map(i => {
       return { result: "Replacement Cost" };
     }),

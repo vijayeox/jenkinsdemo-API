@@ -1212,16 +1212,11 @@
    cell: AJ40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkbppcoinsurance_result
+   key: franchisedAutoDealer*checkbuildingCoinsurance_result
    method: simpleDatagrid
    pageName: Property
    cell: AM40
    type: DataGrid
-   returnValue:
-      '80' : 'Agreed Amount'
-      '90' : 'Agreed Amount'
-      '100' : 'Agreed Amount'
-      'Agreed Amount' : 'Agreed Amount'
 -
    key: franchisedAutoDealer*checkbuildingValuation_result
    method: simpleDatagrid
@@ -1251,27 +1246,11 @@
    cell: AQ40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkcoinsurance_result
+   key: franchisedAutoDealer*checkbuildingCoinsurance_result
    method: simpleDatagrid
    pageName: Property
    cell: AS40
    type: DataGrid
-   returnValue:
-      '0.05' : 'Agreed Amount'
-      '0.10' : 'Agreed Amount'
-      '0.15' : 'Agreed Amount'
-      '0.20' : 'Agreed Amount'
-      '0.25' : 'Agreed Amount'
-      '0.30' : 'Agreed Amount'
-      '0.40' : 'Agreed Amount'
-      '0.50' : 'Agreed Amount'
-      '0.60' : 'Agreed Amount'
-      '0.70' : 'Agreed Amount'
-      '0.80' : 'Agreed Amount'
-      '0.90' : 'Agreed Amount'
-      '1' : 'Agreed Amount'
-      '1.25' : 'Agreed Amount'
-      '1.50' : 'Agreed Amount'
 -
    key: genericData*locationScheduleGridData_biwaitingperiod
    method: simpleDatagrid
