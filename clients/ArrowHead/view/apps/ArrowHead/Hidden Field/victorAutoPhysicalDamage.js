@@ -186,12 +186,12 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
           uniqueLotProtection.push("Fenced");
         }
         if (
-          item.dolsecguards == "yes" ||
-          item.dolaftrhrslighting == "yes" ||
-          item.dolEntranceQuestions.postChain == "yes" ||
-          item.dolsurvcammoniintrunotifi == "yes" ||
-          item.dolsurcamnotmoniotrd == "yes" ||
-          item.dolEntranceQuestions.fullyFencedPremises == "yes"
+          item.dolsecguards != "yes" &&
+          item.dolaftrhrslighting != "yes" &&
+          item.dolEntranceQuestions.postChain != "yes" &&
+          item.dolsurvcammoniintrunotifi != "yes" &&
+          item.dolsurcamnotmoniotrd != "yes" &&
+          item.dolEntranceQuestions.fullyFencedPremises != "yes"
         ) {
           uniqueLotProtection.push("None");
         }
@@ -273,7 +273,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     checkMixofInventoryNew: checkMixofInventoryNew,
     uniqueLotProtection:
       uniqueLotProtection.length > 0
-        ? [...new Set(uniqueKeyControls)] + ""
+        ? [...new Set(uniqueLotProtection)] + ""
         : "",
     uniqueKeyControls:
       uniqueKeyControls.length > 0 ? [...new Set(uniqueKeyControls)] + "" : ""
