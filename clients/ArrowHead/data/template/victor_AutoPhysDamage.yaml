@@ -253,9 +253,10 @@
    cell: D72
    returnBoolean: "Yes|No"
 -
-   key: victorAutoPhysicalDamage*checkaretheyinsuredelsewhere
+   key: aretheyinsuredelsewhere
    Source Worksheet: If they are insured elsewhere?
    pageName: Underwriting Survey
+   returnBoolean: "Yes|No"
    cell: D73
 -
    key: numberofvehiclesindailyrentalfleet
@@ -485,7 +486,7 @@
    Source Worksheet: 'Collision Deductible:'
    pageName: Exposures and Deductibles
    cell: M69
-   returnValue: 
+   returnValue:
       '500' : '1000'
       '750' : '1000'
       '1000' : '1000'
@@ -506,7 +507,7 @@
    Source Worksheet: 'Collision Deductible:'
    pageName: Underwriting Survey
    cell: D29
-   returnValue: 
+   returnValue:
       '500' : '500'
       '750' : '750'
       '1000' : '1000'
@@ -549,7 +550,7 @@
    Source Worksheet: 'Wind/Hail Deductible: '
    pageName: Underwriting Survey
    cell: D27
-   returnValue: 
+   returnValue:
       '500' : '500'
       '1000' : '1000'
       '1250' : '1500'
@@ -563,7 +564,7 @@
    Source Worksheet: 'Flood Deductible:'
    pageName: Underwriting Survey
    cell: D28
-   returnValue: 
+   returnValue:
       '500' : '500'
       '1000' : '1000'
       '1250' : '1500'
@@ -735,7 +736,7 @@
 # -
 #    pageName: Underwriting Survey
 #    Source Worksheet: None
-#    key: 
+#    key:
 #    type: Checkbox
 #    cell: Check Box 234
 -

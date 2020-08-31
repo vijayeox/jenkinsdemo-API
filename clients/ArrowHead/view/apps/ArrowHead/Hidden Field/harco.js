@@ -7,7 +7,6 @@ if (data.workbooksToBeGenerated.harco == true) {
   var FPageGridOne = [];
   var FPageGridTwo = [];
   var FPageGridThree = [];
-
   var checknewcarsales = 0;
   var checkusedCarSales = 0;
   var checkfISales = 0;
@@ -26,7 +25,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     checkavgOfTimesContractDriversUsedPerMonth = "Greater";
   }
 
-  data.genericData.locationScheduleGridData.some((item) => {
+  data.genericData.locationScheduleGridData.some(item => {
     if (parseFloat(item.coinsuranceamount) > 0) {
       checkindemnitytype = item.coinsuranceamount;
       return true;
@@ -36,7 +35,7 @@ if (data.workbooksToBeGenerated.harco == true) {
   });
 
   if (checkindemnitytype == "") {
-    data.genericData.locationScheduleGridData.some((item) => {
+    data.genericData.locationScheduleGridData.some(item => {
       if (parseFloat(item.bimonthlylimitation) > 0) {
         checkindemnitytype = item.bimonthlylimitation;
         return true;
@@ -46,7 +45,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     });
   }
 
-  data.genericData.locationScheduleGridData.some((locationItem) => {
+  data.genericData.locationScheduleGridData.some(locationItem => {
     if (
       locationItem.occupancyType === "autoSalesAndService" ||
       locationItem.occupancyType === "newCarShowroomAndSales"
@@ -60,7 +59,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.map((locationItem) => {
+  data.genericData.locationScheduleGridData.map(locationItem => {
     if (locationItem.signsGreaterThan > 0) {
       FPageGridOne.push([
         locationItem.locationBuildingNumber,
@@ -103,7 +102,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.map((locationItem) => {
+  data.genericData.locationScheduleGridData.map(locationItem => {
     if (locationItem.businessincomelimit > 0) {
       FPageGridTwo.push([
         locationItem.locationBuildingNumber,
@@ -120,7 +119,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.map((locationItem) => {
+  data.genericData.locationScheduleGridData.map(locationItem => {
     if (locationItem.businesselectronicequipment > 0) {
       FPageGridThree.push([
         locationItem.locationBuildingNumber,
@@ -135,7 +134,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.map((locationItem) => {
+  data.genericData.locationScheduleGridData.map(locationItem => {
     if (locationItem.newcarsales > 0) {
       checknewcarsales += locationItem.newcarsales;
     }
@@ -156,7 +155,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.some((locationItem) => {
+  data.genericData.locationScheduleGridData.some(locationItem => {
     if (parseFloat(locationItem.earthquakedeductibles1) > 0) {
       firstEarthquakeDeductible = locationItem.earthquakedeductibles1;
       return true;
@@ -165,7 +164,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.some((locationItem) => {
+  data.genericData.locationScheduleGridData.some(locationItem => {
     if (
       locationItem.windDeductible &&
       locationItem.windDeductible != "exclude" &&
@@ -180,8 +179,44 @@ if (data.workbooksToBeGenerated.harco == true) {
       return false;
     }
   });
+  var tempcrimecoverage = Math.min(
+    data.theftofmoneydeductible ? data.theftofmoneydeductible : 200000,
+    data.outsidethepremisesdeductible
+      ? data.outsidethepremisesdeductible
+      : 200000,
+    data.burglaryofotherpropertydeductible
+      ? data.burglaryofotherpropertydeductible
+      : 200000
+  );
 
   value = {
+    checksoftwareprotection:
+      (data.virusscans && data.virusscans == "yes") ||
+      (data.antivirussoftware && data.antivirussoftware == "yes") ||
+      (data.protectedfirewalls && data.protectedfirewalls == "yes")
+        ? "yes"
+        : "no",
+    checkcrimecoverage: tempcrimecoverage == 200000 ? "" : tempcrimecoverage,
+    checkmedicalexpensedeductible:
+      data.agentseo == "yes" &&
+      (data.medicalexpensedeductible > 0 ||
+        data.medicalexpensedeductible.length > 0)
+        ? data.medicalexpensedeductible
+        : "",
+    checkgrosssales:
+      data.agentseo == "yes" && data.grosssales > 0 ? data.grosssales : "",
+    primarySecondaryOEM: data.genericData.locationScheduleGridData.map(item => {
+      if (item.primaryOEM) {
+        tempSecondaryOEMStore = item.secondaryOEM
+          ? item.secondaryOEM.length > 0
+            ? item.secondaryOEM
+            : []
+          : [];
+        return { result: [item.primaryOEM, ...tempSecondaryOEMStore] + "" };
+      } else {
+        return "";
+      }
+    }),
     checkeplicoverage: data.state
       ? data.state.name != "California" && data.eplicoverage == "yes"
         ? "X"
@@ -190,6 +225,11 @@ if (data.workbooksToBeGenerated.harco == true) {
     checkdiscriminationdeductible: data.state
       ? data.state.name != "California" && data.eplicoverage == "yes"
         ? "25000"
+        : ""
+      : "",
+    checkthirdpartylimit: data.state
+      ? data.state.name != "California" && data.eplicoverage == "yes"
+        ? "100000"
         : ""
       : "",
     checkacterroromissions: data.state
@@ -243,7 +283,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : ""
       : "",
     checkearthquakecoverage: data.genericData.locationScheduleGridData.some(
-      (i) => i.earthquakecoverage == "yes"
+      i => i.earthquakecoverage == "yes"
     ),
     checkReplacement: data.state.abbreviation
       ? data.state.abbreviation == "FL" || data.state.abbreviation == "CA"
@@ -276,7 +316,7 @@ if (data.workbooksToBeGenerated.harco == true) {
 
     checklockbox:
       data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some((locationItem) => {
+        ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
               if (
                 locationItem.locationGarageLiabilityKeyControls.lockbox == true
@@ -290,7 +330,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "",
     checkcomputerizedKeyVault:
       data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some((locationItem) => {
+        ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
               if (
                 locationItem.locationGarageLiabilityKeyControls
@@ -305,7 +345,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "",
 
     checkDolFullyFencedPremises: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolEntranceQuestions.fullyFencedPremises == "yes") {
           return true;
         } else {
@@ -314,7 +354,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkDolBlockedEntrances: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolEntranceQuestions.blockedEntrances == "yes") {
           return true;
         } else {
@@ -323,7 +363,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolaftrhrslighting == "yes") {
           return true;
         } else {
@@ -332,7 +372,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkSecurityGuards: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsecguards == "yes") {
           return true;
         } else {
@@ -341,7 +381,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkdolalrmsys: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolalrmsys == "yes") {
           return true;
         } else {
@@ -350,7 +390,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkdolsurcamnotmoniotrd: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsurcamnotmoniotrd == "yes") {
           return true;
         } else {
@@ -359,7 +399,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkdolsurvcammoniintrunotifi: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsurvcammoniintrunotifi == "yes") {
           return true;
         } else {
@@ -368,7 +408,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkdolguarddogs: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolguarddogs == "yes") {
           return true;
         } else {
@@ -378,7 +418,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     ),
     checklockingKeyCabinet:
       data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some((locationItem) => {
+        ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
               if (
                 locationItem.locationGarageLiabilityKeyControls
@@ -393,7 +433,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "",
     checkdailyKeyInventory:
       data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some((locationItem) => {
+        ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
               if (
                 locationItem.locationGarageLiabilityKeyControls
@@ -408,7 +448,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "",
     checkkeysInCars:
       data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some((locationItem) => {
+        ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
               if (
                 locationItem.locationGarageLiabilityKeyControls.keysInCars ==
@@ -423,7 +463,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "",
     checkkeysInCarsLabel:
       data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some((locationItem) => {
+        ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
               if (
                 locationItem.locationGarageLiabilityKeyControls.keysInCars ==
@@ -438,7 +478,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "",
     checklockedInManagersOffice:
       data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some((locationItem) => {
+        ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
               if (
                 locationItem.locationGarageLiabilityKeyControls
@@ -454,11 +494,11 @@ if (data.workbooksToBeGenerated.harco == true) {
     FPageGridOne: FPageGridOne.length > 0 ? FPageGridOne : "",
     FPageGridTwo: FPageGridTwo.length > 0 ? FPageGridTwo : "",
     FPageGridThree: FPageGridThree.length > 0 ? FPageGridThree : "",
-    GIMGridOne: data.locationSchedule.map((locationItem) => {
+    GIMGridOne: data.locationSchedule.map(locationItem => {
       var employeetoolsItem = 0;
       var accountsreceivableItem = 0;
       var valulablePapersItem = 0;
-      locationItem.buildingDetails.map((buildingItem) => {
+      locationItem.buildingDetails.map(buildingItem => {
         if (buildingItem.employeetools > 0) {
           employeetoolsItem += buildingItem.employeetools;
         }
@@ -479,9 +519,9 @@ if (data.workbooksToBeGenerated.harco == true) {
       ];
     }),
     GIMGridTwo: data.locationSchedule
-      .map((locationItem) => {
+      .map(locationItem => {
         var signsnotattachedItem = 0;
-        locationItem.buildingDetails.map((buildingItem) => {
+        locationItem.buildingDetails.map(buildingItem => {
           if (buildingItem.signsnotattached > 0) {
             signsnotattachedItem += buildingItem.signsnotattached;
           }
@@ -497,15 +537,15 @@ if (data.workbooksToBeGenerated.harco == true) {
             ]
           : "empty";
       })
-      .filter((item) => item != "empty"),
-    JGridOne: data.locationSchedule.map((locationItem) => {
+      .filter(item => item != "empty"),
+    JGridOne: data.locationSchedule.map(locationItem => {
       var oneItem = 0;
       var twoItem = 0;
       var threeItem = 0;
       var fourItem = 0;
       var fiveItem = 0;
       var sixItem = 0;
-      locationItem.buildingDetails.map((buildingItem) => {
+      locationItem.buildingDetails.map(buildingItem => {
         if (
           buildingItem.fTEmployeesFurnishedAnAuto +
             buildingItem.fTEmployeesWhoAreNotFurnished >
@@ -547,7 +587,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     AGENSecondaryOEM: secondaryOEM,
     AGENOtherOEM: other,
     locationBuildingHarcoGrid: data.genericData.locationScheduleGridData.map(
-      (item) => {
+      item => {
         var individualResult = [];
         var requiredFields = [
           "locationNum",
@@ -559,7 +599,7 @@ if (data.workbooksToBeGenerated.harco == true) {
           "zip",
           "county"
         ];
-        requiredFields.map((field) => {
+        requiredFields.map(field => {
           if (item[field]) {
             if (field == "secondaryOEM") {
               try {
@@ -584,7 +624,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     ),
     checkequipmentBreakdown: data.genericData.locationScheduleGridData.some(
-      (item) => {
+      item => {
         if (item.equipmentBreakdown == "yes") {
           return true;
         } else {
@@ -592,6 +632,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         }
       }
     ),
+
     checknewcarsales: checknewcarsales ? checknewcarsales : "",
     checkusedCarSales: checkusedCarSales ? checkusedCarSales : "",
     checkfISales: checkfISales ? checkfISales : "",
@@ -603,7 +644,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     OthersFISalesDescription: checkfISales > 0 ? "Finance/Insurance" : "",
     OthersAutoBodyDescription: checkautoBodySales > 0 ? "Auto Body" : "",
     MGLGrid: data.genericData.locationScheduleGridData
-      .map((item) => {
+      .map(item => {
         var individualResult = [];
         if (
           item.occupancyType == "vacantLand" ||
@@ -615,20 +656,20 @@ if (data.workbooksToBeGenerated.harco == true) {
               ? "VACANT LAND (FOR-PROFIT)"
               : "BUILDINGS OR PREM - LESSOR'S RISK ONLY, FOR PROFIT"
           );
-          [...Array(10)].map((i) => individualResult.push(""));
+          [...Array(10)].map(i => individualResult.push(""));
           individualResult.push(
             item.exposureAmount > 0 ? item.exposureAmount : 0
           );
         }
         return individualResult.length > 0 ? individualResult : "empty";
       })
-      .filter((item) => item != "empty"),
+      .filter(item => item != "empty"),
     checkwhatistheaveragepercentage:
       data.whatistheaveragepercentage > 0
         ? data.whatistheaveragepercentage / 100
         : "",
     checkothertankcontentsExists: data.genericData.storageTankGridData.some(
-      (tankItem) => {
+      tankItem => {
         if (tankItem.othertankcontents.length > 0) {
           return true;
         } else {
@@ -640,25 +681,25 @@ if (data.workbooksToBeGenerated.harco == true) {
       [
         ...new Set(
           data.genericData.storageTankGridData
-            .map((tankItem) => {
+            .map(tankItem => {
               if (tankItem.othertankcontents.length > 0) {
                 return tankItem.othertankcontents;
               } else {
                 return "invalid";
               }
             })
-            .filter((i) => i != "invalid")
+            .filter(i => i != "invalid")
         )
       ] + "",
     checkindemnitytype: checkindemnitytype == "" ? "" : checkindemnitytype,
     checkleasedtoOthers: data.genericData.locationScheduleGridData.some(
-      (i) => i.occupancyType == "bldgLeasedToOthers"
+      i => i.occupancyType == "bldgLeasedToOthers"
     ),
     checklessThan3years: data.numYearsOfOwnership > 3 ? "Yes" : "No",
     checkroofingyear: data.genericData.locationScheduleGridData.some(
-      (i) => i.roofingyear < moment().format("YYYY") - 20
+      i => i.roofingyear < moment().format("YYYY") - 20
     ),
-    checkbuildingLimit: data.genericData.locationScheduleGridData.map((i) => {
+    checkbuildingLimit: data.genericData.locationScheduleGridData.map(i => {
       return {
         result:
           (i.signsLessThan > 0 ? i.signsLessThan : 0) +
@@ -666,7 +707,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       };
     }),
     checkUmbrellaNameExists: data.UmbrellaCoverageAdditional.some(
-      (umbrellaItem) =>
+      umbrellaItem =>
         umbrellaItem.umbrellaCoverageAdditionalName &&
         umbrellaItem.ownershipPercentageUmbrella > 0
     ),

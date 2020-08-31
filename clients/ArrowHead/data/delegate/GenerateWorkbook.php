@@ -427,6 +427,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                             [$fieldConfig['returnValue'][$temp] . ""]
                         );
                     }
+                } else  if (isset($fieldConfig['method2'])) {
+                    $temp = $value[$childKey] . "";
+                    $processMethod = $fieldConfig["method2"];
+                    array_push(
+                        $parsedData,
+                        [$this->$processMethod($temp, $fieldConfig, $formData)]
+                    );
                 } else {
                     array_push($parsedData, [$value[$childKey] . ""]);
                 }

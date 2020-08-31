@@ -206,6 +206,12 @@
       vacantBuilding: Lease & Rental
       deliveryPrep: Auto Parts & Supplies
 -
+   key: harcoExcelData*primarySecondaryOEM_result
+   method: simpleDatagrid
+   pageName: C-Locs&AIs
+   cell: W11
+   type: DataGrid
+-
    key: genericData*locationScheduleGridData_constructiontype
    method: simpleDatagrid
    pageName: C-Locs&AIs
@@ -261,9 +267,69 @@
       yes: P
       no: ""
 -
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: R7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
    Source Worksheet: Loss Control
    pageName: Contacts
    cell: M7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: R7
    key: insurancecontactdataGrid_lossControl
    method: simpleDatagrid
    type: DataGrid
@@ -284,7 +350,73 @@
 -
    Source Worksheet: MVR's & Policy Docs
    pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: R7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
    cell: O7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: R7
    key: insurancecontactdataGrid_mvrPolicyDocs
    method: simpleDatagrid
    type: DataGrid
@@ -319,7 +451,7 @@
 -
    Source Worksheet: Valuation
    pageName: E-Prop
-   cell: 'G8'
+   cell: 'G9'
    key: harcoExcelData*checkValuation
 -
    Source Worksheet: Deductible
@@ -391,7 +523,27 @@
    Source Worksheet: Blanket Coverage BPP
    pageName: E-Prop
    cell: 'L20'
+   key: genericData*locationScheduleGridData_blanketcoverage
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: 'No'
+      no: 'No'
+-
+   Source Worksheet: Blanket Coverage BPP
+   pageName: E-Prop
+   cell: 'L20'
    key: genericData*locationScheduleGridData_blanketcoveragebpp1
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
+-
+   Source Worksheet: Blanket Coverage Business Income
+   pageName: E-Prop
+   cell: 'M20'
+   key: genericData*locationScheduleGridData_blanketcoverage
    method: simpleDatagrid
    type: DataGrid
    returnValue:
@@ -426,13 +578,6 @@
    pageName: E-Prop
    cell: 'K20'
    key: genericData*locationScheduleGridData_businessincomelimit
-   method: simpleDatagrid
-   type: DataGrid
--
-   Source Worksheet: Damage to Rented Premises*
-   pageName: E-Prop
-   cell: 'J20'
-   key: garageLiabilityDamagetoRentedPremises
    method: simpleDatagrid
    type: DataGrid
 -
@@ -560,21 +705,6 @@
 #       Property. If the producer selects a different deductible amount for each
 #       of these coverages, the system will map over the lowest deductible option
 #       selected to the Harco App in Sheet!H-Crime H18
--
-   key: burglaryofotherpropertylimit
-   Source Worksheet: Robbery/Burglary of Other Property Limit
-   pageName: H-Crime
-   cell: K23
-# -
-#    key: burglaryofotherpropertydeductible
-#    Source Worksheet: Robbery/Burglary of Other Property Deductible
-#    pageName: H-Crime
-#    cell: H18
--
-   key: outsidethepremiseslimit
-   Source Worksheet: Outside the Premises Limit
-   pageName: H-Crime
-   cell: J23
 # -
 #    key: outsidethepremisesdeductible
 #    Source Worksheet: 'Outside the Premises Deductible '
@@ -585,6 +715,21 @@
 #    Source Worksheet: Money/Securities/Other Property Deductible
 #    pageName: H-Crime
 #    cell: J18
+# -
+#    key: burglaryofotherpropertydeductible
+#    Source Worksheet: Robbery/Burglary of Other Property Deductible
+#    pageName: H-Crime
+#    cell: H18
+-
+   key: burglaryofotherpropertylimit
+   Source Worksheet: Robbery/Burglary of Other Property Limit
+   pageName: H-Crime
+   cell: K23
+-
+   key: outsidethepremiseslimit
+   Source Worksheet: Outside the Premises Limit
+   pageName: H-Crime
+   cell: J23
 -
    key: propertylimit
    Source Worksheet: Money/Securities/Other Property Limit
@@ -621,21 +766,15 @@
    offset: "5,1"
    key: locationSchedule_customergoodsperlocation
    method: simpleDatagrid
-   type: DataGrid
+   type: DataGrid   
 -
-   key: repairpercentlabor
    Source Worksheet: 'Repair % - Labor:'
-   pageName: J
-   offset: "7,1"
-   cell: Customer Goods
-   returnValue:
-      '0.75': '0.85'
--
    key: harcoExcelData*checkrepairpercentlabor
    pageName: J
    cell: Customer Percentage of Repair Endorsement
    offset: 2,0
-   returnBoolean: 'Yes|No'
+   returnValue:
+      '0.75': '0.85'
 -
    key: harcoExcelData*checkrepairpercentparts
    pageName: J
@@ -747,7 +886,7 @@
    cell: 'I11'
 -
    pageName: K
-   key: medicalexpensedeductible
+   key: harcoExcelData*checkmedicalexpensedeductible
    cell: N8
 -
    key: agentseo
@@ -756,7 +895,7 @@
    cell: K8
    method: checkbox_X
 -
-   key: grosssales
+   key: harcoExcelData*checkgrosssales
    Source Worksheet: 'gross sales: '
    pageName: K
    cell: 'M11'
@@ -786,11 +925,6 @@
    method: simpleDatagrid
    type: DataGrid
    macro: K_AddDDRow_Click
--
-   Source Worksheet: Umbrella Limit
-   pageName: K
-   cell: F33
-   key: umbrellalimit
 -
    Source Worksheet: Name of Driver (and Spouse) to be covered
    pageName: K
@@ -893,6 +1027,7 @@
    cell: Check Box 11
    key: dolalllocdoesnotincld_dailyKeyInventory
    type: Checkbox
+   method: checkInArray
 -
    Source Worksheet: 'locked in managers office'
    pageName: L-DPD
@@ -923,27 +1058,6 @@
       '10000' : '2000'
    note: Harco has a max Wind Ded of $2,000. If a higher deductible has been
       selected the system will map $2,000 to the Harco App.
-# -
-#    Source Worksheet: Standard Open Lot
-#    pageName: L-DPD
-#    cell: I10
-#    key: locationSchedule_standardOpenLot
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    Source Worksheet: Non-Standard Open Lot
-#    pageName: 'L-DPD '
-#    cell: 'J10'
-#    key: locationSchedule_dolnonstndrdopenlot
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    Source Worksheet: Building
-#    pageName: L-DPD
-#    cell: 'K10'
-#    key: locationSchedule_dolbuilding
-#    method: simpleDatagrid
-#    type: DataGrid
 -
    Source Worksheet: Location
    pageName: 'M-GL'
@@ -1076,7 +1190,7 @@
    cell: "Schedule of Above ground Storage Tanks (AST)"
    offset: "3,0"
    key: genericData*storageTankGridData_locationNum
-   macro: M_AddGLClassRow_Click
+   macro: P_AddPollTankRow_Click
    method: simpleDatagrid
    type: DataGrid
 -
@@ -1102,6 +1216,7 @@
    offset: "3,3"
    key: genericData*storageTankGridData_installationdate
    method: simpleDatagrid
+   method2: formatDate
    type: DataGrid
 -
    Source Worksheet: 'Tank Capacity '
@@ -1778,6 +1893,12 @@
    cell: Check Box 58
    key: virusscans
    type: Checkbox
+-
+   Source Worksheet: Daily virus scans ran on all computers
+   pageName: UW Q's
+   cell: Check Box 59
+   key: harcoExcelData*checksoftwareprotection
+   returnBoolean: 'Yes|No'
 -
    Source Worksheet: Formal policy in place for disposal of paper documents/electronic
       equipment that may contain sensitive personal information?

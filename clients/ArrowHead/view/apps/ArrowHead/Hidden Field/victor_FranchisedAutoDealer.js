@@ -3,7 +3,9 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   var checktotalLocationSalesRevenue = 0;
   var checklistCompaniesRepresented = [];
 
-  checklistCompaniesRepresented = data.companiesRepresentedList.map(item => item.listcompaniesrepresented);
+  checklistCompaniesRepresented = data.companiesRepresentedList.map(
+    item => item.listcompaniesrepresented
+  );
 
   data.locationSchedule.map(item => {
     checktotalLocationSalesRevenue += item.totalLocationSalesRevenue
@@ -30,7 +32,7 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   }
 
   value = {
-    checkcompaniesrepresented: checklistCompaniesRepresented + '',
+    checkcompaniesrepresented: checklistCompaniesRepresented + "",
     checktotalLocationSalesRevenue: checktotalLocationSalesRevenue,
     checkfalsePretenseLimit: falsePretenseLimit,
     locationBuildingIndex: data.genericData.locationScheduleGridData
@@ -43,6 +45,27 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
           : { result: data.buildingCoinsurance };
       }
     ),
+    checkpropertyCoverageDeductible: data.genericData.locationScheduleGridData.map(
+      item => {
+        return item.occupancyType == "vacantLand"
+          ? { result: "" }
+          : { result: data.propertyCoverageDeductible };
+      }
+    ),
+    checkbppcoinsurance: data.genericData.locationScheduleGridData.map(item => {
+      return item.occupancyType == "vacantLand"
+        ? { result: "" }
+        : item.agreedamount == "yes"
+        ? { result: "Agreed Amount" }
+        : { result: data.bppcoinsurance };
+    }),
+    checkcoinsurance: data.genericData.locationScheduleGridData.map(item => {
+      return item.occupancyType == "vacantLand"
+        ? { result: "" }
+        : item.agreedamount == "yes"
+        ? { result: "Agreed Amount" }
+        : { result: item.coinsuranceamount };
+    }),
     checkbuildingValuation: data.genericData.locationScheduleGridData.map(i => {
       return { result: "Replacement Cost" };
     }),

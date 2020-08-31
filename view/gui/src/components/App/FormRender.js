@@ -64,8 +64,8 @@ class FormRender extends React.Component {
     this.formErrorDivId = "formio_error_"+formID;
   }
   showFormLoader(state=true,init=0){
-    if(document.getElementById(this.loaderDivID)){
-      var loaderDiv = document.getElementById(this.loaderDivID);
+    var loaderDiv = document.getElementById(this.loaderDivID);
+    if(loaderDiv){
       if(document.getElementById(this.formDivID).clientHeight>0){
         loaderDiv.style.height = document.getElementById(this.formDivID).clientHeight+" px";
       } else {
@@ -73,12 +73,14 @@ class FormRender extends React.Component {
       }
     }
     if(state){
-      this.loader.show(document.getElementById(this.loaderDivID));
+      loaderDiv.style.display = "flex";
+      this.loader.show(loaderDiv);
       if(init == 1){
         document.getElementById(this.formDivID).style.display = "none";
       }
     } else {
       this.loader.destroy();
+      loaderDiv.style.display = "none";
       if(init == 1){
         document.getElementById(this.formDivID).style.display = "block";
       }
@@ -342,7 +344,7 @@ class FormRender extends React.Component {
             if(this.props.route){
               console.log(response)
               that.showFormLoader(false,0);
-              
+
             }
             else {
               var storeCache = await this.storeCache(this.cleanData(data)).then(
@@ -359,34 +361,30 @@ class FormRender extends React.Component {
                   }
               });
             }
-            
+
           }
           return response;
         });
       }
     }
 
-  // Setting empty and null fields to form setsubmission are making unfilled fields dirty and triggeres validation issues
-    removeEmptyFields(data){
-      var cleaned_data = {};
-      if((!!data) && (data.constructor === Object)){
-        Object.keys(data).forEach(function(key) {
-          if(!(data[key] == "" || data[key] == null || data[key] == [])){
-            cleaned_data[key] = data[key];
-          }
-        });
-        return cleaned_data;
-      } else {
-        return data;
-      }
-    }
-
+  // Setting empty and null fields to form setsubmission are making unfilled fields dirty and triggeres validation issue
     formatFormData(data){
       var formData = this.parseResponseData(this.addAddlData(data));
       var ordered_data = {};
-      Object.keys(formData).sort().forEach(function(key) {
-        ordered_data[key] = formData[key];
-      });
+      Object.keys(formData)
+        .sort()
+        .forEach(function (key) {
+          if (
+            !(
+              formData[key] == "" ||
+              formData[key] == null ||
+              formData[key] == []
+            )
+          ) {
+            ordered_data[key] = formData[key];
+          }
+        });
       return ordered_data;
     }
 
@@ -571,23 +569,26 @@ class FormRender extends React.Component {
       }else  if (this.state.fileId) {
         this.getFileDataById().then((response) => {
           if (response.status == "success") {
-            this.getForm().then((response2) => {
-              if (response2.status == "success") {
-                if (!that.state.content) {
-                  that.setState({
-                    content: JSON.parse(response2.data.template),
-                    data: that.formatFormData(response.data.data)
-                  });
-                }
-                if (form) {
-                  that.processProperties(form);
-                } else {
-                    that.createForm().then((form) => {
-                      that.processProperties(form);
-                    });
-                }
+            this.setState(
+              {
+                data: this.formatFormData(response.data.data)
+              },
+              () => {
+                (form || this.state.currentForm)
+                  ? form
+                    ? form
+                        .setSubmission({ data: this.state.data })
+                        .then(function () {
+                          that.processProperties(form);
+                        })
+                    : this.state.currentForm
+                        .setSubmission({ data: this.state.data })
+                        .then(function () {
+                          that.processProperties(that.state.currentForm);
+                        })
+                  : null;
               }
-            });
+            );
           }
         });
       }
@@ -607,45 +608,6 @@ class FormRender extends React.Component {
               this.createForm();
             }
           }
-        });
-      } else if (this.state.formId) {
-        this.getWorkflow().then(response => {
-          if (response.status == "success" && response.data.workflow_id) {
-            that.setState({ workflowId: response.data.workflow_id });
-            if (response.data.activity_id) {
-              that.setState({ activityId: response.data.activity_id });
-            }
-            if (!that.state.content) {
-              that.setState({ content: JSON.parse(response.data.template) });
-            }
-            if(form){
-              that.processProperties(form);
-            }
-          } else {
-            this.getForm().then(response => {
-              if (response.status == "success") {
-                if (response.data.workflow_id) {
-                  that.setState({ workflowId: response.data.workflow_id });
-                }
-                if (response.data.activity_id) {
-                  that.setState({ activityId: response.data.activity_id });
-                }
-                if (!that.state.content) {
-                  that.setState({ content: JSON.parse(response.data.template) });
-                }
-                if(form){
-                   that.processProperties(form);
-                }else{
-                	setTimeout(function() {
-                    that.createForm().then(form=> {
-						          that.processProperties(form);
-                	   });
-                  }, 2000);
-                }
-              }
-            });
-          }
-          that.setState({ formDivID: "formio_" + that.state.formId });
         });
       } else if (this.state.instanceId) {
         this.getInstanceData().then(response => {
@@ -734,34 +696,45 @@ class FormRender extends React.Component {
             });
           },
           beforeSubmit: async (submission,next) => {
-            var submitErrors = [];
-            if(that.state.currentForm.isValid(submission.data, true)==false){
-              that.state.currentForm.checkValidity(submission.data, true,submission.data);
-              that.state.currentForm.errors.forEach((error) => {
-                submitErrors.push(error.message);
-              });
-              if(submitErrors.length > 0){
-                next([]);
-              } else {
-                var response = await that.saveForm(null, that.cleanData(submission.data)).then(function (response) {
-                  if(response.status=='success'){
+            if (
+              that.state.currentForm.checkValidity() &&
+              that.state.currentForm.checkValidity(
+                submission.data,
+                true,
+                submission.data
+              )
+            ) {
+              var response = await that
+                .saveForm(null, that.cleanData(submission.data))
+                .then(function (response) {
+                  if (response.status == "success") {
                     next(null);
                   } else {
+                    if (that.props.route) {
+                      next([response.message]);
+                    }
                     next([response.errors[0].message]);
                   }
                 });
-              }
             } else {
-              var response = await that.saveForm(null, that.cleanData(submission.data)).then(function (response) {
-                if(response.status=='success'){
-                  next(null);
-                } else {
-                  if(that.props.route) {
-                    next([response.message]);
-                  }
-                  next([response.errors[0].message]);
-                }
+              that.state.currentForm.checkValidity(
+                submission.data,
+                true,
+                submission.data
+              );
+              var submitErrors = [];
+              that.state.currentForm.errors.forEach((error) => {
+                submitErrors.push(error.message);
               });
+              if (submitErrors.length > 0) {
+                next([]);
+              } else {
+                that.state.currentForm.triggerChange();
+                next([]);
+                // submitErrors = [
+                //   ...document.querySelectorAll('[ref="errorRef"]')
+                // ].map((i) => i.innerText);
+              }
             }
           }
         };
@@ -775,7 +748,7 @@ class FormRender extends React.Component {
           }
           if(that.state.data !=  undefined){
 
-            form.setSubmission({ data: that.removeEmptyFields(that.state.data) });
+            form.setSubmission({ data: that.state.data });
           }
           form.on("submit", async function (submission) {
             form.emit('submitDone', submission);
@@ -799,6 +772,7 @@ class FormRender extends React.Component {
           });
 
           form.on("change", function (changed) {
+            console.log(changed);
             if (changed && changed.changed) {
               var component = changed.changed.component;
               var instance = changed.changed.instance;
@@ -843,9 +817,31 @@ class FormRender extends React.Component {
                 }
               }
             },true);
-            var elm = document.getElementsByClassName(that.state.appId + "_breadcrumbParent");
-            if (elm.length > 0) {
-              scrollIntoView(elm[0], { scrollMode: "if-needed",block: "center",behavior: "smooth",inline: "nearest" });
+            var nextButton = document.getElementsByClassName(
+              "btn-wizard-nav-next"
+            );
+            var elm = document.getElementsByClassName(
+              that.state.appId + "_breadcrumbParent"
+            );
+            if (nextButton.length > 0) {
+              if (
+                nextButton[0].getAttribute("errorScrollEventAdded") !== "true"
+              ) {
+                nextButton[0].setAttribute("errorScrollEventAdded", "true");
+                nextButton[0].addEventListener("click", () => {
+                  var submitErrors = [
+                    ...document.querySelectorAll('[ref="errorRef"]')
+                  ];
+                  if (elm.length > 0 && submitErrors.length > 0) {
+                    scrollIntoView(elm[0], {
+                      scrollMode: "if-needed",
+                      block: "center",
+                      behavior: "smooth",
+                      inline: "nearest"
+                    });
+                  }
+                });
+              }
             }
             if (that.state.formLevelDelegateCalled == false) {
               that.setState({formLevelDelegateCalled: true});
@@ -1427,7 +1423,23 @@ class FormRender extends React.Component {
           this.loadWorkflow(form);
         });
       });
-    } else {
+    } else if (this.props.formId) {
+     this.getForm().then((response) => {
+       if (response.status == "success") {
+         if (!this.state.content) {
+           this.setState(
+             { content: JSON.parse(response.data.template) }
+           );
+         }
+          this.createForm().then((form) => {
+            var that = this;
+            that.setState({ currentForm: form });
+            that.processProperties(form);
+          });
+       }
+     });
+
+    }  else {
       if(this.state.content){
         this.createForm().then(form => {
           this.loadWorkflow(form);
@@ -1435,6 +1447,9 @@ class FormRender extends React.Component {
       } else {
         this.loadWorkflow();
       }
+    }
+    if(this.props.fileId){
+      this.loadWorkflow();
     }
     $("#" + this.loaderDivID).off("customButtonAction");
     document
@@ -1543,12 +1558,19 @@ class FormRender extends React.Component {
     }
   }
   render() {
-    return (<div>
-      <Notification ref={this.notif} />
-      <div id={this.loaderDivID} className="formLoader"></div>
-      <div id={this.formErrorDivId} style={{display:"none"}}><h3>{this.state.formErrorMessage}</h3></div>
+    return (
+      <div>
+        <Notification ref={this.notif} />
+        <div id={this.loaderDivID} className="formLoader">
+          <i class="fad fa-spinner-third fa-spin"></i>
+          <div>Loading Form</div>
+        </div>
+        <div id={this.formErrorDivId} style={{display:"none"}}>
+          <h3>{this.state.formErrorMessage}</h3>
+        </div>
         <div className="form-render" id={this.formDivID}></div>
-        </div>);
+      </div>
+    );
   }
 }
 export default FormRender;

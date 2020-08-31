@@ -168,11 +168,6 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     : '';
 
   value = {
-    checkaretheyinsuredelsewhere: data.aretheyinsuredelsewhere
-      ? data.aretheyinsuredelsewhere.length > 0
-        ? "Yes"
-        : "No"
-      : "",
     checkSecurityGuards: data.genericData.locationScheduleGridData.some(
       (locationItem) => {
         if (locationItem.dolsecguards == "yes") {
