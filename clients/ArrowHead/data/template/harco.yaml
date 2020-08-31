@@ -693,33 +693,11 @@
    Source Worksheet: Theft of Money/Securities Limit
    pageName: H-Crime
    cell: I23
-# -
-#    Source Worksheet: Theft of Money/Securities Deductible
-#    pageName: H-Crime
-#    cell: H18
-#    key: theftofmoneydeductible
-#    note:  On the Harco App the following crime coverages share the same
-#       deductible field. Inside theft of Money and Securities, 
-# Outside the Premises Insuring Agreement and 
-# Inside Robbery or Safe Burglary of Other
-#       Property. If the producer selects a different deductible amount for each
-#       of these coverages, the system will map over the lowest deductible option
-#       selected to the Harco App in Sheet!H-Crime H18
-# -
-#    key: outsidethepremisesdeductible
-#    Source Worksheet: 'Outside the Premises Deductible '
-#    pageName: H-Crime
-#    cell: H18
-# -
-#    key: propertydeductible
-#    Source Worksheet: Money/Securities/Other Property Deductible
-#    pageName: H-Crime
-#    cell: J18
-# -
-#    key: burglaryofotherpropertydeductible
-#    Source Worksheet: Robbery/Burglary of Other Property Deductible
-#    pageName: H-Crime
-#    cell: H18
+-
+   Source Worksheet: Theft of Money/Securities Deductible
+   pageName: H-Crime
+   cell: H18
+   key: harcoExcelData*checkcrimecoverage
 -
    key: burglaryofotherpropertylimit
    Source Worksheet: Robbery/Burglary of Other Property Limit
@@ -1897,8 +1875,8 @@
    Source Worksheet: Daily virus scans ran on all computers
    pageName: UW Q's
    cell: Check Box 59
-   key: harcoExcelData*checksoftwareprotection
-   returnBoolean: 'Yes|No'
+   key: harcoExcelData*checksoftwareprotectionNone
+   type: Checkbox
 -
    Source Worksheet: Formal policy in place for disposal of paper documents/electronic
       equipment that may contain sensitive personal information?

@@ -190,12 +190,12 @@ if (data.workbooksToBeGenerated.harco == true) {
   );
 
   value = {
-    checksoftwareprotection:
-      (data.virusscans && data.virusscans == "yes") ||
-      (data.antivirussoftware && data.antivirussoftware == "yes") ||
-      (data.protectedfirewalls && data.protectedfirewalls == "yes")
-        ? "yes"
-        : "no",
+    checksoftwareprotectionNone:
+      (data.virusscans == "yes") ||
+      (data.antivirussoftware == "yes") ||
+      (data.protectedfirewalls == "yes")
+        ? "no"
+        : "yes",
     checkcrimecoverage: tempcrimecoverage == 200000 ? "" : tempcrimecoverage,
     checkmedicalexpensedeductible:
       data.agentseo == "yes" &&
