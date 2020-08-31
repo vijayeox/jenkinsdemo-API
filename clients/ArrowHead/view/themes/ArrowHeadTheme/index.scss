@@ -390,3 +390,7 @@ label {
     border: 10px solid $secondary !important;
   }
 }
+
+.choices__list--multiple .choices__item{
+  display: inline-flex;
+}
