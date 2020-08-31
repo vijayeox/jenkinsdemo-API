@@ -179,8 +179,24 @@ if (data.workbooksToBeGenerated.harco == true) {
       return false;
     }
   });
+  var tempcrimecoverage = Math.min(
+    data.theftofmoneydeductible ? data.theftofmoneydeductible : 200000,
+    data.outsidethepremisesdeductible
+      ? data.outsidethepremisesdeductible
+      : 200000,
+    data.burglaryofotherpropertydeductible
+      ? data.burglaryofotherpropertydeductible
+      : 200000
+  );
 
   value = {
+    checksoftwareprotection:
+      (data.virusscans && data.virusscans == "yes") ||
+      (data.antivirussoftware && data.antivirussoftware == "yes") ||
+      (data.protectedfirewalls && data.protectedfirewalls == "yes")
+        ? "yes"
+        : "no",
+    checkcrimecoverage: tempcrimecoverage == 200000 ? "" : tempcrimecoverage,
     checkmedicalexpensedeductible:
       data.agentseo == "yes" &&
       (data.medicalexpensedeductible > 0 ||
@@ -616,6 +632,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         }
       }
     ),
+
     checknewcarsales: checknewcarsales ? checknewcarsales : "",
     checkusedCarSales: checkusedCarSales ? checkusedCarSales : "",
     checkfISales: checkfISales ? checkfISales : "",

@@ -1058,27 +1058,6 @@
       '10000' : '2000'
    note: Harco has a max Wind Ded of $2,000. If a higher deductible has been
       selected the system will map $2,000 to the Harco App.
-# -
-#    Source Worksheet: Standard Open Lot
-#    pageName: L-DPD
-#    cell: I10
-#    key: locationSchedule_standardOpenLot
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    Source Worksheet: Non-Standard Open Lot
-#    pageName: 'L-DPD '
-#    cell: 'J10'
-#    key: locationSchedule_dolnonstndrdopenlot
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    Source Worksheet: Building
-#    pageName: L-DPD
-#    cell: 'K10'
-#    key: locationSchedule_dolbuilding
-#    method: simpleDatagrid
-#    type: DataGrid
 -
    Source Worksheet: Location
    pageName: 'M-GL'
@@ -1914,6 +1893,12 @@
    cell: Check Box 58
    key: virusscans
    type: Checkbox
+-
+   Source Worksheet: Daily virus scans ran on all computers
+   pageName: UW Q's
+   cell: Check Box 59
+   key: harcoExcelData*checksoftwareprotection
+   returnBoolean: 'Yes|No'
 -
    Source Worksheet: Formal policy in place for disposal of paper documents/electronic
       equipment that may contain sensitive personal information?
