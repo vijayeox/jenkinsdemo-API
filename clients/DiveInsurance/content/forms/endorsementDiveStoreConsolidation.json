@@ -4706,7 +4706,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
+							"calculateValue": "if(typeof value == 'string'){\n  value = JSON.parse(value);\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -9277,7 +9277,7 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "if(data[\"groupCoverageSelect\"]){\n  value = parseFloat(data[data[\"groupCoverageSelect\"]]).toFixed(0);\n} else {\n  value = 0;\n}",
-						"key": "groupCoverage",
+						"key": "endogroupCoverage",
 						"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 						"type": "number",
 						"input": true,
@@ -9286,6 +9286,14 @@
 						"style": {
 							"margin-top": "25px"
 						},
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "groupCoverage",
+						"calculateValue": "if(data['endogroupCoverage'] > 0){\n  value = data['previous_groupCoverage'] + data['endogroupCoverage'];\n} else {\n  value = data['previous_groupCoverage']\n}",
+						"key": "groupCoverage",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Columns",
@@ -9347,8 +9355,8 @@
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
-								"calculateValue": "if(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = (parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100).toFixed(0)\n} else {\n  value = 0;\n}",
-								"key": "groupExcessLiability",
+								"calculateValue": "if(data['groupExcessLiabilitySelect']!=data['previous_groupExcessLiabilitySelect']){\nif(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = (parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100).toFixed(0)\n} else {\n  value = 0;\n}\n}else {\n  value =0;\n}",
+								"key": "endogroupExcessLiability",
 								"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 								"type": "number",
 								"input": true,
@@ -9357,6 +9365,14 @@
 								"style": {
 									"margin-top": "25px"
 								},
+								"hideOnChildrenHidden": false
+							}, {
+								"label": "groupExcessLiability",
+								"calculateValue": "if(data['endogroupExcessLiability'] > 0){\n  value = data['previous_groupExcessLiability'] + data['endogroupExcessLiability'];\n} else {\n  value = data['previous_groupExcessLiability']\n}",
+								"key": "groupExcessLiability",
+								"type": "hidden",
+								"input": true,
+								"tableView": false,
 								"hideOnChildrenHidden": false
 							}],
 							"width": 6,
@@ -10015,7 +10031,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattch[0].length == 0){\n  value = [];\n}",
+							"calculateValue": "if(typeof value == 'string'){\n  value = JSON.parse(value);\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -10477,7 +10493,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
-								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
+								"calculateValue": "if(typeof value == 'string'){\n  value = JSON.parse(value);\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -10930,7 +10946,7 @@
 							"inputFormat": "plain",
 							"redrawOn": "data",
 							"clearOnHide": false,
-							"calculateValue": "value = (((parseFloat(data[\"groupCoverage\"]) || 0) + (parseFloat(data[\"groupExcessLiabilityAmount\"]) ||0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100).toFixed(2);",
+							"calculateValue": "value = (((parseFloat(data[\"endogroupCoverage\"]) || 0) + (parseFloat(data[\"endogroupExcessLiability\"]) ||0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100).toFixed(2);",
 							"key": "groupTaxAmount",
 							"type": "number",
 							"input": true,
@@ -11044,13 +11060,13 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "value = ((parseFloat(data[\"groupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00) - (parseFloat(data['groupSurchargeDeductionsAmount'])||0)).toFixed(2)",
+							"calculateValue": "value = ((parseFloat(data[\"endogroupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00) - (parseFloat(data['groupSurchargeDeductionsAmount'])||0)).toFixed(2)",
 							"key": "groupTotalAmount",
 							"type": "number",
+							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true,
-							"decimalLimit": 2
+							"lockKey": true
 						}]
 					}]
 				],
@@ -12218,12 +12234,20 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"redrawOn": "liabilityCoverageOption",
-							"calculateValue": "if(data['liabilityCoverageOption'] && data[data['liabilityCoverageOption']]){\n  value=parseFloat(data[data[\"liabilityCoverageOption\"]]);\n} else {\n  value = 0\n}",
-							"key": "CoverageFP",
+							"calculateValue": "if(data['previous_liabilityCoverageOption'] != data['liabilityCoverageOption']){\n  value = data[data['liabilityCoverageOption']]\n} else {\n  value = 0;\n}",
+							"key": "endorsementLiabilityCoverage",
 							"type": "number",
 							"input": true,
 							"inputType": "number",
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "CoverageFP",
+							"calculateValue": "if(data['endorsementLiabilityCoverage'] > 0){\n  value = data['previous_CoverageFP']+data['endorsementLiabilityCoverage'];\n} else {\n  value = data['previous_CoverageFP'];\n}",
+							"key": "CoverageFP",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
@@ -12301,13 +12325,20 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.doyouhaveapoolonpremisesPL == 'yes'){\nif((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}\n} else {\n  value = 0;\n}",
-						"key": "nonDivingPoolAmount",
+						"calculateValue": "if(data['poolLiability'] != data['previous_poolLiability']){\nif(data.doyouhaveapoolonpremisesPL == 'yes'){\nif((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}\n} else {\n  value = 0;\n}\n} else {\n  value =0;\n}",
+						"key": "endorsementNonDivingPool",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "nonDivingPool",
+						"calculateValue": "if(data['endononDivingPoolAmount'] > 0){\n  value = data['previous_nonDivingPoolAmount'] + data['endononDivingPoolAmount'];\n} else {\n  value = data['previous_nonDivingPoolAmount']\n}",
+						"key": "nonDivingPoolAmount",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}, {
 						"label": "Medical Expense",
 						"prefix": "$",
@@ -12320,8 +12351,8 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\nvalue= data[\"medicalExpense\"]\n}\nelse{\nvalue = 0;\n}",
-						"key": "MedicalExpenseFP",
+						"calculateValue": "if(data[\"medicalPayment\"] != data['previous_medicalPayment']){\n  if(data['previous_medicalPayment'] == true || data['previous_medicalPayment']==true){\n    value= data[\"medicalExpense\"]\n  } else {\n    value = 0;\n  }\n} else{\n  value = 0;\n}",
+						"key": "endoMedicalExpenseFp",
 						"conditional": {
 							"show": true,
 							"when": "medicalPayment",
@@ -12332,6 +12363,13 @@
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "MedicalExpenseFp",
+						"calculateValue": "if(data['endoMedicalExpenseFp'] > 0){\n  value = data['previous_MedicalExpenseFp'] + data['endoMedicalExpenseFp'];\n} else {\n  value = data['previous_MedicalExpenseFp']\n}",
+						"key": "medicalExpenseFp",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}, {
 						"label": "Non-Owned Auto",
 						"prefix": "$",
@@ -12344,13 +12382,20 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true || data.doYouWantToApplyForNonOwnerAuto == \"true\"){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
-						"key": "Non-OwnedAutoFP",
+						"calculateValue": "if(data['Non-OwnedAutoFP'] != data['previous_Non-OwnedAutoFP']){\n  if(data.doYouWantToApplyForNonOwnerAuto == true || data.doYouWantToApplyForNonOwnerAuto == \"true\"){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}\n} else {\n  value = 0;\n}",
+						"key": "endoNon-OwnedAutoFP",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "Non-OwnedAutoFP",
+						"calculateValue": "if(data['endoNon-OwnedAutoFP'] > 0){\n  value = data['previous_Non-OwnedAutoFP'] + data['endoNon-OwnedAutoFP'];\n} else {\n  value = data['previous_Non-OwnedAutoFP']\n}",
+						"key": "Non-OwnedAutoFP",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}, {
 						"label": "Excess Liability",
 						"prefix": "$",
@@ -12363,13 +12408,20 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.excessLiabilityCoveragePrimarylimit1000000PL == \"true\" || data.excessLiabilityCoveragePrimarylimit1000000PL == true){\n value=(data[data[\"excessLiabilityCoverage\"]]||0); \n}else{\n  value = 0;\n}",
-						"key": "ExcessLiabilityFP",
+						"calculateValue": "if(data['ExcessLiabilityFP'] != data['previous_ExcessLiabilityFP']){\nif(data.excessLiabilityCoveragePrimarylimit1000000PL == \"true\" || data.excessLiabilityCoveragePrimarylimit1000000PL == true){\n value=(data[data[\"excessLiabilityCoverage\"]]||0); \n}else{\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+						"key": "endoExcessLiabilityFP",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "ExcessLiabilityFP",
+						"calculateValue": "if(data['endoExcessLiabilityFP'] > 0){\n  value = data['previous_ExcessLiabilityFP'] + data['endoExcessLiabilityFP'];\n} else {\n  value = data['previous_ExcessLiabilityFP']\n}",
+						"key": "ExcessLiabilityFP",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}, {
 						"label": "Travel Agent E&O",
 						"prefix": "$",
@@ -12382,13 +12434,20 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
-						"key": "TravelAgentEOFP",
+						"calculateValue": "if(data['travelAgentEoPL'] != data['previous_travelEnO']){\n  if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+						"key": "endoTravelAgentEOFP",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "TravelAgentEOFP",
+						"calculateValue": "if(data['endotravelAgentEoPL'] > 0){\n  value = data['previous_travelEnO'] + data['endotravelAgentEoPL'];\n} else {\n  value = data['previous_travelEnO']\n}",
+						"key": "TravelAgentEOFP",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}],
 					"hideOnChildrenHidden": false
 				}],
@@ -12455,13 +12514,20 @@
 						"inputFormat": "plain",
 						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else{\n  value = 0;\n}",
-						"key": "ContentsFP",
+						"calculateValue": "if(data['dspropTotal'] != data['previous_dspropTotal']){\n  if(data['propertyCoverageSelect']=='yes'){\nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else{\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+						"key": "endoContentsFP",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "ContentsFP",
+						"calculateValue": "if(data['endoContentsFP'] > 0){\n  value = data['previous_ContentsFP'] + data['endoContentsFP'];\n} else {\n  value = data['previous_ContentsFP']\n}",
+						"key": "ContentsFP",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}, {
 						"label": "Loss of Bus Income",
 						"prefix": "$",
@@ -12475,12 +12541,19 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else {\n  value = 0;\n}",
-						"key": "LossofBusIncomeFP",
+						"key": "endoLossofBusIncomeFP",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "LossofBusIncomeFP",
+						"calculateValue": "if(data['endoLossofBusIncomeFP'] > 0){\n  value = data['previous_LossofBusIncomeFP'] + data['endoLossofBusIncomeFP'];\n} else {\n  value = data['previous_LossofBusIncomeFP']\n}",
+						"key": "LossofBusIncomeFP",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}, {
 						"label": "Building Limit",
 						"prefix": "$",
@@ -12494,12 +12567,19 @@
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+data['lossOfBusIncome'];\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropreplacementvalue\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n} else {\n  value = 0;\n}",
-						"key": "BuildingLimitFP",
+						"key": "endoBuildingLimitFP",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
 						"hideOnChildrenHidden": false
+					}, {
+						"label": "BuildingLimitFP",
+						"calculateValue": "if(data['endoBuildingLimitFP'] > 0){\n  value = data['previous_BuildingLimitFP'] + data['endoBuildingLimitFP'];\n} else {\n  value = data['previous_BuildingLimitFP']\n}",
+						"key": "BuildingLimitFP",
+						"type": "hidden",
+						"input": true,
+						"tableView": false
 					}],
 					"hideOnChildrenHidden": false
 				}],
@@ -12619,7 +12699,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "value=((parseFloat(data[\"CoverageFP\"])||0)+(parseFloat(data[\"nonDivingPoolAmount\"])||0)+(parseFloat(data[\"MedicalExpenseFP\"])||0)+(parseFloat(data[\"Non-OwnedAutoFP\"]||0))+(parseFloat(data[\"ExcessLiabilityFP\"])||0)+(parseFloat(data[\"TravelAgentEOFP\"])||0)).toFixed(0)",
+					"calculateValue": "value=((parseFloat(data[\"endorsementLiabilityCoverage\"])||0)+(parseFloat(data[\"endononDivingPoolAmount\"])||0)+(parseFloat(data[\"endoMedicalExpenseFP\"])||0)+(parseFloat(data[\"endoNon-OwnedAutoFP\"]||0))+(parseFloat(data[\"endoExcessLiabilityFP\"])||0)+(parseFloat(data[\"endoTravelAgentEOFP\"])||0)).toFixed(0)",
 					"key": "liabilityCoveragesTotalPL",
 					"type": "number",
 					"input": true,
@@ -12711,7 +12791,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "value=((parseFloat(data[\"ContentsFP\"])||0)+(parseFloat(data[\"LossofBusIncomeFP\"])||0)+(parseFloat(data[\"BuildingLimitFP\"])||0)).toFixed(0)",
+					"calculateValue": "value=((parseFloat(data[\"endoContentsFP\"])||0)+(parseFloat(data[\"endoLossofBusIncomeFP\"])||0)+(parseFloat(data[\"endoBuildingLimitFP\"])||0)).toFixed(0)",
 					"key": "propertyCoveragesTotalPL",
 					"type": "number",
 					"input": true,
@@ -13514,12 +13594,20 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvalue = 0;\n\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALProRataPremium)||0);\n}\n} else {\n  value=0;\n}",
-					"key": "AddILocPremium",
+					"calculateValue": "if(data['AddILocPremium'] != data['previous_AddILocPremium']){\n  if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvalue = 0;\n\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALProRataPremium)||0);\n}\n} else {\n  value=0;\n}\n} else {\n  value = 0;\n}",
+					"key": "endoAddILocPremium",
 					"type": "number",
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
+					"hideOnChildrenHidden": false
+				}, {
+					"label": "AddILocPremium",
+					"calculateValue": "if(data['endoAddILocPremium'] > 0){\n  value = data['previous_AddILocPremium'] + data['endoAddILocPremium'];\n} else {\n  value = data['previous_AddILocPremium']\n}",
+					"key": "AddILocPremium",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
 					"hideOnChildrenHidden": false
 				}],
 				"size": "md",
@@ -13608,8 +13696,8 @@
 					"requireDecimal": true,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvar value = 0;\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n}\n} else {\n  value = 0;\n}",
-					"key": "AddILocTax",
+					"calculateValue": "if(data['AddILocTax']!=data['previous_AddILocTax']){\n  if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvar value = 0;\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n}\n} else {\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+					"key": "endoAddILocTax",
 					"type": "number",
 					"decimalLimit": 2,
 					"input": true,
@@ -13617,6 +13705,14 @@
 					"lockKey": true,
 					"hideOnChildrenHidden": false,
 					"width": 12
+				}, {
+					"label": "AddILocTax",
+					"calculateValue": "if(data['endoAddILocTax'] > 0){\n  value = data['previous_AddILocTax'] + data['endoAddILocTax'];\n} else {\n  value = data['previous_AddILocTax']\n}",
+					"key": "AddILocTax",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}],
 				"size": "md",
 				"offset": 0,
@@ -13907,14 +14003,22 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100).toFixed(0)",
-					"key": "PropDeductibleCredit",
+					"calculateValue": "if(data['propertyDeductiblesPercentage'] != data['previous_propertyDeductiblesPercentage']){\n  value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100).toFixed(0)\n} else {\n  value = 0;\n}",
+					"key": "endoPropDeductibleCredit",
 					"type": "number",
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
 					"hideOnChildrenHidden": false,
 					"width": 12
+				}, {
+					"label": "PropDeductibleCredit",
+					"calculateValue": "if(data['endoPropDeductibleCredit'] > 0){\n  value = data['previous_PropDeductibleCredit'] + data['endoPropDeductibleCredit'];\n} else {\n  value = data['previous_PropDeductibleCredit']\n}",
+					"key": "PropDeductibleCredit",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}],
 				"size": "md",
 				"offset": 0,
@@ -14090,7 +14194,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"padiFeePL\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0) + (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0)).toFixed(2);\n}",
+					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"padiFeePL\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0)).toFixed(2);\n}",
 					"key": "totalAmount",
 					"type": "number",
 					"decimalLimit": 2,
@@ -14186,13 +14290,13 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "var amount = parseFloat(data[\"totalAmount\"])-parseFloat(data[\"previous_totalAmount\"]);\nif(amount === 0){\n  value = 0.00;\n} else {\n  value = (amount).toFixed(2);\n}",
+					"calculateValue": "if(parseFloat(data[\"totalAmount\"]) === 0){\n  value = 0.00;\n} else {\n  value = parseFloat(data[\"totalAmount\"]).toFixed(2);\n}",
 					"key": "amount",
 					"type": "number",
+					"decimalLimit": 2,
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
-					"decimalLimit": 2,
 					"hideOnChildrenHidden": false
 				}],
 				"size": "md",
@@ -14708,6 +14812,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-31T05:59:57.732Z",
+	"modified": "2020-08-31T11:26:56.225Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
