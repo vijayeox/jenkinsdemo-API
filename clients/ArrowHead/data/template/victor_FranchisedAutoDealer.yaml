@@ -658,6 +658,13 @@
    cell: Check Box 41
    type: Checkbox
 -
+   key: garagekeeperUnderwritingLotProtection_nightWatchman
+   method: pulloutChild
+   Source Worksheet: Night watchman
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 41
+   type: Checkbox
+-
    key: franchisedAutoDealer*checkNotMonitoredSurveillanceCamera
    Source Worksheet: Surveill. Cameras not monitored
    pageName: Garage Keepers Supplementary
@@ -674,6 +681,13 @@
    note: If at least 1 of the Surveillance Camera questions are selected map
       "Yes"to the applicable carrier app.
 -
+   key: garagekeeperUnderwritingLotProtection_videoSurveillance
+   method: pulloutChild
+   Source Worksheet: Video Surveillance
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 45
+   type: Checkbox
+-
    key: franchisedAutoDealer*checkdolpostnchain
    Source Worksheet: Post & Chain
    pageName: Garage Keepers Supplementary
@@ -686,9 +700,23 @@
    cell: Check Box 44
    type: Checkbox
 -
+   key: garagekeeperUnderwritingLotProtection_securityLighting
+   method: pulloutChild
+   Source Worksheet: Security Lighting
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 44
+   type: Checkbox
+-
    key: franchisedAutoDealer*checkdolflyfencdpremises
    Source Worksheet: Fully Fenced Premises
    pageName: Garage Keepers Supplementary
+   cell: Check Box 40
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_fenced
+   method: pulloutChild
+   Source Worksheet: Fenced
+   pageName: 'Garage Keepers Supplementary'
    cell: Check Box 40
    type: Checkbox
 -
@@ -734,39 +762,11 @@
    cell: Check Box 38
    type: Checkbox
 -
-   key: garagekeeperUnderwritingLotProtection_fenced
-   method: pulloutChild
-   Source Worksheet: Fenced
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 40
-   type: Checkbox
--
    key: garagekeeperUnderwritingLotProtection_postChains
    method: pulloutChild
    Source Worksheet: Post and Chains
    pageName: 'Garage Keepers Supplementary'
    cell: Check Box 42
-   type: Checkbox
--
-   key: garagekeeperUnderwritingLotProtection_securityLighting
-   method: pulloutChild
-   Source Worksheet: Security Lighting
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 44
-   type: Checkbox
--
-   key: garagekeeperUnderwritingLotProtection_videoSurveillance
-   method: pulloutChild
-   Source Worksheet: Video Surveillance
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 45
-   type: Checkbox
--
-   key: garagekeeperUnderwritingLotProtection_nightWatchman
-   method: pulloutChild
-   Source Worksheet: Night watchman
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 41
    type: Checkbox
 -
    key: franchisedAutoDealer*checkcompaniesrepresented
