@@ -4,10 +4,14 @@ namespace Oxzion\Analytics\Relational;
 use Oxzion\Analytics\AnalyticsAbstract;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
+use Zend\DB;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Analytics\AnalyticsPostProcessing;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Where;
+use Oxzion\Utils;
+use Oxzion\Utils\AnalyticsUtils;
 
 abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 	protected $dbAdapter;
@@ -35,7 +39,10 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			
 			$orgId = AuthContext::get(AuthConstants::ORG_ID);
 			if (isset($parameters['view'])) {
-				$result = $this->getResultsFromView($orgId,$parameters['view']);	
+			//	$result = $this->getResultsFromView($orgId,$parameters['view']);	
+				$formatedPara = $this->formatQuery($parameters);
+		//	print_r($formatedPara);exit;
+				$result = $this->getResultsFromPara($orgId,$parameters['view'],$formatedPara);
 				$finalResult['meta']['type'] = 'view';
 				foreach(array_keys($result) as $key) {
 					if ($result[$key]['org_id']!=$orgId) {  //Temp solution to protect with org id instead the where clause
@@ -91,18 +98,8 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			}
 		} 
 		$select = array();
-		if ($field) { 
-			$select = [$field,"$operation($field)"];
-		} 
-		else {
-				if (!isset($parameters['list'])) {
-					if (!empty($group)) {
-						$select = ["$operation($field)"];
-					} else {
-						$select = ["count(*)"];
-				}
-			}
-		}
+		
+
 		if (!empty($parameters['frequency'])) {
 			switch ($parameters['frequency']) {
 				case 1:
@@ -119,12 +116,28 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 					break;
 			}
 		}
+		if ($field) { 
+			if (!empty($group)) {
+				$select=$group;
+				$select[] = 'org_id';
+				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
+			} else {
+				$select = ['org_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
+			}
+		} 
+		else {
+			if (!empty($group)) {
+				$select=$group;
+				$select[] = 'org_id';
+				$select[] = new \Zend\Db\Sql\Expression("count(*)");;
+			} 
+		}
 		if ($datetype)
 			$range = "$datetype between '$startdate' and '$enddate'";
 		if (isset($parameters['filter'])) {
-			$filter = $parameters['filter'];  // Need to put logic for this
+			$filter = $parameters['filter']; 
 		}
-		$returnarray = array('group' => $group, 'range' => $range, 'select' => $select);
+		$returnarray = array('group' => $group, 'range' => $range, 'select' => $select,'filter'=>$filter);
 		if (isset($parameters['pagesize'])) {
 			$returnarray['limit'] = $parameters['limit'];
 		}
@@ -133,7 +146,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			foreach ($listConfig as $k => $v) {
 				if(strpos($v, "=")!==false){
 					$listitem = explode("=", $v);
-					$returnarray['select'][] = $listitem[0];
+					$returnarray['select'][$listitem[1]] = $listitem[0];
 					$returnarray['displaylist'][] = $listitem[1];
 				} else {
 					$returnarray['select'][] = $v;
@@ -160,15 +173,22 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		
 	}
 
-	public function getResultsFromPara($orgId,$app_name,$entity_name,$para) {
-		
+	public function getResultsFromPara($orgId,$entity_name,$para) {
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
-		$select = $sql->columns($para['select']);
+//		print_r($para['select']);exit;
+		if (!empty($para['select'])) {
+			$select->columns($para['select']);
+		}
 		$select->from($entity_name);
-		$select->where(['org_id' => $orgId]);
+	//	$select->where(['org_id' => $orgId]);
 		if (!empty($para['range'])) {
 			$select->where($para['range']);
+		}
+		if (!empty($para['filter'])) {
+			$where = new Where();
+			$this->createFilter($para['filter'],$where);
+			$select->where($where);
 		}
 		if (!empty($para['group'])) {
 			$select->group($para['group']);
@@ -176,12 +196,63 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if (!empty($para['limit'])) {
 			$select->group($para['limit']);
 		}
+	//	echo $select->getSqlString();exit;
 		$statement = $sql->prepareStatementForSqlObject($select);
+
 		$result = $statement->execute();
 		$resultSet = new ResultSet();
         return $resultSet->initialize($result)->toArray();
 
 	}
+
+
+
+    protected function createFilter($filter,$where) {
+		$symMapping = ['>'=>'greaterThan','>='=>'greaterThanOrEqualTo','<'=>'lessThan',
+		'<='=>'lessThanOrEqualTo','!='=>'notEqualTo','LIKE'=>'like','NOT LIKE'=>'notLike'];
+        $boolMapping = ['OR'=>'or','AND'=>'and'];
+        if (!isset($filter[1]) && is_array($filter)) {
+            $filter = $filter[0];
+        }
+        $column = $filter[0];
+        if (isset($filter[2])) {
+            $value = $filter[2];
+            $condition = $filter[1];
+        } else {
+            $condition = "==";
+            $value = $filter[1];
+        }
+        if (strtoupper($condition)=='OR' OR strtoupper($condition)=='AND') {
+				$whereNest = $where->nest();
+				$this->createFilter($column,$whereNest);
+				if (strtoupper($condition)=='OR') {
+					$whereNest->or;
+				 } else {
+					$whereNest->and;
+				 }
+				 $this->createFilter($value,$whereNest);
+				 $whereNest->unnest();				                  
+        } else {
+           // echo $column.' '.$condition.' '.$value;exit;
+				$value = AnalyticsUtils::checkSessionValue($value);
+				if (strtolower(substr($value,0,5))=="date:") {
+					$value = date("Y-m-d",strtotime(substr($value,5)));
+				} 
+                if ($condition=="=="){                
+                        if (!is_array($value)) {
+							$where->equalTo($column,$value);
+                        } else {
+                            $where->in($column,$value);
+                        }    
+
+                }  else {
+						$functionName = $symMapping[$condition];
+						$where->$functionName($column,$value);
+                }
+                        
+               
+		 }
+    }
 
 }
 ?>

@@ -486,18 +486,23 @@ class AppService extends AbstractService
         file_put_contents($appName . '/index.scss', $indexfileData2);
     }
 
+
     public function processWorkflow(&$yamlData, $path)
     {
         if (isset($yamlData['workflow'])) {
             $appUuid = $yamlData['app']['uuid'];
             $workflowData = $yamlData['workflow'];
             foreach ($workflowData as $value) {
+                $entityName = null;
+                if(isset($value['entity'])) {
+                    $entityName = is_array($value['entity']) ? $value['entity'][0] : $value['entity'];
+                }
                 $result = 0;
                 $result = $this->checkWorkflowData($value,$appUuid);
                 if ($result == 0) {
-                    $entity = $this->entityService->getEntityByName($yamlData['app']['uuid'], $value['entity']);
+                    $entity = $this->entityService->getEntityByName($yamlData['app']['uuid'], $entityName);
                     if (!$entity) {
-                        $entity = array('name' => $value['entity']);
+                        $entity = array('name' => $entityName);
                         $result = $this->entityService->saveEntity($yamlData['app']['uuid'], $entity);
                     }
                     if (isset($value['uuid']) && isset($entity['id'])) {

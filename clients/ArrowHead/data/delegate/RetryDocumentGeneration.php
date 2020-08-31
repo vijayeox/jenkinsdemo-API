@@ -2,9 +2,8 @@
 
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\HttpClientTrait;
-use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
 use Oxzion\AppDelegate\MailDelegate;
-use Oxzion\Auth\AuthContext;
+use Oxzion\AppDelegate\FileTrait;
 
 
 use Oxzion\AppDelegate\HTTPMethod;
@@ -12,6 +11,7 @@ use Oxzion\AppDelegate\HTTPMethod;
 class RetryDocumentGeneration extends MailDelegate
 {
     use HttpClientTrait;
+    use FileTrait;
 
     public function __construct()
     {
@@ -48,17 +48,30 @@ class RetryDocumentGeneration extends MailDelegate
             $excelData = file_get_contents($excelMapperInputPath);
             $excelData = $this->checkJSON($excelData);
 
+            $fileData = $this->getFile($data['uuid'],  true)['data'];
+            date_default_timezone_set('UTC');
+            $fileData['submissionTime'] = (new DateTime)->format('c');
+            $fileData['documentsToBeGenerated'] = count($excelData);
+            $fileData['documentsSelectedCount'] = count($excelData);
+            $fileData["status"] = "Processing";
+            $this->saveFile($fileData, $data['uuid']);
+
             $selectQuery = "Select value FROM applicationConfig WHERE type ='excelMapperURL'";
             $ExcelTemplateMapperServiceURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+
+            $selectQuery = "Select value FROM applicationConfig WHERE type ='callbackURL'";
+            $callbackURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+            
             if (count($excelData) > 0) {
                 foreach ($excelData as $excelItem) {
+                    $excelItem["postURL"] = $callbackURL;
                     $response = $this->makeRequest(
                         HTTPMethod::POST,
                         $ExcelTemplateMapperServiceURL,
                         $excelItem
                     );
                     $this->logger->info("Retry Excel Mapper POST Request for " . $excelItem["fileId"] . "\n" . $response);
-                    sleep(1);
+                    sleep(5);
                 }
             } else {
                 throw new Exception("Record not found. Please contact Support.", 1);

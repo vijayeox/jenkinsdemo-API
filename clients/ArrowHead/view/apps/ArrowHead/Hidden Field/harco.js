@@ -68,7 +68,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         "",
         "",
         "",
-        locationItem.signsGreaterThan,
+        locationItem.signsGreaterThan
       ]);
     }
     if (locationItem.fences > 0) {
@@ -78,7 +78,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         "",
         "",
         "",
-        locationItem.fences,
+        locationItem.fences
       ]);
     }
     if (locationItem.awaningsscanopies > 0) {
@@ -88,7 +88,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         "",
         "",
         "",
-        locationItem.awaningsscanopies,
+        locationItem.awaningsscanopies
       ]);
     }
     if (locationItem.lightpoles > 0) {
@@ -98,7 +98,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         "",
         "",
         "",
-        locationItem.lightpoles,
+        locationItem.lightpoles
       ]);
     }
   });
@@ -111,17 +111,11 @@ if (data.workbooksToBeGenerated.harco == true) {
         locationItem.utilityservices,
         "",
         "",
-        locationItem.utilityoptions.includes("waterSupply") ? "Yes" : "No",
-        locationItem.utilityoptions.includes("communicationSupply")
-          ? "Yes"
-          : "No",
-        locationItem.utilityoptions.includes("communicationLines")
-          ? "Yes"
-          : "No",
-        locationItem.utilityoptions.includes("powerSupply") ? "Yes" : "No",
-        locationItem.utilityoptions.includes("overheadPowerLines")
-          ? "Yes"
-          : "No",
+        locationItem.waterSupply == "yes" ? "Yes" : "No",
+        locationItem.communicationSupply == "yes" ? "Yes" : "No",
+        locationItem.communicationLines == "yes" ? "Yes" : "No",
+        locationItem.powerSupply == "yes" ? "Yes" : "No",
+        locationItem.overheadPowerLines == "yes" ? "Yes" : "No"
       ]);
     }
   });
@@ -136,7 +130,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         "",
         "",
         "",
-        locationItem.businesselectronicequipment,
+        locationItem.businesselectronicequipment
       ]);
     }
   });
@@ -481,7 +475,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         "",
         accountsreceivableItem > 0 ? accountsreceivableItem : "",
         "",
-        valulablePapersItem > 0 ? valulablePapersItem : "",
+        valulablePapersItem > 0 ? valulablePapersItem : ""
       ];
     }),
     GIMGridTwo: data.locationSchedule
@@ -499,7 +493,7 @@ if (data.workbooksToBeGenerated.harco == true) {
               "",
               "",
               "",
-              signsnotattachedItem > 0 ? signsnotattachedItem : "",
+              signsnotattachedItem > 0 ? signsnotattachedItem : ""
             ]
           : "empty";
       })
@@ -563,7 +557,7 @@ if (data.workbooksToBeGenerated.harco == true) {
           "city",
           "state",
           "zip",
-          "county",
+          "county"
         ];
         requiredFields.map((field) => {
           if (item[field]) {
@@ -654,7 +648,7 @@ if (data.workbooksToBeGenerated.harco == true) {
               }
             })
             .filter((i) => i != "invalid")
-        ),
+        )
       ] + "",
     checkindemnitytype: checkindemnitytype == "" ? "" : checkindemnitytype,
     checkleasedtoOthers: data.genericData.locationScheduleGridData.some(
@@ -668,7 +662,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       return {
         result:
           (i.signsLessThan > 0 ? i.signsLessThan : 0) +
-          (i.buildingLimit > 0 ? i.buildingLimit : 0),
+          (i.buildingLimit > 0 ? i.buildingLimit : 0)
       };
     }),
     checkUmbrellaNameExists: data.UmbrellaCoverageAdditional.some(
@@ -676,6 +670,11 @@ if (data.workbooksToBeGenerated.harco == true) {
         umbrellaItem.umbrellaCoverageAdditionalName &&
         umbrellaItem.ownershipPercentageUmbrella > 0
     ),
+    checkdriveumuim: data.driverOtherCargrid
+      ? data.driverOtherCargrid[0].driveumuim > 500000
+        ? 500000
+        : data.driverOtherCargrid[0].driveumuim
+      : "",
     checkrepairpercentparts:
       parseFloat(data.repairpercentparts) > 0 ? data.repairpercentparts : "",
     checkrepairpercentlabor:
@@ -684,7 +683,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     checkCustomerInsuranceValidity:
       data.customersinsuranceverified && data.regularlythroughouttermofloan
         ? "Yes"
-        : "No",
+        : "No"
   };
 
   console.log(value);

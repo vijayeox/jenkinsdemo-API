@@ -88,6 +88,18 @@ entity:
                 index: true
                 data_type: text
             -
+                name: documentsToBeGenerated
+                text: documentsToBeGenerated
+                data_type: numeric
+            -
+                name: documentsSelectedCount
+                text: documentsSelectedCount
+                data_type: numeric
+            -
+                name: submissionTime
+                text: submissionTime
+                data_type: text
+            -
                 name: producername
                 text: Producer
                 index: true

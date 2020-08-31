@@ -385,15 +385,18 @@ class CommandService extends AbstractService
         if(isset($data['async']) && $data['async'] == 'true'){            
             unset($data['async']);
             $temp = $data;
-            $temp['commands'] = array('command' => 'delegate', 'delegate' => $delegate);
+            $temp['commands'] = [array('command' => 'delegate', 'delegate' => $delegate)];
             $this->logger->info("EXECUTE DELEGATE ---- enqueue");
             $this->enqueue($temp, 'COMMANDS');
+            return $data;
         }
-        $this->logger->info("DELEGATE ---- " . print_r($delegate, true));
-        $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
-        $this->logger->info("DELEGATE DATA ---- " . print_r($data, true));
-        $response = $this->appDelegateService->execute($app_id, $delegate, $data);
-        return $response;
+        else{
+            $this->logger->info("DELEGATE ---- " . print_r($delegate, true));
+            $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
+            $this->logger->info("DELEGATE DATA ---- " . print_r($data, true));
+            $response = $this->appDelegateService->execute($app_id, $delegate, $data);
+            return $response;
+        }
     }
 
     protected function sendMail($params)

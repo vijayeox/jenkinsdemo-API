@@ -2079,6 +2079,7 @@
 								"path": "columns1"
 							}, {
 								"label": "userGrandTotal",
+								"redrawOn": "data",
 								"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
 								"key": "userGrandTotal",
 								"type": "hidden",
@@ -2087,6 +2088,7 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "csrGrandTotal",
+								"redrawOn": "data",
 								"calculateValue": "if(data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
 								"key": "csrGrandTotal",
 								"type": "hidden",
@@ -3091,6 +3093,7 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
+						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
 						"validate": {
 							"multiple": true
 						},
@@ -3555,7 +3558,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 330,
+	"_vid": 332,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3576,6 +3579,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-16T09:40:38.185Z",
+	"modified": "2020-08-28T10:12:55.244Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

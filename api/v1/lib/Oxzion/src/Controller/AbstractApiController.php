@@ -73,12 +73,19 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                 if (is_object($tokenPayload)) {
                     if ($tokenPayload->data && isset($tokenPayload->data->username)) {
                         $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgid]);
+
+                        $userdetail = $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgid]);
+                        if(is_array($userdetail) && count($userdetail)==0){
+                            return $this->getErrorResponse("invalid username.", 401);            
+                        }
                         return;
                     }
                     if ($tokenPayload->data && isset($tokenPayload->data->apikey)) {
                         $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                        $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
+                        $userdetail = $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
+                        if(is_array($userdetail) && count($userdetail)==0){
+                            return $this->getErrorResponse("invalid username.", 401);            
+                        }
                         return;
                     }
                 } elseif ($tokenPayload['orgid']) {

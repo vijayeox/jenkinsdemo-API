@@ -4,7 +4,7 @@ if (data.workbooksToBeGenerated.rpsCyber == true) {
   if (data.locationSchedule) {
     if (data.locationSchedule.length > 0) {
       data.locationSchedule.map((locationItem, locationIndex) => {
-        locationItem.buildingDetails.map((buildingItem) => {
+        locationItem.buildingDetails.map(buildingItem => {
           tempAllEmployees +=
             (buildingItem.fTEmployeesFurnishedAnAuto
               ? buildingItem.fTEmployeesFurnishedAnAuto
@@ -33,22 +33,22 @@ if (data.workbooksToBeGenerated.rpsCyber == true) {
     if (data.ofRecordsContaining < 100000) {
       checkofRecordsContaining = "1-100,000";
     } else if (
-      data.ofRecordsContaining > 100000 &&
+      data.ofRecordsContaining >= 100000 &&
       data.ofRecordsContaining < 250000
     ) {
       checkofRecordsContaining = "100,000-250,000";
     } else if (
-      data.ofRecordsContaining > 250000 &&
+      data.ofRecordsContaining >= 250000 &&
       data.ofRecordsContaining < 500000
     ) {
       checkofRecordsContaining = "250,000-500,000";
     } else if (
-      data.ofRecordsContaining > 500000 &&
+      data.ofRecordsContaining >= 500000 &&
       data.ofRecordsContaining < 750000
     ) {
       checkofRecordsContaining = "500,000-750,000";
     } else if (
-      data.ofRecordsContaining > 750000 &&
+      data.ofRecordsContaining >= 750000 &&
       data.ofRecordsContaining < 1000000
     ) {
       checkofRecordsContaining = "750,000-1,000,000";
@@ -66,9 +66,11 @@ if (data.workbooksToBeGenerated.rpsCyber == true) {
         ? "Yes"
         : "No",
     "Year Established":
-      moment().format("YYYY") - data.numYearsOfOwnership
-        ? data.numYearsOfOwnership
-        : 0
+      data.numYearsOfOwnership > 0
+        ? moment()
+            .subtract(data.numYearsOfOwnership, "years")
+            .format("YYYY")
+        : moment().format("YYYY")
   };
 
   console.log(value);

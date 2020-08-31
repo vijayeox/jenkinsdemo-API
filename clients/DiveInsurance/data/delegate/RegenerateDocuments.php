@@ -138,6 +138,11 @@ class RegenerateDocuments extends PolicyDocument
             $fileData['documents'] = $documents;
             $this->saveFile($fileData,$fileData['fileId']);
         }
+        if($param == "propDCPS"){
+            $this->processFileData($fileData,$documents);
+            $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
+            $this->generateDiveStorePremiumSummary($temp,$documents,$dest,$options);
+        }
       }
     }
 

@@ -133,7 +133,34 @@
    pageName: Garage Liability
    cell: L27
    method: simpleDatagrid
-   type: DataGrid   
+   type: DataGrid
+-
+   key: garageLiabilityMedicalExpense
+   pageName: Garage Liability
+   cell: M27
+   returnValue:
+      '1000': '1000'
+      '2000': '2000'
+      '5000': '2000'
+-
+   key: medicalexpensedeductible
+   pageName: Garage Liability
+   cell: P27
+   returnValue:
+      'none' : '$1,000 BI and PD'
+      '2500' : '$2,500 BI and PD'
+      '5000' : '$5,000 BI and PD'
+      '10000' : '$10,000 BI and PD'
+      '20000' : '$25,000 BI and PD'
+      '25000' : '$25,000 BI and PD'
+      '50000' : '$25,000 BI and PD'
+      '75000' : '$25,000 BI and PD'
+      '100000' : '$25,000 BI and PD'
+      '125000' : '$25,000 BI and PD'
+-
+   key: franchisedAutoDealer*checktotalLocationSalesRevenue
+   pageName: Garage Liability
+   cell: S27
 -
    key: totalemployees
    Source Worksheet: 'Total # of Employees:'
@@ -231,12 +258,12 @@
    pageName: Garage Supplemental
    returnBoolean: "Yes|No"
    cell: C92
-# -
-#    key: flammablestored
-#    Source Worksheet: Are flammables stored in UL approved cabinets?
-#    pageName: Garage Supplemental
-#    cell: Check Box 
-#    type: Checkbox
+-
+   key: flammablestored
+   Source Worksheet: Are flammables stored in UL approved cabinets?
+   pageName: Garage Supplemental
+   cell: Check Box 82
+   type: Checkbox
 -
    key: spraypainting
    Source Worksheet: Does applicant perform body work and spray painting?
@@ -277,13 +304,18 @@
    pageName: Garage Supplemental
    cell: C103
    returnBoolean: "Yes|No"
-# -
-#    key: mixingroomsurvey_haveExplosionProofElectricalSystem
-#    method: pulloutChild
-#    Source Worksheet: Have explosion proof electrical system?
-#    pageName: Garage Supplemental
-#    cell: B106
-#    type: Checkbox
+-
+   key: separatemixingroom
+   pageName: Garage Supplemental 
+   cell: Check Box 81
+   type: Checkbox
+-
+   key: mixingroomsurvey_haveExplosionProofElectricalSystem
+   method: pulloutChild
+   Source Worksheet: Have explosion proof electrical system?
+   pageName: Garage Supplemental
+   cell: Check Box 38
+   type: Checkbox
 -
    key: mixingroomsurvey_haveFireSuppressionSystem
    method: pulloutChild
@@ -291,28 +323,27 @@
    pageName: Garage Supplemental
    returnBoolean: "Yes|No"
    cell: C99
-# -
-#    key: mixingroomsurvey_haveNfpaCompliantVentilation
-#    method: pulloutChild
-#    Source Worksheet: Have NFPA compliant ventilation?
-#    pageName: Garage Supplemental
-#    cell: B105
-#    type: Checkbox
-# -
-#    key: mixingroomsurvey_areDrumsGroundedAndBondedDuringPantTransfer
-#    method: pulloutChild
-#    Source Worksheet: Are drums grounded and bonded during pant transfer?
-#    pageName: Garage Supplemental
-#    cell: B105
-#    type: Checkbox
-# -
-#    key: mixingroomsurvey_raisedSil
-#    method: pulloutChild
-#    Source Worksheet: Raised Sil?
-#    pageName: Garage Supplemental
-#    cell: B107
-#    type: Checkbox
-#    notes: 'Note:Wrongly mentioned as A107 in raw file.'
+-
+   key: mixingroomsurvey_haveNfpaCompliantVentilation
+   method: pulloutChild
+   Source Worksheet: Have NFPA compliant ventilation?
+   pageName: Garage Supplemental
+   cell: Check Box 35
+   type: Checkbox
+-
+   key: mixingroomsurvey_areDrumsGroundedAndBondedDuringPantTransfer
+   method: pulloutChild
+   Source Worksheet: Are drums grounded and bonded during pant transfer?
+   pageName: Garage Supplemental
+   cell: Check Box 37
+   type: Checkbox
+-
+   key: mixingroomsurvey_raisedSil
+   method: pulloutChild
+   Source Worksheet: Raised Sil?
+   pageName: Garage Supplemental
+   cell: Check Box 36
+   type: Checkbox
 -
    key: doesapplicantperformtowing
    Source Worksheet: Does applicant perform towing operations?
@@ -331,16 +362,35 @@
    returnBoolean: "Yes|No"
    cell: C85
 -
-   key: franchisedAutoDealer*formalsafetymeetingsNone
+   key: formalsafetymeetings_none
    Source Worksheet: Formal safety meetings - "None"is selected the system will map "No"
    pageName: Garage Supplemental
    cell: C110
+   method: checkValue
+   returnBoolean: "No|"
 -
-   key: franchisedAutoDealer*formalsafetymeetingsMonthly
+   key: formalsafetymeetings_monthly
    Source Worksheet: Formal safety meetings "Monthly"
    pageName: Garage Supplemental
-   cell: Check Box 56
+   cell: Check Box 57
    type: Checkbox
+   method: checkValue
+-
+   key: formalsafetymeetings_quarterly
+   Source Worksheet: Formal safety meetings "quarterly"
+   pageName: Garage Supplemental
+   cell: Check Box 59
+   type: Checkbox
+   method: checkValue 
+-
+   key: formalsafetymeetings
+   Source Worksheet: Formal safety meetings "quarterly"
+   pageName: Garage Supplemental
+   cell: C112
+   returnValue: 
+      'quarterly': 'Quarterly'
+      'monthly': ''
+      'none': ''
 -
    key: doesapplicantreposestheirownvehicles
    Source Worksheet: Does applicant reposess their own vehicles?
@@ -389,7 +439,6 @@
    key: annualreceiptsfrombusservice
    Source Worksheet: 'If YES, annual receipts from bus service:'
    pageName: Garage Supplemental
-   returnBoolean: "Yes|No"
    cell: C89
 -
    key: franchisedAutoDealer*checktestdriveproceduresInsuranceCard
@@ -700,7 +749,7 @@
    cell: Check Box 41
    type: Checkbox
 -
-   key: franchisedAutoDealer*checklistcompaniesrepresented_result
+   key: franchisedAutoDealer*checklistcompaniesrepresented
    Source Worksheet: 'List companies represented:'
    pageName: Garage Supplemental
    cell: 'C41'
@@ -943,7 +992,7 @@
       office: Occupied
       serviceRepair: Occupied
       usedCarSales: Occupied
-      vacantLand: ''
+      vacantLand: Vacant
       vehicleStorageParkingGarage: Occupied
       partsWarehouseStorage: Occupied
       vacantBuilding: Vacant
@@ -1143,6 +1192,9 @@
    pageName: Property
    cell: AU40
    type: DataGrid
+   returnValue:
+      '24Hours': '24 Hours'
+      'none': '24 Hours'
 -
    key: genericData*locationScheduleGridData_dolright
    method: simpleDatagrid
@@ -1198,11 +1250,24 @@
    cell: C11
    returnBoolean: "Yes|No"
 -
-   key: areallcustomerformsandprint
+   key: allworkorderssignedbycustomer
    pageName: Garage Supplemental 
    cell: C13
    returnBoolean: "Yes|No"
 -
+   key: areallcustomerformsandprint
+   pageName: Garage Supplemental 
+   cell: C15
+   returnBoolean: "Yes|No"
+-
+   key: numberofvehiclesinfleet
+   pageName: Garage Supplemental 
+   cell: C25
+-
    key: franchisedAutoDealer*checkfalsePretenseLimit
    pageName: Garage Keepers (printable) 
    cell: I31
+-
+   key: falsePretenseDeductible
+   pageName: Garage Keepers (printable) 
+   cell: J31

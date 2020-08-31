@@ -186,7 +186,7 @@ return array(
             'statethree' => 'c State',
             'employeethree' => 'Number of employees_3',
             'cityStateZip' => 'City, State, Zip',
-            'employeefour' => 'Number of employees_4',
+            'numberOfEmployees' => 'Number of employees_4',
             'officerone' => 'Number of Officers',
             'employeefive' => 'Number of employees_5',
             'officertwo' => 'Number of Officers_2',

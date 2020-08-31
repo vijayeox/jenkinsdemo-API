@@ -113,6 +113,7 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id, false);
+            $this->updateFileData($id, $fields);
             $this->logger->debug("Check Fields Data ----- " . print_r($validFields,true));
             $this->logger->info("Checking Index Fields ---- " . print_r($validFields['indexedFields'],true));
             if(count($validFields['indexedFields']) > 0 ){
@@ -216,6 +217,7 @@ class FileService extends AbstractService
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
+            // The next line needs to be removed for file save to work
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -298,7 +300,9 @@ class FileService extends AbstractService
             $this->beginTransaction();
             $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
             $file->exchangeArray($fileObject);
+
             $file->validate();
+            $this->logger->info("UPDATEd FILE CHECK DATA --".print_r($file,true));
             $count = $this->table->save($file);
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
@@ -318,6 +322,9 @@ class FileService extends AbstractService
             }
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
+            $select = "SELECT * from ox_file where id = '".$id."'";
+            $result = $this->executeQuerywithParams($select)->toArray();
+            $this->logger->info("FILE DATA CHECK AFTER DATA --".print_r($result,true));
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (($latestcheck == 1) && isset($id)) {
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
@@ -551,7 +558,8 @@ class FileService extends AbstractService
                     }
                     if($field['type'] == 'document' || $field['type'] == 'file' || $field['index'] == 1){
                         $fileFields[] = $indexedField;
-                    }                    
+                    }       
+                    $fieldData[$field['name']] = $fieldvalue;             
                     unset($indexedField);
                 }
                 if($allFields){
@@ -738,14 +746,16 @@ class FileService extends AbstractService
                     if(!isset($attachmentsArray)){
                         $attachmentsArray = array();
                     }
-                    if(is_array($attachmentsArray)){
+                    if(is_array($attachmentsArray) && !empty($attachmentsArray)){
                         foreach ($attachmentsArray as $attachment) {
-                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            $attachment = is_string($attachment) ? json_decode($attachment,true) : $attachment;
+                            if(!empty($attachment)){
+                                $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            }
                         }
-                        $fieldData['field_value']=json_encode($finalAttached);
                     }
+                    $fieldData['field_value']=json_encode($finalAttached);
                     $fieldData[$field['name']] = $finalAttached;
-                    $this->logger->info("Field Created with File- " . json_encode($fieldData));
                     break;
                 } else {
                     $fieldData[$field['name']] = $fieldvalue;
@@ -763,35 +773,48 @@ class FileService extends AbstractService
                     } else {
                         $attachmentsArray = $fieldvalue;
                     }
+                    $finalAttached = array();
                     if(!isset($attachmentsArray)){
                         $attachmentsArray = array();
                     }
-                    if(is_array($attachmentsArray)){
+                    if(is_array($attachmentsArray) && !empty($attachmentsArray)){
                         $finalAttached = array();
                         foreach ($attachmentsArray as $attachment) {
-                            $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            $attachment = is_string($attachment) ? json_decode($attachment,true) : $attachment;
+                            if(!empty($attachment)){
+                                $finalAttached[] = $this->appendAttachmentToFile($attachment,$field,$fileId);
+                            }
                         }
-                        $fieldData['field_value']=json_encode($finalAttached);
-                        $fieldvalue = $finalAttached;
-                        $fieldData[$field['name']] = $finalAttached;
                     }
+                    $fieldData['field_value']=json_encode($finalAttached);
+                    $fieldvalue = $finalAttached;
+                    $fieldData[$field['name']] = $finalAttached;
                 } else {
                     $fieldData[$field['name']] = $fieldvalue;
                 }
             break;
         }
         $fieldvalue = isset($fieldData[$field['name']]) ? $fieldData[$field['name']] : null;
-        if(isset($field['child_fields'])){
+        if(isset($field['child_fields'])  && !empty($field['child_fields']) ){
             if(is_string($fieldvalue)){
                 $fieldvalue = json_decode($fieldvalue,true);
             }
-            $fieldData['childFields'] = $this->getChildFieldsData($field,$fieldvalue,$field['child_fields'],$entityId,$fileId,$rowNumber, $allFields);
-            $fieldData['data'] = $fieldvalue;
-            if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
-                foreach ($fieldData['childFields']['childFields'] as $childfield) {
-                    array_push($fieldData['childFields'],$childfield);
+            $fldValue = $fieldvalue;
+            $fieldData['childFields'] = $this->getChildFieldsData($field,$fldValue,$field['child_fields'],$entityId,$fileId,$rowNumber, $allFields);
+            if(is_array($fldValue)){
+                foreach ($fldValue as $i => $value) {
+                    foreach ($value as $key => $fVal) {
+                        $temp = !is_array($fVal) ? json_decode($fVal) : $fVal;
+                        $fieldvalue[$i][$key] = $temp ? $temp : $fVal;
+                    }
                 }
-                unset($fieldData['childFields']['childFields']);
+                
+                if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
+                    foreach ($fieldData['childFields']['childFields'] as $childfield) {
+                        array_push($fieldData['childFields'],$childfield);
+                    }
+                    unset($fieldData['childFields']['childFields']);
+                }
             }
         } else {
             $fieldData['childFields'] = array();
@@ -819,6 +842,7 @@ class FileService extends AbstractService
         }else{
             $fileAttributes = $this->getFileAttributes($fileId, 'ox_file_document', $parentField['id']);
         }
+        
         if(count($childFields) > 0){
             if(is_array($fieldvalue)){
                 $i = 0;
@@ -841,8 +865,9 @@ class FileService extends AbstractService
                             unset($childFieldsArray[$i]['childFields']);
                         }
                         $childFieldValues[$field['name']] = isset($value[$field['name']]) ? $value[$field['name']] : null;
+                            
                         if($field['type'] == 'file'){
-                            $childFieldValues[$field['name']] = isset($childFieldsArray[$i][$field['name']]) ? $childFieldsArray[$i][$field['name']] : array();
+                            $childFieldValues[$field['name']] = is_array($val) ? json_encode($val) : $val;
                         }
                         unset($childFieldsArray[$i][$field['name']]);
                         $i++;
@@ -1505,7 +1530,7 @@ class FileService extends AbstractService
         return $data;
     }
     public function appendAttachmentToFile($fileAttachment,$field,$fileId,$orgId = null){
-        if(!isset($fileAttachment['file'])) {
+        if(!isset($fileAttachment['file']) && isset($fileAttachment['name'])) {
             $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_UUID);
             $fileUuid = $this->getUuidFromId('ox_file', $fileId);
             $fileLocation = $fileAttachment['path'];
@@ -1520,7 +1545,7 @@ class FileService extends AbstractService
                 // FileUtils::deleteFile($fileAttachment['originalName'],dirname($fileLocation)."/");
                 $fileAttachment['file'] = $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
                 $fileAttachment['url'] = $this->config['baseUrl']."/". $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
-                $fileAttachment['path'] = FileUtils::truepath($targetLocation."/". $orgId . '/' . $fileUuid . '/'.$fileAttachment['name']);
+                $fileAttachment['path'] = FileUtils::truepath($targetLocation.$fileAttachment['name']);
                 $this->logger->info("File Moved- " . json_encode($fileAttachment));
                 // $count = $this->attachmentTable->delete($fileAttachment['id'], []);
             }
@@ -1529,7 +1554,7 @@ class FileService extends AbstractService
         return $fileAttachment;
     }
 
-    private function buildSortQuery($sortOptions, &$field)
+    public function buildSortQuery($sortOptions, &$field)
     {
         $sortCount = 0;
         $sortTable = "tblf" . $sortCount;

@@ -156,6 +156,12 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['update_date'] = $data['update_date'] = $update_date;
                 }
                 $data['endoEffectiveDate'] = $data['update_date'];
+                if($data['start_date']){
+                    $data['start_date'] = date_format(date_create($data['start_date']),"Y-m-d");
+                }
+                if($data['end_date']){
+                    $data['end_date'] = date_format(date_create($data['end_date']),"Y-m-d");
+                }
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
                     $data['previous_additionalInsured'] = $data['additionalInsured'];
                     $policy['previous_additionalInsured'] = $data['additionalInsured'];
@@ -355,6 +361,8 @@ public function execute(array $data,Persistence $persistenceService)
                     foreach ($data['groupPL'] as $key => $value) {
                         if(!isset($value['effectiveDate'])){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                        }else if($value['effectiveDate'] == ""){
+                            $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                         }
                         $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
                         $result = $persistenceService->selectQuery($select);
@@ -373,6 +381,8 @@ public function execute(array $data,Persistence $persistenceService)
                     }
                 }
             }
+
+            $data['stateTaxData'] = $this->getStateTaxData($data,$persistenceService);
             if(isset($data['paymentOptions'])){
                 unset($data['paymentOptions']);
             }
@@ -390,4 +400,23 @@ public function execute(array $data,Persistence $persistenceService)
             }
             $data['previous_policy_data'][$length]['update_date'] = $data['update_date'];
     }
+
+    private function getStateTaxData($data,$persistenceService){
+        $year = date('Y');
+        if($data['product'] == 'Dive Boat'){
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE coverage = 'group' and `year` = ".$year;
+        }else if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE `year` = ".$year;
+        }
+        $stateTaxResult = $persistenceService->selectQuery($selectTax);
+
+        $stateTaxData = [];
+        while ($stateTaxResult->next()) {
+            $rate = $stateTaxResult->current();
+            array_push($stateTaxData, $rate);
+        }
+        return $stateTaxData;
+    }
+
+    
 }

@@ -85,7 +85,7 @@ ox_field:
   - id: 5
     name: "policy_document"
     app_id: 99
-    data_type: "document"
+    data_type: "list"
     type: "document"
     template: '{"persistent" : "true"}'
     required: 1
@@ -95,8 +95,8 @@ ox_field:
   - id: 6
     name: "coi_attachment"
     app_id: 99
-    data_type: "file"
-    type: "document"
+    data_type: "list"
+    type: "file"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 6

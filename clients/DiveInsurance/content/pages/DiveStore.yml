@@ -158,7 +158,7 @@ content:
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Medical Expenses</label>
-                                                                    <p class="uppercase">${data.medicalPayment==''true''? data.MedicalExpenseFP.toFixed(2): 0.00}</p>
+                                                                    <p class="uppercase">${data.medicalPayment==''true'' || data.medicalPayment ? data.MedicalExpenseFP.toFixed(2): 0.00}</p>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Non Owned Auto Liability</label>
