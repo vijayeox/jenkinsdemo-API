@@ -70,5 +70,11 @@ class CleanUpDelegate extends AbstractAppDelegate
     	if(isset($data['padi'])){
     		unset($data['padi']);
     	}
+        if(isset($data['paymentVerified'])){
+            $data['paymentVerified'] = "";
+        }
+        if(isset($data['paymentOptions'])){
+            $data['paymentOptions'] = "";
+        }
     }
  }
