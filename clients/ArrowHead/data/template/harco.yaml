@@ -1875,7 +1875,7 @@
    Source Worksheet: Daily virus scans ran on all computers
    pageName: UW Q's
    cell: Check Box 59
-   key: harcoExcelData*checksoftwareprotection
+   key: harcoExcelData*checksoftwareprotectionNone
    returnBoolean: 'Yes|No'
 -
    Source Worksheet: Formal policy in place for disposal of paper documents/electronic
