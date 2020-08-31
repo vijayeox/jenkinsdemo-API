@@ -1876,7 +1876,7 @@
    pageName: UW Q's
    cell: Check Box 59
    key: harcoExcelData*checksoftwareprotectionNone
-   returnBoolean: 'Yes|No'
+   type: Checkbox
 -
    Source Worksheet: Formal policy in place for disposal of paper documents/electronic
       equipment that may contain sensitive personal information?
