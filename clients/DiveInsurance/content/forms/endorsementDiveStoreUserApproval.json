@@ -52,11 +52,21 @@
 			"tableView": false,
 			"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
 		}, {
-			"key": "page5Panel2",
-			"input": false,
 			"title": "Approval",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "page5Panel2",
+			"customConditional": "if(data.userApprovalRequired == \"true\" || data.userApprovalRequired == true){\n  show = true;\n}else{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Approval",
+			"input": false,
 			"components": [{
 				"label": "well",
 				"tableView": false,
@@ -107,9 +117,7 @@
 				"clearOnHide": false,
 				"hideLabel": true
 			}],
-			"type": "panel",
 			"lockKey": true,
-			"label": "Panel",
 			"path": "page5Panel2"
 		}, {
 			"title": "Attachments",
@@ -148,21 +156,22 @@
 		}, {
 			"title": "Payment Information",
 			"theme": "primary",
+			"breadcrumb": "none",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
 			"collapsible": false,
 			"tableView": false,
 			"key": "page7",
 			"properties": {
 				"payment_confirmation_page": "true"
 			},
-			"customConditional": "show = (data.userApproved == \"accepted\" && parseFloat(data.totalAmount) > 0)",
+			"customConditional": "if((data.userApprovalRequired == false || data.userApprovalRequired == \"false\") && parseFloat(data.totalAmount) > 0){\n  show = true;\n}else if(data.userApproved == \"accepted\" && parseFloat(data.totalAmount) > 0){  \n  show = true;\n}else{\n  show = false;\n}",
 			"type": "panel",
 			"label": "Payment Information",
-			"breadcrumb": "none",
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
 			"components": [{
 				"label": "payment",
 				"calculateValue": "value = 'true';",
@@ -456,8 +465,7 @@
 				"lockKey": true
 			}],
 			"input": false,
-			"lockKey": true,
-			"breadcrumbClickable": true
+			"lockKey": true
 		}, {
 			"title": "Payment Approval",
 			"theme": "primary",
@@ -605,8 +613,8 @@
 		"input": true
 	}],
 	"controller": "",
-	"revisions": "",
-	"_vid": 0,
+	"revisions": "current",
+	"_vid": 4,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -616,13 +624,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"RateCard\"}]"
 	},
 	"name": "endorsementDiveStoreUserApproval",
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-08-20T07:00:09.472Z",
+	"modified": "2020-08-28T09:40:04.767Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

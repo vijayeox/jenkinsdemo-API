@@ -4706,6 +4706,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
+							"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -8829,7 +8830,7 @@
 												"actions": [{
 													"name": "Enable Manual Override",
 													"type": "mergeComponentSchema",
-													"schemaDefinition": "\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\n"
+													"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
 												}]
 											}, {
 												"name": "Disable Custom Tax",
@@ -10833,7 +10834,7 @@
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+							"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nconsole.log(data.stateTaxData);\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"validate": {
 								"max": 100
 							},
@@ -12453,7 +12454,7 @@
 						"inputFormat": "plain",
 						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  \nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\n\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n \n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n     value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n   \n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n   \n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n \n  value = 0;\n}\n}else{\n \n  value = 0;\n}\n",
+						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  console.log(\"PROPERTY SELECT\");\nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nconsole.log(\"propReplacementTotal\" + propReplacementTotal);\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nconsole.log(\"totalLimit\" + totalLimit);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  console.log(\"NON CAT 1\");\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n    console.log(\"NON CAT 2\");\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n    console.log(\"NON CAT 3\");\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n    console.log(\"NON CAT 4\");\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  console.log(\"set to 0\");\n  value = 0;\n}\n}else{\n  console.log(\"set to 0 2\");\n  value = 0;\n}\nconsole.log(value);",
 						"key": "ContentsFP",
 						"type": "number",
 						"input": true,
@@ -13209,7 +13210,7 @@
 						"actions": [{
 							"name": "Enable Manual Override",
 							"type": "mergeComponentSchema",
-							"schemaDefinition": "\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\n"
+							"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
 						}]
 					}, {
 						"name": "Disable Custom Tax",
@@ -14204,11 +14205,72 @@
 			"type": "columns",
 			"input": false
 		}, {
-			"key": "page5Panel4",
+			"title": " ",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "userApprovalPanel",
+			"type": "panel",
+			"label": "Panel",
 			"input": false,
+			"components": [{
+				"label": "padiempWell",
+				"tableView": false,
+				"key": "dfh",
+				"type": "well",
+				"input": false,
+				"components": [{
+					"label": "Content",
+					"attrs": [{
+						"value": "",
+						"attr": ""
+					}],
+					"content": "<h5><b>If the proposal require approval from policyholder.Please select the Approval Required checkbox below.</b></h5>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "approvalRequiredPanel",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
+					"label": "Approval Required",
+					"tableView": false,
+					"defaultValue": false,
+					"clearOnHide": false,
+					"customDefaultValue": "value = false;",
+					"key": "userApprovalRequired",
+					"type": "checkbox",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}],
+				"hideOnChildrenHidden": false
+			}]
+		}, {
 			"title": "Quote Information",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "page5Panel4",
+			"conditional": {
+				"show": true,
+				"when": "userApprovalRequired",
+				"eq": "true"
+			},
+			"type": "panel",
+			"label": "Quote Information",
+			"input": false,
 			"components": [{
 				"label": "Columns",
 				"input": false,
@@ -14426,8 +14488,6 @@
 					"input": true
 				}]
 			}],
-			"type": "panel",
-			"label": "Panel",
 			"path": "page5Panel4"
 		}, {
 			"title": "Attachments",
@@ -14647,6 +14707,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-27T12:09:11.336Z",
+	"modified": "2020-08-28T12:50:04.393Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
