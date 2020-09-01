@@ -44,11 +44,6 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
 
   value = {
     checkblanketcoverage: checkblanketcoverage ? checkblanketcoverage : [],
-    checklistcompaniesrepresented: data.listcompaniesrepresented
-      ? data.listcompaniesrepresented.length > 0
-        ? data.listcompaniesrepresented + ""
-        : ""
-      : "",
     checkcompaniesrepresented: checklistCompaniesRepresented + "",
     checktotalLocationSalesRevenue: checktotalLocationSalesRevenue,
     checkfalsePretenseLimit: falsePretenseLimit,
