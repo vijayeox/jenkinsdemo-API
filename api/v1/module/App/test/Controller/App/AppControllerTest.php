@@ -16,12 +16,13 @@ use AppTest\AppTestSetUpTearDownHelper;
 class AppControllerTest extends ControllerTest
 {
     private $setUpTearDownHelper = NULL;
+    private $config = NULL;
 
     function __construct() {
         parent::__construct();
         $this->loadConfig();
-        $config = $this->getApplicationConfig();
-        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($config['db']);
+        $this->config = $this->getApplicationConfig();
+        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($this->config['db']);
     }
 
     public function setUp(): void
@@ -105,7 +106,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['product'], $product);
         $this->assertEquals($content['total'], 1);
     }
-
 
     public function testGetList()
     {
@@ -248,7 +248,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(2, $appData['status']);
         $this->assertEquals('', $appData['start_options']);
         //Check application descriptor is created and is as expected.
-        $srcAppDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->getApplicationConfig(), $data['app']);
+        $srcAppDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data['app']);
         $this->assertTrue(file_exists($srcAppDir));
         $appDescriptorFilePath = $srcAppDir . DIRECTORY_SEPARATOR . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
         $yamlData = Yaml::parse(file_get_contents($appDescriptorFilePath));
@@ -298,7 +298,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(2, $appData['status']);
         $this->assertEquals('', $appData['start_options']);
         //Check application descriptor is created and is as expected.
-        $srcAppDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->getApplicationConfig(), $appData);
+        $srcAppDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
         $this->assertTrue(file_exists($srcAppDir));
         $appDescriptorFilePath = $srcAppDir . DIRECTORY_SEPARATOR . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
         $yamlData = Yaml::parse(file_get_contents($appDescriptorFilePath));
@@ -427,12 +427,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appUuidCount, 1);
         $this->assertEquals($appRegistryResult[0]['count'], 1);
         $this->assertEquals($content['status'], 'success');
-        $config = $this->getApplicationConfig();
-        $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
-        $delegate = $config['DELEGATE_FOLDER'] . $appUuid;
+        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $appUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
-        $apps = $config['APPS_FOLDER'];
+        $apps = $this->config['APPS_FOLDER'];
         if (enableExecUtils != 0) {
             if (file_exists($apps) && is_dir($apps)) {
                 if (is_link($apps . "/$appName")) {
@@ -455,7 +454,6 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithFieldValidation(){
         $this->setUpTearDownHelper->setupAppDescriptor('application12.yml');
-        $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -471,7 +469,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $query = "SELECT uuid from ox_app where name = '" . $appName . "'";
         $appUuid = $this->executeQueryTest($query);
         $appUuidCount = count($appUuid[0]);
@@ -486,7 +484,6 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithFieldValidationErrors(){
         $this->setUpTearDownHelper->setupAppDescriptor('application13.yml');
-        $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -509,19 +506,18 @@ class AppControllerTest extends ControllerTest
 
     private function unlinkFolders($appUuid, $appName, $orgUuid = null)
     {
-        $config = $this->getApplicationConfig();
-        $file = $config['DELEGATE_FOLDER'] . $appUuid;
+        $file = $this->config['DELEGATE_FOLDER'] . $appUuid;
         if (is_link($file)) {
             unlink($file);
         }
         if ($orgUuid) {
-            $file = $config['TEMPLATE_FOLDER'] . $orgUuid;
+            $file = $this->config['TEMPLATE_FOLDER'] . $orgUuid;
             if (is_link($file)) {
                 unlink($file);
             }
         }
         $appName = str_replace(' ', '', $appName);
-        $app = $config['APPS_FOLDER'] . $appName;
+        $app = $this->config['APPS_FOLDER'] . $appName;
         if (is_link($app)) {
             unlink($app);
         }
@@ -529,11 +525,11 @@ class AppControllerTest extends ControllerTest
             'name' => $appName,
             'uuid' => $appUuid
         ];
-        $appSrcDir = AppArtifactNamingStrategy::getSourceAppDirectory($config, $appData);
+        $appSrcDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
         if (file_exists($appSrcDir)) {
             FileUtils::rmDir($appSrcDir);
         }
-        $appDestDir = AppArtifactNamingStrategy::getDeployAppDirectory($config, $appData);
+        $appDestDir = AppArtifactNamingStrategy::getDeployAppDirectory($this->config, $appData);
         if (file_exists($appDestDir)) {
             FileUtils::rmDir($appDestDir);
         }
@@ -542,7 +538,6 @@ class AppControllerTest extends ControllerTest
     public function testDeployAppWithoutOptionalFieldsInYml()
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application5.yml');
-        $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -559,9 +554,9 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($delegate), true);
-        $apps = $config['APPS_FOLDER'];
+        $apps = $this->config['APPS_FOLDER'];
         if (file_exists($apps) && is_dir($apps)) {
             if (is_link($apps . "/$appName")) {
                 $dist = "/dist/";
@@ -608,7 +603,6 @@ class AppControllerTest extends ControllerTest
     public function testDeployAppWithWrongNameInDatabase()
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application9.yml');
-        $config = $this->getApplicationConfig();
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -628,8 +622,8 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
-        $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
-        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         if (!isset($yaml['org']['uuid'])) {
@@ -643,7 +637,6 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase()
     {
-        $config = $this->getApplicationConfig();
         $this->setUpTearDownHelper->setupAppDescriptor('application10.yml');
         $this->initAuthToken($this->adminUser);
         if (enableCamel == 0) {
@@ -669,8 +662,8 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
-        $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
-        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
@@ -729,7 +722,6 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppOrgDataWithoutUuidAndContactAndPreferencesInYml()
     {
-        $config = $this->getApplicationConfig();
         $this->setUpTearDownHelper->setupAppDescriptor('application4.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
@@ -753,8 +745,8 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT count(name),status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
         $orgid = $this->executeQueryTest($query);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
-        $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
-        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
@@ -765,7 +757,6 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppAddExtraPrivilegesInDatabaseFromYml()
     {
-        $config = $this->getApplicationConfig();
         $this->setUpTearDownHelper->setupAppDescriptor('application6.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
@@ -793,8 +784,8 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $this->assertEquals($privilegearray, $DBprivilege);
         $this->assertEquals($content['status'], 'success');
-        $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
-        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
@@ -805,7 +796,6 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml()
     {
-        $config = $this->getApplicationConfig();
         $this->setUpTearDownHelper->setupAppDescriptor('application6.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
@@ -833,8 +823,8 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
         $this->assertNotEquals($list, 'MANAGE');
         $this->assertEquals($content['status'], 'success');
-        $template = $config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
-        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
@@ -877,9 +867,8 @@ class AppControllerTest extends ControllerTest
     {
         $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         $appName = 'SampleApp';
-        $config = $this->getApplicationConfig();
-        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
-        $appDestDir = $config['EOX_APP_DEPLOY_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
+        $appDestDir = $this->config['EOX_APP_DEPLOY_DIR'] . "${appName}_${sampleAppUuidFromWorkflowYml}";
         try {
             if (file_exists($appSourceDir)) {
                 FileUtils::rmDir($appSourceDir);
@@ -928,8 +917,7 @@ class AppControllerTest extends ControllerTest
     public function testDeployApplicationWithoutSourceAppDir() {
         $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         $appName = 'SampleApp';
-        $config = $this->getApplicationConfig();
-        $appSourceDir = $config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}";
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}";
         //Ensure source directory does not exist.
         if (file_exists($appSourceDir)) {
             FileUtils::rmDir($appSourceDir);
@@ -1193,7 +1181,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-
     public function testGetListOfAssignmentsWithoutFiltersValues()
     {
         $this->initAuthToken($this->adminUser);
@@ -1224,3 +1211,4 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 }
+

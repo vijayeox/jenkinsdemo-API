@@ -120,6 +120,13 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
                     return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\AppArtifactService::class => function ($container) {
+                    return new Service\AppArtifactService(
+                        $container->get('config'), 
+                        $container->get(AdapterInterface::class), 
+                        $container->get(Model\AppTable::class)
+                    );
+                },
             ],
         ];
     }
@@ -135,6 +142,11 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class),
                         $container->get(WorkflowService::class),
                         $container->get(\Oxzion\AppDelegate\AppDelegateService::class)
+                    );
+                },
+                Controller\AppArtifactController::class => function ($container) {
+                    return new Controller\AppArtifactController(
+                        $container->get(Service\AppArtifactService::class)
                     );
                 },
                 Controller\AppRegisterController::class => function ($container) {

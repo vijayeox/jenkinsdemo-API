@@ -36,7 +36,6 @@ class AppService extends AbstractService
     const EOX_RESERVED_APP_NAME = 'SampleApp';
     const APPLICATION_DESCRIPTOR_FILE_NAME = 'application.yml';
 
-    protected $config;
     private $table;
     protected $workflowService;
     protected $fieldService;

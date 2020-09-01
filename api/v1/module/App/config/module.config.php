@@ -4,7 +4,6 @@ namespace App;
 
 use Oxzion\Utils\UuidUtil;
 use Zend\Router\Http\Segment;
-use Zend\Router\Http\Regex;
 
 return [
     'router' => [
@@ -56,27 +55,63 @@ return [
                     ],
                 ],
             ],
-            'appinstall' => [
+            'addArtifact' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/appinstall',
+                    'route' => '/app/:appId/artifact/:artifactType/add',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
+                        'type' => 'form|workflow',
                     ],
                     'defaults' => [
-                        'controller' => Controller\AppController::class,
-                        'action' => 'installAppForOrg',
-                        'method' => 'post',
-                        // 'access' => [
-                        //     // SET ACCESS CONTROL
-                        //     'put'=> 'MANAGE_APP_WRITE',
-                        //     'post'=> 'MANAGE_APP_WRITE',
-                        //     'delete'=> 'MANAGE_APP_DELETE',
-                        //     'get'=> 'VIEW_APP_READ',
-                        // ],
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'POST',
+                        'action' => 'addArtifact',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
                     ],
                 ],
             ],
+            'deleteArtifact' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/artifact/:artifactType/delete/:artifactName',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'type' => 'form|workflow',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'DELETE',
+                        'action' => 'deleteArtifact',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            // 'appinstall' => [
+            //     'type' => Segment::class,
+            //     'options' => [
+            //         'route' => '/app/:appId/appinstall',
+            //         'constraints' => [
+            //             'appId' => UuidUtil::UUID_PATTERN,
+            //         ],
+            //         'defaults' => [
+            //             'controller' => Controller\AppController::class,
+            //             'action' => 'installAppForOrg',
+            //             'method' => 'post',
+            //             // 'access' => [
+            //             //     // SET ACCESS CONTROL
+            //             //     'put'=> 'MANAGE_APP_WRITE',
+            //             //     'post'=> 'MANAGE_APP_WRITE',
+            //             //     'delete'=> 'MANAGE_APP_DELETE',
+            //             //     'get'=> 'VIEW_APP_READ',
+            //             // ],
+            //         ],
+            //     ],
+            // ],
             'applist' => [
                 'type' => Segment::class,
                 'options' => [

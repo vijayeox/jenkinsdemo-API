@@ -365,9 +365,10 @@ class AppController extends AbstractApiController
 
     public function delegateCommandAction()
     {
+        $routeParams = $this->params()->fromRoute();
+        $appId = $routeParams['appId'];
+        $delegate = $routeParams['delegate'];
         $data = $this->extractPostData();
-        $appId = $this->params()->fromRoute()['appId'];
-        $delegate = $this->params()->fromRoute()['delegate'];
         $data = array_merge($data, $this->params()->fromQuery());
         $this->log->info(__CLASS__ . "-> Execute Delegate Start - " . print_r($data, true));
         try {
