@@ -552,7 +552,7 @@
    Source Worksheet: Is there a formal accident investigation program in place?
    pageName: Garage Supplemental
    returnBoolean: "Yes|No"
-   cell: C72
+   cell: C71
 -
    key: disciplinaryProgram
    Source Worksheet: Is there a disciplinary program for at fault auto accidents?
@@ -1266,19 +1266,16 @@
    type: DataGrid
 -
    key: franchisedAutoDealer*checkblanketcoverage
-   method: simpleDatagrid
    pageName: Property
    cell: AK40
    type: DataGrid
 -
    key: franchisedAutoDealer*checkblanketcoverage
-   method: simpleDatagrid
    pageName: Property
    cell: AO40
    type: DataGrid
 -
    key: franchisedAutoDealer*checkblanketcoverage
-   method: simpleDatagrid
    pageName: Property
    cell: AT40
    type: DataGrid
