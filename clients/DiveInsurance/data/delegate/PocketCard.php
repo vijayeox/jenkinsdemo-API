@@ -187,7 +187,7 @@ class PocketCard extends PolicyDocument
             $this->logger->info("Execute generate document ---------");
             $this->documentBuilder->generateDocument($template, $newData, $docDest);
         }
-        if(isset($data['jobStatus']) && ($data['jobStatus']=='In Force')){
+        if(isset($data['jobStatus']) && ($data['jobStatus']=='In Progress')){
             $data['jobStatus'] = 'Completed';
         }        
         $this->logger->info("The data returned from pocket card is : ". print_r($data, true));
