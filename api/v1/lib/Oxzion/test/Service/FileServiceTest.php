@@ -319,9 +319,11 @@ class FileServiceTest extends AbstractServiceTest
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         $this->assertEquals("Completed",$result['data'][0]['status']);
         $this->assertEquals("Completed",$result['data'][1]['status']);
-        $this->assertEquals("Completed",$result['data'][2]['status']);
+        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['status']);
+        $this->assertEquals($dataset['ox_file'][2]['uuid'],$result['data'][2]['uuid']);
+        $this->assertEquals($dataset['ox_workflow_instance'][2]['process_instance_id'],$result['data'][2]['workflowInstanceId']);
         $this->assertEquals("Completed",$result['data'][3]['status']);
-        $this->assertEquals(7,$result['total']);
+        $this->assertEquals(8,$result['total']);
     }
 
     public function testGetFileListWithWorkflowStatusCheckPositiveForPolicyHolder() {
@@ -338,7 +340,10 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals('Completed',$result['data'][0]['status']);
         $this->assertEquals($dataset['ox_file'][1]['uuid'],$result['data'][1]['uuid']);
         $this->assertEquals('Completed',$result['data'][1]['status']);
-        $this->assertEquals(2,$result['total']);
+        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['status']);
+        $this->assertEquals($dataset['ox_file'][2]['uuid'],$result['data'][2]['uuid']);
+        $this->assertEquals($dataset['ox_workflow_instance'][2]['process_instance_id'],$result['data'][2]['workflowInstanceId']);
+        $this->assertEquals(3,$result['total']);
     }
 
     public function testGetFileListWithWorkflowStatusCheckNegative() {

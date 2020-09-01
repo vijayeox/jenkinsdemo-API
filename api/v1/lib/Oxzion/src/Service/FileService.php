@@ -1152,7 +1152,10 @@ class FileService extends AbstractService
         if (isset($params['workflowStatus'])) {
             $fromQuery .= " left join (select max(id) as id, workflow_instance_id from ox_activity_instance  group by workflow_instance_id) lai on lai.workflow_instance_id = wi.id
                             left join ox_activity_instance ai on ai.id = lai.id ";
-            $whereQuery .= " (ai.status = '" . $params['workflowStatus'] . "' OR (ai.status is null AND wi.status = '".$params['workflowStatus']."' )) AND ";
+            if($whereQuery != ""){
+                $whereQuery .= " AND ";
+            }
+            $whereQuery .= " (ai.status = '" . $params['workflowStatus'] . "' OR (ai.status is null AND wi.status = '".$params['workflowStatus']."' )) ";
         }
         $sort = "";
         $field = "";
