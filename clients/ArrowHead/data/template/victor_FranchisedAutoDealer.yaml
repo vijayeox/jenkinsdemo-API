@@ -1025,7 +1025,7 @@
       office: Occupied
       serviceRepair: Occupied
       usedCarSales: Occupied
-      vacantLand: Vacant
+      vacantLand: ""
       vehicleStorageParkingGarage: Occupied
       partsWarehouseStorage: Occupied
       vacantBuilding: Vacant
