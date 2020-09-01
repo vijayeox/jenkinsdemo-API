@@ -7,10 +7,10 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   data.locationSchedule.map(locationItem => {
     if (locationItem.buildingDetails.length > 1) {
       locationItem.buildingDetails.map(item => {
-        checkblanketcoverage.push("Premise Only");
+        checkblanketcoverage.push([result: "Premise Only"]);
       });
     } else if (locationItem.buildingDetails.length == 1) {
-      checkblanketcoverage.push("No");
+      checkblanketcoverage.push([result: "No"]);
     }
   });
 
