@@ -778,7 +778,6 @@ class FileService extends AbstractService
                         $attachmentsArray = array();
                     }
                     if(is_array($attachmentsArray) && !empty($attachmentsArray)){
-                        $finalAttached = array();
                         foreach ($attachmentsArray as $attachment) {
                             $attachment = is_string($attachment) ? json_decode($attachment,true) : $attachment;
                             if(!empty($attachment)){

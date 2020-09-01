@@ -10,14 +10,12 @@ require_once __DIR__."/PolicyDocument.php";
 
 class PocketCard extends PolicyDocument
 {
-	use FileTrait;
+    use FileTrait;
     protected $type;
     protected $template;
 
     public function __construct(){
         parent::__construct();
-        $this->type = 'cancel';
-        $this->template = array('template' => 'PocketCard');
     }
 
     public function execute(array $data, Persistence $persistenceService) 
@@ -29,6 +27,12 @@ class PocketCard extends PolicyDocument
         if(isset($data['storeNumber']) && !empty($data['storeNumber'])){
             $data['padiNumber'] = $data['storeNumber'];
         }
+        $template = "PocketCard";
+        if($data['templateType'] == "blackAndWhite") {
+            $template = "BatchPocketCard";
+        }
+        $this->logger->info("Template is: ".print_r($template, true));
+         
         if(isset($data['padiNumber'])){
             $this->logger->info("generating individual pocket card");
             $params = array();
@@ -106,7 +110,6 @@ class PocketCard extends PolicyDocument
                 $this->logger->info("pocket card - the total number of files fetched for DB/ DS: ".print_r($files2['total'], true));
                 $result = $this->newDataArray($files2);
                 $this->logger->info("pocket card - the file details of get file after data clean up: ".print_r($result, true));
-
                 if((!isset($files)) || empty($files)){
                     $files['total'] = 0;
                     $files['data'] = array();
@@ -172,12 +175,10 @@ class PocketCard extends PolicyDocument
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
         $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
-        $this->logger->info("The destination folder is : ".print_r($dest, true));        
-        $template = $this->template['template'];
-        $this->logger->info("Template is: ".print_r($template, true));
+        $this->logger->info("The destination folder is : ".print_r($dest, true));     
         $options = array();        
-        $docDest = $dest['absolutePath'].$template.'.pdf';
-        $data['documents']['PocketCard'] = $dest['relativePath'].$template.'.pdf';
+        $docDest = $dest['absolutePath'].'PocketCard.pdf';
+        $data['documents']['PocketCard'] = $dest['relativePath'].'PocketCard.pdf';
         $this->logger->info("template path is: ".print_r($docDest, true));
         $newData = array('data' => json_encode($newData));
         $this->logger->info("The file data after encode is : ");
@@ -197,10 +198,10 @@ class PocketCard extends PolicyDocument
         $this->logger->info('pocket card - padi data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
-            if(isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]" &&  $data['groupProfessionalLiabilitySelect'] == 'yes'){
+            if(isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]" &&  $value['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->logger->info('group PL members need to be formatted to a new array');
                 if(isset($value['groupPL'])){
-                    $groupData = json_decode($value['groupPL'], true);
+                    $groupData = is_string($value['groupPL']) ? json_decode($value['groupPL'], true) : $value['groupPL'];
                 } else {
                     $groupData = array();
                 }
@@ -214,7 +215,8 @@ class PocketCard extends PolicyDocument
                     $response[$i]['start_date'] = $value2['start_date'];
                     $response[$i]['product'] = $value['product'];
                     $response[$i]['email'] = $value['email'];
-                    $response[$i]['certificate_no'] = $value['certificate_no'];
+                    $group_certificate_no = ltrim($value['group_certificate_no'],'S');
+                    $response[$i]['certificate_no'] = $group_certificate_no;
                     $response[$i]['end_date'] = $value['end_date'];
                     $response[$i]['address1'] = $value['address1'];
                     $response[$i]['address2'] = isset($value['address2']) ? $value['address2'] : '';
@@ -229,13 +231,12 @@ class PocketCard extends PolicyDocument
                     $i += 1;
                 }                
             }
-            else{
-                $responseData['total'] = -1;
-                $responseData['data'] = '';
-                return $responseData;
-            }
+            $responseData['total'] = $i;
         }
-        $responseData['total'] = $i;
+        if(empty($responseData['data'])){
+            $responseData['total'] = -1;
+            $responseData['data'] = '';
+        }
         $this->logger->info('the response data is : '.print_r($responseData, true));
         return $responseData;
     }
