@@ -548,6 +548,18 @@
    returnBoolean: "Yes|No"
    cell: C68
 -
+   key: accidentInvestigation
+   Source Worksheet: Is there a formal accident investigation program in place?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C72
+-
+   key: disciplinaryProgram
+   Source Worksheet: Is there a disciplinary program for at fault auto accidents?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C77
+-
    key: doesTheInsuredSellAnyOfTheFollowingProducts_creditLifeOrAH
    method: pulloutChild
    Source Worksheet: Credit Life or A&H
@@ -623,11 +635,11 @@
       '2500' : '2500'
       '5000' : '5000'
       '10000' : '10000'
-      '10005000' : '1000'
-      '250012500' : '2500'
-      '500025000' : '5000'
-      '1000025000' : '10000'
-      '1000050000' : '10000'
+      '10005000' : '$1,000 / $5,000'
+      '250012500' : '$2,500 / $10,000'
+      '500025000' : '$5,000 / $10,000'
+      '1000025000' : '$10,000 / $25,000'
+      '1000050000' : '$10,000 / $25,000'
 -
    key: franchisedAutoDealer*checkrepairpercentlabor
    pageName: Garage Keepers (printable)
@@ -993,7 +1005,7 @@
       vacantLand: Vacant Land
       vehicleStorageParkingGarage: Parking Lot - No Structure
       partsWarehouseStorage: Warehouse
-      vacantBuilding: Lease & Rental
+      vacantBuilding: Vacant Building
       deliveryPrep: Auto Parts & Supplies
 -
    key: genericData*locationScheduleGridData_occupancyType
@@ -1250,6 +1262,24 @@
    method: simpleDatagrid
    pageName: Property
    cell: AS40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkblanketcoverage
+   method: simpleDatagrid
+   pageName: Property
+   cell: AK40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkblanketcoverage
+   method: simpleDatagrid
+   pageName: Property
+   cell: AO40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkblanketcoverage
+   method: simpleDatagrid
+   pageName: Property
+   cell: AT40
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_biwaitingperiod

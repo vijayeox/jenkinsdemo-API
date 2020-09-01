@@ -2,6 +2,17 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   var falsePretenseLimit = 0;
   var checktotalLocationSalesRevenue = 0;
   var checklistCompaniesRepresented = [];
+  var checkblanketcoverage = [];
+
+  data.locationSchedule.map(locationItem => {
+    if (locationItem.buildingDetails.length > 1) {
+      locationItem.buildingDetails.map(item => {
+        checkblanketcoverage.push("Premise Only");
+      });
+    } else if (locationItem.buildingDetails.length == 1) {
+      checkblanketcoverage.push("No");
+    }
+  });
 
   checklistCompaniesRepresented = data.companiesRepresentedList.map(
     item => item.listcompaniesrepresented
@@ -32,6 +43,12 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   }
 
   value = {
+    checkblanketcoverage: checkblanketcoverage ? checkblanketcoverage : [],
+    checklistcompaniesrepresented: data.listcompaniesrepresented
+      ? data.listcompaniesrepresented.length > 0
+        ? data.listcompaniesrepresented + ""
+        : ""
+      : "",
     checkcompaniesrepresented: checklistCompaniesRepresented + "",
     checktotalLocationSalesRevenue: checktotalLocationSalesRevenue,
     checkfalsePretenseLimit: falsePretenseLimit,
@@ -211,13 +228,13 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
           result:
             (item.utilityservices > 0
               ? "Utility Services Time Element: " + item.utilityservices
-              : 0) +
+              : '') +
             (item.utilityservices > 0 && item.ordinancelawcoverage > 0
               ? ", "
               : "") +
             (item.ordinancelawcoverage > 0
               ? "Ordinance Law: " + item.ordinancelawcoverage
-              : 0)
+              : '')
         };
       }
     ),
