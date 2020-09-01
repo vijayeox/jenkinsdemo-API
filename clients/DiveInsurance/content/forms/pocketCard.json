@@ -386,7 +386,7 @@
 		}]
 	}, {
 		"label": "Job Status",
-		"customDefaultValue": "value = 'In Force';",
+		"customDefaultValue": "value = 'In Progress';",
 		"key": "jobStatus",
 		"type": "hidden",
 		"input": true,
@@ -404,7 +404,7 @@
 	}],
 	"controller": "",
 	"revisions": "original",
-	"_vid": 51,
+	"_vid": 52,
 	"title": "Pocket Card",
 	"display": "form",
 	"access": [{
@@ -420,6 +420,6 @@
 	"path": "pocketcard",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-22T13:47:45.298Z",
-	"modified": "2020-09-01T07:18:53.896Z",
+	"modified": "2020-09-01T08:23:50.976Z",
 	"machineName": "testdivehub:pocketCard"
 }
