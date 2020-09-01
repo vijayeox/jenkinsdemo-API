@@ -9355,7 +9355,7 @@
 								"requireDecimal": false,
 								"inputFormat": "plain",
 								"clearOnHide": false,
-								"calculateValue": "if(data['groupExcessLiabilitySelect']!=data['previous_groupExcessLiabilitySelect']){\nif(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"groupCoverage\"]){\n  value = (parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"groupCoverage\"]||0.00)/100).toFixed(0)\n} else {\n  value = 0;\n}\n}else {\n  value =0;\n}",
+								"calculateValue": "if(data['groupExcessLiabilitySelect']!=data['previous_groupExcessLiabilitySelect']){\nif(data['groupExcessLiabilitySelect'] && data[data[\"groupExcessLiabilitySelect\"]] && data[\"endogroupCoverage\"]){\n  value = (parseFloat(data[data[\"groupExcessLiabilitySelect\"]]||0.00)*(data[\"endogroupCoverage\"]||0.00)/100).toFixed(0)\n} else {\n  value = 0;\n}\n}else {\n  value =0;\n}",
 								"key": "endogroupExcessLiability",
 								"customConditional": "show = false;\nif (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}",
 								"type": "number",
@@ -12351,7 +12351,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data[\"medicalPayment\"] != data['previous_medicalPayment']){\n  if(data['previous_medicalPayment'] == true || data['previous_medicalPayment']==true){\n    value= data[\"medicalExpense\"]\n  } else {\n    value = 0;\n  }\n} else{\n  value = 0;\n}",
+						"calculateValue": "if(data[\"medicalPayment\"] != data['previous_medicalPayment']){\n  if(data['medicalPayment'] == true || data['medicalPayment']==true){\n    value= data[\"medicalExpense\"]\n  } else {\n    value = 0;\n  }\n} else{\n  value = 0;\n}",
 						"key": "endoMedicalExpenseFp",
 						"conditional": {
 							"show": true,
@@ -14812,6 +14812,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-31T14:46:54.003Z",
+	"modified": "2020-08-31T18:18:00.497Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
