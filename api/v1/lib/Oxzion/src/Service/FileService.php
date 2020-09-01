@@ -264,7 +264,6 @@ class FileService extends AbstractService
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
-            $this->updateFileData($fileId, $fields);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -381,6 +380,9 @@ class FileService extends AbstractService
             }
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
+            $select = "SELECT * from ox_file where id = '".$id."'";
+            $result = $this->executeQuerywithParams($select)->toArray();
+            $this->logger->info("FILE DATA CHECK AFTER DATA --".print_r($result,true));
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (($latestcheck == 1) && isset($id)) {
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
@@ -596,7 +598,7 @@ class FileService extends AbstractService
                     $childFieldsPresent = false;
                     if($field['index'] == 1){
                         unset($indexedField['sequence']);
-    					unset($indexedField['childFields']);
+                        unset($indexedField['childFields']);
                     }else{
                         $indexedField['field_value']=is_array($fieldvalue) ? json_encode($fieldvalue):$fieldvalue;
                         unset($indexedField['field_value_text']);
@@ -857,18 +859,20 @@ class FileService extends AbstractService
             }
             $fldValue = $fieldvalue;
             $fieldData['childFields'] = $this->getChildFieldsData($field,$fldValue,$field['child_fields'],$entityId,$fileId,$rowNumber, $allFields);
-            foreach ($fldValue as $i => $value) {
-                foreach ($value as $key => $fVal) {
-                    $temp = !is_array($fVal) ? json_decode($fVal) : $fVal;
-                    $fieldvalue[$i][$key] = $temp ? $temp : $fVal;
+            if(is_array($fldValue)){
+                foreach ($fldValue as $i => $value) {
+                    foreach ($value as $key => $fVal) {
+                        $temp = !is_array($fVal) ? json_decode($fVal) : $fVal;
+                        $fieldvalue[$i][$key] = $temp ? $temp : $fVal;
+                    }
                 }
-            }
-            
-            if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
-                foreach ($fieldData['childFields']['childFields'] as $childfield) {
-                    array_push($fieldData['childFields'],$childfield);
+                
+                if(isset($fieldData['childFields']['childFields']) && count($fieldData['childFields']['childFields'])>0){
+                    foreach ($fieldData['childFields']['childFields'] as $childfield) {
+                        array_push($fieldData['childFields'],$childfield);
+                    }
+                    unset($fieldData['childFields']['childFields']);
                 }
-                unset($fieldData['childFields']['childFields']);
             }
         } else {
             $fieldData['childFields'] = array();
@@ -1146,7 +1150,9 @@ class FileService extends AbstractService
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
         $fromQuery .= " left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
         if (isset($params['workflowStatus'])) {
-            $whereQuery .= ($whereQuery == "" ? "" : " AND ") . " wi.status = '" . $params['workflowStatus'] . "'";
+            $fromQuery .= " left join (select max(id) as id, workflow_instance_id from ox_activity_instance  group by workflow_instance_id) lai on lai.workflow_instance_id = wi.id
+                            left join ox_activity_instance ai on ai.id = lai.id ";
+            $whereQuery .= " (ai.status = '" . $params['workflowStatus'] . "' OR (ai.status is null AND wi.status = '".$params['workflowStatus']."' )) AND ";
         }
         $sort = "";
         $field = "";
@@ -1611,13 +1617,13 @@ class FileService extends AbstractService
             if (count($fileRecord) > 0) {
                $fileData = json_decode($fileRecord[0]['data'],true);
                $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
-           	   $this->updateFile($fileData,$params['fileId']);
+               $this->updateFile($fileData,$params['fileId']);
             }
         }
         return $data;
     }
     public function appendAttachmentToFile($fileAttachment,$field,$fileId,$orgId = null){
-        if(!isset($fileAttachment['file'])) {
+        if(!isset($fileAttachment['file']) && isset($fileAttachment['name'])) {
             $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_UUID);
             $fileUuid = $this->getUuidFromId('ox_file', $fileId);
             $fileLocation = $fileAttachment['path'];

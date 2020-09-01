@@ -182,6 +182,8 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
                 $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
                 $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
+                $policy['previous_nonDivingPoolAmount'] = $data['nonDivingPoolAmount'];
+                $policy['previous_CoverageFP'] = $data['CoverageFP'];
                 if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
                     $policy['previous_combinedSingleLimitDS'] = 2000000;
                     $policy['previous_annualAggregateDS'] = 3000000;
@@ -208,18 +210,22 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
+                $policy['previous_ExcessLiabilityFP'] = $data['ExcessLiabilityFP'];
                 $policy['previous_propertyCoveragesTotalPL'] = isset($data['propertyCoveragesTotalPL'])?$data['propertyCoveragesTotalPL']:0;
                 $policy['previous_liabilityPropertyCoveragesTotalPL'] = $data['liabilityPropertyCoveragesTotalPL'];
                 $policy['previous_liabilityProRataPremium'] = isset($data['liabilityProRataPremium'])?$data['liabilityProRataPremium']:0;
                 $policy['previous_propertyProRataPremium'] = isset($data['propertyProRataPremium'])?$data['propertyProRataPremium']:0;
                 $policy['previous_ProRataPremium'] = $data['ProRataPremium'];
                 $policy['previous_PropTax'] = $data['PropTax'];
+                $policy['previous_propertyCoverageSelect'] = $data['propertyCoverageSelect'];
                 $policy['previous_LiaTax'] = $data['LiaTax'];
                 $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
                 $policy['previous_AddILocTax'] = $data['AddILocTax'];
+                $policy['previous_propertyDeductiblesPercentage'] = $data['propertyDeductiblesPercentage'];
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
+                $policy['previous_poolLiability'] = $data['poolLiability'];
                 $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;

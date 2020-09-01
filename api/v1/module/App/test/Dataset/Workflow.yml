@@ -379,7 +379,7 @@ ox_activity_instance:
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-21e8105c0722"
     workflow_instance_id: 6
-    status: "In Progress"
+    status: "Completed"
     org_id: 1
 ox_group:
   - id: 1

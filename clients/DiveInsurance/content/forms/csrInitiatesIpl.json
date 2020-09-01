@@ -4,11 +4,21 @@
 	"tags": [],
 	"owner": "5e147f8c6225ae0c3b3440f9",
 	"components": [{
-		"key": "panel",
-		"input": false,
 		"title": "Personal Information",
 		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": false,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
 		"tableView": false,
+		"key": "panel",
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\" || !data.businessPadiVerified) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
+		"type": "panel",
+		"label": "Personal Information",
+		"input": false,
 		"components": [{
 			"label": "policyStartYear",
 			"protected": true,
@@ -1279,18 +1289,8 @@
 			"lockKey": true,
 			"path": "panelPanel4"
 		}],
-		"type": "panel",
 		"lockKey": true,
-		"source": "5d4ee6df800c612c49e802d3",
-		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
-		"label": "Personal Information",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": false,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false
+		"source": "5d4ee6df800c612c49e802d3"
 	}, {
 		"title": "Coverage",
 		"theme": "primary",
@@ -1370,7 +1370,7 @@
 							"showMeridian": false
 						},
 						"clearOnHide": false,
-						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n      if((data.start_date && data.start_date != \"\") ){\n\t    value = data.start_date;\n      }\n} else {\n  if (value == \"\" && (data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-15')))) {\n\n\t\t\tvalue = moment('2020-06-30');\n\n\t}\n\n  if(value == \"\"){\n\tvalue = moment();\n  }\n\n}",
+						"calculateValue": "if(value == \"\"){\n\tvalue = moment();\n}",
 						"allowCalculateOverride": true,
 						"validate": {
 							"required": true,
@@ -2584,7 +2584,7 @@
 									"requireDecimal": false,
 									"inputFormat": "plain",
 									"redrawOn": "data",
-									"calculateValue": "console.log(\"CSR GRAND TOTAL\" + data.csrGrandTotal);\nconsole.log(\"USER GRAND TOTAL\" + data.userGrandTotal);\nvar total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n \n    if(parseFloat(total) != 0){\n      value = total;\n    }else{\n      value = 0;\n    } console.log(\"TOTAL\" + total);\n}",
+									"calculateValue": "console.log(\"CSR GRAND TOTAL\" + data.csrGrandTotal);\nconsole.log(\"USER GRAND TOTAL\" + data.userGrandTotal);\nvar total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n  console.log(\"TOTAL\" + total);\n    if(parseFloat(total) != 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -4216,6 +4216,7 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
+						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
 						"validate": {
 							"multiple": true
 						},
@@ -4547,7 +4548,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0] && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == undefined || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == null || !data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -4983,7 +4984,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 595,
+	"_vid": 600,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5004,6 +5005,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-08-27T09:13:06.675Z",
+	"modified": "2020-08-31T12:31:28.207Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -101,6 +101,9 @@ class EmailService extends AbstractService
         foreach ($result->toArray() as $account) {
             $account['token'] = json_decode($account['token']);
             $account['password'] = TwoWayEncryption::decrypt($account['password']);
+            if($account['password'] == null){
+                throw new ServiceException("Password Decryption failed", 'password.decrypt.fail');   
+            }
             $accounts[] = $account;
         }
         return $accounts;
@@ -122,6 +125,9 @@ class EmailService extends AbstractService
         if ($pw) {
             foreach ($resultSet->toArray() as $account) {
                 $account['password'] = TwoWayEncryption::decrypt($account['password']);
+                if($account['password'] == null){
+                    throw new ServiceException("Password Decryption failed", 'password.decrypt.fail');   
+                }
                 $accounts[] = $account;
             }
         } else {
@@ -147,6 +153,9 @@ class EmailService extends AbstractService
         $accounts = array();
         foreach ($resultSet->toArray() as $account) {
             $account['password'] = TwoWayEncryption::decrypt($account['password']);
+            if($account['password'] == null){
+                throw new ServiceException("Password Decryption failed", 'password.decrypt.fail');   
+            }
             $accounts[] = $account;
         }
         return $accounts;

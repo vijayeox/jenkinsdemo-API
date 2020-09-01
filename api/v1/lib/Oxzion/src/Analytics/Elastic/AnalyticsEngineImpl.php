@@ -251,9 +251,6 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		return $finalresult;
 	}
 
-	public function getMetaData($parameters) {
-
-	}
 
 }
 ?>

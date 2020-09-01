@@ -118,8 +118,8 @@ boolean result7 = false
 boolean result8 = false
 
 if(personalInfo){
-    if(country != "United States of America"){
-       result0=true 
+    if (country != "United States of America" &amp;&amp; country != "Mexico" &amp;&amp; country != "The Bahamas" &amp;&amp; country != "Turks and Caicos" &amp;&amp; country != "British Virgin Islands" &amp;&amp; country != "Cayman Islands" &amp;&amp; country != "Jamaica" &amp;&amp; country != "Aruba" &amp;&amp; country != "Curacao" &amp;&amp; country != "Grenada" &amp;&amp; country != "Barbados" &amp;&amp; country != "St Lucia" &amp;&amp; country != "Trinidad and Tobago" &amp;&amp; country != "Belize" &amp;&amp; country != "Costa Rica" &amp;&amp; country != "Dominican Republic" &amp;&amp; country != "Dominica" &amp;&amp; country != "Martinique" &amp;&amp; country != "Anguilla" &amp;&amp; country != "St Kitts and Nevis") {
+	    result8 = true;
     }
 }
 if(cylinder){
@@ -133,7 +133,7 @@ if (excessLiability) {
   }
 }
 if(coverage || additionalIn){
-if (additionalInsured == 'addAdditionalInsureds') {
+if (additionalInsured) {
  additionalInsured.each {
   if (it.hasProperty('businessRelation') &amp;&amp; it.businessRelation == 'other') {
     result1 = true
@@ -149,15 +149,10 @@ if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternat
 }
 
 
-if(paymentOptions){
+if(coverage &amp;&amp; paymentOptions){
   if(paymentOptions == "creditCard"){
     result6 = false
   }
-}
-
-
-if(country != "United States of America" &amp;&amp; country != "Mexico" &amp;&amp; country != "The Bahamas" &amp;&amp; country != "Turks and Caicos" &amp;&amp; country != "British Virgin Islands" &amp;&amp; country != "Cayman Islands" &amp;&amp; country != "Jamaica" &amp;&amp; country != "Aruba" &amp;&amp; country != "Curacao" &amp;&amp; country != "Grenada" &amp;&amp; country != "Barbados" &amp;&amp; country != "St Lucia" &amp;&amp; country != "Trinidad and Tobago" &amp;&amp; country != "Belize" &amp;&amp; country != "Costa Rica" &amp;&amp; country != "Dominican Republic" &amp;&amp; country != "Dominica" &amp;&amp; country != "Martinique" &amp;&amp; country != "Anguilla" &amp;&amp; country != "St Kitts and Nevis"){
-	result8 = true;
 }
 
 if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || result8 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
