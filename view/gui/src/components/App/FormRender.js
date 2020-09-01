@@ -729,8 +729,22 @@ class FormRender extends React.Component {
               if (submitErrors.length > 0) {
                 next([]);
               } else {
-                that.state.currentForm.triggerChange();
-                next([]);
+                // Disable based on client req for go live
+                // that.state.currentForm.triggerChange();
+                // next([]);
+                var response = await that
+                .saveForm(null, that.cleanData(submission.data))
+                .then(function (response) {
+                  if (response.status == "success") {
+                    next(null);
+                  } else {
+                    if (that.props.route) {
+                      next([response.message]);
+                    }
+                    next([response.errors[0].message]);
+                  }
+                });
+
                 // submitErrors = [
                 //   ...document.querySelectorAll('[ref="errorRef"]')
                 // ].map((i) => i.innerText);
@@ -1460,6 +1474,7 @@ class FormRender extends React.Component {
   customButtonAction = (e) => {
     e.stopPropagation();
     e.preventDefault();
+    this.showFormLoader(true, 0);
     let actionDetails = e.detail;
     let formData = actionDetails.formData;
     if (this.state.workflowId) {
@@ -1475,17 +1490,33 @@ class FormRender extends React.Component {
       }
     }
     if(this.props.fileId){
+      formData.fileId = this.props.fileId;
+      formData["workflow_instance_id"] = undefined;
+    }
+    if(this.state.fileId){
       formData.fileId = this.state.fileId;
       formData["workflow_instance_id"] = undefined;
     }
-    this.showFormLoader(true, 0);
     if (actionDetails["commands"]) {
       this.callPipeline(
         actionDetails["commands"],
         this.cleanData(formData)
       ).then((response) => {
         if (response.status == "success") {
-          this.showFormLoader(false, 0);
+          var formData = { data: this.formatFormData(response.data) };
+          if(response.data.fileId){
+            this.setState({
+              fileId: response.data.fileId
+            })
+          }
+          if(this.state.currentForm){
+            this.state.currentForm.setSubmission(formData).then(response2 =>{
+              this.state.currentForm.setPristine(true);
+              this.showFormLoader(false, 0);
+            });
+          } else {
+            this.showFormLoader(false, 0);
+          }
           this.notif.current.notify(
             "Success",
             actionDetails.notification

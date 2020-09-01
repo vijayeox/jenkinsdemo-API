@@ -750,7 +750,7 @@
    key: harcoExcelData*checkrepairpercentlabor
    pageName: J
    cell: Customer Percentage of Repair Endorsement
-   offset: 2,0
+   offset: 2,3
    returnValue:
       '0.75': '0.85'
 -

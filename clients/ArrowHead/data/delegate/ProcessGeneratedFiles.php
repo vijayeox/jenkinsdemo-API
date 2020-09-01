@@ -2,15 +2,13 @@
 
 use Oxzion\AppDelegate\FileTrait;
 use Oxzion\Db\Persistence\Persistence;
-use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
-use Oxzion\Auth\AuthContext;
-
-
+use Oxzion\AppDelegate\AppDelegateTrait;
 use Oxzion\AppDelegate\MailDelegate;
 
 class ProcessGeneratedFiles extends MailDelegate
 {
     use FileTrait;
+    use AppDelegateTrait;
 
     public function __construct()
     {
@@ -78,7 +76,7 @@ class ProcessGeneratedFiles extends MailDelegate
             if ($fileData['documentsToBeGenerated'] == 1) {
                 $fileData['documentsToBeGenerated'] = 0;
                 $fileData['status'] = 'Generated';
-                $policyMail = $this->triggerMail($persistenceService, $fileData);
+                $policyMail = $this->executeDelegate('DispatchMail', $fileData);
                 $status = $status . "File status is Generated" . ($policyMail ? " and Mail sent" : " and Mail not sent");
                 $fileData['mailStatus'] = $policyMail;
             } else {
@@ -89,51 +87,5 @@ class ProcessGeneratedFiles extends MailDelegate
             throw new Exception("No documents to be generated", 1);
         }
         return ["fileData" => $fileData, "status" => $status];
-    }
-
-    private function triggerMail(Persistence $persistenceService, $data)
-    {
-
-        $selectQuery = "Select value FROM applicationConfig WHERE type ='arrowHeadInboxMail'";
-        $submissionEmail = ($persistenceService->selectQuery($selectQuery))->current()["value"];
-
-        $emailAttachments = [];
-        foreach ($this->checkJSON($data['documents']) as $doc) {
-            if ($doc['originalName'] !== "excelMapperInput.json") {
-                if(isset($doc["fullPath"])){
-                    array_push($emailAttachments, $doc['fullPath'] );
-                } else {
-                    array_push($emailAttachments, $doc['path'] );
-                }
-            }
-        }
-
-        $mailOptions = array();
-        $mailOptions['to'] = $submissionEmail;
-        $mailOptions['subject'] = "New business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
-        $mailOptions['attachments'] = $emailAttachments;
-        $this->logger->info("Arrowhead Policy Mail " . print_r($mailOptions, true));
-        $data['orgUuid'] = "34bf01ab-79ca-42df-8284-965d8dbf290e";
-        // $data['orgUuid'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
-        $response = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
-        $this->logger->info("Mail has " . $response ? "been sent." : "not been sent.");
-        return $response;
-    }
-
-    private function formatDate($data)
-    {
-        $date = strpos($data, "T") ? explode("T", $data)[0] : $data;
-        return date(
-            "m-d-Y",
-            strtotime($date)
-        );
-    }
-
-    private function checkJSON($data)
-    {
-        if (!is_array($data)) {
-            $data = json_decode($data, true);
-        }
-        return $data;
     }
 }

@@ -379,6 +379,11 @@
    pageName: Underwriting Survey
    cell: D49
 -
+   key: victorAutoPhysicalDamage*uniqueLotProtection
+   Source Worksheet: Are key  controls the same for all locations?
+   pageName: Underwriting Survey
+   cell: D56
+-
    key: dolmanagersmstapprove
    Source Worksheet: Managers must approve/record the dupl. of keys?
    pageName: Underwriting Survey
@@ -433,15 +438,15 @@
    pageName: Underwriting Survey
    cell: I26
    returnValue:
-      '5002500' : '500'
-      '10005000' : '1000'
-      '100025000' : '1000'
-      '15007500' : '1500'
-      '150025000' : '1500'
-      '250010000' : '2500'
-      '250012500' : '2500'
-      '250025000' : '2500'
-      '500025000' : '5000'
+      '5002500' : '2500'
+      '10005000' : '5000'
+      '100025000' : '10000'
+      '15007500' : '10000'
+      '150025000' : '10000'
+      '250010000' : '10000'
+      '250012500' : '10000'
+      '250025000' : '10000'
+      '500025000' : '10000'
       '750037500' : '10000'
       '1000050000' : '10000'
       '25000125000' : '10000'
@@ -868,48 +873,48 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_none
+   key: allLotProtectionIncludes_none
    method: pulloutChild
    type: Checkbox
    cell: Check Box 214
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_fenced
+   key: allLotProtectionIncludes_fenced
    method: pulloutChild
    type: Checkbox
    cell: Check Box 219
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_postChains
+   key: allLotProtectionIncludes_postAndChain
    method: pulloutChild
    type: Checkbox
    cell: Check Box 220
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_securityLighting
+   key: allLotProtectionIncludes_securityLighting
    method: pulloutChild
    type: Checkbox
    cell: Check Box 221
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_videoSurveillance
+   key: allLotProtectionIncludes_videoSurveillance
    method: pulloutChild
    type: Checkbox
    cell: Check Box 222
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_nightWatchman
+   key: allLotProtectionIncludes_nightWatchman
    method: pulloutChild
    type: Checkbox
    cell: Check Box 223
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garageKeepersCoverage
+   key: dollotprotection
    cell: D55
    returnBoolean: 'Yes|No'
