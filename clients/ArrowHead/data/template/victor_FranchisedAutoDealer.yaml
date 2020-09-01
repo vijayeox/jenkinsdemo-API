@@ -387,7 +387,7 @@
    pageName: Garage Supplemental
    cell: C110
    method: checkValue
-   returnBoolean: "Yes|No"
+   returnBoolean: "Yes|"
 -
    key: formalsafetymeetings_quarterly
    Source Worksheet: Formal safety meetings "quarterly"
@@ -401,7 +401,7 @@
    pageName: Garage Supplemental
    cell: C110
    method: checkValue
-   returnBoolean: "Yes|No"
+   returnBoolean: "Yes|"
 -
    key: formalsafetymeetings
    Source Worksheet: Formal safety meetings "quarterly"
