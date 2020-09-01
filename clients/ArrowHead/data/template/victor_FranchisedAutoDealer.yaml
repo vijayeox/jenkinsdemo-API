@@ -313,7 +313,7 @@
 -
    key: separatemixingroom
    pageName: Garage Supplemental 
-   cell: Check Box 81
+   cell: Check Box 32
    type: Checkbox
 -
    key: mixingroomsurvey_haveExplosionProofElectricalSystem
