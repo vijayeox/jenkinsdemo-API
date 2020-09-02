@@ -148,7 +148,7 @@ if (
   (initiatedByCsr == false ||
     initiatedByCsr == "false" ||
     initiatedByCsr == "") &amp;&amp;
-  ( tecRecEndorsment == "accepted" ||
+  ( tecRecEndorsment == "withTecRecEndorsementForSelectionAbove" ||
     result1 ||
     result9 ||
     result2 ||

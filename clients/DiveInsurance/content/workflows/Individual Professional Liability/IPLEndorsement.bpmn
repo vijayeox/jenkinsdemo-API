@@ -156,7 +156,7 @@ if(coverage &amp;&amp; paymentOptions){
   }
 }
 
-if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || result8 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "withTecRecEndorsementForSelectionAbove" || result1 || result4 || result8 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)
