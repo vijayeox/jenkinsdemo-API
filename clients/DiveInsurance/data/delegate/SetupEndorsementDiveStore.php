@@ -225,7 +225,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
-                $policy['previous_poolLiability'] = $data['poolLiability'];
+                $policy['previous_poolLiability'] = isset($data['poolLiability']) ? $data['poolLiability'] : 0;
                 $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
