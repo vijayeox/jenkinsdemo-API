@@ -5,7 +5,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="endorsementConsolidationIpl" />
-          <camunda:property name="fields" value="additionalInsured, country, tecRecEndorsment, section2Agreement,endorsement_options, upgradeCareerCoverage, scubaFit, cylinder, excessLiability,paymentOptions, initiatedByCsr, CSRReviewRequired, policyStatus, RejectedPolicy, approved" />
+          <camunda:property name="fields" value="AdditionalInsuredOption,additionalInsured, country, tecRecEndorsment, section2Agreement,endorsement_options, upgradeCareerCoverage, scubaFit, cylinder, excessLiability,paymentOptions, initiatedByCsr, CSRReviewRequired, policyStatus, RejectedPolicy, approved" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1m44nyk</bpmn:outgoing>
@@ -101,6 +101,7 @@ def coverage = endorsementOptions.modify_coverage
 def personalInfo = endorsementOptions.modify_personalInformation
 def additionalIn = endorsementOptions.modify_additionalInsured
 def upgradeInternationalCoverages = execution.getVariable('upgradeCareerCoverage')
+def AdditionalInsuredOption= execution.getVariable('AdditionalInsuredOption')
 
 def scubaFit = execution.getVariable('scubaFit')
 def cylinder = execution.getVariable('cylinder')
@@ -132,8 +133,8 @@ if (excessLiability) {
     result7 = true;
   }
 }
-if(coverage || additionalIn){
-if (additionalInsured == 'addAdditionalInsureds') {
+if(coverage || AdditionalInsuredOption){
+if (AdditionalInsuredOption== 'addAdditionalInsureds') {
  additionalInsured.each {
   if (it.hasProperty('businessRelation') &amp;&amp; it.businessRelation == 'other') {
     result1 = true

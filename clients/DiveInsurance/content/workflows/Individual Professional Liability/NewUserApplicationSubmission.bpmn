@@ -11,7 +11,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="csrInitiatesIpl" />
-          <camunda:property name="fields" value="additionalInsured, country, tecRecEndorsment, section2Agreement,careerCoverage, initiatedByCsr, approved, scubaFit, cylinder,excessLiability, padiNotFoundCsrReview, efrToIPLUpgrade, paymentOptions,userGrandTotal, isRenewalFlow, start_date, CSRReviewRequired, RejectedPolicy,   policyStatus, efrToIPLUpgrade" />
+          <camunda:property name="fields" value="additionalInsured, country, tecRecEndorsment, section2Agreement,careerCoverage, initiatedByCsr, approved, scubaFit, cylinder,excessLiability, padiNotFoundCsrReview, efrToIPLUpgrade, paymentOptions,userGrandTotal, isRenewalFlow, start_date, CSRReviewRequired, RejectedPolicy,   policyStatus, efrToIPLUpgrade,AdditionalInsuredOption" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_161msdp</bpmn:outgoing>
@@ -76,6 +76,7 @@ def paymentOptions = execution.getVariable('paymentOptions')
 def userGrandTotal = execution.getVariable('userGrandTotal')
 def renewalFlow = execution.getVariable('isRenewalFlow')
 def startDate = execution.getVariable('start_date')
+def AdditionalInsuredOption= execution.getVariable('AdditionalInsuredOption')
 
 boolean result1 = false
 boolean result2 = false
@@ -88,7 +89,7 @@ boolean result8 = false
 boolean result9 = false
 boolean result10 = false
 
-if (additionalInsured == 'addAdditionalInsureds' ) {
+if (AdditionalInsuredOption== 'addAdditionalInsureds' ) {
  additionalInsured.each {
   if (it.businessRelation &amp;&amp; it.businessRelation == 'other') {
     result1 = true
