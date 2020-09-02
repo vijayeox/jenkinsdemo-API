@@ -207,6 +207,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_lossOfBusIncome'] = isset($data['lossOfBusIncome'])?$data['lossOfBusIncome']:0;
                 $policy['previous_dspropTotal'] = isset($data['dspropTotal'])?$data['dspropTotal']:0;
                 $policy['previous_lossPayees'] = isset($data['lossPayees'])?$data['lossPayees']:array();
+                $policy['previous_additionalNamedInsured'] = isset($data['additionalNamedInsured'])?$data['additionalNamedInsured']:array();
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];

@@ -250,7 +250,34 @@
       </div>
       </div>
       {/if}
-
+     {if $additional_named_insureds_option=='yes' && ((isset($newadditionalNamedInsured) && $newadditionalNamedInsured != "") || (isset($removedadditionalNamedInsured) && $removedadditionalNamedInsured != ""))}
+      <div class = "box">
+        <center><b><u>***Additional Named Insured***</u></b></center>
+        {if $newadditionalNamedInsured != ""}
+          {assign var=list value=$newadditionalNamedInsured|json_decode:true}
+          {foreach from=$list item=$additional}
+            {if isset($additional.name) && ($additional.name != '')}
+            <p class = "ai_list" style = "font-size:15px;">
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
+            </p>
+            {/if}
+          {/foreach}
+        {/if}
+        {if $removedadditionalNamedInsured != ""}
+          {assign var=list1 value=$removedadditionalNamedInsured|json_decode:true}
+          {foreach from=$list1 item=$additional}
+            {if isset($additional.name) && ($additional.name != '')}
+            <p class = "ai_list" style = "font-size:15px;">
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
+            </p>
+            {/if}
+          {/foreach}
+        {/if}
+        <div style="margin-bottom: 5%"></div>
+        <center><b>but only as respects the operations of the named insured</b></center>
+      </div>
+      </div>
+      {/if}
      {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && isset($removedadditionalLocations) && $removedadditionalLocations != ""))}
       <div class = "box">
         <center><b><u>***Additional Locations***</u></b></center>
