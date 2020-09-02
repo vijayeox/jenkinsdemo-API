@@ -9804,12 +9804,13 @@
 									},
 									"enableMaxDateInput": false,
 									"enableTime": false,
+									"redrawOn": "data",
 									"clearOnHide": false,
-									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(row.existingEffectiveDate).format(\"YYYY-MM-DD\"); \n}",
+									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(row.existingEffectiveDate).format(\"YYYY-MM-DD\"); \n}\n\nif((!row.effectiveDate || row.effectiveDate == '' || row.effectiveDate == undefined) && moment(row.newMembereffectiveDate).isBefore(moment(data.update_date))){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
-										"custom": "if(row.newMembereffectiveDate){\n  valid = (moment(row.newMembereffectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n  valid = (!row.newMembereffectiveDate) ? \"Effective Date is required\" : true;\n}"
+										"custom": "if(row.newMembereffectiveDate && (!row.effectiveDate || row.effectiveDate == \"\" || row.effectiveDate == undefined)){\n  valid = (moment(row.newMembereffectiveDate).format('MM-DD-YYYY') >= moment(data['update_date']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than endorsement effective date \"+moment(data['update_date']).format('MM-DD-YYYY');\n}else if(row.newMembereffectiveDate){\n  valid = (moment(row.newMembereffectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n  valid = (!row.newMembereffectiveDate) ? \"Effective Date is required\" : true;\n}"
 									},
 									"key": "newMembereffectiveDate",
 									"customConditional": "if(!row.start_date || row.start_date == \"\"){\n  show = true;\n}else if(moment(row.start_date).diff(moment(data.update_date)) >= 0){\n  show = true;\n}else{\n  show = false;\n}",
@@ -9852,7 +9853,7 @@
 								"components": [{
 									"label": "start_date",
 									"redrawOn": "data",
-									"calculateValue": "if(row['effectiveDate']){\n  value = moment(row['effectiveDate']).format(\"YYYY-MM-DD\");\n} else if(row['newMembereffectiveDate'] && row['newMembereffectiveDate'] != undefined){\n  value = moment(row['newMembereffectiveDate']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(data.update_date).format(\"YYYY-MM-DD\");\n}",
+									"calculateValue": "if(row['effectiveDate']){\n  value = moment(row['effectiveDate']).format(\"YYYY-MM-DD\");\n} else if(row['newMembereffectiveDate'] && row['newMembereffectiveDate'] != undefined){\n  value = moment(row['newMembereffectiveDate']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(data.update_date).format(\"YYYY-MM-DD\");\n}\n\nif((!row.effectiveDate || row.effectiveDate == '' || row.effectiveDate == undefined) && moment(row.newMembereffectiveDate).isBefore(moment(data.update_date))){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
 									"key": "start_date",
 									"type": "hidden",
 									"input": true,
@@ -10036,10 +10037,10 @@
 							},
 							"key": "documentattach",
 							"type": "file",
+							"url": "/file/attachment",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"url": "/file/attachment"
+							"hideOnChildrenHidden": false
 						}, {
 							"type": "documentviewer",
 							"key": "document1",
@@ -10047,7 +10048,7 @@
 							"dtype": "documentviewer",
 							"datype": "documentviewer",
 							"dattype": "documentviewer",
-							"customConditional": "if (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+							"customConditional": "if(data.CSRReviewRequired || data.CSRReviewRequired == true) {\nif (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}}else{\nshow = false;\n}",
 							"datatype": "documentviewer",
 							"data_type": "documentviewer",
 							"label": " ",

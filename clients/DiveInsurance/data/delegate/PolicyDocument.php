@@ -545,7 +545,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) || (isset($data['generatePersonalInfo']) && ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true')))){
                         $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     }
-				}
+                }
             }else{
                 if ($temp['product'] == 'Individual Professional Liability') {
                  $check = $this->endorsementOptionsFlag($temp);
@@ -770,7 +770,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                              }
                              if($groupVal == true){
                                 if(isset($data['group_certificate_no'])){
-                                	$grp_certificate_no = explode("-",$data['group_certificate_no']);
+                                    $grp_certificate_no = explode("-",$data['group_certificate_no']);
                                     $data['group_certificate_no'] = $grp_certificate_no[0];
                                 }else{
                                     $product = $data['product'];
@@ -1006,23 +1006,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $options['footer'] =  $this->template[$data['product']][$footerKey];
             }
             if(!is_array($docDest)){
-				if(file_exists($docDest)){
-					$docName = basename($docDest);
-					FileUtils::deleteFile($docName,$dest['absolutePath']);
-				}
-				$generatedDocument = $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
-			} else {
-				if(is_array($docDest)){
-					$generatedDocuments = array();
-					foreach($docDest as $key => $doc){
-						if(file_exists($doc)){
-							$docName = basename($doc);
-							FileUtils::deleteFile($docName,$dest['absolutePath']);
-						}
-						$generatedDocuments[] = $this->documentBuilder->generateDocument($key,$data,$doc,$options);
-					}
-				}
-			}
+                if(file_exists($docDest)){
+                    $docName = basename($docDest);
+                    FileUtils::deleteFile($docName,$dest['absolutePath']);
+                }
+                $generatedDocument = $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
+            } else {
+                if(is_array($docDest)){
+                    $generatedDocuments = array();
+                    foreach($docDest as $key => $doc){
+                        if(file_exists($doc)){
+                            $docName = basename($doc);
+                            FileUtils::deleteFile($docName,$dest['absolutePath']);
+                        }
+                        $generatedDocuments[] = $this->documentBuilder->generateDocument($key,$data,$doc,$options);
+                    }
+                }
+            }
             if($this->type == 'lapse'){
                 $data['documents']['lapse_document'] = $dest['relativePath'].$template.'.pdf';
                 return $data;
@@ -1606,7 +1606,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['removedadditionalLocations'] = "";
                         $temp['propertyChanges'] = true;
                         $temp['liabilityChanges'] = true;
-                        $addLocRequired = array("padiNumberAL","address","country","city","state","zip","ALpropertyCoverageSelect","additionalLocationPropertyTotal","ALLossofBusIncome","additionalLocationDoYouOwntheBuilding","ALBuildingReplacementValue","additionalLocationFurniturefixturesAndEquipment","ALnonDivingPoolAmount","travelAgentEoPL","propertyDeductibles","ALcentralStationAlarm","centralStationAlarm");
+                        $addLocRequired = array("padiNumberAL","name","address","country","city","state","zip","ALpropertyCoverageSelect","additionalLocationPropertyTotal","ALLossofBusIncome","additionalLocationDoYouOwntheBuilding","ALBuildingReplacementValue","additionalLocationFurniturefixturesAndEquipment","ALnonDivingPoolAmount","travelAgentEoPL","propertyDeductibles","ALcentralStationAlarm","centralStationAlarm");
                         if(!is_array($policy['previous_additionalLocations'])){
                             if(is_string($policy['previous_additionalLocations'])){
                                 $policy['previous_additionalLocations'] = json_decode($policy['previous_additionalLocations'],true);

@@ -158,7 +158,6 @@ if (
     efrToIPLUpgrade == true || efrToIPLUpgrade == "true" ||
     scubaFit == "scubaFitInstructor" ||
     result5 ||
-    result11 ||
     padiNotFoundCsrReview == "true" ||
     padiNotFoundCsrReview == true)
 ) {
@@ -200,10 +199,10 @@ if ((initiatedByCsr == true || initiatedByCsr == "true") &amp;&amp; (approved ==
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">def status = execution.getVariable('approved')
 if(status == "rejected"){
-	execution.setVariable("policyStatus","Rejected")	
+  execution.setVariable("policyStatus","Rejected")  
 }
 if(status == "onHold"){
-	execution.setVariable("policyStatus","On Hold")
+  execution.setVariable("policyStatus","On Hold")
 }</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
