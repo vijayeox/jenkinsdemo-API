@@ -156,6 +156,9 @@ if(coverage &amp;&amp; paymentOptions){
   }
 }
 
+if(paymentOptions == ""){
+    result6 = false
+  }
 if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "withTecRecEndorsementForSelectionAbove" || result1 || result4 || result8 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
   result3=true
 }
