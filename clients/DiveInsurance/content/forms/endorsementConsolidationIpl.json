@@ -2079,7 +2079,6 @@
 								"path": "columns1"
 							}, {
 								"label": "userGrandTotal",
-								"redrawOn": "data",
 								"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
 								"key": "userGrandTotal",
 								"type": "hidden",
@@ -2088,7 +2087,6 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "csrGrandTotal",
-								"redrawOn": "data",
 								"calculateValue": "if(data.CSRReviewRequired){\n  value = data.endorsementTotal;\n}",
 								"key": "csrGrandTotal",
 								"type": "hidden",
@@ -3093,7 +3091,6 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
-						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
 						"validate": {
 							"multiple": true
 						},

@@ -60,20 +60,17 @@
    Source Worksheet: 'Date of completion of last audit of cash & accounts:'
    pageName: Crime (printable)
    cell: L68
+   method: formatDate
 -
    key: lastauditofinventory
    Source Worksheet: 'Date of completion of last audit of inventory:'
    pageName: Crime (printable)
    cell: L70
--
-   key: auditreportissentto
-   Source Worksheet: 'Audit report is sent to:= Owner'
-   pageName: Crime (printable)
-   cell: H74
+   method: formatDate
 -
    key: discrepenciesloose
    Source Worksheet: Were any discrepencies or loose practices commented upon this audit? (If
-      YES, attach copy of audit and auditor's comments)
+      YES, attach copy of audit and auditors comments)
    pageName: Crime (printable)
    returnBoolean: "Yes|No"
    cell: L76
@@ -158,9 +155,18 @@
       '100000' : '$25,000 BI and PD'
       '125000' : '$25,000 BI and PD'
 -
+   key: garageumUim
+   pageName: Garage Liability
+   cell: Q27
+-
    key: franchisedAutoDealer*checktotalLocationSalesRevenue
    pageName: Garage Liability
    cell: S27
+-
+   key: garageemployeeBenefitsLiability
+   pageName: Garage Liability
+   cell: T27
+   returnBoolean: 'Yes|No'
 -
    key: totalemployees
    Source Worksheet: 'Total # of Employees:'
@@ -307,7 +313,7 @@
 -
    key: separatemixingroom
    pageName: Garage Supplemental 
-   cell: Check Box 81
+   cell: Check Box 32
    type: Checkbox
 -
    key: mixingroomsurvey_haveExplosionProofElectricalSystem
@@ -376,12 +382,26 @@
    type: Checkbox
    method: checkValue
 -
+   key: formalsafetymeetings_monthly
+   Source Worksheet: Formal safety meetings "Monthly"
+   pageName: Garage Supplemental
+   cell: C110
+   method: checkValue
+   returnBoolean: "Yes|"
+-
    key: formalsafetymeetings_quarterly
    Source Worksheet: Formal safety meetings "quarterly"
    pageName: Garage Supplemental
    cell: Check Box 59
    type: Checkbox
-   method: checkValue 
+   method: checkValue
+-
+   key: formalsafetymeetings_quarterly
+   Source Worksheet: Formal safety meetings "quarterly"
+   pageName: Garage Supplemental
+   cell: C110
+   method: checkValue
+   returnBoolean: "Yes|"
 -
    key: formalsafetymeetings
    Source Worksheet: Formal safety meetings "quarterly"
@@ -528,6 +548,18 @@
    returnBoolean: "Yes|No"
    cell: C68
 -
+   key: accidentInvestigation
+   Source Worksheet: Is there a formal accident investigation program in place?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C71
+-
+   key: disciplinaryProgram
+   Source Worksheet: Is there a disciplinary program for at fault auto accidents?
+   pageName: Garage Supplemental
+   returnBoolean: "Yes|No"
+   cell: C77
+-
    key: doesTheInsuredSellAnyOfTheFollowingProducts_creditLifeOrAH
    method: pulloutChild
    Source Worksheet: Credit Life or A&H
@@ -590,6 +622,7 @@
    pageName: Garage Keepers (printable)
    cell: E31
    returnValue:
+      '10005000' : '$1,000 / $5,000'
       '250010000' : '$2,500 / $10,000'
       '500025000' : '$5,000 / $25,000'
       '1000050000' : '$10,000 / $50,000'
@@ -603,11 +636,11 @@
       '2500' : '2500'
       '5000' : '5000'
       '10000' : '10000'
-      '10005000' : '1000'
-      '250012500' : '2500'
-      '500025000' : '5000'
-      '1000025000' : '10000'
-      '1000050000' : '10000'
+      '10005000' : '$1,000 / $5,000'
+      '250010000' : '$2,500 / $10,000'
+      '500025000' : '$5,000 / $10,000'
+      '1000025000' : '$10,000 / $25,000'
+      '1000050000' : '$10,000 / $25,000'
 -
    key: franchisedAutoDealer*checkrepairpercentlabor
    pageName: Garage Keepers (printable)
@@ -638,6 +671,13 @@
    cell: Check Box 41
    type: Checkbox
 -
+   key: garagekeeperUnderwritingLotProtection_nightWatchman
+   method: pulloutChild
+   Source Worksheet: Night watchman
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 41
+   type: Checkbox
+-
    key: franchisedAutoDealer*checkNotMonitoredSurveillanceCamera
    Source Worksheet: Surveill. Cameras not monitored
    pageName: Garage Keepers Supplementary
@@ -654,6 +694,13 @@
    note: If at least 1 of the Surveillance Camera questions are selected map
       "Yes"to the applicable carrier app.
 -
+   key: garagekeeperUnderwritingLotProtection_videoSurveillance
+   method: pulloutChild
+   Source Worksheet: Video Surveillance
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 45
+   type: Checkbox
+-
    key: franchisedAutoDealer*checkdolpostnchain
    Source Worksheet: Post & Chain
    pageName: Garage Keepers Supplementary
@@ -666,9 +713,23 @@
    cell: Check Box 44
    type: Checkbox
 -
+   key: garagekeeperUnderwritingLotProtection_securityLighting
+   method: pulloutChild
+   Source Worksheet: Security Lighting
+   pageName: 'Garage Keepers Supplementary'
+   cell: Check Box 44
+   type: Checkbox
+-
    key: franchisedAutoDealer*checkdolflyfencdpremises
    Source Worksheet: Fully Fenced Premises
    pageName: Garage Keepers Supplementary
+   cell: Check Box 40
+   type: Checkbox
+-
+   key: garagekeeperUnderwritingLotProtection_fenced
+   method: pulloutChild
+   Source Worksheet: Fenced
+   pageName: 'Garage Keepers Supplementary'
    cell: Check Box 40
    type: Checkbox
 -
@@ -714,13 +775,6 @@
    cell: Check Box 38
    type: Checkbox
 -
-   key: garagekeeperUnderwritingLotProtection_fenced
-   method: pulloutChild
-   Source Worksheet: Fenced
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 40
-   type: Checkbox
--
    key: garagekeeperUnderwritingLotProtection_postChains
    method: pulloutChild
    Source Worksheet: Post and Chains
@@ -728,28 +782,7 @@
    cell: Check Box 42
    type: Checkbox
 -
-   key: garagekeeperUnderwritingLotProtection_securityLighting
-   method: pulloutChild
-   Source Worksheet: Security Lighting
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 44
-   type: Checkbox
--
-   key: garagekeeperUnderwritingLotProtection_videoSurveillance
-   method: pulloutChild
-   Source Worksheet: Video Surveillance
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 45
-   type: Checkbox
--
-   key: garagekeeperUnderwritingLotProtection_nightWatchman
-   method: pulloutChild
-   Source Worksheet: Night watchman
-   pageName: 'Garage Keepers Supplementary'
-   cell: Check Box 41
-   type: Checkbox
--
-   key: franchisedAutoDealer*checklistcompaniesrepresented
+   key: franchisedAutoDealer*checkcompaniesrepresented
    Source Worksheet: 'List companies represented:'
    pageName: Garage Supplemental
    cell: 'C41'
@@ -973,7 +1006,7 @@
       vacantLand: Vacant Land
       vehicleStorageParkingGarage: Parking Lot - No Structure
       partsWarehouseStorage: Warehouse
-      vacantBuilding: Lease & Rental
+      vacantBuilding: Vacant Building
       deliveryPrep: Auto Parts & Supplies
 -
    key: genericData*locationScheduleGridData_occupancyType
@@ -992,11 +1025,33 @@
       office: Occupied
       serviceRepair: Occupied
       usedCarSales: Occupied
-      vacantLand: Vacant
+      vacantLand: ""
       vehicleStorageParkingGarage: Occupied
       partsWarehouseStorage: Occupied
       vacantBuilding: Vacant
       deliveryPrep: Occupied
+-
+   key: genericData*locationScheduleGridData_occupancyType
+   method: simpleDatagrid
+   pageName: Property
+   cell: I40
+   type: DataGrid
+   returnValue:
+      autoSalesAndService: '100%'
+      autoStorageLot: '100%'
+      bldgLeasedToOthers: '100%'
+      bodyShop: '100%'
+      carWash: '100%'
+      detailShop: '100%'
+      newCarShowroomAndSales: '100%'
+      office: '100%'
+      serviceRepair: '100%'
+      usedCarSales: '100%'
+      vacantLand: ''
+      vehicleStorageParkingGarage: '100%'
+      partsWarehouseStorage: '100%'
+      vacantBuilding: ''
+      deliveryPrep: '100%'
 -
    key: genericData*locationScheduleGridData_constructiontype
    method: simpleDatagrid
@@ -1147,9 +1202,10 @@
    cell: AI40
    type: DataGrid
    returnValue: 
-      '80': '0.80'
-      '90' : '0.90'
-      '100' : '1'
+      '80': 'Agreed Amount'
+      '90' : 'Agreed Amount'
+      '100' : 'Agreed Amount'
+      'Agreed Amount' : 'Agreed Amount'
 -
    key: genericData*locationScheduleGridData_businesspersonal
    method: simpleDatagrid
@@ -1169,11 +1225,33 @@
    cell: AJ40
    type: DataGrid
 -
+   key: franchisedAutoDealer*checkbuildingCoinsurance_result
+   method: simpleDatagrid
+   pageName: Property
+   cell: AM40
+   type: DataGrid
+-
    key: franchisedAutoDealer*checkbuildingValuation_result
    method: simpleDatagrid
    pageName: Property
    cell: AN40
    type: DataGrid
+-
+   key: franchisedAutoDealer*checkpropertyCoverageDeductible_result
+   method: simpleDatagrid
+   pageName: Property
+   cell: AP40
+   type: DataGrid
+   returnValue: 
+      '1000' : '2500'
+      '2500' : '2500'
+      '5000' : '5000'
+      '10000' : '10000'
+      '20000' : '25000'
+      '25000' : '25000'
+      '50000' : '25000'
+      '75000' : '25000'
+      '100000' : '25000'
 -
    key: franchisedAutoDealer*checkEmployeetoolsOnPremises_result
    method: simpleDatagrid
@@ -1181,10 +1259,25 @@
    cell: AQ40
    type: DataGrid
 -
-   key: genericData*locationScheduleGridData_coinsuranceamount
+   key: franchisedAutoDealer*checkbuildingCoinsurance_result
    method: simpleDatagrid
    pageName: Property
    cell: AS40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkblanketcoverage
+   pageName: Property
+   cell: AK40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkblanketcoverage
+   pageName: Property
+   cell: AO40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkblanketcoverage
+   pageName: Property
+   cell: AT40
    type: DataGrid
 -
    key: genericData*locationScheduleGridData_biwaitingperiod

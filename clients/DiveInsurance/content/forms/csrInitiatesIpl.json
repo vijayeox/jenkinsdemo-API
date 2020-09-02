@@ -2604,7 +2604,6 @@
 							"path": "page3PanelColumns5Columns2"
 						}, {
 							"label": "userGrandTotal",
-							"redrawOn": "data",
 							"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
 							"key": "userGrandTotal",
 							"type": "hidden",
@@ -2613,7 +2612,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "csrGrandTotal",
-							"redrawOn": "data",
+							"redrawOn": "amount",
 							"calculateValue": "if(data.CSRReviewRequired){\n  value = data.amount;\n}",
 							"key": "csrGrandTotal",
 							"type": "hidden",
@@ -4216,7 +4215,6 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
-						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
 						"validate": {
 							"multiple": true
 						},

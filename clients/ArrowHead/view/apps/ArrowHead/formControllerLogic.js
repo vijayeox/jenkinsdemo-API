@@ -37,6 +37,16 @@ s.onload = function (e) {
             )
             .dispatchEvent(ev);
         };
+      } else {
+        if (data.producername.length > 0 && data.namedInsured.length > 0) {
+          saveDraftCustomButton.style.display == "none"
+            ? (saveDraftCustomButton.style.display = "inline-block")
+            : null;
+        } else {
+          saveDraftCustomButton.style.display == "none"
+            ? null
+            : (saveDraftCustomButton.style.display = "none");
+        }
       }
 
       if (
@@ -45,7 +55,7 @@ s.onload = function (e) {
         )
       ) {
         [...document.querySelectorAll('[ref="modalSave"]')].map(
-          (i) => i.innerText = "OK"
+          (i) => (i.innerText = "OK")
         );
       }
     } else {

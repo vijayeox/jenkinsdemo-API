@@ -1606,7 +1606,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['removedadditionalLocations'] = "";
                         $temp['propertyChanges'] = true;
                         $temp['liabilityChanges'] = true;
-                        $addLocRequired = array("padiNumberAL","name","address","country","city","state","zip","ALpropertyCoverageSelect","additionalLocationPropertyTotal","ALLossofBusIncome","additionalLocationDoYouOwntheBuilding","ALBuildingReplacementValue","additionalLocationFurniturefixturesAndEquipment","ALnonDivingPoolAmount","travelAgentEoPL","propertyDeductibles","ALcentralStationAlarm","centralStationAlarm");
+                        $addLocRequired = array("padiNumberAL","address","country","city","state","zip","ALpropertyCoverageSelect","additionalLocationPropertyTotal","ALLossofBusIncome","additionalLocationDoYouOwntheBuilding","ALBuildingReplacementValue","additionalLocationFurniturefixturesAndEquipment","ALnonDivingPoolAmount","travelAgentEoPL","propertyDeductibles","ALcentralStationAlarm","centralStationAlarm");
                         if(!is_array($policy['previous_additionalLocations'])){
                             if(is_string($policy['previous_additionalLocations'])){
                                 $policy['previous_additionalLocations'] = json_decode($policy['previous_additionalLocations'],true);

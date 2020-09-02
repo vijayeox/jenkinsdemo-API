@@ -99,6 +99,12 @@
    pageName: Underwriting Survey
    cell: D18
 -
+   key: victorAutoPhysicalDamage*checkAutobody
+   Source Worksheet: Map if at least one building on the quote has an Occupancy Type of Body Shop
+   pageName: Underwriting Survey
+   cell: D19
+   returnBoolean: 'Yes|No'
+-
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_indexValue
    method: simpleDatagrid
    Source Worksheet: Location Details
@@ -132,13 +138,6 @@
    Source Worksheet: Location Details
    pageName: Locations
    cell: F69
-   type: DataGrid
--
-   key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_state
-   method: simpleDatagrid
-   Source Worksheet: Location Details
-   pageName: Valuation Survey
-   cell: F5
    type: DataGrid
 -
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_PrimaryOEMList
@@ -254,9 +253,10 @@
    cell: D72
    returnBoolean: "Yes|No"
 -
-   key: victorAutoPhysicalDamage*checkaretheyinsuredelsewhere
+   key: aretheyinsuredelsewhere
    Source Worksheet: If they are insured elsewhere?
    pageName: Underwriting Survey
+   returnBoolean: "Yes|No"
    cell: D73
 -
    key: numberofvehiclesindailyrentalfleet
@@ -328,15 +328,15 @@
    pageName: Underwriting Survey
    cell: Check Box 120
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehicleinevtorytaken_monthly
    method: checkValue
-   Source Worksheet: 'Vehicle inventory taken:monthly'
+   Source Worksheet: 'Vehicle inventory taken - monthly'
    pageName: Underwriting Survey
    cell: Check Box 121
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehicleinevtorytaken_quarterly
    method: checkValue
@@ -344,7 +344,7 @@
    pageName: Underwriting Survey
    cell: Check Box 122
    type: Checkbox
-   Note: "Note: If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
+   Note: "Note If the producer doesn’t answer this question it will map over as \"No\".Daily = Sheet!Underwriting Survey D35\r\nWeekly = Sheet!Underwriting Survey E35\r\nMonthly = Sheet!Underwriting Survey F35\r\nQuarterly = Sheet!Underwriting Survey H35"
 -
    key: dolvehstrschedloc
    returnBoolean: Yes|No
@@ -378,6 +378,11 @@
    Source Worksheet: Are key  controls the same for all locations?
    pageName: Underwriting Survey
    cell: D49
+-
+   key: victorAutoPhysicalDamage*uniqueLotProtection
+   Source Worksheet: Are key  controls the same for all locations?
+   pageName: Underwriting Survey
+   cell: D56
 -
    key: dolmanagersmstapprove
    Source Worksheet: Managers must approve/record the dupl. of keys?
@@ -433,15 +438,15 @@
    pageName: Underwriting Survey
    cell: I26
    returnValue:
-      '5002500' : '500'
-      '10005000' : '1000'
-      '100025000' : '1000'
-      '15007500' : '1500'
-      '150025000' : '1500'
-      '250010000' : '2500'
-      '250012500' : '2500'
-      '250025000' : '2500'
-      '500025000' : '5000'
+      '5002500' : '2500'
+      '10005000' : '5000'
+      '100025000' : '10000'
+      '15007500' : '10000'
+      '150025000' : '10000'
+      '250010000' : '10000'
+      '250012500' : '10000'
+      '250025000' : '10000'
+      '500025000' : '10000'
       '750037500' : '10000'
       '1000050000' : '10000'
       '25000125000' : '10000'
@@ -486,7 +491,7 @@
    Source Worksheet: 'Collision Deductible:'
    pageName: Exposures and Deductibles
    cell: M69
-   returnValue: 
+   returnValue:
       '500' : '1000'
       '750' : '1000'
       '1000' : '1000'
@@ -507,7 +512,7 @@
    Source Worksheet: 'Collision Deductible:'
    pageName: Underwriting Survey
    cell: D29
-   returnValue: 
+   returnValue:
       '500' : '500'
       '750' : '750'
       '1000' : '1000'
@@ -550,7 +555,7 @@
    Source Worksheet: 'Wind/Hail Deductible: '
    pageName: Underwriting Survey
    cell: D27
-   returnValue: 
+   returnValue:
       '500' : '500'
       '1000' : '1000'
       '1250' : '1500'
@@ -564,7 +569,7 @@
    Source Worksheet: 'Flood Deductible:'
    pageName: Underwriting Survey
    cell: D28
-   returnValue: 
+   returnValue:
       '500' : '500'
       '1000' : '1000'
       '1250' : '1500'
@@ -736,7 +741,7 @@
 # -
 #    pageName: Underwriting Survey
 #    Source Worksheet: None
-#    key: 
+#    key:
 #    type: Checkbox
 #    cell: Check Box 234
 -
@@ -868,48 +873,48 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_none
+   key: allLotProtectionIncludes_none
    method: pulloutChild
    type: Checkbox
    cell: Check Box 214
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_fenced
+   key: allLotProtectionIncludes_fenced
    method: pulloutChild
    type: Checkbox
    cell: Check Box 219
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_postChains
+   key: allLotProtectionIncludes_postAndChain
    method: pulloutChild
    type: Checkbox
    cell: Check Box 220
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_securityLighting
+   key: allLotProtectionIncludes_securityLighting
    method: pulloutChild
    type: Checkbox
    cell: Check Box 221
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_videoSurveillance
+   key: allLotProtectionIncludes_videoSurveillance
    method: pulloutChild
    type: Checkbox
    cell: Check Box 222
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garagekeeperUnderwritingLotProtection_nightWatchman
+   key: allLotProtectionIncludes_nightWatchman
    method: pulloutChild
    type: Checkbox
    cell: Check Box 223
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: garageKeepersCoverage
+   key: dollotprotection
    cell: D55
    returnBoolean: 'Yes|No'
