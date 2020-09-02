@@ -1405,7 +1405,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
 
                 if(isset($data['medicalPayment']) && isset($policy['previous_medicalPayment'])){
-                    if($policy['previous_medicalPayment'] != $data['medicalPayment']){
+                    if($policy['previous_medicalPayment'] == $data['medicalPayment']){
                         $data['increased_medicalPayment_limit'] = false;
                     } else {
                         $temp['liabilityChanges'] = true;
