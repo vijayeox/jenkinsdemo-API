@@ -4342,11 +4342,12 @@
 				"input": false,
 				"components": [{
 					"label": "Additional Insured",
-					"reorder": false,
+					"reorder": true,
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
 					"defaultValue": [{
@@ -4357,11 +4358,13 @@
 						"state": {},
 						"zip": "",
 						"businessRelation": "",
-						"effectiveDate": null,
 						"businessRelationOther": "",
-						"additionalInformation": ""
+						"additionalInformation": "",
+						"doYouHaveAWrittenContract": "",
+						"additionalInsuredAttachments": [],
+						"effectiveDate": "",
+						"start_date": ""
 					}],
-					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"minLength": 1
@@ -4382,8 +4385,8 @@
 								"components": [{
 									"label": "Name",
 									"tableView": true,
-									"clearOnHide": false,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Name",
@@ -4421,7 +4424,6 @@
 								"components": [{
 									"label": "City",
 									"tableView": true,
-									"clearOnHide": false,
 									"validate": {
 										"customMessage": "Please enter the City of the Additional Insured"
 									},
@@ -4498,7 +4500,6 @@
 									"refreshOn": "row.country",
 									"clearOnRefresh": true,
 									"selectThreshold": 0.3,
-									"clearOnHide": false,
 									"validate": {
 										"customMessage": "Please select the State of the Additional Insured"
 									},
@@ -4523,7 +4524,6 @@
 									"label": "Zip Code",
 									"spellcheck": false,
 									"tableView": true,
-									"clearOnHide": false,
 									"validate": {
 										"customMessage": "Please enter the Zip Code of the Additional Insured",
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
@@ -4595,7 +4595,7 @@
 									"selectThreshold": 0.3,
 									"validate": {
 										"required": true,
-										"customMessage": "Please select the business relation with the additional insured"
+										"customMessage": "Please select the Business Relation with the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Business Relation",
 									"key": "businessRelation",
@@ -4674,12 +4674,12 @@
 								"value": "no",
 								"shortcut": ""
 							}],
-							"validate": {
-								"required": true
-							},
 							"key": "doYouHaveAWrittenContract",
 							"type": "radio",
-							"input": true
+							"input": true,
+							"validate": {
+								"required": true
+							}
 						}, {
 							"label": "Content",
 							"attrs": [{
@@ -4706,7 +4706,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof value == 'string'){\n  value = JSON.parse(value);\n}",
+							"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -4794,12 +4794,13 @@
 				"input": false,
 				"components": [{
 					"label": "Additional Named Insured",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": false,
 					"defaultValue": [{
@@ -4830,6 +4831,9 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -5011,15 +5015,24 @@
 				"tableView": false,
 				"components": [{
 					"label": "Loss Payees",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
-					"defaultValue": [{}],
+					"defaultValue": [{
+						"name": "",
+						"country": "",
+						"address": "",
+						"state": {},
+						"city": "",
+						"zip": "",
+						"description": ""
+					}],
 					"clearOnHide": false,
 					"validate": {
 						"minLength": 1
@@ -5040,6 +5053,9 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -5087,6 +5103,9 @@
 									"label": "Address",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "address",
 									"type": "textfield",
 									"input": true,
@@ -5163,7 +5182,8 @@
 							"tableView": true,
 							"key": "description",
 							"type": "textarea",
-							"input": true
+							"input": true,
+							"hideOnChildrenHidden": false
 						}],
 						"inDataGrid": true,
 						"clearOnHide": false,
@@ -5248,6 +5268,104 @@
 				"label": "Additional Locations",
 				"input": false,
 				"components": [{
+					"label": "Information for each Additional Location is required as follows. (You will need to complete another application for these locations.)",
+					"reorder": true,
+					"addAnother": "Add another location",
+					"addAnotherPosition": "bottom",
+					"defaultOpen": false,
+					"layoutFixed": false,
+					"enableRowGroups": false,
+					"noFirstRow": false,
+					"tableView": true,
+					"defaultValue": [{
+						"padiNumberAL": "",
+						"name": "",
+						"country": "",
+						"address": "",
+						"state": {},
+						"city": "",
+						"zip": "",
+						"ALpropertyCoverageSelect": "",
+						"buildingConstruction": "",
+						"pleaseSpecify": "",
+						"additionalLocationPropertyTotal": "0",
+						"additionalLocationDoYouOwntheBuilding": "",
+						"built_year1": {},
+						"ALdoyouhaveapoolonpremisesPL1": "",
+						"ALcriminalBackGroundChecks": "",
+						"ALhasApplicantSexualAbuse": "",
+						"ALhasApplicantSexualAbuseMolestation": "",
+						"ALdoyouhaveapoolonpremisesPL": "",
+						"ALNonDivingPoolActivities": "",
+						"ALAredepthmarkersclearlyvisibleabovewaterline": "",
+						"ALnoRunningSigns": "",
+						"ALpoolRulesPosted": "",
+						"ALpoolFencedIndoors": "",
+						"ALPooldivingBoardsOrPlatforms": "",
+						"ALglassContainers": "",
+						"ALalcoholBeverages": "",
+						"ALPoolwaiversOfLiability": "",
+						"ALpoolEquipmentChemicalsMaintained": "",
+						"ALpoolTrampolines": "",
+						"doYouConductRecreationalOrBusinessActivitiesOtherThanDivingAtYourFacility": "",
+						"pleaseExplain": "",
+						"cylinderhydrostatictestingAL": false,
+						"otherequipmentsalesAL": false,
+						"ALEquipmentSales": "",
+						"otherequipmentrepairsAL": false,
+						"ALDescribeEquipmentRepairs": "",
+						"otherequipmentrentalsAL": false,
+						"ALDescribeEquipmentRenatals": "",
+						"otherbusinessactivityAL": false,
+						"ALexplainOtherBusinessActivity": "",
+						"ALclaimsinLast5Years": "",
+						"ALdsglClaimAmountpaidanyamountsoutstanding": [{
+							"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
+							"claimsInformatio": "",
+							"ALdsgldateoftheclaim": "",
+							"ALclaimsInformatio": ""
+						}],
+						"ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL": false,
+						"ALlakedivingBoardsOrPlatforms": "",
+						"ALlakeAreasForHighDiving": "",
+						"ALLakewaiversOfLiability": "",
+						"ALlakeSwimmingAreaBoundaryBuoysRopes": "",
+						"ALlakeSponsorAthleticTeams": "",
+						"ALpoolTrampolines1": "",
+						"ALlakeLifeGaurdsPresent": "",
+						"ALlakeLifegaurdCertification": "",
+						"ALlakeLifeGaurds": "",
+						"ALlakeSafetyExcercises": "",
+						"ALlakeLifeGaurdRecordLog": "",
+						"ALlakeJacuzziWhirlPool": "",
+						"ALlakeTemperatureAdjusted": "",
+						"ALlakeFiltrationDrainsUsed": "",
+						"ALTravelAgentEOFP": "NaN",
+						"ALPropertyCoverageOption": "nonCat",
+						"ALProRataPremiumPercentage": 0,
+						"overRideLiabilityTax": false,
+						"ALliabilityTaxPercentage": "0",
+						"ALPropertyTaxPercentage": "0",
+						"ALCoverageFP": "NaN",
+						"ALnonDivingPoolAmount": 0,
+						"ALMedicalExpenseFP": 0,
+						"ALNonOwnedAutoFP": "0",
+						"ALExcessLiabilityFP": "0",
+						"ALlakeQuarry": 0,
+						"ALContentsFP": 0,
+						"ALBuildingLimitFP": 0,
+						"ALliabilityCoveragesTotal": "0",
+						"ALPropertyCoveragesTotal": "0",
+						"ALLiabilityPropertyCoveragesTotal": "0",
+						"ALProRataPremium": "0",
+						"ALliabilityTaxTotal": "0",
+						"ALPropertyTaxTotal": 0,
+						"ALTotalTax": "0",
+						"locationTotal": 0
+					}],
+					"clearOnHide": false,
+					"key": "additionalLocations",
+					"type": "datagrid",
 					"input": true,
 					"components": [{
 						"key": "page4PanelPanelPanel2",
@@ -5281,6 +5399,9 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
@@ -5303,6 +5424,7 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
+											"required": true,
 											"customMessage": "Please enter your country."
 										},
 										"key": "country",
@@ -5328,6 +5450,9 @@
 										"label": "Address",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "address",
 										"type": "textfield",
 										"input": true,
@@ -5350,6 +5475,9 @@
 										"clearOnRefresh": true,
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "state",
 										"type": "select",
 										"indexeddb": {
@@ -5369,6 +5497,9 @@
 										"label": "City",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "city",
 										"type": "textfield",
 										"input": true,
@@ -5380,7 +5511,8 @@
 										"tableView": false,
 										"clearOnHide": false,
 										"validate": {
-											"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+											"required": true,
+											"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
 										"key": "zip",
 										"type": "textfield",
@@ -5400,7 +5532,9 @@
 								"type": "columns",
 								"input": false,
 								"inDataGrid": true
-							}]
+							}],
+							"clearOnHide": false,
+							"hideLabel": true
 						}, {
 							"label": "Do you want to apply Property Coverage?",
 							"widget": "choicesjs",
@@ -7880,6 +8014,7 @@
 															"value": ""
 														}],
 														"multiple": true,
+														"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
 														"validate": {
 															"multiple": true
 														},
@@ -9066,13 +9201,6 @@
 						"label": "Panel",
 						"hideLabel": true
 					}],
-					"tableView": true,
-					"label": "Information for each Additional Location is required as follows. (You will need to complete another application for these locations.)",
-					"key": "additionalLocations",
-					"clearOnHide": false,
-					"type": "datagrid",
-					"addAnotherPosition": "bottom",
-					"addAnother": "Add another location",
 					"lockKey": true
 				}]
 			}]
@@ -11002,7 +11130,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "if(data['groupProfessionalLiabilitySelect']==data['previous_groupProfessionalLiabilitySelect']){\nif(data.groupProfessionalLiabilitySelect=='yes'){\nvalue = parseFloat(data[\"groupPadiFee\"])\n} else {\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+							"calculateValue": "if(data['groupProfessionalLiabilitySelect']!=data['previous_groupProfessionalLiabilitySelect']){\nif(data.groupProfessionalLiabilitySelect=='yes'){\nvalue = parseFloat(data[\"groupPadiFee\"])\n} else {\n  value = 0;\n}\n} else {\n  value = 0;\n}",
 							"key": "groupPadiFeeAmount",
 							"type": "number",
 							"input": true,
@@ -11920,7 +12048,6 @@
 				"lockKey": true
 			}, {
 				"label": "stateTaxData",
-				"persistent": false,
 				"key": "stateTaxData",
 				"properties": {
 					"data_type": "list"
@@ -14812,6 +14939,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-08-31T18:18:00.497Z",
+	"modified": "2020-09-02T08:29:18.728Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }

@@ -375,6 +375,9 @@ public function execute(array $data,Persistence $persistenceService)
                         }else if($value['effectiveDate'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                         }
+                        if(is_string($value['documentattach'])){
+                            $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
+                        }
                         $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
                         $result = $persistenceService->selectQuery($select);
                         if($result->count() > 0){

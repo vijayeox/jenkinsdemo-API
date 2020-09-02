@@ -4632,16 +4632,19 @@
 					"lockKey": true
 				}, {
 					"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"tableView": true,
 					"defaultValue": [{
 						"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
-						"claimsInformatio": ""
+						"claimsInformatio": "",
+						"claimAmountPaid": "",
+						"claimsAmountOutStanding": ""
 					}],
 					"clearOnHide": false,
 					"validate": {
@@ -5284,11 +5287,12 @@
 				"input": false,
 				"components": [{
 					"label": "Additional Insured",
-					"reorder": false,
+					"reorder": true,
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
 					"defaultValue": [{
@@ -5327,6 +5331,7 @@
 									"label": "Name",
 									"tableView": true,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Name",
@@ -5734,12 +5739,13 @@
 				"input": false,
 				"components": [{
 					"label": "Additional Named Insured",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": false,
 					"defaultValue": [{
@@ -5770,6 +5776,9 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -5955,15 +5964,24 @@
 				"tableView": false,
 				"components": [{
 					"label": "Loss Payees",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
-					"defaultValue": [{}],
+					"defaultValue": [{
+						"name": "",
+						"country": "",
+						"address": "",
+						"state": {},
+						"city": "",
+						"zip": "",
+						"description": ""
+					}],
 					"clearOnHide": false,
 					"validate": {
 						"minLength": 1
@@ -5984,6 +6002,9 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -6031,6 +6052,9 @@
 									"label": "Address",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "address",
 									"type": "textfield",
 									"input": true,
@@ -6190,12 +6214,13 @@
 				"components": [{
 					"label": "Information for each Additional Location is required as follows.",
 					"tooltip": "You will need to complete another application for these locations.",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add another location",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
 					"defaultValue": [{
@@ -6210,7 +6235,6 @@
 						"dsPropCentralFireAL": {},
 						"additionalLocationDoYouOwntheBuilding": "",
 						"built_year": {},
-						"explainationAL": "",
 						"receiptsAL": [],
 						"doyouhaveapoolonpremisesAL": "",
 						"ifyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformAL": "",
@@ -6237,7 +6261,7 @@
 						"doYouWantToApplyForNonOwnerAutoAL": false,
 						"nonOwnedAutoLiabilityPL": "",
 						"ALCoverageCheckBox": false,
-						"ALTravelAgentEOFP": "0",
+						"ALTravelAgentEOFP": "NaN",
 						"ALNonOwnedAutoCheckBox": false,
 						"ALExcessLiabilityCheckBox": false,
 						"ALPropertyCoverageOption": "nonCat",
@@ -6245,24 +6269,20 @@
 						"ALPropertyTaxPercentage": "0",
 						"additionalLocationPropertyTotal": "0",
 						"receiptsAL1": [],
-						"ALCoverageFP": 0,
+						"ALCoverageFP": "NaN",
 						"ALnonDivingPoolAmount": 0,
 						"ALMedicalExpenseFP": 0,
-						"ALNonOwnedAutoFP": 0,
-						"ALExcessLiabilityFP": 0,
-						"ALContentsFP": 0,
-						"ALLossofBusIncomeFP": "0",
+						"ALNonOwnedAutoFP": "0",
+						"ALExcessLiabilityFP": "0",
 						"ALBuildingLimitFP": 0,
 						"ALliabilityCoveragesTotal": "0",
-						"ALPropertyCoveragesTotal": "0",
+						"ALPropertyCoveragesTotal": 0,
 						"ALLiabilityPropertyCoveragesTotal": "0",
 						"ALProRataPremium": "0",
-						"ALliabilityTaxTotal": "0",
+						"ALliabilityTaxTotal": "0.00",
 						"ALPropertyTaxTotal": 0,
-						"ALTotalTax": "0",
+						"ALTotalTax": "0.00",
 						"locationTotal": 0,
-						"ALcentralStationAlarm": "",
-						"ALfireSprinklers": "",
 						"ALdoyouhaveapoolonpremisesPL1": "",
 						"ALcriminalBackGroundChecks": "",
 						"ALhasApplicantSexualAbuse": "",
@@ -6302,7 +6322,13 @@
 						"ALlakeLifeGaurdRecordLog": "",
 						"ALlakeJacuzziWhirlPool": "",
 						"ALlakeTemperatureAdjusted": "",
-						"ALlakeFiltrationDrainsUsed": ""
+						"ALlakeFiltrationDrainsUsed": "",
+						"padiNumberAL": "",
+						"ALpropertyCoverageSelect": "",
+						"built_year1": {},
+						"ALProRataPremiumPercentage": 1,
+						"overRideLiabilityTax": false,
+						"ALlakeQuarry": 0
 					}],
 					"clearOnHide": false,
 					"key": "additionalLocations",
@@ -10571,12 +10597,13 @@
 					"hideLabel": true
 				}, {
 					"label": "Group Members",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Not a PADI Member?Click here to add external members",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": true,
 					"hideLabel": true,
 					"tableView": false,
 					"defaultValue": [{
@@ -10586,12 +10613,12 @@
 						"status": "",
 						"nameOfInstitution": "",
 						"initial": "",
-						"start_date": "2020-07-16",
+						"start_date": "2020-09-01",
 						"documentattach": [],
 						"verified": "",
 						"rating": "",
 						"document1": [],
-						"effectiveDate": "2020-07-16",
+						"effectiveDate": "09-01-2020",
 						"start_date1": "2020-07-16"
 					}],
 					"clearOnHide": false,
@@ -10932,12 +10959,13 @@
 					"input": false,
 					"components": [{
 						"label": "Group Additional Insured",
-						"reorder": false,
+						"reorder": true,
 						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
+						"noFirstRow": false,
 						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": [{
@@ -10951,7 +10979,8 @@
 							"businessRelationOther": "",
 							"additionalInformation": "",
 							"doYouHaveAWrittenContract": "",
-							"additionalInsuredAttachments": []
+							"additionalInsuredAttachments": [],
+							"additionalInsuredAttachments1": []
 						}],
 						"validate": {
 							"required": true,
@@ -11400,12 +11429,13 @@
 					"input": false,
 					"components": [{
 						"label": "Additional Named Insured",
-						"reorder": false,
+						"reorder": true,
 						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
+						"noFirstRow": false,
 						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": [{
@@ -14275,7 +14305,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 41,
+	"_vid": 43,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14293,6 +14323,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-01T15:19:40.451Z",
+	"modified": "2020-09-02T08:26:06.233Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
