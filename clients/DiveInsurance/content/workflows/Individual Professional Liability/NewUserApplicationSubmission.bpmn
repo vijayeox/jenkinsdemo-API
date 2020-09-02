@@ -88,7 +88,7 @@ boolean result8 = false
 boolean result9 = false
 boolean result10 = false
 
-if (additionalInsured ) {
+if (additionalInsured == 'addAdditionalInsureds' ) {
  additionalInsured.each {
   if (it.businessRelation &amp;&amp; it.businessRelation == 'other') {
     result1 = true
