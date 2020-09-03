@@ -88,9 +88,9 @@ class FileService extends AbstractService
         $fields = $data = $this->cleanData($data);
         $jsonData = json_encode($data);
         $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
-
+        $orgId = $this->entityService->getEntityOfferingOrganization($entityId);
         $data['uuid'] = $uuid;
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['org_id'] = $orgId ? $orgId : AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
@@ -212,8 +212,8 @@ class FileService extends AbstractService
         $context = ['orgId' => $orgUuid, 'userId' => $userUuid];
         $this->updateOrganizationContext($context);
     }
-    private function updateFileAttributesInternal($entityId, $fields, $fileId){
-        $validFields = $this->checkFields($entityId ,$fields, $fileId);
+    private function updateFileAttributesInternal($entityId, $fileData, $fileId){
+        $validFields = $this->checkFields($entityId ,$fileData, $fileId);
         $validFields = $validFields['validFields'];
         $fields = $validFields['data'];
         unset($validFields['data']);
@@ -262,6 +262,8 @@ class FileService extends AbstractService
                             where fa.file_id = :fileId and f.type IN ('document','file')and ifa.id is null)";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
+                $fields = $this->processMergeData($entityId, $fileData, $fields);
+                $this->updateFileData($fileId, $fields);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
             $this->commit();

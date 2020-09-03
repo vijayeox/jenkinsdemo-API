@@ -45,6 +45,7 @@ class FileServiceTest extends AbstractServiceTest
             case "testFileCreateWithExistingUuid":
             case "testFileCreateWithEntityName":
             case "testFileCreateWithEntityNameAndEntityId":
+            case "testFileCreateWithEntityIdAsPolicyHolder":
             case "testGetFileListWithNoWorkflowOrUserIdInRouteWithParticipants":
             case "testGetFileListWithWorkflowButNoUserIdInRouteWithParticipants":
             case "testGetFileListWithInvalidWorkflowButNoUserIdInRouteWithParticipants":
@@ -69,6 +70,7 @@ class FileServiceTest extends AbstractServiceTest
             case "testFileCreateWithExistingUuid":
             case "testFileCreateWithEntityName":
             case "testFileCreateWithEntityNameAndEntityId":
+            case "testFileCreateWithEntityIdAsPolicyHolder":
             case "testGetFileListWithNoWorkflowOrUserIdInRouteWithParticipants";
             case "testGetFileListWithWorkflowButNoUserIdInRouteWithParticipants":
             case "testGetFileListWithInvalidWorkflowButNoUserIdInRouteWithParticipants":
@@ -499,7 +501,7 @@ class FileServiceTest extends AbstractServiceTest
         }
     }
 
-    private function performFileAssertions($result, $data, $fileParticipantCount = 1, $indexedFields = [["field" => "field1", "id" => 1, "type" => "TEXT"]], $version = 1){
+    private function performFileAssertions($result, $data, $fileParticipantCount = 1, $indexedFields = [["field" => "field1", "id" => 1, "type" => "TEXT"]], $version = 1, $orgId = NULL){
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
@@ -510,7 +512,11 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(1, count($sqlQuery2Result));
         $fileId = $sqlQuery2Result[0]['id'];
         $this->assertEquals($data['data'], $sqlQuery2Result[0]['data']);
-        $this->assertEquals(AuthContext::get(AuthConstants::ORG_ID), $sqlQuery2Result[0]['org_id']);
+        if(!$orgId){
+            $this->assertEquals(AuthContext::get(AuthConstants::ORG_ID), $sqlQuery2Result[0]['org_id']);
+        }else{
+            $this->assertEquals($orgId, $sqlQuery2Result[0]['org_id']);
+        }
         $this->assertEquals(AuthContext::get(AuthConstants::USER_ID), $sqlQuery2Result[0]['created_by']);
         if(!isset($data['form_id'])){
             $this->assertEquals(null, $sqlQuery2Result[0]['form_id']);
@@ -561,6 +567,20 @@ class FileServiceTest extends AbstractServiceTest
         $data = array('field1' => '32325', 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
         $result = $this->fileService->createFile($data);
         $this->performFileAssertions($result, $data, 2);
+           
+    }
+
+    public function testFileCreateWithEntityIdAsPolicyHolder() {
+        AuthContext::put(AuthConstants::ORG_ID, 100);
+        AuthContext::put(AuthConstants::ORG_UUID, 'fa371de7-0387-48ea-8f29-5d3704d96ac5');
+        AuthContext::put(AuthConstants::USER_ID, 100);
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $formId = $dataset['ox_form'][0]['uuid'];
+        $entityId = $dataset['ox_app_entity'][0]['id'];
+        $data = array('field1' => '32325', 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId);
+        $result = $this->fileService->createFile($data);
+        $this->performFileAssertions($result, $data, 2, [["field" => "field1", "id" => 1, "type" => "TEXT"]], $version = 1, 1);
            
     }
 
