@@ -307,7 +307,7 @@
    Note: Note If the producer doesn’t answer this question it will map over as \No
 -
    key: testdriveprocedures_copyOfInsuranceCard
-   method: checkValue
+   method: checkInArray
    Source Worksheet: Test drive procedure - copy Of Insurance Card
    pageName: Underwriting Survey
    cell: D42
@@ -856,7 +856,7 @@
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_none
-   method: pulloutChild
+   method: checkInArray
    type: Checkbox
    cell: Check Box 214
 -
@@ -869,7 +869,7 @@
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_fenced
-   method: pulloutChild
+   method: checkInArray
    type: Checkbox
    cell: Check Box 219
 -
@@ -882,7 +882,7 @@
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_postAndChain
-   method: pulloutChild
+   method: checkInArray
    type: Checkbox
    cell: Check Box 220
 -
@@ -895,7 +895,7 @@
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_securityLighting
-   method: pulloutChild
+   method: checkInArray
    type: Checkbox
    cell: Check Box 221
 -
@@ -908,7 +908,7 @@
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_videoSurveillance
-   method: pulloutChild
+   method: checkInArray
    type: Checkbox
    cell: Check Box 222
 -
@@ -921,7 +921,7 @@
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_nightWatchman
-   method: pulloutChild
+   method: checkInArray
    type: Checkbox
    cell: Check Box 223
 -
