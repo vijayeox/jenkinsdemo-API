@@ -4724,7 +4724,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
+							"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -6872,7 +6872,8 @@
 														},
 														"type": "file",
 														"url": "/file/attachments",
-														"input": true
+														"input": true,
+														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
 														"label": " Is pool equipment/chemicals regularly maintained?",
 														"optionsLabelPosition": "right",
@@ -10177,7 +10178,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattach[0].length == 0 ||  row.documentattach[0] == '[]'){\n  value = [];\n}",
+							"calculateValue": "if(typeof row.documentattach == 'string' || (row.documentattach && row.documentattach[0] && row.documentattach[0].length == 0) ||  (row.documentattach && row.documentattach[0] == '[]')){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -10639,7 +10640,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
-								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
+								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || (row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0) ||  (row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] == '[]')){\n  value = [];\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -12527,7 +12528,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['Non-OwnedAutoFP'] != data['previous_Non-OwnedAutoFP']){\n  if(data.doYouWantToApplyForNonOwnerAuto == true || data.doYouWantToApplyForNonOwnerAuto == \"true\"){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}\n} else {\n  value = 0;\n}",
+						"calculateValue": "if(data['nonOwnedAutoLiabilityPL'] != data['previous_nonOwnedAutoLiabilityPL']){\n  if(data.doYouWantToApplyForNonOwnerAuto == true || data.doYouWantToApplyForNonOwnerAuto == \"true\"){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}\n} else {\n  value = 0;\n}",
 						"key": "endoNon-OwnedAutoFP",
 						"type": "number",
 						"input": true,
@@ -12553,7 +12554,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['ExcessLiabilityFP'] != data['previous_ExcessLiabilityFP']){\nif(data.excessLiabilityCoveragePrimarylimit1000000PL == \"true\" || data.excessLiabilityCoveragePrimarylimit1000000PL == true){\n value=(data[data[\"excessLiabilityCoverage\"]]||0); \n}else{\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+						"calculateValue": "if(data['excessLiabilityCoverage'] != data['previous_excessLiabilityCoverage']){\nif(data.excessLiabilityCoveragePrimarylimit1000000PL == \"true\" || data.excessLiabilityCoveragePrimarylimit1000000PL == true){\n value=(data[data[\"excessLiabilityCoverage\"]]||0); \n}else{\n  value = 0;\n}\n} else {\n  value = 0;\n}",
 						"key": "endoExcessLiabilityFP",
 						"type": "number",
 						"input": true,
@@ -12685,7 +12686,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['lossOfBusIncome'] != $data['previous_lossOfBusIncome']){\nif(data['propertyCoverageSelect']=='yes'){\n  var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else {\n  value = 0;\n}\n} else {\n  value =0;\n}",
+						"calculateValue": "if(data['lossOfBusIncome'] != data['previous_lossOfBusIncome']){\nif(data['propertyCoverageSelect']=='yes'){\n  var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(data[\"lossOfBusIncome\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else {\n  value = 0;\n}\n} else {\n  value =0;\n}",
 						"key": "endoLossofBusIncomeFP",
 						"type": "number",
 						"input": true,
@@ -14957,6 +14958,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-03T08:42:10.070Z",
+	"modified": "2020-09-03T12:30:23.264Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
