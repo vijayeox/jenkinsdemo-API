@@ -190,6 +190,7 @@ class PocketCard extends PolicyDocument
         if(isset($data['jobStatus']) && ($data['jobStatus']=='In Progress')){
             $data['jobStatus'] = 'Completed';
         }        
+        $this->saveFile($data,$data['uuid']);
         $this->logger->info("The data returned from pocket card is : ". print_r($data, true));
         return $data;
     }
