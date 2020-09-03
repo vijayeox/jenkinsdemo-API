@@ -280,60 +280,6 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     : "";
 
   value = {
-    checkSecurityGuards: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.dolsecguards == "yes") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
-    checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.dolaftrhrslighting == "yes") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
-    checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.dolsurvcammoniintrunotifi == "yes") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
-    checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.dolsurcamnotmoniotrd == "yes") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
-    checkdolpostnchain: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.dolEntranceQuestions.postChain == "yes") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
-    checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.dolEntranceQuestions.fullyFencedPremises == "yes") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
     checkAutobody: data.genericData.locationScheduleGridData.some(
       locationItem => {
         if (locationItem.occupancyType == "bodyShop") {

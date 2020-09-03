@@ -306,13 +306,12 @@
    type: Checkbox
    Note: Note If the producer doesn’t answer this question it will map over as \No
 -
-   key: dolvehicleinevtorytaken_none
+   key: testdriveprocedures_copyOfInsuranceCard
    method: checkValue
-   Source Worksheet: Vehicle inventory taken:None
+   Source Worksheet: Test drive procedure - copy Of Insurance Card
    pageName: Underwriting Survey
    cell: D42
-   returnBoolean: "No|"
-   Note: If the producer doesn’t answer this question it will map over as \No
+   returnBoolean: "Yes|No"
 -
    key: dolvehicleinevtorytaken_daily
    method: checkValue
@@ -589,47 +588,6 @@
    pageName: Underwriting Survey
    cell: D63
 -
-   key: victorAutoPhysicalDamage*checkAfterHoursLighting
-   Source Worksheet: After Hours Lighting
-   pageName: Underwriting Survey
-   cell: Check Box 221
-   type: Checkbox
--
-   key: victorAutoPhysicalDamage*checkSecurityGuards
-   Source Worksheet: Security Guards
-   pageName: Underwriting Survey
-   cell: Check Box 223
-   type: Checkbox
-   Note: Wrongly mapped shows K53 in requirement sheet
--
-   key: victorAutoPhysicalDamage*checkNotMonitoredSurveillanceCamera
-   Source Worksheet: Surveill. Cameras not monitored
-   pageName: Underwriting Survey
-   cell: Check Box 222
-   type: Checkbox
-   note: If at least 1 of the Surveillance Camera questions are selected map "Yes"
-      to the applicable carrier app.
--
-   key: victorAutoPhysicalDamage*checkSurveillanceCamera
-   Source Worksheet: Surveill. Cameras monitored / intruder notification
-   pageName: Underwriting Survey
-   cell: Check Box 222
-   type: Checkbox
-   note: If at least 1 of the Surveillance Camera questions are selected map "Yes"
-      to the applicable carrier app.
--
-   key: victorAutoPhysicalDamage*checkdolpostnchain
-   Source Worksheet: Post & Chain
-   pageName: Underwriting Survey
-   cell: Check Box 220
-   type: Checkbox
--
-   key: victorAutoPhysicalDamage*checkdolflyfencdpremises
-   Source Worksheet: Fully Fenced Premises
-   pageName: Underwriting Survey
-   cell: Check Box 219
-   type: Checkbox
--
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_monthAvgNew
    method: simpleDatagrid
    Source Worksheet: 12 Month Avg  New
@@ -768,12 +726,6 @@
    key: victorAutoPhysicalDamage*checkkeycontrolskeysInCars
    type: Checkbox
    cell: Check Box 218
-# -
-#    pageName: Underwriting Survey
-#    Source Worksheet: None
-#    key:
-#    type: Checkbox
-#    cell: Check Box 234
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive

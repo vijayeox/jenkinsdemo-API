@@ -274,6 +274,7 @@
    key: spraypaintingysurvey_arePaintsStoredInUlApprovedCabinets
    Source Worksheet: Are flammables stored in UL approved cabinets?
    pageName: Garage Supplemental
+   method: pulloutChild
    cell: Check Box 33
    type: Checkbox
 -
