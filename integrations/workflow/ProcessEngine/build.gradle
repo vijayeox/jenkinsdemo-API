@@ -19,7 +19,13 @@ dependencies {
     compile("org.camunda.bpm:camunda-engine-spring:7.9.0")
     compile("org.camunda.bpm:camunda-engine-rest:7.9.0:classes")
     compile("org.camunda.bpm.webapp:camunda-webapp:7.9.0:classes")
+    compile group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
+    compile group: 'org.apache.activemq', name: 'activemq-all', version: '5.4.2'
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.3'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0-RC1'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.21'
 }
 
 jar {
