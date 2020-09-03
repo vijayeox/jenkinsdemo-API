@@ -1412,6 +1412,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['liabilityChanges'] = true;
                         if($data['medicalPayment']==true || $data['medicalPayment']=='true'){
                             $temp['increased_medicalPayment_limit'] = "$5,000";
+                        } else {
+                            $temp['removed_medicalPayment'] = true;
                         }
                     }
                 }
@@ -1424,6 +1426,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['increased_non_owned_liability_limit'] = "$1,000,000";
                         } else if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability100K'){
                             $temp['increased_non_owned_liability_limit'] = "$100,000";
+                        } else {
+                            $temp['removed_nonOwnedAutoLiabilityPL'] = true;
                         }
                     }
                 }
@@ -1434,6 +1438,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['liabilityChanges'] = true;
                         if($data['travelAgentEoPL']){
                             $temp['increased_travelEnO'] = "$1,000,000";
+                        } else {
+                            $temp['removed_travelEnO'] = true;
                         }
                     }
                 }
