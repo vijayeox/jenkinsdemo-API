@@ -52,7 +52,12 @@
 					</tr>
     			{/foreach}
 			</table>
-
+			<hr class = "spacing1"></hr>
+			{if isset($groupExcludedOperation) && $groupExcludedOperation != ""}
+			<p style="margin-bottom: 5px;font-size: 16px;"><b>EXCLUDED OPERATION:</b></p>
+	        		<p style="margin-top:1%;margin-left: 2%;text-align: justify;font-size: 15px;">{$groupExcludedOperation}</p>
+	        <hr></hr>
+	    	{/if}
 	</div>
 </body>
 </html>
