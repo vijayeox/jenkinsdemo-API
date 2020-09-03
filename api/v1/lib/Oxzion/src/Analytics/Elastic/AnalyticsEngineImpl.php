@@ -196,8 +196,12 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 //					$finalresult[] = array(implode(" - ",$config['group'])=>$key.' - '.$data['key'],'count'=>$value);
 
 				} else {
-					$value = $data['value']['value'];					
-					$tempresult[$field]= $value;
+					$value = $data['value']['value'];
+					if ($operation=="count_distinct") {
+						$tempresult['count']= $value;	
+					}else {
+						$tempresult[$field]= $value;
+					}					
 					$finalresult[] = $tempresult;
 //					$finalresult[] = array(implode(" - ",$config['group'])=>$key.' - '.$data['key'],$field=>$value);
 	
@@ -219,6 +223,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		$finalresult = array();
 		$operation = key($config['aggregates']);
 		$field = $config['aggregates'][$operation];
+		if ($operation=='count_distinct') {
+			$field = 'count';
+		}
 		$qtrtranslate = array('Jan'=>'Q1','Apr'=>'Q2','Jul'=>'Q3','Oct'=>'Q4');
 		if (isset($config['group'])) {
 			if (count($config['group'])==1) {
