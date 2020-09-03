@@ -271,6 +271,12 @@
    cell: Check Box 82
    type: Checkbox
 -
+   key: spraypaintingysurvey_arePaintsStoredInUlApprovedCabinets
+   Source Worksheet: Are flammables stored in UL approved cabinets?
+   pageName: Garage Supplemental
+   cell: Check Box 33
+   type: Checkbox
+-
    key: spraypainting
    Source Worksheet: Does applicant perform body work and spray painting?
    pageName: Garage Supplemental
@@ -1007,7 +1013,7 @@
       vehicleStorageParkingGarage: Parking Lot - No Structure
       partsWarehouseStorage: Warehouse
       vacantBuilding: Vacant Building
-      deliveryPrep: Auto Parts & Supplies
+      deliveryPrep: Delivery Prep
 -
    key: genericData*locationScheduleGridData_occupancyType
    method: simpleDatagrid

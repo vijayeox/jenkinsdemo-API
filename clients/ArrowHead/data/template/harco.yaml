@@ -929,7 +929,7 @@
    pageName: L-DPD
    cell: 'Other choice explanation:'
    offset: '0,6'
-   key: harcoExcelData*checkkeysInCarsLabel
+   key: harcoExcelData*checkkeysInCars
    returnBoolean: 'Keys in Cars|'
 -
    Source Worksheet: 'Is there a written flood emergency plan in place?\r\n\r\nIf YES, please attach a copy of written flood emergency plan'

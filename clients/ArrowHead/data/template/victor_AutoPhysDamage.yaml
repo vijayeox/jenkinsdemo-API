@@ -710,8 +710,18 @@
    cell: Check Box 211
 -
    pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolsnone
+   type: Checkbox
+   cell: Check Box 211
+-
+   pageName: Underwriting Survey
    key: dolalllocdoesnotincld_computerizedKeyVault
    method: checkInArray
+   type: Checkbox
+   cell: Check Box 215
+-
+   pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolscomputerizedKeyVault
    type: Checkbox
    cell: Check Box 215
 -
@@ -728,14 +738,34 @@
    cell: Check Box 216
 -
    pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolslockingKeyCabinet
+   type: Checkbox
+   cell: Check Box 216
+-
+   pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolslockedInManagersOffice
+   type: Checkbox
+   cell: Check Box 216
+-
+   pageName: Underwriting Survey
    key: dolalllocdoesnotincld_lockBoxes
    method: checkInArray
    type: Checkbox
    cell: Check Box 217
 -
    pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolslockbox
+   type: Checkbox
+   cell: Check Box 217
+-
+   pageName: Underwriting Survey
    key: dolalllocdoesnotincld_keysinCars
    method: checkInArray
+   type: Checkbox
+   cell: Check Box 218
+-
+   pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolskeysInCars
    type: Checkbox
    cell: Check Box 218
 # -
@@ -880,8 +910,20 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionnone
+   type: Checkbox
+   cell: Check Box 214
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_fenced
    method: pulloutChild
+   type: Checkbox
+   cell: Check Box 219
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionfullyFencedPremises
    type: Checkbox
    cell: Check Box 219
 -
@@ -894,8 +936,20 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionpostChain
+   type: Checkbox
+   cell: Check Box 220
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_securityLighting
    method: pulloutChild
+   type: Checkbox
+   cell: Check Box 221
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectiondolaftrhrslighting
    type: Checkbox
    cell: Check Box 221
 -
@@ -908,8 +962,20 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionsurveillance
+   type: Checkbox
+   cell: Check Box 222
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_nightWatchman
    method: pulloutChild
+   type: Checkbox
+   cell: Check Box 223
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectiondolsecguards
    type: Checkbox
    cell: Check Box 223
 -
