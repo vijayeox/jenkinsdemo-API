@@ -922,18 +922,21 @@
    cell: Check box 104
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditfrequencyannual
+   key: auditfrequency_annual
+   method: checkValue
    pageName: Crime (printable)
    cell: Check Box 4
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditfrequencysemiAnnual
+   key: auditfrequency_semiAnnual
    pageName: Crime (printable)
+   method: checkValue
    cell: Check Box 6
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditfrequencyquarterly
+   key: auditfrequency_quarterly
    pageName: Crime (printable)
+   method: checkValue
    cell: Check Box 8
    type: Checkbox
 -
@@ -1272,17 +1275,17 @@
    cell: AS40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkblanketcoverage
+   key: franchisedAutoDealer*checkblanketcoverage_result
    pageName: Property
    cell: AK40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkblanketcoverage
+   key: franchisedAutoDealer*checkblanketcoverage_result
    pageName: Property
    cell: AO40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkblanketcoverage
+   key: franchisedAutoDealer*checkblanketcoverage_result
    pageName: Property
    cell: AT40
    type: DataGrid

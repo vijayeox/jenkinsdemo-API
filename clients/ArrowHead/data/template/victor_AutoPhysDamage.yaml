@@ -583,7 +583,7 @@
    pageName: Underwriting Survey
    cell: D33
 -
-   key: doltotalnoofdemos
+   key: victorAutoPhysicalDamage*sumfurnishedAutoEmployee
    Source Worksheet: 'Total number of demos/furnished auto provided: '
    pageName: Underwriting Survey
    cell: D63
