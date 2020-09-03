@@ -414,7 +414,7 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Pocket Card Job\"},{\"command\" : \"delegate\", \"entity_name\" : \"Pocket Card Job\", \"delegate\" : \"PocketCard\"}, {\"command\" : \"fileSave\", \"entity_name\" : \"Pocket Card Job\"}]"
+		"submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Pocket Card Job\"},{\"command\" : \"delegate\", \"async\" : \"true\", \"entity_name\" : \"Pocket Card Job\", \"delegate\" : \"PocketCard\"}, {\"command\" : \"fileSave\", \"entity_name\" : \"Pocket Card Job\"}]"
 	},
 	"name": "pocketCard",
 	"path": "pocketcard",
