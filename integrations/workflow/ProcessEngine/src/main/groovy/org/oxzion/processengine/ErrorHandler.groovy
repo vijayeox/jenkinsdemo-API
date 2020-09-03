@@ -5,10 +5,6 @@ import groovy.json.JsonOutput
 import groovy.sql.Sql
 import org.camunda.bpm.engine.delegate.BpmnError
 import org.camunda.bpm.engine.delegate.DelegateExecution
-import org.camunda.bpm.engine.impl.cfg.TransactionState
-import org.camunda.bpm.engine.impl.context.Context
-import org.camunda.bpm.engine.impl.incident.IncidentContext
-import org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity
 import org.camunda.bpm.engine.runtime.Incident
 import org.oxzion.messaging.Publisher
 import org.slf4j.Logger
@@ -27,6 +23,8 @@ class ErrorHandler {
         }
         return properties
     }
+
+    static def properties = getConfig()
 
     static Publisher publisher = Publisher.getPublisher()
 
@@ -94,7 +92,7 @@ class ErrorHandler {
         }
     }
     static int log(String error_type, String  error_trace, String payload, String params,String app_id){
-        def prop = getConfig()
+        def prop = properties
         def API_DB_URL =System.getenv('API_DB_URL')?System.getenv('API_DB_URL'):prop."api_db_url"
         def DB_DRIVER = System.getenv('DB_DRIVER')?System.getenv('DB_DRIVER'):prop."db_driver"
         def DB_USERNAME = System.getenv('DB_USERNAME')?System.getenv('DB_USERNAME'):prop."db_username"

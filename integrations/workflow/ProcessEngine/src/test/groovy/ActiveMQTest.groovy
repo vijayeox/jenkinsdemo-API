@@ -6,20 +6,12 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.oxzion.processengine.ErrorHandler
 
-import javax.jms.JMSException
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.MockitoAnnotations
-import static org.mockito.ArgumentMatchers.anyString
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doAnswer
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.ArgumentMatchers.isA
+import static org.mockito.Mockito.doNothing
 import static org.mockito.Mockito.mock
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times
 
 import static org.junit.Assert.*
-import static org.junit.Assume.*
 
 class ActiveMQTest {
 
@@ -45,6 +37,5 @@ class ActiveMQTest {
         assertEquals("test_error",data.error_type)
         assertEquals("trace",data.error_trace)
         assertEquals("a=2",data.params)
-
     }
 }
