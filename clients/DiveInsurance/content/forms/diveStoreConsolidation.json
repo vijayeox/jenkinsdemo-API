@@ -191,6 +191,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "product",
+						"calculateValue": "if(!data.product || data.product = \"\"){\n  value = \"Dive Store\";\n}else{\n  value = \"Group ProfessionalLibility\";\n}",
 						"key": "product",
 						"type": "hidden",
 						"input": true,
@@ -198,6 +199,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "entity_name",
+						"calculateValue": "if(!data.entity_name || data.entity_name = \"\"){\n  value = \"Dive Store\";\n}else{\n  value = \"Group ProfessionalLibility\";\n}",
 						"key": "entity_name",
 						"type": "hidden",
 						"input": true,
@@ -3685,6 +3687,76 @@
 								"label": "Field Set",
 								"input": false,
 								"components": [{
+									"type": "documentviewer",
+									"key": "document1",
+									"protected": true,
+									"persistent": false,
+									"input": 1,
+									"placeholder": "",
+									"prefix": "",
+									"customClass": "",
+									"suffix": "",
+									"multiple": false,
+									"defaultValue": null,
+									"unique": false,
+									"hidden": false,
+									"clearOnHide": true,
+									"refreshOn": "",
+									"redrawOn": "",
+									"tableView": false,
+									"modalEdit": false,
+									"label": " ",
+									"labelPosition": "top",
+									"description": "",
+									"errorLabel": "",
+									"tooltip": "",
+									"hideLabel": true,
+									"tabindex": "",
+									"disabled": false,
+									"autofocus": false,
+									"dbIndex": false,
+									"customDefaultValue": "",
+									"calculateValue": "value = (row.pleaseAttachWaiversOfLiability)",
+									"calculateServer": false,
+									"widget": null,
+									"attributes": {},
+									"validateOn": "change",
+									"validate": {
+										"required": false,
+										"custom": "",
+										"customPrivate": false,
+										"strictDateValidation": false,
+										"multiple": false,
+										"unique": false
+									},
+									"conditional": {
+										"show": null,
+										"when": null,
+										"eq": ""
+									},
+									"overlay": {
+										"style": "",
+										"left": "",
+										"top": "",
+										"width": "",
+										"height": ""
+									},
+									"allowCalculateOverride": false,
+									"encrypted": false,
+									"showCharCount": false,
+									"showWordCount": false,
+									"properties": {},
+									"allowMultipleMasks": false,
+									"id": "eqb4ti7",
+									"dtype": "documentviewer",
+									"datype": "documentviewer",
+									"dattype": "documentviewer",
+									"customConditional": "if(data.CSRReviewRequired || data.CSRReviewRequired == true) {\nif (data.privileges){\n if((typeof row.pleaseAttachWaiversOfLiability != 'string') && row.pleaseAttachWaiversOfLiability !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}}else{\nshow = false;\n}",
+									"datatype": "documentviewer",
+									"data_type": "documentviewer",
+									"inputType": "documentviewer",
+									"keyModified": true
+								}, {
 									"label": "Hours of Operation",
 									"attrs": [{
 										"attr": "",
@@ -5651,7 +5723,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
+							"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -10860,7 +10932,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
+							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattach[0].length == 0 ||  row.documentattach[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -11326,7 +11398,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
-								"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
+								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -14305,7 +14377,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 43,
+	"_vid": 45,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14323,6 +14395,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-02T08:26:06.233Z",
+	"modified": "2020-09-03T08:43:30.541Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }

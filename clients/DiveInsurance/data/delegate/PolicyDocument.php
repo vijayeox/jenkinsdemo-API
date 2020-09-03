@@ -529,8 +529,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         unset($formData[$key]);
                     }
                 }
-                $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
-
+                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) ){
+                    $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
+                }
                 $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 array_push($documents['endorsement_coi_document'], $endorsementDoc);
                 $this->additionalDocumentsDS($temp,$documents,$dest);

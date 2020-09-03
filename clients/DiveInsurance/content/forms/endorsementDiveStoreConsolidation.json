@@ -3069,6 +3069,24 @@
 									"url": "/file/attachments",
 									"input": true
 								}, {
+									"type": "documentviewer",
+									"key": "document1",
+									"calculateValue": "value = (row.pleaseAttachWaiversOfLiability)",
+									"dtype": "documentviewer",
+									"datype": "documentviewer",
+									"dattype": "documentviewer",
+									"customConditional": "if(data.CSRReviewRequired || data.CSRReviewRequired == true) {\nif (data.privileges){\n if((typeof row.pleaseAttachWaiversOfLiability != 'string') && row.pleaseAttachWaiversOfLiability !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}}else{\nshow = false;\n}",
+									"datatype": "documentviewer",
+									"data_type": "documentviewer",
+									"label": " ",
+									"hideLabel": true,
+									"inputType": "documentviewer",
+									"input": 1,
+									"tableView": false,
+									"protected": true,
+									"persistent": false,
+									"keyModified": true
+								}, {
 									"label": " Is pool equipment/chemicals regularly maintained?",
 									"optionsLabelPosition": "right",
 									"inline": false,
@@ -10159,7 +10177,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof value == 'string'){\n  value = JSON.parse(value);\n}",
+							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattach[0].length == 0 ||  row.documentattach[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -10621,7 +10639,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
-								"calculateValue": "if(typeof value == 'string'){\n  value = JSON.parse(value);\n}",
+								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -14939,6 +14957,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-02T08:29:18.728Z",
+	"modified": "2020-09-03T08:42:10.070Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
