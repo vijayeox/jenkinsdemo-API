@@ -165,8 +165,8 @@ class FileService extends AbstractService
         $context = ['orgId' => $orgUuid, 'userId' => $userUuid];
         $this->updateOrganizationContext($context);
     }
-    private function updateFileAttributesInternal($entityId, $fields, $fileId){
-        $validFields = $this->checkFields($entityId ,$fields, $fileId);
+    private function updateFileAttributesInternal($entityId, $fileData, $fileId){
+        $validFields = $this->checkFields($entityId ,$fileData, $fileId);
         $validFields = $validFields['validFields'];
         $fields = $validFields['data'];
         unset($validFields['data']);
@@ -215,6 +215,8 @@ class FileService extends AbstractService
                             where fa.file_id = :fileId and f.type IN ('document','file')and ifa.id is null)";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
+                $fields = $this->processMergeData($entityId, $fileData, $fields);
+                $this->updateFileData($fileId, $fields);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
             // The next line needs to be removed for file save to work
