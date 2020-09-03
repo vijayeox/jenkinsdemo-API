@@ -8,6 +8,12 @@ use Oxzion\Service\AbstractService;
 use Oxzion\FileNotFoundException;
 use Oxzion\DuplicateFileException;
 use Oxzion\App\AppArtifactNamingStrategy;
+use Oxzion\Utils\ZipUtils;
+use Oxzion\Utils\ZipException;
+use Oxzion\Utils\FileUtils;
+use Oxzion\DuplicateEntityException;
+use Oxzion\EntityNotFoundException;
+use Oxzion\InvalidApplicationArchiveException;
 
 /* 
  * This service is for managing application artifact files like form definition 
@@ -16,10 +22,12 @@ use Oxzion\App\AppArtifactNamingStrategy;
 class AppArtifactService extends AbstractService
 {
     private $table;
+    private $appService;
 
-    public function __construct($config, $dbAdapter, AppTable $table) {
+    public function __construct($config, $dbAdapter, AppTable $table, AppService $appService) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->appService = $appService;
     }
 
     public function saveArtifact($appUuid, $artifactType) {
@@ -46,7 +54,7 @@ class AppArtifactService extends AbstractService
                 throw new Exception("Unexpected artifact type ${artifactType}.");
         }
         $targetDir = $targetDir . DIRECTORY_SEPARATOR;
-        //Check whether any of the uploaded file(s) already exists on the server.
+        //Check whether any of the uploaded file(s) already exist(s) on the server.
         foreach($_FILES as $key => $fileData) {
             if (UPLOAD_ERR_OK != $fileData['error']) {
                 throw new Exception('File upload failed.');
@@ -95,5 +103,88 @@ class AppArtifactService extends AbstractService
         if (!unlink($filePath)) {
             throw new Exception("Failed to delete artifact type=${artifactType}, file ${artifactName}.");
         }
+    }
+
+    public function uploadAppArchive() {
+        $fileData = array_shift($_FILES);
+        if (!isset($fileData)) {
+            throw new Exception('File not uploaded!');
+        }
+        if ($fileData['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception('File upload failed.');
+        }
+        $tempDir = FileUtils::createTempDir();
+        //Extract application.yml to a unique temporary directory.
+        try {
+            ZipUtils::unzip($fileData['tmp_name'], $tempDir, ['application.yml']);
+        }
+        catch (ZipException $e) {
+            throw new InvalidApplicationArchiveException('Invalid application archive.', null, $e);
+        }
+
+        //Load application.yml from tempDir where it has been extracted from zip archive.
+        $yamlData = AppService::loadAppDescriptor($tempDir);
+        $appUuid = $yamlData['app']['uuid'];
+
+        //Ensure app entity with the UUID given in $yamlData does not exist on the server.
+        $app = new App($this->table);
+        try {
+            $app->loadByUuid($appUuid);
+            throw new DuplicateEntityException('Application with this UUID already exists on the server.', 
+                ['app' => $appUuid]);
+        }
+        catch (EntityNotFoundException $ignored) {
+            //Entity does not exist. Continue.
+        }
+
+        //Using application.yml data extract input zip archive to app source directory.
+        try {
+            $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $yamlData['app']);
+        }
+        catch (Exception $e) {
+            throw new InvalidApplicationArchiveException('Invalid application archive.', null, $e);
+        }
+        if (file_exists($appSourceDir)) {
+            throw new DuplicateEntityException('Application with this UUID already exists on the server.', 
+                ['app' => $appUuid]);
+        }
+
+        //Create $appSourceDir and extract uploaded zip archive into it.
+        if (!mkdir($appSourceDir)) {
+            throw new Exception("Failed to create directory ${appSourceDir}.");
+        }
+        try {
+            ZipUtils::unzip($fileData['tmp_name'], $appSourceDir);
+        }
+        catch (ZipException $e) {
+            throw new InvalidApplicationArchiveException('Invalid application archive.', null, $e);
+        }
+
+        //Remove tempDir after extracting the archive to target directory.
+        FileUtils::rmDir($tempDir);
+
+        //Create the app using $yamlData from the uploaded archive.
+        $updatedYamlData = $this->appService->createApp($yamlData);
+
+        //Ensure application UUID does not change - even by mistake!
+        if ($yamlData['app']['uuid'] !== $updatedYamlData['app']['uuid']) {
+            throw new Exception(
+                'Application UUID in descriptor YAML does not match UUID returned by createApp service.');
+        }
+
+        return $updatedYamlData;
+    }
+
+    public function createAppArchive($appUuid) {
+        $app = new App($this->table);
+        $app->loadByUuid($appUuid);
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $app->getProperties());
+        $tempFileName = FileUtils::createTempFileName();
+        ZipUtils::zipDir($appSourceDir, $tempFileName);
+        return [
+            'name' => $app->getProperty('name'),
+            'uuid' => $appUuid,
+            'zipFile' => $tempFileName
+        ];
     }
 }

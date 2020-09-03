@@ -24,14 +24,20 @@ class Migration extends AbstractService
      */
     public function __construct($config, $appName, $appId, $description)
     {
+        if (empty($appName) || empty($appId)) {
+            throw new Exception("appName and appId cannot be empty!");
+        }
+
         $this->description = $description;
         $this->appName = $appName;
         $this->appId = $appId;
-        $this->database = AppArtifactNamingStrategy::getDatabaseName(['name' => $appName, 'uuid' => $appId]);
+
         $dbConfig = array_merge(array(), $config['db']);
         $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = 'mysql';
         $this->mysqlAdapter = new Adapter($dbConfig);
+
+        $this->database = AppArtifactNamingStrategy::getDatabaseName(['name' => $appName, 'uuid' => $appId]);
         $adapter = self::createAdapter($config, $this->database);
         parent::__construct($config, $adapter);
         $this->initDB();
@@ -60,12 +66,7 @@ class Migration extends AbstractService
      */
     private function initDB()
     {
-        $adapter = $this->mysqlAdapter;
-        if ($this->appName === null || $this->appName === "" || $this->appId === null || $this->appId === "")
-        {
-            throw new Exception("appName and appId cannot be empty!");
-        }
-        
+        $adapter = $this->mysqlAdapter;        
         try {
             $adapter->getDriver()->getConnection()->beginTransaction();
             $checkVersion = $this->checkDB(); //Code to check if the App Version is already installed.

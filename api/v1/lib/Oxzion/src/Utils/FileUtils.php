@@ -226,4 +226,31 @@ class FileUtils
         }
         return $baseLocation;
     }
+
+    public static function createTempDir($dirNameLength = 10) {
+        $tempDir = sys_get_temp_dir();
+        for ($i=0; $i<100; $i++) {
+            $dirName = StringUtils::randomString($dirNameLength);
+            $targetDir = $tempDir . DIRECTORY_SEPARATOR . $dirName;
+            if (!file_exists($targetDir)) {
+                if (!mkdir($targetDir)) {
+                    throw new Exception('Failed to create temp directory.');
+                }
+                return $targetDir;
+            }
+        }
+		throw new Exception('Failed to create unique temporary directory in 100 attempts!.');
+    }
+
+    public static function createTempFileName($fileNameLength = 10) {
+        $tempDir = sys_get_temp_dir();
+        for ($i=0; $i<100; $i++) {
+            $fileName = StringUtils::randomString($fileNameLength);
+            $targetFile = $tempDir . DIRECTORY_SEPARATOR . $fileName;
+            if (!file_exists($targetFile)) {
+                return $targetFile;
+            }
+        }
+        throw new Exception('Failed to create unique temporary file name in 100 attempts!.');
+    }
 }

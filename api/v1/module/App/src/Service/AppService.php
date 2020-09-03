@@ -171,13 +171,14 @@ class AppService extends AbstractService
             FileUtils::copyDir($appTemplateDir, $appSourceDir);
         }
         $this->createOrUpdateApplicationDescriptor($appSourceDir, $descriptorData);
+        return $appSourceDir;
     }
 
     private function createOrUpdateApplicationDescriptor($dirPath, $descriptorData) {
         $descriptorFilePath = $dirPath . 
             ((DIRECTORY_SEPARATOR == substr($dirPath, -1 )) ? '' : DIRECTORY_SEPARATOR) . self::APPLICATION_DESCRIPTOR_FILE_NAME;
         if (file_exists($descriptorFilePath)) {
-            $descriptorDataFromFile = $this->loadAppDescriptor($dirPath);
+            $descriptorDataFromFile = self::loadAppDescriptor($dirPath);
             ArrayUtils::merge($descriptorDataFromFile, $descriptorData);
             $yamlText = Yaml::dump($descriptorDataFromFile);
         }
@@ -191,7 +192,7 @@ class AppService extends AbstractService
         }
     }
 
-    private function loadAppDescriptor($path)
+    public static function loadAppDescriptor($path)
     {
         //check if directory exists
         if (!(file_exists($path))) {
@@ -218,7 +219,7 @@ class AppService extends AbstractService
 
     public function deployApp($path, $params = null)
     {
-        $ymlData = $this->loadAppDescriptor($path);
+        $ymlData = self::loadAppDescriptor($path);
         if(!isset($params)){
             $params = $this->appDeployOptions;
         }
@@ -655,6 +656,7 @@ class AppService extends AbstractService
         }
         
     }
+
     private function executePackageDiscover()
     {
         $app = $this->config['APPS_FOLDER'];

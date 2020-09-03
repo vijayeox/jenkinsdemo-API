@@ -55,42 +55,6 @@ return [
                     ],
                 ],
             ],
-            'addArtifact' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/artifact/:artifactType/add',
-                    'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,
-                        'type' => 'form|workflow',
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\AppArtifactController::class,
-                        'method' => 'POST',
-                        'action' => 'addArtifact',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                        ],
-                    ],
-                ],
-            ],
-            'deleteArtifact' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/artifact/:artifactType/delete/:artifactName',
-                    'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,
-                        'type' => 'form|workflow',
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\AppArtifactController::class,
-                        'method' => 'DELETE',
-                        'action' => 'deleteArtifact',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                        ],
-                    ],
-                ],
-            ],
             // 'appinstall' => [
             //     'type' => Segment::class,
             //     'options' => [
@@ -120,17 +84,6 @@ return [
                         'controller' => Controller\AppController::class,
                         'action' => 'applist',
                         'method' => 'GET',
-                    ],
-                ],
-            ],
-            'appupload' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/appupload',
-                    'defaults' => [
-                        'controller' => Controller\AppController::class,
-                        'action' => 'appUpload',
-                        'method' => 'post',
                     ],
                 ],
             ],
@@ -870,6 +823,73 @@ return [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
                         'action' => 'reIndex',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'addArtifact' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/artifact/add/:artifactType',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN,
+                        'artifactType' => 'form|workflow',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'POST',
+                        'action' => 'addArtifact',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'deleteArtifact' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/artifact/delete/:artifactType/:artifactName',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN,
+                        'artifactType' => 'form|workflow',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'DELETE',
+                        'action' => 'deleteArtifact',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'downloadAppArchive' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/archive/download',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'GET',
+                        'action' => 'downloadAppArchive',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'uploadAppArchive' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/archive/upload',
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'POST',
+                        'action' => 'uploadAppArchive',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

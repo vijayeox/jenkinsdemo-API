@@ -1211,4 +1211,3 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 }
-

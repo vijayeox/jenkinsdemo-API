@@ -124,7 +124,8 @@ class Module implements ConfigProviderInterface
                     return new Service\AppArtifactService(
                         $container->get('config'), 
                         $container->get(AdapterInterface::class), 
-                        $container->get(Model\AppTable::class)
+                        $container->get(Model\AppTable::class),
+                        $container->get(\App\Service\AppService::class)
                     );
                 },
             ],

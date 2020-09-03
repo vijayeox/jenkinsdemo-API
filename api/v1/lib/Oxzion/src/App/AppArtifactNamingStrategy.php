@@ -2,6 +2,8 @@
 
 namespace Oxzion\App;
 
+use Exception;
+
 class AppArtifactNamingStrategy {
     private static $listener = NULL;
 
@@ -42,12 +44,24 @@ class AppArtifactNamingStrategy {
     }
 
     private static function makeAppDirectoryName($appData) {
-        return $appData['uuid'];
+        $uuid = $appData['uuid'];
+        if (empty($uuid)) {
+            throw new Exception('Application UUID is required.');
+        }
+        return $uuid;
     }
 
     public static function getDatabaseName($appData) {
-        $dbName = self::normalizeAppName($appData['name']) . 
-            '___' . self::normalizeUuid($appData['uuid']);
+        $appName = $appData['name'];
+        if (empty($appName)) {
+            throw new Exception('App name is required.');
+        }
+        $uuid = $appData['uuid'];
+        if (empty($uuid)) {
+            throw new Exception('Application UUID is required.');
+        }
+        $dbName = self::normalizeAppName($appName) . 
+            '___' . self::normalizeUuid($uuid);
         if (self::$listener) {
             self::$listener->databaseNameCreated($dbName);
         }
@@ -55,10 +69,16 @@ class AppArtifactNamingStrategy {
     }
 
     private static function normalizeUuid($uuid) {
+        if (empty($uuid)) {
+            throw new Exception('Application UUID is required.');
+        }
         return str_replace('-', '', $uuid);
     }
 
-    private static function normalizeAppName($appName) {
+    public static function normalizeAppName($appName) {
+        if (empty($appName)) {
+            throw new Exception('App name is required.');
+        }
         $appName = str_replace(' ', '', $appName); //Remove space characters.
         return preg_replace('/[^A-Za-z0-9_]/', '', $appName, -1); // Removes special chars.
     }

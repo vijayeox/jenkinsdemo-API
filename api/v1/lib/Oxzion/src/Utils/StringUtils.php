@@ -26,4 +26,10 @@ class StringUtils
    		} 
     	return (substr($string, -$len) === $endString); 
 	}
+
+    public static function randomString($stringLength) {
+        $sourceStr = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        return substr(str_shuffle($sourceStr), 0, $stringLength);
+	}
 }
+
