@@ -199,7 +199,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "entity_name",
-						"calculateValue": "if(!data.entity_name || data.entity_name = \"\"){\n  value = \"Dive Store\";\n}else{\n  value = \"Group ProfessionalLibility\";\n}",
+						"calculateValue": "if(!data.entity_name || data.entity_name = \"\"){\n  value = \"Dive Store\";\n}else{\n  if(data.entity_name==\"Dive Store\"){\n    value= \"Dive Store\"\n  } else {\n    value = \"Group ProfessionalLibility\";\n  }\n}",
 						"key": "entity_name",
 						"type": "hidden",
 						"input": true,
@@ -3692,62 +3692,10 @@
 									"protected": true,
 									"persistent": false,
 									"input": 1,
-									"placeholder": "",
-									"prefix": "",
-									"customClass": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": null,
-									"unique": false,
-									"hidden": false,
-									"clearOnHide": true,
-									"refreshOn": "",
-									"redrawOn": "",
 									"tableView": false,
-									"modalEdit": false,
 									"label": " ",
-									"labelPosition": "top",
-									"description": "",
-									"errorLabel": "",
-									"tooltip": "",
 									"hideLabel": true,
-									"tabindex": "",
-									"disabled": false,
-									"autofocus": false,
-									"dbIndex": false,
-									"customDefaultValue": "",
 									"calculateValue": "value = (row.pleaseAttachWaiversOfLiability)",
-									"calculateServer": false,
-									"widget": null,
-									"attributes": {},
-									"validateOn": "change",
-									"validate": {
-										"required": false,
-										"custom": "",
-										"customPrivate": false,
-										"strictDateValidation": false,
-										"multiple": false,
-										"unique": false
-									},
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									},
-									"overlay": {
-										"style": "",
-										"left": "",
-										"top": "",
-										"width": "",
-										"height": ""
-									},
-									"allowCalculateOverride": false,
-									"encrypted": false,
-									"showCharCount": false,
-									"showWordCount": false,
-									"properties": {},
-									"allowMultipleMasks": false,
-									"id": "eqb4ti7",
 									"dtype": "documentviewer",
 									"datype": "documentviewer",
 									"dattype": "documentviewer",
@@ -5723,7 +5671,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
+							"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -10845,7 +10793,7 @@
 									},
 									"clearOnHide": false,
 									"customDefaultValue": "if(value != \"\" || !value){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
-									"calculateValue": "if(value != \"\" || !value){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
+									"calculateValue": "if(row.effectiveDate != \"\" || !row.effectiveDate){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
@@ -10853,7 +10801,7 @@
 										"custom": "if(data.effectiveDate){\n  valid = (moment(data.effectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}"
 									},
 									"key": "effectiveDate",
-									"customConditional": "if(value != \"\" || !value){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
+									"customConditional": "if(row.effectiveDate != \"\" || !row.effectiveDate){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
 									"type": "datetime",
 									"input": true,
 									"widget": {
@@ -10932,7 +10880,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattach[0].length == 0 ||  row.documentattach[0] == '[]'){\n  value = [];\n}",
+							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattach[0] && row.documentattach[0].length == 0 ||  row.documentattach[0] && row.documentattach[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -11398,7 +11346,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
-								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
+								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -14377,7 +14325,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 45,
+	"_vid": 49,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14395,6 +14343,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-03T08:43:30.541Z",
+	"modified": "2020-09-03T10:04:30.790Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
