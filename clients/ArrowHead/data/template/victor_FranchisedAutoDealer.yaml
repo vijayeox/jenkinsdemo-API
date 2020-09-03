@@ -1276,16 +1276,19 @@
    type: DataGrid
 -
    key: franchisedAutoDealer*checkblanketcoverage_result
+   method: simpleDatagrid
    pageName: Property
    cell: AK40
    type: DataGrid
 -
    key: franchisedAutoDealer*checkblanketcoverage_result
+   method: simpleDatagrid
    pageName: Property
    cell: AO40
    type: DataGrid
 -
    key: franchisedAutoDealer*checkblanketcoverage_result
+   method: simpleDatagrid
    pageName: Property
    cell: AT40
    type: DataGrid
