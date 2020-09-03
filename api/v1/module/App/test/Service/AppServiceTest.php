@@ -87,9 +87,17 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::ORG_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
-        $app = $appService->getApp($uuid);
-        $this->assertEquals($app['uuid'], $uuid);
-        $this->assertEquals($app['name'], 'DummyApp');
+        $appService->setupOrUpdateApplicationDirectoryStructure([
+            'app' => [
+                'name' => 'DummyApp',
+                'uuid' => $uuid
+            ]
+        ]);
+        $dd = $appService->getApp($uuid);
+        $this->assertTrue(array_key_exists('app', $dd));
+        $appData = $dd['app'];
+        $this->assertEquals($uuid, $appData['uuid']);
+        $this->assertEquals('DummyApp', $appData['name']);
     }
 
     public function testCreateAppPreBuilt() {

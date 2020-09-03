@@ -98,10 +98,9 @@ class AppService extends AbstractService
 
     public function getApp($uuid)
     {
-        $queryString = 'SELECT ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.category, ap.date_created,
-            ap.date_modified, ap.created_by, ap.modified_by, ap.status, ar.org_id, ar.start_options 
+        $queryString = 'SELECT ap.name, ap.uuid 
             FROM ox_app AS ap
-            LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id AND ar.org_id=:orgId
+            LEFT JOIN ox_app_registry AS ar ON ap.id=ar.app_id AND ar.org_id=:orgId
             WHERE ap.status!=:statusDeleted AND ap.uuid=:uuid';
         $queryParams = [
             'orgId' => AuthContext::get(AuthConstants::ORG_ID),
@@ -113,7 +112,9 @@ class AppService extends AbstractService
             throw new EntityNotFoundException('Entity not found.', 
                 ['entity' => 'Active registered app for the logged-in user\'s organization', 'uuid' => $uuid]);
         }
-        return $resultSet[0];
+        $appData = $resultSet[0];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
+        return $this->loadAppDescriptor($appSourceDir);
     }
 
     public function createApp(&$data)
