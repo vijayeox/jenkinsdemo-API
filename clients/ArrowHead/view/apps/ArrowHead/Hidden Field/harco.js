@@ -461,21 +461,6 @@ if (data.workbooksToBeGenerated.harco == true) {
             }
           })
         : "",
-    checkkeysInCarsLabel:
-      data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some(locationItem => {
-            if (locationItem.locationGarageLiabilityKeyControls) {
-              if (
-                locationItem.locationGarageLiabilityKeyControls.keysInCars ==
-                true
-              ) {
-                return true;
-              }
-            } else {
-              return false;
-            }
-          })
-        : "",
     checklockedInManagersOffice:
       data.dolkeycntrlsameallloc == "no"
         ? data.locationSchedule.some(locationItem => {

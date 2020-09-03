@@ -306,13 +306,12 @@
    type: Checkbox
    Note: Note If the producer doesn’t answer this question it will map over as \No
 -
-   key: dolvehicleinevtorytaken_none
-   method: checkValue
-   Source Worksheet: Vehicle inventory taken:None
+   key: testdriveprocedures_copyOfInsuranceCard
+   method: checkInArray
+   Source Worksheet: Test drive procedure - copy Of Insurance Card
    pageName: Underwriting Survey
    cell: D42
-   returnBoolean: "No|"
-   Note: If the producer doesn’t answer this question it will map over as \No
+   returnBoolean: "Yes|No"
 -
    key: dolvehicleinevtorytaken_daily
    method: checkValue
@@ -584,51 +583,10 @@
    pageName: Underwriting Survey
    cell: D33
 -
-   key: doltotalnoofdemos
+   key: victorAutoPhysicalDamage*sumfurnishedAutoEmployee
    Source Worksheet: 'Total number of demos/furnished auto provided: '
    pageName: Underwriting Survey
    cell: D63
--
-   key: victorAutoPhysicalDamage*checkAfterHoursLighting
-   Source Worksheet: After Hours Lighting
-   pageName: Underwriting Survey
-   cell: Check Box 221
-   type: Checkbox
--
-   key: victorAutoPhysicalDamage*checkSecurityGuards
-   Source Worksheet: Security Guards
-   pageName: Underwriting Survey
-   cell: Check Box 223
-   type: Checkbox
-   Note: Wrongly mapped shows K53 in requirement sheet
--
-   key: victorAutoPhysicalDamage*checkNotMonitoredSurveillanceCamera
-   Source Worksheet: Surveill. Cameras not monitored
-   pageName: Underwriting Survey
-   cell: Check Box 222
-   type: Checkbox
-   note: If at least 1 of the Surveillance Camera questions are selected map "Yes"
-      to the applicable carrier app.
--
-   key: victorAutoPhysicalDamage*checkSurveillanceCamera
-   Source Worksheet: Surveill. Cameras monitored / intruder notification
-   pageName: Underwriting Survey
-   cell: Check Box 222
-   type: Checkbox
-   note: If at least 1 of the Surveillance Camera questions are selected map "Yes"
-      to the applicable carrier app.
--
-   key: victorAutoPhysicalDamage*checkdolpostnchain
-   Source Worksheet: Post & Chain
-   pageName: Underwriting Survey
-   cell: Check Box 220
-   type: Checkbox
--
-   key: victorAutoPhysicalDamage*checkdolflyfencdpremises
-   Source Worksheet: Fully Fenced Premises
-   pageName: Underwriting Survey
-   cell: Check Box 219
-   type: Checkbox
 -
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_monthAvgNew
    method: simpleDatagrid
@@ -710,8 +668,18 @@
    cell: Check Box 211
 -
    pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolsnone
+   type: Checkbox
+   cell: Check Box 211
+-
+   pageName: Underwriting Survey
    key: dolalllocdoesnotincld_computerizedKeyVault
    method: checkInArray
+   type: Checkbox
+   cell: Check Box 215
+-
+   pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolscomputerizedKeyVault
    type: Checkbox
    cell: Check Box 215
 -
@@ -728,22 +696,36 @@
    cell: Check Box 216
 -
    pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolslockingKeyCabinet
+   type: Checkbox
+   cell: Check Box 216
+-
+   pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolslockedInManagersOffice
+   type: Checkbox
+   cell: Check Box 216
+-
+   pageName: Underwriting Survey
    key: dolalllocdoesnotincld_lockBoxes
    method: checkInArray
    type: Checkbox
    cell: Check Box 217
 -
    pageName: Underwriting Survey
-   key: dolalllocdoesnotincld_keysinCars
+   key: victorAutoPhysicalDamage*checkkeycontrolslockbox
+   type: Checkbox
+   cell: Check Box 217
+-
+   pageName: Underwriting Survey
+   key: dolalllocdoesnotincld_keysInCars
    method: checkInArray
    type: Checkbox
    cell: Check Box 218
-# -
-#    pageName: Underwriting Survey
-#    Source Worksheet: None
-#    key:
-#    type: Checkbox
-#    cell: Check Box 234
+-
+   pageName: Underwriting Survey
+   key: victorAutoPhysicalDamage*checkkeycontrolskeysInCars
+   type: Checkbox
+   cell: Check Box 218
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
@@ -874,42 +856,78 @@
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_none
-   method: pulloutChild
+   method: checkInArray
+   type: Checkbox
+   cell: Check Box 214
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionnone
    type: Checkbox
    cell: Check Box 214
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_fenced
-   method: pulloutChild
+   method: checkInArray
+   type: Checkbox
+   cell: Check Box 219
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionfullyFencedPremises
    type: Checkbox
    cell: Check Box 219
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_postAndChain
-   method: pulloutChild
+   method: checkInArray
+   type: Checkbox
+   cell: Check Box 220
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionpostChain
    type: Checkbox
    cell: Check Box 220
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_securityLighting
-   method: pulloutChild
+   method: checkInArray
+   type: Checkbox
+   cell: Check Box 221
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectiondolaftrhrslighting
    type: Checkbox
    cell: Check Box 221
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_videoSurveillance
-   method: pulloutChild
+   method: checkInArray
+   type: Checkbox
+   cell: Check Box 222
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectionsurveillance
    type: Checkbox
    cell: Check Box 222
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
    key: allLotProtectionIncludes_nightWatchman
-   method: pulloutChild
+   method: checkInArray
+   type: Checkbox
+   cell: Check Box 223
+-
+   pageName: Underwriting Survey
+   Source Worksheet: garagekeeper Underwriting Lot Protection
+   key: victorAutoPhysicalDamage*checklotprotectiondolsecguards
    type: Checkbox
    cell: Check Box 223
 -

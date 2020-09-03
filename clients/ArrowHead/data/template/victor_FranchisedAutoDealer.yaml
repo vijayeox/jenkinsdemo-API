@@ -271,6 +271,13 @@
    cell: Check Box 82
    type: Checkbox
 -
+   key: spraypaintingysurvey_arePaintsStoredInUlApprovedCabinets
+   Source Worksheet: Are flammables stored in UL approved cabinets?
+   pageName: Garage Supplemental
+   method: pulloutChild
+   cell: Check Box 33
+   type: Checkbox
+-
    key: spraypainting
    Source Worksheet: Does applicant perform body work and spray painting?
    pageName: Garage Supplemental
@@ -915,18 +922,21 @@
    cell: Check box 104
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditfrequencyannual
+   key: auditfrequency_annual
+   method: checkValue
    pageName: Crime (printable)
    cell: Check Box 4
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditfrequencysemiAnnual
+   key: auditfrequency_semiAnnual
    pageName: Crime (printable)
+   method: checkValue
    cell: Check Box 6
    type: Checkbox
 -
-   key: franchisedAutoDealer*checkauditfrequencyquarterly
+   key: auditfrequency_quarterly
    pageName: Crime (printable)
+   method: checkValue
    cell: Check Box 8
    type: Checkbox
 -
@@ -1007,7 +1017,7 @@
       vehicleStorageParkingGarage: Parking Lot - No Structure
       partsWarehouseStorage: Warehouse
       vacantBuilding: Vacant Building
-      deliveryPrep: Auto Parts & Supplies
+      deliveryPrep: Delivery Prep
 -
    key: genericData*locationScheduleGridData_occupancyType
    method: simpleDatagrid
@@ -1265,17 +1275,20 @@
    cell: AS40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkblanketcoverage
+   key: franchisedAutoDealer*checkblanketcoverage_result
+   method: simpleDatagrid
    pageName: Property
    cell: AK40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkblanketcoverage
+   key: franchisedAutoDealer*checkblanketcoverage_result
+   method: simpleDatagrid
    pageName: Property
    cell: AO40
    type: DataGrid
 -
-   key: franchisedAutoDealer*checkblanketcoverage
+   key: franchisedAutoDealer*checkblanketcoverage_result
+   method: simpleDatagrid
    pageName: Property
    cell: AT40
    type: DataGrid
