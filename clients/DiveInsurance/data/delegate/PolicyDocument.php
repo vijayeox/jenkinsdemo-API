@@ -1295,7 +1295,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         protected function diveStoreEnorsementQuoteDocuments(&$data,&$documents,&$temp,$dest,$options,$previous_data,$endorsementOptions,$length){
             $data['quoteDocuments'] = array();
             $documents = array();
-            $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
+            // $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
             if($data['product'] == 'Dive Store' && (isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true)){
                 $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             }
