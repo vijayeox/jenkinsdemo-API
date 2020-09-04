@@ -186,9 +186,7 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['orgId'])) {
             $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
         }
-        if (!isset($params['created_by'])) {
-            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        }
+        $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $workflowId = $params['workflowId'];
 
         if (!isset($params['app_id'])) {
@@ -231,7 +229,7 @@ class WorkflowInstanceService extends AbstractService
                 if(!isset($fileData['uuid'])){
                     $fileData['uuid'] = $fileDataResult['fileId'];
                 }
-                $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
+                $fileData['data'] = !isset($fileData['data']) ? $this->fileService->cleanData($fileData) : $fileData['data'];
             }else{
                 if(isset($fileData['uuid'])){
                     $select  = "SELECT of.id, of.last_workflow_instance_id from ox_file as of join ox_workflow_instance as owi on owi.id = of.last_workflow_instance_id WHERE of.uuid = :fileId";
@@ -264,7 +262,8 @@ class WorkflowInstanceService extends AbstractService
             $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
             $this->logger->info("WorkflowInstanceId created" . print_r($workflowInstanceId, true));
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id, file_id=:fileId, start_data=:startData where id = :workflowInstanceId";
-            $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'],'fileId'=>$this->getIdFromUuid('ox_file', $params['fileId']),'startData'=>json_encode($fileData['data']));
+            $startData = is_array($fileData['data']) ? json_encode($fileData['data']) : $fileData['data'];
+            $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'],'fileId'=>$this->getIdFromUuid('ox_file', $params['fileId']),'startData'=>$startData);
             $this->logger->info("Query1 - $updateQuery with Parametrs - " . print_r($updateParams, true));
             $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
             $this->commit();
