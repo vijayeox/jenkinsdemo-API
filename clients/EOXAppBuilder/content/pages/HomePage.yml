@@ -33,26 +33,29 @@ content:
                     details:
                         -
                             type: Form
+                            dataUrl: 'app/{{uuid}}'
                             form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
-                            appUuid: '{{appId}}'
                     icon: 'far fa-pencil-alt'
                 -
                     name: deploy
                     rule: '''{{status}}'' !== ''Processing'' && ''{{status}}'' !== ''Queued'''
                     details:
                         -
-                            type: Form
-                            form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
-                            appId: '{{appId}}'
-                    icon: 'far fa-file-download'
+                            type: Update
+                            successMessage: 'Application Successfully Deployed'
+                            params:
+                                url: /app/{{uuid}}/deploy
+                                disableAppId: true
+                    icon: 'far fa-rocket-launch'
+                    updateOnly: true
                 -
                     name: install
                     rule: '''{{status}}'' !== ''Processing'' && ''{{status}}'' !== ''Queued'''
                     details:
                         -
-                            type: Form
-                            form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
-                            appUuid: '{{uuid}}'
+                            type: Update
+                            showSuccess: true
+                            url: /app/{{uuid}}/appinstall
                     icon: 'far fa-file-download'
                 -
                     name: delete
@@ -81,3 +84,6 @@ content:
                 -
                     title: App Name
                     field: name
+                -
+                    title: Description
+                    field: description    
