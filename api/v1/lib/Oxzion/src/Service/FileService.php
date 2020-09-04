@@ -1363,7 +1363,7 @@ class FileService extends AbstractService
         );
     }
 
-    private function cleanData($params)
+    public function cleanData($params)
     {
         unset($params['workflowInstanceId']);
         unset($params['activityInstanceId']);
@@ -1378,6 +1378,8 @@ class FileService extends AbstractService
         unset($params['fileId']);
         unset($params['app_id']);
         unset($params['org_id']);
+        unset($params['type']);
+        unset($params['business_role']);
         unset($params['orgId']);
         unset($params['created_by']);
         unset($params['date_modified']);
