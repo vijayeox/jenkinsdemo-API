@@ -1143,7 +1143,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         $temp['groupPL'] = json_encode($groupPL);
         if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-            $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+            $documents['roster_certificate'] = $this->generateRosterCertificate($temp,$dest,$options);
             $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
             if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
                 $this->sortArrayByName($temp,'groupAdditionalInsured');
@@ -1168,8 +1168,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         array_push($data['upgradeGroupLiability'], $upgrade);
                     }
                     $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);
-                    $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
-                    $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
                     $documents['endorsement_group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
                 
                     $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
@@ -1208,7 +1206,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['groupAnnualAggregate'] = "$2,000,000";
                 }
                 $documents['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
-                $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+                $documents['roster_certificate'] = $this->generateRosterCertificate($temp,$dest,$options);
                 if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
                     $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
                 }
@@ -2049,5 +2047,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             asort($newArray);
             $temp[$arrayKey] = json_encode($newArray);
+        }
+
+
+        private function generateRosterCertificate($temp,$dest,$options){
+            $rosterCertificateArray = array();
+            $rosterCertificateArray[] = $this->destination.$this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
+            $rosterCertificateArray[] = $this->destination.$this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
+            $docDest = $dest['absolutePath'].'Roster_Certificate.pdf';
+            $this->documentBuilder->mergePDF($rosterCertificateArray,$docDest);
+            return $dest['relativePath'].'Roster_Certificate.pdf';
         }
 }
