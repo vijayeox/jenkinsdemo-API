@@ -22,7 +22,7 @@
 				{foreach from=$list item=$value}
 		    		<tr>
 						<td class = 't_title' align = "left">{$value.padi}</td>
-						<td class = 't_title' align = "left">{$value.firstname}&nbsp{$value.lastname}</td>
+						<td class = 't_title' align = "left" style = "text-transform : uppercase;">{$value.firstname}&nbsp{$value.lastname}</td>
 						<td class = 't_title' align = "left">{if isset($certificateLevel[$value.status])}{$certificateLevel[$value.status]}{else}{$value.status}{/if}</td>
 						<td class = 't_title' align = "left">{$value.start_date|date_format:"%m/%d/%Y"}</td>
 						<td class = 't_title' align = "left">{if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
@@ -52,12 +52,6 @@
 					</tr>
     			{/foreach}
 			</table>
-			<hr class = "spacing1"></hr>
-			{if isset($groupExcludedOperation) && $groupExcludedOperation != ""}
-			<p style="margin-bottom: 5px;font-size: 16px;"><b>EXCLUDED OPERATION:</b></p>
-	        		<p style="margin-top:1%;margin-left: 2%;text-align: justify;font-size: 15px;">{$groupExcludedOperation}</p>
-	        <hr></hr>
-	    	{/if}
 	</div>
 </body>
 </html>

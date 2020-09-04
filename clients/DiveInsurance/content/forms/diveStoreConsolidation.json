@@ -191,7 +191,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "product",
-						"calculateValue": "if(!data.product || data.product = \"\"){\n  value = \"Dive Store\";\n}else{\n  value = \"Group ProfessionalLibility\";\n}",
+						"calculateValue": "if(!data.product || data.product == \"\"){\n  value = \"Dive Store\";\n}",
 						"key": "product",
 						"type": "hidden",
 						"input": true,
@@ -199,7 +199,8 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "entity_name",
-						"calculateValue": "if(!data.entity_name || data.entity_name = \"\"){\n  value = \"Dive Store\";\n}else{\n  if(data.entity_name==\"Dive Store\"){\n    value= \"Dive Store\"\n  } else {\n    value = \"Group ProfessionalLibility\";\n  }\n}",
+						"redrawOn": "data",
+						"calculateValue": "if(!data.entity_name || data.entity_name == \"\"){\n  value = \"Dive Store\";\n}else{\n  if(data.product==\"Dive Store\"){\n    value= \"Dive Store\"\n  } else {\n    value = \"Group Professional Liability\";\n  }\n}",
 						"key": "entity_name",
 						"type": "hidden",
 						"input": true,
@@ -7864,7 +7865,8 @@
 														},
 														"type": "file",
 														"url": "/file/attachments",
-														"input": true
+														"input": true,
+														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
 														"label": " Is pool equipment/chemicals regularly maintained?",
 														"optionsLabelPosition": "right",
@@ -11346,7 +11348,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
-								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
+								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -14325,7 +14327,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 49,
+	"_vid": 53,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14343,6 +14345,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-03T10:04:30.790Z",
+	"modified": "2020-09-04T05:53:42.347Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
