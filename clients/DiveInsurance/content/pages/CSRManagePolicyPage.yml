@@ -369,7 +369,7 @@ content:
                 -
                     title: 'Policy Status'
                     field: policyStatus
-                    cell: '{item.status == "In Progress" ? <td className = "policyError">Error processing policy</td> : <td>item.policyStatus</td>}'
+                    cell: '<td>{item.status == "In Progress" ? <span className = "policyError">Error processing policy</span> : item.policyStatus}</td>'
                     filterCell:
                         type: dropdown
                         listItems:
