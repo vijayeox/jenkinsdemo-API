@@ -327,6 +327,21 @@ class RoleService extends AbstractService
         }
     }
 
+    public function getRolesByAppId($appId, $orgId = NULL){
+        $orgClause = "rp.org_id";
+        $params = ["appId" => $appId];
+        if($orgId){
+            $orgClause .= " = :orgId";
+            $params['orgId'] = $orgId;
+        }else{
+            $orgClause .= " IS NULL";
+        }
+        $query = "SELECT r.* from ox_role r inner join ox_role_privilege rp on rp.role_id = r.id
+                    where rp.app_id = :appId and $orgClause";
+        $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
+        return $result;
+    }
+
     public function createBasicRoles($orgid, array $businessRoleId = NULL, $defaultRoles = true)
     {
         $basicRoles = [];
