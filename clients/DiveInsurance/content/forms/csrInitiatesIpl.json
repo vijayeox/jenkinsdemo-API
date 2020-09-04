@@ -15,7 +15,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "panel",
-		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\" || !data.businessPadiVerified) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\" || !data.businessPadiVerified) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\n",
 		"type": "panel",
 		"label": "Personal Information",
 		"input": false,
@@ -2584,7 +2584,7 @@
 									"requireDecimal": false,
 									"inputFormat": "plain",
 									"redrawOn": "data",
-									"calculateValue": "console.log(\"CSR GRAND TOTAL\" + data.csrGrandTotal);\nconsole.log(\"USER GRAND TOTAL\" + data.userGrandTotal);\nvar total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n  console.log(\"TOTAL\" + total);\n    if(parseFloat(total) != 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
+									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) != 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -4984,7 +4984,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 600,
+	"_vid": 601,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5005,6 +5005,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-08-31T12:31:28.207Z",
+	"modified": "2020-09-01T13:44:27.867Z",
 	"machineName": "testdivehub:csrInitiates"
 }

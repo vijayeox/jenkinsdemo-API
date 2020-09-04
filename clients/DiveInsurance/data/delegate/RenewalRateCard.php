@@ -88,6 +88,9 @@ class RenewalRateCard extends RateCard
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
             $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['business_padi']."'";
+            if(isset($data['form_data']['product']) && ($data['form_data']['product'] == 'Dive Store' || $data['form_data']['product'] == 'Group Professional Liability')){
+                $select .= " and firstname is null";
+            }
             $result = $persistenceService->selectQuery($select);
             $coverageOptions = array();
             if($result->count() > 0){

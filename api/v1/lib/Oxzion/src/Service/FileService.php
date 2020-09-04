@@ -1377,6 +1377,7 @@ class FileService extends AbstractService
         unset($params['form_id']);
         unset($params['fileId']);
         unset($params['app_id']);
+        unset($params['appId']);
         unset($params['org_id']);
         unset($params['type']);
         unset($params['business_role']);

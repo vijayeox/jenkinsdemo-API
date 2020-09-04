@@ -189,9 +189,7 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['orgId'])) {
             $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
         }
-        if (!isset($params['created_by'])) {
-            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        }
+        $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $workflowId = $params['workflowId'];
 
         if (!isset($params['app_id'])) {
@@ -234,7 +232,7 @@ class WorkflowInstanceService extends AbstractService
                 if(!isset($fileData['uuid'])){
                     $fileData['uuid'] = $fileDataResult['fileId'];
                 }
-                $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
+                $fileData['data'] = !isset($fileData['data']) ? $this->fileService->cleanData($fileData) : $fileData['data'];
             }else{
                 if(isset($fileData['uuid'])){
                     $select  = "SELECT of.id, of.last_workflow_instance_id from ox_file as of join ox_workflow_instance as owi on owi.id = of.last_workflow_instance_id WHERE of.uuid = :fileId";

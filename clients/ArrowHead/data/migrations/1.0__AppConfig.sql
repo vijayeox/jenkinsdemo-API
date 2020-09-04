@@ -20,5 +20,5 @@ INSERT INTO
 VALUES
     (
         'eoxSupportMail',
-        'prajwals@eoxvantage.in'
+        'arrowhead-support@eoxvantage.com'
     );

@@ -207,6 +207,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_lossOfBusIncome'] = isset($data['lossOfBusIncome'])?$data['lossOfBusIncome']:0;
                 $policy['previous_dspropTotal'] = isset($data['dspropTotal'])?$data['dspropTotal']:0;
                 $policy['previous_lossPayees'] = isset($data['lossPayees'])?$data['lossPayees']:array();
+                $policy['previous_additionalNamedInsured'] = isset($data['additionalNamedInsured'])?$data['additionalNamedInsured']:array();
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
@@ -219,13 +220,16 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_PropTax'] = $data['PropTax'];
                 $policy['previous_propertyCoverageSelect'] = $data['propertyCoverageSelect'];
                 $policy['previous_LiaTax'] = $data['LiaTax'];
+                $policy['previous_Non-OwnedAutoFP'] = $data['Non-OwnedAutoFP'];
+                $policy['previous_LossofBusIncomeFP'] = $data['LossofBusIncomeFP'];
+                $policy['previous_BuildingLimitFP'] = $data['BuildingLimitFP'];
                 $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
                 $policy['previous_AddILocTax'] = $data['AddILocTax'];
                 $policy['previous_propertyDeductiblesPercentage'] = $data['propertyDeductiblesPercentage'];
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
-                $policy['previous_poolLiability'] = $data['poolLiability'];
+                $policy['previous_poolLiability'] = isset($data['poolLiability'])?$data['poolLiability']:0;
                 $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
@@ -347,7 +351,9 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($rate);
                 }
             }
-
+            foreach ($policy as $key => $value) {
+                $data[$key] = $value;
+            }
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
             $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
@@ -369,6 +375,9 @@ public function execute(array $data,Persistence $persistenceService)
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                         }else if($value['effectiveDate'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                        }
+                        if(is_string($value['documentattach'])){
+                            $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
                         }
                         $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
                         $result = $persistenceService->selectQuery($select);
