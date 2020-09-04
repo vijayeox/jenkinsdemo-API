@@ -194,6 +194,12 @@ class StorePreviewDocument extends PolicyDocument
                 $this->additionalDocumentsDS($temp,$documents,$dest);    
             }
         }
+        if(isset($data['documents']['roster_pdf'])){
+            unset($data['documents']['roster_pdf']);
+        }
+        if(isset($data['documents']['roster_certificate'])){
+            unset($data['documents']['roster_certificate']);
+        }
         $originalData['finalDocuments'] = $documents;
         return $originalData;
     }
