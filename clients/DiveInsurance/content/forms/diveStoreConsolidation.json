@@ -191,6 +191,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "product",
+						"calculateValue": "if(!data.product || data.product == \"\"){\n  value = \"Dive Store\";\n}",
 						"key": "product",
 						"type": "hidden",
 						"input": true,
@@ -198,6 +199,8 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "entity_name",
+						"redrawOn": "data",
+						"calculateValue": "if(!data.entity_name || data.entity_name == \"\"){\n  value = \"Dive Store\";\n}else{\n  if(data.product==\"Dive Store\"){\n    value= \"Dive Store\"\n  } else {\n    value = \"Group Professional Liability\";\n  }\n}",
 						"key": "entity_name",
 						"type": "hidden",
 						"input": true,
@@ -3685,6 +3688,24 @@
 								"label": "Field Set",
 								"input": false,
 								"components": [{
+									"type": "documentviewer",
+									"key": "document1",
+									"protected": true,
+									"persistent": false,
+									"input": 1,
+									"tableView": false,
+									"label": " ",
+									"hideLabel": true,
+									"calculateValue": "value = (row.pleaseAttachWaiversOfLiability)",
+									"dtype": "documentviewer",
+									"datype": "documentviewer",
+									"dattype": "documentviewer",
+									"customConditional": "if(data.CSRReviewRequired || data.CSRReviewRequired == true) {\nif (data.privileges){\n if((typeof row.pleaseAttachWaiversOfLiability != 'string') && row.pleaseAttachWaiversOfLiability !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}}else{\nshow = false;\n}",
+									"datatype": "documentviewer",
+									"data_type": "documentviewer",
+									"inputType": "documentviewer",
+									"keyModified": true
+								}, {
 									"label": "Hours of Operation",
 									"attrs": [{
 										"attr": "",
@@ -5651,7 +5672,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
+							"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -7844,7 +7865,8 @@
 														},
 														"type": "file",
 														"url": "/file/attachments",
-														"input": true
+														"input": true,
+														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
 														"label": " Is pool equipment/chemicals regularly maintained?",
 														"optionsLabelPosition": "right",
@@ -10773,7 +10795,7 @@
 									},
 									"clearOnHide": false,
 									"customDefaultValue": "if(value != \"\" || !value){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
-									"calculateValue": "if(value != \"\" || !value){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
+									"calculateValue": "if(row.effectiveDate != \"\" || !row.effectiveDate){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
@@ -10781,7 +10803,7 @@
 										"custom": "if(data.effectiveDate){\n  valid = (moment(data.effectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}"
 									},
 									"key": "effectiveDate",
-									"customConditional": "if(value != \"\" || !value){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
+									"customConditional": "if(row.effectiveDate != \"\" || !row.effectiveDate){\n  if(data['start_date'] !=\"\" || !data['start_date']){\n    value = moment(data['start_date']).format(\"MM-DD-YYYY\");\n  } else {\n    value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");\n  }\n}",
 									"type": "datetime",
 									"input": true,
 									"widget": {
@@ -10860,7 +10882,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
-							"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
+							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattach[0] && row.documentattach[0].length == 0 ||  row.documentattach[0] && row.documentattach[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -11326,7 +11348,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
-								"calculateValue": "if(typeof value == 'string'){\n  try{\n    value = JSON.parse(value);\n  } catch(e){\n  }\n}",
+								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -14305,7 +14327,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 43,
+	"_vid": 53,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14323,6 +14345,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-02T08:26:06.233Z",
+	"modified": "2020-09-04T05:53:42.347Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
