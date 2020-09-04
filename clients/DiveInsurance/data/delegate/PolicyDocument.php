@@ -247,6 +247,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                 if(isset($temp['AdditionalInsuredOption']) && ($temp['AdditionalInsuredOption'] == 'addAdditionalInsureds')){
                     $this->logger->info("DOCUMENT AdditionalInsuredOption");
+                    $this->sortArrayByName($temp,'additionalInsured');
                     $documents['additionalInsured_document'] = array($this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter'));
                 }
 
@@ -284,6 +285,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         unset($NewData);    
                         unset($newData);    
                         $this->logger->info("Data is: ".print_r($docdata, true));   
+                        if(file_exists($docDest)){
+                            unlink($docDest);
+                        }
                         $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);  
                         $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';  
                 }   
@@ -302,6 +306,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $temp['additionalInsured'][$i]['state_in_short'] = $this->getStateInShort($temp['additionalInsured'][$i]['state'],$persistenceService);
                     }
                     $temp['additionalInsured'] = json_encode($temp['additionalInsured']);
+                    $this->sortArrayByName($temp,'additionalInsured');
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                     }
                 }
@@ -311,12 +316,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
                     if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
+                        $this->sortArrayByName($temp,'additionalNamedInsured');
                         $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                     }
                 }
                 if(isset($temp['loss_payees']) && $temp['loss_payees'] == 'yes'){
                     if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
-                         $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+                        $this->sortArrayByName($temp,'lossPayees');
+                        $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                     }
                 }
 
@@ -430,12 +437,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                     if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
                         if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
+                            $this->sortArrayByName($temp,'additionalNamedInsured');
                             $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                         }
                     }
 
                     if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
                         $this->logger->info("DOCUMENT lossPayees");
+                        $this->sortArrayByName($temp,'lossPayees');
                         $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                     }
                     if(isset($addLocations) && $temp['additionalLocationsSelect']=="yes"){
@@ -454,35 +463,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                     if($this->type == 'policy'){
                         $this->generateDiveStorePremiumSummary($temp,$documents,$dest,$options);
-                    }
-                }
-                if($data['groupProfessionalLiabilitySelect'] == 'yes'){
-                    if(isset($temp['groupPL']) && !empty($temp['groupPL'])){
-                        if (isset($this->template[$temp['product']]['card'])) {
-                            $this->logger->info('inside dive boat pocket card');
-                            $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                            // $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
-                            $template = $this->template[$temp['product']]['card'];
-                            $options = array();
-                            $docDest = $dest['absolutePath'].$template.'.pdf';
-                            $result = $this->newDataArray($temp);
-                            if(!isset($result) || empty($result)){
-                                $this->logger->warn('no pocket card generated');
-                            }
-                            else{
-                                $newData = json_encode($result);
-                                $docdata = array('data' => $newData);
-                                unset($NewData);
-                                unset($newData);
-                                $this->logger->info("Data is: ".print_r($docdata, true));
-                                if(file_exists($docDest)){
-                                    $docName = basename($docDest);
-                                    FileUtils::deleteFile($docName,$dest['absolutePath']);
-                                }
-                                $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
-                                $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
-                            }
-                        }
                     }
                 }
             }
@@ -1146,12 +1126,26 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
     protected function generateGroupDocuments(&$data,&$temp,&$documents,$previous_data,$endorsementOptions,$dest,$options,$length){
         $groupData = json_decode($temp['groupPL'],true);
-        asort($groupData);
-        $temp['groupPL'] = json_encode($groupData);
+        $padiList = array();
+        $groupPL = array();
+        foreach ($groupData as $key => $row)
+        {
+            $padiList[$key] = $row['padi'];
+        }
+        array_multisort($padiList, SORT_ASC, $groupData);
+        foreach ($padiList as $key => $value) {
+            foreach($groupData as $key1 => $value1){
+                if($padiList[$key] == $groupData[$key1]['padi']){
+                    array_push($groupPL,$groupData[$key1]);
+                }
+            }
+        }
+        $temp['groupPL'] = json_encode($groupPL);
         if($this->type == 'quote' || $this->type == 'endorsementQuote'){
             $documents['roster_certificate'] = $this->generateDocuments($temp,$dest,$options,'roster','rosterHeader','rosterFooter');
             $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
             if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
+                $this->sortArrayByName($temp,'groupAdditionalInsured');
                 $documents['group_ai_certificate'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
             }
         }
@@ -1180,10 +1174,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
                
                     if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
+                        $this->sortArrayByName($temp,'groupAdditionalNamedInsured');
                         $documents['endorsement_group_ani_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
                     }
 
                     if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
+                        $this->sortArrayByName($temp,'groupAdditionalInsured');
                         $documents['endorsement_group_ai_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
                     }
                     $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
@@ -1219,15 +1215,43 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['group_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
                 if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
                     $this->logger->info("DOCUMENT Group Additional Named Insured");
+                    $this->sortArrayByName($temp,'groupAdditionalNamedInsured');
                     $documents['group_additional_named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
                 }
 
                 if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
                     $this->logger->info("DOCUMENT Group Additional Insured");
+                    $this->sortArrayByName($temp,'groupAdditionalInsured');
                     $documents['group_additional_insured_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
                 }
                 if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
                     $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
+                }
+            }
+            if(isset($temp['groupPL']) && !empty($temp['groupPL'])){
+                if (isset($this->template[$temp['product']]['card'])) {
+                    $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
+                    // $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
+                    $template = $this->template[$temp['product']]['card'];
+                    $options = array();
+                    $docDest = $dest['absolutePath'].$template.'.pdf';
+                    $result = $this->newDataArray($temp);
+                    if(!isset($result) || empty($result)){
+                        $this->logger->warn('no pocket card generated');
+                    }
+                    else{
+                        $newData = json_encode($result);
+                        $docdata = array('data' => $newData);
+                        unset($NewData);
+                        unset($newData);
+                        $this->logger->info("Data is: ".print_r($docdata, true));
+                        if(file_exists($docDest)){
+                            $docName = basename($docDest);
+                            FileUtils::deleteFile($docName,$dest['absolutePath']);
+                        }
+                        $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
+                        $documents['PocketCard'] = $dest['relativePath'].$template.'.pdf';
+                    }
                 }
             }
             if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
@@ -1295,6 +1319,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
                 $this->logger->info("DOCUMENT additionalInsured");
+                $this->sortArrayByName($temp,'additionalInsured');
                 $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
             }
 
@@ -1307,6 +1332,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
                 $this->logger->info("DOCUMENT lossPayees");
+                $this->sortArrayByName($temp,'lossPayees');
                 $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
             }
 
@@ -1314,6 +1340,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
                 if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
+                    $this->sortArrayByName($temp,'additionalNamedInsured');
                     $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                 }
             }
@@ -1524,6 +1551,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
                         if(sizeof($newAddInsured) > 0){
                             $temp['newAddInsured'] = json_encode($newAddInsured);
+                            $this->sortArrayByName($temp,'newAddInsured');
                         }
                         $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($temp['newAddInsured'],true));
                         $diff = array_diff(array_map('serialize',$previousAddInsured), array_map('serialize', $addInsured));
@@ -1531,6 +1559,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :".print_r($removedAddInsured,true));
                         if(sizeof($removedAddInsured) > 0){
                             $temp['removedAddInsured'] = json_encode($removedAddInsured);
+                            $this->sortArrayByName($temp,'removedAddInsured');
                         }
                     } else {
                         if(isset($data['previous_additionalInsured'])){
@@ -1556,6 +1585,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($newAddInsured,true));
                             if(sizeof($newAddInsured) > 0){
                                 $temp['newAddInsured'] = json_encode($newAddInsured);
+                                $this->sortArrayByName($temp,'newAddInsured');
                             }
                             $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :".print_r($temp['newAddInsured'],true));
                             $diff = array_diff(array_map('serialize',$data['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
@@ -1563,6 +1593,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :".print_r($removedAddInsured,true));
                             if(sizeof($removedAddInsured) > 0){
                                 $temp['removedAddInsured'] = json_encode($removedAddInsured);
+                                $this->sortArrayByName($temp,'removedAddInsured');
                             }
                         }  else {
                             $temp['newAddInsured'] = "";
@@ -1594,6 +1625,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($newlossPayees,true));
                         if(sizeof($newlossPayees) > 0){
                             $temp['newlossPayees'] = json_encode($newlossPayees);
+                            $this->sortArrayByName($temp,'newlossPayees');
                         } else {
                             $temp['newlossPayees'] = "";
                         }
@@ -1603,6 +1635,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Removed Loss Payees :".print_r($removedlossPayees,true));
                         if(sizeof($removedlossPayees) > 0){
                             $temp['removedlossPayees'] = json_encode($removedlossPayees);
+                            $this->sortArrayByName($temp,'removedlossPayees');
                         } else {
                             $temp['removedlossPayees'] = "";
                         }
@@ -1635,6 +1668,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($newadditionalNamedInsured,true));
                         if(sizeof($newadditionalNamedInsured) > 0){
                             $temp['newadditionalNamedInsured'] = json_encode($newadditionalNamedInsured);
+                            $this->sortArrayByName($temp,'newadditionalNamedInsured');
                         } else {
                             $temp['newadditionalNamedInsured'] = "";
                         }
@@ -1644,6 +1678,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Removed Loss Payees :".print_r($removedadditionalNamedInsured,true));
                         if(sizeof($removedadditionalNamedInsured) > 0){
                             $temp['removedadditionalNamedInsured'] = json_encode($removedadditionalNamedInsured);
+                            $this->sortArrayByName($temp,'removedadditionalNamedInsured');
                         } else {
                             $temp['removedadditionalNamedInsured'] = "";
                         }
@@ -2010,4 +2045,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
 
+        protected function sortArrayByName(&$temp,$arrayKey){
+            $newArray = json_decode($temp[$arrayKey],true);
+            foreach ($newArray as $key => $value) {
+                $newArray[$key]['name'] = strtoupper($newArray[$key]['name']);
+            }
+            asort($newArray);
+            $temp[$arrayKey] = json_encode($newArray);
+        }
 }
