@@ -610,6 +610,7 @@ class Module
                         $dbAdapter,
                         $container->get(Model\WorkflowInstanceTable::class),
                         $container->get(Service\FileService::class),
+                        $container->get(\Oxzion\Service\EntityService::class),
                         $container->get(Service\WorkflowService::class),
                         $container->get(Workflow\WorkflowFactory::class),
                         $container->get(Service\ActivityInstanceService::class),
