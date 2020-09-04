@@ -30,6 +30,7 @@ use Oxzion\Utils\ArrayUtils;
 use Oxzion\InvalidParameterException;
 use Oxzion\App\AppArtifactNamingStrategy;
 use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
 
 class AppService extends AbstractService
 {
@@ -66,7 +67,7 @@ class AppService extends AbstractService
         $this->menuItemService = $menuItemService;
         $this->pageService = $pageService;
         $this->jobService = $jobService;
-        $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job");
+        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job","view","symlink");
     }
 
     /**
@@ -130,7 +131,7 @@ class AppService extends AbstractService
         //Assign user input values AFTER assigning default values.
         $appData = $data['app'];
         $app->assign($appData);
-        if (array_key_exists(Entity::COLUMN_UUID, $appData)) {
+        if (array_key_exists(Entity::COLUMN_UUID, $appData) && !empty($appData[Entity::COLUMN_UUID])) {
             $app->setUserGeneratedUuid($appData[Entity::COLUMN_UUID]);
         }
         try {
@@ -181,10 +182,10 @@ class AppService extends AbstractService
         if (file_exists($descriptorFilePath)) {
             $descriptorDataFromFile = self::loadAppDescriptor($dirPath);
             ArrayUtils::merge($descriptorDataFromFile, $descriptorData);
-            $yamlText = Yaml::dump($descriptorDataFromFile);
+            $yamlText = Yaml::dump($descriptorDataFromFile,20);
         }
         else {
-            $yamlText = Yaml::dump($descriptorData);
+            $yamlText = Yaml::dump($descriptorData,20);
         }
         $yamlWriteResult = file_put_contents($descriptorFilePath, $yamlText);
         if (!$yamlWriteResult) {
@@ -234,7 +235,6 @@ class AppService extends AbstractService
                     $this->createAppPrivileges($ymlData);
                     $this->createRole($ymlData);
                     $this->performMigration($ymlData, $path);
-                    $this->setupAppView($ymlData, $path);
                 break;
                 case 'entity':
                     $this->processEntity($ymlData);
@@ -256,6 +256,9 @@ class AppService extends AbstractService
                 break;
                 case 'symlink':
                     $this->processSymlinks($ymlData, $path);
+                break;
+                case 'view':                
+                    $this->setupAppView($ymlData, $path);
                 break;
                 default:
                     $this->logger->error("Unhandled deploy option '${value}'");
@@ -304,7 +307,10 @@ class AppService extends AbstractService
             }
         }
         FileUtils::copyDir($appSourceDir, $appDeployDir);
-        return $this->deployApp($appDeployDir);
+        $appDeployDir = FileUtils::joinPath($appDeployDir);
+        $result = $this->deployApp($appDeployDir);
+        FileUtils::copy($appDeployDir."application.yml","application.yml",$appSourceDir);
+        return $result;
     }
 
     public function processSymlinks($yamlData, $path){
@@ -387,16 +393,24 @@ class AppService extends AbstractService
                 $menu = $menuData;
                 $menu['sequence'] = $sequence++;
                 $menu['privilege_name'] = isset($menu['privilege']) ? $menu['privilege'] : null;
-                $menu['uuid'] = isset($menu['uuid']) ? $menu['uuid'] : UuidUtil::uuid();
+                $menu['uuid'] = (isset($menu['uuid']) && !empty($menu['uuid'])) ? $menu['uuid'] : UuidUtil::uuid();
                 $menuUpdated = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 if ($menuUpdated == 0) {
                     $count = $this->menuItemService->saveMenuItem($appUuid, $menu);
                 }
                 if(isset($menu['page_uuid'])){
                     $menu['page_id'] = $this->getIdFromUuid('ox_app_page', $menu['page_uuid']);
+                }else if (isset($menu['page'])) {
+                    $page = $this->pageService->getPageByName($appUuid,$menu['page']);
+                    if ($page) {
+                        $menu['page_id'] = $page['id'];
+                    }else{
+                        throw new ValidationException(['page or page_uuid' => 'required']);
+                        
+                    }
                 }
                 $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
-                $menuData['uuid'] = isset($menuData['uuid']) ? $menuData['uuid'] : $menu['uuid'];
+                $menuData['uuid'] = (isset($menuData['uuid']) && !empty($menuData['uuid'])) ? $menuData['uuid'] : $menu['uuid'];
             }
         }
     }
@@ -410,12 +424,14 @@ class AppService extends AbstractService
             foreach ($yamlData['pages'] as &$pageData) {
                 if (isset($pageData['page_name']) && !empty($pageData['page_name'])) {
                     $page = Yaml::parse(file_get_contents($path . 'content/pages/' . $pageData['page_name']));
+                }else{
+                    $page = $pageData;
                 }
-                $page['page_id'] = $pageData['uuid'];
-                $pageId = $page['page_id'];
+                $pageId = $pageData['uuid'];
                 $this->logger->info('the page data is: '.print_r($page, true));
                 $routedata = array("appId" => $appUuid);
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
+                $pageData['uuid'] = $page['uuid'];
             }
         }
     }

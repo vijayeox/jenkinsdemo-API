@@ -49,7 +49,8 @@ class Module
                         $container->get(Service\AddressService::class),
                         $container->get(Service\EmailService::class),
                         $container->get(Service\TemplateService::class),
-                        $container->get(Messaging\MessageProducer::class)
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\RoleService::class)
                     );
                 },
                 Model\UserTable::class => function ($container) {
