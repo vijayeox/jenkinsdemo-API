@@ -660,6 +660,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if(isset($data['endorsement_options'])){
                     $data['endorsement_options'] = "";
                 }
+                if(isset($data['documents']['roster_pdf'])){
+                    unset($data['documents']['roster_pdf']);
+                }
+                if(isset($data['documents']['roster_certificate'])){
+                    unset($data['documents']['roster_certificate']);
+                }
             }
             if(isset($data['initiatedByUser'])){
                 $data['initiatedByUser'] = "";
@@ -1140,6 +1146,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
         }
+        $data['groupPL'] = $groupPL;
         $temp['groupPL'] = json_encode($groupPL);
         if($this->type == 'quote' || $this->type == 'endorsementQuote'){
             if($this->type == 'quote'){
@@ -1149,6 +1156,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
                 $this->sortArrayByName($temp,'groupAdditionalInsured');
                 $documents['group_ai_certificate'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
+            }
+        }else if($this->type == 'endorsementQuote'){
+            $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
+            if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
+                $this->sortArrayByName($temp,'groupAdditionalInsured',$data);
+                $documents['endorsement_group_ai_certificate'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
             }
         }
         else{

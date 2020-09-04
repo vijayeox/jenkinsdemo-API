@@ -14298,6 +14298,14 @@
 			"type": "columns",
 			"input": false
 		}, {
+			"label": "Additional Premium Description",
+			"autoExpand": false,
+			"tableView": true,
+			"key": "additionalPremiumDescription",
+			"customConditional": "show = data.additionalPremium;",
+			"type": "textarea",
+			"input": true
+		}, {
 			"label": "Columns",
 			"columns": [{
 				"components": [{
@@ -14340,7 +14348,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"padiFeePL\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0)).toFixed(2);\n}",
+					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"padiFeePL\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n}",
 					"key": "totalAmount",
 					"type": "number",
 					"decimalLimit": 2,
@@ -14958,6 +14966,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-04T06:35:57.924Z",
+	"modified": "2020-09-04T14:59:18.859Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
