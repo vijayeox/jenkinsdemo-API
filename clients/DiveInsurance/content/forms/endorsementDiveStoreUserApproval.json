@@ -207,6 +207,13 @@
 				"input": true,
 				"tableView": false
 			}, {
+				"label": "payment_fields",
+				"calculateValue": "value = JSON.stringify({\"description\":data.business_padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinance,\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":data.downPayment,\"total_amount\":data.finalAmountPayable});",
+				"key": "payment_fields",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
 				"label": "Columns",
 				"columns": [{
 					"components": [{
@@ -614,7 +621,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 4,
+	"_vid": 5,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -631,6 +638,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-08-28T09:40:04.767Z",
+	"modified": "2020-09-04T09:13:09.543Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
