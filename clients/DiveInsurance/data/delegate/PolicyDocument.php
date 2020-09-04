@@ -1182,7 +1182,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->sortArrayByName($temp,'groupAdditionalInsured');
                         $documents['endorsement_group_ai_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
                     }
-                    $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
                 }
             }else{
                 if ($data['groupExcessLiabilitySelect'] == "no"){
@@ -1223,9 +1222,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT Group Additional Insured");
                     $this->sortArrayByName($temp,'groupAdditionalInsured');
                     $documents['group_additional_insured_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
-                }
-                if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
-                    $documents['group_exclusions'] = $this->copyDocuments($temp,$dest['relativePath'],'groupExclusions');
                 }
             }
             if(isset($temp['groupPL']) && !empty($temp['groupPL'])){
