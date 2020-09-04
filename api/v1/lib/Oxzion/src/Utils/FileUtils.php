@@ -81,6 +81,7 @@ class FileUtils
     public static function copy($src, $destFile, $destDirectory)
     {
         self::createDirectory($destDirectory);
+        $destDirectory = self::joinPath($destDirectory);
         copy($src, $destDirectory.$destFile);
     }
 
@@ -90,10 +91,12 @@ class FileUtils
             if ($file == '.' || $file == '..') continue;
             $srcCheck = self::joinPath($src);
             $destCheck = self::joinPath($dest);
-            if (is_dir($srcCheck.$file))
+            if (is_dir($srcCheck.$file)){
                 self::copyDir($srcCheck.$file, $destCheck.$file);
-            elseif (!file_exists($destCheck.$file))
+            }
+            else {
                 copy($srcCheck.$file, $destCheck.$file);
+            }
         }
     }
 
