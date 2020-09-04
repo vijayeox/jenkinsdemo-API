@@ -1142,8 +1142,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         $temp['groupPL'] = json_encode($groupPL);
         if($this->type == 'quote' || $this->type == 'endorsementQuote'){
-            $documents['roster_certificate'] = $this->generateRosterCertificate($temp,$dest,$options);
-            $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
+            if($this->type == 'quote'){
+                $documents['roster_certificate'] = $this->generateRosterCertificate($temp,$dest,$options);
+                $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
+            }
             if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
                 $this->sortArrayByName($temp,'groupAdditionalInsured');
                 $documents['group_ai_certificate'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
@@ -1294,7 +1296,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['quoteDocuments'] = array();
             $documents = array();
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
-            if($data['product'] == 'Dive Store'){
+            if($data['product'] == 'Dive Store' && (isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true)){
                 $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             }
             if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
