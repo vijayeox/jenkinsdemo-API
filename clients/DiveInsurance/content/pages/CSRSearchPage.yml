@@ -377,3 +377,5 @@ content:
                     product
                 -
                     identifier_field
+                -
+                    transaction_reference_number
