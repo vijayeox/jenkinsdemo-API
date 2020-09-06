@@ -32,8 +32,7 @@ class AppArtifactController extends AbstractApiController {
         $appUuid = $routeParams['appUuid'];
         $artifactType = $routeParams['artifactType'];
         try {
-            $this->appArtifactService->saveArtifact($appUuid, $artifactType);
-            return $this->getSuccessResponse();
+            return $this->getSuccessResponseWithData($this->appArtifactService->saveArtifact($appUuid, $artifactType));
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);

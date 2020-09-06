@@ -70,6 +70,11 @@ class AppArtifactService extends AbstractService
             if (!rename($fileData['tmp_name'], $filePath)) {
                 throw new Exception('Failed to move file ' . $fileData['tmp_name'] . ' to destination.');
             }
+            // returning here cause $_FILES will always be of length 1
+            return [
+                "originalName" => $fileData['name'],
+                "size" => filesize($filePath) 
+            ];
         }
     }
 
