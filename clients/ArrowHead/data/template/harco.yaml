@@ -577,7 +577,7 @@
    Source Worksheet: Business Income Limit
    pageName: E-Prop
    cell: 'K20'
-   key: genericData*locationScheduleGridData_businessincomelimit
+   key: harcoExcelData*totalbusinessincomelimit_result
    method: simpleDatagrid
    type: DataGrid
 -
@@ -1818,7 +1818,7 @@
    Source Worksheet: Surveill. Cameras not monitored
    pageName: UW Q's
    cell: Check Box 17
-   key: harcoExcelData*checkdolsurcamnotmoniotrd
+   key: genericData['locationScheduleGridData']*dolsurcamnotmoniotrd_yes
    type: Checkbox
    note: If at least 1 of the Surveillance Camera questions are selected map
       'Yes' to the applicable carrier app.
