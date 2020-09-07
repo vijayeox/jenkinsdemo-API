@@ -1,0 +1,21 @@
+[Unit]
+Description=Workflow Engine
+[Service]
+User=oxzion
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/camunda
+#path to executable. 
+#executable is a bash script which run the server
+Type=forking
+ExecStart=/camunda/bin/catalina.sh start
+ExecStop=/camunda/bin/catalina.sh stop
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=camunda
+[Install]
+WantedBy=multi-user.target
