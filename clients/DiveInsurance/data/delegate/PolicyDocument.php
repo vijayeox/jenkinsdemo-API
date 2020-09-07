@@ -1614,7 +1614,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_lossPayees']) && $policy['previous_lossPayees'] != $data['lossPayees']){
                         $temp['newlossPayees'] = "";
                         $temp['removedlossPayees'] = "";
-                        $temp['propertyChanges'] = true;
                         if(!is_array($policy['previous_lossPayees'])){
                             if(is_string($data['lossPayees'])){
                                 $policy['previous_lossPayees'] = json_decode($policy['previous_lossPayees'],true);
@@ -1648,6 +1647,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         } else {
                             $temp['removedlossPayees'] = "";
                         }
+                        if($temp['removedlossPayees'] !="" && $temp['newlossPayees'] != ""){
+                            $temp['propertyChanges'] = true;
+                        }
                     } else {
                         $temp['newlossPayees'] = "";
                         $temp['removedlossPayees'] = "";
@@ -1657,7 +1659,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_additionalNamedInsured']) && $policy['previous_additionalNamedInsured'] != $data['additionalNamedInsured']){
                         $temp['newadditionalNamedInsured'] = "";
                         $temp['removedadditionalNamedInsured'] = "";
-                        $temp['propertyChanges'] = true;
                         if(!is_array($policy['previous_additionalNamedInsured'])){
                             if(is_string($data['additionalNamedInsured'])){
                                 $policy['previous_additionalNamedInsured'] = json_decode($policy['previous_additionalNamedInsured'],true);
@@ -1691,6 +1692,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         } else {
                             $temp['removedadditionalNamedInsured'] = "";
                         }
+                        if($temp['removedadditionalNamedInsured'] !="" && $temp['newadditionalNamedInsured'] != ""){
+                            $temp['liabilityChanges'] = true;
+                        }
                     } else {
                         $temp['newadditionalNamedInsured'] = "";
                         $temp['removedadditionalNamedInsured'] = "";
@@ -1700,8 +1704,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_additionalLocations']) && $policy['previous_additionalLocations'] != $data['additionalLocations']){
                         $temp['newAdditionalLocations'] = "";
                         $temp['removedadditionalLocations'] = "";
-                        $temp['propertyChanges'] = true;
-                        $temp['liabilityChanges'] = true;
                         $addLocRequired = array("padiNumberAL","name","address","country","city","state","zip","ALpropertyCoverageSelect","additionalLocationPropertyTotal","ALLossofBusIncome","additionalLocationDoYouOwntheBuilding","ALBuildingReplacementValue","additionalLocationFurniturefixturesAndEquipment","ALnonDivingPoolAmount","travelAgentEoPL","propertyDeductibles","ALcentralStationAlarm","centralStationAlarm");
                         if(!is_array($policy['previous_additionalLocations'])){
                             if(is_string($policy['previous_additionalLocations'])){
@@ -1747,6 +1749,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Additional Locations :".print_r($newAdditionalLocations,true));
                         if(sizeof($newAdditionalLocations) > 0){
                             $temp['newAdditionalLocations'] = json_encode($newAdditionalLocations);
+                        } else {
+                            $temp['newAdditionalLocations'] = "";
                         }
                         $this->logger->info("ARRAY DIFF OF Additional Locations :".print_r($temp['newAdditionalLocations'],true));
                         $diff = array_diff(array_map('serialize',$previousAddLoc), array_map('serialize', $addLoc));
@@ -1754,6 +1758,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Removed Additional Locations :".print_r($removedadditionalLocations,true));
                         if(sizeof($removedadditionalLocations) > 0){
                             $temp['removedadditionalLocations'] = json_encode($removedadditionalLocations);
+                        } else {
+                            $temp['removedadditionalLocations'] = "";
+                        }
+                        if($temp['removedadditionalLocations'] !="" && $temp['newAdditionalLocations'] != ""){
+                            $temp['propertyChanges'] = true;
+                            $temp['liabilityChanges'] = true;
                         }
                     } else {
                         $temp['newAdditionalLocations'] = "";

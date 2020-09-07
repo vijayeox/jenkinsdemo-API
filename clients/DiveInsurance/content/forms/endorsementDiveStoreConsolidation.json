@@ -9953,7 +9953,7 @@
 									"enableTime": false,
 									"redrawOn": "data",
 									"clearOnHide": false,
-									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(row.existingEffectiveDate).format(\"YYYY-MM-DD\"); \n}\n\nif((!row.effectiveDate || row.effectiveDate == '' || row.effectiveDate == undefined) && moment(row.newMembereffectiveDate).isBefore(moment(data.update_date))){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
+									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  if( moment(row.newMembereffectiveDate).isBefore(moment(data.update_date))){\n    value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n  } else {\n    value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n  }\n}else{\n  value = moment(row.existingEffectiveDate).format(\"YYYY-MM-DD\"); \n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
@@ -10902,7 +10902,6 @@
 				"key": "table3",
 				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "table",
-				"numRows": 5,
 				"input": false,
 				"rows": [
 					[{
@@ -10938,6 +10937,118 @@
 							"type": "htmlelement",
 							"input": false,
 							"hideLabel": true
+						}]
+					}],
+					[{
+						"components": [{
+							"label": "Group Coverage Amount",
+							"tag": "h4",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "Group Coverage Amount",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7TableTaxes2",
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true
+						}]
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"key": "previous_groupCoverageAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
+						}]
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"calculateValue": "value = (parseFloat(data[\"endogroupCoverage\"]) || 0).toFixed(0);",
+							"key": "groupCoverageAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
+						}]
+					}],
+					[{
+						"components": [{
+							"label": "Group Excess Liability",
+							"tag": "h4",
+							"attrs": [{
+								"value": "",
+								"attr": ""
+							}],
+							"content": "Group Excess Liability",
+							"refreshOnChange": false,
+							"tableView": false,
+							"key": "page7TableTaxes1",
+							"type": "htmlelement",
+							"input": false,
+							"hideLabel": true
+						}]
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"key": "previous_groupExcessLiabilityAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
+						}]
+					}, {
+						"components": [{
+							"label": "Group Excess Liability Amount",
+							"prefix": "$",
+							"hideLabel": true,
+							"mask": false,
+							"spellcheck": true,
+							"disabled": true,
+							"tableView": true,
+							"delimiter": true,
+							"requireDecimal": false,
+							"inputFormat": "plain",
+							"clearOnHide": false,
+							"calculateValue": "value = (parseFloat(data[\"endogroupExcessLiability\"]) || 0).toFixed(0);",
+							"key": "groupExcessLiabilityAmount",
+							"type": "number",
+							"input": true,
+							"inputType": "number",
+							"lockKey": true
 						}]
 					}],
 					[{
@@ -11207,7 +11318,7 @@
 							"requireDecimal": false,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "value = ((parseFloat(data[\"endogroupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00) - (parseFloat(data['groupSurchargeDeductionsAmount'])||0)).toFixed(2)",
+							"calculateValue": "value = ((parseFloat(data['endogroupCoverage'])||0.00)+(parseFloat(data[\"endogroupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00) - (parseFloat(data['groupSurchargeDeductionsAmount'])||0)).toFixed(2)",
 							"key": "groupTotalAmount",
 							"type": "number",
 							"decimalLimit": 2,
@@ -11219,7 +11330,8 @@
 				],
 				"path": "table3",
 				"clearOnHide": false,
-				"hideLabel": true
+				"hideLabel": true,
+				"numRows": 7
 			}],
 			"path": "well2",
 			"clearOnHide": false,
@@ -14966,6 +15078,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-04T14:59:18.859Z",
+	"modified": "2020-09-07T09:28:48.928Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
