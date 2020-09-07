@@ -2,30 +2,41 @@
 namespace App\Service;
 
 use Oxzion\Test\AbstractServiceTest;
-use Zend\Db\Adapter\AdapterInterface;
 use App\Service\AppService;
-use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Exception;
-use Oxzion\Transaction\TransactionManager;
-use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\Adapter\Driver\Pdo\Pdo;
 use Mockery;
-use Oxzion\Db\Migration\Migration;
-use Oxzion\ServiceException;
-use Oxzion\VersionMismatchException;
 use Oxzion\EntityNotFoundException;
+use Oxzion\App\AppArtifactNamingStrategy;
+use App\Model\App;
+use Symfony\Component\Yaml\Yaml;
+use AppTest\AppTestSetUpTearDownHelper;
 
 class AppServiceTest extends AbstractServiceTest
 {
+    private $setUpTearDownHelper = NULL;
+
+    function __construct() {
+        parent::__construct();
+        $this->loadConfig();
+        $config = $this->getApplicationConfig();
+        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($config['db']);
+    }
+
     public function setUp() : void
     {
-        $this->loadConfig();
         parent::setUp();
+        $this->setUpTearDownHelper->cleanAll();
+    }
+
+    public function tearDown() : void
+    {
+        parent::tearDown();
+        $this->setUpTearDownHelper->cleanAll();
     }
 
     public function getDataSet()
@@ -48,14 +59,6 @@ class AppServiceTest extends AbstractServiceTest
         $mockRestClient = Mockery::mock('Oxzion\Utils\RestClient');
         $taskService->setRestClient($mockRestClient);
         return $mockRestClient;
-    }
-
-    public function cleanDb($appName, $appId): void
-    {
-        $database = Migration::getDatabaseName($appName, $appId);
-        $query = "DROP DATABASE IF EXISTS " . $database;
-        $statement = Migration::createAdapter($this->getApplicationConfig(), $database)->query($query);
-        $result = $statement->execute();
     }
 
     public function testGetAppsOfOrganizationWithApps() {
@@ -84,9 +87,111 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::ORG_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
-        $app = $appService->getApp($uuid);
-        $this->assertEquals($app['uuid'], $uuid);
-        $this->assertEquals($app['name'], 'DummyApp');
+        $appService->setupOrUpdateApplicationDirectoryStructure([
+            'app' => [
+                'name' => 'DummyApp',
+                'uuid' => $uuid
+            ]
+        ]);
+        $dd = $appService->getApp($uuid);
+        $this->assertTrue(array_key_exists('app', $dd));
+        $appData = $dd['app'];
+        $this->assertEquals($uuid, $appData['uuid']);
+        $this->assertEquals('DummyApp', $appData['name']);
+    }
+
+    public function testCreateAppPreBuilt() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $data = [
+            'app' => [
+                'name' => 'DummyApp-New',
+                'description' => 'Dummy app for testing.',
+                'category' => 'DUMMY_CATEGORY',
+                'type' => App::PRE_BUILT
+            ]
+        ];
+        $returnData = $appService->createApp($data);
+        $this->assertTrue(array_key_exists('uuid', $returnData['app']));
+        $appUuid = $returnData['app']['uuid'];
+        $data['app']['uuid'] = $appUuid;
+        $rows = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${appUuid}'");
+        $row = $rows[0];
+        $this->assertEquals($data['app']['name'], $row['name']);
+        $this->assertEquals($data['app']['description'], $row['description']);
+        $this->assertEquals($data['app']['category'], $row['category']);
+        $this->assertEquals($data['app']['type'], $row['type']);
+        $this->assertEquals(0, $row['isdefault']);
+        $this->assertEquals('default_app.png', $row['logo']);
+        $this->assertEquals(App::IN_DRAFT, $row['status']);
+        $this->assertEquals($data['app']['name'], $returnData['app']['name']);
+        $this->assertEquals($data['app']['description'], $returnData['app']['description']);
+        $this->assertEquals($data['app']['category'], $returnData['app']['category']);
+        $this->assertEquals($data['app']['type'], $returnData['app']['type']);
+        $this->assertEquals(0, $returnData['app']['isdefault']);
+        $this->assertEquals('default_app.png', $returnData['app']['logo']);
+        $this->assertEquals(App::IN_DRAFT, $returnData['app']['status']);
+
+        $config = $this->getApplicationConfig();
+        $sourceAppDirectory = AppArtifactNamingStrategy::getSourceAppDirectory($config, $data['app']);
+        if (file_exists($sourceAppDirectory)) {
+            $this->fail("Source app directory ${sourceAppDirectory} SHOULD NOT be created.");
+        }
+    }
+
+    public function testCreateAppMyApp() {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        AuthContext::put(AuthConstants::ORG_ID, '1');
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $data = [
+            'app' => [
+                'name' => 'DummyApp-New',
+                'description' => 'Dummy app for testing.',
+                'category' => 'DUMMY_CATEGORY',
+                'type' => App::MY_APP
+            ]
+        ];
+        $returnData = $appService->createApp($data);
+        $this->assertTrue(array_key_exists('uuid', $returnData['app']));
+        $appUuid = $returnData['app']['uuid'];
+        $data['app']['uuid'] = $appUuid;
+        $rows = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${appUuid}'");
+        $row = $rows[0];
+        $this->assertEquals($data['app']['name'], $row['name']);
+        $this->assertEquals($data['app']['description'], $row['description']);
+        $this->assertEquals($data['app']['category'], $row['category']);
+        $this->assertEquals($data['app']['type'], $row['type']);
+        $this->assertEquals(0, $row['isdefault']);
+        $this->assertEquals('default_app.png', $row['logo']);
+        $this->assertEquals(App::IN_DRAFT, $row['status']);
+        $this->assertEquals($data['app']['name'], $returnData['app']['name']);
+        $this->assertEquals($data['app']['description'], $returnData['app']['description']);
+        $this->assertEquals($data['app']['category'], $returnData['app']['category']);
+        $this->assertEquals($data['app']['type'], $returnData['app']['type']);
+        $this->assertEquals(0, $returnData['app']['isdefault']);
+        $this->assertEquals('default_app.png', $returnData['app']['logo']);
+        $this->assertEquals(App::IN_DRAFT, $returnData['app']['status']);
+
+        $config = $this->getApplicationConfig();
+        $sourceAppDirectory = AppArtifactNamingStrategy::getSourceAppDirectory($config, $data['app']);
+        if (!file_exists($sourceAppDirectory)) {
+            $this->fail("Source app directory ${sourceAppDirectory} is not created.");
+        }
+        $applicationYamlFilePath = $sourceAppDirectory . DIRECTORY_SEPARATOR . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
+        if (!file_exists($applicationYamlFilePath)) {
+            $this->fail("Application descriptor YAML file ${applicationYamlFilePath} is not created.");
+        }
+        $yamlFileData = Yaml::parse(file_get_contents($applicationYamlFilePath));
+        $this->assertEquals($data['app']['name'], $yamlFileData['app']['name']);
+        $this->assertEquals($data['app']['description'], $yamlFileData['app']['description']); 
+        $this->assertEquals($data['app']['category'], $yamlFileData['app']['category']);
+        $this->assertEquals($data['app']['type'], $yamlFileData['app']['type']);
+        $this->assertEquals(0, $yamlFileData['app']['isdefault']);
+        $this->assertEquals('default_app.png', $yamlFileData['app']['logo']);
+        $this->assertEquals(App::IN_DRAFT, $yamlFileData['app']['status']);
+        $this->assertEquals($appUuid, $yamlFileData['app']['uuid']);
+        FileUtils::rmDir($sourceAppDirectory);
     }
 
     public function testGetAppWithInvalidUuid() {
@@ -351,14 +456,19 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'role' => array(array('name' => 'Policy Holder', 'default' => '1', 'privileges' => array(array('privilege_name' => 'MANAGE_MY_POLICY', 'permission' => '3')),'uuid' => '703d3a09-b7f3-49e9-9c79-74d5cae7f6e7')));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
-        $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and org_id = 300";
-        $adapter = $this->getDbAdapter();
-        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
-        $statement = $adapter->query($sqlQuery);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $result = $resultSet->initialize($result)->toArray();
-        $this->assertEquals($result[0]['count'], 1);
+        $sqlQuery = "SELECT * FROM ox_role WHERE uuid = '".$data['role'][0]['uuid']."'";
+        $result = $this->executeQueryTest($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $result = $result[0];
+        $this->assertEquals($data['role'][0]['name'], $result['name']);
+        $this->assertEquals($data['role'][0]['default'], $result['default_role']);
+        $sqlQuery = "SELECT rp.* FROM ox_role_privilege rp WHERE rp.role_id = ".$result['id'];
+        $result = $this->executeQueryTest($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $result = $result[0];
+        $privilege = $data['role'][0]['privileges'][0];
+        $this->assertEquals($privilege['privilege_name'], $result['privilege_name']);
+        $this->assertEquals($privilege['permission'], $result['permission']);
     }
 
     public function testCreateRoleWithNoRoleInData()
@@ -384,7 +494,7 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::ORG_UUID, 'e1033dc0-126b-40ba-89e0-d3061bdeda4p');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('name' => 'V&B', 'uuid' => 'e1033dc0-126b-40ba-89e0-d3061bdeda4p','email' => 'vb07@gmail.com','address1' => '6 bCenterpoint','address2' => 'Dr.','city' => 'La Palma','state' => 'CA','zip' => '90623','country' => 'United States','contact' => array('username' => 'vb07.gmail.com','firstname' => 'Admin','lastname' => 'User','email' => 'vb07@gmail.com'),'preferences' => '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $appService->createOrg($data);
+        $content = $appService->setupOrg($data);
         $sqlQuery = "SELECT count(*) as count FROM ox_organization";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -401,7 +511,7 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
         $path = __DIR__ . '/../sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $appService->createOrg($data);
+        $content = $appService->setupOrg($data);
         $sqlQuery = "SELECT count(name) as count FROM ox_organization WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -422,7 +532,6 @@ class AppServiceTest extends AbstractServiceTest
         $appName = 'SampleApp2';
         $YmlappUuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
         $this->assertEquals($result, true);
-        $this->cleanDb($appName, $YmlappUuid);
     }
 
     public function testCreateAppPrivileges()
@@ -468,11 +577,16 @@ class AppServiceTest extends AbstractServiceTest
         $appname = $path . 'view/apps/DummyApp' ;
         $result = is_dir($appname);
         $this->assertEquals($result, 1);
-        FileUtils::deleteDirectoryContents($appname);
+        FileUtils::rmDir($appname);
     }
     
     public function testProcessSymlinks()
     {
+        if (enableExecUtils == 0) {
+            $mockBosUtils = Mockery::mock('alias:\Oxzion\Utils\ExecUtils');
+            $mockBosUtils->expects('randomPassword')->withAnyArgs()->once()->andReturn('12345678');
+            $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
+        }
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'));        
         $path = __DIR__ . '/../sampleapp/';
@@ -485,24 +599,16 @@ class AppServiceTest extends AbstractServiceTest
         $formfolder = $config['FORM_FOLDER']. 'a77ea120-b028-479b-8c6e-60476b6a4459' ;
         $result2 = file_exists($formfolder);
         $this->assertEquals($result2, 1);
-        $templatefolder = $config['TEMPLATE_FOLDER']. 'a77ea120-b028-479b-8c6e-60476b6a4456';
-        $result3 = file_exists($templatefolder);
-        $this->assertEquals($result3, 1);
         if (is_link($delegatefolder)){
             unlink($delegatefolder);
         };
         if (is_link($formfolder)){
             unlink($formfolder);
         };
-        if (is_link($templatefolder)){
-            unlink($templatefolder);
-        };
         $result = file_exists($delegatefolder);
         $this->assertEquals($result, 0);
         $result2 = file_exists($formfolder);
         $this->assertEquals($result2, 0);
-        $result3 = file_exists($templatefolder);
-        $this->assertEquals($result3, 0);
     }
 
     public function testDeleteApp() {

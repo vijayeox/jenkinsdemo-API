@@ -57,3 +57,9 @@ ox_app_registry:
         id: 400
         app_id: 299
         org_id: 300
+ox_privilege:
+    -
+        id: 500
+        app_id: 299
+        name: MANAGE_MY_POLICY
+        permission_allowed: 3

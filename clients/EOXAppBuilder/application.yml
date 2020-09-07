@@ -20,10 +20,7 @@ org:
         firstname: Support
         lastname: Admin
         email: eoxapp2@vantageagora.com
-    preferences:
-        currency: USD
-        timezone: America/New_York
-        dateformat: mm/dd/yy
+    preferences: '{}'
     country: 'United States'
 privilege:
     -
@@ -64,7 +61,7 @@ entity:
                 data_type: document
 form:
     -
-        name: 'EOX App Form1'
+        name: 'EOX App Form'
         uuid: 1fa0d5c0-b428-499a-a490-37e4349c1060
         description: 'Sample form for eox apps'
         template_file: eoxApp.json

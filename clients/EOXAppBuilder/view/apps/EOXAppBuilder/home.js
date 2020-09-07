@@ -130,7 +130,7 @@ class Home extends React.Component {
           />
         ) : null}
         <div id="floater">
-          <img src="./public/img/poweredby.png"></img>
+          <img src="./apps/EOXAppBuilder/img/poweredby.png"></img>
         </div>
       </div>
     );

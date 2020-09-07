@@ -3,7 +3,9 @@
   "name": "<<applicationName>>",
   "appId":"<<appid>>",
   "category": null,
-  "autostart": true,
+  "autostart": true,  
+  "icon": "icon.svg",
+  "icon_white": "icon_white.svg",
   "defaultAppforOrgs" : false,
   "server": "server.js",
   "title": {

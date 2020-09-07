@@ -147,6 +147,8 @@ class MenuItemService extends AbstractService
                     }else if(AuthContext::isPrivileged($menuItem['privilege_name'])){
                         array_push($menuArray,$menuItem);
                     }
+                }else{
+                    array_push($menuArray, $menuItem);
                 }
 
                 if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '' && $menuItem['parent_id'] != 0) {

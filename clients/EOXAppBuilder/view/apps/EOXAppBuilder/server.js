@@ -19,8 +19,6 @@ module.exports = (core, proc) => ({
     });
     const app = express()
     core.app.use('/public', express.static(path.resolve(__dirname, 'public')));
-    let reactRender = require('./reactRender');
-    reactRender(core,proc);
     // WebSocket Route example (see index.js)
     core.app.ws(proc.resource('/socket'), (ws, req) => {
       ws.send('Hello World');

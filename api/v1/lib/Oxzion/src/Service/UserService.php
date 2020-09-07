@@ -20,6 +20,7 @@ use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ArrayUtils;
 use Oxzion\ValidationException;
+use Oxzion\Service\RoleService;
 
 
 class UserService extends AbstractService
@@ -45,7 +46,7 @@ class UserService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService, MessageProducer $messageProducer,RoleService $roleService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -55,6 +56,7 @@ class UserService extends AbstractService
         $this->addressService = $addressService;
         $this->cacheService = CacheService::getInstance();
         $this->messageProducer = $messageProducer;
+        $this->roleService = $roleService;
     }
 
     /**
@@ -389,6 +391,7 @@ class UserService extends AbstractService
             $select = "SELECT id from `ox_user` where username = '" . $data['username'] . "'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
             $this->addUserRole($resultSet[0]['id'], 'ADMIN');
+            $this->addAppRolesToUser($resultSet[0]['id'],$org);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -402,6 +405,16 @@ class UserService extends AbstractService
             'body' => $this->templateService->getContent('newAdminUser', $data),
         )), 'mail');
         return $resultSet[0]['id'];
+    }
+
+    private function addAppRolesToUser($userId,$org){
+        if (isset($org['app_id'])) {
+            $appId = $this->getIdFromUuid('ox_app',$org['app_id']);
+            $result = $this->roleService->getRolesByAppId($appId);
+            foreach ($result as $role) {
+                $this->addUserRole($userId,$role['name']);
+            }
+        }
     }
 
     private function addUserRole($userId, $roleName)

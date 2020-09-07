@@ -6,15 +6,11 @@ use App\Model\App;
 use App\Model\AppTable;
 use App\Service\AppService;
 use Exception;
+use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
-use Oxzion\ValidationException;
-use Oxzion\EntityNotFoundException;
-use Oxzion\InvalidInputException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\AppDelegate\AppDelegateService;
-use Oxzion\Utils\ArrayUtils;
 
 class AppController extends AbstractApiController
 {
@@ -70,8 +66,8 @@ class AppController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Create App - " . print_r($data, true));
         try {
-            $generated = $this->appService->createApp($data);
-            return $this->getSuccessResponseWithData($generated, 201);
+            $returnData = $this->appService->createApp($data);
+            return $this->getSuccessResponseWithData($returnData, 201);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -145,8 +141,8 @@ class AppController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Update App - ${uuid}, " . print_r($data, true));
         try {
-            $generated = $this->appService->updateApp($uuid, $data);
-            return $this->getSuccessResponseWithData($generated, 200);
+            $returnData = $this->appService->updateApp($uuid, $data);
+            return $this->getSuccessResponseWithData($returnData, 200);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -327,8 +323,8 @@ class AppController extends AbstractApiController
             else{
                 $params = null;
             }
-            $this->appService->deployApp($path, $params);
-            return $this->getSuccessResponse(200);
+            $appData = $this->appService->deployApp($path, $params);
+            return $this->getSuccessResponseWithData($appData);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -358,8 +354,8 @@ class AppController extends AbstractApiController
         }
 
         try {
-            $this->appService->deployApplication($routeParams['appId']);
-            return $this->getSuccessResponse(200);
+            $appData = $this->appService->deployApplication($routeParams['appId']);
+            return $this->getSuccessResponseWithData($appData);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -369,9 +365,10 @@ class AppController extends AbstractApiController
 
     public function delegateCommandAction()
     {
+        $routeParams = $this->params()->fromRoute();
+        $appId = $routeParams['appId'];
+        $delegate = $routeParams['delegate'];
         $data = $this->extractPostData();
-        $appId = $this->params()->fromRoute()['appId'];
-        $delegate = $this->params()->fromRoute()['delegate'];
         $data = array_merge($data, $this->params()->fromQuery());
         $this->log->info(__CLASS__ . "-> Execute Delegate Start - " . print_r($data, true));
         try {
