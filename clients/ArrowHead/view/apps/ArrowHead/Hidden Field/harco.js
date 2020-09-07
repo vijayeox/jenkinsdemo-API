@@ -15,6 +15,27 @@ if (data.workbooksToBeGenerated.harco == true) {
   var checkpartsSales = 0;
   var checkindemnitytype = "";
   var checkavgOfTimesContractDriversUsedPerMonth = "None";
+  var totalbusinessincomelimit = [];
+
+  data.locationSchedule.map(locationItem => {
+    var calculatebusinessincomelimit = 0;
+    if (locationItem.buildingDetails.length > 1) {
+      locationItem.buildingDetails.map(item => {
+        calculatebusinessincomelimit += item.businessincomelimit
+          ? item.businessincomelimit
+          : 0;
+      });
+      locationItem.buildingDetails.map(item => {
+        if (item.buildingNumber == 1) {
+          totalbusinessincomelimit.push({ result: calculatebusinessincomelimit });
+        } else {
+          totalbusinessincomelimit.push({ result: "" });
+        }
+      });
+    } else if (locationItem.buildingDetails.length == 1) {
+      totalbusinessincomelimit.push({ result: locationItem.buildingDetails[0]['businessincomelimit'] });
+    }
+  });
 
   if (
     data.avgOfTimesContractDriversUsedPerMonth > 0 &&
@@ -190,10 +211,11 @@ if (data.workbooksToBeGenerated.harco == true) {
   );
 
   value = {
+    totalbusinessincomelimit: totalbusinessincomelimit ? totalbusinessincomelimit : [],
     checksoftwareprotectionNone:
-      (data.virusscans == "yes") ||
-      (data.antivirussoftware == "yes") ||
-      (data.protectedfirewalls == "yes")
+      data.virusscans == "yes" ||
+      data.antivirussoftware == "yes" ||
+      data.protectedfirewalls == "yes"
         ? "no"
         : "yes",
     checkcrimecoverage: tempcrimecoverage == 200000 ? "" : tempcrimecoverage,
@@ -711,6 +733,5 @@ if (data.workbooksToBeGenerated.harco == true) {
         ? "Yes"
         : "No"
   };
-
   console.log(value);
 }

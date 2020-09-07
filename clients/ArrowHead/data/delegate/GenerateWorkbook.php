@@ -65,13 +65,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     {
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
         // Add logs for created by id and producer name who triggered submission
-        if (isset($data['submittedBy']) && !empty($data['submittedBy'])) {
-            if ($data['submittedBy'] == 'accountExecutive') {
-                return $data;
-            }
-        } else {
-            return $data;
-        }
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
 
         $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
@@ -91,7 +84,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
             unset($data["genericData"]);
         }
-
         foreach ($this->checkJSON($data['workbooksToBeGenerated']) as  $key => $templateSelected) {
             if ($templateSelected) {
                 $selectedTemplate = $this->carrierTemplateList[$key];
@@ -262,6 +254,18 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         // exit();
 
         $data = $tempData;
+
+        $data["workflowInitiatedBy"] = "management";
+        if (isset($data['submittedBy']) && !empty($data['submittedBy'])) {
+            if ($data['submittedBy'] == 'accountExecutive') {
+                $data["workflowInitiatedBy"] = "accountExecutive";
+            }
+        }
+
+        date_default_timezone_set('UTC');
+        $data['submissionTime'] = (new DateTime)->format('c');
+        $data["documents"] = $generatedDocumentsList;
+
         if (count($excelData) > 0) {
             file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
             array_push(
@@ -273,16 +277,10 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     "type" => "file/json"
                 )
             );
-            date_default_timezone_set('UTC');
-            $data['submissionTime'] = (new DateTime)->format('c');
             $data['documentsToBeGenerated'] = count($excelData);
             $data['documentsSelectedCount'] = count($excelData) + count($generatedDocumentsList) - 1;
             $data["status"] = "Processing";
-            $data["documents"] = $generatedDocumentsList;
         } else {
-            $data["documents"] = $generatedDocumentsList;
-            $mailResponse = $this->executeDelegate("DispatchMail", $data);
-            $data['mailStatus'] = $mailResponse;
             $data["status"] = "Generated";
         }
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
@@ -292,7 +290,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         if (count($excelData) > 0) {
             $selectQuery = "Select value FROM applicationConfig WHERE type ='excelMapperURL'";
             $ExcelTemplateMapperServiceURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
-            
+
             $selectQuery = "Select value FROM applicationConfig WHERE type ='callbackURL'";
             $callbackURL = ($persistenceService->selectQuery($selectQuery))->current()["value"];
 

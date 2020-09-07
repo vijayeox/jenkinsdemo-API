@@ -106,4 +106,33 @@ setTimeout(function () {
     victor_FranchisedAutoDealer: false,
     victor_AutoPhysDamage: false
   };
+  data.producerConfirmation ? (data.producerConfirmation = false) : null;
+
+  try {
+    if (data.namedInsured.length == 0) {
+      if (document.getElementsByClassName("pagination").length > 0) {
+        var pageList = [
+          ...document.getElementsByClassName("pagination")[0].children
+        ];
+        var GEActive = pageList.some(
+          (i) =>
+            i.children[0].innerText == "General Information" &&
+            i.className.includes("active")
+        );
+        GEActive
+          ? pageList.map((i, index) =>
+              index !== 0 ? (i.style.cursor = "not-allowed") : null
+            )
+          : null;
+        pageList.map((i, index) =>
+          index !== 0
+            ? i.setAttribute(
+                "title",
+                "Complete General Information page to proceed further"
+              )
+            : null
+        );
+      }
+    }
+  } catch {}
 }, 1000);
