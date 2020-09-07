@@ -102,6 +102,14 @@ entity:
                 data_type: text
                 index: true
             -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
                 name: transaction_reference_number
                 data_type: text
                 index: true
@@ -158,6 +166,14 @@ entity:
                 data_type: text
                 index: true
             -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
                 name: transaction_reference_number
                 data_type: text
                 index: true
@@ -208,6 +224,14 @@ entity:
                 index: true
             -
                 name: name
+                data_type: text
+                index: true
+            -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
                 data_type: text
                 index: true
             -
@@ -263,6 +287,14 @@ entity:
                 data_type: text
                 index: true
             -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
                 name: transaction_reference_number
                 data_type: text
                 index: true
@@ -276,6 +308,17 @@ entity:
             -
                 name: documents
                 text: 'Pocket Card'
+                data_type: document
+    -
+        name: 'Generate Report Job'
+        field:
+            -
+                name: jobStatus
+                text: 'Job Status'
+                data_type: text
+            -
+                name: documents
+                text: 'COI Batch Reports'
                 data_type: document
     -
         name: 'Auto Renewal'
@@ -367,6 +410,14 @@ entity:
                 data_type: text
                 index: true
             -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
                 name: transaction_reference_number
                 data_type: text
                 index: true
@@ -422,6 +473,9 @@ pages:
     -
         page_name: EFR.yml
         uuid: bb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: ReportPage.yml
+        uuid: 95dcfc00-e118-11ea-87d0-0242ac130003
 menu:
     -
         name: Home
@@ -483,6 +537,12 @@ menu:
         icon: 'fa fa-address-card'
         page_uuid: 11cd5446-c2fa-42cc-93b1-638670f4adf7
         uuid: 7794c91e-b708-41be-83e1-cc0bb6cd669a
+    -
+        name: 'Batch Reports'
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        icon: 'fa fa-file-text'
+        page_uuid: 95dcfc00-e118-11ea-87d0-0242ac130003
+        uuid: 7595ffaa-e118-11ea-87d0-0242ac130003
     -
         name: MyAssignments
         privilege: HIDE_FOR_NOW
@@ -610,6 +670,12 @@ form:
         description: 'Lets CSR regenerate the policy document'
         template_file: diveStoreRegeneration.json
         entity: 'Dive Store'
+    -
+        name: 'Generate Report'
+        uuid: 57054a38-e117-11ea-87d0-0242ac130003
+        description: 'Page for CSR generate and view Reports'
+        template_file: generateReport.json
+        entity: 'Generate Report Job'
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03
