@@ -17,11 +17,15 @@ class GenerateReportMenu extends AbstractAppDelegate
 
     public function execute(array $data, Persistence $persistenceService) 
     {
-        $this->logger->info("Executing Pocket Card Menu Generation with data- ".json_encode($data));
+        $this->logger->info("Executing Batch Report Menu Generation with data- ".json_encode($data));
         $params['entityName'] = 'Generate Report Job';
         $sortParams = array("field" => "date_created", "dir" => "desc");
         $filterParams = array("filters" => array());
-        $finalFilterParams = array(array("start" => "0", "take" => "10", "filter" => $filterParams, "sort" => array($sortParams)));
+        $finalFilterParams = array(array("filter" => $filterParams, "sort" => array($sortParams)));
+        if(isset($data['filter'])){
+            $data['filter'] = json_decode($data['filter'],true);
+            $finalFilterParams = array(array("filter" => $filterParams, "sort" => array($sortParams),"skip" => $data['filter'][0]['skip'],"take" => $data['filter'][0]['take']));
+        }
         $files = $this->getFileList($params, $finalFilterParams);
         $this->logger->info("the total number of files fetched is : ".print_r($files['total'], true));
         $this->logger->info("the file details of get file is : ".print_r($files['data'], true));
