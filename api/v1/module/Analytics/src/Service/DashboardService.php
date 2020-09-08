@@ -163,9 +163,9 @@ class DashboardService extends AbstractService
         $count = $resultSet->toArray()[0]['count'];
 
         if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
-            $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdeleted, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+            $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdeleted, d.isdefault, d.filter_configuration, export_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         } else {
-            $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdefault, d.filter_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+            $query = 'SELECT d.uuid, d.name,d.version, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, d.org_id, d.isdefault, d.filter_configuration, export_configuration from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         }
         try {
             $resultSet = $this->executeQuerywithParams($query);
