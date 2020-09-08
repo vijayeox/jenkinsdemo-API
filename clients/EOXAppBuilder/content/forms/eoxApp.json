@@ -6,7 +6,7 @@
 	"components": [{
 		"title": "App Info",
 		"theme": "primary",
-		"breadcrumbClickable": true,
+		"breadcrumbClickable": false,
 		"buttonSettings": {
 			"previous": true,
 			"cancel": true,
@@ -234,7 +234,6 @@
 			"label": "Do you want to add organisation information",
 			"tableView": false,
 			"defaultValue": false,
-			"persistent": false,
 			"clearOnHide": false,
 			"key": "checkOrg",
 			"type": "checkbox",
@@ -457,6 +456,7 @@
 					"columns": [{
 						"components": [{
 							"label": "Username",
+							"disabled": true,
 							"tableView": true,
 							"clearOnHide": false,
 							"calculateValue": "if(data.org.contact.firstname && data.org.contact.lastname){\n    var username = data.org.contact.firstname.toLowerCase() + data.org.contact.lastname.toLowerCase();\n    value = username.split(\" \").join(\"\");\n}",
@@ -666,9 +666,9 @@
 					}],
 					"clearOnHide": false,
 					"validate": {
-						"custom": "if (row.privileges) {\n  if (row.privileges.length > 0) {\n    valid =\n      row.privileges.length ==\n      new Set(\n        row.privileges.map((i) => i.privilege_name.name.replace(/\\s/g, \"\"))\n      ).size\n        ? true\n        : \"You cannot have a same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+						"custom": "if (row.privilegesDuplicate) {\n  if (row.privilegesDuplicate.length > 0) {\n    valid =\n      row.privilegesDuplicate.length ==\n      new Set(\n        row.privilegesDuplicate.map((i) =>\n          i.privilege_name.name.replace(/\\s/g, \"\")\n        )\n      ).size\n        ? true\n        : \"You cannot have a same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}"
 					},
-					"key": "privileges",
+					"key": "privilegesDuplicate",
 					"type": "datagrid",
 					"input": true,
 					"components": [{
@@ -746,6 +746,13 @@
 					"redrawOn": "defaultRole",
 					"calculateValue": "value = data.defaultRole == row.name ? true : false;",
 					"key": "default",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
+					"label": "Actual Privileges Key",
+					"calculateValue": "try {\n  value = row.privilegesDuplicate.map((i) => {\n    return { privilege_name: i.privilege_name.name, permission: i.permission };\n  });\n} catch (error) {}\n\nconsole.log(value);",
+					"key": "privileges",
 					"type": "hidden",
 					"input": true,
 					"tableView": false
@@ -1291,7 +1298,7 @@
 							"label": "Page Content Form",
 							"tableView": true,
 							"form": "5f21c1bdbba30150d672d0cf",
-							"calculateValue": "var pagesList = data.pages.map(i=>i.name);\nvar formsList = data.form.map(i=>i.name);\nif(value){\n  if(value.data){\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
+							"calculateValue": "var pagesList = data.pages.map((i) => i.name);\nvar formsList = data.form.map((i) => {\n  return { name: i.name, template_file: i.template_file };\n});\nif (value) {\n  if (value.data) {\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
 							"key": "pageContent",
 							"type": "form",
 							"input": true,
@@ -1465,7 +1472,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 281,
+	"_vid": 292,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1484,6 +1491,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-09-06T22:17:45.743Z",
+	"modified": "2020-09-08T12:30:50.799Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
