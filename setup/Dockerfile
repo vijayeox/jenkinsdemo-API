@@ -38,15 +38,14 @@ RUN add-apt-repository -y ppa:ondrej/php && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C && \
   apt-get update && \
   apt-get -o Dpkg::Options::="--force-confnew" --force-yes -fuy upgrade && \
-  apt-get -y install postfix python3-setuptools wget git apache2 php-xdebug libapache2-mod-php7.2 mysql-server zip unzip curl php7.2-cli php7.2-dev php7.2-mysql php7.2-gd php7.2-imagick php7.2-recode php7.2-tidy php7.2-xmlrpc php7.2-curl php7.2-json php7.2-msgpack php7.2-memcached php7.2-intl php7.2-sqlite3 php7.2-gmp php7.2-geoip php7.2-mbstring php7.2-xml php7.2-zip php7.2-imap php7.2-soap supervisor pdftk php7.2-imagick libapache2-mod-xsendfile dos2unix xmlstarlet tar tzdata ca-certificates nodejs && \
+  apt-get -y install postfix python3-setuptools wget git apache2 php-xdebug libapache2-mod-php7.2 php7.2-fpm mysql-server zip unzip curl php7.2-cli php7.2-dev php7.2-mysql php7.2-gd php7.2-imagick php7.2-recode php7.2-tidy php7.2-xmlrpc php7.2-curl php7.2-json php7.2-msgpack php7.2-memcached php7.2-intl php7.2-sqlite3 php7.2-gmp php7.2-geoip php7.2-mbstring php7.2-xml php7.2-zip php7.2-imap php7.2-soap supervisor pdftk php7.2-imagick libapache2-mod-xsendfile dos2unix xmlstarlet tar tzdata ca-certificates nodejs zlib1g-dev libglib2.0-dev && \
   apt-get -y autoremove && \
   echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Apache2 conf
 RUN echo "# Include vhost conf" >> /etc/apache2/apache2.conf 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf 
-RUN echo "IncludeOptional /data/lamp/conf/*.conf" >> /etc/apache2/apache2.conf 
-RUN echo "<Directory /data/lamp/www> " >> /etc/apache2/apache2.conf 
+RUN echo "<Directory /var/www/public> " >> /etc/apache2/apache2.conf 
 RUN echo "    Options Indexes FollowSymLinks Includes ExecCGI" >> /etc/apache2/apache2.conf 
 RUN echo "    AllowOverride None" >> /etc/apache2/apache2.conf 
 RUN echo "    Require all granted" >> /etc/apache2/apache2.conf 
@@ -87,16 +86,12 @@ ADD create_mysql_admin_user.sh /create_mysql_admin_user.sh
 RUN chmod 755 /*.sh
 
 # config Apache
-RUN a2enmod rewrite
-RUN a2enmod ssl
+RUN a2enmod actions ssl rewrite headers
 
 # Environment variables to configure php
-ENV PHP_UPLOAD_MAX_FILESIZE 10M
-ENV PHP_POST_MAX_SIZE 10M
+ENV PHP_UPLOAD_MAX_FILESIZE 200M
+ENV PHP_POST_MAX_SIZE 200M
 ENV PHP_MEMORY_LIMIT 1024M
-
-# Add dirs for manage sites (mount from host in run needeed for persistence)
-RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www 
 
 RUN chown -R mysql:mysql /var/lib/mysql
 
@@ -104,12 +99,13 @@ RUN chown -R mysql:mysql /var/lib/mysql
 RUN echo "alias node='nodejs'" >> ~/.bashrc
 
 # Phpmyadmin
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.8.5/phpMyAdmin-4.8.5-all-languages.zip -P /var/www/html/
-RUN unzip /var/www/html/phpMyAdmin-4.8.5-all-languages.zip -d /var/www/html/
-RUN mv /var/www/html/phpMyAdmin-4.8.5-all-languages/ /var/www/html/phpmyadmin/
-RUN cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php
-ADD configs/phpmyadmin/config.inc.php /var/www/html/phpmyadmin/config.inc.php
-RUN chmod 755 /var/www/html/phpmyadmin/config.inc.php
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.8.5/phpMyAdmin-4.8.5-all-languages.zip -P /tmp/phpmyadmin/
+RUN unzip /tmp/phpmyadmin/phpMyAdmin-4.8.5-all-languages.zip -d /tmp/phpmyadmin/
+RUN mkdir -p /var/www/phpmyadmin
+RUN mv /tmp/phpmyadmin/phpMyAdmin-4.8.5-all-languages/ /var/www/phpmyadmin/
+RUN cp /tmp/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
+ADD configs/phpmyadmin/config.inc.php /var/www/phpmyadmin/config.inc.php
+RUN chmod 755 /var/www/phpmyadmin/config.inc.php
 
 # Symfony 2 pre requisted
 RUN curl -sS https://getcomposer.org/installer | php
@@ -122,7 +118,6 @@ RUN mkdir -p /app/view
 RUN mkdir -p /app/camel
 RUN mkdir -p /app/workflow
 RUN mkdir -p /app/clients
-RUN ln -s /app/api /var/www/html/api
 
 # Temp Fix for Issues in missing repositories
 RUN touch /etc/apt/apt.conf.d/99fixbadproxy \
@@ -188,7 +183,7 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
     && rm -f /tmp/camunda.tar.gz
 
 ADD apache_default /etc/apache2/sites-available/000-default.conf
-RUN a2enmod rewrite
+RUN a2enmod rewrite ssl headers
 
 # Set Docker Environment variables
 ENV HOST=${HOST}
@@ -214,4 +209,5 @@ ENV WAIT_FOR_TIMEOUT=30
 ENV TZ=UTC
 ENV DEBUG=false
 
+RUN dos2unix /run.sh
 CMD ["/run.sh"]
