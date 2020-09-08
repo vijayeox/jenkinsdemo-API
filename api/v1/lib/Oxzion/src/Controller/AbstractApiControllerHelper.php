@@ -229,9 +229,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
             $errorCode = $e->getErrorCode();
             $message = $e->getMessage();
             $context = $e->getContextData();
-        } else if ($e instanceof Exception) {
-            $message = $e->getMessage();
-        }
+        } 
         else if ($e instanceof ValidationException) {
             $errorType = OxServiceException::ERR_TYPE_ERROR;
             $errorCode = OxServiceException::ERR_CODE_NOT_ACCEPTABLE; //Input data is not acceptable.

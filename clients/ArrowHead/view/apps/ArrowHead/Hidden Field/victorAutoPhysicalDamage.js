@@ -4,11 +4,12 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var primarySecondaryOEM = [];
   var primarySecondaryOEM2 = [];
   var uniqueKeyControls = [];
+  var uniqueLotProtection = [];
   var MixofInventoryNew = 0;
-  var NewFloowPlan = 0;
+  var NewFloorPlan = 0;
   var checkMixofInventoryNew = 0;
 
-  data.locationSchedule.map((row) => {
+  data.locationSchedule.map(row => {
     MixofInventoryNew +=
       (row.monthAvgNew ? row.monthAvgNew : 0) -
       (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0) +
@@ -17,14 +18,13 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
           ? row.insuredThroughFloorPlanUsed
           : 0));
 
-    NewFloowPlan +=
+    NewFloorPlan +=
       (row.monthAvgNew ? row.monthAvgNew : 0) -
       (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0);
   });
 
-  if (NewFloowPlan > 0 && MixofInventoryNew > 0) {
-    var row = NewFloowPlan / MixofInventoryNew;
-    console.log(row);
+  if (NewFloorPlan > 0 && MixofInventoryNew > 0) {
+    var row = NewFloorPlan / MixofInventoryNew;
     if (row <= 0) {
       checkMixofInventoryNew = 0;
     } else if (row > 0.0 && row <= 0.1) {
@@ -50,26 +50,31 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     }
   }
 
-  data.genericData.locationScheduleGridData.map((item) => {
+  data.genericData.locationScheduleGridData.map(item => {
     if (
       item.occupancyType == "autoSalesAndService" ||
       item.occupancyType == "newCarShowroomAndSales" ||
       item.occupancyType == "vehicleStorageParkingGarage" ||
       item.occupancyType == "autoStorageLot"
     ) {
+      tempSecondaryOEMStore = item.secondaryOEM
+        ? item.secondaryOEM.length > 0
+          ? item.secondaryOEM
+          : []
+        : [];
       primarySecondaryOEM2 = [
         ...primarySecondaryOEM2,
         item.primaryOEM,
-        ...item.secondaryOEM
+        ...tempSecondaryOEMStore
       ];
     }
   });
 
   var DealershipStorageLocationsArray = data.locationSchedule
-    .map((locationItem) => {
+    .map(locationItem => {
       var resultOccupancyType = "";
       var resultPrimaryOEM = "";
-      locationItem.buildingDetails.some((buildingItem) => {
+      locationItem.buildingDetails.some(buildingItem => {
         if (
           buildingItem.occupancyType == "autoSalesAndService" ||
           buildingItem.occupancyType == "newCarShowroomAndSales"
@@ -88,7 +93,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       });
       var furnishedAutoEmployee = 0;
       var nonEmployeesfurnishedAuto = 0;
-      locationItem.buildingDetails.map((building) => {
+      locationItem.buildingDetails.map(building => {
         furnishedAutoEmployee +=
           building.fTEmployeesFurnishedAnAuto +
           building.pTEmployeesFurnishedAnAuto +
@@ -106,8 +111,8 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
         [
           ...new Set(
             locationItem.buildingDetails
-              .map((i) => (i.primaryOEM ? " " + i.primaryOEM : false))
-              .filter((i) => i)
+              .map(i => (i.primaryOEM ? " " + i.primaryOEM : false))
+              .filter(i => i)
           )
         ] + "";
       var copylocationItem = { ...locationItem };
@@ -133,16 +138,16 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
           }
         : false;
     })
-    .filter((filterItem) => (filterItem ? filterItem : false));
+    .filter(filterItem => (filterItem ? filterItem : false));
 
   data.dolkeycntrlsameallloc == "no"
-    ? DealershipStorageLocationsArray.map((item) => {
+    ? DealershipStorageLocationsArray.map(item => {
         if (item.locationGarageLiabilityKeyControls) {
           item.locationGarageLiabilityKeyControls.none
             ? uniqueKeyControls.push("None")
             : "";
           item.locationGarageLiabilityKeyControls.lockbox
-            ? uniqueKeyControls.push("Lockboxs")
+            ? uniqueKeyControls.push("Lock Boxes")
             : "";
           item.locationGarageLiabilityKeyControls.computerizedKeyVault
             ? uniqueKeyControls.push("Key Machine")
@@ -151,7 +156,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             ? uniqueKeyControls.push("Key Board")
             : "";
           item.locationGarageLiabilityKeyControls.dailyKeyInventory
-            ? uniqueKeyControls.push("Unknown Text Fix")
+            ? uniqueKeyControls.push("Daily Key Inventory")
             : "";
           item.locationGarageLiabilityKeyControls.lockedInManagersOffice
             ? uniqueKeyControls.push("Key Board")
@@ -161,12 +166,41 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             : "";
         }
       })
-    : null;
+    : "";
+
+  data.dollotprotection == "no"
+    ? data.locationSchedule.map(item => {
+        if (item.dolsecguards == "yes") {
+          uniqueLotProtection.push("Night Watchman");
+        }
+        if (item.dolaftrhrslighting == "yes") {
+          uniqueLotProtection.push("Security Lighting");
+        }
+        if (item.dolEntranceQuestions.postChain == "yes") {
+          uniqueLotProtection.push("Post and Chains");
+        }
+        if (item.dolsurvcammoniintrunotifi == "yes" || item.dolsurcamnotmoniotrd == "yes") {
+          uniqueLotProtection.push("Video Surveillance");
+        }
+        if (item.dolEntranceQuestions.fullyFencedPremises == "yes") {
+          uniqueLotProtection.push("Fenced");
+        }
+        if (
+          item.dolsecguards != "yes" &&
+          item.dolaftrhrslighting != "yes" &&
+          item.dolEntranceQuestions.postChain != "yes" &&
+          item.dolsurvcammoniintrunotifi != "yes" &&
+          item.dolsurcamnotmoniotrd != "yes" &&
+          item.dolEntranceQuestions.fullyFencedPremises != "yes"
+        ) {
+          uniqueLotProtection.push("None");
+        }
+      })
+    : "";
 
   value = {
-    checkaretheyinsuredelsewhere: data.aretheyinsuredelsewhere ? data.aretheyinsuredelsewhere.length > 0 ? 'Yes' : 'No' : '' ,
     checkSecurityGuards: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsecguards == "yes") {
           return true;
         } else {
@@ -175,7 +209,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       }
     ),
     checkAfterHoursLighting: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolaftrhrslighting == "yes") {
           return true;
         } else {
@@ -184,7 +218,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       }
     ),
     checkSurveillanceCamera: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsurvcammoniintrunotifi == "yes") {
           return true;
         } else {
@@ -193,7 +227,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       }
     ),
     checkNotMonitoredSurveillanceCamera: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolsurcamnotmoniotrd == "yes") {
           return true;
         } else {
@@ -202,7 +236,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       }
     ),
     checkdolpostnchain: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolEntranceQuestions.postChain == "yes") {
           return true;
         } else {
@@ -211,8 +245,17 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       }
     ),
     checkdolflyfencdpremises: data.genericData.locationScheduleGridData.some(
-      (locationItem) => {
+      locationItem => {
         if (locationItem.dolEntranceQuestions.fullyFencedPremises == "yes") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    ),
+    checkAutobody: data.genericData.locationScheduleGridData.some(
+      locationItem => {
+        if (locationItem.occupancyType == "bodyShop") {
           return true;
         } else {
           return false;
@@ -228,6 +271,10 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     sumNonEmployeesfurnished: sumNonEmployeesfurnishedAuto,
     primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + "",
     checkMixofInventoryNew: checkMixofInventoryNew,
+    uniqueLotProtection:
+      uniqueLotProtection.length > 0
+        ? [...new Set(uniqueLotProtection)] + ""
+        : "",
     uniqueKeyControls:
       uniqueKeyControls.length > 0 ? [...new Set(uniqueKeyControls)] + "" : ""
   };

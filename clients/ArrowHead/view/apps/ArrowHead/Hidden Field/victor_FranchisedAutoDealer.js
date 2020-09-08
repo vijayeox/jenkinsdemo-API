@@ -1,6 +1,22 @@
 if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   var falsePretenseLimit = 0;
   var checktotalLocationSalesRevenue = 0;
+  var checklistCompaniesRepresented = [];
+  var checkblanketcoverage = [];
+
+  data.locationSchedule.map(locationItem => {
+    if (locationItem.buildingDetails.length > 1) {
+      locationItem.buildingDetails.map(item => {
+        checkblanketcoverage.push([result: "Premise Only"]);
+      });
+    } else if (locationItem.buildingDetails.length == 1) {
+      checkblanketcoverage.push([result: "No"]);
+    }
+  });
+
+  checklistCompaniesRepresented = data.companiesRepresentedList.map(
+    item => item.listcompaniesrepresented
+  );
 
   data.locationSchedule.map(item => {
     checktotalLocationSalesRevenue += item.totalLocationSalesRevenue
@@ -27,11 +43,8 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   }
 
   value = {
-    checklistcompaniesrepresented: data.listcompaniesrepresented
-      ? data.listcompaniesrepresented.length > 0
-        ? data.listcompaniesrepresented + ""
-        : ""
-      : "",
+    checkblanketcoverage: checkblanketcoverage ? checkblanketcoverage : [],
+    checkcompaniesrepresented: checklistCompaniesRepresented + "",
     checktotalLocationSalesRevenue: checktotalLocationSalesRevenue,
     checkfalsePretenseLimit: falsePretenseLimit,
     locationBuildingIndex: data.genericData.locationScheduleGridData
@@ -41,7 +54,14 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       item => {
         return item.occupancyType == "vacantLand"
           ? { result: "" }
-          : { result: data.buildingCoinsurance };
+          : { result: "Agreed Amount" };
+      }
+    ),
+    checkpropertyCoverageDeductible: data.genericData.locationScheduleGridData.map(
+      item => {
+        return item.occupancyType == "vacantLand"
+          ? { result: "" }
+          : { result: data.propertyCoverageDeductible  ? data.propertyCoverageDeductible : ''};
       }
     ),
     checkbuildingValuation: data.genericData.locationScheduleGridData.map(i => {
@@ -203,13 +223,13 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
           result:
             (item.utilityservices > 0
               ? "Utility Services Time Element: " + item.utilityservices
-              : 0) +
+              : '') +
             (item.utilityservices > 0 && item.ordinancelawcoverage > 0
               ? ", "
               : "") +
             (item.ordinancelawcoverage > 0
               ? "Ordinance Law: " + item.ordinancelawcoverage
-              : 0)
+              : '')
         };
       }
     ),

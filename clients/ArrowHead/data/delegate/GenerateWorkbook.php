@@ -8,6 +8,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 
 use Oxzion\AppDelegate\FileTrait;
+use Oxzion\AppDelegate\AppDelegateTrait;
 use Oxzion\AppDelegate\HttpClientTrait;
 use Oxzion\AppDelegate\HTTPMethod;
 
@@ -16,6 +17,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     use HttpClientTrait;
     use FileTrait;
+    use AppDelegateTrait;
 
     protected $carrierTemplateList = array(
         "dealerGuard_ApplicationOpenLot" => array(
@@ -276,10 +278,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             $data['documentsToBeGenerated'] = count($excelData);
             $data['documentsSelectedCount'] = count($excelData) + count($generatedDocumentsList) - 1;
             $data["status"] = "Processing";
+            $data["documents"] = $generatedDocumentsList;
         } else {
+            $data["documents"] = $generatedDocumentsList;
+            $mailResponse = $this->executeDelegate("DispatchMail", $data);
+            $data['mailStatus'] = $mailResponse;
             $data["status"] = "Generated";
         }
-        $data["documents"] = $generatedDocumentsList;
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         $this->saveFile($data, $fileUUID);
@@ -427,6 +432,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                             [$fieldConfig['returnValue'][$temp] . ""]
                         );
                     }
+                } else  if (isset($fieldConfig['method2'])) {
+                    $temp = $value[$childKey] . "";
+                    $processMethod = $fieldConfig["method2"];
+                    array_push(
+                        $parsedData,
+                        [$this->$processMethod($temp, $fieldConfig, $formData)]
+                    );
                 } else {
                     array_push($parsedData, [$value[$childKey] . ""]);
                 }

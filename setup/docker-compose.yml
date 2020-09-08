@@ -1,0 +1,43 @@
+version: '3.5'
+services:
+    eox:
+        build: 
+            context: .
+            args:
+                HOST: ${HOST}
+                DB_USERNAME: ${DB_USERNAME}
+                DB_PASSWORD: ${DB_PASSWORD}
+                DB_HOST: ${DB_HOST}
+                API_DB : ${API_DB}
+                TEST_API_DB : ${TEST_API_DB}
+        environment:
+          - MYSQL_HOST=mysql
+          - APACHE_SERVER_NAME=alpine.docker.localhost
+          - PHP_SHORT_OPEN_TAG=On
+          - PHP_ERROR_REPORTING=E_ALL
+          - PHP_DISPLAY_ERRORS=On
+          - PHP_HTML_ERRORS=On
+          - PHP_XDEBUG_ENABLED=true
+          - MYSQL_ADMIN_PASS=password
+        ports:
+            - "8080:8080"
+            - "8081:8081" 
+            - "8090:8090"
+            - "8161:8161"
+            - "8085:8085"
+            - "61616:61616"
+            - "5672:5672"
+            - "61613:61613"
+            - "1883:1883"
+            - "61614:61614"
+            - "3306:3306"
+        expose:
+            - '3306'
+        volumes:
+            - ../api/v1/:/app/api
+            - ../view/:/app/view
+            - ../integrations/workflow:/app/workflow
+            - ../integrations/camel:/app/camel
+            - ../clients:/app/clients
+            - ./mysql:/var/lib/mysql
+            - ./configs:/configs

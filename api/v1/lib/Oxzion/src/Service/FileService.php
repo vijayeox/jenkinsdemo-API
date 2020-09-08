@@ -165,8 +165,8 @@ class FileService extends AbstractService
         $context = ['orgId' => $orgUuid, 'userId' => $userUuid];
         $this->updateOrganizationContext($context);
     }
-    private function updateFileAttributesInternal($entityId, $fields, $fileId){
-        $validFields = $this->checkFields($entityId ,$fields, $fileId);
+    private function updateFileAttributesInternal($entityId, $fileData, $fileId){
+        $validFields = $this->checkFields($entityId ,$fileData, $fileId);
         $validFields = $validFields['validFields'];
         $fields = $validFields['data'];
         unset($validFields['data']);
@@ -215,6 +215,8 @@ class FileService extends AbstractService
                             where fa.file_id = :fileId and f.type IN ('document','file')and ifa.id is null)";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
+                $fields = $this->processMergeData($entityId, $fileData, $fields);
+                $this->updateFileData($fileId, $fields);
             }
             $this->logger->info("Update File Data after checkFields ---- " . json_encode($fields));
             // The next line needs to be removed for file save to work
@@ -540,7 +542,7 @@ class FileService extends AbstractService
                     $childFieldsPresent = false;
                     if($field['index'] == 1){
                         unset($indexedField['sequence']);
-    					unset($indexedField['childFields']);
+                        unset($indexedField['childFields']);
                     }else{
                         $indexedField['field_value']=is_array($fieldvalue) ? json_encode($fieldvalue):$fieldvalue;
                         unset($indexedField['field_value_text']);
@@ -1056,7 +1058,9 @@ class FileService extends AbstractService
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
             $fromQuery .= "left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
             if (isset($params['workflowStatus'])) {
-                $whereQuery .= " wi.status = '" . $params['workflowStatus'] . "'  AND ";
+                $fromQuery .= " left join (select max(id) as id, workflow_instance_id from ox_activity_instance  group by workflow_instance_id) lai on lai.workflow_instance_id = wi.id
+                            left join ox_activity_instance ai on ai.id = lai.id ";
+                $whereQuery .= " (ai.status = '" . $params['workflowStatus'] . "' OR (ai.status is null AND wi.status = '".$params['workflowStatus']."' )) AND ";
             } else {
                 $whereQuery .= "";
             }
@@ -1266,7 +1270,7 @@ class FileService extends AbstractService
         );
     }
 
-    private function cleanData($params)
+    public function cleanData($params)
     {
         unset($params['workflowInstanceId']);
         unset($params['activityInstanceId']);
@@ -1280,6 +1284,7 @@ class FileService extends AbstractService
         unset($params['form_id']);
         unset($params['fileId']);
         unset($params['app_id']);
+        unset($params['appId']);
         unset($params['org_id']);
         unset($params['orgId']);
         unset($params['created_by']);
@@ -1524,7 +1529,7 @@ class FileService extends AbstractService
             if (count($fileRecord) > 0) {
                $fileData = json_decode($fileRecord[0]['data'],true);
                $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
-           	   $this->updateFile($fileData,$params['fileId']);
+               $this->updateFile($fileData,$params['fileId']);
             }
         }
         return $data;

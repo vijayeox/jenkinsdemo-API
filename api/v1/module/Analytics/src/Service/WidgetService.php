@@ -127,7 +127,7 @@ class WidgetService extends AbstractService
 
         $widget = new Widget($this->table);
         $widget->loadByUuid($uuid);
-        $widget->assign($data);
+        $widget->assign($data); 
 
         if (isset($data['visualization_uuid'])) {
             //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.

@@ -1,0 +1,19 @@
+[Unit]
+Description=Activemq integrations
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=camel
+[Service]
+User=oxzion
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/app/camel
+#path to executable. 
+#executable is a bash script which calls jar file
+ExecStart=/app/camel/init.d/run.sh
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target

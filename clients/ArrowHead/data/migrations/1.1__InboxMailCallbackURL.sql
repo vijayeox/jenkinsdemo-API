@@ -4,7 +4,7 @@ INSERT INTO
 VALUES
     (
         'arrowHeadInboxMail',
-        'prajwals@eoxvantage.in'
+        'newsubmissions@arrowheadgrp.com'
     );
 
 

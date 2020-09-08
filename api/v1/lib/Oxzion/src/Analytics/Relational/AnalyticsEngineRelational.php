@@ -16,6 +16,8 @@ use Oxzion\Utils\AnalyticsUtils;
 abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 	protected $dbAdapter;
 	protected $dbConfig;
+	private $filterTmpFields;
+	private $filterFields;
 
     public function __construct($appDBAdapter,$appConfig)  {
 		parent::__construct($appDBAdapter,$appConfig);
@@ -68,8 +70,11 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		$field = null;
 		$filter =array();
 		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
-		if (!empty($parameters['date-period'])) {
-			$period = explode('/', $parameters['date-period']);
+		if (!empty($parameters['date-period'])) $dateperiod = $parameters['date-period'];
+		if (!empty($parameters['date_period'])) $dateperiod =  $parameters['date_period'];
+
+		if (!empty($dateperiod)) {
+			$period = explode('/', $dateperiod);
 			$startdate = date('Y-m-d', strtotime($period[0]));
 			$enddate =  date('Y-m-d', strtotime($period[1]));
 		} else {
@@ -135,11 +140,16 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if ($datetype)
 			$range = "$datetype between '$startdate' and '$enddate'";
 		if (isset($parameters['filter'])) {
-			$filter = $parameters['filter']; 
+				$filter[] = $parameters['filter'];
+		}
+		if (isset($parameters['inline_filter'])) {
+			foreach($parameters['inline_filter'] as $inlineArry) {
+				array_unshift($filter, $inlineArry);
+			}
 		}
 		$returnarray = array('group' => $group, 'range' => $range, 'select' => $select,'filter'=>$filter);
 		if (isset($parameters['pagesize'])) {
-			$returnarray['limit'] = $parameters['limit'];
+			$returnarray['limit'] = $parameters['pagesize'];
 		}
 		if (isset($parameters['list'])) {
 			$listConfig=explode(",", $parameters['list']);
@@ -174,6 +184,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 	}
 
 	public function getResultsFromPara($orgId,$entity_name,$para) {
+		
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
 //		print_r($para['select']);exit;
@@ -182,19 +193,31 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		}
 		$select->from($entity_name);
 	//	$select->where(['org_id' => $orgId]);
+
+		
+		if (!empty($para['filter'])) {
+			$this->filterFields = array();
+			foreach($para['filter'] as $filter) {
+				$this->filterTmpFields = array();
+				$where = new Where();
+				$this->createFilter($filter,$where);
+				$select->where($where);	
+				$this->filterFields=array_merge($this->filterFields,$this->filterTmpFields);			
+			}
+		}
 		if (!empty($para['range'])) {
 			$select->where($para['range']);
 		}
-		if (!empty($para['filter'])) {
-			$where = new Where();
-			$this->createFilter($para['filter'],$where);
-			$select->where($where);
-		}
+
 		if (!empty($para['group'])) {
 			$select->group($para['group']);
 		}
 		if (!empty($para['limit'])) {
-			$select->group($para['limit']);
+			$select->limit($para['limit']);
+		}
+
+		if (!empty($para['sort'])) {
+			$select->order($para['sort']);
 		}
 	//	echo $select->getSqlString();exit;
 		$statement = $sql->prepareStatementForSqlObject($select);
@@ -233,6 +256,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 				 $this->createFilter($value,$whereNest);
 				 $whereNest->unnest();				                  
         } else {
+			if (!in_array($column,$this->filterFields)) {
            // echo $column.' '.$condition.' '.$value;exit;
 				$value = AnalyticsUtils::checkSessionValue($value);
 				if (strtolower(substr($value,0,5))=="date:") {
@@ -249,7 +273,8 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 						$functionName = $symMapping[$condition];
 						$where->$functionName($column,$value);
                 }
-                        
+				$this->filterTmpFields[] = $column;
+			}        
                
 		 }
     }
