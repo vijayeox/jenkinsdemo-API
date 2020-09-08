@@ -221,7 +221,7 @@ class AppService extends AbstractService
 
     public function deployApp($path, $params = null)
     {
-        $ymlData = self::loadAppDescriptor($path);
+        $ymlData =  $this->cleanApplicationDescriptorData(self::loadAppDescriptor($path));
         if(!isset($params)){
             $params = $this->appDeployOptions;
         }
@@ -295,7 +295,7 @@ class AppService extends AbstractService
      * <EOX_APP_SOURCE_DIR> to <EOX_APP_DEPLOY_DIR> and then calls deployApp method of this service 
      * to deploy the application.
      */
-    public function deployApplication($appId)
+    public function deployApplication($appId, $params = null)
     {
         $query = 'SELECT name, type FROM ox_app WHERE uuid=:appId';
         $queryParams = array('appId' => $appId);
@@ -321,7 +321,7 @@ class AppService extends AbstractService
         }
         FileUtils::copyDir($appSourceDir, $appDeployDir);
         $appDeployDir = FileUtils::joinPath($appDeployDir);
-        $result = $this->deployApp($appDeployDir);
+        $result = $this->deployApp($appDeployDir, $params);
         FileUtils::copy($appDeployDir."application.yml","application.yml",$appSourceDir);
         return $result;
     }
@@ -1141,5 +1141,37 @@ class AppService extends AbstractService
             throw $e;
         }
     }
-}
 
+    private function cleanApplicationDescriptorData($descriptorData)
+    {
+        if (isset($descriptorData["formDuplicate"])) {
+            unset($descriptorData["formDuplicate"]);
+        }
+        if (isset($descriptorData["textFieldValidate"])) {
+            unset($descriptorData["textFieldValidate"]);
+        }
+        if (isset($descriptorData["workflowDuplicate"])) {
+            unset($descriptorData["workflowDuplicate"]);
+        }
+        if (isset($descriptorData["pages"])) {
+            $descriptorData["pages"] = array_map(function ($page) {
+                if (isset($page["pageContent"])) {
+                    unset($page["pageContent"]);
+                }
+                if (isset($page["details"])) {
+                    unset($page["details"]);
+                }
+                return $page;
+            }, $descriptorData["pages"]);
+        }
+        if (isset($descriptorData["role"])) {
+            $descriptorData["role"] = array_map(function ($role) {
+                if (isset($role["privilegesDuplicate"])) {
+                    unset($role["privilegesDuplicate"]);
+                }
+                return $role;
+            }, $descriptorData["role"]);
+        }
+        return $descriptorData;
+    }
+}
