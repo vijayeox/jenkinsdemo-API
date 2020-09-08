@@ -12,7 +12,8 @@ sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILE
     -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/7.2/apache2/php.ini
 echo "Editing MySQL config"
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-sed -i "s/.*Listen 80*/Listen 80/" /etc/apache2/ports.conf
+sed -i "s/.*Listen 80 /Listen 8080/" /etc/apache2/ports.conf
+sed -i "s/.*Listen 808080/Listen 8080/" /etc/apache2/ports.conf
 sed -i "s/user.*/user = www-data/" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -22,6 +23,16 @@ mkdir -p /var/run/mysqld
 
 chmod 755 /etc/mysql/conf.d/my.cnf
 # install db
+if [ -n "$VAGRANT_OSX_MODE" ];then
+    echo "Setting up users and groups"
+    usermod -u $DOCKER_USER_ID www-data
+    groupmod -g $(($DOCKER_USER_GID + 10000)) $(getent group $DOCKER_USER_GID | cut -d: -f1)
+    groupmod -g ${DOCKER_USER_GID} staff
+else
+    echo "Allowing Apache/PHP to write to the app"
+    # Tweaks to give Apache/PHP write permissions to the app
+    chown -R www-data:staff /var/www
+fi
 echo "Allowing Apache/PHP to write to MySQL"
 # Setup user and permissions for MySQL and Apache
 chmod -R 770 /var/lib/mysql
@@ -49,20 +60,20 @@ cd /app
 cp /configs/env/api/v1/config/autoload/local.php /app/api/config/autoload/
 cp /configs/env/integrations/camel/src/main/resources/* /app/camel/src/main/resources/
 cp -r /configs/env/view/* /app/view
-cp /configs/env/view/bos/osjs-server/.env.example /app/view/bos/osjs-server/.env
+cp /configs/env/view/bos/src/osjs-server/.env.example /app/view/bos/src/osjs-server/.env
 cp -r /configs/env/integrations/workflow/* /app/workflow
 
 # SETUP App view Configs
-cp /configs/view/apps/Analytics/.env.example /app/view/apps/Analytics/.env
-cp /configs/view/apps/Calendar/.env.example /app/view/apps/Calendar/.env
-cp /configs/view/apps/Chat/.env.example /app/view/apps/Chat/.env
-cp /configs/view/apps/CRM/.env.example /app/view/apps/CRM/.env
-cp /configs/view/apps/CRMAdmin/.env.example /app/view/apps/CRMAdmin/.env
-cp /configs/view/apps/HelpApp/.env.example /app/view/apps/HelpApp/.env
-cp /configs/view/apps/Mail/.env.example /app/view/apps/Mail/.env
-cp /configs/view/apps/MailAdmin/.env.example /app/view/apps/MailAdmin/.env
-cp /configs/view/apps/Task/.env.example /app/view/apps/Task/.env
-cp /configs/view/apps/TaskAdmin/.env.example /app/view/apps/TaskAdmin/.env
+cp /configs/env/view/apps/Analytics/.env.example /app/view/apps/Analytics/.env
+cp /configs/env/view/apps/Calendar/.env.example /app/view/apps/Calendar/.env
+cp /configs/env/view/apps/Chat/.env.example /app/view/apps/Chat/.env
+cp /configs/env/view/apps/CRM/.env.example /app/view/apps/CRM/.env
+cp /configs/env/view/apps/CRMAdmin/.env.example /app/view/apps/CRMAdmin/.env
+cp /configs/env/view/apps/HelpApp/.env.example /app/view/apps/HelpApp/.env
+cp /configs/env/view/apps/Mail/.env.example /app/view/apps/Mail/.env
+cp /configs/env/view/apps/MailAdmin/.env.example /app/view/apps/MailAdmin/.env
+cp /configs/env/view/apps/Task/.env.example /app/view/apps/Task/.env
+cp /configs/env/view/apps/TaskAdmin/.env.example /app/view/apps/TaskAdmin/.env
 
 echo "=> Setting up API Vendor Files ..."
 cd /app/api
@@ -70,7 +81,9 @@ composer install
 dos2unix *
 /usr/bin/mysqld_safe > /dev/null 2>&1 &
 ./migrations migrate
+
 mysqladmin -u root -proot shutdown
+ln -s /app/api/* /var/www
 #Workflow setup
 cd /app/workflow
 cd /app/workflow/IdentityService/
