@@ -12,8 +12,8 @@ sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILE
     -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/7.2/apache2/php.ini
 echo "Editing MySQL config"
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-sed -i "s/.*Listen 80 /Listen 8080/" /etc/apache2/ports.conf
-sed -i "s/.*Listen 808080/Listen 8080/" /etc/apache2/ports.conf
+sed -i "s/.*Listen 80*/Listen 8080/" /etc/apache2/ports.conf
+sed -i "s/.*Listen 808080*/Listen 8080/" /etc/apache2/ports.conf
 sed -i "s/user.*/user = www-data/" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
