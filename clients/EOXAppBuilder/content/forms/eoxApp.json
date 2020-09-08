@@ -541,10 +541,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"permission": ""
-				}],
 				"validate": {
 					"custom": "if (data.privilege) {\n  if (data.privilege.length > 0) {\n    valid =\n      data.privilege.length == new Set(data.privilege.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}",
 					"minLength": 1
@@ -622,15 +618,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"privileges": [{
-						"privilege_name": [{}],
-						"permission1": "",
-						"permission": ""
-					}],
-					"default": false
-				}],
 				"validate": {
 					"custom": "if (data.role) {\n  if (data.role.length > 0) {\n    valid =\n      data.role.length == new Set(data.role.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same role more than once.\";\n  } else {\n    valid = true;\n  }\n}",
 					"minLength": 1
@@ -660,10 +647,6 @@
 					"enableRowGroups": false,
 					"noFirstRow": false,
 					"tableView": false,
-					"defaultValue": [{
-						"privilege_name": [{}],
-						"permission": ""
-					}],
 					"clearOnHide": false,
 					"validate": {
 						"custom": "if (row.privilegesDuplicate) {\n  if (row.privilegesDuplicate.length > 0) {\n    valid =\n      row.privilegesDuplicate.length ==\n      new Set(\n        row.privilegesDuplicate.map((i) =>\n          i.privilege_name.name.replace(/\\s/g, \"\")\n        )\n      ).size\n        ? true\n        : \"You cannot have a same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}"
@@ -677,12 +660,7 @@
 						"placeholder": "Please select",
 						"tableView": true,
 						"dataSrc": "custom",
-						"defaultValue": [{}],
 						"data": {
-							"values": [{
-								"label": "",
-								"value": ""
-							}],
 							"custom": "values = data.privilege.map(item =>item)"
 						},
 						"template": "<span>{{ item.name }}</span>",
@@ -829,16 +807,6 @@
 			"enableRowGroups": false,
 			"hideLabel": true,
 			"tableView": false,
-			"defaultValue": [{
-				"name": "",
-				"formFieldsValidationExcel": [],
-				"field": [{
-					"name": "",
-					"text": "",
-					"data_type": "",
-					"index": false
-				}]
-			}],
 			"validate": {
 				"minLength": 0
 			},
@@ -1031,11 +999,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"entity": {},
-					"template_file": []
-				}],
 				"redrawOn": "data",
 				"key": "formDuplicate",
 				"type": "datagrid",
@@ -1130,11 +1093,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"entity": {},
-					"template_file": []
-				}],
 				"clearOnHide": false,
 				"key": "workflow",
 				"type": "datagrid",
@@ -1223,21 +1181,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"uuid": "",
-					"description": "",
-					"details": {
-						"data": {
-							"content": [{
-								"type": "",
-								"useRowData": false,
-								"url": ""
-							}]
-						},
-						"metadata": {}
-					}
-				}],
 				"clearOnHide": false,
 				"key": "pages",
 				"type": "datagrid",
@@ -1359,15 +1302,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"iconClass": "",
-					"page": {},
-					"privilege": {},
-					"parent": {},
-					"uuid": "",
-					"icon": ""
-				}],
 				"clearOnHide": false,
 				"validate": {
 					"minLength": 1
@@ -1472,7 +1406,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 292,
+	"_vid": 293,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1491,6 +1425,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-09-08T12:30:50.799Z",
+	"modified": "2020-09-08T19:56:01.432Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
