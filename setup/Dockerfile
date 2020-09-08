@@ -67,15 +67,16 @@ ENV LC_ALL en_US.UTF-8
 # Add image configuration and scripts
 ADD ./services/start-apache2.sh /start-apache2.sh
 ADD ./services/start-mysqld.sh /start-mysqld.sh
+ADD ./services/start-view.sh /start-view.sh
+ADD ./services/start-camel.sh /start-camel.sh
 #ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 ADD ./configs/my.cnf /etc/mysql/conf.d/my.cnf
 ADD ./configs/supervisor/supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 ADD ./configs/supervisor/supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
+ADD ./configs/supervisor/supervisord-view.conf /etc/supervisor/conf.d/supervisord-view.conf
+ADD ./configs/supervisor/supervisord-camel.conf /etc/supervisor/conf.d/supervisord-camel.conf
 
-ADD ./services/camunda.service /camunda.service
-ADD ./services/view.service /view.service
-ADD ./services/camel.service /camel.service
 RUN chmod 755 /*.sh
 
 # Remove pre-installed database
@@ -185,6 +186,9 @@ COPY bpm-platform.xml /camunda/conf/
 RUN xmlstarlet ed --inplace -u "//Connector[@protocol='HTTP/1.1']/@port" -v ${TOMCAT_PORT} /camunda/conf/server.xml
 RUN rm -f /tmp/camunda-${DISTRO}.sh \
     && rm -f /tmp/camunda.tar.gz
+
+ADD apache_default /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
 
 # Set Docker Environment variables
 ENV HOST=${HOST}
