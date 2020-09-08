@@ -225,7 +225,8 @@ class AppService extends AbstractService
         if(!isset($params)){
             $params = $this->appDeployOptions;
         }
-        foreach ($this->appDeployOptions as $key => $value) {
+        try{
+            foreach ($this->appDeployOptions as $key => $value) {
             if(!in_array($value, $params)){
                 continue;
             }
@@ -270,9 +271,21 @@ class AppService extends AbstractService
         $appData = &$ymlData['app'];
         $appData['status'] = App::PUBLISHED;
         $this->logger->info("\n App Data before app update - ", print_r($appData, true));
-        $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.
-        $this->createOrUpdateApplicationDescriptor($path, $ymlData);
+        $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
+        }catch(Exception $e){
+            $this->removeViewAppOnError($path,$appData['name']);
+        }finally{        
+            $this->createOrUpdateApplicationDescriptor($path, $ymlData);
+        }
         return $ymlData;
+    }
+
+    private function removeViewAppOnError($path,$appName){
+        $targetPath = FileUtils::joinPath($path)."view/apps/".$appName;
+        $this->logger->info("TARGET PATH---".print_r($targetPath,true));
+        if (file_exists($targetPath)) {
+            unlink($targetPath);
+        }
     }
 
     /**
