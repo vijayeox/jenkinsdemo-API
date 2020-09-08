@@ -166,10 +166,6 @@
 				"value": "emergencyFirstResponse",
 				"shortcut": ""
 			}, {
-				"label": "Dive Boat",
-				"value": "diveBoat",
-				"shortcut": ""
-			}, {
 				"label": "Dive Store",
 				"value": "diveStore",
 				"shortcut": ""
@@ -347,7 +343,7 @@
 	}],
 	"controller": "",
 	"revisions": "original",
-	"_vid": 55,
+	"_vid": 56,
 	"title": "Pocket Card",
 	"display": "form",
 	"access": [{
@@ -363,6 +359,6 @@
 	"path": "pocketcard",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-22T13:47:45.298Z",
-	"modified": "2020-09-08T10:50:12.333Z",
+	"modified": "2020-09-08T12:56:33.019Z",
 	"machineName": "testdivehub:pocketCard"
 }
