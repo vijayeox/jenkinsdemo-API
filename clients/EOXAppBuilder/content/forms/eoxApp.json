@@ -1094,7 +1094,7 @@
 				"hideLabel": true,
 				"tableView": false,
 				"clearOnHide": false,
-				"key": "workflow",
+				"key": "workflowDuplicate",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
