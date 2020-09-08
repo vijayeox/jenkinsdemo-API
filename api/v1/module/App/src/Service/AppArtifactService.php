@@ -61,7 +61,8 @@ class AppArtifactService extends AbstractService
             }
             $filePath = $targetDir . $fileData['name'];
             if (file_exists($filePath)) {
-                throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
+                unlink($filePath);
+                // throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
             }
         }
         //Move/copy the files to destination.
