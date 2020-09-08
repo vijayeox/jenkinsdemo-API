@@ -120,7 +120,7 @@ su - root /app/activemq/bin/activemq console &
 su - root /camunda/bin/catalina.sh start &
 
 # supervisord
-dos2unix start-*
+dos2unix /start-*
 echo "========================================================================"
 echo "Supervisord launchs: "
 exec supervisord -n -c /etc/supervisor/supervisord.conf
