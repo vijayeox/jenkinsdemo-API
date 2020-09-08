@@ -310,15 +310,7 @@ class AppController extends AbstractApiController
             $path = $params['path'];
             $path .= substr($path, -1) == '/' ? '' : '/';
             if(isset($params['parameters']) && !empty($params['parameters'])){
-                $params['parameters'] = strtolower($params['parameters']);
-                $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
-                $params['parameters'] = rtrim($params['parameters'],",");
-                $params['parameters'] = ltrim($params['parameters'],",");
-                if(strpos($params['parameters'], ',') !== false){
-                    $params = explode(",",$params['parameters']);
-                }else{
-                    $params = array($params['parameters']);
-                }                    
+                $params = $this->processDeploymentParams($params);                   
             }
             else{
                 $params = null;
@@ -347,6 +339,7 @@ class AppController extends AbstractApiController
     public function deployApplicationAction()
     {
         $routeParams = $this->params()->fromRoute();
+        $params = $this->extractPostData();
         $this->log->info(__CLASS__ . '-> Deploy Application - ' . $routeParams['appId'], true);
         if (!isset($routeParams['appId'])) {
             $this->log->error('Application ID not provided.');
@@ -354,7 +347,13 @@ class AppController extends AbstractApiController
         }
 
         try {
-            $appData = $this->appService->deployApplication($routeParams['appId']);
+            if(isset($params['parameters']) && !empty($params['parameters'])){
+                $params = $this->processDeploymentParams($params);
+            }
+            else{
+                $params = null;
+            }
+            $appData = $this->appService->deployApplication($routeParams['appId'], $params);
             return $this->getSuccessResponseWithData($appData);
         }
         catch (Exception $e) {
@@ -384,6 +383,19 @@ class AppController extends AbstractApiController
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
+    }
+
+    private function processDeploymentParams($params){
+        $params['parameters'] = strtolower($params['parameters']);
+        $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
+        $params['parameters'] = rtrim($params['parameters'],",");
+        $params['parameters'] = ltrim($params['parameters'],",");
+        if(strpos($params['parameters'], ',') !== false){
+            $params = explode(",",$params['parameters']);
+        }else{
+            $params = array($params['parameters']);
+        }   
+        return $params;
     }
 }
 
