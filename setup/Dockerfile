@@ -103,7 +103,6 @@ RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.8.5/phpMyAdmin-4.8.5-all-lang
 RUN unzip /tmp/phpmyadmin/phpMyAdmin-4.8.5-all-languages.zip -d /tmp/phpmyadmin/
 RUN mkdir -p /var/www/phpmyadmin
 RUN mv /tmp/phpmyadmin/phpMyAdmin-4.8.5-all-languages/ /var/www/phpmyadmin/
-RUN cp /tmp/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
 ADD configs/phpmyadmin/config.inc.php /var/www/phpmyadmin/config.inc.php
 RUN chmod 755 /var/www/phpmyadmin/config.inc.php
 
