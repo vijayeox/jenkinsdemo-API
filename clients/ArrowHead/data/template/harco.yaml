@@ -178,11 +178,11 @@
    cell: T11
    type: DataGrid
    returnValue: 
-      'None': None(0%)
-      '0.25': Partial(2-49%)
-      '0.5': Full(50-100%)
-      '0.75': Full(50-100%)
-      '1': Full(50-100%)
+      'None': 'None(0%)'
+      '0.25': 'Partial(2-49%)'
+      '0.5': 'Full(50-100%)'
+      '0.75': 'Full(50-100%)'
+      '1': 'Full(50-100%)'
 -
    key: genericData*locationScheduleGridData_occupancyType
    method: simpleDatagrid
@@ -205,6 +205,12 @@
       partsWarehouseStorage: Warehouse
       vacantBuilding: Lease & Rental
       deliveryPrep: Auto Parts & Supplies
+-
+   key: harcoExcelData*primarySecondaryOEM_result
+   method: simpleDatagrid
+   pageName: C-Locs&AIs
+   cell: W11
+   type: DataGrid
 -
    key: genericData*locationScheduleGridData_constructiontype
    method: simpleDatagrid
@@ -261,9 +267,69 @@
       yes: P
       no: ""
 -
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: 'Accounting:'
+   pageName: Contacts
+   cell: R7
+   key: insurancecontactdataGrid_accounting
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
    Source Worksheet: Loss Control
    pageName: Contacts
    cell: M7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_lossControl
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: Loss Control
+   pageName: Contacts
+   cell: R7
    key: insurancecontactdataGrid_lossControl
    method: simpleDatagrid
    type: DataGrid
@@ -284,7 +350,73 @@
 -
    Source Worksheet: MVR's & Policy Docs
    pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: R7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
    cell: O7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: P7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: Q7
+   key: insurancecontactdataGrid_mvrPolicyDocs
+   method: simpleDatagrid
+   type: DataGrid
+   Note: 'Its two separate fields, in requirement its combined'
+   returnValue:
+      yes: P
+      no: ""
+-
+   Source Worksheet: MVR's & Policy Docs
+   pageName: Contacts
+   cell: R7
    key: insurancecontactdataGrid_mvrPolicyDocs
    method: simpleDatagrid
    type: DataGrid
@@ -317,45 +449,86 @@
       90 : '0.9'
       100 : '1'
 -
+   Source Worksheet: Valuation
+   pageName: E-Prop
+   cell: 'G9'
+   key: harcoExcelData*checkValuation
+-
    Source Worksheet: Deductible
    pageName: E-Prop
    cell: 'G7'
    key: propertyCoverageDeductible
-# -
-#    Source Worksheet: Bi Monthly Limitation
-#    pageName: E-Prop
-#    cell: 'M9'
-#    method: simpleDatagrid
-#    type: DataGrid
-#    key: genericData*locationScheduleGridData_bimonthlylimitation
-#    note: wrong mapping
+-
+   Source Worksheet: BPP Co-Insurance %
+   pageName: E-Prop
+   cell: I8
+   key: harcoExcelData*checkbppcoinsurance
+-
+   Source Worksheet: Building Co-Insurance %
+   pageName: E-Prop
+   cell: 'G8'
+   key: harcoExcelData*checkbuildingCoinsurance
+-
+   Source Worksheet: Bi Monthly Limitation
+   pageName: E-Prop
+   cell: 'M9'
+   key: harcoExcelData*checkindemnitytype
+   returnValue:
+      "3" : "Mo. Limit-1/3"
+      "4" : "Mo. Limit-1/4"
+      "6" : "Mo. Limit-1/6"
+      "0.05" : "Coins 80%"
+      "0.10" : "Coins 80%"
+      "0.15" : "Coins 80%"
+      "0.20" : "Coins 80%"
+      "0.25" : "Coins 80%"
+      "0.30" : "Coins 80%"
+      "0.40" : "Coins 80%"
+      "0.50" : "Coins 80%"
+      "0.60" : "Coins 80%"
+      "0.70" : "Coins 80%"
+      "0.80" : "Coins 80%"
+      "0.90" : "Coins 90%"
+      "1" : "Coins 100%"
+      "1.25" : "Coins 100%"
+      "1.50" : "Coins 100%"
 -
    Source Worksheet: Equipment Breakdown
    pageName: E-Prop
    cell: 'I11'
-   key: equipmentBreakdown
+   key: harcoExcelData*checkequipmentBreakdown
    returnBoolean: 'Yes|No' 
 -
    Source Worksheet: 'Earthquake Coverage:'
    pageName: E-Prop
    cell: G10
-   key: genericData*locationScheduleGridData_earthquakecoverage
+   key: harcoExcelData*checkearthquakecoverage
    returnBoolean: 'Yes|No'
 -
    pageName: E-Prop
-   key: genericData*locationScheduleGridData_earthquakecoverage
+   key: harcoExcelData*checkearthquakecoverage
    cell: I10
    returnBoolean: 'Yes|No'
 -
    pageName: E-Prop
-   key: genericData*locationScheduleGridData_earthquakecoverage
+   key: harcoExcelData*checkearthquakecoverage
    cell: M10
    returnBoolean: 'Yes|No'
 -
    Source Worksheet: 'Earthquake Deductibles:'
    pageName: E-Prop
-   key: harcoExcelData*highestEarthquakeDeductible
+   key: harcoExcelData*firstEarthquakeDeductible
    cell: H10
+-
+   Source Worksheet: Blanket Coverage BPP
+   pageName: E-Prop
+   cell: 'L20'
+   key: genericData*locationScheduleGridData_blanketcoverage
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: 'No'
+      no: 'No'
 -
    Source Worksheet: Blanket Coverage BPP
    pageName: E-Prop
@@ -366,7 +539,16 @@
    returnValue:
       yes: 'Yes'
       no: 'No'
-   Note: It’s a table in template
+-
+   Source Worksheet: Blanket Coverage Business Income
+   pageName: E-Prop
+   cell: 'M20'
+   key: genericData*locationScheduleGridData_blanketcoverage
+   method: simpleDatagrid
+   type: DataGrid
+   returnValue:
+      yes: 'Yes'
+      no: 'No'
 -
    Source Worksheet: Blanket Coverage Business Income
    pageName: E-Prop
@@ -379,7 +561,7 @@
       no: 'No'
 -
    Source Worksheet: Building Limit
-   key:  genericData*locationScheduleGridData_buildingLimit
+   key:  harcoExcelData*checkbuildingLimit_result
    pageName: E-Prop
    cell: 'F20'
    method: simpleDatagrid
@@ -396,13 +578,6 @@
    pageName: E-Prop
    cell: 'K20'
    key: genericData*locationScheduleGridData_businessincomelimit
-   method: simpleDatagrid
-   type: DataGrid
--
-   Source Worksheet: Damage to Rented Premises*
-   pageName: E-Prop
-   cell: 'J20'
-   key: garageLiabilityDamagetoRentedPremises
    method: simpleDatagrid
    type: DataGrid
 -
@@ -437,7 +612,7 @@
 -
    Source Worksheet: Employee Tools
    pageName: G-IM
-   cell: F15
+   cell: F14
    key: harcoExcelData*GIMGridOne
    type: DataGrid
 -
@@ -470,7 +645,7 @@
    key: totalemployees
    Source Worksheet: 'Total # of Employees:'
    pageName: H-Crime
-   cell: H25
+   cell: H23
 -
    key: theftblanketlimit
    Source Worksheet: Employee Theft Blanket Limit
@@ -518,43 +693,21 @@
    Source Worksheet: Theft of Money/Securities Limit
    pageName: H-Crime
    cell: I23
-# -
-#    Source Worksheet: Theft of Money/Securities Deductible
-#    pageName: H-Crime
-#    cell: H18
-#    key: theftofmoneydeductible
-#    note:  On the Harco App the following crime coverages share the same
-#       deductible field. Inside theft of Money and Securities, 
-# Outside the Premises Insuring Agreement and 
-# Inside Robbery or Safe Burglary of Other
-#       Property. If the producer selects a different deductible amount for each
-#       of these coverages, the system will map over the lowest deductible option
-#       selected to the Harco App in Sheet!H-Crime H18
+-
+   Source Worksheet: Theft of Money/Securities Deductible
+   pageName: H-Crime
+   cell: H18
+   key: harcoExcelData*checkcrimecoverage
 -
    key: burglaryofotherpropertylimit
    Source Worksheet: Robbery/Burglary of Other Property Limit
    pageName: H-Crime
    cell: K23
-# -
-#    key: burglaryofotherpropertydeductible
-#    Source Worksheet: Robbery/Burglary of Other Property Deductible
-#    pageName: H-Crime
-#    cell: H18
 -
    key: outsidethepremiseslimit
    Source Worksheet: Outside the Premises Limit
    pageName: H-Crime
    cell: J23
-# -
-#    key: outsidethepremisesdeductible
-#    Source Worksheet: 'Outside the Premises Deductible '
-#    pageName: H-Crime
-#    cell: H18
-# -
-#    key: propertydeductible
-#    Source Worksheet: Money/Securities/Other Property Deductible
-#    pageName: H-Crime
-#    cell: J18
 -
    key: propertylimit
    Source Worksheet: Money/Securities/Other Property Limit
@@ -580,7 +733,7 @@
    Source Worksheet: Garagekeepers (per location)
    pageName: J
    cell: Garagekeepers
-   offset: "7,1"
+   offset: "5,1"
    key: locationSchedule_garagekeepersperlocation
    method: simpleDatagrid
    type: DataGrid
@@ -588,26 +741,20 @@
    Source Worksheet: Customer Goods (per Location)
    pageName: J
    cell: Customer Goods
-   offset: "7,1"
+   offset: "5,1"
    key: locationSchedule_customergoodsperlocation
    method: simpleDatagrid
-   type: DataGrid
+   type: DataGrid   
 -
-   key: repairpercentlabor
    Source Worksheet: 'Repair % - Labor:'
+   key: harcoExcelData*checkrepairpercentlabor
    pageName: J
-   offset: "7,1"
-   cell: Customer Goods
+   cell: Customer Percentage of Repair Endorsement
+   offset: 2,3
    returnValue:
       '0.75': '0.85'
 -
-   key: CHECKrepairpercentlabor
-   pageName: J
-   cell: Customer Percentage of Repair Endorsement
-   offset: 2,0
-   returnBoolean: 'Yes|No'
--
-   key: CHECKrepairpercentparts
+   key: harcoExcelData*checkrepairpercentparts
    pageName: J
    cell: Customer Percentage of Repair Endorsement
    offset: 3,0
@@ -663,7 +810,7 @@
    cell: B8
    Note: IF EPLI Coverage is selected the Harco Workbook will default to the
       options listed in the document titled Harco Deep Dive Review
-   key: eplicoverage
+   key: harcoExcelData*checkeplicoverage
    method: checkbox_X
 -
    Source Worksheet: 'Include 3rd Party:'
@@ -673,20 +820,51 @@
    note:  This will only map to the Harco Workbook if the state is not in
       California. 
 -
+   Source Worksheet: 'Include 3rd Party:'
+   pageName: K
+   cell: B10
+   key: harcoExcelData*checkacterroromissions
+   note:  This will only map to the Harco Workbook if the state is not in
+      California / FL / MA / VA. 
+-
+   Source Worksheet: 'Discrimination Deductible'
+   pageName: K
+   cell: I8
+   key: harcoExcelData*checkdiscriminationdeductible
+   note:  This will only map to the Harco Workbook if the state is not in
+      California.
+-
+   Source Worksheet: 'Include 3rd Party Limit:'
+   pageName: K
+   cell: H9
+   key: harcoExcelData*checkthirdpartylimit
+   note:  This will only map to the Harco Workbook if the state is not in
+      California.
+-
    Source Worksheet: 'Include 3rd Party Deductible:'
    pageName: K
    cell: I9
    key: harcoExcelData*checkthirdpartydeduc
-   returnValue: 
-      '10K' : '10000'
-      '15K' : '15000'
-      '20K' : '20000'
-      '25K' : '25000'
    note:  This will only map to the Harco Workbook if the state is not in
       California.
 -
+   key: harcoExcelData*checkactserrorsCAOnly
+   Source Worksheet: 'acts, errors and omissions - CA only '
    pageName: K
-   key: medicalexpensedeductible
+   cell: 'B11'
+-
+   key: harcoExcelData*checkactserrorsCAOnlyLimit
+   Source Worksheet: 'acts, errors and omissions - CA only '
+   pageName: K
+   cell: 'H11'
+-
+   key: harcoExcelData*checkactserrorsCAOnlyDeduc
+   Source Worksheet: 'acts, errors and omissions - CA only '
+   pageName: K
+   cell: 'I11'
+-
+   pageName: K
+   key: harcoExcelData*checkmedicalexpensedeductible
    cell: N8
 -
    key: agentseo
@@ -695,22 +873,28 @@
    cell: K8
    method: checkbox_X
 -
-   key: grosssales
+   key: harcoExcelData*checkgrosssales
    Source Worksheet: 'gross sales: '
    pageName: K
    cell: 'M11'
+-
+   Source Worksheet: Umbrella Limit
+   pageName: K
+   cell: B31
+   key: harcoExcelData*checkUmbrellaNameExists
+   returnBoolean: 'X|'
 -
    Source Worksheet: Drive Other Car Coverage
    pageName: K
    cell: B17
    key: driveothercarcoverage
    method: checkbox_X
-# -
-#    Source Worksheet: Umbrella - drive other car coverage - checkbox
-#    pageName: K
-#    cell: B31
-#    key: 
-#    method: checkbox_X
+-
+   key: driveothercarcoverage
+   Source Worksheet: Physical damage - if drive other car coverage then default to X
+   pageName: K
+   cell: C20
+   method: checkbox_X
 -
    Source Worksheet: Umbrella name
    pageName: K
@@ -720,11 +904,6 @@
    type: DataGrid
    macro: K_AddDDRow_Click
 -
-   Source Worksheet: Umbrella Limit
-   pageName: K
-   cell: F33
-   key: umbrellalimit
--
    Source Worksheet: Name of Driver (and Spouse) to be covered
    pageName: K
    cell: 'C26'
@@ -732,57 +911,31 @@
    key: driverOtherCargrid_nameofdrivertobecovered
    method: simpleDatagrid
    type: DataGrid
-# -
-#    Source Worksheet: Medical Expense (Auto & Premises)
-#    pageName: K
-#    cell: D21
-#    method: simpleDatagrid
-#    type: DataGrid
-#    key: driverOtherCargrid_medicalexpenceautopremises
-# -
-#    pageName: K
-#    key: driverOtherCargrid_medicalexpenceautopremises
-#    cell: G21
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    key: driverOtherCargrid_driveumuim
-#    Source Worksheet: UM/UIM
-#    pageName: K
-#    cell: G22
-# -
-#    key: driverOtherCargrid_compdeductible
-#    Source Worksheet: Comp Deductible
-#    pageName: K
-#    cell: G20
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    key: driverOtherCargrid_compdeductible
-#    Source Worksheet: Comp Deductible
-#    pageName: K
-#    cell: C20
-#    # method: checkbox_X
-#    method: simpleDatagrid
-#    type: DataGrid 
+-
+   key: harcoExcelData*checkdriveumuim
+   Source Worksheet: UM/UIM
+   pageName: K
+   cell: G22
 -
    Source Worksheet: 'others'
    pageName: L-DPD
-   cell: L25
+   cell: 'Other choice explanation'
+   offset: '0,6'
    key: dolalllocdoesnotincld_keysInCars
    method: checkInArray
    returnBoolean: 'Keys in Cars|'
 -
    Source Worksheet: 'Keys in car - other'
    pageName: L-DPD
-   cell: L25
+   cell: 'Other choice explanation:'
+   offset: '0,6'
    key: harcoExcelData*checkkeysInCarsLabel
    returnBoolean: 'Keys in Cars|'
 -
    Source Worksheet: 'Is there a written flood emergency plan in place?\r\n\r\nIf YES, please attach a copy of written flood emergency plan'
    pageName: L-DPD
    cell: 'Is there a written evacuation plan for flood-prone locations? '
-   offset: '0,1'
+   offset: '0,6'
    key: dolisthremergncypln
    returnBoolean: 'Yes|No'
 -
@@ -852,6 +1005,7 @@
    cell: Check Box 11
    key: dolalllocdoesnotincld_dailyKeyInventory
    type: Checkbox
+   method: checkInArray
 -
    Source Worksheet: 'locked in managers office'
    pageName: L-DPD
@@ -882,27 +1036,6 @@
       '10000' : '2000'
    note: Harco has a max Wind Ded of $2,000. If a higher deductible has been
       selected the system will map $2,000 to the Harco App.
-# -
-#    Source Worksheet: Standard Open Lot
-#    pageName: L-DPD
-#    cell: I10
-#    key: locationSchedule_standardOpenLot
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    Source Worksheet: Non-Standard Open Lot
-#    pageName: 'L-DPD '
-#    cell: 'J10'
-#    key: locationSchedule_dolnonstndrdopenlot
-#    method: simpleDatagrid
-#    type: DataGrid
-# -
-#    Source Worksheet: Building
-#    pageName: L-DPD
-#    cell: 'K10'
-#    key: locationSchedule_dolbuilding
-#    method: simpleDatagrid
-#    type: DataGrid
 -
    Source Worksheet: Location
    pageName: 'M-GL'
@@ -910,11 +1043,11 @@
    cell: 'E23'
    key: harcoExcelData*MGLGrid
    type: DataGrid
-# -
-#    Source Worksheet: 'If YES, is insurance coverage placed elsewhere for this exposure?'
-#    pageName: N-L&R
-#    cell: 'K24'
-#    key: 
+-
+   Source Worksheet: 'Does Insured rent vehicles other than rentals in conjunction with service operation?'
+   pageName: N-L&R
+   cell: 'K26'
+   key: doesinsuredrentvehicles
 -
    Source Worksheet: Insured do any 'in house' leasing?
    pageName: N-L&R
@@ -926,17 +1059,11 @@
    pageName: N-L&R
    cell: 'G7'
    key: minimumliabilitylimitrequired
-   Note: Wrongly mapped
 -
    Source Worksheet: Number of vehicles out on Lease?
    pageName: N-L&R
    cell: G17
    key: numberofvehiclesoutonlease
-# -
-#    Source Worksheet: Rental/Leasing
-#    pageName: N-L&R
-#    cell: 'E12'
-#    key: locationScheduleGridData_rentalLeasingSales
 -
    Source Worksheet: company's name
    pageName: P-Pollution
@@ -945,7 +1072,7 @@
    key: epaDetails_pollutionname
    method: simpleDatagrid
    type: DataGrid
-   macro: P_AddPollTankRow_Click
+   macro: P_AddPollTrnsprtRow_Click
 -
    Source Worksheet: epa
    pageName: P-Pollution
@@ -1023,12 +1150,25 @@
    key: doAbandonedTanksOnSiteContainProduct
    returnBoolean: 'Yes|No'
 -
+   Source Worksheet: 'Other Tank Contents '
+   pageName: P-Pollution
+   cell: " If yes, do they contain any product? "
+   offset: "1,6"
+   key: harcoExcelData*checkothertankcontentsExists
+   returnBoolean: 'Yes|No'
+-
+   Source Worksheet: 'Other Tank Contents '
+   pageName: P-Pollution
+   cell: " If yes, do they contain any product? "
+   offset: "2,6"
+   key: harcoExcelData*checkothertankcontents
+-
    Source Worksheet: 'Loc #'
    pageName: P-Pollution
    cell: "Schedule of Above ground Storage Tanks (AST)"
    offset: "3,0"
    key: genericData*storageTankGridData_locationNum
-   macro: M_AddGLClassRow_Click
+   macro: P_AddPollTankRow_Click
    method: simpleDatagrid
    type: DataGrid
 -
@@ -1040,7 +1180,7 @@
    method: simpleDatagrid
    type: DataGrid
 -
-   Source Worksheet: 'Other Tank Contents '
+   Source Worksheet: 'Other Tank Contents'
    pageName: P-Pollution
    cell: "Schedule of Above ground Storage Tanks (AST)"
    offset: "3,6"
@@ -1054,6 +1194,7 @@
    offset: "3,3"
    key: genericData*storageTankGridData_installationdate
    method: simpleDatagrid
+   method2: formatDate
    type: DataGrid
 -
    Source Worksheet: 'Tank Capacity '
@@ -1135,10 +1276,17 @@
    cell: 'E6'
    key: numYearsOfOwnership
 -
+   Source Worksheet: 'If Occupancy Type = Building Leased to Others selected'
+   pageName: UW Q's
+   cell: 'E14'
+   key: harcoExcelData*checkleasedtoOthers
+   returnValue:
+      '1' : 'Yes'
+-
    Source Worksheet: 'If less than three years, describe experience of management:'
    pageName: UW Q's
-   cell: 'E19'
-   key: lessThan3years
+   cell: 'E17'
+   key: harcoExcelData*checklessThan3years
 -
    Source Worksheet: Any policy or coverage declined, cancelled or non-renewed during the prior
       10 years for any premises or operations?
@@ -1163,11 +1311,11 @@
    type: Checkbox
    key: policyDeclined
    Note: It’s the check boxes in UW Q's sheet with options
-# -
-#    Source Worksheet: 'If YES, please explain:'
-#    pageName: UW Q's
-#    cell: 'E19'
-#    key: policyDeclinedExplain
+-
+   Source Worksheet: 'If less than three years, describe experience of management:'
+   pageName: UW Q's
+   cell: 'E19'
+   key: lessThan3years
 -
    Source Worksheet: Does applicant perform body work and spray painting?
    pageName: UW Q's
@@ -1213,25 +1361,19 @@
    method: checkInArray
    returnBoolean: 'Yes|No'
 -
-   Source Worksheet: 'Audit is performed by:'
-   pageName: UW Q's
-   cell: 'E80'
-   key: auditperformed_publicAccountant
-   method: checkInArray
-   returnBoolean: 'Yes|No'
--
-   Source Worksheet: 'Audit is performed by:'
-   pageName: UW Q's
-   cell: 'E80'
-   key: auditperformed_staff
-   method: checkInArray
-   returnBoolean: 'Yes|No'
--
    Source Worksheet: Has dealership experienced employee theft losses in the last 5 years?
    pageName: UW Q's
    cell: 'E75'
    key: theftloss
    returnBoolean: Yes|No
+-
+   Source Worksheet: Has dealership experienced employee theft losses in the last 5 years?
+   pageName: UW Q's
+   cell: 'E76'
+   key: theftloss
+   returnValue: 
+      'yes': 'See Loss Runs'
+      'no' : ''
 -
    Source Worksheet: Are criminal background checks performed on all employees?
    pageName: UW Q's
@@ -1279,7 +1421,9 @@
    pageName: UW Q's
    cell: 'E99'
    key: repossessionshandledby
-   returnBoolean: Yes|No
+   returnValue:
+      dealership: 'No'
+      thirdParty: 'Yes'
    Note: 'Notes: If Third Party is selected, indicate YES on the Harco app.'
 -
    Source Worksheet: Demo / Furnished auto agreement?
@@ -1350,12 +1494,12 @@
    pageName: UW Q's
    cell: 'E47'
    key: totalnumberofservicesparts
--
-   Source Worksheet: 'Trucks, shuttle, tow trucks, mobile maintenance, etc.:'
-   pageName: UW Q's
-   cell: 'E43 '
-   key: trucksshuttletowtrucks
-   Note: Wrongly mapped
+# -
+#    Source Worksheet: 'Trucks, shuttle, tow trucks, mobile maintenance, etc.:'
+#    pageName: UW Q's
+#    cell: 'E43 '
+#    key: trucksshuttletowtrucks
+#    Note: Wrongly mapped
 -
    Source Worksheet: 'Avg # of times contract drivers used per month at any one location?'
    pageName: UW Q's
@@ -1393,15 +1537,9 @@
    key: formalsafetymeetings
    note: mapping monthly for now - change to yes/no
    returnValue: 
-      monthly: Yes
+      monthly: No
       quarterly: Yes
       none: No
--
-   Source Worksheet: Does applicant reposess their own vehicles?
-   pageName: UW Q's
-   cell: 'E99'
-   key: doesapplicantreposestheirownvehicles
-   returnBoolean: Yes|No
 -
    Source Worksheet: Does the insured have a certificate of insurance for repo company?
    pageName: UW Q's
@@ -1488,6 +1626,12 @@
    key: titlesearchdescribe
    note: wrong mapping. its a description field cant map to yes or no
 -
+   Source Worksheet: Checking latest renovation - withing 20 years - map yes
+   pageName: UW Q's
+   cell: 'E41'
+   key: harcoExcelData*checkroofingyear
+   returnBoolean: Yes|No
+-
    Source Worksheet: Does applicant subcontract any work?
    pageName: UW Q's
    cell: 'E44'
@@ -1515,6 +1659,24 @@
    returnBoolean: Yes|No
    key: dealerrequiresbeingadded
 -
+   Source Worksheet: Does the customer sign disclosure for acknowledgement?
+   pageName: UW Q's
+   cell: 'E53'
+   key: doescustomersigndisclosure
+   returnBoolean: Yes|No
+-
+   Source Worksheet: Does the Company have a Human Resources Department?
+   pageName: UW Q's
+   cell: 'E56'
+   key: humanresources
+   returnBoolean: Yes|No
+-
+   Source Worksheet: Does the Company have a Human Resources Department?
+   pageName: UW Q's
+   cell: 'E57'
+   key: humanresources
+   returnBoolean: '|0.5'
+-
    Source Worksheet: Formal employment application/interview process?
    pageName: UW Q's
    cell: 'E58'
@@ -1532,6 +1694,36 @@
    cell: 'E65'
    key: performancereview
    returnBoolean: Yes|No
+-
+   Source Worksheet: 'Applicant does not use contract drivers'
+   pageName: UW Q's
+   cell: Check Box 35
+   key: harcoExcelData*checkavgOfTimesContractDriversUsedPerMonth
+   type: Checkbox
+   returnValue:
+      'None': 'Yes'
+      'Lesser': ''
+      'Greater': ''
+-
+   Source Worksheet: 'Applicant contract drivers - less than 20 years'
+   pageName: UW Q's
+   cell: Check Box 36
+   key: harcoExcelData*checkavgOfTimesContractDriversUsedPerMonth
+   type: Checkbox
+   returnValue:
+      'None': ''
+      'Lesser': 'Yes'
+      'Greater': ''
+-
+   Source Worksheet: 'Applicant contract drivers - greater than 20 years'
+   pageName: UW Q's
+   cell: Check Box 38
+   key: harcoExcelData*checkavgOfTimesContractDriversUsedPerMonth
+   type: Checkbox
+   returnValue:
+      'None': ''
+      'Lesser': ''
+      'Greater': 'Yes'
 -
    Source Worksheet: 'Drug-testing programs: pre employment'
    pageName: UW Q's
@@ -1608,30 +1800,26 @@
    Source Worksheet: After Hours Lighting
    pageName: UW Q's
    cell: Check Box 16
-   key: harcoExcelData*checkdolaftrhrslighting
+   key: harcoExcelData*checkAfterHoursLighting
    type: Checkbox
-   method: 
 -
    Source Worksheet: Security Guards
    pageName: UW Q's
    cell: Check Box 18
-   key: harcoExcelData*checkdolsecguards
+   key: harcoExcelData*checkSecurityGuards
    type: Checkbox
-   method: 
 -
    Source Worksheet: Alarm System
    pageName: UW Q's
    cell: Check Box 20
    key: harcoExcelData*checkdolalrmsys
    type: Checkbox
-   method: 
 -
    Source Worksheet: Surveill. Cameras not monitored
    pageName: UW Q's
    cell: Check Box 17
    key: harcoExcelData*checkdolsurcamnotmoniotrd
    type: Checkbox
-   method: 
    note: If at least 1 of the Surveillance Camera questions are selected map
       'Yes' to the applicable carrier app.
 -
@@ -1640,7 +1828,6 @@
    cell: Check Box 17
    key: harcoExcelData*checkdolsurvcammoniintrunotifi
    type: Checkbox
-   method: 
    note: If at least 1 of the Surveillance Camera questions are selected map
       'Yes' to the applicable carrier app.
 -
@@ -1649,21 +1836,18 @@
    cell: Check Box 19
    key: harcoExcelData*checkdolguarddogs
    type: Checkbox
-   method: 
 -
    Source Worksheet: Blocked Entrances
    pageName: UW Q's
    cell: Check Box 15
    key: harcoExcelData*checkDolBlockedEntrances
    type: Checkbox
-   method: 
 -
    Source Worksheet: Fully Fenced Premises
    pageName: UW Q's
    cell: Check Box 14
    key: harcoExcelData*checkDolFullyFencedPremises
    type: Checkbox
-   method: 
 # -
 #    Source Worksheet: Other (type in)
 #    pageName: UW Q's
@@ -1686,6 +1870,12 @@
    pageName: UW Q's
    cell: Check Box 58
    key: virusscans
+   type: Checkbox
+-
+   Source Worksheet: Daily virus scans ran on all computers
+   pageName: UW Q's
+   cell: Check Box 59
+   key: harcoExcelData*checksoftwareprotectionNone
    type: Checkbox
 -
    Source Worksheet: Formal policy in place for disposal of paper documents/electronic

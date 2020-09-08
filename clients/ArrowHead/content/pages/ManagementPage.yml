@@ -6,13 +6,13 @@ content:
         content:
             route: 'file'
             filterable: true
+            autoRefresh: 10000
             defaultFilters: 
                 sort:
                     -
                         field: date_created
                         dir: desc                 
             resizable: true
-            refreshButton: true
             pageable:
                 buttonCount: 3
                 pageSizes:
@@ -26,13 +26,24 @@ content:
             actions:
                 -
                     name: Edit
-                    rule: 'row.status == "In Progress" || row.status == "Generated"'
+                    rule: 'row.status == "In Progress" || (profile.privileges.MANAGE_POLICY_APPLICATION_CREATE == true && row.status == "Generated")'
                     details:
                         -
                             type: Form
                             form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
+                -
+                    name: 'Retry'
+                    rule: '(row.status == "Processing" && row.submissionTime) ? moment().isAfter(moment(row.submissionTime).add(3,"m")) : false'
+                    icon: 'far fa-redo'
+                    updateOnly : true
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'command/delegate/RetryDocumentGeneration'
+                                successNotification: "Regenerating Documents. This might take several minutes."
                 -
                     name: 'Export'
                     rule: '''{{status}}'' == ''Generated'''
@@ -47,7 +58,7 @@ content:
                             url: 'file/{{uuid}}/document'
                 -
                     name: 'Please Wait'
-                    rule: '''{{status}}'' == ''Processing'''
+                    rule: '(row.status == "Processing" && row.submissionTime) ? moment().isBefore(moment(row.submissionTime).add(3,"m")) : false'
                     icon: 'fad fa-circle-notch fa-spin'
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:
@@ -89,4 +100,13 @@ content:
                             - 'Processing'
                             - 'In Progress'
                         placeholder: 'Select Status'
-                    cell: '<td>{item.status}</td>'
+                    cell: '<td>
+                           {item.status == "Processing" && item.submissionTime
+                           ? moment().isAfter(moment(item.submissionTime).add(3,"m"))
+                               ? "Error Processing - Please Retry"
+                               : item.status + " (" +
+                               (item.documentsSelectedCount - item.documentsToBeGenerated +1) +
+                               " of " +
+                               item.documentsSelectedCount + ")"
+                           : item.status}
+                           </td>'

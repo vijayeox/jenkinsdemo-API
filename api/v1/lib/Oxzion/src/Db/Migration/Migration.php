@@ -195,7 +195,6 @@ class Migration extends AbstractService
             return 1;
         } catch (Exception $e) {
             $this->rollback();
-            // print_r($e->getMessage());
             throw $e;
         }
     }

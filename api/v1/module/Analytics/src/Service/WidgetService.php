@@ -318,6 +318,12 @@ class WidgetService extends AbstractService
                 }
             }
 
+           
+            if (isset($data[0]['calculated']) && count($data) == 1) {
+                //Send only the calculated value if left oprand not specified and aggregate values
+                $data = $data[0]['calculated'];
+            } 
+
             if (is_array($data)) {
                 $data = $this->getTargets($uuid,$data,1);
             }
@@ -327,13 +333,7 @@ class WidgetService extends AbstractService
                     $response['widget']['targets'] = $targets;
                 }
             }
-            
-            if (isset($data[0]['calculated']) && count($data) == 1) {
-                //Send only the calculated value if left oprand not specified and aggregate values
-                $response['widget']['data'] = $data[0]['calculated'];
-            } else {
-                $response['widget']['data'] = $data;
-            }
+            $response['widget']['data'] = $data;
 
         }
         return $response;
@@ -382,12 +382,12 @@ class WidgetService extends AbstractService
                 return ['red_limit'=>$resultSet[0]['red_limit'],'yellow_limit'=>$resultSet[0]['yellow_limit'],'green_limit'=>$resultSet[0]['green_limit'],'color'=>$color];
             }
 
-        } catch (Exception $e){
-            if ($isaggregate)
-                return $data;
-            else 
-                return null;
-        }
+         } catch (Exception $e){
+             if ($isaggregate)
+                 return $data;
+             else 
+                 return null;
+         }
     }
 
     public function evaluteExpression($data, $expression)

@@ -17,7 +17,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier','business_padi','dba'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier','business_padi','dba','property_carrier','property_policy_id'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -40,6 +40,11 @@
               if (css_selector_classes[css_class] == "dba") {
                 if(vars['dba'] != ""){
                   document.getElementById("dbaName").style.display = "block";
+                }
+              }
+              if (css_selector_classes[css_class] == "state_in_short") {
+                if(vars["state_in_short"] == "NY") {
+                    document.getElementById("padirisk").innerHTML = "PADI Risk Purchasing Group";
                 }
               }
           }
@@ -108,6 +113,7 @@
           <hr></hr>
         </div>
       </div>
+      <p id="padirisk" class = "p_margin"></p>
       </div>
     </div>
      <hr></hr>

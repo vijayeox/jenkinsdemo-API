@@ -37,16 +37,26 @@ s.onload = function (e) {
             )
             .dispatchEvent(ev);
         };
+      } else {
+        if (data.producername.length > 0 && data.namedInsured.length > 0) {
+          saveDraftCustomButton.style.display == "none"
+            ? (saveDraftCustomButton.style.display = "inline-block")
+            : null;
+        } else {
+          saveDraftCustomButton.style.display == "none"
+            ? null
+            : (saveDraftCustomButton.style.display = "none");
+        }
       }
-      var dataGridDeleteIcons = document.getElementsByClassName(
-        "fa-times-circle-o"
-      );
-      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);
-      if (dataGridDeleteIcons.length > 0) {
-        dataGridDeleteIcons.map((item) => {
-          item.classList.add("fa-times-circle");
-          item.classList.remove("fa-times-circle-o");
-        });
+
+      if (
+        [...document.querySelectorAll('[ref="modalSave"]')].some(
+          (i) => i.innerText == "SAVE"
+        )
+      ) {
+        [...document.querySelectorAll('[ref="modalSave"]')].map(
+          (i) => (i.innerText = "OK")
+        );
       }
     } else {
       appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;
@@ -64,4 +74,4 @@ setTimeout(function () {
     victor_FranchisedAutoDealer: false,
     victor_AutoPhysDamage: false
   };
-}, 2000);
+}, 1000);

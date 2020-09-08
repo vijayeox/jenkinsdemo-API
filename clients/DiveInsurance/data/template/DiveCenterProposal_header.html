@@ -35,6 +35,11 @@
                             document.getElementById("dbaName").style.display = "block";
                         }
                     }
+                    if (css_selector_classes[css_class] == "state_in_short") {
+                    if(vars["state_in_short"] == "NY") {
+                        document.getElementById("padirisk").innerHTML = "PADI Risk Purchasing Group";
+                    }
+                }
                 }
             }
             agentInfo();
@@ -92,6 +97,7 @@
                 <b class="p_margin">Member #: <span class="p_margin normal business_padi"></span></b>
                 <hr>
             </div>
+            <p class ="p_margin normal" id="padirisk"></p>
         </div>
 
     </div>

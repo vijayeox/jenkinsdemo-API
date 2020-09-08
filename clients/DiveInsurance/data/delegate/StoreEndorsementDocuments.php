@@ -89,6 +89,12 @@ class StoreEndorsementDocuments extends EndorsementDocument
         }
 
         $this->diveStoreEndorsement($data,$temp,$persistenceService);
+        if(isset($temp['additionalInsured'])){
+            unset($temp['additionalInsured']);    
+        }
+        if(isset($temp['certificateLevelList'])){
+            unset($temp['certificateLevelList']);    
+        }
         if(isset($this->template[$temp['product']]['cover_letter'])){
             $this->logger->info("DOCUMENT cover_letter");
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');

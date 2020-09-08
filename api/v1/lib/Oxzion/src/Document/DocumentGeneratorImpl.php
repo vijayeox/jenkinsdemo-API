@@ -100,6 +100,14 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $finalpdf = array();
         $dest = $destination;
         $myProjectDirectory = __DIR__."/../../../..";
+        if(isset($data)){
+            foreach($data as $key => $value){
+                $docData = json_decode($value,true);
+                if(is_array($docData)){
+                    unset($data[$key]);
+                }    
+            }
+        }
         $snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
         $snappy->setOption("load-error-handling",'ignore');
         $snappy->setOption("load-media-error-handling",'ignore');
