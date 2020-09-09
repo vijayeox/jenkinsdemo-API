@@ -1,8 +1,8 @@
-import {React,ReactDOM,LeftMenuTemplate,FormRender} from "oxziongui";
-import { appId as application_id } from "./metadata.json";
-import "./index.scss";
+import React from "react";
+import FormRender from "./components/App/FormRender";
+import  LeftMenuTemplate  from "./LeftMenuTemplate";
 
-class Home extends React.Component {
+class EOXApplication extends React.Component {
   constructor(props) {
     super(props);
     this.core = this.props.args;
@@ -56,7 +56,7 @@ class Home extends React.Component {
   async getCacheData() {
     let cacheData = await this.helper.request(
       "v1",
-      "/app/" + application_id + "/cache",
+      "/app/" + this.props.application_id + "/cache",
       {},
       "get"
     );
@@ -66,7 +66,7 @@ class Home extends React.Component {
   async deleteCacheData() {
     let cacheData = await this.helper.request(
       "v1",
-      "/app/" + application_id + "/deletecache",
+      "/app/" + this.props.application_id + "/deletecache",
       {},
       "delete"
     );
@@ -76,7 +76,7 @@ class Home extends React.Component {
   async updateCacheData() {
     let cacheData = await this.helper.request(
       "v1",
-      "/app/" + application_id + "/deletecache",
+      "/app/" + this.props.application_id + "/deletecache",
       {},
       "delete"
     );
@@ -86,7 +86,7 @@ class Home extends React.Component {
   async getFormData(workflow_id) {
     let formData = await this.helper.request(
       "v1",
-      "/app/" + application_id + "/workflow/" + workflow_id + "/startform",
+      "/app/" + this.props.application_id + "/workflow/" + workflow_id + "/startform",
       {},
       "get"
     );
@@ -114,7 +114,7 @@ class Home extends React.Component {
               postSubmitCallback={this.postSubmitCallback}
               core={this.core}
               page={this.state.cachePage}
-              appId={application_id}
+              appId={this.props.application_id}
               workflowId={this.state.workflowId}
               formId={this.state.formID}
               content={this.state.formContent}
@@ -126,7 +126,7 @@ class Home extends React.Component {
             core={this.core}
             params={this.params}
             proc={this.proc}
-            appId={application_id}
+            appId={this.props.application_id}
           />
         ) : null}
         <div id="floater">
@@ -136,4 +136,4 @@ class Home extends React.Component {
     );
   }
 }
-export default Home;
+export default EOXApplication;
