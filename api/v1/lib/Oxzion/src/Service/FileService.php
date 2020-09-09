@@ -540,7 +540,7 @@ class FileService extends AbstractService
                     $childFieldsPresent = false;
                     if($field['index'] == 1){
                         unset($indexedField['sequence']);
-    					unset($indexedField['childFields']);
+                        unset($indexedField['childFields']);
                     }else{
                         $indexedField['field_value']=is_array($fieldvalue) ? json_encode($fieldvalue):$fieldvalue;
                         unset($indexedField['field_value_text']);
@@ -1056,7 +1056,9 @@ class FileService extends AbstractService
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
             $fromQuery .= "left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
             if (isset($params['workflowStatus'])) {
-                $whereQuery .= " wi.status = '" . $params['workflowStatus'] . "'  AND ";
+                $fromQuery .= " left join (select max(id) as id, workflow_instance_id from ox_activity_instance  group by workflow_instance_id) lai on lai.workflow_instance_id = wi.id
+                            left join ox_activity_instance ai on ai.id = lai.id ";
+                $whereQuery .= " (ai.status = '" . $params['workflowStatus'] . "' OR (ai.status is null AND wi.status = '".$params['workflowStatus']."' )) AND ";
             } else {
                 $whereQuery .= "";
             }
@@ -1524,7 +1526,7 @@ class FileService extends AbstractService
             if (count($fileRecord) > 0) {
                $fileData = json_decode($fileRecord[0]['data'],true);
                $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
-           	   $this->updateFile($fileData,$params['fileId']);
+               $this->updateFile($fileData,$params['fileId']);
             }
         }
         return $data;

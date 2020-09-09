@@ -434,7 +434,61 @@ ox_activity_instance:
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0722"
     workflow_instance_id: 1
+    status: "Completed"
+    org_id: 1
+  - id: 4
+    activity_id: 1
+    activity_instance_id: "f16622fd-0124-11ea-a8a0-22e8105c0733"
+    workflow_instance_id: 3
+    status: "Completed"
+    org_id: 1
+  - id: 5
+    activity_id: 1
+    activity_instance_id: "126622fd-0124-11ea-a8a0-22e8105c0744"
+    workflow_instance_id: 4
     status: "In Progress"
+    org_id: 1  
+  - id: 6
+    activity_id: 1
+    activity_instance_id: "236622fd-0124-11ea-a8a0-22e8105c0755"
+    workflow_instance_id: 5
+    status: "Completed"
+    org_id: 1
+  - id: 7
+    activity_id: 1
+    activity_instance_id: "346622fd-0124-11ea-a8a0-22e8105c0766"
+    workflow_instance_id: 6
+    status: "In Progress"
+    org_id: 1
+  - id: 8
+    activity_id: 1
+    activity_instance_id: "456622fd-0124-11ea-a8a0-22e8105c0777"
+    workflow_instance_id: 7
+    status: "Completed"
+    org_id: 1
+  - id: 9
+    activity_id: 1
+    activity_instance_id: "566622fd-0124-11ea-a8a0-22e8105c0788"
+    workflow_instance_id: 8
+    status: "Completed"
+    org_id: 1
+  - id: 10
+    activity_id: 1
+    activity_instance_id: "676622fd-0124-11ea-a8a0-22e8105c0799"
+    workflow_instance_id: 9
+    status: "Completed"
+    org_id: 1
+  - id: 11
+    activity_id: 1
+    activity_instance_id: "786622fd-0124-11ea-a8a0-22e8105c07aa"
+    workflow_instance_id: 10
+    status: "Completed"
+    org_id: 1    
+  - id: 12
+    activity_id: 1
+    activity_instance_id: "896622fd-0124-11ea-a8a0-22e8105c07bb"
+    workflow_instance_id: 3
+    status: "Completed"
     org_id: 1
 ox_group:
   - id: 1

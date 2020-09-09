@@ -356,7 +356,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_array($content['data']), true);
-        $this->assertEquals(24, count($content['data']['data']));
+        $this->assertEquals(26, count($content['data']));
     }
         
     public function testExtractFileWithPreDefinedFields()
@@ -368,7 +368,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_array($content['data']), true);
-        $this->assertEquals(2, count($content['data']['data']));
+        $this->assertEquals(4, count($content['data']));
     }
 
     public function testServiceTaskCommands()

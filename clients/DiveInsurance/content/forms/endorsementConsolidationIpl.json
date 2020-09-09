@@ -1918,6 +1918,7 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "excessLiabilityPrice",
+								"redrawOn": "data",
 								"key": "excessLiabilityPrice",
 								"type": "hidden",
 								"input": true,
@@ -3093,7 +3094,7 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
-						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
+						"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 						"validate": {
 							"multiple": true
 						},
@@ -3369,20 +3370,6 @@
 			"label": "Transaction Status",
 			"type": "hidden",
 			"lockKey": true
-		}, {
-			"label": "Please process the payment and approve",
-			"attrs": [{
-				"attr": "",
-				"value": ""
-			}],
-			"content": "<h4>Please process the payment of <b>${{data.balanceEndor}}</b> and approve</h4>",
-			"refreshOnChange": false,
-			"tableView": false,
-			"key": "pleaseProcessThePaymentAndApprove",
-			"customConditional": "show = ((parseFloat(data.balanceEndor) > 0) &&(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ;",
-			"type": "htmlelement",
-			"input": false,
-			"hideLabel": true
 		}],
 		"input": false,
 		"path": "page6",
@@ -3432,7 +3419,7 @@
 		}, {
 			"label": "refundAmount",
 			"redrawOn": "data",
-			"calculateValue": "if (data.CSRReviewRequired) {\n\tif (parseFloat(data.balanceEndor) < 0) {\n\t\tvalue = data.balanceEndor;\n\t} else if (parseFloat(data.endorsementTotal) < 0) {\n\t\tvalue = data.endorsementTotal;\n\t} else {\n\t\tvalue = 0;\n\t}\n} else {\n\tif ((parseFloat(data.endorsementTotal) < 0)) {\nvalue = data.endorsementTotal;\n\t}\n}",
+			"calculateValue": "if (data.CSRReviewRequired) {\n\tif (parseFloat(data.balanceEndor) < 0) {\n\t\tvalue = data.balanceEndor;\n\t} else if (parseFloat(data.endorsementTotal) < 0) {\n\t\tvalue = data.endorsementTotal;\n\t} else {\n\t\tvalue = 0;\n\t}\n} else {\n\tif ((parseFloat(data.endorsementTotal) < 0)) {\nvalue = data.endorsementTotal;\n\t}else{\n\t  value = 0;\n\t}\n}",
 			"key": "refundAmount",
 			"type": "hidden",
 			"input": true,
@@ -3558,7 +3545,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 332,
+	"_vid": 336,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3579,6 +3566,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-08-28T10:12:55.244Z",
+	"modified": "2020-09-04T09:24:14.663Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }
