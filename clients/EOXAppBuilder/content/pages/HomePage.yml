@@ -54,8 +54,29 @@ content:
                     rule: "true"
                     details:
                         -
-                            params:
-                                page_id: '499a2cf4-f271-11ea-adc1-0242ac120002'
+                            type: List
+                            content:
+                                route: 'organization'
+                                disableAppId: true
+                                actions:
+                                     -
+                                         name: Install
+                                         rule: "true"
+                                         details:
+                                             -
+                                                 type: Update
+                                                 successMessage: 'Application Successfully Installed'
+                                                 params:
+                                                    url: /app/org/{{uuid}}/addtoappregistry
+                                                    postData:
+                                                        app_name: "{{Level1_name}}"
+                                                    disableAppId: true
+                                         icon: 'far fa-download'
+                                         updateOnly: true
+                                columnConfig:
+                                    -
+                                        title: Name
+                                        field: name
                     icon: 'far fa-download'
                 # -
                 #     name: Delete
