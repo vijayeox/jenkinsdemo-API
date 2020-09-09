@@ -38,6 +38,9 @@ pages:
     -
         page_name: HomePage.yml
         uuid: d5b33dce-df14-4193-adfe-de27a6d37ddf
+    -
+        page_name: OrgList.yml
+        uuid: 499a2cf4-f271-11ea-adc1-0242ac120002
 menu:
     -
         name: 'Manage EOX Apps'

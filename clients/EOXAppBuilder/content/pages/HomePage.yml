@@ -49,15 +49,14 @@ content:
                                 disableAppId: true
                     icon: 'far fa-rocket-launch'
                     updateOnly: true
-                # -
-                #     name: Install
-                #     rule: '''{{status}}'' !== ''Processing'' && ''{{status}}'' !== ''Queued'''
-                #     details:
-                #         -
-                #             type: Update
-                #             showSuccess: true
-                #             url: /app/{{uuid}}/appinstall
-                #     icon: 'far fa-download'
+                -
+                    name: Install
+                    rule: "true"
+                    details:
+                        -
+                            params:
+                                page_id: '499a2cf4-f271-11ea-adc1-0242ac120002'
+                    icon: 'far fa-download'
                 # -
                 #     name: Delete
                 #     rule: '''{{status}}'' !== ''Processing'' && ''{{status}}'' !== ''Queued'''

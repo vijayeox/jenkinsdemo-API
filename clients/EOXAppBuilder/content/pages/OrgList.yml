@@ -1,0 +1,38 @@
+name: 'Organization List'
+description: 'Shows a list of organization'
+content:
+    -
+        type: List
+        content:
+            route: 'organization'
+            disableAppId: true
+            filterable: true                
+            resizable: true
+            actionsWidth: 260px
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            sortable: 
+                allowUnsort: true
+                mode: single
+            actions:
+                 -
+                     name: Install
+                     rule: "true"
+                     details:
+                         -
+                             type: Update
+                             successMessage: 'Application Successfully Installed'
+                             params:
+                                url: /app/org/{{uuid}}/addtoappregistry
+                                disableAppId: true
+                     icon: 'far fa-download'
+                     updateOnly: true
+            columnConfig:
+                -
+                    title: Name
+                    field: name
