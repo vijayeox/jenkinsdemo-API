@@ -390,9 +390,11 @@ public function execute(array $data,Persistence $persistenceService)
                 if($data['groupPL'] != ""){
                     foreach ($data['groupPL'] as $key => $value) {
                         if(!isset($value['effectiveDate'])){
-                            $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                            $data['groupPL'][$key]['effectiveDate'] = isset($value['start_date']) ? $value['start_date'] : $data['update_date'];
                         }else if($value['effectiveDate'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                        }else if ($value['padi'] == ""){
+                            $data['groupPL'][$key]['effectiveDate'] = $data['update_date'];
                         }
                         if(is_string($value['documentattach'])){
                             $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
