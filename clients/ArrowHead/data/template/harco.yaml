@@ -1244,12 +1244,12 @@
    Source Worksheet: Finance/Insurance
    pageName: Q-Umb
    cell: 'M26'
-   key: harcoExcelData*checkfISales
+   key: harcoExcelData*checkautoBodySales
 -
    Source Worksheet: Auto Body
    pageName: Q-Umb
    cell: 'M27'
-   key: harcoExcelData*checkautoBodySales
+   key: harcoExcelData*checkfISales
 -
    Source Worksheet: Limit
    pageName: Q-Umb
