@@ -754,6 +754,12 @@
    returnValue:
       '0.75': '0.85'
 -
+   Source Worksheet: 'Repair % - Labor:'
+   key: harcoExcelData*checkrepairpercentlaborexists
+   pageName: J
+   cell: Customer Percentage of Repair Endorsement
+   offset: 2,0
+-
    key: harcoExcelData*checkrepairpercentparts
    pageName: J
    cell: Customer Percentage of Repair Endorsement
@@ -1314,7 +1320,7 @@
 -
    Source Worksheet: 'If less than three years, describe experience of management:'
    pageName: UW Q's
-   cell: 'E19'
+   cell: 'E18'
    key: lessThan3years
 -
    Source Worksheet: Does applicant perform body work and spray painting?
