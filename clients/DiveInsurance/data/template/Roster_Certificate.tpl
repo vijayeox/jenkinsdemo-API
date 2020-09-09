@@ -52,7 +52,6 @@
 					</tr>
     			{/foreach}
 			</table>
-
 	</div>
 </body>
 </html>
