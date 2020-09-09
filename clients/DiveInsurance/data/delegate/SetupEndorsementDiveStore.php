@@ -187,6 +187,8 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_groupProfessionalLiabilityPrice'] = 0;
                     $policy['previous_groupTotalAmount'] = 0;
                 }
+                $policy['previous_groupCoverageSelect'] = $data['groupCoverageSelect'];
+                $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
                 $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
                 $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];

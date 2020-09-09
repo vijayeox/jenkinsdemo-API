@@ -109,6 +109,10 @@ entity:
                 name: state
                 data_type: text
                 index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
         identifiers:
@@ -169,6 +173,10 @@ entity:
                 name: state
                 data_type: text
                 index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
     -
         name: 'Dive Boat'
         field:
@@ -226,6 +234,10 @@ entity:
                 name: state
                 data_type: text
                 index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
         identifiers:
@@ -280,6 +292,10 @@ entity:
                 index: true
             -
                 name: state
+                data_type: text
+                index: true
+            -
+                name: transaction_reference_number
                 data_type: text
                 index: true
     -
@@ -399,6 +415,10 @@ entity:
                 index: true
             -
                 name: state
+                data_type: text
+                index: true
+            -
+                name: transaction_reference_number
                 data_type: text
                 index: true
 pages:
