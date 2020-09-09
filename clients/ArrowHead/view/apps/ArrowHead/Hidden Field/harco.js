@@ -289,11 +289,10 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "Reconstruction Cost"
       : "",
     checkthirdparty: data.state
-      ? data.state.name == "California"
-        ? ""
-        : "X"
-      : "X",
-
+      ? data.state.name != "California" && data.eplicoverage == "yes"
+        ? "X"
+        : ""
+      : "",
     checkbuildingCoinsurance: data.state
       ? data.state.name !== "California" || data.state.name !== "Florida"
         ? "1"

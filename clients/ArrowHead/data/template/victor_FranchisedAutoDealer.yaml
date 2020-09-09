@@ -320,6 +320,11 @@
 -
    key: separatemixingroom
    pageName: Garage Supplemental 
+   cell: Check Box 81
+   type: Checkbox
+-
+   key: separatemixingroom
+   pageName: Garage Supplemental 
    cell: Check Box 32
    type: Checkbox
 -
