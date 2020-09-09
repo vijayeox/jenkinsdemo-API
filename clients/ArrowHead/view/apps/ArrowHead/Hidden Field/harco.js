@@ -155,7 +155,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.map(locationItem => {
+  data.locationSchedule.map(locationItem => {
     if (locationItem.newcarsales > 0) {
       checknewcarsales += locationItem.newcarsales;
     }
@@ -702,7 +702,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     checkleasedtoOthers: data.genericData.locationScheduleGridData.some(
       i => i.occupancyType == "bldgLeasedToOthers"
     ),
-    checklessThan3years: data.numYearsOfOwnership > 3 ? "Yes" : "No",
+    checklessThan3years: data.numYearsOfOwnership < 3 ? "Yes" : "No",
     checkroofingyear: data.genericData.locationScheduleGridData.some(
       i => i.roofingyear < moment().format("YYYY") - 20
     ),
@@ -727,6 +727,8 @@ if (data.workbooksToBeGenerated.harco == true) {
       parseFloat(data.repairpercentparts) > 0 ? data.repairpercentparts : "",
     checkrepairpercentlabor:
       parseFloat(data.repairpercentlabor) > 0 ? data.repairpercentlabor : "",
+    checkrepairpercentlaborexists:
+      parseFloat(data.repairpercentlabor) > 0 ? 'Yes' : 'No',
     checkavgOfTimesContractDriversUsedPerMonth: checkavgOfTimesContractDriversUsedPerMonth,
     checkCustomerInsuranceValidity:
       data.customersinsuranceverified && data.regularlythroughouttermofloan
