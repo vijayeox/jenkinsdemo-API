@@ -1,7 +1,6 @@
 import osjs from "osjs";
-import { name as applicationName, icon_white } from "./metadata.json";
-import {React,ReactDOM} from "oxziongui";
-import Home from "./home";
+import { name as applicationName, icon_white, appId } from "./metadata.json";
+import { React, ReactDOM, EOXApplication } from "oxziongui";
 
 // Our launcher
 const register = (core, args, options, metadata) => {
@@ -12,17 +11,37 @@ const register = (core, args, options, metadata) => {
       id: metadata.name + "_Window",
       title: metadata.title.en_EN,
       icon: proc.resource(icon_white),
-      dimension: {
-        width: document.body.clientWidth,
-        height: document.body.clientHeight
+      attributes: {
+        classNames: ["Window_" + metadata.name],
+        dimension: {
+          width: 900,
+          height: 500
+        },
+        minDimension: {
+          width: 900,
+          height: 500
+        },
+        position: {
+          left: 150,
+          top: 50
+        }
       },
       state: {
         maximized: true
-      },
-      position: { left: 700, top: 200 }
+      }
     })
     .on("destroy", () => proc.destroy())
-    .render($content => ReactDOM.render(<Home args={core} params={args} proc={proc} />, $content));
+    .render(($content) =>
+      ReactDOM.render(
+        <EOXApplication
+          args={core}
+          application_id={appId}
+          params={args}
+          proc={proc}
+        />,
+        $content
+      )
+    );
   return proc;
 };
 

@@ -63,4 +63,18 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   .page-link {
     color: $primary-color;;
   }
+
+  #floater {
+    position: fixed;
+    background-color: #f8f9fa;
+    bottom: 15px;
+    right: 30px;
+    pointer-events: none;
+    img {
+      height: 40px;
+      width: auto;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+  }
 }
