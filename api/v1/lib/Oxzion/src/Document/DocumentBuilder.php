@@ -58,13 +58,6 @@ class DocumentBuilder {
         if($options && isset($options['generateOptions'])){
             $generateOptions = $options['generateOptions'];
         }
-        foreach($data as $key => $value){
-            $docData = json_decode($value,true);
-            if(is_array($docData)){
-                unset($data[$key]);
-            }    
-        }
-        
        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend,$generateOptions);
     }
 

@@ -1108,7 +1108,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $response[$i]['product'] = $data['product'];
                 $response[$i]['product_email_id'] = $data['product_email_id'];
                 $response[$i]['email'] = $data['email'];
-                $response[$i]['certificate_no'] = $data['certificate_no'];
+                $certificateNo = ltrim($data['group_certificate_no']);
+                $response[$i]['certificate_no'] = $certificateNo;
                 $response[$i]['end_date'] = $data['end_date'];
                 $response[$i]['address1'] = $data['address1'];
                 $response[$i]['address2'] = isset($data['address2']) ? $data['address2'] : '';

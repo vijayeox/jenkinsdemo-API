@@ -370,7 +370,9 @@ public function execute(array $data,Persistence $persistenceService)
                 }
             }
             foreach ($policy as $key => $value) {
-                $data[$key] = $value;
+                if($key != 'update_date'){
+                    $data[$key] = $value;    
+                }
             }
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
