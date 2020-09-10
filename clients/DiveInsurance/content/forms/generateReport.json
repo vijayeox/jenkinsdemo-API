@@ -119,8 +119,10 @@
                   "defaultDate": "moment()",
                   "validate": {
                     "required": true,
-                    "customMessage": "Please enter a valid Start Date"
+                    "customMessage": "Please enter a valid Start Date",
+                    "custom": "valid = (input <= data.reportEndDate) ? true : 'Enter valid start date';"
                   },
+                  "validateOn": "blur",
                   "errorLabel": "Start Date",
                   "key": "reportStartDate",
                   "type": "datetime",
@@ -173,8 +175,10 @@
                   "defaultDate": "moment()",
                   "validate": {
                     "required": true,
-                    "customMessage": "Please enter a valid End Date"
+                    "customMessage": "Please enter a valid End Date",
+                    "custom": "valid = (input >= data.reportStartDate) ? true : \"Enter valid End date\""
                   },
+                  "validateOn": "blur",
                   "errorLabel": "End Date",
                   "key": "reportEndDate",
                   "type": "datetime",
@@ -234,7 +238,7 @@
     }
   ],
   "revisions": "original",
-  "_vid": 4,
+  "_vid": 7,
   "title": "Generate Report",
   "display": "form",
   "access": [
@@ -257,6 +261,6 @@
   "path": "generatereport",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-08-17T10:48:54.461Z",
-  "modified": "2020-09-01T09:14:20.582Z",
+  "modified": "2020-09-10T05:57:06.243Z",
   "machineName": "testdivehub:generateReport"
 }
