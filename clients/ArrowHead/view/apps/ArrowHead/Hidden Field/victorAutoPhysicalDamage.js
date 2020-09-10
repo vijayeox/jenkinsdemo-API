@@ -24,6 +24,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var nonEmployeesfurnishedAuto = 0;
   var furnishedAutoEmployee = 0;
   var sumfurnishedAutoEmployee = 0;
+  var checkBodyShop = "";
 
   data.locationSchedule.map(row => {
     MixofInventoryNew +=
@@ -278,16 +279,17 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       })
     : "";
 
+  data.genericData.locationScheduleGridData.some(locationItem => {
+    if (locationItem.occupancyType == "bodyShop") {
+      checkBodyShop = "Yes";
+      return true;
+    } else {
+      checkBodyShop = "No";
+      return false;
+    }
+  });
   value = {
-    checkAutobody: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.occupancyType == "bodyShop") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
+    checkAutobody: checkBodyShop ? checkBodyShop : "",
     checkfloodloss: data.dolflodlossdescib
       ? data.dolflodlossdescib.length > 0
         ? "true"
