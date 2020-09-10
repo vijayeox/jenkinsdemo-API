@@ -104,8 +104,8 @@
    pageName: Underwriting Survey
    cell: D19
    returnValue:
-      'true': 'Yes'
-      'false': 'No'
+      '0': 'No'
+      '1': 'Yes'
 -
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_indexValue
    method: simpleDatagrid
