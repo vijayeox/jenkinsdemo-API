@@ -287,59 +287,59 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       checkBodyShop = "No";
       return false;
     }
-  }),
-    (value = {
-      checkAutobody: checkBodyShop ? checkBodyShop : "",
-      checkfloodloss: data.dolflodlossdescib
-        ? data.dolflodlossdescib.length > 0
-          ? "true"
-          : "false"
-        : "",
-      DealershipStorageLocationsArray: DealershipStorageLocationsArray,
-      sumNonEmployeesfurnished: nonEmployeesfurnishedAuto,
-      sumfurnishedAutoEmployee: furnishedAutoEmployee,
-      primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + "",
-      checkMixofInventoryNew: checkMixofInventoryNew,
-      uniqueLotProtection:
-        uniqueLotProtection.length > 0 ? uniqueLotProtection : "",
-      uniqueKeyControls: uniqueKeyControls.length > 0 ? uniqueKeyControls : "",
-      checklotprotectiondolsecguards: checklotprotectiondolsecguards
-        ? checklotprotectiondolsecguards
-        : "",
-      checklotprotectiondolaftrhrslighting: checklotprotectiondolaftrhrslighting
-        ? checklotprotectiondolaftrhrslighting
-        : "",
-      checklotprotectionpostChain: checklotprotectionpostChain
-        ? checklotprotectionpostChain
-        : "",
-      checklotprotectionsurveillance: checklotprotectionsurveillance
-        ? checklotprotectionsurveillance
-        : "",
-      checklotprotectionfullyFencedPremises: checklotprotectionfullyFencedPremises
-        ? checklotprotectionfullyFencedPremises
-        : "",
-      checklotprotectionnone: checklotprotectionnone
-        ? checklotprotectionnone
-        : "",
-      checkkeycontrolsnone: checkkeycontrolsnone ? checkkeycontrolsnone : "",
-      checkkeycontrolslockbox: checkkeycontrolslockbox
-        ? checkkeycontrolslockbox
-        : "",
-      checkkeycontrolscomputerizedKeyVault: checkkeycontrolscomputerizedKeyVault
-        ? checkkeycontrolscomputerizedKeyVault
-        : "",
-      checkkeycontrolslockingKeyCabinet: checkkeycontrolslockingKeyCabinet
-        ? checkkeycontrolslockingKeyCabinet
-        : "",
-      checkkeycontrolsdailyKeyInventory: checkkeycontrolsdailyKeyInventory
-        ? checkkeycontrolsdailyKeyInventory
-        : "",
-      checkkeycontrolslockedInManagersOffice: checkkeycontrolslockedInManagersOffice
-        ? checkkeycontrolslockedInManagersOffice
-        : "",
-      checkkeycontrolskeysInCars: checkkeycontrolskeysInCars
-        ? checkkeycontrolskeysInCars
-        : ""
-    });
+  });
+  value = {
+    checkAutobody: checkBodyShop ? checkBodyShop : "",
+    checkfloodloss: data.dolflodlossdescib
+      ? data.dolflodlossdescib.length > 0
+        ? "true"
+        : "false"
+      : "",
+    DealershipStorageLocationsArray: DealershipStorageLocationsArray,
+    sumNonEmployeesfurnished: nonEmployeesfurnishedAuto,
+    sumfurnishedAutoEmployee: furnishedAutoEmployee,
+    primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + "",
+    checkMixofInventoryNew: checkMixofInventoryNew,
+    uniqueLotProtection:
+      uniqueLotProtection.length > 0 ? uniqueLotProtection : "",
+    uniqueKeyControls: uniqueKeyControls.length > 0 ? uniqueKeyControls : "",
+    checklotprotectiondolsecguards: checklotprotectiondolsecguards
+      ? checklotprotectiondolsecguards
+      : "",
+    checklotprotectiondolaftrhrslighting: checklotprotectiondolaftrhrslighting
+      ? checklotprotectiondolaftrhrslighting
+      : "",
+    checklotprotectionpostChain: checklotprotectionpostChain
+      ? checklotprotectionpostChain
+      : "",
+    checklotprotectionsurveillance: checklotprotectionsurveillance
+      ? checklotprotectionsurveillance
+      : "",
+    checklotprotectionfullyFencedPremises: checklotprotectionfullyFencedPremises
+      ? checklotprotectionfullyFencedPremises
+      : "",
+    checklotprotectionnone: checklotprotectionnone
+      ? checklotprotectionnone
+      : "",
+    checkkeycontrolsnone: checkkeycontrolsnone ? checkkeycontrolsnone : "",
+    checkkeycontrolslockbox: checkkeycontrolslockbox
+      ? checkkeycontrolslockbox
+      : "",
+    checkkeycontrolscomputerizedKeyVault: checkkeycontrolscomputerizedKeyVault
+      ? checkkeycontrolscomputerizedKeyVault
+      : "",
+    checkkeycontrolslockingKeyCabinet: checkkeycontrolslockingKeyCabinet
+      ? checkkeycontrolslockingKeyCabinet
+      : "",
+    checkkeycontrolsdailyKeyInventory: checkkeycontrolsdailyKeyInventory
+      ? checkkeycontrolsdailyKeyInventory
+      : "",
+    checkkeycontrolslockedInManagersOffice: checkkeycontrolslockedInManagersOffice
+      ? checkkeycontrolslockedInManagersOffice
+      : "",
+    checkkeycontrolskeysInCars: checkkeycontrolskeysInCars
+      ? checkkeycontrolskeysInCars
+      : ""
+  };
   console.log(value);
 }
