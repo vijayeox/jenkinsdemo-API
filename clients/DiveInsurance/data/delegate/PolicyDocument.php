@@ -1566,7 +1566,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_additionalInsured']) && $policy['previous_additionalInsured']!=$data['additionalInsured']){
                         $temp['newAddInsured'] = "";
                         $temp['removedAddInsured'] = "";
-                        $temp['liabilityChanges'] = true;
                          if(!is_array($policy['previous_additionalInsured'])){
                                 $policy['previous_additionalInsured'] = array();
                                 $previousAddInsured = array();
@@ -1604,7 +1603,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(isset($data['previous_additionalInsured'])){
                             $temp['newAddInsured'] = "";
                             $temp['removedAddInsured'] = "";
-                            $temp['liabilityChanges'] = true;
                             if(!is_array($data['previous_additionalInsured'])){
                                 if(is_string($data['previous_additionalInsured'])){
                                     $data['previous_additionalInsured'] = json_decode($data['previous_additionalInsured'],true);
@@ -1638,6 +1636,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['newAddInsured'] = "";
                             $temp['removedAddInsured'] = "";
                         }
+                    }
+                    if($temp['removedAddInsured'] !="" && $temp['newAddInsured'] != ""){
+                        $temp['liabilityChanges'] = true;
                     }
                 }
                 if($data['lossPayeesSelect'] == "yes"){
