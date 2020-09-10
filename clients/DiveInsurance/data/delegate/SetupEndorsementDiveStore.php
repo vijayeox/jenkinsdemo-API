@@ -191,10 +191,10 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
                 $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
+                $data['previous_groupPlLength'] = 0;
+                $data['previous_groupAddlLength'] = 0;
+                $data['previous_groupAddlNILength'] = 0;
                 if($data['groupProfessionalLiabilitySelect'] == "yes"){
-                    $data['previous_groupPlLength'] = 0;
-                    $data['previous_groupAddlLength'] = 0;
-                    $data['previous_groupAddlNILength'] = 0;
                     if(isset($data['groupPL'])){
                         $groupPL = is_string($data['groupPL']) ? json_decode($data['groupPL'],true) : $data['groupPL'];
                         $data['previous_groupPlLength'] = sizeof($groupPL);
