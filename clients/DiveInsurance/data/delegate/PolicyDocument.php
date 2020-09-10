@@ -1644,7 +1644,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_lossPayees']) && $policy['previous_lossPayees'] != $data['lossPayees']){
                         $temp['newlossPayees'] = "";
                         $temp['removedlossPayees'] = "";
-                        $temp['propertyChanges'] = true;
                         if(!is_array($policy['previous_lossPayees'])){
                             if(is_string($data['lossPayees'])){
                                 $policy['previous_lossPayees'] = json_decode($policy['previous_lossPayees'],true);
@@ -1691,7 +1690,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_additionalNamedInsured']) && $policy['previous_additionalNamedInsured'] != $data['additionalNamedInsured']){
                         $temp['newadditionalNamedInsured'] = "";
                         $temp['removedadditionalNamedInsured'] = "";
-                        $temp['propertyChanges'] = true;
                         if(!is_array($policy['previous_additionalNamedInsured'])){
                             if(is_string($data['additionalNamedInsured'])){
                                 $policy['previous_additionalNamedInsured'] = json_decode($policy['previous_additionalNamedInsured'],true);
@@ -1737,8 +1735,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_additionalLocations']) && $policy['previous_additionalLocations'] != $data['additionalLocations']){
                         $temp['newAdditionalLocations'] = "";
                         $temp['removedadditionalLocations'] = "";
-                        $temp['propertyChanges'] = true;
-                        $temp['liabilityChanges'] = true;
                         $addLocRequired = array("padiNumberAL","name","address","country","city","state","zip","ALpropertyCoverageSelect","additionalLocationPropertyTotal","ALLossofBusIncome","additionalLocationDoYouOwntheBuilding","ALBuildingReplacementValue","additionalLocationFurniturefixturesAndEquipment","ALnonDivingPoolAmount","travelAgentEoPL","propertyDeductibles","ALcentralStationAlarm","centralStationAlarm");
                         if(!is_array($policy['previous_additionalLocations'])){
                             if(is_string($policy['previous_additionalLocations'])){
