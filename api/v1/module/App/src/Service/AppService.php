@@ -273,18 +273,21 @@ class AppService extends AbstractService
         $this->logger->info("\n App Data before app update - ", print_r($appData, true));
         $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
         }catch(Exception $e){
-            $this->removeViewAppOnError($path,$appData['name']);
+            $this->removeViewAppOnError($path);
         }finally{        
             $this->createOrUpdateApplicationDescriptor($path, $ymlData);
         }
         return $ymlData;
     }
 
-    private function removeViewAppOnError($path,$appName){
-        $targetPath = FileUtils::joinPath($path)."view/apps/".$appName;
+    private function removeViewAppOnError($path){
+        $targetPath = FileUtils::joinPath($path)."view/apps/eoxapps";
         $this->logger->info("TARGET PATH---".print_r($targetPath,true));
-        if (file_exists($targetPath)) {
-            unlink($targetPath);
+        if (file_exists($targetPath) && is_dir($targetPath)) {
+            if (is_link($formlink)) {
+                FileUtils::unlink($formlink);
+            }
+            FileUtils::rmDir($targetPath);
         }
     }
 
