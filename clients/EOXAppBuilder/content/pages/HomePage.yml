@@ -34,7 +34,7 @@ content:
                     details:
                         -
                             type: Form
-                            dataUrl: 'app/{{uuid}}'
+                            dataUrl: 'app/{{Level1_uuid}}'
                             form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                     icon: 'far fa-pencil-alt'
                 -
@@ -45,13 +45,13 @@ content:
                             type: Update
                             successMessage: 'Application Successfully Deployed'
                             params:
-                                url: /app/{{uuid}}/deploy
+                                url: /app/{{Level1_uuid}}/deploy
                                 disableAppId: true
                     icon: 'far fa-rocket-launch'
                     updateOnly: true
                 -
                     name: Install
-                    rule: "true"
+                    rule: "false"
                     details:
                         -
                             type: List
