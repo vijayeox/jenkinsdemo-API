@@ -2816,7 +2816,7 @@
 									"input": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "Are “No Running” signs posted?",
+									"label": "Are â€œNo Runningâ€� signs posted?",
 									"optionsLabelPosition": "right",
 									"inline": false,
 									"tableView": false,
@@ -4590,7 +4590,7 @@
 											"label": "Landlord",
 											"value": "landlord"
 										}, {
-											"label": " Government Entity – Permit Requirement",
+											"label": " Government Entity â€“ Permit Requirement",
 											"value": "governmentEntityPermitRequirement"
 										}, {
 											"label": "Dive Store",
@@ -6631,7 +6631,7 @@
 														"input": true,
 														"hideOnChildrenHidden": false
 													}, {
-														"label": "Are “No Running” signs posted?",
+														"label": "Are â€œNo Runningâ€� signs posted?",
 														"optionsLabelPosition": "right",
 														"inline": false,
 														"tableView": false,
@@ -10511,7 +10511,7 @@
 												"label": "Landlord",
 												"value": "landlord"
 											}, {
-												"label": " Government Entity – Permit Requirement",
+												"label": " Government Entity â€“ Permit Requirement",
 												"value": "governmentEntityPermitRequirement"
 											}, {
 												"label": "Dive Store",
