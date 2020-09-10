@@ -277,6 +277,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     "type" => "file/json"
                 )
             );
+            $data["documents"] = $generatedDocumentsList;
             $data['documentsToBeGenerated'] = count($excelData);
             $data['documentsSelectedCount'] = count($excelData) + count($generatedDocumentsList) - 1;
             $data["status"] = "Processing";
