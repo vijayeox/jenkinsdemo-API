@@ -27,13 +27,17 @@ if (data.workbooksToBeGenerated.harco == true) {
       });
       locationItem.buildingDetails.map(item => {
         if (item.buildingNumber == 1) {
-          totalbusinessincomelimit.push({ result: calculatebusinessincomelimit });
+          totalbusinessincomelimit.push({
+            result: calculatebusinessincomelimit
+          });
         } else {
           totalbusinessincomelimit.push({ result: "" });
         }
       });
     } else if (locationItem.buildingDetails.length == 1) {
-      totalbusinessincomelimit.push({ result: locationItem.buildingDetails[0]['businessincomelimit'] });
+      totalbusinessincomelimit.push({
+        result: locationItem.buildingDetails[0]["businessincomelimit"]
+      });
     }
   });
 
@@ -211,7 +215,9 @@ if (data.workbooksToBeGenerated.harco == true) {
   );
 
   value = {
-    totalbusinessincomelimit: totalbusinessincomelimit ? totalbusinessincomelimit : [],
+    totalbusinessincomelimit: totalbusinessincomelimit
+      ? totalbusinessincomelimit
+      : [],
     checksoftwareprotectionNone:
       data.virusscans == "yes" ||
       data.antivirussoftware == "yes" ||
@@ -223,7 +229,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       data.agentseo == "yes" &&
       (data.medicalexpensedeductible > 0 ||
         data.medicalexpensedeductible.length > 0)
-        ? data.medicalexpensedeductible
+        ? 5000
         : "",
     checkgrosssales:
       data.agentseo == "yes" && data.grosssales > 0 ? data.grosssales : "",
@@ -240,17 +246,23 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     }),
     checkeplicoverage: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "X"
         : ""
       : "",
     checkdiscriminationdeductible: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "25000"
         : ""
       : "",
     checkthirdpartylimit: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "100000"
         : ""
       : "",
@@ -259,27 +271,36 @@ if (data.workbooksToBeGenerated.harco == true) {
         data.state.abbreviation != "FL" &&
         data.state.abbreviation != "MA" &&
         data.state.abbreviation != "VA" &&
-        data.eplicoverage == "yes"
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "X"
         : ""
       : "",
     checkthirdpartydeduc: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "15000"
         : ""
       : "",
     checkactserrorsCAOnly: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "X"
         : ""
       : "",
     checkactserrorsCAOnlyLimit: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "50000"
         : ""
       : "",
     checkactserrorsCAOnlyDeduc: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "2500"
         : ""
       : "",
@@ -289,7 +310,9 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "Reconstruction Cost"
       : "",
     checkthirdparty: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California" &&
+        data.eplicoverage == "yes" &&
+        data.agentseo == "yes"
         ? "X"
         : ""
       : "",
@@ -727,7 +750,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     checkrepairpercentlabor:
       parseFloat(data.repairpercentlabor) > 0 ? data.repairpercentlabor : "",
     checkrepairpercentlaborexists:
-      parseFloat(data.repairpercentlabor) > 0 ? 'Yes' : 'No',
+      parseFloat(data.repairpercentlabor) > 0 ? "Yes" : "No",
     checkavgOfTimesContractDriversUsedPerMonth: checkavgOfTimesContractDriversUsedPerMonth,
     checkCustomerInsuranceValidity:
       data.customersinsuranceverified && data.regularlythroughouttermofloan

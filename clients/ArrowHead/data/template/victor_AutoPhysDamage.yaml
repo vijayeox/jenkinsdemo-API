@@ -103,7 +103,9 @@
    Source Worksheet: Map if at least one building on the quote has an Occupancy Type of Body Shop
    pageName: Underwriting Survey
    cell: D19
-   returnBoolean: 'Yes|No'
+   returnValue:
+      'true': 'Yes'
+      'false': 'No'
 -
    key: victorAutoPhysicalDamage*DealershipStorageLocationsArray_indexValue
    method: simpleDatagrid
