@@ -1644,21 +1644,33 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($policy['previous_lossPayees']) && $policy['previous_lossPayees'] != $data['lossPayees']){
                         $temp['newlossPayees'] = "";
                         $temp['removedlossPayees'] = "";
+                        $previous_lossPayees = array();
+                        $lossPayees = array();
                         if(!is_array($policy['previous_lossPayees'])){
                             if(is_string($data['lossPayees'])){
-                                $policy['previous_lossPayees'] = json_decode($policy['previous_lossPayees'],true);
+                                $previous_lossPayees = json_decode($policy['previous_lossPayees'],true);
+                                foreach ($previous_lossPayees as $key => $value) {
+                                    if(isset($previous_lossPayees[$key]['description'])){
+                                        unset($previous_lossPayees[$key]['description']);
+                                    }
+                                }
                             } else {
-                                $policy['previous_lossPayees'] = array();
+                                $previous_lossPayees = array();
                             }
                         }
                         if(!is_array($data['lossPayees'])){
                             if(is_string($data['lossPayees'])){
-                                $data['lossPayees'] = json_decode($data['lossPayees'],true);
+                                $lossPayees = json_decode($data['lossPayees'],true);
+                                foreach ($lossPayees as $key => $value) {
+                                    if(isset($lossPayees[$key]['description'])){
+                                        unset($lossPayees[$key]['description']);
+                                    }
+                                }
                             } else {
-                                $data['lossPayees'] = array();
+                                $lossPayees = array();
                             }
                         }
-                        $diff = array_diff(array_map('serialize', $data['lossPayees']), array_map('serialize', $policy['previous_lossPayees']));
+                        $diff = array_diff(array_map('serialize', $lossPayees), array_map('serialize', $previous_lossPayees));
                         $newlossPayees = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($newlossPayees,true));
                         if(sizeof($newlossPayees) > 0){
@@ -1668,7 +1680,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['newlossPayees'] = "";
                         }
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($temp['newlossPayees'],true));
-                        $diff = array_diff(array_map('serialize',$policy['previous_lossPayees']), array_map('serialize', $data['lossPayees']));
+                        $diff = array_diff(array_map('serialize',$previous_lossPayees), array_map('serialize', $lossPayees));
                         $removedlossPayees = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Removed Loss Payees :".print_r($removedlossPayees,true));
                         if(sizeof($removedlossPayees) > 0){
