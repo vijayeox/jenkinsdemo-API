@@ -10,13 +10,16 @@
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
           {if isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit}
-            <p>Medical Expense Liability now applies as of the Effective date on this Endorsement ({$increased_medicalPayment_limit} Limit)</p>
+            <p>+Medical Expense Liability now applies as of the Effective date on this Endorsement ({$increased_medicalPayment_limit} Limit)</p>
           {/if}
           {if isset($removed_medicalPayment) && $removed_medicalPayment}
             <p>Medical Expense Liability has been removed as of the Effective date on this Endorsement</p>
           {/if}
           {if isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit}
             <p>+NON-Owned Auto Liability has been increased to {$increased_non_owned_liability_limit} as of the Effective date on this Endorsement</p>
+          {/if}
+          {if isset($decreased_non_owned_liability_limit) && $decreased_non_owned_liability_limit}
+            <p>+NON-Owned Auto Liability has been decreased to {$decreased_non_owned_liability_limit} as of the Effective date on this Endorsement</p>
           {/if}
           {if isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL}
             <p>NON-Owned Auto Liability has been removed as of the Effective date on this Endorsement</p>
@@ -28,7 +31,7 @@
             <p>+Liability Limits have been decreased by ${$decreased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
           {/if}
           {if isset($increased_travelEnO) && $increased_travelEnO}
-            <p>Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
+            <p>+Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
           {/if}
           {if isset($removed_travelEnO) && $removed_travelEnO}
             <p>Travel Agent E & O has been removed as of the Effective date on this Endorsement</p>

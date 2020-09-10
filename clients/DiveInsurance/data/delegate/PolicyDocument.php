@@ -1491,7 +1491,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability1M'){
                             $temp['increased_non_owned_liability_limit'] = "$1,000,000";
                         } else if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability100K'){
-                            $temp['increased_non_owned_liability_limit'] = "$100,000";
+                            if($data['previous_nonOwnedAutoLiabilityPL'] == "$1,000,000"){
+                                $temp['decreased_non_owned_liability_limit'] = "$100,000";
+                            } else {
+                                $temp['increased_non_owned_liability_limit'] = "$100,000";
+                            }
                         } else {
                             $temp['removed_nonOwnedAutoLiabilityPL'] = true;
                         }
