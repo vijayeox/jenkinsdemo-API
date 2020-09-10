@@ -14,7 +14,6 @@ class GenerateReport extends PolicyDocument
     use FileTrait;
     protected $type;
     protected $template;
-
     public function __construct(){
         parent::__construct();
         $this->type = 'cancel';
@@ -58,14 +57,15 @@ class GenerateReport extends PolicyDocument
             $this->saveFile($data,$data['uuid']);      
             return $data;
         }   
-        $this->logger->info("Empty file : ". print_r($data, true));
         $COIdocument = array();
         $fileData = $files['data'];
         foreach ($fileData as $key => $value) {
             if(is_string($fileData[$key]['documents'])) { 
                 $docs = json_decode($fileData[$key]['documents'],true); 
                 if($data['reportProductType'] == 'individualProfessionalLiability' || $data['reportProductType'] =='emergencyFirstResponse'){ 
-                    $COIdocument[] = $this->destination.$docs['coi_document'][0]; 
+                   if(isset($docs['coi_document'])) {
+                     $COIdocument[] = $this->destination.$docs['coi_document'][0];   
+                   }
                 }
                 if($data['reportProductType'] == 'diveStore'){ 
                     $COIdocument[] = $this->destination.$docs['liability_coi_document'];
@@ -79,20 +79,21 @@ class GenerateReport extends PolicyDocument
                         $totalendorsements = sizeOf($docs['endorsement_coi_document']);
                         $COIdocument[] = $this->destination.$docs['endorsement_coi_document'][$totalendorsements-1];
                     }
-                    $this->logger->info("The list of all the documents : ". print_r($COIdocument, true));
                 }
-
+                $this->logger->info("The list of all the documents : ". print_r($COIdocument, true)); 
             }
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
         $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
         $docDest = $dest['absolutePath']."COIbatchReport.pdf";
-        $this->documentBuilder->mergePDF($COIdocument,$docDest);
-        $data['documents']['BatchReport'] = $dest['relativePath']."COIbatchReport.pdf";
-        if(isset($data['jobStatus']) && ($data['jobStatus']=='In Force')){
-            $data['jobStatus'] = 'Completed';
-        }  
-        $this->saveFile($data,$data['uuid']);      
+        if(!empty($COIdocument)){
+            $this->documentBuilder->mergePDF($COIdocument,$docDest);
+            $data['documents']['BatchReport'] = $dest['relativePath']."COIbatchReport.pdf";
+            if(isset($data['jobStatus']) && ($data['jobStatus']=='In Force')){
+                $data['jobStatus'] = 'Completed';
+            }  
+        }
+        $this->saveFile($data,$data['uuid']); 
         return $data;
     }
 }
