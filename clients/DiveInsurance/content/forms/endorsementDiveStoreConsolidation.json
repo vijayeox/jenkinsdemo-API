@@ -4758,7 +4758,7 @@
 			},
 			"collapsible": false,
 			"tableView": false,
-			"key": "additionalNamedInsured",
+			"key": "additionalNamedInsuredPanel",
 			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
 			"label": "Additional Named Insureds",
@@ -4814,22 +4814,27 @@
 				"components": [{
 					"label": "Additional Named Insured",
 					"reorder": true,
+					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
 					"noFirstRow": false,
 					"hideLabel": true,
-					"tableView": false,
+					"tableView": true,
 					"defaultValue": [{
 						"name": "",
 						"country": "",
 						"address": "",
 						"state": {},
 						"city": "",
-						"zip": ""
+						"zip": "",
+						"description": ""
 					}],
 					"clearOnHide": false,
+					"validate": {
+						"minLength": 1
+					},
 					"key": "additionalNamedInsured",
 					"type": "datagrid",
 					"input": true,
@@ -4943,16 +4948,14 @@
 									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "Zip",
+									"label": "Zip Code",
 									"tableView": true,
-									"clearOnHide": false,
 									"validate": {
 										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"key": "zip",
 									"type": "textfield",
 									"input": true,
-									"lockKey": true,
 									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
@@ -4964,18 +4967,22 @@
 							"hideLabel": true,
 							"dataGridLabel": false,
 							"tableView": false,
-							"key": "page4PanelInformationforeachAdditionalInsuredisrequiredasfollowsColumns",
+							"key": "lossPayeesColumns",
 							"type": "columns",
 							"input": false,
-							"inDataGrid": true
+							"inDataGrid": true,
+							"persistent": true
 						}],
 						"inDataGrid": true,
 						"clearOnHide": false,
-						"hideLabel": true
-					}]
+						"hideLabel": true,
+						"persistent": true
+					}],
+					"lockKey": true
 				}],
 				"lockKey": true,
-				"path": "additional_named_insureds"
+				"path": "additional_named_insureds",
+				"persistent": true
 			}]
 		}, {
 			"title": "Loss Payees",
@@ -15140,6 +15147,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-10T07:52:12.169Z",
+	"modified": "2020-09-10T08:35:12.789Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
