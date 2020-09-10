@@ -2816,7 +2816,7 @@
 									"input": true,
 									"hideOnChildrenHidden": false
 								}, {
-									"label": "Are “No Running” signs posted?",
+									"label": "Are â€œNo Runningâ€� signs posted?",
 									"optionsLabelPosition": "right",
 									"inline": false,
 									"tableView": false,
@@ -4404,6 +4404,7 @@
 								"components": [{
 									"label": "Name",
 									"tableView": true,
+									"clearOnHide": false,
 									"validate": {
 										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
@@ -4589,7 +4590,7 @@
 											"label": "Landlord",
 											"value": "landlord"
 										}, {
-											"label": " Government Entity – Permit Requirement",
+											"label": " Government Entity â€“ Permit Requirement",
 											"value": "governmentEntityPermitRequirement"
 										}, {
 											"label": "Dive Store",
@@ -6630,7 +6631,7 @@
 														"input": true,
 														"hideOnChildrenHidden": false
 													}, {
-														"label": "Are “No Running” signs posted?",
+														"label": "Are â€œNo Runningâ€� signs posted?",
 														"optionsLabelPosition": "right",
 														"inline": false,
 														"tableView": false,
@@ -10510,7 +10511,7 @@
 												"label": "Landlord",
 												"value": "landlord"
 											}, {
-												"label": " Government Entity – Permit Requirement",
+												"label": " Government Entity â€“ Permit Requirement",
 												"value": "governmentEntityPermitRequirement"
 											}, {
 												"label": "Dive Store",
@@ -15147,6 +15148,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-10T08:35:12.789Z",
+	"modified": "2020-09-10T10:54:39.497Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
