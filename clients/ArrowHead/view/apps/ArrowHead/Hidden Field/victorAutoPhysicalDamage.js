@@ -24,6 +24,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var nonEmployeesfurnishedAuto = 0;
   var furnishedAutoEmployee = 0;
   var sumfurnishedAutoEmployee = 0;
+  var checkBodyShop = "";
 
   data.locationSchedule.map(row => {
     MixofInventoryNew +=
@@ -278,66 +279,67 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       })
     : "";
 
-  value = {
-    checkAutobody: data.genericData.locationScheduleGridData.some(
-      locationItem => {
-        if (locationItem.occupancyType == "bodyShop") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    ),
-    checkfloodloss: data.dolflodlossdescib
-      ? data.dolflodlossdescib.length > 0
-        ? "true"
-        : "false"
-      : "",
-    DealershipStorageLocationsArray: DealershipStorageLocationsArray,
-    sumNonEmployeesfurnished: nonEmployeesfurnishedAuto,
-    sumfurnishedAutoEmployee: furnishedAutoEmployee,
-    primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + "",
-    checkMixofInventoryNew: checkMixofInventoryNew,
-    uniqueLotProtection:
-      uniqueLotProtection.length > 0 ? uniqueLotProtection : "",
-    uniqueKeyControls: uniqueKeyControls.length > 0 ? uniqueKeyControls : "",
-    checklotprotectiondolsecguards: checklotprotectiondolsecguards
-      ? checklotprotectiondolsecguards
-      : "",
-    checklotprotectiondolaftrhrslighting: checklotprotectiondolaftrhrslighting
-      ? checklotprotectiondolaftrhrslighting
-      : "",
-    checklotprotectionpostChain: checklotprotectionpostChain
-      ? checklotprotectionpostChain
-      : "",
-    checklotprotectionsurveillance: checklotprotectionsurveillance
-      ? checklotprotectionsurveillance
-      : "",
-    checklotprotectionfullyFencedPremises: checklotprotectionfullyFencedPremises
-      ? checklotprotectionfullyFencedPremises
-      : "",
-    checklotprotectionnone: checklotprotectionnone
-      ? checklotprotectionnone
-      : "",
-    checkkeycontrolsnone: checkkeycontrolsnone ? checkkeycontrolsnone : "",
-    checkkeycontrolslockbox: checkkeycontrolslockbox
-      ? checkkeycontrolslockbox
-      : "",
-    checkkeycontrolscomputerizedKeyVault: checkkeycontrolscomputerizedKeyVault
-      ? checkkeycontrolscomputerizedKeyVault
-      : "",
-    checkkeycontrolslockingKeyCabinet: checkkeycontrolslockingKeyCabinet
-      ? checkkeycontrolslockingKeyCabinet
-      : "",
-    checkkeycontrolsdailyKeyInventory: checkkeycontrolsdailyKeyInventory
-      ? checkkeycontrolsdailyKeyInventory
-      : "",
-    checkkeycontrolslockedInManagersOffice: checkkeycontrolslockedInManagersOffice
-      ? checkkeycontrolslockedInManagersOffice
-      : "",
-    checkkeycontrolskeysInCars: checkkeycontrolskeysInCars
-      ? checkkeycontrolskeysInCars
-      : ""
-  };
+  data.genericData.locationScheduleGridData.some(locationItem => {
+    if (locationItem.occupancyType == "bodyShop") {
+      checkBodyShop = "Yes";
+      return true;
+    } else {
+      checkBodyShop = "No";
+      return false;
+    }
+  }),
+    (value = {
+      checkAutobody: checkBodyShop ? checkBodyShop : "",
+      checkfloodloss: data.dolflodlossdescib
+        ? data.dolflodlossdescib.length > 0
+          ? "true"
+          : "false"
+        : "",
+      DealershipStorageLocationsArray: DealershipStorageLocationsArray,
+      sumNonEmployeesfurnished: nonEmployeesfurnishedAuto,
+      sumfurnishedAutoEmployee: furnishedAutoEmployee,
+      primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + "",
+      checkMixofInventoryNew: checkMixofInventoryNew,
+      uniqueLotProtection:
+        uniqueLotProtection.length > 0 ? uniqueLotProtection : "",
+      uniqueKeyControls: uniqueKeyControls.length > 0 ? uniqueKeyControls : "",
+      checklotprotectiondolsecguards: checklotprotectiondolsecguards
+        ? checklotprotectiondolsecguards
+        : "",
+      checklotprotectiondolaftrhrslighting: checklotprotectiondolaftrhrslighting
+        ? checklotprotectiondolaftrhrslighting
+        : "",
+      checklotprotectionpostChain: checklotprotectionpostChain
+        ? checklotprotectionpostChain
+        : "",
+      checklotprotectionsurveillance: checklotprotectionsurveillance
+        ? checklotprotectionsurveillance
+        : "",
+      checklotprotectionfullyFencedPremises: checklotprotectionfullyFencedPremises
+        ? checklotprotectionfullyFencedPremises
+        : "",
+      checklotprotectionnone: checklotprotectionnone
+        ? checklotprotectionnone
+        : "",
+      checkkeycontrolsnone: checkkeycontrolsnone ? checkkeycontrolsnone : "",
+      checkkeycontrolslockbox: checkkeycontrolslockbox
+        ? checkkeycontrolslockbox
+        : "",
+      checkkeycontrolscomputerizedKeyVault: checkkeycontrolscomputerizedKeyVault
+        ? checkkeycontrolscomputerizedKeyVault
+        : "",
+      checkkeycontrolslockingKeyCabinet: checkkeycontrolslockingKeyCabinet
+        ? checkkeycontrolslockingKeyCabinet
+        : "",
+      checkkeycontrolsdailyKeyInventory: checkkeycontrolsdailyKeyInventory
+        ? checkkeycontrolsdailyKeyInventory
+        : "",
+      checkkeycontrolslockedInManagersOffice: checkkeycontrolslockedInManagersOffice
+        ? checkkeycontrolslockedInManagersOffice
+        : "",
+      checkkeycontrolskeysInCars: checkkeycontrolskeysInCars
+        ? checkkeycontrolskeysInCars
+        : ""
+    });
   console.log(value);
 }
