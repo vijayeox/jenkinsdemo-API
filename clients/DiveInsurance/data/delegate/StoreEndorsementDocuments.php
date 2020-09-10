@@ -107,35 +107,15 @@ class StoreEndorsementDocuments extends EndorsementDocument
         if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
             $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
         }
-        
-
-        if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
-            $this->logger->info("DOCUMENT lossPayees");
-            $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
-        }
-
-        if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
-          $addLocations = $temp['additionalLocations'];
-          unset($temp['additionalLocations']);
-            if(is_string($addLocations)){
-                $additionalLocations = json_decode($addLocations,true);
-            } else {
-                $additionalLocations = $addLocations;
-            }
-            for($i=0; $i<sizeof($additionalLocations);$i++){
-                $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
-                $temp["additionalLocationData"] = json_encode($additionalLocations[$i]);
-                $documents['additionalLocations_document_'.$i] = $this->generateDocuments($temp,$dest,$options,'alTemplate','alheader','alfooter',$i,0,true);
-                unset($temp["additionalLocationData"]);
-            }
-        }
 
         if(isset($this->template[$temp['product']]['blanketForm'])){
             $this->logger->info("DOCUMENT blanketForm");
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
         if($this->type == 'endorsement') {
-            $documents['endorsement_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) ){
+                $documents['endorsement_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            }
         }
 
         if($endorsementOptions['modify_groupProfessionalLiability'] == true){

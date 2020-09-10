@@ -191,6 +191,25 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
                 $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
+                if($data['groupProfessionalLiabilitySelect'] == "yes"){
+                    $data['previous_groupPlLength'] = 0;
+                    $data['previous_groupAddlLength'] = 0;
+                    $data['previous_groupAddlNILength'] = 0;
+                    if(isset($data['groupPL'])){
+                        $groupPL = is_string($data['groupPL']) ? json_decode($data['groupPL'],true) : $data['groupPL'];
+                        $data['previous_groupPlLength'] = sizeof($groupPL);
+                    }
+
+                    if($data['additional_insured'] == "yes"){
+                        $groupAdd = is_string($data['groupAdditionalInsured']) ? json_decode($data['groupAdditionalInsured'],true) : $data['groupAdditionalInsured'];
+                        $data['previous_groupAddlLength'] = sizeof($groupAdd);
+                    }
+
+                    if($data['named_insureds'] == "yes"){
+                        $groupAddlNI = is_string($data['groupAdditionalNamedInsured']) ? json_decode($data['groupAdditionalNamedInsured'],true) : $data['groupAdditionalNamedInsured'];
+                        $data['previous_groupAddlNILength'] = sizeof($groupAddlNI);   
+                    }
+                }
                 $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
                 $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
                 $policy['previous_nonDivingPoolAmount'] = $data['nonDivingPoolAmount'];
@@ -395,6 +414,7 @@ public function execute(array $data,Persistence $persistenceService)
                             $data['groupPL'][$key]['effectiveDate'] = isset($value['start_date']) ? $value['start_date'] : $data['update_date'];
                         }else if($value['effectiveDate'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                            $data['groupPL'][$key]['existingEffectiveDate'] = $value['start_date'];
                         }else if ($value['padi'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $data['update_date'];
                         }
