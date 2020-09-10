@@ -4383,6 +4383,7 @@
 						"effectiveDate": "",
 						"start_date": ""
 					}],
+					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"minLength": 1
@@ -4813,7 +4814,6 @@
 				"components": [{
 					"label": "Additional Named Insured",
 					"reorder": true,
-					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
@@ -4829,10 +4829,7 @@
 						"city": "",
 						"zip": ""
 					}],
-					"validate": {
-						"customMessage": "Please add an Additional Insured",
-						"minLength": 1
-					},
+					"clearOnHide": false,
 					"key": "additionalNamedInsured",
 					"type": "datagrid",
 					"input": true,
@@ -4975,8 +4972,7 @@
 						"inDataGrid": true,
 						"clearOnHide": false,
 						"hideLabel": true
-					}],
-					"path": "additionalNamedInsured"
+					}]
 				}],
 				"lockKey": true,
 				"path": "additional_named_insureds"
@@ -9953,14 +9949,14 @@
 									"enableTime": false,
 									"redrawOn": "data",
 									"clearOnHide": false,
-									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(row.existingEffectiveDate).format(\"YYYY-MM-DD\"); \n}\n\nif((!row.effectiveDate || row.effectiveDate == '' || row.effectiveDate == undefined) && moment(row.newMembereffectiveDate).isBefore(moment(data.update_date))){\n  value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}",
+									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\" && (moment(row.newMembereffectiveDate)).isBefore(moment(data.update_date))){\n    value = moment(data['update_date']).format(\"YYYY-MM-DD\");\n}else{\n  value = moment(row.existingEffectiveDate).format(\"YYYY-MM-DD\"); \n}",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
-										"custom": "if(row.newMembereffectiveDate && (!row.effectiveDate || row.effectiveDate == \"\" || row.effectiveDate == undefined)){\n console.log('first'); valid = (moment(row.newMembereffectiveDate).isSameOrAfter(moment(data['update_date']))) ? true : \"Effective date should not be less than endorsement effective date \"+moment(data['update_date']).format('MM-DD-YYYY');\n}else if(row.newMembereffectiveDate){\n console.log('second'); valid = (moment(row.newMembereffectiveDate)).isSameOrAfter(moment(data['policyPeriod'])) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n console.log('third'); valid = (!row.newMembereffectiveDate) ? \"Effective Date is required\" : true;\n}"
+										"custom": "console.log(row.effectiveDate);if(row.newMembereffectiveDate && (!row.effectiveDate || row.effectiveDate == \"\" || row.effectiveDate == undefined)){\n console.log('first'); valid = (moment(row.newMembereffectiveDate).isSameOrAfter(moment(data['update_date']))) ? true : \"Effective date should not be less than endorsement effective date \"+moment(data['update_date']).format('MM-DD-YYYY');\n}else if(row.newMembereffectiveDate){\n console.log('second'); valid = (moment(row.newMembereffectiveDate)).isSameorAfter(moment(data['policyPeriod'])) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n console.log('third'); valid = (!row.newMembereffectiveDate) ? \"Effective Date is required\" : true;\n}"
 									},
 									"key": "newMembereffectiveDate",
-									"customConditional": "console.log(row.start_date);if(!row.start_date || row.start_date == \"\" || row.start_date == undefined){\n  show = true;\n}else if(moment(row.start_date).diff(moment(data.update_date)) >= 0){\n  show = true;\n}else{\n  show = false;\n}",
+									"customConditional": "if(!row.start_date || row.start_date == \"\" || row.start_date == undefined){\n  show = true;\n}else if(moment(row.start_date).diff(moment(data.update_date)) >= 0){\n  show = true;\n}else{\n  show = false;\n}",
 									"type": "datetime",
 									"noCalendar": false,
 									"input": true,
@@ -10282,6 +10278,7 @@
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
+						"noFirstRow": false,
 						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": [{
@@ -10297,6 +10294,7 @@
 							"doYouHaveAWrittenContract": "",
 							"additionalInsuredAttachments": []
 						}],
+						"clearOnHide": false,
 						"validate": {
 							"required": true,
 							"minLength": 1
@@ -10730,6 +10728,7 @@
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
+						"noFirstRow": false,
 						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": [{
@@ -10740,6 +10739,7 @@
 							"city": "",
 							"zip": ""
 						}],
+						"clearOnHide": false,
 						"validate": {
 							"customMessage": "Please add an Additional Insured",
 							"minLength": 1
@@ -15140,6 +15140,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-09T10:24:53.579Z",
+	"modified": "2020-09-10T07:52:12.169Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
