@@ -1158,25 +1158,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['group_ai_certificate'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
             }
         }else if($this->type == 'endorsementQuote'){
-            $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupPlLength'],'groupPL');
-            if($groupLength == 1){
-                $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');    
-            }
+            // $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupPlLength'],'groupPL');
+            $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');    
             
             if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
-                $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlLength'],'groupAdditionalInsured');
-                if($groupLength == 1){
+                // $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlLength'],'groupAdditionalInsured');
+                // if($groupLength == 1){
                     $this->sortArrayByName($temp,'groupAdditionalInsured');
                     $documents['endorsement_group_ai_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
-                }
+                // }
             }
 
             if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
-                $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlNILength'],'groupAdditionalNamedInsured'); 
-                if($groupLength == 1){
+                // $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlNILength'],'groupAdditionalNamedInsured'); 
+                // if($groupLength == 1){
                     $this->sortArrayByName($temp,'groupAdditionalNamedInsured');
                     $documents['endorsement_group_ani_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
-                }
+                // }
             }
         }
         else{
@@ -1201,26 +1199,26 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $documents['endorsement_group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
                     }
                     
-                    $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupPlLength'],'groupPL');
-                    if($groupLength == 1){
-                        $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter'); 
-                        $this->generateGroupPocketCard($data,$temp,$dest,$documents);  
-                    }
+                    // $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupPlLength'],'groupPL');
+                    // if($groupLength == 1){
+                    $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter'); 
+                    $this->generateGroupPocketCard($data,$temp,$dest,$documents);  
+                    // }
                     
                     if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
-                        $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlLength'],'groupAdditionalInsured');
-                        if($groupLength == 1){
+                        // $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlLength'],'groupAdditionalInsured');
+                        // if($groupLength == 1){
                             $this->sortArrayByName($temp,'groupAdditionalInsured');
                             $documents['endorsement_group_ai_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
-                        }
+                        // }
                     }
 
                     if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
-                        $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlNILength'],'groupAdditionalNamedInsured'); 
-                        if($groupLength == 1){
+                        // $this->groupEndorsementOptions($data,$groupLength,$data['previous_groupAddlNILength'],'groupAdditionalNamedInsured'); 
+                        // if($groupLength == 1){
                             $this->sortArrayByName($temp,'groupAdditionalNamedInsured');
                             $documents['endorsement_group_ani_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
-                        }
+                        // }
                     }
                 }
             }else{
@@ -1603,6 +1601,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['removedAddInsured'] = json_encode($removedAddInsured);
                             $this->sortArrayByName($temp,'removedAddInsured');
                         }
+                        if($temp['removedAddInsured'] !="" || $temp['newAddInsured'] != ""){
+                            $temp['liabilityChanges'] = true;
+                        }
                     } else {
                         if(isset($data['previous_additionalInsured'])){
                             $temp['newAddInsured'] = "";
@@ -1636,13 +1637,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 $temp['removedAddInsured'] = json_encode($removedAddInsured);
                                 $this->sortArrayByName($temp,'removedAddInsured');
                             }
+                            if($temp['removedAddInsured'] !="" || $temp['newAddInsured'] != ""){
+                                $temp['liabilityChanges'] = true;
+                            }
                         }  else {
                             $temp['newAddInsured'] = "";
                             $temp['removedAddInsured'] = "";
                         }
-                    }
-                    if($temp['removedAddInsured'] !="" && $temp['newAddInsured'] != ""){
-                        $temp['liabilityChanges'] = true;
                     }
                 }
                 if($data['lossPayeesSelect'] == "yes"){
@@ -1694,7 +1695,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         } else {
                             $temp['removedlossPayees'] = "";
                         }
-                        if($temp['removedlossPayees'] !="" && $temp['newlossPayees'] != ""){
+                        if($temp['removedlossPayees'] !="" || $temp['newlossPayees'] != ""){
                             $temp['propertyChanges'] = true;
                         }
                     } else {
@@ -1740,7 +1741,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         } else {
                             $temp['removedadditionalNamedInsured'] = "";
                         }
-                        if($temp['removedadditionalNamedInsured'] !="" && $temp['newadditionalNamedInsured'] != ""){
+                        if($temp['removedadditionalNamedInsured'] !="" || $temp['newadditionalNamedInsured'] != ""){
                             $temp['liabilityChanges'] = true;
                         }
                     } else {
@@ -1809,7 +1810,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         } else {
                             $temp['removedadditionalLocations'] = "";
                         }
-                        if($temp['removedadditionalLocations'] !="" && $temp['newAdditionalLocations'] != ""){
+                        if($temp['removedadditionalLocations'] !="" || $temp['newAdditionalLocations'] != ""){
                             $temp['propertyChanges'] = true;
                             $temp['liabilityChanges'] = true;
                         }
