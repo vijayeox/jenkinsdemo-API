@@ -131,6 +131,8 @@ workflow()
     mkdir -p build/integrations/workflow
     cd ${OXHOME}/integrations/workflow
     echo -e "${YELLOW}Building workflow....${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/integrations/workflow/ProcessEngine/src/main/resources/* ProcessEngine/src/main/resources/
     docker run -t -v ${PWD}:/camunda --entrypoint ./dockerbuild.sh workflow_build
     echo -e "${YELLOW}Building workflow completed....${RESET}"
     echo -e "${YELLOW}Copying workflow to build folder....${RESET}"
