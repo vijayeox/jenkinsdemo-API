@@ -33,8 +33,8 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
        {from:'public/img',to:'img'},
-       "icon.png",
-       "icon_white.png"
+       "icon.svg",
+       "icon_white.svg"
     ]),
     new MiniCssExtractPlugin({
       filename: "[name].css",
