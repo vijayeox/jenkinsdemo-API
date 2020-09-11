@@ -10609,7 +10609,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\" target=\"_blank\">link</a> for more information.</h4>",
+					"content": "<h4>Please refer the document at the <a href=\"./apps/DiveInsurance/public/docs/GroupProfessionalLiabilityApplication.pdf\" target=\"_blank\">link</a> for more information.</h4>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html1",
@@ -14387,7 +14387,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 63,
+	"_vid": 65,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14405,6 +14405,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-07T09:32:50.575Z",
+	"modified": "2020-09-11T07:07:25.438Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }

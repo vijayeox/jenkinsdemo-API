@@ -132,6 +132,17 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
             $data['property_policy_id'] = $propertyPolicyDetails['policy_number'];
             $data['property_carrier'] = $propertyPolicyDetails['carrier'];
         }
+        if($endorsementOptions['modify_groupProfessionalLiability'] == true){
+            if(isset($data['groupPL'])){
+                if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+                    $policyDetails = $this->getPolicyDetails($data,$persistenceService,'Group Professional Liability');
+                    if($policyDetails){
+                        $data['group_policy_id'] = $policyDetails['policy_number'];
+                        $data['group_carrier'] = $policyDetails['carrier'];
+                    }
+                }
+            }
+        }
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
         if(!is_null($endorsementOptions)){
             $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
@@ -150,6 +161,11 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
         foreach ($temp as $key => $value) {
             if(is_array($temp[$key])){
                 $temp[$key] = json_encode($value);
+            }
+        }
+        if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+            if(!isset($data['group_certificate_no'])){
+                $temp['group_certificate_no'] = 'S123456789';
             }
         }
         if(isset($data['previous_policy_data'])){

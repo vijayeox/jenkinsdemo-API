@@ -48,8 +48,8 @@ class StoreEndorsementDocuments extends EndorsementDocument
             $data['property_policy_id'] = $propertyPolicyDetails['policy_number'];
             $data['property_carrier'] = $propertyPolicyDetails['carrier'];
         }
-        if(isset($data['groupPL'])){
-            if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+        if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+            if(isset($data['groupPL'])){
                 $policyDetails = $this->getPolicyDetails($data,$persistenceService,'Group Professional Liability');
                 if($policyDetails){
                     $data['group_policy_id'] = $policyDetails['policy_number'];
@@ -77,6 +77,11 @@ class StoreEndorsementDocuments extends EndorsementDocument
         foreach ($temp as $key => $value) {
             if(is_array($temp[$key])){
                 $temp[$key] = json_encode($value);
+            }
+        }
+        if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+            if(!isset($data['group_certificate_no'])){
+                $temp['group_certificate_no'] = 'S123456789';
             }
         }
         if(isset($data['previous_policy_data'])){
