@@ -36,6 +36,7 @@
       access to cash/credit card receipts/disbursements?
    pageName: Crime (printable)
    cell: L86
+   returnBoolean: 'Yes|No'
 -
    key: criminalbackgroundcheck
    Source Worksheet: Are criminal background checks performed on all employees?
@@ -483,9 +484,11 @@
    pageName: Garage Supplemental
    cell: C5
 -
-   key: aretheyinsuredelsewhere
-   Source Worksheet: 'If YES, is insurance coverage placed elsewhere for this exposure?'
+   key: doesinsuredrentvehicles
+   Source Worksheet: Does Insured rent vehicles other than rentals in conjunction with service
+      operations?
    pageName: Garage Supplemental
+   returnBoolean: "Daily Rental|"
    cell: C22
 -
    key: customerserviceloanerrentalprogram
