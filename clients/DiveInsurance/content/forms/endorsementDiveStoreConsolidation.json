@@ -12701,7 +12701,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['travelAgentEoPL'] != data['previous_travelEnO']){\n  if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n    var calculate = false;\n    if(data['travelAgentEoPL'] != data['previous_travelEnO']){\n        calculate = true;\n    }else if(parseFloat(data['travelAgentEOReceiptsPL']) != parseFloat(data['previous_travelAgentEOReceiptsPL'])){\n        calculate = true;\n    }\n    if(calculate == true){\n        if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n            value=(parseFloat(data[\"TAEOunder100k\"])||0)\n        }\n        else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n            value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n        }\n    }else{\n        value = 0;\n    }\n\n}else{\n    value = 0;\n}",
 						"key": "endoTravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -15149,6 +15149,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-11T07:07:49.361Z",
+	"modified": "2020-09-11T08:08:48.901Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
