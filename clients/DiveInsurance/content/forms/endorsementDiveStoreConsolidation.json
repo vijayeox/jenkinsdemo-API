@@ -12966,7 +12966,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "value=((parseFloat(data[\"endorsementLiabilityCoverage\"])||0)+(parseFloat(data[\"endononDivingPoolAmount\"])||0)+(parseFloat(data[\"endoMedicalExpenseFP\"])||0)+(parseFloat(data[\"endoNon-OwnedAutoFP\"]||0))+(parseFloat(data[\"endoExcessLiabilityFP\"])||0)+(parseFloat(data[\"endoTravelAgentEOFP\"])||0)).toFixed(0)",
+					"calculateValue": "value=((parseFloat(data[\"endorsementLiabilityCoverage\"])||0)+(parseFloat(data[\"endononDivingPoolAmount\"])||0)+(parseFloat(data[\"endoMedicalExpenseFp\"])||0)+(parseFloat(data[\"endoNon-OwnedAutoFP\"]||0))+(parseFloat(data[\"endoExcessLiabilityFP\"])||0)+(parseFloat(data[\"endoTravelAgentEOFP\"])||0)).toFixed(0)",
 					"key": "liabilityCoveragesTotalPL",
 					"type": "number",
 					"input": true,
@@ -15149,6 +15149,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-11T11:17:51.273Z",
+	"modified": "2020-09-11T13:25:36.355Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
