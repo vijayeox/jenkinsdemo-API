@@ -28,8 +28,8 @@ class RoleService extends AbstractService
     public function saveRole($params, &$data, $roleId = null)
     {
         if (isset($params['orgId'])) {
-            if (!AuthContext::get(AuthConstants::REGISTRATION) && !SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+            if (!AuthContext::get(AuthConstants::REGISTRATION) && (!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))))) {
                 throw new AccessDeniedException("You do not have permissions create/update role");
             } else {
                 $orgId = $this->getIdFromUuid('ox_organization', $params['orgId']);
@@ -65,19 +65,20 @@ class RoleService extends AbstractService
             //First, all the other roles are changed to default role 0, and the new record added will be default role 1
             $this->beginTransaction();
             $clause = "";
+            $params = [];
             if($orgId){
-                $clause .= " AND org_id =" . $orgId;
+                $clause .= " AND org_id =:orgId";                
+                $params['orgId'] = $orgId;
             }
             
             if ($data['default'] == 1 && $clause != "") {
                 $queryString = "UPDATE ox_role set default_role = 0 where id != 0 $clause";
-                $params = array("orgId" => $orgId);
-                $result = $this->executeQueryWithBindParameters($queryString, $params);
+                $result = $this->executeUpdateWithBindParameters($queryString, $params);
             }
 
             if (!isset($roleId) && isset($rolename)) {
                 $select = "SELECT id from ox_role where name = '" . $rolename . "' $clause";
-                $result = $this->executeQuerywithParams($select)->toArray();
+                $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
                 if (count($result) > 0) {
                     $roleId = $result[0]['id'];
                 }
@@ -85,7 +86,7 @@ class RoleService extends AbstractService
             if (isset($roleId)) {
                 $update = "UPDATE `ox_role` SET `name`= '" . $data['name'] . "', `description`= '" . 
                             $data['description'] . "', `default_role`= '" . $data['default'] . "' WHERE `id` = '" . $roleId . "' AND name not in ('ADMIN', 'MANAGER', 'EMPLOYEE') $clause";
-                $result1 = $this->runGenericQuery($update);
+                $result1 = $this->executeUpdateWithBindParameters($update,$params);
                 $count = $result1->getAffectedRows();
             } else {
                 if (!isset($rolename)) {
@@ -323,6 +324,7 @@ class RoleService extends AbstractService
         }
         $query = "SELECT r.* from ox_role r inner join ox_role_privilege rp on rp.role_id = r.id
                     where rp.app_id = :appId and $orgClause";
+                    // print_r($query);exit;
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
         return $result;
     }

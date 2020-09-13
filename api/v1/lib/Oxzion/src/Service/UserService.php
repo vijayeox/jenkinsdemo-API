@@ -390,8 +390,7 @@ class UserService extends AbstractService
             $result = $this->createUser($params, $data);
             $select = "SELECT id from `ox_user` where username = '" . $data['username'] . "'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
-            $this->addUserRole($resultSet[0]['id'], 'ADMIN');
-            $this->addAppRolesToUser($resultSet[0]['id'],$org);
+            $this->addUserRole($resultSet[0]['id'], 'ADMIN');            
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -407,9 +406,9 @@ class UserService extends AbstractService
         return $resultSet[0]['id'];
     }
 
-    private function addAppRolesToUser($userId,$org){
-        if (isset($org['app_id'])) {
-            $appId = $this->getIdFromUuid('ox_app',$org['app_id']);
+    public function addAppRolesToUser($userId,$appId){
+        if (isset($appId)) {
+            $appId = $this->getIdFromUuid('ox_app',$appId);
             $result = $this->roleService->getRolesByAppId($appId);
             foreach ($result as $role) {
                 $this->addUserRole($userId,$role['name']);
@@ -419,11 +418,16 @@ class UserService extends AbstractService
 
     private function addUserRole($userId, $roleName)
     {
-        if ($user = $this->getDataByParams('ox_user', array('id', 'orgid'), array('id' => $userId))->toArray()) {
+        if (!is_numeric($userId)) {
+            $user = $this->getDataByParams('ox_user', array('id', 'orgid'), array('uuid' => $userId))->toArray();
+        }else{
+           $user = $this->getDataByParams('ox_user', array('id', 'orgid'), array('id' => $userId))->toArray(); 
+        }
+        if ($user){
             if ($role = $this->getDataByParams('ox_role', array('id'), array('org_id' => $user[0]['orgid'], 'name' => $roleName))->toArray()) {
-                if (!$this->getDataByParams('ox_user_role', array(), array('user_id' => $userId, 'role_id' => $role[0]['id']))->toArray()) {
+                if (!$this->getDataByParams('ox_user_role', array(), array('user_id' => $user[0]['id'], 'role_id' => $role[0]['id']))->toArray()) {
                     $data = array(array(
-                        'user_id' => $userId,
+                        'user_id' => $user[0]['id'],
                         'role_id' => $role[0]['id'],
                     ));
                     $result = $this->multiInsertOrUpdate('ox_user_role', $data);
@@ -1396,6 +1400,19 @@ class UserService extends AbstractService
             return $result[0];
         }else{
             return 0;
+        }
+    }
+
+    public function getContactUserForOrg($orgId){
+         $select = "SELECT ou.uuid as userId,ou.username,ou.firstname,ou.lastname
+                    FROM ox_user ou INNER JOIN ox_organization org ON org.contactid = ou.id 
+                    WHERE org.uuid=:orgId";
+        $selectParams = array("orgId" => $orgId);
+        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+        if(count($result) > 0){
+            return $result[0];
+        }else{
+            return $result;
         }
     }
 }
