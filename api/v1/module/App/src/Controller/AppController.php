@@ -229,32 +229,30 @@ class AppController extends AbstractApiController
         }
     }
 
-/*-------------------------------------------------------------------------------------------------------------*/
-/* Removed because AppService->installAppForOrg is deprecated/removed. */
-/*-------------------------------------------------------------------------------------------------------------*/
     /**
      * POST App Install API
      * @api
-     * @link /app/:appId/appinstall
+     * @link /app/:appId/install/org/:orgId
      * @method POST
      * ! Deprecated - Does not look like this api is being used any more, the method that calls the service isnt available.
      * ? Need to check if this can be removed
      * @return array of Apps
      */
-/*
-    public function appInstallAction($data)
+
+        public function installAppToOrgAction()
     {
-        $data = $this->extractPostData();
+        $params = $this->extractPostData();
+        $data = array_merge($params, $this->params()->fromRoute());
+        $this->log->info(__CLASS__ . "-> \n Create App Registry- " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->appService->installAppForOrg($data);
-            return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+            $count = $this->appService->installAppToOrg($data['appId'],$data['orgId']);
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
+        return $this->getSuccessResponseWithData($data, 200);
     }
-*/
+
 
     /**
      * POST Assignment API
