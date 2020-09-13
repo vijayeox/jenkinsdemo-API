@@ -81,35 +81,4 @@ class AppRegisterContollerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testAddToAppRegistry()
-    {
-        $data = ['app_name' => 'Admin'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/org/b0971de7-0387-48ea-8f29-5d3704d96a46/addtoappregistry', 'POST', $data);
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppRegisterController::class);
-        $this->assertControllerClass('AppRegisterController');
-        $this->assertMatchedRouteName('addtoappregistry');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['app_name'], $data['app_name']);
-    }
-
-    public function testAddToAppRegistryDuplicated()
-    {
-        $data = ['app_name' => 'SampleApp'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/org/' . $this->testOrgUuid . '/addtoappregistry', 'POST', $data);
-        $this->assertResponseStatusCode(409);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppRegisterController::class);
-        $this->assertControllerClass('AppRegisterController');
-        $this->assertMatchedRouteName('addtoappregistry');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
 }
