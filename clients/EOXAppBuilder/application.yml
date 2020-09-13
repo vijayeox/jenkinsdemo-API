@@ -25,14 +25,26 @@ org:
 privilege:
     -
         name: MANAGE_APPLICATION
-        permission: 1
+        permission: 3
+    -
+        name: MANAGE_INSTALL_APP
+        permission: 3
+    -
+        name: MANAGE_DEPLOY_APP
+        permission: 3
 role:
     -
         name: 'App Developer'
         privileges:
             -
                 privilege_name: MANAGE_APPLICATION
-                permission: 1
+                permission: 3
+            -
+                privilege_name: MANAGE_INSTALL_APP
+                permission: 3
+            -
+                privilege_name: MANAGE_DEPLOY_APP
+                permission: 3
         uuid: 33818081-b18d-456d-a74d-0493a20a2887
 pages:
     -
