@@ -39,19 +39,19 @@ content:
                     icon: 'far fa-pencil-alt'
                 -
                     name: Deploy
-                    rule: "true"
+                    rule: 'profile.privileges.MANAGE_DEPLOY_APP_WRITE==true'
                     details:
                         -
                             type: Update
                             successMessage: 'Application Successfully Deployed'
                             params:
-                                url: /app/{{Level1_uuid}}/deploy
+                                url: /app/{{uuid}}/deploy
                                 disableAppId: true
                     icon: 'far fa-rocket-launch'
                     updateOnly: true
                 -
                     name: Install
-                    rule: "false"
+                    rule: '''{{status}}'' == 4 && profile.privileges.MANAGE_INSTALL_APP_WRITE==true'
                     details:
                         -
                             type: List
@@ -67,9 +67,7 @@ content:
                                                  type: Update
                                                  successMessage: 'Application Successfully Installed'
                                                  params:
-                                                    url: /app/org/{{uuid}}/addtoappregistry
-                                                    postData:
-                                                        app_name: "{{Level1_name}}"
+                                                    url: /app/{{Level1_uuid}}/install/org/{{uuid}}
                                                     disableAppId: true
                                          icon: 'far fa-download'
                                          updateOnly: true
