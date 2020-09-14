@@ -14,10 +14,10 @@ use Oxzion\Service\JobService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
-use Oxzion\Utils\ExecUtils;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Utils\RestClient;
 use Oxzion\EntityNotFoundException;
 use Oxzion\FileNotFoundException;
 use Oxzion\FileContentException;
@@ -70,6 +70,7 @@ class AppService extends AbstractService
         $this->pageService = $pageService;
         $this->jobService = $jobService;
         $this->userService = $userService;
+        $this->restClient = new RestClient(null);
         $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job","view","symlink");
     }
 
@@ -273,7 +274,7 @@ class AppService extends AbstractService
             $this->setupOrg($ymlData, $path);
             $appData = &$ymlData['app'];
             $appData['status'] = App::PUBLISHED;
-            $this->logger->info("\n App Data before app update - ", print_r($appData, true));
+            $this->logger->info("\n App Data before app update - " . print_r($appData, true));
         $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
     }catch(Exception $e){
         $this->removeViewAppOnError($path);
@@ -343,10 +344,7 @@ private function removeViewAppOnError($path){
 }
 
 public function processSymlinks($yamlData, $path){
-    $appUuid = $yamlData['app']['uuid'];
-    $appName = $yamlData['app']['name'];
-    $orgUuid = isset($yamlData['org']['uuid']) ? $yamlData['org']['uuid'] : null;
-    $this->setupLinks($path, $appName, $appUuid, $orgUuid);
+    $this->setupLinksAndBuild($path, $yamlData['app']['uuid']);
 }
 
 public function setupOrg(&$yamlData, $path = null){
@@ -623,38 +621,83 @@ private function checkWorkflowData(&$data,$appUuid)
         }
     }
 
-    private function setLinkAndRunBuild($target,$link){
-        $flag = 0;
-        $folderCount = 0;
-        if (file_exists($target) && is_dir($target)) {
-            $files = new FileSystemIterator($target);
-            foreach ($files as $file) {
-                if ($file->isDir()) {
-                    $folderCount += 1;
+    private function setLinkAndRunBuild($appPath, $appId){
+        $defaultFolders = array(
+            [
+                "type" => "app",
+                "sourceFolder" => $appPath . "view/apps/",
+                "viewLink" => $this->config['APPS_FOLDER']
+            ],
+            [
+                "type" => "theme",
+                "sourceFolder" => $appPath . "view/themes/",
+                "viewLink" => $this->config['THEME_FOLDER']
+            ],
+            [
+                "type" => "gui",
+                "sourceFolder" => $appPath . "view/gui/",
+                "viewLink" => $this->config['GUI_FOLDER']
+            ]
+        );
+        $buildFolders = [];
+        foreach ($defaultFolders as $folderConfig) {
+            if (file_exists($folderConfig["sourceFolder"]) && is_dir($folderConfig["sourceFolder"])) {
+                if ($folderConfig["type"] == "gui") {
+                    $files = array($folderConfig["sourceFolder"]);
+                } else {
+                    $files = new FileSystemIterator($folderConfig["sourceFolder"]);
+                }
+
+                foreach ($files as $file) {
+                    $this->logger->info("\n Symlinking files - " . print_r($folderConfig["type"] . "->" . $file, true));
+                    try {
+                        $checkDirectory = $file->isDir();
+                    } catch (\Throwable $th) {
+                        $checkDirectory = is_dir($file);
+                    }
+                    if ($checkDirectory) {
+
+                        if ($folderConfig["type"] == "gui") {
+                            $targetName = $folderConfig["sourceFolder"];
+                            $linkName = $folderConfig["viewLink"] . $appId;
+                        } else {
+                            $targetName = $file->getPathName();
+                            $linkName = $folderConfig["viewLink"] . $file->getFilename();
+                        }
+
+                        if (is_link($linkName)) {
+                            unlink($linkName);
+                        }
+                        if (file_exists($targetName)) {
+                            $this->setupLink($targetName, $linkName);
+                            array_push($buildFolders, [
+                                "path" => $targetName,
+                                "type" => $folderConfig["type"]
+                            ]);
+                        }
+                    }
                 }
             }
-            foreach ($files as $file) {
-                $this->logger->info("\n Symlinking files" . print_r($file, true));
-                if ($file->isDir()) {
-                    $targetName = $file->getPathName();
-                    $linkName = $link . $file->getFilename();
-                    if (is_link($linkName)) {
-                        unlink($linkName);
-                    }
-                    if (file_exists($targetName)) {
-                        $this->setupLink($targetName, $linkName);
-                        $this->executeCommands($targetName);
-                        $flag = 1;
-                    }
-                }
+        }
+
+        if (count($buildFolders) > 0) {
+            array_push($buildFolders, [
+                "path" => $this->config['APPS_FOLDER'] . "../bos/",
+                "type" => "bos"
+            ]);
+            $restClient = $this->restClient;
+            $output = json_decode($restClient->post(($this->config['applicationUrl'] . "/installer"),
+                ["folders" => $buildFolders]
+            ), true);
+            if ($output["status"] != "Success") {
+                $this->logger->info("\n View Build Failed - App Path " . $appPath);
+                throw new ServiceException('Failed to complete view build for the application.', 'E_APP_VIEW_BUILD_FAIL', 0);
             }
-            if ($flag == 1) {
-                $runDiscover = $this->executePackageDiscover();
-            }
+            $this->logger->info("\n Finished Building App (View) - " . print_r($output, true));
         }
     }
 
-    private function setupLinks($path, $appName, $appId)
+    private function setupLinksAndBuild($path, $appId)
     {
         $link = $this->config['DELEGATE_FOLDER'] . $appId;
         $target = $path . "data/delegate";
@@ -689,22 +732,8 @@ private function checkWorkflowData(&$data,$appUuid)
         if (file_exists($formsTarget)) {
             $this->setupLink($formsTarget, $formlink);
         }
-        $guilink = $this->config['GUI_FOLDER'] . $appId;
-        $guiTarget = $path . "view/gui";
-        if (is_link($guilink)) {
-            FileUtils::unlink($guilink);
-        }
-        if (file_exists($guiTarget)) {
-            $this->setupLink($guiTarget, $guilink);
-            $this->executeCommands($guilink);
-        }
-
-        $appTarget = $path . "view/apps/";
-        $themeTarget = $path."view/themes";
-        $themeLink = $this->config['THEME_FOLDER'];
-        $appLink = $this->config['APPS_FOLDER'];
-        $this->setLinkAndRunBuild($themeTarget,$themeLink);
-        $this->setLinkAndRunBuild($appTarget,$appLink);
+      
+        $this->setLinkAndRunBuild($path, $appId);
     }
 
     private function setupOrgLinks($path, $appId, $orgId){
@@ -719,33 +748,6 @@ private function checkWorkflowData(&$data,$appUuid)
             }
         }
         
-    }
-
-    private function executePackageDiscover()
-    {
-        $app = $this->config['APPS_FOLDER'];
-        $command_one = "cd " . $app . "../bos/";
-        $command = $app . "../bos/";
-        if (!file_exists($command . "src/client/local.js")) {
-            copy($command . 'src/client/local.js.example', $command . 'src/client/local.js');
-        }
-        $command_two = "npm run package:discover";
-        $output = ExecUtils::execCommand($command_one . " && " . $command_two);
-        $this->logger->info("PAckage Discover .. \n" . print_r($output, true));
-    }
-
-    private function executeCommands($link)
-    {
-        $link = str_replace(' ', '\ ', $link);
-        $command_one = "cd " . $link;
-        $command_two = "npm install";
-        $command_three = "npm run build";
-        $command = $command_one . " && " . $command_two;
-        $output = ExecUtils::execCommand($command);
-        $this->logger->info("Executing command $command .. \n" . print_r($output, true));
-        $command = $command_one . " && " . $command_three;
-        $output = ExecUtils::execCommand($command);
-        $this->logger->info("Executing command $command .. \n" . print_r($output, true));
     }
 
     private function setupLink($target, $link)
