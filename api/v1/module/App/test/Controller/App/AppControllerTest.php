@@ -482,28 +482,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($form[0]['count'], 1);
     }
 
-    public function testDeployAppWithFieldValidationErrors(){
-        $this->setUpTearDownHelper->setupAppDescriptor('application13.yml');
-        $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../../sampleapp/'];
-        $this->dispatch('/app/deployapp', 'POST', $data);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(406);
-        $this->assertEquals('error', $content['status']);
-        $this->assertEquals('Validation error(s).', $content['message']);
-        $errors = $content['data']['errors'];
-        $this->assertEquals(2, count($errors));
-        $this->assertEquals("Field padi - Value of property 'decimalLimit' is '2' expected ''", $errors[0]);
-        $this->assertEquals("Field dateTime - Unexpected", $errors[1]);
-        $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
-        $yaml = Yaml::parse(file_get_contents($path . $filename));
-        $appName = $yaml['app']['name'];
-        $YmlappUuid = $yaml['app']['uuid'];
-        $query = 'SELECT uuid FROM ox_app WHERE id=(SELECT max(id) from ox_app)';
-        $newlyCreatedAppId = $this->executeQueryTest($query)[0]['uuid'];
-    }
-
     private function unlinkFolders($appUuid, $appName, $orgUuid = null)
     {
         $file = $this->config['DELEGATE_FOLDER'] . $appUuid;
@@ -569,19 +547,6 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         FileUtils::rmDir($appname);
         $this->unlinkFolders($YmlappUuid, $appname);
-    }
-
-    public function testDeployAppWithWrongUuidAndDuplicateNameInDatabase()
-    {
-        $this->setUpTearDownHelper->setupAppDescriptor('application8.yml');
-        $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../../sampleapp/'];
-        $this->dispatch('/app/deployapp', 'POST', $data);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(500);
-        $this->setDefaultAsserts();
-        $this->assertEquals($content['status'], 'error');
-        unlink(__DIR__ . '/../../sampleapp/application.yml');
     }
 
     public function testDeployAppWithWrongUuidAndUniqueNameInDatabase()

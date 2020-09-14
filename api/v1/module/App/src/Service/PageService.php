@@ -136,6 +136,7 @@ class PageService extends AbstractService
     }
     public function getPageByName($appId,$pageName){
         try{
+            $pageName = is_array($pageName) ? $pageName['name'] : $pageName;
             $select = "SELECT ox_app_page.* FROM ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app_page.name=? and ox_app.uuid=?";
             $whereQuery = array($pageName,$appId);
             $response = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();

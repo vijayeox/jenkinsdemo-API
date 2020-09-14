@@ -472,7 +472,7 @@ public function processPage(&$yamlData, $path)
             }else{
                 $page = $pageData;
             }
-            $pageId = $pageData['uuid'];
+            $pageId = isset($pageData['uuid']) ? $pageData['uuid'] : UuidUtil::uuid();
             $this->logger->info('the page data is: '.print_r($page, true));
             $routedata = array("appId" => $appUuid);
             $result = $this->pageService->savePage($routedata, $page, $pageId);
@@ -1049,9 +1049,10 @@ private function checkWorkflowData(&$data,$appUuid)
         }
         $this->logger->info("Data modified before the transaction", $data);
         try {
+            $appSingleArray = array_unique(array_map('current', $list));
             $this->beginTransaction();
-            $this->updateAppStatus($list,APP::PRE_BUILT,APP::DELETED);
-            $this->updateAppStatus($list,APP::MY_APP,APP::IN_DRAFT);
+            $this->updateAppStatus($appSingleArray,APP::PRE_BUILT,APP::DELETED);
+            $this->updateAppStatus($appSingleArray,APP::MY_APP,APP::IN_DRAFT);
             $select = "SELECT name FROM ox_app where name in ('" . implode("','", $appSingleArray) . "')";
             $result = $this->executeQuerywithParams($select)->toArray();
             $result = array_unique(array_map('current', $result));
@@ -1101,8 +1102,7 @@ private function checkWorkflowData(&$data,$appUuid)
         return 1;
     }
 
-    private function updateAppStatus($appList,$appType,$appStatus){
-       $appSingleArray = array_unique(array_map('current', $appList));
+    private function updateAppStatus($appSingleArray,$appType,$appStatus){
        $update = "UPDATE ox_app SET status = $appStatus where ox_app.name NOT IN ('" . implode("','", $appSingleArray) . "') and ox_app.type=".$appType;
        $this->runGenericQuery($update);
    }
