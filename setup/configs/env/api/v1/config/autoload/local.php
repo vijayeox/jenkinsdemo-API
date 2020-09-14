@@ -22,7 +22,7 @@ if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
     $host = 'localhost';
     $db = "oxzionapi_test";
     $username = "root";
-    $password = "password";
+    $password = "root";
 }
 
 return [
