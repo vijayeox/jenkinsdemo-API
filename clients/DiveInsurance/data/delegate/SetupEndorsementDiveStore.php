@@ -176,7 +176,7 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
                     $policy['previous_groupTaxPercentage'] = isset($data['groupTaxPercentage']) ? $data['groupTaxPercentage'] : 0;
                     $policy['previous_groupPAORfee'] = isset($data['groupPAORfee']) ? $data['groupPAORfee'] : 0;
-                    $policy['previous_groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
+                    $policy['previous_groupProfessionalLiability'] = isset($data['groupProfessionalLiability']) ? $data['groupProfessionalLiability'] : 0;
                     $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
                 } else {
                     $policy['previous_groupCoverage'] = 0;
@@ -184,7 +184,7 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_groupPadiFeeAmount'] = 0;
                     $policy['previous_groupTaxPercentage'] = 0;
                     $policy['previous_groupPAORfee'] = 0;
-                    $policy['previous_groupProfessionalLiabilityPrice'] = 0;
+                    $policy['previous_groupProfessionalLiability'] = 0;
                     $policy['previous_groupTotalAmount'] = 0;
                 }
                 $policy['previous_groupCoverageSelect'] = $data['groupCoverageSelect'];

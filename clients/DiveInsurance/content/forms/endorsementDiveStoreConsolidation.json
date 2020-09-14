@@ -14373,12 +14373,20 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data.groupProfessionalLiabilitySelect == 'yes'){\n  value = (parseFloat(data[\"groupTotalAmount\"])||0)\n} else {\n  value = 0;\n}",
-					"key": "groupProfessionalLiability",
+					"calculateValue": "if(data.groupProfessionalLiabilitySelect == 'yes'){\n    if(parseFloat(data.groupProfessionalLiability) != parseFloat(data.previous_groupProfessionalLiability)){\n         value = (parseFloat(data[\"groupTotalAmount\"])||0)  \n    }\n} else {\n  value = 0;\n}",
+					"key": "endoGroupProfessionalLiability",
 					"type": "number",
 					"input": true,
 					"inputType": "number",
 					"lockKey": true,
+					"hideOnChildrenHidden": true
+				}, {
+					"label": "groupProfessionalLiability",
+					"calculateValue": "if(data['endoGroupProfessionalLiability'] > 0){\n  value = data['previous_groupProfessionalLiability'] + data['endoGroupProfessionalLiability'];\n} else {\n  value = data['previous_groupProfessionalLiability']\n}",
+					"key": "groupProfessionalLiability",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
 					"hideOnChildrenHidden": true
 				}],
 				"size": "md",
@@ -14531,7 +14539,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n}",
+					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"endoGroupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"endoGroupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n}",
 					"key": "totalAmount",
 					"type": "number",
 					"decimalLimit": 2,
@@ -15149,6 +15157,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-11T13:25:36.355Z",
+	"modified": "2020-09-11T15:09:42.912Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
