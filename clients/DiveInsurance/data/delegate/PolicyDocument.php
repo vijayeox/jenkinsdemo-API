@@ -400,9 +400,24 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($temp['previous_additionalInsured'])){
                         unset($temp['previous_additionalInsured']);
                     }
-                    if(isset($temp['additionalInsured'])){
+                    if($this->type != "endorsement"){
+                        if(isset($temp['additionalInsured']) && $temp['additional_insured_select'] == 'addAdditionalInsureds'){
+                        $this->logger->info("DOCUMENT additionalInsured");
+                        $temp['additionalInsured'] = json_decode($temp['additionalInsured'],true);
+                        for($i = 0;$i< sizeof($temp['additionalInsured']);$i++){
+                            $temp['additionalInsured'][$i]['state_in_short'] = $this->getStateInShort($temp['additionalInsured'][$i]['state'],$persistenceService);
+                        }
+                        $temp['additionalInsured'] = json_encode($temp['additionalInsured']);
+                        $this->sortArrayByName($temp,'additionalInsured');
+                        $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                         unset($temp['additionalInsured']);
+                        }    
+                    }else{
+                        if(isset($temp['additionalInsured'])){
+                            unset($temp['additionalInsured']);
+                        }
                     }
+                    
                     if(isset($this->template[$temp['product']]['cover_letter'])){
                         $this->logger->info("DOCUMENT cover_letter");
                         $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
