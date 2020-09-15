@@ -11021,6 +11021,7 @@
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
+											"required": true,
 											"customMessage": "Please enter the Name of the Additional Insured"
 										},
 										"errorLabel": "Additional Insured Name",
@@ -11483,6 +11484,9 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
@@ -14387,7 +14391,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 65,
+	"_vid": 66,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14405,6 +14409,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-11T07:07:25.438Z",
+	"modified": "2020-09-15T12:55:38.114Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
