@@ -403,11 +403,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if($this->type != "endorsement"){
                         if(isset($temp['additionalInsured']) && $temp['additional_insured_select'] == 'addAdditionalInsureds'){
                         $this->logger->info("DOCUMENT additionalInsured");
-                        $temp['additionalInsured'] = json_decode($temp['additionalInsured'],true);
-                        for($i = 0;$i< sizeof($temp['additionalInsured']);$i++){
-                            $temp['additionalInsured'][$i]['state_in_short'] = $this->getStateInShort($temp['additionalInsured'][$i]['state'],$persistenceService);
-                        }
-                        $temp['additionalInsured'] = json_encode($temp['additionalInsured']);
                         $this->sortArrayByName($temp,'additionalInsured');
                         $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                         unset($temp['additionalInsured']);
@@ -550,6 +545,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($data['product'] != 'Group Professional Liability'){
                     if ((!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) ))) {
                         if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
+                            print_r($temp);
                             $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                             $this->policyCOI($policyDocuments,$temp,$documents);
                          }
