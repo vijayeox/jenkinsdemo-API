@@ -82,22 +82,6 @@
       </div>
       {/if}
 
-
-      <!-- {if isset($additionalInsured)}
-      <div class = "box">
-        <center><b><u>***Additional Insured Schedule***</u></b></center>
-        {assign var=list value=$additionalInsured|json_decode:true}
-        {foreach from=$list item=$additional}
-          {if isset($additional.name) && ($additional.name != '')}
-          <p class = "ai_list" style = "font-size:15px;text-transform: uppercase;">
-            {$additional.name}
-          </p>
-      {/if}
-        {/foreach}
-        <div style="margin-bottom: 5%"></div>
-        <center><b>Additional Insured coverage applies only with respect to liability arising out of the operations of the named insureds</b></center>
-      </div>
-      {/if} -->
      {if (isset($newAddInsured) && $newAddInsured != "") || (isset($removedAddInsured) && $removedAddInsured != "")}
       <div class = "box">
         <center><b><u>***Additional Insured Schedule***</u></b></center>
