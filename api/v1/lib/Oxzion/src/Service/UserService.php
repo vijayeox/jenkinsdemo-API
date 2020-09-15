@@ -142,8 +142,8 @@ class UserService extends AbstractService
     {
         if (!$register) {
             if (isset($params['orgId']) && $params['orgId'] != '') {
-                if ((!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                    ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands'])) {
+                if ((!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
+                    ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands']))) {
                     throw new AccessDeniedException("You do not have permissions create user");
                 } else {
                     $data['orgid'] = $this->getIdFromUuid('ox_organization', $params['orgId']);
