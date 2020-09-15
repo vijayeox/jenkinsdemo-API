@@ -8475,12 +8475,20 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "var coverageFp = parseFloat(data[\"CoverageFP\"]);\nvalue=(coverageFp/10).toFixed(0);",
-													"key": "ALCoverageFP",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALCoverageFP) > 0 && parseFloat(data.endorsementLiabilityCoverage) == 0){\n    value = 0;\n  }else{\n    value = (parseFloat(data[\"CoverageFP\"])/10).toFixed(0);  \n  }\n}",
+													"key": "endoALCoverageFP",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "ALCoverageFP",
+													"calculateValue": "if(row.ALCoverageFP > 0){\n  value = row.previous_ALCoverageFP+ row.endoALCoverageFP;\n} else {\n  value = row.previous_ALCoverageFP;\n}",
+													"key": "ALCoverageFP",
+													"type": "hidden",
+													"input": true,
+													"tableView": false,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Non-Diving Pool",
@@ -8493,12 +8501,20 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if ((parseFloat(row.ALPoolLiability)||0) > 50000) {\n  value = data[\"poolLiabilityOver50k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 20000) {\n  value = data[\"poolLiabilityOver20k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 0) {\n  value = data[\"poolLiabilityOver0\"];\n} else {\n  value = 0;\n}",
-													"key": "ALnonDivingPoolAmount",
+													"calculateValue": "if(row.ALPoolLiability != row.previous_ALPoolLiability){\n  if ((parseFloat(row.ALPoolLiability)||0) > 50000) {\n    value = data[\"poolLiabilityOver50k\"];\n  } else if ((parseFloat(row.ALPoolLiability)||0) > 20000) {\n    value = data[\"poolLiabilityOver20k\"];\n  } else if ((parseFloat(row.ALPoolLiability)||0) > 0) {\n    value = data[\"poolLiabilityOver0\"];\n  } else {\n    value = 0;\n  }  \n}else{\n  value = 0;\n}",
+													"key": "endoALnonDivingPoolAmount",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "ALnonDivingPoolAmount",
+													"calculateValue": "if(row.endoALnonDivingPoolAmount > 0){\n  value = row.previous_ALnonDivingPoolAmount + row.endoALnonDivingPoolAmount;\n} else {\n  value = row.previous_ALnonDivingPoolAmount;\n}",
+													"key": "ALnonDivingPoolAmount",
+													"type": "hidden",
+													"input": true,
+													"tableView": false,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Travel Agent E & O",
@@ -8512,12 +8528,20 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = parseFloat(data['TravelAgentEOFP']/10).toFixed(0);",
-													"key": "ALTravelAgentEOFP",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALTravelAgentEOFP) > 0 && parseFloat(data['endoTravelAgentEOFP']) == 0){\n    value = 0;  \n  }else{\n    value = (parseFloat(data['TravelAgentEOFP'])/10).toFixed(0);\n  }\n}",
+													"key": "endoALTravelAgentEOFP",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "ALTravelAgentEOFP",
+													"calculateValue": "if(row.endoALTravelAgentEOFP > 0){\n  value = row.previous_ALTravelAgentEOFP + row.endoALTravelAgentEOFP;\n} else {\n  value = row.previous_ALTravelAgentEOFP;\n}",
+													"key": "ALTravelAgentEOFP",
+													"type": "hidden",
+													"input": true,
+													"tableView": false,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Medical Expense",
@@ -8530,12 +8554,20 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    value = ((parseFloat(data[\"medicalExpense\"])||0)/10).toFixed(0);\n  }\n  else{\n    value = 0;\n  }\n}",
-													"key": "ALMedicalExpenseFP",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    if(parseFloat(row.previous_ALMedicalExpenseFP) > 0 && parseFloat(data.endoMedicalExpenseFp) == 0){\n      value = 0;\n    }else{\n      value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0); \n    }\n  }\n  else{\n    value = 0;\n  }\n}",
+													"key": "endoALMedicalExpenseFP",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "ALMedicalExpenseFP",
+													"calculateValue": "if(row.endoALMedicalExpenseFp > 0){\n  value = row.previous_ALMedicalExpenseFP + row.endoALMedicalExpenseFp;\n} else {\n  value = row.previous_ALMedicalExpenseFP;\n}",
+													"key": "ALMedicalExpenseFP",
+													"type": "hidden",
+													"input": true,
+													"tableView": false,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Non-Owned Auto",
@@ -8548,12 +8580,20 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);",
-													"key": "ALNonOwnedAutoFP",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALNonOwnedAutoFP) > 0 && parseFloat(data[\"endoNon-OwnedAutoFP\"]) == 0){\n    value =0;\n  }else{\n    value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(0);  \n  }\n}",
+													"key": "endoALNonOwnedAutoFP",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "ALNonOwnedAutoFP",
+													"calculateValue": "if(row.endoALNonOwnedAutoFP > 0){\n  value = row.previous_ALNonOwnedAutoFP + row.endoALNonOwnedAutoFP;\n} else {\n  value = row.previous_ALNonOwnedAutoFP;\n}",
+													"key": "ALNonOwnedAutoFP",
+													"type": "hidden",
+													"input": true,
+													"tableView": false,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Excess Liability",
@@ -8566,12 +8606,20 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(0);",
-													"key": "ALExcessLiabilityFP",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALExcessLiabilityFP) > 0 && parseFloat(data[\"endoExcessLiabilityFP\"]) == 0){\n    value = 0;\n  }else{\n    value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(0);  \n  }\n}",
+													"key": "endoALExcessLiabilityFP",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "ALExcessLiabilityFP",
+													"calculateValue": "if(row.endoALExcessLiabilityFP > 0){\n  value = row.previous_ALExcessLiabilityFP + row.endoALExcessLiabilityFP;\n} else {\n  value = row.previous_ALExcessLiabilityFP;\n}",
+													"key": "ALExcessLiabilityFP",
+													"type": "hidden",
+													"input": true,
+													"tableView": false,
 													"hideOnChildrenHidden": false
 												}, {
 													"label": "Lake quarry Charges",
@@ -8584,12 +8632,20 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  value = 4419\n} else {\n  value =0;\n}",
-													"key": "ALlakeQuarry",
+													"calculateValue": "if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL != row.previous_ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  value = 4419\n  } else {\n    value =0;\n  }\n}else{\n  value = 0;\n}",
+													"key": "endoALlakeQuarry",
 													"type": "number",
 													"input": true,
 													"inputType": "number",
 													"lockKey": true,
+													"hideOnChildrenHidden": false
+												}, {
+													"label": "ALlakeQuarry",
+													"calculateValue": "if(row.endoALlakeQuarry > 0){\n  value = row.previous_ALlakeQuarry + row.endoALlakeQuarry;\n} else {\n  value = row.previous_ALlakeQuarry;\n}",
+													"key": "ALlakeQuarry",
+													"type": "hidden",
+													"input": true,
+													"tableView": false,
 													"hideOnChildrenHidden": false
 												}],
 												"width": 12,
@@ -8675,12 +8731,19 @@
 														"requireDecimal": false,
 														"inputFormat": "plain",
 														"clearOnHide": false,
-														"calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.additionalLocationPropertyTotal)||0;\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
-														"key": "ALContentsFP",
+														"calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar total1 = (parseFloat(row.previous_ALBuildingReplacementValue)||0) + (parseFloat(row.previous_additionalLocationPropertyTotal)||0) + (parseFloat(row.previous_ALLossofBusIncome)||0);\nif(total != total1){\n  var amount = parseFloat(row.additionalLocationPropertyTotal)||0;\n  var option = row.ALPropertyCoverageOption;\n  if (total >= 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 250000 && total < 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 100000 && total < 250000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n  } else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total > 0 && total < 100000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n  } else {\n      value = 0;\n  }  \n}else{\n  value = 0;\n}",
+														"key": "endoALContentsFP",
 														"type": "number",
 														"input": true,
 														"inputType": "number",
 														"lockKey": true
+													}, {
+														"label": "ALContentsFP",
+														"calculateValue": "if(row.endoALContentsFP > 0){\n  value = row.previous_ALContentsFP + row.endoALContentsFP;\n} else {\n  value = row.previous_ALContentsFP\n}",
+														"key": "ALContentsFP",
+														"type": "hidden",
+														"input": true,
+														"tableView": false
 													}]
 												}],
 												[{
@@ -8694,12 +8757,20 @@
 														"delimiter": false,
 														"requireDecimal": false,
 														"inputFormat": "plain",
-														"calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.ALLossofBusIncome)\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}",
-														"key": "ALLossofBusIncomeFP",
+														"clearOnHide": false,
+														"calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar total1 = (parseFloat(row.previous_ALBuildingReplacementValue)||0) + (parseFloat(row.previous_additionalLocationPropertyTotal)||0) + (parseFloat(row.previous_ALLossofBusIncome)||0);\nif(total != total1){\n  var amount = parseFloat(row.ALLossofBusIncome)\n  var option = row.ALPropertyCoverageOption;\n  if (total >= 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 250000 && total < 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total >= 100000 && total < 250000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n  } else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n  } else if (total > 0 && total <= 100000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n  } else {\n      value = 0;\n  }  \n}else{\n  value = 0;  \n}",
+														"key": "endoALLossofBusIncomeFP",
 														"type": "number",
 														"input": true,
 														"inputType": "number",
 														"lockKey": true
+													}, {
+														"label": "ALLossofBusIncomeFP",
+														"calculateValue": "if(row.endoALLossofBusIncomeFP > 0){\n  value = row.previous_ALLossofBusIncomeFP + row.endoALLossofBusIncomeFP;\n} else {\n  value = row.previous_ALLossofBusIncomeFP;\n}",
+														"key": "ALLossofBusIncomeFP",
+														"type": "hidden",
+														"input": true,
+														"tableView": false
 													}]
 												}],
 												[{
@@ -8714,12 +8785,19 @@
 														"requireDecimal": false,
 														"inputFormat": "plain",
 														"clearOnHide": false,
-														"calculateValue": "var total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(row.additionalLocationPropertyTotal) + parseFloat(row.ALLossofBusIncome);\nvar amount = row.ALBuildingReplacementValue;\nvar option = row.ALPropertyCoverageOption;\nif (total > 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}",
-														"key": "ALBuildingLimitFP",
+														"calculateValue": "var total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(row.additionalLocationPropertyTotal) + parseFloat(row.ALLossofBusIncome);\nvar total1 = parseFloat(row.previous_ALBuildingReplacementValue) + parseFloat(row.previous_additionalLocationPropertyTotal) + parseFloat(row.previous_ALLossofBusIncome);\nif(total != total1){\n  var amount = row.ALBuildingReplacementValue;\n  var option = row.ALPropertyCoverageOption;\n  if (total > 500000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n  } else if (total > 500000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n  } else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n  } else if (total > 250000 && total < 500000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n  } else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n  } else if (total > 100000 && total < 250000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n  } else if (total > 0 && total < 100000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n  } else if (total > 0 && total < 100000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n  } else {\n      value = 0;\n  }\n}else{\n  value =0;\n}",
+														"key": "endoALBuildingLimitFP",
 														"type": "number",
 														"input": true,
 														"inputType": "number",
 														"lockKey": true
+													}, {
+														"label": "ALBuildingLimitFP",
+														"calculateValue": "if(row.endoALBuildingLimitFP > 0){\n  value = row.previous_ALBuildingLimitFP + row.endoALBuildingLimitFP;\n} else {\n  value = row.previous_ALBuildingLimitFP;\n}",
+														"key": "ALBuildingLimitFP",
+														"type": "hidden",
+														"input": true,
+														"tableView": false
 													}]
 												}]
 											],
@@ -8791,7 +8869,7 @@
 											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value = ((parseFloat(row.ALCoverageFP)||0) + (parseFloat(row.ALnonDivingPoolAmount)||0) + (parseFloat(row.ALMedicalExpenseFP)||0) + (parseFloat(row.ALNonOwnedAutoFP)||0) + (parseFloat(row.ALExcessLiabilityFP)||0) + (parseFloat(row.ALTravelAgentEOFP)||0)).toFixed(0);",
+											"calculateValue": "value = ((parseFloat(row.endoALCoverageFP)||0) + (parseFloat(row.endoALnonDivingPoolAmount)||0) + (parseFloat(row.endoALMedicalExpenseFP)||0) + (parseFloat(row.endoALNonOwnedAutoFP)||0) + (parseFloat(row.endoALExcessLiabilityFP)||0) + (parseFloat(row.endoALTravelAgentEOFP)||0)).toFixed(0);",
 											"key": "ALliabilityCoveragesTotal",
 											"type": "number",
 											"input": true,
@@ -8829,7 +8907,7 @@
 											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value = ((parseFloat(row.ALContentsFP)||0) + (parseFloat(row.ALLossofBusIncomeFP)||0) + (parseFloat(row.ALBuildingLimitFP)||0)).toFixed(0);",
+											"calculateValue": "value = ((parseFloat(row.endoALContentsFP)||0) + (parseFloat(row.endoALLossofBusIncomeFP)||0) + (parseFloat(row.endoALBuildingLimitFP)||0)).toFixed(0);",
 											"key": "ALPropertyCoveragesTotal",
 											"type": "number",
 											"input": true,
@@ -8898,18 +8976,19 @@
 											"mask": false,
 											"spellcheck": false,
 											"tableView": true,
+											"defaultValue": 0,
 											"delimiter": true,
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
 											"calculateValue": "value=data[\"proRataPercentage\"]",
+											"allowCalculateOverride": true,
 											"key": "ALProRataPremiumPercentage",
 											"type": "number",
 											"decimalLimit": 3,
 											"input": true,
 											"inputType": "number",
-											"lockKey": true,
-											"defaultValue": 0
+											"lockKey": true
 										}]
 									}, {
 										"components": [{
@@ -12631,9 +12710,9 @@
 						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"label": "MedicalExpenseFp",
-						"calculateValue": "if(data['endoMedicalExpenseFp'] > 0){\n  value = data['previous_MedicalExpenseFp'] + data['endoMedicalExpenseFp'];\n} else {\n  value = data['previous_MedicalExpenseFp']\n}",
-						"key": "medicalExpenseFp",
+						"label": "MedicalExpenseFP",
+						"calculateValue": "if(data['endoMedicalExpenseFp'] > 0){\n  value = data['previous_MedicalExpenseFP'] + data['endoMedicalExpenseFp'];\n} else {\n  value = data['previous_MedicalExpenseFP'];\n}",
+						"key": "MedicalExpenseFP",
 						"type": "hidden",
 						"input": true,
 						"tableView": false
@@ -12701,7 +12780,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n    var calculate = false;\n    if(data['travelAgentEoPL'] != data['previous_travelEnO']){\n        calculate = true;\n    }else if(parseFloat(data['travelAgentEOReceiptsPL']) != parseFloat(data['previous_travelAgentEOReceiptsPL'])){\n        calculate = true;\n    }\n    if(calculate == true){\n        if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n            value=(parseFloat(data[\"TAEOunder100k\"])||0)\n        }\n        else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n            value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n        }\n    }else{\n        value = 0;\n    }\n\n}else{\n    value = 0;\n}",
+						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n    var calculate = false;\n    if(data['TravelAgentEOFP'] != data['previous_travelEnO']){\n        calculate = true;\n    }else if(parseFloat(data['travelAgentEOReceiptsPL']) != parseFloat(data['previous_travelAgentEOReceiptsPL'])){\n        calculate = true;\n    }\n    if(calculate == true){\n        if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n            value=(parseFloat(data[\"TAEOunder100k\"])||0)\n        }\n        else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n            value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n        }\n    }else{\n        value = 0;\n    }\n\n}else{\n    value = 0;\n}",
 						"key": "endoTravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -12710,7 +12789,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "TravelAgentEOFP",
-						"calculateValue": "if(data['endotravelAgentEoPL'] > 0){\n  value = data['previous_travelEnO'] + data['endotravelAgentEoPL'];\n} else {\n  value = data['previous_travelEnO']\n}",
+						"calculateValue": "if(data['endoTravelAgentEOFP'] > 0){\n  value = data['previous_travelEnO'] + data['endoTravelAgentEOFP'];\n} else {\n  value = data['previous_travelEnO']\n}",
 						"key": "TravelAgentEOFP",
 						"type": "hidden",
 						"input": true,
@@ -13861,7 +13940,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data['AddILocPremium'] != data['previous_AddILocPremium']){\n  if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvalue = 0;\n\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALProRataPremium)||0);\n}\n} else {\n  value=0;\n}\n} else {\n  value = 0;\n}",
+					"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n      var additionalLocationArray =\"additionalLocations\";\n      var additionalLocationArrayLength = data[additionalLocationArray].length;\n      value = 0;\n      for (var i = 0; i < additionalLocationArrayLength; i++) {\n        value += (parseFloat(data[additionalLocationArray][i].ALProRataPremium)||0);\n      }\n  } else {\n      value=0;\n  }",
 					"key": "endoAddILocPremium",
 					"type": "number",
 					"input": true,
@@ -13963,7 +14042,7 @@
 					"requireDecimal": true,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data['AddILocTax']!=data['previous_AddILocTax']){\n  if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\nvar additionalLocationArrayLength = data[additionalLocationArray].length;\nvar value = 0;\nfor (var i = 0; i < additionalLocationArrayLength; i++) {\n  value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n}\n} else {\n  value = 0;\n}\n} else {\n  value = 0;\n}",
+					"calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\n  var additionalLocationArrayLength = data[additionalLocationArray].length;\n  var value = 0;\n  for (var i = 0; i < additionalLocationArrayLength; i++) {\n    value += (parseFloat(data[additionalLocationArray][i].ALTotalTax)||0);\n  }\n} else {\n  value = 0;\n}",
 					"key": "endoAddILocTax",
 					"type": "number",
 					"decimalLimit": 2,
@@ -14539,7 +14618,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"endoGroupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"endoGroupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n}",
+					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"endoGroupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"endoAddILocPremium\"])||0) + (parseFloat(data[\"endoAddILocTax\"])||0) + (parseFloat(data[\"endoGroupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n}",
 					"key": "totalAmount",
 					"type": "number",
 					"decimalLimit": 2,
@@ -15138,8 +15217,8 @@
 		"input": false,
 		"lockKey": true
 	}],
-	"revisions": "",
-	"_vid": 0,
+	"revisions": "original",
+	"_vid": 7,
 	"title": "diveStoreEndorsement3",
 	"display": "wizard",
 	"access": [{
@@ -15157,6 +15236,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-11T15:09:42.912Z",
+	"modified": "2020-09-15T03:48:12.124Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
