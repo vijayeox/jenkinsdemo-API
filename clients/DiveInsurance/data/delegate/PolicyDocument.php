@@ -1769,7 +1769,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         } else {
                             $temp['removedadditionalLocations'] = "";
                         }
-                        if($temp['removedadditionalLocations'] !="" || $temp['newAdditionalLocations'] != ""){
+                        if($temp['removedadditionalLocations'] !=""){
                             $temp['propertyChanges'] = true;
                             $temp['liabilityChanges'] = true;
                         }

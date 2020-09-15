@@ -268,6 +268,7 @@ public function execute(array $data,Persistence $persistenceService)
                             $additionalLocations['previous_ALBuildingReplacementValue'] = isset($additionalLocations['ALBuildingReplacementValue']) ? $additionalLocations['ALBuildingReplacementValue'] : 0;
                             $additionalLocations['previous_additionalLocationPropertyTotal'] = isset($additionalLocations['additionalLocationPropertyTotal']) ? $additionalLocations['additionalLocationPropertyTotal'] : 0;
                             $additionalLocations['previous_ALLossofBusIncome'] = isset($additionalLocations['ALLossofBusIncome']) ? $additionalLocations['ALLossofBusIncome'] : 0;
+                            $additionalLocations['previous_ALnonDivingPoolAmount'] = isset($additionalLocations['ALnonDivingPoolAmount']) ? $additionalLocations['ALnonDivingPoolAmount'] : 0;
                             $additionalLocations['previous_ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] = isset($additionalLocations['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL']) ? $additionalLocations['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] : false;    
                         $data['additionalLocations'][$key] = $additionalLocations;
                     }
