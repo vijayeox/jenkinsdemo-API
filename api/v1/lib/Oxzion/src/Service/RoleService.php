@@ -81,6 +81,7 @@ class RoleService extends AbstractService
                 $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
                 if (count($result) > 0) {
                     $roleId = $result[0]['id'];
+                    $data['id'] = $roleId;
                 }
             }
             if (isset($roleId)) {
@@ -334,7 +335,7 @@ class RoleService extends AbstractService
         $basicRoles = $this->getRolesByOrgid(null);
         try {
             foreach ($basicRoles as $basicRole) {
-                unset($basicRole['id']);
+                // unset($basicRole['id']);
                 unset($basicRole['uuid']);
                 $basicRole['org_id'] = $orgid;
                 if (!$this->createSystemRoleForOrg($basicRole)) {
@@ -355,6 +356,7 @@ class RoleService extends AbstractService
                         SELECT " . $role['id'] . ", rp.privilege_name,rp.permission," . $role['org_id'] .
                 ",rp.app_id from ox_role_privilege rp left join ox_role r on rp.role_id = r.id
                         where r.name = '" . $role['name'] . "' and r.org_id is NULL";
+            $this->logger->info("\n Update Role Query - " . print_r($query, true));
             $count = $this->runGenericQuery($query);
             if (!$count) {
                 throw new ServiceException("Failed to update role privileges", "failed.update.default.privileges");
