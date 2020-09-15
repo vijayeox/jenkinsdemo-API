@@ -59,6 +59,7 @@
 				{assign var=initialAnnualAggregate value=$previousPolicyData.$policyIndex.prevAnnualAggregate}
 				{assign var=initialEquipment value=$previousPolicyData.$policyIndex.previous_equipment}
 				{assign var=initialCylinderCoverage value=$previousPolicyData.$policyIndex.previous_cylinder}
+				{assign var=initialCylinderCoverageLabel value=$previousPolicyData.$policyIndex.previous_cylinderLabel}
 				{assign var=initialScubaFit value=$previousPolicyData.$policyIndex.previous_scubaFit}
 				{assign var=initialTecRec value=$previousPolicyData.$policyIndex.previous_tecRecEndorsment}
 										{else}

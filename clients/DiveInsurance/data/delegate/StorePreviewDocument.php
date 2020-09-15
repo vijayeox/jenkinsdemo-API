@@ -125,6 +125,8 @@ class StorePreviewDocument extends PolicyDocument
         }
         
         if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
+            unset($documents['roster_certificate']);
+            unset($documents['roster_pdf']);
             $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
         }
 

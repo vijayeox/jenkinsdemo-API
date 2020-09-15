@@ -191,25 +191,9 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
                 $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
-                $data['previous_groupPlLength'] = 0;
-                $data['previous_groupAddlLength'] = 0;
-                $data['previous_groupAddlNILength'] = 0;
-                if($data['groupProfessionalLiabilitySelect'] == "yes"){
-                    if(isset($data['groupPL'])){
-                        $groupPL = is_string($data['groupPL']) ? json_decode($data['groupPL'],true) : $data['groupPL'];
-                        $data['previous_groupPlLength'] = sizeof($groupPL);
-                    }
-
-                    if($data['additional_insured'] == "yes"){
-                        $groupAdd = is_string($data['groupAdditionalInsured']) ? json_decode($data['groupAdditionalInsured'],true) : $data['groupAdditionalInsured'];
-                        $data['previous_groupAddlLength'] = sizeof($groupAdd);
-                    }
-
-                    if($data['named_insureds'] == "yes"){
-                        $groupAddlNI = is_string($data['groupAdditionalNamedInsured']) ? json_decode($data['groupAdditionalNamedInsured'],true) : $data['groupAdditionalNamedInsured'];
-                        $data['previous_groupAddlNILength'] = sizeof($groupAddlNI);   
-                    }
-                }
+                $policy['previous_groupPL'] =  isset($data['groupPL']) ? $data['groupPL'] : array();
+                $policy['previous_groupAdditionalInsured'] = isset($data['groupAdditionalInsured']) ? $data['groupAdditionalInsured'] : array();
+                $policy['previous_groupAdditionalNamedInsured'] = isset($data['groupAdditionalNamedInsured']) ? $data['groupAdditionalNamedInsured'] : array();
                 $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
                 $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
                 $policy['previous_nonDivingPoolAmount'] = $data['nonDivingPoolAmount'];
