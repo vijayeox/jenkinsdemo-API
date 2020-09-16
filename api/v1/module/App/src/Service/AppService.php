@@ -551,8 +551,12 @@ public function setupAppView($yamlData, $path)
     $metadataPath = $appName . '/metadata.json';
     $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
     FileUtils::copyDir($eoxapp, $path);
-    FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
-    $jsonData = json_decode(file_get_contents($metadataPath), true);
+     if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
+       FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
+    }else{
+        FileUtils::rmDir($path . 'view/apps/eoxapps');
+    }
+    $jsonData = json_decode(file_get_contents($metadataPath),true);
     $jsonData['name'] = $yamlData['app']['name'];
     $jsonData['appId'] = $yamlData['app']['uuid'];
     $jsonData['title']['en_EN'] = $yamlData['app']['name'];
@@ -1173,33 +1177,36 @@ private function assignWorkflowToEntityMapping($entityArray ,$workflowUuid, $app
 
 private function cleanApplicationDescriptorData($descriptorData)
 {
-    if (isset($descriptorData["formDuplicate"])) {
-        unset($descriptorData["formDuplicate"]);
-    }
-    if (isset($descriptorData["textFieldValidate"])) {
-        unset($descriptorData["textFieldValidate"]);
-    }
-    if (isset($descriptorData["workflowDuplicate"])) {
-        unset($descriptorData["workflowDuplicate"]);
-    }
-    if (isset($descriptorData["pages"])) {
-        $descriptorData["pages"] = array_map(function ($page) {
-            if (isset($page["pageContent"])) {
-                unset($page["pageContent"]);
+    if (isset($descriptorData["entity"])) {
+        $descriptorData["entity"] = array_map(function ($entity) {
+            if (isset($entity["formFieldsValidationExcel"]) && empty($entity['formFieldsValidationExcel'])) {
+                unset($entity["formFieldsValidationExcel"]);
             }
-            if (isset($page["details"])) {
-                unset($page["details"]);
+            if (array_key_exists('name',$entity['field'][0])&& empty($entity['field'][0]['name'])) {
+                unset($entity['field']);
             }
-            return $page;
-        }, $descriptorData["pages"]);
+            return $entity;
+        }, $descriptorData["entity"]);
     }
-    if (isset($descriptorData["role"])) {
-        $descriptorData["role"] = array_map(function ($role) {
-            if (isset($role["privilegesDuplicate"])) {
-                unset($role["privilegesDuplicate"]);
+     if (isset($descriptorData["menu"])) {
+        $descriptorData["menu"] = array_map(function ($menu) {
+            if (isset($menu["privilege"]) && empty($menu['privilege'])) {
+                unset($menu["privilege"]);
             }
-            return $role;
-        }, $descriptorData["role"]);
+            if (isset($menu["parent"]) && empty($menu['parent'])) {
+                unset($menu["parent"]);
+            }
+            return $menu;
+        }, $descriptorData["menu"]);
+    }
+    if (isset($descriptorData["form"]) && empty($descriptorData['form'])) {
+        unset($descriptorData["form"]);
+    }
+    if (isset($descriptorData["org"]) && empty($descriptorData['org'])) {
+        unset($descriptorData["org"]);
+    }
+    if (isset($descriptorData["workflow"]) && empty($descriptorData['workflow'])) {
+        unset($descriptorData["workflow"]);
     }
     return $descriptorData;
 }
