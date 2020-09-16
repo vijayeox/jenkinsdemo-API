@@ -226,6 +226,7 @@ class AppService extends AbstractService
     public function deployApp($path, $params = null)
     {
         $ymlData =  $this->cleanApplicationDescriptorData(self::loadAppDescriptor($path));
+        $this->logger->info("\n Yaml Data " . print_r($ymlData, true));
         if(!isset($params)){
             $params = $this->appDeployOptions;
         }
@@ -1182,7 +1183,7 @@ private function cleanApplicationDescriptorData($descriptorData)
             if (isset($entity["formFieldsValidationExcel"]) && empty($entity['formFieldsValidationExcel'])) {
                 unset($entity["formFieldsValidationExcel"]);
             }
-            if (array_key_exists('name',$entity['field'][0])&& empty($entity['field'][0]['name'])) {
+            if (isset($entity['field']) && array_key_exists('name',$entity['field'][0])&& empty($entity['field'][0]['name'])) {
                 unset($entity['field']);
             }
             return $entity;
@@ -1199,13 +1200,14 @@ private function cleanApplicationDescriptorData($descriptorData)
             return $menu;
         }, $descriptorData["menu"]);
     }
-    if (isset($descriptorData["form"]) && empty($descriptorData['form'])) {
+    
+    if (isset($descriptorData["form"]) && empty($descriptorData['form'][0]['name'])) {
         unset($descriptorData["form"]);
     }
-    if (isset($descriptorData["org"]) && empty($descriptorData['org'])) {
+    if (isset($descriptorData["org"]) && empty($descriptorData['org']['name'])) {
         unset($descriptorData["org"]);
     }
-    if (isset($descriptorData["workflow"]) && empty($descriptorData['workflow'])) {
+    if (isset($descriptorData["workflow"]) && empty($descriptorData['workflow'][0]['name'])) {
         unset($descriptorData["workflow"]);
     }
     return $descriptorData;
