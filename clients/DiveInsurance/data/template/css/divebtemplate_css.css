@@ -919,3 +919,35 @@ body{
   padding:0px;
   font-size: 15px;
 }
+
+/*Roster CSS */
+.t_title {
+  font-size: 16px;
+}
+.title_row{
+  width:100%;
+}
+.title_font{
+  font-size: 16px;
+}
+.t_title1 {
+  width:5%;
+}
+.t_title2 {
+  width:20%;
+}
+.t_title3 {
+  width:35%;
+}
+.t_title4 {
+  width:5%;
+}
+.t_title5 {
+  width:5%;
+}
+.t_title6 {
+  width:15%;
+}
+.t_title7 {
+  width:15%;
+}
