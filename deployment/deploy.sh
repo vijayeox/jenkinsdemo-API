@@ -385,6 +385,7 @@ diveinsurance()
         npm run package:discover
         chmod 777 -R /opt/oxzion/eoxapps
         systemctl start view
+        service php7.2-fpm reload
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
