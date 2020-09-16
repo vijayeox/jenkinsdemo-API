@@ -536,7 +536,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if((isset($endorsementOptions['modify_businessAndPolicyInformation']) && $endorsementOptions['modify_businessAndPolicyInformation'] == true) || (isset($endorsementOptions['modify_boatUsageCaptainCrewSchedule']) && $endorsementOptions['modify_boatUsageCaptainCrewSchedule'] == true) || (isset($endorsementOptions['modify_boatDeatails']) && $endorsementOptions['modify_boatDeatails'] == true) || (isset($endorsementOptions['modify_additionalInsured']) && $endorsementOptions['modify_additionalInsured']  == true)|| (isset($endorsementOptions['modify_lossPayees']) && $endorsementOptions['modify_lossPayees'] == true) || (isset($data['generatePersonalInfo']) || (isset($data['generatePersonalInfo']) && ($data['generatePersonalInfo'] == true || $data['generatePersonalInfo'] == 'true')))){
                         $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     }
-				}
+                }
             }else{
                 if ($temp['product'] == 'Individual Professional Liability') {
                  $check = $this->endorsementOptionsFlag($temp);
@@ -545,7 +545,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 if($data['product'] != 'Group Professional Liability'){
                     if ((!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) ))) {
                         if (!isset($check) || $check['pACCheck'] == 1 || $check['endorsement'] == 0 ) {
-                            print_r($temp);
                             $policyDocuments = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                             $this->policyCOI($policyDocuments,$temp,$documents);
                          }
@@ -768,7 +767,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                              }
                              if($groupVal == true){
                                 if(isset($data['group_certificate_no'])){
-                                	$grp_certificate_no = explode("-",$data['group_certificate_no']);
+                                    $grp_certificate_no = explode("-",$data['group_certificate_no']);
                                     $data['group_certificate_no'] = $grp_certificate_no[0];
                                 }else{
                                     $product = $data['product'];
@@ -1004,23 +1003,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $options['footer'] =  $this->template[$data['product']][$footerKey];
             }
             if(!is_array($docDest)){
-				if(file_exists($docDest)){
-					$docName = basename($docDest);
-					FileUtils::deleteFile($docName,$dest['absolutePath']);
-				}
-				$generatedDocument = $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
-			} else {
-				if(is_array($docDest)){
-					$generatedDocuments = array();
-					foreach($docDest as $key => $doc){
-						if(file_exists($doc)){
-							$docName = basename($doc);
-							FileUtils::deleteFile($docName,$dest['absolutePath']);
-						}
-						$generatedDocuments[] = $this->documentBuilder->generateDocument($key,$data,$doc,$options);
-					}
-				}
-			}
+                if(file_exists($docDest)){
+                    $docName = basename($docDest);
+                    FileUtils::deleteFile($docName,$dest['absolutePath']);
+                }
+                $generatedDocument = $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
+            } else {
+                if(is_array($docDest)){
+                    $generatedDocuments = array();
+                    foreach($docDest as $key => $doc){
+                        if(file_exists($doc)){
+                            $docName = basename($doc);
+                            FileUtils::deleteFile($docName,$dest['absolutePath']);
+                        }
+                        $generatedDocuments[] = $this->documentBuilder->generateDocument($key,$data,$doc,$options);
+                    }
+                }
+            }
             if($this->type == 'lapse'){
                 $data['documents']['lapse_document'] = $dest['relativePath'].$template.'.pdf';
                 return $data;
@@ -2137,7 +2136,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $groupLength = 0;
             $groupPLArray = array('padi','firstname','lastname','rating','status','nameOfInstitution');
             $groupAIArray = array('name','address','city','state','country','zip');
-            $this->groupDataDiff($groupLength,$data['groupPL'],$policy['previous_groupPL'],$groupPLArray);
+            if(isset($policy['previous_grouPL'])){
+                $this->groupDataDiff($groupLength,$data['groupPL'],$policy['previous_groupPL'],$groupPLArray);
+            }else if(isset($data['previous_groupPlLength'])){
+                $groupLength = 1;
+            }
+
+            
             if($groupLength == 1){
                 $this->sortArrayByParam($temp['groupPL'],'padi');
                 $documents['endorsement_group_ni_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
@@ -2147,7 +2152,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }  
             
             if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
-                $this->groupDataDiff($groupLength,$data['groupAdditionalInsured'],$policy['previous_groupAdditionalInsured'],$groupAIArray);
+                if(isset($policy['previous_groupAdditionalInsured'])){
+                    $this->groupDataDiff($groupLength,$data['groupAdditionalInsured'],$policy['previous_groupAdditionalInsured'],$groupAIArray);
+                }else if(isset($data['previous_groupAddlLength'])){
+                    $groupLength = 1;
+                }
                 if($groupLength == 1){
                     $this->sortArrayByParam($temp['groupAdditionalInsured'],'name');
                     $documents['endorsement_group_ai_document'] = $this->generateDocuments($temp,$dest,$options,'gaitemplate','gaiheader','gaifooter');
@@ -2155,10 +2164,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if(isset($temp['groupAdditionalNamedInsured']) && $temp['named_insureds'] == 'yes'){
-                $this->groupDataDiff($groupLength,$temp['groupAdditionalNamedInsured'],$policy['previous_groupAdditionalNamedInsured'],array());
+                if(isset($policy['previous_groupAdditionalNamedInsured'])){
+                    $this->groupDataDiff($groupLength,$temp['groupAdditionalNamedInsured'],$policy['previous_groupAdditionalNamedInsured'],array());
+                }else if(isset($data['previous_groupAddlNILength'])){
+                    $groupLength = 1;
+                }
+                
                 if($groupLength == 1){
                     $this->sortArrayByParam($temp['groupAdditionalNamedInsured'],'name');
-                    // print_r($temp['groupAdditionalNamedInsured']);
                     $documents['endorsement_group_ani_document'] = $this->generateDocuments($temp,$dest,$options,'ganiTemplate','ganiheader','ganifooter');
                 }
             }
