@@ -1146,7 +1146,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
 
         if($this->type == 'quote'){
-            $this->sortGroupArray($temp['groupPL']);
+            $this->sortArrayByParam($temp['groupPL'],'padi');
             $documents['roster_certificate'] = $this->generateRosterCertificate($temp,$dest,$options);
             $documents['roster_pdf'] = $this->copyDocuments($temp,$dest['relativePath'],'rosterPdf');
             if(isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes'){
