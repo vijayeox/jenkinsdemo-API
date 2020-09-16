@@ -1,5 +1,5 @@
-name: 'Pay Period'
-description: 'Pay Period'
+name: 'Load Balance'
+description: 'Load Balance'
 content:
     -
         type: DashboardManager

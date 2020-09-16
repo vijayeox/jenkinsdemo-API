@@ -1,0 +1,7 @@
+name: 'Company Overview'
+description: 'Company Overview'
+content:
+    -
+        type: DashboardManager
+        content:
+            uuid: d7db3f31-30b6-40f6-9412-c906f0d14da0

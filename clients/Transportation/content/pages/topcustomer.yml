@@ -1,5 +1,5 @@
-name: 'Trip Summary'
-description: 'Trip Summary'
+name: 'Top Customer Growth and Declined'
+description: 'Top Customer Growth and Declined'
 content:
     -
         type: DashboardManager

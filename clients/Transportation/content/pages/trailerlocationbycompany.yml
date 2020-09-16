@@ -1,5 +1,5 @@
-name: 'Trailer Current Location'
-description: 'Trailer Current Location'
+name: 'Trailer Location by Company'
+description: 'Trailer Location by Company'
 content:
     -
         type: DashboardManager
