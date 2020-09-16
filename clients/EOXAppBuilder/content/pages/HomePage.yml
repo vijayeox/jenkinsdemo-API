@@ -34,7 +34,7 @@ content:
                     details:
                         -
                             type: Form
-                            dataUrl: 'app/{{Level1_uuid}}'
+                            dataUrl: 'app/{{uuid}}'
                             form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                     icon: 'far fa-pencil-alt'
                 -
