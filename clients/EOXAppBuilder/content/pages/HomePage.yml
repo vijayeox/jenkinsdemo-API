@@ -50,6 +50,18 @@ content:
                     icon: 'far fa-rocket-launch'
                     updateOnly: true
                 -
+                    name: Download
+                    rule: "true"
+                    details:
+                        -
+                            type: Update
+                            method: "Download"
+                            params:
+                                url: app/{{uuid}}/archive/download
+                                disableAppId: true
+                    icon: 'far fa-download'
+                    updateOnly: true      
+                -
                     name: Install
                     rule: '''{{status}}'' == 4 && profile.privileges.MANAGE_INSTALL_APP_WRITE==true'
                     details:
