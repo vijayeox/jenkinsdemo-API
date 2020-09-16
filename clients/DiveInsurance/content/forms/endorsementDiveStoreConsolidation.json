@@ -8869,7 +8869,7 @@
 											"requireDecimal": false,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value = ((parseFloat(row.endoALCoverageFP)||0) + (parseFloat(row.endoALnonDivingPoolAmount)||0) + (parseFloat(row.endoALMedicalExpenseFP)||0) + (parseFloat(row.endoALNonOwnedAutoFP)||0) + (parseFloat(row.endoALExcessLiabilityFP)||0) + (parseFloat(row.endoALTravelAgentEOFP)||0)).toFixed(0);",
+											"calculateValue": "value = ((parseFloat(row.endoALCoverageFP)||0) + (parseFloat(row.endoALnonDivingPoolAmount)||0) + (parseFloat(row.endoALMedicalExpenseFP)||0) + (parseFloat(row.endoALNonOwnedAutoFP)||0) + (parseFloat(row.endoALExcessLiabilityFP)||0) + (parseFloat(row.endoALTravelAgentEOFP)||0) + (parseFloat(row.endoALlakeQuarry)||0)).toFixed(0);",
 											"key": "ALliabilityCoveragesTotal",
 											"type": "number",
 											"input": true,
@@ -8976,7 +8976,7 @@
 											"mask": false,
 											"spellcheck": false,
 											"tableView": true,
-											"defaultValue": 0,
+											"defaultValue": 1,
 											"delimiter": true,
 											"requireDecimal": true,
 											"inputFormat": "plain",
@@ -10405,6 +10405,7 @@
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
+											"required": true,
 											"customMessage": "Please enter the Name of the Additional Insured"
 										},
 										"errorLabel": "Additional Insured Name",
@@ -10848,6 +10849,9 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
@@ -15218,7 +15222,7 @@
 		"lockKey": true
 	}],
 	"revisions": "original",
-	"_vid": 7,
+	"_vid": 10,
 	"title": "diveStoreEndorsement3",
 	"display": "wizard",
 	"access": [{
@@ -15236,6 +15240,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-15T03:48:12.124Z",
+	"modified": "2020-09-15T14:46:10.260Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }

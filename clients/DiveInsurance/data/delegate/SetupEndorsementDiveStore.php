@@ -255,7 +255,6 @@ public function execute(array $data,Persistence $persistenceService)
                 if(isset($data['additionalLocations'])){
                     foreach($data['additionalLocations'] as $key => $value){
                         $additionalLocations = $data['additionalLocations'][$key];
-                        if($additionalLocations['padiNumberAL'] != ""){
                             $additionalLocations['previous_ALCoverageFP'] = isset($additionalLocations['ALCoverageFP']) ? $additionalLocations['ALCoverageFP'] : 0;
                             $additionalLocations['previous_ALPoolLiability'] = isset($additionalLocations['ALPoolLiability']) ? $additionalLocations['ALPoolLiability'] : 0;
                             $additionalLocations['previous_ALTravelAgentEOFP'] = isset($additionalLocations['ALTravelAgentEOFP']) ? $additionalLocations['ALTravelAgentEOFP'] : 0;
@@ -269,24 +268,8 @@ public function execute(array $data,Persistence $persistenceService)
                             $additionalLocations['previous_ALBuildingReplacementValue'] = isset($additionalLocations['ALBuildingReplacementValue']) ? $additionalLocations['ALBuildingReplacementValue'] : 0;
                             $additionalLocations['previous_additionalLocationPropertyTotal'] = isset($additionalLocations['additionalLocationPropertyTotal']) ? $additionalLocations['additionalLocationPropertyTotal'] : 0;
                             $additionalLocations['previous_ALLossofBusIncome'] = isset($additionalLocations['ALLossofBusIncome']) ? $additionalLocations['ALLossofBusIncome'] : 0;
+                            $additionalLocations['previous_ALnonDivingPoolAmount'] = isset($additionalLocations['ALnonDivingPoolAmount']) ? $additionalLocations['ALnonDivingPoolAmount'] : 0;
                             $additionalLocations['previous_ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] = isset($additionalLocations['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL']) ? $additionalLocations['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] : false;    
-                        }else{
-                            $additionalLocations['previous_ALCoverageFP'] = 0;
-                            $additionalLocations['previous_ALPoolLiability'] = 0;
-                            $additionalLocations['previous_ALTravelAgentEOFP'] =  0;
-                            $additionalLocations['previous_ALMedicalExpenseFP'] =  0;
-                            $additionalLocations['previous_ALNonOwnedAutoFP'] = 0;
-                            $additionalLocations['previous_ALExcessLiabilityFP'] = 0;
-                            $additionalLocations['previous_ALlakeQuarry'] = 0;
-                            $additionalLocations['previous_ALContentsFP'] =  0;
-                            $additionalLocations['previous_ALlakeQuarry'] =  0;
-                            $additionalLocations['previous_ALLossofBusIncomeFP'] =  0;
-                            $additionalLocations['previous_ALBuildingReplacementValue'] = 0;
-                            $additionalLocations['previous_additionalLocationPropertyTotal'] =  0;
-                            $additionalLocations['previous_ALLossofBusIncome'] =  0;
-                            $additionalLocations['previous_ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] = false;
-                        }
-                              
                         $data['additionalLocations'][$key] = $additionalLocations;
                     }
                 }
