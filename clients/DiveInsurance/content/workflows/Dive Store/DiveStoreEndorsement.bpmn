@@ -40,11 +40,10 @@
           <camunda:property name="template" value="endorsementDiveStoreConsolidation" />
         </camunda:properties>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_05el7yq123</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0i6edw3123</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0jtqtts</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1b9c2yr</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_0rehh7b</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1l6kyg6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ij66tv123</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1mw3pcp123</bpmn:outgoing>
     </bpmn:userTask>
@@ -96,7 +95,7 @@
       <bpmn:outgoing>SequenceFlow_0c8kwl1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0efcxsl123" sourceRef="UserTask_0cskr81123" targetRef="ExclusiveGateway_0zdc4wn123" />
-    <bpmn:sequenceFlow id="SequenceFlow_05el7yq123" name="No" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="UserTask_0vsw34x123">
+    <bpmn:sequenceFlow id="SequenceFlow_05el7yq123" name="No" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="ServiceTask_0mu2xsj">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="ServiceTask_11gqa7t123" name="CSR Rejection / On Hold" camunda:expression="0">
@@ -151,6 +150,7 @@ if(status == "onHold"){
       <bpmn:incoming>SequenceFlow_0wodcdg</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_131tfxv</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_06slfa1</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_05q7odx</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="UserTask_1teet0g" name="CSR Payment Verification" camunda:asyncAfter="true" camunda:candidateUsers="{{role:CSR}}">
       <bpmn:extensionElements>
@@ -167,7 +167,7 @@ if(status == "onHold"){
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0wodcdg" sourceRef="UserTask_1teet0g" targetRef="ExclusiveGateway_1bd36dj" />
     <bpmn:sequenceFlow id="SequenceFlow_06slfa1" name="Payment Not Verified" sourceRef="ExclusiveGateway_1bd36dj" targetRef="UserTask_1teet0g">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paymentVerified == "declined"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paymentVerified == "declined" &amp;&amp; userApproved == "accepted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="ServiceTask_15c84at" name="Policy Status Change During Review" camunda:expression="0">
       <bpmn:extensionElements>
@@ -223,7 +223,7 @@ execution.setVariable('initiatedByUser',true)</camunda:script>
       <bpmn:outgoing>SequenceFlow_1b9c2yr</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1b9c2yr" sourceRef="Task_1bb5y63" targetRef="UserTask_0vsw34x123" />
-    <bpmn:sequenceFlow id="SequenceFlow_0rehh7b" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="UserTask_0vsw34x123">
+    <bpmn:sequenceFlow id="SequenceFlow_0rehh7b" name="Payment Declined" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="ServiceTask_0mu2xsj">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paymentVerified != null and paymentVerified == "declined"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0c8kwl1" sourceRef="ExclusiveGateway_0zdc4wn123" targetRef="ServiceTask_0kfeda1123">
@@ -242,6 +242,24 @@ execution.setVariable('initiatedByUser',true)</camunda:script>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApprovalRequired == true || userApprovalRequired == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1qf4hjr" sourceRef="ServiceTask_1aqfyhm123" targetRef="UserTask_0cskr81123" />
+    <bpmn:serviceTask id="ServiceTask_0mu2xsj" name="Policy Status Rejected" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Rejected')</camunda:script>
+        </camunda:executionListener>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="command">fileSave</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_05el7yq123</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0rehh7b</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_05q7odx</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1l6kyg6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1l6kyg6" sourceRef="ServiceTask_0mu2xsj" targetRef="UserTask_0vsw34x123" />
+    <bpmn:sequenceFlow id="SequenceFlow_05q7odx" name="User Rejected" sourceRef="ExclusiveGateway_1bd36dj" targetRef="ServiceTask_0mu2xsj">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paymentVerified == "declined" &amp;&amp; userApproved =="rejected"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DiveStoreEndorsement">
@@ -252,10 +270,12 @@ execution.setVariable('initiatedByUser',true)</camunda:script>
         <di:waypoint x="2120" y="548" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0rehh7b_di" bpmnElement="SequenceFlow_0rehh7b">
-        <di:waypoint x="1240" y="533" />
-        <di:waypoint x="1240" y="630" />
-        <di:waypoint x="590" y="630" />
-        <di:waypoint x="590" y="548" />
+        <di:waypoint x="1240" y="483" />
+        <di:waypoint x="1240" y="350" />
+        <di:waypoint x="850" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="965" y="360" width="90" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1b9c2yr_di" bpmnElement="SequenceFlow_1b9c2yr">
         <di:waypoint x="471" y="121" />
@@ -339,11 +359,10 @@ execution.setVariable('initiatedByUser',true)</camunda:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_05el7yq_di" bpmnElement="SequenceFlow_05el7yq123">
         <di:waypoint x="1240" y="483" />
-        <di:waypoint x="1240" y="348" />
-        <di:waypoint x="564" y="348" />
-        <di:waypoint x="564" y="468" />
+        <di:waypoint x="1240" y="320" />
+        <di:waypoint x="850" y="320" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="895" y="331" width="14" height="14" />
+          <dc:Bounds x="922.9999999999987" y="303" width="14" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0efcxsl_di" bpmnElement="SequenceFlow_0efcxsl123">
@@ -441,6 +460,23 @@ execution.setVariable('initiatedByUser',true)</camunda:script>
       <bpmndi:BPMNEdge id="SequenceFlow_1qf4hjr_di" bpmnElement="SequenceFlow_1qf4hjr">
         <di:waypoint x="970" y="508" />
         <di:waypoint x="1060" y="508" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0mu2xsj_di" bpmnElement="ServiceTask_0mu2xsj">
+        <dc:Bounds x="750" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1l6kyg6_di" bpmnElement="SequenceFlow_1l6kyg6">
+        <di:waypoint x="750" y="340" />
+        <di:waypoint x="564" y="340" />
+        <di:waypoint x="564" y="468" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_05q7odx_di" bpmnElement="SequenceFlow_05q7odx">
+        <di:waypoint x="1880" y="483" />
+        <di:waypoint x="1880" y="260" />
+        <di:waypoint x="800" y="260" />
+        <di:waypoint x="800" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1306" y="242" width="70" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
