@@ -2071,7 +2071,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
 
-        private function sortArrayByParam(&$data,$sortKey){
+        protected function sortArrayByParam(&$data,$sortKey){
             $groupData = is_string($data) ? json_decode($data,true) : $data;
             $padiList = array();
             $groupPL = array();
