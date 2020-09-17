@@ -275,8 +275,8 @@ public function execute(array $data,Persistence $persistenceService)
                     }
                 }
                 $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
-                $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
-                $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
+                $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 2000000;
+                $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 1000000;
                 $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
                 if(isset($data['PAORFee'])){
                     $policy['previous_PAORFee'] = $data['PAORFee'];
