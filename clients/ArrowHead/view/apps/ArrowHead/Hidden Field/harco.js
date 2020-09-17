@@ -246,17 +246,17 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     }),
     checkeplicoverage: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "X"
         : ""
       : "",
     checkdiscriminationdeductible: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "25000"
         : ""
       : "",
     checkthirdpartylimit: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "100000"
         : ""
       : "",
@@ -264,28 +264,27 @@ if (data.workbooksToBeGenerated.harco == true) {
       ? data.state.abbreviation != "CA" &&
         data.state.abbreviation != "FL" &&
         data.state.abbreviation != "MA" &&
-        data.state.abbreviation != "VA" &&
-        data.eplicoverage == "yes"
+        data.state.abbreviation != "VA"
         ? "X"
         : ""
       : "",
     checkthirdpartydeduc: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "15000"
         : ""
       : "",
     checkactserrorsCAOnly: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California"
         ? "X"
         : ""
       : "",
     checkactserrorsCAOnlyLimit: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California"
         ? "50000"
         : ""
       : "",
     checkactserrorsCAOnlyDeduc: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California"
         ? "2500"
         : ""
       : "",
@@ -296,7 +295,7 @@ if (data.workbooksToBeGenerated.harco == true) {
         : "Reconstruction Cost"
       : "Reconstruction Cost",
     checkthirdparty: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "X"
         : ""
       : "",
