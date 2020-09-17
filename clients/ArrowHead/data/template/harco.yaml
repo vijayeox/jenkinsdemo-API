@@ -434,16 +434,16 @@
    Source Worksheet: BPP Co-Insurance %
    pageName: E-Prop
    cell: I8
-   key: bppcoinsurance
+   key: harcoExcelData*checkbppcoinsurance
    returnValue: 
-      80 : '0.8'
+      80 : '0.9'
       90 : '0.9'
       100 : '1'
 -
    Source Worksheet: Building Co-Insurance %
    pageName: E-Prop
    cell: 'G8'
-   key: buildingCoinsurance
+   key: harcoExcelData*checkbuildingCoinsurance
    returnValue: 
       80 : '0.8'
       90 : '0.9'
@@ -458,16 +458,6 @@
    pageName: E-Prop
    cell: 'G7'
    key: propertyCoverageDeductible
--
-   Source Worksheet: BPP Co-Insurance %
-   pageName: E-Prop
-   cell: I8
-   key: harcoExcelData*checkbppcoinsurance
--
-   Source Worksheet: Building Co-Insurance %
-   pageName: E-Prop
-   cell: 'G8'
-   key: harcoExcelData*checkbuildingCoinsurance
 -
    Source Worksheet: Bi Monthly Limitation
    pageName: E-Prop

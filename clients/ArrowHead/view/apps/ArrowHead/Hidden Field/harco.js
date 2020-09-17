@@ -229,7 +229,7 @@ if (data.workbooksToBeGenerated.harco == true) {
       data.agentseo == "yes" &&
       (data.medicalexpensedeductible > 0 ||
         data.medicalexpensedeductible.length > 0)
-        ? 5000
+        ? data.medicalexpensedeductible
         : "",
     checkgrosssales:
       data.agentseo == "yes" && data.grosssales > 0 ? data.grosssales : "",
@@ -246,23 +246,17 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     }),
     checkeplicoverage: data.state
-      ? data.state.name != "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name != "California" && data.eplicoverage == "yes"
         ? "X"
         : ""
       : "",
     checkdiscriminationdeductible: data.state
-      ? data.state.name != "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name != "California" && data.eplicoverage == "yes"
         ? "25000"
         : ""
       : "",
     checkthirdpartylimit: data.state
-      ? data.state.name != "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name != "California" && data.eplicoverage == "yes"
         ? "100000"
         : ""
       : "",
@@ -271,61 +265,53 @@ if (data.workbooksToBeGenerated.harco == true) {
         data.state.abbreviation != "FL" &&
         data.state.abbreviation != "MA" &&
         data.state.abbreviation != "VA" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+        data.eplicoverage == "yes"
         ? "X"
         : ""
       : "",
     checkthirdpartydeduc: data.state
-      ? data.state.name != "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name != "California" && data.eplicoverage == "yes"
         ? "15000"
         : ""
       : "",
     checkactserrorsCAOnly: data.state
-      ? data.state.name == "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name == "California" && data.eplicoverage == "yes"
         ? "X"
         : ""
       : "",
     checkactserrorsCAOnlyLimit: data.state
-      ? data.state.name == "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name == "California" && data.eplicoverage == "yes"
         ? "50000"
         : ""
       : "",
     checkactserrorsCAOnlyDeduc: data.state
-      ? data.state.name == "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name == "California" && data.eplicoverage == "yes"
         ? "2500"
         : ""
       : "",
-    checkValuation: data.state
-      ? data.state.name == "California" || data.state.name == "Florida"
+    checkValuation: data.locationSchedule[0].state
+      ? data.locationSchedule[0].state == "CA" ||
+        data.locationSchedule[0].state == "FL"
         ? "Replacement"
         : "Reconstruction Cost"
-      : "",
+      : "Reconstruction Cost",
     checkthirdparty: data.state
-      ? data.state.name != "California" &&
-        data.eplicoverage == "yes" &&
-        data.agentseo == "yes"
+      ? data.state.name != "California" && data.eplicoverage == "yes"
         ? "X"
         : ""
       : "",
-    checkbuildingCoinsurance: data.state
-      ? data.state.name !== "California" || data.state.name !== "Florida"
-        ? "1"
-        : ""
-      : "",
-    checkbppcoinsurance: data.state
-      ? data.state.name !== "California" || data.state.name !== "Florida"
-        ? "1"
-        : ""
-      : "",
+    checkbuildingCoinsurance: data.locationSchedule[0].state
+      ? data.locationSchedule[0].state == "CA" ||
+        data.locationSchedule[0].state == "FL"
+        ? data.buildingCoinsurance
+        : 1
+      : 1,
+    checkbppcoinsurance: data.locationSchedule[0].state
+      ? data.locationSchedule[0].state == "CA" ||
+        data.locationSchedule[0].state == "FL"
+        ? data.bppcoinsurance
+        : 1
+      : 1,
     checkearthquakecoverage: data.genericData.locationScheduleGridData.some(
       i => i.earthquakecoverage == "yes"
     ),
