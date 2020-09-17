@@ -74,7 +74,7 @@
     "friendsofphp/php-cs-fixer": "^2.16@dev",
     "phpunit/dbunit": "^4",
     "mockery/mockery": "^1.2",
-    "sempro/phpunit-pretty-print": "dev-master",
+    "sempro/phpunit-pretty-print": "1.2.2",
     "mybuilder/phpunit-accelerator": "dev-master"
   },
   "autoload": {
@@ -89,7 +89,7 @@
       "User\\": "module/User/src/",
       "Group\\": "module/Group/src/",
       "Analytics\\": "module/Analytics/src/",
-      "Organization\\": "module/Organization/src/",
+      "Account\\": "module/Account/src/",
       "Auth\\": "module/Auth/src/",
       "Attachment\\": "module/Attachment/src/",
       "App\\": "module/App/src/",
@@ -123,7 +123,7 @@
       "AnalyticsTest\\": "module/Analytics/test/",
       "FileIndexerTest\\": "module/FileIndexer/test/",
       "RoleTest\\": "module/Role/test/",
-      "OrganizationTest\\": "module/Organization/test/",
+      "AccountTest\\": "module/Account/test/",
       "AuthTest\\": "module/Auth/test",
       "BookmarkTest\\": "module/Bookmark/test",
       "AppTest\\": "module/App/test",
