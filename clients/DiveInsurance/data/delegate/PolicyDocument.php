@@ -1161,22 +1161,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if($this->type == 'endorsement'){
                 if($endorsementOptions['modify_groupProfessionalLiability'] == true){
-                    $policy = array();
-                    $policy =  $previous_data[$length - 1];
-                    $upgrade = array();
-                    if(isset($data['upgradeGroupLiability'])){
-                        $data['upgradeGroupLiability'] = is_array($data['upgradeGroupLiability']) ? $data['upgradeGroupLiability'] : json_decode($data['upgradeGroupLiability'],true);
-                    }else{
-                        $data['upgradeGroupLiability'] = array();
-                    }
-                    if($policy['previous_combinedSingleLimit'] != $data['combinedSingleLimit']){
-                        $upgrade = array("update_date" => date_format(date_create($data['update_date']),"m/d/Y"),"combinedSingleLimit" => $data['combinedSingleLimit'],"annualAggregate" => $data['annualAggregate']);
-                        array_push($data['upgradeGroupLiability'], $upgrade);
-                    }
-                    $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);
-                    if($policy['previous_combinedSingleLimit'] != $data['combinedSingleLimit'] || sizeof($data['upgradeGroupLiability']) == 0){
-                        $documents['endorsement_group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
-                    }
                     $this->generateGroupAdditionalDocuments($documents,$data,$temp,$previous_data,$dest,$options,true);
                 }
             }else{
@@ -2145,7 +2129,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 array_push($data['upgradeGroupLiability'], $upgrade);
             }
             $temp['upgradeGroupLiability'] = json_encode($data['upgradeGroupLiability']);
-            if($policy['previous_combinedSingleLimit'] != $data['combinedSingleLimit'] || sizeof($data['upgradeGroupLiability']) == 0){
+            if($policy['previous_combinedSingleLimit'] != $data['combinedSingleLimit'] || ($data['groupProfessionalLiabilitySelect'] != $data['previous_groupProfessionalLiabilitySelect'])){
                 $documents['endorsement_group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
             }
 
