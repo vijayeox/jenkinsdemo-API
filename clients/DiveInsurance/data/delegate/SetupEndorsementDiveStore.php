@@ -198,6 +198,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
                 $policy['previous_nonDivingPoolAmount'] = $data['nonDivingPoolAmount'];
                 $policy['previous_CoverageFP'] = $data['CoverageFP'];
+                $policy['previous_proRataPercentage'] = isset($data['proRataPercentage']) ? $data['proRataPercentage'] : 0;
                 if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
                     $policy['previous_combinedSingleLimitDS'] = 2000000;
                     $policy['previous_annualAggregateDS'] = 3000000;
