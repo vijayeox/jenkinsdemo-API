@@ -14449,7 +14449,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data.groupProfessionalLiabilitySelect == 'yes'){\n    if(parseFloat(data.groupProfessionalLiability) != parseFloat(data.previous_groupProfessionalLiability)){\n         value = (parseFloat(data[\"groupTotalAmount\"])||0)  \n    }\n} else {\n  value = 0;\n}",
+					"calculateValue": "if(data.groupProfessionalLiabilitySelect == 'yes'){\n    if(data.groupProfessionalLiabilitySelect != data.previous_groupProfessionalLiabilitySelect){\n         value = (parseFloat(data[\"groupTotalAmount\"])||0)  \n    }else if(parseFloat(data.groupProfessionalLiability) != parseFloat(data.previous_groupProfessionalLiability)){\n         value = (parseFloat(data[\"groupTotalAmount\"])||0)  \n    }\n} else {\n  value = 0;\n}",
 					"key": "endoGroupProfessionalLiability",
 					"type": "number",
 					"input": true,
@@ -15308,7 +15308,7 @@
 		"lockKey": true
 	}],
 	"revisions": "original",
-	"_vid": 21,
+	"_vid": 22,
 	"title": "diveStoreEndorsement3",
 	"display": "wizard",
 	"access": [{
@@ -15326,6 +15326,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-17T13:01:38.947Z",
+	"modified": "2020-09-17T13:28:58.649Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
