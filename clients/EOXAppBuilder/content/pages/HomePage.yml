@@ -55,10 +55,12 @@ content:
                     details:
                         -
                             type: Update
-                            method: "Download"
+                            method: "GET"
                             params:
                                 url: app/{{uuid}}/archive/download
+                                downloadFile: true
                                 disableAppId: true
+                                successNotification: "Application exported successfully!"
                     icon: 'far fa-download'
                     updateOnly: true      
                 -
@@ -102,14 +104,21 @@ content:
                     rule: '''{{status}}'' == ''Processing'' || ''{{status}}'' == ''Queued'''
                     icon: 'fad fa-circle-notch fa-spin'
             operations:
+                title: "Create Application"
                 actions:
                     -
-                        name: Create New App
+                        name: Build Application
                         rule: 'true'
                         details:
                             -
                                 type: Form
                                 form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
+                    -
+                        name: Import Application
+                        rule: 'true'
+                        details:
+                            -
+                                type: UploadAppArchive
             columnConfig:
                 -
                     title: Name
