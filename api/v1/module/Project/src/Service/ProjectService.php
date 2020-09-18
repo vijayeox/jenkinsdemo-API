@@ -147,6 +147,8 @@ class ProjectService extends AbstractService
                 $parentId = $this->getIdFromUuid('ox_project', $data['parent_id']);
                 $parent_uuid = $data['parent_id'];
                 $data['parent_id'] = $parentId;
+                $result = $this->getProjectByUuid($parent_uuid, $params);
+                $data['parent_manager_id'] = $result['manager_id'];
                 if($parentId == 0){
                     throw new ServiceException("Project parent is invalid", "project.parent.invalid");
                 }
@@ -183,6 +185,12 @@ class ProjectService extends AbstractService
         $insert_data = array('user_id' => $data['manager_id'], 'project_id' => $data['id']);
         $insert->values($insert_data);
         $result = $this->executeUpdate($insert);
+        if($data['manager_id'] != $data['parent_manager_id']){
+            $insert = $sql->insert('ox_user_project');
+            $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $data['id']);
+            $insert->values($insert_data);
+            $result = $this->executeUpdate($insert);            
+        }
         if (isset($data['name'])) {
             $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'parent_identifier' => $parent_uuid, 'manager_login' => $data['manager_login'])), 'PROJECT_ADDED');
         }
