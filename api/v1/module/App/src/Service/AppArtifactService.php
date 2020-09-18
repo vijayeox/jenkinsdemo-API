@@ -185,6 +185,9 @@ class AppArtifactService extends AbstractService
         $app = new App($this->table);
         $app->loadByUuid($appUuid);
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $app->getProperties());
+        if(!is_dir($appSourceDir)){
+            throw new InvalidApplicationArchiveException('Application source directory does not exist.', null);
+        }
         $tempFileName = FileUtils::createTempFileName();
         ZipUtils::zipDir($appSourceDir, $tempFileName);
         return [

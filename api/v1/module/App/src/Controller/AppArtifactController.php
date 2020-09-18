@@ -68,7 +68,8 @@ class AppArtifactController extends AbstractApiController {
             $downloadFileName = $normalizedAppName . '-OxzionAppArchive.zip';
             $headers = new \Zend\Http\Headers();
             $headers->addHeaderLine('Content-Type', 'application/zip')
-                    ->addHeaderLine('Content-Disposition', 'attachment; filename="' . $downloadFileName . '"')
+                    ->addHeaderLine('Content-Disposition', 'attachment; filename=' . $downloadFileName )
+                    ->addHeaderLine('Access-Control-Expose-Headers: Content-Disposition')
                     ->addHeaderLine('Content-Length', filesize($zipFilePath));
             $response->setHeaders($headers);
             return $response;
