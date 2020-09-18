@@ -1,6 +1,6 @@
-// import React_app from "./react-app";
+import UploadAppArchive from "./UploadAppArchive";
 
 let guiComponent = {
-  // SampleComponent: React_app
+  UploadAppArchive: UploadAppArchive
 };
 export { guiComponent };
