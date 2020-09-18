@@ -567,7 +567,7 @@ public function setupAppView($yamlData, $path)
     if (isset($yamlData['app']['autostart'])) {
         $jsonData['autostart'] = $yamlData['app']['autostart'];
     }
-    file_put_contents($appName . '/metadata.json', json_encode($jsonData));
+    file_put_contents($appName . '/metadata.json', json_encode($jsonData, JSON_PRETTY_PRINT));
     $packagePath = $appName . '/package.json';
     $jsonData = json_decode(file_get_contents($packagePath), true);
     $jsonData['name'] = $yamlData['app']['name'];
