@@ -130,17 +130,20 @@ class StorePreviewDocument extends PolicyDocument
 
         if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
             $this->logger->info("DOCUMENT additionalInsured");
+            $this->sortArrayByName($temp,'additionalInsured');
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
         if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
             if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
+                $this->sortArrayByName($temp,'additionalNamedInsured');
                 $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
             }
         }
 
         if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
             $this->logger->info("DOCUMENT lossPayees");
+            $this->sortArrayByName($temp,'lossPayees');
             $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
         }
 
@@ -190,6 +193,12 @@ class StorePreviewDocument extends PolicyDocument
             if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
                 $this->additionalDocumentsDS($temp,$documents,$dest);    
             }
+        }
+        if(isset($data['documents']['roster_pdf'])){
+            unset($data['documents']['roster_pdf']);
+        }
+        if(isset($data['documents']['roster_certificate'])){
+            unset($data['documents']['roster_certificate']);
         }
         $originalData['finalDocuments'] = $documents;
         return $originalData;
