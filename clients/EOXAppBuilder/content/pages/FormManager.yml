@@ -5,20 +5,8 @@ content:
             type: List
             content:
                 route: 'app/{{app_uuid}}/artifact/list/form'
-                disableAppId: true
-                filterable: true         
+                disableAppId: true    
                 resizable: true
-                actionsWidth: 260px
-                pageable:
-                    buttonCount: 3
-                    pageSizes:
-                        - 10
-                        - 20
-                        - 50
-                    info: true
-                sortable: 
-                    allowUnsort: true
-                    mode: single
                 actions:
                     -
                         name: Edit
