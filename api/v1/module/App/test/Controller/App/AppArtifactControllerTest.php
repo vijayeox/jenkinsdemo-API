@@ -17,7 +17,7 @@ class AppArtifactControllerTest extends ControllerTest {
         parent::__construct();
         $this->loadConfig();
         $this->config = $this->getApplicationConfig();
-        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($this->config['db']);
+        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($this->config);
     }
 
     public function setUp(): void {

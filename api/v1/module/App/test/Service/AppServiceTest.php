@@ -24,7 +24,7 @@ class AppServiceTest extends AbstractServiceTest
         parent::__construct();
         $this->loadConfig();
         $config = $this->getApplicationConfig();
-        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($config['db']);
+        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($config);
     }
 
     public function setUp() : void
