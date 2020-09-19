@@ -16,7 +16,7 @@ content:
                             operator: eq
                             value: 2                
             resizable: true
-            actionsWidth: 260px
+            actionsWidth: 320px
             pageable:
                 buttonCount: 3
                 pageSizes:
@@ -60,7 +60,7 @@ content:
                     icon: 'far fa-rocket-launch'
                     updateOnly: true
                 -
-                    name: Download
+                    name: Export
                     rule: "true"
                     details:
                         -
@@ -71,7 +71,7 @@ content:
                                 downloadFile: true
                                 disableAppId: true
                                 successNotification: "Application exported successfully!"
-                    icon: 'far fa-download'
+                    icon: 'far fa-cloud-download'
                     updateOnly: true      
                 -
                     name: Install
@@ -83,15 +83,6 @@ content:
                                 params:
                                     app_uuid: '{{uuid}}'
                     icon: 'far fa-download'
-                # -
-                #     name: Delete
-                #     rule: '''{{status}}'' !== ''Processing'' && ''{{status}}'' !== ''Queued'''
-                #     details:
-                #         -
-                #             type: Form
-                #             form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
-                #             appId: '{{appId}}'
-                #     icon: 'far fa-trash-alt' 
                 -
                     name: 'Please Wait'
                     rule: '''{{status}}'' == ''Processing'' || ''{{status}}'' == ''Queued'''
