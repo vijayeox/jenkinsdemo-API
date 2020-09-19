@@ -196,4 +196,42 @@ class AppArtifactService extends AbstractService
             'zipFile' => $tempFileName
         ];
     }
+    public function getArtifacts($appUuid, $artifactType) {
+        $app = new App($this->table);
+        $app->loadByUuid($appUuid);
+        $appData = [
+            'uuid' => $appUuid,
+            'name' => $app->getProperty('name')
+        ];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
+        if (!file_exists($appSourceDir)) {
+            throw new FileNotFoundException(
+                "Application source directory is not found.", ['directory' => $appSourceDir]);
+        }
+        $contentDir = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
+        switch($artifactType) {
+            case 'workflow':
+                $targetDir = $contentDir . 'workflows';
+            break;
+            case 'form':
+                $targetDir = $contentDir . 'forms';
+            break;
+            default:
+                throw new Exception("Unexpected artifact type ${artifactType}.");
+        }
+        $targetDir = $targetDir . DIRECTORY_SEPARATOR;
+        $files = array();
+        if ($handle = opendir($targetDir)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    $ext = pathinfo($entry, PATHINFO_EXTENSION);
+                    if(($ext=='json' && $artifactType =='form') || ($ext=='bpmn' && $artifactType =='workflows') ){
+                        $files[] = array('name'=>substr($entry, 0, strrpos($entry, '.')),'content'=>file_get_contents($targetDir.$entry));
+                    }
+                }
+            }
+            closedir($handle);
+        }
+        return $files;
+    }
 }

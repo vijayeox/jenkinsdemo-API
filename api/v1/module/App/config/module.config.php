@@ -830,6 +830,24 @@ return [
                     ],
                 ],
             ],
+            'getArtifacts' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/artifact/list/:artifactType',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN,
+                        'artifactType' => 'form|workflow',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'GET',
+                        'action' => 'getArtifacts',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'addArtifact' => [
                 'type' => Segment::class,
                 'options' => [

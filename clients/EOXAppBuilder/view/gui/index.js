@@ -1,6 +1,6 @@
-import UploadAppArchive from "./UploadAppArchive";
-
+import FormManager from "./FormManager";
+import WorkflowManager from "./WorkflowManager";
 let guiComponent = {
-  UploadAppArchive: UploadAppArchive
+  FormManager: FormManager
 };
 export { guiComponent };

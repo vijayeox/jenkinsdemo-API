@@ -38,6 +38,16 @@ content:
                             form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                     icon: 'far fa-pencil-alt'
                 -
+                    name: 'Form Manager'
+                    icon: 'fa fa-list-alt'
+                    rule: "true"
+                    details:
+                        -
+                            params:
+                                page_id: '76953fc8-7269-494d-b126-6ea45a07a007'
+                                params:
+                                    app_uuid: '{{uuid}}'
+                -
                     name: Deploy
                     rule: 'profile.privileges.MANAGE_DEPLOY_APP_WRITE==true'
                     details:
@@ -68,27 +78,10 @@ content:
                     rule: '''{{status}}'' == 4 && profile.privileges.MANAGE_INSTALL_APP_WRITE==true'
                     details:
                         -
-                            type: List
-                            content:
-                                route: 'organization'
-                                disableAppId: true
-                                actions:
-                                     -
-                                         name: Install
-                                         rule: "true"
-                                         details:
-                                             -
-                                                 type: Update
-                                                 successMessage: 'Application Successfully Installed'
-                                                 params:
-                                                    url: /app/{{Level1_uuid}}/install/org/{{uuid}}
-                                                    disableAppId: true
-                                         icon: 'far fa-download'
-                                         updateOnly: true
-                                columnConfig:
-                                    -
-                                        title: Name
-                                        field: name
+                            params:
+                                page_id: '96953fc8-7269-494d-b126-6ea45a07a007'
+                                params:
+                                    app_uuid: '{{uuid}}'
                     icon: 'far fa-download'
                 # -
                 #     name: Delete

@@ -6,6 +6,10 @@ app:
     autostart: true
     version: 1
     uuid: 41b77ef3-41db-4a52-8eb8-ba3ac9a9d771
+    status: 4
+    isdefault: false
+    logo: default_app.png
+    start_options: null
 org:
     name: 'EOXAPP setup'
     uuid: 3409c252-74ed-4512-932d-649da0f2f62d
@@ -50,6 +54,12 @@ pages:
     -
         page_name: HomePage.yml
         uuid: d5b33dce-df14-4193-adfe-de27a6d37ddf
+    -
+        page_name: FormManager.yml
+        uuid: 76953fc8-7269-494d-b126-6ea45a07a007
+    -
+        page_name: InstallManager.yml
+        uuid: 96953fc8-7269-494d-b126-6ea45a07a007
 menu:
     -
         name: 'Manage EOX Apps'
