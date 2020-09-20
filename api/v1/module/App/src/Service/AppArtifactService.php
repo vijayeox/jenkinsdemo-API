@@ -1,10 +1,11 @@
 <?php
 namespace App\Service;
 
-use App\Model\App;
-use App\Model\AppTable;
+use Oxzion\Model\App;
+use Oxzion\Model\AppTable;
 use Exception;
 use Oxzion\Service\AbstractService;
+use Oxzion\Service\AppService;
 use Oxzion\FileNotFoundException;
 use Oxzion\DuplicateFileException;
 use Oxzion\App\AppArtifactNamingStrategy;

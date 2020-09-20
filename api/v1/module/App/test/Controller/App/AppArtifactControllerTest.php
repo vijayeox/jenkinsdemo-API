@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\Service\AppService;
+use Oxzion\Service\AppService;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Utils\FileUtils;
 use Oxzion\App\AppArtifactNamingStrategy;

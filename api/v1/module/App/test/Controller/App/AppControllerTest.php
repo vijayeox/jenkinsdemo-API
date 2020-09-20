@@ -3,7 +3,7 @@ namespace App;
 
 use App\Controller\AppController;
 use App\Controller\AppRegisterController;
-use App\Service\AppService;
+use Oxzion\Service\AppService;
 use Mockery;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Utils\FileUtils;
