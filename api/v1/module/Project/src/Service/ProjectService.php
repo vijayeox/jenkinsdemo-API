@@ -185,7 +185,7 @@ class ProjectService extends AbstractService
         $insert_data = array('user_id' => $data['manager_id'], 'project_id' => $data['id']);
         $insert->values($insert_data);
         $result = $this->executeUpdate($insert);
-        if($data['manager_id'] != $data['parent_manager_id']){
+        if(isset($data['manager_id']) && isset($data['parent_manager_id']) && $data['manager_id'] != $data['parent_manager_id']){
             $insert = $sql->insert('ox_user_project');
             $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $data['id']);
             $insert->values($insert_data);
