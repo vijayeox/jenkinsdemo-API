@@ -56,6 +56,7 @@ class Module
                                                 $container->get(\Oxzion\Service\RoleService::class), 
                                                 $container->get(\App\Service\MenuItemService::class), 
                                                 $container->get(\App\Service\PageService::class),
+                                                $container->get(\Oxzion\Service\UserService::class),
                                                 $container->get(\Oxzion\Service\BusinessRoleService::class)
                         );
                 },
