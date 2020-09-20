@@ -419,9 +419,9 @@ ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_
             "where ox_user_project.project_id = " . $projectId .
             " and ox_user_project.user_id not in (" . implode(',', $userSingleArray) . ")";
             $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
-            $query = "SELECT u.id,u.uuid, u.username, up.user_id, u.firstname, u.lastname, u.email , u.timezone FROM ox_user_project up " .
+            $query = "SELECT u.id,u.uuid, u.username, up.user_id, oup.firstname, oup.lastname, oup.email , u.timezone FROM ox_user_project up " .
             "right join ox_user u on u.id = up.user_id and up.project_id = " . $projectId .
-            " where u.id in (" . implode(',', $userSingleArray) . ") and up.user_id is null";
+            " right join ox_user_profile oup on oup.id = u.user_profile_id where u.id in (" . implode(',', $userSingleArray) . ") and up.user_id is null";
             $insertedUser = $this->executeQuerywithParams($query)->toArray();
             $this->beginTransaction();
             try {

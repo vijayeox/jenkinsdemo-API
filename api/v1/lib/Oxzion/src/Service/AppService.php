@@ -1,8 +1,8 @@
 <?php
-namespace App\Service;
+namespace Oxzion\Service;
 
-use App\Model\App;
-use App\Model\AppTable;
+use Oxzion\Model\App;
+use Oxzion\Model\AppTable;
 use Exception;
 use FileSystemIterator;
 use Oxzion\Auth\AuthConstants;
@@ -14,6 +14,8 @@ use Oxzion\Service\JobService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
+use Oxzion\Service\BusinessRoleService;
+use Oxzion\Utils\ExecUtils;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
@@ -51,11 +53,12 @@ class AppService extends AbstractService
     private $appDeployOptions;
     private $roleService;
     private $userService;
+    private $businessRoleService;
 
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService,UserService $userService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService,UserService $userService, BusinessRoleService $businessRoleService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -69,9 +72,10 @@ class AppService extends AbstractService
         $this->menuItemService = $menuItemService;
         $this->pageService = $pageService;
         $this->jobService = $jobService;
+        $this->businessRoleService = $businessRoleService;
         $this->userService = $userService;
         $this->restClient = new RestClient(null);
-        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job","view","symlink");
+        $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job", "migration");
     }
 
     /**
@@ -783,6 +787,17 @@ private function checkWorkflowData(&$data,$appUuid)
         }
     }
 
+    public function processBusinessRoles(&$yamlData)
+    {   
+        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'])) {
+            $appId = $yamlData['app']['uuid'];
+            foreach ($yamlData['businessRole'] as &$businessRole) {
+                $bRole = $businessRole;
+                $result = $this->businessRoleService->saveBusinessRole($appId, $bRole);
+                $businessRole['uuid'] = $bRole['uuid'];
+            }
+        }
+    }
     public function createRole(&$yamlData, $templateRole = true,$orgId = null)
     {
         if (isset($yamlData['role'])) {
@@ -800,6 +815,13 @@ private function checkWorkflowData(&$data,$appUuid)
                 if (!isset($role['name'])) {
                     $this->logger->warn("Role name not provided continuing!");
                     continue;
+                }
+                $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
+                if(isset($role['businessRole'])){
+                    $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']);
+                    if(count($temp) > 0){
+                        $role['business_role_id'] = $temp[0]['id'];
+                    }
                 }
                 $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
                 if($templateRole){
@@ -833,6 +855,7 @@ private function checkWorkflowData(&$data,$appUuid)
         $orgdata = $orgData;
         $orgdata['app_id'] = $appId;
         $result = $this->organizationService->saveOrganization($orgdata);
+        //setup business offering
         if ($result == 0) {
             throw new ServiceException("Organization could not be saved", 'org.not.saved');
         }
@@ -1017,7 +1040,7 @@ private function checkWorkflowData(&$data,$appUuid)
         return $this->formService->createForm($formData);
     }
 
-    private function createAppRegistry($appId, $orgId)
+    public function createAppRegistry($appId, $orgId)
     {
         $sql = $this->getSqlObject();
         //Code to check if the app is already registered for the organization

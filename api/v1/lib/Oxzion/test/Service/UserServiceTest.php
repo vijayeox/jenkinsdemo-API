@@ -10,7 +10,6 @@ use Oxzion\Service\TemplateService;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Service\RoleService;
 
 class UserServiceTest extends ServiceTest
 {
@@ -35,17 +34,7 @@ class UserServiceTest extends ServiceTest
 
     private function getUserService()
     {
-        $config = $this->getApplicationConfig();
-        return new UserService(
-            $config,
-            $this->adapter,
-            $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class),
-            $this->getApplicationServiceLocator()->get(AddressService::class),
-            $this->getApplicationServiceLocator()->get(EmailService::class),
-            $this->getApplicationServiceLocator()->get(TemplateService::class),
-            $this->getApplicationServiceLocator()->get(MessageProducer::class),
-            $this->getApplicationServiceLocator()->get(RoleService::class)
-        );
+        return $this->getApplicationServiceLocator()->get(\Oxzion\Service\UserService::class);
     }
 
     public function testGetPrivileges()

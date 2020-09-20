@@ -159,7 +159,6 @@ class PageContentService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());exit;
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;

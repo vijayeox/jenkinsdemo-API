@@ -6,10 +6,14 @@ ox_app:
     category: "EXAMPLE_CATEGORY"
     type: 2
     status: 1
+ox_organization_profile:
+-
+    id: 120
 ox_organization:
 -   id: 120
     name: "dummyOrg"
     status: "active"
+    org_profile_id: 120
 ox_app_registry:
 -
     org_id: 120

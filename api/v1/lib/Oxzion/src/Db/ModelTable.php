@@ -249,12 +249,7 @@ abstract class ModelTable
                     ['table' => $this->tableGateway->getTable(), 'data' => $data], 
                     UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
             }
-            //DON'T check for return row count - because returned row count can be 0 if the 
-            //database decides there is no need to update the row as there is no data change.
-            //if (!isset($rows) || (1 != $rows)) {
-            //    throw new UpdateFailedException('Database update failed.', 
-            //        ['table' => $this->tableGateway->getTable(), 'data' => $data]);
-            //}
+            
             return $data;
         }
     }

@@ -1,19 +1,28 @@
+ox_organization_profile:
+-
+    id: 3
+    uuid: 'c7499a34-c100-4e41-bece-5822adca3844'
+-
+    id: 4
+    uuid: 'c7499a34-c100-4e41-bece-5822adca3ccc'
 ox_organization:
 -
     id: 3
-    uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
     name: 'Sample Organization'
+    uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
     status: 'Active'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
     contactid: 2
+    org_profile_id: 3
 
 -
     id: 4
-    uuid: 'b6499a34-c100-4e41-bece-5822adca3mnc'
     name: 'Test Organization'
+    uuid: 'b6499a34-c100-4e41-bece-5822adca3ccc'
     status: 'Inactive'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
     contactid: 2
+    org_profile_id: 4
 ox_group:
 -
     id: 1

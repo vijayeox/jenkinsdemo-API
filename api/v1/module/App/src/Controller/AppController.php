@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Model\App;
-use App\Model\AppTable;
-use App\Service\AppService;
+use Oxzion\Model\App;
+use Oxzion\Model\AppTable;
+use Oxzion\Service\AppService;
 use Exception;
 use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;

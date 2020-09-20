@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace Oxzion\Model;
 
 use Oxzion\Type;
 use Oxzion\Model\Entity;

@@ -1,76 +1,63 @@
 <?php
-namespace App\Service;
+namespace Oxzion\Service;
 
-use App\Model\Entity;
-use App\Model\EntityTable;
+use Oxzion\Model\App\Entity;
+use Oxzion\Model\App\EntityTable;
 use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\EntityNotFoundException;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
-use Oxzion\Service\WorkflowService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
 
 class EntityService extends AbstractService
 {
-    public function __construct($config, WorkflowService $workflowService, $dbAdapter, EntityTable $table)
+    public function __construct($config, $dbAdapter, EntityTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->workflowService = $workflowService;
     }
 
-    public function saveEntity($appUuid, &$data, $id = null)
+    public function saveEntity($appUuid, &$data, $createIfNotFound = true)
     {
         $count = 0;
         $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
-        $entity = new Entity();
-        try {
-            if (!isset($data['id'])) {
-                $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $data['date_created'] = date('Y-m-d H:i:s');
-            } else {
-                $querySelect = "SELECT * from ox_app_entity where app_id = '" . $data['app_id'] . "' AND id = " . $data['id'];
-                $queryResult = $this->executeQuerywithParams($querySelect)->toArray();
-                if (count($queryResult) == 0) {
-                    throw new EntityNotFoundException("Entity not found for -" . $data['id'] . " for app $appUuid");
-                }
-                $data = array_merge($queryResult[0], $data);
-                $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $data['date_modified'] = date('Y-m-d H:i:s');
+        $entity = new Entity($this->table);
+        try{
+            $resultSet = $this->getEntity($data['uuid'], $data['app_id']);
+            $data = array_merge($resultSet, $data);
+            $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['date_modified'] = date('Y-m-d H:i:s');
+        }catch(EntityNotFoundException $e){
+            if(!$createIfNotFound){
+                throw $e;
             }
-        } catch (Exception $e) {
-            throw $e;
+            $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['date_created'] = date('Y-m-d H:i:s');
         }
+        
         $this->logger->info(__CLASS__ . "-> \n Data Modified before the transaction - " . print_r($data, true));
         $entity->exchangeArray($data);
         $entity->validate();
-        $this->beginTransaction();
         try {
-            $count = $this->table->save($entity);
-            if (!isset($data['id'])) {
-                $id = $this->table->getLastInsertValue();
-                $data['id'] = $id;
-            }
-            if ($count == 0) {
-                $this->rollback();
-                throw new ServiceException("Entity save failed", 'entity.save.failed');
-            }
+            $this->beginTransaction();
+            $count = $entity->save($entity);
             $this->commit();
-        } catch (Exception $e) {
+            $temp = $entity->getGenerated(true);
+            $data['id'] = $temp['id'];
+            $data['uuid'] = $temp['uuid'];
+        } catch (Exception $e) {     
             $this->rollback();
             throw $e;
         }
-        $entity->validate();
-        return $count;
     }
 
     public function deleteEntity($appUuid, $id)
     {
-        $result = $this->getEntity($appUuid, $id);
+        $result = $this->getEntity($id, $appUuid);
         if ($result) {
             $this->beginTransaction();
             try {
@@ -105,17 +92,25 @@ class EntityService extends AbstractService
         return $resultSet;
     }
 
-    public function getEntity($appId, $id)
+    public function getEntity($id, $appId = null)
     {
         try {
-            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where (ox_app.id=? or ox_app.uuid=?) AND (ox_app_entity.id=? or ox_app_entity.uuid=?)";
-            $queryParams = array($appId, $appId, $id, $id);
+            $where = "";
+            $queryParams = [];
+            if($appId){
+                $where .= is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ?";
+                $where .= " AND ";
+                $queryParams[] = $appId;
+            }
+            $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
+            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where $where";
+            $queryParams[] = $id;
+            $this->logger->info("STATEMENT $query".print_r($queryParams,true));
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultSet) == 0) {
-                return 0;
+                throw new EntityNotFoundException("Entity not found for id - $id ".($appId ? " and appId - $appId" : "") );
             }
         } catch (Exception $e) {
-            $this->rollback();
             throw $e;
         }
         return $resultSet[0];
@@ -130,27 +125,6 @@ class EntityService extends AbstractService
             return null;
         }
         return $result[0];
-    }
-
-    public function deployWorkflow($appId, $id, $params, $file = null)
-    {
-        $baseFolder = $this->config['UPLOAD_FOLDER'];
-        try {
-            $entity = $this->getEntity($appId, $id);
-            if ($entity) {
-                if (isset($file)) {
-                    $workFlowStorageFolder = $baseFolder . "app/" . $appId . "/entity/";
-                    $fileName = FileUtils::storeFile($file, $workFlowStorageFolder);
-                    return $this->workflowService->deploy($workFlowStorageFolder . $fileName, $appId, $params, $entity['id']);
-                } else {
-                    return 0;
-                }
-            } else {
-                return 0;
-            }
-        } catch (Exception $e) {
-            throw $e;
-        }
     }
 
     public function saveIdentifiers($entityId,$identifiers){
@@ -174,6 +148,42 @@ class EntityService extends AbstractService
         }
     }
 
+    public function saveParticipantRoles($entityId, $appId, $data){
+        $this->logger->info("Save Participant Roles for Entity - $entityId ".print_r($data,true));
+        try{
+            $this->beginTransaction();
+            $delete = "DELETE FROM ox_entity_participant_role WHERE entity_id= :entityId";
+            $params = array("entityId" => $entityId);
+            $result = $this->executeUpdateWithBindParameters($delete, $params);
+            $params['appId'] = $appId;
+            foreach ($data as $value) {
+                $insert = "INSERT INTO ox_entity_participant_role(`entity_id`,`business_role_id`) 
+                            (SELECT :entityId, br.id from ox_business_role br
+                            INNER JOIN ox_app a on a.id = br.app_id 
+                            where a.uuid = :appId and br.name = :bRole)";
+                $params["bRole"] = $value['businessRole'];
+                $result = $this->executeQueryWithBindParameters($insert, $params);
+            }
+            $this->commit();
+        }
+        catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function getEntityOfferingOrganization($entityId){
+        $select = "SELECT org_id from ox_org_offering oof 
+                    inner join ox_org_business_role obr on obr.id = oof.org_business_role_id
+                    where oof.entity_id = :entityId";
+        $params = ["entityId" => $entityId];
+        $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
+        if(count($result) > 0){
+            return $result[0]['org_id'];
+        }
+
+        return null;
+    }
     public function updateUuid($entityId,$uuid) {
         try{
             $this->beginTransaction();

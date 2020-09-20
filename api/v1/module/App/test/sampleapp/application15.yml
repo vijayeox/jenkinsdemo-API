@@ -1,0 +1,88 @@
+app:
+    name: MyApp
+    uuid: d77ea120-b028-479b-8c6e-60476b6a4456
+    description: 'App for Testing'
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
+org:
+    name: 'The Companyy'
+    uuid: f0033dc0-126b-40ba-89e0-d3061bdeda4c
+    email: testcomp@gmail.com
+    address1: 'Street Address1'
+    address2: 'Street Address 2'
+    city: 'Bengaluru'
+    state: Karnataka
+    zip: 560009
+    country: 'India'
+    contact:
+        username: testcomp.gmail.com
+        firstname: Admin
+        lastname: User
+        email: testcomp@gmail.com
+    preferences: '{}'
+    businessOffering: 
+        -   
+            businessRole: Agent
+            entity:
+                -   "Personal Liability"
+                -   "Group Liability"
+businessRole:
+    -   name: "Agent"
+    -   name: "Policy Holder"
+privilege:
+    -
+        name: MANAGE_POLICY_APPROVAL
+        permission: 7
+    -
+        name: MANAGE_MY_POLICY
+        permission: 7
+    -
+        name: MANAGE_MY_POLICY2
+        permission: 5
+role:
+    -
+        name: CSR
+        privileges:
+            -
+                privilege_name: MANAGE_POLICY_APPROVAL
+                permission: 5
+        uuid: 45b7c4b0-d08f-4a96-a9c0-8c4df425e7d1        
+        businessRole: "Agent"
+    -
+        name: 'Policy Holder'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_MY_POLICY
+                permission: 3
+            -
+                privilege_name: MANAGE_MY_POLICY2
+                permission: 5
+        uuid: e10aa5de-8122-4b97-87a6-444306b62cb4
+        businessRole: "Policy Holder"
+entity:
+    -
+        name: 'Group Liability'
+        uuid: 444165c1-ae53-4d3e-b111-6cd5f9e8beef
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
+        identifiers:
+            -
+                identifier: business_padi
+        participantRole:
+            -
+                businessRole: 'Policy Holder'
+    -
+        name: 'Personal Liability'
+        uuid: 034165c1-ae53-4d3e-b111-6cd5f9e8be4e
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
+        identifiers:
+            -
+                identifier: padi
+        participantRole:
+            -
+                businessRole: 'Policy Holder'
