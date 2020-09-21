@@ -1385,4 +1385,24 @@ class UserService extends AbstractService
             return 0;
         }
     }
+
+    public function getPolicyTerm()
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_user')
+        ->columns(array('policy_terms'))
+        ->where(array('id' => AuthContext::get(AuthConstants::USER_ID),'orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        $result = $this->executeQuery($select)->toArray();
+        return array_column($result, 'policy_terms');
+    }
+
+    public function updatePolicyTerms()
+    {
+        $sql = $this->getSqlObject();
+        $updatedData['policy_terms'] = "1";
+        $update = $sql->update('ox_user')->set($updatedData)
+        ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        $result = $this->executeUpdate($update);
+    }
 }
