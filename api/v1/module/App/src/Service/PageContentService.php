@@ -239,9 +239,10 @@ class PageContentService extends AbstractService
     }
 
     private function checkListContent($data){
-
         if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
             return  json_encode($data['content']);
+        }else{
+            return $data['content'];
         }
         if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
             return  json_encode($data['gridContent']);
