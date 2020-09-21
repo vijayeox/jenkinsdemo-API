@@ -85,6 +85,7 @@ ox_user:
     uuid: 754bc48a-3c69-4f7a-af8b-019fc984ee76
     username: individualadmin
     name: 'Individual Admin'
+    password: 'testpasswd'
     orgid: 100
     user_profile_id: 150
     status: 'Active'
@@ -94,6 +95,7 @@ ox_user:
     id: 101
     uuid: 864bc48a-3c69-4f7a-af8b-019fc984ee87
     username: individualadmin1
+    password: 'testpasswd'
     name: 'Individual1 Admin'
     orgid: 101
     user_profile_id: 151
@@ -104,6 +106,7 @@ ox_user:
     id: 102
     uuid: 974bc48a-3c69-4f7a-af8b-019fc984ee98
     username: individualadmin2
+    password: 'testpasswd'
     name: 'Individual2 Admin'
     orgid: 102
     user_profile_id: 152

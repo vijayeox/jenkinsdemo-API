@@ -13,6 +13,7 @@ class FileControllerTest extends ControllerTest
     {
         $this->loadConfig();
         parent::setUp();
+        $this->config = $this->getApplicationConfig();
     }
     public function getDataSet()
     {
@@ -172,13 +173,13 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $orgUuid = $this->testOrgUuid;
 
-        $path1 = __DIR__ . '/../../../../../data/template/' . $orgUuid . "/";
+        $path1 = $this->config['TEMPLATE_FOLDER']. $orgUuid . "/";
         if (!is_dir($path1)) {
             mkdir($path1, 0777, true);
         }
         $path = $path1 . $fileId;
         if (!is_link($path)) {
-            symlink(__DIR__ . '/../../../../../../../clients/DiveInsurance/test/Files', $path);
+            symlink($this->config['CLIENT_FOLDER'] . 'DiveInsurance/test/Files', $path);
         }
         $crypto = new Crypto();
         $documentName = $crypto->encryption($path . "/dummy.pdf");

@@ -96,9 +96,9 @@ class OrganizationService extends AbstractService
             }else if(!isset($data['name'])){
                 throw new ValidaTionException("Organization name required");
             }
-            $select = "SELECT count(name),oxo.status,oxo.uuid from ox_organization oxo where oxo.name = '" . $data['name'] . "'";
+            $select = "SELECT oxo.name,oxo.status,oxo.uuid from ox_organization oxo where oxo.name = '" . $data['name'] . "'";
             $result = $this->executeQuerywithParams($select)->toArray();
-            if ($result[0]['count(name)'] > 0) {
+            if (count($result) > 0) {
                 if ($result[0]['status'] == 'Inactive') {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0;
                     if ($data['reactivate'] == 1) {

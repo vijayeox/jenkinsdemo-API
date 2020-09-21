@@ -71,7 +71,7 @@ class AppArtifactControllerTest extends ControllerTest {
         ];
         $this->setupAppSourceDir($data);
         $fileName = 'AddFormTest.json';
-        $fileSize = 74665;
+        $fileSize = 76653;
         $filePath = __DIR__ . '/../../Dataset/' . $fileName;
         $_FILES = [
             'artifactFile' => [
@@ -187,7 +187,7 @@ class AppArtifactControllerTest extends ControllerTest {
         ];
         $this->setupAppSourceDir($data);
         $fileName = 'AddWorkflowTest.bpmn';
-        $fileSize = 546495;
+        $fileSize = 546674;
         $filePath = __DIR__ . '/../../Dataset/' . $fileName;
         $_FILES = [
             'artifactFile' => [
@@ -695,7 +695,7 @@ class AppArtifactControllerTest extends ControllerTest {
         $headers = $response->getHeaders();
         $this->assertEquals('application/zip', 
             $headers->get('content-type')->getFieldValue());
-        $this->assertEquals('attachment; filename="SampleApp-OxzionAppArchive.zip"', 
+        $this->assertEquals('attachment; filename=SampleApp-OxzionAppArchive.zip', 
             $headers->get('content-disposition')->getFieldValue());
         $bodyContent = $response->getBody();
         $signature = substr($bodyContent, 0, 4);

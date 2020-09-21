@@ -75,7 +75,7 @@ class AppService extends AbstractService
         $this->businessRoleService = $businessRoleService;
         $this->userService = $userService;
         $this->restClient = new RestClient(null);
-        $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job", "migration");
+        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration", "symlink");
     }
 
     /**

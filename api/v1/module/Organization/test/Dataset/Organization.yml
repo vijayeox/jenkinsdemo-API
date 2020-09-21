@@ -21,11 +21,12 @@ ox_organization_profile:
         id: 101
         uuid: '915d207e-ac75-11ea-bb37-0242ac130002'
         address_id: 8
+        created_by: 1
   -
         id: 102
         uuid: '915d22cc-ac75-11ea-bb37-0242ac130002'
-        address_id: 9  
-
+        address_id: 9
+        created_by: 1
 ox_organization:
   -
         id: 3

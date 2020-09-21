@@ -148,7 +148,7 @@ class UserService extends AbstractService
     {
         if (!$register) {
             if (isset($params['orgId']) && $params['orgId'] != '') {
-                if ((!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
+                if ((!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && !SecurityManager::isGranted('MANAGE_USER_WRITE') && (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                     ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands']))) {
                     throw new AccessDeniedException("You do not have permissions create user");
                 } else {
@@ -388,7 +388,7 @@ class UserService extends AbstractService
         $password = $data['password'];
         $this->beginTransaction();
         try {
-            $result = $this->createUser($params, $data);
+            $result = $this->createUser($params, $data,true);
             $select = "SELECT id from `ox_user` where username = '" . $data['username'] . "'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
             $response = $this->addUserRole($resultSet[0]['id'], 'ADMIN');
@@ -1375,9 +1375,10 @@ class UserService extends AbstractService
             return 0;
         }
     }
+
     public function getContactUserForOrg($orgId){
-         $select = "SELECT ou.uuid as userId,ou.username,ou.firstname,ou.lastname
-                    FROM ox_user ou INNER JOIN ox_organization org ON org.contactid = ou.id 
+         $select = "SELECT ou.uuid as userId,ou.username,oup.firstname,oup.lastname
+                    FROM ox_user ou INNER JOIN ox_organization org ON org.contactid = ou.id INNER JOIN ox_user_profile oup ON ou.user_profile_id = oup.id 
                     WHERE org.uuid=:orgId";
         $selectParams = array("orgId" => $orgId);
         $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
