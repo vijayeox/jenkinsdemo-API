@@ -555,11 +555,9 @@ public function setupAppView($yamlData, $path)
     $appName = $path . 'view/apps/' . $yamlData['app']['name'];
     $metadataPath = $appName . '/metadata.json';
     $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
-    FileUtils::copyDir($eoxapp, $path);
-     if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
-       FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
-    }else{
-        FileUtils::rmDir($path . 'view/apps/eoxapps');
+    if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
+        FileUtils::copyDir($eoxapp, $path);
+        FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
     }
     $jsonData = json_decode(file_get_contents($metadataPath),true);
     $jsonData['name'] = $yamlData['app']['name'];
