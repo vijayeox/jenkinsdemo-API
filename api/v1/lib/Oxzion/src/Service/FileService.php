@@ -1531,6 +1531,117 @@ class FileService extends AbstractService
         }
         return $data;
     }
+
+    public function deleteAttachment($params)
+    {
+        try{
+            $attachmentFilter['uuid'] = $params['attachmentId'];
+            $attachmentRecord = $this->getDataByParams('ox_file_attachment', array("name",'id'), $attachmentFilter, null)->toArray();
+            if(!empty($attachmentRecord) && !is_null($attachmentRecord)){
+                $this->beginTransaction();
+                $attachmentName = $attachmentRecord[0]['name'];
+                $delete = $this->getSqlObject()
+                    ->delete('ox_file_attachment')
+                    ->where(['id' => $attachmentRecord[0]['id']]);
+                $result = $this->executeQuery($delete);
+                $fileFilter['uuid'] = $params['fileId'];
+                $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $fileFilter, null)->toArray();
+                if(!empty($fileRecord) && !is_null($fileRecord)) {
+                    $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'].'/';
+                    if(file_exists($folderPath.$attachmentName)) {
+                        $deleteFile = FileUtils::deleteFile($attachmentName,$folderPath);
+                    }
+                    $fileData = json_decode($fileRecord[0]['data'],true);
+                    $this->deleteAttachmentRecordWithUuid($fileData, $attachmentFilter['uuid']);
+                    $this->updateFile($fileData,$fileFilter['uuid']);
+                    $this->commit();
+                }
+                else {
+                    throw new ServiceException("Incorrect file uuid specified", "file.uuid.incorrect");
+                }
+            }
+            else {
+                throw new ServiceException("Incorrect attachment uuid specified", "attachment.uuid.incorrect");
+            }
+        }
+        catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    private function deleteAttachmentRecordWithUuid(&$data, $uuid){
+        if (isset($data['uuid']) && $data['uuid'] == $uuid) {
+            return true;
+        }
+        foreach ($data as $key => &$value) {
+            if(is_array($value) && $this->deleteAttachmentRecordWithUuid($value, $uuid)){
+                unset($data[$key]);
+                $data = array_filter($data);
+            }
+        }
+    }
+
+    public function renameAttachment($data) {
+        try{
+            if(isset($data['name'])) {
+                $newName = $data['name'];
+            }
+            else {
+                throw new ServiceException("name is required and not specified", "attachment.newName.unspecified");
+            }
+            $attachmentFilter['uuid'] = $data['attachmentId'];
+            $attachmentRecord = $this->getDataByParams('ox_file_attachment', array("url","path","originalName","name",'id'), $attachmentFilter, null)->toArray();
+            if(!empty($attachmentRecord) && !is_null($attachmentRecord)){
+                $this->beginTransaction();
+                $attachmentName = $attachmentRecord[0]['name'];
+                $url = isset($attachmentRecord[0]['url']) ? str_replace($attachmentName, $newName, $attachmentRecord[0]['url']) : null;
+                $path = isset($attachmentRecord[0]['path']) ? str_replace($attachmentName, $newName, $attachmentRecord[0]['path']) : null;
+                $update = $this->getSqlObject()
+                    ->update('ox_file_attachment')
+                    ->set(['name' => $newName,'originalName' => $newName, 'url' => $url, 'path' => $path])
+                    ->where(['id' => $attachmentRecord[0]['id']]);
+                $result = $this->executeQuery($update);
+                $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $data['fileId'].'/';
+                if(file_exists($folderPath.$attachmentName)){
+                    $check = FileUtils::renameFile($folderPath.$attachmentName, $folderPath.$newName);
+                }
+                $fileFilter['uuid'] = $data['fileId'];
+                $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $fileFilter, null)->toArray();
+                if(!empty($fileRecord) && !is_null($fileRecord)) {
+                    $fileData = json_decode($fileRecord[0]['data'],true);
+                    $this->renameAttachmentRecordWithUuid($fileData, $attachmentFilter['uuid'],$newName,$attachmentName);
+                    $this->updateFile($fileData,$fileFilter['uuid']);
+                    $this->commit();
+                }
+                else {
+                    throw new ServiceException("Incorrect file uuid specified", "file.uuid.incorrect");
+                }
+            } else {
+                throw new ServiceException("Incorrect attachment uuid specified", "attachment.uuid.incorrect");
+            }
+        }
+        catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    private function renameAttachmentRecordWithUuid(&$data, $uuid, $newName, $oldName){
+        if (isset($data['uuid']) && $data['uuid'] == $uuid) {
+            return true;
+        }
+        foreach ($data as $key => &$value) {
+            if(is_array($value) && $this->renameAttachmentRecordWithUuid($value, $uuid, $newName, $oldName)){
+                $data[$key]['name'] = $newName;
+                $data[$key]['originalName'] = $newName;
+                $data[$key]['file'] = isset($data[$key]['file']) ? str_replace($oldName, $newName, $data[$key]['file']) : null;
+                $data[$key]['url'] = isset($data[$key]['url']) ? str_replace($oldName, $newName, $data[$key]['url']) : null;
+                $data[$key]['path'] = isset($data[$key]['path']) ? str_replace($oldName, $newName, $data[$key]['path']) : null;
+            }
+        }
+    }
+
     public function appendAttachmentToFile($fileAttachment,$field,$fileId,$orgId = null){
         if(!isset($fileAttachment['file']) && isset($fileAttachment['name'])) {
             $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_UUID);

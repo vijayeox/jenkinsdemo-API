@@ -9,6 +9,7 @@ use Oxzion\ValidationException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Service\FileService;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\ServiceException;
 
 class FileAttachmentController extends AbstractApiController
 {
@@ -65,11 +66,7 @@ class FileAttachmentController extends AbstractApiController
             if (!$files) {
                 return $this->getErrorResponse("No file Found", 404, $params);
             }
-            if ($files['name']) {
-                $fileInfo = $this->fileService->addAttachment($params,$files);
-            } else {
-                $fileInfo = $this->fileService->addAttachment($params,$files);
-            }
+            $fileInfo = $this->fileService->addAttachment($params,$files);
             return $this->getSuccessResponseWithData($fileInfo, 201);
         } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
@@ -82,5 +79,41 @@ class FileAttachmentController extends AbstractApiController
             return $this->getErrorResponse("File Not attached", 400, $files);
         }
         return $this->getErrorResponse("File Not attached", 400, $files);
+    }
+
+    public function removeAttachmentAction() {
+        $params = $this->params()->fromRoute();
+        try {
+            $this->fileService->deleteAttachment($params);
+            return $this->getSuccessResponse("Attachment has been successfully deleted", 201);
+        }
+        catch (ServiceException $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Unexpected error has occured", 500);
+        }
+        return $this->getErrorResponse("File Not found", 404);
+    }
+
+    public function renameAttachmentAction() {
+        $params = $this->params()->fromRoute();
+        $body = $this->extractPostData();
+        $data = array_merge($params,$body);
+        try {
+            $this->fileService->renameAttachment($data);
+            return $this->getSuccessResponse("Attachment has been successfully deleted", 201);
+        }
+        catch (ServiceException $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Unexpected error has occured", 400);
+        }
+        return $this->getErrorResponse("File Not found", 404);
     }
 }
