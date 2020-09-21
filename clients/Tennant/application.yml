@@ -1,5 +1,5 @@
 app:
-    name: Insurance
+    name: TennantInsurance
     uuid: 46807204-26fc-4b79-9259-3b727a12f918
     description: 'Insurance OI Application'
     category: Dashboards
