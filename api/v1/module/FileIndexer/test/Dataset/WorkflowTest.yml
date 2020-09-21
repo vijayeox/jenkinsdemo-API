@@ -1,9 +1,11 @@
 ox_organization_profile:
 -
     id: 3
+    created_by: 1
     uuid: 'c7499a34-c100-4e41-bece-5822adca3844'
 -
     id: 4
+    created_by: 1
     uuid: 'c7499a34-c100-4e41-bece-5822adca3ccc'
 ox_organization:
 -
