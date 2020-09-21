@@ -1,0 +1,18 @@
+{
+	"type":"application",
+	"name":"RISCOMInsurance",
+	"appId":"e9a5b0df-d6e9-4b54-8833-4c582b8cbcc6",
+	"category":null,
+	"autostart":false,
+    "singleton":true,
+	"defaultAppforOrgs":false,
+	"icon": "icon.png",
+	"icon_white": "icon_white.png",
+	"title": {
+		"en_EN": "Insurance"
+	},
+	"description": {
+		"en_EN": "Insurance"
+	},
+	"files":["main.js","main.css"]
+}
