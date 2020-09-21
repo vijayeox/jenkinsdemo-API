@@ -1065,7 +1065,7 @@
 					"tableView": false
 				}, {
 					"label": "Form Uuid",
-					"customDefaultValue": "try {\n  if (\n    !value &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}",
+					"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n\nconsole.log(value);",
 					"key": "uuid",
 					"type": "hidden",
 					"input": true,
@@ -1219,6 +1219,7 @@
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "Page UUID",
+									"calculateValue": "try {\n  if (\n    !(value.length > 1)\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}",
 									"key": "uuid",
 									"type": "hidden",
 									"input": true,
@@ -1254,11 +1255,11 @@
 							"label": "Page Content Form",
 							"tableView": true,
 							"form": "5f21c1bdbba30150d672d0cf",
-							"calculateValue": "var pagesList = data.pages.map((i) => i.name);\nif (data.form !== \"\") {\n  var formsList = data.form.map((i) => {\n    return { name: i.name, uuid: i.uuid };\n  });\n}\nif (row.pageContent == undefined) {\n  value.data.content = row.content;\n}\nif (value) {\n  if (value.data) {\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
+							"calculateValue": "var pagesList = data.pages.map((i) => {\n return { name: i.name, uuid: i.uuid };\n});\nif (data.form !== \"\") {\n  var formsList = data.form.map((i) => {\n    return { name: i.name, uuid: i.uuid };\n  });\n}\n\nif (value) {\n  if (value.data) {\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
 							"key": "pageContent",
 							"type": "form",
 							"input": true,
-							"formRevision": 16,
+							"formRevision": 26,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Page Content",
@@ -1419,7 +1420,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 358,
+	"_vid": 365,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1438,6 +1439,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-09-18T23:38:09.805Z",
+	"modified": "2020-09-20T15:28:43.523Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }

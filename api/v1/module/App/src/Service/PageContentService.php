@@ -10,6 +10,7 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
 use Exception;
+use Oxzion\Utils\UuidUtil;
 
 class PageContentService extends AbstractService
 {
@@ -73,6 +74,9 @@ class PageContentService extends AbstractService
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){
                 if($value['type'] == 'List' || $value['type'] == 'Search'){
+                    if(isset($value['form_id']) && empty($value['form_id'])){
+                        unset($value['form_id']);
+                    }
                     $value['content'] = json_encode($value['content']);
                 }
                 if($value['type'] == 'Form' && (isset($value['form_id']) || isset($value['template_file']))){
@@ -213,14 +217,11 @@ class PageContentService extends AbstractService
     private function savePageContentInternal($data)
     {   
         try{
-            if(isset($data['content']) && !is_string($data['content'])){
-                $data['content'] = json_encode($data['content']);
-            }
+            $data['content'] = $this->checkListContent($data);
             $page = new PageContent();
             $page->exchangeArray($data);
             $page->validate();
             $count = 0;
-
             $count = $this->table->save($page);
             if ($count == 0) {
                 return 0;
@@ -231,8 +232,19 @@ class PageContentService extends AbstractService
             }
             return $count;
         }catch(Exception $e){
+            print_r($e->getMessage());exit;
             $this->logger->error($e->getMessage(), $e);
             throw $e;
+        }
+    }
+
+    private function checkListContent($data){
+
+        if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
+            return  json_encode($data['content']);
+        }
+        if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
+            return  json_encode($data['gridContent']);
         }
     }
 }
