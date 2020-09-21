@@ -52,9 +52,10 @@ return [
         'authToken' => ''
     ],
     'applicationUrl' => 'http://localhost:8081',
+    'internalBaseUrl' => 'http://localhost:8080/api',
      'CLIENT_FOLDER' => '/app/clients/',
      'APPS_FOLDER' => '/app/view/apps/',
      'THEME_FOLDER' => '/app/view/themes/',
-     'baseUrl' => 'http://localhost:8080',
+     'baseUrl' => 'http://localhost:8080/api',
      'GUI_FOLDER' => '/app/view/gui/src/externals/',
 ];

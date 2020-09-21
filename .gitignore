@@ -30,5 +30,8 @@
 /integrations/workflow/ProcessEngine/bin/
 /integrations/workflow/ProcessEngine/bin/
 /setup/mysql/*
-/view/apps/DiveInsurance
-/view/themes/VicenciaAndBuckleyTheme
+/view/view_built
+/clients/DiveInsurance/view/apps/DiveInsurance/dist/
+/clients/DiveInsurance/view/apps/DiveInsurance/node_modules/
+/clients/EOXAppBuilder/view/apps/EOXAppBuilder/dist/
+/clients/EOXAppBuilder/view/apps/EOXAppBuilder/node_modules/

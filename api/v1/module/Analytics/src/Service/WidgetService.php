@@ -296,7 +296,7 @@ class WidgetService extends AbstractService
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');
         $filter = null;
-        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round'];
+        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot'];
         if ($firstRow['no_filter_override']) {
             unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
         }
@@ -399,16 +399,21 @@ class WidgetService extends AbstractService
         } else {
             $colName = 'calculated';
         }
+        $expression = strtolower($expression);
         foreach ($data as $key1 => $dataset) {
             $m = new EvalMath;
             $m->suppress_errors = true;
             $m->evaluate('round(x,y) = (((x*(10^y))+0.5*(abs(x)/(x+0^abs(x))))%(10^10))/(10^y)');
             foreach ($dataset as $key2 => $value) {
                 if (is_numeric($value)) {
+                    $key2=strtolower($key2);
                     $m->evaluate("$key2 = $value");
                 }
             }
             $calculated = $m->evaluate($expression);
+            if ($calculated=='false' || $calculated=='') {
+                $calculated = 0;
+            }
             $data[$key1][$colName] = $calculated;
         }
         return $data;
