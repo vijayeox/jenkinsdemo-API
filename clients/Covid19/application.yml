@@ -1,0 +1,86 @@
+app:
+    name: Covid19
+    description: 'App for Covid 19'
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
+    isdefault: false
+    logo: default_app.png
+    status: 2
+    start_options: null
+org:
+    name: 'EOX Vantage1'
+    uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
+    email: helpdesk@vantageagora.com
+    address1: '23611 Chagrin Blvd'
+    address2: 'Ste 320, Beachwood, Ohio 44122'
+    city: Beachwood
+    state: OH
+    zip: 44122
+    contact:
+        username: supportadmin
+        firstname: Support
+        lastname: Admin
+        email: helpdesk@vantageagora.com
+    preferences:
+        currency: USD
+        timezone: America/New_York
+        dateformat: mm/dd/yy
+    country: 'United States'
+privilege:
+    -
+        name: MANAGE_CHECKLIST
+        permission: 3
+role:
+    -
+        name: Visitors
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_CHECKLIST
+                permission: 1
+        uuid: d7c0bcdf-596c-42d9-940f-c53d98528fa1
+    -
+        name: 'Checklist Viewers'
+        privileges:
+            -
+                privilege_name: MANAGE_CHECKLIST
+                permission: 3
+        uuid: 770d2fb3-39e9-4ba9-ba23-daceefe83e8c
+entity:
+    -
+        name: 'Symptom Tracker'
+        uuid: 14072055-8465-4143-a2e3-bab93f955b47
+        field:
+            -
+                name: Status
+                text: Status
+                data_type: text
+                index: true
+pages:
+    -
+        page_name: HomePage.yml
+        uuid: 84624217-71f1-4865-becb-08987d46e861
+    -
+        page_name: CheckListPage.yml
+        uuid: 3d2cb3de-492e-4f12-8f36-0941b4b274a4
+menu:
+    -
+        name: Home
+        privilege: MANAGE_CHECKLIST_WRITE
+        icon: 'fa fa-home'
+        page_uuid: 84624217-71f1-4865-becb-08987d46e861
+        uuid: cf839432-6c23-4fcc-846d-13ff17181d79
+    -
+        name: 'Manage Applications'
+        icon: 'fa fa-folder-open'
+        privilege: MANAGE_CHECKLIST_WRITE
+        page_uuid: 3d2cb3de-492e-4f12-8f36-0941b4b274a4
+        uuid: ea4f8fe0-826b-4a84-83c3-23bb963ea05c
+form:
+    -
+        name: 'COVID - 19 Checklist'
+        uuid: f5a13bcc-d3de-4862-b07f-06ff6cadba80
+        description: 'Covid 19 Symptom Tracker'
+        template_file: covidsymptomtracker.json
+        entity: 'Symptom Tracker'

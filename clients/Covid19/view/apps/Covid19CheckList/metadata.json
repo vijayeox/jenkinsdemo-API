@@ -1,0 +1,24 @@
+{
+  "type": "application",
+  "name": "Covid19Checklist",
+  "appId":"d77ea120-b028-479b-8c6e-60476b6a4456",
+  "formId":"1",
+  "category": null,
+  "singleton":true,
+  "icon": "icon.png",
+  "icon_white": "icon_white.png",
+  "autostart": true,
+  "hidden": true,
+  "defaultAppforOrgs" : false,
+  "server": "server.js",
+  "title": {
+    "en_EN": "COVID-19 Checklist"
+  },
+  "description": {
+    "en_EN": "COVID-19 Checklist"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}
