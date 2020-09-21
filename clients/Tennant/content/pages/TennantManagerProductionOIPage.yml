@@ -1,0 +1,7 @@
+name: 'Production'
+description: 'Shows Production OI'
+content:
+    -
+        type: DashboardManager
+        content:
+            uuid: 63bed5fa-d7fa-44f1-b84b-5f87b0405f98

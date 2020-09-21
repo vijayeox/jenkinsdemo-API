@@ -1,0 +1,107 @@
+app:
+    name: Insurance
+    uuid: 46807204-26fc-4b79-9259-3b727a12f918
+    description: 'Insurance OI Application'
+    category: Dashboards
+    type: 2
+    autostart: 'true'
+org:
+    name: 'Tennant'
+    uuid: 63e7ca15-b13c-4a98-8969-d59d7fd7221b
+    email: tennantinsurer@vantageagora.com
+    address1: '5555 Triangle Pkwy NW #130'
+    address2: ''
+    city: Norcross
+    state: GA
+    zip: 30092
+    contact:
+        username: tennantinsurer
+        firstname: Tennant
+        lastname: Insurer
+        email: tennant@vantageagora.com
+    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+    country: 'United States'
+privilege:
+    -
+        name: MANAGE_TENNANTAGENT
+        permission: 15
+    -
+        name: MANAGE_TENNANTUNDERWRITER
+        permission: 15
+    -
+        name: MANAGE_TENNANTPRODUCTION
+        permission: 15
+    -
+        name: MANAGE_TENNANTPRODUCER
+        permission: 15
+role:
+    -
+        name: 'Tennant Agent'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_TENNANTAGENT
+                permission: 15
+        uuid: 1a795e26-a984-4128-8b40-7d5e19b4403a
+    -
+        name: 'Tennant Underwriter'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_TENNANTUNDERWRITER
+                permission: 15
+        uuid: 4e13e54f-17c8-4fd2-911d-9301b661b1b1
+    -
+        name: 'Tennant Production'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_TENNANTPRODUCTION
+                permission: 15
+        uuid: 99778dec-a298-4411-8fd9-898c43b03acc
+    -
+        name: 'Tennant Producer'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_TENNANTPRODUCER
+                permission: 15
+        uuid: f8099647-370a-4848-8fb0-ac63b76cf1fd
+pages:
+    -
+        page_name: TennantManagerAgentOIPage.yml
+        uuid: c346a5b2-beee-43aa-86e4-b02b28d714a8
+    -
+        page_name: TennantManagerUnderwriterOIPage.yml
+        uuid: 91d2384b-3032-4288-85d7-f5671c67ba9b
+    -
+        page_name: TennantManagerProductionOIPage.yml
+        uuid: 63bed5fa-d7fa-44f1-b84b-5f87b0405f98
+    -
+        page_name: TennantManagerProducerOIPage.yml
+        uuid: 34267175-0e15-4d9c-b43d-d2f640ca181a
+menu:
+    -
+        name: Agent
+        icon: 'fal fa-address-card'
+        privilege: MANAGE_TENNANTAGENT_WRITE
+        page_uuid: c346a5b2-beee-43aa-86e4-b02b28d714a8
+        uuid: d2eec096-9dec-4775-8aae-29ae0d2dcda2
+    -
+        name: Underwriter
+        icon: 'fad fa-user-edit'
+        privilege: MANAGE_TENNANTUNDERWRITER_WRITE
+        page_uuid: 91d2384b-3032-4288-85d7-f5671c67ba9b
+        uuid: bcc16b53-2df4-4077-abbd-5b6d1540b862
+    -
+        name: Production
+        icon: 'fal fa-funnel-dollar'
+        privilege: MANAGE_TENNANTPRODUCTION_WRITE
+        page_uuid: 63bed5fa-d7fa-44f1-b84b-5f87b0405f98
+        uuid: 28f9c736-a949-464b-b301-fa50e67b83f0
+    -
+        name: Producer
+        icon: 'fal fa-address-card'
+        privilege: MANAGE_TENNANTPRODUCER_WRITE
+        page_uuid: 34267175-0e15-4d9c-b43d-d2f640ca181a
+        uuid: 698c3985-dc77-4ef5-8a43-0dbae2f27d4d
