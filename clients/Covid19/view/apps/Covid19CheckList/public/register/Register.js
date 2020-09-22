@@ -23,20 +23,11 @@ export default class Register extends React.Component {
         />
         <div className="container">
           <div className="logo">
-            <img src="../img/logo.png" style={{ float: "left" }} />
+            <img src="./img/logo.png" style={{ float: "left" }} />
           </div>
           <section>
             <div className="form">
-              <ul className="tab-group">
-                <li className="tab active">
-                  <a href="#signup">Visitor Checklist</a>
-                </li>
-              </ul>
-              <div className="tab-content">
-                <div id="signup">
-                  <div id="formio"></div>
-                </div>
-              </div>
+            <div id="formio"></div>
             </div>
           </section>
         </div>

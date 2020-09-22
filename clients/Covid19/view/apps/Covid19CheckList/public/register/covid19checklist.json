@@ -39,28 +39,6 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "panel",
-			"customConditional": "if (\n  data[\"verified\"] === true &&\n  (data[\"user_exists\"] === 0 || data[\"user_exists\"] == \"0\") && (data[\"padiNotApplicable\"] === false || data[\"padiNotApplicable\"] == \"false\")\n) {\n  show = true;\n} else {\n  show = false;\n}",
-			"logic": [{
-				"name": "Change Personal Information to Primary Contact",
-				"trigger": {
-					"type": "simple",
-					"simple": {
-						"show": true,
-						"when": "product",
-						"eq": "Dive Store"
-					}
-				},
-				"actions": [{
-					"name": "Change Name",
-					"type": "property",
-					"property": {
-						"label": "Title",
-						"value": "title",
-						"type": "string"
-					},
-					"text": "Primary Contact"
-				}]
-			}],
 			"type": "panel",
 			"label": "Personal Information",
 			"input": false,
@@ -439,7 +417,7 @@
 				}, {
 					"components": [{
 						"label": "Email",
-						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
+						"description": "Please make sure you add this to your safe senders list",
 						"tableView": true,
 						"validate": {
 							"required": true,
@@ -472,7 +450,7 @@
 		"tableView": false
 	}],
 	"revisions": "current",
-	"_vid": 6,
+	"_vid": 9,
 	"title": "COVID - 19 Checklist",
 	"display": "form",
 	"access": [{
@@ -487,6 +465,6 @@
 	"path": "covid19checklist",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-09-21T06:30:40.979Z",
-	"modified": "2020-09-21T18:55:10.814Z",
+	"modified": "2020-09-22T16:31:00.928Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:covid19Checklist"
 }

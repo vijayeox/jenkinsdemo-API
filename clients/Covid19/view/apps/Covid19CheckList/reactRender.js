@@ -30,9 +30,9 @@ module.exports = function(core, proc) {
               <meta charSet="UTF-8" />
               <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
               <meta name="viewport" content="width=device-width, initial-scale=1" />
-              <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-              <link rel="stylesheet" type="text/css" href="../css/formio.full.min.css" />
-              <link rel="stylesheet" type="text/css" href="../css/custom.css" />
+              <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+              <link rel="stylesheet" type="text/css" href="./css/formio.full.min.css" />
+              <link rel="stylesheet" type="text/css" href="./css/custom.css" />
               <script type="text/javascript">
                 var formContent = JSON.stringify(${buf});
                 var appId='${appId}';
@@ -41,14 +41,14 @@ module.exports = function(core, proc) {
             </head>
             <body>
               <div id="root">${component}</div>
-              <script src="../js/country.js"></script>
-              <script src="../js/phonelist.js"></script>
-              <script src="../js/jquery.min.js"></script>
-              <script src="../js/moment.js"></script>
-              <script src="../js/moment-tz.js"></script>
-              <script src="../js/formio.full.min.js"></script>
-              <script src="../js/custom.js"></script>
-              <script src="../js/sweetaleart.js"></script>
+              <script src="./js/country.js"></script>
+              <script src="./js/phonelist.js"></script>
+              <script src="./js/jquery.min.js"></script>
+              <script src="./js/moment.js"></script>
+              <script src="./js/moment-tz.js"></script>
+              <script src="./js/formio.full.min.js"></script>
+              <script src="./js/custom.js"></script>
+              <script src="./js/sweetaleart.js"></script>
             </body>
           </html>
           `;
