@@ -218,6 +218,7 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_combinedSingleLimitDS'] = 1000000;
                     $policy['previous_annualAggregateDS'] = 2000000;
                 }
+                 $policy['previous_propertyCoverageSelect'] = $data['propertyCoverageSelect'];
                 $policy['previous_dspropreplacementvalue'] = isset($data['dspropreplacementvalue'])?$data['dspropreplacementvalue']:0;
                 $policy['previous_lossOfBusIncome'] = isset($data['lossOfBusIncome'])?$data['lossOfBusIncome']:0;
                 $policy['previous_dspropTotal'] = isset($data['dspropTotal'])?$data['dspropTotal']:0;
