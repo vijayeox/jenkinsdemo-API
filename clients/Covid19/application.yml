@@ -1,32 +1,34 @@
 app:
-    name: Covid19
-    description: 'App for Covid 19'
-    category: EXAMPLE_CATEGORY
-    type: 2
-    autostart: true
-    isdefault: false
-    logo: default_app.png
-    status: 2
-    start_options: null
+    -
+        name: Covid19
+        description: 'App for Covid 19'
+        category: EXAMPLE_CATEGORY
+        type: 2
+        autostart: true
+        isdefault: false
+        logo: default_app.png
+        status: 2
+        start_options: null
 org:
-    name: 'EOX Vantage1'
-    uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
-    email: helpdesk@vantageagora.com
-    address1: '23611 Chagrin Blvd'
-    address2: 'Ste 320, Beachwood, Ohio 44122'
-    city: Beachwood
-    state: OH
-    zip: 44122
-    contact:
-        username: supportadmin
-        firstname: Support
-        lastname: Admin
+    -
+        name: 'EOX Vantage1'
+        uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
         email: helpdesk@vantageagora.com
-    preferences:
-        currency: USD
-        timezone: America/New_York
-        dateformat: mm/dd/yy
-    country: 'United States'
+        address1: '23611 Chagrin Blvd'
+        address2: 'Ste 320, Beachwood, Ohio 44122'
+        city: Beachwood
+        state: OH
+        zip: 44122
+        contact:
+            username: supportadmin
+            firstname: Support
+            lastname: Admin
+            email: helpdesk@vantageagora.com
+        preferences:
+            currency: USD
+            timezone: America/New_York
+            dateformat: mm/dd/yy
+        country: 'United States'
 privilege:
     -
         name: MANAGE_CHECKLIST
