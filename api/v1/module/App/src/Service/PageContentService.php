@@ -74,7 +74,7 @@ class PageContentService extends AbstractService
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){
                 if($value['type'] == 'List' || $value['type'] == 'Search'){
-                    if(isset($value['form_id']) && empty($value['form_id']) && $value['form_id'] == ''){
+                    if(isset($value['form_id']) && (empty($value['form_id']) || $value['form_id'] == '')){
                         unset($value['form_id']);
                     }
                     if(isset($value['content'])){
@@ -251,7 +251,10 @@ class PageContentService extends AbstractService
             }
         }
         if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
-            return  json_encode($data['gridContent']);
+            return json_encode($data['gridContent']);
+        }
+        if(isset($data['htmlContent']) && !empty($data['htmlContent']) && !is_string($data['htmlContent'])){
+            return json_encode($data['htmlContent']);
         }
     }
 }
