@@ -104,7 +104,7 @@ class FileAttachmentController extends AbstractApiController
         $data = array_merge($params,$body);
         try {
             $this->fileService->renameAttachment($data);
-            return $this->getSuccessResponse("Attachment has been successfully deleted", 201);
+            return $this->getSuccessResponse("Attachment has been successfully renamed", 201);
         }
         catch (ServiceException $e){
             $this->log->error($e->getMessage(), $e);
