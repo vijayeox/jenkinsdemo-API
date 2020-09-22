@@ -260,9 +260,9 @@ covid()
     cd ${OXHOME}
     echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
     mkdir -p build/clients
-    echo -e "${YELLOW}Copying clients AXON to build folder.${RESET}"
+    echo -e "${YELLOW}Copying clients Covid19 to build folder.${RESET}"
     rsync -rl clients/Covid19/ ./build/clients/Covid19/
-    echo -e "${YELLOW}Copying clients AXON Completed.${RESET}"
+    echo -e "${YELLOW}Copying clients Covid19 Completed.${RESET}"
 
 }
 integrations()
@@ -316,13 +316,13 @@ do
                 break;;
 
         axon)
-				echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 axon
                 package
                 break;;
         covid)
-				echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 covid
                 package
