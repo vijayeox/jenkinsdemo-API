@@ -243,6 +243,16 @@ arrowhead()
     echo -e "${YELLOW}Copying clients Arrowhead Completed.${RESET}"
 
 }
+axon()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients AXON to build folder.${RESET}"
+    rsync -rl clients/AXON/ ./build/clients/AXON/
+    echo -e "${YELLOW}Copying clients AXON Completed.${RESET}"
+
+}
 integrations()
 {
     camel
