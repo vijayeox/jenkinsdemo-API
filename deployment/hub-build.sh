@@ -42,6 +42,7 @@ buildhelp()
     echo -e "17. insuranceoi           -${YELLOW}For packaging insuranceoi app.${RESET}"
     echo -e "18. finance               -${YELLOW}For packaging Finance app.${RESET}"
     echo -e "19. transportation        -${YELLOW}For packaging Transportation app.${RESET}"
+    echo -e "17. axon           -${YELLOW}For packaging axon app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -243,6 +244,16 @@ arrowhead()
     echo -e "${YELLOW}Copying clients Arrowhead Completed.${RESET}"
 
 }
+axon()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients AXON to build folder.${RESET}"
+    rsync -rl clients/AXON/ ./build/clients/AXON/
+    echo -e "${YELLOW}Copying clients AXON Completed.${RESET}"
+
+}
 integrations()
 {
     camel
@@ -292,6 +303,13 @@ do
                 insuranceoi
                 package
                 break;;
+
+        axon)
+				echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                axon
+                package
+                break;;	
         finance)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
