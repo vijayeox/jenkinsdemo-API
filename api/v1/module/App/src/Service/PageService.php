@@ -27,6 +27,7 @@ class PageService extends AbstractService
         $count = 0;
         $orgId = isset($routeData['orgId'])? $this->getIdFromUuid('ox_organization', $routeData['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
         $data['app_id'] = $this->getIdFromUuid('ox_app', $routeData['appId']);
+        $content = false;
         if(isset($data['app_id'])){
             $page = null;
             $content = isset($data['content'])?$data['content']:false;
@@ -56,8 +57,10 @@ class PageService extends AbstractService
             }
             $page->exchangeArray($data);
             $page->validate();
-            try { 
-                unset($data['content']);
+            try {
+                if(isset($data['content'])){
+                    unset($data['content']);
+                }
                 $count = $this->table->save($page);
                 if ($count == 0) {
                     $this->rollback();
@@ -67,7 +70,7 @@ class PageService extends AbstractService
                     $id = $this->table->getLastInsertValue();
                     $data['id'] = $id;
                 }
-                if($content){
+                if(isset($content) && $content){
                     $pageContent = $this->pageContentService->savePageContent($data['id'],$content);
                 }
                 $this->commit();

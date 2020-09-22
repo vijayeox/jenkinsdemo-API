@@ -545,7 +545,11 @@ class AppControllerTest extends ControllerTest
         }
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::rmDir($appname);
+        try {
+            FileUtils::rmDir($appname);
+        } catch (Exception $e){
+            
+        }
         $this->unlinkFolders($YmlappUuid, $appname);
     }
 
@@ -596,7 +600,11 @@ class AppControllerTest extends ControllerTest
         }
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::rmDir($appname);
+        try {
+            FileUtils::rmDir($appname);
+        } catch (Exception $e){
+            
+        }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
@@ -633,7 +641,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::rmDir($appname);
+        try {
+            FileUtils::rmDir($appname);
+        } catch (Exception $e){
+            
+        }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
@@ -716,7 +728,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::rmDir($appname);
+        try {
+            FileUtils::rmDir($appname);
+        } catch (Exception $e){
+            
+        }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
@@ -755,7 +771,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::rmDir($appname);
+        try {
+            FileUtils::rmDir($appname);
+        } catch (Exception $e){
+            
+        }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
@@ -794,7 +814,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::rmDir($appname);
+        try {
+            FileUtils::rmDir($appname);
+        } catch (Exception $e){
+            
+        }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 
@@ -824,7 +848,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         unlink(__DIR__ . '/../../sampleapp/application.yml');
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
-        FileUtils::rmDir($appname);
+        try {
+            FileUtils::rmDir($appname);
+        } catch (Exception $e){
+            
+        }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
 

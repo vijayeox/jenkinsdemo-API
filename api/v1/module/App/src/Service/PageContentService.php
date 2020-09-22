@@ -74,12 +74,16 @@ class PageContentService extends AbstractService
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){
                 if($value['type'] == 'List' || $value['type'] == 'Search'){
-                    if(isset($value['form_id']) && empty($value['form_id'])){
+                    if(isset($value['form_id']) && empty($value['form_id']) && $value['form_id'] == ''){
                         unset($value['form_id']);
                     }
-                    $value['content'] = json_encode($value['content']);
+                    if(isset($value['content'])){
+                        $value['content'] = json_encode($value['content']);
+                    } else {
+                        $value['content'] = null;
+                    }
                 }
-                if($value['type'] == 'Form' && (isset($value['form_id']) || isset($value['template_file']))){
+                if($value['type'] == 'Form' && ((isset($value['form_id']) && $value['form_id'] != '') || isset($value['template_file']))){
                     if (isset($value['template_file'])) {
                         $value['template_file'] = pathinfo($value['template_file'],PATHINFO_FILENAME);
                         $resultSet = $this->getDataByParams('ox_form', array("id"),['name' => $value['template_file']] , null)->toArray();
@@ -242,7 +246,9 @@ class PageContentService extends AbstractService
         if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
             return  json_encode($data['content']);
         }else{
-            return $data['content'];
+            if(isset($data['content'])){
+                return $data['content'];
+            }
         }
         if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
             return  json_encode($data['gridContent']);

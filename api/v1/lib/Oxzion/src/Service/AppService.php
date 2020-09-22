@@ -75,7 +75,7 @@ class AppService extends AbstractService
         $this->businessRoleService = $businessRoleService;
         $this->userService = $userService;
         $this->restClient = new RestClient(null);
-        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration", "symlink");
+        $this->appDeployOptions = array("initialize", "symlink", "entity", "workflow", "form", "page", "menu", "job", "migration");
     }
 
     /**
@@ -239,6 +239,7 @@ class AppService extends AbstractService
                 if(!in_array($value, $params)){
                     continue;
                 }
+                $this->logger->info("\n App Data processing - " . print_r($value, true));
                 switch ($value) {
                     case 'initialize':
                     $this->createOrUpdateApp($ymlData);
