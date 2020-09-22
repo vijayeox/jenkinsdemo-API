@@ -676,5 +676,6 @@ workflow
 helpapp
 transportation
 arrowhead
+axon
 #edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"
