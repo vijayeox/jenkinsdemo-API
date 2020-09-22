@@ -56,8 +56,13 @@ entity:
         uuid: 14072055-8465-4143-a2e3-bab93f955b47
         field:
             -
-                name: Status
+                name: status
                 text: Status
+                data_type: text
+                index: true
+            -
+                name: name
+                text: name
                 data_type: text
                 index: true
 pages:
@@ -85,5 +90,5 @@ form:
         name: 'covidSymptomTracker'
         uuid: f5a13bcc-d3de-4862-b07f-06ff6cadba80
         description: 'Covid 19 Symptom Tracker'
-        template_file: covidsymptomtracker.json
+        template_file: covidSymptomTracker.json
         entity: 'Symptom Tracker'
