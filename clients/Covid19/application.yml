@@ -9,6 +9,7 @@ app:
         logo: default_app.png
         status: 2
         start_options: null
+        uuid: '6cbaaf93-7a4d-48cb-8564-1b258500f717'
 org:
     -
         name: 'EOX Vantage1'
