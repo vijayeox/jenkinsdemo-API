@@ -290,7 +290,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
             if ($sendNotificationMail == true) {
                 $mailResponse = $this->executeDelegate("DispatchMail", $data);
-                $data['mailStatus'] = true;
+                $data['mailStatus'] = $mailResponse;
             }
             $data["status"] = "Generated";
         }
