@@ -243,18 +243,17 @@ class PageContentService extends AbstractService
     }
 
     private function checkListContent($data){
-        if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
-            return  json_encode($data['content']);
-        }else{
-            if(isset($data['content'])){
-                return $data['content'];
-            }
-        }
         if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
             return json_encode($data['gridContent']);
         }
         if(isset($data['htmlContent']) && !empty($data['htmlContent']) && !is_string($data['htmlContent'])){
             return json_encode($data['htmlContent']);
+        }
+        if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
+            return  json_encode($data['content']);
+        }
+        if(isset($data['content']) && is_string($data['content'])){
+            return $data['content'];
         }
     }
 }
