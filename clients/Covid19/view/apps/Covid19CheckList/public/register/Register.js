@@ -8,7 +8,6 @@ export default class Register extends React.Component {
     this.core = this.props.core;
     this.proc = this.props.proc;
     // var metadata = JSON.parse(this.proc.metadata);
-    this.productName = this.props.productName;
     this.appId = this.proc.metadata.appId;
     this.formContent = this.props.form;
   }

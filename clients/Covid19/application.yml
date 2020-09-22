@@ -81,7 +81,7 @@ menu:
         uuid: ea4f8fe0-826b-4a84-83c3-23bb963ea05c
 form:
     -
-        name: 'COVID - 19 Checklist'
+        name: 'covidSymptomTracker'
         uuid: f5a13bcc-d3de-4862-b07f-06ff6cadba80
         description: 'Covid 19 Symptom Tracker'
         template_file: covidsymptomtracker.json

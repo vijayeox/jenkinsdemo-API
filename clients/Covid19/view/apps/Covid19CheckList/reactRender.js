@@ -7,7 +7,6 @@ const Register = require("./public/register/Register");
 module.exports = function(core, proc) {
   core.app.get(proc.resource("/apply"), (req, res) => {
     console.log(req.params);
-    if (req.params.productName) {
       var filePath = path.join(
         __dirname + "/public/register/covid19checklist.json"
       );
@@ -17,7 +16,6 @@ module.exports = function(core, proc) {
             res.json({ error: "No template found" });
           }
           const params = {
-            productName: req.params.productName,
             proc: proc,
             core: core,
           };
@@ -38,7 +36,6 @@ module.exports = function(core, proc) {
               <script type="text/javascript">
                 var formContent = JSON.stringify(${buf});
                 var appId='${appId}';
-                var productName='${req.params.productName}';
                 var baseUrl="${core.config("api.url")}";
               </script>
             </head>
@@ -58,6 +55,5 @@ module.exports = function(core, proc) {
           res.send(html);
         });
       }
-    }
   });
 };
