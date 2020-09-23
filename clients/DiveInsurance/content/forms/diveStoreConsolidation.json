@@ -13875,7 +13875,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['product'] == 'Group Professional Liability') {\n  value = ((parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0 )).toFixed(2);  \n} else {\n  value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0 )) ).toFixed(2);  \n}",
+						"calculateValue": "if(data['product'] == 'Group Professional Liability') {\n  value = ((parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.totalAddPremium) || 0 )).toFixed(2);  \n} else {\n  value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.totalAddPremium) || 0 )) ).toFixed(2);  \n}",
 						"key": "totalAmount",
 						"type": "number",
 						"input": true,

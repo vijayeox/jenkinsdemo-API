@@ -14716,7 +14716,7 @@
 					"requireDecimal": false,
 					"inputFormat": "plain",
 					"clearOnHide": false,
-					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"endoGroupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"liabilityPropertyCoveragesTotalPL\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"endoAddILocPremium\"])||0) + (parseFloat(data[\"endoAddILocTax\"])||0) + (parseFloat(data[\"endoGroupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data.additionalPremium) || 0)).toFixed(2);\n}",
+					"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n\tvalue = ((parseFloat(data[\"endoGroupProfessionalLiability\"])||0) + (parseFloat(data.totalAddPremium) || 0)).toFixed(2);\n} else {\n\tvalue = ((parseFloat(data[\"liabilityPropertyCoveragesTotalPL\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"endoAddILocPremium\"])||0) + (parseFloat(data[\"endoAddILocTax\"])||0) + (parseFloat(data[\"endoGroupProfessionalLiability\"])||0) -(parseFloat(data[\"PropDeductibleCredit\"])||0) + (parseFloat(data.totalAddPremium) || 0)).toFixed(2);\n}",
 					"key": "totalAmount",
 					"type": "number",
 					"decimalLimit": 2,
