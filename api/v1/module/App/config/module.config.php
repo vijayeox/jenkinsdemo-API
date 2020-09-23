@@ -813,6 +813,44 @@ return [
                     ],
                 ],
             ],
+            'attachmentRemoval' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/attachment/:attachmentId/remove',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                        'attachmentId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileAttachmentController::class,
+                        'method' => 'DELETE',
+                        'action' => 'removeAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'attachmentRename' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/attachment/:attachmentId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                        'attachmentId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileAttachmentController::class,
+                        'method' => 'POST',
+                        'action' => 'renameAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'reindexfile' => [
                 'type' => Segment::class,
                 'options' => [

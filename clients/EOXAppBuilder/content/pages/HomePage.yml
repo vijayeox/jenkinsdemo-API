@@ -40,7 +40,7 @@ content:
                 -
                     name: 'Form Manager'
                     icon: 'fa fa-list-alt'
-                    rule: "true"
+                    rule: "false"
                     details:
                         -
                             params:

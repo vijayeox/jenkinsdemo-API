@@ -87,15 +87,17 @@ class FileUtils
 
     public static function copyDir($src, $dest) {
         if (!file_exists($dest)) self::createDirectory($dest);
-        foreach (scandir($src) as $file) {
-            if ($file == '.' || $file == '..') continue;
-            $srcCheck = self::joinPath($src);
-            $destCheck = self::joinPath($dest);
-            if (is_dir($srcCheck.$file)){
-                self::copyDir($srcCheck.$file, $destCheck.$file);
-            }
-            else {
-                copy($srcCheck.$file, $destCheck.$file);
+        if(is_dir($src)){
+            foreach (scandir($src) as $file) {
+                if ($file == '.' || $file == '..') continue;
+                $srcCheck = self::joinPath($src);
+                $destCheck = self::joinPath($dest);
+                if (is_dir($srcCheck.$file)){
+                    self::copyDir($srcCheck.$file, $destCheck.$file);
+                }
+                else {
+                    copy($srcCheck.$file, $destCheck.$file);
+                }
             }
         }
     }

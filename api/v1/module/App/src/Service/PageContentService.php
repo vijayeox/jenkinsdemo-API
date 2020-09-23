@@ -73,6 +73,11 @@ class PageContentService extends AbstractService
             $deleteQuery = array($pageId);
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){
+                if ($value['type'] == 'Comment') {
+                    if(isset($value['form_id']) && (empty($value['form_id']) || $value['form_id'] == '')){
+                        unset($value['form_id']);
+                    }
+                }
                 if($value['type'] == 'List' || $value['type'] == 'Search'){
                     if(isset($value['form_id']) && (empty($value['form_id']) || $value['form_id'] == '')){
                         unset($value['form_id']);

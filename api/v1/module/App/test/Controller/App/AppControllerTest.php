@@ -982,7 +982,7 @@ class AppControllerTest extends ControllerTest
         }
         $query = "SELECT ei.* from ox_entity_participant_role ei 
                     inner join ox_app_entity e on e.id = ei.entity_id 
-                    where e.app_id = $appId order by e.name";
+                     order by e.name";
         $participantRoles = $this->executeQueryTest($query);
         $this->assertEquals(2, count($participantRoles));
         foreach ($participantRoles as $key => $value) {
