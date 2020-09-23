@@ -71,7 +71,11 @@ class AppArtifactControllerTest extends ControllerTest {
         ];
         $this->setupAppSourceDir($data);
         $fileName = 'AddFormTest.json';
-        $fileSize = 76653;
+        if (PHP_OS == 'Linux') {
+            $fileSize = 74665;
+        }else{
+            $fileSize = 76653;
+        }
         $filePath = __DIR__ . '/../../Dataset/' . $fileName;
         $_FILES = [
             'artifactFile' => [
@@ -187,7 +191,11 @@ class AppArtifactControllerTest extends ControllerTest {
         ];
         $this->setupAppSourceDir($data);
         $fileName = 'AddWorkflowTest.bpmn';
-        $fileSize = 546674;
+        if (PHP_OS == 'Linux') {
+            $fileSize = 546495;
+        }else{
+            $fileSize = 546674;
+        }
         $filePath = __DIR__ . '/../../Dataset/' . $fileName;
         $_FILES = [
             'artifactFile' => [
@@ -633,8 +641,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->runDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals('error', $content['status']);
-        $this->assertEquals(409, $content['errorCode']);
-        $this->assertEquals('Application with this UUID already exists on the server.', $content['message']);
+        $this->assertEquals(500, $content['errorCode']);
+        $this->assertEquals('Database insert failed.', $content['message']);
 
         //Take application snapshot after running the test.
         $appRecordSetBeforeTest = $this->executeQueryTest($query);
