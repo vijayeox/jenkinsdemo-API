@@ -336,7 +336,7 @@ abstract class Entity implements Countable
      * 'id' value is also returned in the array if $includeId is TRUE.
      * 'id' value is NOT returned in the array if $includeId is not set or set to FALSE.
      */
-    public function getGenerated($includeId = false) {
+    public function getGenerated($includeId = false) { 
         $arr = array();
         if ($includeId) {
             $id = $this->data[self::COLUMN_ID];

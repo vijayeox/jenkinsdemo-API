@@ -54,12 +54,12 @@ class WidgetService extends AbstractService
         if (isset($data['expression'])) {
             $data['expression'] = json_encode($data['expression']);
         }
-        $form->exchangeWithSpecificKey($data, 'value');
+        // $form->exchangeWithSpecificKey($data, 'value');
         $form->validate();
 
         $this->beginTransaction();
         try {
-            $count = $this->table->save2($form);
+            $count = $form->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -151,7 +151,7 @@ class WidgetService extends AbstractService
 
         $obj = $this->table->getByUuid($uuid, array());
         $form = new Widget();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
 
         if (isset($data['visualization_uuid'])) {
             //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
@@ -164,12 +164,12 @@ class WidgetService extends AbstractService
         if (isset($data['expression'])) {
             $data['expression'] = json_encode($data['expression']);
         }
-        $form->exchangeWithSpecificKey($data, 'value', true);
+        // $form->exchangeWithSpecificKey($data, 'value', true);
         $form->validate();
 
         $this->beginTransaction();
         try {
-            $count = $this->table->save2($form);
+            $count = $form->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -266,12 +266,12 @@ class WidgetService extends AbstractService
         }
         $data = array('version' => $version, 'isdeleted' => 1);
         $form = new Widget();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate($data);
+        // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        // $form->exchangeWithSpecificKey($data, 'value', true);
+        $form->validate();
         $count = 0;
         try {
-            $count = $this->table->save2($form);
+            $count = $form->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;

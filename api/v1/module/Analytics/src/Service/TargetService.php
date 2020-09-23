@@ -32,12 +32,12 @@ class TargetService extends AbstractService
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $form->exchangeWithSpecificKey($data,'value');
+        // $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->save2($form);
+            $count = $form->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -63,12 +63,12 @@ class TargetService extends AbstractService
             throw new Exception("Version is not specified, please specify the version");
         }
         $form = new Target();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
+        // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        // $form->exchangeWithSpecificKey($data,'value',true);
         $form->updateValidate();
         $count = 0;
         try {
-            $count = $this->table->save2($form);
+            $count = $form->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -92,12 +92,12 @@ class TargetService extends AbstractService
         }
         $data = array('version' => $version,'isdeleted' => 1);
         $form = new Target();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
+        // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        // $form->exchangeWithSpecificKey($data,'value',true);
         $form->updateValidate($data);
         $count = 0;
         try {
-            $count = $this->table->save2($form);
+            $count = $form->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
