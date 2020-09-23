@@ -125,25 +125,27 @@ class StorePreviewDocument extends PolicyDocument
         }
         
         if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
+            unset($documents['roster_certificate']);
+            unset($documents['roster_pdf']);
             $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
         }
 
         if(isset($temp['additionalInsured']) && (isset($temp['additional_insured_select']) && ($temp['additional_insured_select']=="addAdditionalInsureds" || $temp['additional_insured_select']=="updateAdditionalInsureds"))){
             $this->logger->info("DOCUMENT additionalInsured");
-            $this->sortArrayByName($temp,'additionalInsured');
+            $this->sortArrayByParam($temp['additionalInsured'],'name');
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
         if(isset($temp['additionalNamedInsured']) && $temp['additional_named_insureds_option'] == 'yes'){
             if($this->type != 'endorsementQuote' && $this->type != 'endorsement'){
-                $this->sortArrayByName($temp,'additionalNamedInsured');
+                $this->sortArrayByParam($temp['additionalNamedInsured'],'name');
                 $documents['ani_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
             }
         }
 
         if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
             $this->logger->info("DOCUMENT lossPayees");
-            $this->sortArrayByName($temp,'lossPayees');
+            $this->sortArrayByParam($temp['lossPayees'],'name');
             $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
         }
 

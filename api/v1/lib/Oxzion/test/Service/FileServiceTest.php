@@ -936,7 +936,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(10,$initialCount);
+        $this->assertEquals(11,$initialCount);
         $data = array('datagrid' => array(0 => array('firstname' => 'Sagar','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("name" => "SampleAttachment.txt", "extension" => "txt", "uuid" => "a9cd8b0c-3218-4fd4-b323-e3b6ce8c7d25", "path" => __DIR__."/Dataset/SampleAttachment.txt" ))), 1 => array('firstname' => 'mark','lastname' => 'hamil', 'padi' => 322,'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" )))), 'entity_id' => $entityId, 'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->assertEquals(1,$result);
@@ -1298,6 +1298,129 @@ class FileServiceTest extends AbstractServiceTest
     public function testUpdateFileAttributeWithInvalidFileId(){
         $this->expectException(EntityNotFoundException::class);
         $this->fileService->updateFileAttributes("InvalidFileId");
+    }
+
+    public function testDeleteAttachment() {
+        $dataset = $this->dataset;
+        $attachmentName = $dataset['ox_file_attachment'][0]['name'];
+        $attachmentUuid = $dataset['ox_file_attachment'][0]['uuid'];
+        $fileUuid = $dataset['ox_file'][10]['uuid'];
+        $params = array('attachmentId' => $attachmentUuid,'fileId' => $fileUuid);
+        $config = $this->getApplicationConfig();
+        //path/orguuid/fileuuid/name
+        $folderPath = $config['APP_DOCUMENT_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/";
+        if(!file_exists($folderPath)) {
+            $check = mkdir($folderPath,0777,true);
+        }
+        $filePath = $config['APP_DOCUMENT_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/".$attachmentName;
+        if(!file_exists($filePath)){
+            touch($filePath);
+        }
+        $this->fileService->deleteAttachment($params);
+        $checkforAttachmentInAttachmentTable = "SELECT * from ox_file_attachment where uuid ='".$attachmentUuid."'";
+        $resultforAttachmentInAttachmentTable = $this->runQuery($checkforAttachmentInAttachmentTable);
+        $this->assertEmpty($resultforAttachmentInAttachmentTable);
+        $this->assertEquals(file_exists($filePath),false);
+        $checkforAttachmentInFileTable = "SELECT * from ox_file where uuid ='".$fileUuid."'";
+        $resultforAttachmentInFileTable = $this->runQuery($checkforAttachmentInFileTable);
+        $fieldData = json_decode($resultforAttachmentInFileTable[0]['data'],true);
+        $attachmentData = json_decode($fieldData['additionalInsured'],true);
+        $this->assertEmpty($attachmentData[0]['additionalInsuredAttachments']);
+    }
+
+    public function testDeleteAttachmentWithIncorrectAttachmentId() {
+        $dataset = $this->dataset;
+        $attachmentUuid = '20258d3b-d5b7-4f48-b302-18ae181df1e2';
+        $fileUuid = $dataset['ox_file'][10]['uuid'];
+        $params = array('attachmentId' => $attachmentUuid,'fileId' => $fileUuid);
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("Incorrect attachment uuid specified");
+        $this->fileService->deleteAttachment($params);
+    }
+
+    public function testDeleteAttachmentWithIncorrectFileId() {
+        $dataset = $this->dataset;
+        $attachmentName = $dataset['ox_file_attachment'][0]['name'];
+        $attachmentUuid = $dataset['ox_file_attachment'][0]['uuid'];
+        $params = array('attachmentId' => $attachmentUuid,'fileId' => '8a7bfe3e-864f-4384-b665-f79c1ad349e3');
+        $config = $this->getApplicationConfig();
+        //path/orguuid/fileuuid/name
+        $folderPath = $config['APP_DOCUMENT_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/";
+        if(!file_exists($folderPath)) {
+            $check = mkdir($folderPath,0777,true);
+        }
+        $filePath = $config['APP_DOCUMENT_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/".$attachmentName;
+        if(!file_exists($filePath)){
+            touch($filePath);
+        }
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("Incorrect file uuid specified");
+        $this->fileService->deleteAttachment($params);
+    }
+
+    public function testRenameAttachment() {
+        $dataset = $this->dataset;
+        $attachmentName = $dataset['ox_file_attachment'][0]['name'];
+        $attachmentUuid = $dataset['ox_file_attachment'][0]['uuid'];
+        $fileUuid = $dataset['ox_file'][10]['uuid'];
+        $params = array('attachmentId' => $attachmentUuid,'fileId' => $fileUuid, 'name' => 'Sample2.txt');
+        $config = $this->getApplicationConfig();
+        //path/orguuid/fileuuid/name
+        $folderPath = $config['APP_DOCUMENT_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/";
+        if(!file_exists($folderPath)) {
+            $check = mkdir($folderPath,0777,true);
+        }
+        $filePath = $config['APP_DOCUMENT_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/".$attachmentName;
+        if(!file_exists($filePath)){
+            touch($filePath);
+        }
+        $this->fileService->renameAttachment($params);
+        $checkforAttachmentInAttachmentTable = "SELECT * from ox_file_attachment where uuid ='".$attachmentUuid."'";
+        $resultforAttachmentInAttachmentTable = $this->runQuery($checkforAttachmentInAttachmentTable);
+        $this->assertEquals($resultforAttachmentInAttachmentTable[0]['name'],'Sample2.txt');
+        $this->assertEquals($resultforAttachmentInAttachmentTable[0]['originalName'],'Sample2.txt');
+        $this->assertEquals($resultforAttachmentInAttachmentTable[0]['path'],'/app/api/v1/data/file_docs/53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/Sample2.txt');
+        $this->assertEquals($resultforAttachmentInAttachmentTable[0]['url'],'http://localhost:8080/53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/Sample2.txt');
+
+        $this->assertEquals(file_exists($folderPath.$params['name']),true);
+
+        $checkforAttachmentInFileTable = "SELECT * from ox_file where uuid ='".$fileUuid."'";
+        $resultforAttachmentInFileTable = $this->runQuery($checkforAttachmentInFileTable);
+        $fieldData = json_decode($resultforAttachmentInFileTable[0]['data'],true);
+        $attachmentData = json_decode($fieldData['additionalInsured'],true);
+        $this->assertEquals($attachmentData[0]['additionalInsuredAttachments'][0]['name'],'Sample2.txt');
+        $this->assertEquals($attachmentData[0]['additionalInsuredAttachments'][0]['originalName'],'Sample2.txt');
+        $this->assertEquals($attachmentData[0]['additionalInsuredAttachments'][0]['file'],'f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt');
+    }
+
+    public function testRenameAttachmentWithoutNamePostData() {
+        $dataset = $this->dataset;
+        $attachmentUuid = $dataset['ox_file_attachment'][0]['uuid'];
+        $fileUuid = $dataset['ox_file'][10]['uuid'];
+        $params = array('attachmentId' => $attachmentUuid,'fileId' => $fileUuid);
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("name is required and not specified");
+        $this->fileService->renameAttachment($params);
+    }
+
+    public function testRenameAttachmentWithIncorrectFileId() {
+        $dataset = $this->dataset;
+        $attachmentUuid = $dataset['ox_file_attachment'][0]['uuid'];
+        $fileUuid = '82f3e9e4-2ad6-42bd-a892-d39c84d67926';
+        $params = array('attachmentId' => $attachmentUuid,'fileId' => $fileUuid, 'name' => 'Sample2.txt');
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("Incorrect file uuid specified");
+        $this->fileService->renameAttachment($params);
+    }
+
+    public function testRenameAttachmentWithIncorrectAttachmentId() {
+        $dataset = $this->dataset;
+        $attachmentUuid = 'aaa746a0-72a3-4e68-be75-f871e77c4331';
+        $fileUuid = $dataset['ox_file'][10]['uuid'];
+        $params = array('attachmentId' => $attachmentUuid,'fileId' => $fileUuid, 'name' => 'Sample2.txt');
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("Incorrect attachment uuid specified");
+        $this->fileService->renameAttachment($params);
     }
 
 }
