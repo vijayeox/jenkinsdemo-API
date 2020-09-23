@@ -14642,7 +14642,7 @@
 					"delimiter": false,
 					"requireDecimal": false,
 					"inputFormat": "plain",
-					"calculateValue": "value = parseFloat(data.additionalPremium) * data.addPremiumTax;",
+					"calculateValue": "value = ((parseFloat(data[\"additionalPremium\"])||0)*(parseFloat(data[\"addPremiumTax\"])||0)/100);",
 					"key": "totalAddPremium",
 					"type": "number",
 					"input": true,
@@ -15316,7 +15316,7 @@
 		"lockKey": true
 	}],
 	"revisions": "original",
-	"_vid": 27,
+	"_vid": 31,
 	"title": "diveStoreEndorsement3",
 	"display": "wizard",
 	"access": [{
@@ -15330,10 +15330,10 @@
 		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"settings": {},
-	"name": "diveStoreEndorsement3",
+	"name": "endorsementDiveStoreConsolidation",
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-22T21:37:35.065Z",
+	"modified": "2020-09-23T06:41:55.017Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
