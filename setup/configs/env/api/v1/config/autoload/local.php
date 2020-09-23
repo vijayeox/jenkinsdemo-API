@@ -22,7 +22,7 @@ if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
     $host = 'localhost';
     $db = "oxzionapi_test";
     $username = "root";
-    $password = "password";
+    $password = "root";
 }
 
 return [
@@ -51,11 +51,22 @@ return [
         'calendarServerUrl' => 'http://localhost:8075/calendar',
         'authToken' => ''
     ],
+    'internalBaseUrl' => 'http://localhost:8080/',
+    'DELEGATE_FOLDER'=>'/app/api/data/delegate/',
+    'ENTITY_FOLDER'=>'/app/api/data/entity/',
+    'FORM_FOLDER'=>'/app/api/data/forms/',
+    'PAGE_FOLDER'=>'/app/api/data/pages/',
     'applicationUrl' => 'http://localhost:8081',
-    'internalBaseUrl' => 'http://localhost:8080/api',
-     'CLIENT_FOLDER' => '/app/clients/',
-     'APPS_FOLDER' => '/app/view/apps/',
-     'THEME_FOLDER' => '/app/view/themes/',
-     'baseUrl' => 'http://localhost:8080/api',
-     'GUI_FOLDER' => '/app/view/gui/src/externals/',
+    'RULE_FOLDER'=>'/app/api/data/rules/',
+    'DATA_FOLDER'=>'/app/api/data/',
+    "UPLOAD_FOLDER" => '/app/api/data/uploads/',
+    'TEMPLATE_FOLDER'=>'/app/api/data/template/',
+    'APP_UPLOAD_FOLDER' => '/app/api/data/app',
+    'APP_DOCUMENT_FOLDER' => '/app/api/data/file_docs/',
+    'CLIENT_FOLDER' => '/app/clients/',
+    'APPS_FOLDER' => "/app/view/apps/",
+    'GUI_FOLDER' => "/app/view/gui/src/externals/",
+    'THEME_FOLDER' => "/app/view/themes/",
+    'EOX_APP_SOURCE_DIR' => '/app/api/data/AppSource/',
+    'EOX_APP_DEPLOY_DIR' => '/app/api/data/AppDeploy/',
 ];
