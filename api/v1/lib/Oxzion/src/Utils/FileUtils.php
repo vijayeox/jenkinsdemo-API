@@ -102,7 +102,11 @@ class FileUtils
 
     public static function renameFile($source, $destination)
     {
-        return rename($source, $destination);
+        $result = self::copyDir($source,$destination);
+        if (is_dir($source)) {
+            self::rmDir($source);
+        }
+        return $result;
     }
 
     public static function rmDir($fsObj)

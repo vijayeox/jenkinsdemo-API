@@ -112,16 +112,17 @@ return [
                     ],
                 ],
             ],
-            'addtoappregistry' => [
+            'installAppToOrg' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/org/:orgId/addtoappregistry',
+                    'route' => '/app/:appId/install/org/:orgId',
                     'constraints' => [
                         'orgId' => UuidUtil::UUID_PATTERN,
+                        'appId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
-                        'controller' => Controller\AppRegisterController::class,
-                        'action' => 'addToAppregistry',
+                        'controller' => Controller\AppController::class,
+                        'action' => 'installAppToOrg',
                         'method' => 'POST',
                     ],
                 ],
@@ -823,6 +824,24 @@ return [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
                         'action' => 'reIndex',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'getArtifacts' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/artifact/list/:artifactType',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN,
+                        'artifactType' => 'form|workflow',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'GET',
+                        'action' => 'getArtifacts',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

@@ -54,9 +54,10 @@ class PrivilegeService extends AbstractService
                             LEFT JOIN ox_role_privilege as orp on orp.app_id = op.app_id
                             LEFT JOIN ox_role as orl on orl.id = orp.role_id
                             LEFT JOIN ox_user_role as our on our.role_id = orl.id
-                            LEFT JOIN  ox_user as av on av.id = our.user_id ";
+                            LEFT JOIN  ox_user as av on av.id = our.user_id 
+                            LEFT JOIN ox_user_profile up on up.id = av.user_profile_id";
             $where = "where av.id = " . $userId . " and op.app_id = '" . $appId . "'";
-            $order = "order by av.firstname";
+            $order = "order by up.firstname";
             $group = "group by op.name, op.permission_allowed";
             $resultSet = $this->executeQuerywithParams($queryString, $where, $group, $order);
         } catch (ValidationException $e) {

@@ -5,6 +5,8 @@
 /api/v1/Doc
 /integrations/smtp/target/*
 /api/v1/data/uploads/*
+/api/v1/data/AppSource/*
+/api/v1/data/AppDeploy/*
 **/.idea/*
 **package-lock.json
 *.env

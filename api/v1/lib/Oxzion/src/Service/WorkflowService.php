@@ -510,7 +510,23 @@ class WorkflowService extends AbstractService
                       } else {
                           $filterOperator = $this->fileService->processFilters($val);
                           if ($val['field'] == 'entity_name') {
-                              $subQuery .= " ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                              $whereQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                              continue;
+                          }
+                          if ($val['field'] == 'status') {
+                            $whereQuery .= " AND ox_file.status " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                            continue;
+                          }
+                          if ($val['field'] == 'start_date') {
+                            $whereQuery .= " AND ox_file.start_date " . $filterOperator["operation"] . $val['value'] . "";
+                            continue;
+                          }
+                          if ($val['field'] == 'end_date') {
+                            $whereQuery .= " AND ox_file.end_date " . $filterOperator["operation"] . $val['value'] . "";
+                            continue;
+                          }
+                          if ($subQuery != '') {
+                              $subQuery .= " " . $filterlogic . " ox_file.id in ";
                           } else {
                             $filterFromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
                             $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
@@ -556,7 +572,7 @@ class WorkflowService extends AbstractService
             $cacheQuery = '';
         } else {
             $cacheQuery =" UNION
-            SELECT ow.name as workflow_name,ofile.uuid,ouc.content as data,oai.activity_instance_id as activityInstanceId,owi.process_instance_id as workflowInstanceId,
+            SELECT ow.name as workflow_name,ofile.uuid,ofile.start_date,ofile.end_date,ofile.status as fileStatus,ouc.content as data,oai.activity_instance_id as activityInstanceId,owi.process_instance_id as workflowInstanceId,
             oai.start_date,oae.name as entity_name,NULL as id,
             oa.name as activityName,ouc.date_created,'in_draft' as to_be_claimed,ou.name as assigned_user
             FROM ox_user_cache as ouc
@@ -581,7 +597,8 @@ class WorkflowService extends AbstractService
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $filterFromQuery $whereQuery";
         // print_r($countQuery);exit;
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
-        $querySet = "SELECT distinct ox_workflow.name as workflow_name, `of`.uuid,`of`.data,
+
+        $querySet = "SELECT distinct ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
     ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,`of`.id,
     ox_activity.name as activityName, `of`.date_created,
     CASE WHEN ox_activity_instance_assignee.assignee = 0 then 1

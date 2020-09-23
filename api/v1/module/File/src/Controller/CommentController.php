@@ -35,7 +35,7 @@ class CommentController extends AbstractApiController
     * <code> {
     *               id : integer,
     *               org_id : integer,
-                    file_id: integer,
+    *               file_id: integer,
     *               text : string,
     *               parent : integer,
     *} </code>

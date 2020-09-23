@@ -1,0 +1,35 @@
+name: 'Form Manager'
+description: 'Shows a list of forms'
+content:
+        -
+            type: List
+            content:
+                route: 'app/{{app_uuid}}/artifact/list/form'
+                disableAppId: true    
+                resizable: true
+                actions:
+                    -
+                        name: Edit
+                        rule: "true"
+                        details:
+                            -
+                                type: FormManager
+                                params:
+                                    app_uuid: '{{app_uuid}}'
+                                    content: '{{content}}'
+                        icon: 'far fa-pencil-alt'
+                operations:
+                    actions:
+                        -
+                            name: Create New Form
+                            rule: 'true'
+                            details:
+                                -
+                                    type: FormManager
+                                    params:
+                                        app_uuid: '{{app_uuid}}'
+                                        page_id: '5b78b1f1-d763-4671-a776-90ca6163252e'
+                columnConfig:
+                    -
+                        title: Name
+                        field: name

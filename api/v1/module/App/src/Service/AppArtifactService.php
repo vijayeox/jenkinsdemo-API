@@ -1,10 +1,11 @@
 <?php
 namespace App\Service;
 
-use App\Model\App;
-use App\Model\AppTable;
+use Oxzion\Model\App;
+use Oxzion\Model\AppTable;
 use Exception;
 use Oxzion\Service\AbstractService;
+use Oxzion\Service\AppService;
 use Oxzion\FileNotFoundException;
 use Oxzion\DuplicateFileException;
 use Oxzion\App\AppArtifactNamingStrategy;
@@ -61,7 +62,8 @@ class AppArtifactService extends AbstractService
             }
             $filePath = $targetDir . $fileData['name'];
             if (file_exists($filePath)) {
-                throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
+                unlink($filePath);
+                // throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
             }
         }
         //Move/copy the files to destination.
@@ -184,6 +186,9 @@ class AppArtifactService extends AbstractService
         $app = new App($this->table);
         $app->loadByUuid($appUuid);
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $app->getProperties());
+        if(!is_dir($appSourceDir)){
+            throw new InvalidApplicationArchiveException('Application source directory does not exist.', null);
+        }
         $tempFileName = FileUtils::createTempFileName();
         ZipUtils::zipDir($appSourceDir, $tempFileName);
         return [
@@ -191,5 +196,43 @@ class AppArtifactService extends AbstractService
             'uuid' => $appUuid,
             'zipFile' => $tempFileName
         ];
+    }
+    public function getArtifacts($appUuid, $artifactType) {
+        $app = new App($this->table);
+        $app->loadByUuid($appUuid);
+        $appData = [
+            'uuid' => $appUuid,
+            'name' => $app->getProperty('name')
+        ];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
+        if (!file_exists($appSourceDir)) {
+            throw new FileNotFoundException(
+                "Application source directory is not found.", ['directory' => $appSourceDir]);
+        }
+        $contentDir = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
+        switch($artifactType) {
+            case 'workflow':
+                $targetDir = $contentDir . 'workflows';
+            break;
+            case 'form':
+                $targetDir = $contentDir . 'forms';
+            break;
+            default:
+                throw new Exception("Unexpected artifact type ${artifactType}.");
+        }
+        $targetDir = $targetDir . DIRECTORY_SEPARATOR;
+        $files = array();
+        if ($handle = opendir($targetDir)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    $ext = pathinfo($entry, PATHINFO_EXTENSION);
+                    if(($ext=='json' && $artifactType =='form') || ($ext=='bpmn' && $artifactType =='workflows') ){
+                        $files[] = array('name'=>substr($entry, 0, strrpos($entry, '.')),'content'=>file_get_contents($targetDir.$entry));
+                    }
+                }
+            }
+            closedir($handle);
+        }
+        return $files;
     }
 }

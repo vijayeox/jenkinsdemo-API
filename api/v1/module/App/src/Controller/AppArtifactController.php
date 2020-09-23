@@ -68,7 +68,8 @@ class AppArtifactController extends AbstractApiController {
             $downloadFileName = $normalizedAppName . '-OxzionAppArchive.zip';
             $headers = new \Zend\Http\Headers();
             $headers->addHeaderLine('Content-Type', 'application/zip')
-                    ->addHeaderLine('Content-Disposition', 'attachment; filename="' . $downloadFileName . '"')
+                    ->addHeaderLine('Content-Disposition', 'attachment; filename=' . $downloadFileName )
+                    ->addHeaderLine('Access-Control-Expose-Headers: Content-Disposition')
                     ->addHeaderLine('Content-Length', filesize($zipFilePath));
             $response->setHeaders($headers);
             return $response;
@@ -86,6 +87,18 @@ class AppArtifactController extends AbstractApiController {
         }
         catch (ZipException $e) {
             return $this->getErrorResponse('Invalid application archive.');
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
+    public function getArtifactsAction() {
+        $routeParams = $this->params()->fromRoute();
+        $appUuid = $routeParams['appUuid'];
+        $artifactType = $routeParams['artifactType'];
+        try {
+            return $this->getSuccessResponseWithData($this->appArtifactService->getArtifacts($appUuid, $artifactType));
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);

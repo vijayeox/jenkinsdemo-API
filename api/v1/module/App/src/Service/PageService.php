@@ -27,6 +27,7 @@ class PageService extends AbstractService
         $count = 0;
         $orgId = isset($routeData['orgId'])? $this->getIdFromUuid('ox_organization', $routeData['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
         $data['app_id'] = $this->getIdFromUuid('ox_app', $routeData['appId']);
+        $content = false;
         if(isset($data['app_id'])){
             $page = null;
             $content = isset($data['content'])?$data['content']:false;
@@ -56,8 +57,10 @@ class PageService extends AbstractService
             }
             $page->exchangeArray($data);
             $page->validate();
-            try { 
-                unset($data['content']);
+            try {
+                if(isset($data['content'])){
+                    unset($data['content']);
+                }
                 $count = $this->table->save($page);
                 if ($count == 0) {
                     $this->rollback();
@@ -67,7 +70,7 @@ class PageService extends AbstractService
                     $id = $this->table->getLastInsertValue();
                     $data['id'] = $id;
                 }
-                if($content){
+                if(isset($content) && $content){
                     $pageContent = $this->pageContentService->savePageContent($data['id'],$content);
                 }
                 $this->commit();
@@ -136,6 +139,7 @@ class PageService extends AbstractService
     }
     public function getPageByName($appId,$pageName){
         try{
+            $pageName = is_array($pageName) ? $pageName['name'] : $pageName;
             $select = "SELECT ox_app_page.* FROM ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app_page.name=? and ox_app.uuid=?";
             $whereQuery = array($pageName,$appId);
             $response = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();

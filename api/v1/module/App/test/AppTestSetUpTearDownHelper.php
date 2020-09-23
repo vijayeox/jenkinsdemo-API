@@ -10,13 +10,15 @@ use Oxzion\App\AppArtifactNamingStrategy;
 
 class AppTestSetUpTearDownHelper implements AppArtifactListener {
     private $dbConfig;
+    private $config;
     private $dbConnection = NULL;
     private $directoriesCreated = array();
     private $databasesCreated = array();
 
-    function __construct($dbConfig) {
+    function __construct($config) {
         AppArtifactNamingStrategy::setArtifactListener($this);
-        $this->dbConfig = $dbConfig;
+        $this->dbConfig = $config['db'];
+        $this->config = $config;
     }
 
     //Begin AppArtifactListener interface implementation.
@@ -111,7 +113,7 @@ class AppTestSetUpTearDownHelper implements AppArtifactListener {
     private function cleanViewAppsDir() {
         $this->removeSubDirectories(__DIR__ . '/sampleapp/view/apps/', 
             ['.gitignore', 'README.md']); //Don't delete these files.
-        $this->removeSymlinks(__DIR__ . '/../../../../../view/apps/');
+        $this->removeSymlinks($this->config['APPS_FOLDER']);
         $dirsToDelete = [
             __DIR__ . '/sampleapp/view/gui', 
             __DIR__ . '/sampleapp/content/workflows',

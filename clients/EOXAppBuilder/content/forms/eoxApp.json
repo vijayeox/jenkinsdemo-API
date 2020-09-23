@@ -6,7 +6,7 @@
 	"components": [{
 		"title": "App Info",
 		"theme": "primary",
-		"breadcrumbClickable": true,
+		"breadcrumbClickable": false,
 		"buttonSettings": {
 			"previous": true,
 			"cancel": true,
@@ -234,7 +234,6 @@
 			"label": "Do you want to add organisation information",
 			"tableView": false,
 			"defaultValue": false,
-			"persistent": false,
 			"clearOnHide": false,
 			"key": "checkOrg",
 			"type": "checkbox",
@@ -457,6 +456,7 @@
 					"columns": [{
 						"components": [{
 							"label": "Username",
+							"disabled": true,
 							"tableView": true,
 							"clearOnHide": false,
 							"calculateValue": "if(data.org.contact.firstname && data.org.contact.lastname){\n    var username = data.org.contact.firstname.toLowerCase() + data.org.contact.lastname.toLowerCase();\n    value = username.split(\" \").join(\"\");\n}",
@@ -541,10 +541,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"permission": ""
-				}],
 				"validate": {
 					"custom": "if (data.privilege) {\n  if (data.privilege.length > 0) {\n    valid =\n      data.privilege.length == new Set(data.privilege.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}",
 					"minLength": 1
@@ -622,15 +618,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"privileges": [{
-						"privilege_name": [{}],
-						"permission1": "",
-						"permission": ""
-					}],
-					"default": false
-				}],
 				"validate": {
 					"custom": "if (data.role) {\n  if (data.role.length > 0) {\n    valid =\n      data.role.length == new Set(data.role.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same role more than once.\";\n  } else {\n    valid = true;\n  }\n}",
 					"minLength": 1
@@ -660,15 +647,11 @@
 					"enableRowGroups": false,
 					"noFirstRow": false,
 					"tableView": false,
-					"defaultValue": [{
-						"privilege_name": [{}],
-						"permission": ""
-					}],
 					"clearOnHide": false,
 					"validate": {
-						"custom": "if (row.privileges) {\n  if (row.privileges.length > 0) {\n    valid =\n      row.privileges.length ==\n      new Set(\n        row.privileges.map((i) => i.privilege_name.name.replace(/\\s/g, \"\"))\n      ).size\n        ? true\n        : \"You cannot have a same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+						"custom": "try {\n  if (row.privilegesDuplicate) {\n    if (row.privilegesDuplicate.length > 0) {\n      valid =\n        row.privilegesDuplicate.length ==\n        new Set(\n          row.privilegesDuplicate.map((i) =>\n            i.privilege_name.name.replace(/\\s/g, \"\")\n          )\n        ).size\n          ? true\n          : \"You cannot have a same privilege more than once.\";\n    } else {\n      valid = true;\n    }\n  }\n} catch (error) {}"
 					},
-					"key": "privileges",
+					"key": "privilegesDuplicate",
 					"type": "datagrid",
 					"input": true,
 					"components": [{
@@ -677,12 +660,7 @@
 						"placeholder": "Please select",
 						"tableView": true,
 						"dataSrc": "custom",
-						"defaultValue": [{}],
 						"data": {
-							"values": [{
-								"label": "",
-								"value": ""
-							}],
 							"custom": "values = data.privilege.map(item =>item)"
 						},
 						"template": "<span>{{ item.name }}</span>",
@@ -746,6 +724,13 @@
 					"redrawOn": "defaultRole",
 					"calculateValue": "value = data.defaultRole == row.name ? true : false;",
 					"key": "default",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
+					"label": "Actual Privileges Key",
+					"calculateValue": "try {\n  value = row.privilegesDuplicate.map((i) => {\n    return { privilege_name: i.privilege_name.name, permission: i.permission };\n  });\n} catch (error) {}",
+					"key": "privileges",
 					"type": "hidden",
 					"input": true,
 					"tableView": false
@@ -822,16 +807,6 @@
 			"enableRowGroups": false,
 			"hideLabel": true,
 			"tableView": false,
-			"defaultValue": [{
-				"name": "",
-				"formFieldsValidationExcel": [],
-				"field": [{
-					"name": "",
-					"text": "",
-					"data_type": "",
-					"index": false
-				}]
-			}],
 			"validate": {
 				"minLength": 0
 			},
@@ -873,6 +848,7 @@
 								}],
 								"clearOnHide": false,
 								"key": "formFieldsValidationExcel",
+								"customConditional": "show = false;",
 								"type": "file",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -1024,22 +1000,22 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"entity": {},
-					"template_file": []
-				}],
 				"redrawOn": "data",
+				"validate": {
+					"custom": "if (data.formDuplicate) {\n  if (data.formDuplicate.length > 0) {\n    valid =\n      data.formDuplicate.length == new Set(data.formDuplicate.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same form more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+				},
 				"key": "formDuplicate",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
-					"label": "Name",
+					"label": "Title",
+					"disabled": true,
 					"tableView": true,
 					"clearOnHide": false,
+					"calculateValue": "try {\n  if (row.template.length > 0) {\n    value =\n      row.template[0].originalName.length > 0\n        ? row.template_file.split(\".\")[0]\n        : \"\";\n  }\n} catch (error) {}",
 					"key": "name",
-					"hideOnChildrenHidden": false,
 					"type": "textfield",
+					"hideOnChildrenHidden": false,
 					"input": true
 				}, {
 					"label": "Entity",
@@ -1077,7 +1053,6 @@
 					"properties": {
 						"absoluteUrl": "true"
 					},
-					"customConditional": "show = !data.form.template_file",
 					"type": "file",
 					"url": "/app/{{data.app.uuid}}/artifact/add/form",
 					"input": true
@@ -1088,10 +1063,18 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false
+				}, {
+					"label": "Form Uuid",
+					"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n\nconsole.log(value);",
+					"key": "uuid",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}]
 			}, {
 				"label": "Actual Form API Key",
-				"calculateValue": "try {\n  value = data.formDuplicate.map((i) => {\n    return { name: i.name, entity: i.entity, template_file: i.template_file };\n  });\n} catch (error) {}",
+				"calculateValue": "try {\n  value = data.formDuplicate.map((i) => {\n    return { name: i.name, entity: i.entity, template_file: i.template_file,uuid: i.uuid };\n  });\n} catch (error) {}",
 				"key": "form",
 				"type": "hidden",
 				"input": true,
@@ -1114,7 +1097,7 @@
 			"label": "Workflows",
 			"input": false,
 			"components": [{
-				"label": "Forms",
+				"label": "Workflows",
 				"reorder": false,
 				"addAnotherPosition": "bottom",
 				"defaultOpen": false,
@@ -1123,13 +1106,8 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"entity": {},
-					"template_file": []
-				}],
 				"clearOnHide": false,
-				"key": "workflow",
+				"key": "workflowDuplicate",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
@@ -1216,21 +1194,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"uuid": "",
-					"description": "",
-					"details": {
-						"data": {
-							"content": [{
-								"type": "",
-								"useRowData": false,
-								"url": ""
-							}]
-						},
-						"metadata": {}
-					}
-				}],
 				"clearOnHide": false,
 				"key": "pages",
 				"type": "datagrid",
@@ -1256,6 +1219,7 @@
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "Page UUID",
+									"calculateValue": "try {\n  if (\n    !(value.length > 1)\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}",
 									"key": "uuid",
 									"type": "hidden",
 									"input": true,
@@ -1291,11 +1255,11 @@
 							"label": "Page Content Form",
 							"tableView": true,
 							"form": "5f21c1bdbba30150d672d0cf",
-							"calculateValue": "var pagesList = data.pages.map(i=>i.name);\nvar formsList = data.form.map(i=>i.name);\nif(value){\n  if(value.data){\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
+							"calculateValue": "var pagesList = data.pages.map((i) => {\n return { name: i.name, uuid: i.uuid };\n});\nif (data.form !== \"\") {\n  var formsList = data.form.map((i) => {\n    return { name: i.name, uuid: i.uuid };\n  });\n}\n\nif (value) {\n  if (value.data) {\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
 							"key": "pageContent",
 							"type": "form",
 							"input": true,
-							"formRevision": 0,
+							"formRevision": 26,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Page Content",
@@ -1352,15 +1316,6 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"iconClass": "",
-					"page": {},
-					"privilege": {},
-					"parent": {},
-					"uuid": "",
-					"icon": ""
-				}],
 				"clearOnHide": false,
 				"validate": {
 					"minLength": 1
@@ -1465,7 +1420,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 281,
+	"_vid": 365,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1484,6 +1439,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-09-06T22:17:45.743Z",
+	"modified": "2020-09-20T15:28:43.523Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
