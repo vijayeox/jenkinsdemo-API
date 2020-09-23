@@ -810,7 +810,7 @@ return [
             'attachmentRemoval' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/:fileId/attachment/:attachmentId',
+                    'route' => '/app/:appId/file/:fileId/attachment/:attachmentId/remove',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'fileId' => UuidUtil::UUID_PATTERN,
