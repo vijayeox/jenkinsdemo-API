@@ -53,7 +53,7 @@ content:
             actions:
                 -
                     name: Policy Regeneration
-                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -61,8 +61,17 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'fa fa-file'
                 -
+                    name: Policy Regeneration
+                    rule: '((row.policyStatus == "Rejected" || row.policyStatus == "In Force") && row.entity_name == "Dive Store" && row.endorsement_options == undefined && (''{{status}}'' != ''In Progress''))'
+                    details:
+                        -
+                            type: Form
+                            form_id: e139cef3-d1e4-4b6f-8f20-51dec19f694e
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-file'
+                -
                     name: Endorsement
-                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -71,7 +80,7 @@ content:
                     icon: 'fa fa-pencil'
                 -
                     name: Endorsement
-                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -80,7 +89,7 @@ content:
                     icon: 'fa fa-pencil'
                 -
                     name: 'Upgrade To IPL'
-                    rule: '''{{policyStatus}}'' == ''In Force'' && (''{{entity_name}}'' == ''Emergency First Response'')'
+                    rule: '''{{policyStatus}}'' == ''In Force'' && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -100,7 +109,7 @@ content:
                     icon: 'fa fa-arrow-circle-up'
                 -
                     name: 'Renew Policy'
-                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -120,7 +129,7 @@ content:
                     icon: 'fa fa-refresh'
                 -
                     name: 'Renew Policy'
-                    rule: '(''{{entity_name}}'' == ''Emergency First Response'')'
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -140,7 +149,7 @@ content:
                     icon: 'fa fa-refresh'
                 -
                     name: 'Renew Policy'
-                    rule: '(''{{entity_name}}'' == ''Dive Store'')'
+                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -160,7 +169,7 @@ content:
                     icon: 'fa fa-refresh'
                 -
                     name: 'Renew Policy'
-                    rule: '(''{{entity_name}}'' == ''Dive Boat'')'
+                    rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -180,7 +189,7 @@ content:
                     icon: 'fa fa-refresh'
                 -
                     name: Endorsement
-                    rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
+                    rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -189,7 +198,7 @@ content:
                     icon: 'fa fa-pencil'
                 -
                     name: Endorsement
-                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
+                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -198,7 +207,7 @@ content:
                     icon: 'fa fa-pencil'
                 -
                     name: Endorsement
-                    rule: '(''{{entity_name}}'' == ''Group Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
+                    rule: '(''{{entity_name}}'' == ''Group Professional Liability'') && (''{{policyStatus}}'' == ''In Force'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -207,7 +216,7 @@ content:
                     icon: 'fa fa-pencil'
                 -
                     name: Comment
-                    rule: 'true'
+                    rule: '(''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Document
@@ -252,7 +261,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -261,7 +270,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -270,7 +279,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -279,7 +288,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -288,7 +297,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
@@ -301,7 +310,7 @@ content:
                             type: Form
                             url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
@@ -310,7 +319,7 @@ content:
                             type: Form
                             url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '((''{{disableReinstate}}'' == ''false'') || (''{{disableReinstate}}'' == ''undefined'')) && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '((''{{disableReinstate}}'' == ''false'') || (''{{disableReinstate}}'' == ''undefined'')) && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
@@ -319,7 +328,7 @@ content:
                             type: Form
                             url: workflow/2d94a2f0-c64c-48e0-a4f0-f85f626f0626/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
@@ -328,7 +337,7 @@ content:
                             type: Form
                             url: workflow/5a2ed122-3f12-4240-b197-a24469721e87/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     icon: 'fa fa-repeat'
             columnConfig:
                 -
@@ -360,6 +369,7 @@ content:
                 -
                     title: 'Policy Status'
                     field: policyStatus
+                    cell: '<td>{item.status == "In Progress" ? <span className = "policyError">Error processing policy</span> : item.policyStatus}</td>'
                     filterCell:
                         type: dropdown
                         listItems:

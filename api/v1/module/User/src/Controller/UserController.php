@@ -522,4 +522,28 @@ class UserController extends AbstractApiController
         $data = $this->getSuccessResponseWithData($result, 200);
         return $data;
     }
+
+    public function getPolicyTermsAction()
+    {
+        $result = $this->userService->getPolicyTerm();
+        if (!empty($result[0])) {
+            return $this->getSuccessResponseWithData($result, 200);
+        } else {
+            return $this->getSuccessResponseWithData(array(), 200);
+        }
+    }
+
+     public function updatePolicyTermsAction()
+    {
+        if(AuthContext::get(AuthConstants::USER_ID)){
+            try {
+                $count = $this->userService->updatePolicyTerms();
+            } catch (Exception $e) {
+                return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
+            }
+            return $this->getSuccessResponseWithData(array(), 200);
+        }else{
+            return $this->getErrorResponse("invalid username.", 401); 
+        }
+    }
 }

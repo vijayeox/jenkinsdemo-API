@@ -17,7 +17,7 @@ return [
                             'put' => 'MANAGE_ORGANIZATION_WRITE',
                             'post' => 'MANAGE_ORGANIZATION_WRITE',
                             'delete' => 'MANAGE_ORGANIZATION_WRITE',
-                            'get' => 'MANAGE_ORGANIZATION_READ',
+                            'get' => ['MANAGE_ORGANIZATION_READ','MANAGE_INSTALL_APP_READ'],
                         ],
                     ],
                 ],

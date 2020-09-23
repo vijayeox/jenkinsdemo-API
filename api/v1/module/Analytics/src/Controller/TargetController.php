@@ -6,6 +6,7 @@ use Analytics\Model\Target;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class TargetController extends AbstractApiController
 {

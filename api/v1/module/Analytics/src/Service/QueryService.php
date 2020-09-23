@@ -10,7 +10,6 @@ use Oxzion\InvalidInputException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ValidationException;
-use Ramsey\Uuid\Uuid;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class QueryService extends AbstractService
@@ -29,92 +28,64 @@ class QueryService extends AbstractService
 
     public function createQuery($data)
     {
-        $form = new Query();
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        if (isset($data['datasource_id'])) {
-            $data['datasource_id'] = $this->getIdFromUuid('ox_datasource', $data['datasource_id']);
-        }
+        $dataSourceUuid = $data['datasource_id'];
+        $dataSourceId = $this->getIdFromUuid('ox_datasource', $dataSourceUuid);
+        $data['datasource_id'] = $dataSourceId;
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $data['org_id'] = $orgId;
+        $orgUuid = $this->getUuidFromId('ox_datasource', $orgId);
 
-        $form->exchangeWithSpecificKey($data, 'value');
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
+        $query = new Query($this->table);
+        $query->assign($data);
+        $query->setForeignKey('org_id', $orgId); //org_id is defined as readonly in the model.
+        $query->setForeignKey('datasource_id', $dataSourceId); //datasource_id is defined as readonly in the model.
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $this->beginTransaction();
+            $query->save();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        //$query->assignBack($data);
+        //$data['datasource_id'] = $dataSourceUuid;
+        //$data['org_id'] = $orgUuid;
+        return $query->getGenerated();
     }
 
     public function updateQuery($uuid, $data)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if (!isset($data['version'])) {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $form = new Query();
-        if (isset($data['datasource_id'])) {
-            $data['datasource_id'] = $this->getIdFromUuid('ox_datasource', $data['datasource_id']);
-        }
-
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate();
-        $count = 0;
+        unset($data['datasource_id']);
+        $query = new Query($this->table);
+        $query->loadByUuid($uuid);
+        $query->assign($data);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
+            $this->beginTransaction();
+            $query->save();
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $query->getGenerated();
     }
 
     public function deleteQuery($uuid, $version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if (!isset($version)) {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $data = array('version' => $version, 'isdeleted' => 1);
-        $form = new Query();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data, 'value', true);
-        $form->updateValidate();
-        $count = 0;
+        $query = new Query($this->table);
+        $query->loadByUuid($uuid);
+        $query->assign([
+            'version' => $version,
+            'isdeleted' => 1,
+        ]);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
+            $this->beginTransaction();
+            $query->save();
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getQuery($uuid, $params)
@@ -167,9 +138,9 @@ class QueryService extends AbstractService
         $count = $resultSet->toArray()[0]['count'];
 
         if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
-            $query = "SELECT q.uuid,q.name,d.uuid as datasource_uuid,q.configuration,q.ispublic,IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner,q.version,q.org_id,q.isdeleted FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
+            $query = "SELECT q.uuid, q.name, d.uuid as datasource_uuid, q.configuration, q.ispublic, IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner, q.version, q.org_id, q.isdeleted FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
         } else {
-            $query = "SELECT q.uuid,q.name,datasource_id,q.configuration,q.ispublic,IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner,q.version,q.org_id FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
+            $query = "SELECT q.uuid, q.name, d.uuid as datasource_uuid, datasource_id, q.configuration, q.ispublic, IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner, q.version, q.org_id FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
@@ -309,7 +280,7 @@ class QueryService extends AbstractService
         return $data;
     }
 
-    function mergeArrays($a, $b, $oldkey, $newkey,$keys)
+    public function mergeArrays($a, $b, $oldkey, $newkey, $keys)
     {
         $c = array();
         foreach ($a as $row1) {
@@ -318,7 +289,7 @@ class QueryService extends AbstractService
             foreach ($b as $key => $row2) {
                 $tmprow2 = array_intersect_key($row2, array_flip($keys));
                 if ($tmprow1 == $tmprow2) {
-                    $mergevalue = ($oldkey==$newkey) ? [$oldkey=>$row2[$oldkey]]:[$newkey=>$row2[$oldkey]];
+                    $mergevalue = ($oldkey == $newkey) ? [$oldkey => $row2[$oldkey]] : [$newkey => $row2[$oldkey]];
                     $c[] = array_merge($row1, $mergevalue);
                     unset($b[$key]);
                     $found = 1;
@@ -329,21 +300,21 @@ class QueryService extends AbstractService
                 $c[] = $row1;
             }
         }
-        foreach($b as $row) {
-            if ($oldkey!=$newkey) {
-                $row[$newkey]=$row[$oldkey];
+        foreach ($b as $row) {
+            if ($oldkey != $newkey) {
+                $row[$newkey] = $row[$oldkey];
                 unset($row[$oldkey]);
             }
             $c[] = $row;
-        }        
+        }
         return ($c);
     }
 
-    function mergeData($data1, $data2, $index)
+    public function mergeData($data1, $data2, $index)
     {
         $arrykeys1 = array_keys($data1[0]);
         $arrykeys2 = array_keys($data2[0]);
-		$oldkey = $arrykeys2[count($arrykeys2) - 1];
+        $oldkey = $arrykeys2[count($arrykeys2) - 1];
         array_pop($arrykeys2);
         if (in_array($oldkey, $arrykeys1)) {
             $newkey = $oldkey . $index;
@@ -351,7 +322,7 @@ class QueryService extends AbstractService
             $newkey = $oldkey;
         }
 
-        $data = $this->mergeArrays($data1, $data2, $oldkey, $newkey,$arrykeys2);
+        $data = $this->mergeArrays($data1, $data2, $oldkey, $newkey, $arrykeys2);
         return $data;
     }
 
@@ -377,7 +348,7 @@ class QueryService extends AbstractService
             if (!empty($data) && isset($queryData['data']) && is_array($queryData['data'])) {
                 if ($aggCheck == 1) {
                     if (!empty($queryData['meta']['aggregates'])) {
-                        $data = $this->mergeData($data,$queryData['data'],$index);
+                        $data = $this->mergeData($data, $queryData['data'], $index);
                     } else {
                         throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
                     }
@@ -386,7 +357,7 @@ class QueryService extends AbstractService
                     if (!empty($queryData['meta']['aggregates'])) {
                         throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);
                     } else {
-                        $data = $this->mergeData($data,$queryData['data'],$index);
+                        $data = $this->mergeData($data, $queryData['data'], $index);
                     }
 
                 }

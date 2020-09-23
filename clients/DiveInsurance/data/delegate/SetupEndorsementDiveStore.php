@@ -156,19 +156,43 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['update_date'] = $data['update_date'] = $update_date;
                 }
                 $data['endoEffectiveDate'] = $data['update_date'];
+                if($data['start_date']){
+                    $data['start_date'] = date_format(date_create($data['start_date']),"Y-m-d");
+                }
+                if($data['end_date']){
+                    $data['end_date'] = date_format(date_create($data['end_date']),"Y-m-d");
+                }
+                if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                    $data['previous_additionalInsured'] = $data['additionalInsured'];
+                    $policy['previous_additionalInsured'] = $data['additionalInsured'];
+                } else {
+                    $data['previous_additionalInsured'] = array();
+                    $policy['previous_additionalInsured'] = array();
+                }
                 $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
-                $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
+                if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+                    $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
+                    $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
+                    $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
+                    $policy['previous_groupTaxPercentage'] = isset($data['groupTaxPercentage']) ? $data['groupTaxPercentage'] : 0;
+                    $policy['previous_groupPAORfee'] = isset($data['groupPAORfee']) ? $data['groupPAORfee'] : 0;
+                    $policy['previous_groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
+                    $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
+                } else {
+                    $policy['previous_groupCoverage'] = 0;
+                    $policy['previous_groupTaxAmount'] = 0;
+                    $policy['previous_groupPadiFeeAmount'] = 0;
+                    $policy['previous_groupTaxPercentage'] = 0;
+                    $policy['previous_groupPAORfee'] = 0;
+                    $policy['previous_groupProfessionalLiabilityPrice'] = 0;
+                    $policy['previous_groupTotalAmount'] = 0;
+                }
                 $policy['previous_groupExcessLiabilitySelect'] = $groupExcessLiability = $data['groupExcessLiabilitySelect'];
-                $policy['previous_groupTaxPercentage'] = isset($data['groupTaxPercentage']) ? $data['groupTaxPercentage'] : 0;
-                $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
-                $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
-                $policy['previous_groupPAORfee'] = isset($data['groupPAORfee']) ? $data['groupPAORfee'] : 0;
-                $policy['groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
-                $policy['previous_groupProfessionalLiabilityPrice'] = isset($data['groupProfessionalLiabilityPrice']) ? $data['groupProfessionalLiabilityPrice'] : 0;
-                $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
                 $policy['previous_groupProfessionalLiabilitySelect'] = $data['groupProfessionalLiabilitySelect'];
                 $policy['previous_propertyDeductibles'] = $data['propertyDeductibles'];
                 $policy['previous_excessLiabilityCoverage'] = $data['excessLiabilityCoverage'];
+                $policy['previous_nonDivingPoolAmount'] = $data['nonDivingPoolAmount'];
+                $policy['previous_CoverageFP'] = $data['CoverageFP'];
                 if($data['excessLiabilityCoverage']=='excessLiabilityCoverage1M'){
                     $policy['previous_combinedSingleLimitDS'] = 2000000;
                     $policy['previous_annualAggregateDS'] = 3000000;
@@ -188,38 +212,44 @@ public function execute(array $data,Persistence $persistenceService)
                     $policy['previous_combinedSingleLimitDS'] = 1000000;
                     $policy['previous_annualAggregateDS'] = 2000000;
                 }
-                if(isset($data['dspropreplacementvalue'])){
-                	$policy['previous_dspropreplacementvalue'] = $data['dspropreplacementvalue'];
-                }
-                if(isset($data['lossOfBusIncome'])){
-                    $policy['previous_lossOfBusIncome'] = $data['lossOfBusIncome'];
-                }
-                $policy['previous_dspropTotal'] = isset($data['dspropTotal']) ? $data['dspropTotal'] : 0;
-                if(isset($data['lossPayees'])){
-                    $policy['previous_lossPayees'] = $data['lossPayees'];    
-                }
+                $policy['previous_dspropreplacementvalue'] = isset($data['dspropreplacementvalue'])?$data['dspropreplacementvalue']:0;
+                $policy['previous_lossOfBusIncome'] = isset($data['lossOfBusIncome'])?$data['lossOfBusIncome']:0;
+                $policy['previous_dspropTotal'] = isset($data['dspropTotal'])?$data['dspropTotal']:0;
+                $policy['previous_lossPayees'] = isset($data['lossPayees'])?$data['lossPayees']:array();
+                $policy['previous_additionalNamedInsured'] = isset($data['additionalNamedInsured'])?$data['additionalNamedInsured']:array();
                 $policy['previous_nonOwnedAutoLiabilityPL'] = $data['nonOwnedAutoLiabilityPL'];
                 $policy['previous_liabilityCoverageOption'] = $data['liabilityCoverageOption'];
                 $policy['previous_liabilityCoveragesTotalPL'] = $data['liabilityCoveragesTotalPL'];
+                $policy['previous_ExcessLiabilityFP'] = $data['ExcessLiabilityFP'];
                 $policy['previous_propertyCoveragesTotalPL'] = isset($data['propertyCoveragesTotalPL'])?$data['propertyCoveragesTotalPL']:0;
                 $policy['previous_liabilityPropertyCoveragesTotalPL'] = $data['liabilityPropertyCoveragesTotalPL'];
                 $policy['previous_liabilityProRataPremium'] = isset($data['liabilityProRataPremium'])?$data['liabilityProRataPremium']:0;
                 $policy['previous_propertyProRataPremium'] = isset($data['propertyProRataPremium'])?$data['propertyProRataPremium']:0;
                 $policy['previous_ProRataPremium'] = $data['ProRataPremium'];
                 $policy['previous_PropTax'] = $data['PropTax'];
+                $policy['previous_propertyCoverageSelect'] = $data['propertyCoverageSelect'];
+                if($data['propertyCoverageSelect'] == 'yes'){
+                    $policy['previous_propertyCoverageSelect'] = $data['propertyCoverageSelect'];
+                    $policy['previous_Non-OwnedAutoFP'] = $data['Non-OwnedAutoFP'];
+                    $policy['previous_LossofBusIncomeFP'] = $data['LossofBusIncomeFP'];
+                    $policy['previous_BuildingLimitFP'] = $data['BuildingLimitFP'];
+                } else {
+                    $policy['previous_Non-OwnedAutoFP'] = 0;
+                    $policy['previous_LossofBusIncomeFP'] = 0;
+                    $policy['previous_BuildingLimitFP'] = 0;
+                }
                 $policy['previous_LiaTax'] = $data['LiaTax'];
                 $policy['previous_AddILocPremium'] = $data['AddILocPremium'];
                 $policy['previous_AddILocTax'] = $data['AddILocTax'];
+                $policy['previous_propertyDeductiblesPercentage'] = $data['propertyDeductiblesPercentage'];
                 $policy['previous_travelEnO'] = $data['travelAgentEoPL'];
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
-                $policy['previous_additionalLocations'] = $data['additionalLocations'];
+                $policy['previous_poolLiability'] = isset($data['poolLiability'])?$data['poolLiability']:0;
+                $policy['previous_additionalLocations'] = isset($data['additionalLocations'])?$data['additionalLocations']:array();
                 $policy['previous_annualAggregate'] = isset($data['annualAggregate']) ? $data['annualAggregate'] : 0;
                 $policy['previous_combinedSingleLimit'] = isset($data['combinedSingleLimit']) ? $data['combinedSingleLimit'] : 0;
                 $policy['previous_PropDeductibleCredit'] = $data['PropDeductibleCredit'];
-                if($data['additional_insured_select'] == "addAdditionalInsureds"){
-                    $policy['previous_additionalInsured'] = $data['additionalInsured'];
-                }
                 if(isset($data['PAORFee'])){
                     $policy['previous_PAORFee'] = $data['PAORFee'];
                 }
@@ -337,7 +367,9 @@ public function execute(array $data,Persistence $persistenceService)
                     unset($rate);
                 }
             }
-
+            foreach ($policy as $key => $value) {
+                $data[$key] = $value;
+            }
             $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
             $data['endorsementGroupLiability'] = $endorsementGroupLiability;
             $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
@@ -357,10 +389,31 @@ public function execute(array $data,Persistence $persistenceService)
                     foreach ($data['groupPL'] as $key => $value) {
                         if(!isset($value['effectiveDate'])){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                        }else if($value['effectiveDate'] == ""){
+                            $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                        }
+                        if(is_string($value['documentattach'])){
+                            $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
+                        }
+                        $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
+                        $result = $persistenceService->selectQuery($select);
+                        if($result->count() > 0){
+                            $response = array();
+                            while ($result->next()) {
+                                $response[] = $result->current();
+                            }
+                            if(count($response) > 0){
+                                $response[0]['rating'] = implode(",",array_column($response, 'rating'));
+                            }
+                            $data['groupPL'][$key]['rating'] = $response[0]['rating'];
+                        } else {
+                            // $data['groupPL'][$key]['rating'] = $response[0]['rating'];
                         }
                     }
                 }
             }
+
+            $data['stateTaxData'] = $this->getStateTaxData($data,$persistenceService);
             if(isset($data['paymentOptions'])){
                 unset($data['paymentOptions']);
             }
@@ -378,4 +431,23 @@ public function execute(array $data,Persistence $persistenceService)
             }
             $data['previous_policy_data'][$length]['update_date'] = $data['update_date'];
     }
+
+    private function getStateTaxData($data,$persistenceService){
+        $year = date('Y');
+        if($data['product'] == 'Dive Boat'){
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE coverage = 'group' and `year` = ".$year;
+        }else if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE `year` = ".$year;
+        }
+        $stateTaxResult = $persistenceService->selectQuery($selectTax);
+
+        $stateTaxData = [];
+        while ($stateTaxResult->next()) {
+            $rate = $stateTaxResult->current();
+            array_push($stateTaxData, $rate);
+        }
+        return $stateTaxData;
+    }
+
+    
 }

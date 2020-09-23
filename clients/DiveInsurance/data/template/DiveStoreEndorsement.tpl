@@ -4,8 +4,8 @@
 <link href= "{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<div class ="body_div_endo">
-	     {if isset($liabilityCoverageChanges) && $liabilityCoverageChanges}
+  <div class ="body_div_endo">
+       <!-- {if isset($liabilityCoverageChanges) && $liabilityCoverageChanges}
        <div class = "box">
           <center><b><u>+Policy has been changed to {$increasedCoverage} as of the Effective date of this Endorsement</u></b></center>
           <center><table>
@@ -63,26 +63,41 @@
             </tr>
           </table></center>
       </div>
-      {/if}
-
-      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit)|| (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO))}
+      {/if} -->
+      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO))}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
           {if isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit}
             <p>Medical Expense Liability now applies as of the Effective date on this Endorsement ({$increased_medicalPayment_limit} Limit)</p>
           {/if}
-          {if isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit}
-            <p>+NON-Owned Auto Liability now applies as of the Effective date on this Endorsement ({$increased_non_owned_liability_limit} Limit)</p>
+          {if isset($removed_medicalPayment) && $removed_medicalPayment}
+            <p>Medical Expense Liability has been removed as of the Effective date on this Endorsement</p>
           {/if}
-
+          {if isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit}
+            <p>+NON-Owned Auto Liability has been increased to {$increased_non_owned_liability_limit} as of the Effective date on this Endorsement</p>
+          {/if}
+          {if isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL}
+            <p>NON-Owned Auto Liability has been removed as of the Effective date on this Endorsement</p>
+          {/if}
           {if isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true}
             <p>+Liability Limits have been increased by ${$increased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
           {/if}
           {if isset($decreased_liability_limit) && $decreased_liability_limit > 0 && $liabilityChanges == true}
             <p>+Liability Limits have been decreased by ${$decreased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
           {/if}
-          {if isset($increased_travelEnO)}
+          {if isset($increased_travelEnO) && $increased_travelEnO}
             <p>Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
+          {/if}
+          {if isset($removed_travelEnO) && $removed_travelEnO}
+            <p>Travel Agent E & O has been removed as of the Effective date on this Endorsement</p>
+          {/if}
+          {if isset($removedadditionalLocations) && $removedadditionalLocations != ""}
+          {assign var=removedAddLoc value=$removedadditionalLocations|json_decode:true}
+            {foreach from=$removedAddLoc item=$location}
+              {if isset($location.address)}
+               <p>Location : {if isset($location.address)} {$location.address} {else} {if isset($location.name)}  {$location.name} {else}  {/if}{/if} has been removed as of the Effective date of this Endorsement</p>
+              {/if}
+            {/foreach}
           {/if}
       </div>
       {/if}
@@ -111,6 +126,14 @@
           {if isset($decreased_buildingLimit) && $propertyChanges == true}
             <p>+Building Limit have been reduced by ${$decreased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
           {/if}
+          {if isset($removedadditionalLocations) && $removedadditionalLocations != ""}
+          {assign var=removedAddLoc value=$removedadditionalLocations|json_decode:true}
+            {foreach from=$removedAddLoc item=$location}
+              {if isset($location.address)}
+              <p>Location : {if isset($location.address)} {$location.address} {else} {if isset($location.name)}  {$location.name} {else}  {/if}{/if} has been removed as of the Effective date of this Endorsement</p>
+              {/if}
+            {/foreach}
+          {/if}
       </div>
       {/if}
 
@@ -130,9 +153,7 @@
         <center><b>Additional Insured coverage applies only with respect to liability arising out of the operations of the named insureds</b></center>
       </div>
       {/if} -->
-
-    {if $additional_insured_select == "addAdditionalInsureds"}
-     {if $newAddInsured != "" || $removedAddInsured != ""}
+     {if (isset($newAddInsured) && $newAddInsured != "") || (isset($removedAddInsured) && $removedAddInsured != "")}
       <div class = "box">
         <center><b><u>***Additional Insured Schedule***</u></b></center>
         {if $newAddInsured != ""}
@@ -165,14 +186,14 @@
                  Booking Agent
               {elseif $additional.businessRelation == "other"}                     {$additional.businessRelationOther}
               {/if})
-              {/if} </span>:  Added as of {$update_date|date_format:"%m/%d/%Y"}
+              {/if} </span>
             </p>
             {/if}
           {/foreach}
         {/if}
         {if $removedAddInsured != ""}
-          {assign var=list1 value=$removedAddInsured|json_decode:true}
-          {foreach from=$list1 item=$additional}
+          {assign var=removedAdditionalInsured value=$removedAddInsured|json_decode:true}
+          {foreach from=$removedAdditionalInsured item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
             <p class = "ai_list" style = "font-size:15px;">
               <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
@@ -200,17 +221,16 @@
                  Booking Agent
               {elseif $additional.businessRelation == "other"}                     {$additional.businessRelationOther}
               {/if})
-              {/if} </span>: Removed as of {$update_date|date_format:"%m/%d/%Y"}.
+              {/if} </span>
             </p>
             {/if}
           {/foreach}
         {/if}
       </div>
       {/if}
-    {/if}
 
 
-     {if $lossPayeesSelect=='yes' && ($newlossPayees != "" || $removedlossPayees != "")}
+     {if $lossPayeesSelect=='yes' && ((isset($newlossPayees) && $newlossPayees != "") || (isset($removedlossPayees) && $removedlossPayees != ""))}
       <div class = "box">
         <center><b><u>***Loss Payees***</u></b></center>
         {if $newlossPayees != ""}
@@ -218,7 +238,7 @@
           {foreach from=$list item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
             <p class = "ai_list" style = "font-size:15px;">
-              <span style = "text-transform: uppercase;">{$additional.name} </span>:  Added as of {$update_date|date_format:"%m/%d/%Y"}
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
             </p>
             {/if}
           {/foreach}
@@ -228,7 +248,7 @@
           {foreach from=$list1 item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
             <p class = "ai_list" style = "font-size:15px;">
-              <span style = "text-transform: uppercase;">{$additional.name} </span>: Removed as of {$update_date|date_format:"%m/%d/%Y"}.
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
             </p>
             {/if}
           {/foreach}
@@ -238,8 +258,35 @@
       </div>
       </div>
       {/if}
-
-     {if $additionalLocationsSelect=='yes' && ($newAdditionalLocations != "" || $removedAdditionalLocations != "")}
+     {if $additional_named_insureds_option=='yes' && ((isset($newadditionalNamedInsured) && $newadditionalNamedInsured != "") || (isset($removedadditionalNamedInsured) && $removedadditionalNamedInsured != ""))}
+      <div class = "box">
+        <center><b><u>***Additional Named Insured***</u></b></center>
+        {if $newadditionalNamedInsured != ""}
+          {assign var=list value=$newadditionalNamedInsured|json_decode:true}
+          {foreach from=$list item=$additional}
+            {if isset($additional.name) && ($additional.name != '')}
+            <p class = "ai_list" style = "font-size:15px;">
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
+            </p>
+            {/if}
+          {/foreach}
+        {/if}
+        {if $removedadditionalNamedInsured != ""}
+          {assign var=list1 value=$removedadditionalNamedInsured|json_decode:true}
+          {foreach from=$list1 item=$additional}
+            {if isset($additional.name) && ($additional.name != '')}
+            <p class = "ai_list" style = "font-size:15px;">
+              <span style = "text-transform: uppercase;">{$additional.name} </span>
+            </p>
+            {/if}
+          {/foreach}
+        {/if}
+        <div style="margin-bottom: 5%"></div>
+        <center><b>but only as respects the operations of the named insured</b></center>
+      </div>
+      </div>
+      {/if}
+     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && isset($removedadditionalLocations) && $removedadditionalLocations != ""))}
       <div class = "box">
         <center><b><u>***Additional Locations***</u></b></center>
         {if $newAdditionalLocations != ""}
@@ -442,9 +489,9 @@
         </div>
     </div>
     
-	</div>
           {/foreach}
       {/if}
       {/if}
+  </div>
 </body>
 </html>

@@ -9,7 +9,7 @@ ox_visualization:
     isdeleted: 0
     configuration: '{"data":"value"}'
     renderer: "value1"
-    type: "Type1"
+    type: "chart"
     version: 1
   -
     id: 12
@@ -21,5 +21,5 @@ ox_visualization:
     isdeleted: 0
     configuration: '{"data":"value"}'
     renderer: "value2"
-    type: "Type2"
+    type: "inline"
     version: 1

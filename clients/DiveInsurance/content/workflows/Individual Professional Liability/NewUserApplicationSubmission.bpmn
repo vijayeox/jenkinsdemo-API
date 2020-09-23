@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.1.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1r6em5n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.2.0">
   <bpmn:process id="IPLNewPolicy" isExecutable="true">
     <bpmn:extensionElements>
       <camunda:executionListener expression="0" event="start" />
@@ -11,7 +11,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="csrInitiatesIpl" />
-          <camunda:property name="fields" value="additionalInsured, country, tecRecEndorsment, section2Agreement,careerCoverage, initiatedByCsr, approved, scubaFit, cylinder,excessLiability, padiNotFoundCsrReview, efrToIPLUpgrade, paymentOptions,userGrandTotal, isRenewalFlow, start_date, CSRReviewRequired, RejectedPolicy,   policyStatus, efrToIPLUpgrade" />
+          <camunda:property name="fields" value="additionalInsured, country, tecRecEndorsment, section2Agreement,careerCoverage, initiatedByCsr, approved, scubaFit, cylinder,excessLiability, padiNotFoundCsrReview, efrToIPLUpgrade, paymentOptions,userGrandTotal, isRenewalFlow, start_date, CSRReviewRequired, RejectedPolicy,   policyStatus, efrToIPLUpgrade,AdditionalInsuredOption" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_161msdp</bpmn:outgoing>
@@ -76,6 +76,7 @@ def paymentOptions = execution.getVariable('paymentOptions')
 def userGrandTotal = execution.getVariable('userGrandTotal')
 def renewalFlow = execution.getVariable('isRenewalFlow')
 def startDate = execution.getVariable('start_date')
+def AdditionalInsuredOption= execution.getVariable('AdditionalInsuredOption')
 
 boolean result1 = false
 boolean result2 = false
@@ -87,12 +88,8 @@ boolean result7 = false
 boolean result8 = false
 boolean result9 = false
 boolean result10 = false
-boolean result11 = false
 
-if(startDate &gt; '2020-07-31'){
-  result11 = true
-}
-if (additionalInsured) {
+if (AdditionalInsuredOption== 'addAdditionalInsureds' ) {
  additionalInsured.each {
   if (it.businessRelation &amp;&amp; it.businessRelation == 'other') {
     result1 = true
@@ -151,17 +148,17 @@ if (
   (initiatedByCsr == false ||
     initiatedByCsr == "false" ||
     initiatedByCsr == "") &amp;&amp;
-  ( tecRecEndorsment == "accepted" ||
+  ( tecRecEndorsment == "withTecRecEndorsementForSelectionAbove" ||
     result1 ||
     result9 ||
     result2 ||
     result4 ||
     result6 ||
     result7 ||
+    result8 ||
     efrToIPLUpgrade == true || efrToIPLUpgrade == "true" ||
     scubaFit == "scubaFitInstructor" ||
     result5 ||
-    result11 ||
     padiNotFoundCsrReview == "true" ||
     padiNotFoundCsrReview == true)
 ) {
@@ -222,7 +219,11 @@ if(status == "onHold"){
     <bpmn:serviceTask id="Task_0giy3fm" name="Policy Status Change during Review" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus', 'Pending Approval')</camunda:script>
+          <camunda:script scriptFormat="groovy">def start_date = execution.getVariable('start_date')
+
+execution.setVariable('policyStatus', 'Pending Approval')
+
+execution.setVariable('csrPolicyPeriod', start_date)</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">fileSave</camunda:inputParameter>
@@ -245,6 +246,7 @@ if(status == "onHold"){
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command": "file"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"ProcessEFRCancellation"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>

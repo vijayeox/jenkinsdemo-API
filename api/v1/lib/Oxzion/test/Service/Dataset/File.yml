@@ -1,3 +1,129 @@
+ox_organization:
+  - id: 100
+    name: Test
+    status: Active
+    type: 'INDIVIDUAL'
+    uuid: 'fa371de7-0387-48ea-8f29-5d3704d96ac5'  
+  - id: 101
+    name: Test2
+    status: Active
+    type: 'INDIVIDUAL'
+    uuid: '1b371de7-0387-48ea-8f29-5d3704d96ad6'  
+  - id: 102
+    name: Test3
+    status: Active
+    type: 'INDIVIDUAL'
+    uuid: '2c371de7-0387-48ea-8f29-5d3704d96ae7'
+ox_address:
+  -
+    id: 50
+    address1: 'Address1-50'
+    address2: 'Address2-50'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560050
+  -
+    id: 51
+    address1: 'Address1-51'
+    address2: 'Address2-51'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560051
+  -
+    id: 52
+    address1: 'Address1-52'
+    address2: 'Address2-52'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560052
+ox_user_profile:
+  - 
+    id: 150
+    uuid: a9fe8447-3b29-410d-8b22-95d337d3fbc2
+    firstname: Individual
+    lastname: Admin
+    email: 'admintestindividual@eoxvantage.in'
+    date_of_birth: '1991-02-28'
+    phone: '1212121212'
+    gender: 'Male'
+    address_id: 50
+    org_id: 100
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'  
+  - 
+    id: 151
+    uuid: bafe8447-3b29-410d-8b22-95d337d3fbd3
+    firstname: Individual2
+    lastname: Admin
+    email: 'admintestindividual2@eoxvantage.in'
+    date_of_birth: '1991-02-28'
+    phone: '1212121212'
+    gender: 'Male'
+    address_id: 51
+    org_id: 101
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'  
+  - 
+    id: 152
+    uuid: cbfe8447-3b29-410d-8b22-95d337d3fbe54
+    firstname: Individual3
+    lastname: Admin
+    email: 'admintestindividual3@eoxvantage.in'
+    date_of_birth: '1991-02-28'
+    phone: '1212121212'
+    gender: 'Male'
+    address_id: 52
+    org_id: 102
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'  
+ox_user:  
+  - 
+    id: 100
+    uuid: 754bc48a-3c69-4f7a-af8b-019fc984ee76
+    username: individualadmin
+    name: 'Individual Admin'
+    password: 'testpasswd'
+    orgid: 100
+    user_profile_id: 150
+    status: 'Active'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'
+  - 
+    id: 101
+    uuid: 864bc48a-3c69-4f7a-af8b-019fc984ee87
+    username: individualadmin1
+    password: 'testpasswd'
+    name: 'Individual1 Admin'
+    orgid: 101
+    user_profile_id: 151
+    status: 'Active'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'
+  - 
+    id: 102
+    uuid: 974bc48a-3c69-4f7a-af8b-019fc984ee98
+    username: individualadmin2
+    password: 'testpasswd'
+    name: 'Individual2 Admin'
+    orgid: 102
+    user_profile_id: 152
+    status: 'Active'
+    created_by: 1
+    date_created: '2020-08-24 00:00:00'        
+ox_user_org:
+  -
+    user_id: 100
+    org_id: 100
+  -
+    user_id: 101
+    org_id: 101
+  -
+    user_id: 102
+    org_id: 102        
+
 ox_app:
   - id: 99
     name: "SampleApp"
@@ -24,27 +150,45 @@ ox_app_entity:
     date_created: "2019-06-26 00:00:00"
     uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    start_date_field: start_date
+    end_date_field: end_date
+    status_field: status
   - id: 2
     name: "entity2"
     app_id: 100
     date_created: "2019-06-26 00:00:00"
     uuid: "e13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    start_date_field: start_date
+    end_date_field: end_date
+    status_field: status
   - id: 3
     name: "entity3"
     app_id: 101
     date_created: "2019-06-26 00:00:00"
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    start_date_field: start_date
+    end_date_field: end_date
+    status_field: status
   - id: 4
     name: "entity4"
     app_id: 99
     date_created: "2019-06-26 00:00:00"
     uuid: "62ba80b3-8a21-4391-820c-1f7857a321e1"
     created_by: 1
+    start_date_field: start_date
+    end_date_field: end_date
+    status_field: status
 ox_app_registry:
   - org_id: 1
     app_id: 99
+  - org_id: 100
+    app_id: 99 
+  - org_id: 101
+    app_id: 99 
+  - org_id: 102
+    app_id: 99  
 ox_field:
   - id: 1
     name: "field1"
@@ -85,7 +229,7 @@ ox_field:
   - id: 5
     name: "policy_document"
     app_id: 99
-    data_type: "document"
+    data_type: "list"
     type: "document"
     template: '{"persistent" : "true"}'
     required: 1
@@ -95,15 +239,15 @@ ox_field:
   - id: 6
     name: "coi_attachment"
     app_id: 99
-    data_type: "file"
-    type: "document"
+    data_type: "list"
+    type: "file"
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 6
     entity_id: 1
     index: 0
   - id: 7
-    name: "field1"
+    name: "field11"
     app_id: 99
     data_type: "numeric"
     template: '{"persistent" : "true"}'
@@ -213,7 +357,7 @@ ox_workflow:
     app_id: 99
     name: "Test Workflow 2"
     process_id: "[main]1"
-    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo"
+    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcc23"
     entity_id: 1
 ox_workflow_deployment:
   - id: 1
@@ -434,7 +578,61 @@ ox_activity_instance:
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0722"
     workflow_instance_id: 1
+    status: "Completed"
+    org_id: 1
+  - id: 4
+    activity_id: 1
+    activity_instance_id: "f16622fd-0124-11ea-a8a0-22e8105c0733"
+    workflow_instance_id: 3
+    status: "Completed"
+    org_id: 1
+  - id: 5
+    activity_id: 1
+    activity_instance_id: "126622fd-0124-11ea-a8a0-22e8105c0744"
+    workflow_instance_id: 4
     status: "In Progress"
+    org_id: 1  
+  - id: 6
+    activity_id: 1
+    activity_instance_id: "236622fd-0124-11ea-a8a0-22e8105c0755"
+    workflow_instance_id: 5
+    status: "Completed"
+    org_id: 1
+  - id: 7
+    activity_id: 1
+    activity_instance_id: "346622fd-0124-11ea-a8a0-22e8105c0766"
+    workflow_instance_id: 6
+    status: "In Progress"
+    org_id: 1
+  - id: 8
+    activity_id: 1
+    activity_instance_id: "456622fd-0124-11ea-a8a0-22e8105c0777"
+    workflow_instance_id: 7
+    status: "Completed"
+    org_id: 1
+  - id: 9
+    activity_id: 1
+    activity_instance_id: "566622fd-0124-11ea-a8a0-22e8105c0788"
+    workflow_instance_id: 8
+    status: "Completed"
+    org_id: 1
+  - id: 10
+    activity_id: 1
+    activity_instance_id: "676622fd-0124-11ea-a8a0-22e8105c0799"
+    workflow_instance_id: 9
+    status: "Completed"
+    org_id: 1
+  - id: 11
+    activity_id: 1
+    activity_instance_id: "786622fd-0124-11ea-a8a0-22e8105c07aa"
+    workflow_instance_id: 10
+    status: "Completed"
+    org_id: 1    
+  - id: 12
+    activity_id: 1
+    activity_instance_id: "896622fd-0124-11ea-a8a0-22e8105c07bb"
+    workflow_instance_id: 3
+    status: "Completed"
     org_id: 1
 ox_group:
   - id: 1
@@ -778,23 +976,23 @@ ox_file_document:
     sequence: null
 ox_wf_user_identifier:
   - id: 1
-    user_id: 1
+    user_id: 101
     identifier_name: "field1"
     identifier: "32552"
     app_id: 99
-    org_id: 1
+    org_id: 101
   - id: 2
     app_id: 99
-    org_id: 1
-    user_id: 1
-    identifier_name: "expiry_date"
-    identifier: "2019-01-01"
-  - id: 3
-    app_id: 99
-    org_id: 1
-    user_id: 2
+    org_id: 102
+    user_id: 102
     identifier_name: "field1"
     identifier: "32253"
+  - id: 3
+    app_id: 99
+    org_id: 100
+    user_id: 100
+    identifier_name: 'field1'
+    identifier: 32325
 ox_indexed_file_attribute:
   - id: 1
     file_id: 11

@@ -3,12 +3,13 @@ use Oxzion\AppDelegate\MailDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\DelegateException;
-
+use Oxzion\AppDelegate\FileTrait;
 require_once __DIR__."/DispatchDocument.php";
 
 
 class DispatchProposalDocument extends DispatchDocument {
 
+    use FileTrait;
     public function __construct(){
         $this->template = array(
             'Dive Boat' => 'diveBoatProposalMailTemplate',
@@ -20,6 +21,8 @@ class DispatchProposalDocument extends DispatchDocument {
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Proposal DOCUMENT --- ".json_encode($data));
+        $fileData = $this->getFile($data['fileId'],false,$data['orgId']);
+        $data = array_merge($data,$fileData['data']);
         $data['template'] = $this->template[$data['product']];
         if(isset($data['documents']) && is_string($data['documents'])){
             $data['documents'] = json_decode($data['documents'],true);

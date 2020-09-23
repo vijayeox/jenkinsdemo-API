@@ -86,6 +86,9 @@ class PadiVerification extends AbstractAppDelegate
             return $data;
         }
         $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['member_number']."'";
+        if(isset($data['product']) && ($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability')){
+            $select .= " and firstname is null";
+        }
         $result = $persistenceService->selectQuery($select);
         if($result->count() > 0){
             $response = array();

@@ -76,11 +76,21 @@ class RenewalRateCard extends RateCard
         }else if($data['form_data']['product'] == 'Dive Store'){
             $data['form_data']['entity_name'] = 'Dive Store';
             $data['form_data']['workflowId'] = 'cb99e634-de00-468d-9230-d6f77d241c5b';
+            if($data['form_data']['country'] == 'United States of America'){
+                $data['form_data']['us_state'] = $data['form_data']['state'];
+                $data['form_data']['us_zip'] = $data['form_data']['zip'];
+            }else{
+                $data['form_data']['non_us_state'] = $data['form_data']['state'];
+                $data['form_data']['non_us_zip'] = $data['form_data']['zip'];   
+            }
             $data['form_data']['start_date'] = $startYear."-06-30";
             $data['form_data']['end_date'] = $endYear."-06-30";
             $date=date_create($data['form_data']['start_date']);
             $data['form_data']['policyPeriod'] = date_format($date,"m-d-Y");
             $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$data['form_data']['business_padi']."'";
+            if(isset($data['form_data']['product']) && ($data['form_data']['product'] == 'Dive Store' || $data['form_data']['product'] == 'Group Professional Liability')){
+                $select .= " and firstname is null";
+            }
             $result = $persistenceService->selectQuery($select);
             $coverageOptions = array();
             if($result->count() > 0){
@@ -96,7 +106,7 @@ class RenewalRateCard extends RateCard
                     $data['form_data']['padiVerified'] = false;
                     $data['form_data']['businessPadiVerified'] = false;
                     $data['form_data']['padiNotApplicable'] = true;
-                    $data['form_data']['padiNotFound'] = false;
+                    $data['form_data']['padiNotFound'] = true;
                 } else {
                     $data['form_data']['padiVerified'] = false;
                     $data['form_data']['businessPadiVerified'] = false;

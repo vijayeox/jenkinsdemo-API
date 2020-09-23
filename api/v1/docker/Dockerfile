@@ -1,12 +1,8 @@
 FROM php:7.2-apache-stretch
 
-RUN apt-get update
-RUN apt-get install -y libpq-dev
-
-RUN apt-get update
-RUN apt-get install -y pdftk
-
 RUN apt-get update \
+ && apt-get install -y libpq-dev \
+ && apt-get install -y pdftk \
  && apt-get install -y graphviz \
  && apt-get install -y unzip \
  && apt-get install -y libxslt-dev \

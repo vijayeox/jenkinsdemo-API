@@ -490,8 +490,9 @@ class GroupService extends AbstractService
             foreach ($insertedUser as $key => $value) {
                 $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'orgname' => $org['name'], 'username' => $value['username'])), 'USERTOGROUP_ADDED');
             }
-            $queryString = "SELECT ox_user.username, ox_user.firstname, ox_user.lastname, ox_user.email FROM ox_user_group " .
-                "inner join ox_user on ox_user.id = ox_user_group.avatar_id " .
+            $queryString = "SELECT ox_user.username, up.firstname, up.lastname, up.email FROM ox_user_group " .
+                "inner join ox_user on ox_user.id = ox_user_group.avatar_id 
+                 inner join ox_user_profile up on up.id = ox_user.user_profile_id " .
                 "where ox_user_group.group_id = " . $group_id;
             $groupUsers = $this->executeQuerywithParams($queryString)->toArray();
             if (count($groupUsers) > 0) {

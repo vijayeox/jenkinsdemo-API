@@ -1,0 +1,16 @@
+{
+  "type": "theme",
+  "name": "EOXAppbuilderTheme",
+  "internal": true,
+  "category": null,
+  "title": {
+    "en_EN": "EOXAppbuilderTheme"
+  },
+  "description": {
+    "en_EN": "EOXAppbuilderTheme"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}

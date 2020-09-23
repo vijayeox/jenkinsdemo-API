@@ -1,18 +1,32 @@
 <?php
 
 use Oxzion\AppDelegate\FileTrait;
+use Oxzion\Db\Persistence\Persistence;
+use Oxzion\AppDelegate\AppDelegateTrait;
+use Oxzion\AppDelegate\MailDelegate;
 
-class ProcessGeneratedFiles
+class ProcessGeneratedFiles extends MailDelegate
 {
     use FileTrait;
+    use AppDelegateTrait;
 
-    public function execute(array $data)
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function setDocumentPath($destination)
+    {
+        $this->destination = $destination;
+    }
+
+    public function execute(array $data, Persistence $persistenceService)
     {
         try {
             if (isset($data['fileId'])) {
                 if ($data['status'] == 1) {
                     if (isset($data['_FILES'])) {
-                        $fileData = $this->saveAndUpdateFile($data);
+                        $fileData = $this->saveAndUpdateFile($data, $persistenceService);
                         $this->saveFile($fileData["fileData"], $data['fileId']);
                         $data['status'] = empty($fileData['status']) ? $data['status'] : $fileData['status'];
                     } else {
@@ -42,7 +56,7 @@ class ProcessGeneratedFiles
         return $data;
     }
 
-    private function saveAndUpdateFile($data)
+    private function saveAndUpdateFile($data, $persistenceService)
     {
         $status = "";
 
@@ -62,7 +76,9 @@ class ProcessGeneratedFiles
             if ($fileData['documentsToBeGenerated'] == 1) {
                 $fileData['documentsToBeGenerated'] = 0;
                 $fileData['status'] = 'Generated';
-                $status = $status . "File status is Generated";
+                $policyMail = $this->executeDelegate('DispatchMail', $fileData);
+                $status = $status . "File status is Generated" . ($policyMail ? " and Mail sent" : " and Mail not sent");
+                $fileData['mailStatus'] = $policyMail;
             } else {
                 $fileData['documentsToBeGenerated'] = $fileData['documentsToBeGenerated'] - 1;
                 $status = $status . " File status is Processing (" . $fileData['documentsToBeGenerated'] . ")";

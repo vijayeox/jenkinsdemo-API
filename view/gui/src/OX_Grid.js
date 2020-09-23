@@ -40,9 +40,9 @@ export default class OX_Grid extends React.Component {
         ? this.props.gridDefaultFilters
         : {},
       apiActivityCompleted: this.rawDataPresent ? true : false,
-      isTab: this.props.isTab?this.props.isTab:false
+      isTab: this.props.isTab ? this.props.isTab : false
     };
-    this.appNavigationDiv = "navigation_"+this.props.appId;
+    this.appNavigationDiv = "navigation_" + this.props.appId;
     this.loader = this.props.osjsCore.make("oxzion/splash");
     this.child = React.createRef();
     this.refreshHandler = this.refreshHandler.bind(this);
@@ -52,6 +52,15 @@ export default class OX_Grid extends React.Component {
   _grid;
 
   componentDidMount() {
+    document.getElementById(this.appNavigationDiv)
+      ? document
+          .getElementById(this.appNavigationDiv)
+          .addEventListener(
+            "handleGridRefresh",
+            () => this.refreshHandler(),
+            false
+          )
+      : null;
     $(document).ready(function () {
       $(".k-textbox").attr("placeholder", "Search");
     });
@@ -255,16 +264,18 @@ export default class OX_Grid extends React.Component {
     let gridToolbarContent = [];
     if (typeof this.props.gridToolbar == "string") {
       gridToolbarContent.push(
-        <JsxParser
-          bindings={{
-            item: this.props.parentData,
-            moment: moment,
-            profile: this.props.userProfile,
-            baseUrl: this.props.baseUrl,
-            gridData: this.state.gridData.data
-          }}
-          jsx={this.props.gridToolbar}
-        />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <JsxParser
+            bindings={{
+              item: this.props.parentData,
+              moment: moment,
+              profile: this.props.userProfile,
+              baseUrl: this.props.baseUrl,
+              gridData: this.state.gridData.data
+            }}
+            jsx={this.props.gridToolbar}
+          />
+        </div>
       );
     } else if (this.props.gridToolbar) {
       gridToolbarContent.push(this.props.gridToolbar);
@@ -416,8 +427,16 @@ export default class OX_Grid extends React.Component {
 
   updatePageContent = (config) => {
     let eventDiv = document.getElementById(this.appNavigationDiv);
-    var pageDetails = {title:config.name,pageContent:config.details,pageId:null,parentPage:this.props.pageId}
-    let ev2 = new CustomEvent("addPage", {detail: pageDetails,bubbles: true});
+    var pageDetails = {
+      title: config.name,
+      pageContent: config.details,
+      pageId: null,
+      parentPage: this.props.pageId
+    };
+    let ev2 = new CustomEvent("addPage", {
+      detail: pageDetails,
+      bubbles: true
+    });
     eventDiv.dispatchEvent(ev2);
   };
 
@@ -600,7 +619,7 @@ export default class OX_Grid extends React.Component {
                   : this.state.gridData.data
               }
             >
-              {this.createColumns(this.props.exportToPDF.columnConfig)}
+              {this.createColumns(this.props.exportToPDF.columnConfig ?this.props.exportToPDF.columnConfig : this.props.columnConfig )}
             </Grid>
           </GridPDFExport>
         ) : null}

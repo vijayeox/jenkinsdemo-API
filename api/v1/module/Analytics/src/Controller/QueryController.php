@@ -43,15 +43,13 @@ class QueryController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->queryService->createQuery($data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $this->queryService->createQuery($data);
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 201);
     }
 
     /**
@@ -66,37 +64,26 @@ class QueryController extends AbstractApiController
     public function update($uuid, $data)
     {
         try {
-            $count = $this->queryService->updateQuery($uuid, $data);
-        } catch (ValidationException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (VersionMismatchException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            $this->queryService->updateQuery($uuid, $data);
+            return $this->getSuccessResponseWithData($data, 200);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Query not found for uuid - $uuid", 404);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 200);
     }
 
     public function delete($uuid)
     {
         $params = $this->params()->fromQuery();
-        if (isset($params['version'])) {
-            try {
-                $response = $this->queryService->deleteQuery($uuid, $params['version']);
-            } catch (VersionMismatchException $e) {
-                $this->log->error($e->getMessage(), $e);
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-            }
-            if ($response == 0) {
-                return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-            }
+        $version = $params['version'];
+        try {
+            $this->queryService->deleteQuery($uuid, $version);
             return $this->getSuccessResponse();
-        } else {
-            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 

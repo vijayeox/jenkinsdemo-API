@@ -1,6 +1,8 @@
 <?php
 namespace User\Controller;
 
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Oxzion\Controller\AbstractApiController;
 use Exception;
 use Zend\Db\Adapter\AdapterInterface;
@@ -50,16 +52,20 @@ class UserSessionController extends AbstractApiController
      */
     public function updateSessionAction()
     {
-        $data=$this->extractPostData();
-        try {
-            $count = $this->sessionService->updateSessionData($data);
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
-        }
-        if (!empty(($data['data']))) {
-            return $this->getSuccessResponseWithData(json_decode($data['data'], true), 200);
-        } else {
-            return $this->getSuccessResponseWithData(array(), 200);
+        if(AuthContext::get(AuthConstants::USER_ID)){
+            $data=$this->extractPostData();
+            try {
+                $count = $this->sessionService->updateSessionData($data);
+            } catch (Exception $e) {
+                return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
+            }
+            if (!empty(($data['data']))) {
+                return $this->getSuccessResponseWithData(json_decode($data['data'], true), 200);
+            } else {
+                return $this->getSuccessResponseWithData(array(), 200);
+            }
+        }else{
+            return $this->getErrorResponse("invalid username.", 401); 
         }
     }
 }

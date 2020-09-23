@@ -9,12 +9,13 @@ use Oxzion\InvalidParameterException;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
-use Oxzion\Service\UserService;
+use Oxzion\Service\EntityService;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Model\WorkflowInstance;
 use Oxzion\Model\WorkflowInstanceTable;
 use Oxzion\Service\ActivityInstanceService;
+use Oxzion\Service\RegistrationService;
 use Oxzion\Utils\ArrayUtils;
 
 class WorkflowInstanceService extends AbstractService
@@ -22,28 +23,31 @@ class WorkflowInstanceService extends AbstractService
     protected $workflowService;
     protected $fileService;
     protected $processEngine;
-    protected $userService;
     protected $activityEngine;
+    protected $registratinService;
+    protected $entityService;
 
     public function __construct(
         $config,
         $dbAdapter,
         WorkflowInstanceTable $table,
         FileService $fileService,
-        UserService $userService,
+        EntityService $entityService,
         WorkflowService $workflowService,
         WorkflowFactory $workflowFactory,
-        ActivityInstanceService $activityInstanceService
+        ActivityInstanceService $activityInstanceService,
+        RegistrationService $registrationService
     ) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->fileService = $fileService;
+        $this->entityService = $entityService;
         $this->workflowService = $workflowService;
         $this->workFlowFactory = $workflowFactory;
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
         $this->activityEngine = $this->workFlowFactory->getActivity();
         $this->activityInstanceService = $activityInstanceService;
-        $this->userService = $userService;
+        $this->registrationService = $registrationService;
     }
     public function setProcessEngine($processEngine)
     {
@@ -161,11 +165,10 @@ class WorkflowInstanceService extends AbstractService
     {
         try {
             $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id 
-            from ox_workflow_instance as oxi
-            join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
-             join ox_workflow as ow on wd.workflow_id = ow.id
-             where oxi.org_id=? and oxi.process_instance_id=?";
-
+                        from ox_workflow_instance as oxi
+                        join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
+                         join ox_workflow as ow on wd.workflow_id = ow.id
+                         where oxi.org_id=? and oxi.process_instance_id=?";
             // $query = "SELECT * from ox_workflow_instance where org_id=? and process_instance_id=?";
             $queryParams = array(AuthContext::get(AuthConstants::ORG_ID), $id);
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
@@ -186,9 +189,7 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['orgId'])) {
             $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
         }
-        if (!isset($params['created_by'])) {
-            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        }
+        $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $workflowId = $params['workflowId'];
 
         if (!isset($params['app_id'])) {
@@ -231,7 +232,7 @@ class WorkflowInstanceService extends AbstractService
                 if(!isset($fileData['uuid'])){
                     $fileData['uuid'] = $fileDataResult['fileId'];
                 }
-                $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
+                $fileData['data'] = !isset($fileData['data']) ? $this->fileService->cleanData($fileData) : $fileData['data'];
             }else{
                 if(isset($fileData['uuid'])){
                     $select  = "SELECT of.id, of.last_workflow_instance_id from ox_file as of join ox_workflow_instance as owi on owi.id = of.last_workflow_instance_id WHERE of.uuid = :fileId";
@@ -264,7 +265,8 @@ class WorkflowInstanceService extends AbstractService
             $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
             $this->logger->info("WorkflowInstanceId created" . print_r($workflowInstanceId, true));
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id, file_id=:fileId, start_data=:startData where id = :workflowInstanceId";
-            $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'],'fileId'=>$this->getIdFromUuid('ox_file', $params['fileId']),'startData'=>json_encode($fileData['data']));
+            $startData = is_array($fileData['data']) ? json_encode($fileData['data']) : $fileData['data'];
+            $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'],'fileId'=>$this->getIdFromUuid('ox_file', $params['fileId']),'startData'=>$startData);
             $this->logger->info("Query1 - $updateQuery with Parametrs - " . print_r($updateParams, true));
             $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
             $this->commit();
@@ -343,7 +345,7 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("setupIdentityField");
         if (isset($params['identifier_field'])) {
             $data = $params;
-            $test = $this->userService->checkAndCreateUser(array(), $data, true);
+            $test = $this->registrationService->registerAccount($data);
         }
     }
 
@@ -397,6 +399,7 @@ class WorkflowInstanceService extends AbstractService
                 "activityInstanceId" => $activityInstance['id']);
             $updateQueryResult = $this->executeUpdateWithBindParameters($updateQuery,$updateQueryParams);
             $params = $this->pruneFields($params, $params['workflow_instance_id']);
+            unset($params['version']);
             $workflowInstanceId = $this->activityEngine->completeActivity($activityId, $params);
 
         } else {
@@ -453,7 +456,31 @@ class WorkflowInstanceService extends AbstractService
     public function setupWorkflowInstance($workflowId, $processInstanceId = null, $params = null)
     {
         $this->logger->info("SET UP Workflow Instance --- " . print_r($params, true));
-        if (isset($params['orgId'])) {
+        $entityId = null;
+        $query = "select w.app_id, w.entity_id, wd.id from ox_workflow as w
+                    inner join ox_workflow_deployment as wd on w.id = wd.workflow_id 
+                    where w.uuid=:uuid and wd.latest=:latest";
+        $queryParams = array("uuid" => $workflowId,"latest" => 1);
+        $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+
+        if(isset($params['entity_name']) && !empty($params['entity_name'])){
+            $select  = "SELECT ox_app_entity.id from ox_app_entity WHERE ox_app_entity.name = :name";
+            $queryParams = array('name' => $params['entity_name']);
+            $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
+            if(isset($result[0]['id'])) {
+                $entityId = $result[0]['id'];
+            } else {
+                throw new ServiceException("Invalid entity property set", "workflow.instance.failed");
+            }
+        }
+        else if(isset($workflowResultSet) && !empty($workflowResultSet)){
+            $entityId = $workflowResultSet[0]['entity_id'];
+        }
+        else {
+            throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed");
+        }
+        $orgId = $this->entityService->getEntityOfferingOrganization($entityId);
+        if (!$orgId && isset($params['orgId'])) {
             if ($org = $this->getIdFromUuid('ox_organization', $params['orgId'])) {
                 $orgId = $org;
             } else {
@@ -497,28 +524,6 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("SET UP Workflow Instance (CREATE NEW WORKFLOW INSTANCE)");
         $form = new WorkflowInstance();
         $dateCreated = date('Y-m-d H:i:s');
-        $query = "select w.app_id, w.entity_id, wd.id from ox_workflow as w
-                    inner join ox_workflow_deployment as wd on w.id = wd.workflow_id 
-                    where w.uuid=:uuid and wd.latest=:latest";
-        $queryParams = array("uuid" => $workflowId,"latest" => 1);
-        $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        $entityId = null;
-        if(isset($params['entity_name']) && !empty($params['entity_name'])){
-            $select  = "SELECT ox_app_entity.id from ox_app_entity WHERE ox_app_entity.name = :name";
-            $queryParams = array('name' => $params['entity_name']);
-            $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
-            if(isset($result[0]['id'])) {
-                $entityId = $result[0]['id'];
-            } else {
-                throw new ServiceException("Invalid entity property set", "workflow.instance.failed");
-            }
-        }
-        elseif(isset($workflowResultSet) && !empty($workflowResultSet)){
-            $entityId = $workflowResultSet[0]['entity_id'];
-        }
-        else {
-            throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed");
-        }
 
         if (count($workflowResultSet)) {
             $data = array('workflow_deployment_id' => $workflowResultSet[0]['id'], 'app_id' => $workflowResultSet[0]['app_id'], 'org_id' => $orgId, 'process_instance_id' => $processInstanceId, 'status' => "In Progress", 'date_created' => $dateCreated, 'created_by' => $createdBy, 'entity_id' => $entityId);
@@ -623,7 +628,7 @@ class WorkflowInstanceService extends AbstractService
     }
 
     public function getWorkflowInstanceDataFromFileId($fileId){
-        $select = "SELECT start_data,completion_data,parent_workflow_instance_id from ox_workflow_instance oxwi inner join ox_file on ox_file.id = oxwi.file_id where ox_file.uuid=:fileId";
+        $select = "SELECT oxwi.start_data,oxwi.completion_data,oxwi.parent_workflow_instance_id from ox_workflow_instance as oxwi inner join ox_file on ox_file.id = oxwi.file_id where ox_file.uuid=:fileId ORDER BY oxwi.date_created";
         $params = array("fileId" => $fileId);
         $result = $this->executeQuerywithBindParameters($select,$params)->toArray();
         if (count($result) == 0) {

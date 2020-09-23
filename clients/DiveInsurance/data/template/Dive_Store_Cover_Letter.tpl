@@ -29,7 +29,9 @@ longer working for you.</li>
 			<li>Please note: Your Dive Center general liability insurance does not cover the supervision and instruction of swimmers.
 This can only be covered by an individual or group professional liability policy.</li>
 		</ul>
-
+		{if isset($notes) && $notes != ''}
+			{$notes}
+     	{/if}
 		<p class = "line_end">Thank you for your support of the PADI Endorsed Dive Center insurance program. Please call or email me if you have any
 questions.</p>
 </div>

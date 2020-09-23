@@ -20,7 +20,6 @@ class Client extends StompClient
             // $connection = $this->stomp->connect();
             $result = $this->stomp->send($destination, new Message($message));
         } catch( Exception $e){
-            print_r('test');
             print_r('error'.$e->getMessage());exit;
         }
         // return $this->stomp->send($destination, new Message($message));

@@ -4,11 +4,21 @@
 	"tags": [],
 	"owner": "5e147f8c6225ae0c3b3440f9",
 	"components": [{
-		"key": "panel",
-		"input": false,
 		"title": "Personal Information",
 		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": false,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
 		"tableView": false,
+		"key": "panel",
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\" || !data.businessPadiVerified) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\n",
+		"type": "panel",
+		"label": "Personal Information",
+		"input": false,
 		"components": [{
 			"label": "policyStartYear",
 			"protected": true,
@@ -1120,21 +1130,6 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
-							}, {
-								"label": "Mobile Phone",
-								"tableView": false,
-								"validate": {
-									"required": true,
-									"custom": "if(data['phone_number'] && data['phone_number'] != ''){\n  if(data['phone_number'].length <= 15){\n      valid = (data['phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Mobile Phone number';\n  }else{\n    valid = (data['phone_number'].length > 15) ? 'Please enter a valid Mobile Phone number' : true;\n  }\n}",
-									"step": "any"
-								},
-								"key": "phone_number",
-								"type": "textfield",
-								"delimiter": false,
-								"requireDecimal": false,
-								"input": true,
-								"hideOnChildrenHidden": false,
-								"inputType": "tel"
 							}],
 							"width": 9,
 							"offset": 0,
@@ -1182,6 +1177,21 @@
 							"size": "md"
 						}, {
 							"components": [{
+								"label": "Mobile Phone",
+								"tableView": false,
+								"validate": {
+									"required": true,
+									"custom": "if(data['phone_number'] && data['phone_number'] != ''){\n  if(data['phone_number'].length <= 15){\n      valid = (data['phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Mobile Phone number';\n  }else{\n    valid = (data['phone_number'].length > 15) ? 'Please enter a valid Mobile Phone number' : true;\n  }\n}",
+									"step": "any"
+								},
+								"key": "phone_number",
+								"type": "textfield",
+								"delimiter": false,
+								"requireDecimal": false,
+								"input": true,
+								"hideOnChildrenHidden": false,
+								"inputType": "tel"
+							}, {
 								"label": "mobile_phone",
 								"calculateValue": "value = data.phone_country_code + \"\" + data.phone_number",
 								"key": "phone",
@@ -1279,18 +1289,8 @@
 			"lockKey": true,
 			"path": "panelPanel4"
 		}],
-		"type": "panel",
 		"lockKey": true,
-		"source": "5d4ee6df800c612c49e802d3",
-		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
-		"label": "Personal Information",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": false,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false
+		"source": "5d4ee6df800c612c49e802d3"
 	}, {
 		"title": "Coverage",
 		"theme": "primary",
@@ -1331,7 +1331,7 @@
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Please select a policy period from the list"
+					"custom": "if(data.start_date && data.start_date != \"\"){\n  valid = (moment(data.start_date).diff(moment(),'days') > 60) ? \"Sorry! You cannot purchase an insurance with an effective date beyond 60 days from the current date. Please try again\" : true;\n}else {\n  valid = (data.start_date_range && data.start_date_range != \"\") ? true : \"Please select a policy period from the list\";\n}"
 				},
 				"key": "start_date_range",
 				"properties": {
@@ -1370,13 +1370,12 @@
 							"showMeridian": false
 						},
 						"clearOnHide": false,
-						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n      if((data.start_date && data.start_date != \"\") ){\n\t    value = data.start_date;\n      }\n} else {\n  if (value == \"\" && (data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-15')))) {\n\n\t\t\tvalue = moment('2020-06-30');\n\n\t}\n\n  if(value == \"\"){\n\tvalue = moment();\n  }\n\n}",
+						"calculateValue": "if(value == \"\"){\n\tvalue = moment();\n}",
 						"allowCalculateOverride": true,
 						"validate": {
 							"required": true,
 							"customMessage": "Please select the Policy Start Date"
 						},
-						"errorLabel": "Policy Start Date",
 						"key": "csrPolicyPeriod",
 						"properties": {
 							"delegate": "RateCard",
@@ -2584,7 +2583,8 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) != 0){\n      value = total;\n    }\n}",
+									"redrawOn": "data",
+									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) != 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -2604,6 +2604,7 @@
 							"path": "page3PanelColumns5Columns2"
 						}, {
 							"label": "userGrandTotal",
+							"redrawOn": "data",
 							"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
 							"key": "userGrandTotal",
 							"type": "hidden",
@@ -2612,7 +2613,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "csrGrandTotal",
-							"redrawOn": "amount",
+							"redrawOn": "data",
 							"calculateValue": "if(data.CSRReviewRequired){\n  value = data.amount;\n}",
 							"key": "csrGrandTotal",
 							"type": "hidden",
@@ -4215,6 +4216,7 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
+						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
 						"validate": {
 							"multiple": true
 						},
@@ -4546,7 +4548,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0] && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == undefined || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == null || !data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -4982,7 +4984,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 581,
+	"_vid": 601,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5003,6 +5005,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-08-16T05:06:14.646Z",
+	"modified": "2020-09-01T13:44:27.867Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -1,0 +1,65 @@
+name: 'View Workbooks'
+description: 'Shows a list of generated workbooks'
+content:
+    -
+        type: List
+        content:
+            route: 'file'
+            filterable: true
+            defaultFilters: 
+                filter:
+                    logic: and
+                    filters:
+                        - 
+                            field: status
+                            operator: eq
+                            value: Generated
+                sort:
+                    -
+                        field: date_created
+                        dir: desc                 
+            resizable: true
+            refreshButton: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            sortable: 
+                allowUnsort: true
+                mode: single
+            actions:
+                -
+                    name: 'Export'
+                    rule: '''{{status}}'' == ''Generated'''
+                    icon: 'far fa-file-download'
+                    details:
+                        -
+                            type: Document
+                            content: '<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+            toolbarTemplate: '<h5>List of workbooks</h5>'
+            columnConfig:
+                -
+                    title: Insured
+                    field: namedInsured
+                -
+                    title: 'Producer'
+                    field: producername
+                -
+                    title: 'Producer Date'
+                    field: producerdate
+                    cell: '<td>{formatDate(item.producerdate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: 'Effective Date'
+                    field: effectiveDate
+                    cell: '<td>{formatDate(item.effectiveDate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
