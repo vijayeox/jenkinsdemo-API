@@ -1,6 +1,6 @@
 <?php
 
-namespace Organization;
+namespace Account;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -10,8 +10,8 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Model\OrganizationTable;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Model\AccountTable;
+use Oxzion\Service\AccountService;
 use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface
@@ -43,16 +43,16 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Controller\OrganizationController::class => function ($container) {
-                    return new Controller\OrganizationController(
-                        $container->get(OrganizationTable::class),
-                        $container->get(OrganizationService::class),
+                Controller\AccountController::class => function ($container) {
+                    return new Controller\AccountController(
+                        $container->get(AccountTable::class),
+                        $container->get(AccountService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },
-                Controller\OrganizationLogoController::class => function ($container) {
-                    return new Controller\OrganizationLogoController(
-                        $container->get(OrganizationService::class),
+                Controller\AccountLogoController::class => function ($container) {
+                    return new Controller\AccountLogoController(
+                        $container->get(AccountService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

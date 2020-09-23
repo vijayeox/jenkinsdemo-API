@@ -5,7 +5,7 @@ use Oxzion\Db\ModelTable;
 use Oxzion\Model\Entity;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
-class UserProfileTable extends ModelTable
+class PersonTable extends ModelTable
 {
     public function __construct(TableGatewayInterface $tableGateway)
     {

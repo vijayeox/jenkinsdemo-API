@@ -1,35 +1,35 @@
 <?php
-namespace Organization\Controller;
+namespace Account\Controller;
 
 use Exception;
 use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Model\Organization;
-use Oxzion\Model\OrganizationTable;
+use Oxzion\Model\Account;
+use Oxzion\Model\AccountTable;
 use Oxzion\ServiceException;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Service\AccountService;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 
-class OrganizationController extends AbstractApiController
+class AccountController extends AbstractApiController
 {
-    private $orgService;
+    private $accountService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(OrganizationTable $table, OrganizationService $orgService, AdapterInterface $dbAdapter)
+    public function __construct(AccountTable $table, AccountService $accountService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, Organization::class);
-        $this->setIdentifierName('orgId');
-        $this->orgService = $orgService;
+        parent::__construct($table, Account::class);
+        $this->setIdentifierName('accountId');
+        $this->accountService = $accountService;
     }
 
     /**
-     * Create Organization API
+     * Create Account API
      * @api
      * @method POST
-     * @link /organization
+     * @link /account
      * @param array $data Array of elements as shown
      * <code> {
      *               id : integer,
@@ -37,18 +37,18 @@ class OrganizationController extends AbstractApiController
      *               logo : string,
      *               status : String(Active|Inactive),
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Organization.
+     * @return array Returns a JSON Response with Status Code and Created Account.
      */
     public function create($data)
     {
         $files = $this->params()->fromFiles('logo') ? $this->params()->fromFiles('logo') : null;
         $id = $this->params()->fromRoute();
-        $this->log->info("Create Organization - " . print_r($data, true) . "\n Files - " . print_r($files, true));
+        $this->log->info("Create Account - " . print_r($data, true) . "\n Files - " . print_r($files, true));
         try {
-            if (!isset($id['orgId'])) {
-                $count = $this->orgService->createOrganization($data, $files);
+            if (!isset($id['accountId'])) {
+                $count = $this->accountService->createAccount($data, $files);
             } else {
-                $count = $this->orgService->updateOrganization($id['orgId'], $data, $files);
+                $count = $this->accountService->updateAccount($id['accountId'], $data, $files);
             }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
@@ -65,22 +65,22 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * GET List Organization API
+     * GET List Account API
      * @api
-     * @link /organization
+     * @link /account
      * @method GET
      * @return array Returns a JSON Response with Invalid Method/
      */
     public function getList()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $this->log->info("Get Oranization List - " . print_r($filterParams, true));
+        $this->log->info("Get Account List - " . print_r($filterParams, true));
         try {
-            $result = $this->orgService->getOrganizations($filterParams);
+            $result = $this->accountService->getAccounts($filterParams);
             if ($result) {
                 for ($x = 0; $x < sizeof($result['data']); $x++) {
                     $baseUrl = $this->getBaseUrl();
-                    $result['data'][$x]['logo'] = $baseUrl . "/organization/logo/" . $result['data'][$x]['uuid'];
+                    $result['data'][$x]['logo'] = $baseUrl . "/account/logo/" . $result['data'][$x]['uuid'];
                     $result['data'][$x]['preferences'] = json_decode($result['data'][$x]['preferences'], true);
                 }
             }
@@ -92,19 +92,19 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * Update Organization API
+     * Update Account API
      * @api
-     * @link /organization[/:orgId]
+     * @link /account[/:accountId]
      * @method PUT
-     * @param array $id ID of Organization to update
+     * @param array $id ID of Account to update
      * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created Organization.
+     * @return array Returns a JSON Response with Status Code and Created Account.
      */
     public function update($id, $data)
     {
         $files = $this->params()->fromFiles('logo');
         try {
-            $count = $this->orgService->updateOrganization($id, $data, $files);
+            $count = $this->accountService->updateAccount($id, $data, $files);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -116,20 +116,19 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * Delete Organization API
+     * Delete Account API
      * @api
-     * @link /organization[/:orgId]
+     * @link /account[/:accountId]
      * @method DELETE
-     * @link /organization[/:orgId]
-     * @param $id ID of Organization to Delete
+     * @param $id ID of Account to Delete
      * @return array success|failure response
      */
     public function delete($id)
     {
         try {
-            $response = $this->orgService->deleteOrganization($id);
+            $response = $this->accountService->deleteAccount($id);
             if ($response == 0) {
-                return $this->getErrorResponse("Organization not found", 404, ['id' => $id]);
+                return $this->getErrorResponse("Account not found", 404, ['id' => $id]);
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -139,11 +138,11 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * GET Organization API
+     * GET Account API
      * @api
-     * @link /organization[/:orgId]
+     * @link /account[/:accountId]
      * @method GET
-     * @param array $dataget of Organization
+     * @param array $dataget of Account
      * @return array $data
      * <code> {
      *               id : integer,
@@ -151,17 +150,17 @@ class OrganizationController extends AbstractApiController
      *               logo : string,
      *               status : String(Active|Inactive),
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Organization.
+     * @return array Returns a JSON Response with Status Code and Created Account.
      */
     public function get($id)
     {
         try {
-            $result = $this->orgService->getOrganizationByUuid($id);
+            $result = $this->accountService->getAccountByUuid($id);
             if (!$result) {
-                return $this->getErrorResponse("Organization not found", 404, ['id' => $id]);
+                return $this->getErrorResponse("Account not found", 404, ['id' => $id]);
             } else {
                 $baseUrl = $this->getBaseUrl();
-                $result['logo'] = $baseUrl . "/organization/logo/" . $result["uuid"];
+                $result['logo'] = $baseUrl . "/account/logo/" . $result["uuid"];
                 $result['preferences'] = json_decode($result['preferences'], true);
             }
         } catch (Exception $e) {
@@ -172,20 +171,20 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * Add User To Organization API
+     * Add User To Account API
      * @api
-     * @link /user/:userId/organization/:organizationId'
+     * @link /user/:userId/account/:accountId'
      * @method POST
-     * @param $id and $orgid that adds a particular user to a organization
+     * @param $id and $accountid that adds a particular user to a account
      * @return array success|failure response
      */
-    public function addUserToOrganizationAction()
+    public function addUserToAccountAction()
     {
         $params = $this->params()->fromRoute();
-        $id = $params['orgId'];
+        $id = $params['accountId'];
         $data = $this->extractPostData();
         try {
-            $count = $this->orgService->saveUser($id, $data);
+            $count = $this->accountService->saveUser($id, $data);
             if ($count == 0) {
                 return $this->getErrorResponse("Entity not found", 404);
             }
@@ -200,24 +199,24 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * GET all users in a particular Organization API
+     * GET all users in a particular Account API
      * @api
-     * @link /oeganization/:orgId/users
+     * @link /account/:accountId/users
      * @method GET
-     * @return array $dataget list of organization by User
+     * @return array $dataget list of Account by User
      * <code>status : "success|error",
-     *       data : all user id's in the organization passed back in json format
+     *       data : all user id's in the Account passed back in json format
      * </code>
      */
-    public function getListOfOrgUsersAction()
+    public function getListOfAccountUsersAction()
     {
-        $organization = $this->params()->fromRoute();
-        $id = $organization[$this->getIdentifierName()];
+        $account = $this->params()->fromRoute();
+        $id = $account[$this->getIdentifierName()];
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->orgService->getOrgUserList($organization[$this->getIdentifierName()], $filterParams, $this->getBaseUrl());
+            $count = $this->accountService->getAccountUserList($account[$this->getIdentifierName()], $filterParams, $this->getBaseUrl());
         } catch (ValidationException $e) {
-            $response = ['data' => $organization, 'errors' => $e->getErrors()];
+            $response = ['data' => $account, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
@@ -230,9 +229,9 @@ class OrganizationController extends AbstractApiController
     {
         $data = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($data['orgId']) ? $data['orgId'] : null;
+        $accountId = isset($data['accountId']) ? $data['accountId'] : null;
         try {
-            $result = $this->orgService->getAdminUsers($filterParams, $orgId);
+            $result = $this->accountService->getAdminUsers($filterParams, $accountId);
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }
@@ -240,20 +239,20 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * GET Organization Groups API
+     * GET Account Groups API
      * @api
-     * @link /organization/:orgId/groups
+     * @link /account/:accountId/groups
      * @method GET
      **/
-    public function getListofOrgGroupsAction()
+    public function getListofAccountGroupsAction()
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
+        $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $result = $this->orgService->getOrgGroupsList($orgId, $filterParams);
+            $result = $this->accountService->getAccountGroupsList($accountId, $filterParams);
             if (!$result) {
-                return $this->getErrorResponse("Organization not found", 404);
+                return $this->getErrorResponse("Account not found", 404);
             }
         } catch (Exception $e) {
             return $this->getErrorResponse($e->getMessage(), 404);
@@ -262,20 +261,20 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * GET Organization Projects API
+     * GET Account Projects API
      * @api
-     * @link /organization/:orgId/projects
+     * @link /account/:accountId/projects
      * @method GET
      **/
-    public function getListofOrgProjectsAction()
+    public function getListofAccountProjectsAction()
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
+        $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $result = $this->orgService->getOrgProjectsList($orgId, $filterParams);
+            $result = $this->accountService->getAccountProjectsList($accountId, $filterParams);
             if (!$result) {
-                return $this->getErrorResponse("Organization not found", 404);
+                return $this->getErrorResponse("Account not found", 404);
             }
         } catch (Exception $e) {
             return $this->getErrorResponse($e->getMessage(), 404);
@@ -284,20 +283,20 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * GET Organization Announcements API
+     * GET Account Announcements API
      * @api
-     * @link /organization/:orgId/announcements
+     * @link /account/:accountId/announcements
      * @method GET
      **/
-    public function getListofOrgAnnouncementsAction()
+    public function getListofAccountAnnouncementsAction()
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
+        $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $result = $this->orgService->getOrgAnnouncementsList($orgId, $filterParams);
+            $result = $this->accountService->getAccountAnnouncementsList($accountId, $filterParams);
             if (!$result) {
-                return $this->getErrorResponse("Organization not found", 404);
+                return $this->getErrorResponse("Account not found", 404);
             }
         } catch (Exception $e) {
             return $this->getErrorResponse($e->getMessage(), 404);
@@ -306,20 +305,20 @@ class OrganizationController extends AbstractApiController
     }
 
     /**
-     * GET Organization Roles API
+     * GET Account Roles API
      * @api
-     * @link /organization/:orgId/roles
+     * @link /account/:accountId/roles
      * @method GET
      **/
-    public function getListofOrgRolesAction()
+    public function getListofAccountRolesAction()
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
+        $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $result = $this->orgService->getOrgRolesList($orgId, $filterParams);
+            $result = $this->accountService->getAccountRolesList($accountId, $filterParams);
             if (!$result) {
-                return $this->getErrorResponse("Organization not found", 404);
+                return $this->getErrorResponse("Account not found", 404);
             }
         } catch (Exception $e) {
             return $this->getErrorResponse($e->getMessage(), 404);

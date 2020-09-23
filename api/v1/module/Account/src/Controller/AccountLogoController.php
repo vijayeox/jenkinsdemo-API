@@ -1,8 +1,8 @@
 <?php
-namespace Organization\Controller;
+namespace Account\Controller;
 
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Service\AccountService;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
 use Zend\InputFilter\Input;
@@ -10,19 +10,19 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Service\UserService;
 
-class OrganizationLogoController extends AbstractApiControllerHelper
+class AccountLogoController extends AbstractApiControllerHelper
 {
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
-    private $organizationService;
+    private $accountService;
     /**
     * @ignore __construct
     */
-    public function __construct(OrganizationService $organizationService, AdapterInterface $dbAdapter)
+    public function __construct(AccountService $accountService, AdapterInterface $dbAdapter)
     {
-        $this->setIdentifierName('orgId');
-        $this->organizationService = $organizationService;
+        $this->setIdentifierName('accountId');
+        $this->accountService = $accountService;
     }
 
     /**
@@ -36,10 +36,10 @@ class OrganizationLogoController extends AbstractApiControllerHelper
     public function get($id)
     {
         $logo = "logo.png";
-        $file = $this->organizationService->getOrgLogoPath($id);
+        $file = $this->accountService->getAccountLogoPath($id);
         
         if (FileUtils::fileExists($file) != 1) {
-            $file = $this->organizationService->getOrgLogoPath(null);
+            $file = $this->accountService->getAccountLogoPath(null);
         }
         $file = $file . $logo;
         if (!headers_sent()) {
@@ -54,7 +54,7 @@ class OrganizationLogoController extends AbstractApiControllerHelper
             return $this->response;
         } catch (Exception $e) {
             print_r($e->getMessage());
-            return $this->getErrorResponse("Organization Logo not found", 404);
+            return $this->getErrorResponse("Account Logo not found", 404);
         }
     }
 }
