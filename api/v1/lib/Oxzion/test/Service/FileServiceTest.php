@@ -592,7 +592,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(10,$initialCount);
+        $this->assertEquals(11,$initialCount);
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->performFileAssertions($result, $data);
