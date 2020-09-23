@@ -1,5 +1,4 @@
 FROM phusion/baseimage:0.10.2
-LABEL maintainer "Bharat Gogineni <bharat@vantageagora.com>"
 # SETUP Docker Arguments
 ARG VERSION=7.9.0
 ARG DISTRO=tomcat
@@ -71,7 +70,7 @@ ADD ./services/start-apache2.sh /start-apache2.sh
 ADD ./services/start-mysqld.sh /start-mysqld.sh
 ADD ./services/start-view.sh /start-view.sh
 ADD ./services/start-camel.sh /start-camel.sh
-ADD run.sh /run.sh
+#ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 ADD ./configs/my.cnf /etc/mysql/conf.d/my.cnf
 ADD ./configs/supervisor/supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
@@ -187,21 +186,6 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 ADD apache_default /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite ssl headers
 
-ENV EK_VERSION=7.9.0
-
-RUN apt-get update -qq >/dev/null 2>&1 \
- && apt-get install wget sudo -qqy >/dev/null 2>&1 \
- && useradd -m -s /bin/bash elasticsearch \
- && echo elasticsearch ALL=NOPASSWD: ALL >/etc/sudoers.d/elasticsearch \
- && chmod 440 /etc/sudoers.d/elasticsearch
-
-RUN mkdir -p /app/elasticsearch
-WORKDIR /app/elasticsearch
-
-RUN wget -q -O - https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-${EK_VERSION}-no-jdk-linux-x86_64.tar.gz | tar -zx \
- && mkdir -p elasticsearch-${EK_VERSION}/data \
- && wget -q -O - https://artifacts.elastic.co/downloads/kibana/kibana-oss-${EK_VERSION}-linux-x86_64.tar.gz | tar -zx
-
 # Set Docker Environment variables
 ENV HOST=${HOST}
 ENV API_DB_USERNAME=${DB_USERNAME}
@@ -210,9 +194,8 @@ ENV DB_USERNAME=${DB_USERNAME}
 ENV DB_PASSWORD=${DB_PASSWORD}
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
-ENV DB_URL=jdbc:mysql://${DB_HOST}/${API_DB}
+ENV DB_URL=jdbc:mysql://${DB_HOST}/${CAMUNDA_DB}
 ENV API_DB_URL=jdbc:mysql://${DB_HOST}/${API_DB}
-ENV CAMUNDA_DB=jdbc:mysql://${DB_HOST}/${CAMUNDA_DATABASE}
 ENV API_DB=${API_DB}
 ENV QUARTZ_DB=${QUARTZ_DB}
 ENV TEST_API_DB=${TEST_API_DB}
@@ -225,8 +208,7 @@ ENV SKIP_DB_CONFIG=
 ENV WAIT_FOR=
 ENV WAIT_FOR_TIMEOUT=30
 ENV TZ=UTC
-ENV DEBUG=
-WORKDIR /
-RUN chmod 777 /run.sh
+ENV DEBUG=false
+
 RUN dos2unix /run.sh
 CMD ["/run.sh"]

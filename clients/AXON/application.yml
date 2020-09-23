@@ -1,30 +1,32 @@
 app:
-    name: AXONInsurance
-    description: 'Insurance OI Application'
-    category: Dashboards
-    type: 2
-    autostart: 'true'
-    uuid: 648ddff8-71b7-4fe0-ac94-eeab5ad56e58
-    isdefault: false
-    logo: default_app.png
-    status: 4
-    start_options: null
+    -
+        name: AXONInsurance
+        description: 'Insurance OI Application'
+        category: Dashboards
+        type: 2
+        autostart: 'true'
+        uuid: 648ddff8-71b7-4fe0-ac94-eeab5ad56e58
+        isdefault: false
+        logo: default_app.png
+        status: 4
+        start_options: null
 org:
-    name: AXON
-    uuid: c1daf39b-e7ec-42eb-b53f-b4affff82ac0
-    email: axon@vantageagora.com
-    address1: '198 W. High St.'
-    address2: 'Somerville, NJ 08876'
-    city: Somerville
-    state: NJ
-    zip: 08876
-    contact:
-        username: axoninsurer
-        firstname: AXON
-        lastname: Insurer
-        email: axoninsurer@vantageagora.com
-    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
-    country: 'United States'
+    -
+        name: AXON
+        uuid: c1daf39b-e7ec-42eb-b53f-b4affff82ac0
+        email: axon@vantageagora.com
+        address1: '198 W. High St.'
+        address2: 'Somerville, NJ 08876'
+        city: Somerville
+        state: NJ
+        zip: 08876
+        contact:
+            username: axoninsurer
+            firstname: AXON
+            lastname: Insurer
+            email: axoninsurer@vantageagora.com
+        preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+        country: 'United States'
 privilege:
     -
         name: MANAGE_AXONAGENT

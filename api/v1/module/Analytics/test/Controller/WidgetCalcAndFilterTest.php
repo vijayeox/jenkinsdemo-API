@@ -475,6 +475,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($jsoncontent, '{"red_limit":"10000","yellow_limit":"25000","green_limit":"35000","color":"yellow"}');
 
     }
+    
     public function testWithPivot() {
     if (enableElastic!=0) {
         $this->setElasticData();

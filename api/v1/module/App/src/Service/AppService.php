@@ -176,22 +176,32 @@ class AppService extends AbstractService
         return $appSourceDir;
     }
 
-    private function createOrUpdateApplicationDescriptor($dirPath, $descriptorData) {
-        $descriptorFilePath = $dirPath . 
-            ((DIRECTORY_SEPARATOR == substr($dirPath, -1 )) ? '' : DIRECTORY_SEPARATOR) . self::APPLICATION_DESCRIPTOR_FILE_NAME;
-        if (file_exists($descriptorFilePath)) {
-            $descriptorDataFromFile = self::loadAppDescriptor($dirPath);
-            ArrayUtils::merge($descriptorDataFromFile, $descriptorData);
-            $yamlText = Yaml::dump($descriptorDataFromFile,20);
+    private function collectappfieldsdata(&$data)
+    {
+        if(isset($data[0])){
+            if (!(array_key_exists('type', $data[0]))) {
+                $data[0]['type'] = 2;
+            }
+            if (!(array_key_exists('category', $data[0]))) {
+                $data[0]['category'] = "OFFICE";
+            }
+            if (!(array_key_exists('autostart', $data[0]))) {
+                $data[0]['autostart'] = "true";
+            }
+            $data[0]['name'] = str_replace(" ", "", $data[0]['name']);
+        } else {
+            if (!(array_key_exists('type', $data))) {
+                $data['type'] = 2;
+            }
+            if (!(array_key_exists('category', $data))) {
+                $data['category'] = "OFFICE";
+            }
+            if (!(array_key_exists('autostart', $data))) {
+                $data['autostart'] = "true";
+            }
+            $data['name'] = str_replace(" ", "", $data['name']);
         }
-        else {
-            $yamlText = Yaml::dump($descriptorData,20);
-        }
-        $yamlWriteResult = file_put_contents($descriptorFilePath, $yamlText);
-        if (!$yamlWriteResult) {
-            $this->logger->error("Failed to create application YAML file ${descriptorFilePath}.");
-            throw new ServiceException('Failed to create application YAML file.', 'E_APP_YAML_CREATE_FAIL', 0);
-        }
+        return $data;
     }
 
     public static function loadAppDescriptor($path)
