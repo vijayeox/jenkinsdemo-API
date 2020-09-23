@@ -9586,7 +9586,9 @@
 						"destinationDataKey": "groupPL",
 						"valueKey": "padi",
 						"validationKey": "membersPadiVerified",
-						"clearSource": "true"
+						"clearSource": "true",
+						"additionalKey": "newMembereffectiveDate",
+						"additionalKeyValue": "update_date"
 					},
 					"type": "button",
 					"event": "callDelegate",
@@ -9941,7 +9943,7 @@
 									"customDefaultValue": "if(row.effectiveDate){\n  value =row.effectiveDate;\n}",
 									"calculateValue": "if((!row.existingEffectiveDate || row.existingEffectiveDate == \"\") && row.padi != \"\" && value != \"\"){\n  value = moment(data['update_date']).format(\"MM-DD-YYYY\");\n}else if(row.existingEffectiveDate){\n  value = moment(row.existingEffectiveDate).format(\"MM-DD-YYYY\");\n}",
 									"key": "existingEffectiveDate",
-									"customConditional": "if(row.start_date || row.start_date !=\"\"){\n  if(moment(row.start_date).diff(moment(data.update_date)) < 0)  {\n    show = true;\n  }else{\n    show = false;\n  }\n}else{\n  show = false;\n}",
+									"customConditional": "show = false;\nif(row.start_date || row.start_date !=\"\" || row.start_date != undefined){\n  if(moment(row.start_date).diff(moment(data.update_date)) < 0)  {\n    show = true;\n  }else{\n    show = false;\n  }\n}else{\n  show = false;\n}",
 									"type": "textfield",
 									"input": true,
 									"hideOnChildrenHidden": false
@@ -10593,9 +10595,16 @@
 										"input": true,
 										"hideOnChildrenHidden": false
 									}, {
+										"label": "AI Effective Date",
+										"key": "aiEffectiveDate",
+										"type": "hidden",
+										"input": true,
+										"tableView": false,
+										"hideOnChildrenHidden": false
+									}, {
 										"label": "Effective Date",
-										"calculateValue": "value = data.endoEffectiveDate;",
-										"key": "effective_date",
+										"calculateValue": "value = moment(data.endoEffectiveDate).format(\"YYYY-MM-DD\");",
+										"key": "endo_effective_date",
 										"type": "hidden",
 										"input": true,
 										"tableView": false,
@@ -15316,7 +15325,7 @@
 		"lockKey": true
 	}],
 	"revisions": "original",
-	"_vid": 31,
+	"_vid": 37,
 	"title": "diveStoreEndorsement3",
 	"display": "wizard",
 	"access": [{
@@ -15334,6 +15343,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-09-23T06:41:55.017Z",
+	"modified": "2020-09-23T12:24:27.431Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
