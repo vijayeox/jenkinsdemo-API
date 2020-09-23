@@ -880,6 +880,11 @@
    key: harcoExcelData*checkUmbrellaNameExists
    returnBoolean: 'X|'
 -
+   key: harcoExcelData*checkdriveumuim
+   Source Worksheet: UM/UIM
+   pageName: K
+   cell: F33
+-
    Source Worksheet: Drive Other Car Coverage
    pageName: K
    cell: B17
