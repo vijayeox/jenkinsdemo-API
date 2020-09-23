@@ -75,7 +75,7 @@ class AppService extends AbstractService
         $this->businessRoleService = $businessRoleService;
         $this->userService = $userService;
         $this->restClient = new RestClient(null);
-        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration","view","symlink");
+        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration","symlink");
     }
 
     /**
@@ -199,7 +199,7 @@ class AppService extends AbstractService
         if (!$yamlWriteResult) {
             $this->logger->error("Failed to create application YAML file ${descriptorFilePath}.");
         }
-        return $data;
+        return $descriptorData;
     }
 
     public static function loadAppDescriptor($path)
@@ -243,6 +243,7 @@ class AppService extends AbstractService
                 switch ($value) {
                     case 'initialize':
                     $this->createOrUpdateApp($ymlData);
+                    $this->processBusinessRoles($ymlData);
                     $this->createAppPrivileges($ymlData);
                     $this->createRole($ymlData);
                     $this->performMigration($ymlData, $path);
@@ -504,6 +505,9 @@ public function processForm(&$yamlData, $path)
             $data['entity_id'] = $entity['id'];
             if (isset($data['template_file'])) {
                 $data['template'] = file_get_contents($path . 'content/forms/' . $data['template_file']);
+            }
+            if (isset($data['template']) && is_array($data['template'])) {
+                $data['template'] = json_encode($data['template']);
             }
             $fieldReference = NULL;
             if($entityReferences && isset($entityReferences[$data['entity']])){
@@ -831,8 +835,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     $result = $this->roleService->saveTemplateRole($role, $role['uuid']);
                     $roleData['uuid'] = $role['uuid'];
                 }else{
-                    unset($role['uuid']);
-                    $result = $this->roleService->saveRole($params, $role);
+                    $result = $this->roleService->saveRole($params, $role, $role['uuid']);
                 }
                 
             }
@@ -1156,6 +1159,9 @@ private function checkWorkflowData(&$data,$appUuid)
             }
             if(isset($entity['identifiers'])){
                 $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);
+            }
+            if(isset($entity['participantRole'])){
+                $result = $this->entityService->saveParticipantRoles($entity['id'], $appId, $entity['participantRole']);
             }
             if(isset($entity['field'])){
                 foreach ($entity['field'] as $field) {
