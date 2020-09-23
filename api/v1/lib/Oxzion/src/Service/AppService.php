@@ -198,8 +198,8 @@ class AppService extends AbstractService
         $yamlWriteResult = file_put_contents($descriptorFilePath, $yamlText);
         if (!$yamlWriteResult) {
             $this->logger->error("Failed to create application YAML file ${descriptorFilePath}.");
-            throw new ServiceException('Failed to create application YAML file.', 'E_APP_YAML_CREATE_FAIL', 0);
         }
+        return $data;
     }
 
     public static function loadAppDescriptor($path)

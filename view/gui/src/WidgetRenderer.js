@@ -6,11 +6,11 @@ import WidgetDrillDownHelper from './WidgetDrillDownHelper';
 import * as am4core from '../amcharts/core';
 import * as am4charts from '../amcharts/charts';
 import * as am4maps from '../amcharts/maps';
-// import * as am4plugins_forceDirected from '@amcharts/amcharts4/plugins/forceDirected'; 
 import am4geodata_usaAlbersLow from '@amcharts/amcharts4-geodata/usaAlbersLow';
 import am4themes_animated from '../amcharts/themes/animated';
 // import am4themes_kelly from '../amcharts/themes/kelly';
 import WidgetTransformer from './WidgetTransformer';
+import * as am4plugins_forceDirected from "../amcharts/plugins/forceDirected";
 am4core.useTheme(am4themes_animated);
 am4core.options.commercialLicense = true;
 
@@ -186,23 +186,28 @@ class WidgetRenderer {
                 case 'LineSeries':
                     am4ChartType = am4charts.XYChart;
                     break;
-
                 case 'ColumnSeries':
                     am4ChartType = am4charts.XYChart;
                     break;
-
                 case 'PieSeries':
                     am4ChartType = am4charts.PieChart;
                     break;
-
                 case 'FunnelSeries':
                 case 'PyramidSeries':
                     am4ChartType = am4charts.SlicedChart;
                     break;
-                // case 'ForceDirectedSeries':
-                //     am4ChartType = am4plugins_forceDirected;
-                //     break;
-
+                case 'ForceDirectedSeries':
+                    am4ChartType = am4plugins_forceDirected.ForceDirectedSeries;
+                    break;
+                case 'ForceDirectedLink':
+                    am4ChartType = am4plugins_forceDirected.ForceDirectedLink;
+                    break;
+                case 'ForceDirectedNode':
+                    am4ChartType = am4plugins_forceDirected.ForceDirectedNode;
+                    break;
+                case 'ForceDirectedTree':
+                    am4ChartType = am4plugins_forceDirected.ForceDirectedTree;
+                    break;
                 default:
                     throw (`Unhandled am4charts type: ${type}`);
             }

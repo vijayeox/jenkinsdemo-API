@@ -1,0 +1,18 @@
+{
+    "type": "application",
+    "name": "BSRIInsurance",
+    "appId": "c1f756bf-b91a-460a-994c-7afa7c8d52e3",
+    "category": null,
+    "autostart": "true",
+    "defaultAppforOrgs": false,
+    "server": "server.js",
+    "icon": "icon.png",
+	"icon_white": "icon_white.png",
+    "title": {
+        "en_EN": "Insurance"
+    },
+    "description": {
+        "en_EN": "Insurance OI Application"
+    },
+    "files": ["main.js", "main.css"]
+}

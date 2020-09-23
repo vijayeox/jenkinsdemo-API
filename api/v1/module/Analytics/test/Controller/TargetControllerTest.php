@@ -65,7 +65,7 @@ class TargetControllerTest extends ControllerTest
         $this->assertMatchedRouteName('target');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['version'], 2);
+        $this->assertEquals($content['data']['period_type'], $data['period_type']);
     }
 
      public function testUpdateWithWrongVersion()
@@ -74,12 +74,12 @@ class TargetControllerTest extends ControllerTest
          $this->initAuthToken($this->adminUser);
          $this->setJsonContent(json_encode($data));
          $this->dispatch('/analytics/target/44f22a46-3434-48df-96b9-c58520005817', 'PUT', null);
-         $this->assertResponseStatusCode(412);
+         $this->assertResponseStatusCode(404);
          $this->setDefaultAsserts();
          $this->assertMatchedRouteName('target');
          $content = (array)json_decode($this->getResponse()->getContent(), true);
          $this->assertEquals($content['status'], 'error');
-         $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
+         $this->assertEquals($content['message'], 'Version changed');
      }
 
     public function testUpdateNotFound()
@@ -194,11 +194,11 @@ class TargetControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/target/44f22a46-3434-48df-96b9-c58520005817?version=3', 'DELETE');
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('target');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
+        $this->assertEquals($content['message'], 'Version changed');
     }
 }

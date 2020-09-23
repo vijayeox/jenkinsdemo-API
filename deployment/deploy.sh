@@ -456,6 +456,40 @@ insuranceoi()
     fi
 }
 
+axon()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/AXON" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./AXON /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building AXON app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/AXON'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/AXONInsurance/
+        rm -rf /opt/oxzion/view/apps/AXONInsurance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+
 task()
 {
     cd ${TEMP}
@@ -625,11 +659,11 @@ arrowhead()
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
-appbuilder()
+covid()
 {
     cd ${TEMP}
     echo -e "${YELLOW}Copying EOX apps...${RESET}"
-    if [ ! -d "./clients/EOXAppBuilder" ] ;
+    if [ ! -d "./clients/Covid19" ] ;
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
@@ -638,25 +672,19 @@ appbuilder()
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
-        rsync -rl --delete ./EOXAppBuilder /opt/oxzion/eoxapps
-        chmod 777 -R /opt/oxzion/eoxapps
-        echo -e "${YELLOW}Building EOXAppBuilder app using deployapp API${RESET}"
+        rsync -rl --delete ./Covid19 /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building Covid 19 app using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
-        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/EOXAppBuilder'
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Covid19'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
-        service php7.2-fpm reload
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
-        cd /opt/oxzion/view/apps/EOXAppBuilder/
-        rm -rf /opt/oxzion/view/apps/EOXAppBuilder/node_modules
-        npm install --unsafe-perm
-        npm run build
-        cd /opt/oxzion/view/themes/EOXAppbuilderTheme/
-        rm -rf /opt/oxzion/view/themes/EOXAppbuilderTheme/node_modules
+        cd /opt/oxzion/view/apps/Covid19CheckList/
+        rm -rf /opt/oxzion/view/apps/Covid19CheckList/node_modules
         npm install --unsafe-perm
         npm run build
         chown oxzion:oxzion -R /opt/oxzion/view
@@ -686,6 +714,7 @@ workflow
 helpapp
 transportation
 arrowhead
-appbuilder
+axon
+covid
 #edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"
