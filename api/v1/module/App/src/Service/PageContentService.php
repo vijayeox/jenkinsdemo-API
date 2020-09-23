@@ -10,6 +10,7 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
 use Exception;
+use Oxzion\Utils\UuidUtil;
 
 class PageContentService extends AbstractService
 {
@@ -73,10 +74,23 @@ class PageContentService extends AbstractService
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){
                 if($value['type'] == 'List' || $value['type'] == 'Search'){
-                    $value['content'] = json_encode($value['content']);
+                    if(isset($value['form_id']) && (empty($value['form_id']) || $value['form_id'] == '')){
+                        unset($value['form_id']);
+                    }
+                    if(isset($value['content'])){
+                        $value['content'] = json_encode($value['content']);
+                    } else {
+                        $value['content'] = null;
+                    }
                 }
-                if($value['type'] == 'Form' && isset($value['form_id'])){
-                    $value['form_id'] = $this->getIdFromUuid('ox_form', $value['form_id']);
+                if($value['type'] == 'Form' && ((isset($value['form_id']) && $value['form_id'] != '') || isset($value['template_file']))){
+                    if (isset($value['template_file'])) {
+                        $value['template_file'] = pathinfo($value['template_file'],PATHINFO_FILENAME);
+                        $resultSet = $this->getDataByParams('ox_form', array("id"),['name' => $value['template_file']] , null)->toArray();
+                        $data['form_id'] = $value['form_id'] = $resultSet[0]['id'];
+                    }else{                     
+                        $value['form_id'] = $this->getIdFromUuid('ox_form', $value['form_id']);  
+                    }
                 }
                 unset($value['id']);
                 if (!isset($value['id'])) {
@@ -153,7 +167,6 @@ class PageContentService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());exit;
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -208,14 +221,11 @@ class PageContentService extends AbstractService
     private function savePageContentInternal($data)
     {   
         try{
-            if(isset($data['content']) && !is_string($data['content'])){
-                $data['content'] = json_encode($data['content']);
-            }
+            $data['content'] = $this->checkListContent($data);
             $page = new PageContent();
             $page->exchangeArray($data);
             $page->validate();
             $count = 0;
-
             $count = $this->table->save($page);
             if ($count == 0) {
                 return 0;
@@ -226,8 +236,30 @@ class PageContentService extends AbstractService
             }
             return $count;
         }catch(Exception $e){
+            print_r($e->getMessage());exit;
             $this->logger->error($e->getMessage(), $e);
             throw $e;
+        }
+    }
+
+    private function checkListContent($data){
+        if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
+            return json_encode($data['gridContent']);
+        }
+        if(isset($data['gridContent']) && is_string($data['gridContent'])){
+            return $data['gridContent'];
+        }
+        if(isset($data['htmlContent']) && !empty($data['htmlContent']) && !is_string($data['htmlContent'])){
+            return json_encode($data['htmlContent']);
+        }
+        if(isset($data['htmlContent']) && is_string($data['htmlContent'])){
+            return $data['htmlContent'];
+        }
+        if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
+            return  json_encode($data['content']);
+        }
+        if(isset($data['content']) && is_string($data['content'])){
+            return $data['content'];
         }
     }
 }

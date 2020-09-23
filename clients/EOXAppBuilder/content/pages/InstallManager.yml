@@ -1,0 +1,25 @@
+name: 'Organization Installer'
+description: 'Shows a list of Organizations to install the Application'
+content:
+        -
+            type: List
+            content:
+                route: 'organization'
+                disableAppId: true
+                actions:
+                     -
+                         name: Install
+                         rule: "true"
+                         details:
+                             -
+                                 type: Update
+                                 successMessage: 'Application Successfully Installed'
+                                 params:
+                                    url: /app/{{app_uuid}}/install/org/{{uuid}}
+                                    disableAppId: true
+                         icon: 'far fa-download'
+                         updateOnly: true
+                columnConfig:
+                    -
+                        title: Name
+                        field: name

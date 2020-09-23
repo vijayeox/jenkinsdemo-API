@@ -21,6 +21,11 @@ use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Service\UserCacheService;
+use Oxzion\Service\OrganizationService;
+use Oxzion\Service\RegistrationService;
+use Oxzion\Utils\ArrayUtils;
+
 class CommandService extends AbstractService
 {
     /**
@@ -31,6 +36,9 @@ class CommandService extends AbstractService
     private $workflowInstanceService;
     private $userService;
     private $jobService;
+    private $userCacheService;
+    private $organizationService;
+    private $registrationService;
     /**
      * @ignore __construct
      */
@@ -41,7 +49,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService, OrganizationService $organizationService, RegistrationService $registrationService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -54,6 +62,9 @@ class CommandService extends AbstractService
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
         $this->userService = $userService;
         $this->jobService = $jobService;
+        $this->userCacheService = $userCacheService;
+        $this->organizationService = $organizationService;
+        $this->registrationService = $registrationService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -92,7 +103,10 @@ class CommandService extends AbstractService
                 $isArray = is_array($value);
                 if (!$isArray) {
                     $commandJson = json_decode($value, true);
-                } else {
+                    if(empty($commandJson)){
+                        $commandJson = array("command" => $value);
+                    }
+                }else{
                     $commandJson = $value;
                 }
                 $this->logger->info("Command JSON------", print_r($commandJson, true));
@@ -127,6 +141,16 @@ class CommandService extends AbstractService
     {
         $this->logger->info("PROCESS COMMAND : command --- " . $command);
         switch ($command) {
+            case 'create_user':
+                return $this->registerAccount($data);
+                break;
+            case 'sign_in':
+                $data['auto_login'] = 1;
+                return $data;
+                break;
+            case 'store_cache_data':
+                return $this->storeCacheData($data);
+                break;
             case 'mail':
                 $this->logger->info("SEND MAIL");
                 return $this->sendMail($data);
@@ -210,6 +234,44 @@ class CommandService extends AbstractService
             default:
                 break;
         };
+    }
+
+    private function registerAccount($data) {
+        $success = $this->registrationService->registerAccount($data);
+        if ($success) {
+            $params['user'] = $data['contact'];
+        } else {
+            throw new Exception("Error Creating User.", 1);
+        }
+        return $params;
+    }
+
+    private function storeCacheData($data){
+        $rawData = $data;
+
+        if (isset($data['user']) && is_array($data['user']) && ArrayUtils::isKeyDefined($data['user'], 'username')) {
+            $user = $this->userService->getUserDetailsbyUserName($data['user']['username']);
+        } elseif (ArrayUtils::isKeyDefined($data, 'username')) {
+            $user = $this->userService->getUserDetailsbyUserName($data['username']);
+        } else {
+            throw new Exception("username is required", 1);
+        }
+        if (!isset($user)) {
+            throw new Exception("Cache Creation Failed", 1);
+        }
+        if (isset($data['app_id'])) {
+            if ($app = $this->getIdFromUuid('ox_app', $data['app_id'])) {
+                $appId = $app;
+            }
+        } else {
+            $appId = null;
+        }
+        $rawData['user_id'] = $user['id'];
+        $rawData['app_id'] = $appId;
+        $userCache = $this->userCacheService->storeUserCache($appId, $rawData);
+        $cacheData = array('user_id' => $user['id'], 'content' => json_encode($userCache), 'app_id' => $appId);
+        $data['cache_data'] = $cacheData;
+        return $data;
     }
 
     private function enqueue($data,$topic, $queue = null){
@@ -557,6 +619,7 @@ class CommandService extends AbstractService
 
     protected function verifyUser(&$data)
     {
+        // TODO IF IDENTIFIER FIELD IS NOT SET GET IT FROM ox_entity_user_relation LIKE IN setupIdentityField METHOD 
         if (isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])) {
             $appId = UuidUtil::isValidUuid($data['appId'])?$this->getIdFromUuid('ox_app',$data['appId']):$data['appId'];
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
@@ -571,7 +634,7 @@ class CommandService extends AbstractService
             }
         }
         if (isset($data['email'])) {
-            $select = "SELECT * from ox_user where email = :email";
+            $select = "SELECT ox_user.*,oxup.firstname,oxup.lastname,oxup.date_of_birth,oxup.phone,oxup.gender,oxup.signature,oxup.address_id from ox_user inner join ox_user_profile oxup on oxup.id = ox_user.user_profile_id  where oxup.email = :email";
             $selectQuery = array("email" => $data['email']);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) > 0) {

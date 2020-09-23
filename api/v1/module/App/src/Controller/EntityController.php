@@ -4,9 +4,9 @@ namespace App\Controller;
 /**
  * Entity Api
  */
-use App\Model\Entity;
-use App\Model\EntityTable;
-use App\Service\EntityService;
+use Oxzion\Model\App\Entity;
+use Oxzion\Model\App\EntityTable;
+use Oxzion\Service\EntityService;
 use Exception;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\EntityNotFoundException;
@@ -47,10 +47,7 @@ class EntityController extends AbstractApiController
         $appUuid = $this->params()->fromRoute()['appId'];
         $this->log->info(__CLASS__ . "-> \n Create Entity - " . print_r($data, true));
         try {
-            $count = $this->entityService->saveEntity($appUuid, $data);
-            if ($count == 0) {
-                return $this->getFailureResponse("Failed to create a new entity", $data);
-            }
+            $this->entityService->saveEntity($appUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -93,22 +90,26 @@ class EntityController extends AbstractApiController
      */
     public function update($id, $data)
     {
+        print($id."\n");
         $appUuid = $this->params()->fromRoute()['appId'];
         $this->log->info(__CLASS__ . "-> \n Update- " . print_r($data, true) . "AppUUID - " . $appUuid);
         if ($id) {
-            $data['id'] = $id;
+            $data['uuid'] = $id;
         }
         try {
-            $count = $this->entityService->saveEntity($appUuid, $data, $id);
+            $this->entityService->saveEntity($appUuid, $data, false);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (EntityNotFoundException $e) {
-            $response = ['data' => $data, 'errors' => $e->getMessage()];
+            $response = ['data' => $data];
             return $this->getErrorResponse("Entity Not Found", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }catch (ServiceException $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -127,7 +128,9 @@ class EntityController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \n Delete Entity - " . print_r($id, true) . "AppUUID - " . $appUuid);
         try {
             $response = $this->entityService->deleteEntity($appUuid, $id);
-        } catch (ServiceException $e) {
+        }catch (EntityNotFoundException $e) {
+            return $this->getErrorResponse("Entity Not Found", 404);
+        }catch (ServiceException $e) {
             return $this->getErrorResponse($e->getMessage(), 404);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -148,8 +151,9 @@ class EntityController extends AbstractApiController
     public function get($entityId)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $result = $this->entityService->getEntity($appUuid, $entityId);
-        if ($result == 0) {
+        try{
+            $result = $this->entityService->getEntity($entityId, $appUuid);
+        }catch(EntityNotFoundException $e){
             return $this->getErrorResponse("Entity not found", 404, ['id' => $entityId]);
         }
         return $this->getSuccessResponseWithData($result);
@@ -167,31 +171,31 @@ class EntityController extends AbstractApiController
      * <code> status : "success|error"
      * </code>
      */
-    public function workflowDeployAction()
-    {
-        $data = $this->extractPostData();
-        $params = array_merge($data, $this->params()->fromRoute());
-        $this->log->info(__CLASS__ . "-> \n Deploy Workflow - " . print_r($params, true));
-        $files = isset($_FILES['files']) ? $_FILES['files'] : null;
-        try {
-            if ($files && isset($params['name'])) {
-                $response = $this->entityService->deployWorkflow($params['appId'], $params['entityId'], $params, $files);
-                if ($response == 0) {
-                    return $this->getErrorResponse("Error Creating workflow");
-                }
-                if ($response == 1) {
-                    return $this->getErrorResponse("Error Parsing BPMN");
-                }
-                if ($response == 2) {
-                    return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
-                }
-                return $this->getSuccessResponse($response);
-            } else {
-                return $this->getErrorResponse("Files cannot be uploaded");
-            }
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 417);
-        }
-    }
+    // public function workflowDeployAction()
+    // {
+    //     $data = $this->extractPostData();
+    //     $params = array_merge($data, $this->params()->fromRoute());
+    //     $this->log->info(__CLASS__ . "-> \n Deploy Workflow - " . print_r($params, true));
+    //     $files = isset($_FILES['files']) ? $_FILES['files'] : null;
+    //     try {
+    //         if ($files && isset($params['name'])) {
+    //             $response = $this->entityService->deployWorkflow($params['appId'], $params['entityId'], $params, $files);
+    //             if ($response == 0) {
+    //                 return $this->getErrorResponse("Error Creating workflow");
+    //             }
+    //             if ($response == 1) {
+    //                 return $this->getErrorResponse("Error Parsing BPMN");
+    //             }
+    //             if ($response == 2) {
+    //                 return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
+    //             }
+    //             return $this->getSuccessResponse($response);
+    //         } else {
+    //             return $this->getErrorResponse("Files cannot be uploaded");
+    //         }
+    //     } catch (Exception $e) {
+    //         $this->log->error($e->getMessage(), $e);
+    //         return $this->getErrorResponse($e->getMessage(), 417);
+    //     }
+    // }
 }

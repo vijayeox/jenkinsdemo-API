@@ -1,6 +1,8 @@
-import React_app from "./react-app";
+import FormManager from "./FormManager";
+import UploadAppArchive from "./UploadAppArchive";
 
 let guiComponent = {
-  SampleComponent: React_app
+  FormManager: FormManager,
+  UploadAppArchive: UploadAppArchive
 };
 export { guiComponent };

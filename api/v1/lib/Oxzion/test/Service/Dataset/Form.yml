@@ -14,3 +14,11 @@ ox_app_entity:
     date_created: "2019-06-26 00:00:00"
     uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+ox_business_role:
+  - id: 1
+    name: Role1
+    app_id: 100
+    date_created: '2020-08-18 00:00:00'
+    created_by: 1
+    uuid: "21f5d16a-5bf5-493e-97de-587b79584747"
+    version: 1
