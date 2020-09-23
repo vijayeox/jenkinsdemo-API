@@ -10,6 +10,7 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
 use Analytics\Service\QueryService;
+use Ramsey\Uuid\Uuid;
 use Exception;
 
 class TargetService extends AbstractService
@@ -26,55 +27,86 @@ class TargetService extends AbstractService
 
     public function createTarget($data)
     {
-        $target = new Target($this->table);
-        $target->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID));
-        $target->assign($data);
+        $form = new Target();
+        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['date_created'] = date('Y-m-d H:i:s');
+        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $form->exchangeWithSpecificKey($data,'value');
+        $form->validate();
+        $this->beginTransaction();
+        $count = 0;
         try {
-            $this->beginTransaction();
-            $target->save();
+            $count = $this->table->save2($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+            $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $target->getGenerated();
+        return $count;
     }
 
     public function updateTarget($uuid, $data)
     {
-        $target = new Target($this->table);
-        $target->loadByUuid($uuid);
-        $target->assign($data);
-        try {
-            $this->beginTransaction();
-            $target->save();
-            $this->commit();
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
+            return 0;
         }
-        catch (Exception $e) {
+        if(!isset($data['version']))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $form = new Target();
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->updateValidate();
+        $count = 0;
+        try {
+            $count = $this->table->save2($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $target->getProperty('version');
+        return $count;
     }
 
     public function deleteTarget($uuid,$version)
     {
-        $target = new Target($this->table);
-        $target->loadByUuid($uuid);
-        $target->assign([
-            'version' => $version,
-            'isdeleted' => 1
-        ]);
-        try {
-            $this->beginTransaction();
-            $target->save();
-            $this->commit();
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
+            return 0;
         }
-        catch (Exception $e) {
+        if(!isset($version))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $data = array('version' => $version,'isdeleted' => 1);
+        $form = new Target();
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->updateValidate($data);
+        $count = 0;
+        try {
+            $count = $this->table->save2($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
+        return $count;
     }
 
     public function getTarget($uuid)

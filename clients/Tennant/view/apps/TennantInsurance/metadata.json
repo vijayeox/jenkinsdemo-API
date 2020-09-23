@@ -1,0 +1,18 @@
+{
+	"type":"application",
+	"name":"TennantInsurance",
+	"appId":"46807204-26fc-4b79-9259-3b727a12f918",
+	"category":null,
+	"autostart":false,
+    "singleton":true,
+	"defaultAppforOrgs":false,
+	"icon": "icon.png",
+	"icon_white": "icon_white.png",
+	"title": {
+		"en_EN": "Insurance"
+	},
+	"description": {
+		"en_EN": "Insurance"
+	},
+	"files":["main.js","main.css"]
+}

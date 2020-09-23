@@ -326,6 +326,7 @@ class WidgetService extends AbstractService
 
             if (is_array($data)) {
                 $data = $this->getTargets($uuid,$data,1);
+<<<<<<< HEAD
             }
             else {
                 $targets = $this->getTargets($uuid,$data,0);
@@ -333,6 +334,15 @@ class WidgetService extends AbstractService
                     $response['widget']['targets'] = $targets;
                 }
             }
+=======
+            }
+            else {
+                $targets = $this->getTargets($uuid,$data,0);
+                if ($targets) {
+                    $response['widget']['targets'] = $targets;
+                }
+            }
+>>>>>>> origin/QA
             $response['widget']['data'] = $data;
 
         }

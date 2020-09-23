@@ -1,0 +1,7 @@
+name: 'Top Customer Growth and Declined'
+description: 'Top Customer Growth and Declined'
+content:
+    -
+        type: DashboardManager
+        content:
+            uuid: 6a288707-b121-4b99-874d-b682c01cca56

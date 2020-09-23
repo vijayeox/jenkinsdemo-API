@@ -156,16 +156,29 @@ class AppService extends AbstractService
 
     private function collectappfieldsdata(&$data)
     {
-        if (!(array_key_exists('type', $data))) {
-            $data['type'] = 2;
+        if(isset($data[0])){
+            if (!(array_key_exists('type', $data[0]))) {
+                $data[0]['type'] = 2;
+            }
+            if (!(array_key_exists('category', $data[0]))) {
+                $data[0]['category'] = "OFFICE";
+            }
+            if (!(array_key_exists('autostart', $data[0]))) {
+                $data[0]['autostart'] = "true";
+            }
+            $data[0]['name'] = str_replace(" ", "", $data[0]['name']);
+        } else {
+            if (!(array_key_exists('type', $data))) {
+                $data['type'] = 2;
+            }
+            if (!(array_key_exists('category', $data))) {
+                $data['category'] = "OFFICE";
+            }
+            if (!(array_key_exists('autostart', $data))) {
+                $data['autostart'] = "true";
+            }
+            $data['name'] = str_replace(" ", "", $data['name']);
         }
-        if (!(array_key_exists('category', $data))) {
-            $data['category'] = "OFFICE";
-        }
-        if (!(array_key_exists('autostart', $data))) {
-            $data['autostart'] = "true";
-        }
-        $data['name'] = str_replace(" ", "", $data['name']);
         return $data;
     }
 
