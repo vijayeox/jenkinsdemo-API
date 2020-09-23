@@ -1,6 +1,6 @@
 {
 	"type": "application",
-	"name": "EOXAppBuilder",
+	"name": "AppBuilder",
 	"appId": "41b77ef3-41db-4a52-8eb8-ba3ac9a9d771",
 	"category": null,
 	"autostart": false,
@@ -11,10 +11,10 @@
 	"server": "server.js",
 	"formio_endpoint":"https://onboarding-qeimxlbzmdfpljg.form.io",
 	"title": {
-		"en_EN": "EOXAppBuilder"
+		"en_EN": "App Builder"
 	},
 	"description": {
-		"en_EN": "App for EOX AppBuilder"
+		"en_EN": "App for AppBuilder"
 	},
 	"files": ["main.js", "main.css"]
 }
