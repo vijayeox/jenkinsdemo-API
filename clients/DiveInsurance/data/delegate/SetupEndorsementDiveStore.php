@@ -253,6 +253,8 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_TravelAgentEOFP'] = isset($data['TravelAgentEOFP']) ? $data['TravelAgentEOFP'] : 0;
                 $policy['previous_medicalPayment'] = $data['medicalPayment'];
+                $policy['previous_doYouWantToApplyForNonOwnerAuto'] = $data['doYouWantToApplyForNonOwnerAuto'];
+                $policy['previous_storeExcessLiabilitySelect'] = $data['excessLiabilityCoveragePrimarylimit1000000PL'];
                 $policy['previous_poolLiability'] = isset($data['poolLiability'])?$data['poolLiability']:0;
                 if(isset($data['additionalLocations'])){
                     foreach($data['additionalLocations'] as $key => $value){
