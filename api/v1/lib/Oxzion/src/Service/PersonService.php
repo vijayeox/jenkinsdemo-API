@@ -70,19 +70,23 @@ class PersonService extends AbstractService
         $personData = $data;
         $personData['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $personData['date_modified'] = date('Y-m-d H:i:s');
-        if (isset($personData['address_id'])) {
-            $this->addressService->updateAddress($personData['address_id'], $personData);
-        }else{
-            $addressid = $this->addressService->addAddress($personData);
-            $data['address_id'] = $addressid;
-        }
-        $person = new Person();
-        $changedArray = array_merge($obj->toArray(), $personData);
-        $this->logger->info("Person Data changedArray".print_r($changedArray,true));
-        $person->exchangeArray($changedArray);
-        $person->validate();
         try {
             $this->beginTransaction();
+            if (isset($personData['address_id'])) {
+                $this->addressService->updateAddress($personData['address_id'], $personData);
+            }else{
+                if(!empty($personData['address1']) || !empty($personData['city']) || 
+                            !empty($personData['state']) || !empty($personData['country']) || !empty($personData['zip'])) {
+                    $addressid = $this->addressService->addAddress($personData);
+                    $personData['address_id'] = $addressid;
+                }
+
+            }
+            $person = new Person();
+            $changedArray = array_merge($obj->toArray(), $personData);
+            $this->logger->info("Person Data changedArray".print_r($changedArray,true));
+            $person->exchangeArray($changedArray);
+            $person->validate();
             $this->logger->info("Person ".print_r($person,true));
             $this->table->save($person);
             $this->commit();

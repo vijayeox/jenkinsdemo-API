@@ -1,7 +1,6 @@
 <?php
 namespace Account\Controller;
 
-use Exception;
 use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Model\Account;
@@ -10,6 +9,7 @@ use Oxzion\ServiceException;
 use Oxzion\Service\AccountService;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
+use Exception;
 
 class AccountController extends AbstractApiController
 {
@@ -46,22 +46,16 @@ class AccountController extends AbstractApiController
         $this->log->info("Create Account - " . print_r($data, true) . "\n Files - " . print_r($files, true));
         try {
             if (!isset($id['accountId'])) {
-                $count = $this->accountService->createAccount($data, $files);
+                $this->accountService->createAccount($data, $files);
             } else {
-                $count = $this->accountService->updateAccount($id['accountId'], $data, $files);
+                $this->accountService->updateAccount($id['accountId'], $data, $files);
             }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->getSuccessResponseWithData($data, 201);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -86,7 +80,7 @@ class AccountController extends AbstractApiController
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
@@ -104,14 +98,12 @@ class AccountController extends AbstractApiController
     {
         $files = $this->params()->fromFiles('logo');
         try {
-            $count = $this->accountService->updateAccount($id, $data, $files);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $this->accountService->updateAccount($id, $data, $files);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
-        }
+        
         return $this->getSuccessResponseWithData($data, 200);
     }
 
@@ -132,7 +124,7 @@ class AccountController extends AbstractApiController
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponse();
     }
@@ -165,7 +157,7 @@ class AccountController extends AbstractApiController
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -173,27 +165,21 @@ class AccountController extends AbstractApiController
     /**
      * Add User To Account API
      * @api
-     * @link /user/:userId/account/:accountId'
+     * @link /account/:accountId/save'
      * @method POST
      * @param $id and $accountid that adds a particular user to a account
      * @return array success|failure response
      */
-    public function addUserToAccountAction()
+    public function addUsersToAccountAction()
     {
         $params = $this->params()->fromRoute();
         $id = $params['accountId'];
         $data = $this->extractPostData();
         try {
-            $count = $this->accountService->saveUser($id, $data);
-            if ($count == 0) {
-                return $this->getErrorResponse("Entity not found", 404);
-            }
-            if ($count == 2) {
-                return $this->getErrorResponse("Enter User Ids", 404);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $this->accountService->saveUser($id, $data);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -214,15 +200,13 @@ class AccountController extends AbstractApiController
         $id = $account[$this->getIdentifierName()];
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->accountService->getAccountUserList($account[$this->getIdentifierName()], $filterParams, $this->getBaseUrl());
-        } catch (ValidationException $e) {
-            $response = ['data' => $account, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $result = $this->accountService->getAccountUserList($account[$this->getIdentifierName()], $filterParams, $this->getBaseUrl());
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
-        }
-        return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
+        
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
     public function getListofAdminUsersAction()
@@ -232,8 +216,9 @@ class AccountController extends AbstractApiController
         $accountId = isset($data['accountId']) ? $data['accountId'] : null;
         try {
             $result = $this->accountService->getAdminUsers($filterParams, $accountId);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
@@ -251,11 +236,9 @@ class AccountController extends AbstractApiController
         $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
             $result = $this->accountService->getAccountGroupsList($accountId, $filterParams);
-            if (!$result) {
-                return $this->getErrorResponse("Account not found", 404);
-            }
         } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
@@ -273,11 +256,9 @@ class AccountController extends AbstractApiController
         $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
             $result = $this->accountService->getAccountProjectsList($accountId, $filterParams);
-            if (!$result) {
-                return $this->getErrorResponse("Account not found", 404);
-            }
         } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
@@ -295,11 +276,9 @@ class AccountController extends AbstractApiController
         $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
             $result = $this->accountService->getAccountAnnouncementsList($accountId, $filterParams);
-            if (!$result) {
-                return $this->getErrorResponse("Account not found", 404);
-            }
         } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
@@ -317,11 +296,9 @@ class AccountController extends AbstractApiController
         $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
             $result = $this->accountService->getAccountRolesList($accountId, $filterParams);
-            if (!$result) {
-                return $this->getErrorResponse("Account not found", 404);
-            }
         } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }

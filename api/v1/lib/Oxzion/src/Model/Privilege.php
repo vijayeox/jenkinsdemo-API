@@ -11,7 +11,6 @@ class Privilege extends Entity
         'id' => null,
         'name' => null,
         'permission_allowed' => 0,
-        'org_id' => null,
         'app_id' => null
     );
 

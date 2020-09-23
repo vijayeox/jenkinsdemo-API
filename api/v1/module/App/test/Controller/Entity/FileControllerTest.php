@@ -170,7 +170,7 @@ class FileControllerTest extends ControllerTest
     {
         $fileId = "d13d0c68-98c9-11e9-adc5-308d99c9145b";
         $this->initAuthToken($this->adminUser);
-        $orgUuid = $this->testOrgUuid;
+        $orgUuid = $this->testAccountUuid;
 
         $path1 = __DIR__ . '/../../../../../data/template/' . $orgUuid . "/";
         if (!is_dir($path1)) {

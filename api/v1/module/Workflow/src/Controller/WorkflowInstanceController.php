@@ -40,7 +40,7 @@ class WorkflowInstanceController extends AbstractApiController
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info(print_r($params, true));
         $this->log->info("executeWorkflow");
-        $this->workflowInstanceService->updateOrganizationContext($params);
+        $this->workflowInstanceService->updateAccountContext($params);
         try {
             $count = $this->workflowInstanceService->startWorkflow($params);
             $this->log->info(WorkflowInstanceController::class . "ExecuteWorkflow Response  - " . print_r($count, true));
@@ -66,7 +66,7 @@ class WorkflowInstanceController extends AbstractApiController
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info(print_r($params, true));
-        $this->workflowInstanceService->updateOrganizationContext($params);
+        $this->workflowInstanceService->updateAccountContext($params);
         try {
             $count = $this->workflowInstanceService->submitActivity($params);
             $this->log->info(WorkflowInstanceController::class . "SubmitActivity Response  - " . print_r($count, true));

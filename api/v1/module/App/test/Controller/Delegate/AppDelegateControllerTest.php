@@ -76,7 +76,7 @@ class AppDelegateControllerTest extends ControllerTest
     public function testUserList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/debf3d35-a0ee-49d3-a8ac-8e480be9dac7/org/53012471-2863-4949-afb1-e69b0891c98a/userlist', 'GET');
+        $this->dispatch('/app/debf3d35-a0ee-49d3-a8ac-8e480be9dac7/account/53012471-2863-4949-afb1-e69b0891c98a/userlist', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(AppDelegateController::class);
@@ -88,11 +88,11 @@ class AppDelegateControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], "Admin Test");
     }
 
-    public function testUserListWrongOrg()
+    public function testUserListWrongAccount()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/debf3d35-a0ee-49d3-a8ac-8e480be9dac7/org/53012471-2863-2343-afb1-e69b0891c98a/userlist', 'GET');
-        $this->assertResponseStatusCode(400);
+        $this->dispatch('/app/debf3d35-a0ee-49d3-a8ac-8e480be9dac7/account/53012471-2863-2343-afb1-e69b0891c98a/userlist', 'GET');
+        $this->assertResponseStatusCode(403);
         $this->assertModuleName('App');
         $this->assertControllerName(AppDelegateController::class);
         $this->assertControllerClass('AppDelegateController');
@@ -100,14 +100,14 @@ class AppDelegateControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], "Organization does not exist");
+        $this->assertEquals($content['message'], "App Does not belong to the account");
     }
 
     public function testUserListWrongApp()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/debf3d35-a0ee-49d3-3454-8e480be9dac7/org/53012471-2863-4949-afb1-e69b0891c98a/userlist', 'GET');
-        $this->assertResponseStatusCode(400);
+        $this->dispatch('/app/debf3d35-a0ee-49d3-3454-8e480be9dac7/account/53012471-2863-4949-afb1-e69b0891c98a/userlist', 'GET');
+        $this->assertResponseStatusCode(403);
         $this->assertModuleName('App');
         $this->assertControllerName(AppDelegateController::class);
         $this->assertControllerClass('AppDelegateController');
@@ -115,6 +115,6 @@ class AppDelegateControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], "App Does not belong to the org");
+        $this->assertEquals($content['message'], "App Does not belong to the account");
     }
 }

@@ -9,6 +9,8 @@ use Oxzion\ServiceException;
 use Oxzion\Service\JobService;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 
 class JobController extends AbstractApiController
 {
@@ -27,7 +29,7 @@ class JobController extends AbstractApiController
      * @api
      * @link /app/appId/schedule
      * @method POST
-     * @param Job Name, Job Group, Job Payload(job->url, data, schedule ->cron), CRON, App Id, Org Id(optional)
+     * @param Job Name, Job Group, Job Payload(job->url, data, schedule ->cron), CRON, App Id, Account Id(optional)
      * @return array Returns a JSON Response with Created Job details(ID).
      */
     public function scheduleJobAction()
@@ -37,10 +39,10 @@ class JobController extends AbstractApiController
         $jobGroup = $params['jobGroup'];
         $jobPayload = $params['jobPayload'];
         $cron = $params['cron'];
-        $orgId = isset($params['orgId']) ? $params['orgId'] : AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $appId = $this->params()->fromRoute()['appId'];
         try {
-            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $orgId);
+            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId);
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);

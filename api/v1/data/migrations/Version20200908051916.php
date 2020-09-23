@@ -80,8 +80,33 @@ final class Version20200908051916 extends AbstractMigration
                                                 DROP COLUMN `org_id`");
         $this->addSql("ALTER TABLE ox_employee CHANGE `org_profile_id` `org_id` INT(32)");
         $this->addSql("ALTER TABLE ox_employee CHANGE `user_profile_id` `person_id` INT(32)");
-        $this->addSql("ALTER TABLE ox_employee CHANGE `managerid` `manager_id` INT(32)");
+        $this->addSql("ALTER TABLE ox_employee ADD COLUMN `manager_id` INT(32)");
         $this->addSql("ALTER TABLE ox_employee ADD CONSTRAINT FOREIGN KEY (`manager_id`) REFERENCES ox_user(`id`)");
+        $this->addSql("UPDATE ox_employee em 
+                        INNER JOIN ox_user u on em.managerid = u.id
+                        INNER JOIN ox_employee e on e.person_id = u.person_id
+                        SET em.manager_id = e.id");
+        $this->addSql("ALTER TABLE ox_employee DROP FOREIGN KEY ox_employee_ibfk_4, 
+                                                DROP COLUMN `managerid`");
+        //employee_manager
+        $this->addSql("ALTER TABLE ox_employee_manager ADD COLUMN employee_id INT(32)");
+        $this->addSql("ALTER TABLE ox_employee_manager ADD CONSTRAINT FOREIGN KEY (`employee_id`) REFERENCES ox_employee(`id`)");
+        $this->addSql("ALTER TABLE ox_employee_manager CHANGE `manager_id` `old_manager_id` INT(32)");
+        $this->addSql("ALTER TABLE ox_employee_manager ADD COLUMN manager_id INT(32)");
+        $this->addSql("ALTER TABLE ox_employee_manager ADD CONSTRAINT FOREIGN KEY (`manager_id`) REFERENCES ox_employee(`id`)");
+        
+        $this->addSql("UPDATE ox_employee_manager em 
+                        INNER JOIN ox_user u on em.user_id = u.id
+                        INNER JOIN ox_employee e on e.person_id = u.person_id
+                        SET em.employee_id = e.id");
+        $this->addSql("UPDATE ox_employee_manager em 
+                        INNER JOIN ox_user u on em.old_manager_id = u.id
+                        INNER JOIN ox_employee e on e.person_id = u.person_id
+                        SET em.manager_id = e.id");
+        $this->addSql("ALTER TABLE ox_employee_manager DROP FOREIGN KEY ox_employee_manager_ibfk_1, 
+                                                DROP COLUMN `user_id`");
+        $this->addSql("ALTER TABLE ox_employee_manager DROP FOREIGN KEY ox_employee_manager_ibfk_2, 
+                                                DROP COLUMN `old_manager_id`");
         //file
         $this->addSql("DROP TRIGGER IF EXISTS `ox_file_insert`");
         $this->addSql("DROP TRIGGER IF EXISTS `ox_file_update`");
@@ -139,6 +164,8 @@ final class Version20200908051916 extends AbstractMigration
         $this->addSql("UPDATE ox_role_privilege set privilege_name = 'MANAGE_ACCOUNT' where privilege_name = 'MANAGE_ORGANIZATION'");
         $this->addSql("UPDATE ox_privilege set name = 'MANAGE_MYACCOUNT' where name = 'MANAGE_MYORG'");
         $this->addSql("UPDATE ox_role_privilege set privilege_name = 'MANAGE_MYACCOUNT' where privilege_name = 'MANAGE_MYORG'");
+        $this->addSql("UPDATE ox_role set default_role = 1 where name = 'EMPLOYEE'");
+        $this->addSql("UPDATE ox_address set city = ' ', state = ' ', zip = ' ' where city is null");
     }
 
     private function setupFileAuditLogTriggers(){

@@ -101,7 +101,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
             $this->setElasticData();
         } else {
             $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
-    //       $input =  json_decode('{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
+    //       $input =  json_decode('{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
     //       $output = json_decode('{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]}}',true);
     //       $this->setMockData($input,$output);
         }
@@ -382,7 +382,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
 
     public function testSessionUserName() {
         
-        $input1 = json_decode('{"index":"'.$this->index_pre.'crmnew_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"actual_amount"}},{"bool":{"must":[{"match":{"industry":{"query":"Insurance","operator":"and"}}},{"bool":{"should":[{"match":{"owner_username":{"query":"john","operator":"and"}}},{"match":{"owner_username":{"query":"admintest","operator":"and"}}}]}}]}}]}},"_source":["*","owner_username"],"aggs":{"groupdata":{"terms":{"field":"owner_username.keyword","size":10000},"aggs":{"value":{"sum":{"field":"actual_amount"}}}}},"explain":true},"_source":["*","owner_username"],"from":0,"size":0}',true);
+        $input1 = json_decode('{"index":"'.$this->index_pre.'crmnew_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"actual_amount"}},{"bool":{"must":[{"match":{"industry":{"query":"Insurance","operator":"and"}}},{"bool":{"should":[{"match":{"owner_username":{"query":"john","operator":"and"}}},{"match":{"owner_username":{"query":"admintest","operator":"and"}}}]}}]}}]}},"_source":["*","owner_username"],"aggs":{"groupdata":{"terms":{"field":"owner_username.keyword","size":10000},"aggs":{"value":{"sum":{"field":"actual_amount"}}}}},"explain":true},"_source":["*","owner_username"],"from":0,"size":0}',true);
         $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true); //This is a dummy output
         $clientMock = Mockery::mock('Elasticsearch\Client');
         $this->elasticService->setElasticClient($clientMock);
@@ -398,7 +398,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
     
 
     public function testSessionUserId() {
-        $input1 = json_decode('{"index":"'.$this->index_pre.'crmnew_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"actual_amount"}},{"bool":{"must":[{"match":{"industry":{"query":"Insurance","operator":"and"}}},{"bool":{"should":[{"match":{"owner_username":{"query":"john","operator":"and"}}},{"match":{"owner_username":{"query":"1","operator":"and"}}}]}}]}}]}},"_source":["*","owner_username"],"aggs":{"groupdata":{"terms":{"field":"owner_username.keyword","size":10000},"aggs":{"value":{"sum":{"field":"actual_amount"}}}}},"explain":true},"_source":["*","owner_username"],"from":0,"size":0}',true);
+        $input1 = json_decode('{"index":"'.$this->index_pre.'crmnew_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"actual_amount"}},{"bool":{"must":[{"match":{"industry":{"query":"Insurance","operator":"and"}}},{"bool":{"should":[{"match":{"owner_username":{"query":"john","operator":"and"}}},{"match":{"owner_username":{"query":"1","operator":"and"}}}]}}]}}]}},"_source":["*","owner_username"],"aggs":{"groupdata":{"terms":{"field":"owner_username.keyword","size":10000},"aggs":{"value":{"sum":{"field":"actual_amount"}}}}},"explain":true},"_source":["*","owner_username"],"from":0,"size":0}',true);
          $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true);  //This is a dummy output
          $clientMock = Mockery::mock('Elasticsearch\Client');
          $this->elasticService->setElasticClient($clientMock);

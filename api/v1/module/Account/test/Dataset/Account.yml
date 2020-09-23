@@ -106,7 +106,6 @@ ox_employee:
   -
         id: 10
         uuid: '308ce568-c8f9-11ea-87d0-0242ac130003'
-        org_id: 3
         date_of_join: '2018-11-11'
         designation: 'IT ANALYST'
         date_created: '2018-11-11 07:25:06'
@@ -118,7 +117,6 @@ ox_employee:
   -
         id: 11
         uuid: '308ce7ca-c8f9-11ea-87d0-0242ac130003'
-        org_id: 3
         date_of_join: '2018-11-11'
         designation: 'IT ANALYST'
         date_created: '2018-11-11 07:25:06'
@@ -154,7 +152,7 @@ ox_role_privilege:
     role_id: 10
     privilege_name: 'MANAGE_MYACCOUNT'
     permission: 3
-    accouont_id: 1
+    account_id: 1
 ox_user_role:
   -
     account_user_id: 10

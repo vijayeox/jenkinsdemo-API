@@ -10,7 +10,7 @@ class Alert extends Entity
     protected $data = array(
         'id' => 0,
         'name' => null,
-        'org_id' => null,
+        'account_id' => null,
         'status' => null,
         'description' => null,
         'created_date' => 0,
@@ -22,8 +22,8 @@ class Alert extends Entity
         if ($this->data['name'] === null) {
             $errors["name"] = 'required';
         }
-        if ($this->data['org_id'] === null) {
-            $errors["org_id"] = 'required';
+        if ($this->data['account_id'] === null) {
+            $errors["account_id"] = 'required';
         }
         if ($this->data['status'] === null) {
             $errors["status"] = 'required';

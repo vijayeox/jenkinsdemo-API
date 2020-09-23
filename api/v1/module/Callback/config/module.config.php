@@ -49,30 +49,30 @@ return [
             'addcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/addorg',
+                    'route'    => '/callback/chat/addaccount',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'addOrg',
+                        'action' => 'addAccount',
                     ],
                 ],
             ],
             'updatecallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/updateorg',
+                    'route'    => '/callback/chat/updateaccount',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'updateOrg',
+                        'action' => 'updateAccount',
                     ],
                 ],
             ],
             'deletecallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/deleteorg',
+                    'route'    => '/callback/chat/deleteaccount',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'deleteOrg',
+                        'action' => 'deleteAccount',
                     ],
                 ],
             ],

@@ -25,7 +25,6 @@ class PageService extends AbstractService
     {  
         $this->logger->info("save page - params - ".json_encode($routeData).", ".json_encode($data).", $id");
         $count = 0;
-        $orgId = isset($routeData['orgId'])? $this->getIdFromUuid('ox_organization', $routeData['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
         $data['app_id'] = $this->getIdFromUuid('ox_app', $routeData['appId']);
         if(isset($data['app_id'])){
             $page = null;

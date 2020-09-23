@@ -24,7 +24,7 @@ class ResourceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/announcements/";
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/oxzionlogo.png", $tempFolder . "oxzionlogo.png");
         $this->dispatch('/resource/test', 'GET');
@@ -42,7 +42,7 @@ class ResourceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/announcements/";
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/oxzionlogo.png", $tempFolder . "oxzionlogo.png");
         $this->dispatch('/resource/notfound', 'GET');

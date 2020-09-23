@@ -206,7 +206,6 @@ class WorkflowService extends AbstractService
         $data['app_id'] = $appId;
         if (!isset($data['id']) || $data['id'] == 0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-            // $data['org_id'] = isset($data['org_id']) ? $data['org_id'] :  AuthContext::get(AuthConstants::ORG_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
         if (isset($data['uuid'])) {
@@ -420,10 +419,10 @@ class WorkflowService extends AbstractService
         $sortjoinQuery = "";
         $appFilter = "ox_app.uuid ='" . $appId . "'";
 
-        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR ox_user_role.user_id = $userId)
+        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR au.user_id = $userId)
                                 OR ox_activity_instance_assignee.user_id = $userId)
                                 AND $appFilter AND ox_activity_instance.status = 'In Progress'
-                                AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
+                                AND ox_workflow_instance.account_id = " . AuthContext::get(AuthConstants::ACCOUNT_ID);
 
         if (!empty($filterParams)) {
             if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
@@ -557,16 +556,18 @@ class WorkflowService extends AbstractService
             }
         }
         $fromQuery = "FROM ox_workflow
-    INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
-    INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id
-    INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
-    INNER JOIN ox_file as `of` on `of`.id = ox_workflow_instance.file_id
-    INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
-    INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
-    INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
-    LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_activity_instance_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_activity_instance_assignee GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
-    LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id
-    LEFT JOIN ox_user_role ON ox_activity_instance_assignee.role_id = ox_user_role.role_id LEFT JOIN ox_user ON ox_activity_instance_assignee.user_id = ox_user.id";
+            INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
+            INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id
+            INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
+            INNER JOIN ox_file as `of` on `of`.id = ox_workflow_instance.file_id
+            INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
+            INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
+            INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
+            LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_activity_instance_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_activity_instance_assignee GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
+            LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id
+            LEFT JOIN ox_user_role ON ox_activity_instance_assignee.role_id = ox_user_role.role_id 
+            LEFT JOIN ox_account_user au on au.id = ox_user_role.account_user_id
+            LEFT JOIN ox_user ON ox_activity_instance_assignee.user_id = ox_user.id";
 
         if(!empty($filterParams)){
             $cacheQuery = '';

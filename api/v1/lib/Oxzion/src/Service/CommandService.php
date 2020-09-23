@@ -22,7 +22,6 @@ use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Service\UserCacheService;
-use Oxzion\Service\OrganizationService;
 use Oxzion\Service\RegistrationService;
 use Oxzion\Utils\ArrayUtils;
 
@@ -37,7 +36,6 @@ class CommandService extends AbstractService
     private $userService;
     private $jobService;
     private $userCacheService;
-    private $organizationService;
     private $registrationService;
     /**
      * @ignore __construct
@@ -49,7 +47,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService, OrganizationService $organizationService, RegistrationService $registrationService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService, RegistrationService $registrationService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -63,7 +61,6 @@ class CommandService extends AbstractService
         $this->userService = $userService;
         $this->jobService = $jobService;
         $this->userCacheService = $userCacheService;
-        $this->organizationService = $organizationService;
         $this->registrationService = $registrationService;
     }
 
@@ -77,14 +74,14 @@ class CommandService extends AbstractService
         $this->logger->info("RUN COMMAND  ------" . json_encode($data));
         //TODO Execute Command Service Methods
         if (isset($data['appId'])) {
-            $orgId = isset($data['orgId']) && !empty($data['orgId']) ? $this->getIdFromUuid('ox_organization', $data['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
-            $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
+            $accountId = isset($data['accountId']) && !empty($data['accountId']) ? $this->getIdFromUuid('ox_account', $data['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
+            $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
             $appId = $this->getIdFromUuid('ox_app', $data['appId']);
-            $selectQuery = array("orgId" => $orgId, "appId" => $appId);
+            $selectQuery = array("accountId" => $accountId, "appId" => $appId);
             $this->logger->info("Executing query $select with params - ".json_encode($selectQuery));
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) == 0) {
-                throw new ServiceException("App Does not belong to the org", "app.fororgnot.found");
+                throw new ServiceException("App Does not belong to the account", "app.for.account.not.found");
             }
             $data['app_id'] = $appId;
         }
@@ -122,7 +119,7 @@ class CommandService extends AbstractService
                     if (is_array($result)) {
                         $inputData = $result;
                         $inputData['app_id'] = isset($data['app_id']) ? $data['app_id'] : null;
-                        $inputData['orgId'] = isset($data['orgId']) ? $data['orgId'] : null;
+                        $inputData['accountId'] = isset($data['accountId']) ? $data['accountId'] : null;
                         $inputData['workFlowId'] = isset($data['workFlowId']) ? $data['workFlowId'] : null;
                         $outputData = array_merge($outputData, $result);
                     }
@@ -277,11 +274,11 @@ class CommandService extends AbstractService
     private function enqueue($data,$topic, $queue = null){
         $this->logger->info("ENQUEUE ------ DATA IS:  " . print_r($data, true));
         $this->logger->info("ENQUEUE ------ TOPIC IS:  " . print_r($topic, true));
-        $orgId = AuthContext::get(AuthConstants::ORG_UUID);
-        $orgIdAdded = false;
-        if(isset($orgId)){
-            $data['orgId'] = $orgId;
-            $orgIdAdded = true;
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
+        $accountIdAdded = false;
+        if(isset($accountId)){
+            $data['accountId'] = $accountId;
+            $accountIdAdded = true;
         }
         if($topic){
             $this->logger->info("ENQUEUE ------ send topic ");
@@ -290,8 +287,8 @@ class CommandService extends AbstractService
             $this->logger->info("ENQUEUE ------ sendqueue ");
             $this->messageProducer->sendQueue(json_encode($data), $queue);
         }
-        if($orgIdAdded){
-            unset($data['orgId']);
+        if($accountIdAdded){
+            unset($data['accountId']);
         }
         return $data;
     }
@@ -338,12 +335,12 @@ class CommandService extends AbstractService
                 $jobName = $data['uuid'];
             }            
             $appId = $data['app_id'];
-            $orgId = isset($data['org_id']) ? $data['org_id'] : AuthContext::get(AuthConstants::ORG_ID);
+            $accountId = isset($data['account_id']) ? $data['account_id'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
             unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
             $this->logger->info("JOB DATA ------" . json_encode($data));
             $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
             $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
-            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $orgId);
+            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId);
         } catch (Exception $e) {
             $this->logger->error("Job Schedule ---- Exception - ".$e->getMessage() , $e);
         }
@@ -463,7 +460,6 @@ class CommandService extends AbstractService
     protected function sendMail($params)
     {
         if (isset($params)) {
-            $orgId = isset($params['orgId']) ? $params['orgId'] : 1;
             $template = isset($params['template']) ? $params['template'] : 0;
             if ($template) {
                 $body = $this->templateService->getContent($template, $params);
@@ -510,7 +506,6 @@ class CommandService extends AbstractService
     protected function generatePDF(&$params)
     {
         if (isset($params)) {
-            $orgId = isset($params['orgid']) ? $params['orgid'] : 1;
             $template = isset($params['template']) ? $params['template'] : 0;
             if ($template) {
                 $body = $this->templateService->getContent($template, $params);
@@ -579,8 +574,8 @@ class CommandService extends AbstractService
         if (isset($data['workflowId'])) {
             $params['workflowId'] = $data['workflowId'];
         }
-        if (isset($data['orgId'])) {
-            $params['orgId'] = $data['orgId'];
+        if (isset($data['accountId'])) {
+            $params['accountId'] = $data['accountId'];
         }
         if (isset($data['userId'])) {
             $params['userId'] = $data['userId'];
@@ -634,7 +629,7 @@ class CommandService extends AbstractService
             }
         }
         if (isset($data['email'])) {
-            $select = "SELECT ox_user.*,oxup.firstname,oxup.lastname,oxup.date_of_birth,oxup.phone,oxup.gender,oxup.signature,oxup.address_id from ox_user inner join ox_user_profile oxup on oxup.id = ox_user.user_profile_id  where oxup.email = :email";
+            $select = "SELECT ox_user.*,oxup.firstname,oxup.lastname,oxup.date_of_birth,oxup.phone,oxup.gender,oxup.signature,oxup.address_id from ox_user inner join ox_person oxup on oxup.id = ox_user.person_id  where oxup.email = :email";
             $selectQuery = array("email" => $data['email']);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) > 0) {

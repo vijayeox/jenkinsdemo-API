@@ -17,6 +17,7 @@ use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
 use Oxzion\Service\CommentService;
+use Oxzion\EntityNotFoundException;
 
 class AppDelegateService extends AbstractService
 {
@@ -25,7 +26,6 @@ class AppDelegateService extends AbstractService
     private $documentBuilder;
     private $messageProducer;
     private $templateService;
-    private $organizationService;
     private $workflowInstanceService;
     private $activityInstanceService;
 
@@ -71,77 +71,73 @@ class AppDelegateService extends AbstractService
     {
         $this->logger->info(AppDelegateService::class . "EXECUTE DELEGATE ---");
         try {
-            $result = $this->delegateFile($appId, $delegate);
-            if ($result) {
-                $obj = new $delegate;
-                if (is_a($obj, DocumentAppDelegate::class)) {
-                    $obj->setDocumentBuilder($this->documentBuilder);
-                    $destination = $this->config['APP_DOCUMENT_FOLDER'];
-                    if (!file_exists($destination)) {
-                        FileUtils::createDirectory($destination);
-                    }
-                    $this->logger->info("Document template location - $destination");
-                    $obj->setDocumentPath($destination);
-                } else if (is_a($obj, CommunicationDelegate::class)) {
-                    $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
-                    $destination = $this->config['APP_DOCUMENT_FOLDER'];
-                    $obj->setDocumentPath($destination);
-                    $obj->setBaseUrl($this->config['applicationUrl']);
-                }else if (is_a($obj, TemplateAppDelegate::class)) {
-                    $destination = $this->config['TEMPLATE_FOLDER'];
-                    if (!file_exists($destination)) {
-                        FileUtils::createDirectory($destination);
-                    }
-                    $this->logger->info("Template location - $destination");
-                    $obj->setTemplatePath($destination);
-                } 
-                if (method_exists($obj, "setFileService")) {
-                    $obj->setFileService($this->fileService);
+            $this->delegateFile($appId, $delegate);
+            $obj = new $delegate;
+            if (is_a($obj, DocumentAppDelegate::class)) {
+                $obj->setDocumentBuilder($this->documentBuilder);
+                $destination = $this->config['APP_DOCUMENT_FOLDER'];
+                if (!file_exists($destination)) {
+                    FileUtils::createDirectory($destination);
                 }
-                if (method_exists($obj, "setTemplateService")) {
-                    $obj->setTemplateService($this->templateService);
+                $this->logger->info("Document template location - $destination");
+                $obj->setDocumentPath($destination);
+            } else if (is_a($obj, CommunicationDelegate::class)) {
+                $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
+                $destination = $this->config['APP_DOCUMENT_FOLDER'];
+                $obj->setDocumentPath($destination);
+                $obj->setBaseUrl($this->config['applicationUrl']);
+            }else if (is_a($obj, TemplateAppDelegate::class)) {
+                $destination = $this->config['TEMPLATE_FOLDER'];
+                if (!file_exists($destination)) {
+                    FileUtils::createDirectory($destination);
                 }
-                if (method_exists($obj, "setMessageProducer")) {
-                    $obj->setMessageProducer($this->messageProducer);
-                }
-                if (method_exists($obj, "setWorkflowInstanceService")) {
-                    $obj->setWorkflowInstanceService($this->workflowInstanceService);
-                }
-                if (method_exists($obj, "setActivityInstanceService")) {
-                    $obj->setActivityInstanceService($this->activityInstanceService);
-                }
-                if (method_exists($obj, "setAppId")) {
-                    $obj->setAppId($appId);
-                }
-                if (method_exists($obj, "setUserContext")) {
-                    $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
-                        AuthContext::get(AuthConstants::NAME),
-                        AuthContext::get(AuthConstants::ORG_UUID),
-                        AuthContext::get(AuthConstants::PRIVILEGES));
-                }
-                if (method_exists($obj, "setUserService")) {
-                    $obj->setUserService($this->userService);
-                }
-                if (method_exists($obj, "setCommentService")) {
-                    $obj->setCommentService($this->commentService);
-                }
-                if (method_exists($obj, "setAppDelegateService")) {
-                    $obj->setAppDelegateService($this->setAppDelegateService());
-                }
-                $persistenceService = $this->getPersistence($appId);
-
-                $output = $obj->execute($dataArray, $persistenceService);
-                if (!$output) {
-                    $output = array();
-                }
-                return $output;
+                $this->logger->info("Template location - $destination");
+                $obj->setTemplatePath($destination);
+            } 
+            if (method_exists($obj, "setFileService")) {
+                $obj->setFileService($this->fileService);
             }
-            return 1;
+            if (method_exists($obj, "setTemplateService")) {
+                $obj->setTemplateService($this->templateService);
+            }
+            if (method_exists($obj, "setMessageProducer")) {
+                $obj->setMessageProducer($this->messageProducer);
+            }
+            if (method_exists($obj, "setWorkflowInstanceService")) {
+                $obj->setWorkflowInstanceService($this->workflowInstanceService);
+            }
+            if (method_exists($obj, "setActivityInstanceService")) {
+                $obj->setActivityInstanceService($this->activityInstanceService);
+            }
+            if (method_exists($obj, "setAppId")) {
+                $obj->setAppId($appId);
+            }
+            if (method_exists($obj, "setUserContext")) {
+                $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
+                    AuthContext::get(AuthConstants::NAME),
+                    AuthContext::get(AuthConstants::ORG_UUID),
+                    AuthContext::get(AuthConstants::PRIVILEGES));
+            }
+            if (method_exists($obj, "setUserService")) {
+                $obj->setUserService($this->userService);
+            }
+            if (method_exists($obj, "setCommentService")) {
+                $obj->setCommentService($this->commentService);
+            }
+            if (method_exists($obj, "setAppDelegateService")) {
+                $obj->setAppDelegateService($this->setAppDelegateService());
+            }
+            $persistenceService = $this->getPersistence($appId);
+
+            $output = $obj->execute($dataArray, $persistenceService);
+            if (!$output) {
+                $output = array();
+            }
+            return $output;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return 2;
     }
 
     private function delegateFile($appId, $className)
@@ -155,7 +151,7 @@ class AppDelegateService extends AbstractService
             require_once $path;
 
         } else {
-            return false;
+            throw new EntityNotFoundException("Delegate not found");
         }
         return true;
     }

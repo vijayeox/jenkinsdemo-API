@@ -11,7 +11,7 @@ class User extends Entity
         'username' => null,
         'password' => null,
         'name' => null,
-        'orgid' => null,
+        'account_id' => null,
         'icon' => null,
         'status' => 'Active',
         'in_game' => '0',
@@ -23,7 +23,7 @@ class User extends Entity
         'preferences' => null,
         'password_reset_code' => null,
         'password_reset_expiry_date' => null,
-        'user_profile_id' => null,
+        'person_id' => null,
     );
 
     public function __construct($data = array())
@@ -38,7 +38,7 @@ class User extends Entity
         $required = array(
             'username',
             'password',
-            'orgid',
+            'account_id',
             'status',
             'date_created',
             'created_by'

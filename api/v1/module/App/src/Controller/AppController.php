@@ -93,7 +93,7 @@ class AppController extends AbstractApiController
      * int created_by,
      * int modified_by,
      * int isdeleted,
-     * int org_id,
+     * int account_id,
      * string start_options
      * }
      * </code>
@@ -189,7 +189,7 @@ class AppController extends AbstractApiController
      * int created_by,
      * int modified_by,
      * int isdeleted,
-     * int org_id,
+     * int account_id,
      * string start_options
      * }
      * </code>

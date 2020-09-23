@@ -172,14 +172,14 @@ class EntityService extends AbstractService
         }
     }
 
-    public function getEntityOfferingOrganization($entityId){
-        $select = "SELECT org_id from ox_org_offering oof 
-                    inner join ox_org_business_role obr on obr.id = oof.org_business_role_id
+    public function getEntityOfferingAccount($entityId){
+        $select = "SELECT account_id from ox_account_offering oof 
+                    inner join ox_account_business_role obr on obr.id = oof.account_business_role_id
                     where oof.entity_id = :entityId";
         $params = ["entityId" => $entityId];
         $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
         if(count($result) > 0){
-            return $result[0]['org_id'];
+            return $result[0]['account_id'];
         }
 
         return null;

@@ -39,23 +39,23 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
     {
         try {
 			
-			$orgId = AuthContext::get(AuthConstants::ORG_ID);
+			$accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
 			if (isset($parameters['view'])) {
-			//	$result = $this->getResultsFromView($orgId,$parameters['view']);	
+			//	$result = $this->getResultsFromView($accountId,$parameters['view']);	
 				$formatedPara = $this->formatQuery($parameters);
 		//	print_r($formatedPara);exit;
-				$result = $this->getResultsFromPara($orgId,$parameters['view'],$formatedPara);
+				$result = $this->getResultsFromPara($accountId,$parameters['view'],$formatedPara);
 				$finalResult['meta']['type'] = 'view';
 				foreach(array_keys($result) as $key) {
-					if ($result[$key]['org_id']!=$orgId) {  //Temp solution to protect with org id instead the where clause
+					if ($result[$key]['account_id']!=$accountId) {  //Temp solution to protect with org id instead the where clause
 						$result = [];break;
 					}
-					unset($result[$key]['org_id']);
+					unset($result[$key]['account_id']);
 				 }
 				 $finalResult['data'] = $result;
 			} else {
 				$formatedPara = $this->formatQuery($parameters);
-				$result = $this->getResultsFromPara($orgId,$app_name,$entity_name,$formatedPara);
+				$result = $this->getResultsFromPara($accountId,$app_name,$entity_name,$formatedPara);
 				$finalResult['data'] = $result;
 			}
 			return $finalResult;
@@ -124,16 +124,16 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if ($field) { 
 			if (!empty($group)) {
 				$select=$group;
-				$select[] = 'org_id';
+				$select[] = 'account_id';
 				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
 			} else {
-				$select = ['org_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
+				$select = ['account_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
 			}
 		} 
 		else {
 			if (!empty($group)) {
 				$select=$group;
-				$select[] = 'org_id';
+				$select[] = 'account_id';
 				$select[] = new \Zend\Db\Sql\Expression("count(*)");;
 			} 
 		}
@@ -170,11 +170,11 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		return $returnarray;
 	}
 
-	public function getResultsFromView($orgId,$view) {
+	public function getResultsFromView($accountId,$view) {
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
 		$select->from($view);
-	//	$select->where(['org_id' => $orgId]);   //commented it out for now since it is clearning out the order. 
+	//	$select->where(['account_id' => $accountId]);   //commented it out for now since it is clearning out the order. 
 	//We will need this in the future so cross org by mistake is not possible
 		$statement = $sql->prepareStatementForSqlObject($select);
 		$result = $statement->execute();
@@ -183,7 +183,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		
 	}
 
-	public function getResultsFromPara($orgId,$entity_name,$para) {
+	public function getResultsFromPara($accountId,$entity_name,$para) {
 		
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
@@ -192,7 +192,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			$select->columns($para['select']);
 		}
 		$select->from($entity_name);
-	//	$select->where(['org_id' => $orgId]);
+	//	$select->where(['account_id' => $accountId]);
 
 		
 		if (!empty($para['filter'])) {

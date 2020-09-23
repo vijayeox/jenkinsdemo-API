@@ -61,17 +61,17 @@ class AppServiceTest extends AbstractServiceTest
         return $mockRestClient;
     }
 
-    public function testGetAppsOfOrganizationWithApps() {
+    public function testGetAppsOfAccountWithApps() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $apps = $appService->getApps();
         $this->assertEquals(7, count($apps));
     }
 
-    public function testGetAppsOfOrganizationWithoutApps() {
+    public function testGetAppsOfAccountWithoutApps() {
         AuthContext::put(AuthConstants::USER_ID, '5');
-        AuthContext::put(AuthConstants::ORG_ID, '2');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '2');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $apps = $appService->getApps();
@@ -84,7 +84,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testGetAppWithValidUuid() {
         AuthContext::put(AuthConstants::USER_ID, 6);
-        AuthContext::put(AuthConstants::ORG_ID, 300);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
         $app = $appService->getApp($uuid);
@@ -94,7 +94,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testCreateAppPreBuilt() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appData = [
             'name' => 'DummyApp-New',
@@ -128,7 +128,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testCreateAppMyApp() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appData = [
             'name' => 'DummyApp-New',
@@ -174,7 +174,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testGetAppWithInvalidUuid() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $app = $appService->getApp('11111111-1111-1111-1111-111111111111');
@@ -392,7 +392,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testProcessJob()
     {
-        AuthContext::put(AuthConstants::ORG_ID, '300');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '300');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
@@ -430,7 +430,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateRole()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_UUID, 'a77ea120-b028-479b-8c6e-60476b6a4456');        
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, 'a77ea120-b028-479b-8c6e-60476b6a4456');        
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'role' => array(array('name' => 'Policy Holder', 'default' => '1', 'privileges' => array(array('privilege_name' => 'MANAGE_MY_POLICY', 'permission' => '3')),'uuid' => '703d3a09-b7f3-49e9-9c79-74d5cae7f6e7')));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
@@ -456,7 +456,7 @@ class AppServiceTest extends AbstractServiceTest
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
-        $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and org_id = 300";
+        $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and account_id = 300";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);
@@ -469,11 +469,11 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateOrg()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_UUID, 'e1033dc0-126b-40ba-89e0-d3061bdeda4p');
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, 'e1033dc0-126b-40ba-89e0-d3061bdeda4p');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('name' => 'V&B', 'uuid' => 'e1033dc0-126b-40ba-89e0-d3061bdeda4p','email' => 'vb07@gmail.com','address1' => '6 bCenterpoint','address2' => 'Dr.','city' => 'La Palma','state' => 'CA','zip' => '90623','country' => 'United States','contact' => array('username' => 'vb07.gmail.com','firstname' => 'Admin','lastname' => 'User','email' => 'vb07@gmail.com'),'preferences' => '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->setupOrg($data);
-        $sqlQuery = "SELECT count(*) as count FROM ox_organization";
+        $sqlQuery = "SELECT count(*) as count FROM ox_account";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);
@@ -490,7 +490,7 @@ class AppServiceTest extends AbstractServiceTest
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->setupOrg($data);
-        $sqlQuery = "SELECT count(name) as count FROM ox_organization WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
+        $sqlQuery = "SELECT count(name) as count FROM ox_account WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);
@@ -591,7 +591,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testDeleteApp() {
         AuthContext::put(AuthConstants::USER_ID, 6);
-        AuthContext::put(AuthConstants::ORG_ID, 300);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
         $appService->deleteApp($uuid, 0);
@@ -601,7 +601,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testDeleteAppWithInvalidUuid() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $appService->deleteApp('11111111-1111-1111-1111-111111111111', 0);

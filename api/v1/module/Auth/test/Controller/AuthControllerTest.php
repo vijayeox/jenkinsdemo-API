@@ -106,9 +106,9 @@ class AuthControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Authentication Failure - Incorrect data specified');
     }
 
-    public function testAuthenticationInActiveOrganization()
+    public function testAuthenticationInActiveAccount()
     {
-        $update = "UPDATE ox_organization SET status = 'Inactive' where id = 1";
+        $update = "UPDATE ox_account SET status = 'Inactive' where id = 1";
         $result = $this->executeUpdate($update);
         $data = ['username' => $this->adminUser, 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
@@ -156,7 +156,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationByApiKey()
     {
-        $data = ['apikey' => '0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98', 'orgid' => '1'];
+        $data = ['apikey' => '0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98', 'accountid' => '1'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -171,7 +171,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationFailByApiKey()
     {
-        $data = ['apikey' => '0cb6fd4c-40a5-11e9-a30d-1c1b0d785x36', 'orgid' => '1'];
+        $data = ['apikey' => '0cb6fd4c-40a5-11e9-a30d-1c1b0d785x36', 'accounrtid' => '1'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -218,15 +218,15 @@ class AuthControllerTest extends ControllerTest
         $rToken = $content['data']['refresh_token'];
         $jToken = $content['data']['jwt'];
         $this->reset();
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1OTU4NDQzNTUsImp0aSI6IkdzNzRLOGZNK1pvVjNtc2xrTlVSXC9BTk9MSXJDVXFmcUEzbWdSUUZLcW9VPSIsIm5iZiI6MTU5NTg0NDM1NSwiZXhwIjoxNTk1OTE2MzU1LCJkYXRhIjp7InVzZXJuYW1lIjoiYWRtaW50ZXN0Iiwib3JnaWQiOiIxIn19.8Umw1UsWissBEaZfrSCp0KnG68JQq3VXIv5qP8mPDt5rZ3owGqpKuFjU8rYX0gapwZlovK6g0UxpdfIBbUGTmg', 'refresh_token' => $rToken];
+        $data = ['jwt' => $jToken, 'refresh_token' => $rToken];
         $this->dispatch('/refreshtoken', 'POST', $data);
+        $content = $this->getResponse()->getContent();
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
         $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AuthController');
         $this->assertMatchedRouteName('refreshtoken');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = $this->getResponse()->getContent();
         $responseContent = (array) json_decode($content, true);
         $this->assertEquals($responseContent['status'], 'success');
         $this->assertNotEquals($responseContent['data']['jwt'], $jToken);
@@ -235,7 +235,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testRefreshFailRefreshTokenExpired()
     {
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NjQxNDQ5NDQsImp0aSI6IkdpTUdVM0RBckRrU21HVVAxVm1tZ01Tc2ZtdUd5YlNjaEl1TndCaXlHXC9VPSIsIm5iZiI6MTU2NDE0NDk0NCwiZXhwIjoxNTY0MjE2OTQ0LCJkYXRhIjp7InVzZXJuYW1lIjoibmVoYSIsIm9yZ2lkIjoiMyJ9fQ.Yhm_UQJiXdkxrOT6sz18IywVtMvzLD_5vkUCmbIHR_AHnNw5bxiBSi9x54IEHOP8sLpz72AgAB8RKi3qJ_nM7Q', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
+        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDA4NjEyNjIsImp0aSI6InFDckZQMjhBXC9GNkNVSUxyTWVEXC9FVHhRUEdQMW9yZERYSjRYbFdpOTArdz0iLCJuYmYiOjE2MDA4NjEyNjIsImV4cCI6MTYwMDkzMzI2MiwiZGF0YSI6eyJ1c2VybmFtZSI6ImFkbWludGVzdCIsImFjY291bnRJZCI6IjEifX0.8HvajhdxPAuRav_bbUwqWsmDwkP7uhA6uHyWuaUiko--i7mYzDR7xRDLqxIoPDnH1RMsKohosch8aqyigixUbA', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -346,13 +346,13 @@ class AuthControllerTest extends ControllerTest
     {
         $data = ['username' => $this->adminUser];
         $this->dispatch('/userprof', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
         $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AuthController');
         $this->assertMatchedRouteName('userprof');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'], 'Admin Test');
         $this->assertContains('user/profile/', $content['data']['profileUrl']);
@@ -442,34 +442,37 @@ class AuthControllerTest extends ControllerTest
         $this->performAssertions($data);
     }
     private function performAssertions($data){
-        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.orgid as org_id FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
+        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.account_id FROM ox_user u inner join ox_person up on up.id = u.person_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $orgId = $newQueryResult[0]['org_id'];
-        $sqlQuery = 'SELECT * FROM ox_organization where id = '.$orgId;
-        $orgResult = $this->runQuery($sqlQuery);
-        $sqlQuery = 'SELECT br.* FROM ox_org_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.org_id = '.$orgId;
+        $accountId = $newQueryResult[0]['account_id'];
+        $sqlQuery = 'SELECT * FROM ox_account where id = '.$accountId;
+        $acctResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT br.* FROM ox_account_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.account_id = '.$accountId;
         $bussRoleResult = $this->runQuery($sqlQuery);
-        $sqlQuery = 'SELECT * FROM ox_role where org_id = '.$orgId;
+        $sqlQuery = 'SELECT * FROM ox_role where account_id = '.$accountId;
         $roleResult = $this->runQuery($sqlQuery);
-        $sqlQuery = 'SELECT * FROM ox_user_role where user_id = '.$newQueryResult[0]['id']." AND role_id = ".$roleResult[0]['id'];
+        $sqlQuery = "SELECT ur.* FROM ox_user_role ur 
+                        INNER JOIN ox_account_user au on au.id = ur.account_user_id
+                        INNER JOIN ox_user u on u.id = au.user_id
+                    where u.id = ".$newQueryResult[0]['id']." AND role_id = ".$roleResult[0]['id'];
         $urResult = $this->runQuery($sqlQuery);
 
         $this->assertEquals($data['data']['firstname'],$newQueryResult[0]['firstname']);
         $this->assertEquals($data['data']['lastname'],$newQueryResult[0]['lastname']);
         $this->assertEquals($data['data']['email'],$newQueryResult[0]['email']);
         if($data['data']['type'] == 'INDIVIDUAL'){
-            $this->assertEquals($data['data']['firstname']." ".$data['data']['lastname'], $orgResult[0]['name']);
+            $this->assertEquals($data['data']['firstname']." ".$data['data']['lastname'], $acctResult[0]['name']);
         }else{
-            $this->assertEquals($data['data']['name'], $orgResult[0]['name']);
+            $this->assertEquals($data['data']['name'], $acctResult[0]['name']);
         }
-        $this->assertEquals($data['data']['type'], $orgResult[0]['type']);
-        $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
+        $this->assertEquals($data['data']['type'], $acctResult[0]['type']);
+        $this->assertEquals($newQueryResult[0]['id'], $acctResult[0]['contactid']);
         if(isset($data['data']['identifier_field'])){
             $sqlQuery = "SELECT * FROM ox_wf_user_identifier where identifier_name = '".$data['data']['identifier_field']."' AND identifier = '".$data['data'][$data['data']['identifier_field']]."'";
             $identifierResult = $this->runQuery($sqlQuery);
             $this->assertEquals(1, count($identifierResult));
             $this->assertEquals(100, $identifierResult[0]['app_id']);
-            $this->assertEquals($orgResult[0]['id'], $identifierResult[0]['org_id']);
+            $this->assertEquals($acctResult[0]['id'], $identifierResult[0]['account_id']);
             $this->assertEquals($newQueryResult[0]['id'], $identifierResult[0]['user_id']);
         }
         if(isset($data['data']['businessRole'])){
@@ -481,7 +484,7 @@ class AuthControllerTest extends ControllerTest
             $this->assertEquals(1, count($urResult));
         }
         $sqlQuery = "SELECT ar.* from ox_app_registry ar inner join ox_app a on a.id = ar.app_id 
-                        where a.uuid = '".$data['data']['app_id']."' AND org_id = $orgId";
+                        where a.uuid = '".$data['data']['app_id']."' AND account_id = $accountId";
 
         $result = $this->runQuery($sqlQuery);
         $this->assertEquals(1, count($result));

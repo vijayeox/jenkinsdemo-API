@@ -22,17 +22,17 @@ return [
                     ],
                 ],
             ],
-            'addUserToAccount' => [
+            'addUsersToAccount' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/account/:accountId/save',
                     'defaults' => [
                         'controller' => Controller\AccountController::class,
                         'method' => 'POST',
-                        'action' => 'addUserToAccount',
+                        'action' => 'addUsersToAccount',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'addUserToAccount' => 'MANAGE_ACCOUNT_WRITE',
+                            'addUsersToAccount' => 'MANAGE_ACCOUNT_WRITE',
                         ],
                     ],
                 ],

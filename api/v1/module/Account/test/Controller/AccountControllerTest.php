@@ -47,9 +47,9 @@ class AccountControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account', 'GET');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(3, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '53012471-2863-4949-afb1-e69b0891c98a');
@@ -158,7 +158,7 @@ class AccountControllerTest extends ControllerTest
         $accountResult = $this->executeQueryTest($select);
         $select = "SELECT ox_user.*,ox_person.firstname,ox_person.lastname,ox_person.address_id,ox_employee.designation FROM ox_user inner join ox_person on ox_person.id = ox_user.person_id inner join ox_employee on ox_employee.person_id = ox_person.id where ox_user.username ='" . $contact['username'] . "'";
         $usrResult = $this->executeQueryTest($select);
-        $select = "SELECT ox_address.address1,ox_organization.uuid,ox_account.uuid,ox_account.name, ox_account.type from ox_address join ox_account on ox_address.id = ox_account.address_id join ox_account on ox_account.organization_id=ox_account.id where name = 'ORGANIZATION'";
+        $select = "SELECT ox_address.address1,ox_organization.uuid,ox_account.uuid,ox_account.name, ox_account.type from ox_address join ox_organization on ox_address.id = ox_organization.address_id join ox_account on ox_account.organization_id=ox_organization.id where name = 'ORGANIZATION'";
         $account = $this->executeQueryTest($select);
         $query = "SELECT * from ox_app_registry where account_id = (SELECT id from ox_account where uuid = '" . $content['data']['uuid'] . "')";
         $appResult = $this->executeQueryTest($query);
@@ -243,12 +243,17 @@ class AccountControllerTest extends ControllerTest
         $data = array('name' => 'ORGANIZATION', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
+        $errors = ['address1' => 'required',
+                    'city' => 'required',
+                    'state' => 'required',
+                    'zip' => 'required'];
+        $this->assertEquals($errors, $content['data']['errors']);
     }
 
     public function testCreateWithExistingContactpersonEmail()
@@ -263,10 +268,10 @@ class AccountControllerTest extends ControllerTest
         $data = array('name' => 'ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
-        $this->assertResponseStatusCode(500);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Username or Email Exists in other Account');
     }
@@ -283,10 +288,10 @@ class AccountControllerTest extends ControllerTest
         $data = array('name' => 'ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
-        $this->assertResponseStatusCode(500);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Username or Email Exists in other Account');
     }
@@ -304,7 +309,7 @@ class AccountControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
         $this->assertEquals($content['status'], 'error');
@@ -324,7 +329,7 @@ class AccountControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
         $this->assertEquals($content['status'], 'error');
@@ -362,7 +367,7 @@ class AccountControllerTest extends ControllerTest
         $data = array('name' => 'Test Organization', 'address1' => 'Ariyalur', 'city' => 'Chennai','state' => 'Tamil Nadu', 'zip' =>'560079', 'preferences' => json_encode($preferences), 'reactivate' => 1);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -377,15 +382,13 @@ class AccountControllerTest extends ControllerTest
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
         $data = ['address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'logo' => 'logo.png', 'status' => 'Active', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences)];
         $this->setJsonContent(json_encode($data));
-        if (enableActiveMQ == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-        }
         $this->dispatch('/account', 'POST', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals('Validation error(s).', $content['message']);
+        $this->assertEquals('Account name required', $content['data']['errors']);
     }
 
     public function testCreateAccess()
@@ -393,9 +396,6 @@ class AccountControllerTest extends ControllerTest
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
-        if (enableActiveMQ == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-        }
         $this->dispatch('/account', 'POST', null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Account');
@@ -422,8 +422,8 @@ class AccountControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT * from ox_address join ox_account on ox_address.id = ox_account.address_id 
-                    inner join ox_account o on o.organization_id = ox_account.id where o.name = 'Cleveland Cavaliers'";
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
+                    inner join ox_account o on o.organization_id = ox_organization.id where o.name = 'Cleveland Cavaliers'";
         $account = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -443,11 +443,10 @@ class AccountControllerTest extends ControllerTest
         }
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a', 'POST', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        // print_r($content);exit;
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT * from ox_address join ox_account on ox_address.id = ox_account.address_id 
-                    inner join ox_account o on o.organization_id = ox_account.id where o.name = 'Cleveland Cavaliers'";
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
+                    inner join ox_account o on o.organization_id = ox_organization.id where o.name = 'Cleveland Cavaliers'";
         $account = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -478,11 +477,11 @@ class AccountControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a', 'DELETE');
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'status' => 'InActive')), 'ACCOUNT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'status' => 'Inactive')), 'ACCOUNT_DELETED')->once()->andReturn();
         }
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -503,23 +502,32 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testsaveUser()
+    public function testSaveUser()
     {
         $this->initAuthToken($this->adminUser);
         $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
-        $data = ['userid' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
-        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
+        $data = ['userIdList' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
+            print("Setting up mock\n");
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')), 'USERTOACCOUNT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'username' => 'managertest')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'username' => 'orgadmin')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
         }
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('addUserToAccount');
+        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $select = "SELECT * FROM ox_account_user where account_id = (SELECT id from ox_account where uuid ='" . $uuid . "')";
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUsersToAccount');
+        $select = "SELECT au.* from ox_account_user au 
+                    inner join ox_account a on a.id = au.account_id 
+                    where a.uuid = '$uuid'";
         $accountResult = $this->executeQueryTest($select);
-        $select = "SELECT count(id) from ox_user where account_id is NULL";
-        $accountCount = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user where account_id is NULL";
+        $userData = $this->executeQueryTest($select);
+        $select = "SELECT ur.* from ox_user_role ur
+                    inner join ox_account_user au on au.id = ur.account_user_id
+                    inner join ox_account a on a.id = au.account_id 
+                    where a.uuid = '$uuid'";
+        $userRoleData = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($accountResult), 2);
         $this->assertEquals($accountResult[0]['user_id'], 1);
@@ -528,22 +536,33 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($accountResult[1]['user_id'], 3);
         $this->assertEquals($accountResult[1]['account_id'], 1);
         $this->assertEquals($accountResult[1]['default'], 1);
-        $this->assertEquals($accountCount[0]['count(id)'], 2);
+        $this->assertEquals(3, count($userRoleData));
+        $this->assertEquals($userRoleData[0]['role_id'], 4);
+        $this->assertEquals($userRoleData[0]['account_user_id'], 1);
+        $this->assertEquals($userRoleData[1]['role_id'], 5);
+        $this->assertEquals($userRoleData[1]['account_user_id'], 1);
+        $this->assertEquals($userRoleData[2]['role_id'], 6);
+        $this->assertEquals($userRoleData[2]['account_user_id'], 3);
+        $this->assertEquals(2, count($userData));
+        $this->assertEquals($userData[0]['id'], 2);
+        $this->assertEquals($userData[1]['id'], 4);
     }
 
-    public function testsaveUserWithUserAlreadyExistsInOtherAccount()
+    public function testSaveUserWithUserAlreadyExistsInOtherAccount()
     {
         $this->initAuthToken($this->adminUser);
         $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
-        $data = ['userid' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
-        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
+        $data = ['userIdList' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')), 'USERTOACCOUNT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'username' => 'managertest')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'username' => 'orgadmin')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'status' => 'Active', 'username' => 'org2admin')), 'USERTOACCOUNT_ADDED')->once()->andReturn();
         }
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('addUserToAccount');
+        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUsersToAccount');
         $select = "SELECT * FROM ox_account_user where account_id = (SELECT id from ox_account where uuid ='" . $uuid . "')";
         $accountResult = $this->executeQueryTest($select);
         $select = "SELECT count(id) from ox_user where account_id is NULL";
@@ -562,19 +581,20 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($accountCount[0]['count(id)'], 2);
     }
 
-    public function testsaveUserWithUserToOtherAccount()
+    public function testSaveUserWithUserToOtherAccount()
     {
         $this->initAuthToken($this->adminUser);
         $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
-        $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'], ['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
-        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
+        $data = ['userIdList' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'], ['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')), 'USERTOACCOUNT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'username' => 'employeetest')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'status' => 'Active', 'username' => 'org2admin')), 'USERTOACCOUNT_ADDED')->once()->andReturn();
         }
+        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToAccount');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $select = "SELECT * FROM ox_account_user where account_id = (SELECT id from ox_account where uuid ='" . $uuid . "')";
         $accountResult = $this->executeQueryTest($select);
         $select = "SELECT count(id) from ox_user where account_id is NULL";
@@ -599,19 +619,19 @@ class AccountControllerTest extends ControllerTest
     public function testToDeleteContactUserFromAccount()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'])];
+        $data = ['userIdList' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'])];
         $uuid = "b6499a34-c100-4e41-bece-5822adca3844";
         $update = "update ox_account set contactid = 6 where id = 3";
         $accountResult = $this->executeUpdate($update);
-        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Sample Organization', 'status' => 'Active', 'username' => 'abc134')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Sample Organization', 'username' => 'abc134')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Sample Organization', 'status' => 'Active', 'username' => 'admintest')), 'USERTOACCOUNT_ADDED')->once()->andReturn();
         }
+        $this->dispatch('/account/' . $uuid . '/save', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToAccount');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $select = "SELECT * FROM ox_account_user where account_id = (SELECT id from ox_account where uuid ='" . $uuid . "')";
         $accountResult = $this->executeQueryTest($select);
         $select = "SELECT count(id) from ox_user where account_id is NULL";
@@ -630,7 +650,7 @@ class AccountControllerTest extends ControllerTest
     public function testAddUserToAccountWithDifferentUser()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5'], ['uuid' => '4fd99e8e68ecc57cde4'])];
+        $data = ['userIdList' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5'], ['uuid' => '4fd99e8e68ecc57cde4'])];
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('addUserToAccount');
@@ -638,13 +658,13 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testgetUsersofAccount()
+    public function testGetUsersOfAccount()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/users', 'GET');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(4, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd99e8e-758f-11e9-b2d5-68ecc57cde45");
@@ -659,7 +679,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 4);
     }
 
-    public function testgetUsersofAccountWithFilter()
+    public function testGetUsersOfAccountWithFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/users?filter=[{"skip":1,"take":2}]', 'GET');
@@ -675,7 +695,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 4);
     }
 
-    public function testgetUsersofAccountWithSortFilter()
+    public function testGetUsersOfAccountWithSortFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/users?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":2,"take":2}]', 'GET');
@@ -691,7 +711,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 4);
     }
 
-    public function testgetUsersofAccountWithFieldFilter()
+    public function testGetUsersOfAccountWithFieldFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/users?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"n Test"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":2}]', 'GET');
@@ -705,7 +725,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetUsersofAccountWithFieldCountryFilter()
+    public function testGetUsersOfAccountWithFieldCountryFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/users?filter=[{"filter":{"filters":[{"field":"country","operator":"endswith","value":"ana"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
@@ -719,13 +739,13 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 2);
     }
 
-    public function testgetAdminUsersAccountWithFilter()
+    public function testGetAdminUsersAccountWithFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"n Test"}]},"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":2}]', 'GET');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
@@ -733,7 +753,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetAdminUsersAccount()
+    public function testGetAdminUsersAccount()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":20}]', 'GET');
@@ -747,20 +767,21 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetAdminUsersAccountByManager()
+    public function testGetAdminUsersAccountByManager()
     {
         $this->initAuthToken($this->managerUser);
         $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
-        $this->assertResponseStatusCode(403);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(401);
         $this->assertModuleName('Account');
         $this->assertControllerName(AccountController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AccountController');
         $this->assertMatchedRouteName('getListofAdminUsers');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals("You do not have permissions", $content['message']);
     }
 
-    public function testgetAdminUsersAccountByEmployee()
+    public function testGetAdminUsersAccountByEmployee()
     {
         $this->initAuthToken($this->employeeUser);
         $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
@@ -773,13 +794,13 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testgetAccountGroups()
+    public function testGetAccountGroups()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups', 'GET');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
         $this->assertEquals($content['data'][0]['name'], 'Test Group');
@@ -791,10 +812,16 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Test Group 5');
         $this->assertEquals($content['data'][1]['description'], 'Group Description');
         $this->assertEquals($content['data'][1]['managerId'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][2]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
+        $this->assertEquals($content['data'][2]['name'], 'Test Group Once Again');
+        $this->assertEquals($content['data'][2]['description'], 'Description for the second test cases');
+        $this->assertEquals($content['data'][2]['managerId'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][2]['parent_id'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
+        
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountGroupsWithFilter()
+    public function testGetAccountGroupsWithFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"oup"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
@@ -811,7 +838,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetAccountGroupsWithSortFilter()
+    public function testGetAccountGroupsWithSortFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
@@ -826,7 +853,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountGroupsWithPagsize()
+    public function testGetAccountGroupsWithPagsize()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"skip":0,"take":1}]', 'GET');
@@ -839,7 +866,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountGroupsWithPagination()
+    public function testGetAccountGroupsWithPagination()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"skip":1,"take":1}]', 'GET');
@@ -852,7 +879,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountGroupsWithInvalidAccountId()
+    public function testGetAccountGroupsWithInvalidAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-/groups?filter=[{"skip":1,"take":1}]', 'GET');
@@ -860,10 +887,10 @@ class AccountControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Account not found');
+        $this->assertEquals($content['message'], 'Invalid Account');
     }
 
-    public function testgetAccountGroupsWithInvalidFilter()
+    public function testGetAccountGroupsWithInvalidFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
@@ -876,7 +903,7 @@ class AccountControllerTest extends ControllerTest
     }
 //Project
 
-    public function testgetAccountProjects()
+    public function testGetAccountProjects()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/projects', 'GET');
@@ -896,7 +923,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountProjectWithFilter()
+    public function testGetAccountProjectWithFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"ct"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
@@ -912,7 +939,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetAccountProjectsWithSortFilter()
+    public function testGetAccountProjectsWithSortFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
@@ -927,7 +954,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountProjectsWithPagsize()
+    public function testGetAccountProjectsWithPagsize()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"skip":0,"take":1}]', 'GET');
@@ -940,7 +967,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountProjectsWithPagination()
+    public function testGetAccountProjectsWithPagination()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"skip":1,"take":1}]', 'GET');
@@ -953,7 +980,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountProjectsWithInvalidAccountId()
+    public function testGetAccountProjectsWithInvalidAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-/projects?filter=[{"skip":1,"take":1}]', 'GET');
@@ -961,10 +988,10 @@ class AccountControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Account not found');
+        $this->assertEquals($content['message'], 'Invalid Account');
     }
 
-    public function testgetAccountProjectsWithInvalidFilter()
+    public function testGetAccountProjectsWithInvalidFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
@@ -977,7 +1004,7 @@ class AccountControllerTest extends ControllerTest
     }
 // Announcements
 
-    public function testgetAccountAnnouncements()
+    public function testGetAccountAnnouncements()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcements', 'GET');
@@ -993,7 +1020,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals(7, $content['total']);
     }
 
-    public function testgetAccountAnnouncementsWithFilter()
+    public function testGetAccountAnnouncementsWithFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"2"},{"field":"description","operator":"startswith","value":"announ"}]},"skip":0,"take":2}]', 'GET');
@@ -1008,7 +1035,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetAccountAnnouncementsWithSortFilter()
+    public function testGetAccountAnnouncementsWithSortFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
@@ -1023,7 +1050,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 7);
     }
 
-    public function testgetAccountAnnouncementsWithPagsize()
+    public function testGetAccountAnnouncementsWithPagsize()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"skip":0,"take":1}]', 'GET');
@@ -1036,7 +1063,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 7);
     }
 
-    public function testgetAccountAnnouncementsWithPagination()
+    public function testGetAccountAnnouncementsWithPagination()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"skip":1,"take":1}]', 'GET');
@@ -1049,7 +1076,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 7);
     }
 
-    public function testgetAccountAnnouncementsWithInvalidAccountId()
+    public function testGetAccountAnnouncementsWithInvalidAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-/announcements?filter=[{"skip":1,"take":1}]', 'GET');
@@ -1057,10 +1084,10 @@ class AccountControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Account not found');
+        $this->assertEquals($content['message'], 'Invalid Account');
     }
 
-    public function testgetAccountAnnouncementsWithInvalidFilter()
+    public function testGetAccountAnnouncementsWithInvalidFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
@@ -1073,7 +1100,7 @@ class AccountControllerTest extends ControllerTest
     }
 // Roles
 
-    public function testgetAccountRoles()
+    public function testGetAccountRoles()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/roles', 'GET');
@@ -1088,7 +1115,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountRolesWithFilter()
+    public function testGetAccountRolesWithFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"ger"},{"field":"description","operator":"startswith","value":"Must"}]},"skip":0,"take":2}]', 'GET');
@@ -1100,7 +1127,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetAccountRolesWithSortFilter()
+    public function testGetAccountRolesWithSortFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
@@ -1113,7 +1140,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountRolesWithPagsize()
+    public function testGetAccountRolesWithPagsize()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"skip":0,"take":1}]', 'GET');
@@ -1125,7 +1152,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountRolesWithPagination()
+    public function testGetAccountRolesWithPagination()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"skip":1,"take":1}]', 'GET');
@@ -1137,7 +1164,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetAccountRolesWithInvalidAccountId()
+    public function testGetAccountRolesWithInvalidAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-/roles?filter=[{"skip":1,"take":1}]', 'GET');
@@ -1145,10 +1172,10 @@ class AccountControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Account not found');
+        $this->assertEquals($content['message'], 'Invalid Account');
     }
 
-    public function testgetAccountRolesWithInvalidFilter()
+    public function testGetAccountRolesWithInvalidFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');

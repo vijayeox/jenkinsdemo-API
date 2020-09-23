@@ -88,9 +88,9 @@ class FileService extends AbstractService
         $fields = $data = $this->cleanData($data);
         $jsonData = json_encode($data);
         $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
-        $orgId = $this->entityService->getEntityOfferingOrganization($entityId);
+        $accountId = $this->entityService->getEntityOfferingAccount($entityId);
         $data['uuid'] = $uuid;
-        $data['org_id'] = $orgId ? $orgId : AuthContext::get(AuthConstants::ORG_ID);
+        $data['account_id'] = $accountId ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
@@ -152,9 +152,9 @@ class FileService extends AbstractService
     private function setupFileParticipants($fileId, $file){
         $entityId = $file['entity_id'];
         $fileData = json_decode($file['data'], true);
-        $query = "INSERT INTO ox_file_participant (file_id, org_id, business_role_id) 
-                  (SELECT $fileId, ob.org_id, ob.business_role_id
-                  from ox_org_business_role ob inner join ox_org_offering oo on ob.id = oo.org_business_role_id
+        $query = "INSERT INTO ox_file_participant (file_id, account_id, business_role_id) 
+                  (SELECT $fileId, ob.account_id, ob.business_role_id
+                  from ox_account_business_role ob inner join ox_account_offering oo on ob.id = oo.account_business_role_id
                   WHERE oo.entity_id = :entityId)";
         $queryParams = ['entityId' => $entityId];
         $this->executeUpdateWithBindParameters($query, $queryParams);
@@ -171,8 +171,8 @@ class FileService extends AbstractService
         }
 
         if($identifier){
-            $query = "INSERT INTO ox_file_participant (file_id, org_id, business_role_id)
-                       (SELECT $fileId, ui.org_id, ep.business_role_id
+            $query = "INSERT INTO ox_file_participant (file_id, account_id, business_role_id)
+                       (SELECT $fileId, ui.account_id, ep.business_role_id
                         FROM ox_wf_user_identifier ui inner join ox_entity_identifier ei on ei.identifier = ui.identifier_name
                         inner join ox_entity_participant_role ep on ep.entity_id = ei.entity_id
                         inner join ox_app_entity ae on ae.id = ep.entity_id and ui.app_id = ae.app_id
@@ -205,12 +205,12 @@ class FileService extends AbstractService
     }
     
     private function updateFileUserContext($obj){
-        $orgId = $obj['org_id'];
+        $accountId = $obj['account_id'];
         $userId = $obj['modified_by'] ? $obj['modified_by'] : $obj['created_by'];
-        $orgUuid = $this->getUuidFromId('ox_organization', $orgId);
+        $accountUuid = $this->getUuidFromId('ox_account', $accountId);
         $userUuid = $this->getUuidFromId('ox_user', $userId);
-        $context = ['orgId' => $orgUuid, 'userId' => $userUuid];
-        $this->updateOrganizationContext($context);
+        $context = ['accountId' => $accountUuid, 'userId' => $userUuid];
+        $this->updateAccountContext($context);
     }
     private function updateFileAttributesInternal($entityId, $fileData, $fileId){
         $validFields = $this->checkFields($entityId ,$fileData, $fileId);
@@ -235,10 +235,10 @@ class FileService extends AbstractService
                             where fa.file_id = :fileId and f.index = 1";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
-                $query = "INSERT INTO ox_indexed_file_attribute (file_id, field_id, org_id, field_value_text, 
+                $query = "INSERT INTO ox_indexed_file_attribute (file_id, field_id, account_id, field_value_text, 
                             field_value_date, field_value_numeric, field_value_boolean, field_value_type, date_created, 
                             created_by, date_modified, modified_by)
-                          (SELECT fa.file_id, fa.field_id, fa.org_id, fa.field_value_text, 
+                          (SELECT fa.file_id, fa.field_id, fa.account_id, fa.field_value_text, 
                             fa.field_value_date, fa.field_value_numeric, fa.field_value_boolean, fa.field_value_type,
                             fa.date_created, fa.created_by, fa.date_modified, fa.modified_by from ox_file_attribute fa 
                             inner join ox_field f on fa.field_id = f.id
@@ -253,9 +253,9 @@ class FileService extends AbstractService
                             where fa.file_id = :fileId and f.type IN('document','file')";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
-                $query = "INSERT INTO ox_file_document (file_id, field_id, org_id, field_value, sequence,
+                $query = "INSERT INTO ox_file_document (file_id, field_id, account_id, field_value, sequence,
                             date_created, created_by, date_modified, modified_by)
-                          (SELECT fa.file_id, fa.field_id, fa.org_id, fa.field_value, fa.sequence, 
+                          (SELECT fa.file_id, fa.field_id, fa.account_id, fa.field_value, fa.sequence, 
                             fa.date_created, fa.created_by, fa.date_modified, fa.modified_by from ox_file_attribute fa 
                             inner join ox_field f on f.id = fa.field_id
                             left outer join ox_file_document ifa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id and (ifa.sequence = fa.sequence or (fa.sequence is null and ifa.sequence is null)) 
@@ -461,15 +461,15 @@ class FileService extends AbstractService
      * @return array $data
      * @return array Returns a JSON Response with Status Code and Created File.
      */
-    public function getFile($id, $latest = false, $orgId = null)
+    public function getFile($id, $latest = false, $accountId = null)
     {
         try {
             $this->logger->info("FILE ID  ------" . json_encode($id));
-            $orgId = isset($orgId) ? $this->getIdFromUuid('ox_organization', $orgId) :
-                                    AuthContext::get(AuthConstants::ORG_ID);
+            $accountId = isset($accountId) ? $this->getIdFromUuid('ox_account', $accountId) :
+                                    AuthContext::get(AuthConstants::ACCOUNT_ID);
             $params = array('id' => $id,
-                'orgId' => $orgId);
-            $select = "SELECT id, uuid, data, entity_id  from ox_file where uuid = :id AND org_id = :orgId";
+                'accountId' => $accountId);
+            $select = "SELECT id, uuid, data, entity_id  from ox_file where uuid = :id AND account_id = :accountId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
             $this->logger->info("FILE DATA ------" . json_encode($result));
@@ -499,8 +499,8 @@ class FileService extends AbstractService
         try {
             $select = "SELECT ox_file.id,ox_file.uuid as fileId, ox_file.data, ox_file.last_workflow_instance_id from ox_file
             inner join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id
-            where ox_file.org_id=:orgId and $where and ox_file.is_active =:isActive";
-            $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),
+            where ox_file.account_id=:accountId and $where and ox_file.is_active =:isActive";
+            $whereQuery = array("accountId" => AuthContext::get(AuthConstants::ACCOUNT_ID),
                 "workflowInstanceId" => $workflowInstanceId,
                 "isActive" => 1);
             $result = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
@@ -739,7 +739,7 @@ class FileService extends AbstractService
         }
         $fieldData['file_id'] = $fileId;
         $fieldData['field_id'] = $field['id'];
-        $fieldData['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
+        $fieldData['account_id'] = (empty($fileArray[$key]['account_id']) ? AuthContext::get(AuthConstants::ACCOUNT_ID) : $fileArray[$key]['account_id']);
         $fieldData['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
         $fieldData['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fieldData['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
@@ -1067,9 +1067,9 @@ class FileService extends AbstractService
             $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
         }
     }
-    private function processParticipantFiltering($orgId, &$fromQuery, &$whereQuery, &$queryParams){
-        $query = "SELECT id from ox_org_business_role where org_id = :orgId";
-        $params = ["orgId" => $orgId];
+    private function processParticipantFiltering($accountId, &$fromQuery, &$whereQuery, &$queryParams){
+        $query = "SELECT id from ox_account_business_role where account_id = :accountId";
+        $params = ["accountId" => $accountId];
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
         if(count($result) == 0){
             return false;
@@ -1079,8 +1079,8 @@ class FileService extends AbstractService
             $whereQuery .= " AND ";
         }
 
-        $whereQuery .= " ofp.org_id = :orgId";
-        $queryParams['orgId'] = $orgId;
+        $whereQuery .= " ofp.account_id = :accountId";
+        $queryParams['accountId'] = $accountId;
         return true;
     }
 
@@ -1116,17 +1116,17 @@ class FileService extends AbstractService
     public function getFileList($appUUid, $params, $filterParams = null)
     {
         $this->logger->info("Inside File List API - with params - " . json_encode($params));
-        $orgId = isset($params['orgId']) ? $this->getIdFromUuid('ox_organization', $params['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = isset($params['accountId']) ? $this->getIdFromUuid('ox_account', $params['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $appId = $this->getIdFromUuid('ox_app', $appUUid);
-        if (!isset($orgId)) {
-            $orgId = $params['orgId'];
+        if (!isset($accountId)) {
+            $accountId = $params['accountId'];
         }
-        $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
-        $selectQuery = array("orgId" => $orgId, "appId" => $appId);
+        $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
+        $selectQuery = array("accountId" => $accountId, "appId" => $appId);
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
         
         if (count($result) == 0) {
-            throw new ServiceException("App Does not belong to the org", "app.fororgnot.found");
+            throw new ServiceException("App Does not belong to the account", "app.for.account.not.found");
         }
 
         $queryParams = array();
@@ -1146,7 +1146,7 @@ class FileService extends AbstractService
         $fromQuery = " from ox_file as `of`
         inner join ox_app_entity as en on en.id = `of`.entity_id
         inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
-        $this->processParticipantFiltering($orgId, $fromQuery, $whereQuery, $queryParams);
+        $this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams);
         $this->processUserFilter($params, $appId, $fromQuery, $whereQuery, $queryParams);
         
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
@@ -1379,9 +1379,11 @@ class FileService extends AbstractService
         unset($params['app_id']);
         unset($params['appId']);
         unset($params['org_id']);
+        unset($params['account_id']);
         unset($params['type']);
         unset($params['business_role']);
         unset($params['orgId']);
+        unset($params['accountId']);
         unset($params['created_by']);
         unset($params['date_modified']);
         unset($params['entity_id']);
@@ -1585,8 +1587,8 @@ class FileService extends AbstractService
     {
         $fileArray = array();
         $data = array();
-        $fileStorage = AuthContext::get(AuthConstants::ORG_UUID) . "/temp/";
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $fileStorage = AuthContext::get(AuthConstants::ACCOUNT_UUID) . "/temp/";
+        $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['uuid'] = UuidUtil::uuid();
         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -1603,9 +1605,9 @@ class FileService extends AbstractService
             $data['path'] = $path;
             $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
         }else{
-            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/';
-            $data['file'] = AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-            $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/';
+            $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+            $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
             $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
         }
         $form->exchangeArray($data);
@@ -1630,12 +1632,12 @@ class FileService extends AbstractService
         }
         return $data;
     }
-    public function appendAttachmentToFile($fileAttachment,$field,$fileId,$orgId = null){
+    public function appendAttachmentToFile($fileAttachment,$field,$fileId,$accountId = null){
         if(!isset($fileAttachment['file']) && isset($fileAttachment['name'])) {
-            $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_UUID);
+            $accountId = isset($accountId) ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_UUID);
             $fileUuid = $this->getUuidFromId('ox_file', $fileId);
             $fileLocation = $fileAttachment['path'];
-            $targetLocation = $this->config['APP_DOCUMENT_FOLDER']. $orgId . '/' . $fileUuid . '/';
+            $targetLocation = $this->config['APP_DOCUMENT_FOLDER']. $accountId . '/' . $fileUuid . '/';
             $this->logger->info("Data CreateFile- " . json_encode($fileLocation));
             $tempname = str_replace(".".$fileAttachment['extension'], "", $fileAttachment['name']);
             $fileAttachment['name'] = $tempname."-".$fileAttachment['uuid'].".".$fileAttachment['extension'];
@@ -1644,8 +1646,8 @@ class FileService extends AbstractService
             if(file_exists($fileLocation)){
                 FileUtils::copy($fileLocation,$fileAttachment['name'],$targetLocation);
                 // FileUtils::deleteFile($fileAttachment['originalName'],dirname($fileLocation)."/");
-                $fileAttachment['file'] = $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
-                $fileAttachment['url'] = $this->config['baseUrl']."/". $orgId . '/' . $fileUuid . '/'.$fileAttachment['name'];
+                $fileAttachment['file'] = $accountId . '/' . $fileUuid . '/'.$fileAttachment['name'];
+                $fileAttachment['url'] = $this->config['baseUrl']."/". $accountId . '/' . $fileUuid . '/'.$fileAttachment['name'];
                 $fileAttachment['path'] = FileUtils::truepath($targetLocation.$fileAttachment['name']);
                 $this->logger->info("File Moved- " . json_encode($fileAttachment));
                 // $count = $this->attachmentTable->delete($fileAttachment['id'], []);

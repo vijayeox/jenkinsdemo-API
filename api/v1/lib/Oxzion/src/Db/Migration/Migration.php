@@ -162,14 +162,14 @@ class Migration extends AbstractService
                     }
                 }
 
-                //Code to add the new column org_id to the table that is created
+                //Code to add the new column account_id to the table that is created
                 $columnResult = $this->mysqlAdapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $this->database . "' and table_name NOT LIKE 'ox_app_migration_version' GROUP BY TABLE_NAME");
                 $resultSet1 = $columnResult->execute();
                 while ($resultSet1->next()) {
                     $resultTableName = $resultSet1->current();
                     $columnList = explode(",", $resultTableName['column_list']);
-                    if (!in_array('ox_app_org_id', $columnList)) {
-                        $tableResult = $adapter->query("ALTER TABLE " . $resultTableName['TABLE_NAME'] . " ADD `ox_app_org_id` INT(11) NOT NULL DEFAULT 0");
+                    if (!in_array('ox_app_account_id', $columnList)) {
+                        $tableResult = $adapter->query("ALTER TABLE " . $resultTableName['TABLE_NAME'] . " ADD `ox_app_account_id` INT(32)");
                         $tableResult->execute();
                     }
                 }

@@ -42,7 +42,7 @@ class AppService extends AbstractService
     protected $workflowService;
     protected $fieldService;
     protected $formService;
-    protected $organizationService;
+    protected $accountService;
     protected $entityService;
     private $privilegeService;
     private $menuItemService;
@@ -55,14 +55,14 @@ class AppService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, BusinessRoleService $businessRoleService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $accountService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, BusinessRoleService $businessRoleService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->workflowService = $workflowService;
         $this->formService = $formService;
         $this->fieldService = $fieldService;
-        $this->organizationService = $organizationService;
+        $this->accountService = $accountService;
         $this->entityService = $entityService;
         $this->privilegeService = $privilegeService;
         $this->roleService = $roleService;
@@ -85,17 +85,18 @@ class AppService extends AbstractService
     public function getApps()
     {
         $queryString = 'SELECT ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.category, ap.date_created, 
-            ap.date_modified, ap.created_by, ap.modified_by, ap.status, ar.org_id, ar.start_options 
+            ap.date_modified, ap.created_by, ap.modified_by, ap.status, a.uuid as accountId, ar.start_options 
             FROM ox_app AS ap
             LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id 
-            WHERE ar.org_id=:orgId AND ap.status!=:status AND ap.name <> \'' . AppService::EOX_RESERVED_APP_NAME . '\'';
+            LEFT JOIN ox_account a on a.id = ar.account_id
+            WHERE ar.account_id=:accountId AND ap.status!=:status AND ap.name <> \'' . AppService::EOX_RESERVED_APP_NAME . '\'';
         $queryParams = [
-            'orgId' => AuthContext::get(AuthConstants::ORG_ID),
+            'accountId' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'status' => App::DELETED
         ];
         $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
         if (empty($resultSet)) {
-            throw new EntityNotFoundException('No active registered apps found for logged-in user\'s organization.', NULL);
+            throw new EntityNotFoundException('No active registered apps found for logged-in user\'s account.', NULL);
         }
         return $resultSet;
     }
@@ -103,19 +104,20 @@ class AppService extends AbstractService
     public function getApp($uuid)
     {
         $queryString = 'SELECT ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.category, ap.date_created,
-            ap.date_modified, ap.created_by, ap.modified_by, ap.status, ar.org_id, ar.start_options 
+            ap.date_modified, ap.created_by, ap.modified_by, ap.status, a.uuid as accountId, ar.start_options 
             FROM ox_app AS ap
-            LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id AND ar.org_id=:orgId
+            LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id AND ar.account_id=:accountId
+            LEFT JOIN ox_account a on a.id = ar.account_id
             WHERE ap.status!=:statusDeleted AND ap.uuid=:uuid';
         $queryParams = [
-            'orgId' => AuthContext::get(AuthConstants::ORG_ID),
+            'accountId' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'statusDeleted' => App::DELETED, 
             'uuid' => $uuid
         ];
         $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
         if (is_null($resultSet) || empty($resultSet)) {
             throw new EntityNotFoundException('Entity not found.', 
-                ['entity' => 'Active registered app for the logged-in user\'s organization', 'uuid' => $uuid]);
+                ['entity' => 'Active registered app for the logged-in user\'s account', 'uuid' => $uuid]);
         }
         return $resultSet[0];
     }
@@ -323,16 +325,16 @@ class AppService extends AbstractService
         if (isset($yamlData['org'])) {
             $appId = $yamlData['app']['uuid'];
             $data = $this->processOrg($yamlData['org'], $appId);
-            $orgId = $yamlData['org']['uuid'];
-            $this->installApp($orgId, $yamlData, $path);
+            $accountId = $yamlData['org']['uuid'];
+            $this->installApp($accountId, $yamlData, $path);
         }
     }
 
-    public function installApp($orgId, $yamlData, $path){
+    public function installApp($accountId, $yamlData, $path){
         $appId = $yamlData['app']['uuid'];
         $this->createRole($yamlData, false);
-        $result = $this->createAppRegistry($appId, $orgId);
-        $this->setupOrgLinks($path, $appId, $orgId);
+        $result = $this->createAppRegistry($appId, $accountId);
+        $this->setupOrgLinks($path, $appId, $accountId);
     }
 
     public function processJob(&$yamlData) {
@@ -654,9 +656,9 @@ class AppService extends AbstractService
         $this->setLinkAndRunBuild($appTarget,$appLink);
     }
 
-    private function setupOrgLinks($path, $appId, $orgId){
-        if ($orgId && $path) {
-            $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
+    private function setupOrgLinks($path, $appId, $accountId){
+        if ($accountId && $path) {
+            $link = $this->config['TEMPLATE_FOLDER'] . $accountId;
             $target = $path . "data/template";
             if (is_link($link)) {
                 FileUtils::unlink($link);
@@ -742,7 +744,7 @@ class AppService extends AbstractService
                     $this->logger->warn("Organization not provided not processing roles!");
                     return;
                 }
-                $params['orgId'] = $yamlData['org']['uuid'];
+                $params['accountId'] = $yamlData['org']['uuid'];
             }
             $appId = $yamlData['app']['uuid'];
             foreach ($yamlData['role'] as &$roleData) {
@@ -787,7 +789,7 @@ class AppService extends AbstractService
         }
         $orgdata = $orgData;
         $orgdata['app_id'] = $appId;
-        $result = $this->organizationService->saveOrganization($orgdata);
+        $result = $this->accountService->saveAccount($orgdata);
         //setup business offering
         if ($result == 0) {
             throw new ServiceException("Organization could not be saved", 'org.not.saved');
@@ -956,23 +958,23 @@ class AppService extends AbstractService
         return $this->formService->createForm($formData);
     }
 
-    public function createAppRegistry($appId, $orgId)
+    public function createAppRegistry($appId, $accountId)
     {
         $sql = $this->getSqlObject();
-        //Code to check if the app is already registered for the organization
+        //Code to check if the app is already registered for the account
         $queryString = "select count(ar.id) as count
         from ox_app_registry as ar
         inner join ox_app ap on ap.id = ar.app_id
-        inner join ox_organization org on org.id = ar.org_id
-        where ap.uuid = :appId and org.uuid = :orgId";
-        $params = array("appId" => is_array($appId) ? $appId['value'] : $appId, "orgId" => $orgId);
+        inner join ox_account acct on acct.id = ar.account_id
+        where ap.uuid = :appId and acct.uuid = :accountId";
+        $params = array("appId" => is_array($appId) ? $appId['value'] : $appId, "accountId" => $accountId);
         $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
         if ($resultSet[0]['count'] == 0) {
             try {
                 $this->beginTransaction();
-                $insert = "INSERT into ox_app_registry (app_id, org_id, start_options)
-                select ap.id, org.id, ap.start_options from ox_app as ap, ox_organization as org where ap.uuid = :appId and org.uuid = :orgId";
-                $params = array("appId" => $appId, "orgId" => $orgId);
+                $insert = "INSERT into ox_app_registry (app_id, account_id, start_options)
+                select ap.id, acct.id, ap.start_options from ox_app as ap, ox_account as acct where ap.uuid = :appId and acct.uuid = :accountId";
+                $params = array("appId" => $appId, "accountId" => $accountId);
                 $result = $this->executeUpdateWithBindParameters($insert, $params);
                 $this->commit();
                 return $result->getAffectedRows();
@@ -1034,9 +1036,9 @@ class AppService extends AbstractService
             $selectquery = $this->executeQuerywithParams($query)->toArray();
             $idList = array_unique(array_map('current', $selectquery));
             for ($i = 0; $i < sizeof($idList); $i++) {
-                $insert = "INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`)
-                SELECT org.id, '" . $idList[$i] . "', now() from ox_organization as org
-                where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
+                $insert = "INSERT INTO `ox_app_registry` (`account_id`,`app_id`,`date_created`)
+                SELECT account.id, '" . $idList[$i] . "', now() from ox_account as account
+                where account.id not in(SELECT account_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
                 $result = $this->runGenericQuery($insert);
             }
             $this->commit();
@@ -1051,9 +1053,9 @@ class AppService extends AbstractService
     public function addToAppRegistry($data)
     {
         $this->logger->debug("Adding App to registry");
-        $data['orgId'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
+        $data['accountId'] = isset($data['accountId']) ? $data['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID);
         $app = $this->table->getByName($data['app_name']);
-        return $this->createAppRegistry($app->uuid, $data['orgId']);
+        return $this->createAppRegistry($app->uuid, $data['accountId']);
     }
 
     public function processEntity(&$yamlData, $assoc_id = null)

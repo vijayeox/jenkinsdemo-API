@@ -5,20 +5,16 @@ use Oxzion\Model\Entity;
 
 class Organization extends Entity
 {
-    const BUSINESS = 'BUSINESS';
-    const INDIVIDUAL = 'INDIVIDUAL';
-
     protected $data = array(
         'id' => null,
-        'name' => null,
         'uuid' => null,
-        'subdomain' => null,
-        'contactid' => null,
-        'preferences' => null,
-        'theme' => 0,
-        'org_profile_id' => null,
-        'status' => 'Active',
-        'type' => 'BUSINESS'
+        'address_id' => null,
+        'labelfile' => null,
+        'languagefile' => null,
+        'date_created' => null,
+        'date_modified' => null,
+        'created_by' => null,
+        'modified_by' => null,
     );
 
     public function __construct($data = array())
@@ -31,9 +27,7 @@ class Organization extends Entity
     public function validate()
     {
         $required = array(
-            'name',
-            'status',
-            'preferences'
+            'address_id'
         );
         $this->validateWithParams($required);
     }

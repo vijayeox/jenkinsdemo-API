@@ -31,13 +31,13 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
             'entity_name'=>$entity_name, 
             'parameters'=>$parameters]);
         try {
-			$orgId = AuthContext::get(AuthConstants::ORG_ID);
+			$accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
 			$query = $this->formatQuery($parameters);
 			if ($entity_name) {
 				$query['filter'][]=['entity_name','==',$entity_name];
 			}
             $elasticService = $this->elasticService;
-			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
+			$result = $elasticService->getQueryResults($accountId,$app_name,$query);
 			$finalResult['meta'] = $query;
 			$finalResult['meta']['type'] = $result['type'];
 			$finalResult['meta']['query'] = $result['query'];

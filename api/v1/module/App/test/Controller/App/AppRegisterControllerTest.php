@@ -55,13 +55,13 @@ class AppRegisterContollerTest extends ControllerTest
         $data = ['applist' => json_encode([["name" => "CRM", "category" => "organization", "options" => ["autostart" => "false", "hidden" => "false"]], ["name" => "Calculator", "category" => "office", "options" => ["autostart" => "false", "hidden" => "false"]], ["name" => "Calendar", "category" => "collaboration", "options" => ["autostart" => "false", "hidden" => "false"]], ["name" => "Chat", "category" => "collaboration", "options" => ["autostart" => "true", "hidden" => "true"]], ["name" => "FileManager", "category" => "office", "options" => ["autostart" => "false", "hidden" => "false"]], ["name" => "Mail", "category" => "collaboration", "options" => ["autostart" => "true", "hidden" => "true"]], ["name" => "MailAdmin", "category" => "utilities", "options" => ["autostart" => "false", "hidden" => "false"]], ["name" => "MyTodo", "category" => "null", "options" => ["autostart" => "false", "hidden" => "true"]], ["name" => "Textpad", "category" => "office", "options" => ["autostart" => "false", "hidden" => "false"]]])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/register', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('appregister');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -85,7 +85,7 @@ class AppRegisterContollerTest extends ControllerTest
     {
         $data = ['app_name' => 'Admin'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/org/b0971de7-0387-48ea-8f29-5d3704d96a46/addtoappregistry', 'POST', $data);
+        $this->dispatch('/app/account/b0971de7-0387-48ea-8f29-5d3704d96a46/addtoappregistry', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(AppRegisterController::class);
@@ -101,7 +101,7 @@ class AppRegisterContollerTest extends ControllerTest
     {
         $data = ['app_name' => 'SampleApp'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/org/' . $this->testOrgUuid . '/addtoappregistry', 'POST', $data);
+        $this->dispatch('/app/account/' . $this->testAccountUuid . '/addtoappregistry', 'POST', $data);
         $this->assertResponseStatusCode(409);
         $this->assertModuleName('App');
         $this->assertControllerName(AppRegisterController::class);

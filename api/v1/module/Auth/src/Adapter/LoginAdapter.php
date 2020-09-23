@@ -48,9 +48,9 @@ class LoginAdapter extends CredentialTreatmentAdapter
         $dbSelect = clone $this->getDbSelect();
         $dbSelect->from($this->tableName)
             ->columns(['*', $credentialExpression])
-            ->join('ox_organization','ox_organization.id = ox_user.orgid')
+            ->join('ox_account','ox_account.id = ox_user.account_id')
             ->where(new SqlOp($this->identityColumn, '=', $this->identity))
-            ->where(new SqlOP('ox_organization.status','=','Active'))
+            ->where(new SqlOP('ox_account.status','=','Active'))
             ->where(new SqlOP('ox_user.status','=','Active'));
         return $dbSelect;
     }

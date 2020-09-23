@@ -10,6 +10,7 @@ use Oxzion\Model\Account;
 use Oxzion\Model\AccountTable;
 use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
+use Oxzion\OxServiceException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\EntityService;
@@ -75,7 +76,7 @@ class AccountService extends AbstractService
     {
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         if (!isset($data['contact'])) {
-            throw new ServiceException("Contact Person details are required", "org.contact.required");
+            throw new ServiceException("Contact Person details are required", "account.contact.required", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
         }
         if (is_string($data['contact'])) {
             $data['contact'] = json_decode($data['contact'], true);
@@ -107,10 +108,10 @@ class AccountService extends AbstractService
                         $count = $this->updateAccount($result[0]['uuid'], $data, $files);
                         $this->uploadAccountLogo($result[0]['uuid'], $files);
                     } else {
-                        throw new ServiceException("Account already exists would you like to reactivate?", "org.already.exists");
+                        throw new ServiceException("Account already exists would you like to reactivate?", "account.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                     }
                 } else {
-                    throw new ServiceException("Account already exists", "org.exists");
+                    throw new ServiceException("Account already exists", "account.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                 }
             }else{
                 if (!isset($data['type']) || (isset($data['type']) && $data['type'] == Account::BUSINESS)) {
@@ -135,7 +136,7 @@ class AccountService extends AbstractService
         //     throw new ServiceException("Business Role not specified", "business.role.required");
         // }
         if(!isset($data['type'])){
-            throw new ServiceException("Business Type not specified", "business.type.required");
+            throw new ServiceException("Business Type not specified", "business.type.required", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
         }
         if (!ArrayUtils::isKeyDefined($data, 'username')) {
             $data['username'] = $data['email'];
@@ -280,7 +281,7 @@ class AccountService extends AbstractService
         $this->logger->info("Data modified before Account Create - " . print_r($form, true));
         $count = $this->table->save($form);
         if ($count == 0) {
-            throw new ServiceException("Failed to create new Account", "failed.create.org");
+            throw new ServiceException("Failed to create new Account", "failed.create.account", OxServiceException::ERR_CODE_UNPROCESSABLE_ENTITY);
         }
         $form->id = $this->table->getLastInsertValue();
         $data['preferences'] = json_decode($data['preferences'], true);
@@ -299,7 +300,7 @@ class AccountService extends AbstractService
             $update = "UPDATE `ox_account` SET `contactid` = '" . $userId . "' where uuid = '" . $data['uuid'] . "'";
             $resultSet = $this->executeQueryWithParams($update);
         } else {
-            throw new ServiceException("Failed to create new Account", "failed.create.org");
+            throw new ServiceException("Failed to create new Account", "failed.create.account", OxServiceException::ERR_CODE_UNPROCESSABLE_ENTITY);
         }
         $insert = "INSERT INTO ox_app_registry (`account_id`,`app_id`,`date_created`,`start_options`) SELECT " . $form->id . ",id,CURRENT_TIMESTAMP(),start_options from ox_app where isdefault = 1";
         $resultSet = $this->executeQueryWithParams($insert);
@@ -351,20 +352,15 @@ class AccountService extends AbstractService
                 $result = $this->updateAccount($accountData['uuid'], $accountData, null);
                 $create = false;
             } catch (ServiceException $e) {
-                if ($e->getMessageCode() != 'org.not.found') {
+                if ($e->getMessageCode() != 'account.not.found') {
                     throw $e;
                 }
             }
         }
-        try {
-            if ($create) {
-                $result = $this->createAccount($accountData, null);
-            }
-        } catch (ServiceException $e) {
-            if ($e->getMessageCode() != 'could.not.create.org') {
-                throw $e;
-            }
+        if ($create) {
+            $result = $this->createAccount($accountData, null);
         }
+    
 
         return $result;
     }
@@ -380,7 +376,7 @@ class AccountService extends AbstractService
     {
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            throw new ServiceException("Entity not found for UUID", "org.not.found");
+            throw new ServiceException("Entity not found for UUID", "account.not.found");
         }
         if (isset($data['contactid'])) {
             $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
@@ -388,7 +384,7 @@ class AccountService extends AbstractService
         if (isset($data['preferences']) && (!is_string($data['preferences']))) {
             $data['preferences'] = json_encode($data['preferences']);
         }
-        $org = $obj->toArray();
+        
         $form = new Account();
         $changedArray = array_merge($obj->toArray(), $data);
         if (isset($changedArray['organization_id'])) {
@@ -516,6 +512,16 @@ class AccountService extends AbstractService
         return $response[0];
     }
 
+    private function getAccountContactPersonDetails($id)
+    {
+        $query = "SELECT ou.uuid from `ox_user` as ou 
+                        inner join ox_account a on a.contactid = ou.id 
+                        where a.uuid = :accountId";
+        $params = ['accountId' => $id];
+        $userData = $this->executeQueryWithBindParameters($query, $params)->toArray();
+        return $userData[0]['uuid'];
+    }
+
     /**
      * GET Account Service
      * @method getAccounts
@@ -556,7 +562,7 @@ class AccountService extends AbstractService
         $query = $select . " " . $from . " " . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         for ($x = 0; $x < sizeof($resultSet); $x++) {
-            $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
+            $resultSet[$x]['contactid'] = $this->getAccountContactPersonDetails($resultSet[$x]['uuid']);
         }
         
         return array('data' => $resultSet, 'total' => $count[0]['count(og.id)']);
@@ -566,19 +572,19 @@ class AccountService extends AbstractService
     {
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            return 0;
+            throw new EntityNotFoundException("Entity Not Found");
         }
-        if (!isset($data['userid']) || empty($data['userid'])) {
-            return 2;
+        if (!isset($data['userIdList']) || empty($data['userIdList'])) {
+            throw new EntityNotFoundException("Users not selected");
         }
         $accountId = $obj->id;
-        $userArray = $this->userService->getUserIdList($data['userid']);
+        $userArray = $this->userService->getUserIdList($data['userIdList']);
         if ($userArray) {
             $userSingleArray = array_unique(array_map('current', $userArray));
             $querystring = "SELECT u.username FROM ox_account_user as ouo
             inner join ox_user as u on u.id = ouo.user_id
             inner join ox_account as account on ouo.account_id = account.id and account.id =" . $accountId . "
-            where ouo.account_id =" . $accountId . " and ouo.user_id not in (" . implode(',', $userSingleArray) . ") and ouo.user_id != org.contactid";
+            where ouo.account_id =" . $accountId . " and ouo.user_id not in (" . implode(',', $userSingleArray) . ") and ouo.user_id != account.contactid";
             $deletedUser = $this->executeQuerywithParams($querystring)->toArray();
             $query = "SELECT ou.username from ox_user as ou 
                         LEFT OUTER JOIN ox_account_user as our on our.user_id = ou.id 
@@ -596,24 +602,34 @@ class AccountService extends AbstractService
                 inner join ox_user as u on u.id = ouo.user_id
                 inner join ox_account as account on ouo.account_id = account.id and account.id =" . $accountId . "
                 where ouo.account_id =" . $accountId . " and ouo.user_id not in (" . implode(',', $userSingleArray) . ") and ouo.user_id != account.contactid";
-                $userId = $this->executeQuerywithParams($select)->toArray();
-                $query = "DELETE ouo FROM ox_account_user as ouo
-                inner join ox_user as u on u.id = ouo.user_id
+                $accountUserId = $this->executeQuerywithParams($select)->toArray();
+                $subQuery = "inner join ox_user as u on u.id = ouo.user_id
                 inner join ox_account as account on ouo.account_id = account.id and account.id =" . $accountId . "
                 where ouo.account_id =" . $accountId . " and ouo.user_id not in (" . implode(',', $userSingleArray) . ") and ouo.user_id != account.contactid";
+                $query = "DELETE ur FROM ox_user_role ur INNER JOIN ox_account_user as ouo on ur.account_user_id = ouo.id $subQuery";
+                $resultSet = $this->executeQuerywithParams($query);
+                $query = "DELETE ouo FROM ox_account_user as ouo $subQuery"; 
                 $resultSet = $this->executeQuerywithParams($query);
                 $insert = "INSERT INTO ox_account_user (user_id,account_id,`default`)
-                SELECT ou.id," . $accountId . ",case when (ou.accountid is NULL)
+                SELECT ou.id," . $accountId . ",case when (ou.account_id is NULL)
                 then 1
                 end
-                from ox_user as ou LEFT OUTER JOIN ox_account_user as our on our.user_id = ou.id AND our.account_id = ou.account_id and our.account_id =" . $accountId . "
+                from ox_user as ou 
+                LEFT OUTER JOIN ox_account_user as our on our.user_id = ou.id AND our.account_id = ou.account_id and our.account_id =" . $accountId . "
                 WHERE ou.id in (" . implode(',', $userSingleArray) . ") AND our.account_id is Null AND ou.id not in (select user_id from  ox_account_user where user_id in (" . implode(',', $userSingleArray) . ") and account_id =" . $accountId . ")";
+                $resultSet = $this->executeQuerywithParams($insert);
+                //handle user_role update using default role
+                $insert = "INSERT INTO ox_user_role (account_user_id, role_id)
+                SELECT our.id, r.id
+                from ox_role as r 
+                INNER JOIN (SELECT au.id, au.account_id FROM ox_account_user au inner join ox_user ou on ou.id = au.user_id where au.account_id = $accountId and ou.username in ('".implode("','", array_unique(array_map('current', $insertedUser)))."') ) as our on our.account_id = r.account_id
+                WHERE r.account_id =" . $accountId . " AND r.default_role = 1";
                 $resultSet = $this->executeQuerywithParams($insert);
                 $update = "UPDATE ox_user SET account_id = $accountId WHERE id in (" . implode(',', $userSingleArray) . ") AND account_id is NULL";
                 $resultSet = $this->executeQuerywithParams($update);
-                if (count($userId) > 0) {
-                    $userIdArray = array_unique(array_map('current', $userId));
-                    $update = "UPDATE ox_user SET account_id = NULL WHERE id in (" . implode(',', $userIdArray) . ")";
+                if (count($accountUserId) > 0) {
+                    $accountUserIdArray = array_unique(array_map('current', $accountUserId));
+                    $update = "UPDATE ox_user SET account_id = NULL WHERE id in (" . implode(',', $accountUserIdArray) . ")";
                     $resultSet = $this->executeQuerywithParams($update);
                 }
                 $this->commit();
@@ -622,20 +638,20 @@ class AccountService extends AbstractService
                 throw $e;
             }
             foreach ($deletedUser as $key => $value) {
-                $this->messageProducer->sendTopic(json_encode(array('accountName' => $obj->name, 'status' => 'Active', 'username' => $value["username"])), 'USERTOACCOUNT_DELETED');
+                $this->messageProducer->sendTopic(json_encode(array('accountName' => $obj->name, 'username' => $value["username"])), 'USERTOACCOUNT_DELETED');
             }
             foreach ($insertedUser as $key => $value) {
                 $this->messageProducer->sendTopic(json_encode(array('accountName' => $obj->name, 'status' => 'Active', 'username' => $value["username"])), 'USERTOACCOUNT_ADDED');
             }
-            return 1;
+        }else{
+            throw new EntityNotFoundException("Entity Not Found");
         }
-        return 0;
     }
 
     public function getAccountUserList($id, $filterParams = null, $baseUrl = '')
     {
         if (!isset($id)) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
 
         $pageSize = 20;
@@ -665,11 +681,12 @@ class AccountService extends AbstractService
             $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
 
-        $where .= strlen($where) > 0 ? " AND " : "WHERE "; 
+        $where .= strlen($where) > 0 ? " AND " : " WHERE "; 
         $where .= "ox_account.uuid = '" . $id . "' AND ox_user.status = 'Active'";
 
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
+        $this->logger->info("Executing query $cntQuery$where");
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
         $count = $resultSet->toArray();
         $query = $query . " " . $from . " " . $where . " " . $sort . " " . $limit;
@@ -699,9 +716,11 @@ class AccountService extends AbstractService
         $sort = "name";
 
         $select = "SELECT DISTINCT ox_user.uuid,ox_user.name ";
-        $from = " from ox_user inner join ox_user_role as our on ox_user.id = our.user_id 
+        $from = " from ox_user 
+                  inner join ox_account_user as oug on ox_user.id = oug.user_id 
+                  inner join ox_user_role as our on oug.id = our.account_user_id 
                   inner join ox_role as oro on our.role_id = oro.id 
-                  inner join ox_account_user as oug on oro.account_id = oug.account_id";
+                  ";
 
         $cntQuery = "SELECT count(DISTINCT ox_user.uuid)" . $from;
 
@@ -716,8 +735,8 @@ class AccountService extends AbstractService
         }
 
         $accountId = $this->getAccountIdByUuid($accountId);
-        $where .= strlen($where) > 0 ? " AND " : "WHERE ";
-        $where .= "oro.account_id =" . $accountId . " and oro.name = 'ADMIN'";
+        $where .= strlen($where) > 0 ? " AND " : " WHERE ";
+        $where .= "oug.account_id =" . $accountId . " and oro.name = 'ADMIN'";
 
 
         $sort = " ORDER BY " . $sort;
@@ -733,7 +752,7 @@ class AccountService extends AbstractService
     public function getAccountGroupsList($id, $filterParams = null)
     {
         if (!isset($id)) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
 
         $pageSize = 20;
@@ -760,9 +779,9 @@ class AccountService extends AbstractService
         }
         $accountId = $this->getAccountIdByUuid($id);
         if (!$accountId) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
-        $where .= strlen($where) > 0 ? " AND " : "WHERE ";
+        $where .= strlen($where) > 0 ? " AND " : " WHERE ";
         $where .= "oxg.account_id =" . $accountId . " and oxg.status = 'Active'";
 
         $sort = " ORDER BY " . $sort;
@@ -782,7 +801,7 @@ class AccountService extends AbstractService
     {
 
         if (!isset($id)) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
 
         $pageSize = 20;
@@ -808,7 +827,7 @@ class AccountService extends AbstractService
         }
         $accountId = $this->getAccountIdByUuid($id);
         if (!$accountId) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
         $where .= strlen($where) > 0 ? " AND oxp.account_id =" . $accountId . " and oxp.isdeleted != 1" : " WHERE oxp.account_id =" . $accountId . " and oxp.isdeleted != 1 and oxp.parent_id IS NULL";
 
@@ -829,7 +848,7 @@ class AccountService extends AbstractService
     {
 
         if (!isset($id)) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
 
         $pageSize = 20;
@@ -855,10 +874,10 @@ class AccountService extends AbstractService
         }
         $accountId = $this->getAccountIdByUuid($id);
         if (!$accountId) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
 
-        $where .= strlen($where) > 0 ? " AND " : "WHERE ";
+        $where .= strlen($where) > 0 ? " AND " : " WHERE ";
         $where .= "oxa.account_id =" . $accountId . " and oxa.status = 1";
 
         $sort = " ORDER BY " . $sort;
@@ -893,7 +912,7 @@ class AccountService extends AbstractService
     public function getAccountRolesList($id, $filterParams = null)
     {
         if (!isset($id)) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
 
         $pageSize = 20;
@@ -919,10 +938,10 @@ class AccountService extends AbstractService
 
         $accountId = $this->getAccountIdByUuid($id);
         if (!$accountId) {
-            return 0;
+            throw new EntityNotFoundException("Invalid Account");
         }
 
-        $where .= strlen($where) > 0 ? " AND " : "WHERE ";
+        $where .= strlen($where) > 0 ? " AND " : " WHERE ";
         $where .= "oxr.account_id =" . $accountId;
 
         $sort = " ORDER BY " . $sort;

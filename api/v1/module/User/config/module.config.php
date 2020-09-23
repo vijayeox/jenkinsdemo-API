@@ -10,15 +10,15 @@ return [
             'user' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]user[/:userId][/:type]',
+                    'route' => '/[account/:accountId/]user[/:userId][/:type]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => ['MANAGE_USER_WRITE', 'MANAGE_ORGANIZATION_WRITE', 'MANAGE_GROUP_WRITE'],
-                            'post' => ['MANAGE_USER_WRITE', 'MANAGE_ORGANIZATION_WRITE', 'MANAGE_GROUP_WRITE'],
-                            'delete' => ['MANAGE_USER_WRITE', 'MANAGE_ORGANIZATION_WRITE', 'MANAGE_GROUP_WRITE'],
-                            'get' => ['MANAGE_USER_READ', 'MANAGE_ORGANIZATION_READ', 'MANAGE_GROUP_READ'],
+                            'put' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
+                            'post' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
+                            'delete' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
+                            'get' => ['MANAGE_USER_READ', 'MANAGE_ACCOUNT_READ', 'MANAGE_GROUP_READ'],
                         ],
                     ],
                 ],
@@ -188,7 +188,7 @@ return [
             'usersList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]users/list',
+                    'route' => '/[account/:accountId/]users/list',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
@@ -273,7 +273,7 @@ return [
             'getUserDetailList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/organization/:orgId/user/:userId/profile',
+                    'route' => '/account/:accountId/user/:userId/profile',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',

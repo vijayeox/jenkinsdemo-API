@@ -14,7 +14,7 @@ class Employee extends Entity
         'about' => null,
         'interest' => null,
         'hobbies' => null,
-        'managerid' => null,
+        'manager_id' => null,
         'selfcontribute' => null,
         'contribute_percent' => null,
         'eid' => null,
@@ -22,8 +22,7 @@ class Employee extends Entity
         'created_by' => null,
         'modified_by' => null,
         'date_created' => null,
-        'user_profile_id' => null,
-        'org_profile_id' => null,        
+        'person_id' => null,
         'date_of_join' => null,
     );
 

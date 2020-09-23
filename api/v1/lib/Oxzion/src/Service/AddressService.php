@@ -23,15 +23,14 @@ class AddressService extends AbstractService
 
     public function addAddress($data)
     {
-        $this->logger->info("Create new Address for the Organization - " . print_r($data, true));
+        $this->logger->info("Create new Address - " . print_r($data, true));
         $form = new Address($data);
         $form->validate();
-        $this->beginTransaction();
         $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count == 0) {
-                $this->rollback();
                 throw new ServiceException("Failed to add the address", "failed.add.address");
             }
             $this->commit();
@@ -52,10 +51,10 @@ class AddressService extends AbstractService
         $form = new Address();
         $changedArray = array_merge($obj->toArray(), $data);
         $form->exchangeArray($changedArray);
-        $this->beginTransaction();
-        $count = 0;
+        $form->validate();
         try {
-            $count = $this->table->save($form);
+            $this->beginTransaction();
+            $this->table->save($form);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -63,15 +62,17 @@ class AddressService extends AbstractService
         }
     }
 
-    public function getOrganizationAddress($uuid)
+    public function getOrganizationAddress($accountId)
     {
         $select = "SELECT oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.id,oa.zip
-                    from ox_organization as og join ox_organization_profile as oxop on oxop.id=og.org_profile_id join ox_address 
-                    as oa on oxop.address_id = oa.id  where og.uuid = :orgId";
-        $params = array("orgId"=> $uuid);
+                    from ox_account as acct 
+                    join ox_organization as org on org.id=acct.organization_id 
+                    join ox_address 
+                    as oa on org.address_id = oa.id  
+                    where acct.uuid = :accountId";
+        $params = array("accountId"=> $accountId);
         $this->logger->info("Executing Query $select with params - ".print_r($params, true));
         $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
         return count($result) > 0 ? $result[0] : array() ;
     }
-
 }

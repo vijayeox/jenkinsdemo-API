@@ -11,16 +11,16 @@ class ArtifactUtils
     public static function getTemplatePath($config, $template, $params = array())
     {
         $templateDir = $config['TEMPLATE_FOLDER']; 
-        $orgUuid = isset($params['orgUuid']) ? $params['orgUuid'] : (isset($params['orgId']) ? $params['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-        self::$logger->info("Org Uuid - $orgUuid");
-        if (isset($orgUuid)) {
-            $path = $orgUuid."/".$template;
+        $accountId = isset($params['accountId']) ? $params['accountId'] : (isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID));
+        self::$logger->info("accountId - $accountId");
+        if (isset($accountId)) {
+            $path = $accountId."/".$template;
         } else {
             $path = $template;
         }
         self::$logger->info("Path - $path, template directory - $templateDir,template - $template");
         if (is_file($templateDir.$path)) {
-            return $templateDir.$orgUuid;
+            return $templateDir.$accountId;
         }else if (is_file($templateDir.$template)) {
             return $templateDir;
         }
@@ -29,9 +29,9 @@ class ArtifactUtils
 
     public static function getDocumentFilePath($templateDir,$fileUuid,$params = array())
     { 
-        $orgUuid = isset($params['orgUuid']) ? $params['orgUuid'] : AuthContext::get(AuthConstants::ORG_UUID);        
-        if (isset($orgUuid)) {
-            $path = $orgUuid."/".$fileUuid."/";
+        $accountId = isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID);        
+        if (isset($accountId)) {
+            $path = $accountId."/".$fileUuid."/";
         }else{
             $path = $fileUuid."/";
         }

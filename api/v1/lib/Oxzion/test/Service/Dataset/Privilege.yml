@@ -6,17 +6,17 @@ ox_app:
     category: "EXAMPLE_CATEGORY"
     type: 2
     status: 1
-ox_organization_profile:
+ox_organization:
 -
     id: 120
-ox_organization:
+ox_account:
 -   id: 120
     name: "dummyOrg"
     status: "active"
-    org_profile_id: 120
+    organization_id: 120
 ox_app_registry:
 -
-    org_id: 120
+    account_id: 120
     app_id: 240
 ox_privilege:
 -
@@ -48,7 +48,7 @@ ox_role_privilege:
     app_id: 240
 ox_role:
 -   id: 30
-    org_id: 120
+    account_id: 120
     name: "ADMIN"
     uuid: "99d91b61-ff95-11e9-be5f-485f99be1ba7"
     default_role: 0

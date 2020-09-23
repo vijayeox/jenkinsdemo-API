@@ -164,13 +164,12 @@ class WorkflowInstanceService extends AbstractService
     public function getWorkflowInstance($id)
     {
         try {
-            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id 
+            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.account_id,ow.uuid as workflow_id 
                         from ox_workflow_instance as oxi
                         join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
                          join ox_workflow as ow on wd.workflow_id = ow.id
-                         where oxi.org_id=? and oxi.process_instance_id=?";
-            // $query = "SELECT * from ox_workflow_instance where org_id=? and process_instance_id=?";
-            $queryParams = array(AuthContext::get(AuthConstants::ORG_ID), $id);
+                         where oxi.account_id=? and oxi.process_instance_id=?";
+            $queryParams = array(AuthContext::get(AuthConstants::ACCOUNT_ID), $id);
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             $this->logger->info("WorkflowInstance ----------" . print_r($resultSet, true));
             return $resultSet;
@@ -186,8 +185,8 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['workflowId'])) {
             throw new EntityNotFoundException("No workflow or workflow instance id provided");
         }
-        if (!isset($params['orgId'])) {
-            $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
+        if (!isset($params['accountId'])) {
+            $params['accountId'] = AuthContext::get(AuthConstants::ACCOUNT_UUID);
         }
         $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $workflowId = $params['workflowId'];
@@ -304,7 +303,7 @@ class WorkflowInstanceService extends AbstractService
             $fields[] = 'app_id';
             $fields[] = 'workflowId';
             $fields[] = 'workflow_id';
-            $fields[] = 'orgId';
+            $fields[] = 'accountId';
             $fields[] = 'fileId';
             $fields[] = 'uuid';
             $fields[] = 'workflowInstanceId';
@@ -358,8 +357,8 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['activityInstanceId'])) {
             throw new InvalidParameterException("Activity instance id required");
         }
-        if (!isset($params['orgId'])) {
-            $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
+        if (!isset($params['accountId'])) {
+            $params['accountId'] = AuthContext::get(AuthConstants::ACCOUNT_UUID);
         }
 
         // SADHITHA CHANGE CREATED BY TO SUBMITTED BY
@@ -479,18 +478,18 @@ class WorkflowInstanceService extends AbstractService
         else {
             throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed");
         }
-        $orgId = $this->entityService->getEntityOfferingOrganization($entityId);
-        if (!$orgId && isset($params['orgId'])) {
-            if ($org = $this->getIdFromUuid('ox_organization', $params['orgId'])) {
-                $orgId = $org;
+        $accountId = $this->entityService->getEntityOfferingAccount($entityId);
+        if (!$accountId && isset($params['accountId'])) {
+            if ($account = $this->getIdFromUuid('ox_account', $params['accountId'])) {
+                $accountId = $account;
             } else {
-                $orgId = $params['orgId'];
+                $accountId = $params['accountId'];
             }
         } 
-        if(!$orgId){
-            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        if(!$accountId){
+            $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
-        $this->logger->info("SET UP Workflow Instance (OrgID) --- " . $orgId);
+        $this->logger->info("SET UP Workflow Instance (accountID) --- " . $accountId);
         if (isset($params['created_by'])) {
             if ($userId = $this->getIdFromUuid('ox_user', $params['created_by'])) {
                 $createdBy = $userId;
@@ -526,7 +525,7 @@ class WorkflowInstanceService extends AbstractService
         $dateCreated = date('Y-m-d H:i:s');
 
         if (count($workflowResultSet)) {
-            $data = array('workflow_deployment_id' => $workflowResultSet[0]['id'], 'app_id' => $workflowResultSet[0]['app_id'], 'org_id' => $orgId, 'process_instance_id' => $processInstanceId, 'status' => "In Progress", 'date_created' => $dateCreated, 'created_by' => $createdBy, 'entity_id' => $entityId);
+            $data = array('workflow_deployment_id' => $workflowResultSet[0]['id'], 'app_id' => $workflowResultSet[0]['app_id'], 'account_id' => $accountId, 'process_instance_id' => $processInstanceId, 'status' => "In Progress", 'date_created' => $dateCreated, 'created_by' => $createdBy, 'entity_id' => $entityId);
             if (isset($params['parentWorkflowInstanceId'])) {
                 $resultParentWorkflow = $this->getIdFromProcessInstanceId($params['parentWorkflowInstanceId']);
                 if (count($resultParentWorkflow) > 0) {

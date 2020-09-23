@@ -25,8 +25,8 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->loadConfig();
         parent::setUp();
         $this->workflowInstanceService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
-        AuthContext::put(AuthConstants::ORG_ID, 1);
-        AuthContext::put(AuthConstants::ORG_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
         AuthContext::put(AuthConstants::USER_ID, 1);
         if (enableCamunda == 1) {
             $workflowFactory = WorkflowFactory::getInstance();
@@ -63,11 +63,11 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
 	private function performAsserts($params){
-        $orgId = 1;
-        if(isset($params['orgId'])){
-            $sqlQuery = "SELECT id from ox_organization where uuid = '".$params['orgId']."'";
+        $accountId = 1;
+        if(isset($params['accountId'])){
+            $sqlQuery = "SELECT id from ox_account where uuid = '".$params['accountId']."'";
             $queryResult = $this->runQuery($sqlQuery);    
-            $orgId = $queryResult[0]['id'];
+            $accountId = $queryResult[0]['id'];
         }
         $sqlQuery = "SELECT * FROM ox_workflow_instance where process_instance_id = '".$this->processId."'";
         $queryResult = $this->runQuery($sqlQuery);
@@ -75,7 +75,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $sqlQuery = "SELECT * FROM ox_file where id = ".$queryResult[0]['file_id'];
         $fileResult = $this->runQuery($sqlQuery);
         $this->assertEquals(1, count($fileResult));
-        $this->assertEquals($orgId, $queryResult[0]['org_id']);
+        $this->assertEquals($accountId, $queryResult[0]['account_id']);
         $this->assertEquals(99, $queryResult[0]['app_id']);
         $this->assertEquals('In Progress', $queryResult[0]['status']);
         $this->assertEquals(AuthContext::get(AuthConstants::USER_ID), $queryResult[0]['created_by']);
@@ -88,7 +88,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
                 case 'app_id':
                 case 'entity_id':
                 case 'uuid':
-                case 'orgId':
+                case 'accountId':
                 case 'created_by':
                 case 'parentWorkflowInstanceId':
                 case 'type':
@@ -119,23 +119,23 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         
         $this->performAsserts($params);
 
-        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.orgid as org_id FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
+        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.account_id FROM ox_user u inner join ox_person up on up.id = u.person_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $orgId = $newQueryResult[0]['org_id'];
-        $sqlQuery = 'SELECT * FROM ox_organization where id = '.$orgId;
-        $orgResult = $this->runQuery($sqlQuery);
-        $sqlQuery = 'SELECT br.* FROM ox_org_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.org_id = '.$orgId;
+        $accountId = $newQueryResult[0]['account_id'];
+        $sqlQuery = 'SELECT * FROM ox_account where id = '.$accountId;
+        $acctResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT br.* FROM ox_account_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.account_id = '.$accountId;
         $bussRoleResult = $this->runQuery($sqlQuery);
         
         $this->assertEquals('brian',$newQueryResult[0]['firstname']);
         $this->assertEquals('test',$newQueryResult[0]['lastname']);
         $this->assertEquals('brian@gmail.com',$newQueryResult[0]['email']);
-        $this->assertEquals($newQueryResult[0]['firstname']." ".$newQueryResult[0]['lastname'], $orgResult[0]['name']);
-        $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
-        $this->assertEquals($params['type'], $orgResult[0]['type']);
+        $this->assertEquals($newQueryResult[0]['firstname']." ".$newQueryResult[0]['lastname'], $acctResult[0]['name']);
+        $this->assertEquals($newQueryResult[0]['id'], $acctResult[0]['contactid']);
+        $this->assertEquals($params['type'], $acctResult[0]['type']);
         $this->assertEquals($params['businessRole'], $bussRoleResult[0]['name']);
         $sqlQuery = "SELECT ar.* from ox_app_registry ar inner join ox_app a on a.id = ar.app_id 
-                        where a.uuid = '".$params['app_id']."' AND org_id = $orgId";
+                        where a.uuid = '".$params['app_id']."' AND account_id = $accountId";
 
         $result = $this->runQuery($sqlQuery);
         $this->assertEquals(1, count($result));
@@ -143,8 +143,8 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     }
 
     public function testStartWorkflowSetupIdentityFieldAsPolicyHolder() {
-        AuthContext::put(AuthConstants::ORG_ID, 100);
-        AuthContext::put(AuthConstants::ORG_UUID, 'fa371de7-0387-48ea-8f29-5d3704d96ac5');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 100);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, 'fa371de7-0387-48ea-8f29-5d3704d96ac5');
         AuthContext::put(AuthConstants::USER_ID, 100);
         $params = array('app_id' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4' ,'identifier_field' =>'id_field','id_field' => '2020', 'email' => 'brian@gmail.com', 'address1' => 'addr1', 'type' => 'INDIVIDUAL', "businessRole" => "Policy Holder",
           'address2' => "", 'city' => 'city', 'state' => 'state', 'country' => 'country', 'zip' => 2323 , 'firstname' => 'brian', 'lastname' => 'test');
@@ -154,23 +154,23 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
 
-        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.orgid as org_id FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
+        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.account_id FROM ox_user u inner join ox_person up on up.id = u.person_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
-        $orgId = $newQueryResult[0]['org_id'];
-        $sqlQuery = 'SELECT * FROM ox_organization where id = '.$orgId;
-        $orgResult = $this->runQuery($sqlQuery);
-        $sqlQuery = 'SELECT br.* FROM ox_org_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.org_id = '.$orgId;
+        $accountId = $newQueryResult[0]['account_id'];
+        $sqlQuery = 'SELECT * FROM ox_account where id = '.$accountId;
+        $acctResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT br.* FROM ox_account_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.account_id = '.$accountId;
         $bussRoleResult = $this->runQuery($sqlQuery);
         
         $this->assertEquals('brian',$newQueryResult[0]['firstname']);
         $this->assertEquals('test',$newQueryResult[0]['lastname']);
         $this->assertEquals('brian@gmail.com',$newQueryResult[0]['email']);
-        $this->assertEquals($newQueryResult[0]['firstname']." ".$newQueryResult[0]['lastname'], $orgResult[0]['name']);
-        $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
-        $this->assertEquals($params['type'], $orgResult[0]['type']);
+        $this->assertEquals($newQueryResult[0]['firstname']." ".$newQueryResult[0]['lastname'], $acctResult[0]['name']);
+        $this->assertEquals($newQueryResult[0]['id'], $acctResult[0]['contactid']);
+        $this->assertEquals($params['type'], $acctResult[0]['type']);
         $this->assertEquals($params['businessRole'], $bussRoleResult[0]['name']);
         $sqlQuery = "SELECT ar.* from ox_app_registry ar inner join ox_app a on a.id = ar.app_id 
-                        where a.uuid = '".$params['app_id']."' AND org_id = $orgId";
+                        where a.uuid = '".$params['app_id']."' AND account_id = $accountId";
 
         $result = $this->runQuery($sqlQuery);
         $this->assertEquals(1, count($result));
@@ -226,15 +226,15 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowWithOrgId(){
-        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'orgId' => 'b0971de7-0387-48ea-8f29-5d3704d96a46');
+    public function testStartWorkflowWithAccountId(){
+        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'accountId' => 'b0971de7-0387-48ea-8f29-5d3704d96a46');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
 
     }
 
-    public function testStartWorkflowWithoutOrgId(){
+    public function testStartWorkflowWithoutAccountId(){
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         $processId = '8ddf83c0-4971-4bac-9bf7-49264db1172e';
         if (enableCamunda == 0) {

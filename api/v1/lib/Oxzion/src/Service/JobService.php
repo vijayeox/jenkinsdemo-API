@@ -39,7 +39,7 @@ class JobService extends AbstractService
 
     // job name is file ID 
     // send appId in the parameter as Uuid
-    public function scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $orgId = null)
+    public function scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId = null)
     {
         $this->logger->info('EXECUTING SCHEDULE NEW JOB');
         try{
@@ -55,10 +55,10 @@ class JobService extends AbstractService
             if($appNewId != 0){
                 $appId = $appNewId;
             }
-            if(!(isset($orgId))){
-                $orgId = AuthContext::get(AuthConstants::ORG_ID);
-                if(!isset($orgId)){
-                    throw new ServiceException('Organization Id not found', 'org.id.not.found');               
+            if(!(isset($accountId))){
+                $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+                if(!isset($accountId)){
+                    throw new ServiceException('Account Id not found', 'org.id.not.found');               
                 }
             }
             $query = "SELECT job_id from ox_job where group_name = :groupName and name = :name and app_id = :appId";
@@ -89,7 +89,7 @@ class JobService extends AbstractService
             $form = new Job();
             $jobData['name'] = $jobName;
             $jobData['job_id'] = $response['JobId'];
-            $jobData['org_id'] = $orgId;
+            $jobData['account_id'] = $accountId;
             $jobData['app_id'] = $appId;
             $jobData['group_name'] = $jobGroup;
             $jobData['config'] = json_encode($jobPayload);
