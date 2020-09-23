@@ -1391,20 +1391,27 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $data['previous_policy_data'][$length]['previous_combinedSingleLimitDS'] = $policy['previous_combinedSingleLimitDS'];
                         $data['previous_policy_data'][$length]['previous_annualAggregateDS'] = $policy['previous_annualAggregateDS'];
                     }
-                    if($policy['previous_excessLiabilityCoverage'] == $data['excessLiabilityCoverage']){
+                    if($policy['previous_excessLiabilityCoverage'] == $data['excessLiabilityCoverage'] && $data['excessLiabilityCoveragePrimarylimit1000000PL']){
                         $temp['increased_liability_limit'] = false;
                         $temp['decreased_liability_limit'] = false;
                     } else {
                         $temp['liabilityChanges'] = true;
-                        $liabilityLimit = array();
-                        $liabilityLimit = $this->getLiabilityLimit($data,'combinedSingleLimitDS','annualAggregateDS','excessLiabilityCoverage');
-                        $data['combinedSingleLimitDS'] = $liabilityLimit['combinedSingleLimit'];
-                        $data['annualAggregateDS'] = $liabilityLimit['annualAggregate'];
-                        $excessLiabilityDiff = (int)$data['combinedSingleLimitDS'] - (int)$policy['previous_combinedSingleLimitDS'];
-                        if($excessLiabilityDiff < 0){
-                            $temp['decreased_liability_limit'] = abs($excessLiabilityDiff);
+                        if($policy['previous_excessLiabilityCoverage'] != $data['excessLiabilityCoverage'] || ($data['excessLiabilityCoveragePrimarylimit1000000PL'] && !$data['previous_storeExcessLiabilitySelect'])){
+                            $liabilityLimit = array();
+                            $liabilityLimit = $this->getLiabilityLimit($data,'combinedSingleLimitDS','annualAggregateDS','excessLiabilityCoverage');
+                            $data['combinedSingleLimitDS'] = $liabilityLimit['combinedSingleLimit'];
+                            $data['annualAggregateDS'] = $liabilityLimit['annualAggregate'];
+                            $excessLiabilityDiff = (int)$data['combinedSingleLimitDS'] - (int)$policy['previous_combinedSingleLimitDS'];
+                            if($excessLiabilityDiff < 0){
+                                $temp['decreased_liability_limit'] = abs($excessLiabilityDiff);
+                            }else{
+                                $temp['increased_liability_limit'] = $excessLiabilityDiff;
+                            }
                         }else{
-                            $temp['increased_liability_limit'] = $excessLiabilityDiff;
+                            $data['combinedSingleLimitDS'] = 1000000;
+                            $data['annualAggregateDS'] = 2000000;
+                            $excessLiabilityDiff = (int)$data['combinedSingleLimitDS'] - (int)$policy['previous_combinedSingleLimitDS'];
+                            $temp['decreased_liability_limit'] = abs($excessLiabilityDiff);
                         }
                     }  
                 }
@@ -1421,21 +1428,25 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                 }
-                if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
-                    if($policy['previous_nonOwnedAutoLiabilityPL'] == $data['nonOwnedAutoLiabilityPL']){
+                if(isset($data['doYouWantToApplyForNonOwnerAuto']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
+                    if($policy['previous_nonOwnedAutoLiabilityPL'] == $data['nonOwnedAutoLiabilityPL'] && $data['doYouWantToApplyForNonOwnerAuto']){
                         $data['increased_non_owned_liability_limit'] = false;
                     } else {
                         $temp['liabilityChanges'] = true;
-                        if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability1M'){
-                            $temp['increased_non_owned_liability_limit'] = "$1,000,000";
-                        } else if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability100K'){
-                            if($data['previous_nonOwnedAutoLiabilityPL'] == "$1,000,000"){
-                                $temp['decreased_non_owned_liability_limit'] = "$100,000";
-                            } else {
-                                $temp['increased_non_owned_liability_limit'] = "$100,000";
+                        if($policy['previous_nonOwnedAutoLiabilityPL'] != $data['nonOwnedAutoLiabilityPL'] || ($data['doYouWantToApplyForNonOwnerAuto'] && !$data['previous_doYouWantToApplyForNonOwnerAuto'])){
+                            if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability1M'){
+                                $temp['increased_non_owned_liability_limit'] = "$1,000,000";
+                            } else if($data['nonOwnedAutoLiabilityPL']=='nonOwnedAutoLiability100K'){
+                                if($data['previous_nonOwnedAutoLiabilityPL'] == "$1,000,000"){
+                                    $temp['decreased_non_owned_liability_limit'] = "$100,000";
+                                } else {
+                                    $temp['increased_non_owned_liability_limit'] = "$100,000";
+                                }
                             }
-                        } else {
-                            $temp['removed_nonOwnedAutoLiabilityPL'] = true;
+                        }else {
+                            if($data['doYouWantToApplyForNonOwnerAuto'] != $data['previous_doYouWantToApplyForNonOwnerAuto']){
+                                $temp['removed_nonOwnedAutoLiabilityPL'] = true;    
+                            }
                         }
                     }
                 }
@@ -1452,56 +1463,61 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
                 $temp['propertyChanges'] = false;
-                if(isset($data['dspropreplacementvalue']) && isset($policy['previous_dspropreplacementvalue'])){
-                    if($data['dspropreplacementvalue'] != $policy['previous_dspropreplacementvalue']){
-                        $temp['propertyChanges'] = true;
-                        if(isset($temp['increased_buildingLimit'])){
-                            unset($temp['increased_buildingLimit']);
-                        }
-                        if(isset($temp['decreased_buildingLimit'])){
-                            unset($temp['decreased_buildingLimit']);
-                        }
-                        $buildingLimit = (int)$data['dspropreplacementvalue'] - (int)$policy['previous_dspropreplacementvalue'];
-                        if($buildingLimit < 0){
-                            $temp['decreased_buildingLimit'] = abs($buildingLimit);
-                        }else{
-                            $temp['increased_buildingLimit'] = $buildingLimit;
-                        }
-                    }
-                }
-                if(isset($data['lossOfBusIncome']) && isset($policy['previous_lossOfBusIncome'])){
-                    if($data['lossOfBusIncome'] != $policy['previous_lossOfBusIncome']){
-                        $temp['propertyChanges'] = true;
-                        if(isset($temp['increased_lossOfBusIncome'])){
-                            unset($temp['increased_lossOfBusIncome']);
-                        }
-                        if(isset($temp['decreased_lossOfBusIncome'])){
-                            unset($temp['decreased_lossOfBusIncome']);
-                        }
-                        $lossOfBusIncome = (int)$data['lossOfBusIncome'] - (int)$policy['previous_lossOfBusIncome'];
-                        if($lossOfBusIncome < 0){
-                            $temp['decreased_lossOfBusIncome'] = abs($lossOfBusIncome);
-                        }else{
-                            $temp['increased_lossOfBusIncome'] = $lossOfBusIncome;
+                if($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect'] && $data['propertyCoverageSelect'] == "no"){
+                    $temp['propertyChanges'] = true;
+                    $temp['removed_property_coverage'] = true;
+                }else{
+                    if(isset($data['dspropreplacementvalue']) && isset($policy['previous_dspropreplacementvalue'])){
+                        if($data['dspropreplacementvalue'] != $policy['previous_dspropreplacementvalue']){
+                            $temp['propertyChanges'] = true;
+                            if(isset($temp['increased_buildingLimit'])){
+                                unset($temp['increased_buildingLimit']);
+                            }
+                            if(isset($temp['decreased_buildingLimit'])){
+                                unset($temp['decreased_buildingLimit']);
+                            }
+                            $buildingLimit = (int)$data['dspropreplacementvalue'] - (int)$policy['previous_dspropreplacementvalue'];
+                            if($buildingLimit < 0){
+                                $temp['decreased_buildingLimit'] = abs($buildingLimit);
+                            }else{
+                                $temp['increased_buildingLimit'] = $buildingLimit;
+                            }
                         }
                     }
-                }
-                if(isset($data['dspropTotal']) && isset($policy['previous_dspropTotal'])){
-                    if($data['dspropTotal'] != $policy['previous_dspropTotal']){
-                        $temp['propertyChanges'] = true;
-                        if(isset($temp['increased_dspropTotal'])){
-                            unset($temp['increased_dspropTotal']);
-                        }
-                        if(isset($temp['decreased_dspropTotal'])){
-                            unset($temp['decreased_dspropTotal']);
-                        }
-                        $dspropTotal = (int)$data['dspropTotal'] - (int)$policy['previous_dspropTotal'];
-                        if($dspropTotal < 0){
-                            $temp['decreased_dspropTotal'] = abs($dspropTotal);
-                        }else{
-                            $temp['increased_dspropTotal'] = $dspropTotal;
+                    if(isset($data['lossOfBusIncome']) && isset($policy['previous_lossOfBusIncome'])){
+                        if($data['lossOfBusIncome'] != $policy['previous_lossOfBusIncome']){
+                            $temp['propertyChanges'] = true;
+                            if(isset($temp['increased_lossOfBusIncome'])){
+                                unset($temp['increased_lossOfBusIncome']);
+                            }
+                            if(isset($temp['decreased_lossOfBusIncome'])){
+                                unset($temp['decreased_lossOfBusIncome']);
+                            }
+                            $lossOfBusIncome = (int)$data['lossOfBusIncome'] - (int)$policy['previous_lossOfBusIncome'];
+                            if($lossOfBusIncome < 0){
+                                $temp['decreased_lossOfBusIncome'] = abs($lossOfBusIncome);
+                            }else{
+                                $temp['increased_lossOfBusIncome'] = $lossOfBusIncome;
+                            }
                         }
                     }
+                    if(isset($data['dspropTotal']) && isset($policy['previous_dspropTotal'])){
+                        if($data['dspropTotal'] != $policy['previous_dspropTotal']){
+                            $temp['propertyChanges'] = true;
+                            if(isset($temp['increased_dspropTotal'])){
+                                unset($temp['increased_dspropTotal']);
+                            }
+                            if(isset($temp['decreased_dspropTotal'])){
+                                unset($temp['decreased_dspropTotal']);
+                            }
+                            $dspropTotal = (int)$data['dspropTotal'] - (int)$policy['previous_dspropTotal'];
+                            if($dspropTotal < 0){
+                                $temp['decreased_dspropTotal'] = abs($dspropTotal);
+                            }else{
+                                $temp['increased_dspropTotal'] = $dspropTotal;
+                            }
+                        }
+                    }    
                 }
                 //Please do not remove
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){

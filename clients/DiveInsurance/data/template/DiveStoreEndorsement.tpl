@@ -6,7 +6,7 @@
 <body>
   <div class ="body_div_endo">
       
-      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO))}
+      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO) || (isset($removed_liability_limit) && $removed_liability_limit))}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
           {if isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit}
@@ -30,6 +30,9 @@
           {if isset($decreased_liability_limit) && $decreased_liability_limit > 0 && $liabilityChanges == true}
             <p>+Liability Limits have been decreased by ${$decreased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
           {/if}
+          {if isset($removed_liability_limit) && $removed_liability_limit}
+              <p>+Liability Limits have been removed as of the Effective date of this Endorsement</p>
+          {/if}
           {if isset($increased_travelEnO) && $increased_travelEnO}
             <p>+Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
           {/if}
@@ -51,6 +54,9 @@
       <div class = "box">
           <center><b><u>***Property Changes***</u></b></center>
 
+          {if isset($removed_property_coverage) && $removed_property_coverage}
+            <p>+Property Coverages has been removed as of the Effective Date of this Endorsement</p>
+          {/if}
           {if isset($increased_dspropTotal) && $propertyChanges == true}
             <p>+Contents Limit have been increased by ${$increased_dspropTotal|number_format} as of the Effective date of this Endorsement</p>
           {/if}
@@ -215,7 +221,7 @@
       </div>
       </div>
       {/if}
-     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && isset($removedadditionalLocations) && $removedadditionalLocations != ""))}
+     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != ""))}
       <div class = "box">
         <center><b><u>***Additional Locations***</u></b></center>
         {if $newAdditionalLocations != ""}

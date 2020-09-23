@@ -13808,7 +13808,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
-						"calculateValue": "value = parseFloat(data.additionalPremium) * data.addPremiumTax;",
+						"calculateValue": "value = ((parseFloat(data[\"additionalPremium\"])||0)*(parseFloat(data[\"addPremiumTax\"])||0)/100);",
 						"key": "totalAddPremium",
 						"type": "number",
 						"input": true,
@@ -13875,7 +13875,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['product'] == 'Group Professional Liability') {\n  value = ((parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0 )).toFixed(2);  \n} else {\n  value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.additionalPremium) || 0 )) ).toFixed(2);  \n}",
+						"calculateValue": "if(data['product'] == 'Group Professional Liability') {\n  value = ((parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.totalAddPremium) || 0 )).toFixed(2);  \n} else {\n  value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.totalAddPremium) || 0 )) ).toFixed(2);  \n}",
 						"key": "totalAmount",
 						"type": "number",
 						"input": true,
@@ -14399,7 +14399,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 72,
+	"_vid": 75,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14417,6 +14417,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-17T12:55:11.200Z",
+	"modified": "2020-09-23T06:38:02.451Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
