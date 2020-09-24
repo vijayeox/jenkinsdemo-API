@@ -444,7 +444,7 @@ do
                 arrowhead
                 package
                 break;;
-		appbuilder)
+	appbuilder)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 appbuilder
