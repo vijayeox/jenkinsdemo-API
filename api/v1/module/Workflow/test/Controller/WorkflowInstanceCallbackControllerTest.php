@@ -13,6 +13,7 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Workflow\WorkflowFactory;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\Utils\StringUtils;
 use Mockery;
 
 class WorkflowInstanceCallbackControllerTest extends ControllerTest
@@ -96,11 +97,12 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
         $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflowinstance/start', 'POST',$data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->assertMatchedRouteName('initiateWorkflow');
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals(StringUtils::startsWith($content['message'], 'Invalid Data'), TRUE);
     }
 
     public function testcompleteWorkflowInstanceWithoutProcessInstanceId()

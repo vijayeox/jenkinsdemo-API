@@ -1,13 +1,10 @@
 <?php
 namespace Account\Controller;
 
-use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Model\Account;
 use Oxzion\Model\AccountTable;
-use Oxzion\ServiceException;
 use Oxzion\Service\AccountService;
-use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
 

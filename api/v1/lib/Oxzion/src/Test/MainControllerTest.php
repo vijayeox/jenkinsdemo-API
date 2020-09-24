@@ -94,7 +94,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $headers->addHeaderLine('Authorization', 'Bearer ' . $token);
     }
 
-    private function getJwtToken($username)
+    protected function getJwtToken($username)
     {
         if (!isset($this->jwtToken[$username])) {
             $data = JwtHelper::getTokenPayload(['username'=>$username,'accountId' => $this->testAccountId,'accountUuid' => $this->testAccountUuid]);

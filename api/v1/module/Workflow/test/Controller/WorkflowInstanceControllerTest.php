@@ -226,7 +226,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertMatchedRouteName('workflowInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+        $this->assertEquals($content['message'], 'A Process is aleady underway for this file');
     }
 
     public function testCreateByLinkingToExistingFile()
@@ -290,7 +290,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertMatchedRouteName('workflowInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+        $this->assertEquals($content['message'], 'A Process is aleady underway for this file');
     }
 
     public function testCreateWithOngoingProcess()
@@ -318,7 +318,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertMatchedRouteName('workflowInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+        $this->assertEquals($content['message'], 'A Process is aleady underway for this file');
     }
 
 // Code commented

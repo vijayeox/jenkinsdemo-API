@@ -477,3 +477,10 @@ ox_wf_user_identifier:
 ox_app_registry:
   - account_id: 1
     app_id: 99
+ox_job:
+  - id: 1
+    account_id: 1
+    app_id: 99
+    group_name: "Job"
+    job_id: "14b5370e-a580-4b80-a17a-a13be8b47ee0"
+    name: "autoRenewalJob"

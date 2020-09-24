@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-        <!-- <testsuite name="Messaging Fixtures Fixtures">
+        <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Auth/test</directory>
         </testsuite>
         <testsuite name="Messaging Fixtures Fixtures">
@@ -10,36 +10,39 @@
         <testsuite name="Attachment Fixtures">
             <directory>./module/Attachment/test</directory>
             <directory>./module/Resource/test</directory>
-        </testsuite> -->
-        <testsuite name="Analytics Fixtures">
-            <!-- <directory>./module/Analytics/test</directory> -->
-            <!-- <directory>./module/FileIndexer/test</directory> -->
         </testsuite> 
+        <testsuite name="Analytics Fixtures">
+            <directory>./module/Analytics/test</directory>
+            <directory>./module/FileIndexer/test</directory>
+        </testsuite>
         <testsuite name="Home Page Fixtures">
-            <!-- <directory>./module/Announcement/test</directory> -->
-            <!-- <directory>./module/Project/test</directory> -->
+            <directory>./module/Announcement/test</directory>
+            <directory>./module/Project/test</directory>
         </testsuite>
         <testsuite name="Roles Fixtures">
-            <!-- <directory>./module/Role/test</directory> -->
+            <directory>./module/Role/test</directory>
         </testsuite>
         <testsuite name="App Fixtures">
-            <!-- <directory>./module/App/test/Controller/App</directory>
-            <directory>./module/App/test/Controller/AppView</directory>  -->
-            <!-- <directory>./module/App/test/Controller/Cache</directory> -->
-            <!-- <directory>./module/App/test/Controller/Delegate</directory> -->
-            <!-- <directory>./module/App/test/Controller/Document</directory> 
+            <directory>./module/App/test/Controller/App</directory>
+            <directory>./module/App/test/Controller/AppView</directory>
+            <directory>./module/App/test/Controller/Cache</directory>
+            <directory>./module/App/test/Controller/Delegate</directory>
+            <directory>./module/App/test/Controller/Document</directory> 
             <directory>./module/App/test/Controller/Entity/EntityControllerTest.php</directory>
             <directory>./module/App/test/Controller/Entity/FieldControllerTest.php</directory>
             <directory>./module/App/test/Controller/Entity/FileControllerTest.php</directory>
             <directory>./module/App/test/Controller/Entity/FormControllerTest.php</directory>
-            <directory>./module/App/test/Controller/Job</directory> -->
-            <!-- <directory>./module/App/test/Controller/Pipeline</directory> -->
-            <!-- <directory>./module/App/test/Controller/Workflow</directory>  -->
+            <directory>./module/App/test/Controller/Job</directory>
+            <directory>./module/App/test/Controller/Pipeline</directory>
+            <directory>./module/App/test/Controller/Workflow</directory> 
         </testsuite>
         <testsuite name="App Fixtures">
-            <directory>./module/Workflow/test</directory>
+            <directory>./module/Workflow/test/Controller/ActivityInstanceControllerTest.php</directory>
+            <directory>./module/Workflow/test/Controller/ServiceTaskControllerTest.php</directory>
+            <directory>./module/Workflow/test/Controller/WorkflowInstanceCallbackControllerTest.php</directory>
+            <directory>./module/Workflow/test/Controller/WorkflowInstanceControllerTest.php</directory>
         </testsuite>
-        <!-- <testsuite name="Core Fixtures">
+        <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test/AnalyticsTest</directory>
             <directory>./lib/Oxzion/test/AppDelegateServiceTest</directory>
             <directory>./lib/Oxzion/test/DocumentTest</directory> 
@@ -79,7 +82,7 @@
         </testsuite> 
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
-        </testsuite>  -->
+        </testsuite> 
     </testsuites> 
     <php>
         <ini name="memory_limit" value="500M" />

@@ -235,7 +235,8 @@ class AuthControllerTest extends ControllerTest
 
     public function testRefreshFailRefreshTokenExpired()
     {
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDA4NjEyNjIsImp0aSI6InFDckZQMjhBXC9GNkNVSUxyTWVEXC9FVHhRUEdQMW9yZERYSjRYbFdpOTArdz0iLCJuYmYiOjE2MDA4NjEyNjIsImV4cCI6MTYwMDkzMzI2MiwiZGF0YSI6eyJ1c2VybmFtZSI6ImFkbWludGVzdCIsImFjY291bnRJZCI6IjEifX0.8HvajhdxPAuRav_bbUwqWsmDwkP7uhA6uHyWuaUiko--i7mYzDR7xRDLqxIoPDnH1RMsKohosch8aqyigixUbA', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
+        $jwtToken = $this->getJwtToken($this->adminUser);
+        $data = ['jwt' => $jwtToken, 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');

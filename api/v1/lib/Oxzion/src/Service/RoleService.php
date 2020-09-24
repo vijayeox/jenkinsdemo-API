@@ -38,11 +38,11 @@ class RoleService extends AbstractService
         } else {
             $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
-        return $this->saveRoleInternal($data, $roleId, $accountId);
+        $this->saveRoleInternal($data, $roleId, $accountId);
     }
 
     public function saveTemplateRole(&$data, $roleId = null){
-        return $this->saveRoleInternal($data, $roleId);
+        $this->saveRoleInternal($data, $roleId);
     }
 
     private function saveRoleInternal(&$inputData, $roleId, $accountId = NULL){
@@ -151,21 +151,13 @@ class RoleService extends AbstractService
         $count = 0;
         try {
             $params['accountId'] = $this->getUuidFromId('ox_account', $data['account_id']);
-            $count = $this->saveRole($params, $data);
-            if ($count == 0) {
-                throw new ServiceException("Failed to create basic roles", "failed.create.basicroles");
-            }
-            $count = $this->updateDefaultRolePrivileges($data);
-            if ($count == 0) {
-                $this->rollback();
-                throw new ServiceException("Failed to create basic roles", "failed.create.basicroles");
-            }
+            $this->saveRole($params, $data);
+            $this->updateDefaultRolePrivileges($data);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function deleteRole($id, $params)
@@ -373,9 +365,7 @@ class RoleService extends AbstractService
                 unset($basicRole['id']);
                 unset($basicRole['uuid']);
                 $basicRole['account_id'] = $accountId;
-                if (!$this->createSystemRoleForAccount($basicRole)) {
-                    throw new ServiceException("Failed to create basic roles", "failed.create.basicroles");
-                }
+                $this->createSystemRoleForAccount($basicRole);
             }
             return count($basicRoles);
         } catch (Exception $e) {
@@ -385,9 +375,11 @@ class RoleService extends AbstractService
 
     protected function updateDefaultRolePrivileges($role)
     {
+        $roleId = $this->getIdFromUuid('ox_role', $role['uuid']);
         $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, account_id, app_id)
-                    SELECT " . $role['id'] . ", rp.privilege_name,rp.permission," . $role['account_id'] .
-            ",rp.app_id from ox_role_privilege rp left join ox_role r on rp.role_id = r.id
+                    SELECT $roleId, rp.privilege_name,rp.permission," . $role['account_id'] .
+            ",rp.app_id from ox_role_privilege rp 
+                        left join ox_role r on rp.role_id = r.id
                     where r.name = '" . $role['name'] . "' and r.account_id is NULL";
         if(isset($role['business_role_id'])){
             $query .= " AND r.business_role_id = ".$role['business_role_id'];

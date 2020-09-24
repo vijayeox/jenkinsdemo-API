@@ -1185,7 +1185,8 @@ class UserService extends AbstractService
         if (!isset($userId)) {
             $userId = AuthContext::get(AuthConstants::USER_ID);
         }
-        $query = "SELECT DISTINCT oa.name,oa.description, oa.uuid, oa.type, oa.logo, oa.category 
+        $query = "SELECT * from 
+                  (SELECT DISTINCT oa.name,oa.description, oa.uuid, oa.type, oa.logo, oa.category 
                     from ox_app as oa 
                     INNER JOIN ox_app_registry as oar ON oa.id = oar.app_id 
                     INNER JOIN ox_privilege as op on oar.app_id = op.app_id 
@@ -1199,7 +1200,8 @@ class UserService extends AbstractService
                     FROM ox_app as oa 
                     INNER JOIN ox_app_registry as oar ON oa.id= oar.app_id  
                     WHERE oa.id NOT IN (SELECT app_id FROM ox_privilege WHERE app_id IS NOT NULL) 
-                    AND oar.account_id = :accountId";
+                    AND oar.account_id = :accountId) a 
+                 ORDER BY a.name";
         $params = ['userId' => $userId, 'accountId' => $accountId];
         $result = $this->executeQueryWithBindParameters($query, $params);
         return $result->toArray();

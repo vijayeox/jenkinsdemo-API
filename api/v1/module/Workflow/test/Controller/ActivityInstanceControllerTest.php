@@ -77,22 +77,31 @@ class ActivityInstanceControllerTest extends ControllerTest
         $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64','activityId'=>1 , 'assignee' => 'admintest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activityinstance', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(406);
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals('Workflow Instance Id not provided', $content['message']);
     }
-    public function testCompleteinstance()
+    public function testCompleteinstanceWithNoProcessInstanceId()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 , 'assignee' => 'admintest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflow/complete', 'POST', $data);
+        $this->dispatch('/callback/workflowinstance/complete', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
+        $this->assertEquals('error', $content['status']);
+        $this->assertEquals('Process Instance Id not set', $content['message']);   
     }
-    public function testCompleteinstanceWithoutProcessId()
+    
+    public function testCompleteinstance()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 ,'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778', 'assignee' => 'admintest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'completed','taskId'=>1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflow/complete', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->dispatch('/callback/workflowinstance/complete', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertEquals('success', $content['status']);
     }
 }

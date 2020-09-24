@@ -2,15 +2,13 @@
 namespace App\Controller;
 
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\EntityNotFoundException;
 use Oxzion\Model\Job;
 use Oxzion\Model\JobTable;
-use Oxzion\ServiceException;
 use Oxzion\Service\JobService;
-use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
+use Exception;
 
 class JobController extends AbstractApiController
 {
@@ -49,12 +47,9 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        } catch (EntityNotFoundException $e) {
-            return $this->getErrorResponse($e->getMessage());
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 406);
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 500);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -78,12 +73,9 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        } catch (ValidationException $e) {
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 406);
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 500);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -107,12 +99,9 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        } catch (ValidationException $e) {
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 406);
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 500);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -139,12 +128,9 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        } catch (ValidationException $e) {
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 406);
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 500);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -163,19 +149,11 @@ class JobController extends AbstractApiController
         $data['app_id'] = $this->params()->fromRoute()['appId'];
         $appId = isset($data['app_id']) ? $data['app_id'] : null;
         try {
-            $response = $this->jobService->cancelJobId($jobId, $appId);
-            if ($response && is_array($response)) {
-                $this->log->info("Job Cancellation Successfully Executed - " . print_r($response, true));
-                return $this->getSuccessResponseWithData($response, 200);
-            } else {
-                return $this->getSuccessResponse();
-            }
-        } catch (ValidationException $e) {
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 406);
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 500);
+            $this->jobService->cancelJobId($jobId, $appId);
+            return $this->getSuccessResponse();
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 }

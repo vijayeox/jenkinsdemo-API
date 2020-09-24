@@ -10,8 +10,10 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Document\DocumentGeneratorImpl;
 use Oxzion\EntityNotFoundException;
+use Oxzion\InvalidParameterException;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\ServiceException;
+use Oxzion\OxServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\JobService;
@@ -89,7 +91,9 @@ class CommandService extends AbstractService
             $this->logger->info("COMMAND  ------" . print_r($data['command'], true));
             $command = $data['command'];
             unset($data['command']);
-            return $this->processCommand($data, $command, $request);
+            $response = $this->processCommand($data, $command, $request);
+            unset($response['app_id']);
+            return $response;
         } else if (isset($data['commands'])) {
             $this->logger->info("Command Service - Comamnds");
             $commands = $data['commands'];
@@ -128,10 +132,10 @@ class CommandService extends AbstractService
             }
             if(isset($outputData)){
                 $this->logger->info("Process Command Data".print_r($outputData,true));
+                unset($outputData['app_id']);
                 return $outputData;
             }
         }
-        return 1;
     }
 
     protected function processCommand(&$data, $command, $request)
@@ -251,10 +255,10 @@ class CommandService extends AbstractService
         } elseif (ArrayUtils::isKeyDefined($data, 'username')) {
             $user = $this->userService->getUserDetailsbyUserName($data['username']);
         } else {
-            throw new Exception("username is required", 1);
+            throw new ServiceException("username is required", '.username.required', OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
         }
         if (!isset($user)) {
-            throw new Exception("Cache Creation Failed", 1);
+            throw new ServiceException("User not found", 'user.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
         }
         if (isset($data['app_id'])) {
             if ($app = $this->getIdFromUuid('ox_app', $data['app_id'])) {
@@ -324,26 +328,25 @@ class CommandService extends AbstractService
             throw new EntityNotFoundException("JobUrl or Cron Expression or JobName Not Specified");
         }
         
-        try
-        {
-            $jobUrl = $data['jobUrl'];
-            $cron = $data['cron'];
-            $jobGroup = $data['jobName'];
-            if(isset($data['fileId'])){
-                $jobName = $data['fileId'];
-            }else{
-                $jobName = $data['uuid'];
-            }            
-            $appId = $data['app_id'];
-            $accountId = isset($data['account_id']) ? $data['account_id'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
-            unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
-            $this->logger->info("JOB DATA ------" . json_encode($data));
-            $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
-            $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
-            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId);
-        } catch (Exception $e) {
-            $this->logger->error("Job Schedule ---- Exception - ".$e->getMessage() , $e);
+        $jobUrl = $data['jobUrl'];
+        $cron = $data['cron'];
+        $jobGroup = $data['jobName'];
+        if(isset($data['fileId'])){
+            $jobName = $data['fileId'];
+        }else{
+            $jobName = $data['uuid'];
+        }     
+        $appId = isset($data['app_id']) ? $data['app_id'] : null ;
+        if(!$appId){
+            throw new InvalidParameterException("App Id not provided");
         }
+        
+        $accountId = isset($data['account_id']) ? $data['account_id'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
+        unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
+        $this->logger->info("JOB DATA ------" . json_encode($data));
+        $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
+        $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
+        $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId);
         if (isset($response) && isset($response['job_id'])) {
             $jobData = array("jobId" => $response['job_id'], "jobGroup" => $response['group_name']);
             $data[$jobGroup] = json_encode($jobData);
@@ -353,78 +356,63 @@ class CommandService extends AbstractService
         return $data;
     }
 
-    protected function canceljob(&$data)
+    protected function cancelJob(&$data)
     {
-        try 
-        {
-            $this->logger->info("DATA  ------" . json_encode($data));
-            if (!isset($data['jobName'])) {
-                $this->logger->warn("Job Name not specified, so job not cancelled");
-                return $data;
-            }
-            $jobName = $data['jobName'];
-            if (!isset($data[$jobName])) {
-                $this->logger->warn("Job Details not found, so job not cancelled");
-                return $data;
-            }
-            $JobData = (is_array($data[$jobName]) ? $data[$jobName] : json_decode($data[$jobName], true));
-            if (!isset($JobData['jobId']) || !isset($JobData['jobGroup'])) {
-                $this->logger->warn("Job Id or Job Group Not Specified, so job not cancelled");
-                return $data;
-            }
-            $appId = $data['app_id'];
-            $groupName = $JobData['jobGroup'];
-            $jobPayload = array('jobid' => $JobData['jobId'], 'jobgroup' => $JobData['jobGroup']);
-            $data[$jobName] = array();
-            $response = $this->jobService->cancelJobId($JobData['jobId'], $appId, $groupName);
-            $this->logger->info("Response - " . print_r($response, true));
-        } 
-        catch (Exception $e) {
-            $this->logger->info("CLEAR JOB RESPONSE ---- " . print_r($e->getMessage(), true));
-            if (strpos($e->getMessage(), 'response') !== false) {
-                $res = explode('response:', $e->getMessage())[1];
-                $res = explode(',"path"', $res)[0];
-                $res = $res . "}";
-                $res = json_decode($res, true);
-                if ($res['status'] == 404) {
-                    $this->logger->warn($res['message']."JOB NOT FOUND ---- " . $e->getMessage(), $e);
-                }
-            }
-            $this->logger->warn("JOB ---- " . $e->getMessage(), $e);
+        $this->logger->info("DATA  ------" . json_encode($data));
+        if (!isset($data['jobName'])) {
+            $this->logger->warn("Job Name not specified, so job not cancelled");
+            return $data;
         }
+        $jobName = $data['jobName'];
+        if (!isset($data[$jobName])) {
+            $this->logger->warn("Job Details not found, so job not cancelled");
+            return $data;
+        }
+        $JobData = (is_array($data[$jobName]) ? $data[$jobName] : json_decode($data[$jobName], true));
+        if (!isset($JobData['jobId']) || !isset($JobData['jobGroup'])) {
+            $this->logger->warn("Job Id or Job Group Not Specified, so job not cancelled");
+            return $data;
+        }
+        $appId = isset($data['app_id']) ? $data['app_id'] : null;
+        if(!$appId){
+            throw new InvalidParameterException("App Id not provided");
+        }
+
+        $groupName = $JobData['jobGroup'];
+        $jobPayload = array('jobid' => $JobData['jobId'], 'jobgroup' => $JobData['jobGroup']);
+        $data[$jobName] = array();
+        $this->jobService->cancelJobId($JobData['jobId'], $appId, $groupName);
+        
         $this->logger->info("Cancel Job Data - " . print_r($data, true));
         return $data;
     }
 
     protected function fileSave(&$data)
     {
-        try {
-            $this->logger->info("File Save Service Start" . print_r($data, true));
-            $fileId = isset($data['fileId']) ? $data['fileId'] : (isset($data['uuid']) ? $data['uuid'] : NULL);
-            if($fileId){
-                $file = $this->fileService->updateFile($data, $fileId);
-            }else if(isset($data['workflow_instance_id'])){
-                $select = "Select ox_file.uuid from ox_file join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where ox_workflow_instance.id=:workflowInstanceId;";
-                $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
-                $this->logger->info("Executing query $select using params - ".json_encode($selectParams));
-                $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
-                if (count($result) == 0) {
-                    $this->logger->info("File Save ---- Workflow Instance Id Not Found");
-                    throw new EntityNotFoundException("Workflow Instance Id Not Found");
-                }
-                $file = $this->fileService->updateFile($data, $result[0]['uuid']);
-            }else{
-                $filedata = $data;
-                $file = $this->fileService->createFile($filedata);
-                $data['fileId'] = $filedata['uuid'];
-                $data['uuid'] = $filedata['uuid'];
+        $this->logger->info("File Save Service Start" . print_r($data, true));
+        $fileId = isset($data['fileId']) ? $data['fileId'] : (isset($data['uuid']) ? $data['uuid'] : NULL);
+        if($fileId){
+            $file = $this->fileService->updateFile($data, $fileId);
+        }else if(isset($data['workflow_instance_id'])){
+            $select = "SELECT ox_file.uuid from ox_file 
+                        join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id 
+                        where ox_workflow_instance.id=:workflowInstanceId;";
+            $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
+            $this->logger->info("Executing query $select using params - ".json_encode($selectParams));
+            $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
+            if (count($result) == 0) {
+                $this->logger->info("File Save ---- Workflow Instance Id Not Found");
+                throw new EntityNotFoundException("Workflow Instance Id Not Found");
             }
-            return $data;
-        } catch (Exception $e) {
-
-            $this->logger->info("File Save ---- Exception" . print_r($e->getMessage(), true));
-            throw $e;
+            $file = $this->fileService->updateFile($data, $result[0]['uuid']);
+        }else{
+            $filedata = $data;
+            $file = $this->fileService->createFile($filedata);
+            $data['fileId'] = $filedata['uuid'];
+            $data['uuid'] = $filedata['uuid'];
         }
+        return $data;
+        
     }
 
     protected function executeDelegate(&$data)
@@ -459,83 +447,81 @@ class CommandService extends AbstractService
 
     protected function sendMail($params)
     {
-        if (isset($params)) {
-            $template = isset($params['template']) ? $params['template'] : 0;
-            if ($template) {
-                $body = $this->templateService->getContent($template, $params);
-            } else {
-                if (isset($params['body'])) {
-                    $body = $params['body'];
-                } else {
-                    $body = null;
-                }
-            }
-            $errors = array();
-            if (isset($params['to'])) {
-                $recepients = $params['to'];
-            } else {
-                $errors['to'] = 'required';
-            }
-            if (isset($params['subject'])) {
-                $subject = $params['subject'];
-            } else {
-                $errors['subject'] = 'required';
-            }
-            if (isset($params['attachments'])) {
-                $attachments = $params['attachments'];
-            }
-            if (count($errors) > (int) 0) {
-                $validationException = new ValidationException();
-                $validationException->setErrors($errors);
-                throw $validationException;
-            }
-            $payload = json_encode(array(
-                'to' => $recepients,
-                'subject' => $subject,
-                'body' => $body,
-                'attachments' => isset($attachments) ? $attachments : null,
-            ));
-            $this->logger->info("Payload for mail -> $payload");
-            $this->messageProducer->sendQueue($payload, 'mail');
-            return 1;
-        } else {
-            return;
+        if(!$params || empty($params)){
+            return $params;
         }
+
+        $template = isset($params['template']) ? $params['template'] : 0;
+        if ($template) {
+            $body = $this->templateService->getContent($template, $params);
+        } else {
+            if (isset($params['body'])) {
+                $body = $params['body'];
+            } else {
+                $body = null;
+            }
+        }
+        $errors = array();
+        if (isset($params['to'])) {
+            $recepients = $params['to'];
+        } else {
+            $errors['to'] = 'required';
+        }
+        if (isset($params['subject'])) {
+            $subject = $params['subject'];
+        } else {
+            $errors['subject'] = 'required';
+        }
+        if (isset($params['attachments'])) {
+            $attachments = $params['attachments'];
+        }
+        if (count($errors) > (int) 0) {
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        }
+        $payload = json_encode(array(
+            'to' => $recepients,
+            'subject' => $subject,
+            'body' => $body,
+            'attachments' => isset($attachments) ? $attachments : null,
+        ));
+        $this->logger->info("Payload for mail -> $payload");
+        $this->messageProducer->sendQueue($payload, 'mail');
     }
 
     protected function generatePDF(&$params)
     {
-        if (isset($params)) {
-            $template = isset($params['template']) ? $params['template'] : 0;
-            if ($template) {
-                $body = $this->templateService->getContent($template, $params);
-
-            } else {
-                if (isset($params['body'])) {
-                    $body = $params['body'];
-                } else {
-                    $body = null;
-                }
-            }
-            if (!$body) {
-                return;
-            }
-            if (isset($params['options'])) {
-                $options = $params['options'];
-            } else {
-                $options = null;
-            }
-            if (isset($params['destination'])) {
-                $destination = $params['destination'];
-            } else {
-                return;
-            }
-            $generatePdf = new DocumentGeneratorImpl();
-            $params['document_path'] = $generatePdf->generateDocument($body, $destination, $options);
+        if(!$params || empty($params)){
             return $params;
+        }
+        $template = isset($params['template']) ? $params['template'] : 0;
+        if ($template) {
+            $body = $this->templateService->getContent($template, $params);
+
+        } else {
+            if (isset($params['body'])) {
+                $body = $params['body'];
+            } else {
+                $body = null;
+            }
+        }
+        if (!$body) {
+            return;
+        }
+        if (isset($params['options'])) {
+            $options = $params['options'];
+        } else {
+            $options = null;
+        }
+        if (isset($params['destination'])) {
+            $destination = $params['destination'];
         } else {
             return;
         }
+        $generatePdf = new DocumentGeneratorImpl();
+        $params['document_path'] = $generatePdf->generateDocument($body, $destination, $options);
+        return $params;
     }
 
     protected function extractFileData(&$data)
@@ -608,7 +594,7 @@ class CommandService extends AbstractService
             $data['id'] = $result['id'];
             return $data;
         } else {
-            throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found");
+            throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
         }
     }
 
@@ -734,7 +720,7 @@ class CommandService extends AbstractService
     protected function claimActivityInstance(&$data){
         $this->logger->info("claimForm");
         if(isset($data['workflowInstanceId']) && isset($data['activityInstanceId'])){
-           $result = $this->workflowInstanceService->claimActivityInstance($data);    
+           $this->workflowInstanceService->claimActivityInstance($data);    
         }
     }
 

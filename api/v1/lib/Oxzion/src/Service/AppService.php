@@ -358,7 +358,7 @@ class AppService extends AbstractService
                     $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
                     if(isset($result) && !empty($result))
                     {
-                        $cancel = $this->jobService->cancelJob($jobName, $jobGroup, $appUuid);
+                        $this->jobService->cancelJob($jobName, $jobGroup, $appUuid);
                     }
                     $this->logger->info("executing schedule job ");
                     $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
@@ -762,10 +762,10 @@ class AppService extends AbstractService
                 }
                 $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
                 if($templateRole){
-                    $result = $this->roleService->saveTemplateRole($role, $role['uuid']);
+                    $this->roleService->saveTemplateRole($role, $role['uuid']);
                     $roleData['uuid'] = $role['uuid'];
                 }else{
-                    $result = $this->roleService->saveRole($params, $role, $role['uuid']);
+                    $this->roleService->saveRole($params, $role, $role['uuid']);
                 }
                 
             }
