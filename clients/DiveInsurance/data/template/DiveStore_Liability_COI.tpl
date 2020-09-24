@@ -12,7 +12,7 @@
               <span class="store_location">{$mailaddress1}</span>,
               <span class="store_location">{$mailaddress2}</span>,
               <span class="store_location">{$physical_city}</span>,
-              <span class="store_location">{$physical_state}</span> <span class="store_location">{$physical_zip}</span>
+              <span class="store_location">{if $physical_state != '[]'}{$physical_state}{/if}</span> <span class="store_location">{$physical_zip}</span>
         {else}
               <span class="store_location">{$address1}</span>,
               <span class="store_location">{$address2}</span>,

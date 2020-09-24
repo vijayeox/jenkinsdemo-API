@@ -19,7 +19,7 @@
                     <span class="storeLocation uppercase">{$mailaddress1}</span>,
                     <span class="storeLocation uppercase">{$mailaddress2}</span>,
                     <span class="storeLocation uppercase">{$physical_city}</span>,
-                    <span class="storeLocation uppercase">{$physical_state}</span> <span class="uppercase">{$physical_zip}</span>
+                    <span class="storeLocation uppercase">{if $physical_state != '[]'}{$physical_state}{/if}</span> <span class="uppercase">{$physical_zip}</span>
                 </p>
                 {else}
                     <span class="storeLocation uppercase">{$address1}</span>,
