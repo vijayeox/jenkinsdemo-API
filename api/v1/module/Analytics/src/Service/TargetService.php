@@ -26,23 +26,12 @@ class TargetService extends AbstractService
 
     public function createTarget($data)
     {
-        $form = new Target();
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        // $form->exchangeWithSpecificKey($data,'value');
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
+        $target = new Target($this->table);
+        $target->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID));
+        $target->assign($data);
         try {
-            $count = $form->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $this->beginTransaction();
+            $target->save();
             $this->commit();
         }
         catch (Exception $e) {
@@ -54,26 +43,15 @@ class TargetService extends AbstractService
 
     public function updateTarget($uuid, $data)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($data['version']))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $form = new Target();
-        // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        // $form->exchangeWithSpecificKey($data,'value',true);
-        $form->validate();
-        $count = 0;
+        $target = new Target($this->table);
+        $target->loadByUuid($uuid);
+        $target->assign($data);
         try {
-            $count = $form->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $target->save();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -82,27 +60,18 @@ class TargetService extends AbstractService
 
     public function deleteTarget($uuid,$version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($version))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $data = array('version' => $version,'isdeleted' => 1);
-        $form = new Target();
-        // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        // $form->exchangeWithSpecificKey($data,'value',true);
-        $form->validate($data);
-        $count = 0;
+        $target = new Target($this->table);
+        $target->loadByUuid($uuid);
+        $target->assign([
+            'version' => $version,
+            'isdeleted' => 1
+        ]);
         try {
-            $count = $form->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $target->save();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
