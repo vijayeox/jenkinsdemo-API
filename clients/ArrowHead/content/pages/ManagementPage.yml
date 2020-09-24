@@ -26,7 +26,7 @@ content:
             actions:
                 -
                     name: Edit
-                    rule: 'row.status == "In Progress" || (profile.privileges.MANAGE_POLICY_APPLICATION_CREATE == true && row.status == "Generated")'
+                    rule: 'row.status == "In Progress" || row.status == "Review" || (profile.privileges.MANAGE_POLICY_APPLICATION_CREATE == true && row.status == "Generated")'
                     details:
                         -
                             type: Form
@@ -97,16 +97,23 @@ content:
                         type: dropdown
                         listItems:
                             - 'Generated'
+                            - 'Review'
                             - 'Processing'
                             - 'In Progress'
                         placeholder: 'Select Status'
-                    cell: '<td>
-                           {item.status == "Processing" && item.submissionTime
-                           ? moment().isAfter(moment(item.submissionTime).add(3,"m"))
-                               ? "Error Processing - Please Retry"
-                               : item.status + " (" +
-                               (item.documentsSelectedCount - item.documentsToBeGenerated +1) +
-                               " of " +
-                               item.documentsSelectedCount + ")"
-                           : item.status}
-                           </td>'
+                    cell: '{item.status == "Processing" && item.submissionTime ? (
+                            moment().isAfter(moment(item.submissionTime).add(3, "m")) ? (
+                                <td className="policyStatusFailed"> Error Processing - Please Retry </td>
+                            ) : <td> {
+                                item.status +
+                                " (" +
+                                (item.documentsSelectedCount - item.documentsToBeGenerated + 1) +
+                                " of " +
+                                item.documentsSelectedCount +
+                                ")"
+                                }</td>
+                            ) : item.status == "Review" ? (
+                            <td className="policyStatusReview"> Submitted - Under Review </td>
+                            ) : (
+                            <td>{item.status}</td>
+                            )}'

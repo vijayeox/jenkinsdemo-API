@@ -29,7 +29,12 @@ class MenuItemService extends AbstractService
         $data['app_id'] = UuidUtil::isValidUuid($appUuid) ? $this->getIdFromUuid('ox_app',$appUuid) : $appUuid;
         $this->logger->info("In saveMenuItem params AppId---".json_encode($data['app_id']));
         if(isset($data['parent_id'])){
-            $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+            if(UuidUtil::isValidUuid($data['parent_id'])){
+                $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+            }
+        }else if (isset($data['parent'])) {
+            $res = $this->getDataByParams('ox_app_menu', array("id"), ['name' => $data['parent'],'app_id' => $data['app_id']], null)->toArray();
+            $data['parent_id'] = $res[0]['id'];
         }
         if(isset($data['page_uuid'])){
             $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_uuid']);

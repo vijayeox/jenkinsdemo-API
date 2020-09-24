@@ -10,7 +10,6 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
 use Analytics\Service\QueryService;
-use Ramsey\Uuid\Uuid;
 use Exception;
 
 class TargetService extends AbstractService
@@ -45,11 +44,12 @@ class TargetService extends AbstractService
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $target->getGenerated();
     }
 
     public function updateTarget($uuid, $data)
@@ -77,7 +77,7 @@ class TargetService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $target->getProperty('version');
     }
 
     public function deleteTarget($uuid,$version)
@@ -106,7 +106,6 @@ class TargetService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getTarget($uuid)

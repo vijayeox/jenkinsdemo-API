@@ -15,7 +15,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "panel",
-		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\" || !data.businessPadiVerified) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\n",
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\" || !data.businessPadiVerified) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
 		"type": "panel",
 		"label": "Personal Information",
 		"input": false,
@@ -4216,7 +4216,7 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
-						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
+						"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 						"validate": {
 							"multiple": true
 						},
@@ -4984,7 +4984,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 601,
+	"_vid": 602,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5005,6 +5005,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-09-01T13:44:27.867Z",
+	"modified": "2020-09-04T09:22:21.643Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -69,6 +69,7 @@ return [
     ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
+    'apiUrl' => 'http://'.$host.':8080',
     'applicationUrl' => 'http://'.$host.':8081',
     'RULE_FOLDER'=>__DIR__.'/../../data/rules/',
     'DATA_FOLDER'=>__DIR__.'/../../data/',

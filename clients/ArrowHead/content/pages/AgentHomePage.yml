@@ -6,6 +6,7 @@ content:
         content:
             route: 'file/user/me'
             filterable: true
+            autoRefresh: 10000
             defaultFilters: 
                 sort:
                     -
@@ -83,7 +84,8 @@ content:
                         type: dropdown
                         listItems:
                             - 'Generated'
+                            - 'Review'
                             - 'Processing'
                             - 'In Progress'
                         placeholder: 'Select Status'
-                    cell: '<td>{item.status}</td>'
+                    cell: '{item.status == "Review" ? <td className="policyStatusReview">{"Submitted - Under Review"}</td> : <td>{item.status}</td>}'

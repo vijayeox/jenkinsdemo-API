@@ -79,6 +79,29 @@
                 <p>Total Group Premium:</p>
             </div>
         </div>
+
+
+        {if isset($additionalPremium)}
+        <div class="main" style="margin-top: 0px;">
+            <p class="hrtag sub_line" style="margin-top: 0px;margin-bottom: 2%;"></p>
+            <div class="value_main">
+                <p>{if isset($additionalPremium)}
+                     {if (int)$additionalPremium < 0 }  
+                     {math equation = '(x * (-1))' x = $additionalPremium assign='addPremium'}
+                        - ${$addPremium|number_format:2}
+                     {else}
+                        ${$additionalPremium|number_format:2}
+                     {/if}
+                     {else} 0.00 
+                 {/if}</p>
+            </div>
+            <div class="sub_main">
+                <p>Additional Premium  : </p>
+                <p>{if isset($additionalPremiumDescription)} {if $additionalPremiumDescription != ""} ({$additionalPremiumDescription}) {/if} {/if}</p>
+            </div>
+        </div>
+        {/if}
+        
         <div class="clearfix"></div>
         <p class="hrtag" style="margin-top: 2px;"></p>
         <div class="total_main">

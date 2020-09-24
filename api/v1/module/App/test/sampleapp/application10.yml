@@ -111,6 +111,7 @@ menu:
       
 form:
   - description: description
+    name: SampleFormForTests
     template:
       _id: 5d3afa5ccc5f75b982967721
       type: form

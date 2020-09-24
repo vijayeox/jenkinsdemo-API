@@ -32,40 +32,56 @@ class PocketCard extends PolicyDocument
             $template = "BatchPocketCard";
         }
         $this->logger->info("Template is: ".print_r($template, true));
-         
+        $files = array();
+        $finalData = array();
         if(isset($data['padiNumber'])){
             $this->logger->info("generating individual pocket card");
-            $params = array();
-            $currentDate = date_create()->format("Y-m-d");
-            $filter[] = array("field" => "end_date", "operator" => "gt", "value" => $currentDate);
-            // $filter[] = array("field" => "policyStatus", "operator" => "eq", "value" => "In Force");
-            if($data['padiProductType'] == 'diveStore'){
-                $filter[] = array("field" => "business_padi", "operator" => "eq", "value" => $data['padiNumber']);
-            }else{
-                $filter[] = array("field" => "padi", "operator" => "eq", "value" => $data['padiNumber']);
-            }
-            
-            if($data['padiProductType'] == 'individualProfessionalLiability'){
-                $params['entityName'] = 'Individual Professional Liability';
-            }
-            if($data['padiProductType'] == 'emergencyFirstResponse'){
-                $params['entityName'] = 'Emergency First Response';
-            }
-            if($data['padiProductType'] == 'diveBoat'){
-                $params['entityName'] = 'Dive Boat';
-            }
-            if($data['padiProductType'] == 'diveStore'){
-                $params['entityName'] = 'Dive Store';
-            }
-            $filterParams = array(array("filter" => array("logic" => "AND", "filters" => $filter)));
-            $this->logger->info("filter params is : ". json_encode($filterParams));
-            $params['workflowStatus'] = 'Completed';
-            $files = $this->getFileList($params, $filterParams);
-            $data['product'] = implode(", ", array_unique(array_column($files['data'], 'product')));
-            $this->logger->info("the product is: ". print_r($data['product'], true));
-            if($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store'){
-                $result = $this->newDataArray($files);
-                $files = $result;
+            $padiArray = explode(",",$data['padiNumber']);
+            foreach ($padiArray as $key => $value) {
+                $filter = array();
+                $params = array();
+                $currentDate = date_create()->format("Y-m-d");
+                $filter[] = array("field" => "end_date", "operator" => "gt", "value" => $currentDate);
+                // $filter[] = array("field" => "policyStatus", "operator" => "eq", "value" => "In Force");
+                if($data['padiProductType'] == 'diveStore'){
+                    $filter[] = array("field" => "business_padi", "operator" => "eq", "value" => $value);
+                }else{
+                    $filter[] = array("field" => "padi", "operator" => "eq", "value" => $value);
+                }
+                
+                if($data['padiProductType'] == 'individualProfessionalLiability'){
+                    $params['entityName'] = 'Individual Professional Liability';
+                }
+                if($data['padiProductType'] == 'emergencyFirstResponse'){
+                    $params['entityName'] = 'Emergency First Response';
+                }
+                if($data['padiProductType'] == 'diveBoat'){
+                    $params['entityName'] = 'Dive Boat';
+                }
+                if($data['padiProductType'] == 'diveStore'){
+                    $params['entityName'] = 'Dive Store';
+                }
+                $filterParams = array(array("filter" => array("logic" => "AND", "filters" => $filter)));
+                $this->logger->info("filter params is : ". json_encode($filterParams));
+                $params['workflowStatus'] = 'Completed';
+                $fileData = $this->getFileList($params, $filterParams);
+                $this->logger->info("FILE DATA POCKET CARD --- : ".print_r($fileData,true));
+                $data['product'] = implode(", ", array_unique(array_column($fileData['data'], 'product')));
+                $this->logger->info("the product is: ". print_r($data['product'], true));
+                if($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store'){
+                    $result = $this->newDataArray($fileData);
+                    if(!empty($result['data'])){
+                        foreach ($result['data'] as $key => $value) {
+                            array_push($finalData,$value);
+                        }
+                    }
+                }else{
+                    if(!empty($fileData['data'])){
+                        array_push($finalData,$fileData['data'][0]);
+                    }
+                }
+                $files['data'] = $finalData;
+                $files['total'] = sizeof($finalData);
             }
         }
         else
@@ -131,7 +147,7 @@ class PocketCard extends PolicyDocument
                 }
             }
         }
-
+        $this->logger->info("the total number of files data: ".print_r($files, true));
         $this->logger->info("the total number of files fetched is : ".print_r($files['total'], true));
         $totalfiles = $files['total'];
         if($totalfiles == 0){
