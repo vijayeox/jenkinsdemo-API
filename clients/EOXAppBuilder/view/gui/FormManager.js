@@ -29,6 +29,7 @@ class FormManager extends React.Component {
     };
     this.appUrl = "/app/" + appId;
     this.saveForm = this.saveForm.bind(this);
+    this.notif = React.createRef();
   }
 
   stepDownPage() {
@@ -66,7 +67,6 @@ class FormManager extends React.Component {
         <this.props.components.Notification ref={this.notif} />
         <React.Suspense fallback={<div>Loading...</div>}>
           <this.OxzionGUIComponents.FormBuilder
-            ref={this.notif}
             core={this.core}
             saveForm={this.saveForm}
             content={this.state.content}
