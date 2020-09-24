@@ -315,9 +315,6 @@ openproject()
         chown www-data:www-data -R /var/www/task
     fi
     export PATH=$OLDPATH
-        
-
-
 }
 helpapp()
 {
@@ -393,7 +390,6 @@ diveinsurance()
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
-
 insurancemanagement()
 {
     cd ${TEMP}
@@ -437,6 +433,7 @@ insuranceoi()
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl --delete ./InsuranceOI /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building InsuranceOI app using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/InsuranceOI'
@@ -456,41 +453,6 @@ insuranceoi()
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
-
-axon()
-{
-    cd ${TEMP}
-    echo -e "${YELLOW}Copying EOX apps...${RESET}"
-    if [ ! -d "./clients/AXON" ] ;
-    then
-        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
-    else
-        echo -e "${GREEN}Stopping view service${RESET}"
-        systemctl stop view
-        cd ${TEMP}/clients
-        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
-        mkdir -p /opt/oxzion/eoxapps
-        rsync -rl --delete ./AXON /opt/oxzion/eoxapps
-        echo -e "${YELLOW}Building AXON app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
-        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/AXON'
-        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
-        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
-        cd /opt/oxzion/view/bos/
-        npm run build
-        npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chmod 777 -R /opt/oxzion/eoxapps
-        cd /opt/oxzion/view/apps/AXONInsurance/
-        rm -rf /opt/oxzion/view/apps/AXONInsurance/node_modules
-        npm install --unsafe-perm
-        npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
-        systemctl start view
-        echo -e "${YELLOW}Started view service!${RESET}"
-    fi
-}
-
 task()
 {
     cd ${TEMP}
@@ -505,6 +467,7 @@ task()
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl --delete ./Task /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Task apps using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Task'
@@ -534,6 +497,7 @@ bridgemed()
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl --delete ./BridgeMed /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building BridgeMed apps using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BridgeMed'
@@ -674,6 +638,7 @@ covid()
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl --delete ./Covid19 /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Covid 19 app using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Covid19'
@@ -689,6 +654,217 @@ covid()
         npm install --unsafe-perm
         npm run build
         chown oxzion:oxzion -R /opt/oxzion/view
+        service php7.2-fpm reload
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+axon()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/AXON" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./AXON /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building AXON app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/AXON'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/AXONInsurance/
+        rm -rf /opt/oxzion/view/apps/AXONInsurance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        service php7.2-fpm reload
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+riscom()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/RISCOM" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./RISCOM /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building RISCOM app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/RISCOM'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/RISCOMInsurance/
+        rm -rf /opt/oxzion/view/apps/RISCOMInsurance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        service php7.2-fpm reload
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+biofi()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/Biofi" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./Biofi /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building Biofi app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Biofi'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/BiofiFinance/
+        rm -rf /opt/oxzion/view/apps/BiofiFinance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        service php7.2-fpm reload
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+tennant()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/Tennant" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./Tennant /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building Tennant app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Tennant'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/TennantInsurance/
+        rm -rf /opt/oxzion/view/apps/TennantInsurance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        service php7.2-fpm reload
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+bsri()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/BSRI" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./BSRI /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building BSRI app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BSRI'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/BSRIInsurance/
+        rm -rf /opt/oxzion/view/apps/BSRIInsurance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        service php7.2-fpm reload
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+hiig()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/HIIG" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl --delete ./HIIG /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building HIIG app using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/HIIG'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
+        cd /opt/oxzion/view/apps/HIIGInsurance/
+        rm -rf /opt/oxzion/view/apps/HIIGInsurance/node_modules
+        npm install --unsafe-perm
+        npm run build
+        chown oxzion:oxzion -R /opt/oxzion/view
+        service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
@@ -717,5 +893,10 @@ transportation
 arrowhead
 axon
 covid
+riscom
+biofi
+tennant
+bsri
+hiig
 #edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"
