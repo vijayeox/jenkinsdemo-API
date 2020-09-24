@@ -139,7 +139,7 @@
 					"label": "",
 					"value": ""
 				}],
-				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 				"fileMaxSize": "10MB",
 				"multiple": true,
 				"clearOnHide": false,
