@@ -45,10 +45,12 @@ buildhelp()
     echo -e "20. axon                  -${YELLOW}For packaging axon app.${RESET}"
     echo -e "21. covid                 -${YELLOW}For packaging covid app.${RESET}"
     echo -e "22. riscom                -${YELLOW}For packaging riscom app.${RESET}"
-	echo -e "23. biofi                 -${YELLOW}For packaging biofi app.${RESET}"
-	echo -e "24. tennant               -${YELLOW}For packaging tennant app.${RESET}"
-	echo -e "25. bsri                  -${YELLOW}For packaging bsri app.${RESET}"
-	echo -e "26. hiig                  -${YELLOW}For packaging hiig app.${RESET}"
+    echo -e "23. biofi                 -${YELLOW}For packaging biofi app.${RESET}"
+    echo -e "24. tennant               -${YELLOW}For packaging tennant app.${RESET}"
+    echo -e "25. bsri                  -${YELLOW}For packaging bsri app.${RESET}"
+    echo -e "26. hiig                  -${YELLOW}For packaging hiig app.${RESET}"
+    echo -e "27. arrowhead             -${YELLOW}For packaging ArrowHead app.${RESET}"
+    echo -e "28. appbuilder            -${YELLOW}For packaging EOXAppBuilder app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -320,6 +322,16 @@ hiig()
     echo -e "${YELLOW}Copying clients HIIG to build folder.${RESET}"
     rsync -rl clients/HIIG/ ./build/clients/HIIG/
     echo -e "${YELLOW}Copying clients HIIG Completed.${RESET}"
+
+}
+appbuilder()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients EOXAppBuilder to build folder.${RESET}"
+    rsync -rl clients/EOXAppBuilder/ ./build/clients/EOXAppBuilder/
+    echo -e "${YELLOW}Copying clients EOXAppBuilder Completed.${RESET}"
 
 }
 integrations()
