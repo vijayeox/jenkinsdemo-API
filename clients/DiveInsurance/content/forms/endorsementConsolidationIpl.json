@@ -1918,6 +1918,7 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "excessLiabilityPrice",
+								"redrawOn": "data",
 								"key": "excessLiabilityPrice",
 								"type": "hidden",
 								"input": true,
@@ -3093,7 +3094,7 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
-						"calculateValue": "if (typeof value ==\"string\"){\n  value = JSON.parse(value);\n}",
+						"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 						"validate": {
 							"multiple": true
 						},
@@ -3190,7 +3191,7 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+						"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]  && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == undefined || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == null || !data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 					},
 					"key": "paymentOptions",
 					"properties": {
@@ -3544,7 +3545,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 334,
+	"_vid": 337,
 	"title": "Endorsement Consolidation - IPL",
 	"display": "wizard",
 	"access": [{
@@ -3565,6 +3566,6 @@
 	"path": "endorsementconsolidationipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-13T11:01:28.672Z",
-	"modified": "2020-09-02T10:46:28.155Z",
+	"modified": "2020-09-14T06:37:15.346Z",
 	"machineName": "testdivehub:endorsementConsolidationIpl"
 }

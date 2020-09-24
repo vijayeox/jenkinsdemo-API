@@ -261,7 +261,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
+                    rule: '(row.policyStatus == "In Force" && row.entity_name == "Individual Professional Liability" && moment().isSameOrBefore(moment(row.end_date)) && row.status != "In Progress")'
                     details:
                         -
                             type: Form
@@ -270,7 +270,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
+                    rule: '(row.policyStatus == "In Force" && row.entity_name == "Emergency First Response" && moment().isSameOrBefore(moment(row.end_date)) && row.status != "In Progress")'
                     details:
                         -
                             type: Form
@@ -279,7 +279,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
+                    rule: '(row.policyStatus == "In Force" && row.entity_name == "Dive Boat" && moment().isSameOrBefore(moment(row.end_date)) && row.status != "In Progress")'
                     details:
                         -
                             type: Form
@@ -288,7 +288,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
+                    rule: '(row.policyStatus == "In Force" && row.entity_name == "Dive Store" && moment().isSameOrBefore(moment(row.end_date)) && row.status != "In Progress")'
                     details:
                         -
                             type: Form
@@ -297,7 +297,7 @@ content:
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
-                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
+                    rule: '(row.policyStatus == "In Force" && row.entity_name == "Group Professional Liability" && moment().isSameOrBefore(moment(row.end_date)) && row.status != "In Progress")'
                     details:
                         -
                             type: Form

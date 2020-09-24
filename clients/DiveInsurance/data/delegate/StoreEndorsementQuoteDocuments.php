@@ -42,7 +42,6 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
              'template' => 'DiveStoreEndorsement', 
              'header' => 'DiveStoreEndorsement_header.html',
              'footer' => 'DiveStoreEndorsement_footer.html', 
-             'cover_letter' => 'DS_Quote_Cover_Letter',
              'aiTemplate' => 'DiveStore_AI',
              'aiheader' => 'DiveStore_AI_header.html',
              'lpTemplate' => 'DiveStore_LP',
@@ -54,9 +53,15 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
              'nTemplate' => 'Group_PL_NI',
              'nheader' => 'Group_DS_NI_header.html',
              'nfooter' => 'Group_NI_footer.html',
+             'gtemplate' => 'Group_PL_COI_DS_Endorsement',
+             'gheader' => 'Group_EndoHeader.html',
+             'gfooter' => 'Group_footer.html',
              'gaitemplate' => 'Group_AI',
              'gaiheader' => 'Group_Quote_AI_header.html',
              'gaifooter' => 'Group_AI_footer.html',
+             'ganiTemplate' => 'Group_ANI',
+             'ganiheader' => 'Group_DS_ANI_header.html',
+             'ganifooter' => 'Group_ANI_footer.html',
              'aniTemplate' => 'DiveStore_ANI',
              'aniheader' => 'DS_Quote_ANI_header.html',
              'anifooter' => null,
@@ -89,6 +94,9 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
              'gaitemplate' => 'Group_AI',
              'gaiheader' => 'Group_Quote_AI_header.html',
              'gaifooter' => 'Group_AI_footer.html',
+             'ganiTemplate' => 'Group_ANI',
+             'ganiheader' => 'Group_DS_ANI_header.html',
+             'ganifooter' => 'Group_ANI_footer.html',
              'aniTemplate' => 'DiveStore_ANI',
              'aniheader' => 'DS_Quote_ANI_header.html',
              'anifooter' => null,
@@ -126,6 +134,17 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
             $data['property_policy_id'] = $propertyPolicyDetails['policy_number'];
             $data['property_carrier'] = $propertyPolicyDetails['carrier'];
         }
+        if($endorsementOptions['modify_groupProfessionalLiability'] == true){
+            if(isset($data['groupPL'])){
+                if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+                    $policyDetails = $this->getPolicyDetails($data,$persistenceService,'Group Professional Liability');
+                    if($policyDetails){
+                        $data['group_policy_id'] = $policyDetails['policy_number'];
+                        $data['group_carrier'] = $policyDetails['carrier'];
+                    }
+                }
+            }
+        }
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
         if(!is_null($endorsementOptions)){
             $workflowInstUuid = $this->getWorkflowInstanceByFileId($data['fileId'],'In Progress');
@@ -144,6 +163,11 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
         foreach ($temp as $key => $value) {
             if(is_array($temp[$key])){
                 $temp[$key] = json_encode($value);
+            }
+        }
+        if($data['groupProfessionalLiabilitySelect'] == 'yes'){
+            if(!isset($data['group_certificate_no'])){
+                $temp['group_certificate_no'] = 'S123456789';
             }
         }
         if(isset($data['previous_policy_data'])){

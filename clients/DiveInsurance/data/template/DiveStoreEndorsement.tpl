@@ -5,76 +5,21 @@
 </head>
 <body>
   <div class ="body_div_endo">
-       <!-- {if isset($liabilityCoverageChanges) && $liabilityCoverageChanges}
-       <div class = "box">
-          <center><b><u>+Policy has been changed to {$increasedCoverage} as of the Effective date of this Endorsement</u></b></center>
-          <center><table>
-            <tr>
-              <th>
-                <b>Upgraded Liability Coverage</b>
-              </th>
-              <th>
-                <b>Limits</b>
-              </th>
-            </tr>
-            <tr>
-              <td>Commercial General Liability (per Occurance)
-              <br></br>
-              (Including Personal Injury and Products and Completed Operations)</td>
-              {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$2,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$3,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$4,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$5,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$10,000,000</td>
-              {else}
-              <td>$1,000,000</td>
-              {/if}
-            </tr>
-            <tr>
-              <td>General and Products and Completed Operations Aggregate</td>
-              {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$3,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$4,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$5,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$6,000,000</td>
-              {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
-              <td>$11,000,000</td>
-              {else}
-              <td>$2,000,000</td>
-              {/if}
-            </tr>
-            <tr>
-              <td>Travel Agent E & O (Each wrongful act $ Aggregate)
-                <br>(Claims made form)</br></td>
-              <td>{if isset($increased_travelEnO)}
-                        $1,000,000
-                  {else}
-                        Not Included
-                  {/if}
-              </td>
-            </tr>
-          </table></center>
-      </div>
-      {/if} -->
-      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO))}
+      
+      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO) || (isset($removed_liability_limit) && $removed_liability_limit))}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
           {if isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit}
-            <p>Medical Expense Liability now applies as of the Effective date on this Endorsement ({$increased_medicalPayment_limit} Limit)</p>
+            <p>+Medical Expense Liability now applies as of the Effective date on this Endorsement ({$increased_medicalPayment_limit} Limit)</p>
           {/if}
           {if isset($removed_medicalPayment) && $removed_medicalPayment}
             <p>Medical Expense Liability has been removed as of the Effective date on this Endorsement</p>
           {/if}
           {if isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit}
             <p>+NON-Owned Auto Liability has been increased to {$increased_non_owned_liability_limit} as of the Effective date on this Endorsement</p>
+          {/if}
+          {if isset($decreased_non_owned_liability_limit) && $decreased_non_owned_liability_limit}
+            <p>+NON-Owned Auto Liability has been decreased to {$decreased_non_owned_liability_limit} as of the Effective date on this Endorsement</p>
           {/if}
           {if isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL}
             <p>NON-Owned Auto Liability has been removed as of the Effective date on this Endorsement</p>
@@ -85,8 +30,11 @@
           {if isset($decreased_liability_limit) && $decreased_liability_limit > 0 && $liabilityChanges == true}
             <p>+Liability Limits have been decreased by ${$decreased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
           {/if}
+          {if isset($removed_liability_limit) && $removed_liability_limit}
+              <p>+Liability Limits have been removed as of the Effective date of this Endorsement</p>
+          {/if}
           {if isset($increased_travelEnO) && $increased_travelEnO}
-            <p>Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
+            <p>+Travel Agent E & O now applies as of the Effective date on this Endorsement ($1,000,000 Limit) and ($1,000,000 Aggregate)</p>
           {/if}
           {if isset($removed_travelEnO) && $removed_travelEnO}
             <p>Travel Agent E & O has been removed as of the Effective date on this Endorsement</p>
@@ -106,6 +54,9 @@
       <div class = "box">
           <center><b><u>***Property Changes***</u></b></center>
 
+          {if isset($removed_property_coverage) && $removed_property_coverage}
+            <p>+Property Coverages has been removed as of the Effective Date of this Endorsement</p>
+          {/if}
           {if isset($increased_dspropTotal) && $propertyChanges == true}
             <p>+Contents Limit have been increased by ${$increased_dspropTotal|number_format} as of the Effective date of this Endorsement</p>
           {/if}
@@ -137,22 +88,6 @@
       </div>
       {/if}
 
-
-      <!-- {if isset($additionalInsured)}
-      <div class = "box">
-        <center><b><u>***Additional Insured Schedule***</u></b></center>
-        {assign var=list value=$additionalInsured|json_decode:true}
-        {foreach from=$list item=$additional}
-          {if isset($additional.name) && ($additional.name != '')}
-          <p class = "ai_list" style = "font-size:15px;text-transform: uppercase;">
-            {$additional.name}
-          </p>
-      {/if}
-        {/foreach}
-        <div style="margin-bottom: 5%"></div>
-        <center><b>Additional Insured coverage applies only with respect to liability arising out of the operations of the named insureds</b></center>
-      </div>
-      {/if} -->
      {if (isset($newAddInsured) && $newAddInsured != "") || (isset($removedAddInsured) && $removedAddInsured != "")}
       <div class = "box">
         <center><b><u>***Additional Insured Schedule***</u></b></center>
@@ -286,7 +221,7 @@
       </div>
       </div>
       {/if}
-     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != "") || (isset($newAdditionalLocations) && isset($removedadditionalLocations) && $removedadditionalLocations != ""))}
+     {if $additionalLocationsSelect=='yes' && ((isset($newAdditionalLocations) && $newAdditionalLocations != ""))}
       <div class = "box">
         <center><b><u>***Additional Locations***</u></b></center>
         {if $newAdditionalLocations != ""}

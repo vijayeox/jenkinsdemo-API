@@ -733,6 +733,14 @@ ox_file:
     last_workflow_instance_id: 10
     created_by: 2
     entity_id: 4
+  - id: 21
+    org_id: 1
+    data: '{"additionalInsured":[{"name":"Fredericka Lucas","address":"Sit quisquam alias ","city":"Illo voluptates sed ","country":"United States of America","state":"Alabama","zip":47296,"additionalInsuredAttachments":[{"org_id":"3","created_id":"6","uuid":"9af76901-9490-4fdd-b1ca-ac544d59d942","name":"sample2.txt","originalName":"sample.txt","extension":"txt","created_date":"2020-09-14 12:17:01","type":"text/plain","file":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","url":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","path":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","id":"3","size":282}]}],"appId":"d77ea120-b028-479b-8c6e-60476b6a4456","email":"zudi@mailinator.com","end_date":"2021-06-30 00:00:00","firstname":"Geoffrey","lastname":"Malone","name":"Geoffrey Malone"}'
+    uuid: "b3bbf0ff-e489-4938-b672-9271fb0d8ffd"
+    date_created: "2019-06-26 10:00:00"
+    last_workflow_instance_id: 10
+    created_by: 2
+    entity_id: 3
 ox_file_attribute:
   - id: 1
     file_id: 11
@@ -1063,4 +1071,16 @@ ox_indexed_file_attribute:
 ox_entity_identifier:
   - entity_id: 1
     identifier: "field1"
+ox_file_attachment:
+  - id: 1
+    uuid: '9af76901-9490-4fdd-b1ca-ac544d59d942'
+    name: 'sample.txt'
+    originalName: 'sample.txt'
+    extension: '.txt'
+    type: 'text/plain'
+    path: '/app/api/v1/data/file_docs/53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/sample.txt'
+    url: 'http://localhost:8080/53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/sample.txt'
+    created_id: 1
+    org_id: 1
+    created_date: '2020-09-14 12:17:01'
 

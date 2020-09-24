@@ -18,6 +18,19 @@ content:
                                     app_uuid: '{{app_uuid}}'
                                     content: '{{content}}'
                         icon: 'far fa-pencil-alt'
+                    -
+                        name: Delete
+                        rule: "true"
+                        details:
+                            -
+                                type: Update
+                                successMessage: "Form deleted successfully!"
+                                params:
+                                    app_uuid: '{{app_uuid}}'
+                                    url: 'app/{{app_uuid}}/artifact/delete/form/{{name}}.json'
+                                    disableAppId: true
+                        icon: 'fas fa-trash-alt' 
+                        updateOnly: true   
                 operations:
                     actions:
                         -
