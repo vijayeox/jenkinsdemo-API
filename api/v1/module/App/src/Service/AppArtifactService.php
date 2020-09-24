@@ -226,8 +226,10 @@ class AppArtifactService extends AbstractService
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != "..") {
                     $ext = pathinfo($entry, PATHINFO_EXTENSION);
-                    if(($ext=='json' && $artifactType =='form') || ($ext=='bpmn' && $artifactType =='workflows') ){
-                        $files[] = array('name'=>substr($entry, 0, strrpos($entry, '.')),'content'=>file_get_contents($targetDir.$entry));
+                    if (($ext == 'json' && $artifactType == 'form') || ($ext == 'bpmn' && $artifactType == 'workflow')) {
+                        $files[] = array(
+                            'name' => substr($entry, 0, strrpos($entry, '.'))
+                        );
                     }
                 }
             }
