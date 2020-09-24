@@ -75,7 +75,7 @@ class AppService extends AbstractService
         $this->businessRoleService = $businessRoleService;
         $this->userService = $userService;
         $this->restClient = new RestClient(null);
-        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration","symlink");
+        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration","view","symlink");
     }
 
     /**
@@ -835,7 +835,8 @@ private function checkWorkflowData(&$data,$appUuid)
                     $result = $this->roleService->saveTemplateRole($role, $role['uuid']);
                     $roleData['uuid'] = $role['uuid'];
                 }else{
-                    $result = $this->roleService->saveRole($params, $role, $role['uuid']);
+                    unset($role['uuid']);
+                    $result = $this->roleService->saveRole($params, $role);
                 }
                 
             }
