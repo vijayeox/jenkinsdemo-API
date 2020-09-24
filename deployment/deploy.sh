@@ -934,7 +934,7 @@ axon
 covid
 riscom
 biofi
-tennants
+tennant
 bsri
 hiig
 appbuilder
