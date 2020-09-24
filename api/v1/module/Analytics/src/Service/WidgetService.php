@@ -9,6 +9,8 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ValidationException;
+use Oxzion\InsertFailedException;
+use Oxzion\EntityNotFoundException;
 use Ramsey\Uuid\Uuid;
 use Webit\Util\EvalMath\EvalMath;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
