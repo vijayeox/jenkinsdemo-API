@@ -134,8 +134,8 @@ class WidgetService extends AbstractService
         if (isset($data['configuration']) && is_array($data['configuration'])) {
             $data['configuration'] =  json_encode($data['configuration']);
         }
-        if (isset($data['configuration']) && is_array($data['configuration'])) {
-            $data['configuration'] =  json_encode($data['configuration']);
+        if (isset($data['expression']) && is_array($data['expression'])) {
+            $data['expression'] =  json_encode($data['expression']);
         }
         $widget->assign($data); 
 
