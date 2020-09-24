@@ -249,6 +249,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_propertyDeductiblesPercentage'] = $data['propertyDeductiblesPercentage'];
                 $policy['previous_travelEnO'] = $data['TravelAgentEOFP'];
                 $policy['previous_travelAgentEOReceiptsPL'] = isset($data['travelAgentEOReceiptsPL']) ? $data['travelAgentEOReceiptsPL'] : 0;
+                $policy['previous_travelAgentEoPL'] = $data['travelAgentEoPL'];
                 $policy['previous_MedicalExpenseFP'] = isset($data['MedicalExpenseFP']) ? $data['MedicalExpenseFP'] : 0;
                 $policy['previous_padiFeePL'] = $data['padiFeePL'];
                 $policy['previous_TravelAgentEOFP'] = isset($data['TravelAgentEOFP']) ? $data['TravelAgentEOFP'] : 0;
