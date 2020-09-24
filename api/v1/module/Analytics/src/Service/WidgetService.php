@@ -125,19 +125,19 @@ class WidgetService extends AbstractService
 
         $widget = new Widget($this->table);
         $widget->loadByUuid($uuid);
-        $widget->assign($data); 
 
         if (isset($data['visualization_uuid'])) {
             //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
             $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $data['org_id']));
             $widget->setForeignKey('visualization_id', $visualizationId);
         }
-        if (isset($data['configuration'])) {
-            $widget->setProperty('configuration', json_encode($data['configuration']));
+        if (isset($data['configuration']) && is_array($data['configuration'])) {
+            $data['configuration'] =  json_encode($data['configuration']);
         }
-        if (isset($data['expression'])) {
-            $widget->setProperty('expression', json_encode($data['expression']));
+        if (isset($data['configuration']) && is_array($data['configuration'])) {
+            $data['configuration'] =  json_encode($data['configuration']);
         }
+        $widget->assign($data); 
 
         try {
             $this->beginTransaction();
