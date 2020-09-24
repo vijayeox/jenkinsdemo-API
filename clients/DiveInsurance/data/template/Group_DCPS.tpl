@@ -14,8 +14,20 @@
         <div class="spacer" style="margin-top: 3%"></div>
         <center>
             <b>
-                <p style="margin-top: 5px;" class="info">Store Location: <span class="storeLocation uppercase">{$address1}, {$address2}, {$city}, {$state},
-                        {$zip}, {$country}</span></p>
+                <p style="margin-top: 5px;" class="info">Store Location:
+                {if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress === "false" || $sameasmailingaddress == 0)}
+                    <span class="storeLocation uppercase">{$mailaddress1}</span>,
+                    <span class="storeLocation uppercase">{$mailaddress2}</span>,
+                    <span class="storeLocation uppercase">{$physical_city}</span>,
+                    <span class="storeLocation uppercase">{$physical_state}</span> <span class="uppercase">{$physical_zip}</span>
+                </p>
+                {else}
+                    <span class="storeLocation uppercase">{$address1}</span>,
+                    <span class="storeLocation uppercase">{$address2}</span>,
+                    <span class="storeLocation uppercase">{$city}</span>,
+                    <span class="storeLocation uppercase">{$state}</span> <span class="uppercase">{$zip}</span>
+                </p>
+                {/if}
             </b>
         </center>
         <!-- First Section -->
