@@ -541,9 +541,9 @@ class UserController extends AbstractApiController
             } catch (Exception $e) {
                 return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
             }
-            return $this->getSuccessResponseWithData(array(), 200);
+            return $this->getSuccessResponse();
         }else{
-            return $this->getErrorResponse("invalid username.", 401); 
+            return $this->getErrorResponse("Invalid Username", 401); 
         }
     }
 }

@@ -231,7 +231,7 @@
 		"label": "Organization Info",
 		"input": false,
 		"components": [{
-			"label": "Do you want to add organisation information",
+			"label": "Do you want to add organization information",
 			"tableView": false,
 			"defaultValue": false,
 			"clearOnHide": false,
@@ -1065,7 +1065,7 @@
 					"tableView": false
 				}, {
 					"label": "Form Uuid",
-					"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n\nconsole.log(value);",
+					"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
 					"key": "uuid",
 					"type": "hidden",
 					"input": true,
@@ -1090,7 +1090,7 @@
 				"next": true
 			},
 			"collapsible": false,
-			"disabled": true,
+			"disabled": false,
 			"tableView": false,
 			"key": "workflowPanel",
 			"type": "panel",
@@ -1106,8 +1106,18 @@
 				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
+				"defaultValue": [{
+					"name": "",
+					"entity": {},
+					"template": [],
+					"bpmn_file": "",
+					"uuid": ""
+				}],
 				"clearOnHide": false,
-				"key": "workflowDuplicate",
+				"validate": {
+					"custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n    console.log(\"Sadd\");\n    console.log(data.workflow);\n    valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+				},
+				"key": "workflow",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
@@ -1121,7 +1131,9 @@
 					"label": "Entity",
 					"widget": "choicesjs",
 					"tableView": true,
+					"multiple": true,
 					"dataSrc": "custom",
+					"defaultValue": [{}],
 					"data": {
 						"values": [{
 							"label": "",
@@ -1131,6 +1143,9 @@
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
+					"validate": {
+						"multiple": true
+					},
 					"key": "entity",
 					"type": "select",
 					"indexeddb": {
@@ -1140,16 +1155,37 @@
 				}, {
 					"label": "Workflow BPMN",
 					"tableView": false,
-					"storage": "base64",
-					"webcam": false,
+					"storage": "url",
+					"webcam": true,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
 					}],
+					"filePattern": ".bpmn",
+					"fileMaxSize": "10MB",
 					"clearOnHide": false,
-					"key": "template_file",
+					"key": "template",
+					"properties": {
+						"absoluteUrl": "true"
+					},
 					"type": "file",
+					"url": "/app/{{data.app.uuid}}/artifact/add/workflow",
 					"input": true
+				}, {
+					"label": "BPMN File",
+					"calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
+					"key": "bpmn_file",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
+					"label": "Workflow Uuid",
+					"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
+					"key": "uuid",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}]
 			}]
 		}]
@@ -1259,7 +1295,7 @@
 							"key": "pageContent",
 							"type": "form",
 							"input": true,
-							"formRevision": 26,
+							"formRevision": 28,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Page Content",
@@ -1420,7 +1456,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 365,
+	"_vid": 372,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1439,6 +1475,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-09-20T15:28:43.523Z",
+	"modified": "2020-09-24T10:56:12.507Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
