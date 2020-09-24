@@ -1,30 +1,32 @@
 app:
-    name: RISCOMInsurance
-    description: 'Insurance OI Application'
-    category: Dashboards
-    type: 2
-    autostart: 'true'
-    uuid: 33f335b9-ceb9-4fd6-b51e-b4911eece839
-    isdefault: false
-    logo: default_app.png
-    status: 4
-    start_options: null
+    -
+        name: RISCOMInsurance
+        description: 'Insurance OI Application'
+        category: Dashboards
+        type: 2
+        autostart: 'true'
+        uuid: 33f335b9-ceb9-4fd6-b51e-b4911eece839
+        isdefault: false
+        logo: default_app.png
+        status: 4
+        start_options: null
 org:
-    name: RISCOM
-    uuid: 8396d782-d9a1-40d2-abf0-b291b8ff75f4
-    email: riscom@vantageagora.com
-    address1: '333 Texas Street, Suite 1150'
-    address2: 'Shreveport, Louisiana 71101'
-    city: Shreveport
-    state: LA
-    zip: 71101
-    contact:
-        username: riscominsurer
-        firstname: Riscom
-        lastname: Insurer
-        email: riscominsurer@vantageagora.com
-    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
-    country: 'United States'
+    -
+        name: RISCOM
+        uuid: 8396d782-d9a1-40d2-abf0-b291b8ff75f4
+        email: riscom@vantageagora.com
+        address1: '333 Texas Street, Suite 1150'
+        address2: 'Shreveport, Louisiana 71101'
+        city: Shreveport
+        state: LA
+        zip: 71101
+        contact:
+            username: riscominsurer
+            firstname: Riscom
+            lastname: Insurer
+            email: riscominsurer@vantageagora.com
+        preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+        country: 'United States'
 privilege:
     -
         name: MANAGE_RISCOMAGENT
@@ -63,29 +65,29 @@ role:
 pages:
     -
         page_name: RISCOMManagerAgentOIPage.yml
-        uuid: 3fa544fa-a5bd-4b0f-9927-095dc6721c21
+        uuid: 99c8efa0-c42e-4a6e-b94e-8aa29835b687
     -
         page_name: RISCOMManagerUnderwriterOIPage.yml
-        uuid: ea4368d2-f5e7-48c9-bd0a-9e02c5ca84eb
+        uuid: d5246917-6bd8-4821-8829-7f9e1bb01825
     -
         page_name: RISCOMManagerProductionOIPage.yml
-        uuid: f7402ebc-995a-49c7-838a-58880a261b65
+        uuid: 32e74d3d-97c4-4b56-88b7-a9b11cf6ee59
 menu:
     -
         name: Agent
         icon: 'fal fa-address-card'
         privilege: MANAGE_RISCOMAGENT_WRITE
-        page_uuid: 3fa544fa-a5bd-4b0f-9927-095dc6721c21
-        uuid: 99c8efa0-c42e-4a6e-b94e-8aa29835b687
+        page_uuid: 99c8efa0-c42e-4a6e-b94e-8aa29835b687
+        uuid: 27ff522d-4d63-4312-940f-a99d720f61c9
     -
         name: Underwriter
         icon: 'fad fa-user-edit'
         privilege: MANAGE_RISCOMUNDERWRITER_WRITE
-        page_uuid: ea4368d2-f5e7-48c9-bd0a-9e02c5ca84eb
-        uuid: d5246917-6bd8-4821-8829-7f9e1bb01825
+        page_uuid: d5246917-6bd8-4821-8829-7f9e1bb01825
+        uuid: ea4368d2-f5e7-48c9-bd0a-9e02c5ca84eb
     -
         name: Production
         icon: 'fal fa-funnel-dollar'
         privilege: MANAGE_RISCOMPRODUCTION_WRITE
-        page_uuid: f7402ebc-995a-49c7-838a-58880a261b65
-        uuid: 32e74d3d-97c4-4b56-88b7-a9b11cf6ee59
+        page_uuid: 32e74d3d-97c4-4b56-88b7-a9b11cf6ee59
+        uuid: f7402ebc-995a-49c7-838a-58880a261b65
