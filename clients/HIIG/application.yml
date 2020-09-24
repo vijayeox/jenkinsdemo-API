@@ -15,7 +15,7 @@ org:
         address2: 'Houston	TX 77024'
         city: Houston
         state: TX
-        zip: 77024
+        zip: 77025
         contact:
             username: hiiginsurer
             firstname: HIIG
