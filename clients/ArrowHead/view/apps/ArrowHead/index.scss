@@ -130,7 +130,8 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
   #floater {
     position: fixed;
-    bottom: 10px;
+    background-color: #f8f9fa;
+    bottom: 15px;
     right: 30px;
     pointer-events: none;
     img {
@@ -139,6 +140,34 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
       pointer-events: none;
       opacity: 0.8;
     }
+    .helpText {
+      position: absolute;
+      display: flex;
+      top: 28px;
+      width: max-content;
+      text-align: center;
+      left: -200px;
+      p {
+        border-radius: 30px;
+        pointer-events: all;
+        background-color: #f0f8ff94;
+        padding: 3px;
+        font-size: 15px;
+        a {
+          padding-left: 5px;
+        }
+      }
+    }
+  }
+
+  .policyStatusReview {
+    background-color: #faaa2c;
+    color: $secondary-dark;
+  }
+
+  .policyStatusFailed {
+    background-color: #ec5b4f;
+    color: white;
   }
 
   .formLoader {
