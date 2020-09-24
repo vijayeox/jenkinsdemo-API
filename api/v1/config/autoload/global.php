@@ -73,6 +73,7 @@ return [
     'ENTITY_FOLDER'=>__DIR__.'/../../data/entity/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
     'PAGE_FOLDER'=>__DIR__.'/../../data/pages/',
+    'apiUrl' => 'http://localhost:8080',
     'applicationUrl' => 'http://localhost:8081',
     'RULE_FOLDER'=>__DIR__.'/../../data/rules/',
     'DATA_FOLDER'=>__DIR__.'/../../data/',
