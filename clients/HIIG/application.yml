@@ -1,26 +1,28 @@
 app:
-    name: HIIGInsurance
-    uuid: 5c94711c-47ec-4687-b3a8-ade7e3ac404b
-    description: 'Insurance OI Application'
-    category: Dashboards
-    type: 2
-    autostart: 'true'
+    -
+        name: HIIGInsurance
+        uuid: 5c94711c-47ec-4687-b3a8-ade7e3ac404b
+        description: 'Insurance OI Application'
+        category: Dashboards
+        type: 2
+        autostart: 'true'
 org:
-    name: 'HIIG'
-    uuid: d5cf6f2b-5384-4fbe-99b2-b787a557cd50
-    email: hiig@vantageagora.com
-    address1: '800 Gessner Rd'
-    address2: 'Houston	TX 77024'
-    city: Houston
-    state: TX
-    zip: 77024
-    contact:
-        username: hiiginsurer
-        firstname: HIIG
-        lastname: Insurer
-        email: hiiginsurer@vantageagora.com
-    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
-    country: 'United States'
+    -
+        name: 'HIIG'
+        uuid: d5cf6f2b-5384-4fbe-99b2-b787a557cd50
+        email: hiig@vantageagora.com
+        address1: '800 Gessner Rd'
+        address2: 'Houston	TX 77024'
+        city: Houston
+        state: TX
+        zip: 77024
+        contact:
+            username: hiiginsurer
+            firstname: HIIG
+            lastname: Insurer
+            email: hiiginsurer@vantageagora.com
+        preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+        country: 'United States'
 privilege:
     -
         name: MANAGE_HOSPITALITYAGENT
