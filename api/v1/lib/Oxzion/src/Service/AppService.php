@@ -75,7 +75,7 @@ class AppService extends AbstractService
         $this->businessRoleService = $businessRoleService;
         $this->userService = $userService;
         $this->restClient = new RestClient(null);
-        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration","view","symlink");
+        $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration", "view", "symlink");
     }
 
     /**
@@ -564,8 +564,9 @@ public function setupAppView($yamlData, $path)
     $metadataPath = $appName . '/metadata.json';
     $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
     if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
-        FileUtils::copyDir($eoxapp, $path);
         FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
+    }else{
+        FileUtils::rmDir($path . 'view/apps/eoxapps');
     }
     $jsonData = json_decode(file_get_contents($metadataPath),true);
     $jsonData['name'] = $yamlData['app']['name'];
@@ -611,6 +612,9 @@ public function processWorkflow(&$yamlData, $path)
                     $bpmnFilePath = $path . "content/workflows/" . $value['bpmn_file'];
                     $result = $this->workflowService->deploy($bpmnFilePath, $appUuid, $value, $entity['id']);
                 }
+                if (isset($value['entity'])) {
+                    $this->assignWorkflowToEntityMapping($value['entity'], $value['uuid'],$appUuid);
+                }
             }
         }
     }
@@ -627,12 +631,6 @@ private function checkWorkflowData(&$data,$appUuid)
             $data['name'] = str_replace('.bpmn', '', $data['bpmn_file']); // Replaces all .bpmn with no space.
             $data['name'] = str_replace(' ', '_', $data['bpmn_file']); // Replaces all spaces
             $data['name'] = preg_replace('/[^A-Za-z0-9_]/', '', $data['name'], -1); // Removes special chars.
-        }
-        if (isset($data['entity'])) {
-            $this->assignWorkflowToEntityMapping($data['entity'], $data['uuid'],$appUuid);
-        } else {
-            $this->logger->warn("Entity not given, deploy failed ! ");
-            return 1;
         }
     }
 
