@@ -65,7 +65,7 @@ class TargetService extends AbstractService
         $form = new Target();
         // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         // $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate();
+        $form->validate();
         $count = 0;
         try {
             $count = $form->save($form);
@@ -94,7 +94,7 @@ class TargetService extends AbstractService
         $form = new Target();
         // $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         // $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate($data);
+        $form->validate($data);
         $count = 0;
         try {
             $count = $form->save($form);
