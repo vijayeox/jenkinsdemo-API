@@ -6,9 +6,12 @@
 <body>
   <div class ="body_div_endo">
       
-      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO) || (isset($removed_liability_limit) && $removed_liability_limit))}
+      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO) || (isset($removed_liability_limit) && $removed_liability_limit) || (isset($newAdditionalPremium) && $newAdditionalPremium))}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
+          {if isset($newAdditionalPremium) && $newAdditionalPremium}
+            <p><center>{$additionalPremiumDescription}</center></p>
+          {/if}
           {if isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit}
             <p>+Medical Expense Liability now applies as of the Effective date on this Endorsement ({$increased_medicalPayment_limit} Limit)</p>
           {/if}
