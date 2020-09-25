@@ -235,21 +235,17 @@ export default class DocumentViewer extends Component {
                         <Card
                           className="docItems"
                           onClick={(e) => {
-                            this.state.selectedDocument
-                              ? doc.file != this.state.selectedDocument.file
-                                ? this.handleDocumentClick(doc)
-                                : null
-                              : null;
+                            doc.file != this.state.selectedDocument?(this.state.selectedDocument.file
+                              ? this.handleDocumentClick(doc)
+                              : null):null;
                           }}
                           key={i}
                         >
                           <div
                             className={
-                              this.state.selectedDocument
-                                ? doc.file == this.state.selectedDocument.file
-                                  ? "docListBody borderActive"
-                                  : "docListBody border"
-                                : null
+                              doc.file == this.state.selectedDocument?(this.state.selectedDocument.file
+                                ? "docListBody borderActive"
+                                : "docListBody border"):"docListBody border"
                             }
                           >
                             <i

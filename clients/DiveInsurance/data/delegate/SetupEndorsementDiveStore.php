@@ -426,12 +426,13 @@ public function execute(array $data,Persistence $persistenceService)
                         }else if($value['effectiveDate'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                             $data['groupPL'][$key]['existingEffectiveDate'] = $value['start_date'];
-                        }else if ($value['padi'] == ""){
+                        }else if (isset($value['padi']) && $value['padi'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $data['update_date'];
                         }
                         if(is_string($value['documentattach'])){
                             $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
-                        }
+			}
+			if(isset($data['padi'])){
                         $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
                         $result = $persistenceService->selectQuery($select);
                         if($result->count() > 0){
@@ -445,7 +446,8 @@ public function execute(array $data,Persistence $persistenceService)
                             $data['groupPL'][$key]['rating'] = $response[0]['rating'];
                         } else {
                             // $data['groupPL'][$key]['rating'] = $response[0]['rating'];
-                        }
+			}
+			}
                     }
                 }
             }
