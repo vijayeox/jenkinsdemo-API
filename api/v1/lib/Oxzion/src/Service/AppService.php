@@ -566,7 +566,9 @@ public function setupAppView($yamlData, $path)
     if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
         FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
     }else{
-        FileUtils::rmDir($path . 'view/apps/eoxapps');
+        if(is_dir($path . 'view/apps/eoxapps')){
+            FileUtils::rmDir($path . 'view/apps/eoxapps');
+        }
     }
     $jsonData = json_decode(file_get_contents($metadataPath),true);
     $jsonData['name'] = $yamlData['app']['name'];
