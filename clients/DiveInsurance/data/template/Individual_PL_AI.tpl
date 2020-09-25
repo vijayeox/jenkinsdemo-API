@@ -102,7 +102,7 @@
 			    			{/if})
 		    			{/if}	
 		    		</p>
-	    		{/foreach}
+	    		{/foreach}<br/>
 			{/foreach}
     	</div>
 	</div>

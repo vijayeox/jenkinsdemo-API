@@ -3037,7 +3037,16 @@
 								"type": "textarea",
 								"input": true,
 								"hideOnChildrenHidden": false
-							}],
+              },{
+                "label": "Endorsement Effective Date",
+                "calculateValue": "if(!row.effective_date || row.effective_date == undefined || row.effective_date ==''){\n  value = moment(data.update_date).format(\"YYYY-MM-DD\");\n}",
+                "key": "endo_effective_date",
+                "type": "hidden",
+                "input": true,
+                "tableView": false,
+                "hideOnChildrenHidden": false
+              }
+            ],
 							"width": 6,
 							"offset": 0,
 							"push": 0,

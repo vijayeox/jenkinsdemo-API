@@ -257,6 +257,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_doYouWantToApplyForNonOwnerAuto'] = $data['doYouWantToApplyForNonOwnerAuto'];
                 $policy['previous_storeExcessLiabilitySelect'] = $data['excessLiabilityCoveragePrimarylimit1000000PL'];
                 $policy['previous_poolLiability'] = isset($data['poolLiability'])?$data['poolLiability']:0;
+                $policy['previous_totalAddPremium'] = isset($data['totalAddPremium']) ? $data['totalAddPremium'] : 0;
                 if(isset($data['additionalLocations'])){
                     foreach($data['additionalLocations'] as $key => $value){
                         $additionalLocations = $data['additionalLocations'][$key];
@@ -431,6 +432,15 @@ public function execute(array $data,Persistence $persistenceService)
                         }
                         if(is_string($value['documentattach'])){
                             $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
+            }
+            if(isset($data['groupAdditionalInsured'])){
+                if($data['groupAdditionalInsured'] != ""){
+                    foreach ($data['groupAdditionalInsured'] as $key => $value) {
+                        if(!isset($value['effective_date'])){
+                            $data['groupAdditionalInsured'][$key]['effective_date'] = isset($data['start_date']) ? $data['start_date'] : $data['update_date'];
+                        }
+                    }
+                }
 			}
 			if(isset($data['padi'])){
                         $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
