@@ -1371,6 +1371,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
                 $temp['liabilityChanges'] = false;
+
+                if(isset($data['totalAddPremium']) && isset($policy['previous_totalAddPremium'])){
+                    $data['additionalPremiumDescription'] = isset($data['additionalPremiumDescription']) ? $data['additionalPremiumDescription'] : "";
+                    if($data['totalAddPremium'] != $policy['previous_totalAddPremium'] && $data['additionalPremiumDescription'] != ""){
+                        $temp['liabilityChanges'] = true;
+                        $temp['newAdditionalPremium'] = true;
+                    }
+                }
                 $temp['liabilityCoverageChanges'] = false;
                 if(isset($data['liabilityCoverageOption']) && isset($policy['previous_liabilityCoverageOption'])){
                     if($policy['previous_liabilityCoverageOption'] != $data['liabilityCoverageOption']){
