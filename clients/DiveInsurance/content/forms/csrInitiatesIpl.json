@@ -4161,13 +4161,13 @@
 								"hideOnChildrenHidden": false
 							}, {
 								"label": "Effective Date",
-								"calculateValue": "value= data.start_date;",
+								"calculateValue": "if(data.AdditionalInsuredOption == \"noAdditionalInsureds\"){\n  value= \"\";\n}else {\n  value= data.start_date;\n}",
 								"key": "effective_date",
 								"type": "hidden",
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
-							}],
+							  }],
 							"width": 6,
 							"offset": 0,
 							"push": 0,
