@@ -49,14 +49,11 @@ class EmployeeService extends AbstractService
             $EmpData['designation'] = "Staff";
         }
         
-        $form = new Employee($EmpData);
-        $form->validate();
+        $form = new Employee($this->table);
+        $form->assign($EmpData);
         try {
             $this->beginTransaction();
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                throw new ServiceException("Failed to add the Employee Record", "failed.add.employee");
-            }
+            $form->save();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -102,13 +99,12 @@ class EmployeeService extends AbstractService
         }
         $EmpData['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $EmpData['date_modified'] = date('Y-m-d H:i:s');
-        $form = new Employee();
+        $form = new Employee($this->table);
         $changedArray = array_merge($obj->toArray(), $EmpData);
-        $form->exchangeArray($changedArray);
-        $form->validate();
+        $form->assign($changedArray);
         try {
             $this->beginTransaction();
-            $this->table->save($form);
+            $form->save();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
