@@ -253,12 +253,13 @@ class AppArtifactService extends AbstractService
             $yaml = Yaml::parse(file_get_contents($descriptorPath));
         }
         if ($action == 'save') {
+            $filePath = $artifactType == 'workflow' ? 'bpmn_file' : 'template_file';
             if (!isset($yaml[$artifactType])) {
                 $yaml[$artifactType] = [];
             }
             array_push($yaml[$artifactType], array(
                 "name" => substr($file, 0, strrpos($file, '.')),
-                "template_file" => $file,
+                $filePath => $file,
                 "uuid" => UuidUtil::uuid()
             ));
         } else if ($action == 'delete') {
@@ -266,7 +267,8 @@ class AppArtifactService extends AbstractService
                 $yaml[$artifactType] = [];
             }
             foreach ($yaml[$artifactType] as $index => $value) {
-                if ($file == $value["template_file"]) {
+                $path = $artifactType == 'workflow' ? $value["bpmn_file"] : $value["template_file"];
+                if ($file == $path) {
                     unset($yaml[$artifactType][$index]);
                 }
             }
