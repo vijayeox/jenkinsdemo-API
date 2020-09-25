@@ -789,11 +789,8 @@ class AppService extends AbstractService
         }
         $orgdata = $orgData;
         $orgdata['app_id'] = $appId;
-        $result = $this->accountService->saveAccount($orgdata);
+        $this->accountService->saveAccount($orgdata);
         //setup business offering
-        if ($result == 0) {
-            throw new ServiceException("Organization could not be saved", 'org.not.saved');
-        }
         $orgData['uuid'] = $orgdata['uuid'];
         return $orgData;
     }

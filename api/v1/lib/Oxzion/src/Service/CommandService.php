@@ -238,12 +238,8 @@ class CommandService extends AbstractService
     }
 
     private function registerAccount($data) {
-        $success = $this->registrationService->registerAccount($data);
-        if ($success) {
-            $params['user'] = $data['contact'];
-        } else {
-            throw new Exception("Error Creating User.", 1);
-        }
+        $this->registrationService->registerAccount($data);
+        $params['user'] = $data['contact'];
         return $params;
     }
 

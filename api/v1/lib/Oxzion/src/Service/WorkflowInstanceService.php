@@ -241,7 +241,7 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("setupIdentityField");
         if (isset($params['identifier_field'])) {
             $data = $params;
-            $test = $this->registrationService->registerAccount($data);
+            $this->registrationService->registerAccount($data);
         }
     }
 

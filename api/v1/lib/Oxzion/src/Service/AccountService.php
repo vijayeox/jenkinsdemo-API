@@ -90,7 +90,6 @@ class AccountService extends AbstractService
         $data['date_modified'] = date('Y-m-d H:i:s');
 
         try{
-            $count = 0;
             $this->beginTransaction();
             if (isset($data['type']) && $data['type'] == Account::INDIVIDUAL) {
                 $data['name'] = $data['contact']['firstname']. " ". $data['contact']['lastname'];
@@ -105,7 +104,7 @@ class AccountService extends AbstractService
                     if ($data['reactivate'] == 1) {
                         $data['status'] = 'Active';
                         $this->logger->info("Data modified before Account Update - " . print_r($data, true));
-                        $count = $this->updateAccount($result[0]['uuid'], $data, $files);
+                        $this->updateAccount($result[0]['uuid'], $data, $files);
                         $this->uploadAccountLogo($result[0]['uuid'], $files);
                     } else {
                         throw new ServiceException("Account already exists would you like to reactivate?", "account.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
@@ -118,7 +117,7 @@ class AccountService extends AbstractService
                     $this->organizationService->addOrganization($data);
                     $data['type'] = Account::BUSINESS;        
                 }
-                $count = $this->saveAccountInternal($data, $files);
+                $this->saveAccountInternal($data, $files);
                 $this->messageProducer->sendTopic(json_encode(array('accountName' => $data['name'], 'status' => $data['status'])), 'ACCOUNT_ADDED');
             }
             $this->commit();
@@ -127,7 +126,6 @@ class AccountService extends AbstractService
             throw $e;
         }    
         
-        return $count;
     }
 
     public function registerAccount(&$data){
@@ -162,7 +160,7 @@ class AccountService extends AbstractService
         try{
             $this->beginTransaction();
             AuthContext::put(AuthConstants::REGISTRATION, TRUE);
-            $result = $this->createAccount($params, NULL);
+            $this->createAccount($params, NULL);
             $data['accountId'] = $params['uuid'];
             $this->addIdentifierForAccount($appId, $params);
             $this->commit();
@@ -173,7 +171,6 @@ class AccountService extends AbstractService
             throw $e;
         }
 
-        return $result;
     }
 
     private function getAppId($appId){
@@ -275,17 +272,13 @@ class AccountService extends AbstractService
         }
     }
     private function saveAccountInternal(&$data, $files = NULL){
-        $form = new Account($data);
-        $form->validate();
-        $count = 0;
-        $this->logger->info("Data modified before Account Create - " . print_r($form, true));
-        $count = $this->table->save($form);
-        if ($count == 0) {
-            throw new ServiceException("Failed to create new Account", "failed.create.account", OxServiceException::ERR_CODE_UNPROCESSABLE_ENTITY);
-        }
-        $form->id = $this->table->getLastInsertValue();
+        $form = new Account($this->table);
+        $form->assign($data);
+        $form->save();
         $data['preferences'] = json_decode($data['preferences'], true);
-        $data['id'] = $form->id;
+        $temp = $form->getGenerated(true);
+        $data['id'] = $temp['id'];
+        $data['uuid'] = $temp['uuid'];
         $this->setupBusinessRole($data);
         $defaultRoles = true;
         if(isset($data['business_role_id'])){
@@ -306,7 +299,6 @@ class AccountService extends AbstractService
         $resultSet = $this->executeQueryWithParams($insert);
         $this->uploadAccountLogo($data['uuid'], $files);
         $data['status'] = $form->status;
-        return $count;
     }
 
     /**
@@ -346,23 +338,20 @@ class AccountService extends AbstractService
 
     public function saveAccount(&$accountData)
     {
-        $create = true;
         if (isset($accountData['uuid'])) {
             try {
-                $result = $this->updateAccount($accountData['uuid'], $accountData, null);
-                $create = false;
+                $this->updateAccount($accountData['uuid'], $accountData, null);
+                return;
             } catch (ServiceException $e) {
                 if ($e->getMessageCode() != 'account.not.found') {
                     throw $e;
                 }
             }
         }
-        if ($create) {
-            $result = $this->createAccount($accountData, null);
-        }
+        
+        $this->createAccount($accountData, null);
+        
     
-
-        return $result;
     }
 
     /**
@@ -385,20 +374,18 @@ class AccountService extends AbstractService
             $data['preferences'] = json_encode($data['preferences']);
         }
         
-        $form = new Account();
+        $form = new Account($this->table);
         $changedArray = array_merge($obj->toArray(), $data);
         if (isset($changedArray['organization_id'])) {
             $this->organizationService->updateOrganization($changedArray['organization_id'],$data);
         }
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
-        $form->exchangeArray($changedArray);
-        $form->validate();
-        $count = 0;
-
+        $form->assign($changedArray);
+        
         try {
             $this->beginTransaction();
-            $count = $this->table->save($form);
+            $form->save();
             if (isset($files)) {
                 $this->uploadAccountLogo($id, $files);
             }
@@ -413,7 +400,6 @@ class AccountService extends AbstractService
         if ($form->status == 'InActive') {
             $this->messageProducer->sendTopic(json_encode(array('accountName' => $obj->name, 'status' => $form->status)), 'ACCOUNT_DELETED');
         }
-        return $count;
     }
 
     /**
@@ -507,7 +493,7 @@ class AccountService extends AbstractService
                     WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (count($response) == 0) {
-            return 0;
+            return null;
         } 
         return $response[0];
     }
