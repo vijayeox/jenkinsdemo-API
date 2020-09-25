@@ -932,13 +932,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return $stateLicenseDetails[0]['license_number'];
             }
         }
-        protected function getPolicyDetails($data,$persistenceService,$product = null,$category = null)
+        protected function getPolicyDetails(&$data,$persistenceService,$product = null,$category = null)
         {
             if(!isset($product)){
                 $product = $data['product'];
             }
+            if(!isset($data['state'])){
+                $state = $data['state'] = isset($data['us_state']) ? $data['us_state'] : isset($data['non_us_state']) ? $data['non_us_state'] : isset($data['business_state']) ? $data['business_state'] : "";
+            }else{
+                $state = $data['state'];
+            }
             $endDate = date_format(date_create($data['end_date']),"Y-m-d");
-            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' AND state = '".$data['state']."' AND `year` = YEAR('".$endDate."') - 1;";
+            $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' AND state = '".$state."' AND `year` = YEAR('".$endDate."') - 1;";
             $this->logger->info("Carrier Policy Query : $selectQuery");
             $resultQuery = $persistenceService->selectQuery($selectQuery);
             while ($resultQuery->next()) {
@@ -2082,18 +2087,22 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $padiList = array();
             $groupPL = array();
             foreach ($groupData as $key => $row)
-            {
+	    {
+		if(isset($row[$sortKey])){
                 $padiList[$key] = ($sortKey == 'name') ? strtoupper($row[$sortKey]) : $row[$sortKey];
                 if($sortKey == 'name'){
                     $groupData[$key]['name'] = $padiList[$key];
-                }
+		}
+		}
             }
             asort($padiList);
             foreach ($padiList as $key => $value) {
-                foreach($groupData as $key1 => $value1){
-                    if($padiList[$key] == $groupData[$key1][$sortKey]){
-                        array_push($groupPL,$groupData[$key1]);
-                    }
+		    foreach($groupData as $key1 => $value1){
+			if(isset($groupData[$key1]) &&isset($groupData[$key1][$sortKey])){
+                    		if($padiList[$key] == $groupData[$key1][$sortKey]){
+                        		array_push($groupPL,$groupData[$key1]);
+		    		}
+			    }
                 }
             }
             $data = json_encode($groupPL);
