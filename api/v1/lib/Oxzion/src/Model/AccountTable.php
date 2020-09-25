@@ -12,8 +12,4 @@ class AccountTable extends ModelTable
         parent::__construct($tableGateway);
     }
 
-    public function save(Entity $data)
-    {
-        return $this->internalSave($data->toArray());
-    }
 }

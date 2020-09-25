@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Model;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity;
 
 class Account extends Entity
@@ -8,33 +9,35 @@ class Account extends Entity
     const BUSINESS = 'BUSINESS';
     const INDIVIDUAL = 'INDIVIDUAL';
 
-    protected $data = array(
-        'id' => null,
-        'name' => null,
-        'uuid' => null,
-        'subdomain' => null,
-        'contactid' => null,
-        'preferences' => null,
-        'theme' => 0,
-        'organization_id' => null,
-        'status' => 'Active',
-        'type' => 'BUSINESS'
+    protected static $MODEL = array(
+        'id' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
+        'uuid' =>               ['type' => Type::UUID,      'readonly' => FALSE,  'required' => FALSE],
+        'name' =>               ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'subdomain' =>          ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'contactid' =>          ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'preferences' =>        ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'theme' =>              ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'organization_id' =>    ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE, 
+            //Dynamic validation code is run using PHP eval function. It runs in the context of Entity. 
+            //Dynamic code has access to following implicit variables:
+            //      $data - Array containing all the properties of this entity.
+            //      $value - Value of the property being validated.
+            //      $property - Name of the property being validated.
+            //Dynamically evaluated code should return:
+            //      NULL if validation passes.
+            //      Validation error message if validation fails.
+            //Dynamically evaluated code may also throw InvalidPropertyValueException 
+            //(\Oxzion\InvalidPropertyValueException) if validation fails.
+            'dynamicValidation' => '
+                if($data["type"] == "BUSINESS" && !$value){
+                    return "Organization not set for Business type Account";
+                }
+            '],
+        'status' =>             ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE, 'value' => 'Active'],
+        'type' =>               ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE, 'value' => 'BUSINESS'],
     );
 
-    public function __construct($data = array())
-    {
-        if ($data) {
-            $this->exchangeArray($data);
-        }
-    }
-
-    public function validate()
-    {
-        $required = array(
-            'name',
-            'status',
-            'preferences'
-        );
-        $this->validateWithParams($required);
+    public function &getModel() {
+        return self::$MODEL;
     }
 }
