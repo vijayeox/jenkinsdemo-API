@@ -78,7 +78,7 @@ class EntityControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = json_decode('{"name":"Entity Test1","description":"Entity Description"}');
+        $data = json_decode('{"name":"Entity Test1","description":"Entity Description"}', true);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -89,8 +89,16 @@ class EntityControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'] > 2, true);
-        $this->assertEquals($content['data']['name'], $data->name);
+        $this->assertEquals(isset($content['data']['id']), FALSE);
+        $this->assertEquals(isset($content['data']['uuid']), TRUE);
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['description'], $data['description']);
+        $query = "SELECT * from ox_app_entity where uuid = '".$content['data']['uuid']."'";
+        $result = $this->executeQueryTest($query);
+        $this->assertEquals(count($result), 1);
+        $this->assertEquals($result[0]['name'], $data['name']);
+        $this->assertEquals($result[0]['description'], $data['description']);
+        $this->assertEquals($result[0]['app_id'], 99);
     }
 
     public function testCreateFailure()
@@ -99,7 +107,7 @@ class EntityControllerTest extends ControllerTest
         $data = ['app_id' => 99];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity', 'POST', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->assertModuleName('App');
         $this->assertControllerName(EntityController::class); // as specified in router's controller name alias
         $this->assertControllerClass('EntityController');
@@ -107,8 +115,8 @@ class EntityControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['name'], 'required');
+        $this->assertEquals($content['message'], 'Validation error(s).');
+        $this->assertEquals($content['data']['errors']['name']['error'], 'required');
     }
 
     public function testUpdate()
@@ -142,20 +150,20 @@ class EntityControllerTest extends ControllerTest
         $this->assertMatchedRouteName('appentity');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Entity Not Found');
+        $this->assertEquals($content['message'], 'Entity not found for the App');
     }
 
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/8ab30b2d-d1da-427a-8e40-bc954b2b0f87/entity/e13d0c68-98c9-11e9-adc5-308d99c9145b', 'DELETE');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(EntityController::class); // as specified in router's controller name alias
         $this->assertControllerClass('EntityController');
         $this->assertMatchedRouteName('appentity');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -171,6 +179,6 @@ class EntityControllerTest extends ControllerTest
         $this->assertMatchedRouteName('appentity');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Entity Not Found');
+        $this->assertEquals($content['message'], 'Entity not found for the App');
     }
 }
