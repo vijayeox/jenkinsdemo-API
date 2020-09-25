@@ -273,7 +273,7 @@ class ElasticService
                 } else {
                     $format = "MMM-yyyy";
                 }
-                $grouparraytmp = array('date_histogram' => array('field' => key($searchconfig['range']), 'interval' => $interval, 'format' => $format));
+                $grouparraytmp = array('date_histogram' => array('field' => $searchconfig['frequency'], 'interval' => $interval, 'format' => $format));
             } else {
                 $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
                 $boolfilterquery['_source'][] = $grouptext;
@@ -359,12 +359,12 @@ class ElasticService
                 $this->filterFields=array_merge($this->filterFields,$this->filterTmpFields);
             }
         }
-        if ($searchconfig['range']) {
-            $daterange = $searchconfig['range'][key($searchconfig['range'])];
-            $dates = explode("/", $daterange);
-            $mustquery['must'][] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
+        // if ($searchconfig['range']) {
+        //     $daterange = $searchconfig['range'][key($searchconfig['range'])];
+        //     $dates = explode("/", $daterange);
+        //     $mustquery['must'][] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
 
-        }
+        // }
         return $mustquery;
 
     }
