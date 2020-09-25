@@ -1,42 +1,30 @@
 <?php
 namespace Oxzion\Model;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity;
 
 class Person extends Entity
 {
-    protected $data = array(
-        'id' => null,
-        'uuid' => null,
-        'firstname' => null,
-        'lastname' => null,
-        'email' => null,
-        'date_of_birth' => null,
-        'phone' => null,
-        'gender' => null,
-        'signature' => null,
-        'address_id' => null,
-        'date_modified' => null,
-        'created_by' => null,
-        'modified_by' => null,
-        'date_created' => null,
+    protected static $MODEL = array(
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => FALSE, 'required' => FALSE],
+        'firstname' =>      ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'lastname' =>       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'email' =>          ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'date_of_birth' =>  ['type' => Type::DATE,      'readonly' => FALSE, 'required' => TRUE],
+        'phone' =>          ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'gender' =>         ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'signature' =>      ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'address_id' =>     ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'date_modified' =>  ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'modified_by' =>    ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
     );
 
-    public function __construct($data = array())
-    {
-        if ($data) {
-            $this->exchangeArray($data);
-        }
+    public function &getModel() {
+        return self::$MODEL;
     }
 
-    public function validate()
-    {
-        $required = array(
-            'firstname',
-            'lastname',
-            'email',
-            'date_of_birth',
-        );
-        $this->validateWithParams($required);
-    }
 }

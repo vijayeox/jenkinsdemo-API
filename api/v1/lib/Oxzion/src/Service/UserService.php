@@ -262,13 +262,9 @@ class UserService extends AbstractService
             if (!isset($data['status'])) {
                 $data['status'] = 'Active';
             }
-            $form = new User($data);
-            $form->validate();
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                throw new ServiceException("Failed to create the User", "failed.create.user", OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR);
-            }
-            $form->id = $data['id'] = $this->table->getLastInsertValue();
+            $form = new User($this->table);
+            $form->assign($data);
+            $form->save();
             $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
             $accountUserId = $this->addUserToAccount($form->id, $form->account_id);
             if (isset($data['role'])) {
@@ -498,30 +494,28 @@ class UserService extends AbstractService
                 $accountId = $this->getIdFromUuid('ox_account', $accountId);
             }
         }
+        $form = new User($this->table);
         if(is_numeric($id)){
-            $obj = $this->table->get($id);
+            $form->loadById($id);
         }else{
-            $obj = $this->table->getByUuid($id);
-        }
-        if (is_null($obj)) {
-            throw new EntityNotFoundException("User not found");
+            $form->loadByUuid($id);
         }
         
         if (isset($accountId)) {
-            $select = "SELECT account_id from ox_account_user where user_id = " . $obj->id;
+            $select = "SELECT account_id from ox_account_user where user_id = " . $form->id;
             $result = $this->executeQuerywithParams($select)->toArray();
             $acctArray = array_map('current', $result);
             if (!in_array($accountId, $acctArray)) {
                 throw new ServiceException('User does not belong to the Account', 'user.not.found',OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         }
-        $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
+        $userdata = array_merge($form->getProperties(), $data); //Merging the data from the db for the ID
         try {
             $this->beginTransaction();
             $this->logger->info("USER-DATA--------\n".print_r($userdata,true));
             $this->personService->updatePerson($userdata['person_id'],$userdata);
             $userdata['name'] = $userdata['firstname'] . " " . $userdata['lastname'];
-            $userdata['uuid'] = $obj->uuid;
+            $userdata['uuid'] = $form->uuid;
             
             $userdata['modified_id'] = isset($userdata['modified_id']) ? $userdata['modified_id'] : AuthContext::get(AuthConstants::USER_ID);
             $userdata['date_modified'] = date('Y-m-d H:i:s');
@@ -538,10 +532,8 @@ class UserService extends AbstractService
                 $userdata['preferences'] = json_encode($preferences);
             }
 
-            $form = new User();
-            $form->exchangeArray($userdata);
-            $form->validate();
-            $this->table->save($form);
+            $form->assign($userdata);
+            $form->save();
             if (isset($data['role'])) {
                 $accountUsers = $this->getDataByParams('ox_account_user', array('id'), array('user_id' => $form->id, 'account_id' => $form->account_id))->toArray();
                 $this->addRoleToUser($accountUsers[0]['id'], $data['role'], $form->account_id);
@@ -586,11 +578,9 @@ class UserService extends AbstractService
         } else {
             $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
-        $obj = $this->table->getByUuid($id['userId'], array());
-        if (is_null($obj)) {
-            throw new EntityNotFoundException("User not found", 'user.not.found');
-        }
-        $select = "SELECT account_id from ox_account_user where user_id = " . $obj->id;
+        $form = new User($this->table);
+        $form->loadByUuid($id['userId']);
+        $select = "SELECT account_id from ox_account_user where user_id = " . $form->id;
         $result = $this->executeQuerywithParams($select)->toArray();
         $acctArray = array_map('current', $result);
         if (!in_array($accountId, $acctArray)) {
@@ -598,36 +588,34 @@ class UserService extends AbstractService
         }
         $select = "SELECT contactid from ox_account where id = " . $accountId;
         $result1 = $this->executeQuerywithParams($select)->toArray();
-        if ($result1[0]['contactid'] == $obj->id) {
+        if ($result1[0]['contactid'] == $form->id) {
             throw new ServiceException('Not allowed to delete Admin user', 'admin.user',OxServiceException::ERR_CODE_FORBIDDEN);
         }
-        $select = "SELECT count(id) from ox_group where manager_id = " . $obj->id;
+        $select = "SELECT count(id) from ox_group where manager_id = " . $form->id;
         $result2 = $this->executeQuerywithParams($select)->toArray();
         if ($result2[0]['count(id)'] > 0) {
             throw new ServiceException('Not allowed to delete the group manager', 'group.manager',OxServiceException::ERR_CODE_FORBIDDEN);
         }
-        $select = "SELECT count(id) from ox_project where manager_id = " . $obj->id;
+        $select = "SELECT count(id) from ox_project where manager_id = " . $form->id;
         $result3 = $this->executeQuerywithParams($select)->toArray();
         if ($result3[0]['count(id)'] > 0) {
             throw new ServiceException('Not allowed to delete the project manager', 'project.manager',OxServiceException::ERR_CODE_FORBIDDEN);
         }
-        $account = $this->getAccount($obj->account_id);
-        $originalArray = $obj->toArray();
-        $form = new User();
+        $account = $this->getAccount($form->account_id);
+        $originalArray = array();
         $originalArray['status'] = 'Inactive';
         $originalArray['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $originalArray['date_modified'] = date('Y-m-d H:i:s');
-        $form->exchangeArray($originalArray);
-        $form->validate();
+        $form->assign($originalArray);
         try{
             $this->beginTransaction();
-            $this->table->save($form);
+            $form->save();
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
             throw $e;
         }
-        $payload = json_encode(array('username' => $obj->username, 'accountName' => $account['name']));
+        $payload = json_encode(array('username' => $form->username, 'accountName' => $account['name']));
         $this->messageProducer->sendTopic($payload, 'USER_DELETED');
     }
 

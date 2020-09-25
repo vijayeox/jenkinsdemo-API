@@ -143,9 +143,11 @@ class AccountService extends AbstractService
         if($result == 1){
             return $result;
         }
-        $user = new User($data);
-        $person = new Person($data);
-        $data['contact'] = array_merge($user->toArray(),$person->toArray());
+        $user = new User();
+        $person = new Person();
+        $user->assign($data);
+        $person->assign($data);
+        $data['contact'] = array_merge($user->getProperties(),$person->toArray());
         $params = $data;
         $params['preferences'] = array();
         $appId = null;

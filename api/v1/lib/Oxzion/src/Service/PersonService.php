@@ -39,31 +39,25 @@ class PersonService extends AbstractService
             $personData['date_of_birth'] = date('Y-m-d');
         }
         
-        $person = new Person($personData);
-        $person->validate();
+        $person = new Person($this->table);
+        $person->assign($personData);
         $count = 0;
         try {
             $this->beginTransaction();
-            $count = $this->table->save($person);
-            if ($count == 0) {
-                $this->rollback();
-                throw new ServiceException("Failed to add the Person record", "failed.add.Person");
-            }
+            $person->save();
+            $temp = $person->getGenerated(true);
+            $data['person_id'] = $temp['id'];
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        $data['person_id'] = $this->table->getLastInsertValue();
-        return $data;
     }
 
     public function updatePerson($id, $data)
     {
-        $obj = $this->table->get($id, array());
-        if (is_null($obj)) {
-            throw new ServiceException("Person not found", "person.not.found");
-        }      
+        $person = new Person($this->table);
+        $person->loadById($id);
         unset($data['id']);
         unset($data['uuid']);
         $this->logger->info("Person DATA--------\n".print_r($data,true));
@@ -82,13 +76,8 @@ class PersonService extends AbstractService
                 }
 
             }
-            $person = new Person();
-            $changedArray = array_merge($obj->toArray(), $personData);
-            $this->logger->info("Person Data changedArray".print_r($changedArray,true));
-            $person->exchangeArray($changedArray);
-            $person->validate();
-            $this->logger->info("Person ".print_r($person,true));
-            $this->table->save($person);
+            $person->exchangeArray($personData);
+            $person->save();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
