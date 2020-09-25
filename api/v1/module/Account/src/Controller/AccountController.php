@@ -115,10 +115,7 @@ class AccountController extends AbstractApiController
     public function delete($id)
     {
         try {
-            $response = $this->accountService->deleteAccount($id);
-            if ($response == 0) {
-                return $this->getErrorResponse("Account not found", 404, ['id' => $id]);
-            }
+            $this->accountService->deleteAccount($id);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);

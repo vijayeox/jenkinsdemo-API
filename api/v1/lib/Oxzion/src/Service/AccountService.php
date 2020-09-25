@@ -410,24 +410,20 @@ class AccountService extends AbstractService
      */
     public function deleteAccount($id)
     {
-        $obj = $this->table->getByUuid($id, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        $originalArray = $obj->toArray();
-        $form = new Account();
-        $originalArray['status'] = 'Inactive';
-        $form->exchangeArray($originalArray);
+        $form = new Account($this->table);
+        $form->loadByUuid($id);
+        
+        $form->assign(['status' => 'Inactive']);
         try{
             $this->beginTransaction();
-            $result = $this->table->save($form);
+            $form->save();
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
             throw $e;
         }
+        $originalArray = $form->getProperties();
         $this->messageProducer->sendTopic(json_encode(array('accountName' => $originalArray['name'], 'status' => $originalArray['status'])), 'ACCOUNT_DELETED');
-        return $result;
     }
 
     /**
