@@ -51,7 +51,25 @@
 		<hr class="hrtag"></hr>
 		<div class = "ai_margin">
 	    	<b><p class = "ai_title">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
-	    		{foreach from=$list item=$additional}
+				{assign var = result value = []}
+				{assign var = i value = ""}
+				{foreach $list as $additional}
+					<p>
+						{if (isset($additional.effective_date)) && $additional.effective_date != ""}
+							{$i = $additional.effective_date}
+						{elseif (isset($additional.endo_effective_date)) && $additional.endo_effective_date != "" }	
+							{$i = $additional.endo_effective_date}
+						
+						{/if}{$result[$i][] = $additional}
+					</p>
+					
+				{/foreach}
+					
+				{foreach $result as $key =>$newList}
+					<p class = "ai_list" style="font-size:16px;margin-bottom:5px;text-transform:none";>Effective as of 
+							{$key|date_format:"%d %B %Y"}
+					</p> 
+					{foreach $newList as $additional}
 		    		<p class = "ai_list">
 		    		{if (isset($additional.name))}
 		    			{$additional.name} 
@@ -82,9 +100,10 @@
 			    			{elseif $additional.businessRelation == "other"}
 			    				{$additional.businessRelationOther}
 			    			{/if})
-		    			{/if}
+		    			{/if}	
 		    		</p>
 	    		{/foreach}
+			{/foreach}
     	</div>
 	</div>
 </body>
