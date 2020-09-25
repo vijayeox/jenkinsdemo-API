@@ -5,6 +5,7 @@ use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\StringUtils;
 use Oxzion\PDF\PDF_Watermarker;
 use Oxzion\AppDelegate\FileTrait;
 use Oxzion\AppDelegate\CommentTrait;
@@ -2086,28 +2087,49 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $groupData = is_string($data) ? json_decode($data,true) : $data;
             $padiList = array();
             $groupPL = array();
+            $nonPadiMemberList = array();
+            $padiMemberList = array();
+            
             foreach ($groupData as $key => $row)
-	    {
-		if(isset($row[$sortKey])){
-                $padiList[$key] = ($sortKey == 'name') ? strtoupper($row[$sortKey]) : $row[$sortKey];
-                if($sortKey == 'name'){
-                    $groupData[$key]['name'] = $padiList[$key];
-		}
-		}
+    	    {
+        		if(isset($row[$sortKey])){
+                    $padiList[$key] = ($sortKey == 'name') ? strtoupper($row[$sortKey]) : $row[$sortKey];
+                    if($sortKey == 'name'){
+                        $groupData[$key]['name'] = $padiList[$key];
+        	        }elseif ($sortKey == 'padi') {
+                        if(StringUtils::startsWith($padiList[$key], '0')){
+                            array_push($nonPadiMemberList,$padiList[$key]);
+                        }else{
+                            array_push($padiMemberList,$padiList[$key]);
+                        }
+                    }
+        		}
             }
-            asort($padiList);
+            if($sortKey == 'padi'){
+                $padiList = array();
+                asort($nonPadiMemberList);
+                asort($padiMemberList);
+                foreach ($nonPadiMemberList as $key => $value) {
+                    array_push($padiList,$value);
+                }
+                foreach ($padiMemberList as $key => $value) {
+                    array_push($padiList,$value);
+                }
+            }else{
+                asort($padiList);    
+            }
+
             foreach ($padiList as $key => $value) {
-		    foreach($groupData as $key1 => $value1){
-			if(isset($groupData[$key1]) &&isset($groupData[$key1][$sortKey])){
+        	    foreach($groupData as $key1 => $value1){
+    		        if(isset($groupData[$key1]) &&isset($groupData[$key1][$sortKey])){
                     		if($padiList[$key] == $groupData[$key1][$sortKey]){
                         		array_push($groupPL,$groupData[$key1]);
-		    		}
-			    }
+    	    		        }
+    		        }
                 }
             }
             $data = json_encode($groupPL);
         }
-
 
         private function generateRosterCertificate($temp,$dest,$options){
             $rosterCertificateArray = array();
