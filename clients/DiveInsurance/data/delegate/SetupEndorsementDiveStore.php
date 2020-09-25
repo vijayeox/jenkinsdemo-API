@@ -257,6 +257,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_doYouWantToApplyForNonOwnerAuto'] = $data['doYouWantToApplyForNonOwnerAuto'];
                 $policy['previous_storeExcessLiabilitySelect'] = $data['excessLiabilityCoveragePrimarylimit1000000PL'];
                 $policy['previous_poolLiability'] = isset($data['poolLiability'])?$data['poolLiability']:0;
+                $policy['previous_totalAddPremium'] = isset($data['totalAddPremium']) ? $data['totalAddPremium'] : 0;
                 if(isset($data['additionalLocations'])){
                     foreach($data['additionalLocations'] as $key => $value){
                         $additionalLocations = $data['additionalLocations'][$key];
