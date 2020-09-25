@@ -7,19 +7,27 @@
 <body>
 	<div class ="body_div_ai">
 		{if $cancellationStatus == 'approved'}
-		<p style="margin-bottom:2%">&nbsp</p> 
+		<p style="margin-bottom:2%">&nbsp</p>
 		<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
-			{if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
+			{if $reasonforCsrCancellation == 'nonPaymentOfPremium' && $product == 'Dive Store'}
 				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>
 				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE TO THE FINANCE COMPANY.</p>
+			{elseif $reasonforCsrCancellation == 'nonPaymentOfPremium' && $product != 'Dive Store'}
+				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>
+				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
+				10 DAYS OF THIS NOTICE.</p>
 			{elseif $reasonforCsrCancellation == 'padiMembershipNotCurrent'}
 				<p>DUE TO PADI MEMBERSHIP NOT CURRENT.</p>
 				<p>TO REINSTATE COVERAGE, MEMBERSHIP MUST BE RENEWED WITHIN 45 DAYS OF THIS NOTICE</p>
-			{elseif $reasonforCsrCancellation == 'nonSufficientFunds'}
+			{elseif $reasonforCsrCancellation == 'nonSufficientFunds' && $product == 'Dive Store'}
 				<p>NON-PAYMENT OF PREMIUM DUE TO NON-SUFFICIENT FUNDS.</p>
 				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE TO THE FINANCE COMPANY.</p>
+			{elseif $reasonforCsrCancellation == 'nonSufficientFunds' && $product != 'Dive Store'}
+				<p>NON-PAYMENT OF PREMIUM DUE TO NON-SUFFICIENT FUNDS.</p>
+				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
+				10 DAYS OF THIS NOTICE.</p>
 			{elseif $reasonforCsrCancellation == 'boatSold'}
 				<p>DUE TO BOAT SOLD.</p>
 			{elseif $reasonforCsrCancellation == 'storeSold'}
