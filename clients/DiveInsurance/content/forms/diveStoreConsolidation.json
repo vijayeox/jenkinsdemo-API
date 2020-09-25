@@ -1258,7 +1258,7 @@
 							"key": "physical_us_zip",
 							"conditional": {
 								"show": true,
-								"when": "country",
+								"when": "physical_country",
 								"eq": "United States of America"
 							},
 							"type": "textfield",
@@ -1272,7 +1272,7 @@
 							"key": "physical_non_us_zip",
 							"conditional": {
 								"show": false,
-								"when": "country",
+								"when": "physical_country",
 								"eq": "United States of America"
 							},
 							"type": "textfield",
@@ -14399,7 +14399,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 75,
+	"_vid": 76,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14417,6 +14417,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-09-23T06:38:02.451Z",
+	"modified": "2020-09-25T06:39:01.078Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
