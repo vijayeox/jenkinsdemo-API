@@ -206,7 +206,7 @@ abstract class ModelTable
         }
 
         if (!isset($id) || is_null($id) || (0 == $id) || empty($id)) {
-            $data[Entity::COLUMN_UUID] = UuidUtil::uuid();
+            $data[Entity::COLUMN_UUID] = isset($data[Entity::COLUMN_UUID]) ? $data[Entity::COLUMN_UUID] : UuidUtil::uuid();
             if (array_key_exists(Entity::COLUMN_VERSION, $data)) {
                 $data[Entity::COLUMN_VERSION] = 1; //Starting version number when the row is inserted in the database.
             }
