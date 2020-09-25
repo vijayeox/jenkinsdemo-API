@@ -3,7 +3,7 @@ namespace Oxzion\Search;
 
 interface Indexer
 {
-    public function index($appId, $id, $type, $body, $fieldtypearray);
+    public function  index($app_name, $id, $entity_name, $body, $fieldTypeAarray=null);
 
     public function delete($appId, $id);
 }

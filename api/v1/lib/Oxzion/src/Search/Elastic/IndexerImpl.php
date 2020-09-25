@@ -46,7 +46,8 @@ class IndexerImpl implements Indexer
     public function delete($appId, $id)
     {
         try {
-            $elasticService = new ElasticService($this->config);
+            $elasticService = new ElasticService();
+            $elasticService->setConfig($this->config);
             $index = $appId;
             $response = $elasticService->delete($index, $id);
             return $response;
@@ -59,7 +60,8 @@ class IndexerImpl implements Indexer
     public function bulk($body)
     {
         try {
-            $elasticService = new ElasticService($this->config);
+            $elasticService = new ElasticService();
+            $elasticService->setConfig($this->config);
             $response = $elasticService->bulk($body);
             return $response;
         } catch (Exception $e) {
