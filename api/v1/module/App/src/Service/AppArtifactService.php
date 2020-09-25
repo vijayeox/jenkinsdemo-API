@@ -8,7 +8,9 @@ use Oxzion\Service\AbstractService;
 use Oxzion\Service\AppService;
 use Oxzion\FileNotFoundException;
 use Oxzion\DuplicateFileException;
+use Symfony\Component\Yaml\Yaml;
 use Oxzion\App\AppArtifactNamingStrategy;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ZipUtils;
 use Oxzion\Utils\ZipException;
 use Oxzion\Utils\FileUtils;
@@ -43,6 +45,7 @@ class AppArtifactService extends AbstractService
             throw new FileNotFoundException(
                 "Application source directory is not found.", ['directory' => $appSourceDir]);
         }
+        $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
         $contentDir = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
         switch($artifactType) {
             case 'workflow':
@@ -62,8 +65,7 @@ class AppArtifactService extends AbstractService
             }
             $filePath = $targetDir . $fileData['name'];
             if (file_exists($filePath)) {
-                unlink($filePath);
-                // throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
+                throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
             }
         }
         //Move/copy the files to destination.
@@ -72,6 +74,7 @@ class AppArtifactService extends AbstractService
             if (!rename($fileData['tmp_name'], $filePath)) {
                 throw new Exception('Failed to move file ' . $fileData['tmp_name'] . ' to destination.');
             }
+            $this->updateAppDescriptor("save", $descriptorPath, $artifactType, $fileData['name']);
             // returning here cause $_FILES will always be of length 1
             return [
                 "originalName" => $fileData['name'],
@@ -92,6 +95,7 @@ class AppArtifactService extends AbstractService
             throw new FileNotFoundException("Application source directory is not found.",
             ['directory' => $appSourceDir]);
         }
+        $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
         $filePath = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
         switch($artifactType) {
             case 'workflow':
@@ -110,6 +114,7 @@ class AppArtifactService extends AbstractService
         if (!unlink($filePath)) {
             throw new Exception("Failed to delete artifact type=${artifactType}, file ${artifactName}.");
         }
+        $this->updateAppDescriptor("delete", $descriptorPath, $artifactType, $artifactName);
     }
 
     public function uploadAppArchive() {
@@ -197,6 +202,7 @@ class AppArtifactService extends AbstractService
             'zipFile' => $tempFileName
         ];
     }
+
     public function getArtifacts($appUuid, $artifactType) {
         $app = new App($this->table);
         $app->loadByUuid($appUuid);
@@ -226,13 +232,48 @@ class AppArtifactService extends AbstractService
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != "..") {
                     $ext = pathinfo($entry, PATHINFO_EXTENSION);
-                    if(($ext=='json' && $artifactType =='form') || ($ext=='bpmn' && $artifactType =='workflows') ){
-                        $files[] = array('name'=>substr($entry, 0, strrpos($entry, '.')),'content'=>file_get_contents($targetDir.$entry));
+                    if (($ext == 'json' && $artifactType == 'form') || ($ext == 'bpmn' && $artifactType == 'workflow')) {
+                        $files[] = array(
+                            'name' => substr($entry, 0, strrpos($entry, '.')) ,
+                            'content'=> file_get_contents($targetDir.$entry)
+                        );
                     }
                 }
             }
             closedir($handle);
         }
         return $files;
+    }
+
+    private function updateAppDescriptor($action, $descriptorPath, $artifactType, $file)
+    {
+        if (!(file_exists($descriptorPath))) {
+            throw new FileNotFoundException('App descriptor not found');
+        } else {
+            $yaml = Yaml::parse(file_get_contents($descriptorPath));
+        }
+        if ($action == 'save') {
+            $filePath = $artifactType == 'workflow' ? 'bpmn_file' : 'template_file';
+            if (!isset($yaml[$artifactType])) {
+                $yaml[$artifactType] = [];
+            }
+            array_push($yaml[$artifactType], array(
+                "name" => substr($file, 0, strrpos($file, '.')),
+                $filePath => $file,
+                "uuid" => UuidUtil::uuid()
+            ));
+        } else if ($action == 'delete') {
+            if (!isset($yaml[$artifactType])) {
+                $yaml[$artifactType] = [];
+            }
+            foreach ($yaml[$artifactType] as $index => $value) {
+                $path = $artifactType == 'workflow' ? $value["bpmn_file"] : $value["template_file"];
+                if ($file == $path) {
+                    unset($yaml[$artifactType][$index]);
+                }
+            }
+        }
+        $new_yaml = Yaml::dump($yaml, 20);
+        file_put_contents($descriptorPath, $new_yaml);
     }
 }

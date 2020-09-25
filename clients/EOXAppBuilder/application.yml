@@ -58,6 +58,9 @@ pages:
         page_name: FormManager.yml
         uuid: 76953fc8-7269-494d-b126-6ea45a07a007
     -
+        page_name: WorkflowManager.yml
+        uuid: ca339e6a-4257-4567-9f70-3dab049615f7
+    -
         page_name: InstallManager.yml
         uuid: 96953fc8-7269-494d-b126-6ea45a07a007
 menu:

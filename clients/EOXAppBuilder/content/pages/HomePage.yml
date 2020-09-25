@@ -16,7 +16,7 @@ content:
                             operator: eq
                             value: 2                
             resizable: true
-            actionsWidth: 320px
+            actionsWidth: 340px
             pageable:
                 buttonCount: 3
                 pageSizes:
@@ -38,16 +38,6 @@ content:
                             form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                     icon: 'far fa-pencil-alt'
                 -
-                    name: 'Form Manager'
-                    icon: 'fa fa-list-alt'
-                    rule: "false"
-                    details:
-                        -
-                            params:
-                                page_id: '76953fc8-7269-494d-b126-6ea45a07a007'
-                                params:
-                                    app_uuid: '{{uuid}}'
-                -
                     name: Deploy
                     rule: 'profile.privileges.MANAGE_DEPLOY_APP_WRITE==true'
                     details:
@@ -59,6 +49,26 @@ content:
                                 disableAppId: true
                     icon: 'far fa-rocket-launch'
                     updateOnly: true
+                -
+                    name: 'Form Manager'
+                    icon: 'far fa-list-alt'
+                    rule: "true"
+                    details:
+                        -
+                            params:
+                                page_id: '76953fc8-7269-494d-b126-6ea45a07a007'
+                                params:
+                                    app_uuid: '{{uuid}}'
+                -
+                    name: 'Workflow Manager'
+                    icon: 'far fa-project-diagram'
+                    rule: "true"
+                    details:
+                        -
+                            params:
+                                page_id: 'ca339e6a-4257-4567-9f70-3dab049615f7'
+                                params:
+                                    app_uuid: '{{uuid}}'
                 -
                     name: Export
                     rule: "true"
@@ -102,7 +112,8 @@ content:
                         rule: 'true'
                         details:
                             -
-                                type: UploadAppArchive
+                                type: UploadArtifact
+                                entity: app
             columnConfig:
                 -
                     title: Name

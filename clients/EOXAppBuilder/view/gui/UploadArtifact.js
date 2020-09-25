@@ -1,21 +1,38 @@
 import React, { Suspense } from "react";
 
-class UploadAppArchive extends React.Component {
+class UploadArtifact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       uploadFile: [],
     };
+    if (this.props.entity == "app") {
+      this.postURL = "/app/archive/upload";
+      this.infoMessage =
+        "Please verify if the zip archive contains valid appilcaion.yml file before proceeding with the import";
+      this.fileExtension = ".zip";
+    } else if (this.props.entity == "form") {
+      this.postURL = "app/" + this.props.params.app_uuid + "/artifact/add/form";
+      this.infoMessage =
+        "Please verify if the JSON file has a unique Form Name";
+      this.fileExtension = ".json";
+    } else if (this.props.entity == "workflow") {
+      this.postURL =
+        "app/" + this.props.params.app_uuid + "/artifact/add/workflow";
+      this.infoMessage =
+        "Please verify if the BPMN file has a unique Workflow Name and has both start and end events";
+      this.fileExtension = ".bpmn";
+    }
     this.core = this.props.core;
     this.loader = this.core.make("oxzion/splash");
     this.notif = React.createRef();
   }
 
-  async uploadZip() {
+  async uploadFile() {
     let helper = this.core.make("oxzion/restClient");
     let response = await helper.request(
       "v1",
-      "/app/archive/upload",
+      this.postURL,
       { file: this.state.uploadFile[0].getRawFile() },
       "filepost"
     );
@@ -62,7 +79,7 @@ class UploadAppArchive extends React.Component {
     fileError
       ? this.notif.current.notify(
           "Unsupported File",
-          "Please select a valid zip archive.",
+          "Please select a valid file.",
           "danger"
         )
       : null;
@@ -76,16 +93,15 @@ class UploadAppArchive extends React.Component {
           <h5
             class="alert alert-warning"
             role="alert"
-            style={{ paddingBottom: "10px" }}
+            style={{ paddingBottom: "10px", width: "fit-content" }}
           >
-            Please verify the zip archive contains valid appilcaion.yml file
-            before proceeding with the import
+            {this.infoMessage}
           </h5>
         </div>
         <Suspense fallback={<div />}>
           <div className="col-md-10">
             <this.props.components.KendoFileUploader.Upload
-              accept=".zip"
+              accept={this.fileExtension}
               autoUpload={false}
               multiple={false}
               showActionButtons={false}
@@ -93,7 +109,7 @@ class UploadAppArchive extends React.Component {
               onAdd={this.onFileChange}
               onRemove={this.onFileChange}
               restrictions={{
-                allowedExtensions: [".zip"],
+                allowedExtensions: [this.fileExtension],
                 maxFileSize: 35000000,
               }}
             />
@@ -106,7 +122,7 @@ class UploadAppArchive extends React.Component {
             disabled={this.state.uploadFile.length == 0}
             onClick={() => {
               this.loader.show();
-              this.uploadZip().then((response) => {
+              this.uploadFile().then((response) => {
                 this.loader.destroy();
                 if (response.status == "success") {
                   this.notif.current.notify(
@@ -125,7 +141,7 @@ class UploadAppArchive extends React.Component {
               });
             }}
           >
-            Upload Zip
+            Upload
           </button>
         </div>
       </div>
@@ -133,4 +149,4 @@ class UploadAppArchive extends React.Component {
   }
 }
 
-export default UploadAppArchive;
+export default UploadArtifact;
