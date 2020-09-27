@@ -97,13 +97,11 @@
                       "tableView": true,
                       "enableMinDateInput": false,
                       "datePicker": {
-                        "minDate": "1950-01-01T12:00:00+05:30",
-                        "maxDate": "moment()",
                         "disableWeekends": false,
                         "disableWeekdays": false,
                         "datepickerMode": "day"
                       },
-                      "enableMaxDateInput": true,
+                      "enableMaxDateInput": false,
                       "enableTime": false,
                       "timePicker": {
                         "showMeridian": false
@@ -129,10 +127,8 @@
                         "hourIncrement": 1,
                         "minuteIncrement": 1,
                         "time_24hr": true,
-                        "minDate": "1950-01-01T12:00:00+05:30",
                         "disableWeekends": false,
-                        "disableWeekdays": false,
-                        "maxDate": "moment()"
+                        "disableWeekdays": false
                       }
                     }
                   ],
@@ -2280,7 +2276,6 @@
                                 {
                                   "label": "isTheLocationAddressSameAsMailingAddress",
                                   "hidden": true,
-                                  "hideLabel": true,
                                   "tableView": false,
                                   "defaultValue": false,
                                   "clearOnHide": false,
@@ -2703,7 +2698,7 @@
                                               "redrawOn": "locationSchedule",
                                               "clearOnHide": false,
                                               "customDefaultValue": "value = parseInt(instance.path.replace(/^\\D+|\\D.*$/g, \"\")) + 1;",
-                                              "calculateValue": "console.log(instance);\n// instance.triggerChange();\n// instance.triggerRedraw();\nvalue = parseInt(instance.path.replace(/^\\D+|\\D.*$/g, \"\")) + 1;",
+                                              "calculateValue": "value = parseInt(instance.path.replace(/^\\D+|\\D.*$/g, \"\")) + 1;",
                                               "key": "locationDuplicate",
                                               "type": "textfield",
                                               "input": true,
@@ -24377,7 +24372,7 @@
   ],
   "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n      )\n    ) {\n      if (\n        !document.getElementById(\"saveDraftCustomButton\") ||\n        !document.getElementById(\"saveDraftCloseCustomButton\")\n      ) {\n        if (!document.getElementById(\"saveDraftCloseCustomButton\")) {\n          let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n          clone.children[0].textContent = \"Save Draft And Close\";\n          clone.children[0].id = \"saveDraftCloseCustomButton\";\n          insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n          saveDraftCloseCustomButton.onclick = function () {\n            let ev = new CustomEvent(\"customButtonAction\", {\n              detail: {\n                timerVariable: appendCustomButtonTimer,\n                formData: data,\n                commands:\n                  '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n                exit: true,\n                notification: \"Data saved successfully\"\n              },\n              bubbles: false\n            });\n            document\n              .getElementById(\n                \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n              )\n              .dispatchEvent(ev);\n          };\n        }\n        if (!document.getElementById(\"saveDraftCustomButton\")) {\n          let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n          clone.children[0].textContent = \"Save Draft\";\n          clone.children[0].id = \"saveDraftCustomButton\";\n          insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n          saveDraftCustomButton.onclick = function () {\n            let ev = new CustomEvent(\"customButtonAction\", {\n              detail: {\n                timerVariable: appendCustomButtonTimer,\n                formData: data,\n                commands:\n                  '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n                exit: false,\n                notification: \"Data saved successfully\"\n              },\n              bubbles: false\n            });\n            document\n              .getElementById(\n                \"formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b\"\n              )\n              .dispatchEvent(ev);\n          };\n        }\n      } else {\n        if (data.producername.length > 0 && data.namedInsured.length > 0) {\n          saveDraftCustomButton.style.display == \"none\"\n            ? (saveDraftCustomButton.style.display = \"inline-block\")\n            : null;\n          saveDraftCloseCustomButton.style.display == \"none\"\n            ? (saveDraftCloseCustomButton.style.display = \"inline-block\")\n            : null;\n        } else {\n          saveDraftCustomButton.style.display == \"none\"\n            ? null\n            : (saveDraftCustomButton.style.display = \"none\");\n          saveDraftCloseCustomButton.style.display == \"none\"\n            ? null\n            : (saveDraftCloseCustomButton.style.display = \"none\");\n        }\n      }\n\n      if (\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].some(\n          (i) => i.innerText == \"SAVE\"\n        )\n      ) {\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].map(\n          (i) => (i.innerText = \"OK\")\n        );\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n\nsetTimeout(function () {\n  data.workbooksToBeGenerated = {\n    epli: false,\n    rpsCyber: false,\n    harco: false,\n    dealerGuard_ApplicationOpenLot: false,\n    victor_FranchisedAutoDealer: false,\n    victor_AutoPhysDamage: false\n  };\n  data.producerConfirmation ? (data.producerConfirmation = false) : null;\n  data.managementSubmitApplication ? (data.managementSubmitApplication = false) : null;\n\n  try {\n    if (data.namedInsured.length == 0) {\n      if (document.getElementsByClassName(\"pagination\").length > 0) {\n        var pageList = [\n          ...document.getElementsByClassName(\"pagination\")[0].children\n        ];\n        var GEActive = pageList.some(\n          (i) =>\n            i.children[0].innerText == \"General Information\" &&\n            i.className.includes(\"active\")\n        );\n        GEActive\n          ? pageList.map((i, index) =>\n              index !== 0 ? (i.style.cursor = \"not-allowed\") : null\n            )\n          : null;\n        pageList.map((i, index) =>\n          index !== 0\n            ? i.setAttribute(\n                \"title\",\n                \"Complete General Information page to proceed further\"\n              )\n            : null\n        );\n      }\n    }\n  } catch {}\n}, 1000);",
   "revisions": "original",
-  "_vid": 1221,
+  "_vid": 1224,
   "title": "Dealer Workbook",
   "display": "wizard",
   "access": [
@@ -24486,6 +24481,6 @@
   "path": "dealerworkbook",
   "project": "5d70a2198e9aff60caf3c170",
   "created": "2020-06-25T07:04:35.147Z",
-  "modified": "2020-09-24T10:54:35.548Z",
+  "modified": "2020-09-27T16:19:53.246Z",
   "machineName": "onboarding-qeimxlbzmdfpljg:cleanForm"
 }
