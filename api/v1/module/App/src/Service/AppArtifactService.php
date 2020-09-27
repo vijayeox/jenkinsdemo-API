@@ -34,17 +34,7 @@ class AppArtifactService extends AbstractService
     }
 
     public function saveArtifact($appUuid, $artifactType) {
-        $app = new App($this->table);
-        $app->loadByUuid($appUuid);
-        $appData = [
-            'uuid' => $appUuid,
-            'name' => $app->getProperty('name')
-        ];
-        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
-        if (!file_exists($appSourceDir)) {
-            throw new FileNotFoundException(
-                "Application source directory is not found.", ['directory' => $appSourceDir]);
-        }
+        $appSourceDir = $this->getAppSourceDirPath($appUuid);
         $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
         $contentDir = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
         switch($artifactType) {
@@ -84,17 +74,7 @@ class AppArtifactService extends AbstractService
     }
 
     public function deleteArtifact($appUuid, $artifactType, $artifactName) {
-        $app = new App($this->table);
-        $app->loadByUuid($appUuid);
-        $appData = [
-            'uuid' => $appUuid,
-            'name' => $app->getProperty('name')
-        ];
-        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
-        if (!file_exists($appSourceDir)) {
-            throw new FileNotFoundException("Application source directory is not found.",
-            ['directory' => $appSourceDir]);
-        }
+        $appSourceDir = $this->getAppSourceDirPath($appUuid);
         $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
         $filePath = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
         switch($artifactType) {
@@ -275,5 +255,20 @@ class AppArtifactService extends AbstractService
         }
         $new_yaml = Yaml::dump($yaml, 20);
         file_put_contents($descriptorPath, $new_yaml);
+    }
+
+    private function getAppSourceDirPath($appUuid){
+        $app = new App($this->table);
+        $app->loadByUuid($appUuid);
+        $appData = [
+            'uuid' => $appUuid,
+            'name' => $app->getProperty('name')
+        ];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
+        if (!file_exists($appSourceDir)) {
+            throw new FileNotFoundException("Application source directory is not found.",
+            ['directory' => $appSourceDir]);
+        }
+        return $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
     }
 }
