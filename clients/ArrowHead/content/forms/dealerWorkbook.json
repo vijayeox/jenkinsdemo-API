@@ -3694,7 +3694,6 @@
                                                                                                                         "filter": {}
                                                                                                                     },
                                                                                                                     "input": true,
-                                                                                                                    "defaultValue": "replacementCost",
                                                                                                                     "hideOnChildrenHidden": false
                                                                                                                 }
                                                                                                             ],
