@@ -9,6 +9,7 @@ ox_app:
 ox_organization:
 -
     id: 120
+    main_organization_id: 120
 ox_account:
 -   id: 120
     name: "dummyOrg"

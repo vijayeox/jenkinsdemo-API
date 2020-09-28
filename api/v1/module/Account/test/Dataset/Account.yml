@@ -21,10 +21,12 @@ ox_organization:
         id: 101
         uuid: '915d207e-ac75-11ea-bb37-0242ac130002'
         address_id: 8
+        main_organization_id: 101
   -
         id: 102
         uuid: '915d22cc-ac75-11ea-bb37-0242ac130002'
         address_id: 9  
+        main_organization_id: 102
 
 ox_account:
   -
