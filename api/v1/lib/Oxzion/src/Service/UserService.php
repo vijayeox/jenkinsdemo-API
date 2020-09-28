@@ -1207,7 +1207,7 @@ class UserService extends AbstractService
         usrp.date_of_birth,
         emp.designation,
         usrp.gender,
-        man.uuid as managerId,
+        manUser.uuid as managerId,
         acc.uuid as accountId,
         emp.date_of_join,
         usrp.phone,
@@ -1226,6 +1226,7 @@ class UserService extends AbstractService
         JOIN ox_account as acc ON au.account_id = acc.id
         LEFT JOIN ox_employee as emp ON emp.person_id = usrp.id
         LEFT JOIN ox_employee as man on man.id = emp.manager_id
+        LEFT JOIN ox_user manUser on manUser.person_id = man.person_id
         LEFT JOIN ox_address as addr ON usrp.address_id = addr.id
     WHERE
         user.uuid = :userId AND acc.uuid = :accountId";
