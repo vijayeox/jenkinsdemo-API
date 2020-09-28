@@ -67,9 +67,7 @@
                     }
                   ],
                   "clearOnHide": false,
-                  "validate": {
-                    "required": true
-                  },
+                  "validate": { "required": true },
                   "key": "endorsement_options",
                   "logic": [
                     {
@@ -119,10 +117,7 @@
         {
           "label": "HTML",
           "attrs": [
-            {
-              "attr": "style",
-              "value": "color: #a94442;font-size:1.1em;"
-            }
+            { "attr": "style", "value": "color: #a94442;font-size:1.1em;" }
           ],
           "content": "Please Note: These options will be disabled once you click on the next button",
           "refreshOnChange": false,
@@ -158,9 +153,7 @@
                       "clearOnHide": false,
                       "calculateValue": "if(data.start_date){\n  value = moment(data.start_date).format(\"MM-DD-YYYY\");\n}",
                       "key": "policyStartDate",
-                      "properties": {
-                        "data_type": "Date"
-                      },
+                      "properties": { "data_type": "Date" },
                       "type": "textfield",
                       "input": true,
                       "hideOnChildrenHidden": false
@@ -183,9 +176,7 @@
                       "clearOnHide": false,
                       "calculateValue": "if(data.end_date){\n  value = moment(data.end_date).format(\"MM-DD-YYYY\");\n}",
                       "key": "policyEndDate",
-                      "properties": {
-                        "data_type": "Date"
-                      },
+                      "properties": { "data_type": "Date" },
                       "type": "textfield",
                       "input": true,
                       "hideOnChildrenHidden": false
@@ -234,18 +225,14 @@
                       },
                       "enableMaxDateInput": false,
                       "enableTime": false,
-                      "timePicker": {
-                        "showMeridian": false
-                      },
+                      "timePicker": { "showMeridian": false },
                       "clearOnHide": false,
                       "validate": {
                         "required": true,
                         "custom": "if (data.endoEffectiveDate){ \n  valid = ((moment(data.endoEffectiveDate).diff(moment(data['start_date'])) >=0) && (moment(data.endoEffectiveDate).diff(moment(data.end_date)) <=0)) ? true : \"Effective date should be between policy period\";\n}"
                       },
                       "key": "endoEffectiveDate",
-                      "properties": {
-                        "delegate": "SetupEndorsementDiveStore"
-                      },
+                      "properties": { "delegate": "SetupEndorsementDiveStore" },
                       "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
                       "type": "datetime",
                       "input": true,
@@ -359,22 +346,14 @@
         "set_property": "{\"property\" : \"disableOptions\",\"value\":true}"
       },
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "logic": [
         {
           "name": "disablePanel",
           "trigger": {
             "type": "simple",
-            "simple": {
-              "show": true,
-              "when": "disableOptions",
-              "eq": "true"
-            }
+            "simple": { "show": true, "when": "disableOptions", "eq": "true" }
           },
           "actions": [
             {
@@ -597,12 +576,7 @@
                   "components": [
                     {
                       "label": "HTML",
-                      "attrs": [
-                        {
-                          "attr": "",
-                          "value": ""
-                        }
-                      ],
+                      "attrs": [{ "attr": "", "value": "" }],
                       "content": "<style>\n  .alignCenter{\n    text-align:center\n  }\n</style>",
                       "refreshOnChange": false,
                       "tableView": false,
@@ -638,11 +612,7 @@
           "title": "Personal Information",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "panel",
@@ -824,10 +794,7 @@
                                 "value": "soleProprietor",
                                 "label": "Sole Proprietor"
                               },
-                              {
-                                "value": "other",
-                                "label": "Other"
-                              }
+                              { "value": "other", "label": "Other" }
                             ]
                           },
                           "selectThreshold": 0.3,
@@ -838,9 +805,7 @@
                           },
                           "key": "entity_type",
                           "type": "select",
-                          "indexeddb": {
-                            "filter": {}
-                          },
+                          "indexeddb": { "filter": {} },
                           "input": true,
                           "lockKey": true,
                           "hideOnChildrenHidden": false
@@ -931,9 +896,7 @@
                           "label": "Current Insurance Company",
                           "tableView": true,
                           "clearOnHide": false,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "current_insurance_company",
                           "type": "textfield",
                           "input": true,
@@ -1027,21 +990,14 @@
                           "tableView": true,
                           "dataSrc": "custom",
                           "data": {
-                            "values": [
-                              {
-                                "value": "",
-                                "label": ""
-                              }
-                            ],
+                            "values": [{ "value": "", "label": "" }],
                             "custom": "values = data['countryList'];"
                           },
                           "valueProperty": "country",
                           "template": "<span>{{ item.country }}</span>",
                           "selectThreshold": 0.3,
                           "clearOnHide": false,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "country",
                           "type": "select",
                           "input": true,
@@ -1061,9 +1017,7 @@
                         {
                           "label": "Address 1",
                           "tableView": true,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "address1",
                           "type": "textfield",
                           "input": true,
@@ -1111,9 +1065,7 @@
                         {
                           "label": "City",
                           "tableView": true,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "city",
                           "type": "textfield",
                           "input": true,
@@ -1135,12 +1087,7 @@
                           "tableView": true,
                           "dataSrc": "custom",
                           "data": {
-                            "values": [
-                              {
-                                "label": "",
-                                "value": ""
-                              }
-                            ],
+                            "values": [{ "label": "", "value": "" }],
                             "custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['country']);\nif(obj){\nvalues = obj.states;\n}"
                           },
                           "template": "<span>{{ item }}</span>",
@@ -1149,9 +1096,7 @@
                           "selectThreshold": 0.3,
                           "clearOnHide": false,
                           "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "us_state",
                           "conditional": {
                             "show": true,
@@ -1159,9 +1104,7 @@
                             "eq": "United States of America"
                           },
                           "type": "select",
-                          "indexeddb": {
-                            "filter": {}
-                          },
+                          "indexeddb": { "filter": {} },
                           "input": true,
                           "lockKey": true,
                           "hideOnChildrenHidden": false
@@ -1207,9 +1150,7 @@
                           "tableView": false,
                           "clearOnHide": false,
                           "customDefaultValue": "if(data.zip){\n  value = data.zip;\n}",
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "us_zip",
                           "conditional": {
                             "show": true,
@@ -1299,12 +1240,7 @@
                           "tableView": true,
                           "dataSrc": "custom",
                           "data": {
-                            "values": [
-                              {
-                                "value": "",
-                                "label": ""
-                              }
-                            ],
+                            "values": [{ "value": "", "label": "" }],
                             "custom": "values = data['countryList'];"
                           },
                           "valueProperty": "country",
@@ -1312,9 +1248,7 @@
                           "template": "<span>{{ item.country }}</span>",
                           "selectThreshold": 0.3,
                           "clearOnHide": false,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "physical_country",
                           "type": "select",
                           "input": true,
@@ -1333,9 +1267,7 @@
                         {
                           "label": " Address 1",
                           "tableView": true,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "mailaddress1",
                           "type": "textfield",
                           "input": true,
@@ -1391,9 +1323,7 @@
                         {
                           "label": "City",
                           "tableView": true,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "physical_city",
                           "type": "textfield",
                           "input": true,
@@ -1415,12 +1345,7 @@
                           "tableView": true,
                           "dataSrc": "custom",
                           "data": {
-                            "values": [
-                              {
-                                "label": "",
-                                "value": ""
-                              }
-                            ],
+                            "values": [{ "label": "", "value": "" }],
                             "custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states;\n}"
                           },
                           "template": "<span>{{ item }}</span>",
@@ -1429,9 +1354,7 @@
                           "selectThreshold": 0.3,
                           "clearOnHide": false,
                           "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "physical_us_state",
                           "conditional": {
                             "show": true,
@@ -1439,9 +1362,7 @@
                             "eq": "United States of America"
                           },
                           "type": "select",
-                          "indexeddb": {
-                            "filter": {}
-                          },
+                          "indexeddb": { "filter": {} },
                           "input": true,
                           "lockKey": true,
                           "hideOnChildrenHidden": false
@@ -1483,9 +1404,7 @@
                           "label": "Zip Code",
                           "spellcheck": false,
                           "tableView": false,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "physical_us_zip",
                           "conditional": {
                             "show": true,
@@ -1561,12 +1480,7 @@
                               "tableView": true,
                               "dataSrc": "custom",
                               "data": {
-                                "values": [
-                                  {
-                                    "label": "",
-                                    "value": ""
-                                  }
-                                ],
+                                "values": [{ "label": "", "value": "" }],
                                 "custom": "values = data['phoneList']"
                               },
                               "valueProperty": "dial_code",
@@ -1577,9 +1491,7 @@
                               "calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\n  if (obj) {\n    value = obj.dial_code;\n  }\n}",
                               "key": "home_country_code",
                               "type": "select",
-                              "indexeddb": {
-                                "filter": {}
-                              },
+                              "indexeddb": { "filter": {} },
                               "input": true,
                               "hideOnChildrenHidden": false
                             }
@@ -1643,12 +1555,7 @@
                               "tableView": true,
                               "dataSrc": "custom",
                               "data": {
-                                "values": [
-                                  {
-                                    "label": "",
-                                    "value": ""
-                                  }
-                                ],
+                                "values": [{ "label": "", "value": "" }],
                                 "custom": "values = data['phoneList']"
                               },
                               "valueProperty": "dial_code",
@@ -1658,9 +1565,7 @@
                               "calculateValue": "if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                               "key": "phone_country_code",
                               "type": "select",
-                              "indexeddb": {
-                                "filter": {}
-                              },
+                              "indexeddb": { "filter": {} },
                               "input": true,
                               "hideOnChildrenHidden": false
                             }
@@ -1788,11 +1693,7 @@
       "label": "Business Information",
       "collapsible": false,
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "path": "panel",
       "conditional": {
         "show": true,
@@ -1811,14 +1712,8 @@
           "tableView": true,
           "data": {
             "values": [
-              {
-                "label": "Yes",
-                "value": "yes"
-              },
-              {
-                "label": "No",
-                "value": "no"
-              }
+              { "label": "Yes", "value": "yes" },
+              { "label": "No", "value": "no" }
             ]
           },
           "selectThreshold": 0.3,
@@ -1830,20 +1725,14 @@
           "errorLabel": "Property Coverage",
           "key": "propertyCoverageSelect",
           "type": "select",
-          "indexeddb": {
-            "filter": {}
-          },
+          "indexeddb": { "filter": {} },
           "input": true
         },
         {
           "title": "Property Information",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "pageNaNPanel",
@@ -1870,22 +1759,10 @@
                       "tableView": true,
                       "data": {
                         "values": [
-                          {
-                            "value": "woodFrame",
-                            "label": "Wood Frame"
-                          },
-                          {
-                            "value": "masonry",
-                            "label": "Masonry"
-                          },
-                          {
-                            "value": "concrete",
-                            "label": "Concrete"
-                          },
-                          {
-                            "label": "Other",
-                            "value": "other"
-                          }
+                          { "value": "woodFrame", "label": "Wood Frame" },
+                          { "value": "masonry", "label": "Masonry" },
+                          { "value": "concrete", "label": "Concrete" },
+                          { "label": "Other", "value": "other" }
                         ]
                       },
                       "selectThreshold": 0.3,
@@ -1896,9 +1773,7 @@
                       },
                       "key": "dspropbuildingconstr",
                       "type": "select",
-                      "indexeddb": {
-                        "filter": {}
-                      },
+                      "indexeddb": { "filter": {} },
                       "labelWidth": 30,
                       "labelMargin": 3,
                       "input": true,
@@ -1909,9 +1784,7 @@
                       "label": "Please Specify",
                       "tableView": true,
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "pleaseSpecify",
                       "conditional": {
                         "show": true,
@@ -1948,20 +1821,10 @@
               "inline": false,
               "tableView": false,
               "values": [
-                {
-                  "label": "Yes",
-                  "value": "yes",
-                  "shortcut": ""
-                },
-                {
-                  "label": "No",
-                  "value": "no",
-                  "shortcut": ""
-                }
+                { "label": "Yes", "value": "yes", "shortcut": "" },
+                { "label": "No", "value": "no", "shortcut": "" }
               ],
-              "validate": {
-                "required": true
-              },
+              "validate": { "required": true },
               "key": "centralStationAlarm",
               "type": "radio",
               "input": true
@@ -1972,20 +1835,10 @@
               "inline": false,
               "tableView": false,
               "values": [
-                {
-                  "label": "Yes",
-                  "value": "yes",
-                  "shortcut": ""
-                },
-                {
-                  "label": "No",
-                  "value": "no",
-                  "shortcut": ""
-                }
+                { "label": "Yes", "value": "yes", "shortcut": "" },
+                { "label": "No", "value": "no", "shortcut": "" }
               ],
-              "validate": {
-                "required": true
-              },
+              "validate": { "required": true },
               "key": "fireSprinklers",
               "type": "radio",
               "input": true
@@ -2319,9 +2172,7 @@
                               "requireDecimal": false,
                               "inputFormat": "plain",
                               "clearOnHide": false,
-                              "validate": {
-                                "required": true
-                              },
+                              "validate": { "required": true },
                               "key": "lossOfBusIncome",
                               "type": "number",
                               "labelMargin": 3,
@@ -2365,14 +2216,8 @@
                       "tableView": false,
                       "data": {
                         "values": [
-                          {
-                            "value": "yes",
-                            "label": "Yes"
-                          },
-                          {
-                            "value": "no",
-                            "label": "No"
-                          }
+                          { "value": "yes", "label": "Yes" },
+                          { "value": "no", "label": "No" }
                         ]
                       },
                       "selectThreshold": 0.3,
@@ -2384,9 +2229,7 @@
                       "errorLabel": "Building Ownership",
                       "key": "dspropownbuilding",
                       "type": "select",
-                      "indexeddb": {
-                        "filter": {}
-                      },
+                      "indexeddb": { "filter": {} },
                       "input": true,
                       "lockKey": true,
                       "hideOnChildrenHidden": false
@@ -2467,12 +2310,7 @@
                               "tableView": true,
                               "dataSrc": "custom",
                               "data": {
-                                "values": [
-                                  {
-                                    "label": "",
-                                    "value": ""
-                                  }
-                                ],
+                                "values": [{ "label": "", "value": "" }],
                                 "custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
                               },
                               "template": "<span>{{ item }}</span>",
@@ -2484,9 +2322,7 @@
                               },
                               "key": "built_year",
                               "type": "select",
-                              "indexeddb": {
-                                "filter": {}
-                              },
+                              "indexeddb": { "filter": {} },
                               "input": true,
                               "hideOnChildrenHidden": false
                             },
@@ -2495,9 +2331,7 @@
                               "tableView": true,
                               "inputFormat": "html",
                               "clearOnHide": false,
-                              "validate": {
-                                "required": true
-                              },
+                              "validate": { "required": true },
                               "key": "dspropUpdatesonplumbingelectricalroofetc",
                               "type": "textfield",
                               "autoExpand": false,
@@ -2556,9 +2390,7 @@
                           "clearOnHide": false,
                           "key": "propertyDeductibles",
                           "type": "select",
-                          "indexeddb": {
-                            "filter": {}
-                          },
+                          "indexeddb": { "filter": {} },
                           "labelWidth": 30,
                           "labelMargin": 3,
                           "input": true,
@@ -2570,12 +2402,7 @@
                           "key": "dspropmechbreakdown",
                           "label": "Content",
                           "input": false,
-                          "attrs": [
-                            {
-                              "value": "",
-                              "attr": ""
-                            }
-                          ],
+                          "attrs": [{ "value": "", "attr": "" }],
                           "content": "<h5>Deductible for Mechanical Breakdown is $2,500 and Wind/Hail is 5%</h5>",
                           "type": "htmlelement",
                           "hideLabel": true,
@@ -2615,11 +2442,7 @@
         "eq": "modify_propertyInformation"
       },
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false
     },
     {
@@ -2630,11 +2453,7 @@
           "title": "General Liability Information",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "pageNaNPanel3",
@@ -2677,9 +2496,7 @@
               "delimiter": true,
               "requireDecimal": false,
               "inputFormat": "plain",
-              "validate": {
-                "required": true
-              },
+              "validate": { "required": true },
               "key": "annualEstimatedReceipts",
               "type": "number",
               "input": true,
@@ -2690,12 +2507,7 @@
               "label": "Yes/No",
               "input": false,
               "tag": "h4",
-              "attrs": [
-                {
-                  "value": "",
-                  "attr": ""
-                }
-              ],
+              "attrs": [{ "value": "", "attr": "" }],
               "content": "Yes/No",
               "type": "htmlelement",
               "hideLabel": true,
@@ -2712,16 +2524,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -2740,16 +2544,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -2768,16 +2564,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -2796,16 +2584,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -2838,16 +2618,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -2866,16 +2638,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -2922,9 +2686,7 @@
                           "requireDecimal": false,
                           "inputFormat": "plain",
                           "clearOnHide": false,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "poolLiability",
                           "type": "number",
                           "labelWidth": 30,
@@ -2963,9 +2725,7 @@
                                       "delimiter": false,
                                       "requireDecimal": false,
                                       "inputFormat": "plain",
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "dimensions",
                                       "type": "number",
                                       "input": true,
@@ -2989,9 +2749,7 @@
                                       "delimiter": false,
                                       "requireDecimal": false,
                                       "inputFormat": "plain",
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "depth",
                                       "type": "number",
                                       "input": true,
@@ -3006,9 +2764,7 @@
                                       "delimiter": false,
                                       "requireDecimal": false,
                                       "inputFormat": "plain",
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "maxDepth",
                                       "type": "number",
                                       "input": true,
@@ -3036,12 +2792,7 @@
                               "components": [
                                 {
                                   "label": "Hours of Operation",
-                                  "attrs": [
-                                    {
-                                      "attr": "",
-                                      "value": ""
-                                    }
-                                  ],
+                                  "attrs": [{ "attr": "", "value": "" }],
                                   "content": "Hours of Operation",
                                   "refreshOnChange": false,
                                   "tableView": false,
@@ -3107,12 +2858,7 @@
                               "components": [
                                 {
                                   "label": "Hours of Operation",
-                                  "attrs": [
-                                    {
-                                      "attr": "",
-                                      "value": ""
-                                    }
-                                  ],
+                                  "attrs": [{ "attr": "", "value": "" }],
                                   "content": "Operating Months",
                                   "refreshOnChange": false,
                                   "tableView": false,
@@ -3133,17 +2879,13 @@
                                           "hideLabel": true,
                                           "tableView": false,
                                           "fields": {
-                                            "day": {
-                                              "hide": true
-                                            },
+                                            "day": { "hide": true },
                                             "month": {
                                               "placeholder": "From",
                                               "hide": false,
                                               "required": true
                                             },
-                                            "year": {
-                                              "hide": true
-                                            }
+                                            "year": { "hide": true }
                                           },
                                           "defaultValue": "00/00/0000",
                                           "key": "from",
@@ -3168,17 +2910,13 @@
                                           "hideLabel": true,
                                           "tableView": false,
                                           "fields": {
-                                            "day": {
-                                              "hide": true
-                                            },
+                                            "day": { "hide": true },
                                             "month": {
                                               "placeholder": "To",
                                               "hide": false,
                                               "required": true
                                             },
-                                            "year": {
-                                              "hide": true
-                                            }
+                                            "year": { "hide": true }
                                           },
                                           "defaultValue": "00/00/0000",
                                           "errorLabel": "Operating Months",
@@ -3502,16 +3240,9 @@
                                   "tableView": false,
                                   "storage": "url",
                                   "webcam": true,
-                                  "fileTypes": [
-                                    {
-                                      "label": "",
-                                      "value": ""
-                                    }
-                                  ],
+                                  "fileTypes": [{ "label": "", "value": "" }],
                                   "multiple": true,
-                                  "validate": {
-                                    "multiple": true
-                                  },
+                                  "validate": { "multiple": true },
                                   "key": "pleaseAttachWaiversOfLiability",
                                   "conditional": {
                                     "show": true,
@@ -3647,9 +3378,7 @@
               "hideLabel": true,
               "tableView": false,
               "key": "pageNaNPanel3Columns2",
-              "conditional": {
-                "show": true
-              },
+              "conditional": { "show": true },
               "type": "columns",
               "input": false,
               "path": "pageNaNPanel3Columns2"
@@ -3665,16 +3394,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -3692,9 +3413,7 @@
                       "description": "You will need to complete another application for these locations.",
                       "tableView": true,
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "dsglPleasedescribehere",
                       "conditional": {
                         "show": true,
@@ -3742,16 +3461,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -3832,16 +3543,8 @@
                       "inline": false,
                       "tableView": false,
                       "values": [
-                        {
-                          "label": "Yes",
-                          "value": "yes",
-                          "shortcut": ""
-                        },
-                        {
-                          "label": "No",
-                          "value": "no",
-                          "shortcut": ""
-                        }
+                        { "label": "Yes", "value": "yes", "shortcut": "" },
+                        { "label": "No", "value": "no", "shortcut": "" }
                       ],
                       "clearOnHide": false,
                       "validate": {
@@ -3859,9 +3562,7 @@
                       "tableView": true,
                       "inputFormat": "html",
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "conductBusinessRecreationalInfo",
                       "conditional": {
                         "show": true,
@@ -3894,9 +3595,7 @@
               "hideLabel": true,
               "tableView": false,
               "key": "pageNaNPanel3Columns",
-              "conditional": {
-                "show": true
-              },
+              "conditional": { "show": true },
               "type": "columns",
               "input": false
             },
@@ -3905,12 +3604,7 @@
               "label": "Please check all that apply below",
               "input": false,
               "tag": "h4",
-              "attrs": [
-                {
-                  "value": "",
-                  "attr": ""
-                }
-              ],
+              "attrs": [{ "value": "", "attr": "" }],
               "content": "Please check all that apply below",
               "type": "htmlelement",
               "hideLabel": true,
@@ -3977,9 +3671,7 @@
                       "label": "Please explain the equipment sales",
                       "tableView": true,
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "dsgleqpsales",
                       "conditional": {
                         "show": true,
@@ -4036,9 +3728,7 @@
                       "label": "Please explain the equipment repairs",
                       "tableView": true,
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "dsgleqprepairs",
                       "conditional": {
                         "show": true,
@@ -4095,9 +3785,7 @@
                       "label": "Please explain the equipment rentals",
                       "tableView": true,
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "dsgleqprentals",
                       "conditional": {
                         "show": true,
@@ -4154,9 +3842,7 @@
                       "label": "Please explain other business activity",
                       "tableView": true,
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "dsglbusinessactivity",
                       "conditional": {
                         "show": true,
@@ -4212,16 +3898,8 @@
                   "inline": false,
                   "tableView": true,
                   "values": [
-                    {
-                      "value": "yes",
-                      "label": "Yes",
-                      "shortcut": ""
-                    },
-                    {
-                      "value": "no",
-                      "label": "No",
-                      "shortcut": ""
-                    }
+                    { "value": "yes", "label": "Yes", "shortcut": "" },
+                    { "value": "no", "label": "No", "shortcut": "" }
                   ],
                   "clearOnHide": false,
                   "validate": {
@@ -4250,9 +3928,7 @@
                     }
                   ],
                   "clearOnHide": false,
-                  "validate": {
-                    "minLength": 1
-                  },
+                  "validate": { "minLength": 1 },
                   "key": "dsglClaimAmountpaidanyamountsoutstanding",
                   "conditional": {
                     "show": true,
@@ -4286,9 +3962,7 @@
                                   },
                                   "enableMaxDateInput": true,
                                   "enableTime": false,
-                                  "timePicker": {
-                                    "showMeridian": false
-                                  },
+                                  "timePicker": { "showMeridian": false },
                                   "validate": {
                                     "required": true,
                                     "custom": "if(row['dsgldateoftheclaim'] && row['dsgldateoftheclaim'] != ''){\n  valid = (moment(row['dsgldateoftheclaim']) < moment()) ? true : 'Please choose the date before '+moment().format('MM-DD-YYYY');\n}"
@@ -4330,9 +4004,7 @@
                                   "prefix": "$",
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "claimAmountPaid",
                                   "type": "textfield",
                                   "input": true,
@@ -4352,9 +4024,7 @@
                                   "prefix": "$",
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "claimsAmountOutStanding",
                                   "type": "textfield",
                                   "input": true,
@@ -4451,11 +4121,7 @@
         "eq": "modify_generalLiabilityInformation"
       },
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false
     },
     {
@@ -4471,23 +4137,14 @@
       },
       "type": "panel",
       "label": "Optional Coverages",
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "breadcrumbClickable": true,
       "input": false,
       "components": [
         {
           "label": "Optional Liability Coverage",
           "tag": "h4",
-          "attrs": [
-            {
-              "value": "",
-              "attr": ""
-            }
-          ],
+          "attrs": [{ "value": "", "attr": "" }],
           "content": "Optional Liability Coverage",
           "refreshOnChange": false,
           "tableView": false,
@@ -4592,26 +4249,11 @@
                   "tableView": true,
                   "data": {
                     "values": [
-                      {
-                        "value": "excessLiabilityCoverage1M",
-                        "label": "1M"
-                      },
-                      {
-                        "value": "excessLiabilityCoverage2M",
-                        "label": "2M"
-                      },
-                      {
-                        "value": "excessLiabilityCoverage3M",
-                        "label": "3M"
-                      },
-                      {
-                        "value": "excessLiabilityCoverage4M",
-                        "label": "4M"
-                      },
-                      {
-                        "value": "excessLiabilityCoverage9M",
-                        "label": "9M"
-                      }
+                      { "value": "excessLiabilityCoverage1M", "label": "1M" },
+                      { "value": "excessLiabilityCoverage2M", "label": "2M" },
+                      { "value": "excessLiabilityCoverage3M", "label": "3M" },
+                      { "value": "excessLiabilityCoverage4M", "label": "4M" },
+                      { "value": "excessLiabilityCoverage9M", "label": "9M" }
                     ]
                   },
                   "selectThreshold": 0.3,
@@ -4627,9 +4269,7 @@
                     "eq": "true"
                   },
                   "type": "select",
-                  "indexeddb": {
-                    "filter": {}
-                  },
+                  "indexeddb": { "filter": {} },
                   "input": true,
                   "lockKey": true,
                   "hideOnChildrenHidden": false
@@ -4713,14 +4353,8 @@
                   "tableView": true,
                   "data": {
                     "values": [
-                      {
-                        "value": "nonOwnedAutoLiability100K",
-                        "label": "100K"
-                      },
-                      {
-                        "value": "nonOwnedAutoLiability1M",
-                        "label": "1M"
-                      }
+                      { "value": "nonOwnedAutoLiability100K", "label": "100K" },
+                      { "value": "nonOwnedAutoLiability1M", "label": "1M" }
                     ]
                   },
                   "selectThreshold": 0.3,
@@ -4736,9 +4370,7 @@
                     "eq": "true"
                   },
                   "type": "select",
-                  "indexeddb": {
-                    "filter": {}
-                  },
+                  "indexeddb": { "filter": {} },
                   "input": true,
                   "lockKey": true,
                   "hideOnChildrenHidden": false
@@ -4766,11 +4398,7 @@
           "title": "Store/Resort Instructional Policy",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "hidden": true,
           "tableView": false,
@@ -4896,11 +4524,7 @@
       "title": "Additional Coverages",
       "theme": "primary",
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "tableView": false,
       "key": "page4",
@@ -4921,12 +4545,7 @@
           "components": [
             {
               "label": "Content",
-              "attrs": [
-                {
-                  "value": "",
-                  "attr": ""
-                }
-              ],
+              "attrs": [{ "value": "", "attr": "" }],
               "content": "<ol>\n<li>Additional Insureds are only added if required by written contract.</li>\n<li>No charge for Additional Insureds, however, all must be listed.</li>\n<li>Entities other than those mentioned, when listed, will be reviewed by the insurance carrier; inclusion on your Certificate of Insurance will indicate that coverage is in effect.</li>\n<li>List business relationship versus personal relationship; eg., \"Bob Smith, property owner\" not \"Bob Smith, father\".</li>\n<li>Other Instructors and assistants may not be Additional Insureds but must obtain their own insurance.</li>",
               "refreshOnChange": false,
               "tableView": false,
@@ -5026,10 +4645,7 @@
                     }
                   ],
                   "clearOnHide": false,
-                  "validate": {
-                    "required": true,
-                    "minLength": 1
-                  },
+                  "validate": { "required": true, "minLength": 1 },
                   "key": "additionalInsured",
                   "type": "datagrid",
                   "input": true,
@@ -5128,12 +4744,7 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      {
-                                        "value": "",
-                                        "label": ""
-                                      }
-                                    ],
+                                    "values": [{ "value": "", "label": "" }],
                                     "custom": "values = data['countryList'];"
                                   },
                                   "valueProperty": "country",
@@ -5145,13 +4756,9 @@
                                   },
                                   "errorLabel": "Additional Insured Country",
                                   "key": "country",
-                                  "properties": {
-                                    "clear_field": "state"
-                                  },
+                                  "properties": { "clear_field": "state" },
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "lockKey": true,
                                   "source": "5d347da33e9be31e15d3b115",
@@ -5172,12 +4779,7 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      {
-                                        "label": "",
-                                        "value": ""
-                                      }
-                                    ],
+                                    "values": [{ "label": "", "value": "" }],
                                     "custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
                                   },
                                   "template": "<span>{{ item }}</span>",
@@ -5191,9 +4793,7 @@
                                   "key": "state",
                                   "customConditional": "show = (row.country)",
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "lockKey": true,
                                   "hideOnChildrenHidden": false
@@ -5291,10 +4891,7 @@
                                         "label": "Booking Agent",
                                         "value": "bookingAgent"
                                       },
-                                      {
-                                        "label": "Other",
-                                        "value": "other"
-                                      }
+                                      { "label": "Other", "value": "other" }
                                     ]
                                   },
                                   "selectThreshold": 0.3,
@@ -5305,9 +4902,7 @@
                                   "errorLabel": "Additional Insured Business Relation",
                                   "key": "businessRelation",
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "lockKey": true,
                                   "hideOnChildrenHidden": false
@@ -5329,9 +4924,7 @@
                                   },
                                   "type": "textfield",
                                   "input": true,
-                                  "style": {
-                                    "margin-top": "4px"
-                                  },
+                                  "style": { "margin-top": "4px" },
                                   "lockKey": true,
                                   "hideOnChildrenHidden": false
                                 }
@@ -5378,23 +4971,13 @@
                           "inline": false,
                           "tableView": false,
                           "values": [
-                            {
-                              "label": "Yes",
-                              "value": "yes",
-                              "shortcut": ""
-                            },
-                            {
-                              "label": "No",
-                              "value": "no",
-                              "shortcut": ""
-                            }
+                            { "label": "Yes", "value": "yes", "shortcut": "" },
+                            { "label": "No", "value": "no", "shortcut": "" }
                           ],
                           "key": "doYouHaveAWrittenContract",
                           "type": "radio",
                           "input": true,
-                          "validate": {
-                            "required": true
-                          }
+                          "validate": { "required": true }
                         },
                         {
                           "label": "Content",
@@ -5419,18 +5002,11 @@
                           "tableView": false,
                           "storage": "url",
                           "webcam": false,
-                          "fileTypes": [
-                            {
-                              "label": "",
-                              "value": ""
-                            }
-                          ],
+                          "fileTypes": [{ "label": "", "value": "" }],
                           "multiple": true,
                           "clearOnHide": false,
                           "calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
-                          "validate": {
-                            "multiple": true
-                          },
+                          "validate": { "multiple": true },
                           "key": "additionalInsuredAttachments",
                           "type": "file",
                           "url": "/file/attachment",
@@ -5458,11 +5034,7 @@
           "title": "Additional Named Insureds",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "additionalNamedInsuredPanel",
@@ -5478,14 +5050,8 @@
               "defaultValue": "no",
               "data": {
                 "values": [
-                  {
-                    "value": "yes",
-                    "label": "Yes"
-                  },
-                  {
-                    "value": "no",
-                    "label": "No"
-                  }
+                  { "value": "yes", "label": "Yes" },
+                  { "value": "no", "label": "No" }
                 ]
               },
               "selectThreshold": 0.3,
@@ -5497,9 +5063,7 @@
               "errorLabel": "Additional Named Insureds",
               "key": "additional_named_insureds_option",
               "type": "select",
-              "indexeddb": {
-                "filter": {}
-              },
+              "indexeddb": { "filter": {} },
               "input": true,
               "lockKey": true
             },
@@ -5547,9 +5111,7 @@
                     }
                   ],
                   "clearOnHide": false,
-                  "validate": {
-                    "minLength": 1
-                  },
+                  "validate": { "minLength": 1 },
                   "key": "additionalNamedInsured",
                   "type": "datagrid",
                   "input": true,
@@ -5570,9 +5132,7 @@
                                   "label": "Name",
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "name",
                                   "type": "textfield",
                                   "input": true,
@@ -5585,12 +5145,7 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      {
-                                        "value": "",
-                                        "label": ""
-                                      }
-                                    ],
+                                    "values": [{ "value": "", "label": "" }],
                                     "custom": "values = data['countryList'];"
                                   },
                                   "valueProperty": "country",
@@ -5601,13 +5156,9 @@
                                     "customMessage": "Please enter your country."
                                   },
                                   "key": "country",
-                                  "properties": {
-                                    "clear_field": "state"
-                                  },
+                                  "properties": { "clear_field": "state" },
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "lockKey": true,
                                   "source": "5d347da33e9be31e15d3b115",
@@ -5638,12 +5189,7 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      {
-                                        "label": "",
-                                        "value": ""
-                                      }
-                                    ],
+                                    "values": [{ "label": "", "value": "" }],
                                     "custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
                                   },
                                   "template": "<span>{{ item }}</span>",
@@ -5653,9 +5199,7 @@
                                   "clearOnHide": false,
                                   "key": "state",
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "lockKey": true,
                                   "hideOnChildrenHidden": false
@@ -5727,11 +5271,7 @@
           "title": "Loss Payees",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "panel2",
@@ -5747,14 +5287,8 @@
               "defaultValue": "no",
               "data": {
                 "values": [
-                  {
-                    "value": "yes",
-                    "label": "Yes"
-                  },
-                  {
-                    "value": "no",
-                    "label": "No"
-                  }
+                  { "value": "yes", "label": "Yes" },
+                  { "value": "no", "label": "No" }
                 ]
               },
               "selectThreshold": 0.3,
@@ -5766,9 +5300,7 @@
               "errorLabel": "Loss Payees",
               "key": "lossPayeesSelect",
               "type": "select",
-              "indexeddb": {
-                "filter": {}
-              },
+              "indexeddb": { "filter": {} },
               "input": true,
               "lockKey": true
             },
@@ -5802,9 +5334,7 @@
                     }
                   ],
                   "clearOnHide": false,
-                  "validate": {
-                    "minLength": 1
-                  },
+                  "validate": { "minLength": 1 },
                   "key": "lossPayees",
                   "type": "datagrid",
                   "input": true,
@@ -5825,9 +5355,7 @@
                                   "label": "Name",
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "name",
                                   "type": "textfield",
                                   "input": true,
@@ -5840,12 +5368,7 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      {
-                                        "value": "",
-                                        "label": ""
-                                      }
-                                    ],
+                                    "values": [{ "value": "", "label": "" }],
                                     "custom": "values = data['countryList'];"
                                   },
                                   "valueProperty": "country",
@@ -5856,13 +5379,9 @@
                                     "customMessage": "Please enter your country."
                                   },
                                   "key": "country",
-                                  "properties": {
-                                    "clear_field": "state"
-                                  },
+                                  "properties": { "clear_field": "state" },
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "lockKey": true,
                                   "source": "5d347da33e9be31e15d3b115",
@@ -5881,9 +5400,7 @@
                                   "label": "Address",
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "address",
                                   "type": "textfield",
                                   "input": true,
@@ -5896,12 +5413,7 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      {
-                                        "label": "",
-                                        "value": ""
-                                      }
-                                    ],
+                                    "values": [{ "label": "", "value": "" }],
                                     "custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
                                   },
                                   "template": "<span>{{ item }}</span>",
@@ -5911,9 +5423,7 @@
                                   "clearOnHide": false,
                                   "key": "state",
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "lockKey": true,
                                   "hideOnChildrenHidden": false
@@ -5996,11 +5506,7 @@
           "title": "Additional Locations",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "additionalLocations1",
@@ -6020,14 +5526,8 @@
               "defaultValue": "no",
               "data": {
                 "values": [
-                  {
-                    "value": "yes",
-                    "label": "Yes"
-                  },
-                  {
-                    "value": "no",
-                    "label": "No"
-                  }
+                  { "value": "yes", "label": "Yes" },
+                  { "value": "no", "label": "No" }
                 ]
               },
               "selectThreshold": 0.3,
@@ -6039,9 +5539,7 @@
               "errorLabel": "Additional Locations",
               "key": "additionalLocationsSelect",
               "type": "select",
-              "indexeddb": {
-                "filter": {}
-              },
+              "indexeddb": { "filter": {} },
               "input": true,
               "lockKey": true
             },
@@ -6208,9 +5706,7 @@
                                       "label": "Name",
                                       "tableView": true,
                                       "clearOnHide": false,
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "name",
                                       "type": "textfield",
                                       "input": true,
@@ -6224,10 +5720,7 @@
                                       "dataSrc": "custom",
                                       "data": {
                                         "values": [
-                                          {
-                                            "value": "",
-                                            "label": ""
-                                          }
+                                          { "value": "", "label": "" }
                                         ],
                                         "custom": "values = data['countryList'];"
                                       },
@@ -6240,13 +5733,9 @@
                                         "customMessage": "Please enter your country."
                                       },
                                       "key": "country",
-                                      "properties": {
-                                        "clear_field": "state"
-                                      },
+                                      "properties": { "clear_field": "state" },
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "source": "5d347da33e9be31e15d3b115",
@@ -6265,9 +5754,7 @@
                                       "label": "Address",
                                       "tableView": true,
                                       "clearOnHide": false,
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "address",
                                       "type": "textfield",
                                       "input": true,
@@ -6281,10 +5768,7 @@
                                       "dataSrc": "custom",
                                       "data": {
                                         "values": [
-                                          {
-                                            "label": "",
-                                            "value": ""
-                                          }
+                                          { "label": "", "value": "" }
                                         ],
                                         "custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
                                       },
@@ -6293,14 +5777,10 @@
                                       "clearOnRefresh": true,
                                       "selectThreshold": 0.3,
                                       "clearOnHide": false,
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "state",
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "hideOnChildrenHidden": false
@@ -6318,9 +5798,7 @@
                                       "label": "City",
                                       "tableView": true,
                                       "clearOnHide": false,
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "city",
                                       "type": "textfield",
                                       "input": true,
@@ -6367,14 +5845,8 @@
                           "tableView": true,
                           "data": {
                             "values": [
-                              {
-                                "label": "Yes",
-                                "value": "yes"
-                              },
-                              {
-                                "label": "No",
-                                "value": "no"
-                              }
+                              { "label": "Yes", "value": "yes" },
+                              { "label": "No", "value": "no" }
                             ]
                           },
                           "selectThreshold": 0.3,
@@ -6386,9 +5858,7 @@
                           "errorLabel": "Property Coverage",
                           "key": "ALpropertyCoverageSelect",
                           "type": "select",
-                          "indexeddb": {
-                            "filter": {}
-                          },
+                          "indexeddb": { "filter": {} },
                           "input": true
                         },
                         {
@@ -6454,14 +5924,10 @@
                                           },
                                           "selectThreshold": 0.3,
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "buildingConstruction",
                                           "type": "select",
-                                          "indexeddb": {
-                                            "filter": {}
-                                          },
+                                          "indexeddb": { "filter": {} },
                                           "labelWidth": 30,
                                           "labelMargin": 3,
                                           "input": true,
@@ -6472,9 +5938,7 @@
                                           "label": "Please Specify",
                                           "tableView": true,
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "pleaseSpecify",
                                           "conditional": {
                                             "show": true,
@@ -6520,15 +5984,9 @@
                                   "value": "yes",
                                   "shortcut": ""
                                 },
-                                {
-                                  "label": "No",
-                                  "value": "no",
-                                  "shortcut": ""
-                                }
+                                { "label": "No", "value": "no", "shortcut": "" }
                               ],
-                              "validate": {
-                                "required": true
-                              },
+                              "validate": { "required": true },
                               "key": "ALcentralStationAlarm",
                               "type": "radio",
                               "input": true
@@ -6544,15 +6002,9 @@
                                   "value": "yes",
                                   "shortcut": ""
                                 },
-                                {
-                                  "label": "No",
-                                  "value": "no",
-                                  "shortcut": ""
-                                }
+                                { "label": "No", "value": "no", "shortcut": "" }
                               ],
-                              "validate": {
-                                "required": true
-                              },
+                              "validate": { "required": true },
                               "key": "ALfireSprinklers",
                               "type": "radio",
                               "input": true
@@ -6585,12 +6037,7 @@
                                       "key": "page4PanelPanelInformationforeachAdditionalLocationisrequiredasfollowsYouwillneedtocompleteanotherapplicationfortheselocationsColumnsPanelColumnsContent",
                                       "label": "Content",
                                       "input": false,
-                                      "attrs": [
-                                        {
-                                          "value": "",
-                                          "attr": ""
-                                        }
-                                      ],
+                                      "attrs": [{ "value": "", "attr": "" }],
                                       "content": "Please indicate the amount of insurance required for each category below.The amount should\ninclude the replacement  value for items as store displays,fixtures, computers, furniture, \nequipment and tools (including rental equipment), property of others (employee scuba equipment \nstored on premises, customer repair equipment, etc.) and tenant improvements. Inventory value \nshould be reported at your cost. PADI Members with multiple locations should include the\n contents for each category for all locations.",
                                       "type": "htmlelement",
                                       "hideLabel": true,
@@ -6752,9 +6199,7 @@
                                               }
                                             ]
                                           },
-                                          {
-                                            "components": []
-                                          }
+                                          { "components": [] }
                                         ]
                                       ],
                                       "tableView": false,
@@ -6803,9 +6248,7 @@
                                               "requireDecimal": false,
                                               "inputFormat": "plain",
                                               "clearOnHide": false,
-                                              "validate": {
-                                                "required": true
-                                              },
+                                              "validate": { "required": true },
                                               "key": "ALLossofBusIncome",
                                               "type": "number",
                                               "input": true,
@@ -6847,14 +6290,8 @@
                                       "tableView": true,
                                       "data": {
                                         "values": [
-                                          {
-                                            "value": "yes",
-                                            "label": "Yes"
-                                          },
-                                          {
-                                            "value": "no",
-                                            "label": "No"
-                                          }
+                                          { "value": "yes", "label": "Yes" },
+                                          { "value": "no", "label": "No" }
                                         ]
                                       },
                                       "selectThreshold": 0.3,
@@ -6865,9 +6302,7 @@
                                       },
                                       "key": "additionalLocationDoYouOwntheBuilding",
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "hideOnChildrenHidden": false
@@ -6937,10 +6372,7 @@
                                               "dataSrc": "custom",
                                               "data": {
                                                 "values": [
-                                                  {
-                                                    "label": "",
-                                                    "value": ""
-                                                  }
+                                                  { "label": "", "value": "" }
                                                 ],
                                                 "custom": "var currentYear = moment().year()\nfor(var i = 1901; i<currentYear; i++){\n  values.push(i);\n}"
                                               },
@@ -6954,9 +6386,7 @@
                                               "errorLabel": "Year built of building",
                                               "key": "built_year1",
                                               "type": "select",
-                                              "indexeddb": {
-                                                "filter": {}
-                                              },
+                                              "indexeddb": { "filter": {} },
                                               "input": true,
                                               "hideOnChildrenHidden": false
                                             },
@@ -7001,9 +6431,7 @@
                                       "key": "explainationAL",
                                       "type": "textfield",
                                       "input": true,
-                                      "style": {
-                                        "margin-top": "5px"
-                                      },
+                                      "style": { "margin-top": "5px" },
                                       "lockKey": true,
                                       "hideOnChildrenHidden": false,
                                       "rows": 3,
@@ -7074,12 +6502,7 @@
                                   "label": "Yes/No",
                                   "input": false,
                                   "tag": "h4",
-                                  "attrs": [
-                                    {
-                                      "value": "",
-                                      "attr": ""
-                                    }
-                                  ],
+                                  "attrs": [{ "value": "", "attr": "" }],
                                   "content": "Yes/No",
                                   "type": "htmlelement",
                                   "hideLabel": true,
@@ -7176,9 +6599,7 @@
                                               "requireDecimal": false,
                                               "inputFormat": "plain",
                                               "clearOnHide": false,
-                                              "validate": {
-                                                "required": true
-                                              },
+                                              "validate": { "required": true },
                                               "key": "ALpoolLiability",
                                               "type": "number",
                                               "labelWidth": 30,
@@ -7844,9 +7265,7 @@
                                   "hideLabel": true,
                                   "tableView": false,
                                   "key": "ALpageNaNPanel3Columns2",
-                                  "conditional": {
-                                    "show": true
-                                  },
+                                  "conditional": { "show": true },
                                   "type": "columns",
                                   "input": false,
                                   "path": "pageNaNPanel3Columns2"
@@ -7877,9 +7296,7 @@
                                             }
                                           ],
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "doYouConductRecreationalOrBusinessActivitiesOtherThanDivingAtYourFacility",
                                           "type": "radio",
                                           "input": true,
@@ -7890,9 +7307,7 @@
                                           "autoExpand": false,
                                           "tableView": true,
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "pleaseExplain",
                                           "conditional": {
                                             "show": true,
@@ -7927,12 +7342,7 @@
                                   "label": "Please check all that apply below",
                                   "input": false,
                                   "tag": "h4",
-                                  "attrs": [
-                                    {
-                                      "value": "",
-                                      "attr": ""
-                                    }
-                                  ],
+                                  "attrs": [{ "value": "", "attr": "" }],
                                   "content": "Please check all that apply below",
                                   "type": "htmlelement",
                                   "hideLabel": true,
@@ -8001,9 +7411,7 @@
                                           "label": "Please explain the equipment sales",
                                           "tableView": true,
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "ALEquipmentSales",
                                           "conditional": {
                                             "show": true,
@@ -8059,9 +7467,7 @@
                                           "label": "Please explain the equipment repairs",
                                           "tableView": true,
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "ALDescribeEquipmentRepairs",
                                           "conditional": {
                                             "show": true,
@@ -8117,9 +7523,7 @@
                                           "label": "Please explain the equipment rentals",
                                           "tableView": true,
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "ALDescribeEquipmentRenatals",
                                           "conditional": {
                                             "show": true,
@@ -8175,9 +7579,7 @@
                                           "label": "Please explain other business activity",
                                           "tableView": true,
                                           "clearOnHide": false,
-                                          "validate": {
-                                            "required": true
-                                          },
+                                          "validate": { "required": true },
                                           "key": "ALexplainOtherBusinessActivity",
                                           "conditional": {
                                             "show": true,
@@ -8246,9 +7648,7 @@
                                     }
                                   ],
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "ALclaimsinLast5Years",
                                   "type": "radio",
                                   "input": true,
@@ -8270,9 +7670,7 @@
                                     }
                                   ],
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "minLength": 1
-                                  },
+                                  "validate": { "minLength": 1 },
                                   "key": "ALdsglClaimAmountpaidanyamountsoutstanding",
                                   "conditional": {
                                     "show": true,
@@ -8667,10 +8065,7 @@
                                                 {
                                                   "label": "Hours of Operation",
                                                   "attrs": [
-                                                    {
-                                                      "attr": "",
-                                                      "value": ""
-                                                    }
+                                                    { "attr": "", "value": "" }
                                                   ],
                                                   "content": "Hours of Operation",
                                                   "refreshOnChange": false,
@@ -8740,10 +8135,7 @@
                                                 {
                                                   "label": "Hours of Operation",
                                                   "attrs": [
-                                                    {
-                                                      "attr": "",
-                                                      "value": ""
-                                                    }
+                                                    { "attr": "", "value": "" }
                                                   ],
                                                   "content": "Operating Months",
                                                   "refreshOnChange": false,
@@ -9514,9 +8906,7 @@
                                               "enableRowGroups": false,
                                               "tableView": false,
                                               "defaultValue": [
-                                                {
-                                                  "ALlakeActivities": ""
-                                                }
+                                                { "ALlakeActivities": "" }
                                               ],
                                               "key": "ALlakeOtherActivities",
                                               "type": "datagrid",
@@ -10028,12 +9418,7 @@
                                         "label": "Liability Coverages Total",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "Liability Coverages Total",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10041,9 +9426,7 @@
                                       }
                                     ]
                                   },
-                                  {
-                                    "components": []
-                                  },
+                                  { "components": [] },
                                   {
                                     "components": [
                                       {
@@ -10076,12 +9459,7 @@
                                         "label": "Property Coverages Total",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "Property Coverages Total",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10089,9 +9467,7 @@
                                       }
                                     ]
                                   },
-                                  {
-                                    "components": []
-                                  },
+                                  { "components": [] },
                                   {
                                     "components": [
                                       {
@@ -10124,12 +9500,7 @@
                                         "label": "Liability & Property Coverages Total",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "Liability & Property Coverages Total",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10137,9 +9508,7 @@
                                       }
                                     ]
                                   },
-                                  {
-                                    "components": []
-                                  },
+                                  { "components": [] },
                                   {
                                     "components": [
                                       {
@@ -10172,12 +9541,7 @@
                                         "label": "ProRata Premium",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "ProRata Premium",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10242,12 +9606,7 @@
                                         "label": "Liability Tax",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "Liability Tax",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10280,9 +9639,7 @@
                                         "inputFormat": "plain",
                                         "clearOnHide": false,
                                         "calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-                                        "validate": {
-                                          "max": 100
-                                        },
+                                        "validate": { "max": 100 },
                                         "key": "ALliabilityTaxPercentage",
                                         "logic": [
                                           {
@@ -10364,12 +9721,7 @@
                                         "label": "Property Tax",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "Property Tax",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10401,9 +9753,7 @@
                                         "inputFormat": "plain",
                                         "clearOnHide": false,
                                         "calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-                                        "validate": {
-                                          "max": 100
-                                        },
+                                        "validate": { "max": 100 },
                                         "key": "ALPropertyTaxPercentage",
                                         "logic": [
                                           {
@@ -10485,12 +9835,7 @@
                                         "label": "Total Tax",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "Total Tax",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10498,9 +9843,7 @@
                                       }
                                     ]
                                   },
-                                  {
-                                    "components": []
-                                  },
+                                  { "components": [] },
                                   {
                                     "components": [
                                       {
@@ -10533,12 +9876,7 @@
                                         "label": "Location Total",
                                         "input": false,
                                         "tag": "h4",
-                                        "attrs": [
-                                          {
-                                            "value": "",
-                                            "attr": ""
-                                          }
-                                        ],
+                                        "attrs": [{ "value": "", "attr": "" }],
                                         "content": "Location Total",
                                         "type": "htmlelement",
                                         "hideLabel": true,
@@ -10546,9 +9884,7 @@
                                       }
                                     ]
                                   },
-                                  {
-                                    "components": []
-                                  },
+                                  { "components": [] },
                                   {
                                     "components": [
                                       {
@@ -10603,11 +9939,7 @@
       "title": "Group Professional Liability",
       "theme": "primary",
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "tableView": false,
       "key": "page7",
@@ -10626,14 +9958,8 @@
           "tableView": true,
           "data": {
             "values": [
-              {
-                "label": "Yes",
-                "value": "yes"
-              },
-              {
-                "label": "No",
-                "value": "no"
-              }
+              { "label": "Yes", "value": "yes" },
+              { "label": "No", "value": "no" }
             ]
           },
           "selectThreshold": 0.3,
@@ -10645,17 +9971,13 @@
           "errorLabel": "Group Professional Liability",
           "key": "groupProfessionalLiabilitySelect",
           "type": "select",
-          "indexeddb": {
-            "filter": {}
-          },
+          "indexeddb": { "filter": {} },
           "input": true
         },
         {
           "label": "certificateLevelList",
           "key": "certificateLevelList",
-          "properties": {
-            "data_type": "list"
-          },
+          "properties": { "data_type": "list" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -10730,9 +10052,7 @@
                                 "requireDecimal": false,
                                 "inputFormat": "plain",
                                 "clearOnHide": false,
-                                "validate": {
-                                  "required": true
-                                },
+                                "validate": { "required": true },
                                 "key": "annualEstimatedResponseRecieptsGL",
                                 "type": "number",
                                 "labelWidth": 0,
@@ -10801,9 +10121,7 @@
                       "clearOnHide": false,
                       "calculateValue": "value = parseFloat(data['annualEstimatedResponseRecieptsGL'])",
                       "key": "annualReceipt",
-                      "attributes": {
-                        "style": "display:none;"
-                      },
+                      "attributes": { "style": "display:none;" },
                       "type": "number",
                       "input": true,
                       "hideOnChildrenHidden": false,
@@ -10828,9 +10146,7 @@
                       "input": true,
                       "inputType": "number",
                       "lockKey": true,
-                      "style": {
-                        "margin-top": "25px"
-                      },
+                      "style": { "margin-top": "25px" },
                       "hideOnChildrenHidden": false
                     },
                     {
@@ -10854,10 +10170,7 @@
                               "tableView": true,
                               "data": {
                                 "values": [
-                                  {
-                                    "label": "No",
-                                    "value": "no"
-                                  },
+                                  { "label": "No", "value": "no" },
                                   {
                                     "value": "groupExcessLiability1M",
                                     "label": "1M"
@@ -10882,14 +10195,10 @@
                               },
                               "selectThreshold": 0.3,
                               "clearOnHide": false,
-                              "validate": {
-                                "required": true
-                              },
+                              "validate": { "required": true },
                               "key": "groupExcessLiabilitySelect",
                               "type": "select",
-                              "indexeddb": {
-                                "filter": {}
-                              },
+                              "indexeddb": { "filter": {} },
                               "input": true,
                               "lockKey": true,
                               "hideOnChildrenHidden": false
@@ -10921,9 +10230,7 @@
                               "input": true,
                               "inputType": "number",
                               "lockKey": true,
-                              "style": {
-                                "margin-top": "25px"
-                              },
+                              "style": { "margin-top": "25px" },
                               "hideOnChildrenHidden": false
                             },
                             {
@@ -11016,9 +10323,7 @@
                   "description": "Enter the PADI Membership to Validate",
                   "tableView": true,
                   "clearOnHide": false,
-                  "validate": {
-                    "pattern": "[0-9\\s-]*$"
-                  },
+                  "validate": { "pattern": "[0-9\\s-]*$" },
                   "key": "groupPadi",
                   "type": "textfield",
                   "input": true
@@ -11098,12 +10403,7 @@
                 },
                 {
                   "label": "HTML",
-                  "attrs": [
-                    {
-                      "attr": "",
-                      "value": ""
-                    }
-                  ],
+                  "attrs": [{ "attr": "", "value": "" }],
                   "content": "<h4>Please refer the document at the <a href=\"./apps/DiveInsurance/public/docs/GroupProfessionalLiabilityApplication.pdf\" target=\"_blank\">link</a> for more information.</h4>",
                   "refreshOnChange": false,
                   "tableView": false,
@@ -11164,9 +10464,7 @@
                                   "disabled": true,
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "padi",
                                   "logic": [
                                     {
@@ -11208,9 +10506,7 @@
                                   "disabled": true,
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "firstname",
                                   "logic": [
                                     {
@@ -11252,9 +10548,7 @@
                                   "disabled": true,
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "lastname",
                                   "logic": [
                                     {
@@ -11307,21 +10601,14 @@
                                   "tableView": true,
                                   "dataSrc": "custom",
                                   "data": {
-                                    "values": [
-                                      {
-                                        "label": "",
-                                        "value": ""
-                                      }
-                                    ],
+                                    "values": [{ "label": "", "value": "" }],
                                     "custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  var ratingValues = padiRating.split(\",\");\n  var certificateValues = [];\n  ratingValues.forEach(function(item, index) {\n    for(var j=0;j<certificateLevel[item].length;j++){\n      certificateValues.push(certificateLevel[item][j])\n    }\n  });\n  \tvalues = certificateValues;\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
                                   },
                                   "valueProperty": "value",
                                   "selectThreshold": 0.3,
                                   "clearOnHide": false,
                                   "allowCalculateOverride": true,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "status",
                                   "logic": [
                                     {
@@ -11345,9 +10632,7 @@
                                     }
                                   ],
                                   "type": "select",
-                                  "indexeddb": {
-                                    "filter": {}
-                                  },
+                                  "indexeddb": { "filter": {} },
                                   "input": true,
                                   "hideOnChildrenHidden": false
                                 }
@@ -11365,9 +10650,7 @@
                                   "disabled": true,
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "nameOfInstitution",
                                   "logic": [
                                     {
@@ -11601,13 +10884,9 @@
                                   },
                                   "enableMaxDateInput": false,
                                   "enableTime": false,
-                                  "timePicker": {
-                                    "showMeridian": false
-                                  },
+                                  "timePicker": { "showMeridian": false },
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "update_date",
                                   "customConditional": "if(row.upgradeStatus == true || row.upgradeStatus == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
                                   "type": "datetime",
@@ -11666,13 +10945,9 @@
                                   },
                                   "enableMaxDateInput": false,
                                   "enableTime": false,
-                                  "timePicker": {
-                                    "showMeridian": false
-                                  },
+                                  "timePicker": { "showMeridian": false },
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "cancel_date",
                                   "customConditional": "if(row.cancel == true || row.cancel == \"true\"){\n  show = true;\n}else{\n  show = false;\n}",
                                   "type": "datetime",
@@ -11718,18 +10993,11 @@
                           "tableView": true,
                           "storage": "url",
                           "webcam": false,
-                          "fileTypes": [
-                            {
-                              "label": "",
-                              "value": ""
-                            }
-                          ],
+                          "fileTypes": [{ "label": "", "value": "" }],
                           "multiple": true,
                           "clearOnHide": false,
                           "calculateValue": "if(typeof row.documentattach == 'string' || (row.documentattach && row.documentattach[0] && row.documentattach[0].length == 0) ||  (row.documentattach && row.documentattach[0] == '[]')){\n  value = [];\n}",
-                          "validate": {
-                            "multiple": true
-                          },
+                          "validate": { "multiple": true },
                           "key": "documentattach",
                           "type": "file",
                           "url": "/file/attachment",
@@ -11788,14 +11056,8 @@
                   "tableView": true,
                   "data": {
                     "values": [
-                      {
-                        "value": "yes",
-                        "label": "Yes"
-                      },
-                      {
-                        "value": "no",
-                        "label": "No"
-                      }
+                      { "value": "yes", "label": "Yes" },
+                      { "value": "no", "label": "No" }
                     ]
                   },
                   "selectThreshold": 0.3,
@@ -11807,9 +11069,7 @@
                   "errorLabel": "Additional Insured",
                   "key": "additional_insured",
                   "type": "select",
-                  "indexeddb": {
-                    "filter": {}
-                  },
+                  "indexeddb": { "filter": {} },
                   "input": true,
                   "lockKey": true
                 },
@@ -11860,10 +11120,7 @@
                         }
                       ],
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true,
-                        "minLength": 1
-                      },
+                      "validate": { "required": true, "minLength": 1 },
                       "key": "groupAdditionalInsured",
                       "type": "datagrid",
                       "input": true,
@@ -11964,10 +11221,7 @@
                                       "dataSrc": "custom",
                                       "data": {
                                         "values": [
-                                          {
-                                            "value": "",
-                                            "label": ""
-                                          }
+                                          { "value": "", "label": "" }
                                         ],
                                         "custom": "values = data['countryList'];"
                                       },
@@ -11980,13 +11234,9 @@
                                       },
                                       "errorLabel": "Additional Insured Country",
                                       "key": "country",
-                                      "properties": {
-                                        "clear_field": "state"
-                                      },
+                                      "properties": { "clear_field": "state" },
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "source": "5d347da33e9be31e15d3b115",
@@ -12008,10 +11258,7 @@
                                       "dataSrc": "custom",
                                       "data": {
                                         "values": [
-                                          {
-                                            "label": "",
-                                            "value": ""
-                                          }
+                                          { "label": "", "value": "" }
                                         ],
                                         "custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
                                       },
@@ -12027,9 +11274,7 @@
                                       "key": "state",
                                       "customConditional": "show = (row.country)",
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "hideOnChildrenHidden": false
@@ -12128,10 +11373,7 @@
                                             "label": "Booking Agent",
                                             "value": "bookingAgent"
                                           },
-                                          {
-                                            "label": "Other",
-                                            "value": "other"
-                                          }
+                                          { "label": "Other", "value": "other" }
                                         ]
                                       },
                                       "selectThreshold": 0.3,
@@ -12142,9 +11384,7 @@
                                       "errorLabel": "Additional Insured Business Relation",
                                       "key": "businessRelation",
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "hideOnChildrenHidden": false
@@ -12165,9 +11405,7 @@
                                       },
                                       "type": "textfield",
                                       "input": true,
-                                      "style": {
-                                        "margin-top": "4px"
-                                      },
+                                      "style": { "margin-top": "4px" },
                                       "lockKey": true,
                                       "hideOnChildrenHidden": false
                                     }
@@ -12228,18 +11466,12 @@
                                   "value": "yes",
                                   "shortcut": ""
                                 },
-                                {
-                                  "label": "No",
-                                  "value": "no",
-                                  "shortcut": ""
-                                }
+                                { "label": "No", "value": "no", "shortcut": "" }
                               ],
                               "key": "doYouHaveAWrittenContract",
                               "type": "radio",
                               "input": true,
-                              "validate": {
-                                "required": true
-                              }
+                              "validate": { "required": true }
                             },
                             {
                               "label": "Content",
@@ -12264,18 +11496,11 @@
                               "tableView": false,
                               "storage": "url",
                               "webcam": false,
-                              "fileTypes": [
-                                {
-                                  "label": "",
-                                  "value": ""
-                                }
-                              ],
+                              "fileTypes": [{ "label": "", "value": "" }],
                               "multiple": true,
                               "clearOnHide": false,
                               "calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || (row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0) ||  (row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] == '[]')){\n  value = [];\n}",
-                              "validate": {
-                                "multiple": true
-                              },
+                              "validate": { "multiple": true },
                               "key": "additionalInsuredAttachments",
                               "type": "file",
                               "url": "/file/attachment",
@@ -12320,14 +11545,8 @@
                   "tableView": true,
                   "data": {
                     "values": [
-                      {
-                        "value": "yes",
-                        "label": "Yes"
-                      },
-                      {
-                        "value": "no",
-                        "label": "No"
-                      }
+                      { "value": "yes", "label": "Yes" },
+                      { "value": "no", "label": "No" }
                     ]
                   },
                   "selectThreshold": 0.3,
@@ -12338,9 +11557,7 @@
                   },
                   "key": "named_insureds",
                   "type": "select",
-                  "indexeddb": {
-                    "filter": {}
-                  },
+                  "indexeddb": { "filter": {} },
                   "input": true,
                   "lockKey": true
                 },
@@ -12411,9 +11628,7 @@
                                       "label": "Name",
                                       "tableView": true,
                                       "clearOnHide": false,
-                                      "validate": {
-                                        "required": true
-                                      },
+                                      "validate": { "required": true },
                                       "key": "name",
                                       "type": "textfield",
                                       "input": true,
@@ -12427,10 +11642,7 @@
                                       "dataSrc": "custom",
                                       "data": {
                                         "values": [
-                                          {
-                                            "value": "",
-                                            "label": ""
-                                          }
+                                          { "value": "", "label": "" }
                                         ],
                                         "custom": "values = data['countryList'];"
                                       },
@@ -12442,13 +11654,9 @@
                                         "customMessage": "Please enter your country."
                                       },
                                       "key": "country",
-                                      "properties": {
-                                        "clear_field": "state"
-                                      },
+                                      "properties": { "clear_field": "state" },
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "source": "5d347da33e9be31e15d3b115",
@@ -12480,10 +11688,7 @@
                                       "dataSrc": "custom",
                                       "data": {
                                         "values": [
-                                          {
-                                            "label": "",
-                                            "value": ""
-                                          }
+                                          { "label": "", "value": "" }
                                         ],
                                         "custom": "try {\n  countrylist = JSON.parse(data['countryList']);\n} catch(e) {\n  countrylist = data['countryList'];\n}\nif(countrylist){\n  let obj = countrylist.find(o => o.country === row.country);\n  if(obj){\n    values = obj.states\n  }\n}"
                                       },
@@ -12494,9 +11699,7 @@
                                       "clearOnHide": false,
                                       "key": "state",
                                       "type": "select",
-                                      "indexeddb": {
-                                        "filter": {}
-                                      },
+                                      "indexeddb": { "filter": {} },
                                       "input": true,
                                       "lockKey": true,
                                       "hideOnChildrenHidden": false
@@ -12580,20 +11783,13 @@
               "input": false,
               "rows": [
                 [
-                  {
-                    "components": []
-                  },
+                  { "components": [] },
                   {
                     "components": [
                       {
                         "label": "HTML",
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "attr": "",
-                            "value": ""
-                          }
-                        ],
+                        "attrs": [{ "attr": "", "value": "" }],
                         "content": "Previous Policy Information",
                         "refreshOnChange": false,
                         "tableView": false,
@@ -12609,12 +11805,7 @@
                       {
                         "label": "HTML",
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "attr": "",
-                            "value": ""
-                          }
-                        ],
+                        "attrs": [{ "attr": "", "value": "" }],
                         "content": "Current Policy Information",
                         "refreshOnChange": false,
                         "tableView": false,
@@ -12632,12 +11823,7 @@
                       {
                         "label": "Group Coverage Amount",
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "value": "",
-                            "attr": ""
-                          }
-                        ],
+                        "attrs": [{ "value": "", "attr": "" }],
                         "content": "Group Coverage Amount",
                         "refreshOnChange": false,
                         "tableView": false,
@@ -12700,12 +11886,7 @@
                       {
                         "label": "Group Excess Liability",
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "value": "",
-                            "attr": ""
-                          }
-                        ],
+                        "attrs": [{ "value": "", "attr": "" }],
                         "content": "Group Excess Liability",
                         "refreshOnChange": false,
                         "tableView": false,
@@ -12770,12 +11951,7 @@
                         "label": "Taxes",
                         "input": false,
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "value": "",
-                            "attr": ""
-                          }
-                        ],
+                        "attrs": [{ "value": "", "attr": "" }],
                         "content": "Taxes",
                         "type": "htmlelement",
                         "hideLabel": true,
@@ -12832,9 +12008,7 @@
                         "inputFormat": "plain",
                         "clearOnHide": false,
                         "calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-                        "validate": {
-                          "max": 100
-                        },
+                        "validate": { "max": 100 },
                         "key": "groupTaxPercentage",
                         "logic": [
                           {
@@ -12891,12 +12065,7 @@
                       {
                         "label": "HTML",
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "attr": "",
-                            "value": ""
-                          }
-                        ],
+                        "attrs": [{ "attr": "", "value": "" }],
                         "content": "Tax Price",
                         "refreshOnChange": false,
                         "tableView": false,
@@ -12963,12 +12132,7 @@
                         "label": "PADI Fee",
                         "input": false,
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "value": "",
-                            "attr": ""
-                          }
-                        ],
+                        "attrs": [{ "value": "", "attr": "" }],
                         "content": "PADI Fee",
                         "type": "htmlelement",
                         "hideLabel": true,
@@ -13031,12 +12195,7 @@
                         "label": "Total",
                         "input": false,
                         "tag": "h4",
-                        "attrs": [
-                          {
-                            "value": "",
-                            "attr": ""
-                          }
-                        ],
+                        "attrs": [{ "value": "", "attr": "" }],
                         "content": "Total",
                         "type": "htmlelement",
                         "hideLabel": true,
@@ -13129,12 +12288,7 @@
                       "key": "page5ColumnsPanelContent",
                       "label": "Content",
                       "input": false,
-                      "attrs": [
-                        {
-                          "value": "",
-                          "attr": ""
-                        }
-                      ],
+                      "attrs": [{ "value": "", "attr": "" }],
                       "content": "We (I) know and acknowledge that this policy does not provide any insurance coverage or defense\n for snow-ski rentals or snow-ski binding adjustments. No coverage is provided for firearms (this exclusion does not include spear guns). No coverage is provided under \nthis policy for any professional liability except under the terms of the Contingent Professional \nLiability coverage. Professional Liability includes, but is not limited to, instruction of scuba\n diving and snorkeling or other forms of aquatic activity. The policy defines these and other\n exclusions as they apply. Burglary Coverage is afforded only with a working Central S\ntation Alarm (Policy Warranty and applies only when property coverage is purchased). \nThis policy does not provide coverage for Workers Compensation, Employers Liability, \nEmployment Practices Liability, motorized watercraft or non motorized watercraft \nmore than 20 feet in length.",
                       "type": "htmlelement",
                       "hideLabel": true,
@@ -13146,9 +12300,7 @@
                       "tableView": false,
                       "defaultValue": false,
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "page5ColumnsPanelAcknowledged",
                       "type": "checkbox",
                       "input": true,
@@ -13174,9 +12326,7 @@
                                   "label": "Name",
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "ApplicantName",
                                   "type": "textfield",
                                   "input": true,
@@ -13196,9 +12346,7 @@
                                   "label": "Title",
                                   "tableView": true,
                                   "clearOnHide": false,
-                                  "validate": {
-                                    "required": true
-                                  },
+                                  "validate": { "required": true },
                                   "key": "TitleofApplicant",
                                   "type": "textfield",
                                   "input": true,
@@ -13263,12 +12411,7 @@
                           "key": "page5ColumnsPanel2Content",
                           "label": "Content",
                           "input": false,
-                          "attrs": [
-                            {
-                              "value": "",
-                              "attr": ""
-                            }
-                          ],
+                          "attrs": [{ "value": "", "attr": "" }],
                           "content": "Upon receipt and review of the completed application, Vicencia & Buckley,\n a division of HUB International will provide your with a total premium for \nyour approval before coverage is placed. Upon your acceptance of the policy and premium, credit card information can be provided to Vicencia & Buckley, \na division of HUB International or a check/money order mailed. Premium \nFinancing is also available.",
                           "type": "htmlelement",
                           "hideLabel": true,
@@ -13288,12 +12431,7 @@
                           "key": "page5ColumnsPanel4Content",
                           "label": "Content",
                           "input": false,
-                          "attrs": [
-                            {
-                              "value": "",
-                              "attr": ""
-                            }
-                          ],
+                          "attrs": [{ "value": "", "attr": "" }],
                           "content": "HUB International Insurance will use the information you provide on this form \nto be in touch with you and to provide updates and marketing.We will treat \nyour information with respect. For more information about our privacy practices \nplease visit our website. By checking this box, you agree  that we may process  \nyour information in accordance with these terms.",
                           "type": "htmlelement",
                           "hideLabel": true,
@@ -13304,9 +12442,7 @@
                           "tableView": false,
                           "defaultValue": false,
                           "clearOnHide": false,
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "gdprAgreement",
                           "type": "checkbox",
                           "input": true,
@@ -14087,9 +13223,7 @@
             {
               "label": "stateTaxData",
               "key": "stateTaxData",
-              "properties": {
-                "data_type": "list"
-              },
+              "properties": { "data_type": "list" },
               "type": "hidden",
               "input": true,
               "tableView": true,
@@ -14403,12 +13537,7 @@
                         {
                           "label": "ProRata Percentage",
                           "tag": "h4",
-                          "attrs": [
-                            {
-                              "value": "",
-                              "attr": ""
-                            }
-                          ],
+                          "attrs": [{ "value": "", "attr": "" }],
                           "content": "ProRata Percentage",
                           "refreshOnChange": false,
                           "tableView": false,
@@ -14501,26 +13630,17 @@
                           "tableView": false,
                           "dataSrc": "custom",
                           "data": {
-                            "values": [
-                              {
-                                "label": "",
-                                "value": ""
-                              }
-                            ],
+                            "values": [{ "label": "", "value": "" }],
                             "custom": "if(data['propertyCoverageSelect'] == 'yes'){\n  values = [{ \"value\": \"standardCoverageUpTo50000\",\"label\": \"Standard Coverage (Up to $50,000)\"},{\"value\": \"standardCoverage50001To100000\",\"label\": \"Standard Coverage ($50,001 to $100,000)\"},{\"value\": \"standardCoverage100001To200000\",\"label\": \"Standard Coverage ($100,001 to $200,000)\"},{\"value\": \"standardCoverage200001To350000\",\"label\": \"Standard Coverage ($200,001 to $350,000)\"},{\"value\": \"standardCoverage350001To500000\",\"label\": \"Standard Coverage ($350,001 to $500,000)\"},{\"value\": \"standardCoverage500001To1M\",\"label\": \"Standard Coverage ($500,001 to $1M)\"},{\"value\": \"standardCoverage1MAndOver\",\"label\": \"Standard Coverage ($1M and Over)\"},{\"value\": \"liabilityOnlyUpTo50000\",\"label\": \"Liability Only (Up to $50,000)\"},{\"value\": \"liabilityOnly50001To100000\",\"label\": \"Liability Only ($50,001 to $100,000)\"},{\"value\": \"liabilityOnly100001To200000\",\"label\": \"Liability Only ($100,001 to $200,000)\"},{\"value\": \"liabilityOnly200001To350000\",\"label\": \"Liability Only ($200,001 to $350,000)\"},{\"value\": \"liabilityOnly350001To500000\",\"label\": \"Liability Only ($350,001 to $500,000)\"},{\"value\": \"liabilityOnly500001To1M\",\"label\": \"Liability Only ($500,001 to $1M)\"},{\"value\": \"liabilityOnly1MAndOver\",\"label\": \"Liability Only ($1M and Over)\"},{\"value\": \"discontinuedOperation\",\"label\": \"Discontinued Operation\"},{\"value\": \"noCoverageSelected\",\"label\": \"No Coverage Selected\"}];\n} else {\n  values = [{\"value\": \"liabilityOnlyUpTo50000\",\"label\": \"Liability Only (Up to $50,000)\"},{\"value\": \"liabilityOnly50001To100000\",\"label\": \"Liability Only ($50,001 to $100,000)\"},{\"value\": \"liabilityOnly100001To200000\",\"label\": \"Liability Only ($100,001 to $200,000)\"},{\"value\": \"liabilityOnly200001To350000\",\"label\": \"Liability Only ($200,001 to $350,000)\"},{\"value\": \"liabilityOnly350001To500000\",\"label\": \"Liability Only ($350,001 to $500,000)\"},{\"value\": \"liabilityOnly500001To1M\",\"label\": \"Liability Only ($500,001 to $1M)\"},{\"value\": \"liabilityOnly1MAndOver\",\"label\": \"Liability Only ($1M and Over)\"},{\"value\": \"discontinuedOperation\",\"label\": \"Discontinued Operation\"},{\"value\": \"noCoverageSelected\",\"label\": \"No Coverage Selected\"}];\n}"
                           },
                           "valueProperty": "value",
                           "selectThreshold": 0.3,
                           "clearOnHide": false,
                           "calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <=50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
-                          "validate": {
-                            "required": true
-                          },
+                          "validate": { "required": true },
                           "key": "liabilityCoverageOption",
                           "type": "select",
-                          "indexeddb": {
-                            "filter": {}
-                          },
+                          "indexeddb": { "filter": {} },
                           "input": true,
                           "lockKey": true,
                           "hideOnChildrenHidden": false
@@ -14824,17 +13944,11 @@
                           "label": "NON CAT",
                           "shortcut": ""
                         },
-                        {
-                          "value": "cat",
-                          "label": "CAT",
-                          "shortcut": ""
-                        }
+                        { "value": "cat", "label": "CAT", "shortcut": "" }
                       ],
                       "defaultValue": "nonCat",
                       "clearOnHide": false,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "type": "radio",
                       "optionsLabelPosition": "right",
                       "inline": true,
@@ -14968,12 +14082,7 @@
                   "label": "Content",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Current values",
                   "type": "htmlelement",
                   "hideLabel": true,
@@ -14994,12 +14103,7 @@
                   "label": "Content",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Previous values",
                   "type": "htmlelement",
                   "hideLabel": true,
@@ -15029,12 +14133,7 @@
                   "label": "Liability Coverages Total",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Liability Coverages Total",
                   "type": "htmlelement",
                   "tableView": false,
@@ -15135,12 +14234,7 @@
                   "label": "Property Coverages Total",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Property Coverages Total",
                   "type": "htmlelement",
                   "tableView": false,
@@ -15242,12 +14336,7 @@
                   "label": "Liability Property Coverages Total",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Liability Property Coverages Total",
                   "type": "htmlelement",
                   "tableView": false,
@@ -15346,12 +14435,7 @@
                 {
                   "label": "Liability ProRata Premium",
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Liability ProRata Premium",
                   "refreshOnChange": false,
                   "hidden": true,
@@ -15460,12 +14544,7 @@
                   "label": "Property ProRata Premium",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Property ProRata Premium",
                   "type": "htmlelement",
                   "tableView": false,
@@ -15560,12 +14639,7 @@
                 {
                   "label": "ProRata Premium",
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "ProRata Premium",
                   "refreshOnChange": false,
                   "hidden": true,
@@ -15674,12 +14748,7 @@
                   "label": "Property Tax",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Property Tax",
                   "type": "htmlelement",
                   "tableView": false,
@@ -15718,9 +14787,7 @@
                   "inputFormat": "plain",
                   "clearOnHide": false,
                   "calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
-                  "validate": {
-                    "max": 100
-                  },
+                  "validate": { "max": 100 },
                   "key": "propertyTaxPL",
                   "conditional": {
                     "show": false,
@@ -15862,12 +14929,7 @@
                   "label": "Liability Tax",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Liability Tax",
                   "type": "htmlelement",
                   "tableView": false,
@@ -15906,9 +14968,7 @@
                   "inputFormat": "plain",
                   "clearOnHide": false,
                   "calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
-                  "validate": {
-                    "max": 100
-                  },
+                  "validate": { "max": 100 },
                   "key": "liabilityTaxPL",
                   "conditional": {
                     "show": false,
@@ -16048,12 +15108,7 @@
                 {
                   "label": "Additional Location Premium",
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Additional Location Premium",
                   "refreshOnChange": false,
                   "tableView": false,
@@ -16164,12 +15219,7 @@
                 {
                   "label": "Additional Location Tax",
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Additional Location Tax",
                   "refreshOnChange": false,
                   "tableView": false,
@@ -16288,12 +15338,7 @@
                   "label": "PA/OR Fee",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "PA/OR Fee",
                   "type": "htmlelement",
                   "tableView": false,
@@ -16394,12 +15439,7 @@
                   "label": "PADI Fee",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "PADI Fee",
                   "type": "htmlelement",
                   "tableView": false,
@@ -16494,12 +15534,7 @@
                 {
                   "label": "Property Deductible Credit",
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Property Deductible Credit",
                   "refreshOnChange": false,
                   "tableView": false,
@@ -16638,12 +15673,7 @@
                   "label": "Group Professional Liability",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Group Professional Liability",
                   "type": "htmlelement",
                   "tableView": false,
@@ -16749,12 +15779,7 @@
                   "label": "Additional Premium",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Additional Premium",
                   "type": "htmlelement",
                   "tableView": false,
@@ -16824,12 +15849,7 @@
                   "label": "Total Additional Premium",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Total Additional Premium",
                   "type": "htmlelement",
                   "tableView": false,
@@ -16857,9 +15877,7 @@
                   "inputFormat": "plain",
                   "clearOnHide": false,
                   "calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
-                  "validate": {
-                    "max": 100
-                  },
+                  "validate": { "max": 100 },
                   "key": "addPremiumTax",
                   "conditional": {
                     "show": false,
@@ -16949,12 +15967,7 @@
                   "label": "Total Amount",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Total Amount",
                   "type": "htmlelement",
                   "tableView": false,
@@ -17052,12 +16065,7 @@
                   "label": "Content",
                   "input": false,
                   "tag": "h4",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "Amount Payable",
                   "type": "htmlelement",
                   "hideLabel": true,
@@ -17127,11 +16135,7 @@
           "title": " ",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "userApprovalPanel",
@@ -17148,12 +16152,7 @@
               "components": [
                 {
                   "label": "Content",
-                  "attrs": [
-                    {
-                      "value": "",
-                      "attr": ""
-                    }
-                  ],
+                  "attrs": [{ "value": "", "attr": "" }],
                   "content": "<h5><b>If the proposal require approval from policyholder.Please select the Approval Required checkbox below.</b></h5>",
                   "refreshOnChange": false,
                   "tableView": false,
@@ -17182,11 +16181,7 @@
           "title": "Quote Information",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "page5Panel4",
@@ -17211,12 +16206,7 @@
                       "key": "page5Panel4Content",
                       "label": "Content",
                       "input": false,
-                      "attrs": [
-                        {
-                          "value": "",
-                          "attr": ""
-                        }
-                      ],
+                      "attrs": [{ "value": "", "attr": "" }],
                       "content": "<p> The Quote Requirements are due to prior ? </p>",
                       "type": "htmlelement",
                       "hideLabel": true,
@@ -17244,9 +16234,7 @@
                         "datepickerMode": "day"
                       },
                       "enableTime": false,
-                      "timePicker": {
-                        "showMeridian": false
-                      },
+                      "timePicker": { "showMeridian": false },
                       "clearOnHide": false,
                       "key": "quote_due_date",
                       "type": "datetime",
@@ -17337,11 +16325,7 @@
                           "label": "I have also attached a Business Income Worksheet. This coverage is if you have a covered property",
                           "shortcut": ""
                         },
-                        {
-                          "value": "Other",
-                          "label": "Other",
-                          "shortcut": ""
-                        }
+                        { "value": "Other", "label": "Other", "shortcut": "" }
                       ],
                       "validate": {
                         "customMessage": "Please select any one of the option",
@@ -17362,12 +16346,7 @@
                     },
                     {
                       "label": "HTML",
-                      "attrs": [
-                        {
-                          "attr": "",
-                          "value": ""
-                        }
-                      ],
+                      "attrs": [{ "attr": "", "value": "" }],
                       "content": "<style>\n  .selectboxesSpacing{\n    .checkbox{\n      margin-top:15px;\n      margin-bottom:15px;\n    }\n  }\n</style>",
                       "refreshOnChange": false,
                       "tableView": false,
@@ -17388,9 +16367,7 @@
                     {
                       "label": "Please enter the value of XXX :",
                       "tableView": true,
-                      "validate": {
-                        "required": true
-                      },
+                      "validate": { "required": true },
                       "key": "marineX",
                       "conditional": {
                         "show": true,
@@ -17423,10 +16400,7 @@
               "layoutFixed": false,
               "enableRowGroups": false,
               "tableView": false,
-              "validate": {
-                "required": true,
-                "minLength": 1
-              },
+              "validate": { "required": true, "minLength": 1 },
               "key": "quoteInfoOther",
               "conditional": {
                 "show": true,
@@ -17440,9 +16414,7 @@
                   "label": "Please Mention",
                   "hideLabel": true,
                   "tableView": true,
-                  "validate": {
-                    "required": true
-                  },
+                  "validate": { "required": true },
                   "key": "info",
                   "type": "textfield",
                   "input": true
@@ -17456,11 +16428,7 @@
           "title": "Attachments",
           "theme": "primary",
           "breadcrumbClickable": true,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "csrAttachmentsPanel",
@@ -17474,17 +16442,10 @@
               "tableView": false,
               "storage": "url",
               "webcam": true,
-              "fileTypes": [
-                {
-                  "label": "",
-                  "value": ""
-                }
-              ],
+              "fileTypes": [{ "label": "", "value": "" }],
               "multiple": true,
               "clearOnHide": false,
-              "validate": {
-                "multiple": true
-              },
+              "validate": { "multiple": true },
               "key": "csrApprovalAttachments",
               "type": "file",
               "input": true,
@@ -17495,21 +16456,13 @@
       ],
       "path": "page5PanelPanel",
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      }
+      "buttonSettings": { "previous": true, "cancel": true, "next": true }
     },
     {
       "title": "Quote Documents",
       "theme": "primary",
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "tableView": false,
       "key": "page10",
@@ -17527,9 +16480,7 @@
           "redrawOn": "data",
           "calculateValue": "value = {};\nif(data.quoteDocuments)\n{\n  if(typeof data.quoteDocuments === 'object'){\n    value = data.quoteDocuments;  \n  }else{\n    var documents = {};\n    data.quoteDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
           "key": "quoteDocuments",
-          "properties": {
-            "data_type": "list"
-          },
+          "properties": { "data_type": "list" },
           "type": "hidden",
           "input": true,
           "tableView": false
@@ -17553,11 +16504,7 @@
       "title": "Approval",
       "theme": "primary",
       "breadcrumbClickable": true,
-      "buttonSettings": {
-        "previous": true,
-        "cancel": true,
-        "next": true
-      },
+      "buttonSettings": { "previous": true, "cancel": true, "next": true },
       "collapsible": false,
       "tableView": false,
       "key": "page5Panel2",
@@ -17569,11 +16516,7 @@
           "title": "Approve/Reject the Application",
           "theme": "primary",
           "breadcrumbClickable": false,
-          "buttonSettings": {
-            "previous": true,
-            "cancel": true,
-            "next": true
-          },
+          "buttonSettings": { "previous": true, "cancel": true, "next": true },
           "collapsible": false,
           "tableView": false,
           "key": "page77Panel",
@@ -17589,26 +16532,12 @@
               "autofocus": true,
               "tableView": true,
               "values": [
-                {
-                  "value": "approved",
-                  "label": "Approved",
-                  "shortcut": ""
-                },
-                {
-                  "value": "rejected",
-                  "label": "Rejected",
-                  "shortcut": ""
-                },
-                {
-                  "label": "On Hold",
-                  "value": "onHold",
-                  "shortcut": ""
-                }
+                { "value": "approved", "label": "Approved", "shortcut": "" },
+                { "value": "rejected", "label": "Rejected", "shortcut": "" },
+                { "label": "On Hold", "value": "onHold", "shortcut": "" }
               ],
               "clearOnHide": false,
-              "validate": {
-                "required": true
-              },
+              "validate": { "required": true },
               "key": "csrApproved",
               "type": "radio",
               "input": true,
@@ -17626,20 +16555,10 @@
           "layoutFixed": false,
           "enableRowGroups": false,
           "tableView": false,
-          "defaultValue": [
-            {
-              "reason": ""
-            }
-          ],
-          "validate": {
-            "minLength": 1
-          },
+          "defaultValue": [{ "reason": "" }],
+          "validate": { "minLength": 1 },
           "key": "rejectionReason",
-          "conditional": {
-            "show": true,
-            "when": "approved",
-            "eq": "rejected"
-          },
+          "conditional": { "show": true, "when": "approved", "eq": "rejected" },
           "customConditional": "show = (data.csrApproved == \"rejected\" || data.csrApproved == \"onHold\")",
           "type": "datagrid",
           "input": true,
@@ -17677,7 +16596,7 @@
     }
   ],
   "revisions": "original",
-  "_vid": 46,
+  "_vid": 47,
   "title": "diveStoreEndorsement3",
   "display": "wizard",
   "access": [
@@ -17701,6 +16620,6 @@
   "path": "divestoreendorsement3",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-08-03T07:30:50.996Z",
-  "modified": "2020-09-25T13:35:40.279Z",
+  "modified": "2020-09-28T04:54:33.981Z",
   "machineName": "testdivehub:diveStoreEndorsement3"
 }
