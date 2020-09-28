@@ -311,61 +311,9 @@ public function execute(array $data,Persistence $persistenceService)
     private function getRates(&$data,$persistenceService){
         $length = sizeof($data['previous_policy_data']) - 1;
         $policy = $data['previous_policy_data'][$length];
-        $endorsementCoverage = array();
-        $endorsementGroupCoverage = array();
         $endorsementGroupLiability = array();
-        $endorsementPropertyDeductibles = array();
         $endorsementExcessLiabilityCoverage = array();
-        $endorsementNonOwnedAutoLiabilityPL = array();
         $endorsementLiabilityCoverageOption = array();
-         if(isset($policy['previous_groupCoverageSelect'])){
-                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_groupCoverageSelect']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
-                $this->logger->info("Executing Endorsement Rate Card Group Coverage - Dive Store".$selectCoverage);
-                $resultCoverage = $persistenceService->selectQuery($selectCoverage);
-                while ($resultCoverage->next()) {
-                    $rate = $resultCoverage->current();
-                    if(isset($rate['key'])){
-                        if($rate['key'] == $policy['previous_groupCoverageSelect']){
-                            $data['groupCoverageSelect'] = $policy['previous_groupCoverageSelect'];
-                        }
-                        $endorsementGroupCoverage[$rate['key']] = $rate['coverage'];
-                    }
-                    unset($rate);
-                }
-            }
-            if(isset($groupExcessLiability)){
-                if(is_array($groupExcessLiability)){
-                    $groupExcessLiability = '';
-                }
-                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$groupExcessLiability."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
-                    $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Boat".$selectCoverage);
-                    $resultCoverage = $persistenceService->selectQuery($selectCoverage);
-                    while ($resultCoverage->next()) {
-                        $rate = $resultCoverage->current();
-                        if(isset($rate['key'])){
-                            if($rate['key'] == $policy['previous_groupExcessLiabilitySelect']){
-                                $data['groupExcessLiabilitySelect'] = $policy['previous_groupExcessLiabilitySelect'];
-                            }
-                            $endorsementGroupLiability[$rate['key']] = $rate['coverage'];
-                        }
-                        unset($rate);
-                    }
-            }
-            if(isset($policy['previous_propertyDeductibles'])){
-                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_propertyDeductibles']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
-                $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Store".$selectCoverage);
-                $resultCoverage = $persistenceService->selectQuery($selectCoverage);
-                while ($resultCoverage->next()) {
-                    $rate = $resultCoverage->current();
-                    if(isset($rate['key'])){
-                        if($rate['key'] == $policy['previous_propertyDeductibles']){
-                            $data['propertyDeductibles'] = $policy['previous_propertyDeductibles'];
-                        }
-                        $endorsementPropertyDeductibles[$rate['key']] = $rate['coverage'];
-                    }
-                    unset($rate);
-                }
-            }
             if(isset($policy['previous_excessLiabilityCoverage'])){
                 $selectCoverage = "select rc.* from premium_rate_card rc WHERE product = '".$data['product']."' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."' order by CAST(rc.previous_key as UNSIGNED) DESC";
                 $resultCoverage = $persistenceService->selectQuery($selectCoverage);
@@ -376,21 +324,6 @@ public function execute(array $data,Persistence $persistenceService)
                             $data['excessLiabilityCoverage'] = $policy['previous_excessLiabilityCoverage'];
                         }
                         $endorsementExcessLiabilityCoverage[$rate['key']] = $rate['coverage'];
-                    }
-                    unset($rate);
-                }
-            }
-            if(isset($policy['previous_nonOwnedAutoLiabilityPL'])){
-                $selectCoverage = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_nonOwnedAutoLiabilityPL']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
-                $this->logger->info("Executing Endorsement Rate Card Coverage - Dive Store".$selectCoverage);
-                $resultCoverage = $persistenceService->selectQuery($selectCoverage);
-                while ($resultCoverage->next()) {
-                    $rate = $resultCoverage->current();
-                    if(isset($rate['key'])){
-                        if($rate['key'] == $policy['previous_nonOwnedAutoLiabilityPL']){
-                            $data['nonOwnedAutoLiabilityPL'] = $policy['previous_nonOwnedAutoLiabilityPL'];
-                        }
-                        $endorsementNonOwnedAutoLiabilityPL[$rate['key']] = $rate['coverage'];
                     }
                     unset($rate);
                 }
@@ -415,11 +348,7 @@ public function execute(array $data,Persistence $persistenceService)
                     $data[$key] = $value;    
                 }
             }
-            $data['endorsementGroupCoverage'] = $endorsementGroupCoverage;
-            $data['endorsementGroupLiability'] = $endorsementGroupLiability;
-            $data['endorsementPropertyDeductibles'] = $endorsementPropertyDeductibles;
             $data['endorsementExcessLiabilityCoverage'] = $endorsementExcessLiabilityCoverage;
-            $data['endorsementNonOwnedAutoLiabilityPL'] = $endorsementNonOwnedAutoLiabilityPL;
             $data['endorsementLiabilityCoverageOption'] = $endorsementLiabilityCoverageOption;
             $data['initial_combinedSingleLimit'] = $data['previous_policy_data'][0]['previous_combinedSingleLimit'];
             $data['initial_annualAggregate'] = $data['previous_policy_data'][0]['previous_annualAggregate'];

@@ -3040,7 +3040,7 @@
               },{
                 "label": "Endorsement Effective Date",
                 "calculateValue": "if(!row.effective_date || row.effective_date == undefined || row.effective_date ==''){\n  value = moment(data.update_date).format(\"YYYY-MM-DD\");\n}",
-                "key": "endo_effective_date",
+                "key": "effective_date",
                 "type": "hidden",
                 "input": true,
                 "tableView": false,
