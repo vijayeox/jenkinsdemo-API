@@ -17697,7 +17697,7 @@
     "submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
   },
   "settings": {},
-  "name": "diveStoreEndorsement3",
+  "name": "endorsementDiveStoreConsolidation",
   "path": "divestoreendorsement3",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-08-03T07:30:50.996Z",
