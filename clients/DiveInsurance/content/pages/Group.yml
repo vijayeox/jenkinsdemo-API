@@ -121,12 +121,12 @@ content:
                                                                     <p class="uppercase">${data.groupTaxAmount.toFixed(2)}</p>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Additional Premium</label>
-                                                                    <p class="uppercase">${data.totalAddPremium.toFixed(2)}</p>
-                                                                </div>
-                                                                <div class="form-group">
                                                                     <label>Group Amount</label>
                                                                     <p class="uppercase">${data.groupTotalAmount.toFixed(2)}</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Additional Premium</label>
+                                                                    <p class="uppercase">${data.totalAddPremium.toFixed(2)}</p>
                                                                 </div>
                                                           </div>
                                                 </div>
