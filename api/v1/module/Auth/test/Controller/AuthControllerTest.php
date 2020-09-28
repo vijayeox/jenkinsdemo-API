@@ -468,6 +468,12 @@ class AuthControllerTest extends ControllerTest
         }
         $this->assertEquals($data['data']['type'], $acctResult[0]['type']);
         $this->assertEquals($newQueryResult[0]['id'], $acctResult[0]['contactid']);
+        if($acctResult[0]['organization_id']){
+            $query = "select * from ox_organization where id = ".$acctResult[0]['organization_id'];
+            $result = $this->executeQueryTest($query);
+            $this->assertEquals(1, count($result));
+            $this->assertEquals($acctResult[0]['organization_id'], $result[0]['main_organization_id']);
+        }
         if(isset($data['data']['identifier_field'])){
             $sqlQuery = "SELECT * FROM ox_wf_user_identifier where identifier_name = '".$data['data']['identifier_field']."' AND identifier = '".$data['data'][$data['data']['identifier_field']]."'";
             $identifierResult = $this->runQuery($sqlQuery);

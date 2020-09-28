@@ -158,7 +158,8 @@ class AccountControllerTest extends ControllerTest
         $accountResult = $this->executeQueryTest($select);
         $select = "SELECT ox_user.*,ox_person.firstname,ox_person.lastname,ox_person.address_id,ox_employee.designation FROM ox_user inner join ox_person on ox_person.id = ox_user.person_id inner join ox_employee on ox_employee.person_id = ox_person.id where ox_user.username ='" . $contact['username'] . "'";
         $usrResult = $this->executeQueryTest($select);
-        $select = "SELECT ox_address.address1,ox_organization.uuid,ox_account.uuid,ox_account.name, ox_account.type from ox_address join ox_organization on ox_address.id = ox_organization.address_id join ox_account on ox_account.organization_id=ox_organization.id where name = 'ORGANIZATION'";
+        $select = "SELECT ox_address.address1,ox_organization.uuid,ox_account.uuid,ox_account.name, ox_account.type, ox_organization.id org_id, ox_organization.main_organization_id 
+            from ox_address join ox_organization on ox_address.id = ox_organization.address_id join ox_account on ox_account.organization_id=ox_organization.id where name = 'ORGANIZATION'";
         $account = $this->executeQueryTest($select);
         $query = "SELECT * from ox_app_registry where account_id = (SELECT id from ox_account where uuid = '" . $content['data']['uuid'] . "')";
         $appResult = $this->executeQueryTest($query);
@@ -174,6 +175,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(isset($usrResult[0]['address_id']), true);
+        $this->assertEquals($account[0]['org_id'], $account[0]['main_organization_id']);
         $this->assertEquals($account[0]['address1'], $data['address1']);
         $this->assertEquals($account[0]['type'], 'BUSINESS');
         $this->assertEquals($appResult[0]['app_id'], 1);
@@ -422,13 +424,15 @@ class AccountControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
+        $select = "SELECT ox_address.*, ox_organization.id org_id, ox_organization.main_organization_id
+                    from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
                     inner join ox_account o on o.organization_id = ox_organization.id where o.name = 'Cleveland Cavaliers'";
         $account = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($account[0]['address1'], '23811 Chagrin Blvd, Ste 244');
+        $this->assertEquals($account[0]['org_id'], $account[0]['main_organization_id']);
     }
 
     public function testUpdateWithAddress()
@@ -445,13 +449,15 @@ class AccountControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
+        $select = "SELECT ox_address.*, ox_organization.id org_id, ox_organization.main_organization_id
+                    from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
                     inner join ox_account o on o.organization_id = ox_organization.id where o.name = 'Cleveland Cavaliers'";
         $account = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($account[0]['address1'], $data['address1']);
+        $this->assertEquals($account[0]['org_id'], $account[0]['main_organization_id']);
     }
 
     public function testUpdateRestricted()
