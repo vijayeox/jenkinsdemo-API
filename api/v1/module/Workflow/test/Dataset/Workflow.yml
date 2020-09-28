@@ -454,7 +454,7 @@ ox_activity_instance:
     start_date: "2019-06-26 00:00:00"
     submitted_date: "2019-06-27 00:00:00"
     org_id: 1
-ox_activity_instance_assignee:
+ox_file_assignee:
   - activity_instance_id: 1
     user_id: 1
     assignee: 1
