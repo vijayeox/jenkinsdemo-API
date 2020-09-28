@@ -118,6 +118,7 @@ class AccountService extends AbstractService
                     $data['type'] = Account::BUSINESS;        
                 }
                 $this->saveAccountInternal($data, $files);
+                unset($data['organization_id']);
                 $this->messageProducer->sendTopic(json_encode(array('accountName' => $data['name'], 'status' => $data['status'])), 'ACCOUNT_ADDED');
             }
             $this->commit();
