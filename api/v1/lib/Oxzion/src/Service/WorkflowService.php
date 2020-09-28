@@ -421,7 +421,7 @@ class WorkflowService extends AbstractService
         $appFilter = "ox_app.uuid ='" . $appId . "'";
 
         $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR ox_user_role.user_id = $userId)
-                                OR ox_activity_instance_assignee.user_id = $userId)
+                                OR ox_file_assignee.user_id = $userId)
                                 AND $appFilter AND ox_activity_instance.status = 'In Progress'
                                 AND ox_workflow_instance.org_id = " . AuthContext::get(AuthConstants::ORG_ID);
 
@@ -564,9 +564,10 @@ class WorkflowService extends AbstractService
     INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
     INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
     INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
-    LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_activity_instance_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_activity_instance_assignee GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
-    LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id
-    LEFT JOIN ox_user_role ON ox_activity_instance_assignee.role_id = ox_user_role.role_id LEFT JOIN ox_user ON ox_activity_instance_assignee.user_id = ox_user.id";
+    LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.file_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_file_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_file_assignee WHERE activity_instance_id is not null GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_file_assignee ON ox_file_assignee.activity_instance_id = ox_activity_instance.id
+    LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
+    LEFT JOIN ox_file as `oxf` ON `oxf`.id = ox_file_assignee.file_id
+    LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id LEFT JOIN ox_user ON ox_file_assignee.user_id = ox_user.id";
 
         if(!empty($filterParams)){
             $cacheQuery = '';
@@ -601,8 +602,8 @@ class WorkflowService extends AbstractService
         $querySet = "SELECT distinct ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
     ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,`of`.id,
     ox_activity.name as activityName, `of`.date_created,
-    CASE WHEN ox_activity_instance_assignee.assignee = 0 then 1
-    WHEN ox_activity_instance_assignee.assignee = 1 AND ox_activity_instance_assignee.user_id = $userId then 0 else 2
+    CASE WHEN ox_file_assignee.assignee = 0 then 1
+    WHEN ox_file_assignee.assignee = 1 AND ox_file_assignee.user_id = $userId then 0 else 2
     end as to_be_claimed,ox_user.name as assigned_user $field $fromQuery $filterFromQuery $whereQuery $sort $pageSize $offset";
         $this->logger->info("Executing Assignment listing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
