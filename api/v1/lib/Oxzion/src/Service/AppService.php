@@ -564,6 +564,7 @@ public function setupAppView($yamlData, $path)
     $metadataPath = $appName . '/metadata.json';
     $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
     if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
+        FileUtils::copyDir($eoxapp,$path);
         FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
     }else{
         if(is_dir($path . 'view/apps/eoxapps')){
@@ -1166,6 +1167,10 @@ private function checkWorkflowData(&$data,$appUuid)
             }
             if(isset($entity['field'])){
                 foreach ($entity['field'] as $field) {
+                    if(isset($field['ryg_rule'])){
+                        $entity['ryg_rule'] = $field['ryg_rule'];
+                        $this->entityService->saveEntity($appId, $entity);
+                    }
                     $result = $this->fieldService->getFieldByName($entity['uuid'], $field['name']);
                     if ($result == 0) {
                         $field['entity_id'] = $entity['id'];

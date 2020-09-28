@@ -1326,7 +1326,7 @@ class FileService extends AbstractService
         $where = trim($where) != "" ? "WHERE $where" : "";
         $where = rtrim($where, " AND ");
         try {
-            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id $field $fromQuery $where $sort $pageSize $offset";
+            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.ryg_rule as rygRule,en.name as entity_name,en.uuid as entity_id $field $fromQuery $where $sort $pageSize $offset";
             $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
             $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
             $countQuery = "SELECT FOUND_ROWS();";

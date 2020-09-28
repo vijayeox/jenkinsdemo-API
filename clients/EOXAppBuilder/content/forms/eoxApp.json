@@ -936,6 +936,16 @@
 								"key": "index",
 								"type": "checkbox",
 								"input": true
+							}, {
+								"label": "RYG Rule",
+								"editor": "ace",
+								"autoExpand": false,
+								"tableView": true,
+								"key": "ryg_rule",
+								"type": "textarea",
+								"input": true,
+								"hideOnChildrenHidden": false,
+								"as": "string"
 							}]
 						}],
 						"hideOnChildrenHidden": false
@@ -1090,7 +1100,6 @@
 				"next": true
 			},
 			"collapsible": false,
-			"disabled": false,
 			"tableView": false,
 			"key": "workflowPanel",
 			"type": "panel",
@@ -1108,7 +1117,7 @@
 				"tableView": false,
 				"defaultValue": [{
 					"name": "",
-					"entity": {},
+					"entity": [{}],
 					"template": [],
 					"bpmn_file": "",
 					"uuid": ""
@@ -1295,7 +1304,7 @@
 							"key": "pageContent",
 							"type": "form",
 							"input": true,
-							"formRevision": 28,
+							"formRevision": 29,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Page Content",
@@ -1456,7 +1465,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 372,
+	"_vid": 380,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1475,6 +1484,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-09-24T10:56:12.507Z",
+	"modified": "2020-09-25T11:56:16.333Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }

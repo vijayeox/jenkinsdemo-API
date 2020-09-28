@@ -269,6 +269,6 @@ class AppArtifactService extends AbstractService
             throw new FileNotFoundException("Application source directory is not found.",
             ['directory' => $appSourceDir]);
         }
-        return $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
+        return $appSourceDir;
     }
 }
