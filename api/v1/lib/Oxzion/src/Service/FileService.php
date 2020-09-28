@@ -80,9 +80,6 @@ class FileService extends AbstractService
                 $entityId = $result[0]['id'];
             }
         }
-        $selectQuery = "SELECT start_date_field,end_date_field,status_field from ox_app_entity WHERE id =:entityId";
-        $parameters = array('entityId' => $entityId);
-        $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         unset($data['uuid']);
         $oldData = $data;
         $fields = $data = $this->cleanData($data);
@@ -94,14 +91,9 @@ class FileService extends AbstractService
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
-        $data['entity_id'] = $entityId;
         $data['data'] = $jsonData;
+        $this->setupEntityFields($entityId,$data);
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
-        if (count($resultQuery) > 0) {        
-            $data['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
-            $data['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
-            $data['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
-        }
         $file = new File($this->table);
         if(isset($data['id'])){
             unset($data['id']);
@@ -136,6 +128,7 @@ class FileService extends AbstractService
             }
             $this->logger->info("Created successfully  - file record");
             $this->setupFileParticipants($result['id'], $data);
+            $this->setupFileAssignee($result['id'], $data);
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (isset($result['id'])) {
@@ -147,6 +140,172 @@ class FileService extends AbstractService
             throw $e;
         }
         return $count;
+    }
+    private function setupEntityFields($entityId,&$data){
+        $data['entity_id'] = $entityId;
+        $selectQuery = "SELECT start_date_field,end_date_field,status_field from ox_app_entity WHERE id =:entityId";
+        $parameters = array('entityId' => $entityId);
+        $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
+        if (count($resultQuery) > 0) {
+            $data['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
+            $data['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
+            $data['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
+        }
+    }
+    private function setupFileAssignee($fileId,$file){
+        $query = "delete from ox_file_assignee where file_id = :fileId";
+        $queryWhere = array("fileId" => $fileId);
+        $result = $this->executeUpdateWithBindParameters($query, $queryWhere);
+        $this->setUserAssignees($fileId, $file);
+        $this->setGroupAssignees($fileId, $file);
+        $this->setRoleAssignees($fileId, $file);
+    }
+    private function setGroupAssignees($fileId,$file){
+        $fileData = json_decode($file['data'], true);
+        if (isset($fileData['assigned_group'])) {
+            try {
+                $assignedList  = json_decode($fileData['assigned_group'], true);
+                if (is_null($assignedList)) {
+                    $this->setGroupAssignee($fileId,$fileData['assigned_group'],1);
+                } else {
+                    if(isset($assignedList) && is_array($assignedList)){
+                        foreach($assignedList as $assignee){
+                            $this->setGroupAssignee($fileId,$assignee,0);
+                        }
+                    }
+                }
+              } catch (Exception $e) {
+                $this->logger->info("Error Setting Group Assignee---".$e->getMessage());
+              }
+        }
+        if (isset($fileData['observer_group'])) {
+            try {
+                $observers_groupList  = json_decode($fileData['observer_group'], true);
+                if (!is_null($observers_groupList)) {
+                    foreach($observers_groupList as $observer){
+                        $this->setGroupAssignee($fileId,$observer,0);
+                    }
+                }
+            } catch (Exception $e){
+                $this->logger->info("Error Setting Group Assignee---".$e->getMessage());
+            }
+        }
+    }
+    private function setRoleAssignees($fileId,$file){
+        $fileData = json_decode($file['data'], true);
+        if (isset($fileData['assigned_role'])) {
+            try {
+                $assignedList  = json_decode($fileData['assigned_role'], true);
+                if (is_null($assignedList)) {
+                    $this->setRoleAssignee($fileId,$fileData['assigned_role'],1);
+                } else {
+                    if(isset($assignedList) && is_array($assignedList)){
+                        foreach($assignedList as $assignee){
+                            $this->setRoleAssignee($fileId,$assignee,0);
+                        }
+                    }
+                }
+              } catch (Exception $e) {
+                $this->logger->info("Error Setting Role Assignee---".$e->getMessage());
+              }
+        }
+        if (isset($fileData['observer_role'])) {
+            try {
+                $observer_roleList  = json_decode($fileData['observer_role'], true);
+                if (!is_null($observer_roleList)) {
+                    foreach($observer_roleList as $observer){
+                        $this->setRoleAssignee($fileId,$observer,0);
+                    }
+                }
+            } catch (Exception $e){
+                $this->logger->info("Error Setting Role Assignee---".$e->getMessage());
+            }
+        }
+    }
+    private function setUserAssignees($fileId,$file){
+        $fileData = json_decode($file['data'], true);
+        if (isset($fileData['assignedto'])) {
+            try {
+                if(is_string($fileData['assignedto'])){
+                    $assignedList  = json_decode($fileData['assignedto'], true);
+                } else {
+                    $assignedList  = $fileData['assignedto'];
+                }
+                if (is_null($assignedList)) {
+                    $this->setUserAssignee($fileId,$fileData['assignedto'],1);
+                } else {
+                    if(isset($assignedList) && is_array($assignedList)){
+                        foreach($assignedList as $assignee){
+                            $this->setUserAssignee($fileId,$assignee,1);
+                        }
+                    } else {
+                        $this->setUserAssignee($fileId,$fileData['assignedto'],1);
+                    }
+                }
+              } catch (Exception $e) {
+                $this->logger->info("Error Setting Assignee---".$e->getMessage());
+              }
+        }
+        if (isset($fileData['observers'])) {
+            try {
+                if(is_string($fileData['observers'])){
+                    $observersList  = json_decode($fileData['observers'], true);
+                } else {
+                    $observersList  = $fileData['observers'];
+                }
+                if (!is_null($observersList)) {
+                    if(isset($observersList) && is_array($observersList)){
+                        foreach($observersList as $observer){
+                            $this->setUserAssignee($fileId,$observer,0);
+                        }
+                    } else {
+                        $this->setUserAssignee($fileId,$fileData['observers'],0);
+                    }
+                }
+            } catch (Exception $e){
+                $this->logger->info("Error Setting Assignee---".$e->getMessage());
+            }
+        }
+    }
+    private function setUserAssignee($fileId,$user,$assignee){
+        if ($user == 'owner') {
+            $getOwner = $this->executeQuerywithParams("SELECT ox_file.created_by FROM `ox_file` WHERE ox_file.`id` = '" . $fileId . "';")->toArray();
+            if (isset($getOwner) && count($getOwner) > 0) {
+                $userId = $getOwner[0]['created_by'];
+            } else {
+                return;
+            }
+        } else if ($user == 'manager') {
+            $manager = $this->executeQuerywithParams("SELECT manager_id FROM `ox_user_manager` inner join ox_user on ox_user_manager.user_id=ox_user.id inner join ox_file on ox_user.id=ox_file.modified_by WHERE `file`.`id` = " . $fileId . ";")->toArray();
+            if (isset($manager) && count($manager) > 0) {
+                $userId = $manager[0]['manager_id'];
+            } else {
+                return;
+            }
+        } else {
+            $userId = $this->getIdFromUuid('ox_user', $user);
+        }
+        if($userId){
+            $insertParams = array("fileId" => $fileId, "userId" => $userId, "assignee" => $assignee);
+            $insert = "INSERT INTO `ox_file_assignee` (`file_id`,`user_id`,`assignee`) VALUES (:fileId,:userId,:assignee)";
+            $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
+        }
+    }
+    private function setRoleAssignee($fileId,$role,$assignee){
+        $roleId = $this->getIdFromUuid('ox_role', $role);
+        if ($roleId) {
+            $insert = "INSERT INTO `ox_file_assignee` (`file_id`,`role_id`,`assignee`) VALUES (:fileId,:roleId,:assignee)";
+            $insertParams = array("fileId" => $fileId, "roleId" => $roleId, "assignee" => $assignee);
+            $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
+        }
+    }
+    private function setGroupAssignee($fileId,$role,$assignee){
+        $groupId = $this->getIdFromUuid('ox_role', $role);
+        if ($groupId) {
+            $insert = "INSERT INTO `ox_file_assignee` (`file_id`,`group_id`,`assignee`) VALUES (:fileId,:groupId,:assignee)";
+            $insertParams = array("fileId" => $fileId, "groupId" => $groupId, "assignee" => $assignee);
+            $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
+        }
     }
 
     private function setupFileParticipants($fileId, $file){
@@ -169,8 +328,7 @@ class FileService extends AbstractService
                 break;
             }
         }
-
-        if($identifier){
+        if(isset($identifier)){
             $query = "INSERT INTO ox_file_participant (file_id, org_id, business_role_id)
                        (SELECT $fileId, ui.org_id, ep.business_role_id
                         FROM ox_wf_user_identifier ui inner join ox_entity_identifier ei on ei.identifier = ui.identifier_name
@@ -334,9 +492,6 @@ class FileService extends AbstractService
         $file->loadByUuid($id);
         $result = $file->getGenerated(true);
         $id = $result['id'];
-        $selectQuery = "SELECT ox_app_entity.start_date_field,ox_app_entity.end_date_field,ox_app_entity.status_field,ox_file.version from ox_app_entity inner join ox_file on ox_file.entity_id = ox_app_entity.id WHERE ox_file.id =:fileId";
-        $parameters = array('fileId' => $id);
-        $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         $validFields = $this->checkFields($entityId ,$fields, $id, false);
         $dataArray = $this->processMergeData($entityId, $fileObject, $fields);
         $fileObject = $obj;
@@ -344,13 +499,10 @@ class FileService extends AbstractService
         if(isset($data['version'])){
             $fileObject['version'] = $data['version'];
         }
-        
         $fileObject['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
-        $fileObject['start_date'] = date_format(date_create(isset($dataArray[$resultQuery[0]['start_date_field']])?$dataArray[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
-        $fileObject['end_date'] = date_format(date_create(isset($dataArray[$resultQuery[0]['start_date_field']])?$dataArray[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
-        $fileObject['status'] = isset($dataArray[$resultQuery[0]['status_field']])?$dataArray[$resultQuery[0]['status_field']]:null;
+        $this->setupEntityFields($entityId,$fileObject);
         if (isset($data['last_workflow_instance_id'])) {
            $fileObject['last_workflow_instance_id'] = $data['last_workflow_instance_id'];
         }
@@ -380,6 +532,7 @@ class FileService extends AbstractService
                     $this->multiInsertOrUpdate('ox_file_document', $validFields['documentFields']);
                 }
             }
+            $this->setupFileAssignee($id, $file->toArray());
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
             $select = "SELECT * from ox_file where id = '".$id."'";
