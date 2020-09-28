@@ -257,6 +257,16 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_doYouWantToApplyForNonOwnerAuto'] = $data['doYouWantToApplyForNonOwnerAuto'];
                 $policy['previous_storeExcessLiabilitySelect'] = $data['excessLiabilityCoveragePrimarylimit1000000PL'];
                 $policy['previous_poolLiability'] = isset($data['poolLiability'])?$data['poolLiability']:0;
+                $policy['previous_dspropFurniturefixturesandequip'] = isset($data['dspropFurniturefixturesandequip'])?$data['dspropFurniturefixturesandequip']:0;
+                $policy['previous_dspropofothers'] = isset($data['dspropofothers'])?$data['dspropofothers']:0;
+                $policy['previous_dspropinventory'] = isset($data['dspropinventory'])?$data['dspropinventory']:0;
+                $policy['previous_dspropsignsattachedordetached'] = isset($data['dspropsignsattachedordetached'])?$data['dspropsignsattachedordetached']:0;
+                $policy['previous_dspropTennantImprv'] = isset($data['dspropTennantImprv'])?$data['dspropTennantImprv']:0;
+                $policy['previous_dspropother'] = isset($data['dspropother'])?$data['dspropother']:0;
+                $policy['previous_dspropTotal'] = isset($data['dspropTotal'])?$data['dspropTotal']:0;
+                $policy['previous_lossOfBusIncome'] = isset($data['lossOfBusIncome'])?$data['lossOfBusIncome']:0;
+                $policy['previous_dspropreplacementvalue'] = isset($data['dspropreplacementvalue'])?$data['dspropreplacementvalue']:0;
+                $policy['previous_dsglestmonthretailreceipt'] = isset($data['dsglestmonthretailreceipt'])?$data['dsglestmonthretailreceipt']:0;
                 $policy['previous_totalAddPremium'] = isset($data['totalAddPremium']) ? $data['totalAddPremium'] : 0;
                 if(isset($data['additionalLocations'])){
                     foreach($data['additionalLocations'] as $key => $value){
