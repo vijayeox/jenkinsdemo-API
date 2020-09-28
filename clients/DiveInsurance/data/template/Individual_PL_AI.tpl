@@ -57,9 +57,6 @@
 					<p>
 						{if (isset($additional.effective_date)) && $additional.effective_date != ""}
 							{$i = $additional.effective_date}
-						{elseif (isset($additional.endo_effective_date)) && $additional.endo_effective_date != "" }	
-							{$i = $additional.endo_effective_date}
-						
 						{/if}{$result[$i][] = $additional}
 					</p>
 					

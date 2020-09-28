@@ -18,8 +18,6 @@
 
 				{if (isset($additional.effective_date) && $additional.effective_date != "")}
 					{$result[$additional['effective_date']][] = $additional}
-				{elseif (isset($additional.endo_effective_date))}
-					{$result[$additional['endo_effective_date']][] = $additional}
 				{/if}
 			</p>
 		{/foreach}
