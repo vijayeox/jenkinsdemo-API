@@ -238,10 +238,20 @@ class QueryService extends AbstractService
     {
         $analyticsEngine = $this->datasourceService->getAnalyticsEngine($datasource_uuid);
         $parameters = json_decode($configuration, 1);
-        if (isset($parameters['filter']) && is_string($parameters['filter'])) {
-            $exp_config = json_decode($parameters['filter'], 1);
-            $parameters['filter'] = $exp_config;
-        }
+
+        // if (isset($parameters['filter']) && is_string($parameters['filter'])) {
+        //     $exp_config = json_decode($parameters['filter'], 1);
+        //     $parameters['filter'] = $exp_config;
+        // }
+
+        // if (isset($parameters['sort']) && is_string($parameters['sort'])) {
+        //     $exp_sort = json_decode($parameters['sort'], 1);
+        //     $parameters['sort'] = $exp_sort;
+        // }
+
+        $parameters['filter'] = $this->stringDecode($parameters['filter']);
+        $parameters['sort'] = $this->stringDecode($parameters['sort']);
+
         if (!isset($parameters['inline_filter'])) {
             $parameters['inline_filter'] = [];
         }
@@ -269,6 +279,14 @@ class QueryService extends AbstractService
         }
         $result = $analyticsEngine->runQuery($app_name, $entity_name, $parameters);
         return $result;
+    }
+
+    private function stringDecode($params) {
+        if (isset($params) && is_string($params)) {
+            $exp_sort = json_decode($params, 1);
+            $params = $exp_sort;
+        }
+        return $params;
     }
 
     public function queryData($rows)
