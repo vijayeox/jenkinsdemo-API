@@ -70,38 +70,38 @@ role:
 pages:
     -
         page_name: TennantManagerAgentOIPage.yml
-        uuid: c346a5b2-beee-43aa-86e4-b02b28d714a8
+        uuid: d2eec096-9dec-4775-8aae-29ae0d2dcda2
     -
         page_name: TennantManagerUnderwriterOIPage.yml
-        uuid: 91d2384b-3032-4288-85d7-f5671c67ba9b
+        uuid: bcc16b53-2df4-4077-abbd-5b6d1540b862
     -
         page_name: TennantManagerProductionOIPage.yml
-        uuid: 63bed5fa-d7fa-44f1-b84b-5f87b0405f98
+        uuid: 28f9c736-a949-464b-b301-fa50e67b83f0
     -
         page_name: TennantManagerProducerOIPage.yml
-        uuid: 34267175-0e15-4d9c-b43d-d2f640ca181a
+        uuid: 698c3985-dc77-4ef5-8a43-0dbae2f27d4d
 menu:
     -
         name: Agent
         icon: 'fal fa-address-card'
         privilege: MANAGE_TENNANTAGENT_WRITE
-        page_uuid: c346a5b2-beee-43aa-86e4-b02b28d714a8
-        uuid: d2eec096-9dec-4775-8aae-29ae0d2dcda2
+        page_uuid: d2eec096-9dec-4775-8aae-29ae0d2dcda2
+        uuid: c346a5b2-beee-43aa-86e4-b02b28d714a8
     -
         name: Underwriter
         icon: 'fad fa-user-edit'
         privilege: MANAGE_TENNANTUNDERWRITER_WRITE
-        page_uuid: 91d2384b-3032-4288-85d7-f5671c67ba9b
-        uuid: bcc16b53-2df4-4077-abbd-5b6d1540b862
+        page_uuid: bcc16b53-2df4-4077-abbd-5b6d1540b862
+        uuid: 91d2384b-3032-4288-85d7-f5671c67ba9b
     -
         name: Production
         icon: 'fal fa-funnel-dollar'
         privilege: MANAGE_TENNANTPRODUCTION_WRITE
-        page_uuid: 63bed5fa-d7fa-44f1-b84b-5f87b0405f98
-        uuid: 28f9c736-a949-464b-b301-fa50e67b83f0
+        page_uuid: 28f9c736-a949-464b-b301-fa50e67b83f0
+        uuid: 63bed5fa-d7fa-44f1-b84b-5f87b0405f98
     -
         name: Producer
         icon: 'fal fa-address-card'
         privilege: MANAGE_TENNANTPRODUCER_WRITE
-        page_uuid: 34267175-0e15-4d9c-b43d-d2f640ca181a
-        uuid: 698c3985-dc77-4ef5-8a43-0dbae2f27d4d
+        page_uuid: 698c3985-dc77-4ef5-8a43-0dbae2f27d4d
+        uuid: 34267175-0e15-4d9c-b43d-d2f640ca181a

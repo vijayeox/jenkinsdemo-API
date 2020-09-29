@@ -100,38 +100,38 @@ role:
 pages:
     -
         page_name: BSRIManagerProductionOIPage.yml
-        uuid: 44f72917-a1a6-43fb-a555-c1ed3ff5baed
+        uuid: d7cf66d2-d2d6-4897-b8d1-c17aebb35bda
     -
         page_name: BSRIManagerUnderwriterOIPage.yml
-        uuid: 8b4787d4-a912-4746-91b4-42fac904c010
+        uuid: feabeb18-f4dc-48af-b078-31c16d1aea0c
     -
         page_name: BSRIManagerAgentOIPage.yml
-        uuid: 2a6d578a-0ade-42ec-9024-62e5ba4105d9
+        uuid: f0460cc9-38f9-408d-b51b-cfe05128e076
     -
         page_name: BSRIManagerBAMOIPage.yml
-        uuid: fb4ecad6-5057-4dfa-98c7-84d52990abd1
+        uuid: 974ae3fb-c1ff-40b2-b584-f276e00a8239
 menu:
     -
         name: Agent
         icon: 'fal fa-address-card'
         privilege: MANAGE_AGENTVIEW_WRITE
-        page_uuid: 2a6d578a-0ade-42ec-9024-62e5ba4105d9
-        uuid: f0460cc9-38f9-408d-b51b-cfe05128e076
+        page_uuid: f0460cc9-38f9-408d-b51b-cfe05128e076
+        uuid: 21bff526-c39a-4d8b-a605-86c34b0a804d
     -
         name: Underwriter
         icon: 'fad fa-user-edit'
         privilege: MANAGE_UNDERWRITERVIEW_WRITE
-        page_uuid: 8b4787d4-a912-4746-91b4-42fac904c010
-        uuid: feabeb18-f4dc-48af-b078-31c16d1aea0c
+        page_uuid: feabeb18-f4dc-48af-b078-31c16d1aea0c
+        uuid: c1a13288-fd25-4287-b01a-7300d81319ff
     -
         name: Production
         icon: 'fal fa-funnel-dollar'
         privilege: MANAGE_PRODUCTIONVIEW_WRITE
-        page_uuid: 44f72917-a1a6-43fb-a555-c1ed3ff5baed
-        uuid: d7cf66d2-d2d6-4897-b8d1-c17aebb35bda
+        page_uuid: d7cf66d2-d2d6-4897-b8d1-c17aebb35bda
+        uuid: bc0b8879-b21c-4782-9fa6-f550e6f6e92d
     -
         name: BAM
         icon: 'fal fa-truck-moving'
         privilege: MANAGE_BAMREPORTVIEW_WRITE
-        page_uuid: fb4ecad6-5057-4dfa-98c7-84d52990abd1
-        uuid: 974ae3fb-c1ff-40b2-b584-f276e00a8239
+        page_uuid: 974ae3fb-c1ff-40b2-b584-f276e00a8239
+        uuid: 38392c31-a786-4ffa-b9a1-31b20e873980

@@ -1,30 +1,32 @@
 app:
-    name: BiofiFinance
-    description: Finance
-    category: Dashboards
-    type: 2
-    autostart: 'true'
-    uuid: 57a765f2-40b7-413d-bdc1-a182b9f54be2
-    isdefault: false
-    logo: default_app.png
-    status: 4
-    start_options: null
+    -
+        name: BiofiFinance
+        description: Finance
+        category: Dashboards
+        type: 2
+        autostart: 'true'
+        uuid: 57a765f2-40b7-413d-bdc1-a182b9f54be2
+        isdefault: false
+        logo: default_app.png
+        status: 4
+        start_options: null
 org:
-    name: 'Biofi Medical Healthcare'
-    uuid: 5658eb99-ac64-49b2-b080-c90126decac3
-    email: biofi@vantageagora.com
-    address1: 'Helix Biotech Park, Electronics City Phase 1'
-    address2: 'Bengaluru, Karnataka, India-560100'
-    city: Bengaluru
-    state: Karnataka
-    zip: 560100
-    contact:
-        username: biofifinance
-        firstname: Biofi
-        lastname: Finance
-        email: biofifinance@vantageagora.com
-    preferences: '{"dateformat":"dd-MM-yyyy","currency":"INR","timezone":"Asia/Kolkata"}'
-    country: India
+    -
+        name: 'Biofi Medical Healthcare'
+        uuid: 5658eb99-ac64-49b2-b080-c90126decac3
+        email: biofi@vantageagora.com
+        address1: 'Helix Biotech Park, Electronics City Phase 1'
+        address2: 'Bengaluru, Karnataka, India-560100'
+        city: Bengaluru
+        state: Karnataka
+        zip: 560100
+        contact:
+            username: biofifinance
+            firstname: Biofi
+            lastname: Finance
+            email: biofifinance@vantageagora.com
+        preferences: '{"dateformat":"dd-MM-yyyy","currency":"INR","timezone":"Asia/Kolkata"}'
+        country: India
 privilege:
     -
         name: MANAGE_BIOFIFINANCE
@@ -41,11 +43,11 @@ role:
 pages:
     -
         page_name: companyoverview.yml
-        uuid: 0681e3cf-28b9-4ac2-a5eb-530540437293
+        uuid: 7035141e-e8d4-41ab-a821-c20a68a1d351
 menu:
     -
         name: 'Company Overview'
         icon: 'fal fa-usd-circle'
         privilege: MANAGE_BIOFIFINANCE_WRITE
-        page_uuid: 0681e3cf-28b9-4ac2-a5eb-530540437293
-        uuid: 7035141e-e8d4-41ab-a821-c20a68a1d351
+        page_uuid: 7035141e-e8d4-41ab-a821-c20a68a1d351
+        uuid: 0681e3cf-28b9-4ac2-a5eb-530540437293
