@@ -20,6 +20,7 @@ use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ArrayUtils;
 use Oxzion\ValidationException;
+use Oxzion\EntityNotFoundException;
 
 
 class UserService extends AbstractService
@@ -1280,6 +1281,9 @@ class UserService extends AbstractService
         $this->logger->info("Check user query $query with Params" . json_encode($queryParams));
         $result = $this->executeQuerywithBindParameters($query, $queryParams)->toArray();
         if (count($result) == 0) {
+            if(!$register) {
+                throw new EntityNotFoundException("User not found");
+            }
             try {
                 $this->beginTransaction();
                 $result = $this->createUser($params, $data, $register);
