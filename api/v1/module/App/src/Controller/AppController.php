@@ -8,7 +8,7 @@ use Oxzion\Service\AppService;
 use Exception;
 use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Service\WorkflowService;
+use Oxzion\Service\FileService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\AppDelegate\AppDelegateService;
 
@@ -22,12 +22,12 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, WorkflowService $workflowService,AppDelegateService $appDelegateService)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, FileService $fileService,AppDelegateService $appDelegateService)
     {
         parent::__construct($table, App::class);
         $this->setIdentifierName('appId');
         $this->appService = $appService;
-        $this->workflowService = $workflowService;
+        $this->fileService = $fileService;
         $this->appDelegateService = $appDelegateService;
         $this->log = $this->getLogger();
     }
@@ -266,7 +266,7 @@ class AppController extends AbstractApiController
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
         try {
-            $assignments = $this->workflowService->getAssignments($params['appId'], $filterParams);
+            $assignments = $this->fileService->getAssignments($params['appId'], $filterParams);
             return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
         }
         catch (AccessDeniedException $e) {
