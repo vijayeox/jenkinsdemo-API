@@ -56,6 +56,7 @@ class Module
                                                 $container->get(\Oxzion\Service\RoleService::class), 
                                                 $container->get(\App\Service\MenuItemService::class), 
                                                 $container->get(\App\Service\PageService::class),
+                                                $container->get(\Oxzion\Service\UserService::class),
                                                 $container->get(\Oxzion\Service\BusinessRoleService::class)
                         );
                 },
@@ -78,6 +79,7 @@ class Module
                         $container->get(Service\EmailService::class),
                         $container->get(Service\TemplateService::class),
                         $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\RoleService::class),
                         $container->get(Service\PersonService::class),
                         $container->get(Service\EmployeeService::class)
                     );

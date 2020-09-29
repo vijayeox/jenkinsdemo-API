@@ -91,6 +91,7 @@ class ImportService extends AbstractService
                     if (isset($type[$col])) {
                         switch ($type[$col]) {
                             case "numeric":
+                            case "number":
                                 $body[$col] = (float) $data[$idx];    
                                 break;
                             case "text":

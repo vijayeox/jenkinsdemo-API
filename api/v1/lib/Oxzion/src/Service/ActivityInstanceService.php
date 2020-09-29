@@ -46,7 +46,7 @@ class ActivityInstanceService extends AbstractService
     }
     public function getActivityInstanceForm($data)
     {
-        $selectQuery = "SELECT oxa.* from ox_activity_instance_assignee as oxa
+        $selectQuery = "SELECT oxa.* from ox_file_assignee as oxa
                         join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id
                         LEFT JOIN ox_user_group as oug on oxa.group_id = oug.group_id
                         LEFT JOIN ox_user_role as our on oxa.role_id = our.role_id
@@ -154,7 +154,7 @@ class ActivityInstanceService extends AbstractService
         }
         $test = $this->activityEngine->claimActivity($taskId, AuthContext::get(AuthConstants::USERNAME));
         
-        $selectQuery = "SELECT aia.* FROM `ox_activity_instance_assignee` as aia
+        $selectQuery = "SELECT aia.* FROM `ox_file_assignee` as aia
                         inner join ox_activity_instance ai on ai.id = aia.activity_instance_id
                         WHERE ai.activity_instance_id=:activityInstanceId and aia.user_id=:userId;";
         $selectParams = array("userId" => AuthContext::get(AuthConstants::USER_ID), "activityInstanceId" => $data['activityInstanceId']);
@@ -165,7 +165,7 @@ class ActivityInstanceService extends AbstractService
         if (!empty($activityInstanceAssignee)) {
             try {
                 $this->beginTransaction();
-                $updateQuery = "UPDATE ox_activity_instance_assignee 
+                $updateQuery = "UPDATE ox_file_assignee 
                                 SET assignee = :assignee, user_id=:userId
                                 where id = :id;";
                 $updateParams = array("assignee" => 1, "userId" => AuthContext::get(AuthConstants::USER_ID), "id" => $activityInstanceAssignee[0]['id']);
@@ -187,7 +187,7 @@ class ActivityInstanceService extends AbstractService
                             AND account_id=:accountId;";
             $selectParams = array("activityInstanceId" => $data['activityInstanceId'], "accountId" => AuthContext::get(AuthConstants::ACCOUNT_ID));
             $resultSelect = $this->executeQueryWithBindParameters($selectQuery, $selectParams)->toArray();
-            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`)
+            $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`user_id`,`assignee`)
             VALUES (:activityInstanceId,:userId,:assignee)";
             $insertParams = array("activityInstanceId" => $resultSelect[0]['id'], "userId" => AuthContext::get(AuthConstants::USER_ID), "assignee" => 1);
             $resultSet = $this->executeUpdateWithBindParameters($insert, $insertParams);
@@ -220,7 +220,7 @@ class ActivityInstanceService extends AbstractService
         }
         try {
             $this->beginTransaction();
-            $updateQuery = "UPDATE ox_activity_instance_assignee SET assignee = :assignee WHERE activity_instance_id = (SELECT id from ox_activity_instance WHERE activity_instance_id = :activityInstanceId)";
+            $updateQuery = "UPDATE ox_file_assignee SET assignee = :assignee WHERE activity_instance_id = (SELECT id from ox_activity_instance WHERE activity_instance_id = :activityInstanceId)";
             $updateParams = array("assignee" => 0, "activityInstanceId" => $data['activityInstanceId']);
             $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
             if(isset($cacheCheck) && !empty($cacheCheck[0])) {
@@ -311,7 +311,7 @@ class ActivityInstanceService extends AbstractService
                         }
                         $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_role` WHERE `name` = '" . $candidate['roleid'] . "';")->toArray();
                         if ($groupQuery) {
-                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`role_id`)
+                            $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`role_id`)
                             VALUES (:activityInstanceId,:roleId)";
                             $insertParams = array("activityInstanceId" => $activityInstance['id'], "roleId" => $groupQuery[0]['id']);
                             $resultSet = $this->executeUpdateWithBindParameters($insert, $insertParams);
@@ -326,7 +326,7 @@ class ActivityInstanceService extends AbstractService
                         }
                         $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_group` WHERE `name` = '" . $candidate['groupid'] . "';")->toArray();
                         if ($groupQuery) {
-                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`group_id`)
+                            $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`group_id`)
                             VALUES (:activityInstanceId,:groupId)";
                             $insertParams = array("activityInstanceId" => $activityInstance['id'], "groupId" => $groupQuery[0]['id']);
                             $resultSet = $this->executeUpdateWithBindParameters($insert, $insertParams);
@@ -404,7 +404,7 @@ class ActivityInstanceService extends AbstractService
 
 
     private function setUserAssignee($activityInstanceId,$userId,$assignee){
-        $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`)
+        $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`user_id`,`assignee`)
                             VALUES (:activityInstanceId,:userId,:assignee)";
         $insertParams = array("activityInstanceId" => $activityInstanceId, "userId" => $userId, "assignee" => $assignee);
         $resultSet = $this->executeUpdateWithBindParameters($insert, $insertParams);

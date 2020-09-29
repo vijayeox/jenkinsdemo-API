@@ -262,7 +262,7 @@ class SetupEndorsement extends AbstractAppDelegate
     }
 
 
-    private function getExcessLiabilityRates(&$data,&$premiumRateCardDetails,$policy,$privileges,$persistenceService){
+    private function getExcessLiabilityRates(&$data,&$premiumRateCardDetails,&$policy,$privileges,$persistenceService){
         if(isset($policy['previous_excessLiability'])){
             $endorsementExcessLiability = array();
             $fromClause = "";
@@ -300,7 +300,7 @@ class SetupEndorsement extends AbstractAppDelegate
         }
     }
 
-    private function getCylinderRates(&$data,&$premiumRateCardDetails,$policy,$privileges,$persistenceService){
+    private function getCylinderRates(&$data,&$premiumRateCardDetails,&$policy,$privileges,$persistenceService){
         if(isset($policy['previous_cylinder'])){
             $this->logger->info("PREVIOUS CYLINDER VALUE ---".print_r($policy['previous_cylinder'],true));
             $endorsementCylinder = array();
@@ -315,6 +315,7 @@ class SetupEndorsement extends AbstractAppDelegate
                     } else {
                         $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                     }
+                    $this->logger->info("RATE CYLINDER -- ".print_r($rate['key'],true));
                     if($rate['key'] == $policy['previous_cylinder']){
                         $policy['previous_cylinderLabel'] = $rate['coverage'];
                         $premiumRateCardDetails[$rate['key']] = 0;
@@ -328,7 +329,7 @@ class SetupEndorsement extends AbstractAppDelegate
         }
     }
 
-    private function getEquipmentRates(&$data,&$premiumRateCardDetails,$policy,$privileges,$persistenceService){
+    private function getEquipmentRates(&$data,&$premiumRateCardDetails,&$policy,$privileges,$persistenceService){
         if(isset($policy['previous_equipment'])){
             $endorsementEquipment = array();
             $selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_equipment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
@@ -360,7 +361,7 @@ class SetupEndorsement extends AbstractAppDelegate
     }
 
 
-    private function getTechRecRates(&$data,&$premiumRateCardDetails,$policy,$privileges,$persistenceService){
+    private function getTechRecRates(&$data,&$premiumRateCardDetails,&$policy,$privileges,$persistenceService){
          if(isset($policy['previous_tecRecEndorsment'])){
             $endorsementTecRec = array();
             $selectTecRec = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_tecRecEndorsment']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
@@ -391,7 +392,7 @@ class SetupEndorsement extends AbstractAppDelegate
         }
     }
 
-    private function getScubaFitRates(&$data,&$premiumRateCardDetails,$policy,$privileges,$persistenceService){
+    private function getScubaFitRates(&$data,&$premiumRateCardDetails,&$policy,$privileges,$persistenceService){
         if(isset($policy['previous_scubaFit'])){
             $endorsementScubaFit = array();
             $selectScubafit = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$policy['previous_scubaFit']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";

@@ -1,0 +1,18 @@
+{
+	"type":"application",
+	"name":"HIIGInsurance",
+	"appId":"5c94711c-47ec-4687-b3a8-ade7e3ac404b",
+	"category":null,
+	"autostart":false,
+    "singleton":true,
+	"defaultAppforOrgs":false,
+	"icon": "icon.png",
+	"icon_white": "icon_white.png",
+	"title": {
+		"en_EN": "Insurance"
+	},
+	"description": {
+		"en_EN": "Insurance"
+	},
+	"files":["main.js","main.css"]
+}

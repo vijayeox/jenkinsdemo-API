@@ -29,8 +29,8 @@ class RoleService extends AbstractService
     public function saveRole($params, &$data, $roleId = null)
     {
         if (isset($params['accountId'])) {
-            if (!AuthContext::get(AuthConstants::REGISTRATION) && !SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
-                ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
+            if (!AuthContext::get(AuthConstants::REGISTRATION) && (!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') && 
+                ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))))) {
                 throw new AccessDeniedException("You do not have permissions create/update role");
             } else {
                 $accountId = $this->getIdFromUuid('ox_account', $params['accountId']);
@@ -60,7 +60,7 @@ class RoleService extends AbstractService
         $rolename = $data['name'];
         $data['description'] = isset($data['description']) ? $data['description'] : null;
         $data['privileges'] = isset($data['privileges']) ? $data['privileges'] : array();
-        $data['default'] = isset($data['default']) ? $data['default'] : (isset($data['default_role']) ? $data['default_role'] : 0);
+        $data['default'] = isset($data['default']) && $data['default'] ? $data['default'] : (isset($data['default_role']) ? $data['default_role'] : 0);
         $this->logger->info("\n Data modified before the transaction - " . print_r($data, true));
         $count = 0;
         try {
@@ -83,6 +83,7 @@ class RoleService extends AbstractService
                 $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
                 if (count($result) > 0) {
                     $roleId = $result[0]['id'];
+                    $data['id'] = $roleId;
                 }
             }
 
@@ -99,6 +100,7 @@ class RoleService extends AbstractService
 
                 $inputData['uuid'] = $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
                 $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] : 0;
+                $data['default'] = $data['default'] ? 1 :0;
                 $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`account_id`,`is_system_role`, `default_role`, business_role_id) 
                             VALUES ('" . $rolename . "','" . $data['description'] . "','" . $data['uuid'] . "'," . ($accountId ? $accountId : 'NULL') . ",'" . $data['is_system_role'] . "','" . $data['default'] . "', $businessRoleId)";
                 $result1 = $this->runGenericQuery($insert);
@@ -362,7 +364,7 @@ class RoleService extends AbstractService
         }
         try {
             foreach ($basicRoles as $basicRole) {
-                unset($basicRole['id']);
+                // unset($basicRole['id']);
                 unset($basicRole['uuid']);
                 $basicRole['account_id'] = $accountId;
                 $this->createSystemRoleForAccount($basicRole);

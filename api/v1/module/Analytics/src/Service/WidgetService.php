@@ -127,19 +127,19 @@ class WidgetService extends AbstractService
 
         $widget = new Widget($this->table);
         $widget->loadByUuid($uuid);
-        $widget->assign($data);
 
         if (isset($data['visualization_uuid'])) {
             //TODO: Query visualization with account_id, ispublic and created_by filters to ensure current user has permission to read it.
             $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('account_id' => $data['account_id']));
             $widget->setForeignKey('visualization_id', $visualizationId);
         }
-        if (isset($data['configuration'])) {
-            $widget->setProperty('configuration', json_encode($data['configuration']));
+        if (isset($data['configuration']) && is_array($data['configuration'])) {
+            $data['configuration'] =  json_encode($data['configuration']);
         }
-        if (isset($data['expression'])) {
-            $widget->setProperty('expression', json_encode($data['expression']));
+        if (isset($data['expression']) && is_array($data['expression'])) {
+            $data['expression'] =  json_encode($data['expression']);
         }
+        $widget->assign($data); 
 
         try {
             $this->beginTransaction();
@@ -296,7 +296,7 @@ class WidgetService extends AbstractService
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');
         $filter = null;
-        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round'];
+        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot'];
         if ($firstRow['no_filter_override']) {
             unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
         }
@@ -326,8 +326,7 @@ class WidgetService extends AbstractService
 
             if (is_array($data)) {
                 $data = $this->getTargets($uuid,$data,1);
-            }
-            else {
+            } else {
                 $targets = $this->getTargets($uuid,$data,0);
                 if ($targets) {
                     $response['widget']['targets'] = $targets;
@@ -399,16 +398,21 @@ class WidgetService extends AbstractService
         } else {
             $colName = 'calculated';
         }
+        $expression = strtolower($expression);
         foreach ($data as $key1 => $dataset) {
             $m = new EvalMath;
             $m->suppress_errors = true;
             $m->evaluate('round(x,y) = (((x*(10^y))+0.5*(abs(x)/(x+0^abs(x))))%(10^10))/(10^y)');
             foreach ($dataset as $key2 => $value) {
                 if (is_numeric($value)) {
+                    $key2=strtolower($key2);
                     $m->evaluate("$key2 = $value");
                 }
             }
             $calculated = $m->evaluate($expression);
+            if ($calculated=='false' || $calculated=='') {
+                $calculated = 0;
+            }
             $data[$key1][$colName] = $calculated;
         }
         return $data;

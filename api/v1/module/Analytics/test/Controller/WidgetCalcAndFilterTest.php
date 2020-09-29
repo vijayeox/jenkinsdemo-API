@@ -475,5 +475,21 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($jsoncontent, '{"red_limit":"10000","yellow_limit":"25000","green_limit":"35000","color":"yellow"}');
 
     }
+    
+    public function testWithPivot() {
+    if (enableElastic!=0) {
+        $this->setElasticData();
+    } else {
+        $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
+    }
+    $this->initAuthToken($this->adminUser);
+    $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true&pivot=1', 'GET');
+    $this->assertResponseStatusCode(200);
+    $this->setDefaultAsserts();
+    $content = json_decode($this->getResponse()->getContent(), true);
+    $this->assertEquals($content['status'], 'success');
+    $jsoncontent = json_encode($content['data']['widget']['data']);
+    $this->assertEquals($jsoncontent, '[{"owner_username":"john","Insurance":1000,"Software":2000},{"owner_username":"mark","Insurance":6000,"Software":null},{"owner_username":"jane","Insurance":5000,"Software":null}]');
+}
 
 }

@@ -434,16 +434,16 @@
    Source Worksheet: BPP Co-Insurance %
    pageName: E-Prop
    cell: I8
-   key: bppcoinsurance
+   key: harcoExcelData*checkbppcoinsurance
    returnValue: 
-      80 : '0.8'
+      80 : '0.9'
       90 : '0.9'
       100 : '1'
 -
    Source Worksheet: Building Co-Insurance %
    pageName: E-Prop
    cell: 'G8'
-   key: buildingCoinsurance
+   key: harcoExcelData*checkbuildingCoinsurance
    returnValue: 
       80 : '0.8'
       90 : '0.9'
@@ -458,16 +458,6 @@
    pageName: E-Prop
    cell: 'G7'
    key: propertyCoverageDeductible
--
-   Source Worksheet: BPP Co-Insurance %
-   pageName: E-Prop
-   cell: I8
-   key: harcoExcelData*checkbppcoinsurance
--
-   Source Worksheet: Building Co-Insurance %
-   pageName: E-Prop
-   cell: 'G8'
-   key: harcoExcelData*checkbuildingCoinsurance
 -
    Source Worksheet: Bi Monthly Limitation
    pageName: E-Prop
@@ -577,7 +567,7 @@
    Source Worksheet: Business Income Limit
    pageName: E-Prop
    cell: 'K20'
-   key: genericData*locationScheduleGridData_businessincomelimit
+   key: harcoExcelData*totalbusinessincomelimit_result
    method: simpleDatagrid
    type: DataGrid
 -
@@ -754,6 +744,12 @@
    returnValue:
       '0.75': '0.85'
 -
+   Source Worksheet: 'Repair % - Labor:'
+   key: harcoExcelData*checkrepairpercentlaborexists
+   pageName: J
+   cell: Customer Percentage of Repair Endorsement
+   offset: 2,0
+-
    key: harcoExcelData*checkrepairpercentparts
    pageName: J
    cell: Customer Percentage of Repair Endorsement
@@ -929,7 +925,7 @@
    pageName: L-DPD
    cell: 'Other choice explanation:'
    offset: '0,6'
-   key: harcoExcelData*checkkeysInCarsLabel
+   key: harcoExcelData*checkkeysInCars
    returnBoolean: 'Keys in Cars|'
 -
    Source Worksheet: 'Is there a written flood emergency plan in place?\r\n\r\nIf YES, please attach a copy of written flood emergency plan'
@@ -1238,12 +1234,12 @@
    Source Worksheet: Finance/Insurance
    pageName: Q-Umb
    cell: 'M26'
-   key: harcoExcelData*checkfISales
+   key: harcoExcelData*checkautoBodySales
 -
    Source Worksheet: Auto Body
    pageName: Q-Umb
    cell: 'M27'
-   key: harcoExcelData*checkautoBodySales
+   key: harcoExcelData*checkfISales
 -
    Source Worksheet: Limit
    pageName: Q-Umb
@@ -1314,7 +1310,7 @@
 -
    Source Worksheet: 'If less than three years, describe experience of management:'
    pageName: UW Q's
-   cell: 'E19'
+   cell: 'E18'
    key: lessThan3years
 -
    Source Worksheet: Does applicant perform body work and spray painting?
@@ -1818,7 +1814,7 @@
    Source Worksheet: Surveill. Cameras not monitored
    pageName: UW Q's
    cell: Check Box 17
-   key: harcoExcelData*checkdolsurcamnotmoniotrd
+   key: genericData['locationScheduleGridData']*dolsurcamnotmoniotrd_yes
    type: Checkbox
    note: If at least 1 of the Surveillance Camera questions are selected map
       'Yes' to the applicable carrier app.

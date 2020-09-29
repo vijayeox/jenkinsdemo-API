@@ -15,6 +15,31 @@ if (data.workbooksToBeGenerated.harco == true) {
   var checkpartsSales = 0;
   var checkindemnitytype = "";
   var checkavgOfTimesContractDriversUsedPerMonth = "None";
+  var totalbusinessincomelimit = [];
+
+  data.locationSchedule.map(locationItem => {
+    var calculatebusinessincomelimit = 0;
+    if (locationItem.buildingDetails.length > 1) {
+      locationItem.buildingDetails.map(item => {
+        calculatebusinessincomelimit += item.businessincomelimit
+          ? item.businessincomelimit
+          : 0;
+      });
+      locationItem.buildingDetails.map(item => {
+        if (item.buildingNumber == 1) {
+          totalbusinessincomelimit.push({
+            result: calculatebusinessincomelimit
+          });
+        } else {
+          totalbusinessincomelimit.push({ result: "" });
+        }
+      });
+    } else if (locationItem.buildingDetails.length == 1) {
+      totalbusinessincomelimit.push({
+        result: locationItem.buildingDetails[0]["businessincomelimit"]
+      });
+    }
+  });
 
   if (
     data.avgOfTimesContractDriversUsedPerMonth > 0 &&
@@ -134,7 +159,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     }
   });
 
-  data.genericData.locationScheduleGridData.map(locationItem => {
+  data.locationSchedule.map(locationItem => {
     if (locationItem.newcarsales > 0) {
       checknewcarsales += locationItem.newcarsales;
     }
@@ -190,10 +215,13 @@ if (data.workbooksToBeGenerated.harco == true) {
   );
 
   value = {
+    totalbusinessincomelimit: totalbusinessincomelimit
+      ? totalbusinessincomelimit
+      : [],
     checksoftwareprotectionNone:
-      (data.virusscans == "yes") ||
-      (data.antivirussoftware == "yes") ||
-      (data.protectedfirewalls == "yes")
+      data.virusscans == "yes" ||
+      data.antivirussoftware == "yes" ||
+      data.protectedfirewalls == "yes"
         ? "no"
         : "yes",
     checkcrimecoverage: tempcrimecoverage == 200000 ? "" : tempcrimecoverage,
@@ -218,17 +246,17 @@ if (data.workbooksToBeGenerated.harco == true) {
       }
     }),
     checkeplicoverage: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "X"
         : ""
       : "",
     checkdiscriminationdeductible: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "25000"
         : ""
       : "",
     checkthirdpartylimit: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "100000"
         : ""
       : "",
@@ -236,52 +264,53 @@ if (data.workbooksToBeGenerated.harco == true) {
       ? data.state.abbreviation != "CA" &&
         data.state.abbreviation != "FL" &&
         data.state.abbreviation != "MA" &&
-        data.state.abbreviation != "VA" &&
-        data.eplicoverage == "yes"
+        data.state.abbreviation != "VA"
         ? "X"
         : ""
       : "",
     checkthirdpartydeduc: data.state
-      ? data.state.name != "California" && data.eplicoverage == "yes"
+      ? data.state.name != "California"
         ? "15000"
         : ""
       : "",
     checkactserrorsCAOnly: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California"
         ? "X"
         : ""
       : "",
     checkactserrorsCAOnlyLimit: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California"
         ? "50000"
         : ""
       : "",
     checkactserrorsCAOnlyDeduc: data.state
-      ? data.state.name == "California" && data.eplicoverage == "yes"
+      ? data.state.name == "California"
         ? "2500"
         : ""
       : "",
-    checkValuation: data.state
-      ? data.state.name == "California" || data.state.name == "Florida"
+    checkValuation: data.locationSchedule[0].state
+      ? data.locationSchedule[0].state == "CA" ||
+        data.locationSchedule[0].state == "FL"
         ? "Replacement"
         : "Reconstruction Cost"
-      : "",
+      : "Reconstruction Cost",
     checkthirdparty: data.state
-      ? data.state.name == "California"
-        ? ""
-        : "X"
-      : "X",
-
-    checkbuildingCoinsurance: data.state
-      ? data.state.name !== "California" || data.state.name !== "Florida"
-        ? "1"
+      ? data.state.name != "California"
+        ? "X"
         : ""
       : "",
-    checkbppcoinsurance: data.state
-      ? data.state.name !== "California" || data.state.name !== "Florida"
-        ? "1"
-        : ""
-      : "",
+    checkbuildingCoinsurance: data.locationSchedule[0].state
+      ? data.locationSchedule[0].state == "CA" ||
+        data.locationSchedule[0].state == "FL"
+        ? data.buildingCoinsurance
+        : 1
+      : 1,
+    checkbppcoinsurance: data.locationSchedule[0].state
+      ? data.locationSchedule[0].state == "CA" ||
+        data.locationSchedule[0].state == "FL"
+        ? data.bppcoinsurance
+        : 1
+      : 1,
     checkearthquakecoverage: data.genericData.locationScheduleGridData.some(
       i => i.earthquakecoverage == "yes"
     ),
@@ -447,21 +476,6 @@ if (data.workbooksToBeGenerated.harco == true) {
           })
         : "",
     checkkeysInCars:
-      data.dolkeycntrlsameallloc == "no"
-        ? data.locationSchedule.some(locationItem => {
-            if (locationItem.locationGarageLiabilityKeyControls) {
-              if (
-                locationItem.locationGarageLiabilityKeyControls.keysInCars ==
-                true
-              ) {
-                return true;
-              }
-            } else {
-              return false;
-            }
-          })
-        : "",
-    checkkeysInCarsLabel:
       data.dolkeycntrlsameallloc == "no"
         ? data.locationSchedule.some(locationItem => {
             if (locationItem.locationGarageLiabilityKeyControls) {
@@ -695,7 +709,7 @@ if (data.workbooksToBeGenerated.harco == true) {
     checkleasedtoOthers: data.genericData.locationScheduleGridData.some(
       i => i.occupancyType == "bldgLeasedToOthers"
     ),
-    checklessThan3years: data.numYearsOfOwnership > 3 ? "Yes" : "No",
+    checklessThan3years: data.numYearsOfOwnership < 3 ? "Yes" : "No",
     checkroofingyear: data.genericData.locationScheduleGridData.some(
       i => i.roofingyear < moment().format("YYYY") - 20
     ),
@@ -720,12 +734,13 @@ if (data.workbooksToBeGenerated.harco == true) {
       parseFloat(data.repairpercentparts) > 0 ? data.repairpercentparts : "",
     checkrepairpercentlabor:
       parseFloat(data.repairpercentlabor) > 0 ? data.repairpercentlabor : "",
+    checkrepairpercentlaborexists:
+      parseFloat(data.repairpercentlabor) > 0 ? "Yes" : "No",
     checkavgOfTimesContractDriversUsedPerMonth: checkavgOfTimesContractDriversUsedPerMonth,
     checkCustomerInsuranceValidity:
       data.customersinsuranceverified && data.regularlythroughouttermofloan
         ? "Yes"
         : "No"
   };
-
   console.log(value);
 }

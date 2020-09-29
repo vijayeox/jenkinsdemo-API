@@ -6,7 +6,7 @@
 	"components": [{
 		"title": "App Info",
 		"theme": "primary",
-		"breadcrumbClickable": true,
+		"breadcrumbClickable": false,
 		"buttonSettings": {
 			"previous": true,
 			"cancel": true,
@@ -19,168 +19,202 @@
 		"label": "App Info",
 		"input": false,
 		"components": [{
-			"title": "Basic Info",
-			"theme": "primary",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
+			"label": "Container",
 			"tableView": false,
-			"key": "basicInfo",
-			"type": "panel",
-			"label": "Panel",
-			"input": false,
+			"clearOnHide": false,
+			"key": "app",
+			"type": "container",
+			"input": true,
 			"components": [{
-				"label": "Container",
-				"tableView": false,
-				"key": "app",
-				"type": "container",
-				"input": true,
-				"components": [{
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "Name",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "name",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md"
-					}, {
-						"components": [{
-							"label": "Descripton",
-							"tableView": true,
-							"key": "descripton",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md"
-					}],
-					"tableView": false,
-					"key": "columns1",
-					"type": "columns",
-					"input": false
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "Run automatically at startup",
-							"tableView": false,
-							"defaultValue": false,
-							"key": "autostart",
-							"type": "checkbox",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md"
-					}, {
-						"components": [{
-							"label": "Category",
-							"widget": "choicesjs",
-							"tableView": true,
-							"data": {
-								"values": [{
-									"label": "Office",
-									"value": "office"
-								}, {
-									"label": "Utilities",
-									"value": "utilities"
-								}, {
-									"label": "Business",
-									"value": "business"
-								}, {
-									"label": "Finance",
-									"value": "finance"
-								}, {
-									"label": "News",
-									"value": "news"
-								}, {
-									"label": "Medical",
-									"value": "medical"
-								}, {
-									"label": "Entertainment",
-									"value": "entertainment"
-								}, {
-									"label": "Productivity",
-									"value": "productivity"
-								}, {
-									"label": "Education",
-									"value": "education"
-								}, {
-									"label": "Photo & Video",
-									"value": "photoVideo"
-								}, {
-									"label": "Shopping",
-									"value": "shopping"
-								}, {
-									"label": "Travel",
-									"value": "travel"
-								}]
-							},
-							"selectThreshold": 0.3,
-							"key": "category",
-							"type": "select",
-							"indexeddb": {
-								"filter": {}
-							},
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md"
-					}],
-					"tableView": false,
-					"key": "columns2",
-					"type": "columns",
-					"input": false
-				}]
-			}, {
 				"label": "App Uuid",
-				"calculateValue": "value = data['uuid'];",
-				"key": "appUuid",
+				"key": "uuid",
 				"type": "hidden",
 				"input": true,
-				"tableView": false
-			}, {
-				"label": "Save",
-				"action": "event",
-				"showValidations": false,
-				"theme": "success",
-				"customClass": "alignCenter",
 				"tableView": false,
-				"key": "save",
-				"properties": {
-					"api": "[{\"method\" : \"post\", \"url\":\"/app\"}]"
-				},
-				"type": "button",
-				"input": true
+				"hideOnChildrenHidden": false
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Title",
+						"tableView": true,
+						"validate": {
+							"required": true
+						},
+						"errorLabel": "Application Title",
+						"key": "title",
+						"type": "textfield",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Name",
+						"disabled": true,
+						"tableView": true,
+						"clearOnHide": false,
+						"calculateValue": "value = data.app.title ? data.app.title.replace(/\\s+/g, '') : \"\";",
+						"key": "name",
+						"type": "textfield",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns1",
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Description",
+						"tableView": true,
+						"clearOnHide": false,
+						"key": "description",
+						"type": "textfield",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}, {
+					"components": [{
+						"label": "Category",
+						"widget": "choicesjs",
+						"tableView": true,
+						"data": {
+							"values": [{
+								"label": "Office",
+								"value": "office"
+							}, {
+								"label": "Utilities",
+								"value": "utilities"
+							}, {
+								"label": "Business",
+								"value": "business"
+							}, {
+								"label": "Finance",
+								"value": "finance"
+							}, {
+								"label": "News",
+								"value": "news"
+							}, {
+								"label": "Medical",
+								"value": "medical"
+							}, {
+								"label": "Entertainment",
+								"value": "entertainment"
+							}, {
+								"label": "Productivity",
+								"value": "productivity"
+							}, {
+								"label": "Education",
+								"value": "education"
+							}, {
+								"label": "Photo & Video",
+								"value": "photoVideo"
+							}, {
+								"label": "Shopping",
+								"value": "shopping"
+							}, {
+								"label": "Travel",
+								"value": "travel"
+							}]
+						},
+						"selectThreshold": 0.3,
+						"validate": {
+							"required": true
+						},
+						"errorLabel": "Application Category",
+						"key": "category",
+						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
+						"input": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 6,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
+				}],
+				"tableView": false,
+				"key": "columns2",
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Run automatically at startup",
+				"tableView": false,
+				"defaultValue": false,
+				"clearOnHide": false,
+				"key": "autostart",
+				"type": "checkbox",
+				"input": true,
+				"hideOnChildrenHidden": false
 			}]
-		}],
-		"customConditional": "if(!data.appUuid || data.appUuid == \"\"){\ndocument.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\ndocument.getElementsByClassName(\"btn-wizard-nav-cancel\")[0].style.display = \"none\";\n}else{\ndocument.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\ndocument.getElementsByClassName(\"btn-wizard-nav-cancel\")[0].style.display = \"block\";\n}"
+		}, {
+			"label": "Create App",
+			"action": "event",
+			"showValidations": false,
+			"theme": "success",
+			"customClass": "alignCenter",
+			"disabled": true,
+			"tableView": false,
+			"key": "save",
+			"properties": {
+				"api": "{ \t\"api\": { \t\t\"method\": \"post\", \t\t\"url\": \"app\" \t}}",
+				"postVariable": "app"
+			},
+			"customConditional": "if(data.app.uuid && data.app.uuid != \"\"){\n  show=false;\n}else {\n  show=true;\n}",
+			"logic": [{
+				"name": "Disable",
+				"trigger": {
+					"type": "javascript",
+					"javascript": "result = data.app.name.length > 0 && data.app.category.length > 0;"
+				},
+				"actions": [{
+					"name": "Disable",
+					"type": "mergeComponentSchema",
+					"property": "",
+					"state": false,
+					"schemaDefinition": "schema = {disabled : false}"
+				}]
+			}],
+			"type": "button",
+			"event": "callApi",
+			"input": true
+		}, {
+			"label": "Create App",
+			"hideLabel": true,
+			"spellcheck": false,
+			"disabled": true,
+			"tableView": true,
+			"defaultValue": "Please click on the Create App button before you proceed",
+			"validateOn": "blur",
+			"validate": {
+				"custom": "if (data.app.name.length > 0 && data.app.category.length > 0) {\n  valid = data.app.uuid\n    ? data.app.uuid.length > 0\n      ? true\n      : \"Create App to proceed further\"\n    : \"Create App to proceed further\";\n} else {\n  valid = true;\n}"
+			},
+			"key": "textFieldValidate",
+			"customConditional": "if(data.app.uuid && data.app.uuid != \"\"){\n  show=false;\n}else {\n  show=true;\n}",
+			"type": "textfield",
+			"input": true
+		}]
 	}, {
 		"title": "Organization Info",
 		"theme": "primary",
@@ -193,24 +227,26 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "organizationInfo",
-		"customConditional": "if(data.appUuid && data.appUuid != \"\")\n{\n  show=true;\n}else {\n  show=false;\n}",
 		"type": "panel",
 		"label": "Organization Info",
 		"input": false,
 		"components": [{
-			"label": "Do you want to add organisation information",
+			"label": "Do you want to add organization information",
 			"tableView": false,
 			"defaultValue": false,
+			"clearOnHide": false,
 			"key": "checkOrg",
 			"type": "checkbox",
 			"input": true
 		}, {
 			"label": "Container",
 			"tableView": false,
+			"clearOnHide": false,
 			"key": "org",
 			"conditional": {
 				"show": true,
-				"when": "checkOrg"
+				"when": "checkOrg",
+				"eq": "true"
 			},
 			"type": "container",
 			"input": true,
@@ -220,12 +256,55 @@
 					"components": [{
 						"label": "Name",
 						"tableView": true,
+						"clearOnHide": false,
 						"validate": {
 							"required": true
 						},
 						"key": "name",
 						"type": "textfield",
 						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Country",
+						"widget": "choicesjs",
+						"uniqueOptions": true,
+						"tableView": true,
+						"dataSrc": "custom",
+						"data": {
+							"values": [{
+								"value": "",
+								"label": ""
+							}],
+							"custom": "values = data['countryList'];"
+						},
+						"valueProperty": "country",
+						"template": "<span>{{ item.country }}</span>",
+						"selectThreshold": 0.3,
+						"readOnlyValue": true,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "country",
+						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
+						"input": true,
+						"lockKey": true,
+						"source": "5d347da33e9be31e15d3b115",
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Address",
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "address1",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -237,11 +316,65 @@
 					"components": [{
 						"label": "Email",
 						"tableView": true,
+						"clearOnHide": false,
 						"validate": {
 							"required": true
 						},
 						"key": "email",
 						"type": "email",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "State",
+						"widget": "choicesjs",
+						"tableView": true,
+						"dataSrc": "custom",
+						"data": {
+							"values": [{
+								"label": "",
+								"value": ""
+							}],
+							"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
+						},
+						"template": "<span>{{ item }}</span>",
+						"refreshOn": "country",
+						"clearOnRefresh": true,
+						"selectThreshold": 0.3,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "state",
+						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false,
+						"isNew": false
+					}, {
+						"label": "City",
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "city",
+						"type": "textfield",
+						"input": true,
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "Zip Code",
+						"tableView": true,
+						"clearOnHide": false,
+						"validate": {
+							"required": true,
+							"custom": "if (data.org.zip && data.org.zip != \"\") {\n  if (data.org.zip.length <= 12) {\n    valid = data.org.zip.match(/^[0-9\\s-]*$/)\n      ? true\n      : \"Please enter a valid Zip Code for your region.\";\n  } else {\n    valid =\n      data.org.zip.length > 12\n        ? \"Please enter a valid Zip Code for your region.\"\n        : true;\n  }\n}"
+						},
+						"key": "zip",
+						"type": "textfield",
 						"input": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -258,6 +391,7 @@
 			}, {
 				"label": "Container",
 				"tableView": false,
+				"clearOnHide": false,
 				"key": "contact",
 				"type": "container",
 				"input": true,
@@ -280,6 +414,7 @@
 						"components": [{
 							"label": "Firstname",
 							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true
 							},
@@ -297,6 +432,7 @@
 						"components": [{
 							"label": "Lastname",
 							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true
 							},
@@ -320,8 +456,10 @@
 					"columns": [{
 						"components": [{
 							"label": "Username",
+							"disabled": true,
 							"tableView": true,
-							"calculateValue": "if(data.org.contact.firstname && data.org.contact.lastname){\n    value = data.org.contact.firstname.toLowerCase() + data.org.contact.lastname.toLowerCase();\n}",
+							"clearOnHide": false,
+							"calculateValue": "if(data.org.contact.firstname && data.org.contact.lastname){\n    var username = data.org.contact.firstname.toLowerCase() + data.org.contact.lastname.toLowerCase();\n    value = username.split(\" \").join(\"\");\n}",
 							"allowCalculateOverride": true,
 							"validate": {
 								"required": true
@@ -340,6 +478,7 @@
 						"components": [{
 							"label": "Email",
 							"tableView": true,
+							"clearOnHide": false,
 							"validate": {
 								"required": true
 							},
@@ -373,7 +512,6 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "page2",
-		"customConditional": "if(data.appUuid && data.appUuid != \"\")\n{\n  show=true;\n}else {\n  show=false;\n}",
 		"type": "panel",
 		"label": "Roles and Privileges",
 		"input": false,
@@ -388,9 +526,9 @@
 			},
 			"collapsible": false,
 			"tableView": false,
-			"key": "privileges1",
+			"key": "privilegesPanel",
 			"type": "panel",
-			"label": "Panel",
+			"label": "Privileges",
 			"input": false,
 			"components": [{
 				"label": "Privileges",
@@ -400,13 +538,11 @@
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
+				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"permission": ""
-				}],
 				"validate": {
+					"custom": "if (data.privilege) {\n  if (data.privilege.length > 0) {\n    valid =\n      data.privilege.length == new Set(data.privilege.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}",
 					"minLength": 1
 				},
 				"key": "privilege",
@@ -447,6 +583,7 @@
 						"value": "15",
 						"shortcut": ""
 					}],
+					"clearOnHide": false,
 					"validate": {
 						"required": true
 					},
@@ -478,10 +615,11 @@
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
+				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{}],
 				"validate": {
+					"custom": "if (data.role) {\n  if (data.role.length > 0) {\n    valid =\n      data.role.length == new Set(data.role.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same role more than once.\";\n  } else {\n    valid = true;\n  }\n}",
 					"minLength": 1
 				},
 				"key": "role",
@@ -490,6 +628,7 @@
 				"components": [{
 					"label": "Name",
 					"tableView": true,
+					"clearOnHide": false,
 					"validate": {
 						"required": true,
 						"unique": true
@@ -500,54 +639,149 @@
 					"input": true
 				}, {
 					"label": "Privileges",
+					"reorder": false,
+					"addAnother": "Add Privilege",
+					"addAnotherPosition": "bottom",
+					"defaultOpen": false,
+					"layoutFixed": false,
+					"enableRowGroups": false,
+					"noFirstRow": false,
+					"tableView": false,
+					"clearOnHide": false,
+					"validate": {
+						"custom": "try {\n  if (row.privilegesDuplicate) {\n    if (row.privilegesDuplicate.length > 0) {\n      valid =\n        row.privilegesDuplicate.length ==\n        new Set(\n          row.privilegesDuplicate.map((i) =>\n            i.privilege_name.name.replace(/\\s/g, \"\")\n          )\n        ).size\n          ? true\n          : \"You cannot have a same privilege more than once.\";\n    } else {\n      valid = true;\n    }\n  }\n} catch (error) {}"
+					},
+					"key": "privilegesDuplicate",
+					"type": "datagrid",
+					"input": true,
+					"components": [{
+						"label": "Name",
+						"widget": "choicesjs",
+						"placeholder": "Please select",
+						"tableView": true,
+						"dataSrc": "custom",
+						"data": {
+							"custom": "values = data.privilege.map(item =>item)"
+						},
+						"template": "<span>{{ item.name }}</span>",
+						"selectThreshold": 0.3,
+						"clearOnHide": false,
+						"validate": {
+							"required": true
+						},
+						"key": "privilege_name",
+						"type": "select",
+						"indexeddb": {
+							"filter": {}
+						},
+						"input": true
+					}, {
+						"label": "Permission",
+						"optionsLabelPosition": "right",
+						"inline": true,
+						"disabled": true,
+						"tableView": false,
+						"values": [{
+							"label": "Read",
+							"value": "1",
+							"shortcut": ""
+						}, {
+							"label": "Write",
+							"value": "3",
+							"shortcut": ""
+						}, {
+							"label": "Create",
+							"value": "7",
+							"shortcut": ""
+						}, {
+							"label": "Delete",
+							"value": "15",
+							"shortcut": ""
+						}],
+						"clearOnHide": false,
+						"validate": {
+							"required": true,
+							"custom": "valid =\n  input <= instance.component.values[instance.component.values.length - 1].value\n    ? true\n    : \"Please select a valid permission level\";"
+						},
+						"key": "permission",
+						"logic": [{
+							"name": "Check Name",
+							"trigger": {
+								"type": "javascript",
+								"javascript": "try {\n    result = row.privilege_name.name.length > 0\n  } catch {\n    result = false;\n  }"
+							},
+							"actions": [{
+								"name": "Enable",
+								"type": "value",
+								"value": "var set = [\n  {\n    label: \"Read\",\n    value: \"1\",\n    shortcut: \"\"\n  },\n  {\n    label: \"Write\",\n    value: \"3\",\n    shortcut: \"\"\n  },\n  {\n    label: \"Create\",\n    value: \"7\",\n    shortcut: \"\"\n  },\n  {\n    label: \"Delete\",\n    value: \"15\",\n    shortcut: \"\"\n  }\n];\nvar values = false;\ntry {\n  values = set\n    .map((i) => (i.value <= row.privilege_name.permission ? i : false))\n    .filter((i) => (i ? i : false));\n} catch {}\n\nif (values && values.length > 0) {\n  component.values = values;\n  component.disabled = false;\n}"
+							}]
+						}],
+						"type": "radio",
+						"input": true
+					}]
+				}, {
+					"label": "Default Role",
+					"redrawOn": "defaultRole",
+					"calculateValue": "value = data.defaultRole == row.name ? true : false;",
+					"key": "default",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
+					"label": "Actual Privileges Key",
+					"calculateValue": "try {\n  value = row.privilegesDuplicate.map((i) => {\n    return { privilege_name: i.privilege_name.name, permission: i.permission };\n  });\n} catch (error) {}",
+					"key": "privileges",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}]
+			}]
+		}, {
+			"label": "Columns",
+			"columns": [{
+				"components": [{
+					"label": "Default Role",
 					"widget": "choicesjs",
-					"placeholder": "Please choose all that apply",
 					"tableView": true,
-					"multiple": true,
 					"dataSrc": "custom",
-					"defaultValue": [{}],
 					"data": {
 						"values": [{
 							"label": "",
 							"value": ""
 						}],
-						"custom": "values = data.privilege.map(item=>item.name)"
+						"custom": "values = data.role.map(i=>i.name)"
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
 					"validate": {
-						"required": true,
-						"multiple": true
+						"required": true
 					},
-					"key": "privileges",
+					"key": "defaultRole",
+					"customConditional": "show = false;",
 					"type": "select",
 					"indexeddb": {
 						"filter": {}
 					},
-					"input": true
-				}]
-			}]
-		}, {
-			"label": "Default Role",
-			"widget": "choicesjs",
-			"tableView": true,
-			"dataSrc": "custom",
-			"data": {
-				"values": [{
-					"label": "",
-					"value": ""
+					"input": true,
+					"hideOnChildrenHidden": false
 				}],
-				"custom": "values = data.role.map(i=>i.name)"
-			},
-			"selectThreshold": 0.3,
-			"validate": {
-				"required": true
-			},
-			"key": "defaultRole",
-			"type": "select",
-			"indexeddb": {
-				"filter": {}
-			},
-			"input": true
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}, {
+				"components": [],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}],
+			"tableView": false,
+			"key": "columns6",
+			"type": "columns",
+			"input": false
 		}]
 	}, {
 		"title": "Entities",
@@ -561,7 +795,6 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "page3",
-		"customConditional": "if(data.appUuid && data.appUuid != \"\")\n{\n  show=true;\n}else {\n  show=false;\n}",
 		"type": "panel",
 		"label": "Entities",
 		"input": false,
@@ -573,16 +806,21 @@
 			"defaultOpen": false,
 			"layoutFixed": false,
 			"enableRowGroups": false,
+			"noFirstRow": true,
 			"hideLabel": true,
 			"tableView": false,
 			"defaultValue": [{
 				"name": "",
 				"formFieldsValidationExcel": [],
+				"start_date_field": "",
+				"end_date_field": "",
+				"statusField": "",
 				"field": [{
 					"name": "",
 					"text": "",
 					"data_type": "",
-					"index": false
+					"index": false,
+					"ryg_rule": ""
 				}]
 			}],
 			"validate": {
@@ -600,9 +838,7 @@
 							"components": [{
 								"label": "Name",
 								"tableView": true,
-								"validate": {
-									"required": true
-								},
+								"clearOnHide": false,
 								"key": "name",
 								"type": "textfield",
 								"input": true,
@@ -623,7 +859,9 @@
 									"label": "",
 									"value": ""
 								}],
+								"clearOnHide": false,
 								"key": "formFieldsValidationExcel",
+								"customConditional": "show = false;",
 								"type": "file",
 								"input": true,
 								"hideOnChildrenHidden": false
@@ -636,6 +874,55 @@
 						}],
 						"tableView": false,
 						"key": "columns7",
+						"type": "columns",
+						"input": false
+					}, {
+						"label": "Columns",
+						"columns": [{
+							"components": [{
+								"label": "Start date field",
+								"tableView": true,
+								"key": "start_date_field",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "End date field",
+								"tableView": true,
+								"key": "end_date_field",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0,
+							"size": "md"
+						}, {
+							"components": [{
+								"label": "Status field",
+								"tableView": true,
+								"key": "statusField",
+								"type": "textfield",
+								"input": true,
+								"hideOnChildrenHidden": false
+							}],
+							"size": "md",
+							"width": 4,
+							"offset": 0,
+							"push": 0,
+							"pull": 0
+						}],
+						"tableView": false,
+						"key": "columns9",
 						"type": "columns",
 						"input": false
 					}, {
@@ -662,12 +949,14 @@
 							"components": [{
 								"label": "Name",
 								"tableView": true,
+								"clearOnHide": false,
 								"key": "name",
 								"type": "textfield",
 								"input": true
 							}, {
 								"label": "Label",
 								"tableView": true,
+								"clearOnHide": false,
 								"key": "text",
 								"type": "textfield",
 								"input": true
@@ -680,17 +969,21 @@
 										"label": "Text",
 										"value": "text"
 									}, {
+										"label": "Numeric",
+										"value": "numeric"
+									}, {
+										"label": "Date",
+										"value": "date"
+									}, {
 										"label": "Document",
 										"value": "document"
 									}, {
 										"label": "JSON",
 										"value": "json"
-									}, {
-										"label": "Date",
-										"value": "date"
 									}]
 								},
 								"selectThreshold": 0.3,
+								"clearOnHide": false,
 								"key": "data_type",
 								"type": "select",
 								"indexeddb": {
@@ -700,10 +993,21 @@
 							}, {
 								"label": "Indexed",
 								"tableView": false,
+								"defaultValue": false,
+								"clearOnHide": false,
 								"key": "index",
 								"type": "checkbox",
+								"input": true
+							}, {
+								"label": "RYG Rule",
+								"editor": "ace",
+								"autoExpand": false,
+								"tableView": true,
+								"key": "ryg_rule",
+								"type": "textarea",
 								"input": true,
-								"defaultValue": false
+								"hideOnChildrenHidden": false,
+								"as": "string"
 							}]
 						}],
 						"hideOnChildrenHidden": false
@@ -740,7 +1044,6 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "page5",
-		"customConditional": "if(data.appUuid && data.appUuid != \"\")\n{\n  show=true;\n}else {\n  show=false;\n}",
 		"type": "panel",
 		"label": "Forms And Workflows",
 		"input": false,
@@ -755,9 +1058,9 @@
 			},
 			"collapsible": false,
 			"tableView": false,
-			"key": "forms2",
+			"key": "formsPanel",
 			"type": "panel",
-			"label": "Forms",
+			"label": "Panel",
 			"input": false,
 			"components": [{
 				"label": "Forms",
@@ -766,21 +1069,25 @@
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
+				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"entity": {},
-					"template_file": []
-				}],
-				"key": "form",
+				"redrawOn": "data",
+				"validate": {
+					"custom": "if (data.formDuplicate) {\n  if (data.formDuplicate.length > 0) {\n    valid =\n      data.formDuplicate.length == new Set(data.formDuplicate.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same form more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+				},
+				"key": "formDuplicate",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
-					"label": "Name",
+					"label": "Title",
+					"disabled": true,
 					"tableView": true,
+					"clearOnHide": false,
+					"calculateValue": "try {\n  if (row.template.length > 0) {\n    value =\n      row.template[0].originalName.length > 0\n        ? row.template_file.split(\".\")[0]\n        : \"\";\n  }\n} catch (error) {}",
 					"key": "name",
 					"type": "textfield",
+					"hideOnChildrenHidden": false,
 					"input": true
 				}, {
 					"label": "Entity",
@@ -795,6 +1102,7 @@
 						"custom": "values = data.entity.map(item=>item.name)"
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
 					"key": "entity",
 					"type": "select",
 					"indexeddb": {
@@ -802,18 +1110,47 @@
 					},
 					"input": true
 				}, {
-					"label": "Form JSON",
+					"label": "Form File",
 					"tableView": false,
-					"storage": "base64",
-					"webcam": false,
+					"storage": "url",
+					"webcam": true,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
 					}],
-					"key": "template_file",
+					"filePattern": ".json",
+					"fileMaxSize": "10MB",
+					"clearOnHide": false,
+					"key": "template",
+					"properties": {
+						"absoluteUrl": "true"
+					},
 					"type": "file",
+					"url": "/app/{{data.app.uuid}}/artifact/add/form",
 					"input": true
+				}, {
+					"label": "Template File",
+					"calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
+					"key": "template_file",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
+					"label": "Form Uuid",
+					"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
+					"key": "uuid",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}]
+			}, {
+				"label": "Actual Form API Key",
+				"calculateValue": "try {\n  value = data.formDuplicate.map((i) => {\n    return { name: i.name, entity: i.entity, template_file: i.template_file,uuid: i.uuid };\n  });\n} catch (error) {}",
+				"key": "form",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
 			}]
 		}, {
 			"title": "Workflows",
@@ -826,30 +1163,38 @@
 			},
 			"collapsible": false,
 			"tableView": false,
-			"key": "forms1",
+			"key": "workflowPanel",
 			"type": "panel",
-			"label": "Panel",
+			"label": "Workflows",
 			"input": false,
 			"components": [{
-				"label": "Forms",
+				"label": "Workflows",
 				"reorder": false,
 				"addAnotherPosition": "bottom",
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
+				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
 				"defaultValue": [{
 					"name": "",
-					"entity": {},
-					"template_file": []
+					"entity": [{}],
+					"template": [],
+					"bpmn_file": "",
+					"uuid": ""
 				}],
-				"key": "forms2",
+				"clearOnHide": false,
+				"validate": {
+					"custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n    console.log(\"Sadd\");\n    console.log(data.workflow);\n    valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+				},
+				"key": "workflow",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
 					"label": "Name",
 					"tableView": true,
+					"clearOnHide": false,
 					"key": "name",
 					"type": "textfield",
 					"input": true
@@ -857,7 +1202,9 @@
 					"label": "Entity",
 					"widget": "choicesjs",
 					"tableView": true,
+					"multiple": true,
 					"dataSrc": "custom",
+					"defaultValue": [{}],
 					"data": {
 						"values": [{
 							"label": "",
@@ -866,6 +1213,10 @@
 						"custom": "values = data.entity.map(item=>item.name)"
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
+					"validate": {
+						"multiple": true
+					},
 					"key": "entity",
 					"type": "select",
 					"indexeddb": {
@@ -875,15 +1226,37 @@
 				}, {
 					"label": "Workflow BPMN",
 					"tableView": false,
-					"storage": "base64",
-					"webcam": false,
+					"storage": "url",
+					"webcam": true,
 					"fileTypes": [{
 						"label": "",
 						"value": ""
 					}],
-					"key": "template_file",
+					"filePattern": ".bpmn",
+					"fileMaxSize": "10MB",
+					"clearOnHide": false,
+					"key": "template",
+					"properties": {
+						"absoluteUrl": "true"
+					},
 					"type": "file",
+					"url": "/app/{{data.app.uuid}}/artifact/add/workflow",
 					"input": true
+				}, {
+					"label": "BPMN File",
+					"calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
+					"key": "bpmn_file",
+					"type": "hidden",
+					"input": true,
+					"tableView": false
+				}, {
+					"label": "Workflow Uuid",
+					"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
+					"key": "uuid",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"hideOnChildrenHidden": false
 				}]
 			}]
 		}]
@@ -899,7 +1272,6 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "page4",
-		"customConditional": "if(data.appUuid && data.appUuid != \"\")\n{\n  show=true;\n}else {\n  show=false;\n}",
 		"type": "panel",
 		"label": "Pages And Menus",
 		"input": false,
@@ -926,8 +1298,10 @@
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
+				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
+				"clearOnHide": false,
 				"key": "pages",
 				"type": "datagrid",
 				"input": true,
@@ -940,6 +1314,7 @@
 								"components": [{
 									"label": "Name",
 									"tableView": true,
+									"clearOnHide": false,
 									"validate": {
 										"required": true,
 										"unique": true
@@ -951,6 +1326,7 @@
 									"hideOnChildrenHidden": false
 								}, {
 									"label": "Page UUID",
+									"calculateValue": "try {\n  if (\n    !(value.length > 1)\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}",
 									"key": "uuid",
 									"type": "hidden",
 									"input": true,
@@ -966,6 +1342,7 @@
 								"components": [{
 									"label": "Description",
 									"tableView": true,
+									"clearOnHide": false,
 									"key": "description",
 									"type": "textfield",
 									"input": true,
@@ -982,14 +1359,22 @@
 							"type": "columns",
 							"input": false
 						}, {
-							"label": "Page Content",
+							"label": "Page Content Form",
 							"tableView": true,
 							"form": "5f21c1bdbba30150d672d0cf",
-							"calculateValue": "var pagesList = data.pages.map(i=>i.name);\nif(value){\n  if(value.data){\n    value.data.pagesList = pagesList;\n  }\n}",
-							"key": "details",
+							"calculateValue": "var pagesList = data.pages.map((i) => {\n return { name: i.name, uuid: i.uuid };\n});\nif (data.form !== \"\") {\n  var formsList = data.form.map((i) => {\n    return { name: i.name, uuid: i.uuid };\n  });\n}\n\nif (value) {\n  if (value.data) {\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
+							"key": "pageContent",
 							"type": "form",
 							"input": true,
-							"formRevision": 0,
+							"formRevision": 30,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Page Content",
+							"calculateValue": "if(row.pageContent){\n  if(row.pageContent.data.content){\n    if(row.pageContent.data.content.length > 0){\n      value = row.pageContent.data.content;\n    }\n  }\n}",
+							"key": "content",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 12,
@@ -1023,9 +1408,9 @@
 			},
 			"collapsible": false,
 			"tableView": false,
-			"key": "menu",
+			"key": "menuPanel",
 			"type": "panel",
-			"label": "Panel",
+			"label": "Menus",
 			"input": false,
 			"components": [{
 				"label": "App Menus",
@@ -1035,28 +1420,33 @@
 				"defaultOpen": false,
 				"layoutFixed": false,
 				"enableRowGroups": false,
+				"noFirstRow": false,
 				"hideLabel": true,
 				"tableView": false,
-				"defaultValue": [{
-					"name": "",
-					"iconClass": "",
-					"page": {},
-					"privilege": {},
-					"parent": {},
-					"uuid": ""
-				}],
+				"clearOnHide": false,
+				"validate": {
+					"minLength": 1
+				},
 				"key": "menu",
 				"type": "datagrid",
 				"input": true,
 				"components": [{
 					"label": "Name",
 					"tableView": true,
+					"clearOnHide": false,
+					"validate": {
+						"required": true
+					},
 					"key": "name",
 					"type": "textfield",
 					"input": true
 				}, {
 					"label": "Icon Class",
 					"tableView": true,
+					"clearOnHide": false,
+					"validate": {
+						"required": true
+					},
 					"key": "icon",
 					"type": "textfield",
 					"input": true
@@ -1073,6 +1463,10 @@
 						"custom": "values = data.pages.map(item=>item.name)"
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
+					"validate": {
+						"required": true
+					},
 					"key": "page",
 					"type": "select",
 					"indexeddb": {
@@ -1085,9 +1479,14 @@
 					"tableView": true,
 					"dataSrc": "custom",
 					"data": {
+						"values": [{
+							"label": "",
+							"value": ""
+						}],
 						"custom": "values = data.privilege.map(item=>item.name)"
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
 					"key": "privilege",
 					"type": "select",
 					"indexeddb": {
@@ -1107,6 +1506,7 @@
 						"custom": "values = data.menu.map(item=>item.name);"
 					},
 					"selectThreshold": 0.3,
+					"clearOnHide": false,
 					"validate": {
 						"custom": "if(row && input){\n  valid = input == row.name ? \"Cannot Parent the menu to itself!\" : true;\n}"
 					},
@@ -1125,88 +1525,9 @@
 				}]
 			}]
 		}]
-	}, {
-		"title": "Generate App Config",
-		"theme": "primary",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false,
-		"tableView": false,
-		"key": "page6",
-		"customConditional": "if(data.appUuid && data.appUuid != \"\")\n{\n  show=true;\n}else {\n  show=false;\n}",
-		"type": "panel",
-		"label": "Generate App Config",
-		"input": false,
-		"components": [{
-			"label": "Columns",
-			"columns": [{
-				"components": [],
-				"width": 4,
-				"offset": 0,
-				"push": 0,
-				"pull": 0,
-				"size": "md"
-			}, {
-				"components": [{
-					"label": "Generate Application JSON",
-					"action": "event",
-					"showValidations": false,
-					"size": "lg",
-					"leftIcon": "fad fa-hammer",
-					"tableView": false,
-					"key": "generateApplicationJson",
-					"type": "button",
-					"event": "generateButton",
-					"input": true,
-					"hideOnChildrenHidden": false
-				}],
-				"width": 4,
-				"offset": 0,
-				"push": 0,
-				"pull": 0,
-				"size": "md"
-			}, {
-				"components": [],
-				"size": "md",
-				"width": 4,
-				"offset": 0,
-				"push": 0,
-				"pull": 0
-			}],
-			"tableView": false,
-			"key": "columns19",
-			"type": "columns",
-			"input": false
-		}, {
-			"label": "Application JSON",
-			"editor": "ace",
-			"autoExpand": false,
-			"tableView": true,
-			"key": "applicationJson",
-			"logic": [{
-				"name": "Generate JSON",
-				"trigger": {
-					"type": "event",
-					"event": "generateButton"
-				},
-				"actions": [{
-					"name": "Set Value",
-					"type": "value",
-					"value": "value = JSON.stringify(data, null, 4);"
-				}]
-			}],
-			"type": "textarea",
-			"rows": 10,
-			"as": "string",
-			"input": true
-		}]
 	}],
 	"revisions": "current",
-	"_vid": 93,
+	"_vid": 383,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1214,16 +1535,17 @@
 		"type": "read_all"
 	}],
 	"submissionAccess": [],
-	"controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_40ff97c2-2923-46cb-b426-cde4b0475f15\"\n      )\n    ) {\n      if (!document.getElementById(\"saveDraftCustomButton\")) {\n        let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n        clone.children[0].textContent = \"Save Draft\";\n        clone.children[0].id = \"saveDraftCustomButton\";\n        insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n        saveDraftCustomButton.onclick = function () {\n          let ev = new CustomEvent(\"customButtonAction\", {\n            detail: {\n              timerVariable: appendCustomButtonTimer,\n              formData: data,\n              commands:\n                '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n              exit: true\n            },\n            bubbles: false\n          });\n          document\n            .getElementById(\n              \"formio_loader_40ff97c2-2923-46cb-b426-cde4b0475f15\"\n            )\n            .dispatchEvent(ev);\n        };\n      }\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
+	"controller": "",
 	"properties": {
 		"showBreadcrumbs": "true",
-		"submission_commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"App Description\"}]"
+		"submission_api": "{ \t\"api\": { \t\t\"method\": \"put\", \t\t\"url\": \"/app/{{app.uuid}}\" \t} }",
+		"clearVariables": "orgId"
 	},
 	"settings": {},
 	"name": "eoxApp",
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-08-24T13:57:00.687Z",
+	"modified": "2020-09-29T09:04:01.931Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }

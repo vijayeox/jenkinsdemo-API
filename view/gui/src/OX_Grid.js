@@ -52,13 +52,15 @@ export default class OX_Grid extends React.Component {
   _grid;
 
   componentDidMount() {
-    document
-      .getElementById(this.appNavigationDiv)
-      .addEventListener(
-        "handleGridRefresh",
-        () => this.refreshHandler(),
-        false
-      );
+    document.getElementById(this.appNavigationDiv)
+      ? document
+          .getElementById(this.appNavigationDiv)
+          .addEventListener(
+            "handleGridRefresh",
+            () => this.refreshHandler(),
+            false
+          )
+      : null;
     $(document).ready(function () {
       $(".k-textbox").attr("placeholder", "Search");
     });
@@ -140,7 +142,7 @@ export default class OX_Grid extends React.Component {
       table.push(
         <GridColumn
           cell={
-            dataItem.cell
+            dataItem.cell || dataItem.rygRule
               ? (item) => (
                   <CustomCell
                     cellTemplate={dataItem.cell}
@@ -617,7 +619,7 @@ export default class OX_Grid extends React.Component {
                   : this.state.gridData.data
               }
             >
-              {this.createColumns(this.props.exportToPDF.columnConfig)}
+              {this.createColumns(this.props.exportToPDF.columnConfig ?this.props.exportToPDF.columnConfig : this.props.columnConfig )}
             </Grid>
           </GridPDFExport>
         ) : null}
@@ -675,7 +677,7 @@ class CustomCell extends GridCell {
       } else {
         return <td className="gridActions">{cellTemplate}</td>;
       }
-    } else if (checkType == "string") {
+    } else if (checkType == "string"  || this.props.dataItem.rygRule) {
       return (
         <JsxParser
           bindings={{
@@ -686,7 +688,7 @@ class CustomCell extends GridCell {
             profile: this.props.userProfile,
             baseUrl: this.props.baseUrl
           }}
-          jsx={this.props.cellTemplate}
+          jsx={this.props.cellTemplate ? this.props.cellTemplate : this.props.dataItem.rygRule ? this.props.dataItem.rygRule : "<td></td>" }
         />
       );
     }

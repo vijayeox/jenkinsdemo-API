@@ -5,7 +5,8 @@ namespace Analytics\Model;
 use Oxzion\Model\Entity;
 use Oxzion\Type;
 
-class Dashboard extends Entity {
+class Dashboard extends Entity
+{
     protected static $MODEL = [
         'id' =>                     ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
         'uuid' =>                   ['type' => Type::UUID,      'readonly' => TRUE,     'required' => FALSE],
@@ -21,9 +22,11 @@ class Dashboard extends Entity {
         'version' =>                ['type' => Type::INTEGER,   'readonly' => FALSE,    'required' => FALSE],
         'isdefault' =>              ['type' => Type::BOOLEAN,   'readonly' => FALSE,    'required' => FALSE, 'value' => FALSE],
         'filter_configuration' =>   ['type' => Type::STRING,    'readonly' => FALSE,    'required' => FALSE]
+        'export_configuration' => 	['type' => Type::STRING, 	'readonly' => FALSE, 	'required' => FALSE],
     ];
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 }

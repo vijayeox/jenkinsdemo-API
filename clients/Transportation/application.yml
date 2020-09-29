@@ -1,10 +1,12 @@
 app:
     name: Transportation
+    title: 'Transportation'
     uuid: 103c128a-1553-498b-8f37-cd3e16c56857
     description: Transportation
     category: Dashboards
     type: 2
     autostart: 'false'
+checkOrg: true    
 org:
     name: 'EOX Vantage1'
     uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
@@ -12,7 +14,7 @@ org:
     address1: '23611 Chagrin Blvd'
     address2: 'Ste 320, Beachwood, Ohio 44122'
     city: Beachwood
-    state: OH
+    state: Ohio
     zip: 44122
     contact:
         username: supportadmin
@@ -23,7 +25,7 @@ org:
         currency: USD
         timezone: America/New_York
         dateformat: mm/dd/yy
-    country: 'United States'
+    country: 'United States of America'
 privilege:
     -
         name: MANAGE_TRANSPORTATION
@@ -31,6 +33,12 @@ privilege:
 role:
     -
         name: 'Transportation Manager'
+        privilegesDuplicate:
+        -
+            privilege_name:
+                name: MANAGE_TRANSPORTATION
+                permission: 15
+            permission: 15
         default: true
         privileges:
             -
@@ -39,13 +47,16 @@ role:
         uuid: 11560dc4-dfb8-4e48-a7f7-bfa4054c88c6
 pages:
     -
+        page_name: overview.yml
+        uuid: d7db3f31-30b6-40f6-9412-c906f0d14da0
+    -
         page_name: availableloadsreport.yml
         uuid: 68b97b51-c68d-4678-8b5b-07b6dbb7057e
     -
-        page_name: trailercurrentlocation.yml
+        page_name: trailerlocationbycompany.yml
         uuid: bdcf93cb-b63b-4e57-adea-ce5b6d25cea7
     -
-        page_name: tripsummary.yml
+        page_name: topcustomer.yml
         uuid: 1c8eb1e5-f5ec-4af9-88e6-d17eca54d8e4
     -
         page_name: monthlymileagereport.yml
@@ -54,7 +65,7 @@ pages:
         page_name: monthlyrevenuesummary.yml
         uuid: c5debd4b-7948-4bb9-90ce-e58e95b496b0
     -
-        page_name: payperiodsummary.yml
+        page_name: loadbalance.yml
         uuid: 20633819-40e6-45de-b123-eef2772f2503
     -
         page_name: unbilledrevenue.yml
@@ -64,20 +75,26 @@ pages:
         uuid: c643663f-4c40-4298-bd6e-3fafdd65ceca
 menu:
     -
+        name: 'Company Overview'
+        icon: 'fal fa-home-alt'
+        privilege: MANAGE_TRANSPORTATION_WRITE
+        page_uuid: d7db3f31-30b6-40f6-9412-c906f0d14da0
+        uuid: fe08c882-e5b1-4412-a8b9-e80d88dd15ae
+    -
         name: 'Available Loads'
         icon: 'far fa-road'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: 68b97b51-c68d-4678-8b5b-07b6dbb7057e
         uuid: 218b1966-d94d-42fa-b4e4-c8518f088493
     -
-        name: 'Trailer Current Location'
+        name: 'Trailer Location by Company'
         icon: 'fal fa-map-marked-alt'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: bdcf93cb-b63b-4e57-adea-ce5b6d25cea7
         uuid: c3b1d64e-b61d-4f5e-8807-d34cd6a9c868
     -
-        name: 'Trip Summary'
-        icon: 'fal fa-truck-container'
+        name: 'Top Customer Growth and Declined'
+        icon: 'fal fa-chart-line'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: 1c8eb1e5-f5ec-4af9-88e6-d17eca54d8e4
         uuid: 6a288707-b121-4b99-874d-b682c01cca56
@@ -94,8 +111,8 @@ menu:
         page_uuid: c5debd4b-7948-4bb9-90ce-e58e95b496b0
         uuid: 936b6dfe-d704-4dc8-8acb-ec6582054759
     -
-        name: 'Pay Period'
-        icon: 'fal fa-credit-card'
+        name: 'Load Balance'
+        icon: 'fal fa-balance-scale'
         privilege: MANAGE_TRANSPORTATION_WRITE
         page_uuid: 20633819-40e6-45de-b123-eef2772f2503
         uuid: 2a288707-c121-4c99-874d-b282e01cca34

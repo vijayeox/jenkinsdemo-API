@@ -1279,4 +1279,45 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'],array());
         $this->assertEquals($content['data']['role'],array());
      }
+
+     public function testGetPrivacyPolicyWithData()
+     {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/getPolicyTerm', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('User');
+        $this->assertControllerName(UserController::class);
+        $this->assertControllerClass('UserController');
+        $this->assertMatchedRouteName('get_policyterm');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+    public function testGetPrivacyPolicyWithoutdata()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/getPolicyTerm', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('User');
+        $this->assertControllerName(UserController::class);
+        $this->assertControllerClass('UserController');
+        $this->assertMatchedRouteName('get_policyterm');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']),0);
+    }
+    public function testUpdatePrivacyPolicyData()
+        {
+            $this->initAuthToken($this->adminUser);
+            $this->dispatch('/user/me/updatePolicyTerm', 'POST');
+            $this->assertResponseStatusCode(200);
+            $this->assertModuleName('User');
+            $this->assertControllerName(UserController::class);
+            $this->assertControllerClass('UserController');
+            $this->assertMatchedRouteName('update_PolicyTerm');
+            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+            $content = (array)json_decode($this->getResponse()->getContent(), true);
+            $this->assertEquals($content['status'], 'success');
+        }
 }

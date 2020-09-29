@@ -65,7 +65,7 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 
 
     private function formatQuery($parameters) {
-		$range=null;
+		$frequency=null;
 		$field = null;
 		$dateperiod = null;
 		$filter =array();
@@ -78,9 +78,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 			$period = explode('/', $dateperiod);
 			$startdate = date('Y-m-d', strtotime($period[0]));
 			$enddate =  date('Y-m-d', strtotime($period[1]));
-		} else {
-			$startdate = date('Y').'-01-01';
-			$enddate = date('Y').'-12-31';
+//		} else {
+//			$startdate = date('Y').'-01-01';
+//			$enddate = date('Y').'-12-31';
 		}
 		if (!empty($parameters['field'])) {
 			if (substr(strtolower($parameters['field']), 0, 5) == 'date(') {
@@ -137,9 +137,12 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 					$group[] = 'period-year';
 					break;
 			}
+			$frequency = $datetype;
 		}
-		if (!isset($parameters['skipdate']) && $datetype)
-			$range[$datetype] = $startdate . "/" . $enddate;
+		if (!isset($parameters['skipdate']) && $datetype && isset($startdate)){
+			$filter[] = [[$datetype,'>=','date:'.$startdate],'AND',[$datetype,'<=','date:'.$enddate]];
+		}
+			// $range[$datetype] = $startdate . "/" . $enddate;
 		if (isset($parameters['filter'])) {
 			$filter[] = $parameters['filter'];
 		}
@@ -151,7 +154,7 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		$this->hasGroup = (empty($group)) ? 0 : 1;
 		if (!empty($group)) $group = array_map('strtolower', $group);
 
-		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'range' => $range, 'aggregates' => $aggregates);
+		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'aggregates' => $aggregates, 'frequency'=>$frequency);
 		if (isset($parameters['pagesize'])) {
 			$returnarray['pagesize'] = $parameters['pagesize'];
 		}

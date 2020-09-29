@@ -32,10 +32,10 @@ abstract class Entity implements Countable
     public function __construct($table = NULL)
     {
         $this->table = $table;
-        if (!isset($this->data) || is_null($this->data)) {
+        if (!isset($this->data)) {
             $this->data = [];
             $model = &$this->getModel();
-            if (!isset($model) || is_null($model)) {
+            if (!isset($model)) {
                 return;
             }
             foreach($model as $propName => $propDef) {
@@ -161,7 +161,7 @@ abstract class Entity implements Countable
         $data = $this->data;
         try {
             $result = eval("use \Oxzion\InvalidPropertyValueException;\r\n" . $code);
-            if (isset($result) && !is_null($result)) {
+            if (isset($result)) {
                 throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
                 ['property' => $property, 'value' => $value, 'error' => $result]);
             }
@@ -174,11 +174,11 @@ abstract class Entity implements Countable
 
     private function validateAndConvert($property, $value) {
         $model = &$this->getModel();
-        if (!isset($model) || is_null($model)) {
+        if (!isset($model)) {
             return $value; //Any value is valid when model is not set.
         }
         $propDef = $model[$property];
-        if (!isset($propDef) || is_null($propDef)) {
+        if (!isset($propDef)) {
             return $value; //Any value is valid when the property definition is not set for a property.
         }
         $this->runDynamicValidationIfExists($property, $value, $propDef);
@@ -213,7 +213,7 @@ abstract class Entity implements Countable
     }
 
     private function isEmpty($value) {
-        if (!isset($value) || is_null($value)) {
+        if (!isset($value)) {
             return true;
         }
         switch(gettype($value)) {
@@ -231,11 +231,11 @@ abstract class Entity implements Countable
 
     private function isReadOnly($property) {
         $model = &$this->getModel();
-        if (!isset($model) || is_null($model)) {
+        if (!isset($model)) {
             return false; //Everything is read-write when model is not set.
         }
         $propDef = $model[$property];
-        if (!isset($propDef) || is_null($propDef)) {
+        if (!isset($propDef)) {
             return false; //Property is read-write when property definition is not set in the model.
         }
         return $propDef['readonly'] ? true : false;
@@ -243,11 +243,11 @@ abstract class Entity implements Countable
 
     private function isRequired($property) {
         $model = &$this->getModel();
-        if (!isset($model) || is_null($model)) {
+        if (!isset($model)) {
             return false; //Everything is optional when model is not set.
         }
         $propDef = $model[$property];
-        if (!isset($propDef) || is_null($propDef)) {
+        if (!isset($propDef)) {
             return false; //Property is optional when property definition is not set in the model.
         }
         return $propDef['required'] ? true : false;
@@ -317,13 +317,13 @@ abstract class Entity implements Countable
      */
     public function assign($input) {
         //Make sure 'version' is set if this is update.
-        $id = $this->data[self::COLUMN_ID];
-        $uuid = $this->data[self::COLUMN_UUID];
-        $isIdValid = (!is_null($id) && (0 != $id) && !empty($id));
-        $isUuidValid = (!is_null($uuid) && !empty($uuid));
+        $id = array_key_exists(self::COLUMN_ID, $this->data) ? $this->data[self::COLUMN_ID] : NULL;
+        $uuid = array_key_exists(self::COLUMN_UUID, $this->data) ? $this->data[self::COLUMN_UUID] : NULL;
+        $isIdValid = (isset($id) && (0 != $id));
+        $isUuidValid = isset($uuid);
         $isVersionInModel = array_key_exists(self::COLUMN_VERSION, $this->data);
-        $isVersionSet = !is_null($input) && isset($input) && array_key_exists(self::COLUMN_VERSION, $input);
-        //Existence of valid id and UUID means record is being updated. Therefore version is needed.
+        $isVersionSet = array_key_exists(self::COLUMN_VERSION, $input) && isset($input[self::COLUMN_VERSION]);
+        //Existence of valid id or UUID means record is being updated. Therefore version is needed.
         if ($isVersionInModel && ($isIdValid || $isUuidValid) && !$isVersionSet) {
             throw new ParameterRequiredException('Version number is required.', [Entity::COLUMN_VERSION]);
         }
@@ -336,21 +336,21 @@ abstract class Entity implements Countable
      * 'id' value is also returned in the array if $includeId is TRUE.
      * 'id' value is NOT returned in the array if $includeId is not set or set to FALSE.
      */
-    public function getGenerated($includeId = false) {
+    public function getGenerated($includeId = false) { 
         $arr = array();
         if ($includeId) {
             $id = $this->data[self::COLUMN_ID];
-            if (isset($id) && !is_null($id)) {
+            if (isset($id)) {
                 $arr[self::COLUMN_ID] = $id;
             }
         }
         $uuid = $this->data[self::COLUMN_UUID];
-        if (isset($uuid) && !is_null($uuid)) {
+        if (isset($uuid)) {
             $arr[self::COLUMN_UUID] = $uuid;
         }
         if (array_key_exists(self::COLUMN_VERSION, $this->data)) {
             $version = $this->data[self::COLUMN_VERSION];
-            if (isset($version) && !is_null($version)) {
+            if (isset($version)) {
                 $arr[self::COLUMN_VERSION] = $version;
             }
         }
@@ -382,7 +382,7 @@ abstract class Entity implements Countable
         $includeId = $includes & self::INCLUDE_ID;
         $includeCreatedByAndDate = $includes & self::INCLUDE_CREATED_BY_AND_DATE;
         $includeModifiedByAndDate = $includes & self::INCLUDE_MODIFIED_BY_AND_DATE;
-        if (!isset($propArray) || is_null($propArray) || empty($propArray)) {
+        if (!isset($propArray) || empty($propArray)) {
             $propArray = array();
             foreach($this->data as $key => $value) {
                 $propArray[] = $key;
@@ -417,7 +417,7 @@ abstract class Entity implements Countable
         }
         $existingValue = $this->data[$key];
         $convertedValue = $this->validateAndConvert($key, $value);
-        if (isset($existingValue) && !is_null($existingValue)) {
+        if (isset($existingValue)) {
             if (!$force && ($existingValue != $convertedValue)) {
                 throw new DataCorruptedException('Data corrupted.', 
                     ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key, 
@@ -453,5 +453,13 @@ abstract class Entity implements Countable
             throw new Exception("Property '${property}' is not defined in the model.");
         }
         $this->data[$property] = $this->validateAndConvert($property, $value);
+    }
+
+    public function setUserGeneratedUuid($uuid) {
+        $existingUuid = $this->data[Entity::COLUMN_UUID];
+        if (isset($existingUuid)) {
+            throw new Exception("UUID is already set. It cannot be modified.");
+        }
+        $this->data[Entity::COLUMN_UUID] = $this->validateAndConvert(Entity::COLUMN_UUID, $uuid);
     }
 }

@@ -295,6 +295,30 @@ return [
                     ],
                 ],
             ],
+
+            'get_PolicyTerm' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/getPolicyTerm',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'GET',
+                        'action' => 'getPolicyTerms',
+                    ],
+                ],
+            ],
+
+            'update_PolicyTerm' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/updatePolicyTerm',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'updatePolicyTerms',
+                    ],
+                ],
+            ],
             'getuserproject' => [
                 'type' => Segment::class,
                 'options' => [

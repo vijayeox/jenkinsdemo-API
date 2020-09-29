@@ -82,6 +82,7 @@ ox_user:
     uuid: 754bc48a-3c69-4f7a-af8b-019fc984ee76
     username: individualadmin
     name: 'Individual Admin'
+    password: 'testpasswd'
     account_id: 100
     person_id: 150
     status: 'Active'
@@ -91,6 +92,7 @@ ox_user:
     id: 101
     uuid: 864bc48a-3c69-4f7a-af8b-019fc984ee87
     username: individualadmin1
+    password: 'testpasswd'
     name: 'Individual1 Admin'
     account_id: 101
     person_id: 151
@@ -101,6 +103,7 @@ ox_user:
     id: 102
     uuid: 974bc48a-3c69-4f7a-af8b-019fc984ee98
     username: individualadmin2
+    password: 'testpasswd'
     name: 'Individual2 Admin'
     account_id: 102
     person_id: 152
@@ -174,6 +177,7 @@ ox_app_entity:
     start_date_field: start_date
     end_date_field: end_date
     status_field: status
+    ryg_rule: "{item.status == \"Completed\" ? (\n<td style=\"color:green;background-color:green\"> {item.status} </td>\n ) :  (item.status == \"In Progress\" ? (<td style=\"color:yellow\"> {item.status} </td>) : (\n <td>{item.status}</td>\n))}"
 ox_app_registry:
   - account_id: 1
     app_id: 99
@@ -640,7 +644,7 @@ ox_user_group:
   - id: 1
     group_id: 1
     avatar_id: 1
-ox_activity_instance_assignee:
+ox_file_assignee:
   - id: 1
     activity_instance_id: 1
     user_id: 1
@@ -727,6 +731,14 @@ ox_file:
     last_workflow_instance_id: 10
     created_by: 2
     entity_id: 4
+  - id: 21
+    org_id: 1
+    data: '{"additionalInsured":[{"name":"Fredericka Lucas","address":"Sit quisquam alias ","city":"Illo voluptates sed ","country":"United States of America","state":"Alabama","zip":47296,"additionalInsuredAttachments":[{"org_id":"3","created_id":"6","uuid":"9af76901-9490-4fdd-b1ca-ac544d59d942","name":"sample2.txt","originalName":"sample.txt","extension":"txt","created_date":"2020-09-14 12:17:01","type":"text/plain","file":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","url":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","path":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","id":"3","size":282}]}],"appId":"d77ea120-b028-479b-8c6e-60476b6a4456","email":"zudi@mailinator.com","end_date":"2021-06-30 00:00:00","firstname":"Geoffrey","lastname":"Malone","name":"Geoffrey Malone"}'
+    uuid: "b3bbf0ff-e489-4938-b672-9271fb0d8ffd"
+    date_created: "2019-06-26 10:00:00"
+    last_workflow_instance_id: 10
+    created_by: 2
+    entity_id: 3
 ox_file_attribute:
   - id: 1
     file_id: 11
@@ -1057,4 +1069,16 @@ ox_indexed_file_attribute:
 ox_entity_identifier:
   - entity_id: 1
     identifier: "field1"
+ox_file_attachment:
+  - id: 1
+    uuid: '9af76901-9490-4fdd-b1ca-ac544d59d942'
+    name: 'sample.txt'
+    originalName: 'sample.txt'
+    extension: '.txt'
+    type: 'text/plain'
+    path: '/app/api/v1/data/file_docs/53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/sample.txt'
+    url: 'http://localhost:8080/53012471-2863-4949-afb1-e69b0891c98a/b3bbf0ff-e489-4938-b672-9271fb0d8ffd/sample.txt'
+    created_id: 1
+    org_id: 1
+    created_date: '2020-09-14 12:17:01'
 

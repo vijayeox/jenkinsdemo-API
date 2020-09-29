@@ -32,10 +32,38 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         if (isset($parameters['target'])) {
             $finalResult['target'] = $parameters['target'];
         }
+        if (!empty($parameters['pivot'])) {
+            $finalResult['data'] = $this->pivot($finalResult['data'],$parameters);
+        }
         if (isset($parameters['template'])) {
-            $finalResult['data'] = $this->applyTemplate($finalResult,$parameters);
+            $finalResult['data'] = $this->applyTemplate($finalResult['data'],$parameters);
         }
         return $finalResult;
+    }
+
+    public function pivot($data,$parameters) {
+        $groupArray=explode(',',$parameters['group']);
+        if (!isset($groupArray[0]) || !isset($groupArray[1]) || !isset($parameters['field'])) {
+            throw new \Exception('Please check query. Two Groups and Field should Exist');
+        }
+        $pivotResult = [];
+        $group1 = $groupArray[0];
+        $group2 = $groupArray[1];
+        $tmpArray=[];
+        $columnKeys = [];
+        foreach ($data as $row) {
+            $tmpArray[$row[$group1]][$row[$group2]] = $row[$parameters['field']];
+            if (!isset($columnKeys[$row[$group2]]))
+            {
+                $columnKeys[$row[$group2]] = null; 
+            }
+        }
+        foreach ($tmpArray as $key=>$groupArray) {
+            $array1 = $groupArray+$columnKeys;
+            $pivotResult[] = array_merge([$group1=>$key],$array1);
+        }
+        return $pivotResult;
+
     }
 
 

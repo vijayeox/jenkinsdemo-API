@@ -7,10 +7,10 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
   data.locationSchedule.map(locationItem => {
     if (locationItem.buildingDetails.length > 1) {
       locationItem.buildingDetails.map(item => {
-        checkblanketcoverage.push([result: "Premise Only"]);
+        checkblanketcoverage.push({ result: "Premise Only" });
       });
     } else if (locationItem.buildingDetails.length == 1) {
-      checkblanketcoverage.push([result: "No"]);
+      checkblanketcoverage.push({ result: "No" });
     }
   });
 
@@ -61,7 +61,11 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       item => {
         return item.occupancyType == "vacantLand"
           ? { result: "" }
-          : { result: data.propertyCoverageDeductible  ? data.propertyCoverageDeductible : ''};
+          : {
+              result: data.propertyCoverageDeductible
+                ? data.propertyCoverageDeductible
+                : ""
+            };
       }
     ),
     checkbuildingValuation: data.genericData.locationScheduleGridData.map(i => {
@@ -223,13 +227,13 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
           result:
             (item.utilityservices > 0
               ? "Utility Services Time Element: " + item.utilityservices
-              : '') +
+              : "") +
             (item.utilityservices > 0 && item.ordinancelawcoverage > 0
               ? ", "
               : "") +
             (item.ordinancelawcoverage > 0
               ? "Ordinance Law: " + item.ordinancelawcoverage
-              : '')
+              : "")
         };
       }
     ),
@@ -237,22 +241,9 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       data.repairpercentlabor == 95 || data.repairpercentlabor == 85
         ? 90
         : data.repairpercentlabor,
-    checkauditfrequencyannual:
-      data.auditfrequency == "annual" ? "true" : "false",
-    checkauditfrequencysemiAnnual:
-      data.auditfrequency == "semiAnnual" ? "true" : "false",
-    checkauditfrequencyquarterly:
-      data.auditfrequency == "quarterly" ? "true" : "false",
-    checkauditreportissenttoowners:
-      data.auditreportissentto == "owners" ? "true" : "false",
-    checkauditreportissenttopartners:
-      data.auditreportissentto == "partners" ? "true" : "false",
-    checkauditreportissenttoboardOfDirectors:
-      data.auditreportissentto == "boardOfDirectors" ? "true" : "false",
     checkwhodeliversvehiclesonemployee:
       data.whodeliversvehicleson == "employee" ? "true" : "false",
     checkwhodeliversvehiclesonindependentContractor:
       data.whodeliversvehicleson == "independentContractor" ? "true" : "false"
   };
-  console.log(value);
 }

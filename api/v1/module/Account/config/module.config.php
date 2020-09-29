@@ -17,7 +17,7 @@ return [
                             'put' => 'MANAGE_ACCOUNT_WRITE',
                             'post' => 'MANAGE_ACCOUNT_WRITE',
                             'delete' => 'MANAGE_ACCOUNT_WRITE',
-                            'get' => 'MANAGE_ACCOUNT_READ',
+                            'get' => ['MANAGE_ACCOUNT_READ','MANAGE_INSTALL_APP_READ'],
                         ],
                     ],
                 ],

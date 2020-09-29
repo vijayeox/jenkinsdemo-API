@@ -9,6 +9,8 @@ ox_app:
 ox_organization:
 -
     id: 120
+    uuid: "9f6c35fe-2e3e-4c6f-ad15-a61d98e8d641"
+    created_by: 1
 ox_account:
 -   id: 120
     name: "dummyOrg"

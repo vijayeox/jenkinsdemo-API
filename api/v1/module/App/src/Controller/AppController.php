@@ -6,8 +6,9 @@ use Oxzion\Model\App;
 use Oxzion\Model\AppTable;
 use Oxzion\Service\AppService;
 use Exception;
+use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Service\WorkflowService;
+use Oxzion\Service\FileService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\AppDelegate\AppDelegateService;
 
@@ -21,12 +22,12 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, WorkflowService $workflowService,AppDelegateService $appDelegateService)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, FileService $fileService,AppDelegateService $appDelegateService)
     {
         parent::__construct($table, App::class);
         $this->setIdentifierName('appId');
         $this->appService = $appService;
-        $this->workflowService = $workflowService;
+        $this->fileService = $fileService;
         $this->appDelegateService = $appDelegateService;
         $this->log = $this->getLogger();
     }
@@ -65,8 +66,8 @@ class AppController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Create App - " . print_r($data, true));
         try {
-            $generated = $this->appService->createApp($data);
-            return $this->getSuccessResponseWithData($generated, 201);
+            $returnData = $this->appService->createApp($data);
+            return $this->getSuccessResponseWithData($returnData, 201);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -140,8 +141,8 @@ class AppController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Update App - ${uuid}, " . print_r($data, true));
         try {
-            $generated = $this->appService->updateApp($uuid, $data);
-            return $this->getSuccessResponseWithData($generated, 200);
+            $returnData = $this->appService->updateApp($uuid, $data);
+            return $this->getSuccessResponseWithData($returnData, 200);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -228,32 +229,30 @@ class AppController extends AbstractApiController
         }
     }
 
-/*-------------------------------------------------------------------------------------------------------------*/
-/* Removed because AppService->installAppForOrg is deprecated/removed. */
-/*-------------------------------------------------------------------------------------------------------------*/
     /**
      * POST App Install API
      * @api
-     * @link /app/:appId/appinstall
+     * @link /app/:appId/install/org/:orgId
      * @method POST
      * ! Deprecated - Does not look like this api is being used any more, the method that calls the service isnt available.
      * ? Need to check if this can be removed
      * @return array of Apps
      */
-/*
-    public function appInstallAction($data)
+
+        public function installAppToOrgAction()
     {
-        $data = $this->extractPostData();
+        $params = $this->extractPostData();
+        $data = array_merge($params, $this->params()->fromRoute());
+        $this->log->info(__CLASS__ . "-> \n Create App Registry- " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->appService->installAppForOrg($data);
-            return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+            $count = $this->appService->installAppToOrg($data['appId'],$data['orgId']);
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
+        return $this->getSuccessResponseWithData($data, 200);
     }
-*/
+
 
     /**
      * POST Assignment API
@@ -267,7 +266,7 @@ class AppController extends AbstractApiController
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
         try {
-            $assignments = $this->workflowService->getAssignments($params['appId'], $filterParams);
+            $assignments = $this->fileService->getAssignments($params['appId'], $filterParams);
             return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
         }
         catch (AccessDeniedException $e) {
@@ -309,15 +308,7 @@ class AppController extends AbstractApiController
             $path = $params['path'];
             $path .= substr($path, -1) == '/' ? '' : '/';
             if(isset($params['parameters']) && !empty($params['parameters'])){
-                $params['parameters'] = strtolower($params['parameters']);
-                $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
-                $params['parameters'] = rtrim($params['parameters'],",");
-                $params['parameters'] = ltrim($params['parameters'],",");
-                if(strpos($params['parameters'], ',') !== false){
-                    $params = explode(",",$params['parameters']);
-                }else{
-                    $params = array($params['parameters']);
-                }                    
+                $params = $this->processDeploymentParams($params);                   
             }
             else{
                 $params = null;
@@ -346,6 +337,7 @@ class AppController extends AbstractApiController
     public function deployApplicationAction()
     {
         $routeParams = $this->params()->fromRoute();
+        $params = $this->extractPostData();
         $this->log->info(__CLASS__ . '-> Deploy Application - ' . $routeParams['appId'], true);
         if (!isset($routeParams['appId'])) {
             $this->log->error('Application ID not provided.');
@@ -353,7 +345,13 @@ class AppController extends AbstractApiController
         }
 
         try {
-            $appData = $this->appService->deployApplication($routeParams['appId']);
+            if(isset($params['parameters']) && !empty($params['parameters'])){
+                $params = $this->processDeploymentParams($params);
+            }
+            else{
+                $params = null;
+            }
+            $appData = $this->appService->deployApplication($routeParams['appId'], $params);
             return $this->getSuccessResponseWithData($appData);
         }
         catch (Exception $e) {
@@ -364,9 +362,10 @@ class AppController extends AbstractApiController
 
     public function delegateCommandAction()
     {
+        $routeParams = $this->params()->fromRoute();
+        $appId = $routeParams['appId'];
+        $delegate = $routeParams['delegate'];
         $data = $this->extractPostData();
-        $appId = $this->params()->fromRoute()['appId'];
-        $delegate = $this->params()->fromRoute()['delegate'];
         $data = array_merge($data, $this->params()->fromQuery());
         $this->log->info(__CLASS__ . "-> Execute Delegate Start - " . print_r($data, true));
         try {
@@ -382,6 +381,19 @@ class AppController extends AbstractApiController
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
+    }
+
+    private function processDeploymentParams($params){
+        $params['parameters'] = strtolower($params['parameters']);
+        $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
+        $params['parameters'] = rtrim($params['parameters'],",");
+        $params['parameters'] = ltrim($params['parameters'],",");
+        if(strpos($params['parameters'], ',') !== false){
+            $params = explode(",",$params['parameters']);
+        }else{
+            $params = array($params['parameters']);
+        }   
+        return $params;
     }
 }
 

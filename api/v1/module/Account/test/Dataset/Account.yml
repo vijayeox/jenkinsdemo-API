@@ -29,16 +29,19 @@ ox_organization:
         id: 101
         uuid: '915d207e-ac75-11ea-bb37-0242ac130002'
         address_id: 8
+        created_by: 1
         parent_id: null
   -
         id: 102
         uuid: '915d22cc-ac75-11ea-bb37-0242ac130002'
         address_id: 9  
+        created_by: 1
         parent_id: null
   - 
         id: 103
         uuid: 'a25d22cc-ac75-11ea-bb37-0242ac130013'
         address_id: 10
+        created_by: 1
         parent_id: 101
 
 ox_org_heirarchy:
@@ -46,6 +49,7 @@ ox_org_heirarchy:
         main_org_id: 101
         parent_id: 101
         child_id: 103
+
 ox_account:
   -
         id: 3

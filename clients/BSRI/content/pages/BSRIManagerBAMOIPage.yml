@@ -1,0 +1,7 @@
+name: 'BAM'
+description: 'Shows BAM OI'
+content:
+    -
+        type: DashboardManager
+        content:
+            uuid: fb4ecad6-5057-4dfa-98c7-84d52990abd1

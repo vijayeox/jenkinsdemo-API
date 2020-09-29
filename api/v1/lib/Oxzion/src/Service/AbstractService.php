@@ -19,7 +19,7 @@ abstract class AbstractService extends AbstractBaseService
 
     protected function getBaseUrl()
     {
-        return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
+        return $this->config["apiUrl"];
     }
 
     protected function getAccountIdForOrgId($orgId){

@@ -302,6 +302,7 @@ content:
                 - phone
                 - business_name
                 - certificate_no
+                - transaction_reference_number
             filterOperator : startswith
             placeholder: 'Search using Name or PADI or Product or Phone'
             operations:
@@ -377,3 +378,5 @@ content:
                     product
                 -
                     identifier_field
+                -
+                    transaction_reference_number

@@ -26,7 +26,8 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
     private $config;
     protected function getBaseUrl()
     {
-        return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
+        $config = $this->getConfig();
+        return $config["apiUrl"];
     }
 
     protected function getLogger()

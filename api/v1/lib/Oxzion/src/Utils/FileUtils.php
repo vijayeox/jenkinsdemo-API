@@ -81,25 +81,34 @@ class FileUtils
     public static function copy($src, $destFile, $destDirectory)
     {
         self::createDirectory($destDirectory);
+        $destDirectory = self::joinPath($destDirectory);
         copy($src, $destDirectory.$destFile);
     }
 
     public static function copyDir($src, $dest) {
         if (!file_exists($dest)) self::createDirectory($dest);
-        foreach (scandir($src) as $file) {
-            if ($file == '.' || $file == '..') continue;
-            $srcCheck = self::joinPath($src);
-            $destCheck = self::joinPath($dest);
-            if (is_dir($srcCheck.$file))
-                self::copyDir($srcCheck.$file, $destCheck.$file);
-            elseif (!file_exists($destCheck.$file))
-                copy($srcCheck.$file, $destCheck.$file);
+        if(is_dir($src)){
+            foreach (scandir($src) as $file) {
+                if ($file == '.' || $file == '..') continue;
+                $srcCheck = self::joinPath($src);
+                $destCheck = self::joinPath($dest);
+                if (is_dir($srcCheck.$file)){
+                    self::copyDir($srcCheck.$file, $destCheck.$file);
+                }
+                else {
+                    copy($srcCheck.$file, $destCheck.$file);
+                }
+            }
         }
     }
 
     public static function renameFile($source, $destination)
     {
-        return rename($source, $destination);
+        $result = self::copyDir($source,$destination);
+        if (is_dir($source)) {
+            self::rmDir($source);
+        }
+        return $result;
     }
 
     public static function rmDir($fsObj)
@@ -225,5 +234,32 @@ class FileUtils
             $baseLocation .= "/";
         }
         return $baseLocation;
+    }
+
+    public static function createTempDir($dirNameLength = 10) {
+        $tempDir = sys_get_temp_dir();
+        for ($i=0; $i<100; $i++) {
+            $dirName = StringUtils::randomString($dirNameLength);
+            $targetDir = $tempDir . DIRECTORY_SEPARATOR . $dirName;
+            if (!file_exists($targetDir)) {
+                if (!mkdir($targetDir)) {
+                    throw new Exception('Failed to create temp directory.');
+                }
+                return $targetDir;
+            }
+        }
+		throw new Exception('Failed to create unique temporary directory in 100 attempts!.');
+    }
+
+    public static function createTempFileName($fileNameLength = 10) {
+        $tempDir = sys_get_temp_dir();
+        for ($i=0; $i<100; $i++) {
+            $fileName = StringUtils::randomString($fileNameLength);
+            $targetFile = $tempDir . DIRECTORY_SEPARATOR . $fileName;
+            if (!file_exists($targetFile)) {
+                return $targetFile;
+            }
+        }
+        throw new Exception('Failed to create unique temporary file name in 100 attempts!.');
     }
 }

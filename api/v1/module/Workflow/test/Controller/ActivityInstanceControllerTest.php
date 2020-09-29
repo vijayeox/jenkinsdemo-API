@@ -44,7 +44,7 @@ class ActivityInstanceControllerTest extends ControllerTest
         }
         $this->assertEquals($tableFieldName[0]['workflow_instance_id'], $data['workflow_instance_id']);
         $this->assertEquals($tableFieldName[4]['activity_instance_id'], $data['activityInstanceId']);
-        $sqlQuery2 = "Select * from ox_activity_instance_assignee";
+        $sqlQuery2 = "Select * from ox_file_assignee";
         $statement2 = $dbAdapter->query($sqlQuery2);
         $result2 = $statement2->execute();
         $this->assertEquals(4, $result2->count());

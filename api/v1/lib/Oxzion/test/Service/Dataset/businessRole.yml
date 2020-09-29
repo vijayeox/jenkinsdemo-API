@@ -3,10 +3,12 @@ ox_business_role:
     uuid: "77b30b2d-d1da-427a-8e40-bc954b2b0f77"
     name: "Policy Holder"
     app_id: 99
+    created_by: 1
   - id: 101
     uuid: "78b30b2d-d1da-427a-8e40-bc954b2b0f88"
     name: "Agency"
     app_id: 99
+    created_by: 1
 ox_entity_participant_role:
   - entity_id: 1
     business_role_id: 100

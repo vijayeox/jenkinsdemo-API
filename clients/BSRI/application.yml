@@ -1,0 +1,137 @@
+app:
+    name: BSRIInsurance
+    title: 'BSRI Insurance'
+    description: 'Insurance OI Application'
+    category: Dashboards
+    type: 2
+    autostart: 'true'
+    uuid: c1f756bf-b91a-460a-994c-7afa7c8d52e3
+    isdefault: false
+    logo: default_app.png
+    status: 4
+    start_options: null
+checkOrg: true    
+org:
+    name: BSRI
+    uuid: c01056d8-e2f7-4b98-964a-3f868fb1ed2f
+    email: bsriuseradmin@vantageagora.com
+    address1: '2113 Greenbriar Drive'
+    address2: 'Suite D, Southlake'
+    city: Southlake
+    state: Texas
+    zip: 76092
+    contact:
+        username: bsriuser
+        firstname: BSRI
+        lastname: USer
+        email: bsriuser@vantageagora.com
+    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+    country: 'United States of America'
+privilege:
+    -
+        name: MANAGE_AGENTVIEW
+        permission: 15
+    -
+        name: MANAGE_UNDERWRITERVIEW
+        permission: 15
+    -
+        name: MANAGE_PRODUCTIONVIEW
+        permission: 15
+    -
+        name: MANAGE_BAMREPORTVIEW
+        permission: 15
+role:
+    -
+        name: 'BSRI Agent'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_AGENTVIEW
+                    permission: 15
+                permission: 15
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_AGENTVIEW
+                permission: 15
+        uuid: 6c6ecfb6-07af-474a-a873-d8a61a4f7444
+    -
+        name: 'BSRI Underwriter'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_UNDERWRITERVIEW
+                    permission: 15
+                permission: 15
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_UNDERWRITERVIEW
+                permission: 15
+        uuid: 1ffecc5f-bb10-425f-8ef2-7474ad7d3ff3
+    -
+        name: 'BSRI Production'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_PRODUCTIONVIEW
+                    permission: 15
+                permission: 15
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_PRODUCTIONVIEW
+                permission: 15
+        uuid: ee4eb6da-50bb-42b1-a930-b847986e7d5f
+    -
+        name: 'BSRI BAM'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_BAMREPORTVIEW
+                    permission: 15
+                permission: 15
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_BAMREPORTVIEW
+                permission: 15
+        uuid: 7ce12c65-0168-48b9-b912-5ad8661a157d
+pages:
+    -
+        page_name: BSRIManagerProductionOIPage.yml
+        uuid: 44f72917-a1a6-43fb-a555-c1ed3ff5baed
+    -
+        page_name: BSRIManagerUnderwriterOIPage.yml
+        uuid: 8b4787d4-a912-4746-91b4-42fac904c010
+    -
+        page_name: BSRIManagerAgentOIPage.yml
+        uuid: 2a6d578a-0ade-42ec-9024-62e5ba4105d9
+    -
+        page_name: BSRIManagerBAMOIPage.yml
+        uuid: fb4ecad6-5057-4dfa-98c7-84d52990abd1
+menu:
+    -
+        name: Agent
+        icon: 'fal fa-address-card'
+        privilege: MANAGE_AGENTVIEW_WRITE
+        page_uuid: 2a6d578a-0ade-42ec-9024-62e5ba4105d9
+        uuid: f0460cc9-38f9-408d-b51b-cfe05128e076
+    -
+        name: Underwriter
+        icon: 'fad fa-user-edit'
+        privilege: MANAGE_UNDERWRITERVIEW_WRITE
+        page_uuid: 8b4787d4-a912-4746-91b4-42fac904c010
+        uuid: feabeb18-f4dc-48af-b078-31c16d1aea0c
+    -
+        name: Production
+        icon: 'fal fa-funnel-dollar'
+        privilege: MANAGE_PRODUCTIONVIEW_WRITE
+        page_uuid: 44f72917-a1a6-43fb-a555-c1ed3ff5baed
+        uuid: d7cf66d2-d2d6-4897-b8d1-c17aebb35bda
+    -
+        name: BAM
+        icon: 'fal fa-truck-moving'
+        privilege: MANAGE_BAMREPORTVIEW_WRITE
+        page_uuid: fb4ecad6-5057-4dfa-98c7-84d52990abd1
+        uuid: 974ae3fb-c1ff-40b2-b584-f276e00a8239

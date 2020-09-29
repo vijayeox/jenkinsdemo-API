@@ -9,10 +9,12 @@ ox_business_role:
   - id: 10
     uuid: "ccbf3d35-a0ee-49d3-a8ac-8e480be9dadd"
     name: "Policy Holder"
+    created_by: 1
     app_id: 100
   - id: 11
     uuid: "33bf3d35-a0ee-49d3-a8ac-8e480be9da22"
     name: "Some Role"
+    created_by: 1
     app_id: 100
 ox_privilege:
   - name: MANAGE_POLICY

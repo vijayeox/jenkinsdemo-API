@@ -170,7 +170,7 @@ abstract class ModelTable
 
     private function checkAndIncrementVersion(array &$data) {
         $version = $data[Entity::COLUMN_VERSION];
-        if(!isset($version) || is_null($version)) {
+        if(!isset($version)) {
             throw new ParameterRequiredException('Version number is required.', [Entity::COLUMN_VERSION]);
         }
         try {
@@ -205,8 +205,14 @@ abstract class ModelTable
             $id = $data[Entity::COLUMN_ID];
         }
 
-        if (!isset($id) || is_null($id) || (0 == $id) || empty($id)) {
-            $data[Entity::COLUMN_UUID] = isset($data[Entity::COLUMN_UUID]) ? $data[Entity::COLUMN_UUID] : UuidUtil::uuid();
+        if (!isset($id) || (0 == $id)) {
+            if (array_key_exists(Entity::COLUMN_UUID, $data)) {
+                //Check and set UUID only if user generated UUID is not set.
+                $uuid = $data[Entity::COLUMN_UUID];
+                if (!isset($uuid)) {
+                    $data[Entity::COLUMN_UUID] = UuidUtil::uuid();
+                }
+            }
             if (array_key_exists(Entity::COLUMN_VERSION, $data)) {
                 $data[Entity::COLUMN_VERSION] = 1; //Starting version number when the row is inserted in the database.
             }

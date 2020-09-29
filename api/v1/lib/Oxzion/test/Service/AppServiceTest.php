@@ -24,7 +24,7 @@ class AppServiceTest extends AbstractServiceTest
         parent::__construct();
         $this->loadConfig();
         $config = $this->getApplicationConfig();
-        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($config['db']);
+        $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($config);
     }
 
     public function setUp() : void
@@ -87,40 +87,54 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::ACCOUNT_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
-        $app = $appService->getApp($uuid);
-        $this->assertEquals($app['uuid'], $uuid);
-        $this->assertEquals($app['name'], 'DummyApp');
+        $appService->setupOrUpdateApplicationDirectoryStructure([
+            'app' => [
+                'name' => 'DummyApp',
+                'uuid' => $uuid
+            ]
+        ]);
+        $dd = $appService->getApp($uuid);
+        $this->assertTrue(array_key_exists('app', $dd));
+        $appData = $dd['app'];
+        $this->assertEquals($uuid, $appData['uuid']);
+        $this->assertEquals('DummyApp', $appData['name']);
     }
 
     public function testCreateAppPreBuilt() {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $appData = [
-            'name' => 'DummyApp-New',
-            'description' => 'Dummy app for testing.',
-            'category' => 'DUMMY_CATEGORY',
-            'type' => App::PRE_BUILT
+        $data = [
+            'app' => [
+                'name' => 'DummyApp-New',
+                'description' => 'Dummy app for testing.',
+                'category' => 'DUMMY_CATEGORY',
+                'type' => App::PRE_BUILT
+            ]
         ];
-        $returnedAppData = $appService->createApp($appData);
-        $this->assertTrue(array_key_exists('uuid', $returnedAppData));
-        $appUuid = $returnedAppData['uuid'];
-        $appData['uuid'] = $appUuid;
+        $returnData = $appService->createApp($data);
+        $this->assertTrue(array_key_exists('uuid', $returnData['app']));
+        $appUuid = $returnData['app']['uuid'];
+        $data['app']['uuid'] = $appUuid;
         $rows = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${appUuid}'");
         $row = $rows[0];
-        $this->assertEquals($appData['name'], $row['name']);
-        $this->assertEquals($appData['description'], $row['description']);
-        $this->assertEquals($appData['category'], $row['category']);
-        $this->assertEquals($appData['type'], $row['type']);
-        $this->assertEquals($appData['name'], $returnedAppData['name']);
-        $this->assertEquals($appData['description'], $returnedAppData['description']);
-        $this->assertEquals($appData['category'], $returnedAppData['category']);
-        $this->assertEquals($appData['type'], $returnedAppData['type']);
-        $this->assertEquals(0, $returnedAppData['isdefault']);
-        $this->assertEquals(App::IN_DRAFT, $returnedAppData['status']);
+        $this->assertEquals($data['app']['name'], $row['name']);
+        $this->assertEquals($data['app']['description'], $row['description']);
+        $this->assertEquals($data['app']['category'], $row['category']);
+        $this->assertEquals($data['app']['type'], $row['type']);
+        $this->assertEquals(0, $row['isdefault']);
+        $this->assertEquals('default_app.png', $row['logo']);
+        $this->assertEquals(App::IN_DRAFT, $row['status']);
+        $this->assertEquals($data['app']['name'], $returnData['app']['name']);
+        $this->assertEquals($data['app']['description'], $returnData['app']['description']);
+        $this->assertEquals($data['app']['category'], $returnData['app']['category']);
+        $this->assertEquals($data['app']['type'], $returnData['app']['type']);
+        $this->assertEquals(0, $returnData['app']['isdefault']);
+        $this->assertEquals('default_app.png', $returnData['app']['logo']);
+        $this->assertEquals(App::IN_DRAFT, $returnData['app']['status']);
 
         $config = $this->getApplicationConfig();
-        $sourceAppDirectory = AppArtifactNamingStrategy::getSourceAppDirectory($config, $appData);
+        $sourceAppDirectory = AppArtifactNamingStrategy::getSourceAppDirectory($config, $data['app']);
         if (file_exists($sourceAppDirectory)) {
             $this->fail("Source app directory ${sourceAppDirectory} SHOULD NOT be created.");
         }
@@ -130,45 +144,53 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $appData = [
-            'name' => 'DummyApp-New',
-            'description' => 'Dummy app for testing.',
-            'category' => 'DUMMY_CATEGORY',
-            'type' => App::MY_APP
+        $data = [
+            'app' => [
+                'name' => 'DummyApp-New',
+                'description' => 'Dummy app for testing.',
+                'category' => 'DUMMY_CATEGORY',
+                'type' => App::MY_APP
+            ]
         ];
-        $returnedAppData = $appService->createApp($appData);
-        $this->assertTrue(array_key_exists('uuid', $returnedAppData));
-        $appUuid = $returnedAppData['uuid'];
-        $appData['uuid'] = $appUuid;
+        $returnData = $appService->createApp($data);
+        $this->assertTrue(array_key_exists('uuid', $returnData['app']));
+        $appUuid = $returnData['app']['uuid'];
+        $data['app']['uuid'] = $appUuid;
         $rows = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${appUuid}'");
         $row = $rows[0];
-        $this->assertEquals($appData['name'], $row['name']);
-        $this->assertEquals($appData['description'], $row['description']);
-        $this->assertEquals($appData['category'], $row['category']);
-        $this->assertEquals($appData['type'], $row['type']);
-        $this->assertEquals($appData['name'], $returnedAppData['name']);
-        $this->assertEquals($appData['description'], $returnedAppData['description']);
-        $this->assertEquals($appData['category'], $returnedAppData['category']);
-        $this->assertEquals($appData['type'], $returnedAppData['type']);
-        $this->assertEquals(0, $returnedAppData['isdefault']);
-        $this->assertEquals(App::IN_DRAFT, $returnedAppData['status']);
+        $this->assertEquals($data['app']['name'], $row['name']);
+        $this->assertEquals($data['app']['description'], $row['description']);
+        $this->assertEquals($data['app']['category'], $row['category']);
+        $this->assertEquals($data['app']['type'], $row['type']);
+        $this->assertEquals(0, $row['isdefault']);
+        $this->assertEquals('default_app.png', $row['logo']);
+        $this->assertEquals(App::IN_DRAFT, $row['status']);
+        $this->assertEquals($data['app']['name'], $returnData['app']['name']);
+        $this->assertEquals($data['app']['description'], $returnData['app']['description']);
+        $this->assertEquals($data['app']['category'], $returnData['app']['category']);
+        $this->assertEquals($data['app']['type'], $returnData['app']['type']);
+        $this->assertEquals(0, $returnData['app']['isdefault']);
+        $this->assertEquals('default_app.png', $returnData['app']['logo']);
+        $this->assertEquals(App::IN_DRAFT, $returnData['app']['status']);
 
         $config = $this->getApplicationConfig();
-        $sourceAppDirectory = AppArtifactNamingStrategy::getSourceAppDirectory($config, $appData);
+        $sourceAppDirectory = AppArtifactNamingStrategy::getSourceAppDirectory($config, $data['app']);
         if (!file_exists($sourceAppDirectory)) {
             $this->fail("Source app directory ${sourceAppDirectory} is not created.");
         }
-        $applicationYamlFilePath = $sourceAppDirectory . '/' . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
+        $applicationYamlFilePath = $sourceAppDirectory . DIRECTORY_SEPARATOR . AppService::APPLICATION_DESCRIPTOR_FILE_NAME;
         if (!file_exists($applicationYamlFilePath)) {
             $this->fail("Application descriptor YAML file ${applicationYamlFilePath} is not created.");
         }
         $yamlFileData = Yaml::parse(file_get_contents($applicationYamlFilePath));
-        $yamlAppData = $yamlFileData['app'];
-        $this->assertEquals($appData['name'], $yamlAppData['name']);
-        $this->assertEquals($appData['description'], $yamlAppData['description']); 
-        $this->assertEquals($appData['category'], $yamlAppData['category']);
-        $this->assertEquals($appData['type'], $yamlAppData['type']);
-        $this->assertEquals($appUuid, $yamlAppData['uuid']);
+        $this->assertEquals($data['app']['name'], $yamlFileData['app']['name']);
+        $this->assertEquals($data['app']['description'], $yamlFileData['app']['description']); 
+        $this->assertEquals($data['app']['category'], $yamlFileData['app']['category']);
+        $this->assertEquals($data['app']['type'], $yamlFileData['app']['type']);
+        $this->assertEquals(0, $yamlFileData['app']['isdefault']);
+        $this->assertEquals('default_app.png', $yamlFileData['app']['logo']);
+        $this->assertEquals(App::IN_DRAFT, $yamlFileData['app']['status']);
+        $this->assertEquals($appUuid, $yamlFileData['app']['uuid']);
         FileUtils::rmDir($sourceAppDirectory);
     }
 
@@ -247,6 +269,23 @@ class AppServiceTest extends AbstractServiceTest
         $resultSet = new ResultSet();
         $result = $resultSet->initialize($result)->toArray();
         $this->assertEquals($result[0]['count'], 1);
+    }
+
+    public function testProcessEntityWithRule()
+    {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'entity' => array(array( 'name' => 'Individual Professional Liability', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text','ryg_rule' => '{item.policyStatus == \"Completed\" ? (\n<td style=\"color:green;background-color:green\"> {item.policyStatus} </td>\n ) :  (item.policyStatus == \"In Progress\" ? (<td style=\"color:yellow\"> {item.policyStatus} </td>) : (\n <td>{item.policyStatus}</td>\n))}')))));
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processEntity($data);
+        $sqlQuery = "SELECT name,ryg_rule FROM ox_app_entity WHERE app_id = 299";
+        $adapter = $this->getDbAdapter();
+        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
+        $statement = $adapter->query($sqlQuery);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $result = $resultSet->initialize($result)->toArray();
+        $this->assertEquals($result[0]['name'],$data['entity'][0]['name'] );
+        $this->assertEquals($result[0]['ryg_rule'],$data['entity'][0]['field'][0]['ryg_rule']);
     }
 
     public function testProcessForm()

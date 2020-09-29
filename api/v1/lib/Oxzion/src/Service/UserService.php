@@ -26,6 +26,7 @@ use Oxzion\Utils\ArrayUtils;
 use Oxzion\Service\PersonService;
 use Oxzion\Service\EmployeeService;
 use Oxzion\ValidationException;
+use Oxzion\Service\RoleService;
 
 class UserService extends AbstractService
 {
@@ -52,7 +53,7 @@ class UserService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService, MessageProducer $messageProducer,PersonService $personService, EmployeeService $empService)
+    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService, MessageProducer $messageProducer,RoleService $roleService,PersonService $personService, EmployeeService $empService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -62,6 +63,7 @@ class UserService extends AbstractService
         $this->addressService = $addressService;
         $this->cacheService = CacheService::getInstance();
         $this->messageProducer = $messageProducer;
+        $this->roleService = $roleService;
         $this->personService = $personService;
         $this->empService = $empService;
     }
@@ -163,8 +165,8 @@ class UserService extends AbstractService
             
         if (!$register) {
             if (isset($params['accountId']) && $params['accountId'] != '') {
-                if ((!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
-                    ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) && !AuthContext::get(AuthConstants::REGISTRATION)) {
+                if ((!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && !SecurityManager::isGranted('MANAGE_USER_WRITE') && (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
+                    ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) && !isset($params['commands']))) {
                     throw new AccessDeniedException("You do not have permissions create user");
                 } else {
                     $data['account_id'] = $this->getIdFromUuid('ox_account', $params['accountId']);
@@ -433,6 +435,16 @@ class UserService extends AbstractService
             'body' => $this->templateService->getContent('newAdminUser', $data),
         )), 'mail');
         return $data['uuid'];
+    }
+
+    public function addAppRolesToUser($userId,$appId){
+        if (isset($appId)) {
+            $appId = $this->getIdFromUuid('ox_app',$appId);
+            $result = $this->roleService->getRolesByAppId($appId);
+            foreach ($result as $role) {
+                $this->addUserRole($userId,$role['name']);
+            }
+        }
     }
 
     private function addUserRole($accountUserId, $roleName, $accountId)
@@ -1356,5 +1368,38 @@ class UserService extends AbstractService
         }
 
         return NULL;
+    }
+
+    public function getContactUserForOrg($orgId){
+         $select = "SELECT ou.uuid as userId,ou.username,oup.firstname,oup.lastname
+                    FROM ox_user ou INNER JOIN ox_organization org ON org.contactid = ou.id INNER JOIN ox_user_profile oup ON ou.user_profile_id = oup.id 
+                    WHERE org.uuid=:orgId";
+        $selectParams = array("orgId" => $orgId);
+        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+        if(count($result) > 0){
+            return $result[0];
+        }else{
+            return $result;
+        }
+    }
+
+    public function getPolicyTerm()
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_user')
+        ->columns(array('policy_terms'))
+        ->where(array('id' => AuthContext::get(AuthConstants::USER_ID),'orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        $result = $this->executeQuery($select)->toArray();
+        return array_column($result, 'policy_terms');
+    }
+
+    public function updatePolicyTerms()
+    {
+        $sql = $this->getSqlObject();
+        $updatedData['policy_terms'] = "1";
+        $update = $sql->update('ox_user')->set($updatedData)
+        ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        $result = $this->executeUpdate($update);
     }
 }
