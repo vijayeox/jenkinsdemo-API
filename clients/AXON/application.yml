@@ -83,29 +83,29 @@ role:
 pages:
     -
         page_name: AXONManagerAgentOIPage.yml
-        uuid: 18d3e6bb-e948-48e6-b27c-3a00bcee17b8
+        uuid: a603084e-f94f-4997-aa26-b00c931a1a0c
     -
         page_name: AXONManagerUnderwriterOIPage.yml
-        uuid: 9e221c20-d33d-40a4-b8b3-d523e7e145e6
+        uuid: 4044c80f-4d63-45ee-a447-16f49ac88272
     -
         page_name: AXONManagerProductionOIPage.yml
-        uuid: 078ce17c-a104-434c-ad71-f69a1a8331c8
+        uuid: f233f565-0b61-4ec8-8090-0189441879d2
 menu:
     -
         name: Agent
         icon: 'fal fa-address-card'
         privilege: MANAGE_AXONAGENT_WRITE
-        page_uuid: 18d3e6bb-e948-48e6-b27c-3a00bcee17b8
-        uuid: a603084e-f94f-4997-aa26-b00c931a1a0c
+        page_uuid: a603084e-f94f-4997-aa26-b00c931a1a0c
+        uuid: 18d3e6bb-e948-48e6-b27c-3a00bcee17b8
     -
         name: Underwriter
         icon: 'fad fa-user-edit'
         privilege: MANAGE_AXONUNDERWRITER_WRITE
-        page_uuid: 9e221c20-d33d-40a4-b8b3-d523e7e145e6
-        uuid: 4044c80f-4d63-45ee-a447-16f49ac88272
+        page_uuid: 4044c80f-4d63-45ee-a447-16f49ac88272
+        uuid: 9e221c20-d33d-40a4-b8b3-d523e7e145e6
     -
         name: Production
         icon: 'fal fa-funnel-dollar'
         privilege: MANAGE_AXONPRODUCTION_WRITE
-        page_uuid: 078ce17c-a104-434c-ad71-f69a1a8331c8
-        uuid: f233f565-0b61-4ec8-8090-0189441879d2
+        page_uuid: f233f565-0b61-4ec8-8090-0189441879d2
+        uuid: 078ce17c-a104-434c-ad71-f69a1a8331c8
