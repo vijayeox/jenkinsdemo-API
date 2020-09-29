@@ -1,32 +1,32 @@
 app:
-    -
-        name: BSRIInsurance
-        description: 'Insurance OI Application'
-        category: Dashboards
-        type: 2
-        autostart: 'true'
-        uuid: c1f756bf-b91a-460a-994c-7afa7c8d52e3
-        isdefault: false
-        logo: default_app.png
-        status: 4
-        start_options: null
+    name: BSRIInsurance
+    title: 'BSRI Insurance'
+    description: 'Insurance OI Application'
+    category: Dashboards
+    type: 2
+    autostart: 'true'
+    uuid: c1f756bf-b91a-460a-994c-7afa7c8d52e3
+    isdefault: false
+    logo: default_app.png
+    status: 4
+    start_options: null
+checkOrg: true    
 org:
-    -
-        name: BSRI
-        uuid: c01056d8-e2f7-4b98-964a-3f868fb1ed2f
-        email: bsriuseradmin@vantageagora.com
-        address1: '2113 Greenbriar Drive'
-        address2: 'Suite D, Southlake'
-        city: Southlake
-        state: TX
-        zip: 76092
-        contact:
-            username: bsriuser
-            firstname: BSRI
-            lastname: USer
-            email: bsriuser@vantageagora.com
-        preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
-        country: 'United States'
+    name: BSRI
+    uuid: c01056d8-e2f7-4b98-964a-3f868fb1ed2f
+    email: bsriuseradmin@vantageagora.com
+    address1: '2113 Greenbriar Drive'
+    address2: 'Suite D, Southlake'
+    city: Southlake
+    state: Texas
+    zip: 76092
+    contact:
+        username: bsriuser
+        firstname: BSRI
+        lastname: USer
+        email: bsriuser@vantageagora.com
+    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+    country: 'United States of America'
 privilege:
     -
         name: MANAGE_AGENTVIEW
@@ -43,6 +43,12 @@ privilege:
 role:
     -
         name: 'BSRI Agent'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_AGENTVIEW
+                    permission: 15
+                permission: 15
         default: true
         privileges:
             -
@@ -51,6 +57,12 @@ role:
         uuid: 6c6ecfb6-07af-474a-a873-d8a61a4f7444
     -
         name: 'BSRI Underwriter'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_UNDERWRITERVIEW
+                    permission: 15
+                permission: 15
         default: true
         privileges:
             -
@@ -59,6 +71,12 @@ role:
         uuid: 1ffecc5f-bb10-425f-8ef2-7474ad7d3ff3
     -
         name: 'BSRI Production'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_PRODUCTIONVIEW
+                    permission: 15
+                permission: 15
         default: true
         privileges:
             -
@@ -67,6 +85,12 @@ role:
         uuid: ee4eb6da-50bb-42b1-a930-b847986e7d5f
     -
         name: 'BSRI BAM'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_BAMREPORTVIEW
+                    permission: 15
+                permission: 15
         default: true
         privileges:
             -
