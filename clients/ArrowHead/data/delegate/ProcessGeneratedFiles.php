@@ -76,8 +76,15 @@ class ProcessGeneratedFiles extends MailDelegate
             if ($fileData['documentsToBeGenerated'] == 1) {
                 $fileData['documentsToBeGenerated'] = 0;
 
-                if ($fileData["workflowInitiatedBy"] == "accountExecutive") {
-                    $fileData['status'] = 'Review';
+                $sendNotificationMail = false;
+                if (isset($fileData['managementSubmitApplication']) && !empty($fileData['managementSubmitApplication'])) {
+                    if ($fileData['managementSubmitApplication'] == true || $fileData['managementSubmitApplication'] == "true") {
+                        $sendNotificationMail = true;
+                    }
+                }
+
+                if ($fileData["workflowInitiatedBy"] == "accountExecutive" || $sendNotificationMail) {
+                    $fileData['status'] = $sendNotificationMail ? 'Generated' :'Review';
                     $policyMail = $this->executeDelegate('DispatchMail', $fileData);
                     $fileData['mailStatus'] = $policyMail;
                 } else {

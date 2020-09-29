@@ -170,6 +170,10 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     color: white;
   }
 
+  .btn-wizard-nav-submit{
+    display: none;
+  }
+
   .formLoader {
     display: flex;
     align-items: center;

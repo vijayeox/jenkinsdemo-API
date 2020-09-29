@@ -140,3 +140,9 @@ form:
         description: 'Dealer Workbook form to generate carrier templates'
         template_file: dealerWorkbook.json
         entity: 'Dealer Policy'
+    -
+        name: 'Claims Form'
+        uuid: 055cdece-c75c-4d33-b32c-800e05421406
+        description: 'Claims form'
+        template_file: claimsFormDev.json
+        entity: 'Dealer Policy'

@@ -282,6 +282,16 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             $data['documentsSelectedCount'] = count($excelData) + count($generatedDocumentsList) - 1;
             $data["status"] = "Processing";
         } else {
+            $sendNotificationMail = false;
+            if (isset($data['managementSubmitApplication']) && !empty($data['managementSubmitApplication'])) {
+                if ($data['managementSubmitApplication'] == true || $data['managementSubmitApplication'] == "true") {
+                    $sendNotificationMail = true;
+                }
+            }
+            if ($sendNotificationMail == true) {
+                $mailResponse = $this->executeDelegate("DispatchMail", $data);
+                $data['mailStatus'] = $mailResponse;
+            }
             $data["status"] = "Generated";
         }
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

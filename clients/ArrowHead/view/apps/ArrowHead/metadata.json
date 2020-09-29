@@ -9,7 +9,7 @@
   "icon_white": "icon_white.png",
   "defaultAppforOrgs": false,
   "server": "server.js",
-  "title": { "en_EN": "Auto Dealer" },
+  "title": { "en_EN": "Carport" },
   "description": { "en_EN": "App for Arrow Head" },
   "files": ["main.js", "main.css"]
 }
