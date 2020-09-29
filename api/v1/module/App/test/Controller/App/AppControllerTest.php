@@ -308,16 +308,16 @@ class AppControllerTest extends ControllerTest
     public function testCreateWithoutRequiredData()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['type' => 2, 'account_id' => 4];
+        $data['app'] = ['type' => 2, 'account_id' => 4];
         $query = "SELECT id, name FROM ox_app ORDER BY id ASC";
         //Take a snapshot of ox_app records.
         $existingRecordSet = $this->executeQueryTest($query);
         $this->dispatch('/app', 'POST', $data);
         $newRecordSet = $this->executeQueryTest($query);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         //Assert response status etc.
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['name']['error'], 'required');
@@ -402,8 +402,11 @@ class AppControllerTest extends ControllerTest
         $roleprivilege1 = $this->executeQueryTest($query);
         $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY' and app_id = '" . $appId . "'";
         $roleprivilege2 = $this->executeQueryTest($query);
-        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_POLICY_APPROVAL' and app_id = '" . $appId . "'";
+        $query = "SELECT * FROM ox_role_privilege rp
+                    inner join ox_role r on r.id = rp.role_id
+                    WHERE privilege_name = 'MANAGE_POLICY_APPROVAL'";//" and app_id = '" . $appId . "'";
         $roleprivilege3 = $this->executeQueryTest($query);
+        print_r($roleprivilege3);exit;
         $query = "SELECT count(id) as count FROM ox_form WHERE app_id = " . $appId . " and name = 'sampleFormForTests'";
         $form = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count FROM ox_app_menu WHERE app_id = " . $appId;
@@ -412,7 +415,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($form[0]['count'], 1);
         $this->assertEquals($roleprivilege1[0]['count'], 2);
         $this->assertEquals($roleprivilege2[0]['count'], 2);
-        $this->assertEquals($roleprivilege3[0]['count'], 2);
+        $this->assertEquals(xount($roleprivilege3), 2);
         $this->assertEquals($role[0]['count'], 5);
         $this->assertEquals($privilege[0]['count'], 3);
         $this->assertEquals($rolePrivilege[0]['count'], 6);

@@ -517,8 +517,8 @@ class AppArtifactControllerTest extends ControllerTest {
         ];
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/archive/upload", 'POST');
-        $this->runDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
+        $this->runDefaultAsserts();
         $this->assertEquals('success', $content['status']);
         $this->assertEquals($uuid, $content['data']['app']['uuid']);
 

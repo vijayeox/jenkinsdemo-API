@@ -981,7 +981,7 @@ class UserControllerTest extends ControllerTest
     public function testChangePassword()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
+        $data = ['old_password' => 'Welcome2eox!', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/changepassword', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);

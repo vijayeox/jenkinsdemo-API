@@ -111,7 +111,6 @@ ox_employee:
     uuid: '86ba43a2-b113-11ea-b3de-0242ac130004'
     designation: 'Developer'
     date_of_join: '2019-02-28'
-    created_by: 1
     org_id: 1
     person_id: 112
     created_by: 1

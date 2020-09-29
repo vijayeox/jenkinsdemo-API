@@ -219,9 +219,10 @@ class QueryControllerTest extends ControllerTest
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/query/6f1d2819-c5ff-2326-bc40-f7a20704a748?data=true', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        print_r($content);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['query']['data'][0]['period-month'], 'Apr-2019');
         $this->assertEquals($content['data']['query']['data'][0]['total'], 890);

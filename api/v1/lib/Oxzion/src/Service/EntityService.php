@@ -28,8 +28,7 @@ class EntityService extends AbstractService
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $entity = new Entity($this->table);
         try{
-            $resultSet = $this->getEntity($data['uuid'], $data['app_id']);
-            $data = array_merge($resultSet, $data);
+            $entity->loadByUuid($data['uuid']);
             $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_modified'] = date('Y-m-d H:i:s');
         }catch(EntityNotFoundException $e){
@@ -49,7 +48,8 @@ class EntityService extends AbstractService
             $temp = $entity->getGenerated(true);
             $inputData['id'] = $temp['id'];
             $inputData['uuid'] = $temp['uuid'];
-        } catch (Exception $e) {     
+        } catch (Exception $e) {  
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }

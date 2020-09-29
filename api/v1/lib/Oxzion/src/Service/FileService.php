@@ -1802,7 +1802,7 @@ class FileService extends AbstractService
                 $fileFilter['uuid'] = $params['fileId'];
                 $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $fileFilter, null)->toArray();
                 if(!empty($fileRecord) && !is_null($fileRecord)) {
-                    $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'].'/';
+                    $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'].'/';
                     if(file_exists($folderPath.$attachmentName)) {
                         $deleteFile = FileUtils::deleteFile($attachmentName,$folderPath);
                     }
@@ -1857,7 +1857,7 @@ class FileService extends AbstractService
                     ->set(['name' => $newName,'originalName' => $newName, 'url' => $url, 'path' => $path])
                     ->where(['id' => $attachmentRecord[0]['id']]);
                 $result = $this->executeQuery($update);
-                $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $data['fileId'].'/';
+                $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $data['fileId'].'/';
                 if(file_exists($folderPath.$attachmentName)){
                     $check = FileUtils::renameFile($folderPath.$attachmentName, $folderPath.$newName);
                 }
@@ -1897,7 +1897,7 @@ class FileService extends AbstractService
         }
     }
 
-    public function appendAttachmentToFile($fileAttachment,$field,$fileId,$orgId = null){
+    public function appendAttachmentToFile($fileAttachment,$field,$fileId){
         if(!isset($fileAttachment['file']) && isset($fileAttachment['name'])) {
             $accountId = isset($accountId) ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_UUID);
             $fileUuid = $this->getUuidFromId('ox_file', $fileId);
@@ -2380,7 +2380,7 @@ class FileService extends AbstractService
         $sortjoinQuery = "";
         $appFilter = "ox_app.uuid ='" . $appId . "'";
 
-        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR ox_user_role.user_id = $userId)
+        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR au.user_id = $userId)
                                 OR ox_file_assignee.user_id = $userId)
                                 AND $appFilter";
 
@@ -2516,24 +2516,28 @@ class FileService extends AbstractService
             }
         }
         $fromQuery = "FROM ox_workflow
-    INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
-    INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id
-    INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id AND ox_workflow_instance.org_id =" . AuthContext::get(AuthConstants::ORG_ID)."
-    INNER JOIN ox_file as `of` on `of`.id = ox_workflow_instance.file_id
-    INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
-    INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
-    INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id AND ox_activity_instance.status = 'In Progress'
-    LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.file_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_file_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_file_assignee WHERE activity_instance_id is not null GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_file_assignee ON ox_file_assignee.activity_instance_id = ox_activity_instance.id
-    LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
-    LEFT JOIN ox_file as `oxf` ON `oxf`.id = ox_file_assignee.file_id
-    LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id LEFT JOIN ox_user ON ox_file_assignee.user_id = ox_user.id";
+            INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
+            INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id
+            INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id AND ox_workflow_instance.account_id =" . AuthContext::get(AuthConstants::ACCOUNT_ID)."
+            INNER JOIN ox_file as `of` on `of`.id = ox_workflow_instance.file_id
+            INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
+            INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
+            INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id AND ox_activity_instance.status = 'In Progress'
+            LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.file_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_file_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_file_assignee WHERE activity_instance_id is not null GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_file_assignee ON ox_file_assignee.activity_instance_id = ox_activity_instance.id
+            LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
+            LEFT JOIN ox_file as `oxf` ON `oxf`.id = ox_file_assignee.file_id
+            LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id 
+            LEFT JOIN ox_account_user au on au.id = ox_user_role.account_user_id
+            LEFT JOIN ox_user ON ox_file_assignee.user_id = ox_user.id";
 
         $fileQuery = "FROM ox_file as `of` 
-        INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
-    INNER JOIN ox_app on ox_app.id = ox_app_entity.app_id
-    LEFT JOIN (SELECT oxi.id,oxi.file_id,oxi.user_id,oxi.assignee,CASE WHEN ox3.assignee = 1 THEN ox3.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox3.assignee = 1 THEN ox3.group_id ELSE oxi.group_id END as group_id FROM ox_file_assignee as oxi INNER JOIN (SELECT file_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_file_assignee WHERE file_id is not null GROUP BY file_id) as ox3 on (oxi.file_id = ox3.file_id AND oxi.assignee = ox3.assignee)) as ox_file_assignee ON (ox_file_assignee.file_id = `of`.id)
-    LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
-    LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id LEFT JOIN ox_user ON ox_file_assignee.user_id = ox_user.id";
+            INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
+            INNER JOIN ox_app on ox_app.id = ox_app_entity.app_id
+            LEFT JOIN (SELECT oxi.id,oxi.file_id,oxi.user_id,oxi.assignee,CASE WHEN ox3.assignee = 1 THEN ox3.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox3.assignee = 1 THEN ox3.group_id ELSE oxi.group_id END as group_id FROM ox_file_assignee as oxi INNER JOIN (SELECT file_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_file_assignee WHERE file_id is not null GROUP BY file_id) as ox3 on (oxi.file_id = ox3.file_id AND oxi.assignee = ox3.assignee)) as ox_file_assignee ON (ox_file_assignee.file_id = `of`.id)
+            LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
+            LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id 
+            LEFT JOIN ox_account_user au on au.id = ox_user_role.account_user_id
+            LEFT JOIN ox_user ON ox_file_assignee.user_id = ox_user.id";
         if(!empty($filterParams)){
             $cacheQuery = '';
         } else {
@@ -2566,7 +2570,8 @@ class FileService extends AbstractService
         CASE WHEN ox_file_assignee.assignee = 0 then 1
         WHEN ox_file_assignee.assignee = 1 AND ox_file_assignee.user_id = $userId then 0 else 2
         end as to_be_claimed,ox_user.name as assigned_user $field";
-        $countQuery = "SELECT count(id) as `count` from ((SELECT distinct ox_file_assignee.id $fromQuery $filterFromQuery $whereQuery) UNION all (SELECT distinct ox_file_assignee.id $fileQuery $filterFromQuery $whereQuery)) as t1";
+        $countQuery = "SELECT count(id) as `count` 
+                        from ((SELECT distinct ox_file_assignee.id $fromQuery $filterFromQuery $whereQuery) UNION all (SELECT distinct ox_file_assignee.id $fileQuery $filterFromQuery $whereQuery)) as t1";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
         $fieldList = "distinct `of`.id,ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
         ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,

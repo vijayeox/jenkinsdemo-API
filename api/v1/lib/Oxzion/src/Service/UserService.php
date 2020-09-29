@@ -165,9 +165,12 @@ class UserService extends AbstractService
             
         if (!$register) {
             if (isset($params['accountId']) && $params['accountId'] != '') {
-                if ((!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && !SecurityManager::isGranted('MANAGE_USER_WRITE') && (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
-                    ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) && !isset($params['commands']))) {
-                    throw new AccessDeniedException("You do not have permissions create user");
+                if (!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') &&
+                    !AuthContext::get(AuthConstants::REGISTRATION) &&
+                     (!SecurityManager::isGranted('MANAGE_USER_WRITE') && 
+                        (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
+                         $params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID)) )) {
+                    throw new AccessDeniedException("You do not have permissions to create user");
                 } else {
                     $data['account_id'] = $this->getIdFromUuid('ox_account', $params['accountId']);
                 }
@@ -1370,11 +1373,13 @@ class UserService extends AbstractService
         return NULL;
     }
 
-    public function getContactUserForOrg($orgId){
+    public function getContactUserForAccount($accountId){
          $select = "SELECT ou.uuid as userId,ou.username,oup.firstname,oup.lastname
-                    FROM ox_user ou INNER JOIN ox_organization org ON org.contactid = ou.id INNER JOIN ox_user_profile oup ON ou.user_profile_id = oup.id 
-                    WHERE org.uuid=:orgId";
-        $selectParams = array("orgId" => $orgId);
+                    FROM ox_user ou 
+                    INNER JOIN ox_account org ON org.contactid = ou.id 
+                    INNER JOIN ox_person oup ON ou.person_id = oup.id 
+                    WHERE org.uuid=:accountId";
+        $selectParams = array("accountId" => $accountId);
         $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
         if(count($result) > 0){
             return $result[0];
@@ -1389,7 +1394,7 @@ class UserService extends AbstractService
         $select = $sql->select();
         $select->from('ox_user')
         ->columns(array('policy_terms'))
-        ->where(array('id' => AuthContext::get(AuthConstants::USER_ID),'orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->where(array('id' => AuthContext::get(AuthConstants::USER_ID),'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeQuery($select)->toArray();
         return array_column($result, 'policy_terms');
     }
@@ -1399,7 +1404,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $updatedData['policy_terms'] = "1";
         $update = $sql->update('ox_user')->set($updatedData)
-        ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeUpdate($update);
     }
 }

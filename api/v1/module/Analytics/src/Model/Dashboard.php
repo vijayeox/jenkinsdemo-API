@@ -21,8 +21,8 @@ class Dashboard extends Entity
         'content' =>                ['type' => Type::STRING,    'readonly' => FALSE,    'required' => FALSE],
         'version' =>                ['type' => Type::INTEGER,   'readonly' => FALSE,    'required' => FALSE],
         'isdefault' =>              ['type' => Type::BOOLEAN,   'readonly' => FALSE,    'required' => FALSE, 'value' => FALSE],
-        'filter_configuration' =>   ['type' => Type::STRING,    'readonly' => FALSE,    'required' => FALSE]
-        'export_configuration' => 	['type' => Type::STRING, 	'readonly' => FALSE, 	'required' => FALSE],
+        'filter_configuration' =>   ['type' => Type::STRING,    'readonly' => FALSE,    'required' => FALSE],
+        'export_configuration' => 	['type' => Type::STRING, 	'readonly' => FALSE, 	'required' => FALSE]
     ];
 
     public function &getModel()

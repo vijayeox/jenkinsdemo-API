@@ -22,7 +22,7 @@ class Entity extends OxzionEntity
         'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
         'date_modified' =>      ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
         'created_by' =>         ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
-        'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE]
+        'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
         'ryg_rule' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
     ];
     
