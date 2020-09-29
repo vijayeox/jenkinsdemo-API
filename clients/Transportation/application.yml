@@ -1,10 +1,12 @@
 app:
     name: Transportation
+    title: 'Transportation'
     uuid: 103c128a-1553-498b-8f37-cd3e16c56857
     description: Transportation
     category: Dashboards
     type: 2
     autostart: 'false'
+checkOrg: true    
 org:
     name: 'EOX Vantage1'
     uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
@@ -12,7 +14,7 @@ org:
     address1: '23611 Chagrin Blvd'
     address2: 'Ste 320, Beachwood, Ohio 44122'
     city: Beachwood
-    state: OH
+    state: Ohio
     zip: 44122
     contact:
         username: supportadmin
@@ -23,7 +25,7 @@ org:
         currency: USD
         timezone: America/New_York
         dateformat: mm/dd/yy
-    country: 'United States'
+    country: 'United States of America'
 privilege:
     -
         name: MANAGE_TRANSPORTATION
@@ -31,6 +33,12 @@ privilege:
 role:
     -
         name: 'Transportation Manager'
+        privilegesDuplicate:
+        -
+            privilege_name:
+                name: MANAGE_TRANSPORTATION
+                permission: 15
+            permission: 15
         default: true
         privileges:
             -

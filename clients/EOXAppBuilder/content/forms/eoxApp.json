@@ -757,6 +757,7 @@
 						"required": true
 					},
 					"key": "defaultRole",
+					"customConditional": "show = false;",
 					"type": "select",
 					"indexeddb": {
 						"filter": {}
@@ -838,9 +839,6 @@
 								"label": "Name",
 								"tableView": true,
 								"clearOnHide": false,
-								"validate": {
-									"required": true
-								},
 								"key": "name",
 								"type": "textfield",
 								"input": true,
@@ -1529,7 +1527,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 381,
+	"_vid": 383,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1548,6 +1546,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-09-29T06:13:32.729Z",
+	"modified": "2020-09-29T09:04:01.931Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
