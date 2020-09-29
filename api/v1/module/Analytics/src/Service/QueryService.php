@@ -385,7 +385,7 @@ class QueryService extends AbstractService
                     }
                 }
             } else {
-                if (isset($queryData['data'])) {
+                if (!empty($queryData['data'])) {
                     if (!is_array($queryData['data']) && $resultCount > 1) {
                         $data[0]['q' . strval($key + 1)] = $queryData['data'];
                     } else {
