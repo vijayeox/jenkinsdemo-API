@@ -271,6 +271,23 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertEquals($result[0]['count'], 1);
     }
 
+    public function testProcessEntityWithRule()
+    {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'entity' => array(array( 'name' => 'Individual Professional Liability', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text','ryg_rule' => '{item.policyStatus == \"Completed\" ? (\n<td style=\"color:green;background-color:green\"> {item.policyStatus} </td>\n ) :  (item.policyStatus == \"In Progress\" ? (<td style=\"color:yellow\"> {item.policyStatus} </td>) : (\n <td>{item.policyStatus}</td>\n))}')))));
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $content = $appService->processEntity($data);
+        $sqlQuery = "SELECT name,ryg_rule FROM ox_app_entity WHERE app_id = 299";
+        $adapter = $this->getDbAdapter();
+        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
+        $statement = $adapter->query($sqlQuery);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $result = $resultSet->initialize($result)->toArray();
+        $this->assertEquals($result[0]['name'],$data['entity'][0]['name'] );
+        $this->assertEquals($result[0]['ryg_rule'],$data['entity'][0]['field'][0]['ryg_rule']);
+    }
+
     public function testProcessForm()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');

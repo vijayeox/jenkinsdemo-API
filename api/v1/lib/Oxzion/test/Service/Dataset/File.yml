@@ -180,6 +180,7 @@ ox_app_entity:
     start_date_field: start_date
     end_date_field: end_date
     status_field: status
+    ryg_rule: "{item.status == \"Completed\" ? (\n<td style=\"color:green;background-color:green\"> {item.status} </td>\n ) :  (item.status == \"In Progress\" ? (<td style=\"color:yellow\"> {item.status} </td>) : (\n <td>{item.status}</td>\n))}"
 ox_app_registry:
   - org_id: 1
     app_id: 99

@@ -321,7 +321,6 @@ class QueryService extends AbstractService
         } else {
             $newkey = $oldkey;
         }
-
         $data = $this->mergeArrays($data1, $data2, $oldkey, $newkey, $arrykeys2);
         return $data;
     }
@@ -345,10 +344,10 @@ class QueryService extends AbstractService
                     $aggCheck = 1;
                 }
             }
-            if (!empty($data) && isset($queryData['data']) && is_array($queryData['data'])) {
+            if (!empty($data) && !empty($queryData['data']) && is_array($queryData['data'])) {
                 if ($aggCheck == 1) {
                     if (!empty($queryData['meta']['aggregates'])) {
-                        $data = $this->mergeData($data, $queryData['data'], $index);
+                            $data = $this->mergeData($data, $queryData['data'], $index);
                     } else {
                         throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
                     }
@@ -357,9 +356,8 @@ class QueryService extends AbstractService
                     if (!empty($queryData['meta']['aggregates'])) {
                         throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);
                     } else {
-                        $data = $this->mergeData($data, $queryData['data'], $index);
+                            $data = $this->mergeData($data, $queryData['data'], $index);
                     }
-
                 }
             } else {
                 if (isset($queryData['data'])) {
