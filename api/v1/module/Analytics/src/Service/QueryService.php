@@ -236,13 +236,17 @@ class QueryService extends AbstractService
 
     private function runQuery($configuration, $datasource_uuid, $overRides = null)
     {
-
         $analyticsEngine = $this->datasourceService->getAnalyticsEngine($datasource_uuid);
         $parameters = json_decode($configuration, 1);
+        if (isset($parameters['filter']) && is_string($parameters['filter'])) {
+            $exp_config = json_decode($parameters['filter'], 1);
+            $parameters['filter'] = $exp_config;
+        }
         if (!isset($parameters['inline_filter'])) {
             $parameters['inline_filter'] = [];
         }
         if (!empty($overRides)) {
+            print_r($parameters);exit;
             if (array_key_exists('filter', $overRides)) {
                 if (!empty($overRides['filter'])) {
                     $filter = '{"filter":' . $overRides['filter'] . '}';
