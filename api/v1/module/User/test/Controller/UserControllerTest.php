@@ -949,7 +949,7 @@ class UserControllerTest extends ControllerTest
     public function testChangePassword()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
+        $data = ['old_password' => 'Welcome2eox!', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/changepassword', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -973,7 +973,7 @@ class UserControllerTest extends ControllerTest
     public function testChangePasswordWithDifferentPassword()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'wrongConfirmPassword'];
+        $data = ['old_password' => 'Welcome2eox!', 'new_password' => 'welcome', 'confirm_password' => 'wrongConfirmPassword'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/changepassword', 'POST', $data);
         $this->assertResponseStatusCode(404);
