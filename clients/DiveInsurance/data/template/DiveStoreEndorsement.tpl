@@ -96,7 +96,21 @@
         <center><b><u>***Additional Insured Schedule***</u></b></center>
         {if $newAddInsured != ""}
           {assign var=list value=$newAddInsured|json_decode:true}
-          {foreach from=$list item=$additional}
+          {assign var = result value = []}
+	
+          {foreach $list as $additional}
+            <p>
+
+              {if (isset($additional.effective_date) && $additional.effective_date != "")}
+                {$result[$additional['effective_date']][] = $additional}
+              {/if}
+            </p>
+          {/foreach}
+          {foreach $result as $key =>$newList}
+            <p class = "ai_list" style="font-size:16px;margin-bottom:5px";>Effective as of 
+                {$key|date_format:"%d %B %Y"}
+            </p> 
+          {foreach from=$newList item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
             <p class = "ai_list" style = "font-size:15px;">
               <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
@@ -128,11 +142,15 @@
             </p>
             {/if}
           {/foreach}
+          {/foreach}
         {/if}
         {if $removedAddInsured != ""}
+          
           {assign var=removedAdditionalInsured value=$removedAddInsured|json_decode:true}
+           <p>Removed on {$update_date|date_format:"%d %B %Y"}</p>
           {foreach from=$removedAdditionalInsured item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
+           
             <p class = "ai_list" style = "font-size:15px;">
               <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
               {if $additional.businessRelation == "confinedWaterTrainingLocation"}

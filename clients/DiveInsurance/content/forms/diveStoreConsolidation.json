@@ -6023,6 +6023,15 @@
                                   "type": "textarea",
                                   "input": true,
                                   "hideOnChildrenHidden": false
+                                },
+                                {
+                                  "label": "Effective Date",
+                                  "calculateValue": "if(data.additional_insured_select == \"noAdditionalInsureds\"){\n  value= \"\";\n}else {\n  value= data.start_date;\n}",
+                                  "key": "effective_date",
+                                  "type": "hidden",
+                                  "input": true,
+                                  "tableView": false,
+                                  "hideOnChildrenHidden": false
                                 }
                               ],
                               "width": 6,
@@ -15533,7 +15542,7 @@
     }
   ],
   "revisions": "current",
-  "_vid": 78,
+  "_vid": 79,
   "title": "diveStoreConsolidation3",
   "display": "wizard",
   "access": [
@@ -15557,6 +15566,6 @@
   "path": "divestoreconsolidation3",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-07-28T11:29:44.022Z",
-  "modified": "2020-09-25T10:47:31.453Z",
+  "modified": "2020-09-28T11:57:49.689Z",
   "machineName": "testdivehub:diveStoreConsolidation3"
 }
