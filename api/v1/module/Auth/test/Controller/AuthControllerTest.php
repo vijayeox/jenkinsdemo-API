@@ -43,7 +43,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthentication()
     {
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -59,7 +59,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationWithSpaceAtEnd()
     {
-        $data = ['username' => $this->adminUser . '   ', 'password' => 'password'];
+        $data = ['username' => $this->adminUser . '   ', 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -75,7 +75,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationWithSpaceAtBeginning()
     {
-        $data = ['username' => '   ' . $this->adminUser, 'password' => 'password'];
+        $data = ['username' => '   ' . $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -93,7 +93,7 @@ class AuthControllerTest extends ControllerTest
     {
         $update = "UPDATE ox_user SET status = 'Inactive' where username = '" . $this->adminUser . "'";
         $result = $this->executeUpdate($update);
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -110,7 +110,7 @@ class AuthControllerTest extends ControllerTest
     {
         $update = "UPDATE ox_organization SET status = 'Inactive' where id = 1";
         $result = $this->executeUpdate($update);
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -125,7 +125,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationFail()
     {
-        $data = ['username' => 'mehul', 'password' => 'password'];
+        $data = ['username' => 'mehul', 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -140,7 +140,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationRefreshTokenExpired()
     {
-        $data = ['username' => $this->managerUser, 'password' => 'password'];
+        $data = ['username' => $this->managerUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -189,7 +189,7 @@ class AuthControllerTest extends ControllerTest
         $query = "update ox_user_refresh_token set expiry_date = '" . date('Y-m-d H:i:s', strtotime('+1 day', time())) . "'";
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $rToken = $content['data']['refresh_token'];
@@ -212,7 +212,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testRefreshJwtTokenExpired()
     {
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $rToken = $content['data']['refresh_token'];
@@ -280,7 +280,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testValidateToken()
     {
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $data = ['jwt' => $content['data']['jwt']];
