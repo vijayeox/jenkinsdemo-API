@@ -130,7 +130,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    private function performBaseCreateTest($data, $parentLevel = 0){
+    private function performBaseCreateTest($data, $mainOrgId = null){
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -185,6 +185,7 @@ class AccountControllerTest extends ControllerTest
                     where oh.child_id = ".$account[0]['organization_id'];
             $orgHeirarchy = $this->executeQueryTest($query);
             $this->assertEquals(1, count($orgHeirarchy));
+            $this->assertEquals($orgHeirarchy[0]['main_org_id'], $mainOrgId);
             $this->assertEquals($account[0]['parent_id'], $orgHeirarchy[0]['parent_id']);
         }else{
             $this->assertEquals($account[0]['parent_id'], null);
@@ -215,7 +216,7 @@ class AccountControllerTest extends ControllerTest
         $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'barat@myvamla.com', 'phone' => '1234567890');
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
         $data = array('name' => 'CHILD ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences), 'parentId' => '915d207e-ac75-11ea-bb37-0242ac130002');
-        $this->performBaseCreateTest($data);
+        $this->performBaseCreateTest($data, 101);
     }
 
     public function testCreateGrandChildOrganization()
@@ -228,7 +229,7 @@ class AccountControllerTest extends ControllerTest
         $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'barat@myvamla.com', 'phone' => '1234567890');
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
         $data = array('name' => 'CHILD ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences), 'parentId' => 'a25d22cc-ac75-11ea-bb37-0242ac130013');
-        $this->performBaseCreateTest($data);
+        $this->performBaseCreateTest($data, 101);
     }
 
     public function testCreateIndiividualAccount()

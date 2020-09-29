@@ -102,7 +102,7 @@ class OrganizationService extends AbstractService
         $mainOrgId = $id;
         $params = ['parentId' => $parentId];
         if($parentId){
-            $query = "SELECT main_org_id from ox_org_heirarchy where parent_id = :parentId";
+            $query = "SELECT main_org_id from ox_org_heirarchy where parent_id = :parentId OR child_id = :parentId";
             $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
             if(!empty($result)){
                 $mainOrgId = $result[0]['main_org_id'];
