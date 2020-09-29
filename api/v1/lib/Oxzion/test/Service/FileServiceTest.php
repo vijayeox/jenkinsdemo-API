@@ -1423,4 +1423,17 @@ class FileServiceTest extends AbstractServiceTest
         $this->fileService->renameAttachment($params);
     }
 
+    public function testGetFileListWithEntityRule() {
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $params = array('entityName' => 'entity4');
+        $filterParams = null;
+        $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
+        $this->assertEquals("959640f3-8260-4a94-823e-f61ea8aff79c",$result['data'][0]['uuid']);
+        $this->assertEquals($params['entityName'],$result['data'][0]['entity_name']);
+        $this->assertCount(1,[$result['data'][0]['rygRule']]);
+        $this->assertEquals(1,$result['total']);
+    }
+
 }
