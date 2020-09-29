@@ -2,11 +2,9 @@ ox_organization:
 -
     id: 3
     uuid: 'c7499a34-c100-4e41-bece-5822adca3844'
-    main_organization_id: 3
 -
     id: 4
     uuid: 'c7499a34-c100-4e41-bece-5822adca3ccc'
-    main_organization_id: 4
 ox_account:
 -
     id: 3

@@ -484,11 +484,13 @@ class AccountService extends AbstractService
      */
     public function getAccountByUuid($id)
     {
-        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences, ou.uuid as contactid 
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences, ou.uuid as contactid, porg.uuid as parentId, pacct.name as parentName 
                     from ox_account as og 
                     inner join ox_user ou on ou.id = og.contactid
-                    left join ox_organization oxop on oxop.id= og.organization_id 
-                    left join ox_address as oa on oxop.address_id = oa.id  
+                    left join ox_organization org on org.id= og.organization_id
+                    left join ox_organization porg on porg.id = org.parent_id
+                    left join ox_account pacct on pacct.organization_id = porg.id 
+                    left join ox_address as oa on org.address_id = oa.id  
                     WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (count($response) == 0) {
@@ -525,10 +527,12 @@ class AccountService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences";
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences, porg.uuid as parentId, pacct.name as parentName";
         $from = " from ox_account as og 
-                    left join ox_organization as oxop on oxop.id = og.organization_id 
-                    left join ox_address as oa on oxop.address_id = oa.id";
+                    left join ox_organization as org on org.id = og.organization_id 
+                    left join ox_organization as porg on porg.id = org.parent_id
+                    left join ox_account as pacct on pacct.organization_id = porg.id
+                    left join ox_address as oa on org.address_id = oa.id";
         $cntQuery = "SELECT count(og.id) " . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);

@@ -51,14 +51,19 @@ class AccountControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(3, count($content['data']));
+        $this->assertEquals(4, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
         $this->assertEquals($content['data'][1]['uuid'], 'b0971de7-0387-48ea-8f29-5d3704d96a46');
         $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['data'][2]['uuid'], 'b6499a34-c100-4e41-bece-5822adca3844');
-        $this->assertEquals($content['data'][2]['name'], 'Sample Organization');
-        $this->assertEquals($content['total'], 3);
+        $this->assertEquals($content['data'][2]['uuid'], 'c7499a34-c100-4e41-bece-5822adca3223');
+        $this->assertEquals($content['data'][2]['name'], 'Sample Child Organization');
+        $this->assertEquals($content['data'][3]['uuid'], 'b6499a34-c100-4e41-bece-5822adca3844');
+        $this->assertEquals($content['data'][3]['name'], 'Sample Organization');
+        $this->assertEquals($content['data'][2]['parentId'], '915d207e-ac75-11ea-bb37-0242ac130002');
+        $this->assertEquals($content['data'][2]['parentName'], $content['data'][3]['name']);
+        $this->assertEquals($content['total'], 4);
+        
     }
 
     public function testGetListWithQuery()
@@ -101,7 +106,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
-        $this->assertEquals($content['total'], 3);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testGet()
@@ -125,26 +130,18 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testCreate()
-    {
-        $this->initAuthToken($this->adminUser);
-        $config = $this->getApplicationConfig();
-        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/";
-        FileUtils::createDirectory($tempFolder);
-        copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
-        $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'barat@myvamla.com', 'phone' => '1234567890');
-        $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
-        $data = array('name' => 'ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
+    private function performBaseCreateTest($data, $parentLevel = 0){
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'ORGANIZATION', 'status' => 'Active')), 'ACCOUNT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => $data['name'], 'status' => isset($data['status']) ? $data['status'] : 'Active')), 'ACCOUNT_ADDED')->once()->andReturn();
         }
         $this->dispatch('/account', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
+        $contact = json_decode($data['contact'], true);
         $query = "SELECT * from ox_role where account_id = (SELECT id from ox_account where uuid = '" . $content['data']['uuid'] . "')";
         $role = $this->executeQueryTest($query);
         for ($x = 0; $x < sizeof($role); $x++) {
@@ -158,8 +155,11 @@ class AccountControllerTest extends ControllerTest
         $accountResult = $this->executeQueryTest($select);
         $select = "SELECT ox_user.*,ox_person.firstname,ox_person.lastname,ox_person.address_id,ox_employee.designation FROM ox_user inner join ox_person on ox_person.id = ox_user.person_id inner join ox_employee on ox_employee.person_id = ox_person.id where ox_user.username ='" . $contact['username'] . "'";
         $usrResult = $this->executeQueryTest($select);
-        $select = "SELECT ox_address.address1,ox_organization.uuid,ox_account.uuid,ox_account.name, ox_account.type, ox_organization.id org_id, ox_organization.main_organization_id 
-            from ox_address join ox_organization on ox_address.id = ox_organization.address_id join ox_account on ox_account.organization_id=ox_organization.id where name = 'ORGANIZATION'";
+        $select = "SELECT ox_address.address1,ox_organization.uuid,ox_account.uuid,ox_account.name, ox_account.type, ox_organization.parent_id, ox_account.organization_id
+            from ox_address 
+            join ox_organization on ox_address.id = ox_organization.address_id 
+            join ox_account on ox_account.organization_id=ox_organization.id 
+            where name = '".$data['name']."'";
         $account = $this->executeQueryTest($select);
         $query = "SELECT * from ox_app_registry where account_id = (SELECT id from ox_account where uuid = '" . $content['data']['uuid'] . "')";
         $appResult = $this->executeQueryTest($query);
@@ -175,10 +175,60 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(isset($usrResult[0]['address_id']), true);
-        $this->assertEquals($account[0]['org_id'], $account[0]['main_organization_id']);
         $this->assertEquals($account[0]['address1'], $data['address1']);
         $this->assertEquals($account[0]['type'], 'BUSINESS');
         $this->assertEquals($appResult[0]['app_id'], 1);
+        if(isset($data['parentId'])){
+            $this->assertEquals(!empty($account[0]['parent_id']), true);
+            $query = "SELECT oh.* from ox_org_heirarchy oh
+                    inner join ox_organization org on org.id = oh.main_org_id
+                    where oh.child_id = ".$account[0]['organization_id'];
+            $orgHeirarchy = $this->executeQueryTest($query);
+            $this->assertEquals(1, count($orgHeirarchy));
+            $this->assertEquals($account[0]['parent_id'], $orgHeirarchy[0]['parent_id']);
+        }else{
+            $this->assertEquals($account[0]['parent_id'], null);
+        
+        }
+    }
+
+    public function testCreate()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
+        $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'barat@myvamla.com', 'phone' => '1234567890');
+        $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
+        $data = array('name' => 'ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
+        $this->performBaseCreateTest($data);
+    }
+
+    public function testCreateChildOrganization()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
+        $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'barat@myvamla.com', 'phone' => '1234567890');
+        $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
+        $data = array('name' => 'CHILD ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences), 'parentId' => '915d207e-ac75-11ea-bb37-0242ac130002');
+        $this->performBaseCreateTest($data);
+    }
+
+    public function testCreateGrandChildOrganization()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
+        $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'barat@myvamla.com', 'phone' => '1234567890');
+        $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
+        $data = array('name' => 'CHILD ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences), 'parentId' => 'a25d22cc-ac75-11ea-bb37-0242ac130013');
+        $this->performBaseCreateTest($data);
     }
 
     public function testCreateIndiividualAccount()
@@ -424,7 +474,7 @@ class AccountControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT ox_address.*, ox_organization.id org_id, ox_organization.main_organization_id
+        $select = "SELECT ox_address.*
                     from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
                     inner join ox_account o on o.organization_id = ox_organization.id where o.name = 'Cleveland Cavaliers'";
         $account = $this->executeQueryTest($select);
@@ -432,7 +482,38 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($account[0]['address1'], '23811 Chagrin Blvd, Ste 244');
-        $this->assertEquals($account[0]['org_id'], $account[0]['main_organization_id']);
+    }
+
+    public function testUpdateWithParent()
+    {
+        $data = ['name' => 'Cleveland Cavaliers', 'address1' => '23811 Chagrin Blvd, Ste 244', 'city' => 'Beachwood', 'state' => 'OH', 'country' => 'US', 'zip' => '44122', 'logo' => 'logo.png', 'status' => 'Active', 'parentId' => '915d207e-ac75-11ea-bb37-0242ac130002'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        if (enableActiveMQ == 0) {
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('new_accountName' => 'Cleveland Cavaliers', 'old_accountName' => 'Cleveland Black', 'status' => 'Active')), 'ACCOUNT_UPDATED')->once()->andReturn();
+        }
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a', 'POST', null);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $select = "SELECT ox_address.*, parent.uuid as parentId, o.organization_id
+                    from ox_address 
+                    join ox_organization org on ox_address.id = org.address_id 
+                    inner join ox_account o on o.organization_id = org.id 
+                    inner join ox_organization parent on org.parent_id = parent.id
+                    where o.name = 'Cleveland Cavaliers'";
+        $account = $this->executeQueryTest($select);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['status'], $data['status']);
+        $this->assertEquals($account[0]['address1'], $data['address1']);
+        $this->assertEquals($account[0]['parentId'], $data['parentId']);
+        $query = "SELECT oh.* from ox_org_heirarchy oh
+                    inner join ox_organization org on org.id = oh.main_org_id
+                    where oh.child_id = ".$account[0]['organization_id']." AND org.uuid = '".$data['parentId']."'";
+        $orgHeirarchy = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($orgHeirarchy));
     }
 
     public function testUpdateWithAddress()
@@ -449,7 +530,7 @@ class AccountControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT ox_address.*, ox_organization.id org_id, ox_organization.main_organization_id
+        $select = "SELECT ox_address.*
                     from ox_address join ox_organization on ox_address.id = ox_organization.address_id 
                     inner join ox_account o on o.organization_id = ox_organization.id where o.name = 'Cleveland Cavaliers'";
         $account = $this->executeQueryTest($select);
@@ -457,7 +538,6 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($account[0]['address1'], $data['address1']);
-        $this->assertEquals($account[0]['org_id'], $account[0]['main_organization_id']);
     }
 
     public function testUpdateRestricted()

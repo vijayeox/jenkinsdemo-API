@@ -11,7 +11,6 @@ class Organization extends Entity
         'uuid' =>                   ['type' => Type::UUID,      'readonly' => FALSE, 'required' => FALSE],
         'address_id' =>             ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
         'parent_id' =>              ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'main_organization_id' =>   ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
         'labelfile' =>              ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'languagefile' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'date_created' =>           ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],

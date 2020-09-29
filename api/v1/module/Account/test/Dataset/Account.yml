@@ -15,19 +15,37 @@ ox_address:
     state: 'Tamil Nadu'
     country: 'India'
     zip: 560079    
-
+  -
+    id: 10
+    address1: 'PES College Ring road'
+    address2: "Banashankari"
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560085
+  
 ox_organization:
   -
         id: 101
         uuid: '915d207e-ac75-11ea-bb37-0242ac130002'
         address_id: 8
-        main_organization_id: 101
+        parent_id: null
   -
         id: 102
         uuid: '915d22cc-ac75-11ea-bb37-0242ac130002'
         address_id: 9  
-        main_organization_id: 102
+        parent_id: null
+  - 
+        id: 103
+        uuid: 'a25d22cc-ac75-11ea-bb37-0242ac130013'
+        address_id: 10
+        parent_id: 101
 
+ox_org_heirarchy:
+  -
+        main_org_id: 101
+        parent_id: 101
+        child_id: 103
 ox_account:
   -
         id: 3
@@ -46,6 +64,14 @@ ox_account:
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
         contactid: 2
         organization_id: 102
+  -
+        id: 5
+        name: 'Sample Child Organization'
+        uuid: 'c7499a34-c100-4e41-bece-5822adca3223'
+        status: 'Active'
+        preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
+        contactid: 2
+        organization_id: 103
 
 ox_person:        
   -
