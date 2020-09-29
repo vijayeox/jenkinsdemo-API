@@ -248,9 +248,13 @@ class QueryService extends AbstractService
         //     $exp_sort = json_decode($parameters['sort'], 1);
         //     $parameters['sort'] = $exp_sort;
         // }
-
-        $parameters['filter'] = $this->stringDecode($parameters['filter']);
-        $parameters['sort'] = $this->stringDecode($parameters['sort']);
+        
+        if (isset($parameters['filter']) && is_string($parameters['filter'])) {
+            $parameters['filter'] = $this->stringDecode($parameters['filter']);
+        }
+        if (isset($parameters['sort']) && is_string($parameters['sort'])) {
+            $parameters['sort'] = $this->stringDecode($parameters['sort']);
+        }
 
         if (!isset($parameters['inline_filter'])) {
             $parameters['inline_filter'] = [];
