@@ -256,7 +256,6 @@ class QueryService extends AbstractService
             $parameters['inline_filter'] = [];
         }
         if (!empty($overRides)) {
-            print_r($parameters);exit;
             if (array_key_exists('filter', $overRides)) {
                 if (!empty($overRides['filter'])) {
                     $filter = '{"filter":' . $overRides['filter'] . '}';
