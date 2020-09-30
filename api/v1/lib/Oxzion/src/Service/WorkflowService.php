@@ -102,8 +102,8 @@ class WorkflowService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
             $this->saveWorkflow($appId, $data);
             $workflow = $data;
             $workFlowId = $data['id'];
@@ -232,9 +232,8 @@ class WorkflowService extends AbstractService
         $form = new Workflow();
         $form->exchangeArray($data);
         $form->validate();
-        $this->beginTransaction();
-        $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count == 0) {
                 throw new ServiceException("Workflow not saved", 'workflow.save.failed');
