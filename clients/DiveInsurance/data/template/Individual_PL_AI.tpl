@@ -63,11 +63,11 @@
 				{/foreach}
 					
 				{foreach $result as $key =>$newList}
-					<p class = "ai_list" style="font-size:16px;margin-bottom:5px;text-transform:none";>Effective as of 
+					<p class = "ai_list" style="font-size:15px;margin-bottom:5px;text-transform:none";>Effective as of 
 							{$key|date_format:"%d %B %Y"}
 					</p> 
 					{foreach from=$newList item=$additional}
-		    		<p class = "ai_list">
+		    		<p class = "ai_list" style="font-size: 13px;">
 		    		{if (isset($additional.name))}
 		    			{$additional.name} 
 		    		{/if}
