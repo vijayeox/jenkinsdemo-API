@@ -8334,870 +8334,6 @@
                 "type": "columns",
                 "input": false
               }]
-            }, {
-              "title": "Liability & Property Coverages",
-              "theme": "primary",
-              "breadcrumbClickable": true,
-              "buttonSettings": {
-                "previous": true,
-                "cancel": true,
-                "next": true
-              },
-              "collapsible": false,
-              "tableView": false,
-              "key": "page4PanelPanelPanel2Panel",
-              "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-              "type": "panel",
-              "label": "Liability & Property Coverages",
-              "input": false,
-              "components": [{
-                "label": "Columns",
-                "input": false,
-                "tableView": false,
-                "key": "page4PanelPanelPanel2PanelColumns",
-                "columns": [{
-                  "components": [{
-                    "key": "page4PanelPanelPanel2PanelColumnsPanel",
-                    "input": false,
-                    "title": "Liability Coverages",
-                    "theme": "primary",
-                    "tableView": false,
-                    "components": [{
-                      "label": "Columns",
-                      "columns": [{
-                        "components": [{
-                          "label": "Liability Premium",
-                          "prefix": "$",
-                          "mask": false,
-                          "spellcheck": true,
-                          "disabled": true,
-                          "tableView": true,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
-                          "clearOnHide": false,
-                          "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALCoverageFP) > 0 && parseFloat(data.endorsementLiabilityCoverage) == 0){\n    value = 0;\n  }else{\n    value = (parseFloat(data[\"CoverageFP\"])/10).toFixed(2);  \n  }\n}",
-                          "key": "endoALCoverageFP",
-                          "type": "number",
-                          "input": true,
-                          "inputType": "number",
-                          "lockKey": true,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "ALCoverageFP",
-                          "calculateValue": "if(row.ALCoverageFP > 0){\n  value = row.previous_ALCoverageFP+ row.endoALCoverageFP;\n} else {\n  value = row.previous_ALCoverageFP;\n}",
-                          "key": "ALCoverageFP",
-                          "type": "hidden",
-                          "input": true,
-                          "tableView": false,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "Non-Diving Pool",
-                          "prefix": "$",
-                          "mask": false,
-                          "spellcheck": true,
-                          "disabled": true,
-                          "tableView": true,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
-                          "clearOnHide": false,
-                          "calculateValue": "if(row.ALPoolLiability != row.previous_ALPoolLiability){\n  if ((parseFloat(row.ALPoolLiability)||0) > 50000) {\n    value = data[\"poolLiabilityOver50k\"];\n  } else if ((parseFloat(row.ALPoolLiability)||0) > 20000) {\n    value = data[\"poolLiabilityOver20k\"];\n  } else if ((parseFloat(row.ALPoolLiability)||0) > 0) {\n    value = data[\"poolLiabilityOver0\"];\n  } else {\n    value = 0;\n  }  \n}else{\n  value = 0;\n}",
-                          "key": "endoALnonDivingPoolAmount",
-                          "type": "number",
-                          "input": true,
-                          "inputType": "number",
-                          "lockKey": true,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "ALnonDivingPoolAmount",
-                          "calculateValue": "if(row.endoALnonDivingPoolAmount > 0){\n  value = row.previous_ALnonDivingPoolAmount + row.endoALnonDivingPoolAmount;\n} else {\n  value = row.previous_ALnonDivingPoolAmount;\n}",
-                          "key": "ALnonDivingPoolAmount",
-                          "type": "hidden",
-                          "input": true,
-                          "tableView": false,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "Travel Agent E & O",
-                          "prefix": "$",
-                          "mask": false,
-                          "spellcheck": true,
-                          "disabled": true,
-                          "tableView": true,
-                          "defaultValue": "0",
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
-                          "clearOnHide": false,
-                          "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALTravelAgentEOFP) > 0 && parseFloat(data['endoTravelAgentEOFP']) == 0){\n    value = 0;  \n  }else{\n    value = (parseFloat(data['TravelAgentEOFP'])/10).toFixed(2);\n  }\n}",
-                          "key": "endoALTravelAgentEOFP",
-                          "type": "number",
-                          "input": true,
-                          "inputType": "number",
-                          "lockKey": true,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "ALTravelAgentEOFP",
-                          "calculateValue": "if(row.endoALTravelAgentEOFP > 0){\n  value = row.previous_ALTravelAgentEOFP + row.endoALTravelAgentEOFP;\n} else {\n  value = row.previous_ALTravelAgentEOFP;\n}",
-                          "key": "ALTravelAgentEOFP",
-                          "type": "hidden",
-                          "input": true,
-                          "tableView": false,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "Medical Expense",
-                          "prefix": "$",
-                          "mask": false,
-                          "spellcheck": true,
-                          "disabled": true,
-                          "tableView": true,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
-                          "clearOnHide": false,
-                          "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    if(parseFloat(row.previous_ALMedicalExpenseFP) > 0 && parseFloat(data.endoMedicalExpenseFp) == 0){\n      value = 0;\n    }else{\n      value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(2); \n    }\n  }\n  else{\n    value = 0;\n  }\n}",
-                          "key": "endoALMedicalExpenseFP",
-                          "type": "number",
-                          "input": true,
-                          "inputType": "number",
-                          "lockKey": true,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "ALMedicalExpenseFP",
-                          "calculateValue": "if(row.endoALMedicalExpenseFp > 0){\n  value = row.previous_ALMedicalExpenseFP + row.endoALMedicalExpenseFp;\n} else {\n  value = row.previous_ALMedicalExpenseFP;\n}",
-                          "key": "ALMedicalExpenseFP",
-                          "type": "hidden",
-                          "input": true,
-                          "tableView": false,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "Non-Owned Auto",
-                          "prefix": "$",
-                          "mask": false,
-                          "spellcheck": false,
-                          "disabled": true,
-                          "tableView": false,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
-                          "clearOnHide": false,
-                          "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALNonOwnedAutoFP) > 0 && parseFloat(data[\"endoNon-OwnedAutoFP\"]) == 0){\n    value =0;\n  }else{\n    value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(2);  \n  }\n}",
-                          "key": "endoALNonOwnedAutoFP",
-                          "type": "number",
-                          "input": true,
-                          "inputType": "number",
-                          "lockKey": true,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "ALNonOwnedAutoFP",
-                          "calculateValue": "if(row.endoALNonOwnedAutoFP > 0){\n  value = row.previous_ALNonOwnedAutoFP + row.endoALNonOwnedAutoFP;\n} else {\n  value = row.previous_ALNonOwnedAutoFP;\n}",
-                          "key": "ALNonOwnedAutoFP",
-                          "type": "hidden",
-                          "input": true,
-                          "tableView": false,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "Excess Liability",
-                          "prefix": "$",
-                          "mask": false,
-                          "spellcheck": true,
-                          "disabled": true,
-                          "tableView": true,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
-                          "clearOnHide": false,
-                          "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALExcessLiabilityFP) > 0 && parseFloat(data[\"endoExcessLiabilityFP\"]) == 0){\n    value = 0;\n  }else{\n    value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(2);  \n  }\n}",
-                          "key": "endoALExcessLiabilityFP",
-                          "type": "number",
-                          "input": true,
-                          "inputType": "number",
-                          "lockKey": true,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "ALExcessLiabilityFP",
-                          "calculateValue": "if(row.endoALExcessLiabilityFP > 0){\n  value = row.previous_ALExcessLiabilityFP + row.endoALExcessLiabilityFP;\n} else {\n  value = row.previous_ALExcessLiabilityFP;\n}",
-                          "key": "ALExcessLiabilityFP",
-                          "type": "hidden",
-                          "input": true,
-                          "tableView": false,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "Lake quarry Charges",
-                          "prefix": "$",
-                          "mask": false,
-                          "spellcheck": true,
-                          "disabled": true,
-                          "tableView": true,
-                          "delimiter": false,
-                          "requireDecimal": false,
-                          "inputFormat": "plain",
-                          "clearOnHide": false,
-                          "calculateValue": "if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL != row.previous_ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  value = 4419\n  } else {\n    value =0;\n  }\n}else{\n  value = 0;\n}",
-                          "key": "endoALlakeQuarry",
-                          "type": "number",
-                          "input": true,
-                          "inputType": "number",
-                          "lockKey": true,
-                          "hideOnChildrenHidden": false
-                        }, {
-                          "label": "ALlakeQuarry",
-                          "calculateValue": "if(row.endoALlakeQuarry > 0){\n  value = row.previous_ALlakeQuarry + row.endoALlakeQuarry;\n} else {\n  value = row.previous_ALlakeQuarry;\n}",
-                          "key": "ALlakeQuarry",
-                          "type": "hidden",
-                          "input": true,
-                          "tableView": false,
-                          "hideOnChildrenHidden": false
-                        }],
-                        "width": 12,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md"
-                      }, {
-                        "components": [],
-                        "width": 6,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md"
-                      }],
-                      "tableView": false,
-                      "key": "columns10",
-                      "type": "columns",
-                      "input": false,
-                      "hideLabel": true
-                    }],
-                    "type": "panel",
-                    "hideOnChildrenHidden": false,
-                    "label": "Panel"
-                  }],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }, {
-                  "components": [{
-                    "title": "Property Coverages",
-                    "theme": "primary",
-                    "breadcrumbClickable": true,
-                    "buttonSettings": {
-                      "previous": true,
-                      "cancel": true,
-                      "next": true
-                    },
-                    "collapsible": false,
-                    "tableView": false,
-                    "key": "page4PanelPanelPanel2PanelColumnsPanel2",
-                    "type": "panel",
-                    "label": "Property Coverages",
-                    "input": false,
-                    "components": [{
-                      "label": "Cat/NonCat AL",
-                      "optionsLabelPosition": "right",
-                      "inline": true,
-                      "hideLabel": true,
-                      "tableView": true,
-                      "defaultValue": "nonCat",
-                      "values": [{
-                        "value": "nonCat",
-                        "label": "NON CAT",
-                        "shortcut": ""
-                      }, {
-                        "value": "cat",
-                        "label": "CAT",
-                        "shortcut": ""
-                      }],
-                      "clearOnHide": false,
-                      "key": "ALPropertyCoverageOption",
-                      "type": "radio",
-                      "input": true,
-                      "lockKey": true
-                    }, {
-                      "clearOnHide": false,
-                      "input": false,
-                      "key": "page4PanelPanelPanel2PanelColumnsPanel2Table",
-                      "numCols": 1,
-                      "rows": [
-                        [{
-                          "components": [{
-                            "label": "Contents",
-                            "prefix": "$",
-                            "mask": false,
-                            "spellcheck": true,
-                            "disabled": true,
-                            "tableView": true,
-                            "delimiter": false,
-                            "requireDecimal": false,
-                            "inputFormat": "plain",
-                            "clearOnHide": false,
-                            "calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar total1 = (parseFloat(row.previous_ALBuildingReplacementValue)||0) + (parseFloat(row.previous_additionalLocationPropertyTotal)||0) + (parseFloat(row.previous_ALLossofBusIncome)||0);\nif(total != total1){\n  var amount = parseFloat(row.additionalLocationPropertyTotal)||0;\n  var option = row.ALPropertyCoverageOption;\n  if (total >= 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total < 100000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else {\n      value = 0;\n  }  \n}else{\n  value = 0;\n}",
-                            "key": "endoALContentsFP",
-                            "type": "number",
-                            "input": true,
-                            "inputType": "number",
-                            "lockKey": true
-                          }, {
-                            "label": "ALContentsFP",
-                            "calculateValue": "if(row.endoALContentsFP > 0){\n  value = row.previous_ALContentsFP + row.endoALContentsFP;\n} else {\n  value = row.previous_ALContentsFP\n}",
-                            "key": "ALContentsFP",
-                            "type": "hidden",
-                            "input": true,
-                            "tableView": false
-                          }]
-                        }],
-                        [{
-                          "components": [{
-                            "label": "Business Income",
-                            "prefix": "$",
-                            "mask": false,
-                            "spellcheck": true,
-                            "disabled": true,
-                            "tableView": true,
-                            "delimiter": false,
-                            "requireDecimal": false,
-                            "inputFormat": "plain",
-                            "clearOnHide": false,
-                            "calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar total1 = (parseFloat(row.previous_ALBuildingReplacementValue)||0) + (parseFloat(row.previous_additionalLocationPropertyTotal)||0) + (parseFloat(row.previous_ALLossofBusIncome)||0);\nif(total != total1){\n  var amount = parseFloat(row.ALLossofBusIncome)\n  var option = row.ALPropertyCoverageOption;\n  if (total >= 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total <= 100000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else {\n      value = 0;\n  }  \n}else{\n  value = 0;  \n}",
-                            "key": "endoALLossofBusIncomeFP",
-                            "type": "number",
-                            "input": true,
-                            "inputType": "number",
-                            "lockKey": true
-                          }, {
-                            "label": "ALLossofBusIncomeFP",
-                            "calculateValue": "if(row.endoALLossofBusIncomeFP > 0){\n  value = row.previous_ALLossofBusIncomeFP + row.endoALLossofBusIncomeFP;\n} else {\n  value = row.previous_ALLossofBusIncomeFP;\n}",
-                            "key": "ALLossofBusIncomeFP",
-                            "type": "hidden",
-                            "input": true,
-                            "tableView": false
-                          }]
-                        }],
-                        [{
-                          "components": [{
-                            "label": "Building Limit",
-                            "prefix": "$",
-                            "mask": false,
-                            "spellcheck": true,
-                            "disabled": true,
-                            "tableView": true,
-                            "delimiter": false,
-                            "requireDecimal": false,
-                            "inputFormat": "plain",
-                            "clearOnHide": false,
-                            "calculateValue": "var total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(row.additionalLocationPropertyTotal) + parseFloat(row.ALLossofBusIncome);\nvar total1 = parseFloat(row.previous_ALBuildingReplacementValue) + parseFloat(row.previous_additionalLocationPropertyTotal) + parseFloat(row.previous_ALLossofBusIncome);\nif(total != total1){\n  var amount = row.ALBuildingReplacementValue;\n  var option = row.ALPropertyCoverageOption;\n  if (total > 500000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 500000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 250000 && total < 500000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 100000 && total < 250000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else if (total > 0 && total < 100000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 0 && total < 100000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else {\n      value = 0;\n  }\n}else{\n  value =0;\n}",
-                            "key": "endoALBuildingLimitFP",
-                            "type": "number",
-                            "input": true,
-                            "inputType": "number",
-                            "lockKey": true
-                          }, {
-                            "label": "ALBuildingLimitFP",
-                            "calculateValue": "if(row.endoALBuildingLimitFP > 0){\n  value = row.previous_ALBuildingLimitFP + row.endoALBuildingLimitFP;\n} else {\n  value = row.previous_ALBuildingLimitFP;\n}",
-                            "key": "ALBuildingLimitFP",
-                            "type": "hidden",
-                            "input": true,
-                            "tableView": false
-                          }]
-                        }]
-                      ],
-                      "tableView": false,
-                      "type": "table",
-                      "hideLabel": true,
-                      "label": "Table"
-                    }],
-                    "hideOnChildrenHidden": false
-                  }],
-                  "width": 6,
-                  "offset": 0,
-                  "push": 0,
-                  "pull": 0,
-                  "size": "md"
-                }],
-                "type": "columns",
-                "hideLabel": true
-              }]
-            }, {
-              "title": "Liability & Property Coverages Total",
-              "theme": "primary",
-              "breadcrumbClickable": true,
-              "buttonSettings": {
-                "previous": true,
-                "cancel": true,
-                "next": true
-              },
-              "collapsible": false,
-              "tableView": false,
-              "key": "ALLiabilityPropertyCoveragesTotal",
-              "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n} else {\n  show = false;\n}",
-              "type": "panel",
-              "label": "Liability & Property Coverages Total",
-              "input": false,
-              "components": [{
-                "clearOnHide": false,
-                "input": false,
-                "key": "ALLiabilityPropertyCoveragesTotalTable",
-                "numRows": 8,
-                "rows": [
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalTableLiabilityCoveragesTotal",
-                      "label": "Liability Coverages Total",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "Liability Coverages Total",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": []
-                  }, {
-                    "components": [{
-                      "label": "Liability Coverages Total",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value = ((parseFloat(row.endoALCoverageFP)||0) + (parseFloat(row.endoALnonDivingPoolAmount)||0) + (parseFloat(row.endoALMedicalExpenseFP)||0) + (parseFloat(row.endoALNonOwnedAutoFP)||0) + (parseFloat(row.endoALExcessLiabilityFP)||0) + (parseFloat(row.endoALTravelAgentEOFP)||0) + (parseFloat(row.endoALlakeQuarry)||0)).toFixed(0);",
-                      "key": "ALliabilityCoveragesTotal",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }],
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalTablePropertyCoverageTotal",
-                      "label": "Property Coverages Total",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "Property Coverages Total",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": []
-                  }, {
-                    "components": [{
-                      "label": "Property Coverages Total",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value = ((parseFloat(row.endoALContentsFP)||0) + (parseFloat(row.endoALLossofBusIncomeFP)||0) + (parseFloat(row.endoALBuildingLimitFP)||0)).toFixed(0);",
-                      "key": "ALPropertyCoveragesTotal",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }],
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalTableLiabilityPropertyCoveragesTotal",
-                      "label": "Liability & Property Coverages Total",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "Liability & Property Coverages Total",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": []
-                  }, {
-                    "components": [{
-                      "label": "Liability & Property Coverages Total",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)",
-                      "key": "ALLiabilityPropertyCoveragesTotal",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }],
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalColumnsProRataPremium",
-                      "label": "ProRata Premium",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "ProRata Premium",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": [{
-                      "label": "ProRata Premium %",
-                      "prefix": "%",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": false,
-                      "tableView": true,
-                      "defaultValue": 1,
-                      "delimiter": true,
-                      "requireDecimal": true,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value=data[\"proRataPercentage\"]",
-                      "allowCalculateOverride": true,
-                      "key": "ALProRataPremiumPercentage",
-                      "type": "number",
-                      "decimalLimit": 3,
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }, {
-                    "components": [{
-                      "label": "ProRata Premium",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value=(((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALProRataPremiumPercentage)||0)) + parseFloat(row.ALliabilityCoveragesTotal)).toFixed(0);",
-                      "key": "ALProRataPremium",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }],
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalTableLiabilityTax",
-                      "label": "Liability Tax",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "Liability Tax",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": [{
-                      "label": "Over Ride Liability Tax",
-                      "tableView": false,
-                      "defaultValue": false,
-                      "clearOnHide": false,
-                      "key": "overRideLiabilityTax",
-                      "type": "checkbox",
-                      "input": true
-                    }, {
-                      "label": "Liability Tax Percentage",
-                      "prefix": "%",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": false,
-                      "disabled": true,
-                      "tableView": false,
-                      "defaultValue": "0",
-                      "delimiter": false,
-                      "requireDecimal": true,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-                      "validate": {
-                        "max": 100
-                      },
-                      "key": "ALliabilityTaxPercentage",
-                      "logic": [{
-                        "name": "Enable Custom Tax",
-                        "trigger": {
-                          "type": "javascript",
-                          "simple": {
-                            "show": true,
-                            "when": "additionalLocations.overRideLiabilityTax",
-                            "eq": "true"
-                          },
-                          "javascript": "if(row.overRideLiabilityTax == true){\n  result = true\n} else {\n  result = false\n}"
-                        },
-                        "actions": [{
-                          "name": "Enable Manual Override",
-                          "type": "mergeComponentSchema",
-                          "schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
-                        }]
-                      }, {
-                        "name": "Disable Custom Tax",
-                        "trigger": {
-                          "type": "javascript",
-                          "simple": {
-                            "show": true,
-                            "when": "additionalLocations.overRideLiabilityTax",
-                            "eq": "true"
-                          },
-                          "javascript": "if(row.overRideLiabilityTax == false){\n  result = true\n} else {\n  result = false\n}"
-                        },
-                        "actions": [{
-                          "name": "Disable Manual Over ride",
-                          "type": "mergeComponentSchema",
-                          "schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
-                        }]
-                      }],
-                      "type": "number",
-                      "decimalLimit": 3,
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }, {
-                    "components": [{
-                      "label": "Liability Tax",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value=((parseFloat(row.ALliabilityCoveragesTotal)||0)*(parseFloat(row.ALliabilityTaxPercentage)||0)/100).toFixed(2);",
-                      "key": "ALliabilityTaxTotal",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }],
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalTablePropertyTax",
-                      "label": "Property Tax",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "Property Tax",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": [{
-                      "label": "Over Ride Property Tax",
-                      "tableView": false,
-                      "defaultValue": false,
-                      "key": "overRidePropertyTax",
-                      "type": "checkbox",
-                      "input": true
-                    }, {
-                      "label": "Liability Tax Percentage",
-                      "prefix": "%",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": false,
-                      "disabled": true,
-                      "tableView": false,
-                      "defaultValue": "0",
-                      "delimiter": false,
-                      "requireDecimal": true,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-                      "validate": {
-                        "max": 100
-                      },
-                      "key": "ALPropertyTaxPercentage",
-                      "logic": [{
-                        "name": "Enable Custom Tax",
-                        "trigger": {
-                          "type": "javascript",
-                          "simple": {
-                            "show": true,
-                            "when": "additionalLocations.overRidePropertyTax",
-                            "eq": "true"
-                          },
-                          "javascript": "if(row.overRidePropertyTax == true){\n  result = true\n} else {\n  result = false\n}"
-                        },
-                        "actions": [{
-                          "name": "Enable Manual Override",
-                          "type": "mergeComponentSchema",
-                          "schemaDefinition": "schema = { allowCalculateOverride:true ,disabled:false}"
-                        }]
-                      }, {
-                        "name": "Disable Custom Tax",
-                        "trigger": {
-                          "type": "javascript",
-                          "simple": {
-                            "show": true,
-                            "when": "additionalLocations.overRidePropertyTax",
-                            "eq": ""
-                          },
-                          "javascript": "if(row.overRidePropertyTax == false){\n  result = true\n} else {\n  result = false\n}"
-                        },
-                        "actions": [{
-                          "name": "Disable Manual Over ride",
-                          "type": "mergeComponentSchema",
-                          "schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true}"
-                        }]
-                      }],
-                      "type": "number",
-                      "decimalLimit": 3,
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }, {
-                    "components": [{
-                      "label": "Property Tax Total",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "if(data.additionalLocationsSelect=='yes'){\nvalue=((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALPropertyTaxPercentage)||0)/100).toFixed(2);\n} else {\n  value = 0\n}",
-                      "key": "ALPropertyTaxTotal",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }],
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalTableTotalTax",
-                      "label": "Total Tax",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "Total Tax",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": []
-                  }, {
-                    "components": [{
-                      "label": "Total Tax",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value=((parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)).toFixed(2);",
-                      "key": "ALTotalTax",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }],
-                  [{
-                    "components": [{
-                      "key": "alLiabilityPropertyCoveragesTotalTableLocationTotal",
-                      "label": "Location Total",
-                      "input": false,
-                      "tag": "h4",
-                      "attrs": [{
-                        "value": "",
-                        "attr": ""
-                      }],
-                      "content": "Location Total",
-                      "type": "htmlelement",
-                      "hideLabel": true,
-                      "tableView": false
-                    }]
-                  }, {
-                    "components": []
-                  }, {
-                    "components": [{
-                      "label": "Location Total",
-                      "prefix": "$",
-                      "hideLabel": true,
-                      "mask": false,
-                      "spellcheck": true,
-                      "disabled": true,
-                      "tableView": true,
-                      "delimiter": true,
-                      "requireDecimal": false,
-                      "inputFormat": "plain",
-                      "clearOnHide": false,
-                      "calculateValue": "value=(parseFloat(row.ALProRataPremium)||0)+(parseFloat(row.ALTotalTax)||0);",
-                      "key": "locationTotal",
-                      "type": "number",
-                      "input": true,
-                      "inputType": "number",
-                      "lockKey": true
-                    }]
-                  }]
-                ],
-                "tableView": false,
-                "type": "table",
-                "hideLabel": true,
-                "label": "Table"
-              }],
-              "lockKey": true
             }],
             "type": "panel",
             "inDataGrid": true,
@@ -12602,7 +11738,7 @@
               "requireDecimal": false,
               "inputFormat": "plain",
               "redrawOn": "liabilityCoverageOption",
-              "calculateValue": "if(data['previous_liabilityCoverageOption'] != data['liabilityCoverageOption']){\n  var previusCoverageRange = previous_liabilityCoverageOption.replace('liabilityOnly', \"\").replace('standardCoverage', \"\");\n  var currentCoverageRange = previous_liabilityCoverageOption.replace('liabilityOnly', \"\").replace('standardCoverage', \"\");\n  if(previusCoverageRange != currentCoverageRange){\n  if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n    var proRataDiff = data['proRataPercentage'];\n    var endoCoverageFp = parseFloat(data[data['liabilityCoverageOption']]) * proRataDiff;\n    var coverageFp = parseFloat(data.previous_CoverageFP) * proRataDiff;\n    value = (endoCoverageFp - coverageFp).toFixed(0);  \n  }else{\n    value = data[data['liabilityCoverageOption']];\n  }\n  } else {\n    value =0;\n  }\n} else {\n  value = 0;\n}",
+              "calculateValue": "if(data['previous_liabilityCoverageOption'] != data['liabilityCoverageOption']){\n  var previusCoverageRange = data['previous_liabilityCoverageOption'].replace('liabilityOnly', \"\").replace('standardCoverage', \"\");\n  var currentCoverageRange = data['liabilityCoverageOption'].replace('liabilityOnly', \"\").replace('standardCoverage', \"\");\n  if(previusCoverageRange != currentCoverageRange){\n  if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n    var proRataDiff = data['proRataPercentage'];\n    var endoCoverageFp = parseFloat(data[data['liabilityCoverageOption']]) * proRataDiff;\n    var coverageFp = parseFloat(data.previous_CoverageFP) * proRataDiff;\n    value = (endoCoverageFp - coverageFp).toFixed(0);  \n  }else{\n    value = data[data['liabilityCoverageOption']];\n  }\n  } else {\n    value =0;\n  }\n} else {\n  value = 0;\n}",
               "key": "endorsementLiabilityCoverage",
               "type": "number",
               "input": true,
@@ -12882,7 +12018,7 @@
             "inputFormat": "plain",
             "redrawOn": "data",
             "clearOnHide": false,
-            "calculateValue": "if(data['dspropTotal'] != data['previous_dspropTotal']){\n  if(data['propertyCoverageSelect']=='yes'){\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\n    var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\n    var propDiff = propTotal - (parseFloat(data[\"previous_dspropTotal\"])||0);\n    var val;\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(propDiff))).toFixed(0);\n    } else {\n      val = 0;\n    }\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n      var proRataDiff = data['proRataPercentage'];\n      var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\n      var currVal = val * proRataDiff;\n      value = (currVal - preVal).toFixed(0);\n    }else{\n      value = val;\n    }\n  }else{\n    value = 0;\n  }\n} else {\n  if(data['previous_propertyCoverageSelect'] != data['propertyCoverageSelect']){\n    if(data['propertyCoverageSelect']=='yes'){\n      var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n      var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\n      var propDiff = propTotal - (parseFloat(data[\"previous_dspropTotal\"])||0);\n      var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\n      var val;\n      if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\n      } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n        val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n        val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\n      } else {\n        val = 0;\n      }\n      if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n        var proRataDiff = data['proRataPercentage'];\n        var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\n        var currVal = val * proRataDiff;\n        value = (currVal - preVal).toFixed(0);\n      }else{\n        value = val;\n      }\n  }else{\n    value = 0;\n  }\n}else{\n  value = 0;\n}\n}",
+            "calculateValue": "if(data['dspropTotal'] != data['previous_dspropTotal']){\r\n  if(data['propertyCoverageSelect']=='yes'){\r\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n    var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\r\n    var propDiff = propTotal - (parseFloat(data[\"previous_dspropTotal\"])||0);\r\n    var val;\r\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else {\r\n      val = 0;\r\n    }\r\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n      var proRataDiff = data['proRataPercentage'];\r\n      var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\r\n      var currVal = val * proRataDiff;\r\n      value = (currVal - preVal).toFixed(0);\r\n    }else{\r\n      value = val;\r\n    }\r\n  }else{\r\n    value = 0;\r\n  }\r\n} else {\r\n  if(data['previous_propertyCoverageSelect'] != data['propertyCoverageSelect']){\r\n    if(data['propertyCoverageSelect']=='yes'){\r\n      var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n      var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\r\n      var propDiff = propTotal - (parseFloat(data[\"previous_dspropTotal\"])||0);\r\n      var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n      var val;\r\n      if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else {\r\n        val = 0;\r\n      }\r\n      if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n        var proRataDiff = data['proRataPercentage'];\r\n        var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\r\n        var currVal = val * proRataDiff;\r\n        value = (currVal - preVal).toFixed(0);\r\n      }else{\r\n        value = val;\r\n      }\r\n  }else{\r\n    value = 0;\r\n  }\r\n}else{\r\n  value = 0;\r\n}\r\n}",
             "key": "endoContentsFP",
             "type": "number",
             "input": true,
@@ -12908,7 +12044,7 @@
             "requireDecimal": false,
             "inputFormat": "plain",
             "clearOnHide": false,
-            "calculateValue": "if(data['lossOfBusIncome'] != data['previous_lossOfBusIncome']){\n  if(data['propertyCoverageSelect']=='yes'){\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\n    var lossOfBusIncomeTotal = (parseFloat(data[\"lossOfBusIncome\"])||0);\n    var lossOfBusIncomeDiff = lossOfBusIncomeTotal - (parseFloat(data[\"previous_lossOfBusIncome\"])||0);\n    var val;\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else {\n      val = 0;\n    }\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n      var proRataDiff = data['proRataPercentage'];\n      var preVal = parseFloat(data['previous_LossofBusIncomeFP'] || 0) * proRataDiff;\n      var currVal = val * proRataDiff;\n      value = (currVal - preVal).toFixed(0);\n    }else{\n      value =val;\n    }\n  }else {\n    value = 0;\n  }\n} else {\n  if(data['propertyCoverageSelect'] != data['previous_propertyCoverageSelect']){\n  if(data['propertyCoverageSelect']=='yes'){\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\n    var lossOfBusIncomeTotal = (parseFloat(data[\"lossOfBusIncome\"])||0);\n    var lossOfBusIncomeDiff = lossOfBusIncomeTotal - (parseFloat(data[\"previous_lossOfBusIncome\"])||0);\n    var val;\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff))).toFixed(0);\n    } else {\n      val = 0;\n    }\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n      var proRataDiff = data['proRataPercentage'];\n      var preVal = parseFloat(data['previous_LossofBusIncomeFP'] || 0) * proRataDiff;\n      var currVal = val * proRataDiff;\n      value = (currVal - preVal).toFixed(0);\n    }else{\n      value =val;\n    }\n  }else {\n    value = 0;\n  }\n  } else {\n    value = 0;\n  }\n}",
+            "calculateValue": "if(data['lossOfBusIncome'] != data['previous_lossOfBusIncome']){\r\n  if(data['propertyCoverageSelect']=='yes'){\r\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n    var lossOfBusIncomeTotal = (parseFloat(data[\"lossOfBusIncome\"])||0);\r\n    var lossOfBusIncomeDiff = lossOfBusIncomeTotal - (parseFloat(data[\"previous_lossOfBusIncome\"])||0);\r\n    var val;\r\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else {\r\n      val = 0;\r\n    }\r\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n      var proRataDiff = data['proRataPercentage'];\r\n      var preVal = parseFloat(data['previous_LossofBusIncomeFP'] || 0) * proRataDiff;\r\n      var currVal = val * proRataDiff;\r\n      value = (currVal - preVal).toFixed(0);\r\n    }else{\r\n      value =val;\r\n    }\r\n  }else {\r\n    value = 0;\r\n  }\r\n} else {\r\n  if(data['propertyCoverageSelect'] != data['previous_propertyCoverageSelect']){\r\n  if(data['propertyCoverageSelect']=='yes'){\r\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n    var lossOfBusIncomeTotal = (parseFloat(data[\"lossOfBusIncome\"])||0);\r\n    var lossOfBusIncomeDiff = lossOfBusIncomeTotal;\r\n    var val;\r\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * (parseFloat(lossOfBusIncomeDiff)).toFixed(0);\r\n    } else {\r\n      val = 0;\r\n    }\r\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n      var proRataDiff = data['proRataPercentage'];\r\n      var preVal = parseFloat(data['previous_LossofBusIncomeFP'] || 0) * proRataDiff;\r\n      var currVal = val * proRataDiff;\r\n      value = (currVal - preVal).toFixed(0);\r\n    }else{\r\n      value =val;\r\n    }\r\n  }else {\r\n    value = 0;\r\n  }\r\n  } else {\r\n    value = 0;\r\n  }\r\n}",
             "key": "endoLossofBusIncomeFP",
             "type": "number",
             "input": true,
@@ -12934,7 +12070,7 @@
             "requireDecimal": false,
             "inputFormat": "plain",
             "clearOnHide": false,
-            "calculateValue": "if(data['dspropreplacementvalue'] != data['previous_dspropreplacementvalue']){\n  if(data['propertyCoverageSelect']=='yes'){\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n    var totalLimit = propReplacementTotal+data['lossOfBusIncome'];\n    var dspropreplacementvalueTotal = (parseFloat(data[\"dspropreplacementvalue\"])||0);\n    var dspropreplacementvalueTotalDiff = dspropreplacementvalueTotal - (parseFloat(data[\"previous_dspropreplacementvalue\"])||0);\n    var val;\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else {\n      val = 0;\n    }\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n      var proRataDiff = data['proRataPercentage'];\n      var preVal = parseFloat(data['previous_BuildingLimitFP'] || 0) * proRataDiff;\n      var currVal = val * proRataDiff;\n      value = (currVal - preVal).toFixed(0);\n    }else{\n      value = val;\n    }\n  } else {\n    value = 0;\n  }\n} else {\n  if(data['previous_propertyCoverageSelect'] != data['propertyCoverageSelect']){\n  if(data['propertyCoverageSelect']=='yes'){\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\n    var totalLimit = propReplacementTotal+data['lossOfBusIncome'];\n    var dspropreplacementvalueTotal = (parseFloat(data[\"dspropreplacementvalue\"])||0);\n    var dspropreplacementvalueTotalDiff = dspropreplacementvalueTotal - (parseFloat(data[\"previous_dspropreplacementvalue\"])||0);\n    var val;\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else if (totalLimit > 0 && data[\"propertyCoverageOption\"] == \"cat\") {\n      val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (dspropreplacementvalueTotalDiff)).toFixed(0);\n    } else {\n      val = 0;\n    }\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n      var proRataDiff = data['proRataPercentage'];\n      var preVal = parseFloat(data['previous_BuildingLimitFP'] || 0) * proRataDiff;\n      var currVal = val * proRataDiff;\n      value = (currVal - preVal).toFixed(0);\n    }else{\n      value = val;\n    }\n  } else {\n    value = 0;\n  }\n}else{\n  value = 0;\n}\n}",
+            "calculateValue": "if(data['dspropTotal'] != data['previous_dspropTotal']){\r\n  if(data['propertyCoverageSelect']=='yes'){\r\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n    var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\r\n    var propDiff = propTotal - (parseFloat(data[\"previous_dspropTotal\"])||0);\r\n    var val;\r\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else {\r\n      val = 0;\r\n    }\r\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n      var proRataDiff = data['proRataPercentage'];\r\n      var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\r\n      var currVal = val * proRataDiff;\r\n      value = (currVal - preVal).toFixed(0);\r\n    }else{\r\n      value = val;\r\n    }\r\n  }else{\r\n    value = 0;\r\n  }\r\n} else {\r\n  if(data['previous_propertyCoverageSelect'] != data['propertyCoverageSelect']){\r\n    if(data['propertyCoverageSelect']=='yes'){\r\n      var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n      var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\r\n      var propDiff = propTotal;\r\n      var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n      var val;\r\n      if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else {\r\n        val = 0;\r\n      }\r\n      if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n        var proRataDiff = data['proRataPercentage'];\r\n        var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\r\n        var currVal = val * proRataDiff;\r\n        value = (currVal - preVal).toFixed(0);\r\n      }else{\r\n        value = val;\r\n      }\r\n  }else{\r\n    value = 0;\r\n  }\r\n}else{\r\n  value = 0;\r\n}\r\n}",
             "key": "endoBuildingLimitFP",
             "type": "number",
             "input": true,
@@ -12961,6 +12097,985 @@
       "key": "columns24",
       "type": "columns",
       "input": false
+    }, {
+      "title": "Additional Locations Information",
+      "theme": "primary",
+      "breadcrumbClickable": true,
+      "buttonSettings": {
+        "previous": true,
+        "cancel": true,
+        "next": true
+      },
+      "collapsible": false,
+      "tableView": false,
+      "key": "additionalLocationsInformation",
+      "type": "panel",
+      "label": "Panel",
+      "input": false,
+      "components": [{
+        "label": "Additional LOc",
+        "disableAddingRemovingRows": true,
+        "reorder": false,
+        "addAnotherPosition": "bottom",
+        "defaultOpen": false,
+        "layoutFixed": false,
+        "enableRowGroups": false,
+        "noFirstRow": false,
+        "hideLabel": true,
+        "tableView": false,
+        "defaultValue": [{
+          "endoALTravelAgentEOFP": "NaN",
+          "ALPropertyCoverageOption": "nonCat",
+          "ALProRataPremiumPercentage": 1,
+          "overRideLiabilityTax": false,
+          "ALliabilityTaxPercentage": "0",
+          "ALPropertyTaxPercentage": "0",
+          "endoALCoverageFP": "NaN",
+          "endoALnonDivingPoolAmount": 0,
+          "endoALMedicalExpenseFP": 0,
+          "endoALNonOwnedAutoFP": "0.00",
+          "endoALExcessLiabilityFP": "0.00",
+          "endoALlakeQuarry": 0,
+          "endoALContentsFP": 0,
+          "endoALLossofBusIncomeFP": 0,
+          "endoALBuildingLimitFP": 0,
+          "ALliabilityCoveragesTotal": "0",
+          "ALPropertyCoveragesTotal": "0",
+          "ALLiabilityPropertyCoveragesTotal": "0",
+          "ALProRataPremium": "0",
+          "ALliabilityTaxTotal": "0.00",
+          "ALPropertyTaxTotal": 0,
+          "ALTotalTax": "0.00",
+          "locationTotal": 0,
+          "padiNumberAL": "",
+          "name": ""
+        }],
+        "redrawOn": "additionalLocations",
+        "clearOnHide": false,
+        "calculateValue": "value = data.additionalLocations",
+        "key": "endoAdditionalLocation",
+        "type": "datagrid",
+        "input": true,
+        "components": [{
+          "label": "adsaf",
+          "tableView": false,
+          "key": "adsaf",
+          "type": "well",
+          "input": false,
+          "components": [{
+            "label": "Columns",
+            "columns": [{
+              "components": [{
+                "label": "Location's PADI Number",
+                "disabled": true,
+                "tableView": false,
+                "clearOnHide": false,
+                "validate": {
+                  "pattern": "[0-9\\s-]*$",
+                  "step": "any"
+                },
+                "key": "padiNumberAL",
+                "type": "textfield",
+                "delimiter": false,
+                "requireDecimal": false,
+                "input": true,
+                "hideOnChildrenHidden": false
+              }],
+              "offset": 0,
+              "push": 0,
+              "pull": 0,
+              "size": "md",
+              "width": 6
+            }, {
+              "components": [{
+                "label": "Name",
+                "disabled": true,
+                "tableView": true,
+                "clearOnHide": false,
+                "key": "name",
+                "type": "textfield",
+                "input": true,
+                "lockKey": true,
+                "hideOnChildrenHidden": false
+              }],
+              "width": 6,
+              "offset": 0,
+              "push": 0,
+              "pull": 0,
+              "size": "md"
+            }],
+            "tableView": false,
+            "key": "columns48",
+            "type": "columns",
+            "input": false
+          }, {
+            "title": "Liability & Property Coverages",
+            "theme": "primary",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+              "previous": true,
+              "cancel": true,
+              "next": true
+            },
+            "collapsible": false,
+            "tableView": false,
+            "key": "page4PanelPanelPanel2Panel",
+            "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+            "type": "panel",
+            "label": "Liability & Property Coverages",
+            "input": false,
+            "components": [{
+              "label": "Columns",
+              "input": false,
+              "tableView": false,
+              "key": "page4PanelPanelPanel2PanelColumns",
+              "columns": [{
+                "components": [{
+                  "key": "page4PanelPanelPanel2PanelColumnsPanel",
+                  "input": false,
+                  "title": "Liability Coverages",
+                  "theme": "primary",
+                  "tableView": false,
+                  "components": [{
+                    "label": "Columns",
+                    "columns": [{
+                      "components": [{
+                        "label": "Liability Premium",
+                        "prefix": "$",
+                        "mask": false,
+                        "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "clearOnHide": false,
+                        "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALCoverageFP) > 0 && parseFloat(data.endorsementLiabilityCoverage) == 0){\n    value = 0;\n  }else{\n    value = (parseFloat(data[\"CoverageFP\"])/10).toFixed(2);  \n  }\n}",
+                        "key": "endoALCoverageFP",
+                        "type": "number",
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "ALCoverageFP",
+                        "calculateValue": "if(row.ALCoverageFP > 0){\n  value = row.previous_ALCoverageFP+ row.endoALCoverageFP;\n} else {\n  value = row.previous_ALCoverageFP;\n}",
+                        "key": "ALCoverageFP",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "Non-Diving Pool",
+                        "prefix": "$",
+                        "mask": false,
+                        "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "clearOnHide": false,
+                        "calculateValue": "if(row.ALPoolLiability != row.previous_ALPoolLiability){\n  if ((parseFloat(row.ALPoolLiability)||0) > 50000) {\n    value = data[\"poolLiabilityOver50k\"];\n  } else if ((parseFloat(row.ALPoolLiability)||0) > 20000) {\n    value = data[\"poolLiabilityOver20k\"];\n  } else if ((parseFloat(row.ALPoolLiability)||0) > 0) {\n    value = data[\"poolLiabilityOver0\"];\n  } else {\n    value = 0;\n  }  \n}else{\n  value = 0;\n}",
+                        "key": "endoALnonDivingPoolAmount",
+                        "type": "number",
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "ALnonDivingPoolAmount",
+                        "calculateValue": "if(row.endoALnonDivingPoolAmount > 0){\n  value = row.previous_ALnonDivingPoolAmount + row.endoALnonDivingPoolAmount;\n} else {\n  value = row.previous_ALnonDivingPoolAmount;\n}",
+                        "key": "ALnonDivingPoolAmount",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "Travel Agent E & O",
+                        "prefix": "$",
+                        "mask": false,
+                        "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "defaultValue": "0",
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "clearOnHide": false,
+                        "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALTravelAgentEOFP) > 0 && parseFloat(data['endoTravelAgentEOFP']) == 0){\n    value = 0;  \n  }else{\n    value = (parseFloat(data['TravelAgentEOFP'])/10).toFixed(2);\n  }\n}",
+                        "key": "endoALTravelAgentEOFP",
+                        "type": "number",
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "ALTravelAgentEOFP",
+                        "calculateValue": "if(row.endoALTravelAgentEOFP > 0){\n  value = row.previous_ALTravelAgentEOFP + row.endoALTravelAgentEOFP;\n} else {\n  value = row.previous_ALTravelAgentEOFP;\n}",
+                        "key": "ALTravelAgentEOFP",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "Medical Expense",
+                        "prefix": "$",
+                        "mask": false,
+                        "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "clearOnHide": false,
+                        "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    if(parseFloat(row.previous_ALMedicalExpenseFP) > 0 && parseFloat(data.endoMedicalExpenseFp) == 0){\n      value = 0;\n    }else{\n      value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(2); \n    }\n  }\n  else{\n    value = 0;\n  }\n}",
+                        "key": "endoALMedicalExpenseFP",
+                        "type": "number",
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "ALMedicalExpenseFP",
+                        "calculateValue": "if(row.endoALMedicalExpenseFp > 0){\n  value = row.previous_ALMedicalExpenseFP + row.endoALMedicalExpenseFp;\n} else {\n  value = row.previous_ALMedicalExpenseFP;\n}",
+                        "key": "ALMedicalExpenseFP",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "Non-Owned Auto",
+                        "prefix": "$",
+                        "mask": false,
+                        "spellcheck": false,
+                        "disabled": true,
+                        "tableView": false,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "clearOnHide": false,
+                        "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALNonOwnedAutoFP) > 0 && parseFloat(data[\"endoNon-OwnedAutoFP\"]) == 0){\n    value =0;\n  }else{\n    value=((parseFloat(data[\"Non-OwnedAutoFP\"])||0)/10).toFixed(2);  \n  }\n}",
+                        "key": "endoALNonOwnedAutoFP",
+                        "type": "number",
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "ALNonOwnedAutoFP",
+                        "calculateValue": "if(row.endoALNonOwnedAutoFP > 0){\n  value = row.previous_ALNonOwnedAutoFP + row.endoALNonOwnedAutoFP;\n} else {\n  value = row.previous_ALNonOwnedAutoFP;\n}",
+                        "key": "ALNonOwnedAutoFP",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "Excess Liability",
+                        "prefix": "$",
+                        "mask": false,
+                        "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "clearOnHide": false,
+                        "calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n}else{\n  if(parseFloat(row.previous_ALExcessLiabilityFP) > 0 && parseFloat(data[\"endoExcessLiabilityFP\"]) == 0){\n    value = 0;\n  }else{\n    value = ((parseInt(data[\"ExcessLiabilityFP\"])||0)/10).toFixed(2);  \n  }\n}",
+                        "key": "endoALExcessLiabilityFP",
+                        "type": "number",
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "ALExcessLiabilityFP",
+                        "calculateValue": "if(row.endoALExcessLiabilityFP > 0){\n  value = row.previous_ALExcessLiabilityFP + row.endoALExcessLiabilityFP;\n} else {\n  value = row.previous_ALExcessLiabilityFP;\n}",
+                        "key": "ALExcessLiabilityFP",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "Lake quarry Charges",
+                        "prefix": "$",
+                        "mask": false,
+                        "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "clearOnHide": false,
+                        "calculateValue": "if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL != row.previous_ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  value = 4419\n  } else {\n    value =0;\n  }\n}else{\n  value = 0;\n}",
+                        "key": "endoALlakeQuarry",
+                        "type": "number",
+                        "input": true,
+                        "inputType": "number",
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false
+                      }, {
+                        "label": "ALlakeQuarry",
+                        "calculateValue": "if(row.endoALlakeQuarry > 0){\n  value = row.previous_ALlakeQuarry + row.endoALlakeQuarry;\n} else {\n  value = row.previous_ALlakeQuarry;\n}",
+                        "key": "ALlakeQuarry",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                      }],
+                      "width": 12,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }, {
+                      "components": [],
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md"
+                    }],
+                    "tableView": false,
+                    "key": "columns10",
+                    "type": "columns",
+                    "input": false,
+                    "hideLabel": true
+                  }],
+                  "type": "panel",
+                  "hideOnChildrenHidden": false,
+                  "label": "Panel"
+                }],
+                "width": 6,
+                "offset": 0,
+                "push": 0,
+                "pull": 0,
+                "size": "md"
+              }, {
+                "components": [{
+                  "title": "Property Coverages",
+                  "theme": "primary",
+                  "breadcrumbClickable": true,
+                  "buttonSettings": {
+                    "previous": true,
+                    "cancel": true,
+                    "next": true
+                  },
+                  "collapsible": false,
+                  "tableView": false,
+                  "key": "page4PanelPanelPanel2PanelColumnsPanel2",
+                  "type": "panel",
+                  "label": "Property Coverages",
+                  "input": false,
+                  "components": [{
+                    "label": "Cat/NonCat AL",
+                    "optionsLabelPosition": "right",
+                    "inline": true,
+                    "hideLabel": true,
+                    "tableView": true,
+                    "defaultValue": "nonCat",
+                    "values": [{
+                      "value": "nonCat",
+                      "label": "NON CAT",
+                      "shortcut": ""
+                    }, {
+                      "value": "cat",
+                      "label": "CAT",
+                      "shortcut": ""
+                    }],
+                    "clearOnHide": false,
+                    "key": "ALPropertyCoverageOption",
+                    "type": "radio",
+                    "input": true,
+                    "lockKey": true
+                  }, {
+                    "clearOnHide": false,
+                    "input": false,
+                    "key": "page4PanelPanelPanel2PanelColumnsPanel2Table",
+                    "numCols": 1,
+                    "rows": [
+                      [{
+                        "components": [{
+                          "label": "Contents",
+                          "prefix": "$",
+                          "mask": false,
+                          "spellcheck": true,
+                          "disabled": true,
+                          "tableView": true,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
+                          "calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar total1 = (parseFloat(row.previous_ALBuildingReplacementValue)||0) + (parseFloat(row.previous_additionalLocationPropertyTotal)||0) + (parseFloat(row.previous_ALLossofBusIncome)||0);\nif(total != total1){\n  var amount = parseFloat(row.additionalLocationPropertyTotal)||0;\n  var option = row.ALPropertyCoverageOption;\n  if (total >= 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total < 100000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(2);\n  } else {\n      value = 0;\n  }  \n}else{\n  value = 0;\n}",
+                          "key": "endoALContentsFP",
+                          "type": "number",
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
+                        }, {
+                          "label": "ALContentsFP",
+                          "calculateValue": "if(row.endoALContentsFP > 0){\n  value = row.previous_ALContentsFP + row.endoALContentsFP;\n} else {\n  value = row.previous_ALContentsFP\n}",
+                          "key": "ALContentsFP",
+                          "type": "hidden",
+                          "input": true,
+                          "tableView": false
+                        }]
+                      }],
+                      [{
+                        "components": [{
+                          "label": "Business Income",
+                          "prefix": "$",
+                          "mask": false,
+                          "spellcheck": true,
+                          "disabled": true,
+                          "tableView": true,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
+                          "calculateValue": "var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar total1 = (parseFloat(row.previous_ALBuildingReplacementValue)||0) + (parseFloat(row.previous_additionalLocationPropertyTotal)||0) + (parseFloat(row.previous_ALLossofBusIncome)||0);\nif(total != total1){\n  var amount = parseFloat(row.ALLossofBusIncome)\n  var option = row.ALPropertyCoverageOption;\n  if (total >= 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 250000 && total < 500000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total >= 100000 && total < 250000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount)).toFixed(2);\n  } else if (total > 0 && total <= 100000 && option == \"cat\") {\n      value = (((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount)).toFixed(2);\n  } else {\n      value = 0;\n  }  \n}else{\n  value = 0;  \n}",
+                          "key": "endoALLossofBusIncomeFP",
+                          "type": "number",
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
+                        }, {
+                          "label": "ALLossofBusIncomeFP",
+                          "calculateValue": "if(row.endoALLossofBusIncomeFP > 0){\n  value = row.previous_ALLossofBusIncomeFP + row.endoALLossofBusIncomeFP;\n} else {\n  value = row.previous_ALLossofBusIncomeFP;\n}",
+                          "key": "ALLossofBusIncomeFP",
+                          "type": "hidden",
+                          "input": true,
+                          "tableView": false
+                        }]
+                      }],
+                      [{
+                        "components": [{
+                          "label": "Building Limit",
+                          "prefix": "$",
+                          "mask": false,
+                          "spellcheck": true,
+                          "disabled": true,
+                          "tableView": true,
+                          "delimiter": false,
+                          "requireDecimal": false,
+                          "inputFormat": "plain",
+                          "clearOnHide": false,
+                          "calculateValue": "var total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(row.additionalLocationPropertyTotal) + parseFloat(row.ALLossofBusIncome);\nvar total1 = parseFloat(row.previous_ALBuildingReplacementValue) + parseFloat(row.previous_additionalLocationPropertyTotal) + parseFloat(row.previous_ALLossofBusIncome);\nif(total != total1){\n  var amount = row.ALBuildingReplacementValue;\n  var option = row.ALPropertyCoverageOption;\n  if (total > 500000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 500000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 250000 && total < 500000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 100000 && total < 250000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else if (total > 0 && total < 100000 && option == \"nonCat\") {\n      value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(2);\n  } else if (total > 0 && total < 100000 && option == \"cat\") {\n      value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(2);\n  } else {\n      value = 0;\n  }\n}else{\n  value =0;\n}",
+                          "key": "endoALBuildingLimitFP",
+                          "type": "number",
+                          "input": true,
+                          "inputType": "number",
+                          "lockKey": true
+                        }, {
+                          "label": "ALBuildingLimitFP",
+                          "calculateValue": "if(row.endoALBuildingLimitFP > 0){\n  value = row.previous_ALBuildingLimitFP + row.endoALBuildingLimitFP;\n} else {\n  value = row.previous_ALBuildingLimitFP;\n}",
+                          "key": "ALBuildingLimitFP",
+                          "type": "hidden",
+                          "input": true,
+                          "tableView": false
+                        }]
+                      }]
+                    ],
+                    "tableView": false,
+                    "type": "table",
+                    "hideLabel": true,
+                    "label": "Table"
+                  }],
+                  "hideOnChildrenHidden": false
+                }],
+                "width": 6,
+                "offset": 0,
+                "push": 0,
+                "pull": 0,
+                "size": "md"
+              }],
+              "type": "columns",
+              "hideLabel": true
+            }]
+          }, {
+            "title": "Liability & Property Coverages Total",
+            "theme": "primary",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+              "previous": true,
+              "cancel": true,
+              "next": true
+            },
+            "collapsible": false,
+            "tableView": false,
+            "key": "ALLiabilityPropertyCoveragesTotal",
+            "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n} else {\n  show = false;\n}",
+            "type": "panel",
+            "label": "Liability & Property Coverages Total",
+            "input": false,
+            "components": [{
+              "clearOnHide": false,
+              "input": false,
+              "key": "ALLiabilityPropertyCoveragesTotalTable",
+              "numRows": 8,
+              "rows": [
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalTableLiabilityCoveragesTotal",
+                    "label": "Liability Coverages Total",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "Liability Coverages Total",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": []
+                }, {
+                  "components": [{
+                    "label": "Liability Coverages Total",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value = ((parseFloat(row.endoALCoverageFP)||0) + (parseFloat(row.endoALnonDivingPoolAmount)||0) + (parseFloat(row.endoALMedicalExpenseFP)||0) + (parseFloat(row.endoALNonOwnedAutoFP)||0) + (parseFloat(row.endoALExcessLiabilityFP)||0) + (parseFloat(row.endoALTravelAgentEOFP)||0) + (parseFloat(row.endoALlakeQuarry)||0)).toFixed(0);",
+                    "key": "ALliabilityCoveragesTotal",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }],
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalTablePropertyCoverageTotal",
+                    "label": "Property Coverages Total",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "Property Coverages Total",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": []
+                }, {
+                  "components": [{
+                    "label": "Property Coverages Total",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value = ((parseFloat(row.endoALContentsFP)||0) + (parseFloat(row.endoALLossofBusIncomeFP)||0) + (parseFloat(row.endoALBuildingLimitFP)||0)).toFixed(0);",
+                    "key": "ALPropertyCoveragesTotal",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }],
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalTableLiabilityPropertyCoveragesTotal",
+                    "label": "Liability & Property Coverages Total",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "Liability & Property Coverages Total",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": []
+                }, {
+                  "components": [{
+                    "label": "Liability & Property Coverages Total",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value = ((parseFloat(row.ALliabilityCoveragesTotal)||0) + (parseFloat(row.ALPropertyCoveragesTotal)||0)).toFixed(0)",
+                    "key": "ALLiabilityPropertyCoveragesTotal",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }],
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalColumnsProRataPremium",
+                    "label": "ProRata Premium",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "ProRata Premium",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": [{
+                    "label": "ProRata Premium %",
+                    "prefix": "%",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": false,
+                    "tableView": true,
+                    "defaultValue": 1,
+                    "delimiter": true,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value=data[\"proRataPercentage\"]",
+                    "allowCalculateOverride": true,
+                    "key": "ALProRataPremiumPercentage",
+                    "type": "number",
+                    "decimalLimit": 3,
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }, {
+                  "components": [{
+                    "label": "ProRata Premium",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value=(((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALProRataPremiumPercentage)||0)) + parseFloat(row.ALliabilityCoveragesTotal)).toFixed(0);",
+                    "key": "ALProRataPremium",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }],
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalTableLiabilityTax",
+                    "label": "Liability Tax",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "Liability Tax",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": [{
+                    "label": "Over Ride Liability Tax",
+                    "tableView": false,
+                    "defaultValue": false,
+                    "clearOnHide": false,
+                    "key": "overRideLiabilityTax",
+                    "type": "checkbox",
+                    "input": true
+                  }, {
+                    "label": "Liability Tax Percentage",
+                    "prefix": "%",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": false,
+                    "disabled": true,
+                    "tableView": false,
+                    "defaultValue": "0",
+                    "delimiter": false,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+                    "validate": {
+                      "max": 100
+                    },
+                    "key": "ALliabilityTaxPercentage",
+                    "logic": [{
+                      "name": "Enable Custom Tax",
+                      "trigger": {
+                        "type": "javascript",
+                        "simple": {
+                          "show": true,
+                          "when": "additionalLocations.overRideLiabilityTax",
+                          "eq": "true"
+                        },
+                        "javascript": "if(row.overRideLiabilityTax == true){\n  result = true\n} else {\n  result = false\n}"
+                      },
+                      "actions": [{
+                        "name": "Enable Manual Override",
+                        "type": "mergeComponentSchema",
+                        "schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
+                      }]
+                    }, {
+                      "name": "Disable Custom Tax",
+                      "trigger": {
+                        "type": "javascript",
+                        "simple": {
+                          "show": true,
+                          "when": "additionalLocations.overRideLiabilityTax",
+                          "eq": "true"
+                        },
+                        "javascript": "if(row.overRideLiabilityTax == false){\n  result = true\n} else {\n  result = false\n}"
+                      },
+                      "actions": [{
+                        "name": "Disable Manual Over ride",
+                        "type": "mergeComponentSchema",
+                        "schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
+                      }]
+                    }],
+                    "type": "number",
+                    "decimalLimit": 3,
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }, {
+                  "components": [{
+                    "label": "Liability Tax",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value=((parseFloat(row.ALliabilityCoveragesTotal)||0)*(parseFloat(row.ALliabilityTaxPercentage)||0)/100).toFixed(2);",
+                    "key": "ALliabilityTaxTotal",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }],
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalTablePropertyTax",
+                    "label": "Property Tax",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "Property Tax",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": [{
+                    "label": "Over Ride Property Tax",
+                    "tableView": false,
+                    "defaultValue": false,
+                    "key": "overRidePropertyTax",
+                    "type": "checkbox",
+                    "input": true
+                  }, {
+                    "label": "Liability Tax Percentage",
+                    "prefix": "%",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": false,
+                    "disabled": true,
+                    "tableView": false,
+                    "defaultValue": "0",
+                    "delimiter": false,
+                    "requireDecimal": true,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+                    "validate": {
+                      "max": 100
+                    },
+                    "key": "ALPropertyTaxPercentage",
+                    "logic": [{
+                      "name": "Enable Custom Tax",
+                      "trigger": {
+                        "type": "javascript",
+                        "simple": {
+                          "show": true,
+                          "when": "additionalLocations.overRidePropertyTax",
+                          "eq": "true"
+                        },
+                        "javascript": "if(row.overRidePropertyTax == true){\n  result = true\n} else {\n  result = false\n}"
+                      },
+                      "actions": [{
+                        "name": "Enable Manual Override",
+                        "type": "mergeComponentSchema",
+                        "schemaDefinition": "schema = { allowCalculateOverride:true ,disabled:false}"
+                      }]
+                    }, {
+                      "name": "Disable Custom Tax",
+                      "trigger": {
+                        "type": "javascript",
+                        "simple": {
+                          "show": true,
+                          "when": "additionalLocations.overRidePropertyTax",
+                          "eq": ""
+                        },
+                        "javascript": "if(row.overRidePropertyTax == false){\n  result = true\n} else {\n  result = false\n}"
+                      },
+                      "actions": [{
+                        "name": "Disable Manual Over ride",
+                        "type": "mergeComponentSchema",
+                        "schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true}"
+                      }]
+                    }],
+                    "type": "number",
+                    "decimalLimit": 3,
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }, {
+                  "components": [{
+                    "label": "Property Tax Total",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "if(data.additionalLocationsSelect=='yes'){\nvalue=((parseFloat(row.ALPropertyCoveragesTotal)||0)*(parseFloat(row.ALPropertyTaxPercentage)||0)/100).toFixed(2);\n} else {\n  value = 0\n}",
+                    "key": "ALPropertyTaxTotal",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }],
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalTableTotalTax",
+                    "label": "Total Tax",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "Total Tax",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": []
+                }, {
+                  "components": [{
+                    "label": "Total Tax",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value=((parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)).toFixed(2);",
+                    "key": "ALTotalTax",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }],
+                [{
+                  "components": [{
+                    "key": "alLiabilityPropertyCoveragesTotalTableLocationTotal",
+                    "label": "Location Total",
+                    "input": false,
+                    "tag": "h4",
+                    "attrs": [{
+                      "value": "",
+                      "attr": ""
+                    }],
+                    "content": "Location Total",
+                    "type": "htmlelement",
+                    "hideLabel": true,
+                    "tableView": false
+                  }]
+                }, {
+                  "components": []
+                }, {
+                  "components": [{
+                    "label": "Location Total",
+                    "prefix": "$",
+                    "hideLabel": true,
+                    "mask": false,
+                    "spellcheck": true,
+                    "disabled": true,
+                    "tableView": true,
+                    "delimiter": true,
+                    "requireDecimal": false,
+                    "inputFormat": "plain",
+                    "clearOnHide": false,
+                    "calculateValue": "value=(parseFloat(row.ALProRataPremium)||0)+(parseFloat(row.ALTotalTax)||0);",
+                    "key": "locationTotal",
+                    "type": "number",
+                    "input": true,
+                    "inputType": "number",
+                    "lockKey": true
+                  }]
+                }]
+              ],
+              "tableView": false,
+              "type": "table",
+              "hideLabel": true,
+              "label": "Table"
+            }],
+            "lockKey": true
+          }],
+          "hideLabel": true
+        }]
+      }]
     }, {
       "label": "Columns",
       "columns": [{
@@ -13958,7 +14073,7 @@
           "inputFormat": "plain",
           "redrawOn": "data",
           "clearOnHide": false,
-          "calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n      var additionalLocationArray =\"additionalLocations\";\n      var additionalLocationArrayLength = data[\"additionalLocations\"].length;\n      value = 0;\n      for (var i = 0; i < additionalLocationArrayLength; i++) {\n        var premium = data[\"additionalLocations\"][i].ALProRataPremium;\n        value += (parseFloat(premium)||0).toFixed(2);\n      }\n  } else {\n      value=0;\n  }",
+          "calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n      var additionalLocationArray =\"additionalLocations\";\n      var additionalLocationArrayLength = data[\"endoAdditionalLocation\"].length;\n      value = 0;\n      for (var i = 0; i < additionalLocationArrayLength; i++) {\n        var amt = (parseFloat(data[\"endoAdditionalLocation\"][i].ALProRataPremium) || 0).toFixed(2);\n        value += parseFloat(amt);\n      }\n  } else {\n      value=0;\n  }",
           "key": "endoAddILocPremium",
           "type": "number",
           "input": true,
@@ -14061,7 +14176,7 @@
           "inputFormat": "plain",
           "redrawOn": "data",
           "clearOnHide": false,
-          "calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\n  var additionalLocationArrayLength = data[additionalLocationArray].length;\n  var value = 0;\n  for (var i = 0; i < additionalLocationArrayLength; i++) {\n    var tax = data[\"additionalLocations\"][i].ALTotalTax;\n    value += (parseFloat(tax)||0).toFixed(2);\n    \n  }\n} else {\n  value = 0;\n}",
+          "calculateValue": "if(data.additionalLocationsSelect==\"yes\"){\n  var additionalLocationArray =\"additionalLocations\";\n  var additionalLocationArrayLength = data[\"endoAdditionalLocation\"].length;\n  var value = 0;\n  for (var i = 0; i < additionalLocationArrayLength; i++) {\n    var tax = parseFloat(data[\"endoAdditionalLocation\"][i].ALTotalTax||0).toFixed(2);\n    value += parseFloat(tax);\n    \n  }\n} else {\n  value = 0;\n}",
           "key": "endoAddILocTax",
           "type": "number",
           "decimalLimit": 2,
@@ -15338,7 +15453,7 @@
     "lockKey": true
   }],
   "revisions": "original",
-  "_vid": 55,
+  "_vid": 66,
   "title": "diveStoreEndorsement3",
   "display": "wizard",
   "access": [{
@@ -15356,6 +15471,6 @@
   "path": "divestoreendorsement3",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-08-03T07:30:50.996Z",
-  "modified": "2020-09-29T10:07:07.527Z",
+  "modified": "2020-09-30T04:10:30.261Z",
   "machineName": "testdivehub:diveStoreEndorsement3"
 }
