@@ -121,6 +121,9 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
         }else{
             $endorsementOptions = null;
         }
+        if(isset($originalData['endoAdditionalLocations'])){
+            $originalData['additionalLocations'] = $originalData['endoAdditionalLocations'];
+        }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));
         $data['orgUuid'] = $orgUuid;
         $liabilityPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'LIABILITY');
