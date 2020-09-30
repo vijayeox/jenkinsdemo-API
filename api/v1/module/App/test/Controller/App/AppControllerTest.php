@@ -80,6 +80,14 @@ class AppControllerTest extends ControllerTest
         return $mockRestClient;
     }
 
+    private function getMockRestClientForAppService()
+    {
+        $mockRestClient = Mockery::mock('Oxzion\Utils\RestClient');
+        $appService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\AppService::class);
+        $appService->setRestClient($mockRestClient);
+        return $mockRestClient;
+    }
+
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('App');
@@ -121,10 +129,12 @@ class AppControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'GET');
+        $this->setUpTearDownHelper->setupAppInSourceLocation('sample.yml');
+        $appId = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+        $this->dispatch("/app/$appId", 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
 
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['app']['uuid']);
@@ -361,9 +371,8 @@ class AppControllerTest extends ControllerTest
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
         if (enableExecUtils == 0) {
-            $mockBosUtils = Mockery::mock('alias:\Oxzion\Utils\ExecUtils');
-            $mockBosUtils->expects('randomPassword')->withAnyArgs()->once()->andReturn('12345678');
-            $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
@@ -406,7 +415,6 @@ class AppControllerTest extends ControllerTest
                     inner join ox_role r on r.id = rp.role_id
                     WHERE privilege_name = 'MANAGE_POLICY_APPROVAL'";//" and app_id = '" . $appId . "'";
         $roleprivilege3 = $this->executeQueryTest($query);
-        print_r($roleprivilege3);exit;
         $query = "SELECT count(id) as count FROM ox_form WHERE app_id = " . $appId . " and name = 'sampleFormForTests'";
         $form = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count FROM ox_app_menu WHERE app_id = " . $appId;
@@ -415,7 +423,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($form[0]['count'], 1);
         $this->assertEquals($roleprivilege1[0]['count'], 2);
         $this->assertEquals($roleprivilege2[0]['count'], 2);
-        $this->assertEquals(xount($roleprivilege3), 2);
+        $this->assertEquals(count($roleprivilege3), 2);
         $this->assertEquals($role[0]['count'], 5);
         $this->assertEquals($privilege[0]['count'], 3);
         $this->assertEquals($rolePrivilege[0]['count'], 6);
@@ -453,6 +461,10 @@ class AppControllerTest extends ControllerTest
     public function testDeployAppWithFieldValidation(){
         $this->setUpTearDownHelper->setupAppDescriptor('application12.yml');
         $this->initAuthToken($this->adminUser);
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -515,6 +527,10 @@ class AppControllerTest extends ControllerTest
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application5.yml');
         $this->initAuthToken($this->adminUser);
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -556,6 +572,15 @@ class AppControllerTest extends ControllerTest
         $this->setUpTearDownHelper->setupAppDescriptor('application14.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
+        if (enableCamundaForDeployApp == 0) {
+            $mockProcessManager = $this->getMockProcessManager();
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -571,6 +596,10 @@ class AppControllerTest extends ControllerTest
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application9.yml');
         $this->initAuthToken($this->adminUser);
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -613,6 +642,10 @@ class AppControllerTest extends ControllerTest
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -704,10 +737,14 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
@@ -743,10 +780,14 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
@@ -785,6 +826,10 @@ class AppControllerTest extends ControllerTest
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -834,6 +879,10 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -872,9 +921,8 @@ class AppControllerTest extends ControllerTest
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
         if (enableExecUtils == 0) {
-            $mockBosUtils = Mockery::mock('alias:\Oxzion\Utils\ExecUtils');
-            $mockBosUtils->expects('randomPassword')->withAnyArgs()->once()->andReturn('12345678');
-            $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -912,9 +960,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(2, count($businessRole));
         $this->assertEquals($yaml['businessRole'][0]['name'], $businessRole[0]['name']);
         $this->assertEquals($yaml['businessRole'][1]['name'], $businessRole[1]['name']);
-        $query = "SELECT * from ox_role WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
+        $query = "SELECT * from ox_role 
+                    WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
         $role = $this->executeQueryTest($query);
-        $this->assertEquals(6, count($role));
+        $this->assertEquals(7, count($role));
         $this->assertEquals($yaml['role'][0]['name'], $role[1]['name']);
         $this->assertEquals(null, $role[1]['account_id']);
         $this->assertEquals($businessRole[0]['id'], $role[1]['business_role_id']);
@@ -924,15 +973,18 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($yaml['role'][1]['name'], $role[5]['name']);
         $this->assertEquals(null, $role[5]['account_id']);
         $this->assertEquals($businessRole[1]['id'], $role[5]['business_role_id']);
-
+        $this->assertEquals($role[5]['name'], $role[6]['name']);
+        $this->assertEquals($accountId, $role[6]['account_id']);
+        $this->assertEquals($role[5]['business_role_id'], $role[6]['business_role_id']);
+        
         $query = "SELECT rp.* from ox_role_privilege rp 
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
-        $this->assertEquals(4, count($rolePrivilege));
+        $this->assertEquals(6, count($rolePrivilege));
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[0]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[0]['permission']);
         $this->assertEquals($role[1]['id'], $rolePrivilege[0]['role_id']);
-        $this->assertEquals($accountId, $rolePrivilege[0]['account_id']);
+        $this->assertEquals(null, $rolePrivilege[0]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[0]['app_id']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[1]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[1]['permission']);
@@ -942,13 +994,27 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($yaml['role'][1]['privileges'][0]['privilege_name'], $rolePrivilege[2]['privilege_name']);
         $this->assertEquals($yaml['role'][1]['privileges'][0]['permission'], $rolePrivilege[2]['permission']);
         $this->assertEquals($role[5]['id'], $rolePrivilege[2]['role_id']);
-        $this->assertEquals($accountId, $rolePrivilege[2]['account_id']);
+        $this->assertEquals(null, $rolePrivilege[2]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[2]['app_id']);
+        
         $this->assertEquals($yaml['role'][1]['privileges'][1]['privilege_name'], $rolePrivilege[3]['privilege_name']);
         $this->assertEquals($yaml['role'][1]['privileges'][1]['permission'], $rolePrivilege[3]['permission']);
         $this->assertEquals($role[5]['id'], $rolePrivilege[3]['role_id']);
-        $this->assertEquals($accountId, $rolePrivilege[3]['account_id']);
+        $this->assertEquals(null, $rolePrivilege[3]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[3]['app_id']);
+
+        $this->assertEquals($yaml['role'][1]['privileges'][0]['privilege_name'], $rolePrivilege[4]['privilege_name']);
+        $this->assertEquals($yaml['role'][1]['privileges'][0]['permission'], $rolePrivilege[4]['permission']);
+        $this->assertEquals($role[6]['id'], $rolePrivilege[4]['role_id']);
+        $this->assertEquals($accountId, $rolePrivilege[4]['account_id']);
+        $this->assertEquals($appId, $rolePrivilege[4]['app_id']);
+        
+        $this->assertEquals($yaml['role'][1]['privileges'][1]['privilege_name'], $rolePrivilege[5]['privilege_name']);
+        $this->assertEquals($yaml['role'][1]['privileges'][1]['permission'], $rolePrivilege[5]['permission']);
+        $this->assertEquals($role[6]['id'], $rolePrivilege[5]['role_id']);
+        $this->assertEquals($accountId, $rolePrivilege[5]['account_id']);
+        $this->assertEquals($appId, $rolePrivilege[5]['app_id']);
+
         $query = "select * from ox_account_business_role where account_id = $accountId";
         $accountBusinessRole = $this->executeQueryTest($query);
         $this->assertEquals(1, count($accountBusinessRole));
@@ -1271,11 +1337,11 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch("/app/${uuid2}", 'PUT', null);
-        $this->assertResponseStatusCode(500);
-        $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(406);
+        $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Unexpected error.');
+        $this->assertEquals($content['message'], 'UUID in URL and UUID in data set are not matching.');
         //Take database record snapshot after test.
         $recordSetAfterUpdate = $this->executeQueryTest($query);
         $this->assertEquals($recordSetBeforeUpdate, $recordSetAfterUpdate);

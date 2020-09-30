@@ -78,6 +78,9 @@ class AppService extends AbstractService
         $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration", "view", "symlink");
     }
 
+    public function setRestClient($restClient){
+        $this->restClient = $restClient;
+    }
     /**
      * GET List App Service
      * @method getApps
@@ -286,7 +289,9 @@ class AppService extends AbstractService
             $this->logger->info("\n App Data before app update - " . print_r($appData, true));
             $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
         }catch(Exception $e){
+            $this->logger->error($e->getMessage(), $e);
             $this->removeViewAppOnError($path);
+            throw $e;
         }finally{        
             $this->createOrUpdateApplicationDescriptor($path, $ymlData);
         }
@@ -365,21 +370,21 @@ class AppService extends AbstractService
         }
     }
 
-    public function installAppToOrg($appId,$orgId){
+    public function installAppToOrg($appId,$accountId){
         $destination = $this->getAppSourceAndDeployDirectory($appId);
         $ymlData = self::loadAppDescriptor($destination['deployDir']);
-        $this->installApp($orgId,$ymlData,$destination['deployDir']);
+        $this->installApp($accountId,$ymlData,$destination['deployDir']);
     }
 
-    private function installApp($orgId, $yamlData, $path){
+    private function installApp($accountId, $yamlData, $path){
         try{
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
-            $this->createRole($yamlData, false,$orgId);
-            $user = $this->userService->getContactUserForAccount($orgId);
-            $this->userService->addAppRolesToUser($user['userId'],$appId);
-            $result = $this->createAppRegistry($appId, $orgId);
-            $this->setupOrgLinks($path, $appId, $orgId);
+            $this->createRole($yamlData, false,$accountId);
+            $user = $this->accountService->getContactUserForAccount($accountId);
+            $this->userService->addAppRolesToUser($user['accountUserId'],$appId, $accountId);
+            $result = $this->createAppRegistry($appId, $accountId);
+            $this->setupOrgLinks($path, $appId, $accountId);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();

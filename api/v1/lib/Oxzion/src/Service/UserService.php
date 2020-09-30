@@ -440,12 +440,12 @@ class UserService extends AbstractService
         return $data['uuid'];
     }
 
-    public function addAppRolesToUser($userId,$appId){
+    public function addAppRolesToUser($accountUserId,$appId, $accountId){
         if (isset($appId)) {
             $appId = $this->getIdFromUuid('ox_app',$appId);
             $result = $this->roleService->getRolesByAppId($appId);
             foreach ($result as $role) {
-                $this->addUserRole($userId,$role['name']);
+                $this->addUserRole($accountUserId,$role['name'], $accountId);
             }
         }
     }
@@ -1371,21 +1371,6 @@ class UserService extends AbstractService
         }
 
         return NULL;
-    }
-
-    public function getContactUserForAccount($accountId){
-         $select = "SELECT ou.uuid as userId,ou.username,oup.firstname,oup.lastname
-                    FROM ox_user ou 
-                    INNER JOIN ox_account org ON org.contactid = ou.id 
-                    INNER JOIN ox_person oup ON ou.person_id = oup.id 
-                    WHERE org.uuid=:accountId";
-        $selectParams = array("accountId" => $accountId);
-        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
-        if(count($result) > 0){
-            return $result[0];
-        }else{
-            return $result;
-        }
     }
 
     public function getPolicyTerm()

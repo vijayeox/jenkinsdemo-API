@@ -330,6 +330,22 @@ class AccountService extends AbstractService
         }
     }
 
+    public function getContactUserForAccount($accountId){
+         $select = "SELECT ou.uuid as userId,ou.username,oup.firstname,oup.lastname, au.id as accountUserId
+                    FROM ox_user ou 
+                    INNER JOIN ox_account acct ON acct.contactid = ou.id
+                    INNER JOIN ox_person oup ON ou.person_id = oup.id 
+                    INNER JOIN ox_account_user au on au.user_id = ou.id and au.account_id = acct.id
+                    WHERE acct.uuid=:accountId";
+        $selectParams = array("accountId" => $accountId);
+        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+        if(count($result) > 0){
+            return $result[0];
+        }else{
+            return $result;
+        }
+    }
+
     private function setupBasicAccount($account, $contactPerson, $accountPreferences, $defaultRoles)
     {
         // adding basic roles
