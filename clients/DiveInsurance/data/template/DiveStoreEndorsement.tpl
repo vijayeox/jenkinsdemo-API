@@ -92,7 +92,7 @@
       {/if}
 
      {if (isset($newAddInsured) && $newAddInsured != "") || (isset($removedAddInsured) && $removedAddInsured != "")}
-      <div class = "box">
+      <div>
         <center><b><u>***Additional Insured Schedule***</u></b></center>
         {if $newAddInsured != ""}
           {assign var=list value=$newAddInsured|json_decode:true}
@@ -107,12 +107,12 @@
             </p>
           {/foreach}
           {foreach $result as $key =>$newList}
-            <p class = "ai_list" style="font-size:16px;margin-bottom:5px";>Effective as of 
+            <p class = "ai_list" style="margin-bottom:5px;font-size:15px;">Effective as of 
                 {$key|date_format:"%d %B %Y"}
             </p> 
           {foreach from=$newList item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
-            <p class = "ai_list" style = "font-size:15px;">
+            <p class = "ai_list">
               <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
               {if $additional.businessRelation == "confinedWaterTrainingLocation"}
                 Confined Water Training Location 
@@ -141,17 +141,17 @@
               {/if} </span>
             </p>
             {/if}
-          {/foreach}
+          {/foreach}<br/>
           {/foreach}
         {/if}
         {if $removedAddInsured != ""}
           
           {assign var=removedAdditionalInsured value=$removedAddInsured|json_decode:true}
-           <p>Removed on {$update_date|date_format:"%d %B %Y"}</p>
+           <p class = "ai_list" style="font-size:15px;margin-bottom:5px";>Removed on {$update_date|date_format:"%d %B %Y"}</p>
           {foreach from=$removedAdditionalInsured item=$additional}
             {if isset($additional.name) && ($additional.name != '')}
            
-            <p class = "ai_list" style = "font-size:15px;">
+          <p class = "ai_list">
               <span style = "text-transform: uppercase;">{$additional.name}{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
               {if $additional.businessRelation == "confinedWaterTrainingLocation"}
                 Confined Water Training Location 
