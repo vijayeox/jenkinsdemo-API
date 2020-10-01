@@ -2,21 +2,22 @@
 
 namespace Oxzion\Db;
 
-use Zend\Db\TableGateway\TableGateway;
+use Exception;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\EntityNotFoundException;
+use Oxzion\InsertFailedException;
 use Oxzion\Model\Entity;
+use Oxzion\MultipleRowException;
+use Oxzion\ParameterRequiredException;
+use Oxzion\ServiceException;
+use Oxzion\UpdateFailedException;
+use Oxzion\Utils\UuidUtil;
+use Oxzion\VersionMismatchException;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
-use Oxzion\VersionMismatchException;
-use Oxzion\InsertFailedException;
-use Oxzion\UpdateFailedException;
-use Oxzion\ServiceException;
-use Oxzion\MultipleRowException;
-use Oxzion\EntityNotFoundException;
-use Oxzion\ParameterRequiredException;
-use Oxzion\Utils\UuidUtil;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Exception;
+use Zend\Db\TableGateway\TableGateway;
+
 
 abstract class ModelTable
 {
@@ -49,11 +50,9 @@ abstract class ModelTable
             $filter = array();
         }
 
-        $filter[Entity::COLUMN_ID] = (int)$id;
+        $filter[Entity::COLUMN_ID] = (int) $id;
         $rowset = $this->tableGateway->select($filter);
-
         $row = $rowset->current();
-
         return $row;
     }
 
@@ -67,10 +66,10 @@ abstract class ModelTable
         $filter[Entity::COLUMN_UUID] = $uuid;
         $rowset = $this->tableGateway->select($filter);
         if (0 == count($rowset)) {
-            return NULL;
+            return null;
         }
         if (count($rowset) > 1) {
-            throw new MultipleRowException('Multiple rows found when queried by UUID.', 
+            throw new MultipleRowException('Multiple rows found when queried by UUID.',
                 ['table' => $this->tableGateway->getTable(), 'uuid' => $uuid]);
         }
         $row = $rowset->current();
@@ -82,7 +81,7 @@ abstract class ModelTable
         $this->init();
         if (is_null($filter)) {
             $filter = array();
-            $filter[Entity::COLUMN_ID] = $id;  // You cannot have a filter and an id. If there is filter, then id is irrelavant.
+            $filter[Entity::COLUMN_ID] = $id; // You cannot have a filter and an id. If there is filter, then id is irrelavant.
         } else {
             $filter[Entity::COLUMN_ID] = $id;
         }
@@ -94,7 +93,7 @@ abstract class ModelTable
         $this->init();
         if (is_null($filter)) {
             $filter = array();
-            $filter[Entity::COLUMN_UUID] = $uuid;  // You cannot have a filter and an id. If there is filter, then id is irrelavant.
+            $filter[Entity::COLUMN_UUID] = $uuid; // You cannot have a filter and an id. If there is filter, then id is irrelavant.
         } else {
             $filter[Entity::COLUMN_UUID] = $uuid;
         }
@@ -146,11 +145,12 @@ abstract class ModelTable
             }
             return $this->tableGateway->update($data, [Entity::COLUMN_ID => $id]);
         } catch (Exception $e) {
-            throw new ServiceException($e->getMessage(),'save.error');
+            throw new ServiceException($e->getMessage(), 'save.error');
         }
     }
 
-    private function setCreatedByAndDate(&$data) {
+    private function setCreatedByAndDate(&$data)
+    {
         if (array_key_exists(Entity::COLUMN_CREATED_BY, $data) && empty($data[Entity::COLUMN_CREATED_BY])) {
             $data[Entity::COLUMN_CREATED_BY] = AuthContext::get(AuthConstants::USER_ID);
         }
@@ -159,7 +159,8 @@ abstract class ModelTable
         }
     }
 
-    private function setModifiedByAndDate(&$data) {
+    private function setModifiedByAndDate(&$data)
+    {
         if (array_key_exists(Entity::COLUMN_MODIFIED_BY, $data) && empty($data[Entity::COLUMN_MODIFIED_BY])) {
             $data[Entity::COLUMN_MODIFIED_BY] = AuthContext::get(AuthConstants::USER_ID);
         }
@@ -168,27 +169,27 @@ abstract class ModelTable
         }
     }
 
-    private function checkAndIncrementVersion(array &$data) {
+    private function checkAndIncrementVersion(array &$data)
+    {
         $version = $data[Entity::COLUMN_VERSION];
-        if(!isset($version)) {
+        if (!isset($version)) {
             throw new ParameterRequiredException('Version number is required.', [Entity::COLUMN_VERSION]);
         }
         try {
             $adapter = $this->tableGateway->getAdapter();
-            $statement = $adapter->createStatement('SELECT ' . Entity::COLUMN_VERSION . ' FROM ' . $this->tableGateway->getTable() . 
+            $statement = $adapter->createStatement('SELECT ' . Entity::COLUMN_VERSION . ' FROM ' . $this->tableGateway->getTable() .
                 ' WHERE ' . Entity::COLUMN_ID . '=?', [$data[Entity::COLUMN_ID]]);
             $result = $statement->execute();
             //count cannot be > 1 when selected on id column. Therefore we don't check for count > 1.
-            if (0 == $result->count()) { 
-                throw new EntityNotFoundException('Entity not found.', 
+            if (0 == $result->count()) {
+                throw new EntityNotFoundException('Entity not found.',
                     ['entity' => $this->tableGateway->getTable(), 'id' => $data[Entity::COLUMN_ID]]);
             }
             $row = $result->current();
             $dbVersion = $row[Entity::COLUMN_VERSION];
-        }
-        catch(Exception $e) {
-            throw new UpdateFailedException('Database update failed.', 
-                ['table' => $this->tableGateway->getTable(), 'data' => $data], 
+        } catch (Exception $e) {
+            throw new UpdateFailedException('Database update failed.',
+                ['table' => $this->tableGateway->getTable(), 'data' => $data],
                 UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
         }
         if ($dbVersion != $version) {
@@ -199,8 +200,9 @@ abstract class ModelTable
 
     public function internalSave2(array &$data)
     {
+        // print_r($data);exit; 
         $this->init();
-        $id = NULL;
+        $id = null;
         if (array_key_exists(Entity::COLUMN_ID, $data) && isset($data[Entity::COLUMN_ID])) {
             $id = $data[Entity::COLUMN_ID];
         }
@@ -219,21 +221,19 @@ abstract class ModelTable
             $this->setCreatedByAndDate($data);
             try {
                 $rows = $this->tableGateway->insert($data);
-            }
-            catch(Exception $e) {
-                throw new InsertFailedException('Database insert failed.', 
+            } catch (Exception $e) {
+                throw new InsertFailedException('Database insert failed.',
                     ['table' => $this->tableGateway->getTable(), 'data' => $data],
                     InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
             }
-            if(!isset($rows) || (1 != $rows)) {
-                throw new InsertFailedException('Database insert failed.', 
+            if (!isset($rows) || (1 != $rows)) {
+                throw new InsertFailedException('Database insert failed.',
                     ['table' => $this->tableGateway->getTable(), 'data' => $data]);
             }
             $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
             $data[Entity::COLUMN_ID] = $this->lastInsertValue;
             return $data;
-        }
-        else {
+        } else {
             $whereCondition = [Entity::COLUMN_ID => $id];
             if (array_key_exists(Entity::COLUMN_VERSION, $data)) {
                 //IMPORTANT: version property in $whereCondition should be set before calling checkAndIncrementVersion
@@ -243,13 +243,12 @@ abstract class ModelTable
             $this->setModifiedByAndDate($data);
             try {
                 $rows = $this->tableGateway->update($data, $whereCondition);
-            }
-            catch(Exception $e) {
-                throw new UpdateFailedException('Database update failed.', 
-                    ['table' => $this->tableGateway->getTable(), 'data' => $data], 
+            } catch (Exception $e) {
+                throw new UpdateFailedException('Database update failed.',
+                    ['table' => $this->tableGateway->getTable(), 'data' => $data],
                     UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
             }
-            
+
             return $data;
         }
     }
