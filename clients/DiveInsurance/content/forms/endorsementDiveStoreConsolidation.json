@@ -8736,6 +8736,18 @@
             "additionalKey": "newMembereffectiveDate",
             "additionalKeyValue": "update_date"
           },
+          "logic": [{
+            "name": "Event ",
+            "trigger": {
+              "type": "event",
+              "event": "callDelegate"
+            },
+            "actions": [{
+              "name": "Action",
+              "type": "value",
+              "value": "if(data.groupPL && data.groupPL.length >= 1){\n  var length = data.groupPL.length - 1;\n  if(data.groupPL[length]['padi'] == \"\"){\n    data.groupPL.pop(); \n  }\n}"
+            }]
+          }],
           "type": "button",
           "event": "callDelegate",
           "input": true
@@ -8802,6 +8814,7 @@
           "defaultOpen": false,
           "layoutFixed": false,
           "enableRowGroups": false,
+          "noFirstRow": false,
           "hideLabel": true,
           "tableView": false,
           "defaultValue": [{
@@ -8811,7 +8824,7 @@
             "status": "",
             "nameOfInstitution": "",
             "initial": "",
-            "start_date": "2020-06-30",
+            "start_date": "Invalid date",
             "documentattach": [],
             "verified": "",
             "rating": "",
@@ -8819,10 +8832,13 @@
             "upgradeStatus": false,
             "cancel": false,
             "cancel_date": "",
-            "document1": []
+            "document1": [],
+            "email": "",
+            "newMembereffectiveDate": "Invalid date",
+            "effectiveDate": "",
+            "existingEffectiveDate": ""
           }],
           "clearOnHide": false,
-          "calculateValue": "if(value && value.length > 1){\n  var length = value.length - 1;\n  if(value[length]['padi'] == \"\"){\n    value.pop(); \n  }\n}",
           "key": "groupPL",
           "type": "datagrid",
           "input": true,
@@ -8859,6 +8875,28 @@
                         "type": "boolean"
                       },
                       "state": false
+                    }]
+                  }, {
+                    "name": "Add Prefix",
+                    "trigger": {
+                      "type": "javascript",
+                      "javascript": "result = false;\nif(row.nameOfInstitution && row.nameOfInstitution != \"PADI\" && row.padi != \"\" && !row.padi.startsWith('0')){\n  result = true;\n}else{\n  result = false;\n}"
+                    },
+                    "actions": [{
+                      "name": "Add Prefix Action",
+                      "type": "value",
+                      "value": "if(row.padi != undefined){\n  value = '0'+value;  \n}"
+                    }]
+                  }, {
+                    "name": "Remove prefix",
+                    "trigger": {
+                      "type": "javascript",
+                      "javascript": "result = false;\nif(row.nameOfInstitution == \"PADI\"){\n  result = true;\n}else{\n  result = false;\n}"
+                    },
+                    "actions": [{
+                      "name": "Remove",
+                      "type": "value",
+                      "value": "if(row.padi.startsWith('0')){\n  value = row.padi.substring(1);\n}"
                     }]
                   }],
                   "type": "textfield",
@@ -12070,7 +12108,7 @@
             "requireDecimal": false,
             "inputFormat": "plain",
             "clearOnHide": false,
-            "calculateValue": "if(data['dspropTotal'] != data['previous_dspropTotal']){\r\n  if(data['propertyCoverageSelect']=='yes'){\r\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n    var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\r\n    var propDiff = propTotal - (parseFloat(data[\"previous_dspropTotal\"])||0);\r\n    var val;\r\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else {\r\n      val = 0;\r\n    }\r\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n      var proRataDiff = data['proRataPercentage'];\r\n      var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\r\n      var currVal = val * proRataDiff;\r\n      value = (currVal - preVal).toFixed(0);\r\n    }else{\r\n      value = val;\r\n    }\r\n  }else{\r\n    value = 0;\r\n  }\r\n} else {\r\n  if(data['previous_propertyCoverageSelect'] != data['propertyCoverageSelect']){\r\n    if(data['propertyCoverageSelect']=='yes'){\r\n      var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n      var propTotal = (parseFloat(data[\"dspropTotal\"])||0);\r\n      var propDiff = propTotal;\r\n      var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n      var val;\r\n      if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (propDiff)).toFixed(0);\r\n      } else {\r\n        val = 0;\r\n      }\r\n      if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n        var proRataDiff = data['proRataPercentage'];\r\n        var preVal = parseFloat(data['previous_ContentsFP'] || 0) * proRataDiff;\r\n        var currVal = val * proRataDiff;\r\n        value = (currVal - preVal).toFixed(0);\r\n      }else{\r\n        value = val;\r\n      }\r\n  }else{\r\n    value = 0;\r\n  }\r\n}else{\r\n  value = 0;\r\n}\r\n}",
+            "calculateValue": "if(data['dspropreplacementvalue'] != data['previous_dspropreplacementvalue']){\r\n  if(data['propertyCoverageSelect']=='yes'){\r\n    var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n    var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n    var propTotal = (parseFloat(data[\"dspropreplacementvalue\"])||0);\r\n    var propDiff = propTotal - (parseFloat(data[\"previous_dspropreplacementvalue\"])||0);\r\n    var val;\r\n    if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n      val = (parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(propDiff)).toFixed(0);\r\n    } else {\r\n      val = 0;\r\n    }\r\n    if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n      var proRataDiff = data['proRataPercentage'];\r\n      var preVal = parseFloat(data['previous_BuildingLimitFP'] || 0) * proRataDiff;\r\n      var currVal = val * proRataDiff;\r\n      value = (currVal - preVal).toFixed(0);\r\n    }else{\r\n      value = val;\r\n    }\r\n  }else{\r\n    value = 0;\r\n  }\r\n} else {\r\n  if(data['previous_propertyCoverageSelect'] != data['propertyCoverageSelect']){\r\n    if(data['propertyCoverageSelect']=='yes'){\r\n      var propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\r\n      var totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\r\n      var propTotal = (parseFloat(data[\"dspropreplacementvalue\"])||0);\r\n      var propDiff = propTotal;\r\n      var val;\r\n      if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\r\n        val = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * parseFloat(propDiff)).toFixed(0);\r\n      } else {\r\n        val = 0;\r\n      }\r\n      if(data['previous_proRataPercentage'] != data['proRataPercentage']){\r\n        var proRataDiff = data['proRataPercentage'];\r\n        var preVal = parseFloat(data['previous_BuildingLimitFP'] || 0) * proRataDiff;\r\n        var currVal = val * proRataDiff;\r\n        value = (currVal - preVal).toFixed(0);\r\n      }else{\r\n        value = val;\r\n      }\r\n  }else{\r\n    value = 0;\r\n  }\r\n}else{\r\n  value = 0;\r\n}\r\n}",
             "key": "endoBuildingLimitFP",
             "type": "number",
             "input": true,
@@ -15453,7 +15491,7 @@
     "lockKey": true
   }],
   "revisions": "original",
-  "_vid": 66,
+  "_vid": 84,
   "title": "diveStoreEndorsement3",
   "display": "wizard",
   "access": [{
@@ -15471,6 +15509,6 @@
   "path": "divestoreendorsement3",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-08-03T07:30:50.996Z",
-  "modified": "2020-09-30T04:10:30.261Z",
+  "modified": "2020-10-01T05:27:33.354Z",
   "machineName": "testdivehub:diveStoreEndorsement3"
 }
