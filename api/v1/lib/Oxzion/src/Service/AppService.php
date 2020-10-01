@@ -287,7 +287,9 @@ class AppService extends AbstractService
             $this->logger->info("\n App Data before app update - " . print_r($appData, true));
         $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
     }catch(Exception $e){
+        $this->logger->error($e->getMessage(), $e);
         $this->removeViewAppOnError($path);
+        throw $e;
     }finally{        
         $this->createOrUpdateApplicationDescriptor($path, $ymlData);
     }
@@ -590,6 +592,7 @@ public function setupAppView($yamlData, $path)
     $indexfileData = file_get_contents($indexScssPath);
     $indexfileData2 = str_replace('{AppName}', $yamlData['app']['name'], $indexfileData);
     file_put_contents($appName . '/index.scss', $indexfileData2);
+    FileUtils::chmod_r($path . 'view' , 0777);
 }
 
 
