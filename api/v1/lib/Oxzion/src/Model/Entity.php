@@ -3,18 +3,18 @@ namespace Oxzion\Model;
 
 use Countable;
 use Exception;
-use ParseError;
-use Oxzion\Type;
-use Oxzion\InvalidInputException;
-use Oxzion\ValidationException;
-use Oxzion\EntityNotFoundException;
 use Oxzion\DataCorruptedException;
-use Oxzion\ParameterRequiredException;
+use Oxzion\EntityNotFoundException;
+use Oxzion\InvalidInputException;
 use Oxzion\InvalidPropertyValueException;
+use Oxzion\ParameterRequiredException;
+use Oxzion\Type;
+use Oxzion\ValidationException;
+use ParseError;
 
 abstract class Entity implements Countable
 {
-    protected $data = NULL;
+    protected $data = null;
     protected $table;
 
     const INCLUDE_ID = 1;
@@ -29,7 +29,7 @@ abstract class Entity implements Countable
     const COLUMN_MODIFIED_DATE = 'date_modified';
     const COLUMN_MODIFIED_BY = 'modified_by';
 
-    public function __construct($table = NULL)
+    public function __construct($table = null)
     {
         $this->table = $table;
         if (!isset($this->data)) {
@@ -38,8 +38,8 @@ abstract class Entity implements Countable
             if (!isset($model)) {
                 return;
             }
-            foreach($model as $propName => $propDef) {
-                $this->data[$propName] = array_key_exists('value', $propDef) ? $propDef['value'] : NULL;
+            foreach ($model as $propName => $propDef) {
+                $this->data[$propName] = array_key_exists('value', $propDef) ? $propDef['value'] : null;
             }
         }
     }
@@ -111,7 +111,7 @@ abstract class Entity implements Countable
         return $this->data;
     }
 
-    /* 
+    /*
      * This method is used by Zend framework to set values into the model.
      * See $resultSetPrototype->setArrayObjectPrototype in Module.php.
      */
@@ -146,14 +146,16 @@ abstract class Entity implements Countable
     /*
      * Child classes must override this method. $MODEL instance should be
      * returned by reference.
-     * 
+     *
      * TODO:Convert this method to abstract method when all the child classes have been migrated.
      */
-    protected function &getModel() {
-        return NULL;
+    protected function &getModel()
+    {
+        return null;
     }
 
-    private function runDynamicValidationIfExists($property, $value, $propDef) {
+    private function runDynamicValidationIfExists($property, $value, $propDef)
+    {
         if (!array_key_exists('dynamicValidation', $propDef)) {
             return;
         }
@@ -163,16 +165,16 @@ abstract class Entity implements Countable
             $result = eval("use \Oxzion\InvalidPropertyValueException;\r\n" . $code);
             if (isset($result)) {
                 throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
-                ['property' => $property, 'value' => $value, 'error' => $result]);
+                    ['property' => $property, 'value' => $value, 'error' => $result]);
             }
-        }
-        catch(ParseError $e) {
+        } catch (ParseError $e) {
             throw new InvalidPropertyValueException("Validator code parse error for property '${property}'.",
                 ['property' => $property, 'error' => 'Validator code parse error:' . $e->getMessage()]);
         }
     }
 
-    private function validateAndConvert($property, $value) {
+    private function validateAndConvert($property, $value)
+    {
         $model = &$this->getModel();
         if (!isset($model)) {
             return $value; //Any value is valid when model is not set.
@@ -184,8 +186,7 @@ abstract class Entity implements Countable
         $this->runDynamicValidationIfExists($property, $value, $propDef);
         try {
             $convertedValue = Type::convert($value, $propDef['type']);
-        }
-        catch (InvalidInputException $e) {
+        } catch (InvalidInputException $e) {
             throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
                 ['property' => $property, 'value' => $value, 'error' => 'type']);
         }
@@ -197,12 +198,13 @@ abstract class Entity implements Countable
     }
 
     /*
-     * This method only runs 'required' checks because data type is validated when 
+     * This method only runs 'required' checks because data type is validated when
      * the values are assigned to $data array in this class.
      */
-    public function validate() {
+    public function validate()
+    {
         $errors = array();
-        foreach($this->data as $property => $value) {
+        foreach ($this->data as $property => $value) {
             if ($this->isRequired($property) && $this->isEmpty($value)) {
                 $errors[$property] = ['error' => 'required', 'value' => $this->data[$property]];
             }
@@ -212,24 +214,26 @@ abstract class Entity implements Countable
         }
     }
 
-    private function isEmpty($value) {
+    private function isEmpty($value)
+    {
         if (!isset($value)) {
             return true;
         }
-        switch(gettype($value)) {
+        switch (gettype($value)) {
             case 'string':
                 return ((0 == strlen($value)) || (0 == strlen(trim($value, " \t\n\r\0\x0B")))) ? true : false;
-            break;
+                break;
             case 'boolean':
                 return false;
-            break;
+                break;
             default:
                 $strVal = print_r($value, true);
                 return (0 == strlen($strVal)) ? true : false;
         }
     }
 
-    private function isReadOnly($property) {
+    private function isReadOnly($property)
+    {
         $model = &$this->getModel();
         if (!isset($model)) {
             return false; //Everything is read-write when model is not set.
@@ -241,7 +245,8 @@ abstract class Entity implements Countable
         return $propDef['readonly'] ? true : false;
     }
 
-    private function isRequired($property) {
+    private function isRequired($property)
+    {
         $model = &$this->getModel();
         if (!isset($model)) {
             return false; //Everything is optional when model is not set.
@@ -256,13 +261,14 @@ abstract class Entity implements Countable
     /*
      * Assigns values from $input to model. Allows caller to control whether to honour 'readonly' flag.
      * Keys in $input that do not exist in the model are ignored.
-     * By default readonly properties are not set. Caller can force setting readonly values 
+     * By default readonly properties are not set. Caller can force setting readonly values
      * by seting $skipReadonly to FALSE.
-     * 
+     *
      * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
      * setting properties without needed checks.
      */
-    private function assignInternal($input, $skipReadOnly = true) {
+    private function assignInternal($input, $skipReadOnly = true)
+    {
         $errors = array();
         foreach ($input as $property => $value) {
             //Ignore properties in input which don't exist in the model.
@@ -275,8 +281,7 @@ abstract class Entity implements Countable
             }
             try {
                 $this->data[$property] = $this->validateAndConvert($property, $value);
-            }
-            catch (InvalidPropertyValueException $e) {
+            } catch (InvalidPropertyValueException $e) {
                 $errors[$property] = ['value' => $value, 'error' => $e->getContextData()['error']];
             }
         }
@@ -288,11 +293,12 @@ abstract class Entity implements Countable
     /*
      * Loads data from database using UUID.
      */
-    public function loadByUuid($uuid) {
+    public function loadByUuid($uuid)
+    {
         $obj = $this->table->getByUuid($uuid);
         if (is_null($obj) || (0 == count($obj))) {
-            throw new EntityNotFoundException('Entity not found.', 
-            ['entity' => $this->table->getTableGateway()->getTable(), 'uuid' => $uuid]);
+            throw new EntityNotFoundException('Entity not found.',
+                ['entity' => $this->table->getTableGateway()->getTable(), 'uuid' => $uuid]);
         }
         $this->assignInternal($obj->toArray(), false);
         return $this;
@@ -301,7 +307,8 @@ abstract class Entity implements Countable
     /*
      * Loads data from database using Id.
      */
-    public function loadById($id) {
+    public function loadById($id)
+    {
         $obj = $this->table->get($id);
         if (is_null($obj) || (0 == count($obj))) {
             throw new EntityNotFoundException('Entity not found.', ['entity' => $this->table->getTableGateway()->getTable(), 'id' => $id]);
@@ -315,10 +322,11 @@ abstract class Entity implements Countable
      * Keys in $input that do not exist in the model are ignored.
      * Throws ParameterRequiredException if 'version' is not set in $input.
      */
-    public function assign($input) {
+    public function assign($input)
+    {
         //Make sure 'version' is set if this is update.
-        $id = array_key_exists(self::COLUMN_ID, $this->data) ? $this->data[self::COLUMN_ID] : NULL;
-        $uuid = array_key_exists(self::COLUMN_UUID, $this->data) ? $this->data[self::COLUMN_UUID] : NULL;
+        $id = array_key_exists(self::COLUMN_ID, $this->data) ? $this->data[self::COLUMN_ID] : null;
+        $uuid = array_key_exists(self::COLUMN_UUID, $this->data) ? $this->data[self::COLUMN_UUID] : null;
         $isIdValid = (isset($id) && (0 != $id));
         $isUuidValid = isset($uuid);
         $isVersionInModel = array_key_exists(self::COLUMN_VERSION, $this->data);
@@ -336,7 +344,8 @@ abstract class Entity implements Countable
      * 'id' value is also returned in the array if $includeId is TRUE.
      * 'id' value is NOT returned in the array if $includeId is not set or set to FALSE.
      */
-    public function getGenerated($includeId = false) { 
+    public function getGenerated($includeId = false)
+    {
         $arr = array();
         if ($includeId) {
             $id = $this->data[self::COLUMN_ID];
@@ -357,7 +366,8 @@ abstract class Entity implements Countable
         return $arr;
     }
 
-    public function getProperty($property) {
+    public function getProperty($property)
+    {
         if (!array_key_exists($property, $this->data)) {
             throw new Exception("Property '${property}' is not defined in the model.");
         }
@@ -366,38 +376,39 @@ abstract class Entity implements Countable
 
     /*
      * Gets properties specified in $keyArray.
-     * 
-     * Gets all properties except id, created_by, date_created, modified_by, date_modified  
+     *
+     * Gets all properties except id, created_by, date_created, modified_by, date_modified
      * when $propArray is NULL or empty.
-     * 
-     * Gets properties specified in $propArray except id, created_by, date_created, modified_by, 
+     *
+     * Gets properties specified in $propArray except id, created_by, date_created, modified_by,
      * date_modified when $propArray is not NULL and not empty.
-     * 
-     * By default id, created_by, date_created, modified_by, date_modified properties are not 
-     * returned. They can be fetched by setting $includes to INCLUDE_ID, INCLUDE_CREATED_BY_AND_DATE 
+     *
+     * By default id, created_by, date_created, modified_by, date_modified properties are not
+     * returned. They can be fetched by setting $includes to INCLUDE_ID, INCLUDE_CREATED_BY_AND_DATE
      * and INCLUDE_MODIFIED_BY_AND_DATE or a bitwise combination of them.
      */
-    public function getProperties($propArray = NULL, $includes = 0) {
+    public function getProperties($propArray = null, $includes = 0)
+    {
         $returnArray = array();
         $includeId = $includes & self::INCLUDE_ID;
         $includeCreatedByAndDate = $includes & self::INCLUDE_CREATED_BY_AND_DATE;
         $includeModifiedByAndDate = $includes & self::INCLUDE_MODIFIED_BY_AND_DATE;
         if (!isset($propArray) || empty($propArray)) {
             $propArray = array();
-            foreach($this->data as $key => $value) {
+            foreach ($this->data as $key => $value) {
                 $propArray[] = $key;
             }
         }
 
-        foreach($propArray as $key) {
+        foreach ($propArray as $key) {
             if (!$includeId && (self::COLUMN_ID == $key)) {
                 continue;
             }
-            if (!$includeCreatedByAndDate && 
+            if (!$includeCreatedByAndDate &&
                 ((self::COLUMN_CREATED_BY == $key) || (self::COLUMN_CREATED_DATE == $key))) {
                 continue;
             }
-            if (!$includeModifiedByAndDate && 
+            if (!$includeModifiedByAndDate &&
                 ((self::COLUMN_MODIFIED_BY == $key) || (self::COLUMN_MODIFIED_DATE == $key))) {
                 continue;
             }
@@ -406,12 +417,14 @@ abstract class Entity implements Countable
         return $returnArray;
     }
 
-    public function save() {
+    public function save()
+    {
         $this->validate();
         $this->table->internalSave2($this->data);
     }
 
-    public function setForeignKey($key, $value, $force = false) {
+    public function setForeignKey($key, $value, $force = false)
+    {
         if (!array_key_exists($key, $this->data)) {
             throw new Exception("Property '${key}' is not defined in the model.");
         }
@@ -419,43 +432,48 @@ abstract class Entity implements Countable
         $convertedValue = $this->validateAndConvert($key, $value);
         if (isset($existingValue)) {
             if (!$force && ($existingValue != $convertedValue)) {
-                throw new DataCorruptedException('Data corrupted.', 
-                    ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key, 
-                    'existingValue' => $existingValue, 'newValue' => $value]);
+                throw new DataCorruptedException('Data corrupted.',
+                    ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key,
+                        'existingValue' => $existingValue, 'newValue' => $value]);
             }
         }
         $this->data[$key] = $convertedValue;
     }
 
-    public function setModifiedBy($value, $property = self::COLUMN_MODIFIED_BY) {
+    public function setModifiedBy($value, $property = self::COLUMN_MODIFIED_BY)
+    {
         if (!array_key_exists($property, $this->data)) {
             throw new Exception("Property '${property}' is not defined in the model.");
         }
         $this->data[$property] = $this->validateAndConvert($property, $value);
     }
 
-    public function setModifiedDate($value, $property = self::COLUMN_MODIFIED_DATE) {
+    public function setModifiedDate($value, $property = self::COLUMN_MODIFIED_DATE)
+    {
         if (!array_key_exists($property, $this->data)) {
             throw new Exception("Property '${property}' is not defined in the model.");
         }
         $this->data[$property] = $this->validateAndConvert($property, $value);
     }
 
-    public function setCreatedBy($value, $property = self::COLUMN_CREATED_BY) {
-        if (!array_key_exists($property, $this->data)) {
-            throw new Exception("Property '${property}' is not defined in the model.");
-        }
-        $this->data[$property] = $this->validateAndConvert($property, $value);
-    }
-    
-    public function setCreatedDate($value, $property = self::COLUMN_CREATED_DATE) {
+    public function setCreatedBy($value, $property = self::COLUMN_CREATED_BY)
+    {
         if (!array_key_exists($property, $this->data)) {
             throw new Exception("Property '${property}' is not defined in the model.");
         }
         $this->data[$property] = $this->validateAndConvert($property, $value);
     }
 
-    public function setUserGeneratedUuid($uuid) {
+    public function setCreatedDate($value, $property = self::COLUMN_CREATED_DATE)
+    {
+        if (!array_key_exists($property, $this->data)) {
+            throw new Exception("Property '${property}' is not defined in the model.");
+        }
+        $this->data[$property] = $this->validateAndConvert($property, $value);
+    }
+
+    public function setUserGeneratedUuid($uuid)
+    {
         $existingUuid = $this->data[Entity::COLUMN_UUID];
         if (isset($existingUuid)) {
             throw new Exception("UUID is already set. It cannot be modified.");

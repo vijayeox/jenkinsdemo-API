@@ -31,6 +31,7 @@ class DataSourceService extends AbstractService
     {
         $dataSource = new DataSource($this->table);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $dataSource->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID));
         $dataSource->assign($data);
         try {
             $this->beginTransaction();
