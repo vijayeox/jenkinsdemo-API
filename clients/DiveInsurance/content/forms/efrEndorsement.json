@@ -1457,7 +1457,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"calculateValue": "if((data.endor_attachments || data.endor_attachments !== undefined) && data.endor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
@@ -1496,7 +1496,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
