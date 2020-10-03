@@ -43,7 +43,7 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
 
     public function pivot($data,$parameters) {
         $groupArray=explode(',',$parameters['group']);
-        if (!isset($groupArray[0]) || !isset($groupArray[1]) || !isset($parameters['field'])) {
+        if (!isset($groupArray[0]) || !isset($groupArray[1])) {
             throw new \Exception('Please check query. Two Groups and Field should Exist');
         }
         $pivotResult = [];
@@ -51,8 +51,13 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         $group2 = $groupArray[1];
         $tmpArray=[];
         $columnKeys = [];
+        if (isset($data[0]['count'])) {
+            $valueColumn = 'count';
+        } else {
+            $valueColumn = $parameters['field'];
+        }
         foreach ($data as $row) {
-            $tmpArray[$row[$group1]][$row[$group2]] = $row[$parameters['field']];
+            $tmpArray[$row[$group1]][$row[$group2]] = $row[$valueColumn];
             if (!isset($columnKeys[$row[$group2]]))
             {
                 $columnKeys[$row[$group2]] = null; 

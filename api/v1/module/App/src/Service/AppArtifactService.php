@@ -14,6 +14,7 @@ use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\ZipUtils;
 use Oxzion\Utils\ZipException;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\ImageUtils;
 use Oxzion\DuplicateEntityException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\InvalidApplicationArchiveException;
@@ -26,6 +27,8 @@ class AppArtifactService extends AbstractService
 {
     private $table;
     private $appService;
+    private $contentFolder = DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
+    private $appViewDirectory = DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'apps'. DIRECTORY_SEPARATOR.'eoxapps'. DIRECTORY_SEPARATOR;
 
     public function __construct($config, $dbAdapter, AppTable $table, AppService $appService) {
         parent::__construct($config, $dbAdapter);
@@ -36,18 +39,24 @@ class AppArtifactService extends AbstractService
     public function saveArtifact($appUuid, $artifactType) {
         $appSourceDir = $this->getAppSourceDirPath($appUuid);
         $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
-        $contentDir = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
         switch($artifactType) {
             case 'workflow':
-                $targetDir = $contentDir . 'workflows';
+                return $this->uploadContents($appSourceDir,'workflows',$descriptorPath,$artifactType);
             break;
             case 'form':
-                $targetDir = $contentDir . 'forms';
+                return $this->uploadContents($appSourceDir,'forms',$descriptorPath,$artifactType);
+            break;
+            case 'app_icon':
+            case 'app_icon_white':
+                $targetDir = $appSourceDir . $this->appViewDirectory;
+                return $this->uploadAppIcon($targetDir,$artifactType);
             break;
             default:
                 throw new Exception("Unexpected artifact type ${artifactType}.");
         }
-        $targetDir = $targetDir . DIRECTORY_SEPARATOR;
+    }
+    private function uploadContents($appSourceDir,$contentType,$descriptorPath,$artifactType){
+        $targetDir = $appSourceDir . $this->contentFolder . $contentType . DIRECTORY_SEPARATOR;
         //Check whether any of the uploaded file(s) already exist(s) on the server.
         foreach($_FILES as $key => $fileData) {
             if (UPLOAD_ERR_OK != $fileData['error']) {
@@ -72,11 +81,31 @@ class AppArtifactService extends AbstractService
             ];
         }
     }
+    private function uploadAppIcon($targetDir,$iconType){
+        if(isset($_FILES) && isset($_FILES['file'])){
+            if (isset($_FILES['error']) && UPLOAD_ERR_OK != $_FILES['error']) {
+                throw new Exception('File upload failed.');
+            }
+            if($iconType == 'app_icon'){
+                $filePath = $targetDir .'icon.png';
+            } else if($iconType == 'app_icon_white'){
+                $filePath = $targetDir .'icon_white.png';
+            }
+            move_uploaded_file($_FILES['file']['tmp_name'], $targetDir.$_FILES['file']['name']);
+            $fileCreated = ImageUtils::createPNGImage($targetDir.$_FILES['file']['name'],$filePath);
+            return [
+                "originalName" => $filePath,
+                "size" => filesize($filePath) 
+            ];
+        } else {
+            throw new Exception('File upload failed.');
+        }
+    }
 
     public function deleteArtifact($appUuid, $artifactType, $artifactName) {
         $appSourceDir = $this->getAppSourceDirPath($appUuid);
         $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
-        $filePath = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
+        $filePath = $appSourceDir . $this->contentFolder;
         switch($artifactType) {
             case 'workflow':
                 $filePath = $filePath . 'workflows';
@@ -195,7 +224,7 @@ class AppArtifactService extends AbstractService
             throw new FileNotFoundException(
                 "Application source directory is not found.", ['directory' => $appSourceDir]);
         }
-        $contentDir = $appSourceDir . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
+        $contentDir = $appSourceDir . $this->contentFolder;
         switch($artifactType) {
             case 'workflow':
                 $targetDir = $contentDir . 'workflows';
@@ -227,6 +256,9 @@ class AppArtifactService extends AbstractService
 
     private function updateAppDescriptor($action, $descriptorPath, $artifactType, $file)
     {
+        if($artifactType != 'form' && $artifactType != 'workflow'){
+            return;
+        }
         if (!(file_exists($descriptorPath))) {
             throw new FileNotFoundException('App descriptor not found');
         } else {
