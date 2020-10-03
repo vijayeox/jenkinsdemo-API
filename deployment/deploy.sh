@@ -67,6 +67,8 @@ api()
         rm -Rf api/v1/data/file_docs
         rm -Rf api/v1/data/AppDeploy
         rm -Rf api/v1/data/AppSource
+        rm -Rf api/v1/data/pages
+        rm -Rf api/v1/data/entity
         rsync -rl --delete api/v1/ /var/www/api/
         ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
@@ -79,6 +81,8 @@ api()
         ln -nfs /var/lib/oxzion/api/template /var/www/api/data/template
         ln -nfs /var/lib/oxzion/api/AppDeploy /var/www/api/data/AppDeploy
         ln -nfs /var/lib/oxzion/api/AppSource /var/www/api/data/AppSource
+        ln -nfs /var/lib/oxzion/api/pages /var/www/api/data/pages
+        ln -nfs /var/lib/oxzion/api/entity /var/www/api/data/entity
         ln -nfs /var/log/oxzion/api /var/www/api/logs
         chown www-data:www-data -R /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
