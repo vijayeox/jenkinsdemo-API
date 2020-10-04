@@ -60,7 +60,8 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"pattern": "/^[a-z0-9]+$/i"
+							"pattern": "/^[a-z0-9-]+$/i",
+							"customMessage": "Application Name must Contain only Alphabets and Numbers"
 						},
 						"errorLabel": "Application Name must Contain only Alphabets and Numbers",
 						"key": "name",
@@ -1617,7 +1618,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 387,
+	"_vid": 388,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1636,6 +1637,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-10-03T21:46:31.063Z",
+	"modified": "2020-10-04T07:50:12.229Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
