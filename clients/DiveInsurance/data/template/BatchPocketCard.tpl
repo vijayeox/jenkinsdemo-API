@@ -39,9 +39,9 @@
 						</div>
 					</div>
 				</div>
-			</div><br><br><br><br><br><br><br><br>
+			</div><br/><br/><br/><br/><br/><br/><br/>
 			{if $individual.product == "Dive Store"}
-				<br><br><br><br>
+				<br/><br/><br/><br/>
 			{/if}
 		</div>
 		{assign var=val value=$val+1}
