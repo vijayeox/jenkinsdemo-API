@@ -1,11 +1,15 @@
 <?php
 
 use Oxzion\Db\Persistence\Persistence;
+use Oxzion\AppDelegate\FieldTrait;
+use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\ZipUtils;
 
 use Oxzion\AppDelegate\MailDelegate;
 
 class DispatchMail extends MailDelegate
 {
+    use FieldTrait;
 
     public function __construct()
     {
@@ -32,6 +36,41 @@ class DispatchMail extends MailDelegate
                 }
             }
         }
+        $attachmentFieldsArray = include(__DIR__ . "/fieldMappingAttachments.php");
+        $fileDocs =  $this->destination . $data["orgId"] . DIRECTORY_SEPARATOR . $data["fileId"] . DIRECTORY_SEPARATOR ;
+        $mailDocumentsDir = $fileDocs . "mailDocuments";
+
+        $attachmentsAvailable = false;
+        foreach ($attachmentFieldsArray as $attachmentField) {
+            if (
+                isset($data[$attachmentField])
+            ) {
+                if (count($this->checkJSON($data[$attachmentField])) > 0) {
+                    $attachmentsAvailable = true;
+                    $fieldConfig = $this->getFieldByName("Dealer Policy", $attachmentField);
+                    $folderPath = $mailDocumentsDir . DIRECTORY_SEPARATOR . $fieldConfig["text"];
+                    foreach ($this->checkJSON($data[$attachmentField]) as $fileIndex => $attachmentFile) {
+                        if (FileUtils::fileExists($attachmentFile["path"])) {
+                            FileUtils::copy(
+                                $attachmentFile["path"],
+                                $fileIndex == 0 ? $attachmentFile["originalName"] : $attachmentFile["originalName"] . "_" . $fileIndex,
+                                $folderPath
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($attachmentsAvailable) {
+            FileUtils::fileExists($mailDocumentsDir . ".zip") ?
+                FileUtils::deleteFile("mailDocuments.zip", $fileDocs) : null;
+            ZipUtils::zipDir($mailDocumentsDir, $mailDocumentsDir . ".zip");
+            array_push($emailAttachments,  $mailDocumentsDir . ".zip");
+            FileUtils::rmDir($mailDocumentsDir);
+        }
+
+
         $mailOptions = array();
         $mailOptions['to'] = $submissionEmail;
         $mailOptions['subject'] = "New business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
