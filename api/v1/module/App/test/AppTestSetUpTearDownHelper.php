@@ -7,6 +7,7 @@ use Exception;
 use PDO;
 use Oxzion\Utils\FileUtils;
 use Oxzion\App\AppArtifactNamingStrategy;
+use Symfony\Component\Yaml\Yaml;
 
 class AppTestSetUpTearDownHelper implements AppArtifactListener {
     private $dbConfig;
@@ -157,6 +158,19 @@ class AppTestSetUpTearDownHelper implements AppArtifactListener {
             __DIR__ . '/sampleapp/application.yml')) {
                 throw new Exception('Could not Delete File: ' . print_r(error_get_last(), true));
         }
+    }
+
+    public function setupAppInSourceLocation(string $descriptor){
+        $this->setupAppDescriptor($descriptor);
+        $path = __DIR__ . '/sampleapp';
+        $yaml = Yaml::parse(file_get_contents($path.'/application.yml'));
+        $appId = $yaml['app']['uuid'];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, ['uuid' => $appId]);
+        $appSourceDir;
+        if (!file_exists($appSourceDir)) {
+            FileUtils::createDirectory($appSourceDir);
+        }
+        FileUtils::copyDir($path, $appSourceDir);
     }
 
     public function cleanAll() {

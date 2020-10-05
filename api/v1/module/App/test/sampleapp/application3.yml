@@ -26,11 +26,8 @@ privilege:
 dashboard:
   - name: Dashboard
     content: content/Dashboard.txt
-menu:
-  - name: Home
-    group: Policy Holder
-    page:
-      - name: My Policies
+pages:
+  - name: My Policies
         content:
           - type: LIST
             content:
@@ -42,50 +39,63 @@ menu:
                 columns:
                   - field: ''
                     title: ''
-  - name: My History
-    group: Policy Holder
-    page:
-      - name: All Policies
+  - name: All Policies
         content:
           - type: LIST
             content:
               - url: ''
-  - name: Home
-    group: CSR
-    page:
-      - name: Dashboard
+  - name: Dashboard
         content:
           - type: DASHBOARD
             dashboard: Dashboard
   - name: Requests
-    group: CSR
-    page:
-      - name: Requests
         content:
           - type: LIST
             content:
               - url: ''
   - name: Manage Policies
-    group: CSR
-    page:
-      - name: Manage Policies
         content:
           - type: List
             content:
               - ur: ''
+menu:
+  - name: Home
+    group: Policy Holder
+    page: My Policies
+      
+  - name: My History
+    group: Policy Holder
+    page: All Policies
+      
+  - name: Home
+    group: CSR
+    page: Dashboard
+      
+  - name: Requests
+    group: CSR
+    page: Requests
+      
+  - name: Manage Policies
+    group: CSR
+    page: Manage Policies
+      
 workflow:
   - name: Individual Liability
-    id: f0efea9e-7863-4368-a9b2-baa1a1603067
+    uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
     bpmn_file: individual_liability.bpmn
+    entity: dummyEntity1
   - name: Group Liability
-    id: 76dc0348-910c-4ae8-a05a-78ba47803208
+    uuid: 76dc0348-910c-4ae8-a05a-78ba47803208
     bpmn_file: group_liability.bpmn
+    entity: dummyEntity1
   - name: Dive Store
-    id: cb99e634-de00-468d-9230-d6f77d241c5b
+    uuid: cb99e634-de00-468d-9230-d6f77d241c5b
     bpmn_file: dive_store.bpmn
+    entity: dummyEntity1
   - name: Dive Boat
-    id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+    uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
     bpmn_file: dive_boat.bpmn
+    entity: dummyEntity1
 job:
   - import_padi:
       - stored_procedure_name: ox_padi_verification
