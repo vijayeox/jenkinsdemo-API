@@ -8,6 +8,8 @@ use Oxzion\Model\Field;
 use Oxzion\Model\FieldTable;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
+use Oxzion\EntityNotFoundException;
+use Oxzion\Utils\UuidUtil;
 
 class FieldService extends AbstractService
 {
@@ -161,14 +163,22 @@ class FieldService extends AbstractService
         }
     }
 
-    public function getFieldByName($entityId, $fieldName)
+    public function getFieldByName($entity, $fieldName)
     {
-        $this->logger->info("EntityId = $entityId, FieldName = $fieldName");
+        $this->logger->info("Entity = $entity, FieldName = $fieldName");
+        if (!UuidUtil::isValidUuid($entity)) {
+            $entityList = $this->getDataByParams('ox_app_entity', array("uuid"), array('name' => $entity))->toArray();
+            if (count($entityList) > 0) {
+                $entity = $entityList[0]["uuid"];
+            } else {
+                throw new EntityNotFoundException("Entity Not Found -- " . $entity);
+            }
+        }
         try {
             $queryString = "Select oxf.* from ox_field as oxf
                             inner join ox_app_entity as en on oxf.entity_id = en.id
             where en.uuid=? and oxf.name=?";
-            $queryParams = array($entityId, $fieldName);
+            $queryParams = array($entity, $fieldName);
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             if (count($resultSet) == 0) {
                 return 0;
