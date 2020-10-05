@@ -22,7 +22,7 @@
             var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date',
                 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages', 'start_date', 'license_number',
                 'firstname', 'lastname', 'city', 'state', 'country', 'zip', 'certificate_no', 'padi',
-                'end_date', 'liability_policy_id', 'address1', 'address2', 'storename','liability_carrier','business_name','state_in_short','business_padi'
+                'end_date', 'liability_policy_id', 'address1', 'address2', 'storename','liability_carrier','business_name','state_in_short','business_padi','dba'
             ];
             for (var css_class in css_selector_classes) {
                 if (css_selector_classes.hasOwnProperty(css_class)) {
@@ -43,6 +43,16 @@
                     moment(vars[css_selector_classes[css_class]]).format(
                       "D MMMM YYYY"
                     ) + " - 12:01:00 AM";
+                }
+                if (css_selector_classes[css_class] == "dba") {
+                    if(vars['dba'] != ""){
+                        document.getElementById("dbaName").style.display = "block";
+                    }
+                }
+                if (css_selector_classes[css_class] == "state_in_short") {
+                    if(vars["state_in_short"] == "NY") {
+                        document.getElementById("padirisk").innerHTML = "PADI Risk Purchasing Group";
+                    }
                 }
             }
             
@@ -84,6 +94,7 @@
                 <b class="caption2">Insured's Name and Mailing Address:</b>
                 <div class="line"></div>
                 <p class="info normal"><span class="business_name uppercase"></span></p>
+                <p class = "info normal" id = "dbaName" style = "display:none;">DBA:<span class ="dba uppercase"></span></p>
                 <div class="line"></div>
                 <p class="info normal"><span class="address1 uppercase"></span></p>
                 <div class="line"></div>
@@ -113,6 +124,7 @@
                     </hr>
                 </div>
             </div>
+            <p class ="p_margin normal" id="padirisk"></p>
         </div>
     </div>
     <div class="clearfix"></div>

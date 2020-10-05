@@ -11,7 +11,9 @@ namespace ArrowHeadWebService
         public string postURL { get; set; }
         public string mappingFile { get; set; }
         public string dwFile { get; set; }
-        public string orgId { get; set; }
-        public string appId { get; set; }
+        public string commands { get; set; }
+        public string appUUID { get; set; }
+        public string delegateName { get; set; }
+        public string token { get; set; }
     }
 }

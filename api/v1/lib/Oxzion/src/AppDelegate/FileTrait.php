@@ -32,7 +32,7 @@ trait FileTrait
         return $this->fileService->getFileList($this->appId,$params,$filterparams);
     }
 
-    protected function saveFile($params,$fileId){
+    protected function saveFile($params,$fileId = null){
         $this->logger->info("SAVE FILE");
         return $this->fileService->updateFile($params,$fileId);
     }
@@ -50,7 +50,19 @@ trait FileTrait
         $this->fileService->completeBatchProcessing();
     }
 
+    protected function addAttachment($params, $file){
+        return $this->fileService->addAttachment($params, $file);
+    }
+
     protected function updateFieldValueOnFiles($data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams = null){
         $this->fileService->updateFieldValueOnFiles($this->appId,$data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams);
+    }
+    protected function getFileVersionChangeLog($fileId,$version){
+        $this->logger->info("File Version Change Log");
+        return $this->fileService->getFileVersionChangeLog($fileId,$version);        
+    }
+
+    protected function getWorkflowInstanceStartDataFromFileId($fileId){
+        return $this->fileService->getWorkflowInstanceStartDataFromFileId($fileId);
     }
 }

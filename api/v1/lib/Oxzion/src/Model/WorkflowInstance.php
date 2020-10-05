@@ -21,9 +21,10 @@ class WorkflowInstance extends Entity
         'parent_workflow_instance_id' => null,
         'file_id' => 0,
         'start_data' => null,
-        'completion_data' => null
+        'completion_data' => null,
+        'entity_id' => null
     );
-    
+
     public function validate()
     {
         $dataArray = array("workflow_deployment_id", "app_id", "org_id", "date_created","created_by","status");

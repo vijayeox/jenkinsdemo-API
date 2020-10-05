@@ -1,6 +1,6 @@
 $primary-color: #275362;
 
-.PageRender {
+.Navigation {
   position: relative;
   margin: 0 0px 0 15px;
   height: 100%;
@@ -55,6 +55,14 @@ $primary-color: #275362;
     font-size: 1.75rem;
     font-weight: 300;
     width: 100%;
+  }
+
+  abbr{
+    text-decoration: none;
+  }
+
+  .page-active , .contentDiv{
+    height: 100%;
   }
 
   .searchBar {
@@ -165,4 +173,15 @@ $primary-color: #275362;
   height: 26px;
   position: relative;
   text-size-adjust: 100%;
+}
+.page-inactive{
+  display:none;
+}
+.page-active{
+  display: block;
+}
+.rygBadge{
+  margin-left: auto;
+  width: 80px;
+  border: 3px solid lightgrey;
 }

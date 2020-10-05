@@ -8,8 +8,8 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name1">{$business_name}</p>
-			<p class="name1">{if isset($dba) && $dba !=""}
+			<p class="name">{$business_name}</p>
+			<p class="name">{if isset($dba) && $dba !=""}
 								DBA : {$dba} 
 							{/if}</p>
 			<p class="name">{$address1}</p>
@@ -37,8 +37,8 @@
 			<li>Please note: Your Dive Center general liability insurance does not cover the supervision and instruction of swimmers. This can only be covered by an individual or group professional liability policy.</li>
 		</ul>
 
-		<p>To purchase your insurance coverage, please provide us with the following items:</p>
 		{if isset($quoteInfo) && $quoteInfo != '[]'}
+		<p>To purchase your insurance coverage, please provide us with the following items:</p>
 			{assign var=list value=$quoteInfo|json_decode:true}
 			{foreach from=$list item=$quoteData key = key}
 					{if $key == 'Other' &&  ($quoteData == true || $quoteData == 'true')}

@@ -58,6 +58,7 @@ class AddressService extends AbstractService
             $count = $this->table->save($form);
             $this->commit();
         } catch (Exception $e) {
+            $this->rollback();
             throw $e;
         }
     }
@@ -65,8 +66,8 @@ class AddressService extends AbstractService
     public function getOrganizationAddress($uuid)
     {
         $select = "SELECT oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.id,oa.zip
-                    from ox_organization as og join ox_address 
-                    as oa on og.address_id = oa.id  where og.uuid = :orgId";
+                    from ox_organization as og join ox_organization_profile as oxop on oxop.id=og.org_profile_id join ox_address 
+                    as oa on oxop.address_id = oa.id  where og.uuid = :orgId";
         $params = array("orgId"=> $uuid);
         $this->logger->info("Executing Query $select with params - ".print_r($params, true));
         $result = $this->executeQueryWithBindParameters($select,$params)->toArray();

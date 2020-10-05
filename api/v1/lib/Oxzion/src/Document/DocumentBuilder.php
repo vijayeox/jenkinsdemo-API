@@ -92,4 +92,11 @@ class DocumentBuilder {
         FileUtils::copy($sourcePath,$template,$destinationPath);
         return;
     }
+
+    public function mergePDF(array $sourceArray,$destination)
+    {
+        $this->logger->info("Merge documents");
+        return $this->documentGenerator->mergeDocuments( $sourceArray,$destination);
+    }
+    
 }

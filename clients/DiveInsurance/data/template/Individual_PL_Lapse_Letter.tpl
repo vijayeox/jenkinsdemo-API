@@ -13,8 +13,8 @@
 			<p class="name">{$lastname},{$firstname}{if isset($initial)},{$initial}{/if}</p>
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
-			<p class = "details">{$city},{$state_in_short} - {$zip}</p>
-			<p class = "details">{$country}</p>
+			<p class = "name">{$city},{$state} - {$zip}</p>
+			<p class = "name">{$country}</p>
 		</div>
 		<div class = "certi_details">
 			<div class = "certi_title">
@@ -30,7 +30,6 @@
 				<p class="certi">{$padi}</p>
 				<p class="certi">{$start_date}</p>
 				<p class = "certi">{$end_date|date_format:"%d %B %Y"}&nbsp12:01:00 AM</p>
-
 			</div>
 		</div>
 	</div>
@@ -44,16 +43,15 @@
 			If you have any questions, please contact our office at (800) 223-9998.
 		</p>
 
-
-			<p class = "spacing">Sincerely,</p>
-			<p class = "lapse_font">Vincencia & Buckley A Division of HUB International</p>
-			<p class = "lapse_font">Insurance Service</p>
+		<p class = "sign">
+			Sincerely,
+			<br/><br/>
+			PADI Department<br/>
+			Vicencia & Buckley, a Division of HUB International Insurance Services Inc.<br/>
+			6 Centerpointe Dr. #350<br/>
+			La Palma, CA - 90623<br/>
+			Email: padi-professional@hubinternational.com<br/>
 		</p>
-
-		<p class = "footer_title">
-			PADI PROFESSIONAL LIABILITY DEPARTMENT
-		</p>
-		<p class = "lapse_font">Email Address: instructors@diveinsurance.com</p>
 	</div>
   </div>
 </div>

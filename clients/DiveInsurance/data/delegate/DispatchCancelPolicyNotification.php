@@ -3,11 +3,12 @@ use Oxzion\AppDelegate\MailDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Encryption\Crypto;
+use Oxzion\AppDelegate\FileTrait;
 require_once __DIR__."/DispatchDocument.php";
 
 
 class DispatchCancelPolicyNotification extends DispatchDocument {
-
+    use FileTrait;
     public $template;
 
     public function __construct(){
@@ -15,6 +16,7 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
             'Individual Professional Liability' => 'CancelPolicyMailTemplate',
             'Emergency First Response' => 'CancelPolicyMailTemplate',
             'Dive Boat' => 'CancelPolicyMailTemplate',
+            'Group Professional Liability' => 'CancelPolicyMailTemplate',
             'NotApproved' => 'CancelPolicyNotApprovedMailTemplate',
             'Dive Store' => 'CancelPolicyMailTemplate');
         parent::__construct();
@@ -23,6 +25,8 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Dispatch Cancel Policy Notification");
+        $fileData = $this->getFile($data['fileId'],false,$data['orgId']);
+        $data = array_merge($data,$fileData['data']);
         if($data['cancellationStatus'] =="approved")
         {
             $this->logger->info("Dispatch Cancel Policy Notification -- approved");

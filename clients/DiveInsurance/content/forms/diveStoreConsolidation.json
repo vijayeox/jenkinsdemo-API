@@ -1,8 +1,8 @@
 {
-	"_id": "5e731f8b7270c4852406e562",
+	"_id": "5f200c28dcfccc296eb532c9",
 	"type": "form",
 	"tags": [],
-	"owner": "5e1f430cb451f91416ebd5cd",
+	"owner": "5d934bbfa6b700b319f8ad1d",
 	"components": [{
 		"title": "Primary Contact",
 		"theme": "primary",
@@ -15,6 +15,7 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "panel",
+		"nextPage": "if (\n  (data.businessPadiVerified === true ||\n    data.businessPadiVerified === \"true\"||\n    data.padiNotFound === true) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"propertyPanel\";\n} else {\n  next = \"panel\";\n}",
 		"type": "panel",
 		"label": "Primary Contact",
 		"components": [{
@@ -190,7 +191,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "product",
-						"calculateValue": "value = \"Dive Store\";",
+						"calculateValue": "if(!data.product || data.product == \"\"){\n  value = \"Dive Store\";\n}",
 						"key": "product",
 						"type": "hidden",
 						"input": true,
@@ -198,7 +199,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "entity_name",
-						"calculateValue": "value = \"Dive Store\"",
+						"calculateValue": "if(!data.entity_name || data.entity_name == \"\"){\n  value = \"Dive Store\";\n}else{\n  if(data.product==\"Dive Store\"){\n    value= \"Dive Store\"\n  } else {\n    value = \"Group Professional Liability\";\n  }\n}",
 						"key": "entity_name",
 						"type": "hidden",
 						"input": true,
@@ -220,7 +221,7 @@
 						"validate": {
 							"required": true,
 							"pattern": "[0-9\\s-]*$",
-							"customMessage": "Padi Number is required",
+							"customMessage": "PADI Membership is required",
 							"min": 0,
 							"step": "any"
 						},
@@ -321,7 +322,7 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "panelColumnsContent2",
-						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
+						"customConditional": "show = ((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data['businessPadiVerified'] === true || data['businessPadiVerified'] === 'true') &&\n\tdata.privileges['MANAGE_MY_POLICY_READ'])\n\nif(((data['padiNotFound']===true||data['padiNotFound']=='true') && \n\t(data['verified'] === true || data['verified']=='true') && \n\t(data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']))){\n\t  show = false\n\t}\nif(data.isRenewalFlow && (data.isRenewalFlow == true || data.isRenewalFlow == 'true')){\n  show = false;\n}",
 						"type": "htmlelement",
 						"input": false,
 						"hideLabel": true,
@@ -503,7 +504,6 @@
 			"input": false,
 			"components": [{
 				"label": "Legal Business Name",
-				"spellcheck": false,
 				"tableView": false,
 				"clearOnHide": false,
 				"calculateValue": "if(data['business_name'] && data['businessPadiVerified']===true){\n  value = data['business_name']\n}",
@@ -947,23 +947,54 @@
 									"label": "",
 									"value": ""
 								}],
-								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === row['country']);\nif(obj){\nvalues = obj.states\n}"
+								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['country']);\nif(obj){\nvalues = obj.states;\n}"
 							},
 							"template": "<span>{{ item }}</span>",
 							"refreshOn": "country",
 							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
 							"validate": {
 								"required": true
 							},
-							"key": "state",
+							"key": "us_state",
+							"conditional": {
+								"show": true,
+								"when": "country",
+								"eq": "United States of America"
+							},
 							"type": "select",
 							"indexeddb": {
 								"filter": {}
 							},
 							"input": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "State",
+							"tableView": true,
+							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
+							"key": "non_us_state",
+							"conditional": {
+								"show": false,
+								"when": "country",
+								"eq": "United States of America"
+							},
+							"attributes": {
+								"style": "margin-bottom:0px"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "state",
+							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
+							"key": "state",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
@@ -979,10 +1010,39 @@
 							"validate": {
 								"required": true
 							},
-							"key": "zip",
+							"key": "us_zip",
+							"conditional": {
+								"show": true,
+								"when": "country",
+								"eq": "United States of America"
+							},
+							"attributes": {
+								"style": "margin-bottom:0px"
+							},
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip Code",
+							"tableView": true,
+							"clearOnHide": false,
+							"key": "non_us_zip",
+							"conditional": {
+								"show": false,
+								"when": "country",
+								"eq": "United States of America"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "zip",
+							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_zip;\n} else {\n  value = data.non_us_zip;\n}",
+							"key": "zip",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"size": "md",
@@ -1078,7 +1138,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -1129,25 +1188,59 @@
 						"components": [{
 							"label": "State",
 							"widget": "choicesjs",
-							"tableView": false,
+							"tableView": true,
 							"dataSrc": "custom",
 							"data": {
-								"values": [{}],
-								"custom": "let obj = data['countryList'].find(o => o.country === data.physical_country);\nif (obj) {\n  values = obj.states;\n}"
+								"values": [{
+									"label": "",
+									"value": ""
+								}],
+								"custom": "try {\ncountrylist = JSON.parse(data['countryList']);\n} catch(e) {\ncountrylist = data['countryList'];\n}\nlet obj = countrylist.find(o => o.country === data['physical_country']);\nif(obj){\nvalues = obj.states;\n}"
 							},
 							"template": "<span>{{ item }}</span>",
+							"refreshOn": "country",
+							"clearOnRefresh": true,
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
 							"validate": {
 								"required": true
 							},
-							"key": "physical_state",
+							"key": "physical_us_state",
+							"conditional": {
+								"show": true,
+								"when": "physical_country",
+								"eq": "United States of America"
+							},
 							"type": "select",
-							"refreshOn": "physical_country",
+							"indexeddb": {
+								"filter": {}
+							},
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"clearOnRefresh": true
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "State",
+							"tableView": true,
+							"clearOnHide": false,
+							"customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
+							"key": "physical_non_us_state",
+							"conditional": {
+								"show": false,
+								"when": "physical_country",
+								"eq": "United States of America"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "physical_state",
+							"calculateValue": "if(data.country == \"United States of America\"){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
+							"key": "physical_state",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1158,15 +1251,40 @@
 						"components": [{
 							"label": "Zip Code",
 							"spellcheck": false,
-							"tableView": true,
-							"clearOnHide": false,
+							"tableView": false,
 							"validate": {
 								"required": true
 							},
-							"key": "physical_zip",
+							"key": "physical_us_zip",
+							"conditional": {
+								"show": true,
+								"when": "country",
+								"eq": "United States of America"
+							},
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "Zip Code",
+							"tableView": true,
+							"clearOnHide": false,
+							"key": "physical_non_us_zip",
+							"conditional": {
+								"show": false,
+								"when": "country",
+								"eq": "United States of America"
+							},
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "physical_zip",
+							"calculateValue": "if(data.physical_country && data.physical_country == \"United States of America\"){\n  value = data.physical_us_zip;\n} else {\n  value = data.physical_non_us_zip;\n}",
+							"key": "physical_zip",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
 							"hideOnChildrenHidden": false
 						}],
 						"size": "md",
@@ -1485,49 +1603,18 @@
 				}, {
 					"components": [{
 						"label": "Policy End Date",
-						"displayInTimezone": "utc",
-						"useLocaleSettings": true,
-						"allowInput": false,
-						"format": "MM-dd-yyyy",
+						"suffix": "<i class=\"fa fa-calendar\"></i>",
+						"spellcheck": false,
 						"disabled": true,
 						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"datepickerMode": "day"
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
 						"clearOnHide": false,
-						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nvar day = today.date();\nif(month >= 5){\n  if(month==5 && day==30){\n    value = (year + 1) + \"-06-30\";\n  } else if(month ==5 && day < 30){\n    value = (year) + \"-06-30\";\n  } else {\n    value = (year + 1) + \"-06-30\";\n  }\n}else{\nvalue = (year)+ \"-06-30\";\n}",
+						"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nvar day = today.date();\nif(month >= 5){\n  if(month==5 && day==30){\n    value = (year + 1)+\"-06-30\";\n  } else if(month ==5 && day < 30){\n    value = year+\"-06-30\";\n  } else {\n    value = (year + 1)+\"-06-30\";\n  }\n}else{\nvalue = year+\"-06-30\";\n}",
 						"key": "end_date",
 						"properties": {
 							"data_type": "Date"
 						},
-						"type": "datetime",
+						"type": "textfield",
 						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "utc",
-							"language": "en",
-							"useLocaleSettings": true,
-							"allowInput": false,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "MM-dd-yyyy",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
 						"hideOnChildrenHidden": false
 					}],
 					"width": 5,
@@ -1539,6 +1626,913 @@
 				"type": "columns",
 				"hideLabel": true,
 				"path": "panelColumns"
+			}, {
+				"label": "well",
+				"tableView": false,
+				"key": "rateCard",
+				"type": "fieldset",
+				"clearOnHide": false,
+				"input": false,
+				"components": [{
+					"input": true,
+					"tableView": true,
+					"key": "liability",
+					"label": "liability",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "true"
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "property",
+					"label": "property",
+					"type": "hidden",
+					"lockKey": true,
+					"defaultValue": "true"
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "limitOver500000CoverBuildingCat",
+							"label": "limitOver500000CoverBuildingCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBuildingCat",
+							"label": "limitOver250000CoverBuildingCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBuildingCat",
+							"label": "limitOver100000CoverBuildingCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBuildingCat",
+							"label": "limitOver0CoverBuildingCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "limitOver500000CoverBuildingNonCat",
+							"persistent": "client-only",
+							"key": "limitOver500000CoverBuildingNonCat",
+							"type": "hidden",
+							"input": true,
+							"tableView": true,
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBuildingNonCat",
+							"label": "limitOver250000CoverBuildingNonCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBuildingNonCat",
+							"label": "limitOver100000CoverBuildingNonCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBuildingNonCat",
+							"label": "limitOver0CoverBuildingNonCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "limitOver500000CoverBusIncomeCat",
+							"label": "limitOver500000CoverBusIncomeCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBusIncomeCat",
+							"label": "limitOver250000CoverBusIncomeCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBusIncomeCat",
+							"label": "limitOver100000CoverBusIncomeCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBusIncomeCat",
+							"label": "limitOver0CoverBusIncomeCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver500000CoverBusIncomeNonCat",
+							"label": "limitOver500000CoverBusIncomeNonCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver250000CoverBusIncomeNonCat",
+							"label": "limitOver250000CoverBusIncomeNonCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver100000CoverBusIncomeNonCat",
+							"label": "limitOver100000CoverBusIncomeNonCat",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "limitOver0CoverBusIncomeNonCat",
+							"label": "limitOver0CoverBusIncomeNonCat",
+							"type": "hidden",
+							"lockKey": true,
+							"defaultValue": "0.00997272",
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns3",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverageUpTo50000",
+							"label": "standardCoverageUpTo50000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage50001To100000",
+							"label": "standardCoverage50001To100000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage100001To200000",
+							"label": "standardCoverage100001To200000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage200001To350000",
+							"label": "standardCoverage200001To350000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage350001To500000",
+							"label": "standardCoverage350001To500000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage500001To1M",
+							"label": "standardCoverage500001To1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "standardCoverage1MAndOver",
+							"label": "standardCoverage1MAndOver",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnlyUpTo50000",
+							"label": "liabilityOnlyUpTo50000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly50001To100000",
+							"label": "liabilityOnly50001To100000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly100001To200000",
+							"label": "liabilityOnly100001To200000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly200001To350000",
+							"label": "liabilityOnly200001To350000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly350001To500000",
+							"label": "liabilityOnly350001To500000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly500001To1M",
+							"label": "liabilityOnly500001To1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "liabilityOnly1MAndOver",
+							"label": "liabilityOnly1MAndOver",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "discontinuedOperation",
+							"label": "discontinuedOperation",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "medicalExpense",
+					"label": "medicalExpense",
+					"type": "hidden",
+					"lockKey": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns4",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "nonOwnedAutoLiability100K",
+							"label": "NON-Owned Auto Liability 100k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "page5PanelColumns4HiddenField",
+							"label": "NON-Owned Auto Liability 1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideLabel": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns5",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage1M",
+							"label": "excessLiabilityCoverage1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage2M",
+							"label": "excessLiabilityCoverage2M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage3M",
+							"label": "excessLiabilityCoverage3M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage4M",
+							"label": "excessLiabilityCoverage4M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "excessLiabilityCoverage9M",
+							"label": "excessLiabilityCoverage9M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "TAEOunder100k",
+							"label": "TAEOunder100k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "TAEO100kTo500k",
+							"label": "TAEO100kTo500k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 6,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns6",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "poolLiabilityOver0",
+							"label": "poolLiabilityOver0",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "poolLiabilityOver20k",
+							"label": "poolLiabilityOver20k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "poolLiabilityOver50k",
+							"label": "poolLiabilityOver50k",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns7",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsJan",
+							"label": "proRataFactorsJan",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsApr",
+							"label": "proRataFactorsApr",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsJul",
+							"label": "proRataFactorsJul",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsOct",
+							"label": "proRataFactorsOct",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsFeb",
+							"label": "proRataFactorsFeb",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsMay",
+							"label": "proRataFactorsMay",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsAug",
+							"label": "proRataFactorsAug",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsNov",
+							"label": "proRataFactorsNov",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsMar",
+							"label": "proRataFactorsMar",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsJun",
+							"label": "proRataFactorsJun",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsSep",
+							"label": "proRataFactorsSep",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "proRataFactorsDec",
+							"label": "proRataFactorsDec",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "padiFee",
+					"label": "padiFee",
+					"type": "hidden",
+					"lockKey": true
+				}, {
+					"label": "stateTaxData",
+					"key": "stateTaxData",
+					"properties": {
+						"data_type": "list"
+					},
+					"type": "hidden",
+					"input": true,
+					"tableView": true,
+					"lockKey": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns8",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan25000",
+							"label": "groupCoverageMoreThan25000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan50000",
+							"label": "groupCoverageMoreThan50000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan200000",
+							"label": "groupCoverageMoreThan200000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan100000",
+							"label": "groupCoverageMoreThan100000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan150000",
+							"label": "groupCoverageMoreThan150000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan0",
+							"label": "groupCoverageMoreThan0",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan250000",
+							"label": "groupCoverageMoreThan250000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan350000",
+							"label": "groupCoverageMoreThan350000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupCoverageMoreThan500000",
+							"label": "groupCoverageMoreThan500000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns9",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability1M",
+							"label": "groupExcessLiability1M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability4M",
+							"label": "groupExcessLiability4M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability2M",
+							"label": "groupExcessLiability2M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability9M",
+							"label": "groupExcessLiability9M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "groupExcessLiability3M",
+							"label": "groupExcessLiability3M",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "combinedSingleLimit",
+							"redrawOn": "data",
+							"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
+							"key": "combinedSingleLimit",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "annualAggregate",
+							"redrawOn": "data",
+							"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
+							"key": "annualAggregate",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}, {
+							"label": "groupExcessLiabilityLimit",
+							"redrawOn": "data",
+							"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
+							"key": "groupExcessLiabilityLimit",
+							"type": "hidden",
+							"input": true,
+							"tableView": false,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}, {
+					"input": true,
+					"tableView": true,
+					"key": "groupPadiFee",
+					"label": "groupPadiFee",
+					"type": "hidden",
+					"lockKey": true
+				}, {
+					"label": "Columns",
+					"input": false,
+					"tableView": false,
+					"key": "page5PanelColumns10",
+					"columns": [{
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "propertyDeductibles1000",
+							"label": "propertyDeductibles1000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "propertyDeductibles2500",
+							"label": "propertyDeductibles2500",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}, {
+						"components": [{
+							"input": true,
+							"tableView": true,
+							"key": "propertyDeductibles5000",
+							"label": "propertyDeductibles5000",
+							"type": "hidden",
+							"lockKey": true,
+							"hideOnChildrenHidden": false
+						}],
+						"width": 4,
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md"
+					}],
+					"type": "columns",
+					"hideLabel": true,
+					"persistent": true
+				}],
+				"hideLabel": true,
+				"lockKey": true,
+				"hideOnChildrenHidden": false,
+				"persistent": true
 			}]
 		}, {
 			"label": "Do you want to apply Property Coverage?",
@@ -1561,6 +2555,11 @@
 			},
 			"errorLabel": "Property Coverage",
 			"key": "propertyCoverageSelect",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "select",
 			"indexeddb": {
 				"filter": {}
@@ -2207,7 +3206,8 @@
 							"labelMargin": 3,
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"defaultValue": "propertyDeductibles1000"
 						}, {
 							"key": "dspropmechbreakdown",
 							"label": "Content",
@@ -2252,8 +3252,24 @@
 		},
 		"collapsible": false
 	}, {
-		"type": "panel",
 		"title": "General Liability Information/Claims Information",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "pageNaN",
+		"conditional": {
+			"show": false,
+			"when": "product",
+			"eq": "Group Professional Liability"
+		},
+		"type": "panel",
+		"label": "General Liability Information/Claims Information",
 		"components": [{
 			"title": "General Liability Information",
 			"theme": "primary",
@@ -2671,6 +3687,24 @@
 								"label": "Field Set",
 								"input": false,
 								"components": [{
+									"type": "documentviewer",
+									"key": "document1",
+									"protected": true,
+									"persistent": false,
+									"input": 1,
+									"tableView": false,
+									"label": " ",
+									"hideLabel": true,
+									"calculateValue": "value = (row.pleaseAttachWaiversOfLiability)",
+									"dtype": "documentviewer",
+									"datype": "documentviewer",
+									"dattype": "documentviewer",
+									"customConditional": "if(data.CSRReviewRequired || data.CSRReviewRequired == true) {\nif (data.privileges){\n if((typeof row.pleaseAttachWaiversOfLiability != 'string') && row.pleaseAttachWaiversOfLiability !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}}else{\nshow = false;\n}",
+									"datatype": "documentviewer",
+									"data_type": "documentviewer",
+									"inputType": "documentviewer",
+									"keyModified": true
+								}, {
 									"label": "Hours of Operation",
 									"attrs": [{
 										"attr": "",
@@ -3399,10 +4433,10 @@
 							"eq": "true"
 						},
 						"type": "textfield",
-						"input": true,
-						"lockKey": true,
 						"labelWidth": 30,
 						"labelMargin": 3,
+						"input": true,
+						"lockKey": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -3618,16 +4652,19 @@
 					"lockKey": true
 				}, {
 					"label": "Please list the date of the claim, the amount paid and any amounts outstanding",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"tableView": true,
 					"defaultValue": [{
 						"dsgldateoftheclaim": "2020-06-15T00:00:00+05:30",
-						"claimsInformatio": ""
+						"claimsInformatio": "",
+						"claimAmountPaid": "",
+						"claimsAmountOutStanding": ""
 					}],
 					"clearOnHide": false,
 					"validate": {
@@ -3796,18 +4833,7 @@
 			}],
 			"path": "pageNaNPanel3"
 		}],
-		"input": false,
-		"key": "pageNaN",
-		"theme": "primary",
-		"tableView": false,
-		"label": "GENERAL LIABILITY INFORMATION/CLAIMS INFORMATION",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false
+		"input": false
 	}, {
 		"title": "Optional Coverages",
 		"theme": "primary",
@@ -3820,8 +4846,13 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "page4PanelPanelPanel",
+		"conditional": {
+			"show": false,
+			"when": "product",
+			"eq": "Group Professional Liability"
+		},
 		"type": "panel",
-		"label": "OPTIONAL COVERAGE'S",
+		"label": "Optional Coverages",
 		"input": false,
 		"components": [{
 			"label": "Optional Liability Coverage",
@@ -3849,6 +4880,7 @@
 					"tableView": true,
 					"defaultValue": false,
 					"clearOnHide": false,
+					"allowCalculateOverride": true,
 					"key": "travelAgentEoPL",
 					"type": "checkbox",
 					"input": true,
@@ -4178,934 +5210,26 @@
 				"hideLabel": true,
 				"label": "Table"
 			}]
-		}, {
-			"label": "well",
-			"hidden": true,
-			"tableView": false,
-			"key": "rateCard",
-			"type": "well",
-			"clearOnHide": false,
-			"input": false,
-			"components": [{
-				"input": true,
-				"tableView": true,
-				"key": "liability",
-				"label": "liability",
-				"type": "hidden",
-				"lockKey": true,
-				"defaultValue": "true"
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "property",
-				"label": "property",
-				"type": "hidden",
-				"lockKey": true,
-				"defaultValue": "true"
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBuildingCat",
-						"label": "limitOver500000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBuildingCat",
-						"label": "limitOver250000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBuildingCat",
-						"label": "limitOver100000CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBuildingCat",
-						"label": "limitOver0CoverBuildingCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "limitOver500000CoverBuildingNonCat",
-						"persistent": "client-only",
-						"key": "limitOver500000CoverBuildingNonCat",
-						"type": "hidden",
-						"input": true,
-						"tableView": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBuildingNonCat",
-						"label": "limitOver250000CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBuildingNonCat",
-						"label": "limitOver100000CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBuildingNonCat",
-						"label": "limitOver0CoverBuildingNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBusIncomeCat",
-						"label": "limitOver500000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBusIncomeCat",
-						"label": "limitOver250000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBusIncomeCat",
-						"label": "limitOver100000CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBusIncomeCat",
-						"label": "limitOver0CoverBusIncomeCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver500000CoverBusIncomeNonCat",
-						"label": "limitOver500000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver250000CoverBusIncomeNonCat",
-						"label": "limitOver250000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver100000CoverBusIncomeNonCat",
-						"label": "limitOver100000CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "limitOver0CoverBusIncomeNonCat",
-						"label": "limitOver0CoverBusIncomeNonCat",
-						"protected": true,
-						"persistent": false,
-						"type": "hidden",
-						"lockKey": true,
-						"defaultValue": "0.00997272",
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns3",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverageUpTo50000",
-						"label": "standardCoverageUpTo50000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage50001To100000",
-						"label": "standardCoverage50001To100000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage100001To200000",
-						"label": "standardCoverage100001To200000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage200001To350000",
-						"label": "standardCoverage200001To350000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage350001To500000",
-						"label": "standardCoverage350001To500000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage500001To1M",
-						"label": "standardCoverage500001To1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "standardCoverage1MAndOver",
-						"label": "standardCoverage1MAndOver",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnlyUpTo50000",
-						"label": "liabilityOnlyUpTo50000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly50001To100000",
-						"label": "liabilityOnly50001To100000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly100001To200000",
-						"label": "liabilityOnly100001To200000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly200001To350000",
-						"label": "liabilityOnly200001To350000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly350001To500000",
-						"label": "liabilityOnly350001To500000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly500001To1M",
-						"label": "liabilityOnly500001To1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "liabilityOnly1MAndOver",
-						"label": "liabilityOnly1MAndOver",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "discontinuedOperation",
-						"label": "discontinuedOperation",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "medicalExpense",
-				"label": "medicalExpense",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns4",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "nonOwnedAutoLiability100K",
-						"label": "NON-Owned Auto Liability 100k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "page5PanelColumns4HiddenField",
-						"label": "NON-Owned Auto Liability 1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideLabel": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns5",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage1M",
-						"label": "excessLiabilityCoverage1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage2M",
-						"label": "excessLiabilityCoverage2M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage3M",
-						"label": "excessLiabilityCoverage3M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage4M",
-						"label": "excessLiabilityCoverage4M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "excessLiabilityCoverage9M",
-						"label": "excessLiabilityCoverage9M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "TAEOunder100k",
-						"label": "TAEOunder100k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "TAEO100kTo500k",
-						"label": "TAEO100kTo500k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 6,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns6",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "poolLiabilityOver0",
-						"label": "poolLiabilityOver0",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "poolLiabilityOver20k",
-						"label": "poolLiabilityOver20k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "poolLiabilityOver50k",
-						"label": "poolLiabilityOver50k",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns7",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsJan",
-						"label": "proRataFactorsJan",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsApr",
-						"label": "proRataFactorsApr",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsJul",
-						"label": "proRataFactorsJul",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsOct",
-						"label": "proRataFactorsOct",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsFeb",
-						"label": "proRataFactorsFeb",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsMay",
-						"label": "proRataFactorsMay",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsAug",
-						"label": "proRataFactorsAug",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsNov",
-						"label": "proRataFactorsNov",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsMar",
-						"label": "proRataFactorsMar",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsJun",
-						"label": "proRataFactorsJun",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsSep",
-						"label": "proRataFactorsSep",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "proRataFactorsDec",
-						"label": "proRataFactorsDec",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "padiFee",
-				"label": "padiFee",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "stateTaxData",
-				"label": "stateTaxData",
-				"type": "hidden",
-				"lockKey": true,
-				"protected": true,
-				"persistent": false
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns8",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan25000",
-						"label": "groupCoverageMoreThan25000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan50000",
-						"label": "groupCoverageMoreThan50000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan200000",
-						"label": "groupCoverageMoreThan200000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan100000",
-						"label": "groupCoverageMoreThan100000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan150000",
-						"label": "groupCoverageMoreThan150000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan0",
-						"label": "groupCoverageMoreThan0",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan250000",
-						"label": "groupCoverageMoreThan250000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan350000",
-						"label": "groupCoverageMoreThan350000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupCoverageMoreThan500000",
-						"label": "groupCoverageMoreThan500000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns9",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability1M",
-						"label": "groupExcessLiability1M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability4M",
-						"label": "groupExcessLiability4M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability2M",
-						"label": "groupExcessLiability2M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability9M",
-						"label": "groupExcessLiability9M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "groupExcessLiability3M",
-						"label": "groupExcessLiability3M",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "combinedSingleLimit",
-						"calculateValue": "var limit = '1000000';\nvalue = (parseFloat(data['groupExcessLiabilityLimit']) || 0) + parseFloat(limit);",
-						"key": "combinedSingleLimit",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "annualAggregate",
-						"calculateValue": "var limit = '1000000';\nvalue = parseFloat(data['combinedSingleLimit']) + parseFloat(limit);",
-						"key": "annualAggregate",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "groupExcessLiabilityLimit",
-						"calculateValue": "if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability1M'){\n  value = '1000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability2M'){\n  value = '2000000';    \n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability3M'){\n  value = '3000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability4M'){\n  value = '4000000';\n}else if(data['groupExcessLiabilitySelect'] == 'groupExcessLiability9M'){\n  value = '9000000';\n}",
-						"key": "groupExcessLiabilityLimit",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}, {
-				"input": true,
-				"tableView": true,
-				"key": "groupPadiFee",
-				"label": "groupPadiFee",
-				"type": "hidden",
-				"lockKey": true
-			}, {
-				"label": "Columns",
-				"input": false,
-				"tableView": false,
-				"key": "page5PanelColumns10",
-				"columns": [{
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "propertyDeductibles1000",
-						"label": "propertyDeductibles1000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "propertyDeductibles2500",
-						"label": "propertyDeductibles2500",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}, {
-					"components": [{
-						"input": true,
-						"tableView": true,
-						"key": "propertyDeductibles5000",
-						"label": "propertyDeductibles5000",
-						"type": "hidden",
-						"lockKey": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md"
-				}],
-				"type": "columns",
-				"hideLabel": true
-			}],
-			"hideLabel": true,
-			"lockKey": true,
-			"hideOnChildrenHidden": false
 		}]
 	}, {
-		"type": "panel",
 		"title": "Additional",
+		"theme": "primary",
+		"breadcrumbClickable": true,
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"collapsible": false,
+		"tableView": false,
+		"key": "page4",
+		"conditional": {
+			"show": false,
+			"when": "product",
+			"eq": "Group Professional Liability"
+		},
+		"type": "panel",
+		"label": "Panel",
 		"components": [{
 			"key": "page4Panel",
 			"input": false,
@@ -5183,11 +5307,12 @@
 				"input": false,
 				"components": [{
 					"label": "Additional Insured",
-					"reorder": false,
+					"reorder": true,
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
 					"defaultValue": [{
@@ -5201,7 +5326,9 @@
 						"businessRelationOther": "",
 						"additionalInformation": "",
 						"doYouHaveAWrittenContract": "",
-						"additionalInsuredAttachments": []
+						"additionalInsuredAttachments": [],
+						"effectiveDate": "",
+						"start_date": ""
 					}],
 					"validate": {
 						"required": true,
@@ -5224,6 +5351,7 @@
 									"label": "Name",
 									"tableView": true,
 									"validate": {
+										"required": true,
 										"customMessage": "Please enter the Name of the Additional Insured"
 									},
 									"errorLabel": "Additional Insured Name",
@@ -5363,7 +5491,7 @@
 									"tableView": true,
 									"validate": {
 										"customMessage": "Please enter the Zip Code of the Additional Insured",
-										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"errorLabel": "Additional Insured Zip Code",
 									"key": "zip",
@@ -5416,8 +5544,17 @@
 											"label": "Training Agency",
 											"value": "trainingAgency"
 										}, {
-											"value": "other",
-											"label": "Other"
+											"value": "cruiseLine",
+											"label": "Cruise Line"
+										}, {
+											"label": "Land Owner",
+											"value": "landOwner"
+										}, {
+											"label": "Booking Agent",
+											"value": "bookingAgent"
+										}, {
+											"label": "Other",
+											"value": "other"
 										}]
 									},
 									"selectThreshold": 0.3,
@@ -5534,6 +5671,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
+							"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -5621,12 +5759,13 @@
 				"input": false,
 				"components": [{
 					"label": "Additional Named Insured",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": false,
 					"defaultValue": [{
@@ -5657,6 +5796,9 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -5755,7 +5897,7 @@
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
-										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"key": "zip",
 									"type": "textfield",
@@ -5798,8 +5940,13 @@
 			"collapsible": false,
 			"tableView": false,
 			"key": "panel2",
+			"conditional": {
+				"show": true,
+				"when": "propertyCoverageSelect",
+				"eq": "yes"
+			},
 			"type": "panel",
-			"label": "Panel",
+			"label": "Loss Payees",
 			"input": false,
 			"components": [{
 				"label": "Would you like to add Loss Payees?",
@@ -5837,15 +5984,24 @@
 				"tableView": false,
 				"components": [{
 					"label": "Loss Payees",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add More",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
-					"defaultValue": [{}],
+					"defaultValue": [{
+						"name": "",
+						"country": "",
+						"address": "",
+						"state": {},
+						"city": "",
+						"zip": "",
+						"description": ""
+					}],
 					"clearOnHide": false,
 					"validate": {
 						"minLength": 1
@@ -5866,6 +6022,9 @@
 									"label": "Name",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "name",
 									"type": "textfield",
 									"input": true,
@@ -5913,6 +6072,9 @@
 									"label": "Address",
 									"tableView": true,
 									"clearOnHide": false,
+									"validate": {
+										"required": true
+									},
 									"key": "address",
 									"type": "textfield",
 									"input": true,
@@ -5963,7 +6125,7 @@
 									"label": "Zip Code",
 									"tableView": true,
 									"validate": {
-										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+										"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 									},
 									"key": "zip",
 									"type": "textfield",
@@ -5989,7 +6151,8 @@
 							"tableView": true,
 							"key": "description",
 							"type": "textarea",
-							"input": true
+							"input": true,
+							"hideOnChildrenHidden": false
 						}],
 						"inDataGrid": true,
 						"clearOnHide": false,
@@ -6071,12 +6234,13 @@
 				"components": [{
 					"label": "Information for each Additional Location is required as follows.",
 					"tooltip": "You will need to complete another application for these locations.",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Add another location",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": false,
 					"hideLabel": true,
 					"tableView": true,
 					"defaultValue": [{
@@ -6091,7 +6255,6 @@
 						"dsPropCentralFireAL": {},
 						"additionalLocationDoYouOwntheBuilding": "",
 						"built_year": {},
-						"explainationAL": "",
 						"receiptsAL": [],
 						"doyouhaveapoolonpremisesAL": "",
 						"ifyouhaveapoolisitusedforactivitiesotherthandivingandorswimmingIfyescontactVicenciaBuckleyforsupplementalformAL": "",
@@ -6118,7 +6281,7 @@
 						"doYouWantToApplyForNonOwnerAutoAL": false,
 						"nonOwnedAutoLiabilityPL": "",
 						"ALCoverageCheckBox": false,
-						"ALTravelAgentEOFP": "0",
+						"ALTravelAgentEOFP": "NaN",
 						"ALNonOwnedAutoCheckBox": false,
 						"ALExcessLiabilityCheckBox": false,
 						"ALPropertyCoverageOption": "nonCat",
@@ -6126,24 +6289,20 @@
 						"ALPropertyTaxPercentage": "0",
 						"additionalLocationPropertyTotal": "0",
 						"receiptsAL1": [],
-						"ALCoverageFP": 0,
+						"ALCoverageFP": "NaN",
 						"ALnonDivingPoolAmount": 0,
 						"ALMedicalExpenseFP": 0,
-						"ALNonOwnedAutoFP": 0,
-						"ALExcessLiabilityFP": 0,
-						"ALContentsFP": 0,
-						"ALLossofBusIncomeFP": "0",
+						"ALNonOwnedAutoFP": "0",
+						"ALExcessLiabilityFP": "0",
 						"ALBuildingLimitFP": 0,
 						"ALliabilityCoveragesTotal": "0",
-						"ALPropertyCoveragesTotal": "0",
+						"ALPropertyCoveragesTotal": 0,
 						"ALLiabilityPropertyCoveragesTotal": "0",
 						"ALProRataPremium": "0",
-						"ALliabilityTaxTotal": "0",
+						"ALliabilityTaxTotal": "0.00",
 						"ALPropertyTaxTotal": 0,
-						"ALTotalTax": "0",
+						"ALTotalTax": "0.00",
 						"locationTotal": 0,
-						"ALcentralStationAlarm": "",
-						"ALfireSprinklers": "",
 						"ALdoyouhaveapoolonpremisesPL1": "",
 						"ALcriminalBackGroundChecks": "",
 						"ALhasApplicantSexualAbuse": "",
@@ -6183,7 +6342,13 @@
 						"ALlakeLifeGaurdRecordLog": "",
 						"ALlakeJacuzziWhirlPool": "",
 						"ALlakeTemperatureAdjusted": "",
-						"ALlakeFiltrationDrainsUsed": ""
+						"ALlakeFiltrationDrainsUsed": "",
+						"padiNumberAL": "",
+						"ALpropertyCoverageSelect": "",
+						"built_year1": {},
+						"ALProRataPremiumPercentage": 1,
+						"overRideLiabilityTax": false,
+						"ALlakeQuarry": 0
 					}],
 					"clearOnHide": false,
 					"key": "additionalLocations",
@@ -6221,6 +6386,9 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
@@ -6243,6 +6411,7 @@
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
 										"validate": {
+											"required": true,
 											"customMessage": "Please enter your country."
 										},
 										"key": "country",
@@ -6268,6 +6437,9 @@
 										"label": "Address",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "address",
 										"type": "textfield",
 										"input": true,
@@ -6290,6 +6462,9 @@
 										"clearOnRefresh": true,
 										"selectThreshold": 0.3,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "state",
 										"type": "select",
 										"indexeddb": {
@@ -6309,6 +6484,9 @@
 										"label": "City",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "city",
 										"type": "textfield",
 										"input": true,
@@ -6320,6 +6498,7 @@
 										"tableView": false,
 										"clearOnHide": false,
 										"validate": {
+											"required": true,
 											"custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
 										"key": "zip",
@@ -6346,7 +6525,7 @@
 						}, {
 							"label": "Do you want to apply Property Coverage?",
 							"widget": "choicesjs",
-							"tableView": true,
+							"tableView": false,
 							"data": {
 								"values": [{
 									"label": "Yes",
@@ -6990,115 +7169,6 @@
 									"label": "Columns",
 									"columns": [{
 										"components": [{
-											"label": "Is applicant in bankruptcy or receivership?",
-											"optionsLabelPosition": "right",
-											"inline": false,
-											"tableView": false,
-											"values": [{
-												"label": "Yes",
-												"value": "yes",
-												"shortcut": ""
-											}, {
-												"label": "No",
-												"value": "no",
-												"shortcut": ""
-											}],
-											"clearOnHide": false,
-											"validate": {
-												"required": true,
-												"customMessage": "Please select an option"
-											},
-											"errorLabel": "Pool Premises",
-											"key": "ALdoyouhaveapoolonpremisesPL1",
-											"type": "radio",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "Do you conduct criminal background checks on all employees?",
-											"optionsLabelPosition": "right",
-											"inline": false,
-											"tableView": false,
-											"values": [{
-												"label": "Yes",
-												"value": "yes",
-												"shortcut": ""
-											}, {
-												"label": "No",
-												"value": "no",
-												"shortcut": ""
-											}],
-											"clearOnHide": false,
-											"validate": {
-												"required": true,
-												"customMessage": "Please select an option"
-											},
-											"errorLabel": "Pool Premises",
-											"key": "ALcriminalBackGroundChecks",
-											"type": "radio",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "Has the applicant or any employees ever been convicted of a child abuse or sexual abuse related crime?",
-											"optionsLabelPosition": "right",
-											"inline": false,
-											"tableView": false,
-											"values": [{
-												"label": "Yes",
-												"value": "yes",
-												"shortcut": ""
-											}, {
-												"label": "No",
-												"value": "no",
-												"shortcut": ""
-											}],
-											"clearOnHide": false,
-											"validate": {
-												"required": true,
-												"customMessage": "Please select an option"
-											},
-											"errorLabel": "Pool Premises",
-											"key": "ALhasApplicantSexualAbuse",
-											"type": "radio",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "Has the applicant ever had an allegation of sexual abuse or molestation? ",
-											"optionsLabelPosition": "right",
-											"inline": false,
-											"tableView": false,
-											"values": [{
-												"label": "Yes",
-												"value": "yes",
-												"shortcut": ""
-											}, {
-												"label": "No",
-												"value": "no",
-												"shortcut": ""
-											}],
-											"clearOnHide": false,
-											"validate": {
-												"required": true,
-												"customMessage": "Please select an option"
-											},
-											"errorLabel": "Pool Premises",
-											"key": "ALhasApplicantSexualAbuseMolestation",
-											"type": "radio",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}, {
-											"label": "Please advise details of the incident, the date and the outcome",
-											"autoExpand": false,
-											"tableView": true,
-											"key": "ALpleaseAdviseDetailsOfTheIncidentTheDateAndTheOutcome",
-											"conditional": {
-												"show": true,
-												"when": "row.ALhasApplicantSexualAbuseMolestation",
-												"eq": "yes"
-											},
-											"type": "textarea",
-											"input": true,
-											"hideOnChildrenHidden": false
-										}, {
 											"label": "Do you have a pool on premises?",
 											"optionsLabelPosition": "right",
 											"inline": false,
@@ -7161,11 +7231,7 @@
 											"collapsible": false,
 											"tableView": false,
 											"key": "ALpoolSupplementalForm1",
-											"conditional": {
-												"show": true,
-												"when": "additionalLocations.ALNonDivingPoolActivities",
-												"eq": "yes"
-											},
+											"customConditional": "if(row['ALNonDivingPoolActivities'] == \"yes\"){\n  show = true;\n}else{\n  show = false;\n}",
 											"type": "panel",
 											"label": "Pool Supplemental Form",
 											"input": false,
@@ -7215,6 +7281,9 @@
 															"delimiter": false,
 															"requireDecimal": false,
 															"inputFormat": "plain",
+															"validate": {
+																"required": true
+															},
 															"key": "ALdimensions",
 															"type": "number",
 															"input": true,
@@ -7235,6 +7304,9 @@
 															"delimiter": false,
 															"requireDecimal": false,
 															"inputFormat": "plain",
+															"validate": {
+																"required": true
+															},
 															"key": "ALdepth",
 															"type": "number",
 															"input": true,
@@ -7248,6 +7320,9 @@
 															"delimiter": false,
 															"requireDecimal": false,
 															"inputFormat": "plain",
+															"validate": {
+																"required": true
+															},
 															"key": "ALmaxDepth",
 															"type": "number",
 															"input": true,
@@ -7680,7 +7755,8 @@
 														},
 														"type": "file",
 														"url": "/file/attachments",
-														"input": true
+														"input": true,
+														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
 														"label": " Is pool equipment/chemicals regularly maintained?",
 														"optionsLabelPosition": "right",
@@ -7883,7 +7959,6 @@
 											"hideOnChildrenHidden": false
 										}, {
 											"label": "Please explain the equipment sales",
-											"spellcheck": false,
 											"tableView": true,
 											"clearOnHide": false,
 											"validate": {
@@ -9288,7 +9363,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if ((parseFloat(row.ALPoolLiability)||0) > 50000) {\n  value = data[\"poolLiabilityOver50k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 20000) {\n  value = data[\"poolLiabilityOver20k\"];\n} else if ((parseFloat(row.ALPoolLiability)||0) > 0) {\n  value = data[\"poolLiabilityOver0\"];\n} else {\n  value = 0;\n}",
+													"calculateValue": "if ((parseFloat(row.ALpoolLiability)||0) > 50000) {\n  value = data[\"poolLiabilityOver50k\"];\n} else if ((parseFloat(row.ALpoolLiability)||0) > 20000) {\n  value = data[\"poolLiabilityOver20k\"];\n} else if ((parseFloat(row.ALpoolLiability)||0) > 0) {\n  value = data[\"poolLiabilityOver0\"];\n} else {\n  value = 0;\n}",
 													"key": "ALnonDivingPoolAmount",
 													"type": "number",
 													"input": true,
@@ -9325,7 +9400,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  value = ((parseFloat(data[\"MedicalExpenseFP\"])||0)/10).toFixed(0);\n}",
+													"calculateValue": "if(row['ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL'] == true){\n  value = 0;\n} else { \n  if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\n    value = ((parseFloat(data[\"medicalExpense\"])||0)/10).toFixed(0);\n  }\n  else{\n    value = 0;\n  }\n}",
 													"key": "ALMedicalExpenseFP",
 													"type": "number",
 													"input": true,
@@ -9379,7 +9454,7 @@
 													"requireDecimal": false,
 													"inputFormat": "plain",
 													"clearOnHide": false,
-													"calculateValue": "if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL){\n  value = 4419\n} else {\n  value =0;\n}",
+													"calculateValue": "if(row.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL == true){\n  value = 4419.00;\n} else {\n  value =0;\n}",
 													"key": "ALlakeQuarry",
 													"type": "number",
 													"input": true,
@@ -9469,8 +9544,7 @@
 														"delimiter": false,
 														"requireDecimal": false,
 														"inputFormat": "plain",
-														"clearOnHide": false,
-														"calculateValue": "if(row['ALpropertyCoverageSelect'] == 'yes') {\nvar total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.additionalLocationPropertyTotal)||0;\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}\n} else {\n  value =0;\n}",
+														"calculateValue": "if(row['ALpropertyCoverageSelect'] == 'yes') {\nvar total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.additionalLocationPropertyTotal)||0;\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500001 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500001 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250001 && total <= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250001 && total <= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100001 && total <= 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100001 && total <= 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}\n} else {\n  value =0;\n}",
 														"key": "ALContentsFP",
 														"type": "number",
 														"input": true,
@@ -9489,7 +9563,7 @@
 														"delimiter": false,
 														"requireDecimal": false,
 														"inputFormat": "plain",
-														"calculateValue": "if(row['ALpropertyCoverageSelect']=='yes'){\n  var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.ALLossofBusIncome)\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250000 && total < 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100000 && total < 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}\n} else {\n  value =0;\n}",
+														"calculateValue": "if(row['ALpropertyCoverageSelect']=='yes'){\n  var total = (parseFloat(row.ALBuildingReplacementValue)||0) + (parseFloat(row.additionalLocationPropertyTotal)||0) + (parseFloat(row.ALLossofBusIncome)||0);\nvar amount = parseFloat(row.ALLossofBusIncome)\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500001 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 500001 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver500000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250001 && total <= 500000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 250001 && total <= 500000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver250000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100001 && total <= 250000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total >= 100001 && total <= 250000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver100000CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeNonCat\"])||0) * amount)).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"cat\") {\n    value = (((parseFloat(data[\"limitOver0CoverBusIncomeCat\"])||0) * amount)).toFixed(0);\n} else {\n    value = 0;\n}\n} else {\n  value =0;\n}",
 														"key": "ALLossofBusIncomeFP",
 														"type": "number",
 														"input": true,
@@ -9509,7 +9583,7 @@
 														"requireDecimal": false,
 														"inputFormat": "plain",
 														"clearOnHide": false,
-														"calculateValue": "if(row['ALpropertyCoverageSelect']=='yes'){\nvar total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(row.additionalLocationPropertyTotal) + parseFloat(row.ALLossofBusIncome);\nvar amount = row.ALBuildingReplacementValue;\nvar option = row.ALPropertyCoverageOption;\nif (total > 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 250000 && total < 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 100000 && total < 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total < 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}\n} else {\n  value =0;\n}",
+														"calculateValue": "if(row['ALpropertyCoverageSelect']=='yes' && row['additionalLocationDoYouOwntheBuilding']=='yes'){\nvar total = parseFloat(row.ALBuildingReplacementValue) + parseFloat(row.additionalLocationPropertyTotal) + parseFloat(row.ALLossofBusIncome);\nvar amount = row.ALBuildingReplacementValue;\nvar option = row.ALPropertyCoverageOption;\nif (total >= 500001 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total >= 500001 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total >= 250001 && total <= 500000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total >= 250001 && total <= 500000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total >= 100001 && total <= 250000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total >= 100001 && total <= 250000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"nonCat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * amount).toFixed(0);\n} else if (total > 0 && total <= 100000 && option == \"cat\") {\n    value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * amount).toFixed(0);\n} else {\n    value = 0;\n}\n} else {\n  value =0;\n}",
 														"key": "ALBuildingLimitFP",
 														"type": "number",
 														"input": true,
@@ -9748,11 +9822,20 @@
 										}]
 									}, {
 										"components": [{
+											"label": "Over Ride Liability Tax",
+											"tableView": false,
+											"defaultValue": false,
+											"clearOnHide": false,
+											"key": "overRideLiabilityTax",
+											"type": "checkbox",
+											"input": true
+										}, {
 											"label": "Liability Tax Percentage",
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
 											"spellcheck": false,
+											"disabled": true,
 											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
@@ -9764,6 +9847,39 @@
 												"max": 100
 											},
 											"key": "ALliabilityTaxPercentage",
+											"logic": [{
+												"name": "Enable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRideLiabilityTax",
+														"eq": "true"
+													},
+													"javascript": "if(row.overRideLiabilityTax == true){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Enable Manual Override",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
+												}]
+											}, {
+												"name": "Disable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRideLiabilityTax",
+														"eq": "true"
+													},
+													"javascript": "if(row.overRideLiabilityTax == false){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Disable Manual Over ride",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
+												}]
+											}],
 											"type": "number",
 											"decimalLimit": 3,
 											"input": true,
@@ -9809,22 +9925,63 @@
 										}]
 									}, {
 										"components": [{
-											"label": "Property Tax Percentage",
+											"label": "Over Ride Property Tax",
+											"tableView": false,
+											"defaultValue": false,
+											"key": "overRidePropertyTax",
+											"type": "checkbox",
+											"input": true
+										}, {
+											"label": "Liability Tax Percentage",
 											"prefix": "%",
 											"hideLabel": true,
 											"mask": false,
 											"spellcheck": false,
+											"disabled": true,
 											"tableView": false,
 											"defaultValue": "0",
 											"delimiter": false,
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
+											"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"liability\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 											"validate": {
 												"max": 100
 											},
 											"key": "ALPropertyTaxPercentage",
+											"logic": [{
+												"name": "Enable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRidePropertyTax",
+														"eq": "true"
+													},
+													"javascript": "if(row.overRidePropertyTax == true){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Enable Manual Override",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "schema = { allowCalculateOverride:true ,disabled:false}"
+												}]
+											}, {
+												"name": "Disable Custom Tax",
+												"trigger": {
+													"type": "javascript",
+													"simple": {
+														"show": true,
+														"when": "additionalLocations.overRidePropertyTax",
+														"eq": ""
+													},
+													"javascript": "if(row.overRidePropertyTax == false){\n  result = true\n} else {\n  result = false\n}"
+												},
+												"actions": [{
+													"name": "Disable Manual Over ride",
+													"type": "mergeComponentSchema",
+													"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true}"
+												}]
+											}],
 											"type": "number",
 											"decimalLimit": 3,
 											"input": true,
@@ -9883,13 +10040,13 @@
 											"requireDecimal": true,
 											"inputFormat": "plain",
 											"clearOnHide": false,
-											"calculateValue": "value=((parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)).toFixed(0);",
+											"calculateValue": "value=((parseFloat(row.ALliabilityTaxTotal)||0)+(parseFloat(row.ALPropertyTaxTotal)||0)).toFixed(2);",
 											"key": "ALTotalTax",
 											"type": "number",
+											"decimalLimit": 2,
 											"input": true,
 											"inputType": "number",
-											"lockKey": true,
-											"decimalLimit": 2
+											"lockKey": true
 										}]
 									}],
 									[{
@@ -9947,11 +10104,7 @@
 				}]
 			}]
 		}],
-		"input": false,
-		"key": "page4",
-		"theme": "primary",
-		"tableView": false,
-		"label": "Panel"
+		"input": false
 	}, {
 		"title": "Group Professional Liability",
 		"theme": "primary",
@@ -10004,7 +10157,6 @@
 			"input": true
 		}, {
 			"label": "groupCoverageSelect",
-			"redrawOn": "data",
 			"calculateValue": "var groupVal = parseFloat(data['annualEstimatedResponseRecieptsGL']).toFixed(0);\nif(groupVal > 0 && groupVal <= 25000){\n  value = 'groupCoverageMoreThan0';\n}else if(groupVal >= 25001 && groupVal <= 50000){\n  value = 'groupCoverageMoreThan25000';\n}else if(groupVal >= 50001 && groupVal <= 100000){\n  value = 'groupCoverageMoreThan50000';\n}else if(groupVal >= 100001 && groupVal <= 150000){\n  value = 'groupCoverageMoreThan100000';\n}else if(groupVal >= 150001 && groupVal <= 200000){\n  value = 'groupCoverageMoreThan150000';\n}else if(groupVal >= 200001 && groupVal <= 250000){\n  value = 'groupCoverageMoreThan200000';\n}else if(groupVal >= 250001 && groupVal <= 350000){\n  value = 'groupCoverageMoreThan250000';\n}else if(groupVal >= 350001 && groupVal <= 500000){\n  value = 'groupCoverageMoreThan350000';\n}else if(groupVal >= 500001){\n  value = 'groupCoverageMoreThan500000';\n}",
 			"key": "groupCoverageSelect",
 			"type": "hidden",
@@ -10063,7 +10215,6 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
@@ -10145,7 +10296,6 @@
 						"delimiter": true,
 						"requireDecimal": false,
 						"inputFormat": "plain",
-						"redrawOn": "data",
 						"clearOnHide": false,
 						"calculateValue": "if(data[\"groupCoverageSelect\"]){\n  value = parseFloat(data[data[\"groupCoverageSelect\"]]).toFixed(0);\n} else {\n  value = 0;\n}",
 						"key": "groupCoverage",
@@ -10350,7 +10500,7 @@
 						"attr": "",
 						"value": ""
 					}],
-					"content": "<h4>Please refer the document at the <a href=\"https://www.diveinsurance.com/downloads/2019-20%20Group%20Professional%20App.pdf\" target=\"_blank\">link</a> for more information.</h4>",
+					"content": "<h4>Please refer the document at the <a href=\"./apps/DiveInsurance/public/docs/GroupProfessionalLiabilityApplication.pdf\" target=\"_blank\">link</a> for more information.</h4>",
 					"refreshOnChange": false,
 					"tableView": false,
 					"key": "html1",
@@ -10359,12 +10509,13 @@
 					"hideLabel": true
 				}, {
 					"label": "Group Members",
-					"reorder": false,
+					"reorder": true,
 					"addAnother": "Not a PADI Member?Click here to add external members",
 					"addAnotherPosition": "bottom",
 					"defaultOpen": false,
 					"layoutFixed": false,
 					"enableRowGroups": false,
+					"noFirstRow": true,
 					"hideLabel": true,
 					"tableView": false,
 					"defaultValue": [{
@@ -10374,13 +10525,12 @@
 						"status": "",
 						"nameOfInstitution": "",
 						"initial": "",
-						"start_date": "2020-07-16",
+						"start_date": "",
 						"documentattach": [],
 						"verified": "",
 						"rating": "",
 						"document1": [],
-						"effectiveDate": "2020-07-16",
-						"start_date1": "2020-07-16"
+						"effectiveDate": ""
 					}],
 					"clearOnHide": false,
 					"calculateValue": "if(value && value.length > 1){\n  var length = value.length - 1;\n  if(value[length]['padi'] == \"\"){\n    value.pop(); \n  }\n}",
@@ -10399,7 +10549,6 @@
 								"components": [{
 									"label": "Membership Number",
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
@@ -10419,7 +10568,6 @@
 								"components": [{
 									"label": "First Name",
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
@@ -10439,7 +10587,6 @@
 								"components": [{
 									"label": "Last Name",
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
@@ -10498,7 +10645,6 @@
 								"components": [{
 									"label": "Name of Training Agency",
 									"tableView": true,
-									"redrawOn": "data",
 									"clearOnHide": false,
 									"validate": {
 										"required": true
@@ -10523,6 +10669,37 @@
 							"label": "Columns",
 							"columns": [{
 								"components": [{
+									"label": "Email",
+									"tableView": true,
+									"validate": {
+										"customMessage": "Please enter your email address in format: yourname@example.com"
+									},
+									"key": "email",
+									"type": "email",
+									"input": true,
+									"hideOnChildrenHidden": false
+								}],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md",
+								"width": 8
+							}, {
+								"components": [],
+								"offset": 0,
+								"push": 0,
+								"pull": 0,
+								"size": "md",
+								"width": 4
+							}],
+							"tableView": false,
+							"key": "columns41",
+							"type": "columns",
+							"input": false
+						}, {
+							"label": "Columns",
+							"columns": [{
+								"components": [{
 									"label": "Effective Date",
 									"format": "MM-dd-yyyy",
 									"tableView": false,
@@ -10537,12 +10714,11 @@
 										"showMeridian": false
 									},
 									"clearOnHide": false,
-									"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
+									"calculateValue": "value = moment(data['policyPeriod']).format(\"MM-DD-YYYY\");",
 									"allowCalculateOverride": true,
 									"validate": {
 										"required": true,
-										"customMessage": "Effective date is required",
-										"custom": "if(data.effectiveDate){\n  valid = (moment(data.effectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}"
+										"custom": "if(row.effectiveDate){\n  valid = (moment(row.effectiveDate).format('MM-DD-YYYY') >= moment(data['policyPeriod']).format('MM-DD-YYYY')) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n  valid = (row.padi != \"\" && row.effectiveDate != \"\") ? true : \"Effective Date is required\";\n}"
 									},
 									"key": "effectiveDate",
 									"type": "datetime",
@@ -10594,7 +10770,6 @@
 							"input": false
 						}, {
 							"label": "initial",
-							"redrawOn": "data",
 							"key": "initial",
 							"type": "hidden",
 							"input": true,
@@ -10624,15 +10799,16 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
+							"calculateValue": "if(typeof row.documentattach == 'string' || row.documentattach[0] && row.documentattach[0].length == 0 ||  row.documentattach[0] && row.documentattach[0] == '[]'){\n  value = [];\n}",
 							"validate": {
 								"multiple": true
 							},
 							"key": "documentattach",
 							"type": "file",
+							"url": "/file/attachment",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"url": "/file/attachment"
+							"hideOnChildrenHidden": false
 						}, {
 							"type": "documentviewer",
 							"key": "document1",
@@ -10640,7 +10816,7 @@
 							"dtype": "documentviewer",
 							"datype": "documentviewer",
 							"dattype": "documentviewer",
-							"customConditional": "if (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+							"customConditional": "if(data.CSRReviewRequired || data.CSRReviewRequired == true) {if (data.privileges){\n if((typeof row.documentattach != 'string') && row.documentattach !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}}else{\nshow = false;\n}",
 							"datatype": "documentviewer",
 							"data_type": "documentviewer",
 							"label": " ",
@@ -10722,12 +10898,13 @@
 					"input": false,
 					"components": [{
 						"label": "Group Additional Insured",
-						"reorder": false,
+						"reorder": true,
 						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
+						"noFirstRow": false,
 						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": [{
@@ -10741,7 +10918,8 @@
 							"businessRelationOther": "",
 							"additionalInformation": "",
 							"doYouHaveAWrittenContract": "",
-							"additionalInsuredAttachments": []
+							"additionalInsuredAttachments": [],
+							"additionalInsuredAttachments1": []
 						}],
 						"validate": {
 							"required": true,
@@ -10765,6 +10943,7 @@
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
+											"required": true,
 											"customMessage": "Please enter the Name of the Additional Insured"
 										},
 										"errorLabel": "Additional Insured Name",
@@ -10907,7 +11086,7 @@
 										"clearOnHide": false,
 										"validate": {
 											"customMessage": "Please enter the Zip Code of the Additional Insured",
-											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
 										"errorLabel": "Additional Insured Zip Code",
 										"key": "zip",
@@ -10960,14 +11139,23 @@
 												"label": "Training Agency",
 												"value": "trainingAgency"
 											}, {
-												"value": "other",
-												"label": "Other"
+												"value": "cruiseLine",
+												"label": "Cruise Line"
+											}, {
+												"label": "Land Owner",
+												"value": "landOwner"
+											}, {
+												"label": "Booking Agent",
+												"value": "bookingAgent"
+											}, {
+												"label": "Other",
+												"value": "other"
 											}]
 										},
 										"selectThreshold": 0.3,
 										"validate": {
 											"required": true,
-											"customMessage": "Please select the Business Relation with the Additional Insured"
+											"customMessage": "Please select the business relation with the additional insured"
 										},
 										"errorLabel": "Additional Insured Business Relation",
 										"key": "businessRelation",
@@ -11078,6 +11266,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
+								"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments && row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -11085,6 +11274,24 @@
 								"type": "file",
 								"url": "/file/attachment",
 								"input": true
+							}, {
+								"type": "documentviewer",
+								"key": "additionalInsuredAttachments1",
+								"calculateValue": "value = (row.additionalInsuredAttachments)",
+								"dtype": "documentviewer",
+								"datype": "documentviewer",
+								"dattype": "documentviewer",
+								"customConditional": "if (data.privileges){\n if((typeof row.additionalInsuredAttachments != 'string') && row.additionalInsuredAttachments !==''){\n    show = ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) ? true: false;\n  } else {\n    show =false\n  }\n  } else {\n  show = false;\n}",
+								"datatype": "documentviewer",
+								"data_type": "documentviewer",
+								"label": " ",
+								"hideLabel": true,
+								"inputType": "documentviewer",
+								"input": 1,
+								"tableView": false,
+								"protected": true,
+								"persistent": false,
+								"keyModified": true
 							}],
 							"tableView": false,
 							"type": "well",
@@ -11162,12 +11369,13 @@
 					"input": false,
 					"components": [{
 						"label": "Additional Named Insured",
-						"reorder": false,
+						"reorder": true,
 						"addAnother": "Add More",
 						"addAnotherPosition": "bottom",
 						"defaultOpen": false,
 						"layoutFixed": false,
 						"enableRowGroups": false,
+						"noFirstRow": false,
 						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": [{
@@ -11198,6 +11406,9 @@
 										"label": "Name",
 										"tableView": true,
 										"clearOnHide": false,
+										"validate": {
+											"required": true
+										},
 										"key": "name",
 										"type": "textfield",
 										"input": true,
@@ -11296,7 +11507,7 @@
 										"tableView": true,
 										"clearOnHide": false,
 										"validate": {
-											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+											"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 										},
 										"key": "zip",
 										"type": "textfield",
@@ -11326,6 +11537,13 @@
 					}],
 					"path": "page7Panel"
 				}]
+			}, {
+				"label": "Excluded Operation",
+				"autoExpand": false,
+				"tableView": true,
+				"key": "groupExcludedOperation",
+				"type": "textarea",
+				"input": true
 			}, {
 				"label": "Table",
 				"cellAlignment": "left",
@@ -11366,7 +11584,6 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data[\"groupCoverage\"]) || 0).toFixed(0);",
 							"key": "groupCoverageAmount",
@@ -11406,7 +11623,6 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data[\"groupExcessLiability\"]) || 0).toFixed(0);",
 							"key": "groupExcessLiabilityAmount",
@@ -11433,22 +11649,64 @@
 						}]
 					}, {
 						"components": [{
-							"label": "Tax Percentage",
+							"label": "Over Ride Tax",
+							"tableView": false,
+							"clearOnHide": false,
+							"key": "overRideGroupTax",
+							"type": "checkbox",
+							"input": true,
+							"defaultValue": false
+						}, {
+							"label": "Group Tax Percentage",
 							"prefix": "%",
 							"hideLabel": true,
 							"mask": false,
 							"spellcheck": false,
-							"tableView": true,
+							"disabled": true,
+							"tableView": false,
+							"defaultValue": "0",
 							"delimiter": false,
 							"requireDecimal": true,
 							"inputFormat": "plain",
 							"clearOnHide": false,
-							"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  var percentage = 0;\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"group\"\n    ) {\n      percentage =  stateTaxData[i].percentage;\n    }\n  }\n  return percentage;\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\n\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
-							"allowCalculateOverride": true,
+							"calculateValue": "function getValue(states) {\n  \nvar state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n\n  for (var i = 0; i < states.length; i++) {\n    if (stateTaxData[i].state == state && stateTaxData[i].coverage == \"group\") {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nvar stateTaxData = data[\"stateTaxData\"];\nif(stateTaxData){\n  value = getValue(stateTaxData);\n}",
 							"validate": {
 								"max": 100
 							},
 							"key": "groupTaxPercentage",
+							"logic": [{
+								"name": "Enable Custom Tax",
+								"trigger": {
+									"type": "javascript",
+									"simple": {
+										"show": true,
+										"when": "additionalLocations.overRidePropertyTax",
+										"eq": "true"
+									},
+									"javascript": "if(data.overRideGroupTax == true){\n  result = true\n} else {\n  result = false\n}"
+								},
+								"actions": [{
+									"name": "Enable Manual Override",
+									"type": "mergeComponentSchema",
+									"schemaDefinition": "schema = { allowCalculateOverride:true ,disabled:false}"
+								}]
+							}, {
+								"name": "Disable Custom Tax",
+								"trigger": {
+									"type": "javascript",
+									"simple": {
+										"show": true,
+										"when": "additionalLocations.overRidePropertyTax",
+										"eq": ""
+									},
+									"javascript": "if(row.overRideGroupTax == false){\n  result = true\n} else {\n  result = false\n}"
+								},
+								"actions": [{
+									"name": "Disable Manual Over ride",
+									"type": "mergeComponentSchema",
+									"schemaDefinition": "schema = {allowCalculateOverride:false,disabled:true,redraw:\"data\"}"
+								}]
+							}],
 							"type": "number",
 							"decimalLimit": 3,
 							"input": true,
@@ -11467,6 +11725,7 @@
 							"delimiter": true,
 							"requireDecimal": true,
 							"inputFormat": "plain",
+							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "value = (((parseFloat(data[\"groupCoverage\"]) || 0) + (parseFloat(data[\"groupExcessLiabilityAmount\"]) ||0))* (parseFloat(data[\"groupTaxPercentage\"]) || 0)/100);",
 							"key": "groupTaxAmount",
@@ -11506,7 +11765,6 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "value = (parseFloat(data[\"groupPadiFee\"])).toFixed(0)",
 							"key": "groupPadiFeeAmount",
@@ -11581,7 +11839,6 @@
 							"delimiter": true,
 							"requireDecimal": false,
 							"inputFormat": "plain",
-							"redrawOn": "data",
 							"clearOnHide": false,
 							"calculateValue": "value = ((parseFloat(data[\"groupExcessLiability\"])||0.00)+(parseFloat(data[\"groupTaxAmount\"])||0.00)+(parseFloat(data[\"groupPadiFeeAmount\"])||0.00)+(parseFloat(data[\"groupCoverage\"])||0.00) - (parseFloat(data['groupSurchargeDeductionsAmount'])||0)).toFixed(2)",
 							"key": "groupTotalAmount",
@@ -11823,15 +12080,9 @@
 		"input": false,
 		"components": [{
 			"label": "Columns",
-			"input": false,
-			"tableView": false,
-			"key": "page5PanelColumns2",
 			"columns": [{
 				"components": [{
 					"label": "Columns",
-					"input": false,
-					"tableView": false,
-					"key": "page5PanelColumns2Columns4",
 					"columns": [{
 						"components": [{
 							"label": "Coverage",
@@ -11849,7 +12100,7 @@
 							"valueProperty": "value",
 							"selectThreshold": 0.3,
 							"clearOnHide": false,
-							"calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
+							"calculateValue": "var receiptsAmount=data['totalReceiptsAmount'];\nvar properyCoverage = data['propertyCoverageSelect'];\nif(properyCoverage == 'yes' && receiptsAmount <= 50000){\n\tvalue = 'standardCoverageUpTo50000';\n} else if(properyCoverage == 'no' && receiptsAmount <=50000){\n\tvalue = 'liabilityOnlyUpTo50000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'standardCoverage50001To100000';\n} else if(properyCoverage == 'no' && receiptsAmount > 50000 && receiptsAmount <= 100000){\n\tvalue = 'liabilityOnly50001To100000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'standardCoverage100001To200000';\n} else if(properyCoverage == 'no' && receiptsAmount > 100000 && receiptsAmount <= 200000){\n\tvalue = 'liabilityOnly100001To200000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'standardCoverage200001To350000';\n} else if(properyCoverage == 'no' && receiptsAmount > 200000 && receiptsAmount <= 350000){\n\tvalue = 'liabilityOnly200001To350000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'standardCoverage350001To500000';\n} else if(properyCoverage == 'no' && receiptsAmount > 350000 && receiptsAmount <= 500000){\n\tvalue = 'liabilityOnly350001To500000';\n} else if(properyCoverage == 'yes' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'standardCoverage500001To1M';\n} else if(properyCoverage == 'no' && receiptsAmount > 500000 && receiptsAmount <= 1000000){\n\tvalue = 'liabilityOnly500001To1M';\n} else if(properyCoverage == 'yes' && receiptsAmount > 1000000){\n\tvalue = 'standardCoverage1MAndOver';\n} else if(properyCoverage == 'no' && receiptsAmount > 1000000){\n\tvalue = 'liabilityOnly1MAndOver';\n} else {\n\tvalue = 'noCoverageSelected';\n}",
 							"validate": {
 								"required": true
 							},
@@ -11893,8 +12144,16 @@
 						"pull": 0,
 						"size": "md"
 					}],
+					"hideLabel": true,
+					"tableView": false,
+					"key": "page5PanelColumns2Columns4",
+					"conditional": {
+						"show": false,
+						"when": "product",
+						"eq": "Group Professional Liability"
+					},
 					"type": "columns",
-					"hideLabel": true
+					"input": false
 				}, {
 					"label": "totalReceiptsAmount",
 					"calculateValue": "var receiptsAmount = (parseFloat(data['dsglestmonthretailreceipt'])||0);\nif(data.additionalLocations && data.additionalLocations.length > 0){\n  for(var i=0;i<data.additionalLocations.length;i++){\n    if(data.additionalLocations[i]['estimatedMonthlyReceipts'] && data.additionalLocations[i]['estimatedMonthlyReceipts']){\n      receiptsAmount = parseFloat(receiptsAmount) + parseFloat(data.additionalLocations[i]['estimatedMonthlyReceipts']);\n    }\n  }\n}\nvalue =receiptsAmount;",
@@ -11917,8 +12176,16 @@
 				"pull": 0,
 				"size": "md"
 			}],
+			"hideLabel": true,
+			"tableView": false,
+			"key": "page5PanelColumns2",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
-			"hideLabel": true
+			"input": false
 		}, {
 			"label": "Columns",
 			"columns": [{
@@ -11934,8 +12201,13 @@
 					"collapsible": false,
 					"tableView": false,
 					"key": "liabilityCoverages",
+					"conditional": {
+						"show": false,
+						"when": "product",
+						"eq": "Group Professional Liability"
+					},
 					"type": "panel",
-					"label": "Panel",
+					"label": "Liability Coverages",
 					"input": false,
 					"components": [{
 						"label": "Non-Diving Pool",
@@ -11968,13 +12240,8 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data[\"medicalExpensePLCheckBox\"] == \"true\" || data[\"medicalExpensePLCheckBox\"] == true){\nvalue=(data[\"medicalExpense\"]||0)\n}\nelse{\nvalue = 0;\n}",
+						"calculateValue": "if(data[\"medicalPayment\"] == \"true\" || data[\"medicalPayment\"] == true){\nvalue= data[\"medicalExpense\"]\n}\nelse{\nvalue = 0;\n}",
 						"key": "MedicalExpenseFP",
-						"conditional": {
-							"show": true,
-							"when": "medicalExpensePLCheckBox",
-							"eq": "true"
-						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
@@ -11992,7 +12259,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
+						"calculateValue": "if(data.doYouWantToApplyForNonOwnerAuto == true || data.doYouWantToApplyForNonOwnerAuto == \"true\"){\n  value=(data[data[\"nonOwnedAutoLiabilityPL\"]]||0)\n} else {\n  value =0;\n}",
 						"key": "Non-OwnedAutoFP",
 						"type": "number",
 						"input": true,
@@ -12011,7 +12278,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=(data[data[\"excessLiabilityCoverage\"]]||0)",
+						"calculateValue": "if(data.excessLiabilityCoveragePrimarylimit1000000PL == \"true\" || data.excessLiabilityCoveragePrimarylimit1000000PL == true){\n value=(data[data[\"excessLiabilityCoverage\"]]||0); \n}else{\n  value = 0;\n}",
 						"key": "ExcessLiabilityFP",
 						"type": "number",
 						"input": true,
@@ -12030,7 +12297,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\nvalue=(parseFloat(data[\"TAEOunder100k\"])||0)\n}\nelse if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>100000){\nvalue=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n}",
+						"calculateValue": "if(data['travelAgentEoPL'] == true || data['travelAgentEoPL'] == \"true\"){\n  if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>0 && (parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)<100000 ){\n    value=(parseFloat(data[\"TAEOunder100k\"])||0)\n  }\n  else if((parseFloat(data[\"travelAgentEOReceiptsPL\"])||0)>=100000){\n    value=(parseFloat(data[\"TAEO100kTo500k\"])||0)\n  }\n}else{\n  value = 0;\n}",
 						"key": "TravelAgentEOFP",
 						"type": "number",
 						"input": true,
@@ -12102,7 +12369,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = ((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else{\n  value = 0;\n}",
+						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\nvar propReplacementTotal = ((parseFloat(data[\"dspropreplacementvalue\"])||0)+(parseFloat(data[\"dspropTotal\"])||0));\nvar totalLimit = propReplacementTotal+parseFloat(data['lossOfBusIncome']);\nif (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = parseFloat((parseFloat(data[\"limitOver500000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 500000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = parseFloat((parseFloat(data[\"limitOver500000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = parseFloat((parseFloat(data[\"limitOver250000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 250000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = parseFloat((parseFloat(data[\"limitOver250000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = parseFloat((parseFloat(data[\"limitOver100000CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 100000 && data[\"propertyCoverageOption\"] == \"cat\") {\n  value = parseFloat((parseFloat(data[\"limitOver100000CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"nonCat\") {\n  value = parseFloat((parseFloat(data[\"limitOver0CoverBuildingNonCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else if (totalLimit > 0 &&data[\"propertyCoverageOption\"] == \"cat\") {\n  value = parseFloat((parseFloat(data[\"limitOver0CoverBuildingCat\"])||0) * (parseFloat(data[\"dspropTotal\"])||0)).toFixed(0);\n} else {\n  value = 0;\n}\n}else{\n  value = 0;\n}",
 						"key": "ContentsFP",
 						"type": "number",
 						"input": true,
@@ -12158,31 +12425,64 @@
 			}],
 			"tableView": false,
 			"key": "columns24",
+			"conditional": {
+				"show": false,
+				"when": "product",
+				"eq": "Group Professional Liability"
+			},
 			"type": "columns",
 			"input": false
 		}, {
-			"clearOnHide": false,
+			"title": "Coverages",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "coverages",
+			"type": "panel",
+			"label": "Panel",
 			"input": false,
-			"key": "page5PanelPanelTable2",
-			"numRows": 15,
-			"rows": [
-				[{
+			"components": [{
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelTableLiabilityCoveragesTotal",
 						"label": "Liability Coverages Total",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Liability Coverages Total",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelTableLiabilityCoveragesTotal",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Liability Coverages Total",
@@ -12198,29 +12498,68 @@
 						"clearOnHide": false,
 						"calculateValue": "value=((parseFloat(data[\"CoverageFP\"])||0)+(parseFloat(data[\"nonDivingPoolAmount\"])||0)+(parseFloat(data[\"MedicalExpenseFP\"])||0)+(parseFloat(data[\"Non-OwnedAutoFP\"]||0))+(parseFloat(data[\"ExcessLiabilityFP\"])||0)+(parseFloat(data[\"TravelAgentEOFP\"])||0)).toFixed(0)",
 						"key": "liabilityCoveragesTotalPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns26",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelTablePropertyCoveragesTotal",
 						"label": "Property Coverages Total",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Property Coverages Total",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelTablePropertyCoveragesTotal",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Property Coverages Total",
@@ -12236,29 +12575,68 @@
 						"clearOnHide": false,
 						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  value=(parseFloat(data[\"ContentsFP\"])||0)+(parseFloat(data[\"LossofBusIncomeFP\"])||0)+(parseFloat(data[\"BuildingLimitFP\"])||0)-(parseFloat(data[\"PropDeductibleCredit\"])||0)\n} else {\n  value =0;\n}",
 						"key": "propertyCoveragesTotalPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns27",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelTableLiabilityPropertyCoveragesTotal",
 						"label": "Liability Property Coverages Total",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Liability Property Coverages Total",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelTableLiabilityPropertyCoveragesTotal",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Liability Property Coverages Total",
@@ -12274,27 +12652,61 @@
 						"clearOnHide": false,
 						"calculateValue": "value=((parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)+(parseFloat(data[\"propertyCoveragesTotalPL\"])||0)).toFixed(0)",
 						"key": "liabilityPropertyCoveragesTotalPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns28",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelTableLiabilityProRataPremium",
 						"label": "Liability ProRata Premium",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Liability ProRata Premium",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelTableLiabilityProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "ProRata Premium Percentage",
@@ -12310,12 +12722,23 @@
 						"calculateValue": "var selectedDate = new Date(data[\"policyPeriod\"]);\nvar month = selectedDate.getMonth()+1;\n\nfunction getValue(month) {\n  var proRata = 0;\n  switch (month) {\n    case 1:\n      proRata = (parseFloat(data[\"proRataFactorsJan\"])||0);\n      break;\n    case 2:\n      proRata = (parseFloat(data[\"proRataFactorsFeb\"])||0);\n      break;\n    case 3:\n      proRata = (parseFloat(data[\"proRataFactorsMar\"])||0);\n      break;\n    case 4:\n      proRata = (parseFloat(data[\"proRataFactorsApr\"])||0);\n      break;\n    case 5:\n      proRata = (parseFloat(data[\"proRataFactorsMay\"])||0);\n      break;\n    case 6:\n      proRata = (parseFloat(data[\"proRataFactorsJun\"])||0);\n      break;\n    case 7:\n      proRata = (parseFloat(data[\"proRataFactorsJul\"])||0);\n      break;\n    case 8:\n      proRata = (parseFloat(data[\"proRataFactorsAug\"])||0);\n      break;\n    case 9:\n      proRata = (parseFloat(data[\"proRataFactorsSep\"])||0);\n      break;\n    case 10:\n      proRata = (parseFloat(data[\"proRataFactorsOct\"])||0);\n      break;\n    case 11:\n      proRata = (parseFloat(data[\"proRataFactorsNov\"])||0);\n      break;\n    case 12:\n      proRata = (parseFloat(data[\"proRataFactorsDec\"])||0);\n      break;\n  }\n  return proRata;\n}\n\nvalue = getValue(month);",
 						"allowCalculateOverride": true,
 						"key": "proRataPercentage",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Liability Amount with ProRata",
@@ -12331,29 +12754,68 @@
 						"clearOnHide": false,
 						"calculateValue": "value=((parseFloat(data[\"liabilityCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
 						"key": "liabilityProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns29",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelTablePropertyProRataPremium",
 						"label": "Property ProRata Premium",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Property ProRata Premium",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelTablePropertyProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Property with Pro Rata Premium",
@@ -12369,29 +12831,68 @@
 						"clearOnHide": false,
 						"calculateValue": "value=((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
 						"key": "propertyProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns31",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelColumnsProRataPrem",
 						"label": "ProRata Premium",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "ProRata Premium",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelColumnsProRataPrem",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "ProRata Premium",
@@ -12405,50 +12906,140 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value=((parseFloat(data[\"liabilityPropertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"proRataPercentage\"])||0)).toFixed(0)",
+						"calculateValue": "value=(((parseFloat(data[\"liabilityProRataPremium\"])||0) + (parseFloat(data[\"propertyProRataPremium\"])||0))).toFixed(0)",
 						"key": "ProRataPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns33",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelColumnsPropTax",
 						"label": "Prop Tax",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Prop Tax",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelColumnsPropTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
+						"label": "Over Ride Tax",
+						"tableView": false,
+						"defaultValue": false,
+						"clearOnHide": false,
+						"key": "overRideStorePropertyTax",
+						"type": "checkbox",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
 						"label": "Property Tax Percentage",
 						"prefix": "%",
 						"mask": false,
-						"spellcheck": true,
-						"tableView": true,
+						"spellcheck": false,
+						"disabled": true,
+						"tableView": false,
 						"defaultValue": "0",
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"property\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
-						"allowCalculateOverride": true,
+						"validate": {
+							"max": 100
+						},
 						"key": "propertyTaxPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"logic": [{
+							"name": "Enable Custom Tax",
+							"trigger": {
+								"type": "javascript",
+								"simple": {
+									"show": true,
+									"when": "additionalLocations.overRideLiabilityTax",
+									"eq": "true"
+								},
+								"javascript": "if(data.overRideStorePropertyTax == true){\n  result = true\n} else {\n  result = false\n}"
+							},
+							"actions": [{
+								"name": "Enable Manual Override",
+								"type": "mergeComponentSchema",
+								"schemaDefinition": "console.log(schema)\nschema = {\"allowCalculateOverride\":true,\"disabled\":false}\nconsole.log(schema)"
+							}]
+						}, {
+							"name": "Disable Custom Tax",
+							"trigger": {
+								"type": "javascript",
+								"simple": {
+									"show": true,
+									"when": "additionalLocations.overRideLiabilityTax",
+									"eq": "true"
+								},
+								"javascript": "if(data.overRideStorePropertyTax == false){\n  result = true\n} else {\n  result = false\n}"
+							},
+							"actions": [{
+								"name": "Disable Manual Over ride",
+								"type": "mergeComponentSchema",
+								"schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
+							}]
+						}],
 						"type": "number",
 						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Property Tax",
@@ -12464,49 +13055,139 @@
 						"clearOnHide": false,
 						"calculateValue": "if(data['propertyCoverageSelect']=='yes'){\n  value = ((parseFloat(data[\"propertyProRataPremium\"])||0)*(parseFloat(data[\"propertyTaxPL\"])||0)/100);\n} else {\n  value =0;\n}",
 						"key": "PropTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns32",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelTableLiaTax",
 						"label": "Lia Tax",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "Lia Tax",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelTableLiaTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
+						"label": "Over Ride Tax",
+						"tableView": false,
+						"defaultValue": false,
+						"clearOnHide": false,
+						"key": "overRideStoreLiabilityTax",
+						"type": "checkbox",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}, {
 						"label": "Liability Tax Percentage",
 						"prefix": "%",
 						"mask": false,
-						"spellcheck": true,
-						"tableView": true,
+						"spellcheck": false,
+						"disabled": true,
+						"tableView": false,
 						"defaultValue": "0",
 						"delimiter": false,
 						"requireDecimal": true,
 						"inputFormat": "plain",
 						"clearOnHide": false,
 						"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
-						"allowCalculateOverride": true,
+						"validate": {
+							"max": 100
+						},
 						"key": "liabilityTaxPL",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"logic": [{
+							"name": "Enable Custom Tax",
+							"trigger": {
+								"type": "javascript",
+								"simple": {
+									"show": true,
+									"when": "additionalLocations.overRideLiabilityTax",
+									"eq": "true"
+								},
+								"javascript": "if(data.overRideStoreLiabilityTax == true){\n  result = true\n} else {\n  result = false\n}"
+							},
+							"actions": [{
+								"name": "Enable Manual Override",
+								"type": "mergeComponentSchema",
+								"schemaDefinition": "schema = {\"allowCalculateOverride\":true,\"disabled\":false}"
+							}]
+						}, {
+							"name": "Disable Custom Tax",
+							"trigger": {
+								"type": "javascript",
+								"simple": {
+									"show": true,
+									"when": "additionalLocations.overRideLiabilityTax",
+									"eq": "true"
+								},
+								"javascript": "if(data.overRideStoreLiabilityTax == false){\n  result = true\n} else {\n  result = false\n}"
+							},
+							"actions": [{
+								"name": "Disable Manual Over ride",
+								"type": "mergeComponentSchema",
+								"schemaDefinition": "schema = {\"allowCalculateOverride\":false,\"disabled\":true}"
+							}]
+						}],
 						"type": "number",
 						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Liability Tax",
@@ -12522,14 +13203,36 @@
 						"clearOnHide": false,
 						"calculateValue": "value = ((parseFloat(data[\"liabilityProRataPremium\"])||0)*(parseFloat(data[\"liabilityTaxPL\"])||0)/100);",
 						"key": "LiaTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"decimalLimit": 2
-					}]
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns30",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
 						"label": "Additional Location Premium",
 						"tag": "h4",
@@ -12541,12 +13244,28 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page5PanelPanelTableAddILocPremium",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "htmlelement",
 						"input": false,
-						"hideLabel": true
-					}]
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Additional Location Premium",
@@ -12565,10 +13284,27 @@
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns35",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
 						"label": "Additional Location Tax",
 						"tag": "h4",
@@ -12580,12 +13316,28 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page5PanelPanelTableAddILocTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "htmlelement",
 						"input": false,
-						"hideLabel": true
-					}]
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Additional Location Tax",
@@ -12605,10 +13357,27 @@
 						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns34",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
 						"key": "page5PanelPanelTableGroupLiability",
 						"label": "Group Professional Liability",
@@ -12621,10 +13390,21 @@
 						"content": "Group Professional Liability",
 						"type": "htmlelement",
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Group Professional Liability",
@@ -12643,10 +13423,22 @@
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns36",
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
 						"key": "page5PanelPanelTablePadiFee",
 						"label": "PADI Fee",
@@ -12659,10 +13451,21 @@
 						"content": "PADI Fee",
 						"type": "htmlelement",
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "PADI Fee",
@@ -12681,10 +13484,27 @@
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns37",
+				"type": "columns",
+				"input": false,
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				}
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
 						"label": "Property Deductible Credit",
 						"tag": "h4",
@@ -12696,10 +13516,21 @@
 						"refreshOnChange": false,
 						"tableView": false,
 						"key": "page5PanelPanelTablePropDeductibleCredit",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "htmlelement",
 						"input": false,
-						"hideLabel": true
-					}]
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
 				}, {
 					"components": [{
 						"label": "Property Deductibles Percentage",
@@ -12715,12 +13546,23 @@
 						"calculateValue": "if(data['propertyDeductibles'] && data[data['propertyDeductibles']]) {\n  value = (data[data[\"propertyDeductibles\"]]||0)\n}",
 						"allowCalculateOverride": true,
 						"key": "propertyDeductiblesPercentage",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
+						"decimalLimit": 3,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"decimalLimit": 3
-					}]
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Property Deductible Credit",
@@ -12736,30 +13578,69 @@
 						"clearOnHide": false,
 						"calculateValue": "value = ((parseFloat(data[\"propertyCoveragesTotalPL\"])||0)*(parseFloat(data[\"propertyDeductiblesPercentage\"])||0)/100).toFixed(2)",
 						"key": "PropDeductibleCredit",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
+						"decimalLimit": 2,
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"decimalLimit": 2
-					}]
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns38",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
-						"key": "page5PanelPanelTablePaorFee",
 						"label": "PA/OR Fee",
-						"input": false,
 						"tag": "h4",
 						"attrs": [{
 							"value": "",
 							"attr": ""
 						}],
 						"content": "PA/OR Fee",
-						"type": "htmlelement",
+						"refreshOnChange": false,
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"key": "page5PanelPanelTablePaorFee",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "PA/OR Fee",
@@ -12774,13 +13655,186 @@
 						"clearOnHide": false,
 						"calculateValue": "var amount=0.00;\nif(data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Pennsylvania'){\n  amount =parseFloat(amount)+ 20.00\n}\nif(data.propertyCoverageSelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nif(data.groupProfessionalLiabilitySelect=='yes' && data.state=='Oregon'){\n  amount =parseFloat(amount)+ 10.00\n}\nvalue = amount",
 						"key": "PAORFee",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
 				}],
-				[{
+				"tableView": false,
+				"key": "columns40",
+				"conditional": {
+					"show": false,
+					"when": "product",
+					"eq": "Group Professional Liability"
+				},
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"label": "Additional Premium",
+						"tag": "h4",
+						"attrs": [{
+							"value": "",
+							"attr": ""
+						}],
+						"content": "Additional Premium",
+						"refreshOnChange": false,
+						"tableView": false,
+						"key": "additionalPremiumLabel",
+						"type": "htmlelement",
+						"input": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
+				}, {
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Number",
+						"prefix": "$",
+						"hideLabel": true,
+						"mask": false,
+						"spellcheck": false,
+						"tableView": false,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"key": "additionalPremium",
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false,
+						"defaultValue": 0
+					}],
+					"size": "md",
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}],
+				"tableView": false,
+				"key": "columns39",
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Columns",
+				"columns": [{
+					"components": [{
+						"key": "additionalPremiumLabel",
+						"label": "Total Additional Premium",
+						"input": false,
+						"tag": "h4",
+						"attrs": [{
+							"value": "",
+							"attr": ""
+						}],
+						"content": "Total Additional Premium",
+						"type": "htmlelement",
+						"tableView": false,
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Additional Premium Tax Percentage",
+						"prefix": "%",
+						"mask": false,
+						"spellcheck": false,
+						"tableView": false,
+						"defaultValue": "0",
+						"delimiter": false,
+						"requireDecimal": true,
+						"inputFormat": "plain",
+						"clearOnHide": false,
+						"calculateValue": "function getValue(states) {\n  var state = data['state'];\nif(data['sameasmailingaddress']==false){\n  state=data['physical_state'];\n}\n  for (var i = 0; i < states.length; i++) {\n    if (\n      stateTaxData[i].state == state &&\n      stateTaxData[i].coverage == \"liability\"\n    ) {\n      return stateTaxData[i].percentage;\n    }\n  }\n}\n\nif(data['stateTaxData']){\n  var stateTaxData = data[\"stateTaxData\"];\n  value = getValue(stateTaxData);\n}",
+						"validate": {
+							"max": 100
+						},
+						"key": "addPremiumTax",
+						"conditional": {
+							"show": false,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						},
+						"type": "number",
+						"decimalLimit": 3,
+						"input": true,
+						"inputType": "number",
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
+				}, {
+					"components": [{
+						"label": "Total Additional Premium ",
+						"prefix": "$",
+						"mask": false,
+						"spellcheck": true,
+						"disabled": true,
+						"tableView": false,
+						"defaultValue": 0,
+						"delimiter": false,
+						"requireDecimal": false,
+						"inputFormat": "plain",
+						"calculateValue": "value = ((parseFloat(data[\"additionalPremium\"])||0)*(parseFloat(data[\"addPremiumTax\"])||0)/100);",
+						"key": "totalAddPremium",
+						"type": "number",
+						"input": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"width": 4
+				}],
+				"tableView": false,
+				"key": "columns47",
+				"type": "columns",
+				"input": false
+			}, {
+				"label": "Additional Premium Description",
+				"autoExpand": false,
+				"tableView": true,
+				"key": "additionalPremiumDescription",
+				"customConditional": "show = data.additionalPremium;",
+				"type": "textarea",
+				"input": true
+			}, {
+				"label": "Columns",
+				"columns": [{
 					"components": [{
 						"key": "page5PanelPanelTableTotalAmount",
 						"label": "Total Amount",
@@ -12793,10 +13847,21 @@
 						"content": "Total Amount",
 						"type": "htmlelement",
 						"tableView": false,
-						"hideLabel": true
-					}]
+						"hideLabel": true,
+						"hideOnChildrenHidden": false
+					}],
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md"
 				}, {
-					"components": []
+					"components": [],
+					"offset": 0,
+					"push": 0,
+					"pull": 0,
+					"size": "md",
+					"width": 4
 				}, {
 					"components": [{
 						"label": "Total Amount",
@@ -12810,19 +13875,25 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"clearOnHide": false,
-						"calculateValue": "value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0)) ).toFixed(2);",
+						"calculateValue": "if(data['product'] == 'Group Professional Liability') {\n  value = ((parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.totalAddPremium) || 0 )).toFixed(2);  \n} else {\n  value = (((parseFloat(data[\"ProRataPremium\"])||0) + (parseFloat(data[\"PropTax\"])||0) + (parseFloat(data[\"LiaTax\"])||0) + (parseFloat(data[\"AddILocPremium\"])||0) + (parseFloat(data[\"AddILocTax\"])||0) + (parseFloat(data[\"padiFeePL\"])||0)+ (parseFloat(data[\"PAORFee\"])||0) + (parseFloat(data[\"groupProfessionalLiability\"])||0) + (parseFloat(data.totalAddPremium) || 0 )) ).toFixed(2);  \n}",
 						"key": "totalAmount",
 						"type": "number",
 						"input": true,
 						"inputType": "number",
-						"lockKey": true
-					}]
-				}]
-			],
-			"tableView": false,
-			"type": "table",
-			"hideLabel": true,
-			"label": "Table"
+						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}],
+					"size": "md",
+					"width": 4,
+					"offset": 0,
+					"push": 0,
+					"pull": 0
+				}],
+				"tableView": false,
+				"key": "columns42",
+				"type": "columns",
+				"input": false
+			}]
 		}, {
 			"key": "page5Panel4",
 			"input": false,
@@ -12966,8 +14037,8 @@
 						"hideOnChildrenHidden": false,
 						"defaultValue": {
 							"marineSurveyCompletedWithinThePast12MonthsVesselsFive5YearsOrOlderAreRequiredToProvideCurrentConditionAndValuationSurveyWithConfirmationThatAllRecommendationsAreCompletedXxx": false,
-							"Signed Finance Agreement with down payment if not paying in full.": false,
-							"Certificate of Inspection.": false,
+							"Signed Finance Agreement with down payment if not paying in full": false,
+							"Certificate of Inspection": false,
 							"Signed Proposal": false,
 							"Other": false
 						}
@@ -13094,6 +14165,7 @@
 				}],
 				"multiple": true,
 				"clearOnHide": false,
+				"calculateValue": "if(typeof value == \"string\"){\n  try{\n    value = JSON.parse(value);\n  } catch(Exception){\n    console.log(value);\n  }\n}",
 				"validate": {
 					"multiple": true
 				},
@@ -13123,7 +14195,7 @@
 		"tableView": false,
 		"key": "page10",
 		"properties": {
-			"commands": "[{\"command\":\"fileSave\"},{\"command\" : \"delegate\",\"delegate\":\"QuoteDocument\"}]"
+			"commands": "[{\"command\":\"fileSave\"},{\"command\" : \"delegate\",\"delegate\":\"StoreQuoteDocuments\"}]"
 		},
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
@@ -13131,7 +14203,6 @@
 		"input": false,
 		"components": [{
 			"label": "quoteDocuments",
-			"redrawOn": "data",
 			"calculateValue": "value = {};\nif(data.quoteDocuments)\n{\n  if(typeof data.quoteDocuments === 'object'){\n    value = data.quoteDocuments;  \n  }else{\n    var documents = {};\n    data.quoteDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
 			"key": "quoteDocuments",
 			"properties": {
@@ -13254,6 +14325,22 @@
 					"required": true
 				},
 				"key": "csrApproved",
+				"logic": [{
+					"name": "GPL approval options",
+					"trigger": {
+						"type": "simple",
+						"simple": {
+							"show": true,
+							"when": "product",
+							"eq": "Group Professional Liability"
+						}
+					},
+					"actions": [{
+						"name": "Hide",
+						"type": "mergeComponentSchema",
+						"schemaDefinition": "schema = {\"values\":[{\"value\":\"approved\",\"label\":\"Approved\",\"shortcut\":\"\"},{\"label\":\"On Hold\",\"value\":\"onHold\",\"shortcut\":\"\"}]}"
+					}]
+				}],
 				"type": "radio",
 				"input": true,
 				"lockKey": true
@@ -13311,25 +14398,25 @@
 		}],
 		"input": false
 	}],
-	"controller": "",
 	"revisions": "current",
-	"_vid": 533,
-	"title": "Dive Store Consolidation",
+	"_vid": 75,
+	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
 		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
 		"type": "read_all"
 	}],
 	"submissionAccess": [],
-	"settings": {},
+	"controller": "",
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
 		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
 	},
+	"settings": {},
 	"name": "diveStoreConsolidation",
-	"path": "divestoreconsolidation",
+	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
-	"created": "2020-03-19T07:30:19.830Z",
-	"modified": "2020-07-16T10:34:13.776Z",
-	"machineName": "testdivehub:diveStoreConsolidation"
+	"created": "2020-07-28T11:29:44.022Z",
+	"modified": "2020-09-23T06:38:02.451Z",
+	"machineName": "testdivehub:diveStoreConsolidation3"
 }

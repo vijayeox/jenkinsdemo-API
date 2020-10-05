@@ -6,6 +6,24 @@ content:
         content:
             actions:
                 -
+                    name: Policy Regeneration
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            form_id: db82e118-cbef-11ea-87d0-0242ac130003
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-file'
+                -
+                    name: Policy Regeneration
+                    rule: '((row.policyStatus == "Rejected" || row.policyStatus == "In Force") && row.entity_name == "Dive Store" && row.endorsement_options == undefined)'
+                    details:
+                        -
+                            type: Form
+                            form_id: e139cef3-d1e4-4b6f-8f20-51dec19f694e
+                            fileId: '{{uuid}}'
+                    icon: 'fa fa-file'
+                -
                     name: Endorsement
                     rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                     details:
@@ -29,9 +47,100 @@ content:
                     details:
                         -
                             type: Form
-                            url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
-                            workflowInstanceId: '{{workflowInstanceId}}'
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands:
+                                    -
+                                        command: startform
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: EFRToIPLUpgrade
                     icon: 'fa fa-arrow-circle-up'
+                -
+                    name: 'Renew Policy'
+                    rule: '(''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: f0efea9e-7863-4368-a9b2-baa1a1603067
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands:
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
+                -
+                    name: 'Renew Policy'
+                    rule: '(''{{entity_name}}'' == ''Emergency First Response'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: cb74d176-225a-11ea-978f-2e728ce88125
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands:
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
+                -
+                    name: 'Renew Policy'
+                    rule: '(''{{entity_name}}'' == ''Dive Store'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: cb99e634-de00-468d-9230-d6f77d241c5b
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands:
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
+                -
+                    name: 'Renew Policy'
+                    rule: '(''{{entity_name}}'' == ''Dive Boat'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                commands:
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: RenewalRateCard
+                                    -
+                                        command: startform
+                    icon: 'fa fa-refresh'
                 -
                     name: Endorsement
                     rule: '(''{{entity_name}}'' == ''Dive Boat'') && (''{{policyStatus}}'' == ''In Force'')'
@@ -51,17 +160,58 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     icon: 'fa fa-pencil'
                 -
-                    name: 'View Policy'
-                    icon: 'fa fa-envelope-open'
-                    rule: '''{{policyStatus}}'' != ''Rejected'''
+                    name: Endorsement
+                    rule: '(''{{entity_name}}'' == ''Group Professional Liability'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    icon: 'fa fa-pencil'
+                -
+                    name: Comment
+                    rule: 'true'
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period:{moment(data.start_date).format(''MM-DD-YYYY'')} - {moment(data.end_date).format(''MM-DD-YYYY'')} </p>'
+                            content: '<h4>{data.identifier_field == "business_padi" ? data.business_padi : data.padi} - {data.firstname} {data.lastname} - {data.product}</h4>'
                             useRowData: true
                         -
-                            type: DocumentViewer
-                            url: 'file/{{uuid}}/document'
+                            type: Comment
+                            content: '{{uuid}}'
+                    icon: 'far fa-comment'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Store'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'eb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Group Professional Liability'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'fb018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'ab018dfd-be95-4c53-9a97-042f615f3623'
+                -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                    details:
+                        -
+                            params:
+                                page_id: 'bb018dfd-be95-4c53-9a97-042f615f3623'
                 -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
@@ -99,6 +249,15 @@ content:
                             url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
+                    name: 'Cancel Policy'
+                    icon: 'fa fa-ban'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/61cb9e10-5845-4379-97c9-f9486b702bda/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                -
                     name: 'Reinstate Policy'
                     details:
                         -
@@ -114,7 +273,7 @@ content:
                             type: Form
                             url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{disableReinstate}}'' == ''false'') && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '((''{{disableReinstate}}'' == ''false'') || (''{{disableReinstate}}'' == ''undefined'')) && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
@@ -138,8 +297,12 @@ content:
                 - padi
                 - firstname
                 - lastname
+                - name
                 - product
                 - phone
+                - business_name
+                - certificate_no
+                - transaction_reference_number
             filterOperator : startswith
             placeholder: 'Search using Name or PADI or Product or Phone'
             operations:
@@ -183,9 +346,11 @@ content:
                 -
                     title: Name
                     field: firstname
-                    cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                    cell: '<td>{item.product == "Dive Store" ? item.business_name : item.product == "Group Professional Liability" ? item.business_name :(item.firstname + " " + item.lastname)}</td>'
                     multiFieldFilter:
                         - lastname
+                        - business_name
+                        - name
                 -
                     title: Product
                     field: entity_name
@@ -203,3 +368,15 @@ content:
             passColumnConfig :
                 -
                     lastname
+                -
+                    business_padi
+                -
+                    name
+                -
+                    business_name
+                -
+                    product
+                -
+                    identifier_field
+                -
+                    transaction_reference_number

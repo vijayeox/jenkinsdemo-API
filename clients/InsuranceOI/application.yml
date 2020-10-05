@@ -1,28 +1,28 @@
 app:
-    -
-        name: Insurance
-        uuid: f726fded-0764-4f4e-945e-689586baf74b
-        description: 'Insurance OI Application'
-        category: Dashboards
-        type: 2
-        autostart: 'true'
+    name: Insurance
+    title: 'Insurance'
+    uuid: f726fded-0764-4f4e-945e-689586baf74b
+    description: 'Insurance OI Application'
+    category: Dashboards
+    type: 2
+    autostart: 'true'
+checkOrg: true 
 org:
-    -
-        name: 'EOX Vantage1'
-        uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
+    name: 'EOX Vantage1'
+    uuid: b0923de7-0387-48ea-8f29-5d3704d96a46
+    email: helpdesk@vantageagora.com
+    address1: '23611 Chagrin Blvd, Ste 320'
+    address2: 'Beachwood, Ohio 44122'
+    city: Beachwood
+    state: Ohio
+    zip: 44122
+    contact:
+        username: supportadmin
+        firstname: Support
+        lastname: Admin
         email: helpdesk@vantageagora.com
-        address1: '23611 Chagrin Blvd, Ste 320'
-        address2: 'Beachwood, Ohio 44122'
-        city: Beachwood
-        state: OH
-        zip: 44122
-        contact:
-            username: supportadmin
-            firstname: Support
-            lastname: Admin
-            email: helpdesk@vantageagora.com
-        preferences: '{}'
-        country: 'United States'
+    preferences: '{}'
+    country: 'United States of America'
 privilege:
     -
         name: MANAGE_AGENTVIEW
@@ -34,6 +34,12 @@ role:
     -
         name: 'Insurance Agent'
         default: true
+        privilegesDuplicate:
+        -
+            privilege_name:
+                name: MANAGE_AGENTVIEW
+                permission: 15
+            permission: 15
         privileges:
             -
                 privilege_name: MANAGE_AGENTVIEW
@@ -42,6 +48,12 @@ role:
     -
         name: 'Insurance Manager'
         default: true
+        privilegesDuplicate:
+        -
+            privilege_name:
+                name: MANAGE_MANAGERVIEW
+                permission: 15
+            permission: 15
         privileges:
             -
                 privilege_name: MANAGE_MANAGERVIEW

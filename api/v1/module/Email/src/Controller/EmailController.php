@@ -156,6 +156,7 @@ class EmailController extends AbstractApiController
     {
         $id = $this->params()->fromRoute()['emailId'];
         $this->log->info(__CLASS__ . "-> Default email action - " . json_encode($id, true));
+
         try {
             $responseData = $this->emailService->emailDefault($id);
         } catch (ValidationException $e) {
@@ -163,6 +164,7 @@ class EmailController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Unexpected Error occurred", 500);
         }
         if ($responseData == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);

@@ -6,9 +6,12 @@ use Auth\Controller\AuthController;
 use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
 
 class AuthControllerTest extends ControllerTest
 {
+    private $dbAdapter;
+
     public function setUp(): void
     {
         $this->loadConfig();
@@ -21,9 +24,26 @@ class AuthControllerTest extends ControllerTest
         return $dataset;
     }
 
+    protected function getDbAdapter(){
+        if(!$this->dbAdapter){
+            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);    
+        }
+        
+        return $this->dbAdapter;
+    }
+
+    private function runQuery($query) {
+        $adapter = $this->getDbAdapter();
+        $statement = $adapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $result = $resultSet->initialize($result)->toArray();
+        return $result;
+    }
+
     public function testAuthentication()
     {
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -39,7 +59,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationWithSpaceAtEnd()
     {
-        $data = ['username' => $this->adminUser . '   ', 'password' => 'password'];
+        $data = ['username' => $this->adminUser . '   ', 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -55,7 +75,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationWithSpaceAtBeginning()
     {
-        $data = ['username' => '   ' . $this->adminUser, 'password' => 'password'];
+        $data = ['username' => '   ' . $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -73,7 +93,7 @@ class AuthControllerTest extends ControllerTest
     {
         $update = "UPDATE ox_user SET status = 'Inactive' where username = '" . $this->adminUser . "'";
         $result = $this->executeUpdate($update);
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -90,7 +110,7 @@ class AuthControllerTest extends ControllerTest
     {
         $update = "UPDATE ox_organization SET status = 'Inactive' where id = 1";
         $result = $this->executeUpdate($update);
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -105,7 +125,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationFail()
     {
-        $data = ['username' => 'mehul', 'password' => 'password'];
+        $data = ['username' => 'mehul', 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -120,7 +140,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testAuthenticationRefreshTokenExpired()
     {
-        $data = ['username' => $this->managerUser, 'password' => 'password'];
+        $data = ['username' => $this->managerUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -169,7 +189,7 @@ class AuthControllerTest extends ControllerTest
         $query = "update ox_user_refresh_token set expiry_date = '" . date('Y-m-d H:i:s', strtotime('+1 day', time())) . "'";
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $rToken = $content['data']['refresh_token'];
@@ -192,13 +212,13 @@ class AuthControllerTest extends ControllerTest
 
     public function testRefreshJwtTokenExpired()
     {
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $rToken = $content['data']['refresh_token'];
         $jToken = $content['data']['jwt'];
         $this->reset();
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NjA0MTgzMzgsImp0aSI6ImEyVUlTRkY4dXZMRTBVQnlMSDFxdDF1TldRUW14U29QXC81Skc2d085NEhvPSIsIm5iZiI6MTU2MDQxODMzOCwiZXhwIjoxNTYwNDE4MzQ4LCJkYXRhIjp7InVzZXJuYW1lIjoiYmhhcmF0Z3Rlc3QiLCJvcmdpZCI6IjEifX0.7rTurKwUph5WA9rB--5EVHHg3E_M0tVd5boshuuoPVwZgarCCymuqs8voA06aFuwM6I00tDmpYApG-dIA3BDzQ', 'refresh_token' => $rToken];
+        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1OTU4NDQzNTUsImp0aSI6IkdzNzRLOGZNK1pvVjNtc2xrTlVSXC9BTk9MSXJDVXFmcUEzbWdSUUZLcW9VPSIsIm5iZiI6MTU5NTg0NDM1NSwiZXhwIjoxNTk1OTE2MzU1LCJkYXRhIjp7InVzZXJuYW1lIjoiYWRtaW50ZXN0Iiwib3JnaWQiOiIxIn19.8Umw1UsWissBEaZfrSCp0KnG68JQq3VXIv5qP8mPDt5rZ3owGqpKuFjU8rYX0gapwZlovK6g0UxpdfIBbUGTmg', 'refresh_token' => $rToken];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -206,7 +226,8 @@ class AuthControllerTest extends ControllerTest
         $this->assertControllerClass('AuthController');
         $this->assertMatchedRouteName('refreshtoken');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $responseContent = (array) json_decode($this->getResponse()->getContent(), true);
+        $content = $this->getResponse()->getContent();
+        $responseContent = (array) json_decode($content, true);
         $this->assertEquals($responseContent['status'], 'success');
         $this->assertNotEquals($responseContent['data']['jwt'], $jToken);
         $this->assertEquals($responseContent['data']['refresh_token'], $rToken);
@@ -259,7 +280,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testValidateToken()
     {
-        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $data = ['username' => $this->adminUser, 'password' => 'Welcome2eox!'];
         $this->dispatch('/auth', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $data = ['jwt' => $content['data']['jwt']];
@@ -333,13 +354,13 @@ class AuthControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['username'], 'Admin Test');
         $this->assertContains('user/profile/', $content['data']['profileUrl']);
     }
 
     public function testValidProfileEmail()
     {
-        $data = ['username' => 'bharatg@myvamla.com'];
+        $data = ['username' => 'admin1@eoxvantage.in'];
         $this->dispatch('/userprof', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -349,7 +370,7 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('userprof');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['username'], 'Admin Test');
         $this->assertContains('user/profile/', $content['data']['profileUrl']);
     }
 
@@ -382,10 +403,12 @@ class AuthControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Invalid User');
     }
-    public function testRegister()
+
+    public function testRegisterBusinessAccount()
     {
-        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
-        $this->dispatch('/register', 'POST', json_decode($data, true));
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"BUSINESS","business_role":"Policy Holder","name" : "Big Org", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = json_decode($data, true);
+        $this->dispatch('/register', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -397,10 +420,110 @@ class AuthControllerTest extends ControllerTest
         $this->assertArrayHasKey('jwt', $content['data']);
         $this->assertArrayHasKey('refresh_token', $content['data']);
         $this->assertArrayHasKey('username', $content['data']);
+        $this->performAssertions($data);
     }
+
+    public function testRegisterIndividualAccount()
+    {
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder","identifier_field":"padi","padi":"12345", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = json_decode($data, true);
+        $this->dispatch('/register', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('register');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertArrayHasKey('jwt', $content['data']);
+        $this->assertArrayHasKey('refresh_token', $content['data']);
+        $this->assertArrayHasKey('username', $content['data']);
+        $this->performAssertions($data);
+    }
+    private function performAssertions($data){
+        $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.orgid as org_id FROM ox_user u inner join ox_user_profile up on up.id = u.user_profile_id order by u.id DESC LIMIT 1';
+        $newQueryResult = $this->runQuery($sqlQuery);
+        $orgId = $newQueryResult[0]['org_id'];
+        $sqlQuery = 'SELECT * FROM ox_organization where id = '.$orgId;
+        $orgResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT br.* FROM ox_org_business_role obr inner join ox_business_role br on obr.business_role_id = br.id where obr.org_id = '.$orgId;
+        $bussRoleResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT * FROM ox_role where org_id = '.$orgId;
+        $roleResult = $this->runQuery($sqlQuery);
+        $sqlQuery = 'SELECT * FROM ox_user_role where user_id = '.$newQueryResult[0]['id']." AND role_id = ".$roleResult[0]['id'];
+        $urResult = $this->runQuery($sqlQuery);
+
+        $this->assertEquals($data['data']['firstname'],$newQueryResult[0]['firstname']);
+        $this->assertEquals($data['data']['lastname'],$newQueryResult[0]['lastname']);
+        $this->assertEquals($data['data']['email'],$newQueryResult[0]['email']);
+        if($data['data']['type'] == 'INDIVIDUAL'){
+            $this->assertEquals($data['data']['firstname']." ".$data['data']['lastname'], $orgResult[0]['name']);
+        }else{
+            $this->assertEquals($data['data']['name'], $orgResult[0]['name']);
+        }
+        $this->assertEquals($data['data']['type'], $orgResult[0]['type']);
+        $this->assertEquals($newQueryResult[0]['id'], $orgResult[0]['contactid']);
+        if(isset($data['data']['identifier_field'])){
+            $sqlQuery = "SELECT * FROM ox_wf_user_identifier where identifier_name = '".$data['data']['identifier_field']."' AND identifier = '".$data['data'][$data['data']['identifier_field']]."'";
+            $identifierResult = $this->runQuery($sqlQuery);
+            $this->assertEquals(1, count($identifierResult));
+            $this->assertEquals(100, $identifierResult[0]['app_id']);
+            $this->assertEquals($orgResult[0]['id'], $identifierResult[0]['org_id']);
+            $this->assertEquals($newQueryResult[0]['id'], $identifierResult[0]['user_id']);
+        }
+        if(isset($data['data']['businessRole'])){
+            $this->assertEquals($data['data']['businessRole'], $bussRoleResult[0]['name']);
+            $this->assertEquals("Admin", $roleResult[0]['name']);
+            $this->assertEquals(1, count($urResult));
+        }else{
+            $this->assertEquals(3, count($roleResult));
+            $this->assertEquals(1, count($urResult));
+        }
+        $sqlQuery = "SELECT ar.* from ox_app_registry ar inner join ox_app a on a.id = ar.app_id 
+                        where a.uuid = '".$data['data']['app_id']."' AND org_id = $orgId";
+
+        $result = $this->runQuery($sqlQuery);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(date('Y-m-d'), date_create($result[0]['date_created'])->format('Y-m-d'));
+    }
+    public function testRegisterWithoutType()
+    {
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","businessRole":"Policy Holder", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $this->dispatch('/register', 'POST', json_decode($data, true));
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('register');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals('Business Type not specified', $content['message']);
+    }
+
+    public function testRegisterWithoutBusinessRole()
+    {
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = json_decode($data, true);
+        $this->dispatch('/register', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('register');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertArrayHasKey('jwt', $content['data']);
+        $this->assertArrayHasKey('refresh_token', $content['data']);
+        $this->assertArrayHasKey('username', $content['data']);
+        $this->performAssertions($data);
+    }
+
     public function testRegisterWithoutCredentialsCommand()
     {
-        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -414,7 +537,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterWithoutCacheCommand()
     {
-        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a", "app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","type":"INDIVIDUAL","business_role":"Policy Holder","commands":"[\"create_user\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -428,7 +551,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterWithOnlyCacheCommand()
     {
-        $data = '{"data":{"username":"bharatgtest","commands":"[\"store_cache_data\"]"},"username":"bharatgtest","dummdata":"dummy"}';
+        $data = '{"data":{"username":"admintest","commands":"[\"store_cache_data\"]"},"username":"admintest","dummdata":"dummy"}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -454,24 +577,10 @@ class AuthControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertArrayNotHasKey('data', $content);
     }
-    public function testRegisterUserExistsInOtherOrg()
-    {
-        $data = '{"data":{"orgId":"b0971de7-0387-48ea-8f29-5d3704d96a46","app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgtest","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
-        $this->dispatch('/register', 'POST', json_decode($data, true));
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
-        $this->assertModuleName('auth');
-        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AuthController');
-        $this->assertMatchedRouteName('register');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email Exists in other Organization');
-    }
-
+    
     public function testRegisterUserExists()
     {
-        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatg@myvamla.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "123456", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","type":"INDIVIDUAL","business_role":"Policy Holder","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatg@myvamla.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);

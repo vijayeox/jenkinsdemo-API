@@ -25,9 +25,16 @@ class MenuItemService extends AbstractService
         $this->logger->info("In saveMenuItem params - $appUuid, ".json_encode($data));
         $MenuItem = new MenuItem();
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
-        $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
+        $this->logger->info("Valid UUID-----".json_encode(UuidUtil::isValidUuid($appUuid)));
+        $data['app_id'] = UuidUtil::isValidUuid($appUuid) ? $this->getIdFromUuid('ox_app',$appUuid) : $appUuid;
+        $this->logger->info("In saveMenuItem params AppId---".json_encode($data['app_id']));
         if(isset($data['parent_id'])){
-            $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+            if(UuidUtil::isValidUuid($data['parent_id'])){
+                $data['parent_id'] = $this->getIdFromUuid('ox_app_menu',$data['parent_id']);
+            }
+        }else if (isset($data['parent'])) {
+            $res = $this->getDataByParams('ox_app_menu', array("id"), ['name' => $data['parent'],'app_id' => $data['app_id']], null)->toArray();
+            $data['parent_id'] = $res[0]['id'];
         }
         if(isset($data['page_uuid'])){
             $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_uuid']);
@@ -39,10 +46,13 @@ class MenuItemService extends AbstractService
         $data['icon'] = isset($data['icon']) ? $data['icon'] : "fas fa-border-all";
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+
         $MenuItem->exchangeArray($data);
+
         $MenuItem->validate();
         $this->beginTransaction();
         $count = 0;
+
         try {
             $count = $this->table->save($MenuItem);
             if ($count == 0) {
@@ -144,9 +154,11 @@ class MenuItemService extends AbstractService
                         if(AuthContext::isPrivileged($privilegeList['eq']) && !AuthContext::isPrivileged($privilegeList['neq'])){
                              array_push($menuArray,$menuItem);
                         }
-                    }else if(AuthContext::isPrivileged($menuItem['privilege_name'])){
+                    }else if(AuthContext::isPrivileged($menuItem['privilege_name']) || AuthContext::isPrivileged($menuItem['privilege_name'] . "_READ")){
                         array_push($menuArray,$menuItem);
                     }
+                }else{
+                    array_push($menuArray, $menuItem);
                 }
 
                 if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != '' && $menuItem['parent_id'] != 0) {

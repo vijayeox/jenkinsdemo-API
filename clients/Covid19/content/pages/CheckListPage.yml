@@ -1,0 +1,41 @@
+name: 'Manage Checklist'
+description: 'Page to manage Visitors'
+content:
+    -
+        type: List
+        content:
+            route: 'file'
+            defaultFilters: '{"sort":[{"field":"date","dir":"desc"}]}'
+            forceDefaultFilters: true
+            filterable: true
+            resizable: true
+            sortable:
+                allowUnsort: true
+                mode: single
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            actions:
+                -
+                    name: Comment
+                    rule: 'true'
+                    details:
+                        -
+                            type: Comment
+                            content: '{{uuid}}'
+                    icon: 'far fa-comment'
+            columnConfig:
+                -
+                    title: 'Name of Person'
+                    field: name
+                -
+                    title: 'Date'
+                    field: date
+                    cell: '<td>{formatDateWithoutTimezone(item.date)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+            searchOnEnter: true

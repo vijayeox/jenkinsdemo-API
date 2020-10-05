@@ -40,4 +40,8 @@ trait WorkflowTrait
     public function getWorkflowChangeLog($workflowInstanceId,$labelMapping){
        return $this->workflowInstanceService->getWorkflowChangeLog($workflowInstanceId,$labelMapping);
     }
+
+    public function getWorkflowInstanceDataFromFileId($fileId){
+       return $this->workflowInstanceService->getWorkflowInstanceDataFromFileId($fileId);
+    }
 }

@@ -13,6 +13,7 @@ class WorkflowDeployment extends Entity
         'latest' => 1,
         'created_by' => null,
         'date_created' => null,
+        'fields' => null
     );
     public function validate()
     {

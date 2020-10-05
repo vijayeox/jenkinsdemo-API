@@ -5,18 +5,20 @@ use Oxzion\Model\Entity;
 
 class Organization extends Entity
 {
+    const BUSINESS = 'BUSINESS';
+    const INDIVIDUAL = 'INDIVIDUAL';
+
     protected $data = array(
         'id' => null,
-        'uuid' => null,
         'name' => null,
+        'uuid' => null,
         'subdomain' => null,
-        'address_id' => null,
-        'labelfile' => null,
-        'languagefile' => 'en',
         'contactid' => null,
         'preferences' => null,
         'theme' => 0,
-        'status' => 'Active'
+        'org_profile_id' => null,
+        'status' => 'Active',
+        'type' => 'BUSINESS'
     );
 
     public function __construct($data = array())

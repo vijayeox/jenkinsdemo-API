@@ -17,7 +17,7 @@ abstract class DispatchDocument extends MailDelegate
         $mailOptions = array();
         $fileData = array();
         $mailOptions['to'] = $data['email'];
-        if($data['product'] == 'Dive Store'){
+        if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
             if(isset($data['approverEmailId'])){
                 $mailOptions['cc'] = $data['approverEmailId'];
             }

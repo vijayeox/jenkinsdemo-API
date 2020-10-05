@@ -62,6 +62,7 @@ export default class DesktopServiceProvider extends ServiceProvider {
     this.desktop.init();
 
     this.core.singleton('osjs/desktop', () => ({
+      setKeyboardContext: ctx => this.desktop.setKeyboardContext(ctx),
       addContextMenuEntries: entries => this.desktop.addContextMenu(entries),
       applySettings: settings => this.desktop.applySettings(settings),
       getRect: () => this.desktop.getRect()
@@ -69,6 +70,7 @@ export default class DesktopServiceProvider extends ServiceProvider {
 
     this.core.on('osjs/core:started', () => {
       this.desktop.applySettings();
+      this.desktop.cookiesCheck();
     });
   }
 

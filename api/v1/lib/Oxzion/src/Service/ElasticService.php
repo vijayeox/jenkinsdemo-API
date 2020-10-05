@@ -6,6 +6,9 @@ use Elasticsearch\ClientBuilder;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Logger;
+use Oxzion\Analytics\AnalyticsAbstract;
+use Oxzion\Utils;
+use Oxzion\Utils\AnalyticsUtils;
 
 use function GuzzleHttp\json_encode;
 
@@ -23,6 +26,7 @@ class ElasticService
     private $logger;
     private $filterFields;
     private $filterTmpFields;
+    private $excludes;
 
     public function __construct()
     {
@@ -132,9 +136,12 @@ class ElasticService
 
     public function getQueryResults($orgId, $app_name, $params)
     {
+        $this->excludes = [];
+        if (isset($params['excludes'])) {
+            $this->excludes = $params['excludes'];
+        }
         $result = $this->filterData($orgId, $app_name, $params);
         return $result;
-
     }
 
     public function filterData($orgId, $app_name, $searchconfig)
@@ -200,7 +207,7 @@ class ElasticService
  //   {"<=", ["sale_date", "2019-10-31"]},
 
 
-    protected function createFilter($filter) {
+    protected function createFilter($filter,$type='') {
         $subQuery = null;
         $symMapping = ['>'=>'gt','>='=>'gte','<'=>'lt','<='=>'lte'];
         $boolMapping = ['OR'=>'should','AND'=>'must'];
@@ -215,9 +222,12 @@ class ElasticService
             $condition = "==";
             $value = $filter[1];
         }
+        if (isset($filter[3])) {
+            $type = $filter[3];
+        }
         if (strtoupper($condition)=='OR' OR strtoupper($condition)=='AND') {
-                 $tempQuery1 = $this->createFilter($column);
-                 $tempQuery2 = $this->createFilter($value);
+                 $tempQuery1 = $this->createFilter($column,$type);
+                 $tempQuery2 = $this->createFilter($value,$type);
                  if ($tempQuery1) {
                     $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery1;
                  }
@@ -226,26 +236,9 @@ class ElasticService
                  }
                  
         } else {
-           // echo $column.' '.$condition.' '.$value;exit;
-            if (!in_array($column,$this->filterFields)) {
-                if (strtolower(substr($value,0,8))=="session:") {
-                    $sessionvar = substr($value,8);
-                    switch($sessionvar) {
-                        case "username":
-                            $value = AuthContext::get(AuthConstants::USERNAME);
-                            break;
-                        case "name":
-                            $value = AuthContext::get(AuthConstants::NAME);
-                            break;
-                        case "orgid":
-                            $value = AuthContext::get(AuthConstants::ORG_ID);
-                            break;
-                        case "userid":
-                            $value = AuthContext::get(AuthConstants::USER_ID);
-                            break;
-                    }
 
-                }
+            if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
+                $value = AnalyticsUtils::checkSessionValue($value);
                 if ($condition=="=="){                
                         if (!is_array($value)) {
                         $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
@@ -287,7 +280,7 @@ class ElasticService
                 } else {
                     $format = "MMM-yyyy";
                 }
-                $grouparraytmp = array('date_histogram' => array('field' => key($searchconfig['range']), 'interval' => $interval, 'format' => $format));
+                $grouparraytmp = array('date_histogram' => array('field' => $searchconfig['frequency'], 'interval' => $interval, 'format' => $format));
             } else {
                 $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
                 $boolfilterquery['_source'][] = $grouptext;
@@ -373,12 +366,12 @@ class ElasticService
                 $this->filterFields=array_merge($this->filterFields,$this->filterTmpFields);
             }
         }
-        if ($searchconfig['range']) {
-            $daterange = $searchconfig['range'][key($searchconfig['range'])];
-            $dates = explode("/", $daterange);
-            $mustquery['must'][] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
+        // if ($searchconfig['range']) {
+        //     $daterange = $searchconfig['range'][key($searchconfig['range'])];
+        //     $dates = explode("/", $daterange);
+        //     $mustquery['must'][] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
 
-        }
+        // }
         return $mustquery;
 
     }

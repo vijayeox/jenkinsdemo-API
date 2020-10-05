@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
+import { dashboard, dateFormat, dateTimeFormat } from '../metadata.json';
 import { Form, Row, Button } from 'react-bootstrap'
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select/creatable'
@@ -19,16 +20,55 @@ const customStyles = {
 };
 
 const FilterFields = function (props) {
-    const { filters, index, fieldType, dataType, onUpdate, removeField, field, filterName, filterMode } = props;
+    const { filters, index, fieldType, dataType, onUpdate, removeField, field, filterName, filterMode, dateFormat } = props;
     const filtersOptions = {
         "dateoperator": [{ "Between": "gte&&lte" }, { "Less Than": "<" }, { "Greater Than": ">" }, { "Equals": "==" }, { "Not Equals": "!=" }],
-        "textoperator": [{ "Equals": "=="}, { "Not Equals": "NOT LIKE" }],
+        "textoperator": [{ "Equals": "==" }, { "Not Equals": "NOT LIKE" }],
         "numericoperator": [{ "Less Than": "<" }, { "Greater Than": ">" }, { "Equals": "==" }, { "Not Equals": "!=" }]
     };
     const dataTypeOptions = [
         "numeric"
     ]
 
+    const removeValue = (e, value) => {
+        //remove the filter value on click
+        let filterCopy = filters
+        let values = filters[index]["value"]
+        let filteredValues = values.filter((item) => item.value !== value)
+        filterCopy[index]["value"] = filteredValues
+        props.setFilterValues(filterCopy)
+    }
+
+    const CustomOption = (props) => {
+        const {
+            children,
+            className,
+            cx,
+            getStyles,
+            isDisabled,
+            isFocused,
+            isSelected,
+            innerRef,
+            innerProps,
+        } = props;
+        const { onClick } = innerProps;
+        innerProps.onClick = (e) => {
+            if (e.target.tagName !== "I") {
+                onClick(e)
+            }
+            console.log("clicked")
+        }
+        return (
+            <div
+                ref={innerRef}
+                className="custom-react-select-container"
+                {...innerProps}
+            >
+                {/* DONOT CHANGE THE TAGS SPECIFIED BELOW */}
+                <span>{children}</span><i class="far fa-times-circle" onClick={(e) => removeValue(e, children)}></i>
+            </div>
+        );
+    };
     const disabledFields = filterMode == "APPLY"
     const visibility = filterMode == "CREATE"
     return (
@@ -83,7 +123,7 @@ const FilterFields = function (props) {
                         filters[index]["operator"] !== "gte&&lte" ?
                             <DatePicker
                                 key={index}
-                                dateFormat="MM/dd/yyyy"
+                                dateFormat={dateFormat}
                                 selected={Date.parse(filters[index]["startDate"])}
                                 showMonthDropdown
                                 showYearDropdown
@@ -106,7 +146,7 @@ const FilterFields = function (props) {
                             <div className="dates-container">
                                 <DatePicker
                                     selected={Date.parse(filters[index]["startDate"])}
-                                    dateFormat="MM/dd/yyyy"
+                                    dateFormat={dateFormat}
                                     onChange={date => onUpdate(date, index, "startDate")}
                                     selectsStart
                                     startDate={Date.parse(filters[index]["startDate"])}
@@ -129,7 +169,7 @@ const FilterFields = function (props) {
                                 />
                                 <DatePicker
                                     selected={Date.parse(filters[index]["endDate"])}
-                                    dateFormat="MM/dd/yyyy"
+                                    dateFormat={dateFormat}
                                     onChange={date => onUpdate(date, index, "endDate")}
                                     selectsEnd
                                     startDate={Date.parse(filters[index]["startDate"])}
@@ -153,35 +193,32 @@ const FilterFields = function (props) {
                                 />
                             </div>
                         :
-                        filterMode == "Create" ?
-                            <Select
-                                selected={filters[index]["value"]["selected"] ? filters[index]["value"].filter(option => option.value == filters[index]["value"]["selected"]) : ""}
-                                styles={customStyles}
-                                name="value"
-                                id="value"
-                                onChange={(e) => onUpdate(e, index, "defaultValue")}
-                                value=""
-                                options={filters[index]["value"]}
-                            />
-                            :
-                            <Select
-                                selected={filters[index]["value"]["selected"] ? filters[index]["value"].filter(option => option.value == filters[index]["value"]["selected"]) : ""}
-                                styles={customStyles}
-                                name="value"
-                                id="value"
-                                onChange={(e) => onUpdate(e, index, "defaultValue")}
-                                value={filters[index]["value"]["selected"] ? filters[index]["value"].filter(option => option.value == filters[index]["value"]["selected"]) : ""}
-                                options={filters[index]["value"]}
-                            />
+                        <Select
+                            selected={filters[index]["value"]["selected"] ? filters[index]["value"].filter(option => option.value == filters[index]["value"]["selected"]) : ""}
+                            components={filterMode == "CREATE" && { Option: CustomOption }}
+                            styles={customStyles}
+                            name="value"
+                            id="value"
+                            onChange={(e) => onUpdate(e, index, "defaultValue")}
+                            value={filters[index]["value"]["selected"] ? filters[index]["value"].filter(option => option.value == filters[index]["value"]["selected"]) : ""}
+                            options={filters[index]["value"]}
+
+                        />
 
                         // <Form.Control type="text" name="value" onChange={(e) => onUpdate(e, index)} value={filters[index] !== undefined ? filters[index]["value"] : ""} />
                     }
                 </Form.Group>
             </div>
-            <div className="col" style={{ marginBottom: "1em", position: "relative", left: "0px" }}>
+            <div className="dash-manager-buttons dashboard-filter-field" style={{ marginBottom: "1em", position: "relative", left: "0px" }}>
                 <Form.Group>
                     <Form.Label></Form.Label>
-                    <Button onClick={(e) => removeField(index, fieldType)}>x</Button>
+                    <Button className="filter_remove_button" style={{
+                        cursor: "pointer",
+                        float: "left",
+                        verticalAlign: "middle",
+                        marginTop: "25px",
+                        position: "relative",
+                    }} onClick={(e) => removeField(index, fieldType)}><i className="fa fa-minus" aria-hidden="true"></i></Button>
                 </Form.Group>
             </div>
         </Form.Row>)
@@ -191,6 +228,8 @@ const FilterFields = function (props) {
 class DashboardFilter extends React.Component {
     constructor(props) {
         super(props);
+        this.core = this.props.core;
+        this.userProfile = this.core.make("oxzion/profile").get();
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.createField = this.createField.bind(this);
@@ -202,9 +241,24 @@ class DashboardFilter extends React.Component {
             inputFields: [],
             startDate: new Date(),
             createFilterOption: [{ value: "text", label: "Text" }, { value: "date", label: "Date" }, { value: "numeric", label: "Number" }],
-            applyFilterOption: [],
-            filters: this.props.filterConfiguration,
-            applyFilters: []
+            applyFilterOption: this.props.applyFilterOption ? this.props.applyFilterOption : [],
+            filters: this.props.filterConfiguration ? this.props.filterConfiguration : [],
+            applyFilters: [],
+            dateFormat: this.userProfile.key.preferences.dateformat,
+            dateTimeFormat: dateTimeFormat.title.en_EN
+            // userProfile: this.core.make("oxzion/profile").get()
+        }
+
+        console.log("Inside the filter Function: " + this.state.dateFormat);
+    }
+
+    componentDidMount() {
+        this.saveFilter();
+      }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.filterConfiguration != this.props.filterConfiguration) {
+            this.setState({ filters: this.props.filterConfiguration, applyFilterOption: this.props.applyFilterOption })
         }
     }
 
@@ -223,10 +277,9 @@ class DashboardFilter extends React.Component {
                 //     this.setState({ filters: filters, createFilterOption: availableOptions })
                 // }
                 // else {
-                this.setState({ filters: filters }, state => console.log(state))
+                this.setState({ filters: filters }, state => state)
                 // }
-            }
-            else if (this.props.filterMode === "APPLY") {
+            } else if (this.props.filterMode === "APPLY") {
                 let applyFilterOption = [...this.state.applyFilterOption]
                 applyFilterOption.push({ label: this.state.filters[index]["filterName"], value: this.state.filters[index] })
                 filters.splice(index, 1);
@@ -241,7 +294,7 @@ class DashboardFilter extends React.Component {
         let newoption = null
         let length = filters !== undefined ? filters.length : 0
         if (fieldType === "date") {
-            filters.push({ filterName: '', field: '', fieldType: fieldType, dataType: "date", operator: "", value: new Date("YYYY-mm-dd"), key: length })
+            filters.push({ filterName: '', field: '', fieldType: fieldType, dataType: "date", operator: "", value: new Date(this.state.dateFormat), key: length })
         } else if (fieldType === "text") {
             filters.push({ filterName: '', field: '', fieldType: fieldType, dataType: "text", operator: "", value: "", key: length })
         } else if (fieldType === "numeric") {
@@ -338,7 +391,11 @@ class DashboardFilter extends React.Component {
 
     hideFilterDiv() {
         var element = document.getElementById("filter-form-container");
-        element.classList.add("disappear");
+        element && element.classList.add("disappear");
+
+        element = document.getElementById("filtereditor-form-container");
+        element && element.classList.add("disappear");
+
         this.props.hideFilterDiv()
         document.getElementById("dashboard-container") && document.getElementById("dashboard-container").classList.remove("disappear")
         document.getElementById("dashboard-filter-btn") && (document.getElementById("dashboard-filter-btn").disabled = false)
@@ -346,7 +403,6 @@ class DashboardFilter extends React.Component {
     }
 
     saveFilter() {
-        console.log(this.state)
         let restClient = this.props.core.make('oxzion/restClient');
         let filters
         if (this.state.filters !== undefined) {
@@ -369,24 +425,29 @@ class DashboardFilter extends React.Component {
             )
         } else if (this.props.filterMode === "APPLY") {
             this.props.setDashboardFilter(filters)
-            console.log("IMPLEMENTING")
-            console.log(filters)
+            this.hideFilterDiv()
         }
+    }
+
+    setFilterValues(filters) {
+        this.setState({ filters })
     }
 
     render() {
         return (
-            <div id="filter-form-container" className="disappear">
-                <Row className="pull-right">
-                    <button type="button" className="close" aria-label="Close" onClick={() => this.hideFilterDiv()}>
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </Row>
+            <div>
+                <div className="row pull-right dash-manager-buttons" style={{ right: "22px", height: "30px", textAlign: "center", padding: "4px" }}>
+                    <Button type="button" className="close btn btn-primary" aria-label="Close" onClick={() => this.hideFilterDiv()} style={{ padding: "5px" }}>
+                        <i className="fa fa-close" aria-hidden="true"></i>
+                    </Button>
+                </div>
                 <Form className="create-filter-form">
                     {this.state.filters.filter(obj => obj !== undefined).map((filterRow, index) => {
                         return <FilterFields
                             index={index}
+                            dateFormat={this.state.dateFormat}
                             filters={this.state.filters}
+                            setFilterValues={(filter) => this.setFilterValues(filter)}
                             input={this.state.input}
                             key={filterRow.key}
                             dataType={filterRow.dataType || ""}
@@ -430,10 +491,10 @@ class DashboardFilter extends React.Component {
                             />
                         </Form.Group>
                     }
-                    <Row >
+                    <Form.Row>
                         <Button className="apply-filter-btn" onClick={() => this.saveFilter()}>Apply Filters</Button>
 
-                    </Row>
+                    </Form.Row>
 
                 </Form>
             </div >

@@ -53,25 +53,35 @@
 	    	<b><p class = "ai_title">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 	    		{foreach from=$list item=$additional}
 		    		<p class = "ai_list">
-		    			{$additional.name} {if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
-		    			{if $additional.businessRelation == "confinedWaterTrainingLocation"}
-		    			 	Confined Water Training Location 
-		    			{elseif $additional.businessRelation == "openWaterTrainingLocation"} 
-		    				Open Water Training Location 
-		    			{elseif $additional.businessRelation == "diveBoatOwner"} 
-		    				Dive Boat Owner
-		    			{elseif $additional.businessRelation == "mortgageeLossPayee"} 
-		    				Mortgagee / Loss Payee
-		    			{elseif $additional.businessRelation == "landlord"}
-		    				Landlord
-		    			{elseif $additional.businessRelation == "governmentEntityPermitRequirement"} 
-		    			    Government Entity - Permit Requirement
-		    			{elseif $additional.businessRelation == "diveStore"} 
-		    			   Dive Store
-		    			{elseif $additional.businessRelation == "trainingAgency"} 
-		    			   Training Agency
-		    			{elseif $additional.businessRelation == "other"} 									   {$additional.businessRelationOther}
-		    			{/if})
+		    		{if (isset($additional.name))}
+		    			{$additional.name} 
+		    		{/if}
+		    			{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
+							{if $additional.businessRelation == "confinedWaterTrainingLocation"}
+								Confined Water Training Location
+			    			{elseif $additional.businessRelation == "openWaterTrainingLocation"}
+			    				Open Water Training Location
+			    			{elseif $additional.businessRelation == "diveBoatOwner"}
+			    				Dive Boat Owner
+			    			{elseif $additional.businessRelation == "mortgageeLossPayee"}
+			    				Mortgagee / Loss Payee
+			    			{elseif $additional.businessRelation == "landlord"}
+			    				Landlord
+			    			{elseif $additional.businessRelation == "governmentEntityPermitRequirement"}
+			    			    Government Entity - Permit Requirement
+			    			{elseif $additional.businessRelation == "diveStore"}
+			    			   Dive Store
+			    			{elseif $additional.businessRelation == "trainingAgency"}
+			    			   Training Agency
+			    			{elseif $additional.businessRelation == "cruiseLine"}
+			    			   Cruise Line
+			    			{elseif $additional.businessRelation == "landOwner"}
+			    			   Land Owner
+			    			{elseif $additional.businessRelation == "bookingAgent"}
+			    			   Booking Agent
+			    			{elseif $additional.businessRelation == "other"}
+			    				{$additional.businessRelationOther}
+			    			{/if})
 		    			{/if}
 		    		</p>
 	    		{/foreach}

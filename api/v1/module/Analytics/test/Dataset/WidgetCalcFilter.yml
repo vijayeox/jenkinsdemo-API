@@ -194,4 +194,45 @@ ox_widget:
     configuration: ''
     version: 1
     expression: ''
-    no_filter_override: 1
+    exclude_overrides: 'all'
+  - 
+    id: 126
+    uuid: '123781c3-040d-44d8-1111-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'simpleonequery'
+    configuration: ''
+    version: 1
+    expression: ''
+  - 
+    id: 127
+    uuid: '123781c3-040d-44d8-1221-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: '2filteroverrides'
+    configuration: ''
+    version: 1
+    expression: ''
+    exclude_overrides: 'owner_username,industry'
+  - 
+    id: 128
+    uuid: '123781c3-040d-44d8-1331-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: '1filteroverrides'
+    configuration: ''
+    version: 1
+    expression: ''
+    exclude_overrides: 'industry'

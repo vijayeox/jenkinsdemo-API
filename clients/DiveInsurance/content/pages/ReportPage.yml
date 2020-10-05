@@ -1,0 +1,64 @@
+name: 'Batch Reports'
+description: 'Lets CSR generate Reports'
+content:
+    -
+        type: List
+        content:
+            route: 'pipeline'
+            filterable: false
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            urlPostParams:
+               commands: 
+                    -
+                        command: delegate
+                        delegate: GenerateReportMenu
+            actions:
+                -
+                    name: 'View Report'
+                    icon: 'fa fa-envelope-open'
+                    rule: '''{{jobStatus}}'' == ''Completed'''
+                    details:
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+            operations:
+                title: 'Report'
+                actions:
+                    -
+                        name: 'Generate Report'
+                        rule: true
+                        details:
+                            -
+                                type: Form
+                                form_id: 57054a38-e117-11ea-87d0-0242ac130003
+            columnConfig:
+                -
+                    title: 'Filters Used'
+                    field: generationType
+                -
+                    title: Product
+                    field: reportProductType
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Individual Professional Liability'
+                            - 'Dive Boat'
+                            - 'Dive Store'
+                            - 'Emergency First Response'
+                        placeholder: 'Select Product'
+                -
+                    title: 'Country'
+                    field: country
+                -   
+                    title: 'State'
+                    field: state
+                -
+                    title: Status
+                    field: jobStatus

@@ -27,6 +27,12 @@ class PolicyCheck extends FileDelegate
         $policyList = $this->getFileList($params,$filterParams);
         if(count($policyList['data']) > 0){
             $data['policy_exists'] = true;
+            if(count($policyList['data']) == 1){
+                $fileData = json_decode($policyList['data'][0]['data'],true);
+                if(isset($fileData['padiEmployee']) && ($fileData['padiEmployee'] == "true" || $fileData['padiEmployee'] == true)){
+                    $data['policy_exists'] = false;           
+                }
+            }
         } else {
             $data['policy_exists'] = false;
         }

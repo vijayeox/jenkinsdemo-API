@@ -140,10 +140,12 @@ class AbstractEditor extends React.Component {
             return state;
         },
             () => {
-                if (this.state.selectedTab !== '' && this.state.selectedTab=="widget") {
+                if (this.state.selectedTab !== '' && (this.state.selectedTab=="widget"||this.state.selectedTab=="chart")) {
                     thiz.refreshViews();
                 } else if(this.state.selectedTab !== '' && this.state.selectedTab=="query"){
                     thiz.refreshQueryPreview()
+                } else if(this.state.selectedTab !== '' && this.state.selectedTab=="table"){
+                    thiz.refreshDrillDownPreview()
                 }
             });
     }
@@ -202,6 +204,8 @@ class AbstractEditor extends React.Component {
             }
             this.state.drillDownWidgetTitle !== "" && (drillDownObject["widgetTitle"] = this.state.drillDownWidgetTitle)
             this.state.drillDownWidgetFooter !== "" && (drillDownObject["widgetFooter"] = this.state.drillDownWidgetFooter)
+            this.state.drillDownDashboardTitle !== "" && (drillDownObject["dashboardTitle"] = this.state.drillDownDashboardTitle)
+
             this.state.hasMaxDepth && this.state.drillDownMaxDepth != -1 && (drillDownObject["maxDepth"] = parseInt(this.state.drillDownMaxDepth))
             if (configuration) {
                 if (configuration["oxzion-meta"]) {
@@ -536,7 +540,7 @@ class AbstractEditor extends React.Component {
     loadQueries = (postLoadCallback) => {
         let thiz = this;
         window.postDataRequest('analytics/query?filter=' +
-            encodeURIComponent('[{"take":500,"skip":0,"sort":[{"field":"name","dir":"asc"}]}]')).
+            encodeURIComponent('[{"take":10000,"skip":0,"sort":[{"field":"name","dir":"asc"}]}]')).
             then(function (response) {
                 thiz.queryList = response.data;
                 thiz.forceUpdate();

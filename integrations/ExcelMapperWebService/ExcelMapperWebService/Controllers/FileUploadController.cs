@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+
+
 
 namespace ArrowHeadWebService.Controllers
 {
@@ -32,51 +35,23 @@ namespace ArrowHeadWebService.Controllers
             _settings.postURL = customConfig["postURL"].ToString();
         }
 
-        public class FileUploadAPI
-        {
-            public IFormFile files { get; set; }
-            public string fileId { get; set; }
-            public string orgId { get; set; }
-            public string appId { get; set; }
-        }
+
+
 
         [HttpPost]
-        public async Task<ContentResult> Post([FromForm] FileUploadAPI objFile)
+        public ContentResult Post([FromBody] JsonElement jsonbody)
         {
             try
             {
-               
-                if (objFile.fileId == null)
-                {
-                    return Content("{\"Status\":0,\"Message\":\"fileId missing\"}", "application/json");
-                }
-                if (objFile.files !=null)
-                {
-                    _environment.WebRootPath = "C:\\OxzionRoot";
-                    if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
-                    {
-                        Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
-                    }
-                    Console.WriteLine("Project Directory : " + _environment.WebRootPath);
-                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + objFile.files.FileName))
-                    {
-                        objFile.files.CopyTo(fileStream);
-                        fileStream.Flush();
-                    }
-                    _settings.orgId = objFile.orgId;
-                    _settings.appId = objFile.appId;
-                    ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
-                    new Task(() => { pExcel.processFile(_environment.WebRootPath, objFile.files.FileName,objFile.fileId); }).Start();                    
-                    return Content("{\"Status\":1,\"Message\":\"" + objFile.files.FileName+" file Uploaded\"}", "application/json");
-                }
-                else
-                {
-                    return Content("{\"Status\":0,\"Message\":\"No File Uploaded\"}", "application/json");
-                }
-            } catch (Exception ex)
+                string jsontext = jsonbody.ToString();
+                ProcessExcel.ProcessExcel pExcel = new ProcessExcel.ProcessExcel(_settings);
+                new Task(() => { pExcel.processFile(_environment.WebRootPath, jsonbody); }).Start();
+                return Content("{\"Status\":1,\"Message\":\"" + "File Sent For Processing\"}", "application/json");
+            } catch (Exception e)
             {
-                return Content("{\"Status\":0,\"Message\":\""+ex+"\"}", "application/json");
+                return Content("{\"Status\":0,\"Message\":\"" + e.Message + "\"}", "application/json");
             }
         }
+
     }
 }

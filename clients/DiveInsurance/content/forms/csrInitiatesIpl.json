@@ -4,11 +4,21 @@
 	"tags": [],
 	"owner": "5e147f8c6225ae0c3b3440f9",
 	"components": [{
-		"key": "panel",
-		"input": false,
 		"title": "Personal Information",
 		"theme": "primary",
+		"breadcrumbClickable": false,
+		"buttonSettings": {
+			"previous": false,
+			"cancel": false,
+			"next": true
+		},
+		"collapsible": false,
 		"tableView": false,
+		"key": "panel",
+		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\" || !data.businessPadiVerified) &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
+		"type": "panel",
+		"label": "Personal Information",
+		"input": false,
 		"components": [{
 			"label": "policyStartYear",
 			"protected": true,
@@ -839,7 +849,7 @@
 							"tableView": false,
 							"validate": {
 								"required": true,
-								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+								"custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 							},
 							"key": "zip",
 							"type": "textfield",
@@ -943,7 +953,6 @@
 					}, {
 						"components": [{
 							"label": " Address 2",
-							"spellcheck": false,
 							"tableView": false,
 							"key": "mailaddress2",
 							"type": "textfield",
@@ -1033,7 +1042,7 @@
 							"clearOnHide": false,
 							"validate": {
 								"required": true,
-								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+								"custom": "if(data['physical_zip'] && data['physical_zip'] != ''){\n  if(data['physical_zip'].length <= 12){\n      valid = (data['physical_zip'].match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data['physical_zip'].length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 							},
 							"key": "physical_zip",
 							"type": "textfield",
@@ -1103,9 +1112,7 @@
 								"label": "Home or Work Phone",
 								"tableView": false,
 								"validate": {
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Phone Number",
-									"custom": "if(data.home_phone_number){\n  valid = (data.home_phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"custom": "if(data['home_phone_number'] && data['home_phone_number'] != ''){\n  if(data['home_phone_number'].length <= 15){\n      valid = (data['home_phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Home or Work Phone number';\n  }else{\n    valid = (data['home_phone_number'].length > 15) ? 'Please enter a valid Home or Work Phone number' : true;\n  }\n}",
 									"step": "any"
 								},
 								"key": "home_phone_number",
@@ -1174,9 +1181,7 @@
 								"tableView": false,
 								"validate": {
 									"required": true,
-									"pattern": "^\\d+$",
-									"customMessage": "Please enter a valid Mobile Phone number",
-									"custom": "if(data.phone_number){\n  valid = (data.phone_number.toString().length > 15) ? 'Please enter a valid Home or Work Phone number' : true; \n}",
+									"custom": "if(data['phone_number'] && data['phone_number'] != ''){\n  if(data['phone_number'].length <= 15){\n      valid = (data['phone_number'].match(/^\\d+$/)) ?  true : 'Please enter a valid Mobile Phone number';\n  }else{\n    valid = (data['phone_number'].length > 15) ? 'Please enter a valid Mobile Phone number' : true;\n  }\n}",
 									"step": "any"
 								},
 								"key": "phone_number",
@@ -1219,18 +1224,17 @@
 						"placeholder": " ",
 						"tableView": true,
 						"validate": {
-							"customMessage": "Please enter a valid Fax number"
+							"custom": "if(data['fax'] && data['fax'] != ''){\n  if(data['fax'].length <= 15){\n      valid = (data['fax'].match(/^\\d+$/)) ?  true : 'Please enter a valid Fax number';\n  }else{\n    valid = (data['fax'].length > 15) ? 'Please enter a valid Fax number' : true;\n  }\n}"
 						},
-						"errorLabel": "Fax",
 						"key": "fax",
-						"type": "phoneNumber",
+						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"inputType": "tel"
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
-						"spellcheck": false,
 						"tableView": false,
 						"validate": {
 							"required": true,
@@ -1285,18 +1289,8 @@
 			"lockKey": true,
 			"path": "panelPanel4"
 		}],
-		"type": "panel",
 		"lockKey": true,
-		"source": "5d4ee6df800c612c49e802d3",
-		"nextPage": "if (\n  (data.padiVerified === true ||\n    data.padiVerified === \"true\" ||\n    data.padiNotFound === true) &&\n  (data.businessPadiVerified === false ||\n    data.businessPadiVerified === \"false\") &&\n  (data.policy_exists === false || data.policy_exists === \"false\" || data.policy_exists === '')\n) {\n  next = \"coveragePage\";\n} else {\n  next = \"panel\";\n}\nconsole.log(next);",
-		"label": "Personal Information",
-		"breadcrumbClickable": false,
-		"buttonSettings": {
-			"previous": false,
-			"cancel": false,
-			"next": true
-		},
-		"collapsible": false
+		"source": "5d4ee6df800c612c49e802d3"
 	}, {
 		"title": "Coverage",
 		"theme": "primary",
@@ -1337,7 +1331,7 @@
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
-					"customMessage": "Please select a policy period from the list"
+					"custom": "if(data.start_date && data.start_date != \"\"){\n  valid = (moment(data.start_date).diff(moment(),'days') > 60) ? \"Sorry! You cannot purchase an insurance with an effective date beyond 60 days from the current date. Please try again\" : true;\n}else {\n  valid = (data.start_date_range && data.start_date_range != \"\") ? true : \"Please select a policy period from the list\";\n}"
 				},
 				"key": "start_date_range",
 				"properties": {
@@ -1360,7 +1354,6 @@
 					"components": [{
 						"label": "Policy Start Date",
 						"displayInTimezone": "utc",
-						"useLocaleSettings": true,
 						"allowInput": false,
 						"format": "MM-dd-yyyy",
 						"tableView": false,
@@ -1376,15 +1369,13 @@
 						"timePicker": {
 							"showMeridian": false
 						},
-						"redrawOn": "data",
 						"clearOnHide": false,
-						"calculateValue": "if ((!(!data.CSRReviewRequired)) && (data.CSRReviewRequired == true || data.CSRReviewRequired == 'true' || data.CSRReviewRequired != \"\" \n\t )) {\n  if((data.start_date && data.start_date != \"\") ){\n\tvalue = data.start_date;\n  }\n} else {\n  if ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1) &&\n\t  (moment().isSameOrBefore(moment('2020-07-13')))) {\n\t\t\tvalue = moment('2020-06-30').format(\"MM-DD-YYYY\");\n\t}\n  if(value == \"\"){\n\tvalue = moment().format(\"MM-DD-YYYY\");\n  }\n}",
+						"calculateValue": "if(value == \"\"){\n\tvalue = moment();\n}",
 						"allowCalculateOverride": true,
 						"validate": {
 							"required": true,
 							"customMessage": "Please select the Policy Start Date"
 						},
-						"errorLabel": "Policy Start Date",
 						"key": "csrPolicyPeriod",
 						"properties": {
 							"delegate": "RateCard",
@@ -1397,7 +1388,7 @@
 							"type": "calendar",
 							"displayInTimezone": "utc",
 							"language": "en",
-							"useLocaleSettings": true,
+							"useLocaleSettings": false,
 							"allowInput": false,
 							"mode": "single",
 							"enableTime": false,
@@ -1479,7 +1470,7 @@
 			}, {
 				"label": "start_date",
 				"defaultValue": "null",
-				"calculateValue": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) {\n\tif (data.csrPolicyPeriod && moment(data.csrPolicyPeriod)) {\n\t\t\tvalue = moment(data.csrPolicyPeriod).format(\"YYYY-MM-DD\");\n\t}\n}else{\nvar startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1)\n\t&& (moment().isSameOrBefore(moment('2020-07-13')))) {\n\tvalue = startRange.format(\"YYYY-MM-DD\");\n} else {\n\tvalue = moment.max(today, startRange).format(\"YYYY-MM-DD\");\n}\n}",
+				"calculateValue": "if (data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])) {\n\tif (data.csrPolicyPeriod && moment(data.csrPolicyPeriod)) {\n\t\t\tvalue = moment(data.csrPolicyPeriod).format(\"YYYY-MM-DD\");\n\t}\n}else{\nvar startRange = moment(data['start_date_range'].value);\nvar today = moment();\nif ((data['isRenewalFlow'] == true || data['isRenewalFlow'] == \"true\" || data['isRenewalFlow'] == 1)\n\t&& (moment().isSameOrBefore(moment('2020-07-15')))) {\n\tvalue = startRange.format(\"YYYY-MM-DD\");\n} else {\n\tvalue = moment.max(today, startRange).format(\"YYYY-MM-DD\");\n}\n}",
 				"key": "start_date",
 				"properties": {
 					"data_type": " Date"
@@ -1499,17 +1490,17 @@
 				"input": true,
 				"tableView": true,
 				"lockKey": true
-			}, {
-				"label": "setCsrPolicyPeriod",
-				"calculateValue": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\nvalue = true;\n}",
-				"key": "setCsrPolicyPeriod",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
 			}],
 			"type": "panel",
 			"tooltip": "Select a valid policy period from the list",
 			"label": "Panel"
+		}, {
+			"label": "setCsrPolicyPeriod",
+			"calculateValue": "if (data.privileges && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n value = true;\n}",
+			"key": "setCsrPolicyPeriod",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}, {
 			"title": "Coverage and Options",
 			"theme": "primary",
@@ -2592,7 +2583,8 @@
 									"delimiter": true,
 									"requireDecimal": false,
 									"inputFormat": "plain",
-									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) > 0){\n      value = total;\n    }else{\n      value = \"0\";\n    }\n}",
+									"redrawOn": "data",
+									"calculateValue": "var total = parseFloat(data[\"csrGrandTotal\"]) - parseFloat(data[\"userGrandTotal\"]);\nif (data.efrToIPLUpgrade) {\n  if (data.CSRReviewRequired) {\n    var sum = total;\n    value = sum < 0 ? 0 : sum;\n  } else {\n    var sum = data[\"amount\"] - data.efrAmountPaid;\n    value = sum < 0 ? 0 : sum;\n  }\n} else {\n    if(parseFloat(total) != 0){\n      value = total;\n    }else{\n      value = 0;\n    }\n}",
 									"key": "balance",
 									"type": "number",
 									"input": true,
@@ -2612,6 +2604,7 @@
 							"path": "page3PanelColumns5Columns2"
 						}, {
 							"label": "userGrandTotal",
+							"redrawOn": "data",
 							"calculateValue": "if(!data.CSRReviewRequired){\n  value = data.finalAmount;\n}",
 							"key": "userGrandTotal",
 							"type": "hidden",
@@ -2620,7 +2613,7 @@
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "csrGrandTotal",
-							"redrawOn": "amount",
+							"redrawOn": "data",
 							"calculateValue": "if(data.CSRReviewRequired){\n  value = data.amount;\n}",
 							"key": "csrGrandTotal",
 							"type": "hidden",
@@ -3052,6 +3045,32 @@
 			}],
 			"path": "coverageOptions"
 		}, {
+			"title": "Excluded Operation",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "excludedOperationPanel",
+			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Excluded Operation",
+			"input": false,
+			"components": [{
+				"label": "Text Area",
+				"autoExpand": false,
+				"hideLabel": true,
+				"tableView": true,
+				"key": "excludedOperation",
+				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+				"type": "textarea",
+				"input": true
+			}]
+		}, {
 			"key": "page3Panel2",
 			"input": false,
 			"title": "Footnotes",
@@ -3453,8 +3472,7 @@
 										"disableWeekends": false,
 										"disableWeekdays": false,
 										"maxDate": "moment()"
-									},
-									"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>"
+									}
 								}],
 								"width": 4,
 								"offset": 0,
@@ -4019,7 +4037,7 @@
 								"clearOnHide": false,
 								"validate": {
 									"customMessage": "Please enter the Zip Code of the Additional Insured",
-									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
+									"custom": "if(row.zip && row.zip != ''){\n  if(row.zip.length <= 12){\n      valid = (row.zip.match(/^[a-zA-Z0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (row.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
 								},
 								"errorLabel": "Additional Insured Zip Code",
 								"key": "zip",
@@ -4072,8 +4090,17 @@
 										"label": "Training Agency",
 										"value": "trainingAgency"
 									}, {
-										"value": "other",
-										"label": "Other"
+										"value": "cruiseLine",
+										"label": "Cruise Line"
+									}, {
+										"label": "Land Owner",
+										"value": "landOwner"
+									}, {
+										"label": "Booking Agent",
+										"value": "bookingAgent"
+									}, {
+										"label": "Other",
+										"value": "other"
 									}]
 								},
 								"selectThreshold": 0.3,
@@ -4189,6 +4216,7 @@
 						}],
 						"multiple": true,
 						"clearOnHide": false,
+						"calculateValue": "if(typeof row.additionalInsuredAttachments == 'string' || row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0].length == 0 ||  row.additionalInsuredAttachments[0] && row.additionalInsuredAttachments[0] == '[]'){\n  value = [];\n}",
 						"validate": {
 							"multiple": true
 						},
@@ -4520,7 +4548,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0]){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
+							"custom": "if(data.paymentOptions == \"creditCard\" && data.privileges['MANAGE_MY_POLICY_READ']){\n  if(document.getElementsByClassName(\"btn-wizard-nav-submit\")[0] && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == undefined || data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] == null || !data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"none\";\n  }else{\n    document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n  }\n}else{\n  document.getElementsByClassName(\"btn-wizard-nav-submit\")[0].style.display = \"block\";\n}"
 						},
 						"key": "paymentOptions",
 						"properties": {
@@ -4746,6 +4774,19 @@
 			"type": "htmlelement",
 			"input": false
 		}, {
+			"label": "Please process the payment and approve",
+			"attrs": [{
+				"attr": "",
+				"value": ""
+			}],
+			"content": "<h4>Please process the Refund of <b>${{data.balance * -1}}</b> and approve</h4>",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "page6Pleaseprocessthepaymentandapprove2",
+			"customConditional": "show = (parseFloat(data.balance) < 0);",
+			"type": "htmlelement",
+			"input": false
+		}, {
 			"label": "aw",
 			"tableView": false,
 			"key": "aw",
@@ -4780,6 +4821,53 @@
 				"key": "padiVerifiedCSRCheck",
 				"type": "checkbox",
 				"input": true,
+				"hideOnChildrenHidden": false
+			}]
+		}, {
+			"title": "   ",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"tableView": false,
+			"key": "panel2",
+			"type": "panel",
+			"label": "Panel",
+			"input": false,
+			"components": [{
+				"label": "padiempWell",
+				"tableView": false,
+				"key": "dfh",
+				"type": "well",
+				"input": false,
+				"components": [{
+					"label": "Content",
+					"attrs": [{
+						"value": "",
+						"attr": ""
+					}],
+					"content": "<h5><b>If the policyholder is an employee of PADI. Please select the PADI Employee checkbox below.</b></h5>",
+					"refreshOnChange": false,
+					"tableView": false,
+					"key": "padiEmployeePanel",
+					"type": "htmlelement",
+					"input": false,
+					"hideLabel": true
+				}, {
+					"label": "PADI Employee",
+					"tableView": false,
+					"clearOnHide": false,
+					"customDefaultValue": "value = false;",
+					"key": "padiEmployee",
+					"type": "checkbox",
+					"input": true,
+					"defaultValue": false,
+					"hideOnChildrenHidden": false
+				}],
 				"hideOnChildrenHidden": false
 			}]
 		}, {
@@ -4859,7 +4947,6 @@
 				"input": false,
 				"components": [{
 					"label": "Reason for Rejection / On Hold",
-					"spellcheck": false,
 					"tableView": false,
 					"case": "mixed",
 					"clearOnHide": false,
@@ -4897,7 +4984,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 552,
+	"_vid": 602,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4918,6 +5005,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-07-08T08:10:53.235Z",
+	"modified": "2020-09-04T09:22:21.643Z",
 	"machineName": "testdivehub:csrInitiates"
 }

@@ -9,6 +9,7 @@
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
 			<p class="name">{$business_name}</p>
+			{if isset($dba) && $dba != ""}<p class="name">DBA : {$dba}</p>{/if}
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
 			<p class="name">{$city}, {$state} {$zip}</p>
@@ -28,7 +29,9 @@ longer working for you.</li>
 			<li>Please note: Your Dive Center general liability insurance does not cover the supervision and instruction of swimmers.
 This can only be covered by an individual or group professional liability policy.</li>
 		</ul>
-
+		{if isset($notes) && $notes != ''}
+			{$notes}
+     	{/if}
 		<p class = "line_end">Thank you for your support of the PADI Endorsed Dive Center insurance program. Please call or email me if you have any
 questions.</p>
 </div>

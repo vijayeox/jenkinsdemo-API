@@ -1,0 +1,128 @@
+app:
+  name: UniqueAppName
+  uuid: 11111111-1111-1111-1111-111111111111
+  category: EXAMPLE_CATEGORY
+org:
+  name: Vincencia & Buckley
+  email: testhub07@gmail.com
+  address1: 6 bCenterpoint
+  address2: Dr.
+  city: La Palma
+  state: CA
+  zip: 90623
+  country: United States
+privilege:
+  - name: MANAGE_POLICY_APPROVAL
+    permission: 3
+  - name: MANAGE_MY_POLICY
+    permission: 3
+dashboard:
+  - name: Dashboard
+    content: content/Dashboard.txt
+pages:
+  - name: 'My Policies'
+    description: Shows a list of users policies
+    content:
+      - type: Document
+        content: <p><h2>Personal Policies</h2></p><p></p>
+      - type: List
+        content:
+          route: 'app/{{app_id}}/file'
+          filterable: true
+          reorderable: true
+          resizable: true
+          pageable:
+            buttonCount: 3
+            pageSizes:
+              - 10
+              - 20
+              - 50
+            info: true
+            actions:
+              - name: View
+                page_id: '1'
+                icon: fas fa-envelope-open-text
+              - name: Claim
+                page_id: '2'
+                icon: fas fa-plus-circle
+              - name: Cancel
+                page_id: '3'
+                icon: far fa-window-close
+            columnConfig:
+              - title: Name
+                field: name
+              - title: Status
+                field: status
+              - title: Data
+                field: data
+  - name: 'All Policies'
+    description: Shows all the policies
+    content:
+      - type: List
+        content:
+          route: 'app/{{app_id}}/file'
+  - name: 'Verify PADI details'
+    description: Lets CSR to input and check PADI Data
+    content:
+      - content: <h3>Verify PADI Details</h3>
+        type: Document
+      - form_id: '750'
+        type: Form
+  - name: 'Dashboard'
+    description: Shows dashboard
+    content:
+      - type: Dashboard
+        dashboard: Dashboard
+  - name: 'Requests'
+    description: Shows requests
+    content:
+      - type: List
+        content:
+          route: ''
+  - name: 'Manage Policies'
+    description: Page to manage policies
+    content:
+      - type: List
+        content:
+          route: ''
+menu:
+  - name: Home
+    privilege: MANAGE_MY_POLICY_WRITE
+    icon: fa-home
+    page: My Policies
+  - name: My History
+    privilege: MANAGE_MY_POLICY_READ
+    page: All Policies
+      
+  - name: Verify PADI details
+    page: Verify PADI details
+      
+  - name: Home
+    privilege: MANAGE_POLICY_APPROVAL_READ
+    page: Dashboard
+
+  - name: Requests
+    privilege: MANAGE_POLICY_APPROVAL_WRITE
+    page: Requests
+      
+  - name: Manage Policies
+    privilege: MANAGE_POLICY_APPROVAL_WRITE
+    page: Manage Policies
+      
+workflow:
+  - name: Individual Liability
+    uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
+    bpmn_file: individual_liability.bpmn
+    entity: dummyEntity1
+  - name: Group Liability
+    uuid: 76dc0348-910c-4ae8-a05a-78ba47803208
+    bpmn_file: group_liability.bpmn
+    entity: dummyEntity1
+  - name: Dive Store
+    uuid: cb99e634-de00-468d-9230-d6f77d241c5b
+    bpmn_file: dive_store.bpmn
+    entity: dummyEntity1
+  - name: Dive Boat
+    uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+    bpmn_file: dive_boat.bpmn
+    entity: dummyEntity1

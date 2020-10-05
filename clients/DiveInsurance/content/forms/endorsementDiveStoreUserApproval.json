@@ -35,7 +35,7 @@
 		}, {
 			"type": "documentviewer",
 			"key": "quoteDocuments",
-			"label": "Store Documents",
+			"label": "Policy Documents",
 			"calculateValue": "value = (data['documents'])",
 			"hideLabel": true,
 			"inputType": "documentviewer",
@@ -52,11 +52,21 @@
 			"tableView": false,
 			"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
 		}, {
-			"key": "page5Panel2",
-			"input": false,
 			"title": "Approval",
 			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
 			"tableView": false,
+			"key": "page5Panel2",
+			"customConditional": "if(data.userApprovalRequired == \"true\" || data.userApprovalRequired == true){\n  show = true;\n}else{\n  show = false;\n}",
+			"type": "panel",
+			"label": "Approval",
+			"input": false,
 			"components": [{
 				"label": "well",
 				"tableView": false,
@@ -88,70 +98,26 @@
 					"input": true,
 					"lockKey": true
 				}, {
-					"label": "Rejection Reason",
-					"reorder": false,
-					"addAnotherPosition": "bottom",
-					"defaultOpen": false,
-					"layoutFixed": false,
-					"enableRowGroups": false,
-					"hideLabel": true,
+					"label": "Could you let us know the Reason for Rejecting the Quote?",
+					"autoExpand": false,
 					"tableView": true,
-					"defaultValue": [{
-						"reason": ""
-					}],
-					"clearOnHide": false,
 					"validate": {
-						"minLength": 1
+						"required": true
 					},
-					"key": "rejectionReason",
+					"key": "userRejectionReason",
 					"conditional": {
 						"show": true,
-						"when": "approved",
-						"eq": "rejected"
+						"when": "userApproved",
+						"eq": "false"
 					},
-					"type": "datagrid",
-					"input": true,
-					"components": [{
-						"label": "",
-						"tableView": true,
-						"key": "rejectionReasonssswell",
-						"type": "well",
-						"input": false,
-						"components": [{
-							"label": "Reason for Rejection",
-							"spellcheck": false,
-							"tableView": false,
-							"case": "mixed",
-							"clearOnHide": false,
-							"validate": {
-								"required": true,
-								"customMessage": "Rejection reason is required"
-							},
-							"key": "reason",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}]
-					}]
-				}, {
-					"label": "Additional Notes",
-					"tableView": true,
-					"key": "additionalNotes",
-					"conditional": {
-						"show": true,
-						"when": "approved",
-						"eq": "accepted"
-					},
-					"type": "textfield",
+					"type": "textarea",
 					"input": true
 				}],
 				"path": "well4",
 				"clearOnHide": false,
 				"hideLabel": true
 			}],
-			"type": "panel",
 			"lockKey": true,
-			"label": "Panel",
 			"path": "page5Panel2"
 		}, {
 			"title": "Attachments",
@@ -190,21 +156,22 @@
 		}, {
 			"title": "Payment Information",
 			"theme": "primary",
+			"breadcrumb": "none",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
 			"collapsible": false,
 			"tableView": false,
 			"key": "page7",
 			"properties": {
 				"payment_confirmation_page": "true"
 			},
-			"customConditional": "show = (data.userApproved == \"accepted\" && parseFloat(data.totalAmount) > 0)",
+			"customConditional": "if((data.userApprovalRequired == false || data.userApprovalRequired == \"false\") && parseFloat(data.totalAmount) > 0){\n  show = true;\n}else if(data.userApproved == \"accepted\" && parseFloat(data.totalAmount) > 0){  \n  show = true;\n}else{\n  show = false;\n}",
 			"type": "panel",
 			"label": "Payment Information",
-			"breadcrumb": "none",
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
 			"components": [{
 				"label": "payment",
 				"calculateValue": "value = 'true';",
@@ -236,6 +203,13 @@
 			}, {
 				"label": "transaction_reference_number",
 				"key": "transactionReferenceNumber",
+				"type": "hidden",
+				"input": true,
+				"tableView": false
+			}, {
+				"label": "payment_fields",
+				"calculateValue": "value = JSON.stringify({\"description\":data.business_padi,\"product\":data.product,\"state\":data.state,\"automatic_renewal\":data.automatic_renewal,\"installment_billing\":data.premiumFinance,\"policy_type\":\"Endorsement\",\"installment_amount\":0,\"downpayment_amount\":data.downPayment,\"total_amount\":data.finalAmountPayable});",
+				"key": "payment_fields",
 				"type": "hidden",
 				"input": true,
 				"tableView": false
@@ -498,8 +472,7 @@
 				"lockKey": true
 			}],
 			"input": false,
-			"lockKey": true,
-			"breadcrumbClickable": true
+			"lockKey": true
 		}, {
 			"title": "Payment Approval",
 			"theme": "primary",
@@ -588,9 +561,12 @@
 		"collapsible": false,
 		"tableView": false,
 		"key": "DocumentPreview",
+		"properties": {
+			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"StoreEndorsementDocuments\"}]"
+		},
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
-		"label": "Document Preview",
+		"label": "Documents Preview",
 		"input": false,
 		"components": [{
 			"title": "Document Preview",
@@ -602,7 +578,6 @@
 				"next": true
 			},
 			"collapsible": false,
-			"hidden": true,
 			"tableView": false,
 			"key": "page10",
 			"type": "panel",
@@ -612,7 +587,7 @@
 				"label": "finalDocuments",
 				"persistent": false,
 				"protected": true,
-				"calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}",
+				"calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}\nconsole.log(value);",
 				"key": "finalDocuments",
 				"properties": {
 					"data_type": "list"
@@ -623,7 +598,7 @@
 			}, {
 				"type": "documentviewer",
 				"key": "documents1",
-				"label": "Quote Information",
+				"label": "Store Endorsement Documents",
 				"calculateValue": "value = (data['finalDocuments'])",
 				"hideLabel": true,
 				"inputType": "documentviewer",
@@ -645,8 +620,8 @@
 		"input": true
 	}],
 	"controller": "",
-	"revisions": "",
-	"_vid": 0,
+	"revisions": "current",
+	"_vid": 5,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -656,13 +631,13 @@
 	"submissionAccess": [],
 	"settings": {},
 	"properties": {
-		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"submitWorkflow\"}]",
+		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"RateCard\"}]"
 	},
 	"name": "endorsementDiveStoreUserApproval",
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-07-08T11:48:37.665Z",
+	"modified": "2020-09-04T09:13:09.543Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

@@ -17,7 +17,8 @@
           vars[temp_var[0]] = unescape(temp_var[1]);
         }
       }
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2','single_limit','annual_aggregate','carrier'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'cancelDate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2','single_limit','annual_aggregate','carrier'];
+
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -31,12 +32,20 @@
                 "start_date"
               )[0].textContent = moment(
                 vars[css_selector_classes[css_class]]
-              ).format("D MMMM YYYY");
+              ).format("DD MMMM YYYY");
             }
+            if (css_selector_classes[css_class] == "cancelDate") {
+              document.getElementsByClassName(
+                "cancelDate"
+              )[0].textContent = moment(
+                vars[css_selector_classes[css_class]]
+              ).format("DD MMMM YYYY");
+            }
+
             if (css_selector_classes[css_class] == "end_date") {
               document.getElementsByClassName("end_date")[0].textContent =
                 moment(vars[css_selector_classes[css_class]]).format(
-                  "D MMMM YYYY"
+                  "DD MMMM YYYY"
                 ) + " - 12:01:00 AM";
             }
             document.getElementsByClassName("padi_no")[0].textContent = vars[vars['identifier_field']];
@@ -75,7 +84,7 @@
         <table border = "0" width="450px">
           <tr>
             <td>Date:</td>
-            <td><span class ="date"></span></td>
+            <td><span class ="cancelDate"></span></td>
           </tr>
           <tr>
             <td>Certificate #:</td>
@@ -98,12 +107,12 @@
     </div>
     <p class = "p_margin"></p>
     <p class = "p_margin"></p>
-    <p class = "p_margin">Policy issued by <span class ="carrier"></span></p>
-    <p class = "p_margin">Policy #: <span class ="policy_id"></span></p>
+    <p class = "p_margin"></p>
+    <p class = "p_margin"></p>
   </div>
 </div><br><br>
 <div style="margin-bottom:6%"></div> 
-<div class="spacer"></div>
+<div class="spacer" style="margin-top: 30%"></div>
 <center><div class="title3"><b>COVERAGE: PADI ENDORSED DIVE CENTER INSURANCE</b></div></center>
 <div class="spacer"></div>
 </body>

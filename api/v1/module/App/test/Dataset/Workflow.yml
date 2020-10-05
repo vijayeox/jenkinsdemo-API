@@ -5,18 +5,21 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 4
+    isdefault: 0
   - id: 100
     name: "UnassignedApp1"
     uuid: "8ab30b2d-d1da-427a-8e40-bc954b2b0f87"
     category: "OTHERS"
     type: 2
     status: 4
+    isdefault: 0
   - id: 101
     name: "UnassignedApp2"
     uuid: "8ab30b2d-d1da-427a-8e40-bc954b2b0f89"
     category: "OTHERS"
     type: 2
     status: 4
+    isdefault: 0
 ox_app_entity:
   - id: 1
     name: "entity1"
@@ -192,7 +195,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     file_id: 11
-    start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2050-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
   - id: 2
     workflow_deployment_id: 1
     process_instance_id: 2
@@ -376,7 +379,7 @@ ox_activity_instance:
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-21e8105c0722"
     workflow_instance_id: 6
-    status: "In Progress"
+    status: "Completed"
     org_id: 1
 ox_group:
   - id: 1
@@ -390,7 +393,7 @@ ox_user_group:
   - id: 1
     group_id: 1
     avatar_id: 1
-ox_activity_instance_assignee:
+ox_file_assignee:
   - id: 1
     activity_instance_id: 1
     user_id: 1
@@ -407,6 +410,7 @@ ox_file:
     date_created: "2019-06-25 00:00:00"
     entity_id: 1
     last_workflow_instance_id: 1
+    version: 1
   - id: 12
     org_id: 1
     data: '{"firstname":"Rai","product":"Individual Professional Liability"}'
@@ -414,6 +418,7 @@ ox_file:
     date_created: "2019-06-28 00:00:00"
     entity_id: 1
     last_workflow_instance_id: 2
+    version: 1
   - id: 13
     org_id: 1
     data: '{"firstname":"Raj","product":"Individual Professional Liability"}'
@@ -421,6 +426,7 @@ ox_file:
     date_created: "2019-06-26 00:00:00"
     entity_id: 1
     last_workflow_instance_id: 3
+    version: 1
   - id: 14
     org_id: 1
     data: '{"firstname":"Ram","product":"Dive Boat"}'
@@ -428,6 +434,7 @@ ox_file:
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
     last_workflow_instance_id: 4
+    version: 1
   - id: 15
     org_id: 1
     data: '{"firstname":"Reshma","product":"Dive Store"}'
@@ -435,6 +442,7 @@ ox_file:
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
     last_workflow_instance_id: 6
+    version: 1
   - id: 16
     org_id: 1
     data: '{"firstname":"Arpitha","product":"Dive Store"}'
@@ -442,86 +450,87 @@ ox_file:
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
     last_workflow_instance_id: 7
+    version: 1
 ox_file_attribute:
   - id: 1
     file_id: 11
     org_id: 1
-    field_value: 32552
+    field_value_numeric: 32552
     field_id: 1
   - id: 2
     file_id: 11
     org_id: 1
-    field_value: "2019-10-01"
+    field_value_date: "2019-10-01"
     field_id: 3
   - id: 3
     file_id: 12
     org_id: 1
-    field_value: 32552
+    field_value_numeric: 32552
     field_id: 1
   - id: 4
     file_id: 13
     org_id: 1
-    field_value: "2020-01-01"
+    field_value_date: "2020-01-01"
     field_id: 3
   - id: 5
     file_id: 13
     org_id: 1
-    field_value: 32552
+    field_value_numeric: 32552
     field_id: 1
   - id: 6
     file_id: 14
     org_id: 1
-    field_value: "2030-06-20"
+    field_value_date: "2030-06-20"
     field_id: 3
   - id: 7
     file_id: 14
     org_id: 1
-    field_value: 32552
+    field_value_numeric: 32552
     field_id: 1
   - id: 8
     file_id: 11
     org_id: 1
-    field_value: 1
+    field_value_numeric: 1
     field_id: 2
   - id: 9
     file_id: 12
     org_id: 1
-    field_value: 8
+    field_value_numeric: 8
     field_id: 2
   - id: 10
     file_id: 14
     org_id: 1
-    field_value: 8
+    field_value_numeric: 8
     field_id: 2
   - id: 11
     file_id: 11
     org_id: 1
-    field_value: "[array1]"
+    field_value: '[{"name":"lpcap_error.png"}]'
     field_id: 5
   - id: 12
     file_id: 11
     org_id: 1
-    field_value: "[array]"
+    field_value: '{"scuba_fit_document":"PL_Scuba_Fit_Endorsement.pdf"}'
     field_id: 6
   - id: 13
     file_id: 15
     org_id: 1
-    field_value: 32253
+    field_value_numeric: 32253
     field_id: 1
   - id: 16
     file_id: 16
     org_id: 1
-    field_value: 32253
+    field_value_numeric: 32253
     field_id: 1
   - id: 17
     file_id: 16
     org_id: 1
-    field_value: 8
+    field_value_numeric: 8
     field_id: 2
   - id: 18
     file_id: 16
     org_id: 1
-    field_value: "2030-06-20"
+    field_value_date: "2030-06-20"
     field_id: 3
   - id: 19
     file_id: 11
@@ -652,6 +661,17 @@ ox_indexed_file_attribute:
     field_value_text: "Dive Store"
     field_value_type: 'TEXT'
     field_id: 7 
+ox_file_document:
+  - id: 1
+    file_id: 11
+    org_id: 1
+    field_value: "[array1]"
+    field_id: 5
+  - id: 2
+    file_id: 11
+    org_id: 1
+    field_value: "[array]"
+    field_id: 6
 ox_wf_user_identifier:
   - id: 1
     user_id: 1
@@ -664,7 +684,7 @@ ox_wf_user_identifier:
     org_id: 1
     user_id: 1
     identifier_name: "expiry_date"
-    identifier: "2019-01-01"
+    identifier: "2050-01-01"
   - id: 3
     app_id: 99
     org_id: 1

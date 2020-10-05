@@ -39,8 +39,10 @@ export default class OX_Grid extends React.Component {
       dataState: this.props.gridDefaultFilters
         ? this.props.gridDefaultFilters
         : {},
-      apiActivityCompleted: this.rawDataPresent ? true : false
+      apiActivityCompleted: this.rawDataPresent ? true : false,
+      isTab: this.props.isTab ? this.props.isTab : false
     };
+    this.appNavigationDiv = "navigation_" + this.props.appId;
     this.loader = this.props.osjsCore.make("oxzion/splash");
     this.child = React.createRef();
     this.refreshHandler = this.refreshHandler.bind(this);
@@ -50,6 +52,15 @@ export default class OX_Grid extends React.Component {
   _grid;
 
   componentDidMount() {
+    document.getElementById(this.appNavigationDiv)
+      ? document
+          .getElementById(this.appNavigationDiv)
+          .addEventListener(
+            "handleGridRefresh",
+            () => this.refreshHandler(),
+            false
+          )
+      : null;
     $(document).ready(function () {
       $(".k-textbox").attr("placeholder", "Search");
     });
@@ -131,7 +142,7 @@ export default class OX_Grid extends React.Component {
       table.push(
         <GridColumn
           cell={
-            dataItem.cell
+            dataItem.cell || dataItem.rygRule
               ? (item) => (
                   <CustomCell
                     cellTemplate={dataItem.cell}
@@ -253,16 +264,18 @@ export default class OX_Grid extends React.Component {
     let gridToolbarContent = [];
     if (typeof this.props.gridToolbar == "string") {
       gridToolbarContent.push(
-        <JsxParser
-          bindings={{
-            item: this.props.parentData,
-            moment: moment,
-            profile: this.props.userProfile,
-            baseUrl: this.props.baseUrl,
-            gridData: this.state.gridData.data
-          }}
-          jsx={this.props.gridToolbar}
-        />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <JsxParser
+            bindings={{
+              item: this.props.parentData,
+              moment: moment,
+              profile: this.props.userProfile,
+              baseUrl: this.props.baseUrl,
+              gridData: this.state.gridData.data
+            }}
+            jsx={this.props.gridToolbar}
+          />
+        </div>
       );
     } else if (this.props.gridToolbar) {
       gridToolbarContent.push(this.props.gridToolbar);
@@ -318,12 +331,12 @@ export default class OX_Grid extends React.Component {
             var formatDate = (dateTime, dateTimeFormat) => {
               let userTimezone,
                 userDateTimeFomat = null;
-              userTimezone = this.props.userProfile.preferences.timezone
-                ? this.props.userProfile.preferences.timezone
+              userTimezone = this.userprofile.preferences.timezone
+                ? this.userprofile.preferences.timezone
                 : moment.tz.guess();
-              userDateTimeFomat = this.props.userProfile.preferences.dateformat
-                ? this.props.userProfile.preferences.dateformat
-                : "MM/dd/yyyy";
+              userDateTimeFomat = this.userprofile.preferences.dateformat
+                ? this.userprofile.preferences.dateformat
+                : "YYYY-MM-DD";
               dateTimeFormat ? (userDateTimeFomat = dateTimeFormat) : null;
               return moment(dateTime)
                 .utc(dateTime, "MM/dd/yyyy HH:mm:ss")
@@ -333,9 +346,9 @@ export default class OX_Grid extends React.Component {
             };
             var formatDateWithoutTimezone = (dateTime, dateTimeFormat) => {
               let userDateTimeFomat = null;
-              userDateTimeFomat = this.props.userProfile.preferences.dateformat
-                ? this.props.userProfile.preferences.dateformat
-                : "MM/dd/yyyy";
+              userDateTimeFomat = this.userprofile.preferences.dateformat
+                ? this.userprofile.preferences.dateformat
+                : "YYYY-MM-DD";
               dateTimeFormat ? (userDateTimeFomat = dateTimeFormat) : null;
               return moment(dateTime).format(userDateTimeFomat);
             };
@@ -413,18 +426,15 @@ export default class OX_Grid extends React.Component {
   };
 
   updatePageContent = (config) => {
-    let eventDiv = document.getElementsByClassName(
-      this.props.appId + "_breadcrumbParent"
-    )[0];
-
-    let ev = new CustomEvent("updateBreadcrumb", {
-      detail: config,
-      bubbles: true
-    });
-    eventDiv.dispatchEvent(ev);
-
-    let ev2 = new CustomEvent("updatePageView", {
-      detail: config.details,
+    let eventDiv = document.getElementById(this.appNavigationDiv);
+    var pageDetails = {
+      title: config.name,
+      pageContent: config.details,
+      pageId: null,
+      parentPage: this.props.pageId
+    };
+    let ev2 = new CustomEvent("addPage", {
+      detail: pageDetails,
       bubbles: true
     });
     eventDiv.dispatchEvent(ev2);
@@ -609,7 +619,7 @@ export default class OX_Grid extends React.Component {
                   : this.state.gridData.data
               }
             >
-              {this.createColumns(this.props.exportToPDF.columnConfig)}
+              {this.createColumns(this.props.exportToPDF.columnConfig ?this.props.exportToPDF.columnConfig : this.props.columnConfig )}
             </Grid>
           </GridPDFExport>
         ) : null}
@@ -667,7 +677,7 @@ class CustomCell extends GridCell {
       } else {
         return <td className="gridActions">{cellTemplate}</td>;
       }
-    } else if (checkType == "string") {
+    } else if (checkType == "string"  || this.props.dataItem.rygRule) {
       return (
         <JsxParser
           bindings={{
@@ -678,7 +688,7 @@ class CustomCell extends GridCell {
             profile: this.props.userProfile,
             baseUrl: this.props.baseUrl
           }}
-          jsx={this.props.cellTemplate}
+          jsx={this.props.cellTemplate ? this.props.cellTemplate : this.props.dataItem.rygRule ? this.props.dataItem.rygRule : "<td></td>" }
         />
       );
     }

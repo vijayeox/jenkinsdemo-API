@@ -119,3 +119,28 @@ ox_widget_query:
     ox_widget_id: 125
     sequence: 1
     configuration: "Sample"  
+  -
+    ox_query_id: 114
+    ox_widget_id: 126
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 116
+    ox_widget_id: 127
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 117
+    ox_widget_id: 127
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 117
+    ox_widget_id: 128
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 116
+    ox_widget_id: 128
+    sequence: 1
+    configuration: "Sample"  

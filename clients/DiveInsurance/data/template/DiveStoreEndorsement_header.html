@@ -17,7 +17,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier','business_padi'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier','business_padi','dba','property_carrier','property_policy_id'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -37,7 +37,23 @@
                     "D MMMM YYYY"
                   ) + " - 12:01:00 AM";
               }
+              if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
+              }
+              if (css_selector_classes[css_class] == "state_in_short") {
+                if(vars["state_in_short"] == "NY") {
+                    document.getElementById("padirisk").innerHTML = "PADI Risk Purchasing Group";
+                }
+              }
           }
+      }
+      if(vars['liabilityChanges'] == true || vars['liabilityChanges'] == 'true'){
+        document.getElementById("liabilityCoverages").style.display = "block";
+      }
+      if(vars['propertyChanges'] == true || vars['propertyChanges'] == 'true'){
+        document.getElementById("propertyCoverages").style.display = "block";
       }
       agentInfo();
   }
@@ -48,13 +64,10 @@
  	       	  <hr class="line1"></hr>
       		<div class="spacer"></div>
       		<hr class="line2"></hr>
-
       		<div class="title1"><center><b>DIVE CENTER ENDORSEMENT</b></center></div>
-
           <hr class="line1"></hr>
           <div class="spacer"></div>
           <hr class="line2"></hr>
-
     <div class = "content">
       <div class ="content1">
           <b class = "caption">Agent Information</b>
@@ -68,6 +81,7 @@
           </div>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
           <p class = "details"><span class ="business_name"></span></p>
+          <p class = "details" id = "dbaName" style = "display:none;">DBA:<span class ="dba"></span></p>
           <p class = "details"><span class ="address1"></span></p>
           <p class = "details"><span class ="address2"></span></p>
           <p class = "details"><span class ="city"></span>, <span class ="state_in_short"></span>&nbsp<span class ="zip"></span></p>
@@ -88,14 +102,20 @@
         </div>
         <div>
           <hr></hr>
-          <p class = "p_margin">Policy issued by &nbsp<span class ="liability_carrier"></span></p>
-          <p class = "p_margin">Policy #: <span class ="liability_policy_id"></span></p>
+          <span id="liabilityCoverages" style="display: none;">
+            <p class = "p_margin">Liability Policy issued by &nbsp<span class ="liability_carrier"></span></p>
+            <p class = "p_margin">Liability Policy #: <span class ="liability_policy_id"></span></p>
+          </span>
+          <span id="propertyCoverages" style="display: none;">
+            <p class = "p_margin">Property Policy issued by &nbsp<span class ="property_carrier"></span></p>
+            <p class = "p_margin">Property Policy #: <span class ="property_policy_id"></span></p>
+          </span>
           <hr></hr>
         </div>
       </div>
+      <p id="padirisk" class = "p_margin"></p>
       </div>
     </div>
-    <div class="margin_div">&nbsp</div>
-    <div class="margin_div">&nbsp</div>
+     <hr></hr>
 </body>
 </html>

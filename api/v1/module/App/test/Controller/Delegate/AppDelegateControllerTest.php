@@ -15,17 +15,18 @@ class AppDelegateControllerTest extends ControllerTest
             'UUID' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4',
             'description' => 'FirstAppOfTheClient',
         );
-        $path = __DIR__ . '/../../../../../data/delegate/' . $this->data['UUID'];
-        if (!is_link($path)) {
-            symlink(__DIR__ . '/../../../../../../../clients/DiveInsurance/data/delegate/', $path);
-        }
         parent::setUp();
+        $this->config = $this->getApplicationConfig();
+        $path = $this->config['DELEGATE_FOLDER']. $this->data['UUID'];
+        if (!is_link($path)) {
+            symlink($this->config['CLIENT_FOLDER'].'DiveInsurance/data/delegate/', $path);
+        }
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        $path = __DIR__ . '/../../../../../data/delegate/' . $this->data['UUID'];
+        $path = $this->config['DELEGATE_FOLDER'] . $this->data['UUID'];
         if (is_link($path)) {
             unlink($path);
         }
@@ -85,7 +86,7 @@ class AppDelegateControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], "Bharat Gogineni");
+        $this->assertEquals($content['data'][0]['name'], "Admin Test");
     }
 
     public function testUserListWrongOrg()

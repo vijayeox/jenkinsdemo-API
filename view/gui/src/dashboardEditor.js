@@ -4,12 +4,12 @@ import { dashboardEditor as section } from '../metadata.json';
 import JavascriptLoader from './components/javascriptLoader';
 import WidgetRenderer from './WidgetRenderer';
 import DashboardFilter from './DashboardFilter';
-
+import DashboardExportModal from './components/Modals/DashbordExportModal'
 import Swal from 'sweetalert2';
 import './public/css/sweetalert.css';
 import './components/widget/editor/widgetEditorApp.scss';
 import './public/css/dashboardEditor.scss'
-import '@progress/kendo-theme-default/dist/all.css';
+import '@progress/kendo-theme-bootstrap/dist/all.css';
 
 class DashboardEditor extends React.Component {
     constructor(props) {
@@ -24,8 +24,8 @@ class DashboardEditor extends React.Component {
             editorMode: 'initial',
             errors: {},
             filterConfiguration: [],
-            showFilterDiv: false,
             dashboardVisibility: -1,
+            dashboardExportModal: false
 
         };
         this.initialState = { ...this.state }
@@ -36,6 +36,7 @@ class DashboardEditor extends React.Component {
         this.dashboardName = React.createRef();
         this.dashboardVisibility = React.createRef();
         this.dashboardDescription = React.createRef();
+        this.exportModalRef = React.createRef();
 
         let thisInstance = this;
         this.editorDialogMessageHandler = function (event) {
@@ -138,18 +139,18 @@ class DashboardEditor extends React.Component {
                         height: 200
                     },
                     min: {
-                        width: 50,
-                        height: 50
+                        width: 100,
+                        height: 100
                     },
                     max: {
-                        width: 800,
+                        width: '100%',
                         height: 600,
                     }
                 },
                 dialogUrl: './widgetEditorDialog.html'
             }
         };
-    
+
         //Without this setting CKEditor removes empty inline widgets (which is <span></span> tag).
         CKEDITOR.dtd.$removeEmpty['span'] = false;
         let editor = CKEDITOR.appendTo('ckEditorInstance', config);
@@ -228,7 +229,8 @@ class DashboardEditor extends React.Component {
                 'description': this.state.dashboardDescription,
                 'dashboard_type': "html",
                 'filter_configuration': JSON.stringify(this.state.filterConfiguration),
-                'ispublic': this.state.dashboardVisibility
+                'ispublic': this.state.dashboardVisibility,
+                'export_configuration': JSON.stringify(this.state.selectQuery)
             };
             let url = 'analytics/dashboard';
             let method = '';
@@ -289,7 +291,8 @@ class DashboardEditor extends React.Component {
                         dashboardName: dashboard.name ? dashboard.name : '',
                         dashboardDescription: dashboard.description ? dashboard.description : '',
                         filterConfiguration: (dashboard.filter_configuration != "" ? JSON.parse(dashboard.filter_configuration) : []),
-                        dashboardVisibility: parseInt(dashboard.ispublic)
+                        dashboardVisibility: parseInt(dashboard.ispublic),
+                        selectQuery: dashboard.export_configuration != undefined ? dashboard.export_configuration : ""
                     });
                     editor.setData(response.dashboard.content);
                 },
@@ -459,13 +462,10 @@ class DashboardEditor extends React.Component {
     }
 
     displayFilterDiv() {
-        this.setState({ showFilterDiv: true }, state => {
-
-            var element = document.getElementById("filter-form-container");
-            element.classList.remove("disappear");
-            document.getElementById("dashboard-container").classList.add("disappear")
-            document.getElementById("dashboard-filter-btn").disabled = true
-        })
+        var element = document.getElementById("filtereditor-form-container");
+        element.classList.remove("disappear");
+        document.getElementById("dashboard-container").classList.add("disappear")
+        document.getElementById("dashboard-filter-btn").disabled = true
     }
 
     setFilter(filter) {
@@ -482,17 +482,25 @@ class DashboardEditor extends React.Component {
         this.setState({ errors: errors })
         return Object.keys(errors).length == 0
     }
+    showExportModal(showModal) {
+        this.setState({ showExportModal: showModal })
+    }
+
+    setExportQueryUUID() {
+
+    }
 
     render() {
         return (
             <form className="dashboard-editor-form">
-                <div className="row col-12" style={{ marginBottom: "3em" }}>
-                    <Button className="dashboard-back-btn" onClick={() => this.props.flipCard("")}><i className="fa fa-arrow-left" aria-hidden="true" title="Go back"></i></Button>
-                    <Button className="dashboard-save-btn" onClick={this.saveDashboard} disabled={!this.state.contentChanged}>Save</Button>
-                    <Button className="dashboard-filter-btn" id="dashboard-filter-btn" onClick={() => this.displayFilterDiv()}><i className="fa fa-filter" aria-hidden="true"></i>Filter</Button>
+                <div className="dash-manager-buttons">
+                    <Button id="dashboard-export-settings-btn" onClick={() => this.showExportModal(true)}><i class="fas fa-file-export" title="Set Export OI Query"></i></Button>
+                    <Button id="dashboard-filter-btn" onClick={() => this.displayFilterDiv()}><i className="fa fa-filter" aria-hidden="true" title="Filter OI"></i></Button>
+                    <Button onClick={this.saveDashboard} disabled={!this.state.contentChanged}><i className="fa fa-save" aria-hidden="true" title="Save OI"></i></Button>
+                    <Button onClick={() => this.props.flipCard("")}><i className="fa fa-close" aria-hidden="true" title="Go back"></i></Button>
                 </div>
-                <div>{
-                    this.state.showFilterDiv &&
+                <div id="filtereditor-form-container" className="disappear">{
+                    this.state.filterConfiguration &&
                     <DashboardFilter
                         hideFilterDiv={() => this.setState({ showFilterDiv: false })}
                         setFilter={(filter) => this.setFilter(filter)}
@@ -504,11 +512,21 @@ class DashboardEditor extends React.Component {
                         core={this.core}
                     />
                 }
-
                 </div>
+                {this.state.showExportModal &&
+                    <DashboardExportModal
+                        show={this.state.showExportModal}
+                        queryOptions={[]}
+                        onHide={() => this.showExportModal(false)}
+                        core={this.core}
+                        notification={this.props.notif}
+                        inputChanged={(e) => this.inputChanged(e)}
+                        selectedExportQuery={this.state.selectQuery || ""}
+                    />
+                }
                 <div id="dashboard-container">
                     <div className="form-group row">
-                        <label htmlFor="dashboardName" className="col-2 col-form-label form-control-sm">Name</label>
+                        <label htmlFor="dashboardName" className="col-form-label form-control-sm">Name</label>
                         <div className="col-2">
                             <>
                                 <input type="text" id="dashboardName" name="dashboardName" ref={this.dashboardName} className="form-control form-control-sm"
@@ -523,7 +541,7 @@ class DashboardEditor extends React.Component {
                                 </Overlay>
                             </>
                         </div>
-                        <label htmlFor="dashboardDescription" className="col-2 col-form-label form-control-sm">Description</label>
+                        <label htmlFor="dashboardDescription" className="col-form-label form-control-sm">Description</label>
                         <div className="col-4">
                             <>
                                 <input type="text" id="dashboardDescription" name="dashboardDescription" ref={this.dashboardDescription} className="form-control form-control-sm"
@@ -538,12 +556,14 @@ class DashboardEditor extends React.Component {
                                 </Overlay>
                             </>
                         </div>
+
+                        <label htmlFor="dashboardVisibility" className="col-form-label form-control-sm">Visibility</label>
                         <div className="col-2">
                             <>
                                 <select id="dashboardVisibility" ref={this.dashboardVisibility} name="dashboardVisibility" className="form-control form-control-sm" placeholder="Select Visibility" value={this.state.dashboardVisibility != null ? this.state.dashboardVisibility : -1} onChange={this.inputChanged}>
                                     <option disabled value={-1} key="-1">Select Visibility</option>
-                                    <option key="1" value={1}>public</option>
-                                    <option key="2" value={0}>private</option>
+                                    <option key="1" value={1}>Public</option>
+                                    <option key="2" value={0}>Private</option>
                                 </select>
                                 <Overlay target={this.dashboardVisibility} show={this.state.errors.dashboardVisibility != null} placement="bottom">
                                     {props => (
@@ -561,7 +581,7 @@ class DashboardEditor extends React.Component {
                         </div>
                     </div>
 
-                    <div id="gridArea" style={{ height: '200px', width: '800px' }}>
+                    <div id="gridArea" style={{ height: '200px', width: '98%' }}>
                         <div className="oxzion-widget-content"></div>
                     </div>
                 </div>

@@ -12,7 +12,9 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
     public function __construct(){
         $this->template = array(
             'Dive Boat' => 'diveBoatPolicyMailTemplate',
-            'Dive Store' => 'diveStorePolicyMailTemplate');
+            'Dive Store' => 'diveStorePolicyMailTemplate',
+            'Group Professional Liability' => 'groupProfessionalLiabilityPolicyMailTemplate',
+        );
         parent::__construct();
     }
 

@@ -66,6 +66,36 @@ return [
                     ],
                 ],
             ],
+            'target' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/analytics/target[/:targetUuid]',
+                    'defaults' => [
+                        'controller' => Controller\TargetController::class,
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'put' => 'MANAGE_QUERY_WRITE',
+                            'post' => 'MANAGE_QUERY_WRITE',
+                            'delete' => 'MANAGE_QUERY_WRITE',
+                            'get' => 'MANAGE_QUERY_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'getKRAResult' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/analytics/target/getkraresult',
+                    'defaults' => [
+                        'controller' => Controller\TargetController::class,
+                        'method' => 'GET',
+                        'action' => 'getKRAResult',
+                        'access' => [
+                            'getKRAResult' => 'MANAGE_QUERY_READ',
+                        ],
+                    ],
+                ],
+            ],
             'visualization' => [
                 'type' => Segment::class,
                 'options' => [

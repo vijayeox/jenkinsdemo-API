@@ -1,0 +1,268 @@
+{
+	"_id": "5f68f108aaf680f8266171de",
+	"type": "form",
+	"tags": [],
+	"owner": "5cd2e0d62363f67ddc9489c6",
+	"components": [{
+		"title": "COVID - 19 Checlist",
+		"theme": "primary",
+		"collapsible": false,
+		"tableView": false,
+		"key": "covid19Checlist",
+		"type": "panel",
+		"label": "Panel",
+		"input": false,
+		"components": [{
+			"label": "Columns",
+			"columns": [{
+				"components": [{
+					"label": "Name",
+					"tableView": true,
+					"customDefaultValue": "if(data.userprofile && data.userprofile.name){\n  value = data.userprofile.name\n}",
+					"validate": {
+						"required": true
+					},
+					"key": "name",
+					"type": "textfield",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}, {
+				"components": [{
+					"label": "Screening Date",
+					"format": "MM-DD-YYYY",
+					"tableView": false,
+					"enableMinDateInput": true,
+					"datePicker": {
+						"minDate": "moment()",
+						"disableWeekends": false,
+						"disableWeekdays": false
+					},
+					"enableMaxDateInput": false,
+					"defaultDate": "moment()",
+					"validate": {
+						"required": true
+					},
+					"key": "date",
+					"type": "datetime",
+					"input": true,
+					"widget": {
+						"type": "calendar",
+						"displayInTimezone": "viewer",
+						"language": "en",
+						"useLocaleSettings": false,
+						"allowInput": true,
+						"mode": "single",
+						"enableTime": true,
+						"noCalendar": false,
+						"format": "MM-DD-YYYY",
+						"hourIncrement": 1,
+						"minuteIncrement": 1,
+						"time_24hr": false,
+						"minDate": "moment()",
+						"disableWeekends": false,
+						"disableWeekdays": false,
+						"maxDate": null
+					},
+					"hideOnChildrenHidden": false
+				}],
+				"width": 6,
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md"
+			}],
+			"tableView": false,
+			"key": "columns1",
+			"type": "columns",
+			"input": false
+		}, {
+			"label": "Office Location Visiting",
+			"widget": "choicesjs",
+			"tableView": true,
+			"data": {
+				"values": [{
+					"label": "Cleveland",
+					"value": "Cleveland ,Ohio"
+				}, {
+					"label": "Rnd Center ,Bangalore",
+					"value": "Rnd Center ,Bangalore"
+				}, {
+					"label": "Pixel Park ,Bangalore",
+					"value": "Pixel Park ,Bangalore"
+				}]
+			},
+			"selectThreshold": 0.3,
+			"key": "officeLocationVisiting",
+			"type": "select",
+			"indexeddb": {
+				"filter": {}
+			},
+			"input": true
+		}, {
+			"label": "Are you exhibiting any of the following symptoms consistent with the list of symptoms provided by the CDC?",
+			"optionsLabelPosition": "right",
+			"tableView": false,
+			"defaultValue": {
+				"": false,
+				"fever": false,
+				"cough": false,
+				"shortnessOfBreath": false,
+				"noneOfTheAbove": false
+			},
+			"values": [{
+				"label": "Fever",
+				"value": "fever",
+				"shortcut": ""
+			}, {
+				"label": "Cough",
+				"value": "cough",
+				"shortcut": ""
+			}, {
+				"label": "Shortness of breath",
+				"value": "shortnessOfBreath",
+				"shortcut": ""
+			}, {
+				"label": "None of the above",
+				"value": "noneOfTheAbove",
+				"shortcut": ""
+			}],
+			"clearOnHide": false,
+			"key": "areYouExhibitingAnyOfTheFollowingSymptomsConsistentWithTheListOfSymptomsProvidedByTheCdc1",
+			"type": "selectboxes",
+			"input": true,
+			"inputType": "checkbox"
+		}, {
+			"label": "Was your temperature above 100.4 degrees within the last 12 hours?",
+			"optionsLabelPosition": "right",
+			"inline": false,
+			"tableView": false,
+			"values": [{
+				"label": "Yes",
+				"value": "yes",
+				"shortcut": ""
+			}, {
+				"label": "No",
+				"value": "no",
+				"shortcut": ""
+			}],
+			"key": "wasYourTemperatureAbove1004DegreesWithinTheLast12Hours",
+			"type": "radio",
+			"input": true
+		}, {
+			"label": "To your knowledge have you been in contact with anyone exhibiting the above symptoms in the last 14 days?",
+			"optionsLabelPosition": "right",
+			"inline": false,
+			"tableView": false,
+			"values": [{
+				"label": "Yes",
+				"value": "yes",
+				"shortcut": ""
+			}, {
+				"label": "No",
+				"value": "no",
+				"shortcut": ""
+			}],
+			"key": "toYourKnowledgeHaveYouBeenInContactWithAnyoneExhibitingTheAboveSymptomsInTheLast14Days",
+			"type": "radio",
+			"input": true
+		}, {
+			"label": "To your knowledge have you been in contact with anyone with a confirmed case of COVID-19 in the last 14 days?",
+			"optionsLabelPosition": "right",
+			"inline": false,
+			"tableView": false,
+			"values": [{
+				"label": "Yes",
+				"value": "yes",
+				"shortcut": ""
+			}, {
+				"label": "No",
+				"value": "no",
+				"shortcut": ""
+			}],
+			"key": "toYourKnowledgeHaveYouBeenInContactWithAnyoneWithAConfirmedCaseOfCovid19InTheLast14Days",
+			"type": "radio",
+			"input": true
+		}, {
+			"label": "HTML",
+			"attrs": [{
+				"attr": "style",
+				"value": "text-align:center"
+			}],
+			"content": "I acknowledge that I have read and understand the questions in this survey and answered them truthfully.  I understand that even when precautions are taken there is a risk of contracting COVID-19, and knowing this, I consent to today's services.  On my behalf or on behalf of the individual receiving services, whom I have the right to sign on behalf of, I release and discharge EOX Vantage, its employees and equity partners and assigns for and from any and all liability, claims, demands, damages, and causes of action, of any kind, including but not limited to personal injuries, medical expenses, pain and suffering, lost wages and all other damages, whether now known or unknown, resulting from the rendering of services at the Firm.",
+			"refreshOnChange": false,
+			"tableView": false,
+			"key": "html",
+			"type": "htmlelement",
+			"input": false
+		}, {
+			"label": "Columns",
+			"columns": [{
+				"components": [],
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md",
+				"width": 4
+			}, {
+				"components": [{
+					"label": "I Agree",
+					"tableView": false,
+					"defaultValue": false,
+					"key": "iAgree",
+					"type": "checkbox",
+					"input": true,
+					"hideOnChildrenHidden": false
+				}],
+				"offset": 0,
+				"push": 0,
+				"pull": 0,
+				"size": "md",
+				"width": 4
+			}, {
+				"components": [],
+				"size": "md",
+				"width": 4,
+				"offset": 0,
+				"push": 0,
+				"pull": 0
+			}],
+			"tableView": false,
+			"key": "columns",
+			"type": "columns",
+			"input": false
+		}]
+	}, {
+		"type": "button",
+		"label": "Submit",
+		"key": "submit",
+		"disableOnInvalid": true,
+		"input": true,
+		"tableView": false
+	}],
+	"revisions": "",
+	"_vid": 0,
+	"title": "CovidSymptomTracker",
+	"display": "form",
+	"access": [{
+		"roles": ["5d70a2198e9aff51d0f3c171", "5d70a2198e9afffba0f3c172", "5d70a2198e9affff8af3c173"],
+		"type": "read_all"
+	}],
+	"submissionAccess": [],
+	"controller": "",
+	"properties": {
+		"submission_commands": "[{\"command\": \"fileSave\", \"entity_name\": \"Symptom Tracker\" }]"
+	},
+	"settings": {},
+	"name": "covidSymptomTracker",
+	"path": "covidsymptomtracker",
+	"project": "5d70a2198e9aff60caf3c170",
+	"created": "2020-09-21T18:29:28.681Z",
+	"modified": "2020-09-21T19:04:23.878Z",
+	"machineName": "onboarding-qeimxlbzmdfpljg:covidSymptomTracker"
+}

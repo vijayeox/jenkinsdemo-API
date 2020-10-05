@@ -1,8 +1,8 @@
 import React from "react";
 import Page from "./components/App/Page";
 import FormRender from "./components/App/FormRender";
-import Breadcrumb from "./components/App/Breadcrumb";
 import { createBrowserHistory } from "history";
+import { Chip } from "@progress/kendo-react-buttons";
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -12,67 +12,84 @@ class Navigation extends React.Component {
     this.appId = this.props.appId;
     this.proc = this.props.proc;
     this.params = this.props.params;
+    this.pageClass = this.appId + "_page";
+    this.pageDiv = this.appId + "_pages";
+    this.appNavigationDiv = "navigation_" + this.appId;
     this.state = {
-      selected: this.props.selected
+      selected: this.props.selected,
+      pages: [],
     };
     this.homepage = null;
-    this.child = React.createRef();
     this.breadcrumbDiv = this.appId + "_breadcrumbParent";
     this.contentDivID = this.appId + "_Content";
-    this.getMenulist().then(response => {
+    if (this.props.menus && this.props.menus.length > 0) {
+      this.props.menuLoad(this.props.menus);
+      if (this.props.menus[0]) {
+        this.homepage = this.props.menus[0];
+      }
+    } else {
+      this.getMenulist().then((response) => {
         this.props.menuLoad(response["data"]);
-        if(response['data'][0]){
+        if (response["data"][0]) {
           this.homepage = response["data"][0];
         }
-      if (this.params && this.params.page) {
-        this.child.current.clearBreadcrumb();
-        this.setState({ selected: { page_id: this.params.page } });
-        history.push("/");
-      } else if (this.params && this.params.activityId) {
-        this.setState({ selected: { activity_id: this.params.activityId } });
-      } else if (this.proc && this.proc.args) {
-        if (typeof this.proc.args === "string") {
-          try {
-            var appParams = JSON.parse(this.proc.args);
-            if (appParams.type) {
-              this.postSubmitCallback = this.postSubmitCallback.bind(this);
-              this.setState({
-                selected: {
-                  type: appParams.type,
-                  page_id: appParams.pageId,
-                  pipeline: appParams.pipeline,
-                  workflow_id: appParams.workflowId,
-                  parentWorkflowInstanceId: appParams.workflowInstanceId,
-                  workflowInstanceId: appParams.workflowInstanceId,
-                  url: appParams.url,
-                  activityInstanceId: appParams.activityInstanceId
-                }
-              });
-              history.push("/");
-            } else {
-              this.child.current.updateBreadCrumb({detail:appParams});
-              let ev = new CustomEvent("updatePageView", {
-                detail: appParams.detail,
-                bubbles: true
-              });
-              document.getElementsByClassName(this.breadcrumbDiv)[0].dispatchEvent(ev);
-              history.push("/");
+        if (this.params && this.params.page) {
+          this.setState({
+            pages: [
+              {
+                pageId: this.params.page,
+                title: this.params.pageTitle,
+                icon: this.params.pageIcon,
+              },
+            ],
+          });
+          this.pageActive(this.params.page);
+          history.push("/");
+        } else if (this.params && this.params.activityId) {
+          this.setState({ selected: { activity_id: this.params.activityId } });
+        } else if (this.proc && this.proc.args) {
+          ``;
+          if (typeof this.proc.args === "string") {
+            try {
+              var appParams = JSON.parse(this.proc.args);
+              if (appParams.type) {
+                this.setState({
+                  selected: {
+                    type: appParams.type,
+                    page_id: appParams.pageId,
+                    pipeline: appParams.pipeline,
+                    workflow_id: appParams.workflowId,
+                    parentWorkflowInstanceId: appParams.workflowInstanceId,
+                    workflowInstanceId: appParams.workflowInstanceId,
+                    url: appParams.url,
+                    activityInstanceId: appParams.activityInstanceId,
+                  },
+                });
+                this.pageActive(appParams.pageId);
+                history.push("/");
+              } else {
+                history.push("/");
+                let ev = new CustomEvent("addPage", {
+                  detail: { pageContent: appParams.detail },
+                  bubbles: true,
+                });
+                document
+                  .getElementsByClassName(this.breadcrumbDiv)[0]
+                  .dispatchEvent(ev);
+              }
+            } catch (e) {
+              console.log("No params!");
+              console.log(e);
+              this.props.selectLoad(this.homepage);
             }
-          } catch (e) {
-            console.log("No params!");
-            console.log(e);
-            this.child.current.clearBreadcrumb();
+          } else {
             this.props.selectLoad(this.homepage);
           }
         } else {
-          this.child.current.clearBreadcrumb();
           this.props.selectLoad(this.homepage);
         }
-      } else {
-        this.child.current.clearBreadcrumb();
-        this.props.selectLoad(this.homepage);
-      }
-    });
+      });
+    }
   }
   async getMenulist() {
     let helper = this.core.make("oxzion/restClient");
@@ -84,66 +101,184 @@ class Navigation extends React.Component {
     );
     return menulist;
   }
+  pageActive(pageId) {
+    if (document.getElementById(pageId + "_page")) {
+      document
+        .getElementById(pageId + "_page")
+        .classList.remove("page-inactive");
+      document.getElementById(pageId + "_page").classList.add("page-active");
+    }
+  }
+  pageInActive(pageId) {
+    if (document.getElementById(pageId + "_page")) {
+      document.getElementById(pageId + "_page").classList.add("page-inactive");
+      document.getElementById(pageId + "_page").classList.remove("page-active");
+    }
+  }
+  componentDidMount() {
+    document
+      .getElementById(this.appNavigationDiv)
+      .addEventListener("addPage", this.addPage, false);
+    document
+      .getElementById(this.appNavigationDiv)
+      .addEventListener("stepDownPage", this.stepDownPage, false);
+    document
+      .getElementById(this.appNavigationDiv)
+      .addEventListener("selectPage", this.selectPage, false);
+  }
+
+  addPage = (e) => {
+    var pages = this.state.pages;
+    pages.push(e.detail);
+    if (
+      e.detail.parentPage &&
+      document.getElementById(e.detail.parentPage + "_page")
+    ) {
+      this.pageInActive(e.detail.parentPage);
+    }
+    this.setState({ pages: pages });
+  };
+  selectPage = (e) => {
+    this.pageActive(e.detail.parentPage);
+  };
 
   componentWillReceiveProps(props) {
     if (props.selected) {
-      this.setState({ selected: props.selected });
-      if (props.selected !== this.state.selected)
-        this.child.current.clearBreadcrumb();
+      var item = props.selected;
+      if (item.page_id) {
+        var page = [{ pageId: item.page_id, title: item.name }];
+        this.setState({ pages: page });
+        this.pageActive(item.page_id);
+      }
     }
   }
-  postSubmitCallback = () => {
-    this.props.selectLoad(this.homepage);
-    try {
-      this.homepage.page_id != this.props.selected.page_id
-        ? this.child.current.clearBreadcrumb()
-        : null;
-    } catch {
-      null;
+  componentDidUpdate(prevProps) {
+    if (prevProps.selected != this.props.selected) {
+      var item = this.props.selected;
+      if (item.page_id) {
+        var page = [{ pageId: item.page_id, title: item.name }];
+        this.setState({ pages: page });
+        this.pageActive(item.page_id);
+      }
     }
-    if (history) {
-      history.push("/");
+  }
+
+  stepDownPage = (e) => {
+    if (this.state.pages.length == 1) {
+      this.props.selectLoad(this.homepage);
+    } else {
+      let data = this.state.pages.slice();
+      if (data.length > 1) {
+        data.splice(data.length - 1, data.length);
+        this.setState({
+          pages: data,
+        });
+        this.pageActive(data[data.length - 1]["pageId"]);
+      } else {
+        this.props.selectLoad(this.homepage);
+      }
     }
   };
+
+  breadcrumbClick = (currentValue, index) => {
+    let data = this.state.pages.slice();
+    data.splice(index + 1, data.length);
+    this.setState({
+      pages: data,
+    });
+    this.pageActive(currentValue.pageId);
+  };
+
+  renderBreadcrumbs = () => {
+    var breadcrumbsList = [];
+    this.state.pages.map((currentValue, index) => {
+      var clickable = false;
+      if (this.state.pages.length > 1 && index + 1 != this.state.pages.length) {
+        clickable = true;
+      }
+      currentValue.title
+        ? breadcrumbsList.push(
+            <>
+              {index == "0" ? null : (
+                <div
+                  style={{
+                    marginRight: "5px",
+                  }}
+                />
+              )}
+              <Chip
+                text={currentValue.title}
+                value={""}
+                disabled={!clickable}
+                className={
+                  clickable ? "activeBreadcrumb" : "disabledBreadcrumb"
+                }
+                icon={currentValue.icon}
+                type={clickable || index == 0 ? "none" : "info"}
+                selected={false}
+                onClick={() => {
+                  clickable ? this.breadcrumbClick(currentValue, index) : null;
+                }}
+                removable={false}
+              />
+            </>
+          )
+        : null;
+    });
+    return breadcrumbsList;
+  };
+  renderPages() {
+    var pageList = [];
+    var that = this;
+    if (this.state.pages.length > 0) {
+      this.state.pages.map((item, i) => {
+        var pageId = item.pageId + "_page";
+        var pageClasses = this.pageClass + " page-active";
+        pageList.push(
+          <div className={pageClasses} id={pageId}>
+            <Page
+              key={item.pageId}
+              config={this.props.config}
+              proc={this.props.proc}
+              app={this.props.appId}
+              core={this.core}
+              pageId={item.pageId}
+              params={item.params}
+              pageContent={item.pageContent}
+              currentRow={item.currentRow}
+            />
+          </div>
+        );
+      });
+    }
+    return pageList;
+  }
 
   render() {
     const { expanded, selected } = this.state;
     return (
-      <div className="PageRender">
+      <div id={this.appNavigationDiv} className="Navigation">
         <div className={this.breadcrumbDiv}>
-          <Breadcrumb ref={this.child} appId={this.appId}
-          homePage={this.postSubmitCallback} />
+          {this.state.pages.length > 0 ? (
+            <div className="breadcrumbs">{this.renderBreadcrumbs()}</div>
+          ) : null}
         </div>
-        {this.state.selected.page_id ? (
-          <Page
-            pageId={this.state.selected.page_id}
-            config={this.props.config}
-            proc={this.props.proc}
-            app={this.props.appId}
-            core={this.core}
-          />
-        ) : (
-          <Page
-            config={this.props.config}
-            proc={this.props.proc}
-            app={this.props.appId}
-            core={this.core}
-          />
-        )}
-        {(this.state.selected.activityInstanceId &&
-          this.state.selected.activityInstanceId) ||
-        this.state.selected.pipeline ? (
-          <div id={this.contentDivID} className="AppBuilderPage">
-            <FormRender
-              postSubmitCallback={this.postSubmitCallback}
-              core={this.core}
-              appId={this.props.appId}
-              activityInstanceId={this.state.selected.activityInstanceId}
-              workflowInstanceId={this.state.selected.workflowInstanceId}
-              pipeline={this.state.selected.pipeline}
-            />
-          </div>
-        ) : null}
+        <div className={this.pageDiv} style={{ height: "calc(100% - 55px)" }}>
+          {this.state.pages.length > 0 ? this.renderPages() : null}
+          {(this.state.selected.activityInstanceId &&
+            this.state.selected.activityInstanceId) ||
+          this.state.selected.pipeline ? (
+            <div id={this.contentDivID} className="AppBuilderPage">
+              <FormRender
+                core={this.core}
+                appId={this.props.appId}
+                activityInstanceId={this.state.selected.activityInstanceId}
+                workflowInstanceId={this.state.selected.workflowInstanceId}
+                pipeline={this.state.selected.pipeline}
+              />
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
@@ -152,18 +287,18 @@ export default Navigation;
 
 // The params to open a specific page must be sent in the following format:
 // http://localhost:8081/?app=DiveInsurance
-                      //  &params= {
-                                  //   "name": "Quote Approval",
-                                  //   "detail": [{
-                                  //     "type": "Form",
-                                  //     "pipeline": {
-                                  //       "activityInstanceId": "629256b1-82f4-11ea-ba01-bacc68b07eda",
-                                  //       "workflowInstanceId": "5e8ea8c0-82f4-11ea-ba01-bacc68b07eda",
-                                  //       "commands": [{
-                                  //         "command": "claimForm"
-                                  //       }, {
-                                  //         "command": "instanceForm"
-                                  //       }]
-                                  //     }
-                                  //   }]
-                                  // }
+//  &params= {
+//   "name": "Quote Approval",
+//   "detail": [{
+//     "type": "Form",
+//     "pipeline": {
+//       "activityInstanceId": "629256b1-82f4-11ea-ba01-bacc68b07eda",
+//       "workflowInstanceId": "5e8ea8c0-82f4-11ea-ba01-bacc68b07eda",
+//       "commands": [{
+//         "command": "claimForm"
+//       }, {
+//         "command": "instanceForm"
+//       }]
+//     }
+//   }]
+// }
