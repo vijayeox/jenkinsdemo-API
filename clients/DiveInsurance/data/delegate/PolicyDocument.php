@@ -917,7 +917,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         protected function getLicenseNumber($data,$persistenceService)
         {
-            $selectQuery = "Select * FROM state_license WHERE state = '".$data['state']."'";
+            $state = null;
+            if(isset($data['state'])){
+                $state = $data['state'];
+                $state = str_replace("'", "", $state);
+            }
+            $selectQuery = "Select * FROM state_license WHERE state = '".$state."'";
             $resultQuery = $persistenceService->selectQuery($selectQuery);
             while ($resultQuery->next()) {
                 $stateLicenseDetails[] = $resultQuery->current();
@@ -940,8 +945,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             if(!isset($data['state'])){
                 $state = $data['state'] = isset($data['us_state']) ? $data['us_state'] : isset($data['non_us_state']) ? $data['non_us_state'] : isset($data['business_state']) ? $data['business_state'] : "";
+                $state = str_replace("'", "", $state);
             }else{
                 $state = $data['state'];
+                $state = str_replace("'", "", $state);
             }
             $endDate = date_format(date_create($data['end_date']),"Y-m-d");
             $selectQuery = "Select carrier,policy_number FROM carrier_policy WHERE product ='".$product."' AND state = '".$state."' AND `year` = YEAR('".$endDate."') - 1;";
@@ -1093,6 +1100,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
 
     protected function getStateInShort($state,$persistenceService){
+        $state = str_replace("'", "", $state);
         $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$state."'";
         $resultSet = $persistenceService->selectQuery($selectQuery);
         if($resultSet->count() == 0){
