@@ -37,7 +37,7 @@ class DispatchMail extends MailDelegate
             }
         }
         $attachmentFieldsArray = include(__DIR__ . "/fieldMappingAttachments.php");
-        $fileDocs =  $this->destination . $data["orgId"] . DIRECTORY_SEPARATOR . $data["fileId"] . DIRECTORY_SEPARATOR ;
+        $fileDocs =  $this->destination . $data["orgId"] . DIRECTORY_SEPARATOR . $data["fileId"] . DIRECTORY_SEPARATOR;
         $mailDocumentsDir = $fileDocs . "mailDocuments";
 
         $attachmentsAvailable = false;
@@ -53,7 +53,7 @@ class DispatchMail extends MailDelegate
                         if (FileUtils::fileExists($attachmentFile["path"])) {
                             FileUtils::copy(
                                 $attachmentFile["path"],
-                                $fileIndex == 0 ? $attachmentFile["originalName"] : $attachmentFile["originalName"] . "_" . $fileIndex,
+                                $attachmentFile["originalName"],
                                 $folderPath
                             );
                         }
