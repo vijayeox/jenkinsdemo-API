@@ -24479,7 +24479,7 @@
     ],
     "settings": {},
     "properties": {
-        "submission_commands": "[{\"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }, { \"command\": \"delegate\", \"async\" : \"false\", \"entity_name\" : \"Dealer Policy\",\"delegate\": \"GenerateWorkbook\" }]",
+        "submission_commands": "[{\"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }, { \"command\": \"delegate\", \"async\" : \"true\", \"entity_name\" : \"Dealer Policy\",\"delegate\": \"GenerateWorkbook\" }]",
         "showPrevious": "true",
         "showCancel": "true"
     },
