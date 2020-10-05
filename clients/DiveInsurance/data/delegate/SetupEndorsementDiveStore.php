@@ -365,9 +365,12 @@ public function execute(array $data,Persistence $persistenceService)
                             $data['groupPL'][$key]['effectiveDate'] = isset($value['start_date']) ? $value['start_date'] : $data['update_date'];
                         }else if($value['effectiveDate'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
-                            $data['groupPL'][$key]['existingEffectiveDate'] = $value['start_date'];
+                            $data['groupPL'][$key]['existingEffectiveDate'] = date_format(date_create($value['start_date']),'m-d-Y');
                         }else if (isset($value['padi']) && $value['padi'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $data['update_date'];
+                        }else{
+                            $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
+                            $data['groupPL'][$key]['existingEffectiveDate'] = date_format(date_create($value['start_date']),'m-d-Y');
                         }
                         if(is_string($value['documentattach'])){
                             $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
