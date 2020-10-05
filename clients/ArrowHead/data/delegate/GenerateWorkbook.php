@@ -266,7 +266,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $data['submissionTime'] = (new DateTime)->format('c');
         $data["documents"] = $generatedDocumentsList;
 
-        if (count($excelData) > 10) {
+        if (count($excelData) > 0) {
             file_put_contents($fileDestination['absolutePath'] . "excelMapperInput.json", json_encode($excelData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
             array_push(
                 $generatedDocumentsList,
