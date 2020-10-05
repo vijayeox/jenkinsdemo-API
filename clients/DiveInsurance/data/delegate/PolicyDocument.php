@@ -520,7 +520,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         unset($formData[$key]);
                     }
                 }
-                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) ){
+                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true)){
                     $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
                     $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     array_push($documents['endorsement_coi_document'], $endorsementDoc);
@@ -1282,7 +1282,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');    
             }
             if($data['product'] == 'Dive Store'){
-                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) ){
+                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true)){
                     $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 }
             }
@@ -1364,6 +1364,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $length = sizeof($policy) - 1;
                 $policy =  $policy[$length];
                 unset($data['increased_liability'],$data['new_auto_liability']);
+                $temp['additionalLocationsChanges'] = false;
                 $data['update_date'] = $policy['update_date'];
                 if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
                     if($policy['previous_nonOwnedAutoLiabilityPL'] == 'no' && $data['nonOwnedAutoLiabilityPL'] !='no'){
@@ -1716,11 +1717,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         if(sizeof($removedadditionalNamedInsured) > 0){
                             $temp['removedadditionalNamedInsured'] = json_encode($removedadditionalNamedInsured);
                             $this->sortArrayByParam($temp['removedadditionalNamedInsured'],'name');
+                            $temp['liabilityChanges'] = true;
                         } else {
                             $temp['removedadditionalNamedInsured'] = "";
-                        }
-                        if($temp['removedadditionalNamedInsured'] !="" || $temp['newadditionalNamedInsured'] != ""){
-                            $temp['liabilityChanges'] = true;
                         }
                     } else {
                         $temp['newadditionalNamedInsured'] = "";
@@ -1776,6 +1775,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $this->logger->info("ARRAY DIFF OF Additional Locations :".print_r($newAdditionalLocations,true));
                         if(sizeof($newAdditionalLocations) > 0){
                             $temp['newAdditionalLocations'] = json_encode($newAdditionalLocations);
+                            $temp['additionalLocationsChanges'] = true;
                         } else {
                             $temp['newAdditionalLocations'] = "";
                         }
@@ -1784,13 +1784,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $removedadditionalLocations = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Removed Additional Locations :".print_r($removedadditionalLocations,true));
                         if(sizeof($removedadditionalLocations) > 0){
-                            $temp['removedadditionalLocations'] = json_encode($removedadditionalLocations);
+                            if($removedadditionalLocations[0]['name'] != ""){
+                                $temp['removedadditionalLocations'] = json_encode($removedadditionalLocations);
+                                $temp['propertyChanges'] = true;
+                                $temp['liabilityChanges'] = true;    
+                            }
                         } else {
                             $temp['removedadditionalLocations'] = "";
-                        }
-                        if($temp['removedadditionalLocations'] !=""){
-                            $temp['propertyChanges'] = true;
-                            $temp['liabilityChanges'] = true;
                         }
                     } else {
                         $temp['newAdditionalLocations'] = "";
