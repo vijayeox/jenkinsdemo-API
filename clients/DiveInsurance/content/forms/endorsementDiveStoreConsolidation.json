@@ -9149,7 +9149,7 @@
                   "allowCalculateOverride": true,
                   "validate": {
                     "required": true,
-                    "custom": "if(row.newMembereffectiveDate && (!row.effectiveDate || row.effectiveDate == \"\" || row.effectiveDate == undefined)){\n console.log('first'); valid = (moment(row.newMembereffectiveDate).isSameOrAfter(moment(data['update_date']))) ? true : \"Effective date should not be less than endorsement effective date \"+moment(data['update_date']).format('MM-DD-YYYY');\n}else if(row.newMembereffectiveDate){\n console.log('second'); valid = (moment(row.newMembereffectiveDate)).isSameOrAfter(moment(data['policyPeriod'])) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n console.log('third'); valid = (!row.newMembereffectiveDate) ? \"Effective Date is required\" : true;\n}"
+                    "custom": "if(row.newMembereffectiveDate && (!row.effectiveDate || row.effectiveDate == \"\" || row.effectiveDate == undefined)){\n valid = (moment(row.newMembereffectiveDate).isSameOrAfter(moment(data['update_date']))) ? true : \"Effective date should not be less than endorsement effective date \"+moment(data['update_date']).format('MM-DD-YYYY');\n}else if(row.newMembereffectiveDate){\n var policyPeriod = moment(data['policyPeriod']).format('MM-DD-YYYY');\n valid = (moment(row.newMembereffectiveDate)).isSameOrAfter(moment(policyPeriod)) ? true : \"Effective date should not be less than policy start date \"+moment(data['policyPeriod']).format('MM-DD-YYYY');\n}else{\n valid = (!row.newMembereffectiveDate) ? \"Effective Date is required\" : true;\n}"
                   },
                   "key": "newMembereffectiveDate",
                   "customConditional": "if(!row.start_date || row.start_date == \"\" || row.start_date == undefined){\n  show = true;\n}else if(moment(row.start_date).diff(moment(data.update_date)) >= 0){\n  show = true;\n}else{\n  show = false;\n}",
@@ -15491,7 +15491,7 @@
     "lockKey": true
   }],
   "revisions": "original",
-  "_vid": 89,
+  "_vid": 91,
   "title": "diveStoreEndorsement3",
   "display": "wizard",
   "access": [{
@@ -15509,6 +15509,6 @@
   "path": "divestoreendorsement3",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-08-03T07:30:50.996Z",
-  "modified": "2020-10-02T12:34:15.919Z",
+  "modified": "2020-10-06T08:28:23.463Z",
   "machineName": "testdivehub:diveStoreEndorsement3"
 }
