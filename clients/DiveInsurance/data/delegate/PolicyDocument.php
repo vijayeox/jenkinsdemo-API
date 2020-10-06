@@ -1498,6 +1498,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['propertyChanges'] = true;
                     $temp['removed_property_coverage'] = true;
                 }else{
+                    if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
+                        if($data['propertyCoverageSelect'] == 'yes'){
+                            $temp['property_added'] = true;
+                        }
+                    }
                     if(isset($data['dspropreplacementvalue']) && isset($policy['previous_dspropreplacementvalue'])){
                         if($data['dspropreplacementvalue'] != $policy['previous_dspropreplacementvalue']){
                             $temp['propertyChanges'] = true;
@@ -1512,6 +1517,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 $temp['decreased_buildingLimit'] = abs($buildingLimit);
                             }else{
                                 $temp['increased_buildingLimit'] = $buildingLimit;
+                            }
+                        } else {
+                            if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
+                                if($data['propertyCoverageSelect'] == 'yes'){
+                                    $temp['increased_buildingLimit'] = $data['dspropreplacementvalue'];
+                                }
                             }
                         }
                     }
@@ -1530,6 +1541,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             }else{
                                 $temp['increased_lossOfBusIncome'] = $lossOfBusIncome;
                             }
+                        } else {
+                            if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
+                                if($data['propertyCoverageSelect'] == 'yes'){
+                                    $temp['increased_lossOfBusIncome'] = $data['lossOfBusIncome'];
+                                }
+
+                            }
                         }
                     }
                     if(isset($data['dspropTotal']) && isset($policy['previous_dspropTotal'])){
@@ -1546,6 +1564,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 $temp['decreased_dspropTotal'] = abs($dspropTotal);
                             }else{
                                 $temp['increased_dspropTotal'] = $dspropTotal;
+                            }
+                        } else {
+                            if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
+                                if($data['propertyCoverageSelect'] == 'yes'){
+                                    $temp['increased_dspropTotal'] = $data['dspropTotal'];
+                                }
                             }
                         }
                     }    
