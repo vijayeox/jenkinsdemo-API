@@ -480,7 +480,7 @@ private function installApp($orgId, $yamlData, $path){
             $appUuid = $yamlData['app']['uuid'];
             $sequence = 0;
             foreach ($yamlData['pages'] as &$pageData) {
-                if (isset($pageData['page_name']) && !empty($pageData['page_name'])) {
+                if (isset($pageData['page_name']) && !empty($pageData['page_name']) && file_exists($path . 'content/pages/' . $pageData['page_name'])) {
                     $page = Yaml::parse(file_get_contents($path . 'content/pages/' . $pageData['page_name']));
                 }else{
                     $page = $pageData;
@@ -569,7 +569,6 @@ private function installApp($orgId, $yamlData, $path){
         $metadataPath = $appName . '/metadata.json';
         $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
         if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
-            FileUtils::copyDir($eoxapp,$path);
             FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
         }else{
             if(is_dir($path . 'view/apps/eoxapps')){
