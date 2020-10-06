@@ -267,9 +267,14 @@ class FileUtils
     public static function chmod_r($path,int $permission = 0777) {
         $dir = new DirectoryIterator($path);
         foreach ($dir as $item) {
-            chmod($item->getPathname(), $permission);
-            if ($item->isDir() && !$item->isDot()) {
-                self::chmod_r($item->getPathname(),$permission);
+            if(is_dir($item->getPathname())){
+                if ($item->isDir() && !$item->isDot()) {
+                    self::chmod_r($item->getPathname(),$permission);
+                } else {
+                    if(!$item->isDot()){
+                        chmod($item->getPathname(), $permission);
+                    }
+                }
             }
         }
     }
