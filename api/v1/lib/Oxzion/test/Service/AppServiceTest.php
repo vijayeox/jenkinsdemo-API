@@ -590,6 +590,11 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'));        
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $config = $this->getApplicationConfig();
+        $eoxapp = $config['DATA_FOLDER'] . 'eoxapps';
+        if(!is_dir($path . 'view/apps/eoxapps')){
+            FileUtils::copyDir($eoxapp,$path);
+        }
         $content = $appService->setupAppView($data, $path);
         $appname = $path . 'view/apps/DummyApp' ;
         $result = is_dir($appname);
