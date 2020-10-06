@@ -60,10 +60,8 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"pattern": "/^[a-z0-9-]+$/i",
-							"customMessage": "Application Name must Contain only Alphabets and Numbers"
+							"custom": "if(data.app.name && data.app.name != ''){\n      valid = (data.app.name.match(/^[a-z0-9-]+$/i)) ?  true : 'Application Name must Contain only Alphabets and Numbers.';\n}"
 						},
-						"errorLabel": "Application Name must Contain only Alphabets and Numbers",
 						"key": "name",
 						"type": "textfield",
 						"input": true,
@@ -1618,7 +1616,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 388,
+	"_vid": 389,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1637,6 +1635,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-10-04T07:50:12.229Z",
+	"modified": "2020-10-05T12:24:57.740Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
