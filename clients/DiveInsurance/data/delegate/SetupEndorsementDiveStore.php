@@ -163,6 +163,11 @@ public function execute(array $data,Persistence $persistenceService)
                     $data['end_date'] = date_format(date_create($data['end_date']),"Y-m-d");
                 }
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
+                    foreach ($data['additionalInsured'] as $key => $value) {
+                        if(!isset($value['effective_date'])){
+                            $data['additionalInsured'][$key]['effective_date'] = isset($data['start_date']) ? $data['start_date'] : $data['update_date'];
+                        }
+                    }
                     $data['previous_additionalInsured'] = $data['additionalInsured'];
                     $policy['previous_additionalInsured'] = $data['additionalInsured'];
                 } else {
@@ -268,7 +273,7 @@ public function execute(array $data,Persistence $persistenceService)
                 $policy['previous_dspropreplacementvalue'] = isset($data['dspropreplacementvalue'])?$data['dspropreplacementvalue']:0;
                 $policy['previous_dsglestmonthretailreceipt'] = isset($data['dsglestmonthretailreceipt'])?$data['dsglestmonthretailreceipt']:0;
                 $policy['previous_totalAddPremium'] = isset($data['totalAddPremium']) ? $data['totalAddPremium'] : 0;
-                if(isset($data['additionalLocations'])){
+                if(isset($data['additionalLocations']) && $data['additionalLocationsSelect'] == "yes"){
                     foreach($data['additionalLocations'] as $key => $value){
                         $additionalLocations = $data['additionalLocations'][$key];
                             $additionalLocations['previous_ALCoverageFP'] = isset($additionalLocations['ALCoverageFP']) ? $additionalLocations['ALCoverageFP'] : 0;
@@ -281,6 +286,7 @@ public function execute(array $data,Persistence $persistenceService)
                             $additionalLocations['previous_ALContentsFP'] = isset($additionalLocations['ALContentsFP']) ? $additionalLocations['ALContentsFP'] : 0;
                             $additionalLocations['previous_ALlakeQuarry'] = isset($additionalLocations['ALlakeQuarry']) ? $additionalLocations['ALlakeQuarry'] : 0;
                             $additionalLocations['previous_ALLossofBusIncomeFP'] = isset($additionalLocations['ALLossofBusIncomeFP']) ? $additionalLocations['ALLossofBusIncomeFP'] : 0;
+                            $additionalLocations['ALBuildingReplacementValue'] = isset($additionalLocations['ALBuildingReplacementValue']) ? $additionalLocations['ALBuildingReplacementValue'] : 0;
                             $additionalLocations['previous_ALBuildingReplacementValue'] = isset($additionalLocations['ALBuildingReplacementValue']) ? $additionalLocations['ALBuildingReplacementValue'] : 0;
                             $additionalLocations['previous_additionalLocationPropertyTotal'] = isset($additionalLocations['additionalLocationPropertyTotal']) ? $additionalLocations['additionalLocationPropertyTotal'] : 0;
                             $additionalLocations['previous_ALLossofBusIncome'] = isset($additionalLocations['ALLossofBusIncome']) ? $additionalLocations['ALLossofBusIncome'] : 0;
@@ -366,11 +372,13 @@ public function execute(array $data,Persistence $persistenceService)
                         }else if($value['effectiveDate'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                             $data['groupPL'][$key]['existingEffectiveDate'] = date_format(date_create($value['start_date']),'m-d-Y');
+                            $data['groupPL'][$key]['newMembereffectiveDate'] = date_format(date_create($value['start_date']),'m-d-Y');
                         }else if (isset($value['padi']) && $value['padi'] == ""){
                             $data['groupPL'][$key]['effectiveDate'] = $data['update_date'];
                         }else{
                             $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                             $data['groupPL'][$key]['existingEffectiveDate'] = date_format(date_create($value['start_date']),'m-d-Y');
+                            $data['groupPL'][$key]['newMembereffectiveDate'] = date_format(date_create($value['start_date']),'m-d-Y');
                         }
                         if(is_string($value['documentattach'])){
                             $data['groupPL'][$key]['documentattach'] = json_decode($value['documentattach'],true);
