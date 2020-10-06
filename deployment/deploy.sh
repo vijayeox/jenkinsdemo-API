@@ -882,7 +882,6 @@ appbuilder()
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
         echo -e "${GREEN}Stopping view service${RESET}"
-        systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
@@ -891,6 +890,7 @@ appbuilder()
         echo -e "${YELLOW}Building EOXAppBuilder app using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/EOXAppBuilder'
+        systemctl stop view
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         service php7.2-fpm reload
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
