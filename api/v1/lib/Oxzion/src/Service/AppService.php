@@ -480,7 +480,7 @@ private function installApp($orgId, $yamlData, $path){
             $appUuid = $yamlData['app']['uuid'];
             $sequence = 0;
             foreach ($yamlData['pages'] as &$pageData) {
-                if (isset($pageData['page_name']) && !empty($pageData['page_name'])) {
+                if (isset($pageData['page_name']) && !empty($pageData['page_name']) && file_exists($path . 'content/pages/' . $pageData['page_name'])) {
                     $page = Yaml::parse(file_get_contents($path . 'content/pages/' . $pageData['page_name']));
                 }else{
                     $page = $pageData;
