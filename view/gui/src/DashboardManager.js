@@ -128,7 +128,7 @@ class DashboardManager extends React.Component {
 
             that.setState({ dashboardBody: "", inputs, dashList: response.data, uuid: dash.uuid, exportConfiguration: dash.export_configuration, filterConfiguration: dashboardFilter, dashboardStack: dashboardStack },
               () => {
-                this.applyDashboardFilter(this.getFilterProperty("filterConfiguration"))
+                // this.applyDashboardFilter(this.getFilterProperty("filterConfiguration"))
               }
             )
           }
@@ -405,7 +405,7 @@ class DashboardManager extends React.Component {
                           content={() => this.dashboardViewerRef}
                         />
                         {this.state.exportConfiguration != null &&
-                          <Button onClick={() => this.exportExcel()} title="Export OI"><i class="fas fa-file-export"></i></Button>
+                          <Button onClick={() => this.exportExcel()} title="Export OI"><i className="fas fa-file-export"></i></Button>
                         }
 
                         {this.userProfile.key.privileges.MANAGE_DASHBOARD_WRITE &&
