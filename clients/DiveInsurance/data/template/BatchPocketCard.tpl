@@ -26,9 +26,9 @@
 				<div class = "main_section1" style = "font-size: 15px;">
 					<p class = "card_holder_name" style = "margin-bottom: 0px;font-size:15px">
                     {if isset($individual.business_name)}Business Name:&nbsp;
-						<span style = "text-transform: uppercase;">{$individual.business_name}</span><br>
+						<span style = "text-transform: uppercase;">{$individual.business_name}</span><br> {/if}
 						Insured: &nbsp;<span style = "text-transform: uppercase;">{$individual.firstname}&nbsp{$individual.lastname}</span></p>
-                    {/if}
+                   
 					<br>
 					<div class = "section" style ="float:right;font-size: 15px;">
 						<div class = "sec1">
