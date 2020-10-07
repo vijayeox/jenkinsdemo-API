@@ -1,32 +1,32 @@
 app:
-    -
-        name: RISCOMInsurance
-        description: 'Insurance OI Application'
-        category: Dashboards
-        type: 2
-        autostart: 'true'
-        uuid: 33f335b9-ceb9-4fd6-b51e-b4911eece839
-        isdefault: false
-        logo: default_app.png
-        status: 4
-        start_options: null
+    name: RISCOMInsurance
+    title: 'RISCOM Insurance'
+    description: 'Insurance OI Application'
+    category: Dashboards
+    type: 2
+    autostart: 'true'
+    uuid: 33f335b9-ceb9-4fd6-b51e-b4911eece839
+    isdefault: false
+    logo: default_app.png
+    status: 4
+    start_options: null
+checkOrg: true    
 org:
-    -
-        name: RISCOM
-        uuid: 8396d782-d9a1-40d2-abf0-b291b8ff75f4
-        email: riscom@vantageagora.com
-        address1: '333 Texas Street, Suite 1150'
-        address2: 'Shreveport, Louisiana 71101'
-        city: Shreveport
-        state: LA
-        zip: 71101
-        contact:
-            username: riscominsurer
-            firstname: Riscom
-            lastname: Insurer
-            email: riscominsurer@vantageagora.com
-        preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
-        country: 'United States'
+    name: RISCOM
+    uuid: 8396d782-d9a1-40d2-abf0-b291b8ff75f4
+    email: riscom@vantageagora.com
+    address1: '333 Texas Street, Suite 1150'
+    address2: 'Shreveport, Louisiana 71101'
+    city: Shreveport
+    state: Louisiana
+    zip: 71101
+    contact:
+        username: riscominsurer
+        firstname: Riscom
+        lastname: Insurer
+        email: riscominsurer@vantageagora.com
+    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+    country: 'United States of America'
 privilege:
     -
         name: MANAGE_RISCOMAGENT
@@ -40,6 +40,12 @@ privilege:
 role:
     -
         name: 'RISCOM Agent'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_RISCOMAGENT
+                    permission: 15
+                permission: 15
         default: true
         privileges:
             -
@@ -48,6 +54,12 @@ role:
         uuid: 6f49ed69-310e-4a63-8118-9eb4276531f1
     -
         name: 'RISCOM Underwriter'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_RISCOMUNDERWRITER
+                    permission: 15
+                permission: 15
         default: true
         privileges:
             -
@@ -56,6 +68,12 @@ role:
         uuid: a2068d7f-b556-4cca-a30e-23c3d3b6a8ab
     -
         name: 'RISCOM Production'
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MANAGE_RISCOMPRODUCTION
+                    permission: 15
+                permission: 15
         default: true
         privileges:
             -

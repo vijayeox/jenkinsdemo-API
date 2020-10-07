@@ -67,6 +67,8 @@ api()
         rm -Rf api/v1/data/file_docs
         rm -Rf api/v1/data/AppDeploy
         rm -Rf api/v1/data/AppSource
+        rm -Rf api/v1/data/pages
+        rm -Rf api/v1/data/entity
         rsync -rl --delete api/v1/ /var/www/api/
         ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
@@ -79,6 +81,8 @@ api()
         ln -nfs /var/lib/oxzion/api/template /var/www/api/data/template
         ln -nfs /var/lib/oxzion/api/AppDeploy /var/www/api/data/AppDeploy
         ln -nfs /var/lib/oxzion/api/AppSource /var/www/api/data/AppSource
+        ln -nfs /var/lib/oxzion/api/pages /var/www/api/data/pages
+        ln -nfs /var/lib/oxzion/api/entity /var/www/api/data/entity
         ln -nfs /var/log/oxzion/api /var/www/api/logs
         chown www-data:www-data -R /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
@@ -367,7 +371,7 @@ diveinsurance()
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl --delete ./DiveInsurance /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building DiveInsurance apps using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/DiveInsurance'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -405,7 +409,7 @@ insurancemanagement()
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl --delete ./InsuranceManagement /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building InsuranceManagement apps using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/InsuranceManagement'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -435,7 +439,7 @@ insuranceoi()
         rsync -rl --delete ./InsuranceOI /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building InsuranceOI app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/InsuranceOI'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -469,7 +473,7 @@ task()
         rsync -rl --delete ./Task /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Task apps using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Task'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -499,7 +503,7 @@ bridgemed()
         rsync -rl --delete ./BridgeMed /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building BridgeMed apps using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BridgeMed'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -533,7 +537,7 @@ finance()
         rsync -rl --delete ./Finance /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Finance app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Finance'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -567,7 +571,7 @@ transportation()
         rsync -rl --delete ./Transportation /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Transportation app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Transportation'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -601,7 +605,7 @@ arrowhead()
         rsync -rl --delete ./ArrowHead /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building ArrowHead app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/ArrowHead'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         service php7.2-fpm reload
@@ -640,7 +644,7 @@ covid()
         rsync -rl --delete ./Covid19 /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Covid 19 app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Covid19'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -675,7 +679,7 @@ axon()
         rsync -rl --delete ./AXON /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building AXON app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/AXON'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -710,7 +714,7 @@ riscom()
         rsync -rl --delete ./RISCOM /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building RISCOM app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/RISCOM'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -745,7 +749,7 @@ biofi()
         rsync -rl --delete ./Biofi /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Biofi app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Biofi'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -780,7 +784,7 @@ tennant()
         rsync -rl --delete ./Tennant /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Tennant app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Tennant'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -815,7 +819,7 @@ bsri()
         rsync -rl --delete ./BSRI /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building BSRI app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BSRI'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -850,7 +854,7 @@ hiig()
         rsync -rl --delete ./HIIG /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building HIIG app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/HIIG'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -878,15 +882,15 @@ appbuilder()
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
         echo -e "${GREEN}Stopping view service${RESET}"
-        systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl --delete ./EOXAppBuilder /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building EOXAppBuilder app using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/EOXAppBuilder'
+        systemctl stop view
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         service php7.2-fpm reload
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"

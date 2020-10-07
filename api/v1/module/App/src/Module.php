@@ -113,7 +113,7 @@ class Module implements ConfigProviderInterface
                         $container->get(\Oxzion\Model\AppTable::class),
                         $container->get(\Oxzion\Service\AppService::class),
                         $container->get(AdapterInterface::class),
-                        $container->get(WorkflowService::class),
+                        $container->get(FileService::class),
                         $container->get(\Oxzion\AppDelegate\AppDelegateService::class)
                     );
                 },
@@ -181,8 +181,7 @@ class Module implements ConfigProviderInterface
                     return new Controller\FileController(
                         $container->get(FileTable::class),
                         $container->get(FileService::class),
-                        $container->get(AdapterInterface::class),
-                        $container->get(WorkflowService::class)
+                        $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\FileAttachmentController::class => function ($container) {

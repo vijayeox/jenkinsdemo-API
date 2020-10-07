@@ -26,6 +26,7 @@ class ElasticService
     private $logger;
     private $filterFields;
     private $filterTmpFields;
+    private $excludes;
 
     public function __construct()
     {
@@ -135,9 +136,12 @@ class ElasticService
 
     public function getQueryResults($orgId, $app_name, $params)
     {
+        $this->excludes = [];
+        if (isset($params['excludes'])) {
+            $this->excludes = $params['excludes'];
+        }
         $result = $this->filterData($orgId, $app_name, $params);
         return $result;
-
     }
 
     public function filterData($orgId, $app_name, $searchconfig)
@@ -203,7 +207,7 @@ class ElasticService
  //   {"<=", ["sale_date", "2019-10-31"]},
 
 
-    protected function createFilter($filter) {
+    protected function createFilter($filter,$type='') {
         $subQuery = null;
         $symMapping = ['>'=>'gt','>='=>'gte','<'=>'lt','<='=>'lte'];
         $boolMapping = ['OR'=>'should','AND'=>'must'];
@@ -218,9 +222,12 @@ class ElasticService
             $condition = "==";
             $value = $filter[1];
         }
+        if (isset($filter[3])) {
+            $type = $filter[3];
+        }
         if (strtoupper($condition)=='OR' OR strtoupper($condition)=='AND') {
-                 $tempQuery1 = $this->createFilter($column);
-                 $tempQuery2 = $this->createFilter($value);
+                 $tempQuery1 = $this->createFilter($column,$type);
+                 $tempQuery2 = $this->createFilter($value,$type);
                  if ($tempQuery1) {
                     $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery1;
                  }
@@ -229,8 +236,8 @@ class ElasticService
                  }
                  
         } else {
-           // echo $column.' '.$condition.' '.$value;exit;
-            if (!in_array($column,$this->filterFields)) {
+
+            if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
                 $value = AnalyticsUtils::checkSessionValue($value);
                 if ($condition=="=="){                
                         if (!is_array($value)) {

@@ -239,7 +239,7 @@ class WidgetService extends AbstractService
     public function getWidget($uuid, $params)
     {
         $overRides = [];
-        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, w.no_filter_override, IF(w.created_by=:created_by, true, false) AS is_owner, w.version,v.renderer, v.type, q.uuid AS query_uuid, wq.sequence AS query_sequence, wq.configuration AS query_configuration FROM ox_widget w JOIN ox_visualization v on w.visualization_id=v.id JOIN ox_widget_query wq ON w.id=wq.ox_widget_id JOIN ox_query q ON wq.ox_query_id=q.id WHERE w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid AND (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
+        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, w.exclude_overrides, IF(w.created_by=:created_by, true, false) AS is_owner, w.version,v.renderer, v.type, q.uuid AS query_uuid, wq.sequence AS query_sequence, wq.configuration AS query_configuration FROM ox_widget w JOIN ox_visualization v on w.visualization_id=v.id JOIN ox_widget_query wq ON w.id=wq.ox_widget_id JOIN ox_query q ON wq.ox_query_id=q.id WHERE w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid AND (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -277,7 +277,7 @@ class WidgetService extends AbstractService
                 'renderer' => $firstRow['renderer'],
                 'type' => $firstRow['type'],
                 'version' => $firstRow['version'],
-                'no_filter_override' => $firstRow['no_filter_override'],
+                'exclude_overrides' => $firstRow['exclude_overrides'],
                 'queries' => $queries,
             ];
             $response = [
@@ -297,9 +297,14 @@ class WidgetService extends AbstractService
         $uuidList = array_column($resultSet, 'query_uuid');
         $filter = null;
         $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot'];
-        if ($firstRow['no_filter_override']) {
-            unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
+        if (!empty($firstRow['exclude_overrides'])) {
+            if (strtolower($firstRow['exclude_overrides']=='all')) {
+                unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
+            } else {
+                $overRides['excludes'] = explode(',',$firstRow['exclude_overrides']);
+            }
         }
+
         if (isset($params['data'])) {
             foreach ($overRidesAllowed as $overRidesKey) {
                 if (isset($params[$overRidesKey])) {

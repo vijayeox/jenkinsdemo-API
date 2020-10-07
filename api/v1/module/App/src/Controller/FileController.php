@@ -10,8 +10,8 @@ use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Service\FileService;
-use Oxzion\Service\WorkflowService;
 use Oxzion\ValidationException;
+use Oxzion\AccessDeniedException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
@@ -21,16 +21,14 @@ use Exception;
 class FileController extends AbstractApiController
 {
     private $fileService;
-    private $workflowService;
     /**
      * @ignore __construct
      */
-    public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter,WorkflowService $workflowService)
+    public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, File::class);
         $this->setIdentifierName('id');
         $this->fileService = $fileService;
-        $this->workflowService = $workflowService;
     }
     /**
      * Create File API
@@ -254,7 +252,7 @@ class FileController extends AbstractApiController
                         $result['myfiles'] = $this->fileService->getFileList($appUuid,$params,$filterParams);
                     break;
                 case 'assignments':
-                        $result['assignments'] = $this->workflowService->getAssignments($appUuid,$filterParams);
+                        $result['assignments'] = $this->fileService->getAssignments($appUuid,$filterParams);
                     break;
                 default:
                     break;

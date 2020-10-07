@@ -10,22 +10,6 @@ app:
     isdefault: false
     logo: default_app.png
     start_options: null
-org:
-    name: 'EOXAPP setup'
-    uuid: 3409c252-74ed-4512-932d-649da0f2f62d
-    email: eoxapp2@vantageagora.com
-    address1: '23611 Chagrin Blvd'
-    address2: 'Ste 320, Beachwood, Ohio 44122'
-    city: Beachwood
-    state: OH
-    zip: 44122
-    contact:
-        username: supportadmin
-        firstname: Support
-        lastname: Admin
-        email: eoxapp2@vantageagora.com
-    preferences: '{}'
-    country: 'United States'
 privilege:
     -
         name: MANAGE_APPLICATION
@@ -57,6 +41,9 @@ pages:
     -
         page_name: FormManager.yml
         uuid: 76953fc8-7269-494d-b126-6ea45a07a007
+    -
+        page_name: WorkflowManager.yml
+        uuid: ca339e6a-4257-4567-9f70-3dab049615f7
     -
         page_name: InstallManager.yml
         uuid: 96953fc8-7269-494d-b126-6ea45a07a007

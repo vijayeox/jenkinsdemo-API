@@ -48,6 +48,7 @@ workflow:
   - name: Dive Boat
     uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
     bpmn_file: Dive Boat/SampleBPMN.bpmn
+    entity: dummyEntity3
 form:
   - description: description
     template:

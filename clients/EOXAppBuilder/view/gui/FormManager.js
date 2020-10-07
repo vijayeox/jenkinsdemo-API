@@ -7,59 +7,72 @@ class FormManager extends React.Component {
     this.core = this.props.core;
     this.helper = this.core.make("oxzion/restClient");
     this.applicationId = this.props.appId;
-    var formId=null;
-    var appId=null;
+    var formId = null;
+    var appId = null;
     var content = null;
-    if(this.props.params){
-      formId=this.props.params.form_id;
-      appId=this.props.params.app_uuid;
-      if(typeof this.props.params.content == 'string' && this.props.params.content!=undefined){
-        content = JSON.parse(this.props.params.content);
+    if (this.props.params) {
+      formId = this.props.params.form_id;
+      appId = this.props.params.app_uuid;
+      if (this.props.params.content) {
+        try {
+          content = JSON.parse(this.props.params.content);
+        } catch (error) {
+          content = this.props.params.content;
+        }
       }
     }
     this.state = {
       windowVisible: false,
-      formId:formId,
-      appId:appId,
-      content:content
+      formId: formId,
+      appId: appId,
+      content: content,
     };
-    this.appUrl = "/app/"+appId;
+    this.appUrl = "/app/" + appId;
     this.saveForm = this.saveForm.bind(this);
+    this.notif = React.createRef();
   }
 
-  componentDidMount() {
-
-  }
-  stepDownPage(){
+  stepDownPage() {
     let ev = new CustomEvent("stepDownPage", {
       detail: {},
-      bubbles: true
+      bubbles: true,
     });
-    if(document.getElementById("navigation_"+this.applicationId)){
-      document.getElementById("navigation_"+this.applicationId).dispatchEvent(ev);
-      if(this.props){
-        try{
-          this.props.postSubmitCallback();
-        } catch(e){
-          console.log("Unable to Handle Callback");
-        }
-      }
+    if (document.getElementById("navigation_" + this.applicationId)) {
+      document
+        .getElementById("navigation_" + this.applicationId)
+        .dispatchEvent(ev);
+      this.props.refresh();
     }
   }
-  async saveForm(form){
-    var name = form.name;
-    var body = new Blob([JSON.stringify(form)], { type: 'application/json' });
-    var fileParams = [];
-    fileParams[name+'.json'] = {body:body,name:name+'.json'};
-    var response = await this.helper.request("v1",this.appUrl + "/artifact/add/form",fileParams,"filepost");
-    this.stepDownPage();
+  async saveForm(form) {
+    var response = await this.helper.request(
+      "v1",
+      this.appUrl + "/artifact/add/form",
+      {
+        [name + ".json"]: {
+          body: new Blob([JSON.stringify(form)], { type: "application/json" }),
+          name: form.name + ".json",
+        },
+      },
+      "filepost"
+    );
+    response.status == "success"
+      ? this.stepDownPage()
+      : this.notif.current.notify("Form Save Failed", response.message, "danger");
   }
 
   render() {
     return (
       <div>
+        <this.props.components.Notification ref={this.notif} />
         <React.Suspense fallback={<div>Loading...</div>}>
-        <this.OxzionGUIComponents.FormBuilder ref={this.notif} core={this.core} saveForm={this.saveForm} content={this.state.content} formId={this.state.formId} appId={this.state.appId} />
+          <this.OxzionGUIComponents.FormBuilder
+            core={this.core}
+            saveForm={this.saveForm}
+            content={this.state.content}
+            formId={this.state.formId}
+            appId={this.state.appId}
+          />
         </React.Suspense>
       </div>
     );

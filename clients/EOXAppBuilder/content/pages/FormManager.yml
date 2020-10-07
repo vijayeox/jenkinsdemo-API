@@ -32,16 +32,25 @@ content:
                         icon: 'fas fa-trash-alt' 
                         updateOnly: true   
                 operations:
+                    title: "Create New Form"
                     actions:
                         -
-                            name: Create New Form
+                            name: Build Form
                             rule: 'true'
                             details:
                                 -
                                     type: FormManager
                                     params:
                                         app_uuid: '{{app_uuid}}'
-                                        page_id: '5b78b1f1-d763-4671-a776-90ca6163252e'
+                        -
+                            name: Import Form
+                            rule: 'true'
+                            details:
+                                -
+                                    type: UploadArtifact
+                                    entity: form
+                                    params:
+                                        app_uuid: '{{app_uuid}}'
                 columnConfig:
                     -
                         title: Name
