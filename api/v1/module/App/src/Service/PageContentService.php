@@ -244,7 +244,6 @@ class PageContentService extends AbstractService
             }
             return $count;
         }catch(Exception $e){
-            print_r($e->getMessage());exit;
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
@@ -256,12 +255,6 @@ class PageContentService extends AbstractService
         }
         if(isset($data['gridContent']) && !empty($data['gridContent']) && is_string($data['gridContent'])){
             return $data['gridContent'];
-        }
-        if(isset($data['htmlContent']) && !empty($data['htmlContent']) && !is_string($data['htmlContent'])){
-            return json_encode($data['htmlContent']);
-        }
-        if(isset($data['htmlContent']) && !empty($data['htmlContent']) && is_string($data['htmlContent'])){
-            return $data['htmlContent'];
         }
         if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
             return json_encode($data['content']);
