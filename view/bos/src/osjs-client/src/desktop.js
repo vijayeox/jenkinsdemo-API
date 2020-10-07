@@ -34,6 +34,7 @@ import {handleTabOnTextarea} from './utils/dom';
 import Window from './window';
 import Search from './search';
 import * as merge from 'deepmerge';
+import Swal from 'sweetalert2';
 
 const TEMPLATE = subtract => `
   .osjs-root[data-mobile=true] .osjs-window,
@@ -89,7 +90,7 @@ const applyBackgroundStyles = (core, background) => {
  * Creates a rectangle with the realestate panels takes up
  */
 const createPanelSubtraction = (panel, panels) => {
-  const subtraction = {top: 0, left: 0, right: 0, bottom: 0};
+  const subtraction = {top: 0, left: 0, right: 0, bottom: 30};
   const set = p => (subtraction[p.options.position] = p.$element.offsetHeight);
 
   if (panels.length > 0) {
@@ -127,6 +128,7 @@ export default class Desktop extends EventEmitter {
     this.$styles.setAttribute('type', 'text/css');
     this.contextmenuEntries = [];
     this.search = core.config('search.enabled') ? new Search(core) : null;
+    this.keyboardContext = null;
     this.subtract = {
       left: 0,
       top: 0,
@@ -166,6 +168,17 @@ export default class Desktop extends EventEmitter {
     this.initDeveloperTray();
 
     this.core.$resourceRoot.appendChild(this.$styles);
+  }
+
+  /**
+   * Sets the keyboard context.
+   *
+   * Used for tabbing and other special events
+   *
+   * @param {Element} [ctx]
+   */
+  setKeyboardContext(ctx) {
+    this.keyboardContext = ctx;
   }
 
   initConnectionEvents() {
@@ -265,10 +278,13 @@ export default class Desktop extends EventEmitter {
         w.emit(n, e, w);
       }
     };
+    const isWithinContext = (target) => this.keyboardContext && this.keyboardContext.contains(target);
 
-    const isWithinWindow = (w, target) => {
-      return w && w.$element.contains(target);
-    };
+    const isWithinWindow = (w, target) => w &&
+      w.$element.contains(target);
+
+    const isWithin = (w, target) => isWithinWindow(w, target) ||
+      isWithinContext(target);
 
     ['keydown', 'keyup', 'keypress'].forEach(n => {
       this.core.$root.addEventListener(n, e => forwardKeyEvent(n, e));
@@ -289,14 +305,18 @@ export default class Desktop extends EventEmitter {
         const {tagName} = e.target;
         const isInput = ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].indexOf(tagName) !== -1;
         const w = Window.lastWindow();
-
-        if (isWithinWindow(w, e.target)) {
+        if (isWithin(w, e.target)) {
           if (isInput) {
             if (tagName === 'TEXTAREA') {
               handleTabOnTextarea(e);
             }
           } else {
-            e.preventDefault();
+            const isDiv = ['DIV'].indexOf(tagName) !== -1;
+            if(isDiv && e.target.classList.contains('form-control') && e.target.classList.contains('dropdown')){
+              return;
+            } else {
+              e.preventDefault();
+            }
           }
         } else {
           e.preventDefault();
@@ -660,5 +680,33 @@ export default class Desktop extends EventEmitter {
     const height = root.offsetHeight - top - bottom;
 
     return {width, height, top, bottom, left, right};
+  }
+
+  async cookiesCheck(){
+    let helper = this.core.make('oxzion/restClient');
+    let condition = await helper.request('v1','/user/me/getPolicyTerm', {}, 'get' );
+    if(typeof condition['data'][0] == 'undefined' && condition['data'][0] !== "1"){
+      const { value: accept } = await Swal.fire({
+        title: 'Privacy and Policy',
+        allowOutsideClick: false,
+        input: 'checkbox',
+        inputPlaceholder: 'I have read the EOX Vatage <a href="./privacy-policy" target="_blank">Privacy and Policy</a>. I agree with the terms and conditions.',
+        confirmButtonText:
+        'Continue<i class="fa fa-arrow-right"></i>',
+        inputValidator: (result) => {
+          return !result && 'You need to agree with T&C'
+        }
+      })
+
+      if (accept) {
+        let helper = this.core.make("oxzion/restClient");
+        let updateterm = await helper.request(
+          "v1",
+          "/user/me/updatePolicyTerm",{},
+          "post"
+          );
+        updateterm.status == "success" ? Swal.fire('Thank you for accepting our terms and conditions') : Swal.fire({title : updateterm.message, allowOutsideClick: false});
+      }
+    }
   }
 }

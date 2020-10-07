@@ -21,10 +21,10 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
+					<p class = "details">{$lastname}, {$firstname}{if isset($initial)}, {$initial} {/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$city}, {$state_in_short} {$zip}</p>
 					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
@@ -50,10 +50,39 @@
 		<div class="spacing">&nbsp</div>
 		<hr class="hrtag"></hr>
 		<div class = "ai_margin">
-	    	<b><p class = "ai_title">Additional Insured (See Additional Insured - Blanket Form):</p></b>
+	    	<b><p class = "ai_title">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
 	    		{foreach from=$list item=$additional}
 		    		<p class = "ai_list">
-		    			{$additional.name}
+		    		{if (isset($additional.name))}
+		    			{$additional.name} 
+		    		{/if}
+		    			{if (isset($additional.businessRelation) && $additional.businessRelation != "")}(
+							{if $additional.businessRelation == "confinedWaterTrainingLocation"}
+								Confined Water Training Location
+			    			{elseif $additional.businessRelation == "openWaterTrainingLocation"}
+			    				Open Water Training Location
+			    			{elseif $additional.businessRelation == "diveBoatOwner"}
+			    				Dive Boat Owner
+			    			{elseif $additional.businessRelation == "mortgageeLossPayee"}
+			    				Mortgagee / Loss Payee
+			    			{elseif $additional.businessRelation == "landlord"}
+			    				Landlord
+			    			{elseif $additional.businessRelation == "governmentEntityPermitRequirement"}
+			    			    Government Entity - Permit Requirement
+			    			{elseif $additional.businessRelation == "diveStore"}
+			    			   Dive Store
+			    			{elseif $additional.businessRelation == "trainingAgency"}
+			    			   Training Agency
+			    			{elseif $additional.businessRelation == "cruiseLine"}
+			    			   Cruise Line
+			    			{elseif $additional.businessRelation == "landOwner"}
+			    			   Land Owner
+			    			{elseif $additional.businessRelation == "bookingAgent"}
+			    			   Booking Agent
+			    			{elseif $additional.businessRelation == "other"}
+			    				{$additional.businessRelationOther}
+			    			{/if})
+		    			{/if}
 		    		</p>
 	    		{/foreach}
     	</div>

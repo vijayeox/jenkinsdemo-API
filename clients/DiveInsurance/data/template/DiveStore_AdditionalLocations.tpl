@@ -1,10 +1,8 @@
-{assign var=additionalLocationData value=$additionalLocationData|json_decode:true}
-{assign var=dspropcentralfire value=$additionalLocationData.dsPropCentralFireAL}
+{assign var=additionalLocationDataItem value=$additionalLocationData|json_decode:true}
 <!DOCTYPE html>
 <html>
 
 <head>
-    <link href="{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
     <link href="{$smarty.current_dir}/css/divestemplate_css.css" rel="stylesheet" type="text/css" />
     <!-- <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script> -->
 </head>
@@ -12,92 +10,142 @@
 <body>
     <p></p>
     <div>
+    <br>
+    {if isset($additionalLocationDataItem.name) && $additionalLocationDataItem.name != ""} <p class = "info"><b>Store/Location Description : </b>{$additionalLocationDataItem.name}</p>{/if}
 
-    <b><p>Store/Location Description : {$business_name}</p></b>
-    <b><p>Store/Location Number: {$padi}</p></b>
-    <p><b>Additional Named Insured:</b></p>
+    {if isset($additional_named_insureds_option) && $additional_named_insureds_option =='yes'}
     {assign var=list value=$additionalNamedInsured|json_decode:true}
-    {if isset($additional_named_insureds_option) && $additional_named_insureds_option=='yes'}
+    <p class = "info"><b>Additional Named Insured:</b></p>
     {foreach from=$list item=$additional}
-        <p class = "ai_list">
-            &nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.country},{$additional.city},{$additional.state},{$additional.zip}
+        <p class = "ai_list info">
+            &nbsp&nbsp&nbsp {if isset($additional.name) && is_string($additional.name)}{$additional.name}{/if}{if isset($additional.address) && is_string($additional.address) && $additional.address !=""},{$additional.address}{/if}{if isset($additional.city)  && is_string($additional.city) && $additional.city !=""},{$additional.city}{/if}{if isset($additional.state) && is_string($additional.state)},{$additional.state}{/if}{if isset($additional.zip) && is_string($additional.zip) && $additional.city !=""}{$additional.zip}{/if}
         </p>
     {/foreach}
     {/if}
-    <p><b>Location Address: {$additionalLocationData.address},<br>
-    {$additionalLocationData.country},{$additionalLocationData.city},{$additionalLocationData.state} - {$additionalLocationData.zip}</p>
+    {if isset($additionalLocationDataItem.padiNumberAL) && $additionalLocationDataItem.padiNumberAL != "" && $additionalLocationDataItem.padiNumberAL != null} <p class = "info"><b>Store/Location Number: </b>{$additionalLocationDataItem.padiNumberAL}</p>{/if}
+    {if (isset($additionalLocationDataItem.address) && $additionalLocationDataItem.address != "") ||
+    (isset($additionalLocationDataItem.country) && $additionalLocationDataItem.country != "") ||
+    ( isset($additionalLocationDataItem.city)  && $additionalLocationDataItem.city != "" ) ||
+    (isset($additionalLocationDataItem.state) && $additionalLocationDataItem.state != "" && is_string($additionalLocationDataItem.state)) ||
+    (isset($additionalLocationDataItem.zip) && $additionalLocationDataItem.zip != "")}<p  class = "info"><b>
+    Location Address: </b>{if isset($additionalLocationDataItem.address) && is_string($additionalLocationDataItem.address) && $additionalLocationDataItem.address !=""}{$additionalLocationDataItem.address}{/if}<br>
+    {if isset($additionalLocationDataItem.country) && is_string($additionalLocationDataItem.country) && $additionalLocationDataItem.country !=""}{$additionalLocationDataItem.country}{/if}{if isset($additionalLocationDataItem.city)  && is_string($additionalLocationDataItem.city) && $additionalLocationDataItem.city !=""},{$additionalLocationDataItem.city}{/if}{if isset($additionalLocationDataItem.state) && is_string($additionalLocationDataItem.state)},{$additionalLocationDataItem.state}{/if}{if isset($additionalLocationDataItem.zip) && is_string($additionalLocationDataItem.zip) && $additionalLocationDataItem.zip !=""} - {$additionalLocationDataItem.zip}{/if}</p>
+    {/if}
         <div class="table_sec">
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <th>Property Coverages</th>
-                        <th>Limits</th>
+                        <th class = "table_hd">Property Coverages</th>
+                        <th class = "table_hd">Limits</th>
                     </tr>
-                    <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
-                    <tr><td>Policy #: PPK1992907</td></tr>
+                    <tr><td   class = "info">Policy issued by {$property_carrier}</td></tr>
+                    <tr><td   class = "info">Policy #: {$property_policy_id}</td></tr>
                     <tr>
-                        <td>Contents Limit:</td>
-                        <td>${$additionalLocationData.additionalLocationPropertyTotal|number_format}</td>
+                        <td class = "info">Contents Limit:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">${$additionalLocationDataItem.additionalLocationPropertyTotal|number_format}</td>{else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td id="space_left">(Sign limited to : $25,000)</td>
+                    {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info" id="space_left">(Sign limited to : $25,000)</td>
+                        {else}
+                      <td></td>
+                          {/if}
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Business Income:</td>
-                        {if $additionalLocationData.ALLossofBusIncomeCheckBox != "false"}
-                            <td>${$additionalLocationData.ALLossofBusIncome|number_format}</td>
+                        <td class = "info">Business Income:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">${$additionalLocationDataItem.ALLossofBusIncome|number_format}</td>
                         {else}
-                            <td>$0</td>
+                        <td class = "info">Not Included</td>
                         {/if}
                     </tr>
                     <tr>
-                        <td>Building Coverage:</td>
-                        {if isset($additionalLocationData.additionalLocationDoYouOwntheBuilding) && $additionalLocationData.additionalLocationDoYouOwntheBuilding != "no"}
-                            <td>${$additionalLocationData.ALBuildingReplacementValue|number_format}</td>
+                        <td class = "info">Building Coverage:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if isset($additionalLocationDataItem.additionalLocationDoYouOwntheBuilding) && $additionalLocationDataItem.additionalLocationDoYouOwntheBuilding != "no"}
+                            <td  class = "info" >${$additionalLocationDataItem.ALBuildingReplacementValue|number_format}</td>
                         {else}
-                            <td>Not Included</td>
+                            <td class = "info">Not Included</td>
+                        {/if}
+                        {else}
+                        <td class = "info">Not Included</td>
                         {/if}
                     </tr>
                     <tr>
-                        <td>Equipment Breakdown:</td>
-                        {if isset($additionalLocationData.additionalLocationFurniturefixturesAndEquipment) && (int)$additionalLocationData.additionalLocationFurniturefixturesAndEquipment != 0}
-                            <td>Included</td>
+                        <td class = "info">Equipment Breakdown:</td>
+                        {if isset($additionalLocationDataItem.additionalLocationFurniturefixturesAndEquipment) && (int)$additionalLocationDataItem.additionalLocationFurniturefixturesAndEquipment != 0}
+                            <td class = "info">Included</td>
                         {else}
-                            <td>Not Included</td>
+                            <td class = "info">Not Included</td>
                         {/if}
                     </tr>
                     <tr>
-                        <td>Business Income from dependant properties:</td>
-                        <td>$5,000</td>
+                        <td class = "info">Business Income from dependant properties:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$5,000</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>Robbery (per Occurrence - Inside):</td>
-                        <td>$2,500</td>
+                        <td class = "info">Robbery (per Occurrence - Inside):</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$2,500</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>Robbery (per Occurrence - Outside):</td>
-                        <td>$2,500</td>
+                        <td class = "info">Robbery (per Occurrence - Outside):</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$2,500</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>Transit Coverage (Locked Vehicle):</td>
-                        <td>$10,000</td>
+                        <td class = "info">Transit Coverage (Locked Vehicle):</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$10,000</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>EmployeeTheft Limit:</td>
-                        <td>$5,000</td>
+                        <td class = "info">EmployeeTheft Limit:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$5,000</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>Property of Others:</td>
-                        <td>$25,000</td>
+                        <td class = "info">Property of Others:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$25,000</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>Off premises:</td>
-                        <td>$10,000</td>
+                        <td class = "info">Off premises:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$10,000</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>Glass:</td>
-                        <td>$5,000</td>
+                        <td class = "info">Glass:</td>
+                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        <td class = "info">$5,000</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
                     </tr>
                 </tbody>
             </table>
@@ -105,27 +153,27 @@
             <table class="proposal_table" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <th>Liability Coverages</th>
-                        <th>Limits</th>
+                        <th class = "table_hd">Liability Coverages</th>
+                        <th class = "table_hd">Limits</th>
                     </tr>
-                    <tr><td>Policy issued by Tokio Marine Speciality Insurance Company</td></tr>
-                    <tr><td>Policy #: PPK1992907</td></tr>
+                    <tr><td   class = "info">Policy issued by {$liability_carrier}</td></tr>
+                    <tr><td   class = "info">Policy #: {$liability_policy_id}</td></tr>
                     <tr>
-                        <td>NON-Diving Pool Use:</td>
-                        {if isset($additionalLocationData.ALPoolLiability) && (int)$additionalLocationData.ALPoolLiability > 0}
-                            <td>$1,000,000</td>
-                        {else}
-                            <td>Not Included</td>
-                        {/if}
+                        <td class = "info">NON-Diving Pool Use:</td>
+                        {if isset($additionalLocationDataItem.ALnonDivingPoolAmount) && (int)$additionalLocationDataItem.ALnonDivingPoolAmount > 0}
+                                      <td>$1,000,000</td>
+                                  {else}
+                                      <td>Excluded</td>
+                                  {/if}
                     </tr>
                     <tr>
-                        <td>Travel Agent E&O (Each wrongful act & Aggregate):
+                        <td class = "info">Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if $additionalLocationData.estimatedMonthlyReceipts && (int)$additionalLocationData.estimatedMonthlyReceipts > 0}
-                            <td>$1,000,000</td>
+                        {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
+                                <td>$1,000,000</td>
                         {else}
-                            <td>Not Included</td>
+                                <td>Not Included</td>
                         {/if}
                     </tr>
                 </tbody>
@@ -139,7 +187,16 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is $1000.</td>
+                            Mechanical breakdown is $2500. All other perils is {if $propertyDeductibles == "propertyDeductibles1000"}
+                           $1,000
+                        {elseif $propertyDeductibles == "propertyDeductibles2500"}
+                           $2,500
+                        {elseif $propertyDeductibles == "propertyDeductibles5000"}
+                           $5,000
+                        {else}
+                           $1,000
+                        {/if}
+                            </td>
                     </tr>
                 </tbody>
             </table>
@@ -147,24 +204,24 @@
             </hr>
             <hr class="line_divide">
             </hr>
-
             <!-- Report Header -->
 
             <!-- Alarm Calc -->
-            <div style="margin: 2% 0;">
-                {if $dspropcentralfire.centralStationAlarmAL != "yes"}
-                <center>
-                    <b>
-                        <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>
-                    </b>
-                </center>
+
+                {if isset($additionalLocationDataItem.ALcentralStationAlarm) && $additionalLocationDataItem.ALcentralStationAlarm != "yes"}
+                    <div style="margin: 2% 0;">
+                        {if isset($additionalLocationDataItem.centralStationAlarm) && $additionalLocationDataItem.centralStationAlarm != "yes"}
+                        <center>
+                            <b>
+                                <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>
+                            </b>
+                        </center>
+                        {/if}
+                    </div>
                 {/if}
-            </div>
-            <!-- Additional Location -->
+
         </div>
-
-    </div>
-
+  </div>
 </body>
 
 </html>

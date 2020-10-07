@@ -21,6 +21,11 @@ use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Service\UserCacheService;
+use Oxzion\Service\OrganizationService;
+use Oxzion\Service\RegistrationService;
+use Oxzion\Utils\ArrayUtils;
+
 class CommandService extends AbstractService
 {
     /**
@@ -31,6 +36,9 @@ class CommandService extends AbstractService
     private $workflowInstanceService;
     private $userService;
     private $jobService;
+    private $userCacheService;
+    private $organizationService;
+    private $registrationService;
     /**
      * @ignore __construct
      */
@@ -41,7 +49,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService, UserCacheService $userCacheService, OrganizationService $organizationService, RegistrationService $registrationService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -54,6 +62,9 @@ class CommandService extends AbstractService
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
         $this->userService = $userService;
         $this->jobService = $jobService;
+        $this->userCacheService = $userCacheService;
+        $this->organizationService = $organizationService;
+        $this->registrationService = $registrationService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -92,7 +103,10 @@ class CommandService extends AbstractService
                 $isArray = is_array($value);
                 if (!$isArray) {
                     $commandJson = json_decode($value, true);
-                } else {
+                    if(empty($commandJson)){
+                        $commandJson = array("command" => $value);
+                    }
+                }else{
                     $commandJson = $value;
                 }
                 $this->logger->info("Command JSON------", print_r($commandJson, true));
@@ -127,6 +141,16 @@ class CommandService extends AbstractService
     {
         $this->logger->info("PROCESS COMMAND : command --- " . $command);
         switch ($command) {
+            case 'create_user':
+                return $this->registerAccount($data);
+                break;
+            case 'sign_in':
+                $data['auto_login'] = 1;
+                return $data;
+                break;
+            case 'store_cache_data':
+                return $this->storeCacheData($data);
+                break;
             case 'mail':
                 $this->logger->info("SEND MAIL");
                 return $this->sendMail($data);
@@ -212,6 +236,44 @@ class CommandService extends AbstractService
         };
     }
 
+    private function registerAccount($data) {
+        $success = $this->registrationService->registerAccount($data);
+        if ($success) {
+            $params['user'] = $data['contact'];
+        } else {
+            throw new Exception("Error Creating User.", 1);
+        }
+        return $params;
+    }
+
+    private function storeCacheData($data){
+        $rawData = $data;
+
+        if (isset($data['user']) && is_array($data['user']) && ArrayUtils::isKeyDefined($data['user'], 'username')) {
+            $user = $this->userService->getUserDetailsbyUserName($data['user']['username']);
+        } elseif (ArrayUtils::isKeyDefined($data, 'username')) {
+            $user = $this->userService->getUserDetailsbyUserName($data['username']);
+        } else {
+            throw new Exception("username is required", 1);
+        }
+        if (!isset($user)) {
+            throw new Exception("Cache Creation Failed", 1);
+        }
+        if (isset($data['app_id'])) {
+            if ($app = $this->getIdFromUuid('ox_app', $data['app_id'])) {
+                $appId = $app;
+            }
+        } else {
+            $appId = null;
+        }
+        $rawData['user_id'] = $user['id'];
+        $rawData['app_id'] = $appId;
+        $userCache = $this->userCacheService->storeUserCache($appId, $rawData);
+        $cacheData = array('user_id' => $user['id'], 'content' => json_encode($userCache), 'app_id' => $appId);
+        $data['cache_data'] = $cacheData;
+        return $data;
+    }
+
     private function enqueue($data,$topic, $queue = null){
         $this->logger->info("ENQUEUE ------ DATA IS:  " . print_r($data, true));
         $this->logger->info("ENQUEUE ------ TOPIC IS:  " . print_r($topic, true));
@@ -259,13 +321,14 @@ class CommandService extends AbstractService
 
     protected function scheduleJob(&$data)
     {
+        $this->logger->info("DATA  ------" . json_encode($data));
+        if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
+            $this->logger->info("jobUrl/Cron/JobName Not Specified");
+            throw new EntityNotFoundException("JobUrl or Cron Expression or JobName Not Specified");
+        }
+        
         try
         {
-            $this->logger->info("DATA  ------" . json_encode($data));
-            if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
-                $this->logger->info("jobUrl/Cron/JobName Not Specified");
-                throw new EntityNotFoundException("JobUrl or Cron Expression or JobName Not Specified");
-            }
             $jobUrl = $data['jobUrl'];
             $cron = $data['cron'];
             $jobGroup = $data['jobName'];
@@ -284,9 +347,8 @@ class CommandService extends AbstractService
         } catch (Exception $e) {
             $this->logger->error("Job Schedule ---- Exception - ".$e->getMessage() , $e);
         }
-        if (isset($response) && isset($response['body'])) {
-            $response = json_decode($response['body'], true);
-            $jobData = array("jobId" => $response['JobId'], "jobGroup" => $response['JobGroup']);
+        if (isset($response) && isset($response['job_id'])) {
+            $jobData = array("jobId" => $response['job_id'], "jobGroup" => $response['group_name']);
             $data[$jobGroup] = json_encode($jobData);
         }
         $this->logger->info("Schedule JOB DATA - " . print_r($data, true));
@@ -341,21 +403,24 @@ class CommandService extends AbstractService
     {
         try {
             $this->logger->info("File Save Service Start" . print_r($data, true));
-            if(isset($data['workflow_instance_id'])){
+            $fileId = isset($data['fileId']) ? $data['fileId'] : (isset($data['uuid']) ? $data['uuid'] : NULL);
+            if($fileId){
+                $file = $this->fileService->updateFile($data, $fileId);
+            }else if(isset($data['workflow_instance_id'])){
                 $select = "Select ox_file.uuid from ox_file join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where ox_workflow_instance.id=:workflowInstanceId;";
                 $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
+                $this->logger->info("Executing query $select using params - ".json_encode($selectParams));
                 $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
                 if (count($result) == 0) {
                     $this->logger->info("File Save ---- Workflow Instance Id Not Found");
                     throw new EntityNotFoundException("Workflow Instance Id Not Found");
                 }
                 $file = $this->fileService->updateFile($data, $result[0]['uuid']);
-            }else if(isset($data['fileId'])){
-                $file = $this->fileService->updateFile($data, $data['fileId']);
-            }else if(isset($data['uuid'])){
-                $file = $this->fileService->updateFile($data, $data['uuid']);
             }else{
-                $file = $this->fileService->createFile($data);
+                $filedata = $data;
+                $file = $this->fileService->createFile($filedata);
+                $data['fileId'] = $filedata['uuid'];
+                $data['uuid'] = $filedata['uuid'];
             }
             return $data;
         } catch (Exception $e) {
@@ -382,15 +447,17 @@ class CommandService extends AbstractService
         if(isset($data['async']) && $data['async'] == 'true'){            
             unset($data['async']);
             $temp = $data;
-            $temp['commands'] = array('command' => 'delegate', 'delegate' => $delegate);
+            $temp['commands'] = [array('command' => 'delegate', 'delegate' => $delegate)];
             $this->logger->info("EXECUTE DELEGATE ---- enqueue");
             $this->enqueue($temp, 'COMMANDS');
+            return $data;
+        }else{
+            $this->logger->info("DELEGATE ---- " . print_r($delegate, true));
+            $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
+            $this->logger->info("DELEGATE DATA ---- " . print_r($data, true));
+            $response = $this->appDelegateService->execute($app_id, $delegate, $data);
+            return $response;
         }
-        $this->logger->info("DELEGATE ---- " . print_r($delegate, true));
-        $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
-        $this->logger->info("DELEGATE DATA ---- " . print_r($data, true));
-        $response = $this->appDelegateService->execute($app_id, $delegate, $data);
-        return $response;
     }
 
     protected function sendMail($params)
@@ -501,7 +568,7 @@ class CommandService extends AbstractService
         if ($result == 0) {
             throw new EntityNotFoundException("File " . $fileId . " not found");
         }
-        $data['data'] = $result['data'];
+        $data = array_merge($data,$result['data']);
         return $data;
     }
 
@@ -539,8 +606,9 @@ class CommandService extends AbstractService
         if (isset($data['workflow_id']) && isset($data['appId'])) {
             $workFlowId = $data['workflow_id'];
             $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
-            // print_r($result);exit;
-            $data['template'] = $result['template'];
+            if(isset($result['template'])){
+                $data['template'] = $result['template'];
+            }
             $data['formName'] = $result['formName'];
             $data['id'] = $result['id'];
             return $data;
@@ -551,6 +619,7 @@ class CommandService extends AbstractService
 
     protected function verifyUser(&$data)
     {
+        // TODO IF IDENTIFIER FIELD IS NOT SET GET IT FROM ox_entity_user_relation LIKE IN setupIdentityField METHOD 
         if (isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])) {
             $appId = UuidUtil::isValidUuid($data['appId'])?$this->getIdFromUuid('ox_app',$data['appId']):$data['appId'];
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
@@ -565,7 +634,7 @@ class CommandService extends AbstractService
             }
         }
         if (isset($data['email'])) {
-            $select = "SELECT * from ox_user where email = :email";
+            $select = "SELECT ox_user.*,oxup.firstname,oxup.lastname,oxup.date_of_birth,oxup.phone,oxup.gender,oxup.signature,oxup.address_id from ox_user inner join ox_user_profile oxup on oxup.id = ox_user.user_profile_id  where oxup.email = :email";
             $selectQuery = array("email" => $data['email']);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) > 0) {

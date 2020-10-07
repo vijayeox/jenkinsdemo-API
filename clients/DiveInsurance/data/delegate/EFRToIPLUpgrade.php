@@ -19,11 +19,11 @@ class EFRToIPLUpgrade extends PolicyCheck
             $new_data['EFRFileId'] = $data['fileId'];
             $new_data['EFRWorkflowInstanceId'] = $data['workflowInstanceId'];
             $new_data['efrToIPLUpgrade'] = true;
-            $new_data['efrAmountPaid'] = (!empty($fileData['amount']) ? $fileData['amount'] : 0.00) + 
-                                         (!empty($fileData['endorAmount']) ? $fileData['endorAmount'] : 0.00);
+            $new_data['efrAmountPaid'] = (!empty($fileData['liabilityCoverage1000000'])?$fileData['liabilityCoverage1000000'] : 0.00) + (!empty($fileData['amountPayable']) ? $fileData['amountPayable'] : 0.00) + 
+                                         (!empty($fileData['endorAmountPayable']) ? $fileData['endorAmountPayable'] : 0.00);
             $new_data['product'] = "Individual Professional Liability";
             $new_data['disableUserInfoEdit'] = true;
-            $new_data['excessLiability'] = (str_replace("excessLiabilityCoverage", "liabilityCoverage", $fileData['liabilityCoverage']));
+            $new_data['excessLiability'] = isset($fileData['excessLiability'])?$fileData['excessLiability']:NULL;
             $new_data['padi']= isset($fileData['padi']) ? $fileData['padi'] : NULL ;
             $new_data['padiNotFound']= isset($fileData['padiNotFound']) ? $fileData['padiNotFound'] : NULL ;
             $new_data['padiNotFoundCsrReview']= isset($fileData['padiNotFoundCsrReview']) ? $fileData['padiNotFoundCsrReview'] : NULL ;
@@ -39,7 +39,41 @@ class EFRToIPLUpgrade extends PolicyCheck
             }else{
                 $new_data['initiatedByCsr'] = false;
             }
-
+            $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='".$fileData['padi']."'";
+            $coverageOptions = array();
+            $result = $persistenceService->selectQuery($select);
+            if($result->count() > 0){
+                $response = array();
+                while ($result->next()) {
+                    $response[] = $result->current();
+                }
+                $ratingApplicable = implode('","',array_column($response, 'rating'));
+                $returnArray['rating'] = $ratingApplicable;
+                $coverageSelect = 'Select DISTINCT coverage_level,coverage_name FROM coverage_options WHERE padi_rating  in ("'.$ratingApplicable.'") and category IS NULL';
+                $this->logger->info("coverage select".$coverageSelect);
+                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                if($result->count() > 0){
+                    while ($coverageLevels->next()) {
+                        $coverage = $coverageLevels->current();
+                        $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                    }
+                } else {
+                    $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options and category IS NULL";
+                    $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                    while ($coverageLevels->next()) {
+                        $coverage = $coverageLevels->current();
+                        $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                    }
+                }
+            }else{
+                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                while ($coverageLevels->next()) {
+                    $coverage = $coverageLevels->current();
+                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                }
+            }
+            $new_data['careerCoverageOptions'] = $coverageOptions;
             $new_data['address1']= isset($fileData['address1']) ? $fileData['address1'] : NULL;
             $new_data['address2']= isset($fileData['address2']) ? $fileData['address2'] : NULL;
             $new_data['city']= isset($fileData['city']) ? $fileData['city'] : NULL;
@@ -67,6 +101,7 @@ class EFRToIPLUpgrade extends PolicyCheck
             $new_data['username']= isset($fileData['username']) ? $fileData['username'] : NULL;
             $new_data['zip']= isset($fileData['zip']) ? $fileData['zip'] : NULL;
             $new_data['state_in_short']= isset($fileData['state_in_short']) ? $fileData['state_in_short'] : NULL;
+            $new_data['product_email_id'] = 'instructors@diveinsurance.com';
             $new_data = parent::execute($new_data, $persistenceService );
         }
         $data['data'] = $new_data;

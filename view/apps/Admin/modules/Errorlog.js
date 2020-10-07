@@ -64,6 +64,7 @@ class Errorlog extends React.Component {
           args={this.core}
         />
         <div style={{ width: "100%", padding: "10px" }}></div>
+        <React.Suspense fallback={<div>Loading...</div>}>
         <OX_Grid
           osjsCore={this.core}
           data={"errorlog"}
@@ -79,6 +80,14 @@ class Errorlog extends React.Component {
             {
               title: "Type",
               field: "error_type"
+            },
+            {
+              title: "Payload",
+              field: "payload"
+            },
+            {
+              title: "Parameters",
+              field: "params"
             },
             {
               title: "Date Created",
@@ -98,6 +107,7 @@ class Errorlog extends React.Component {
             }
           ]}
         />
+          </React.Suspense>
       </div>
     );
   }

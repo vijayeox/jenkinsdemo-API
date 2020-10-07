@@ -42,13 +42,17 @@ html {
   color: #053b6d !important;
 }
 
-.osjs-panel-item .logo-here img {
+.osjs-panel-item .logo-here {
     content: url('./src/images/logo.png');
     width : 150px;
-    height: 44px;
+    height: 61px;
 }
 
-.osjs-panel-item[data-name=logout] > div > img{
+.osjs-panel-logout {
+  margin-right: 0;
+  vertical-align: middle;
+  height: 24px;
+  width: 24px;
   content: url('./src/images/logout.svg');
 }
 
@@ -367,6 +371,10 @@ label {
 
 .docViewerComponent .image-download-button{
   background-color: #053b6d !important;
+}
+
+.PageRender .appButtons .moduleBtn .block{
+  background-color: #053b6d;
 }
 
 @import "variables.scss";

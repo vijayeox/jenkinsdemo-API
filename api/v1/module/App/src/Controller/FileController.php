@@ -10,26 +10,25 @@ use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Service\FileService;
-use Oxzion\Service\WorkflowService;
 use Oxzion\ValidationException;
+use Oxzion\AccessDeniedException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
-
+use Oxzion\VersionMismatchException;
+use Exception;
 
 class FileController extends AbstractApiController
 {
     private $fileService;
-    private $workflowService;
     /**
      * @ignore __construct
      */
-    public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter,WorkflowService $workflowService)
+    public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, File::class);
         $this->setIdentifierName('id');
         $this->fileService = $fileService;
-        $this->workflowService = $workflowService;
     }
     /**
      * Create File API
@@ -60,6 +59,9 @@ class FileController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Unexpected Error!",500, $data);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -96,10 +98,11 @@ class FileController extends AbstractApiController
         }
         try {
             $count = $this->fileService->updateFile($data, $id);
-            // var_dump($count);exit;
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         catch (EntityNotFoundException $e) {
             $response = ['data' => $data, 'errors' => $e->getMessage()];
@@ -120,15 +123,17 @@ class FileController extends AbstractApiController
      */
     public function delete($id)
     {
-        try {
-            $response = $this->fileService->deleteFile($id);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+        $params = $this->params()->fromQuery();
+        if (isset($params['version'])) {
+            try {
+                $response = $this->fileService->deleteFile($id,$params['version']);
+            }catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            }
+            return $this->getSuccessResponse();
+        } else {
+            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['id' => $id]);
         }
-        if ($response == 0) {
-            return $this->getErrorResponse("File not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
     }
     /**
      * GET File API
@@ -154,6 +159,7 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
+        print($file."\n");
         if(file_exists($file)){
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');
@@ -246,7 +252,7 @@ class FileController extends AbstractApiController
                         $result['myfiles'] = $this->fileService->getFileList($appUuid,$params,$filterParams);
                     break;
                 case 'assignments':
-                        $result['assignments'] = $this->workflowService->getAssignments($appUuid,$filterParams);
+                        $result['assignments'] = $this->fileService->getAssignments($appUuid,$filterParams);
                     break;
                 default:
                     break;
@@ -269,6 +275,20 @@ class FileController extends AbstractApiController
         $params = $this->params()->fromRoute();
         try {
             $result = $this->fileService->getFileDocumentList($params);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        return $this->getSuccessResponseWithData($result, 200);
+    }
+    public function reIndexAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            $result = $this->fileService->reIndexFile($params);
         } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);

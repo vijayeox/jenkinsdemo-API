@@ -36,8 +36,8 @@
     <p class = "c_details">{$business_name}</p>
     <p class = "c_details">{$business_address1}</p>
     <p class = "c_details">{$business_address2}</p>
-    <p class = "c_details">{$business_city},{$state_in_short}</p>
-    <p class = "c_details">{$business_country},{$business_zip}</p>
+    <p class = "c_details">{$business_city}, {$state_in_short} {$business_zip}</p>
+    <p class = "c_details">{$business_country}</p>
   </div>
   <div class = "agent_info1">
     <p class ="padi_margin"><b>Member#:</b> {$padi}

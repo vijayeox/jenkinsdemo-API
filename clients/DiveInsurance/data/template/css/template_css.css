@@ -500,17 +500,11 @@ body {
   margin-top: 10%;
 }
 .t_title {
-  float: left;
-  margin-top: 1px;
-  margin-bottom: 1px;
   font-size: 13px;
 }
 
 .t_title1 {
-  float: left;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /* footer */
@@ -610,6 +604,20 @@ td, th {
   padding: 0px;
   letter-spacing: 1px;
 }
+
+.grp_info3 {
+  width: 70%;
+  margin-left: 30px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 12px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  padding: 0px;
+  letter-spacing: 1px;
+}
+
+
 .grp_info2 {
   width: 45%;
   margin-left: 30px;

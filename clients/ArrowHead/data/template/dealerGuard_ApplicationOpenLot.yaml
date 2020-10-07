@@ -1,0 +1,460 @@
+-
+   Source Worksheet: Producer
+   pageName: APPLICATION
+   key: producername
+   cell: 'F8'
+-
+   Source Worksheet: Named Insured
+   pageName: APPLICATION
+   key: namedInsured
+   cell: 'D2'
+-
+   Source Worksheet: DBA (if any)
+   pageName: APPLICATION
+   key: dba
+   cell: 'B3'
+-
+   Source Worksheet: Mailing Address
+   pageName: APPLICATION
+   key: mailingAddress
+   cell: 'C5'
+-
+   Source Worksheet: City
+   pageName: APPLICATION
+   key: city
+   cell: 'N5'
+-
+   Source Worksheet: State
+   pageName: APPLICATION
+   key: state_abbreviation
+   method: pulloutChild
+   cell: 'W5'
+-
+   Source Worksheet: Zip
+   pageName: APPLICATION
+   key: zip
+   cell: Z5
+-
+   Source Worksheet: 'FIEN/Soc Sec #'
+   pageName: APPLICATION
+   key: socialsecNum
+   cell: 'Y4'
+-
+   Source Worksheet: 'Business Phone:'
+   pageName: APPLICATION
+   key: businessPhone
+   cell: 'C6'
+-
+   Source Worksheet: 'Business Fax:'
+   pageName: APPLICATION
+   key: businessFax
+   cell: 'N6'
+-
+   Source Worksheet: 'Business Email:'
+   pageName: APPLICATION
+   key: businessEmail
+   cell: 'W7'
+-
+   Source Worksheet: 'Website:'
+   pageName: APPLICATION
+   key: website
+   cell: 'W6'
+-
+   Source Worksheet: 'Dealer Name:'
+   pageName: APPLICATION
+   key: dealerName
+   cell: 'D2'
+-
+   Source Worksheet: Insurance Contact
+   pageName: APPLICATION
+   key: 'dealerguardOpenLot*checkGenFullName'
+   cell: 'G7'
+-
+   Source Worksheet: 'Email:'
+   pageName: APPLICATION
+   key: 'dealerguardOpenLot*checkGenEmail'
+   cell: 'W7'
+-
+   Source Worksheet: 'Effective Date:'
+   pageName: APPLICATION
+   key: effectiveDate
+   method: formatDate
+   cell: 'O10'
+-
+   Source Worksheet: 'Need by Date:'
+   pageName: APPLICATION
+   key: needByDate
+   method: formatDate
+   cell: 'D10'
+-
+   Source Worksheet: DOL Target Premium
+   pageName: APPLICATION
+   key: dolTargetPremium
+   cell: 'N12'
+-
+   Source Worksheet: 'Number of years in business under current ownership:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot*ownershipDate
+   cell: 'J4'
+-
+   Source Worksheet: Any policy or coverage declined, cancelled or non-renewed during the prior
+      10 years for any premises or operations?
+   pageName: APPLICATION
+   key: policyDeclined
+   method: checkbox_X
+   cell: B49
+-
+   Source Worksheet: Non Employees
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checknonemployees
+   cell: W46
+-
+   Source Worksheet: Employees
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkemployees
+   cell: O46
+   Note: This will sum cell B5 (F/T Employees furnished an Auto) + cell B6 (P/T Employees furnished with an Auto) to Sheet!APPLICATION O46\r\n\r\nFor Example If a producer enters 40 F/T Employees furnished with an auto and 20 P/T Employees furnished with an auto the system will map 60 to Sheet!APPLICATION O46
+-
+   Source Worksheet: Employee deductible participation?
+   pageName: APPLICATION
+   key: employeedeductibleparticipation
+   method: checkbox_X
+   cell: B47
+-
+   Source Worksheet: Formal safety meetings
+   pageName: APPLICATION
+   key: formalsafetymeetings
+   cell: B44
+   returnValue: 
+      'monthly' : 'X'
+      'quarterly' : 'X'
+      'none' : ''
+-
+   Source Worksheet: Test drives always accompanied by employee?
+   pageName: APPLICATION
+   key: testdrivesalwaysaccompanied
+   method: checkbox_X
+   cell: B33
+-
+   Source Worksheet: 'Test Drive Procedures:'
+   pageName: APPLICATION
+   key: testdriveprocedures_copyOfDriversLicense
+   method: checkInArray
+   returnBoolean: "X|"
+   cell: B34
+-
+   Source Worksheet: Customer Service Loaner Rental Program?
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkserviceRepairSales
+   method: checkbox_X
+   cell: B32
+-
+   Source Worksheet: Customer Service Loaner Rental Program?
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkcustomerserviceloanerrentalprogram
+   method: checkbox_X
+   cell: B48
+-
+   Source Worksheet: Number of vehicles in fleet?
+   pageName: APPLICATION
+   key: numberofvehiclesinfleet
+   cell: 'Y24:Z24'
+-
+   Source Worksheet: Vehicles purchased and/or sold through brokers?
+   pageName: APPLICATION
+   key: dolvehiclespurchasedorsold
+   method: checkbox_X
+   cell: B35
+-
+   Source Worksheet: Any vehicles valued in excess of $100,000 per unit? If YES, attach a
+      current schedule
+   pageName: APPLICATION
+   key: dolVehicleValuedInExcess
+   method: checkbox_X
+   cell: B42
+-
+   Source Worksheet: 'Spot Delivery Procedures:'
+   pageName: APPLICATION
+   key: dolspotdeliveryprocedures_insuranceVerification
+   method: checkInArray
+   returnBoolean: 'X|'
+   cell: B41
+-
+   Source Worksheet: 'Vehicle inventory taken:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkVehicleInventoryTaken
+   method: checkbox_X
+   cell: B43
+-
+   Source Worksheet: 'Weekly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkVehicleInventoryTakenWeekly
+   method: checkbox_X
+   cell: J43
+-
+   Source Worksheet: 'Biweekly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkVehicleInventoryTakenBiweekly
+   method: checkbox_X
+   cell: N43
+-
+   Source Worksheet: 'Monthly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkVehicleInventoryTakenMonthly
+   method: checkbox_X
+   cell: S43
+-
+   Source Worksheet: 'Monthly:'
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkVehicleInventoryTakenMonthly
+   method: checkbox_X
+   cell: S43
+-
+   Source Worksheet: Vehicles only stored at scheduled locations?
+   pageName: APPLICATION
+   key: dolvehstrschedloc
+   method: checkbox_X
+   cell: B50
+-
+   Source Worksheet: Daily Key Inventory
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkDailyKeyInventory
+   cell: P40
+-
+   Source Worksheet: Computerized Key Vault
+   pageName: APPLICATION
+   method: checkbox_X
+   key: dealerguardOpenLot*checkComputerizedKeyVault
+   cell: B39
+-
+   Source Worksheet: Lockbox
+   pageName: APPLICATION
+   method: checkbox_X
+   key: dealerguardOpenLot*checkLockbox
+   cell: B37
+-
+   Source Worksheet: 'Comp Deductible:'
+   pageName: APPLICATION
+   key: dolcompdeduc
+   cell: 'C27'
+   returnValue:
+      '5002500' : '500 / 2,500'
+      '10005000' : '1,000 / 5,000'
+      '100025000' : '1,000 / 2,5000'
+      '15007500' : '1,500 / 7,500'
+      '150025000' : '1,500 / 25,000'
+      '250010000' : '2,500 / 12,500'
+      '250012500' : '2,500 / 12,500'
+      '250025000' : '2,500 / 25,000'
+      '500025000' : '5,000 / 25,000'
+      '750037500' : '7,500 / 37,500'
+      '1000050000' : '10,000 / 50,000'
+      '25000125000' : '25,000 / 125,000'
+      '50000250000' : '50,000 / 250,000'
+-
+   Source Worksheet: 'Comp Deductible:'
+   pageName: APPLICATION
+   key: dolcompdeduc
+   cell: 'C29'
+   returnValue:
+      '5002500' : '500 / 2,500'
+      '10005000' : '1,000 / 5,000'
+      '100025000' : '1,000 / 2,5000'
+      '15007500' : '1,500 / 7,500'
+      '150025000' : '1,500 / 25,000'
+      '250010000' : '2,500 / 12,500'
+      '250012500' : '2,500 / 12,500'
+      '250025000' : '2,500 / 25,000'
+      '500025000' : '5,000 / 25,000'
+      '750037500' : '7,500 / 37,500'
+      '1000050000' : '10,000 / 50,000'
+      '25000125000' : '25,000 / 125,000'
+      '50000250000' : '50,000 / 250,000'
+-
+   Source Worksheet: 'Wind/Hail Deductible: '
+   pageName: APPLICATION
+   key: dolwindhaildeduc
+   cell: 'O27'
+-
+   Source Worksheet: 'Wind/Hail Deductible: '
+   pageName: APPLICATION
+   key: dolwindhaildeduc
+   cell: 'O29'
+-
+   Source Worksheet: 'Max Value/ Per vehicle held for sale limit:'
+   pageName: APPLICATION
+   key: dolmaxvalpervehicle
+   cell: Z10
+-
+   Source Worksheet: 'False Pretense Limit:'
+   pageName: APPLICATION
+   key: falsePretenseNumber
+   cell: 'Y22'
+-
+   Source Worksheet: New - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_newComp
+   cell: F15
+-
+   Source Worksheet: New - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_newCollision
+   cell: F15
+-
+   Source Worksheet: New - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_newFalsePretense
+   cell: T15
+-
+   Source Worksheet: 'Used - Comp '
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_usedComp
+   cell: F16
+-
+   Source Worksheet: 'Used - Coll'
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_usedCollision
+   cell: F16
+-
+   Source Worksheet: Used - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_usedFalsePretense
+   cell: T16
+-
+   Source Worksheet: Demo Furnished - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_demosFurnishedAutosComp
+   cell: F17
+-
+   Source Worksheet: Demo Furnished - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_demosFurnishedAutosCollision
+   cell: F17
+-
+   Source Worksheet: Demo Furnished - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_demosFurnishedAutosFalsePretense
+   cell: T17
+-
+   Source Worksheet: Service Loaners - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_serviceLoanersComp
+   cell: F18
+-
+   Source Worksheet: Service Loaners - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_serviceLoanersCollision
+   cell: F18
+-
+   Source Worksheet: Service Loaners - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_serviceLoanersFalsePretense
+   cell: T18
+-
+   Source Worksheet: Other - Owned - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherOwnedComp
+   cell: F19
+-
+   Source Worksheet: Other - Owned - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherOwnedCollision
+   cell: F19
+-
+   Source Worksheet: Other - Owned - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherOwnedFalsePretense
+   cell: T19
+-
+   Source Worksheet: Other - Non-Owned - Comp
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherNonOwnedComp
+   cell: F20
+-
+   Source Worksheet: Other - Non-Owned - Coll
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherNonOwnedCollision
+   cell: F20
+-
+   Source Worksheet: Other - Non-Owned - False Pretense
+   pageName: APPLICATION
+   method : "checkbox_X"
+   key: requestedCoverageQuestions_otherNonOwnedFalsePretense
+   cell: T20
+-
+   Source Worksheet: 'Total number of demos/furnished auto provided: '
+   pageName: APPLICATION
+   key: doltotalnoofdemos
+   cell: 'Y23'
+-
+   Source Worksheet: 'Total number of demos/furnished auto provided: '
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkDOLTotalNoOfDemos
+   method: checkbox_X
+   cell: B46
+-
+   Source Worksheet: 'Is there a written flood emergency plan in place?'
+   pageName: APPLICATION
+   key: dolisthremergncypln
+   method: checkbox_X
+   cell: B45
+-
+   Source Worksheet: 'Are keys removed over the night?'
+   pageName: APPLICATION
+   key: dolarekeysremovnigh
+   method: checkbox_X
+   cell: B38
+-
+   Source Worksheet: 'Are keys removed over the night?'
+   pageName: APPLICATION
+   key: dolarekeysremovnigh
+   method: checkbox_X
+   cell: B40
+-
+   Source Worksheet: Security Guards
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkSecurityGuards
+   cell: B36
+   method: checkbox_X
+   Notes: "\r\nPre-Condition: \r\nIf Occupancy Type/Building Description = Sales & Service & security guards = Yes then map \"X\"to:\r\nSheet!Application B36"
+-
+   pageName: SOV
+   skip: "25_3"
+   key: dealerguardOpenLot*SOVFranchise_franchise
+   method: simpleDatagrid
+   type: DataGrid
+   cell: C5
+-
+   pageName: SOV
+   skip: "25_3"
+   key: dealerguardOpenLot*SOVGrid
+   type: DataGrid
+   cell: D5
+-
+   pageName: APPLICATION
+   key: dealerguardOpenLot*checkemployees
+   cell: O46
+-
+   pageName: ADDITIONAL INTEREST
+   skip: "1_8"
+   key: namedInsuredSchedule_namedInsuredScheduleName
+   method: simpleDatagrid
+   type: DataGrid
+   cell: "D12"

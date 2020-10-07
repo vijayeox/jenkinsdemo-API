@@ -73,7 +73,7 @@ export default class FileComponent extends File {
             if(_this6.component.storage=='url'){
             var uploadFile = {file:file,data:{name:file.name,type:file.type}}
             var helper = _this6.component.core.make("oxzion/restClient");
-            helper.request("v1","/app/"+_this6.component.appId+_this6.component.url,uploadFile,"fileupload").then(function (response) {
+            helper.request("v1",(_this6.component.properties['absoluteUrl'] ? url : "/app/"+_this6.component.appId +_this6.component.url),uploadFile,"fileupload").then(function (response) {
                 if(response.status=='success'){
                     var index = _this6.statuses.indexOf(fileUpload);
                     if (index !== -1) {
@@ -135,42 +135,34 @@ export default class FileComponent extends File {
         });
       }
     }
-
-    deleteFile(fileInfo) {
-        if(this.component.storage=='url'){
-          return new _nativePromiseOnly.default(function (resolve, reject) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('DELETE', fileInfo.url, true);
-
-            xhr.onload = function () {
-              if (xhr.status >= 200 && xhr.status < 300) {
-                resolve('File deleted');
-            } else {
-                reject(xhr.response || 'Unable to delete file');
-            }
-        };
-
-        xhr.send(null);
-    });
-      } else {
-        super.deleteFile(fileInfo);
+    getFile(fileInfo) {
+      const { options = {} } = this.component;
+      const { fileService } = this;
+      if (!fileService) {
+        return alert('File Service not provided');
       }
-    }
-
-    downloadFile(file) {
-        console.log(file)
-      if (file.private) {
-        if (formio.submissionId && file.data) {
-          file.data.submission = formio.submissionId;
+      if (this.component.privateDownload) {
+        fileInfo.private = true;
+      }
+      fileService.downloadFile(fileInfo, options).then((file) => {
+        if (file) {
+          if (['base64', 'indexeddb'].includes(file.storage)) {
+            download(file.url, file.originalName || file.name, file.type);
+          }
+          else {
+            if(fileInfo.url){
+              window.open(fileInfo.url.replace(this.component.uiUrl,this.component.wrapperUrl+this.component.appId), '_blank');
+            } else {
+              window.open(file.url, '_blank');
+            }
+          }
         }
-
-        return xhrRequest(file.url, file.name, {}, JSON.stringify(file)).then(function (response) {
-          return response.data;
-        });
-      } // Return the original as there is nothing to do.
-
-
-      return _nativePromiseOnly.default.resolve(file);
+      })
+      .catch((response) => {
+        // Is alert the best way to do this?
+        // User is expecting an immediate notification due to attempting to download a file.
+        alert(response);
+      });
     }
     render(children){
         var evt = new CustomEvent("getAppDetails", { detail: {} });

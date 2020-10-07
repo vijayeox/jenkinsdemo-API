@@ -1,0 +1,103 @@
+name: "Admin Page"
+description: "Admin page to manage all the rates"
+content:
+  - type: RenderButtons
+    content:
+      buttonList:
+        - name: Premium Rates
+          icon: fad fa-money-bill-alt
+          details:
+            - type: AdminPage
+              adminItem: PremiumRates
+              productDropdown:
+                title: "Product"
+                items:
+                  - "Individual Professional Liability - New Policy"
+                  - "Individual Professional Liability - Endorsement"
+                  - "Emergency First Response - New Policy"
+                  - "Dive Boat - New Policy"
+                  - "Dive Boat - Endorsement"
+                  - "Dive Boat - Group PL"
+                  - "Dive Boat - Group PL Endorsement"
+                  - "Dive Store - New Policy"
+                  - "Dive Store - Endorsement"
+                  - "Dive Store - Group PL"
+                  - "Dive Store - Group PL Endorsement"
+              gridConfig:
+                delegate: "GetPremiumRates"
+                inlineDelegate: UpdatePolicyRates
+                inlineRemoveDelegate: AddOrRemovePolicyRates
+                inlineDelegateParams:
+                  - "premium"
+                  - "tax"
+                  - "padi_fee"
+                expandable: true
+                columnConfig:
+                  - title: Coverage
+                    field: coverage
+        - name: State Tax
+          icon: fad fa-sack-dollar
+          details:
+            - type: AdminPage
+              adminItem: StateTax
+              productDropdown:
+                title: "Coverage"
+                items:
+                  - "Liability"
+                  - "Property"
+                  - "Group"
+              gridConfig:
+                delegate: "GetStateTaxRates"
+                inlineEdit: true
+                inlineDelegate: UpdateStateTaxRates
+                inlineDelegateParams:
+                  - "percentage"
+                columnConfig:
+                  - title: State
+                    field: state
+                    editable: false
+                  - title: Percentage
+                    field: percentage
+                    editor: numeric
+        - name: Carrier Policy
+          icon: fad fa-file-invoice
+          details:
+            - type: AdminPage
+              adminItem: CarrierPolicy
+              disableProductSelection: true
+              gridConfig:
+                delegate: "GetCarrierAndPolicyNumber"
+                inlineEdit: true
+                inlineDelegate: UpdateCarrierandPolicyNumber
+                inlineDelegateParams:
+                  - "carrier"
+                  - "policy_number"
+                columnConfig:
+                  - title: Product
+                    field: product
+                    editable: false
+                  - title: Carrier
+                    field: carrier
+                  - title: Policy Number
+                    field: policy_number
+                  - title: Category
+                    field: category
+                    editable: false
+                  - title: State
+                    field: state
+                    editable: false
+        - name: Surplus Lines
+          icon: fad fa-flag-usa
+          details:
+            - type: AdminPage
+              adminItem: SurplusLines
+              gridConfig:
+                delegate: "GetSurplusLines"
+                columnConfig:
+                  - title: State
+                    field: state
+                  - title: Surplus Line
+                    field: surplusLine
+                  - title: Action
+                    action:
+                      - icon: fa fa-pencil

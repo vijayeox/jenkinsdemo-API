@@ -84,6 +84,10 @@
     }
   }
 
+  .k-grid-edit-cell .k-textbox {
+    font-size: 14px;
+  }
+
   .k-filtercell > .k-filtercell-wrapper > input::placeholder {
     font-size: small;
   }
@@ -154,7 +158,6 @@
   }
 
   abbr {
-    text-decoration: none;
     border-bottom: unset;
   }
 
@@ -166,6 +169,7 @@
 
     abbr {
       padding: 3px;
+      text-decoration: none;
     }
 
     .manage-btn {
@@ -194,10 +198,10 @@
 }
 
 .k-pdf-export {
-  p{
+  p {
     font-size: 14px;
   }
-  
+
   .k-master-row {
     td {
       font-size: 12px;
@@ -205,7 +209,7 @@
   }
 
   .k-header {
-    .k-link{
+    .k-link {
       font-size: 12px;
       font-weight: bold;
     }

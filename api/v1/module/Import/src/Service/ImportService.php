@@ -32,18 +32,22 @@ class ImportService extends AbstractService
         $result = [];
         $type = 'elastic';
         $count = 0;
-        if (isset($data['type'])) {
-            $type = strtolower($data['type']);
-        }
-        foreach ($files as $file) {
-            $fileSaved = $this->saveFile($file);
-            if ($type == 'elastic') {
-                $count = $this->importToElastic($fileSaved, $data);
+        try {
+            if (isset($data['type'])) {
+                $type = strtolower($data['type']);
             }
-            unlink($fileSaved);
-            $result[] = ['file' => $file['name'], 'recordsSent' => $count, 'message' => 'Records Sent to ActiveMQ for Indexing'];
+            foreach ($files as $file) {
+                $fileSaved = $this->saveFile($file);
+                if ($type == 'elastic') {
+                    $count = $this->importToElastic($fileSaved, $data);
+                }
+                unlink($fileSaved);
+                $result[] = ['file' => $file['name'], 'recordsSent' => $count, 'message' => 'Records Sent to ActiveMQ for Indexing'];
+            }
+            return ($result);
+        } catch (Exception $e) {
+            throw $e;
         }
-        return ($result);
     }
     /**
      * @ignore constructAttachment
@@ -57,6 +61,7 @@ class ImportService extends AbstractService
 
     public function importToElastic($fileName, $data)
     {
+        $type = array();
         if (!isset($data['index'])) {
             throw new Exception('Index Not Specified');
         } else {
@@ -65,24 +70,51 @@ class ImportService extends AbstractService
         $index = (substr($index, -6) != "_index") ? $index . '_index' : $index;
         $file = fopen($fileName, "r");
         $header = fgetcsv($file);
+        foreach($header as $key=>$headercol) {
+            $colarray = explode(":",$headercol);
+            if (isset($colarray['1'])) {                
+                $header[$key] = $colarray[0];
+                $type[$colarray[0]]=$colarray[1];
+            }
+        }
         $params = array();
+        // $finalArray = array();
         $i = 0;
         try {
-            while (($data = fgetcsv($file, 1000, ",")) !== false) {
+            while (($data = fgetcsv($file, 0, ",")) !== false) {
                 $idx = 0;
                 $body = array();
                 foreach ($header as $col) {
                     if (strtoupper($data[$idx]) == 'NULL') {
-                        $data[$idx] = '';
+                        $data[$idx] = null;
                     }
-                    if (is_numeric($data[$idx])) {
-                        $body[$col] = (float) $data[$idx];
+                    if (isset($type[$col])) {
+                        switch ($type[$col]) {
+                            case "numeric":
+                            case "number":
+                                $body[$col] = (float) $data[$idx];    
+                                break;
+                            case "text":
+                                $body[$col] = (string) $data[$idx];    
+                                break;
+                            case "date":
+                                $body[$col] = date("Y/m/d",strtotime($data[$idx])); 
+                                break;
+                            default:                               
+                                $body[$col] = $data[$idx]; 
+                          }
                     } else {
-                        $body[$col] = $data[$idx];
+                        if (is_numeric($data[$idx])) {
+                            $body[$col] = (float) $data[$idx];
+                        } else {
+                            $body[$col] = $data[$idx];
+                        }
                     }
                     $idx++;
+                    // print_r($data);
                 }
                 $params[] = $body;
+                // $finalArray[] = $body;
                 // Every 1000 documents stop and send the bulk request
                 if ($i % 1000 == 0) {
                     $this->messageProducer->sendQueue(json_encode(array('index' => $index, 'body' => $params, 'operation' => 'Bulk', 'type' => '_doc')), 'elastic');
@@ -94,11 +126,11 @@ class ImportService extends AbstractService
                 }
                 $i++;
             }
+            // print_r($finalArray);exit;
             if (!empty($params)) {
                 $this->messageProducer->sendQueue(json_encode(array('index' => $index, 'body' => $params, 'operation' => 'Bulk', 'type' => '_doc')), 'elastic');
             }
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
             throw $e;
 
         }

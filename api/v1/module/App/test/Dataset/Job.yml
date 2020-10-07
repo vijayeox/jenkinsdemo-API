@@ -5,3 +5,4 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 4
+    isdefault: 0

@@ -8,6 +8,7 @@ User=oxzion
 # The configuration file application.properties should be here:
 #change this to your workspace
 WorkingDirectory=/opt/oxzion/camel
+LimitNOFILE=100000
 #path to executable. 
 #executable is a bash script which calls jar file
 ExecStart=/opt/oxzion/camel/init.d/run.sh

@@ -20,12 +20,13 @@ class ProcessEFRCancellation extends AbstractAppDelegate
         $fileData = $this->getFile($data['EFRFileId']);
         $fileData = $fileData['data'];
         $fileData['reasonforCsrCancellation'] = array("value"=>"others");
-        $fileData['othersCsr'] = "Upgrade To IPL";
+        $fileData['othersCsr'] = "UPGRADE TO IPL";
         $fileData['cancellationStatus'] = "approved";
         $fileData['disableReinstate'] = true;
         $fileData['workflowId'] = "81cb9e10-5845-4379-97c9-f9486b702bda";
         $fileData['fileId'] = $data['EFRFileId'];
         $fileData['parentWorkflowInstanceId'] = $data['EFRWorkflowInstanceId'];
+        $fileData['reinstatementCriteria'] = json_encode(array());
         $this->logger->info("EFR Cancellation Data sent to WF ---".json_encode($fileData));
 
         $result = $this->startWorkflow($fileData);

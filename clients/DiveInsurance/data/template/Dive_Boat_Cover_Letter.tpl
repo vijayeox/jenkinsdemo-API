@@ -11,13 +11,13 @@
 			<p class="name1">{$business_name}</p>
 			<p class="name1">{$business_address1}</p>
 			<p class="name1">{$business_address2}</p>
-			<p class="name1">{$business_city},{$business_state}</p>
-			<p class="name1">{$business_country},{$business_zip}</p>
+			<p class="name1">{$business_city}, {$business_state}</p>
+			<p class="name1">{$business_country}, {$business_zip}</p>
 		</div>
 
 		<p class = "rgard">RE: PADI ENDORSED DIVE BOAT INSURANCE</p>
 
-		<p>Dear <span class ="rgaard1">{$firstname}&nbsp{$lastname}</span></p>
+		<p>Dear <span class ="rgaard1">{$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if},</span></p>
 		<div class = "line_space">
 		<p>We are pleased to enclose the certificate of insurance and policy for your dive/snorkel vessel. The certificate lists the
 coverage and policy limits applicable to your vessel.</p>

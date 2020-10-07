@@ -7,13 +7,13 @@ import AnnouncementIcon from "../assets/images/icon_white.svg";
 import ForgotPassword from "./ForgotPassword.js";
 import ResetPasswordPage from "./ResetPasswordPage.js";
 import Slider from "./Slider.js";
-
+import LocalStorageAdapter from "../adapters/localStorageAdapter.js";
 
 export default class LoginContainer extends defaultLogin {
   render() {
-  var node = document.createElement("div");
-  node.className = "reactLoginPage"
-  document.body.appendChild(node);   
+    var node = document.createElement("div");
+    node.className = "reactLoginPage";
+    document.body.appendChild(node);
     const b = ReactDOM.render(
       <Login
         core={this.core}
@@ -24,19 +24,21 @@ export default class LoginContainer extends defaultLogin {
       document.getElementsByClassName("reactLoginPage")[0]
     );
     this.on("login:stop", () => {
-      if (window.localStorage.getItem("AUTH_token")) {
-        ReactDOM.unmountComponentAtNode(document.getElementsByClassName("reactLoginPage")[0]);
+      let AuthToken = this.core.make("oxzion/profile").getAuth();
+      if (AuthToken) {
+        ReactDOM.unmountComponentAtNode(
+          document.getElementsByClassName("reactLoginPage")[0]
+        );
       }
     });
     this.on("login:error", (err) => {
       let ev = new CustomEvent("loginMessage", {
         detail: err,
-        bubbles: true
+        bubbles: true,
       });
       document.getElementById("ox-login-form").dispatchEvent(ev);
     });
   }
-
 }
 
 class Login extends React.Component {
@@ -48,7 +50,7 @@ class Login extends React.Component {
       error: false,
       username: "",
       password: "",
-      resetPasswordToken: ""
+      resetPasswordToken: "",
     };
     this.handleChange = this.handleChange.bind(this);
     this.loginAction = this.loginAction.bind(this);
@@ -65,7 +67,7 @@ class Login extends React.Component {
     queryObj.resetpassword
       ? this.setState({
           showPage: "resetpassword",
-          resetPasswordToken: queryObj.resetpassword
+          resetPasswordToken: queryObj.resetpassword,
         })
       : null;
     document
@@ -76,7 +78,7 @@ class Login extends React.Component {
   errorMessage(e) {
     this.setState({ error: e.detail });
   }
-  
+
   handleChange(e) {
     let target = e.target;
     this.setState({ [target.name]: target.value });
@@ -86,7 +88,7 @@ class Login extends React.Component {
     e.preventDefault();
     var loginDetails = {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
     };
     this.props.triggerSubmit(loginDetails);
   }
@@ -110,9 +112,16 @@ class Login extends React.Component {
     } else {
       return (
         <main id="login-container " className="loginContainer row lighten-3 ">
-        <div className="loginSlider col-8" style={{display:"flex", flexDirection:"column",justifyContent:"center"}}>
-        <Slider core={this.core}/>
-        </div>
+          <div
+            className="loginSlider col-8"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Slider core={this.core} />
+          </div>
           <div id="ox-login-form" className="col-4">
             <div
               className="form-wrapper__inner"
@@ -179,7 +188,14 @@ class Login extends React.Component {
               </div>
             </div>
             <footer className="footer-links">
-              <a href="https://www.eoxvantage.com">About Us</a>
+              <a href="https://www.eoxvantage.com">About Us</a> &nbsp;&nbsp; |
+              &nbsp;&nbsp;
+              <a href="./privacy-policy" target="_blank">
+                Privacy Policy
+              </a>
+              <div className="coppyRight">
+                Copyright © 2004-2020 EOX Vantage. All rights reserved.
+              </div>
             </footer>
           </div>
         </main>

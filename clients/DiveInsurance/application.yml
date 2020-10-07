@@ -1,28 +1,26 @@
 app:
-    -
-        name: DiveInsurance
-        uuid: d77ea120-b028-479b-8c6e-60476b6a4456
-        description: 'App for Dive Insurance'
-        category: EXAMPLE_CATEGORY
-        type: 2
-        autostart: true
+    name: DiveInsurance
+    uuid: d77ea120-b028-479b-8c6e-60476b6a4456
+    description: 'App for Dive Insurance'
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
 org:
-    -
-        name: 'Vincencia & Buckley'
-        uuid: f0033dc0-126b-40ba-89e0-d3061bdeda4c
+    name: 'Vincencia & Buckley'
+    uuid: f0033dc0-126b-40ba-89e0-d3061bdeda4c
+    email: testhub07@gmail.com
+    address1: '6 bCenterpoint'
+    address2: Dr.
+    city: 'La Palma'
+    state: CA
+    zip: 90623
+    country: 'United States'
+    contact:
+        username: testhub07.gmail.com
+        firstname: Admin
+        lastname: User
         email: testhub07@gmail.com
-        address1: '6 bCenterpoint'
-        address2: Dr.
-        city: 'La Palma'
-        state: CA
-        zip: 90623
-        country: 'United States'
-        contact:
-            username: testhub07.gmail.com
-            firstname: Admin
-            lastname: User
-            email: testhub07@gmail.com
-        preferences: '{}'
+    preferences: '{}'
 privilege:
     -
         name: MANAGE_POLICY_APPROVAL
@@ -55,48 +53,265 @@ role:
 entity:
     -
         name: 'Individual Professional Liability'
+        uuid: 034165c1-ae53-4d3e-b111-6cd5f9e8be4e
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
+        identifiers:
+            -
+                identifier: padi
         field:
             -
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+            -
+                name: name
+                data_type: text
+                index: true
+            -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
     -
         name: 'Dive Store'
+        uuid: 161a3f0f-c384-4f2d-a3da-a8a7ae51622e
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
+        identifiers:
+            -
+                identifier: business_padi
         field:
             -
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: business_name
+                data_type: text
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: business_padi
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+            -
+                name: name
+                data_type: text
+                index: true
+            -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
     -
         name: 'Dive Boat'
+        uuid: 2d344a48-0e06-48b6-b586-2b60a2b14120
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
         field:
             -
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: business_padi
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+            -
+                name: name
+                data_type: text
+                index: true
+            -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
     -
         name: 'Emergency First Response'
+        uuid: f7ad1590-f008-4728-8892-9de50c51d5d5
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
+        identifiers:
+            -
+                identifier: padi
         field:
             -
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+                index: true
             -
                 name: documents
                 text: 'Policy Documents'
                 data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+            -
+                name: name
+                data_type: text
+                index: true
+            -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
     -
         name: 'Pocket Card Job'
         field:
@@ -108,6 +323,120 @@ entity:
                 name: documents
                 text: 'Pocket Card'
                 data_type: document
+        uuid: 33a8793d-99d3-4f34-9a0a-29b6b1bf8fa6
+    -
+        name: 'Generate Report Job'
+        field:
+            -
+                name: jobStatus
+                text: 'Job Status'
+                data_type: text
+            -
+                name: documents
+                text: 'COI Batch Reports'
+                data_type: document
+    -
+        name: 'Auto Renewal'
+        uuid: 3ea49f10-ca39-11ea-87d0-0242ac130003
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+                index: true
+            -
+                name: documents
+                text: 'Policy Documents'
+                data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: padi
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+    -
+        name: 'Group Professional Liability'
+        identifiers:
+            -
+                identifier: business_padi
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+                index: true
+            -
+                name: documents
+                text: 'Policy Documents'
+                data_type: document
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: business_name
+                data_type: text
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: firstname
+                data_type: text
+                index: true
+            -
+                name: lastname
+                data_type: text
+                index: true
+            -
+                name: product
+                data_type: text
+                index: true
+            -
+                name: business_padi
+                data_type: text
+                index: true
+            -
+                name: certificate_no
+                text: 'Certificate Number'
+                data_type: text
+                index: true
+            -
+                name: country
+                data_type: text
+                index: true
+            -
+                name: state
+                data_type: text
+                index: true
+            -
+                name: transaction_reference_number
+                data_type: text
+                index: true
 pages:
     -
         page_name: UserHomePage.yml
@@ -145,6 +474,24 @@ pages:
     -
         page_name: ViewChangeLog.yml
         uuid: 121ba91d-f17a-2034-a25f-86f108594637
+    -
+        page_name: AdminPage.yml
+        uuid: c869ce1d-022c-40b8-8214-86ba3d6442e4
+    -
+        page_name: DiveStore.yml
+        uuid: eb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: Group.yml
+        uuid: fb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: IPL.yml
+        uuid: ab018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: EFR.yml
+        uuid: bb018dfd-be95-4c53-9a97-042f615f3623
+    -
+        page_name: ReportPage.yml
+        uuid: 95dcfc00-e118-11ea-87d0-0242ac130003
 menu:
     -
         name: Home
@@ -207,11 +554,23 @@ menu:
         page_uuid: 11cd5446-c2fa-42cc-93b1-638670f4adf7
         uuid: 7794c91e-b708-41be-83e1-cc0bb6cd669a
     -
+        name: 'Batch Reports'
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        icon: 'fa fa-file-text'
+        page_uuid: 95dcfc00-e118-11ea-87d0-0242ac130003
+        uuid: 7595ffaa-e118-11ea-87d0-0242ac130003
+    -
         name: MyAssignments
         privilege: HIDE_FOR_NOW
         icon: 'fa fa-list'
         page_uuid: 151ba91d-f17a-4034-a25f-86f108594637
         uuid: 3b396d26-c0cb-4436-8804-f22431d6ac8c
+    -
+        name: Administrator
+        privilege: MANAGE_ADMIN_WRITE
+        icon: 'far fa-users-cog'
+        page_uuid: c869ce1d-022c-40b8-8214-86ba3d6442e4
+        uuid: d9cca9b1-dc90-4e34-9cf6-34e42706462c
 workflow:
     -
         name: 'Individual Liability'
@@ -224,10 +583,10 @@ workflow:
         bpmn_file: 'Individual Professional Liability/IPLEndorsement.bpmn'
         entity: 'Individual Professional Liability'
     -
-        name: 'Individual Liability Auto Renewal'
+        name: 'Auto Renewal'
         uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
         bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
-        entity: 'Individual Professional Liability'
+        entity: 'Auto Renewal'
     -
         name: 'Emergency First Response'
         uuid: cb74d176-225a-11ea-978f-2e728ce88125
@@ -292,12 +651,16 @@ workflow:
         name: 'Dive Store'
         uuid: cb99e634-de00-468d-9230-d6f77d241c5b
         bpmn_file: 'Dive Store/NewApplication.bpmn'
-        entity: 'Dive Store'
+        entity:
+            - 'Dive Store'
+            - 'Group Professional Liability'
     -
         name: 'Dive Store Endorsement'
         uuid: 2bc1caaa-9628-486d-8b42-104534625994
         bpmn_file: 'Dive Store/DiveStoreEndorsement.bpmn'
-        entity: 'Dive Store'
+        entity:
+            - 'Dive Store'
+            - 'Group Professional Liability'
 form:
     -
         name: 'PADI Verification'
@@ -311,6 +674,24 @@ form:
         description: 'Lets CSR generate and view Pocket Cards'
         template_file: pocketCard.json
         entity: 'Pocket Card Job'
+    -
+        name: 'Policy Regeneration'
+        uuid: db82e118-cbef-11ea-87d0-0242ac130003
+        description: 'Lets CSR regenerate the policy document'
+        template_file: iplPolicyRegeneration.json
+        entity: 'Individual Professional Liability'
+    -
+        name: 'Dive Store Policy Regeneration'
+        uuid: e139cef3-d1e4-4b6f-8f20-51dec19f694e
+        description: 'Lets CSR regenerate the policy document'
+        template_file: diveStoreRegeneration.json
+        entity: 'Dive Store'
+    -
+        name: 'Generate Report'
+        uuid: 57054a38-e117-11ea-87d0-0242ac130003
+        description: 'Page for CSR generate and view Reports'
+        template_file: generateReport.json
+        entity: 'Generate Report Job'
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03
@@ -318,7 +699,7 @@ job:
         url: /app/d77ea120-b028-479b-8c6e-60476b6a4456/delegate/UpdatePolicyStatusOnExpiration
         cron: '0 30 9 1 JUL ? *'
         data:
-            flag: 'notEqualTo'
+            flag: notEqualTo
             orgId: f0033dc0-126b-40ba-89e0-d3061bdeda4c
             appId: d77ea120-b028-479b-8c6e-60476b6a4456
     -
@@ -327,6 +708,6 @@ job:
         url: /app/d77ea120-b028-479b-8c6e-60476b6a4456/delegate/UpdatePolicyStatusOnExpiration
         cron: '0 30 9 23 JUL ? *'
         data:
-            flag: 'equalTo'
+            flag: equalTo
             orgId: f0033dc0-126b-40ba-89e0-d3061bdeda4c
             appId: d77ea120-b028-479b-8c6e-60476b6a4456

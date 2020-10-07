@@ -17,6 +17,19 @@ abstract class DispatchDocument extends MailDelegate
         $mailOptions = array();
         $fileData = array();
         $mailOptions['to'] = $data['email'];
+        if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
+            if(isset($data['approverEmailId'])){
+                $mailOptions['cc'] = $data['approverEmailId'];
+            }
+        }
+        if(isset($data['additional_email'])){
+            $receiverEmailList = is_string($data['additional_email']) ? json_decode($data['additional_email'],true) : $data['additional_email'];
+            if(isset($receiverEmailList) && count($receiverEmailList) > 0){
+                array_unshift($receiverEmailList, $data['email']);
+                $mailOptions['to'] = $receiverEmailList;
+            }
+        }
+              
         $mailOptions['subject'] = $data['subject'];
         if (isset($data['document'])) {
             $mailOptions['attachments'] = $data['document'];

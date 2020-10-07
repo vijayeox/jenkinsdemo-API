@@ -1,0 +1,18 @@
+{
+	"type":"application",
+	"name":"BIOFIFINANCE",
+	"appId":"0bbdc4b3-5422-4aef-a73f-72c80919a8ff",
+	"category":null,
+	"autostart":false,
+    "singleton":true,
+	"defaultAppforOrgs":false,
+	"icon": "icon.png",
+	"icon_white": "icon_white.png",
+	"title": {
+		"en_EN": "Finance"
+	},
+	"description": {
+		"en_EN": "Finance"
+	},
+	"files":["main.js","main.css"]
+}

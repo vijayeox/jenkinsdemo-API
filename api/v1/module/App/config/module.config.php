@@ -38,27 +38,44 @@ return [
                     ],
                 ],
             ],
-            'appinstall' => [
+            'deployApplication' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/appinstall',
+                    'route' => '/app/:appId/deploy',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
-                        'action' => 'installAppForOrg',
-                        'method' => 'post',
-                        // 'access' => [
-                        //     // SET ACCESS CONTROL
-                        //     'put'=> 'MANAGE_APP_WRITE',
-                        //     'post'=> 'MANAGE_APP_WRITE',
-                        //     'delete'=> 'MANAGE_APP_DELETE',
-                        //     'get'=> 'VIEW_APP_READ',
-                        // ],
+                        'method' => 'POST',
+                        'action' => 'deployApplication',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
                     ],
                 ],
             ],
+            // 'appinstall' => [
+            //     'type' => Segment::class,
+            //     'options' => [
+            //         'route' => '/app/:appId/appinstall',
+            //         'constraints' => [
+            //             'appId' => UuidUtil::UUID_PATTERN,
+            //         ],
+            //         'defaults' => [
+            //             'controller' => Controller\AppController::class,
+            //             'action' => 'installAppForOrg',
+            //             'method' => 'post',
+            //             // 'access' => [
+            //             //     // SET ACCESS CONTROL
+            //             //     'put'=> 'MANAGE_APP_WRITE',
+            //             //     'post'=> 'MANAGE_APP_WRITE',
+            //             //     'delete'=> 'MANAGE_APP_DELETE',
+            //             //     'get'=> 'VIEW_APP_READ',
+            //             // ],
+            //         ],
+            //     ],
+            // ],
             'applist' => [
                 'type' => Segment::class,
                 'options' => [
@@ -67,17 +84,6 @@ return [
                         'controller' => Controller\AppController::class,
                         'action' => 'applist',
                         'method' => 'GET',
-                    ],
-                ],
-            ],
-            'appupload' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/appupload',
-                    'defaults' => [
-                        'controller' => Controller\AppController::class,
-                        'action' => 'appUpload',
-                        'method' => 'post',
                     ],
                 ],
             ],
@@ -106,16 +112,17 @@ return [
                     ],
                 ],
             ],
-            'addtoappregistry' => [
+            'installAppToOrg' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/org/:orgId/addtoappregistry',
+                    'route' => '/app/:appId/install/org/:orgId',
                     'constraints' => [
                         'orgId' => UuidUtil::UUID_PATTERN,
+                        'appId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
-                        'controller' => Controller\AppRegisterController::class,
-                        'action' => 'addToAppregistry',
+                        'controller' => Controller\AppController::class,
+                        'action' => 'installAppToOrg',
                         'method' => 'POST',
                     ],
                 ],
@@ -350,7 +357,7 @@ return [
             'startform' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/workflow/:workflowId/startform',
+                    'route' => '/app/:appId/[entity/:entityId/]workflow/:workflowId/startform',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'workflowId' => UuidUtil::UUID_PATTERN,
@@ -378,7 +385,7 @@ return [
             'app_cache' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/cache',
+                    'route' => '/app/:appId/cache[/:cacheId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
@@ -413,6 +420,21 @@ return [
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'action' => 'getDocument',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
+            'gettempdocument' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/:appId/data/:orgId/temp/:tempId/:documentName',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\DocumentController::class,
+                        'action' => 'getTempDocument',
                         'method' => 'GET',
                     ],
                 ],
@@ -640,7 +662,7 @@ return [
             'file_document_get' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/:appId/:orgId/:fileId[/:folder]/:document',
+                    'route' => '[/:appId]/:orgId/:fileId[/:folder]/:document',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'orgId' => UuidUtil::UUID_PATTERN,
@@ -785,6 +807,146 @@ return [
                         'controller' => Controller\FileAttachmentController::class,
                         'method' => 'POST',
                         'action' => 'addAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'attachmentRemoval' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/attachment/:attachmentId/remove',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                        'attachmentId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileAttachmentController::class,
+                        'method' => 'DELETE',
+                        'action' => 'removeAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'attachmentRename' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/attachment/:attachmentId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                        'attachmentId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileAttachmentController::class,
+                        'method' => 'POST',
+                        'action' => 'renameAttachment',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'reindexfile' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/reindex',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'reIndex',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'getArtifacts' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/artifact/list/:artifactType',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN,
+                        'artifactType' => 'form|workflow',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'GET',
+                        'action' => 'getArtifacts',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'addArtifact' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/artifact/add/:artifactType',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN,
+                        'artifactType' => 'form|workflow|app_icon|app_icon_white',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'POST',
+                        'action' => 'addArtifact',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'deleteArtifact' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/artifact/delete/:artifactType/:artifactName',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN,
+                        'artifactType' => 'form|workflow',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'DELETE',
+                        'action' => 'deleteArtifact',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'downloadAppArchive' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appUuid/archive/download',
+                    'constraints' => [
+                        'appUuid' => UuidUtil::UUID_PATTERN
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'GET',
+                        'action' => 'downloadAppArchive',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'uploadAppArchive' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/archive/upload',
+                    'defaults' => [
+                        'controller' => Controller\AppArtifactController::class,
+                        'method' => 'POST',
+                        'action' => 'uploadAppArchive',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

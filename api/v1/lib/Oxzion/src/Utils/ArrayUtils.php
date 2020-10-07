@@ -77,4 +77,30 @@ class ArrayUtils
         }
         return $map;
     }
+
+    public static function isList($arr){
+        if (array() === $arr) return false;
+        return array_keys($arr) === range(0, count($arr) - 1);
+    }
+
+    //Merges values of second array into first one - WITHOUT CREATING A NEW ARRAY.
+    //It is very  useful when first array is large array - because it avoids creating
+    //a copy of large array and then merging.
+    //Note - both parameters are pass by reference to avoid creating a copy of the 
+    //arrays when they are passed by value.
+    public static function merge(&$first, &$second) {
+        foreach($second as $key => $value) {
+            $first[$key] = $value;
+        }
+    }
+    public static function in_array_r($needle, $haystack, $strict = false) {
+        if(is_array($haystack)){
+            foreach ($haystack as $item) {
+                if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && self::in_array_r($needle, $item, $strict))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

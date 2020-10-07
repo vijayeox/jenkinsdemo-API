@@ -34,118 +34,120 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == ""}
-                            $1,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $10,000,000
+                        {else}
+                            $1,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == ""}
-                            $1,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                         	$4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
                             $10,000,000
-                        {/if}
-					</p>
-					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == ""}
-                            $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
-                            $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
-                            $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
-                            $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
-                            $6,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
-                            $11,000,000
-                        {/if}
-					</p>
-					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == ""}
-                            $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
-                            $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
-                            $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
-                            $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
-                            $6,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
-                            $11,000,000
-                        {/if}
-					</p>
-					<p class = "sec_title2">
-						{if $excessLiabilityCoverage == ""}
+                        {else}
                             $1,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage1M"}
-                            $2,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M"}
-                            $3,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M"}
-                            $4,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M"}
-                            $5,000,000
-                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M"}
-                            $10,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-					{if isset($medicalPayment) && ($medicalPayment == "true"||$medicalPayment == true)}
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $3,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $4,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $5,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $6,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $11,000,000
+                        {else}
+                            $2,000,000
+                        {/if}
+					</p>
+					<p class = "sec_title2">
+                        {if $excessLiabilityCoverage == "excessLiabilityCoverage1M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $3,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage2M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $4,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage3M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $5,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage4M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $6,000,000
+                        {elseif $excessLiabilityCoverage == "excessLiabilityCoverage9M" && $excessLiabilityCoveragePrimarylimit1000000PL == true}
+                            $11,000,000
+                         {else}
+                            $2,000,000
+                        {/if}
+					</p>
+					<p class = "sec_title2">
+                            $1,000,000
+					</p>
+					<p class = "sec_title2">
+					{if isset($medicalPayment) && ($medicalPayment == "true" || $medicalPayment == true || $medicalPayment == 1) }
                             <td>$5000</td>
                         {else}
-                            <td>$0</td>{/if}
+                            <td>Excluded</td>{/if}
                         </p>
-					<p class = "sec_title2">                        
-                        {if $nonOwnedAutoLiabilityPL == "no"}
-                            <td>Not Included</td>
+					<p class = "sec_title2">
+										{if isset($doYouWantToApplyForNonOwnerAuto) && $doYouWantToApplyForNonOwnerAuto == true && $doYouWantToApplyForNonOwnerAuto == "true"}
+										{if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability100K"}
+												<td>$100,000</td>
+										{else if $nonOwnedAutoLiabilityPL == "nonOwnedAutoLiability1M"}
+												<td>$1,000,000</td>
+										{else}
+												<td>Excluded</td>
+										{/if}
+										{else}
+												<td>Excluded</td>
+												{/if}
+					</p>
+					<p class = "sec_title2">
+					    {if isset($nonDivingPoolAmount) && (int)$nonDivingPoolAmount > 0}
+                            <td>$1,000,000</td>
                         {else}
-                            <td>Included</td>
+                            <td>Excluded</td>
                         {/if}
 					</p>
 					<p class = "sec_title2">
-					    {if isset($poolLiability) && (int)$poolLiability > 0}
-                            <td>$1,000,000</td>
-                        {else}
-                            <td>Not Included</td>
-                        {/if}
-					</p>
-					<p class = "sec_title2">
-					    {if isset($TravelAgentEOFP) && (int)$TravelAgentEOFP > 0}
-                            <td>$1,000,000</td>
-                        {else}
-                            <td>Not Included</td>
-                        {/if}
+						{if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
+								<td>$1,000,000</td>
+						{else}
+								<td>Excluded</td>
+						{/if}
 					</p>
 				</div></b>
 			</div>
+
 		<div class="spacing">&nbsp</div>
 
-		<hr></hr>
-		<b><center><p class="addIn">{if !empty($additionalInsured)}
+		{if isset(excludedOperation) && $excludedOperation != ""}
+			<div class="section_col1" style="border-style: solid">
+				<p class ="title">SECTION II: EXCLUDED DESIGNATED OPERATION</p>
+			</div>
+			<p class ="exop" style="margin-top:1px;font-size: 15px;">{$excludedOperation}</p>
+		{/if}
+
+		<hr class="addIn"></hr>
+		<b><center><p class="addIn">{if $additional_insured_select == "addAdditionalInsureds"}
 			Certificate has Additional Insureds (See Attached)
 			{else}
-		Certificate Does Not Have Additional Insured.
+			Certificate Does Not Have Additional Insured.
 			{/if}</p></center></b>
-		<hr></hr>
+		<hr class="addIn"></hr>
 
 		<p  class = "policy_notice">The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688.
 The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description
@@ -341,13 +343,17 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/v/UT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
+				<center><p class = "notice">both of
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+				</p></center>
+			{elseif $state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveStore/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>
@@ -371,4 +377,3 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 	</div>
 </body>
 </html>
-

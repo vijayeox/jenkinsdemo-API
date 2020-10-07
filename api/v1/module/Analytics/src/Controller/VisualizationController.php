@@ -2,7 +2,7 @@
 
 namespace Analytics\Controller;
 
-use Zend\Log\Logger;
+use Exception;
 use Analytics\Model\Visualization;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
@@ -38,16 +38,13 @@ class VisualizationController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->visualizationService->createVisualization($data);
+            $this->visualizationService->createVisualization($data);
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
     }
 
     /**
@@ -62,36 +59,25 @@ class VisualizationController extends AbstractApiController
     public function update($uuid, $data)
     {
         try {
-            $count = $this->visualizationService->updateVisualization($uuid, $data);
+            $this->visualizationService->updateVisualization($uuid, $data);
+            return $this->getSuccessResponseWithData($data, 200);
         }
-        catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Visualization not found for uuid - $uuid", 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function delete($uuid) {
+    public function delete($uuid)
+    {
         $params = $this->params()->fromQuery();
-        if(isset($params['version'])){
-            try {
-                $response = $this->visualizationService->deleteVisualization($uuid, $params['version']);
-            }
-            catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-            }
-            if ($response == 0) {
-                return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-            }
+        try {
+            $this->visualizationService->deleteVisualization($uuid, $params['version']);
             return $this->getSuccessResponse();
-        } else {
-            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -147,4 +133,3 @@ class VisualizationController extends AbstractApiController
         return $this->getSuccessResponseWithData($result);
     }
 }
-

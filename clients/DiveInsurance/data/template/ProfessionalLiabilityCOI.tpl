@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
 </head>
 <body onload = "agentInfo()">
-	<div class ="body_div"> 
+	<div class ="body_div">
 		<div>&nbsp</div>
 		<div class = "content">
 			<div class ="content1">
@@ -19,10 +19,10 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
+					<p class = "details">{$lastname}, {$firstname}{if isset($initial)}, {$initial} {/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$city}, {$state_in_short} {$zip}</p>
 					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
@@ -43,6 +43,9 @@
 				<p class = "policy">Policy issued by &nbsp{$carrier}</p>
 				<p class = "policy2">Policy #: {$policy_id}</p>
 				<hr></hr>
+				{if $state_in_short === "NY" || $state === "New York"}
+					<p>PADI Risk Purchasing Group</p>
+				{/if}
 			</div>
 		</div>
 		<div class="spacing">&nbsp</div>
@@ -56,10 +59,13 @@
 				{assign var=initialAnnualAggregate value=$previousPolicyData.$policyIndex.prevAnnualAggregate}
 				{assign var=initialEquipment value=$previousPolicyData.$policyIndex.previous_equipment}
 				{assign var=initialCylinderCoverage value=$previousPolicyData.$policyIndex.previous_cylinder}
+				{assign var=initialCylinderCoverageLabel value=$previousPolicyData.$policyIndex.previous_cylinderLabel}
 				{assign var=initialScubaFit value=$previousPolicyData.$policyIndex.previous_scubaFit}
+				{assign var=initialTecRec value=$previousPolicyData.$policyIndex.previous_tecRecEndorsment}
 										{else}
 				{assign var=careerCov value=$careerCoverageVal}
 				{assign var=previous_scubaFit value=""}
+				{assign var=previous_tecRecEndorsment value=""}
 				{/if}
 		{/if}
 		<div>
@@ -72,7 +78,16 @@
 							</tr>
 							<tr>
 								<th nowrap><b class = "ins_font">COVERAGE:</b></th>
-								<td><p class = "ins_font">Insured's Status: {if isset($careerCov)}
+								<td><p class = "ins_font">Insured's Status: 
+										{if isset($initialTecRec)}
+											{if $initialTecRec != "tecRecDeclined"}
+											<span> TecRec </span>
+											{/if}
+										{else}
+											{if $tecRecEndorsment != "tecRecDeclined"} <span> TecRec </span>
+											{/if}
+										{/if}
+										{if isset($careerCov)}
 											{$careerCov}
 										{else}
 											{$careerCoverageVal}
@@ -132,29 +147,29 @@
 								<th nowrap><p class = "ins_font"><b>Cylinder Coverage:</b></p></th>
 								<td><p class = "ins_font">
 								{if isset($initialCylinderCoverage)}
-									{if $initialCylinderCoverage != "cylinderInspectorOrInstructorDeclined"}
-											{$cylinderPriceVal}
+									{if $initialCylinderCoverage != "cylinderInspectorOrCylinderInspectionInstructorDeclined"}
+											{$initialCylinderCoverageLabel}
 										{else}
 											Not Covered
 										{/if}
 								{else}
-									{if $cylinder != "cylinderInspectorOrInstructorDeclined"}
+									{if $cylinder != "cylinderInspectorOrCylinderInspectionInstructorDeclined"}
 											{$cylinderPriceVal}
 										{else}
 											Not Covered
 										{/if}
 								{/if}
+
 									</p>
 								</td>
 							</tr>
 						</table>
 				</div>
 			</div>
-    	
+
 			<div class="policy_notice_div">
 				<hr class="hrtag"></hr>
-					<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-						to the date that the alleged negligent act, error, or omission occurred.
+					<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day of uninterrupted coverage,whichever is earlier (refer to section VI of the policy). However, in no case will the retro date be prior to 6/30/1992. In the event of a claim which invokes a Retroactive Date prior to {$start_date}, the Certificate Holder must submit proof of uninterrupted insurance coverage dating prior to the date that the alleged negligent act, error, or omission occurred.
 					</p></center>
 					<hr class = "spacing1"></hr>
 					<b><center><p class = "phy_add">Physical Address {if ($sameasmailingaddress == "false" || $sameasmailingaddress == false) && (isset($mailaddress1) && $mailaddress1 != "") }
@@ -171,7 +186,14 @@
 		</div>
 		<div class = "second_content">
 			{if isset($update_date)}
-				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>	
+			{assign var=hasEndorsement value=0}
+			{foreach from=$previousPolicyData item=$upgradeData}
+			{if isset($upgradeData.careerCoverageName) || isset($upgradeData.upgraded_single_limit) || isset($upgradeData.scubaCoverageName) || isset($upgradeData.equipmentCoverageName) ||  isset($upgradeData.cylinderCoverageName) || isset($upgradeData.tecRecCoverageName)}
+			{assign var=hasEndorsement value=1}
+			{/if}
+			{/foreach}
+			{if $hasEndorsement == 1}
+				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				{if isset($previousPolicyData) && !empty($previousPolicyData)}
 
 					{foreach from=$previousPolicyData item=$upgradeData}
@@ -210,7 +232,8 @@
 					{/foreach}
 				{/if}
 			{/if}
-				
+			{/if}
+
 			<hr></hr>
 			<p class = "policy_notice">
 				The insurance afforded by this policy is a master policy issued to PADI Worldwide Corporation, 30151 Tomas Street, Rancho Santa Margarita, CA 92688. The insurance is provided under terms and conditions of the master policy which is enclosed with this certificate. Please read the policy for a full description of the terms, conditions and exclusions of the policy. This certificate does not amend, alter or extend the coverage afforded by the policy referenced on this certificate.
@@ -220,6 +243,12 @@
 			</p>
 
 
+			<hr></hr>
+			{if isset($excludedOperation) && $excludedOperation != ""}
+			<p style="margin-bottom: 5px;font-size: 15px;"><b>EXCLUDED OPERATION:</b></p>
+            		<p style="margin-top:1%;margin-left: 2%;text-align: justify;font-size: 13px;">{$excludedOperation}</p>
+        	{/if}
+			<hr></hr>
 			{if $state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/AK.tpl"}</b>
@@ -406,13 +435,17 @@
 				</p></center>
 			{elseif $state == 'Utah'}
 				<center><p class = "notice">
-					<b>{include file ="{$smarty.current_dir}/v/UT.tpl"}</b>
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virginia'}
-				<center><p class = "notice">
+				<center><p class = "notice">both of
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
+				<center><p class = "notice">both of
+					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+				</p></center>
+			{elseif $state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>
@@ -437,4 +470,3 @@
 	</div>
 </body>
 </html>
-

@@ -1,0 +1,71 @@
+.osjs-window[data-id="Window_DiveInsurance"] {
+  .customAdminPage {
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    $primary-color: #053b6d !important;
+
+    .adminPageGrid {
+      height: inherit;
+    }
+
+    .dashIcons {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      padding: 10px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+
+      .moduleBtn {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+
+        .block {
+          background-color: $primary-color;
+          padding: 15px;
+          border-radius: 10px;
+          color: white;
+          font-size: 100px;
+        }
+
+        .titles {
+          font-size: 24px;
+          color: $primary-color;
+          padding: 30px;
+        }
+      }
+    }
+
+    .dropdownDiv {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 15px;
+    }
+
+    .k-header.k-grid-toolbar {
+      div {
+        justify-content: flex-end !important;
+      }
+      .fa {
+        font-size: large;
+        color: white;
+      }
+      .buttonText {
+        margin-bottom: 0px;
+        color: white;
+        font-size: 15px;
+        margin-left: 10px;
+      }
+    }
+
+    .textArea {
+      margin-top: 10px;
+      max-height: 200px;
+      width: 103%;
+    }
+  }
+}

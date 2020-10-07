@@ -15,13 +15,19 @@ abstract class AbstractBaseService
     
     protected function __construct($config, $dbAdapter)
     {
-        $this->dbAdapter = $dbAdapter;
-        if ($dbAdapter) {
-            $this->sql = new Sql($this->dbAdapter);
-        }
+        $this->setAdapter($dbAdapter);
+        
         $this->logger = Logger::getLogger(get_class($this));
         $this->config = $config;
     }  
+
+    //this method is used only for phpunit tests. Not required to be called otherwise
+    public function setAdapter($adapter){
+        $this->dbAdapter = $adapter;
+        if ($adapter) {
+            $this->sql = new Sql($this->dbAdapter);
+        }
+    }
 
     public function beginTransaction()
     {

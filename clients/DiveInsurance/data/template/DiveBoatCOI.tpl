@@ -491,7 +491,11 @@ premium, then 10 days notice will be provided, and any premium not earned will b
         <center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveBoat/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Virgin Islands'}
+      {elseif $state == 'Virgin Islands'}
+        <center><p class = "notice">both of 
+          <b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
+        </p></center>
+			{elseif $business_state == 'Vermont'}
 				<hr></hr>
         <center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/DiveBoat/{$surplusLineYear}/VT.tpl"}</b>

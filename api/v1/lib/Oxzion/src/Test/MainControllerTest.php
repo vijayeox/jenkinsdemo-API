@@ -10,16 +10,17 @@ use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
+use Zend\Db\Sql\Sql;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Console\Console;
 
 abstract class MainControllerTest extends AbstractHttpControllerTestCase
 {
-    protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
+    protected $adminUser = 'admintest'; //TODO Need to put as global setup
     protected $adminUserId = 1;
-    protected $employeeUser = 'rakshithtest';
+    protected $employeeUser = 'employeetest';
     protected $employeeUserId = 2;
-    protected $managerUser = 'karantest';
+    protected $managerUser = 'managertest';
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;
@@ -210,5 +211,11 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
         return $result;
+    }
+    protected function executeUpdateQuery($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $sql = new Sql($dbAdapter);
+        $statement = $this->sql->prepareStatementForSqlObject($query);
+        return $statement->execute();
     }
 }

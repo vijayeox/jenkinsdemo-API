@@ -118,8 +118,7 @@ class JobService extends AbstractService
             }
         }
         $this->logger->info("Schedule JOB DATA in job service- " . print_r($jobData, true));
-        $this->logger->info("Return Schedule Job response job service- " . print_r($responseReturn, true));
-        return $responseReturn;
+        return $jobData;
     }
     
     public function cancelJob($jobName, $jobGroup, $appId)

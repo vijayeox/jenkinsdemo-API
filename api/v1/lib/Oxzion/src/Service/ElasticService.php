@@ -3,7 +3,12 @@ namespace Oxzion\Service;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Logger;
+use Oxzion\Analytics\AnalyticsAbstract;
+use Oxzion\Utils;
+use Oxzion\Utils\AnalyticsUtils;
 
 use function GuzzleHttp\json_encode;
 
@@ -21,11 +26,15 @@ class ElasticService
     private $logger;
     private $filterFields;
     private $filterTmpFields;
+    private $excludes;
 
-    public function __construct($config)
+    public function __construct()
     {
-        $this->config = $config;
         $this->logger = Logger::getLogger(get_class($this));
+    }
+
+    public function setConfig($config){
+        $this->config = $config;
         $clientsettings = array();
         $clientsettings['host'] = $config['elasticsearch']['serveraddress'];
         $clientsettings['user'] = $config['elasticsearch']['user'];
@@ -37,15 +46,16 @@ class ElasticService
         $this->logger->info("core to be used - ".$this->core);
         $this->type = $config['elasticsearch']['type'];
         $clientbuilder = ClientBuilder::create(); 
-        if ($clientbuilder) { 
+        if(!$this->client || !isset($_ENV['ENV']) || $_ENV['ENV'] != 'test'){
             $this->client = $clientbuilder->setHosts(array($clientsettings))->build();
-        } else {
-            $this->client = new ClientBuilder(); //This is for Mocking in the test case
         }
     }
-
     public function setElasticClient($client){
         $this->client = $client;
+    }
+
+    public function getElasticClient(){
+        return $this->client;
     }
 
     public function create($indexName,$fieldList,$settings) {
@@ -126,9 +136,12 @@ class ElasticService
 
     public function getQueryResults($orgId, $app_name, $params)
     {
+        $this->excludes = [];
+        if (isset($params['excludes'])) {
+            $this->excludes = $params['excludes'];
+        }
         $result = $this->filterData($orgId, $app_name, $params);
         return $result;
-
     }
 
     public function filterData($orgId, $app_name, $searchconfig)
@@ -167,7 +180,7 @@ class ElasticService
         }
 
         $result_obj = $this->search($params);
-		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
+        if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
 			$results['type']='group';
 		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
@@ -194,7 +207,7 @@ class ElasticService
  //   {"<=", ["sale_date", "2019-10-31"]},
 
 
-    protected function createFilter($filter) {
+    protected function createFilter($filter,$type='') {
         $subQuery = null;
         $symMapping = ['>'=>'gt','>='=>'gte','<'=>'lt','<='=>'lte'];
         $boolMapping = ['OR'=>'should','AND'=>'must'];
@@ -209,9 +222,12 @@ class ElasticService
             $condition = "==";
             $value = $filter[1];
         }
+        if (isset($filter[3])) {
+            $type = $filter[3];
+        }
         if (strtoupper($condition)=='OR' OR strtoupper($condition)=='AND') {
-                 $tempQuery1 = $this->createFilter($column);
-                 $tempQuery2 = $this->createFilter($value);
+                 $tempQuery1 = $this->createFilter($column,$type);
+                 $tempQuery2 = $this->createFilter($value,$type);
                  if ($tempQuery1) {
                     $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery1;
                  }
@@ -220,8 +236,9 @@ class ElasticService
                  }
                  
         } else {
-        //    echo $column.' '.$condition.' '.$value;
-            if (!in_array($column,$this->filterFields)) {
+
+            if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
+                $value = AnalyticsUtils::checkSessionValue($value);
                 if ($condition=="=="){                
                         if (!is_array($value)) {
                         $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
@@ -230,6 +247,8 @@ class ElasticService
                         }    
                 } elseif ($condition=="<>" || $condition=="!=") {
                         $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
+                } elseif ($condition=="NOT LIKE" || $condition=="not like") {
+                        $subQuery['bool']['must_not'][] =  ["match_phrase"=>[ $column=>$value ]];
                 }  else {
                         if (strtolower(substr($value,0,5))=="date:") {
                             $value = date("Y-m-d",strtotime(substr($value,5)));
@@ -261,7 +280,7 @@ class ElasticService
                 } else {
                     $format = "MMM-yyyy";
                 }
-                $grouparraytmp = array('date_histogram' => array('field' => key($searchconfig['range']), 'interval' => $interval, 'format' => $format));
+                $grouparraytmp = array('date_histogram' => array('field' => $searchconfig['frequency'], 'interval' => $interval, 'format' => $format));
             } else {
                 $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
                 $boolfilterquery['_source'][] = $grouptext;
@@ -311,7 +330,6 @@ class ElasticService
         if (strpos($text, 'query:') !== false) {
             $query['bool']['must'][] = array("query_string" => (array("query" => str_replace('query:', "", $text))));
         } else {
-            // $query['bool']['should'][] = array("query_string"=>(array("query"=>$text)));
             $query['bool']['should'][] = array("multi_match" => array("fields" => $this->getBoostFields($entity, $fields), "query" => $text, "fuzziness" => "AUTO"));
         }
         return $query;
@@ -322,9 +340,7 @@ class ElasticService
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
         } else if (key($aggregates) != "count") {
-            //    $aggs = array('value'=>array(key($aggregates)=>array("script"=>array("inline"=>"try { return Float.parseFloat(doc['".$aggregates[key($aggregates)].".keyword'].value); } catch (NumberFormatException e) { return 0; }"))));
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
-
         }
         return $aggs;
     }
@@ -350,12 +366,12 @@ class ElasticService
                 $this->filterFields=array_merge($this->filterFields,$this->filterTmpFields);
             }
         }
-        if ($searchconfig['range']) {
-            $daterange = $searchconfig['range'][key($searchconfig['range'])];
-            $dates = explode("/", $daterange);
-            $mustquery['must'][] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
+        // if ($searchconfig['range']) {
+        //     $daterange = $searchconfig['range'][key($searchconfig['range'])];
+        //     $dates = explode("/", $daterange);
+        //     $mustquery['must'][] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
 
-        }
+        // }
         return $mustquery;
 
     }
@@ -392,25 +408,21 @@ class ElasticService
             default:
                 break;
         }
-        // print_r($mustquery);exit;
         return $mustquery;
     }
 
     public function search($q)
     {
-       if  ($this->core) {
-           $q['index'] = $this->core.'_'.$q['index'];
-       }
-       $this->logger->debug('Elastic query:');
-       $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
-       $data['query'] = json_encode($q);
-  //      print_r(json_encode($q));echo "\n";
-       $data["data"] = $this->client->search($q);
-       $this->logger->debug('Data from elastic:');
-       $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
-  //       print_r(json_encode($data['data']));echo "\n";
+        if  ($this->core) {
+            $q['index'] = $this->core.'_'.$q['index'];
+        }
+        $this->logger->debug('Elastic query:');
+        $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
+        $data['query'] = json_encode($q);
+        $data["data"] = $this->client->search($q);
+        $this->logger->debug('Data from elastic:');
+        $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
         return $data;
-
     }
 
     public function bulk($body) {
@@ -425,7 +437,6 @@ class ElasticService
         $index = ($this->core) ? $this->core.'_'.$index:$index;
         $params['index'] = $index;
         $params['id'] = $id;
-    //    $params['type'] = $this->type;
         $params['body'] = $body;
         return $this->client->index($params);
     }

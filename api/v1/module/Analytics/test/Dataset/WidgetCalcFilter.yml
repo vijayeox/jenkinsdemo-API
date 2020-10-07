@@ -142,3 +142,97 @@ ox_widget:
     configuration: 'sample config3'
     version: 1
     expression: '{"expression":"q1+q2"}'
+  -
+    id: 122
+    uuid: '667781c3-344d-44d8-0095-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'testwithSession'
+    configuration: 'sample config3'
+    version: 1
+    expression: ''    
+  -
+    id: 123
+    uuid: '667781c3-344d-44d8-1195-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'testwithSessionUserId'
+    configuration: 'sample config3'
+    version: 1
+    expression: '' 
+  -
+    id: 124
+    uuid: '667781c3-344d-4400-1195-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'testCombineTwoCounts'
+    configuration: 'sample config3'
+    version: 1
+    expression: '' 
+  -
+    id: 125
+    uuid: '123781c3-040d-44d8-6695-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'NoFilterOverride'
+    configuration: ''
+    version: 1
+    expression: ''
+    exclude_overrides: 'all'
+  - 
+    id: 126
+    uuid: '123781c3-040d-44d8-1111-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'simpleonequery'
+    configuration: ''
+    version: 1
+    expression: ''
+  - 
+    id: 127
+    uuid: '123781c3-040d-44d8-1221-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: '2filteroverrides'
+    configuration: ''
+    version: 1
+    expression: ''
+    exclude_overrides: 'owner_username,industry'
+  - 
+    id: 128
+    uuid: '123781c3-040d-44d8-1331-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: '1filteroverrides'
+    configuration: ''
+    version: 1
+    expression: ''
+    exclude_overrides: 'industry'

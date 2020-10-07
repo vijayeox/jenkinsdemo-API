@@ -4,9 +4,16 @@ content:
     -
         type: List
         content:
-            route: 'file'
+            route: 'file/user/me'
             filterable: true
+            autoRefresh: 10000
+            defaultFilters: 
+                sort:
+                    -
+                        field: date_created
+                        dir: desc                 
             resizable: true
+            refreshButton: true
             pageable:
                 buttonCount: 3
                 pageSizes:
@@ -14,34 +21,38 @@ content:
                     - 20
                     - 50
                 info: true
-            defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
             sortable: 
                 allowUnsort: true
                 mode: single
             actions:
                 -
-                    name: 'View'
-                    rule: '''{{policyStatus}}'' == ''Completed'''
-                    icon: 'fa fa-envelope-open'
+                    name: Edit
+                    rule: 'row.status == "In Progress"'
+                    details:
+                        -
+                            type: Form
+                            form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b
+                            fileId: '{{uuid}}'
+                    icon: 'far fa-pencil-alt'
+                -
+                    name: 'Export'
+                    rule: '''{{status}}'' == ''Generated'''
+                    icon: 'far fa-file-download'
                     details:
                         -
                             type: Document
-                            content: '<h4>{data.padi} - {data.firstname} {data.lastname}</h4><p> Policy Period : {moment(data.start_date).format(''MMMM Do YYYY'')} to {moment(data.end_date).format(''MMMM Do YYYY'')} </p>'
+                            content: '<h5>Insured Name: {data.namedInsured}</h5>'
                             useRowData: true
                         -
                             type: DocumentViewer
                             url: 'file/{{uuid}}/document'
                 -
-                    name: Edit
-                    rule: 'true'
-                    details:
-                        -
-                            type: Form
-                            form_id: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7
-                            fileId: '{{uuid}}'
-                    icon: 'far fa-pencil-alt'
+                    name: 'Please Wait'
+                    rule: '''{{status}}'' == ''Processing'''
+                    icon: 'fad fa-circle-notch fa-spin'
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:
+                title: "Create Workbook"
                 actions:
                     -
                         name: Create New Workbook
@@ -49,23 +60,32 @@ content:
                         details:
                             -
                                 type: Form
-                                form_id: 2b4a5099-4a2b-415a-b1d1-b539cbe1eee7           
+                                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b      
             columnConfig:
                 -
                     title: Insured
                     field: namedInsured
                 -
-                    title: 'Producer'
-                    field: producername
+                    title: 'Producer Date'
+                    field: producerdate
+                    cell: '<td>{formatDate(item.producerdate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
                 -
                     title: 'Effective Date'
                     field: effectiveDate
-                    cell: '<td>{moment(item.effectiveDate).format("MMMM Do YYYY")}</td>'
+                    cell: '<td>{formatDate(item.effectiveDate)}</td>'
                     filter: date
                     filterFormat: YYYY-MM-DD
                 -
-                    title: 'Producer Date'
-                    field: producerdate
-                    cell: '<td>{moment(item.producerdate).format("MMMM Do YYYY")}</td>'
-                    filter: date
-                    filterFormat: YYYY-MM-DD
+                    title: 'Status'
+                    field: status
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Generated'
+                            - 'Review'
+                            - 'Processing'
+                            - 'In Progress'
+                        placeholder: 'Select Status'
+                    cell: '{item.status == "Review" ? <td className="policyStatusReview">{"Submitted - Under Review"}</td> : <td>{item.status}</td>}'

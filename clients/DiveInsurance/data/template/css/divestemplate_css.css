@@ -123,6 +123,17 @@ body{
 	padding: 0px;
 	letter-spacing: 1px;
 }
+.info1{
+	margin-left: 30px;
+	font-family: sans-serif;
+	font-style: normal;
+	font-size: 13px;
+	margin-bottom:1px;
+	margin-top:0px;
+	padding: 0px;
+	letter-spacing: 1px;
+	width: 70%;
+}
 
 .info.normal {
 	font-weight: 100;
@@ -210,6 +221,11 @@ body{
 	margin-left: 5%;
 	width:100%;
 }
+.section_col1{
+	margin-right: 10%;
+	margin-left: 5%;
+	width:81%;
+}
 .sec1{
 	width:60%;
 	float:left;
@@ -263,8 +279,8 @@ body{
 }
 
 .addIn{
-	margin-bottom: 0px;
-	margin-top: 0px;
+	margin: 0px;
+	padding: 0px;
 }
 
 .title{
@@ -312,7 +328,7 @@ body{
 	margin-bottom: 0px;
 }
 .footer_note{
-	font-size:13px;
+	font-size:10px;
 	margin-top: 1px;
 	margin-bottom: 1px;
 	letter-spacing: 1px;
@@ -407,6 +423,9 @@ ul > li {
 }
 
 /* Dive Center Proposal */
+.margin_space{
+	margin-top : 23%;
+}
 .line_divide {
 	margin-bottom: 2px;
 	font-weight: 700;
@@ -417,7 +436,6 @@ ul > li {
 }
 
 .table_sec {
-	margin-bottom: 40%;
 	margin-top: 2%;
 }
 
@@ -429,15 +447,17 @@ table.proposal_table {
 }
 
 table.proposal_table th {
-    border: 0.5px solid black;
+    border: 1px solid black;
 }
 
 table.proposal_table th:first-child {
+	width: 70%;
     text-align: left;
     padding-left: 10px;
 }
 
 table.proposal_table th:last-child {
+	width: 30%;
     text-align: right;
     padding-right: 10px;
 }
@@ -510,4 +530,22 @@ table.proposal_table td:last-child {
 }
 .payment_option > div + div p {
 	margin: 0px;
+}
+.table_hd{
+	border: 1px solid black;
+}
+
+.exop{
+	margin-left: 6%;
+	font-family: sans-serif;
+	font-style: normal;
+	margin-bottom:3%;
+	margin-top:5px;
+	padding: 0px;
+	letter-spacing: 1px;
+	width:80%;
+}
+.box{
+  margin:10px;
+  border: 1px solid black;
 }

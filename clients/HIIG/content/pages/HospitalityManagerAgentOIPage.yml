@@ -1,0 +1,7 @@
+name: 'Agent'
+description: 'Shows Agent OI'
+content:
+    -
+        type: DashboardManager
+        content:
+            uuid: bfa5901c-0379-42cb-9086-4879761e4b2c 

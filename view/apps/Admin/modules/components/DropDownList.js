@@ -82,6 +82,7 @@ export default class DropDown extends React.Component {
     this.props.disableItem ? (this.inputProps = { opened: false }) : [];
     return (
       <div>
+            <React.Suspense fallback={<div>Loading...</div>}>
         {this.props.rawData ? (
           <KendoReactDropDowns.DropDownList
             data={this.state.mainList}
@@ -90,7 +91,7 @@ export default class DropDown extends React.Component {
             onChange={this.props.onDataChange}
             textField={this.props.keyValuePair ? "name" : undefined}
             valueField={this.props.keyValuePair ? "id" : undefined}
-            filterable={true}
+            filterable={this.props.filterable == false ? false : true}
             onFilterChange={this.filterChange}
             style={{ width: this.props.width ? this.props.width : "100%" }}
             popupSettings={{ height: "160px" }}
@@ -113,6 +114,7 @@ export default class DropDown extends React.Component {
             required={this.props.required}
           />
         )}
+        </React.Suspense>
       </div>
     );
   }

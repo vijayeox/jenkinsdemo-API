@@ -30,11 +30,14 @@ class ForgotPasswordController extends AbstractAPIControllerHelper
             if ($responseData === 0) {
                 return $this->getErrorResponse("The username entered does not match your profile username", 404);
             }
-        } catch (Exception $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+        }catch (ValidationException $e) {
+                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                return $this->getErrorResponse("We do not have an email on your account", 417, $response);
+        }catch (Exception $e) {
+            $response = ['data' => $data, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Something went wrong with password reset, please contact your administrator", 500);
         }
-        return $this->getSuccessResponseWithData($data, 200);
+        return $this->getSuccessResponseWithData($responseData, 200);
 
     }
     public function resetPasswordAction()

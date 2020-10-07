@@ -2,12 +2,11 @@
 
 namespace Analytics\Controller;
 
-use Zend\Log\Logger;
+use Exception;
 use Analytics\Model\DataSource;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
-use Exception;
 
 class DataSourceController extends AbstractApiController
 {
@@ -41,16 +40,13 @@ class DataSourceController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->dataSourceService->createDataSource($data);
+            $this->dataSourceService->createDataSource($data);
+            return $this->getSuccessResponseWithData($data, 201);
         }
-        catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
     }
 
     /**
@@ -65,36 +61,25 @@ class DataSourceController extends AbstractApiController
     public function update($uuid, $data)
     {
         try {
-            $count = $this->dataSourceService->updateDataSource($uuid, $data);
+            $this->dataSourceService->updateDataSource($uuid, $data);
+            return $this->getSuccessResponseWithData($data, 200);
         }
-        catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }        
     }
 
-    public function delete($uuid) {
+    public function delete($uuid)
+    {
         $params = $this->params()->fromQuery();
-        if(isset($params['version'])){
-            try {
-                $response = $this->dataSourceService->deleteDataSource($uuid,$params['version']);
-            }
-            catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-            }
-            if ($response == 0) {
-                return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-            }
+        try {
+            $this->dataSourceService->deleteDataSource($uuid, $params['version']);
             return $this->getSuccessResponse();
-        } else {
-            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -153,7 +138,6 @@ class DataSourceController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dataSourceService->getDataSourceList($params);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }
-

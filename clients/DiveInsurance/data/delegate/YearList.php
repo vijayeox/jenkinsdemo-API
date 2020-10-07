@@ -1,59 +1,102 @@
 <?php
 
-use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
+use Oxzion\AppDelegate\TemplateAppDelegate;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 
-class YearList extends AbstractAppDelegate
+
+class YearList extends TemplateAppDelegate
 {
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
 
     // Premium Calculation values are fetched here
-    public function execute(array $data,Persistence $persistenceService)
-    {  
-        $yearList = array();
-        if($data['type'] == 'rates'){
-            if($data['product'] == 'Individual Professional Liability - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Individual Professional Liability';
-            }else if($data['product'] == 'Individual Professional Liability - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Individual Professional Liability';
-            }else if($data['product'] == 'Emergency First Response - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Emergency First Response';
-            }else if($data['product'] == 'Emergency First Response - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Emergency First Response';
-            }else if($data['product'] == 'Dive Boat - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Dive Boat';
-            }else if($data['product'] == 'Dive Boat - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Dive Boat';
-            }else if($data['product'] == 'Dive Store - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Dive Store';
-            }else if($data['product'] == 'Dive Store - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Dive Store';
-            }  
-            $selectQuery  = "SELECT DISTINCT year from premium_rate_card WHERE product = '".$product."' AND is_upgrade = ".$is_upgrade;
-        }else if($data['type'] == 'stateTax'){
-            $selectQuery  = "SELECT DISTINCT year from state_tax WHERE coverage = '".$data['coverage']."'";
-        }else if($data['type'] == 'carrierpolicy'){
-            $selectQuery  = "SELECT DISTINCT year from carrier_policy";
-        }
-        
-        $result = $persistenceService->selectQuery($selectQuery);
-        while ($result->next()) {
-            $year = $result->current();
-            array_push($yearList,$year['year']);
-        }
+    public function execute(array $data, Persistence $persistenceService)
+    {
+        if (AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')) {
+            $yearList = array();
+            if (isset($data['product'])) {
+                if ($data['product'] == 'Individual Professional Liability - New Policy') {
+                    $is_upgrade = 0;
+                    $product = 'Individual Professional Liability';
+                } else if ($data['product'] == 'Individual Professional Liability - Endorsement') {
+                    $is_upgrade = 1;
+                    $product = 'Individual Professional Liability';
+                } else if ($data['product'] == 'Emergency First Response - New Policy') {
+                    $is_upgrade = 0;
+                    $product = 'Emergency First Response';
+                } else if ($data['product'] == 'Emergency First Response - Endorsement') {
+                    $is_upgrade = 1;
+                    $product = 'Emergency First Response';
+                } else if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Boat - Group PL') {
+                    $is_upgrade = 0;
+                    $product = 'Dive Boat';
+                } else if ($data['product'] == 'Dive Boat - Endorsement' || $data['product'] == "Dive Boat - Group PL Endorsement") {
+                    $is_upgrade = 1;
+                    $product = 'Dive Boat';
+                } else if ($data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Store - Group PL') {
+                    $is_upgrade = 0;
+                    $product = 'Dive Store';
+                } else if ($data['product'] == 'Dive Store - Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
+                    $is_upgrade = 1;
+                    $product = 'Dive Store';
+                } else {
+                    $is_upgrade = 0;
+                    $product = $data['product'];
+                }
+                if ($data['type'] == 'PremiumRates') {
+                    $andClause1 = " ";
+                    if ($data['product'] == 'Dive Boat - Group PL' || $data['product'] == 'Dive Store - Group PL') {
+                        $andClause1  = " AND coverage_category IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY') ";
+                    }
+                    if ($data['product'] == 'Dive Boat - Group PL Endorsement' || $data['product'] == 'Dive Store - Group PL Endorsement') {
+                        $andClause1 = " AND coverage_category IN ('GROUP_EXCESS_LIABILITY')";
+                    }
 
-        return $yearList;
+                    if ($data['product'] == 'Dive Boat - New Policy' || $data['product'] == 'Dive Store - New Policy' || $data['product'] == 'Dive Boat - Endorsement' || $data['product'] == 'Dive Store - Endorsement') {
+                       $andClause1 = " AND (coverage_category = '' OR coverage_category IS NULL OR coverage_category NOT IN ('GROUP_COVERAGE','GROUP_EXCESS_LIABILITY','GROUP_PADI_FEE')) ";
+                    }
 
+                    $selectQuery  = "SELECT DISTINCT year from premium_rate_card WHERE 
+                                product = '" . $product . "' AND
+                                 is_upgrade = " . $is_upgrade . " " . $andClause1." ORDER BY `year`" ;
+                } else if ($data['type'] == 'SurplusLines') {
+                    if ($product == 'Individual Professional Liability') {
+                        $product = 'IPL';
+                    } else if ($product == 'Emergency First Response') {
+                        $product = 'EFR';
+                    } else if ($product == 'Dive Boat') {
+                        $product = 'DiveBoat';
+                    } else if ($product == 'Dive Store') {
+                        $product = 'DiveStore';
+                    } else if ($product == 'Group Professional Liability') {
+                        $product = 'Group';
+                    }
+                    $destinationPath = $this->destination . AuthContext::get(AuthConstants::ORG_UUID) . '/SurplusLines/' . $product;
+                    $yearList = scandir($destinationPath);
+                    array_shift($yearList);
+                    array_shift($yearList);
+                    return $yearList;
+                } else if ($data['type'] == 'CarrierPolicy') {
+                    $selectQuery  = "SELECT DISTINCT year from carrier_policy";
+                }
+            } else {
+                if ($data['type'] == 'StateTax') {
+                    $selectQuery  = "SELECT DISTINCT year from state_tax WHERE coverage = '" . $data['coverage'] . "'";
+                }
+            }
+            $result = $persistenceService->selectQuery($selectQuery);
+            while ($result->next()) {
+                $year = $result->current();
+                array_push($yearList, $year['year']);
+            }
+            return $yearList;
+        } else {
+            $this->logger->info("YearList : You do not have access to this API");
+            throw new DelegateException("You do not have access to this API", 'no_access');
+        }
     }
-
 }

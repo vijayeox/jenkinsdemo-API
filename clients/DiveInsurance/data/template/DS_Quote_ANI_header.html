@@ -17,12 +17,17 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date','business_name', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','state_in_short','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2','business_padi','dba'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
               for (var j = 0; j < element.length; ++j) {
                   element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+              if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
               }
           }
       }
@@ -30,7 +35,7 @@
   }
   </script>
 </head>
-<body onload="subst()" id = "doc_body">  
+<body onload="subst()" id = "doc_body">
  <div>
             <hr class="line1"></hr>
           <div class="spacer"></div>
@@ -45,7 +50,7 @@
                <p class ="page_no1">Page <span class="page"></span> of <span class="topage"></span></p>
             </div>
           </div>
- 
+
           <hr class="line1"></hr>
           <div class="spacer"></div>
           <hr class="line2"></hr>
@@ -68,9 +73,9 @@
           <p class ="p_info"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
           <p class ="p_info" id = "phone2Val"></p>
           <p class ="p_info">www.diveinsurance.com</p>
-          <p class ="p_info">diveboat@diveinsurance.com</p>
+          <p class ="p_info">divestore@diveinsurance.com</p>
           <p class ="p_info">Policy period from <span class ="start_date"></span> to <span class = "end_date"></span></p>
-          <p class ="agent_info2"><b>Member#:</b> <span class ="padi"></span></p>
+          <p class ="agent_info2"><b>Member#:</b> <span class ="business_padi"></span></p>
       </div>
       </div>
     </div>
@@ -79,17 +84,18 @@
     <div class="agent">
       <div class = "agent_info">
       <b >Insured's Name and Mailing Address:</b>
-          <p class = "c_details"><span class ="firstname"></span>,<span class ="lastname"></span></p>
+          <p class = "details"><span class ="business_name"></span></p>
+          <p class = "details" id = "dbaName" style = "display:none;">DBA:<span class ="dba"></span></p>
           <p class = "c_details"><span class="address1"></span></p>
           <p class = "c_details"><span class="address2"></span></p>
-          <p class = "c_details"><span class ="city"></span>,<span class ="state"></span></p>
-          <p class = "c_details"><span class = "country"></span>,<span class ="zip"></span></p>
+          <p class = "c_details"><span class ="city"></span>, <span class ="state_in_short"></span> <span class ="zip"></span></p>
+          <p class = "c_details"><span class = "country"></span></p>
       </div>
       <div class = "agent_info1">
-        <p class ="padi_margin"></p>                                                                
+        <p class ="padi_margin"></p>
       </div>
     </div>
-<div class = "spacing_div">&nbsp</div>
+ <div class = "spacing_div">&nbsp</div>
     <hr class = "qfooter_line1"></hr>
 </div>
 </body>

@@ -1,0 +1,77 @@
+app:
+    name: EOXAppBuilder
+    description: 'App for EOX AppBuilder'
+    category: EXAMPLE_CATEGORY
+    type: 1
+    autostart: true
+    version: 1
+    uuid: 41b77ef3-41db-4a52-8eb8-ba3ac9a9d771
+    status: 4
+    isdefault: false
+    logo: default_app.png
+    start_options: null
+privilege:
+    -
+        name: MANAGE_APPLICATION
+        permission: 3
+    -
+        name: MANAGE_INSTALL_APP
+        permission: 3
+    -
+        name: MANAGE_DEPLOY_APP
+        permission: 3
+role:
+    -
+        name: 'App Developer'
+        privileges:
+            -
+                privilege_name: MANAGE_APPLICATION
+                permission: 3
+            -
+                privilege_name: MANAGE_INSTALL_APP
+                permission: 3
+            -
+                privilege_name: MANAGE_DEPLOY_APP
+                permission: 3
+        uuid: 33818081-b18d-456d-a74d-0493a20a2887
+pages:
+    -
+        page_name: HomePage.yml
+        uuid: d5b33dce-df14-4193-adfe-de27a6d37ddf
+    -
+        page_name: FormManager.yml
+        uuid: 76953fc8-7269-494d-b126-6ea45a07a007
+    -
+        page_name: WorkflowManager.yml
+        uuid: ca339e6a-4257-4567-9f70-3dab049615f7
+    -
+        page_name: InstallManager.yml
+        uuid: 96953fc8-7269-494d-b126-6ea45a07a007
+menu:
+    -
+        name: 'Manage EOX Apps'
+        icon: 'fas fa-home'
+        page_uuid: d5b33dce-df14-4193-adfe-de27a6d37ddf
+        uuid: 2f6aef7e-d0a4-11ea-87d0-0242ac130003
+        privilege: MANAGE_APPLICATION_READ
+entity:
+    -
+        name: 'App Description'
+        override_data: true
+        field:
+            -
+                name: status
+                text: Status
+                index: true
+                data_type: text
+            -
+                name: documents
+                text: Documents
+                data_type: document
+form:
+    -
+        name: 'EOX App Form'
+        uuid: 1fa0d5c0-b428-499a-a490-37e4349c1060
+        description: 'Sample form for eox apps'
+        template_file: eoxApp.json
+        entity: 'App Description'

@@ -32,16 +32,38 @@ export class DataLoader extends React.Component {
           });
         });
     }
+    if (this.props.autoRefresh) {
+      var that = this;
+      var autoRefreshTimer = setInterval(() => {
+        var gridElement = document.getElementById(this.props.parentDiv);
+        if (gridElement) {
+          if (
+            !document.hidden &&
+            (gridElement.offsetWidth ||
+              gridElement.offsetHeight ||
+              gridElement.getClientRects().length > 0)
+          ) {
+            that.triggerGetCall(true);
+          }
+        } else {
+          autoRefreshTimer ? clearInterval(autoRefreshTimer) : null;
+        }
+      }, this.props.autoRefresh);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.url !== prevProps.url) {
+    if (
+      this.props.url !== prevProps.url ||
+      !this.objectEquals(this.props.urlPostParams, prevProps.urlPostParams)
+    ) {
       this.triggerGetCall();
     }
   }
 
-  triggerGetCall() {
-    this.loader.showGrid();
+  triggerGetCall(hideLoader) {
+    hideLoader ? null : this.loader.showGrid();
+    this.pending = toODataString(this.props.dataState);
     this.getData(this.props.url).then((response) => {
       this.lastSuccess = this.pending;
       this.pending = undefined;
@@ -65,7 +87,7 @@ export class DataLoader extends React.Component {
       } else {
         this.requestDataIfNeeded();
       }
-      this.loader.destroyGrid();
+      hideLoader ? null : this.loader.destroyGrid();
     });
   }
 
@@ -164,25 +186,22 @@ export class DataLoader extends React.Component {
         var newFilters = [];
         gridConfig.filter.filters.map((filterItem2, i) => {
           if (filterItem2.field == ColumnItem.field) {
-            var searchQuery = filterItem2.value.split(" ");
-            searchQuery.map((searchItem) =>
-              newFilters.push({
-                field: filterItem2.field,
-                operator: filterItem2.operator,
-                value: searchItem
-              })
-            );
+            var mergeFilterArray = [filterItem2];
             ColumnItem.multiFieldFilter.map((multiFieldItem) => {
-              let newFilter = JSON.parse(JSON.stringify(filterItem2));
-              searchQuery.map((searchItem) =>
-                newFilters.push({
-                  field: multiFieldItem,
-                  operator: newFilter.operator,
-                  value: searchItem
-                })
-              );
+              let filterCopy = JSON.parse(JSON.stringify(filterItem2));
+              mergeFilterArray.push({
+                field: multiFieldItem,
+                operator: filterCopy.operator,
+                value: filterCopy.value
+              });
             });
-            gridConfig.filter.logic = "or";
+            var mergeFilter = {
+              filter: {
+                logic: "or",
+                filters: mergeFilterArray
+              }
+            };
+            newFilters.push(mergeFilter);
           } else {
             newFilters.push(filterItem2);
           }
@@ -216,7 +235,7 @@ export class DataLoader extends React.Component {
     return <div></div>;
   }
 
-    objectEquals(obj1, obj2) {
+  objectEquals(obj1, obj2) {
     for (var i in obj1) {
       if (obj1.hasOwnProperty(i)) {
         if (!obj2.hasOwnProperty(i)) return false;

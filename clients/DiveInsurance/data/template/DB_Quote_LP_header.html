@@ -19,7 +19,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','state_in_short','padi'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','state_in_short','padi','carrier'];
        for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
             var element = document.getElementsByClassName(
@@ -82,7 +82,7 @@
           <p class = "details"><span class ="business_name"></span></p>
           <p class = "details"><span class ="business_address1"></span></p>
           <p class = "details"><span class ="business_address2"></span></p>
-          <p class = "details"><span class ="business_city"></span>,<span class ="state_in_short"></span> - <span class ="business_zip"></span></p>
+          <p class = "details"><span class ="business_city"></span>, <span class ="state_in_short"></span> <span class ="business_zip"></span></p>
           <p class = "details"><span class ="business_country"></span></p>
       </div>
       <div class ="content2">
@@ -97,7 +97,7 @@
           <p class = "p_margin"><span class ="padi"></p>
           <p class = "p_margin"><span class ="start_date"></p>
           <p class = "p_margin"><span class ="end_date">&nbsp12:01:00 AM</p>
-          <p class = "p_margin">U.S. SPECIALTY INSURANCE COMPANY</p>
+          <p class = "p_margin"><span class ="carrier"></p>
           <p class = "p_margin"><span class ="policy_id"></p>
         </div>
       </div>

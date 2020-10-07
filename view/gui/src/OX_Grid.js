@@ -10,6 +10,10 @@ import {
 } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
 import { GridPDFExport } from "@progress/kendo-react-pdf";
+import {
+  ExcelExport,
+  ExcelExportColumn
+} from "@progress/kendo-react-excel-export";
 import { Button, DropDownButton } from "@progress/kendo-react-buttons";
 import $ from "jquery";
 import JsxParser from "react-jsx-parser";
@@ -18,6 +22,7 @@ import DataLoader from "./components/Grid/DataLoader";
 import DataOperation from "./components/Grid/DataOperation";
 import CustomFilter from "./components/Grid/CustomFilter";
 import "./components/Grid/customStyles.scss";
+import InlineComponent from "./components/Grid/InlineComponent";
 
 export default class OX_Grid extends React.Component {
   constructor(props) {
@@ -34,14 +39,28 @@ export default class OX_Grid extends React.Component {
       dataState: this.props.gridDefaultFilters
         ? this.props.gridDefaultFilters
         : {},
-      apiActivityCompleted: this.rawDataPresent ? true : false
+      apiActivityCompleted: this.rawDataPresent ? true : false,
+      isTab: this.props.isTab ? this.props.isTab : false
     };
+    this.appNavigationDiv = "navigation_" + this.props.appId;
     this.loader = this.props.osjsCore.make("oxzion/splash");
     this.child = React.createRef();
     this.refreshHandler = this.refreshHandler.bind(this);
+    this.inlineEdit = this.inlineEdit.bind(this);
   }
+  _excelExport;
+  _grid;
 
   componentDidMount() {
+    document.getElementById(this.appNavigationDiv)
+      ? document
+          .getElementById(this.appNavigationDiv)
+          .addEventListener(
+            "handleGridRefresh",
+            () => this.refreshHandler(),
+            false
+          )
+      : null;
     $(document).ready(function () {
       $(".k-textbox").attr("placeholder", "Search");
     });
@@ -123,7 +142,7 @@ export default class OX_Grid extends React.Component {
       table.push(
         <GridColumn
           cell={
-            dataItem.cell
+            dataItem.cell || dataItem.rygRule
               ? (item) => (
                   <CustomCell
                     cellTemplate={dataItem.cell}
@@ -144,6 +163,8 @@ export default class OX_Grid extends React.Component {
             dataItem.filterCell ? CustomFilter(dataItem.filterCell) : undefined
           }
           groupable={dataItem.groupable ? dataItem.groupable : undefined}
+          editor={dataItem.editor ? dataItem.editor : undefined}
+          editable={dataItem.editable}
           headerClassName={
             dataItem.headerClassName ? dataItem.headerClassName : undefined
           }
@@ -162,32 +183,123 @@ export default class OX_Grid extends React.Component {
         />
       );
     });
+
+    this.props.inlineEdit
+      ? table.push(
+          <GridColumn
+            filterable={false}
+            key={Math.random() * 20}
+            reorderable={false}
+            width="175px"
+            title={"Actions"}
+            cell={InlineComponent(
+              this.props.inlineActions,
+              this.inlineEdit,
+              this.refreshHandler
+            )}
+          />
+        )
+      : null;
+
     return table;
+  };
+
+  inlineEdit = (dataItem) => {
+    if (this.state.dataState.group) {
+      if (this.state.dataState.group.length > 0) {
+        var newData = this.state.gridData.data.map((item) => {
+          var newItem = item.items.map((item1) => {
+            return item1.id === dataItem.id
+              ? { ...item1, inEdit: true }
+              : item1;
+          });
+          return {
+            items: newItem,
+            aggregates: item.aggregates,
+            field: item.field,
+            value: item.value
+          };
+        });
+      }
+    } else {
+      var newData = this.state.gridData.data.map((item) => {
+        return item.id === dataItem.id ? { ...item, inEdit: true } : item;
+      });
+    }
+    this.setState({
+      gridData: { data: newData, total: this.state.gridData.total }
+    });
+  };
+
+  itemChange = (event) => {
+    if (this.state.dataState.group) {
+      if (this.state.dataState.group.length > 0) {
+        var data = this.state.gridData.data.map((item) => {
+          var newItem = item.items.map((item1) => {
+            return item1.id === event.dataItem.id
+              ? { ...item1, [event.field]: event.value }
+              : item1;
+          });
+          return {
+            items: newItem,
+            aggregates: item.aggregates,
+            field: item.field,
+            value: item.value
+          };
+        });
+      }
+    } else {
+      var data = this.state.gridData.data.map((item) => {
+        return item.id === event.dataItem.id
+          ? { ...item, [event.field]: event.value }
+          : item;
+      });
+    }
+    this.setState({
+      gridData: { data: data, total: this.state.gridData.total }
+    });
   };
 
   generateGridToolbar() {
     let gridToolbarContent = [];
     if (typeof this.props.gridToolbar == "string") {
       gridToolbarContent.push(
-        <JsxParser
-          bindings={{
-            item: this.props.parentData,
-            moment: moment,
-            profile: this.props.userProfile,
-            baseUrl: this.props.baseUrl,
-            gridData: this.state.gridData.data
-          }}
-          jsx={this.props.gridToolbar}
-        />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <JsxParser
+            bindings={{
+              item: this.props.parentData,
+              moment: moment,
+              profile: this.props.userProfile,
+              baseUrl: this.props.baseUrl,
+              gridData: this.state.gridData.data
+            }}
+            jsx={this.props.gridToolbar}
+          />
+        </div>
       );
     } else if (this.props.gridToolbar) {
       gridToolbarContent.push(this.props.gridToolbar);
     }
     if (this.props.exportToPDF) {
       gridToolbarContent.push(
-        <button className="k-button" onClick={this.exportPDF}>
+        <Button
+          style={{ right: "10px", float: "right" }}
+          primary={true}
+          onClick={this.exportPDF}
+        >
           Export to PDF
-        </button>
+        </Button>
+      );
+    }
+    if (this.props.exportToExcel) {
+      gridToolbarContent.push(
+        <Button
+          style={{ right: "10px", float: "right" }}
+          primary={true}
+          onClick={() => this.exportExcel(this.props.exportToExcel)}
+        >
+          Export to Excel
+        </Button>
       );
     }
     if (this.props.gridOperations) {
@@ -204,6 +316,54 @@ export default class OX_Grid extends React.Component {
   exportPDF = () => {
     this.loader.show();
     this.gridPDFExport.save(this.state.data, this.loader.destroy());
+  };
+
+  exportExcel = (excelConfig) => {
+    var gridData = this.state.gridData;
+    if (excelConfig.columnConfig) {
+      gridData = typeof gridData == "array" ? gridData : gridData.data;
+      gridData = gridData.map((item) => {
+        var tempItem = { ...item };
+        excelConfig.columnConfig.map((column) => {
+          if (column.cell) {
+            var data = tempItem;
+            var _moment = moment;
+            var formatDate = (dateTime, dateTimeFormat) => {
+              let userTimezone,
+                userDateTimeFomat = null;
+              userTimezone = this.userprofile.preferences.timezone
+                ? this.userprofile.preferences.timezone
+                : moment.tz.guess();
+              userDateTimeFomat = this.userprofile.preferences.dateformat
+                ? this.userprofile.preferences.dateformat
+                : "YYYY-MM-DD";
+              dateTimeFormat ? (userDateTimeFomat = dateTimeFormat) : null;
+              return moment(dateTime)
+                .utc(dateTime, "MM/dd/yyyy HH:mm:ss")
+                .clone()
+                .tz(userTimezone)
+                .format(userDateTimeFomat);
+            };
+            var formatDateWithoutTimezone = (dateTime, dateTimeFormat) => {
+              let userDateTimeFomat = null;
+              userDateTimeFomat = this.userprofile.preferences.dateformat
+                ? this.userprofile.preferences.dateformat
+                : "YYYY-MM-DD";
+              dateTimeFormat ? (userDateTimeFomat = dateTimeFormat) : null;
+              return moment(dateTime).format(userDateTimeFomat);
+            };
+            var evalString = column.cell.replace(/moment/g, "_moment");
+            tempItem[column.field] = eval("(" + evalString + ")");
+          }
+        });
+        return tempItem;
+      });
+    }
+    console.log(gridData);
+    this._excelExport.save(
+      gridData,
+      excelConfig.columnConfig ? undefined : this._grid.columns
+    );
   };
 
   expandChange = (event) => {
@@ -266,18 +426,15 @@ export default class OX_Grid extends React.Component {
   };
 
   updatePageContent = (config) => {
-    let eventDiv = document.getElementsByClassName(
-      this.props.appId + "_breadcrumbParent"
-    )[0];
-
-    let ev = new CustomEvent("updateBreadcrumb", {
-      detail: config,
-      bubbles: true
-    });
-    eventDiv.dispatchEvent(ev);
-
-    let ev2 = new CustomEvent("updatePageView", {
-      detail: config.details,
+    let eventDiv = document.getElementById(this.appNavigationDiv);
+    var pageDetails = {
+      title: config.name,
+      pageContent: config.details,
+      pageId: null,
+      parentPage: this.props.pageId
+    };
+    let ev2 = new CustomEvent("addPage", {
+      detail: pageDetails,
       bubbles: true
     });
     eventDiv.dispatchEvent(ev2);
@@ -287,6 +444,7 @@ export default class OX_Grid extends React.Component {
     var operationsList = [];
     var listData = this.state.gridData.data;
     config.actions.map((i) => {
+      var profile = this.userprofile;
       let result = eval(i.rule);
       result ? operationsList.push(i) : null;
     });
@@ -382,6 +540,9 @@ export default class OX_Grid extends React.Component {
 
         <Grid
           data={this.state.gridData.data}
+          ref={(grid) => {
+            this._grid = grid;
+          }}
           total={
             this.state.gridData.total
               ? parseInt(this.state.gridData.total)
@@ -416,6 +577,8 @@ export default class OX_Grid extends React.Component {
           selectedField="selected"
           expandField={this.props.expandable ? "expanded" : null}
           {...this.state.dataState}
+          editField={this.props.inlineEdit ? "inEdit" : undefined}
+          onItemChange={this.itemChange}
         >
           {this.generateGridToolbar() && this.state.apiActivityCompleted ? (
             <GridToolbar>
@@ -456,9 +619,24 @@ export default class OX_Grid extends React.Component {
                   : this.state.gridData.data
               }
             >
-              {this.createColumns(this.props.exportToPDF.columnConfig)}
+              {this.createColumns(this.props.exportToPDF.columnConfig ?this.props.exportToPDF.columnConfig : this.props.columnConfig )}
             </Grid>
           </GridPDFExport>
+        ) : null}
+        {this.props.exportToExcel ? (
+          <ExcelExport ref={(excelExport) => (this._excelExport = excelExport)}>
+            {this.props.exportToExcel.columnConfig
+              ? this.props.exportToExcel.columnConfig.map((item) => (
+                  <ExcelExportColumn
+                    field={item.field}
+                    title={item.title}
+                    cellOptions={item.cellOptions}
+                    locked={item.locked}
+                    width={item.width}
+                  />
+                ))
+              : null}
+          </ExcelExport>
         ) : null}
       </div>
     );
@@ -467,6 +645,30 @@ export default class OX_Grid extends React.Component {
 
 class CustomCell extends GridCell {
   render() {
+    var formatDate = (dateTime, dateTimeFormat) => {
+      let userTimezone,
+        userDateTimeFomat = null;
+      userTimezone = this.props.userProfile.preferences.timezone
+        ? this.props.userProfile.preferences.timezone
+        : moment.tz.guess();
+      userDateTimeFomat = this.props.userProfile.preferences.dateformat
+        ? this.props.userProfile.preferences.dateformat
+        : "MM/dd/yyyy";
+      dateTimeFormat ? (userDateTimeFomat = dateTimeFormat) : null;
+      return moment(dateTime)
+        .utc(dateTime, "MM/dd/yyyy HH:mm:ss")
+        .clone()
+        .tz(userTimezone)
+        .format(userDateTimeFomat);
+    };
+    var formatDateWithoutTimezone = (dateTime, dateTimeFormat) => {
+      let userDateTimeFomat = null;
+      userDateTimeFomat = this.props.userProfile.preferences.dateformat
+        ? this.props.userProfile.preferences.dateformat
+        : "MM/dd/yyyy";
+      dateTimeFormat ? (userDateTimeFomat = dateTimeFormat) : null;
+      return moment(dateTime).format(userDateTimeFomat);
+    };
     let checkType = typeof this.props.cellTemplate;
     if (checkType == "function") {
       var cellTemplate = this.props.cellTemplate(this.props.dataItem);
@@ -475,16 +677,18 @@ class CustomCell extends GridCell {
       } else {
         return <td className="gridActions">{cellTemplate}</td>;
       }
-    } else if (checkType == "string") {
+    } else if (checkType == "string"  || this.props.dataItem.rygRule) {
       return (
         <JsxParser
           bindings={{
             item: this.props.dataItem,
             moment: moment,
+            formatDate: formatDate,
+            formatDateWithoutTimezone: formatDateWithoutTimezone,
             profile: this.props.userProfile,
             baseUrl: this.props.baseUrl
           }}
-          jsx={this.props.cellTemplate}
+          jsx={this.props.cellTemplate ? this.props.cellTemplate : this.props.dataItem.rygRule ? this.props.dataItem.rygRule : "<td></td>" }
         />
       );
     }
@@ -512,7 +716,7 @@ OX_Grid.defaultProps = {
       { text: "grid.filterIsNullOperator", operator: "isnull" },
       { text: "grid.filterIsNotNullOperator", operator: "isnotnull" },
       { text: "grid.filterIsEmptyOperator", operator: "isempty" },
-      { text: "grid.filterIsNotEmptyOperator", operator: "isnotempty" },
+      { text: "grid.filterIsNotEmptyOperator", operator: "isnotempty" }
     ],
     numeric: [
       { text: "grid.filterEqOperator", operator: "eq" },
@@ -522,7 +726,7 @@ OX_Grid.defaultProps = {
       { text: "grid.filterLteOperator", operator: "lte" },
       { text: "grid.filterLtOperator", operator: "lt" },
       { text: "grid.filterIsNullOperator", operator: "isnull" },
-      { text: "grid.filterIsNotNullOperator", operator: "isnotnull" },
+      { text: "grid.filterIsNotNullOperator", operator: "isnotnull" }
     ],
     date: [
       { text: "grid.filterEqOperator", operator: "eq" },
@@ -532,10 +736,10 @@ OX_Grid.defaultProps = {
       { text: "grid.filterBeforeOperator", operator: "lt" },
       { text: "grid.filterBeforeOrEqualOperator", operator: "lte" },
       { text: "grid.filterIsNullOperator", operator: "isnull" },
-      { text: "grid.filterIsNotNullOperator", operator: "isnotnull" },
+      { text: "grid.filterIsNotNullOperator", operator: "isnotnull" }
     ],
-    boolean: [{ text: "grid.filterEqOperator", operator: "eq" }],
-  },
+    boolean: [{ text: "grid.filterEqOperator", operator: "eq" }]
+  }
 };
 
 OX_Grid.propTypes = {

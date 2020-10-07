@@ -9,11 +9,18 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Analytics\AnalyticsAbstract;
 
 
-class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
+class AnalyticsEngineImpl extends AnalyticsAbstract {
 
 	private $hasGroup;
-    public function __construct($config,$appDBAdapter,$appConfig) {
-		parent::__construct($config,$appDBAdapter,$appConfig);
+    private $elasticService;
+    public function __construct($appDBAdapter,$appConfig, ElasticService $elasticService) {
+		parent::__construct(null,$appDBAdapter,$appConfig);
+		$this->elasticService = $elasticService;
+    }
+
+    public function setConfig($config){
+    	parent::setConfig($config);
+    	$this->elasticService->setConfig($config);
     }
 
     public function getData($app_name,$entity_name,$parameters)
@@ -29,7 +36,7 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 			if ($entity_name) {
 				$query['filter'][]=['entity_name','==',$entity_name];
 			}
-            $elasticService = new ElasticService($this->config);
+            $elasticService = $this->elasticService;
 			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
 			$finalResult['meta'] = $query;
 			$finalResult['meta']['type'] = $result['type'];
@@ -58,7 +65,7 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 
 
     private function formatQuery($parameters) {
-		$range=null;
+		$frequency=null;
 		$field = null;
 		$dateperiod = null;
 		$filter =array();
@@ -71,9 +78,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 			$period = explode('/', $dateperiod);
 			$startdate = date('Y-m-d', strtotime($period[0]));
 			$enddate =  date('Y-m-d', strtotime($period[1]));
-		} else {
-			$startdate = date('Y').'-01-01';
-			$enddate = date('Y').'-12-31';
+//		} else {
+//			$startdate = date('Y').'-01-01';
+//			$enddate = date('Y').'-12-31';
 		}
 		if (!empty($parameters['field'])) {
 			if (substr(strtolower($parameters['field']), 0, 5) == 'date(') {
@@ -130,23 +137,30 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 					$group[] = 'period-year';
 					break;
 			}
+			$frequency = $datetype;
 		}
-		if (!isset($parameters['skipdate']) && $datetype)
-			$range[$datetype] = $startdate . "/" . $enddate;
+		if (!isset($parameters['skipdate']) && $datetype && isset($startdate)){
+			$filter[] = [[$datetype,'>=','date:'.$startdate],'AND',[$datetype,'<=','date:'.$enddate]];
+		}
+			// $range[$datetype] = $startdate . "/" . $enddate;
 		if (isset($parameters['filter'])) {
 			$filter[] = $parameters['filter'];
 		}
 		if (isset($parameters['inline_filter'])) {
 			foreach($parameters['inline_filter'] as $inlineArry) {
+				$inlineArry[3] = 'inline';
 				array_unshift($filter, $inlineArry);
 			}
 		}
 		$this->hasGroup = (empty($group)) ? 0 : 1;
 		if (!empty($group)) $group = array_map('strtolower', $group);
 
-		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'range' => $range, 'aggregates' => $aggregates);
+		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'aggregates' => $aggregates, 'frequency'=>$frequency);
 		if (isset($parameters['pagesize'])) {
 			$returnarray['pagesize'] = $parameters['pagesize'];
+		}
+		if (isset($parameters['excludes'])) {
+			$returnarray['excludes'] = $parameters['excludes'];
 		}
 		if (isset($parameters['list'])) {
 				if($parameters['list']=="*"){
@@ -189,8 +203,12 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 //					$finalresult[] = array(implode(" - ",$config['group'])=>$key.' - '.$data['key'],'count'=>$value);
 
 				} else {
-					$value = $data['value']['value'];					
-					$tempresult[$field]= $value;
+					$value = $data['value']['value'];
+					if ($operation=="count_distinct") {
+						$tempresult['count']= $value;	
+					}else {
+						$tempresult[$field]= $value;
+					}					
 					$finalresult[] = $tempresult;
 //					$finalresult[] = array(implode(" - ",$config['group'])=>$key.' - '.$data['key'],$field=>$value);
 	
@@ -212,6 +230,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 		$finalresult = array();
 		$operation = key($config['aggregates']);
 		$field = $config['aggregates'][$operation];
+		if ($operation=='count_distinct') {
+			$field = 'count';
+		}
 		$qtrtranslate = array('Jan'=>'Q1','Apr'=>'Q2','Jul'=>'Q3','Oct'=>'Q4');
 		if (isset($config['group'])) {
 			if (count($config['group'])==1) {
@@ -244,9 +265,6 @@ class AnalyticsEngineImpl extends AnalyticsAbstract implements AnalyticsEngine {
 		return $finalresult;
 	}
 
-	public function getMetaData($parameters) {
-
-	}
 
 }
 ?>

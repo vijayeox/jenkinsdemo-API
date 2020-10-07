@@ -10,4 +10,5 @@ interface AppDelegate
     public function getUserId();
     public function getusername();
     public function getOrgId();
+    public function getUserDetailsByIdentifier($identifier,$identifierName);
 }

@@ -4,22 +4,28 @@ namespace Oxzion\Analytics\API;
 
 use Oxzion\Service\QuickBooksService;
 use Zend\Db\Sql\Sql;
-use Oxzion\Analytics\AnalyticsEngine;
 
 use function GuzzleHttp\json_encode;
 
-class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI implements AnalyticsEngine
+class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI
 {
 
-  public function __construct($config, $appDBAdapter, $appConfig)
+  private $quickbookService;
+
+  public function __construct($appDBAdapter, $appConfig, QuickBooksService $quickbookService)
   {
-    parent::__construct($config, $appDBAdapter, $appConfig);
+    parent::__construct($appDBAdapter, $appConfig);
+    $this->quickbookService = $quickbookService;
   }
 
+  public function setConfig($config){
+    parent::setConfig($config);
+    $this->quickbookService->setConfig($config);
+  }
   public function getData($app_name,$entity_name,$parameters)
   {
     $finalResult['meta']=$parameters;
-    $qbService = new QuickBooksService($this->config);
+    $qbService = $this->quickbookService;
     $dateperiod = null;
     if (!empty($parameters['filter']) || !empty($parameters['inline_filter'])) {
       $parameters = $this->parseFilter($parameters);
@@ -59,19 +65,28 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI implements Analyt
   }
 
 
-  public function parseFilter($parameters){
+  public function parseFilter($parameters)
+  {
     if (isset($parameters['filter'])) {
-        $filter = $parameters['filter'];
+      $filter = $parameters['filter'];
     }
-   if (isset($parameters['inline_filter'])) {
-        $filter = $parameters['inline_filter'];
+    if (isset($parameters['inline_filter'])) {
+      $filter = $parameters['inline_filter'];
     }
-    if (isset($filter[0][0][0])){
-      if ($filter[0][0][0]=='date_period' || $filter[0][0][0]=='date-period') {
-        $startdate=Date('Y-m-d',strtotime($filter[0][0][2]));
-        $enddate=Date('Y-m-d',strtotime($filter[0][2][2]));
-        $parameters['date_period']=$startdate.'/'.$enddate;
-      }  
+    if (isset($filter[0][0][0])) {
+      if ($filter[0][0][0] == 'date_period' || $filter[0][0][0] == 'date-period') {
+        $startdate = $filter[0][0][2];
+        $enddate = $filter[0][2][2];
+        if (substr($startdate, 0, 5) == "date:") {
+          $startdate = substr($startdate, 5);
+        }
+        if (substr($enddate, 0, 5) == "date:") {
+          $enddate = substr($enddate, 5);
+        }
+        $startdate = Date('Y-m-d', strtotime($startdate));
+        $enddate = Date('Y-m-d', strtotime($enddate));
+        $parameters['date_period'] = $startdate . '/' . $enddate;
+      }
     }
     return $parameters;
   }

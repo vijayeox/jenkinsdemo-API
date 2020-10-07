@@ -19,6 +19,9 @@ class AuthSuccessListener
             AuthContext::put($key, $value);
             if ($key == AuthConstants::USERNAME) {
                 $result = $this->userService->getUserContextDetails($value);
+                if(isset($result) && count($result)==0){
+                        return [];
+                }
                 AuthContext::put(AuthConstants::USER_ID, $result['id']);
                 AuthContext::put(AuthConstants::NAME, $result['name']);
                 AuthContext::put(AuthConstants::ORG_ID, $result['orgid']);

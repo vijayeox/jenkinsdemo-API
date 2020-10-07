@@ -18,95 +18,67 @@ class DataSourceService extends AbstractService
 {
 
     private $table;
+    private $analyticEngines;
 
-    public function __construct($config, $dbAdapter, DataSourceTable $table)
+    public function __construct($config, $dbAdapter, DataSourceTable $table, array $analyticEngines)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->analyticEngines = $analyticEngines;
     }
 
     public function createDataSource($data)
     {
-        $form = new DataSource();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
+        $dataSource = new DataSource($this->table);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $form->exchangeWithSpecificKey($data,'value');
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
+        $dataSource->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID));
+        $dataSource->assign($data);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $this->beginTransaction();
+            $dataSource->save();
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $dataSource->getGenerated();
     }
 
     public function updateDataSource($uuid, $data)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($data['version']))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $form = new DataSource();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate($data);
-        $count = 0;
+        $dataSource = new DataSource($this->table);
+        $dataSource->loadByUuid($uuid);
+        $dataSource->assign($data);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $dataSource->save();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
+        return $dataSource->getGenerated();
     }
 
     public function deleteDataSource($uuid,$version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        if(!isset($version))
-        {
-            throw new Exception("Version is not specified, please specify the version");
-        }
-        $data = array('version' => $version,'isdeleted' => 1);
-        $form = new DataSource();
-        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
-        $form->exchangeWithSpecificKey($data,'value',true);
-        $form->updateValidate($data);
-        $count = 0;
+        $dataSource = new DataSource($this->table);
+        $dataSource->loadByUuid($uuid);
+        $dataSource->assign([
+            'version' => $version, 
+            'isdeleted' => 1
+        ]);
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
+            $this->beginTransaction();
+            $dataSource->save();
+            $this->commit();
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getDataSource($uuid)
@@ -176,21 +148,25 @@ class DataSourceService extends AbstractService
                 case 'ELASTIC':
                 case 'ELASTICSEARCH':
                     $elasticConfig['elasticsearch'] = $dsConfig['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines["ELASTIC"];
+                    $analyticsObject->setConfig($elasticConfig);
                     break;
                 case 'MYSQL':
                     $dsConfig = $dsConfig['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEngineMySQLImpl($dsConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines[$type];
+                    $analyticsObject->setConfig($dsConfig);
                     break;
                 case 'POSTGRES':
                 case 'POSTGRESQL':
                     $dsConfig = $dsConfig['data'];
-                    $analyticsObject = new  \Oxzion\Analytics\Relational\AnalyticsEnginePostgresImpl($dsConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines["POSTGRES"];
+                    $analyticsObject->setConfig($dsConfig);
                     break;
                 case 'QUICKBOOKS':
                     $dsConfig = $dsConfig['data'];
                     $dsConfig['dsid']=$response[0]['id'];
-                    $analyticsObject = new  \Oxzion\Analytics\API\AnalyticsEngineQuickBooksImpl($dsConfig,$this->dbAdapter,$this->config);
+                    $analyticsObject = $this->analyticEngines[$type];
+                    $analyticsObject->setConfig($dsConfig);
                     break;
             }
         }

@@ -8,7 +8,6 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
 {
     public function __construct(){
         parent::__construct();
-        $this->status = array('OWSI' => 'Instructor','MI' => 'Instructor','AL' => 'Instructor','EFR' => 'Instructor','MSDT' => 'Instructor','UI' => 'Instructor','DM' => 'Dive Master','AI' => 'Assistant Instructor','AIN' => 'Assistant Instructor','LFSI' => 'Swim Instructor','FDIC' => 'Freedive Instructor');
     }
 
     // Padi Verification is performed here
@@ -21,7 +20,7 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
         if(!isset($data['member_number'])){
             return;
         }
-        $select = "Select firstname, MI as initial, lastname,insurance_type as status FROM padi_data WHERE member_number ='".$data['member_number']."'";
+        $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$data['member_number']."'";
         $result = $persistenceService->selectQuery($select);
         if($result->count() > 0){
             $response = array();
@@ -34,18 +33,17 @@ class NamedInsuredPadiVerification extends AbstractAppDelegate
                 return $data;      
             }
             $response[0]['nameOfInstitution'] = 'PADI';
-            if(isset($response[0]['status']) && $response[0]['status'] != ''){
-               if($response[0]['status'] == 'PM'){
-                    $returnArray['namedInsuredPadiVerified'] = false;
+            if(isset($response[0]['rating']) && $response[0]['rating'] != ''){
+                if($response[0]['rating'] == 'PM' || $response[0]['firstname'] == ''){
+                    $returnArray['membersPadiVerified'] = false;
                     $data = array_merge($data,$returnArray);
                     return $data;        
-                }else if(array_key_exists($response[0]['status'], $this->status)){
-                    $response[0]['status'] = $this->status[$response[0]['status']];    
-                }else{
-                    $response[0]['status'] = " ";
                 }
             }else{
-                $response[0]['status'] = " ";
+                $response[0]['rating'] = " ";
+            }
+            if(count($response) > 0){
+                $response[0]['rating'] = implode(",",array_column($response, 'rating'));
             }
             $returnArray = array_merge($data,$response[0]);
             $returnArray['namedInsuredPadiVerified'] = true;

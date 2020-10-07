@@ -12,15 +12,19 @@ use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ResponseInterface;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
 use Zend\Stdlib\ArrayUtils;
+use Oxzion\Service\UserService;
+use Oxzion\Auth\AuthSuccessListener;
+use Oxzion\Auth\AuthConstants;
 
 class ServiceTest extends TestCase
 {
-    protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
+    protected $adminUser = 'admintest'; //TODO Need to put as global setup
     protected $adminUserId = 1;
-    protected $employeeUser = 'rakshithtest';
+    protected $employeeUser = 'employeetest';
     protected $employeeUserId = 2;
-    protected $managerUser = 'karantest';
+    protected $managerUser = 'managertest';
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;
@@ -84,6 +88,11 @@ class ServiceTest extends TestCase
     //this is required to ensure that same connection is used by dbunit and zend db
     protected function setupConnection()
     {
+    }
+
+    protected function getSetUpOperation()
+    {
+        return Factory::INSERT();
     }
 
     /**
@@ -214,7 +223,10 @@ class ServiceTest extends TestCase
         $this->application->getServiceManager()->get('SendResponseListener')->detach($events);
 
         return $this->application;
+    
     }
+
+
 
     /**
      * Get the service manager of the application object
@@ -373,5 +385,29 @@ class ServiceTest extends TestCase
             ));
         }
         $this->assertEquals($module, $match);
+    }
+
+    protected function initAuthContext($username){
+         $userService = $this->getApplicationServiceLocator()->get(UserService::class);
+         $authSuccessListener = new AuthSuccessListener($userService);
+         $authSuccessListener->loadUserDetails(array(AuthConstants::USERNAME => $username));
+    }
+
+    protected function executeQueryTest($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
+    }
+
+    protected function executeUpdate($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        return $result;
     }
 }

@@ -4,7 +4,31 @@
 	"tags": [],
 	"owner": "5ddfaa682859774314661851",
 	"components": [{
-		"label": "Reason for Cancellation:",
+		"label": "ApproverName",
+		"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].name;\n  }\n}",
+		"key": "approverName",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"hideOnChildrenHidden": false
+	}, {
+		"label": "ApproverEmailId",
+		"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].email;\n  }\n}",
+		"key": "approverEmailId",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"hideOnChildrenHidden": false
+	}, {
+		"label": "ApproverDesignation",
+		"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].designation;\n  }\n}",
+		"key": "approverDesignation",
+		"type": "hidden",
+		"input": true,
+		"tableView": false,
+		"hideOnChildrenHidden": false
+	}, {
+		"label": "Reason for Cancellation",
 		"widget": "choicesjs",
 		"placeholder": "--Select one--",
 		"tableView": true,
@@ -14,19 +38,21 @@
 				"value": "",
 				"label": ""
 			}],
-			"custom": "var list = [{\n    \"label\": \"Non-payment of Premium\",\n    \"value\": \"nonPaymentOfPremium\"\n}, {\n    \"label\": \"PADI Membership not current\",\n    \"value\": \"padiMembershipNotCurrent\"\n}, {\n    \"label\": \"Non-Sufficient Funds\",\n    \"value\": \"nonSufficientFunds\"\n}, {\n    \"label\": \"Others\",\n    \"value\": \"others\"\n}]\nif (data['product'] == 'Dive Boat') {\n    list.push({\n        \"label\": \"Boat Sold\",\n        \"value\": \"boatSold\"\n    })\n}\nif (data['product'] == 'Dive Store') {\n    list.push({\n        \"label\": \"Store Sold\",\n        \"value\": \"storeSold\"\n    })\n}\nconsole.log(list);\nvalues = list"
+			"custom": "var list = [{\n    \"label\": \"Non-payment of Premium\",\n    \"value\": \"nonPaymentOfPremium\"\n}, {\n    \"label\": \"PADI Membership not current\",\n    \"value\": \"padiMembershipNotCurrent\"\n}, {\n    \"label\": \"Non-Sufficient Funds\",\n    \"value\": \"nonSufficientFunds\"\n}, {\n    \"label\": \"Others\",\n    \"value\": \"others\"\n}]\nif (data['product'] == 'Dive Boat') {\n    list.push({\n        \"label\": \"Boat Sold\",\n        \"value\": \"boatSold\"\n    })\n}\nif (data['product'] == 'Dive Store') {\n    list.push({\n        \"label\": \"Store Sold\",\n        \"value\": \"storeSold\"\n    });\n    list.push({\n        \"label\": \"Business Closed\",\n        \"value\": \"Business CLosed\"\n    });\n}\nconsole.log(list);\nvalues = list"
 		},
 		"selectThreshold": 0.3,
 		"calculateValue": "if (data.reasonForUserCancellation) {\n    value = data.reasonForUserCancellation;\n   \n}",
 		"allowCalculateOverride": true,
 		"validate": {
 			"required": true,
-			"unique": false,
-			"multiple": false
+			"customMessage": "Please select a Reason for Cancellation"
 		},
 		"key": "csrCancellationReason",
 		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse {\n  show = false;\n}",
 		"type": "select",
+		"indexeddb": {
+			"filter": {}
+		},
 		"input": true,
 		"lockKey": true,
 		"dataGridLabel": false
@@ -37,49 +63,16 @@
 		"type": "hidden",
 		"input": true,
 		"tableView": true,
-		"lockKey": true,
-		"isNew": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
-	}, {
-		"label": "Amount to be paid to Reinstate Policy:",
-		"labelPosition": "left-left",
-		"prefix": "$",
-		"mask": false,
-		"spellcheck": true,
-		"tableView": true,
-		"delimiter": true,
-		"requireDecimal": true,
-		"inputFormat": "plain",
-		"validate": {
-			"required": true,
-			"unique": false,
-			"multiple": false
-		},
-		"key": "reinstateAmount",
-		"customConditional": "show = data.reasonforCsrCancellation.value == 'nonSufficientFunds' || data.reasonforCsrCancellation.value =='nonPaymentOfPremium' && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true : false;",
-		"type": "number",
-		"decimalLimit": 2,
-		"input": true,
-		"inputType": "number",
-		"lockKey": true,
-		"labelWidth": 30,
-		"labelMargin": 3,
-		"isNew": false
+		"lockKey": true
 	}, {
 		"label": "Others",
 		"autoExpand": false,
 		"customClass": "others",
-		"spellcheck": true,
 		"tableView": true,
 		"inputFormat": "plain",
 		"calculateValue": "if(data.othersUser){\n  value = data.othersUser\n}",
 		"validate": {
-			"required": true,
-			"unique": false,
-			"multiple": false
+			"required": true
 		},
 		"key": "othersCsr",
 		"customConditional": "if (data.privileges){\n  show = \n  ((data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null) \n  && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] \n  && (data.reasonforCsrCancellation.value =='others')) ? true: false;\n}\nelse{\n  show = false;\n}",
@@ -87,10 +80,87 @@
 		"input": true,
 		"lockKey": true
 	}, {
-		"input": true,
+		"label": "Amount to be paid to Reinstate Policy",
+		"labelPosition": "left-left",
+		"prefix": "$",
+		"mask": false,
+		"spellcheck": true,
 		"tableView": true,
+		"delimiter": true,
+		"requireDecimal": false,
+		"inputFormat": "plain",
+		"clearOnHide": false,
+		"validate": {
+			"required": true,
+			"customMessage": "Please enter the Amount to be paid to Reinstate Policy"
+		},
+		"key": "reinstateAmount",
+		"customConditional": "show = data.reasonforCsrCancellation.value == 'nonSufficientFunds' || data.reasonforCsrCancellation.value =='nonPaymentOfPremium' && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true : false;",
+		"type": "number",
+		"labelWidth": 30,
+		"labelMargin": 3,
+		"decimalLimit": 0,
+		"input": true,
+		"inputType": "number",
+		"lockKey": true
+	}, {
+		"label": "Effective Date",
+		"displayInTimezone": "utc",
+		"allowInput": false,
+		"format": "MM-dd-yyyy",
+		"tableView": false,
+		"enableMinDateInput": false,
+		"datePicker": {
+			"disableWeekends": false,
+			"disableWeekdays": false,
+			"datepickerMode": "day"
+		},
+		"enableMaxDateInput": false,
+		"enableTime": false,
+		"timePicker": {
+			"showMeridian": false
+		},
+		"clearOnHide": false,
+		"allowCalculateOverride": true,
+		"validate": {
+			"required": true,
+			"custom": "if (data.cancellationDate){ \n  valid = ((moment(data.cancellationDate).diff(moment(data['start_date'])) >=0) && (moment(data.cancellationDate).diff(moment(data.end_date)) <=0)) ? true : \"Effective date should be between policy period\";\n}"
+		},
+		"key": "cancellationDate",
+		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse {\n  show = false;\n}",
+		"type": "datetime",
+		"input": true,
+		"widget": {
+			"type": "calendar",
+			"displayInTimezone": "utc",
+			"language": "en",
+			"useLocaleSettings": false,
+			"allowInput": false,
+			"mode": "single",
+			"enableTime": false,
+			"noCalendar": false,
+			"format": "MM-dd-yyyy",
+			"hourIncrement": 1,
+			"minuteIncrement": 1,
+			"time_24hr": true,
+			"minDate": null,
+			"disableWeekends": false,
+			"disableWeekdays": false,
+			"maxDate": null
+		},
+		"hideOnChildrenHidden": false
+	}, {
+		"label": "CancelDate",
+		"calculateValue": "value = data['cancellationDate'] ? moment(data['cancellationDate']).format(\"YYYY-MM-DD\") : moment().format(\"YYYY-MM-DD\");",
+		"key": "cancelDate",
+		"type": "hidden",
+		"input": true,
+		"tableView": false
+	}, {
 		"label": "Cancellation Status:",
-		"key": "cancellationStatus",
+		"optionsLabelPosition": "right",
+		"inline": false,
+		"tableView": true,
 		"values": [{
 			"value": "approved",
 			"label": "Approved",
@@ -100,151 +170,86 @@
 			"label": "Not Approved",
 			"shortcut": ""
 		}],
-		"validate": {
-			"required": true
-		},
-		"type": "radio",
-		"optionsLabelPosition": "right",
-		"inline": false,
+		"key": "cancellationStatus",
 		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse{\n  show = false;\n}",
+		"type": "radio",
 		"labelWidth": 30,
 		"labelMargin": 3,
+		"input": true,
 		"lockKey": true
 	}, {
-		"label": "Reason for Cancel Policy Not Approved:",
+		"label": "Reinstatement Criteria",
+		"reorder": false,
+		"addAnother": "Add More",
+		"addAnotherPosition": "bottom",
+		"defaultOpen": false,
+		"layoutFixed": false,
+		"enableRowGroups": false,
+		"tableView": false,
+		"defaultValue": [{
+			"reason": "",
+			"criteria": ""
+		}],
+		"validate": {
+			"minLength": 1
+		},
+		"key": "reinstatementCriteria",
+		"conditional": {
+			"show": true,
+			"when": "cancellationStatus",
+			"eq": "approved"
+		},
+		"type": "datagrid",
+		"input": true,
+		"components": [{
+			"label": "Text Field",
+			"hideLabel": true,
+			"tableView": true,
+			"validate": {
+				"required": true,
+				"customMessage": "Reinstatement Criteria is required."
+			},
+			"key": "criteria",
+			"type": "textfield",
+			"input": true
+		}]
+	}, {
+		"label": "Reason for Cancel Policy Not Approved",
 		"autoExpand": false,
-		"spellcheck": true,
 		"tableView": true,
 		"inputFormat": "plain",
 		"validate": {
 			"required": true,
-			"unique": false,
-			"multiple": false
+			"customMessage": "Please Enter the reason for not Approving the Cancellation of the Policy"
 		},
 		"key": "reasonforRejection",
 		"customConditional": "show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && data.cancellationStatus == 'notApproved' ? true : false;",
 		"type": "textarea",
 		"input": true,
-		"lockKey": true,
-		"isNew": false
-	}, {
-		"label": "Reason for Cancellation",
-		"widget": "choicesjs",
-		"tableView": true,
-		"dataSrc": "custom",
-		"data": {
-			"values": [{
-				"value": "",
-				"label": ""
-			}],
-			"custom": "var list = [{\"label\": \"PADI Membership not current\",\"value\" : \"padiMembershipNotCurrent\"},{\"label\": \"Others\",\"value\" : \"others\"}\n]\nif(data['product'] == 'Dive Boat'){\nlist.push({\"label\": \"Boat Sold\",\"value\" : \"boatSold\"})\n}\nelse if(data['product'] == 'Dive Store'){\nlist.push({\"label\": \"Store Sold\",\"value\" : \"storeSold\"})\n}\nvalues = list"
-		},
-		"selectThreshold": 0.3,
-		"validate": {
-			"required": true,
-			"unique": false,
-			"multiple": false
-		},
-		"key": "userCancellationReason",
-		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_MY_POLICY_READ']? true : false;\n}\nelse{\n  show = false;\n}",
-		"type": "select",
-		"input": true,
-		"lockKey": true,
-		"isNew": false
+		"lockKey": true
 	}, {
 		"label": "Reason for User Cancellation",
 		"calculateValue": "if(data['userCancellationReason']){\n  value = data['userCancellationReason'];\n}",
 		"key": "reasonForUserCancellation",
 		"type": "hidden",
 		"input": true,
-		"tableView": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
-	}, {
-		"label": "Others",
-		"autoExpand": false,
-		"customClass": "others",
-		"spellcheck": true,
-		"tableView": true,
-		"inputFormat": "plain",
-		"validate": {
-			"required": true,
-			"unique": false,
-			"multiple": false
-		},
-		"key": "othersUser",
-		"customConditional": "if (data.privileges){\n  show = ((data.privileges['MANAGE_MY_POLICY_READ']) && data.reasonForUserCancellation.value == 'others') ? true : false;\n}\nelse{\n  show = false;\n}",
-		"type": "textarea",
-		"input": true,
-		"lockKey": true,
-		"isNew": false
-	}, {
-		"type": "panel",
-		"title": "Cancel Confirmation",
-		"components": [{
-			"key": "page7Content2",
-			"label": "Content",
-			"input": false,
-			"attrs": [{
-				"value": "",
-				"attr": ""
-			}],
-			"content": "This is not a binder of insurance coverage, and does not bind the insurer or Vicencia Buckley, a division of HUB International, until approved by the insurer and a premium is paid by the applicant and all required documents are received. We (I) acknowledge that this policy does not cover in water accidents and that we (I) have or require Professional Liability in place for in water accidents. No coverage is provided under this policy for Liquor Liability. It is your duty to correct any wrong information and to complete any omitted information on this application. Concealment, misrepresenting, or stating falsely on this application may result in your policy being voided or rescinded at any time, even after a loss",
-			"type": "htmlelement",
-			"hideLabel": true,
-			"tableView": false,
-			"validate": {
-				"unique": false,
-				"multiple": false
-			}
-		}, {
-			"label": "I have read and agree to Terms of Service, Cancellation Policy and Privacy Policy.",
-			"tableView": true,
-			"defaultValue": false,
-			"validate": {
-				"required": true,
-				"customMessage": "Confirmation Required",
-				"unique": false,
-				"multiple": false
-			},
-			"key": "userAgreement",
-			"type": "checkbox",
-			"input": true,
-			"dataGridLabel": false
-		}],
-		"input": false,
-		"key": "cancelConfirmation",
-		"theme": "primary",
-		"tableView": false,
-		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_MY_POLICY_READ']? true : false;\n}\nelse{\n  show = false;\n}",
-		"lockKey": true,
-		"label": "Panel"
+		"tableView": false
 	}, {
 		"label": "Policy Status",
 		"calculateValue": "if(data.privileges && data.privileges['MANAGE_MY_POLICY_READ']){\n  value = 'Cancellation Approval Pending';\n}",
 		"key": "policyStatus",
 		"type": "hidden",
 		"input": true,
-		"tableView": false,
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"tableView": false
 	}, {
 		"input": true,
 		"label": "Submit",
 		"tableView": false,
 		"key": "submit",
-		"type": "button",
-		"validate": {
-			"unique": false,
-			"multiple": false
-		}
+		"type": "button"
 	}],
 	"revisions": "original",
-	"_vid": 81,
+	"_vid": 127,
 	"title": "Cancel Policy Generic",
 	"display": "form",
 	"access": [{
@@ -258,7 +263,7 @@
 	"path": "cancelpolicygeneric",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-08T05:30:33.387Z",
-	"modified": "2020-03-26T12:54:56.433Z",
+	"modified": "2020-08-07T15:07:09.843Z",
 	"machineName": "testdivehub:cancelPolicyGeneric",
 	"controller": ""
 }

@@ -14,6 +14,7 @@ class Module
     private static $logInitialized = false;
     public function init(ModuleManager $moduleManager)
     {
+        ini_set('max_execution_time', 100); 
         $events = $moduleManager->getEventManager();
         // Registering a listener at default priority, 1, which will trigger
         // after the ConfigListener merges config.
@@ -40,6 +41,35 @@ class Module
                 Auth\AuthSuccessListener::class => function ($container) {
                     return new Auth\AuthSuccessListener($container->get(Service\UserService::class));
                 },
+                Service\AppService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\AppService($container->get('config'), 
+                                                $dbAdapter, 
+                                                $container->get(Model\AppTable::class), 
+                                                $container->get(\Oxzion\Service\WorkflowService::class), 
+                                                $container->get(\Oxzion\Service\FormService::class), 
+                                                $container->get(\Oxzion\Service\FieldService::class), 
+                                                $container->get(\Oxzion\Service\JobService::class), 
+                                                $container->get(\Oxzion\Service\OrganizationService::class), 
+                                                $container->get(\Oxzion\Service\EntityService::class), 
+                                                $container->get(\Oxzion\Service\PrivilegeService::class), 
+                                                $container->get(\Oxzion\Service\RoleService::class), 
+                                                $container->get(\App\Service\MenuItemService::class), 
+                                                $container->get(\App\Service\PageService::class),
+                                                $container->get(\Oxzion\Service\UserService::class),
+                                                $container->get(\Oxzion\Service\BusinessRoleService::class)
+                        );
+                },
+                Model\AppTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\AppTableGateway::class);
+                    return new Model\AppTable($tableGateway);
+                },
+                Model\AppTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\App());
+                    return new TableGateway('ox_app', $dbAdapter, null, $resultSetPrototype);
+                },
                 Service\UserService::class => function ($container) {
                     return new Service\UserService(
                         $container->get('config'),
@@ -48,7 +78,10 @@ class Module
                         $container->get(Service\AddressService::class),
                         $container->get(Service\EmailService::class),
                         $container->get(Service\TemplateService::class),
-                        $container->get(Messaging\MessageProducer::class)
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\RoleService::class),
+                        $container->get(Service\UserProfileService::class),
+                        $container->get(Service\EmployeeService::class)
                     );
                 },
                 Model\UserTable::class => function ($container) {
@@ -82,7 +115,14 @@ class Module
                 },
                 \Oxzion\Service\FileService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class), $container->get(Messaging\MessageProducer::class),$container->get(\Oxzion\Service\FieldService::class),$container->get(\Oxzion\Model\FileAttachmentTable::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), 
+                                                            $dbAdapter, 
+                                                            $container->get(\Oxzion\Model\FileTable::class), 
+                                                            $container->get(\Oxzion\Service\FormService::class), 
+                                                            $container->get(Messaging\MessageProducer::class),
+                                                            $container->get(\Oxzion\Service\FieldService::class),
+                                                            $container->get(\Oxzion\Service\EntityService::class),
+                                                            $container->get(\Oxzion\Model\FileAttachmentTable::class));
                 },
                 Service\RoleService::class => function ($container) {
                     return new Service\RoleService(
@@ -102,6 +142,28 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Role());
                     return new TableGateway(
                         'ox_role',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\BusinessRoleService::class => function ($container) {
+                    return new Service\BusinessRoleService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\BusinessRoleTable::class)
+                    );
+                },
+                Model\BusinessRoleTable::class => function ($container) {
+                    return new Model\BusinessRoleTable(
+                        $container->get(Model\BusinessRoleTableGateway::class)
+                    );
+                },
+                Model\BusinessRoleTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\BusinessRole());
+                    return new TableGateway(
+                        'ox_business_role',
                         $container->get(AdapterInterface::class),
                         null,
                         $resultSetPrototype
@@ -212,15 +274,32 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Field());
                     return new TableGateway('ox_field', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\EntityService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\EntityService($container->get('config'), 
+                                                     $dbAdapter, 
+                                                     $container->get(Model\App\EntityTable::class));
+                },
+                Model\App\EntityTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\App\EntityTableGateway::class);
+                    return new Model\App\EntityTable($tableGateway);
+                },
+                Model\App\EntityTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\App\Entity());
+                    return new TableGateway('ox_app_entity', $dbAdapter, null, $resultSetPrototype);
+                },
                 Service\OrganizationService::class => function ($container) {
                     return new Service\OrganizationService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Model\OrganizationTable::class),
                         $container->get(Service\UserService::class),
-                        $container->get(Service\AddressService::class),
                         $container->get(Service\RoleService::class),
                         $container->get(Service\PrivilegeService::class),
+                        $container->get(Service\OrganizationProfileService::class),
+                        $container->get(Service\EntityService::class),
                         $container->get(Messaging\MessageProducer::class)
                     );
                 },
@@ -256,6 +335,74 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Address());
                     return new TableGateway(
                         'ox_address',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\OrganizationProfileService::class => function ($container) {
+                    return new Service\OrganizationProfileService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Service\AddressService::class),
+                        $container->get(Model\OrganizationProfileTable::class)
+                    );
+                },
+                Model\OrganizationProfileTable::class => function ($container) {
+                    return new Model\OrganizationProfileTable(
+                        $container->get(Model\OrganizationProfileTableGateway::class)
+                    );
+                },
+                Model\OrganizationProfileTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\OrganizationProfile());
+                    return new TableGateway(
+                        'ox_organization_profile',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\UserProfileService::class => function ($container) {
+                    return new Service\UserProfileService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Service\AddressService::class),
+                        $container->get(Model\UserProfileTable::class)
+                    );
+                },
+                 Model\UserProfileTable::class => function ($container) {
+                    return new Model\UserProfileTable(
+                        $container->get(Model\UserProfileTableGateway::class)
+                    );
+                },
+                Model\UserProfileTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\UserProfile());
+                    return new TableGateway(
+                        'ox_user_profile',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\EmployeeService::class => function ($container) {
+                    return new Service\EmployeeService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\EmployeeTable::class)
+                    );
+                },
+                 Model\EmployeeTable::class => function ($container) {
+                    return new Model\EmployeeTable(
+                        $container->get(Model\EmployeeTableGateway::class)
+                    );
+                },
+                Model\EmployeeTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Employee());
+                    return new TableGateway(
+                        'ox_employee',
                         $container->get(AdapterInterface::class),
                         null,
                         $resultSetPrototype
@@ -316,11 +463,6 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\UserToken());
                     return new TableGateway('ox_user_refresh_token', $dbAdapter, null, $resultSetPrototype);
                 },
-                Analytics\AnalyticsEngine::class => function ($container) {
-                    $config = $container->get('config');
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Analytics\Elastic\AnalyticsEngineImpl($config,$dbAdapter,$config);
-                },
                 Search\SearchEngine::class => function ($container) {
                     $config = $container->get('config');
                     return new Search\Elastic\SearchEngineImpl($config);
@@ -359,7 +501,9 @@ class Module
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\FileService::class),
                         $container->get(Service\WorkflowInstanceService::class),
-                        $container->get(Service\ActivityInstanceService::class)
+                        $container->get(Service\ActivityInstanceService::class),
+                        $container->get(Service\UserService::class),
+                        $container->get(Service\CommentService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {
@@ -452,6 +596,15 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\ActivityInstance());
                     return new TableGateway('ox_activity_instance', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\RegistrationService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\RegistrationService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Service\OrganizationService::class),
+                        $container->get(Service\AppService::class)
+                    );
+                },
                 Service\WorkflowInstanceService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\WorkflowInstanceService(
@@ -459,10 +612,11 @@ class Module
                         $dbAdapter,
                         $container->get(Model\WorkflowInstanceTable::class),
                         $container->get(Service\FileService::class),
-                        $container->get(Service\UserService::class),
+                        $container->get(\Oxzion\Service\EntityService::class),
                         $container->get(Service\WorkflowService::class),
                         $container->get(Workflow\WorkflowFactory::class),
-                        $container->get(Service\ActivityInstanceService::class)
+                        $container->get(Service\ActivityInstanceService::class),
+                        $container->get(Service\RegistrationService::class)
                     );
                 },
                 Service\ActivityInstanceService::class => function ($container) {
@@ -505,7 +659,10 @@ class Module
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(Service\WorkflowService::class),
-                        $container->get(Service\UserService::class));
+                        $container->get(Service\UserService::class),
+                        $container->get(Service\UserCacheService::class),
+                        $container->get(Service\OrganizationService::class),
+                        $container->get(Service\RegistrationService::class));
                 },
                 Model\ServiceTaskInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\ServiceTaskInstanceTableGateway::class);
@@ -523,8 +680,35 @@ class Module
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\ServiceTaskInstanceTable::class),
-                        $container->get(Service\CommandService::class)
+                        $container->get(Service\CommandService::class),
+                        $container->get(Service\WorkflowInstanceService::class)
                     );
+                },
+                Service\QuickBooksService::class => function ($container) {
+                    return new Service\QuickBooksService();
+                },
+                Service\ElasticService::class => function ($container) {
+                    return new Service\ElasticService();
+                },
+                Analytics\API\AnalyticsEngineQuickBooksImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\API\AnalyticsEngineQuickBooksImpl($dbAdapter, 
+                                $container->get('config'),
+                                $container->get(Service\QuickBooksService::class));
+                },
+                Analytics\Elastic\AnalyticsEngineImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Elastic\AnalyticsEngineImpl($dbAdapter, 
+                                $container->get('config'),
+                                $container->get(Service\ElasticService::class));
+                },
+                Analytics\Relational\AnalyticsEngineMySQLImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Relational\AnalyticsEngineMySQLImpl($dbAdapter, $container->get('config'));
+                },
+                Analytics\Relational\AnalyticsEnginePostgresImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\Relational\AnalyticsEnginePostgresImpl($dbAdapter, $container->get('config'));
                 },
             ],
         ];

@@ -22,7 +22,12 @@ class PocketCardMenu extends AbstractAppDelegate
         $params['entityName'] = 'Pocket Card Job';
         $sortParams = array("field" => "date_created", "dir" => "desc");
         $filterParams = array("filters" => array());
-        $finalFilterParams = array(array("start" => "0", "limit" => "10", "filter" => $filterParams, "sort" => array($sortParams)));
+        $finalFilterParams = array(array("filter" => $filterParams, "sort" => array($sortParams)));
+        if(isset($data['filter'])){
+            $data['filter'] = json_decode($data['filter'],true);
+            $finalFilterParams = array(array("filter" => $filterParams, "sort" => array($sortParams),"skip" => $data['filter'][0]['skip'],"take" => $data['filter'][0]['take']));
+        }
+        
         $files = $this->getFileList($params, $finalFilterParams);
         $this->logger->info("the total number of files fetched is : ".print_r($files['total'], true));
         $this->logger->info("the file details of get file is : ".print_r($files['data'], true));
@@ -65,7 +70,11 @@ class PocketCardMenu extends AbstractAppDelegate
                 }
                 else{
                     if(isset($value['pocketCardProductType'])){
-                        $productName = json_decode($value['pocketCardProductType'], true);
+                        if(is_string($value['pocketCardProductType'])){
+                            $productName = json_decode($value['pocketCardProductType'], true);
+                        } else {
+                            $productName = array();
+                        }
                         unset($value['pocketCardProductType']);
                         $value['pocketCardProductType'] = '';
                         if(isset($productName['individualProfessionalLiability']) && ($productName['individualProfessionalLiability'] == 1)){

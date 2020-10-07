@@ -14,20 +14,50 @@
         </testsuite>
         <testsuite name="Home Page Fixtures">
             <directory>./module/Auth/test</directory>
-            <directory>./module/Screen/test</directory>
             <directory>./module/Announcement/test</directory>
-            <directory>./module/Widget/test</directory>
             <directory>./module/Project/test</directory>
         </testsuite>
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
         </testsuite>
         <testsuite name="App Fixtures">
-            <directory>./module/App/test</directory>
+            <directory>./module/App/test/Controller/App</directory>
+            <directory>./module/App/test/Controller/AppView</directory> 
+            <directory>./module/App/test/Controller/Cache</directory>
+            <directory>./module/App/test/Controller/Delegate</directory>
+            <directory>./module/App/test/Controller/Document</directory> 
+            <directory>./module/App/test/Controller/Entity/EntityControllerTest.php</directory>
+            <directory>./module/App/test/Controller/Entity/FieldControllerTest.php</directory>
+            <directory>./module/App/test/Controller/Entity/FileControllerTest.php</directory>
+            <directory>./module/App/test/Controller/Entity/FormControllerTest.php</directory>
+            <directory>./module/App/test/Controller/Job</directory>
+            <directory>./module/App/test/Controller/Pipeline</directory>
+            <directory>./module/App/test/Controller/Workflow</directory>
+        </testsuite>
+        <testsuite name="App Fixtures">
             <directory>./module/Workflow/test</directory>
         </testsuite>
         <testsuite name="Core Fixtures">
-            <directory>./lib/Oxzion/test</directory>
+            <directory>./lib/Oxzion/test/AnalyticsTest</directory>
+            <directory>./lib/Oxzion/test/AppDelegateServiceTest</directory>
+            <directory>./lib/Oxzion/test/DocumentTest</directory>
+            <directory>./lib/Oxzion/test/Migration</directory>
+            <directory>./lib/Oxzion/test/NLPTest</directory>
+            <directory>./lib/Oxzion/test/ParserTest</directory>
+            <directory>./lib/Oxzion/test/PDFFillTest</directory>
+            <directory>./lib/Oxzion/test/TemplateTest</directory>
+            <directory>./lib/Oxzion/test/ValidationTest</directory>
+            <directory>./lib/Oxzion/test/WorkflowTest</directory>
+            <directory>./lib/Oxzion/test/Service/AppServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/FileServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/FormServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/PrivilegeServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/TemplateServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/UserServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/UserTokenServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/WorkflowInstanceServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/WorkflowServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/BusinessRoleServiceTest.php</directory>
         </testsuite>
         <testsuite name="Callback Fixtures">
             <directory>./module/Callback/test</directory>
@@ -35,7 +65,10 @@
         <testsuite name="User Fixtures">
             <directory>./module/Organization/test</directory>
             <directory>./module/Alert/test</directory>
-            <directory>./module/User/test</directory>
+            <directory>./module/User/test/Controller/ForgotPasswordControllerTest.php</directory>
+            <directory>./module/User/test/Controller/ProfilePictureControllerTest.php</directory>
+            <directory>./module/User/test/Controller/UserControllerTest.php</directory>
+            <directory>./module/User/test/Controller/UserSessionControllerTest.php</directory>
             <directory>./module/Email/test</directory>
             <directory>./module/Group/test</directory>
             <directory>./module/Contact/test</directory>
@@ -46,12 +79,6 @@
         </testsuite> 
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
-        </testsuite>
-        <testsuite name="Dive Insurance Fixtures">
-            <directory>../../clients/DiveInsurance/test/</directory>
-        </testsuite>
-        <testsuite name="BridgeMed Fixtures">
-            <directory>../../clients/BridgeMed/test/</directory>
         </testsuite>
     </testsuites> 
     <php>

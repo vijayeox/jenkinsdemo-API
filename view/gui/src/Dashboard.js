@@ -12,7 +12,10 @@ class Dashboard extends Component {
     this.state = {
       htmlData: this.props.htmlData ? this.props.htmlData : null,
       dashboardFilter: this.props.dashboardFilter,
-      widgetCounter: 0
+      preparedDashboardFilter: null,
+      drilldownDashboardFilter: [],
+      widgetCounter: 0,
+
     };
     this.content = this.props.content;
     this.renderedWidgets = {};
@@ -44,8 +47,9 @@ class Dashboard extends Component {
     );
     return response;
   }
-  async getWidgetByUuid(uuid, filterParams) {
 
+
+  async getWidgetByUuid(uuid, filterParams) {
     let filterParameter = (filterParams && filterParams != []) ? ("&filter=" + JSON.stringify(filterParams)) : ''
     let response = await this.helper.request(
       "v1",
@@ -53,25 +57,52 @@ class Dashboard extends Component {
       {},
       "get"
     );
-
-
     return response;
+  } 
+  extractFilter(){
+    let stack=this.props.dashboardStack;
+    let filter=stack[stack.length-1].drilldownDashboardFilter
+    let filterText=""
+    for(let i=0;i<filter.length;i++){
+      filterText!="" && (filterText += " ")
+      filterText += filter[i]
+    }
+    return filterText
   }
-
-  appendToDashboardContainer(htmlData){
-    let container="<div id='dasboard-viewer-content' class='dasboard-viewer-content'>"+htmlData+"</div>"
+  appendToDashboardContainer(htmlData) {
+    let backButton = ""
+    let dashboardFilterDescription = ""
+    if (this.props.dashboardStack && this.props.dashboardStack.length > 1) {
+      //rendering back button for drilled down dashboard
+      let dashboardTitle=this.props.dashboardStack[this.props.dashboardStack.length-1]["drilldownDashboardTitle"]
+      backButton = `<div id='dashboard-rollup-button' title="Previous OI" class='dashboard-rollup-button'><i class='fa fa-arrow-left'  aria-hidden='true'></i></div>`
+      dashboardFilterDescription="<span class='badge badge-info dashboard-filter-description' id='dashboard-drilldown-title'>"+dashboardTitle+"</span>";
+    }
+    let container = "<div id='dasboard-viewer-content' class='dasboard-viewer-content'>" + dashboardFilterDescription + backButton + htmlData + "</div>"
     return container
   }
+  setupDrillDownListeners() {
+    if (document.getElementById("dashboard-rollup-button")) {
+      let backbutton = document.getElementById("dashboard-rollup-button")
+      backbutton.addEventListener('click', event => {
+        this.props.rollupToDashboard()
+      });
+    }
+  }
+
+
 
   componentDidMount() {
     if (this.uuid) {
-      let thiz = this;
       this.getDashboardHtmlDataByUuid(this.uuid).then(response => {
         if (response.status == "success") {
           this.setState({
             htmlData: response.data.dashboard.content ? response.data.dashboard.content : null
-          });
-          this.updateGraph();
+          }, () => {
+            this.setupDrillDownListeners()
+          }
+          );
+          (this.props.drilldownDashboardFilter && this.props.drilldownDashboardFilter.length > 0) ? this.updateGraph(this.props.drilldownDashboardFilter) : this.updateGraph()
         } else {
           this.setState({
             htmlData: `<p>No Data</p>`
@@ -88,7 +119,7 @@ class Dashboard extends Component {
           });
         });
     } else if (this.state.htmlData != null) {
-      this.updateGraph();
+      (this.props.drilldownDashboardFilter.length > 0) ? this.updateGraph(this.props.drilldownDashboardFilter) : this.updateGraph()
     }
     window.addEventListener('message', this.widgetDrillDownMessageHandler, false);
   }
@@ -106,87 +137,150 @@ class Dashboard extends Component {
     window.removeEventListener('message', this.widgetDrillDownMessageHandler, false);
   }
 
-preparefilter(filter1,filter2){
-  var filter=[]
-  filter.push(filter1)
-  filter.push("AND")
-  filter.push(filter2)
-  return filter
-}
+  preparefilter(filter1, filter2) {
+    var filter = []
+    filter.push(filter1)
+    filter.push("AND")
+    filter.push(filter2)
+    return filter
+  }
+
+  extractFilterValues() {
+    let filterParams = []
+    this.props.dashboardFilter.map((filter, index) => {
+      let filterarray = []
+      if (filter["dataType"] == "date") {
+        var startDate = filter["startDate"]
+        var endDate = null
+        if (filter["startDate"] && filter["endDate"]) {
+          //convert startDate object to string
+          if (typeof startDate !== "string") {
+            startDate = filter["startDate"]
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          } else if (new Date(startDate)) {
+            startDate = new Date(filter["startDate"])
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          }
+          //date range received
+          if (filter["operator"] == "gte&&lte") {
+            endDate = filter["endDate"]
+            if (typeof endDate !== "string") {
+              endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
+            } else if (new Date(endDate)) {
+              endDate = new Date(endDate)
+              endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
+            }
+            //prepare startDate array
+            filterarray.push(filter["field"])
+            filterarray.push(">=")
+            filterarray.push(startDate)
+            filterParams.push(filterarray)
+
+
+            //prepare endDate array
+            filterarray = []
+            filterarray.push(filter["field"])
+            filterarray.push("<=")
+            filterarray.push(endDate)
+            filterParams.push(filterarray)
+          } else {
+            //if date is not a range
+            filterarray = []
+            filterarray.push(filter["field"])
+            filterarray.push(filter["operator"])
+            if (typeof startDate !== "string") {
+              startDate = filter["startDate"]
+              startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+            } else if (new Date(startDate)) {
+              startDate = new Date(filter["startDate"])
+              startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+            }
+            filterarray.push(startDate)
+            filterParams.push(filterarray)
+
+          }
+        } else {
+          //single date passed
+          filterarray.push(filter["field"])
+          filterarray.push(filter["operator"])
+          if (typeof startDate !== "string") {
+            startDate = filter["startDate"]
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          } else if (new Date(startDate)) {
+            startDate = new Date(filter["startDate"])
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          }
+          filterarray.push(startDate)
+          filterParams.push(filterarray)
+        }
+      } else {
+        filterarray.push(filter["field"])
+        filterarray.push(filter["operator"])
+        filterarray.push(filter["value"]["selected"])
+        if (filter["value"].hasOwnProperty("selected")) {
+          filterParams.push(filterarray)
+        }
+      }
+    })
+    return filterParams
+  }
+
+  updateGraphWithFilterChanges() {
+    let filterParams = this.extractFilterValues()
+    let preparedFilter
+    if (filterParams && filterParams.length > 1) {
+      preparedFilter = filterParams[0]
+      for (let i = 1; i < filterParams.length; i++) {
+        preparedFilter = this.preparefilter(preparedFilter, filterParams[i])
+
+      }
+    }
+    if (filterParams) {
+      if(filterParams.length == 0){
+        //if no dashboard filter exists
+        if (this.props.dashboardStack.length > 1) {
+          //adding drildowndashboardfilter to the dashboard filter if it exists
+          let drilldownDashboardFilter = this.props.dashboardStack[this.props.dashboardStack.length - 1]["drilldownDashboardFilter"]
+          if (drilldownDashboardFilter.length > 1)
+            this.updateGraph(drilldownDashboardFilter)
+        }else{
+          this.updateGraph()
+        }
+      }
+      else if (filterParams.length > 1) {
+        if (this.props.dashboardStack.length > 1) {
+          //adding drildowndashboardfilter to the dashboard filter if it exists
+          let drilldownDashboardFilter = this.props.dashboardStack[this.props.dashboardStack.length - 1]["drilldownDashboardFilter"]
+          if (drilldownDashboardFilter.length > 1)
+            preparedFilter = this.preparefilter(drilldownDashboardFilter, preparedFilter)
+        }
+        this.setState({ preparedDashboardFilter: preparedFilter }, () => {
+          this.updateGraph(preparedFilter)
+        })
+      } else {
+        //adding drildowndashboardfilter to the dashboard filter if it exists
+        preparedFilter = filterParams
+        let drilldownDashboardFilter = this.props.dashboardStack[this.props.dashboardStack.length - 1]["drilldownDashboardFilter"]
+        if (drilldownDashboardFilter.length > 1)
+          preparedFilter = this.preparefilter(drilldownDashboardFilter, filterParams)
+        this.setState({ preparedDashboardFilter: preparedFilter }, () => {
+          this.updateGraph(preparedFilter)
+        })
+      }
+    }
+    else {
+      this.updateGraph()
+    }
+  }
 
   componentDidUpdate(prevProps) {
     //update component when filter is changed
     if (prevProps.dashboardFilter != this.props.dashboardFilter) {
-      let filterParams = []
-      this.props.dashboardFilter.map((filter, index) => {
-        let filterarray = []
-        if (filter["dataType"] == "date") {
-          var startDate = filter["startDate"]
-          var endDate = null
-          if (filter["startDate"] && filter["endDate"]) {
-            //convert startDate object to string
-            if (typeof startDate !== "string") {
-              startDate = filter["startDate"]
-              startDate = startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
-            }
-            //date range received
-            if (filter["operator"] == "gte&&lte") {
-              endDate = filter["endDate"]
-              if (typeof endDate !== "string") {
-                endDate = endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
-              }
-              //prepare startDate array
-              filterarray.push(filter["field"])
-              filterarray.push(">=")
-              filterarray.push(startDate)
-              filterParams.push(filterarray)
-              
-
-              //prepare endDate array
-              filterarray = []
-              filterarray.push(filter["field"])
-              filterarray.push("<=")
-              filterarray.push(endDate)
-              filterParams.push(filterarray)
-            }
-          } else {
-            //single date passed
-            filterarray.push(filter["field"])
-            filterarray.push(filter["operator"])
-            filterarray.push(startDate)
-            filterParams.push(filterarray)
-          }
-        } else {
-          filterarray.push(filter["field"])
-          filterarray.push(filter["operator"])
-          filterarray.push(filter["value"]["selected"])
-          filterParams.push(filterarray)
-        }
-      })
-      let preapredFilter
-      if(filterParams && filterParams.length>1){
-        preapredFilter=filterParams[0]
-        for(let i=1;i<filterParams.length;i++){
-          preapredFilter=this.preparefilter(preapredFilter,filterParams[i])
-          
-        }
-      }
-
-      if(filterParams && filterParams.length != 0)
-        {
-          if(filterParams.length>1)
-            this.updateGraph(preapredFilter)
-          else
-            this.updateGraph(filterParams)
-        }     
-       else{
-         this.updateGraph()
-       }
+      this.updateGraphWithFilterChanges()
     }
   }
 
   updateGraph = async (filterParams) => {
-    console.log(filterParams);
     if (null === this.state.htmlData) {
       return;
     }
@@ -204,43 +298,45 @@ preparefilter(filter1,filter2){
         delete this.renderedWidgets[elementId];
       }
     }
-    
-    if(widgets.length==0){
+    if (widgets.length == 0) {
       this.loader.destroy();
     }
-    else{
+    else {
       for (let widget of widgets) {
         var attributes = widget.attributes;
         //dispose 
         var that = this;
         var widgetUUId = attributes[WidgetDrillDownHelper.OXZION_WIDGET_ID_ATTRIBUTE].value;
         this.getWidgetByUuid(widgetUUId, filterParams)
-        .then(response=>{
-          if(response.status =="success"){
-            response.data.widget && console.timeEnd("analytics/widget/"+response.data.widget.uuid+"?data=true")
-            that.setState({ widgetCounter: that.state.widgetCounter+1});
-            if ('error' === response.status) {
-              console.error('Could not load widget.');
-              console.error(response);
-              errorFound = true;
+          .then(response => {
+            if (response.status == "success") {
+              response.data.widget && console.timeEnd("analytics/widget/" + response.data.widget.uuid + "?data=true")
+              that.setState({ widgetCounter: that.state.widgetCounter + 1 });
+              if ('error' === response.status) {
+                console.error('Could not load widget.');
+                console.error(response);
+                errorFound = true;
+              }
+              else {
+                //dispose if widget exists
+                let hasDashboardFilters = this.state.preparedDashboardFilter ? true : false;
+                let renderproperties = { "element": widget, "widget": response.data.widget, "hasDashboardFilters": hasDashboardFilters, "dashboardEditMode": false }
+
+                let widgetObject = WidgetRenderer.render(renderproperties);
+                if (widgetObject) {
+                  this.renderedWidgets[widgetUUId] = widgetObject;
+                }
+              }
+              if (that.state.widgetCounter >= widgets.length) {
+                this.loader.destroy();
+              }
+            } else {
+              that.setState({ widgetCounter: that.state.widgetCounter + 1 });
+              if (this.state.widgetCounter >= widgets.length) {
+                that.loader.destroy();
+              }
             }
-            else {
-            //dispose if widget exists
-            let widgetObject = WidgetRenderer.render(widget, response.data.widget);
-            if (widgetObject) {
-              this.renderedWidgets[widgetUUId] = widgetObject;
-            }
-          }
-          if(that.state.widgetCounter>=widgets.length){
-            this.loader.destroy();
-          }
-          } else {
-            that.setState({ widgetCounter: that.state.widgetCounter+1});
-            if(this.state.widgetCounter>=widgets.length){
-              that.loader.destroy();
-            }
-          }
-        });
+          });
       }
     }
     if (errorFound) {
@@ -253,8 +349,47 @@ preparefilter(filter1,filter2){
     }
   };
 
+  async drillDownToDashboard(data) {
+    let event = {};
+    let elementId=data.elementId
+     //starting spinner 
+     if (elementId) {
+      var widgetDiv = document.getElementById(elementId);
+      this.loader.show(widgetDiv);
+    }
+    let dashboardData = await this.getDashboardHtmlDataByUuid(data.dashboard);
+    let dashboardStack = this.props.dashboardStack ? this.props.dashboardStack : []
+    let dashboardFilter = (dashboardStack.length > 0 && dashboardStack[dashboardStack.length - 1]["drilldownDashboardFilter"].length > 0) ? dashboardStack[dashboardStack.length - 1]["drilldownDashboardFilter"] : []
+    let widgetFilter = data.filter
+    let drilldownDashboardFilter = JSON.parse(widgetFilter)
+    let drilldownDashboardTitle=data.dashboardTitle
+    event.value = JSON.stringify(dashboardData.data.dashboard)
+    if (this.state.preparedDashboardFilter !== null) {
+      //combining dashboardfilter with widgetfilter
+      drilldownDashboardFilter = this.preparefilter(this.state.preparedDashboardFilter, JSON.parse(widgetFilter))
+      event.dashboardFilter = this.state.preparedDashboardFilter
+
+    } else if (dashboardFilter.length > 0) {
+      //combining dashboardfilter with widgetfilter
+      drilldownDashboardFilter = this.preparefilter(dashboardFilter, JSON.parse(widgetFilter))
+      event.dashboardFilter = dashboardFilter
+
+    }
+    event.drilldownDashboardFilter = drilldownDashboardFilter;
+    event.drilldownDashboardTitle = drilldownDashboardTitle;
+    if (elementId) {
+      var widgetDiv = document.getElementById(elementId);
+      this.loader.destroy(widgetDiv);
+    }
+    this.props.drilldownToDashboard(event, "dashname")
+  }
+
   widgetDrillDownMessageHandler = (event) => {
     let eventData = event.data;
+    if (eventData.target == 'dashboard') {
+      this.drillDownToDashboard(eventData);
+    }
+
     let action = eventData[WidgetDrillDownHelper.MSG_PROP_ACTION];
     if ((action !== WidgetDrillDownHelper.ACTION_DRILL_DOWN) && (action !== WidgetDrillDownHelper.ACTION_ROLL_UP)) {
       return;
@@ -286,8 +421,24 @@ preparefilter(filter1,filter2){
 
     let url = `analytics/widget/${widgetId}?data=true`;
     let filter = eventData[WidgetDrillDownHelper.MSG_PROP_FILTER];
-    if (filter && ('' !== filter)) {
+
+    // console.log("Printing Filter: " + this.state.preparedDashboardFilter)
+    //apply dashboard filter if exists
+    if (this.state.preparedDashboardFilter) {
+      //combining dashboardfilter with widgetfilter
+      let preparedFilter = filter ? this.preparefilter(this.state.preparedDashboardFilter, JSON.parse(filter)) : this.state.preparedDashboardFilter
+      filter = preparedFilter
+      url = url + '&filter=' + JSON.stringify(filter);
+    } else if(this.props.dashboardStack && this.props.dashboardStack.length>1){
+      let dashFilter=this.props.dashboardStack[this.props.dashboardStack.length -1]["drilldownDashboardFilter"]
+      let preparedFilter = filter ? this.preparefilter(dashFilter, JSON.parse(filter)) : dashFilter
+      filter = preparedFilter
+      url = url + '&filter=' + JSON.stringify(filter);
+
+    } else if (filter && ('' !== filter)) {
       url = url + '&filter=' + encodeURIComponent(filter);
+    } else {
+      url = url;
     }
     //starting spinner 
     if (eventData.elementId) {
@@ -298,7 +449,8 @@ preparefilter(filter1,filter2){
     let element = document.getElementById(elementId);
     this.helper.request('v1', url, null, 'get').
       then(response => {
-        let widgetObject = WidgetRenderer.render(element, response.data.widget, eventData);
+        let renderproperties = { "element": element, "widget": response.data.widget, "props": eventData, "dashboardEditMode": false }
+        let widgetObject = WidgetRenderer.render(renderproperties);
         if (widgetObject) {
           self.renderedWidgets[elementId] = widgetObject;
         }
@@ -321,7 +473,7 @@ preparefilter(filter1,filter2){
   }
 
   render() {
-      return  <div id={this.dashboardDivId} dangerouslySetInnerHTML={{ __html: this.appendToDashboardContainer(this.state.htmlData?this.state.htmlData:'') }} />;
+    return <div id={this.dashboardDivId} dangerouslySetInnerHTML={{ __html: this.appendToDashboardContainer(this.state.htmlData ? this.state.htmlData : '') }} />
   }
 }
 

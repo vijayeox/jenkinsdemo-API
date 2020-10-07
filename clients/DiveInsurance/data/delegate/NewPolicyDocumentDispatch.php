@@ -12,11 +12,13 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
     public function __construct(){
         $this->template = array(
             'Dive Boat' => 'diveBoatPolicyMailTemplate',
-            'Dive Store' => 'diveStorePolicyMailTemplate');
+            'Dive Store' => 'diveStorePolicyMailTemplate',
+            'Group Professional Liability' => 'groupProfessionalLiabilityPolicyMailTemplate',
+        );
         parent::__construct();
     }
 
-    
+
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("New Policy Document".json_encode($data));
@@ -34,10 +36,10 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
         foreach($data['documents'] as $doc){
             if(is_array($doc)){
                 $doc = end($doc);
-            }  
+            }
             $file = $this->destination.$doc;
             if(file_exists($file)){
-                 array_push($fileData, $file);         
+                 array_push($fileData, $file);
             }else{
                 $this->logger->error("File Not Found".$file);
                 array_push($errorFile,$file);
@@ -47,24 +49,32 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
 
         if(isset($data['csrApprovalAttachments'])){
             foreach($data['csrApprovalAttachments'] as $doc){
-                $file = $this->destination.$doc['file'];
-                if(file_exists($file)){
-                    array_push($fileData, $file);         
-                } else {
-                    $this->logger->error("File Not Found".$file);
-                    array_push($errorFile,$file);
-                }
+              if(isset($doc['file'])){
+                  $file = $this->destination.$doc['file'];
+                  if(file_exists($file)){
+                      array_push($fileData, $file);
+                  } else {
+                      $this->logger->error("File Not Found".$file);
+                      array_push($errorFile,$file);
+                  }
+              }
             }
             $data['csrApprovalAttachments'] = array();
         }
-
+        if($data['product'] == 'Dive Store'){
+            $subject = 'PADI Endorsed Dive Store Insurance Documents – '.$data['business_padi'];
+        }else if($data['product'] == 'Dive Boat'){
+            $subject = 'PADI Endorsed Dive Boat Insurance Documents – '.$data[$data['identifier_field']];
+        }else{
+            $subject = 'Certificate of Insurance';
+        }
         if(count($errorFile) > 0){
             $error = json_encode($errorFile);
             $this->logger->error("Documents Not Found".$error);
             throw new DelegateException('Documents Not Found','file.not.found',0,$errorFile);
         }
         $data['document'] =$fileData;
-        $data['subject'] = 'Certificate Of Insurance';
+        $data['subject'] = $subject;
         $response = $this->dispatch($data);
         return $response;
     }

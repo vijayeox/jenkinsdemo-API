@@ -16,6 +16,8 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
 {
     private $mock;
     private $index_pre;
+    private $elasticService;
+    private $client;
     public function setUp() : void
     {
         $this->loadConfig();
@@ -26,11 +28,14 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         } else {
             $this->index_pre = '';
         }
+        $this->elasticService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ElasticService::class);
+        $this->client = $this->elasticService->getElasticClient();
     }
 
     public function tearDown()  : void {
         parent::tearDown();
-        Mockery::close();
+        $this->elasticService->setElasticClient($this->client);
+  //      Mockery::close();
     }
 
     public function createIndex($indexer, $body)
@@ -77,6 +82,8 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Visualization.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetCalcFilter.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetQueryCalcFilter.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetTarget.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Target.yml");
         return $dataset;
     }
 
@@ -248,6 +255,23 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":2000,"actual_amount":2300}]');
     }
 
+    public function testGetWithNoOverridingFilterParametersData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123781c3-040d-44d8-6695-f2c3130bafbc?data=true&filter=%5B%5B%22owner_username%22%2C%22%3D%3D%22%2C%22john%22%5D%2C%22AND%22%2C%5B%22industry%22%2C%22%3D%3D%22%2C%22Software%22%5D%5D', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"mark","budget_amount":6000,"actual_amount":5600},{"owner_username":"john","actual_amount":500}]');
+    }
+
+
+
     public function testGetWithOverridingAtWidgetQueryData() {
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test'); 
@@ -290,7 +314,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
-        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":6000,"actual_amount":2300}]');
+        $this->assertEquals($jsoncontent, '[{"owner_username":"mark","budget_amount":6000},{"owner_username":"john","actual_amount":2300}]');
     }
 
     public function testGetWithOverridingMultiLevel() {
@@ -321,7 +345,7 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
-        $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000},{"owner_username":"mark","industry":"Insurance","budget_amount":3000},{"owner_username":"mark","industry":"Insurance","budget_amount":3000},{"owner_username":"jane","industry":"Insurance","budget_amount":5000},{"owner_username":"john","industry":"Software","budget_amount":2000}]');
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","industry":"Insurance","budget_amount":3000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","industry":"Insurance","budget_amount":3000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"jane","industry":"Insurance","budget_amount":5000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"john","industry":"Software","budget_amount":2000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"}]');
     }
 
     public function testSortingWithGroup() {
@@ -336,8 +360,168 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
-        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":1500},{"owner_username":"mark","budget_amount":3000},{"owner_username":"jane","budget_amount":5000}]');
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":1500,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","budget_amount":3000,"red_limit":"2000","yellow_limit":"3000","green_limit":"4000"},{"owner_username":"jane","budget_amount":5000,"red_limit":"10000","yellow_limit":"25000","green_limit":"35000"}]');
     }
 
+    public function testCombineWithMultiCount() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/667781c3-344d-4400-1195-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","count":2},{"owner_username":"mark","count":1,"count2":1},{"owner_username":"jane","count2":1}]');
+    }
+
+    
+
+    public function testSessionUserName() {
+        
+        $input1 = json_decode('{"index":"'.$this->index_pre.'crmnew_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"actual_amount"}},{"bool":{"must":[{"match":{"industry":{"query":"Insurance","operator":"and"}}},{"bool":{"should":[{"match":{"owner_username":{"query":"john","operator":"and"}}},{"match":{"owner_username":{"query":"admintest","operator":"and"}}}]}}]}}]}},"_source":["*","owner_username"],"aggs":{"groupdata":{"terms":{"field":"owner_username.keyword","size":10000},"aggs":{"value":{"sum":{"field":"actual_amount"}}}}},"explain":true},"_source":["*","owner_username"],"from":0,"size":0}',true);
+        $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true); //This is a dummy output
+        $clientMock = Mockery::mock('Elasticsearch\Client');
+        $this->elasticService->setElasticClient($clientMock);
+        $indexMock = Mockery::mock('Elasticsearch\Namespaces\IndicesNamespace');
+        $clientMock->shouldReceive('indices')->andReturn($indexMock);
+        $indexMock->shouldReceive('create')->withAnyArgs();
+        $clientMock->shouldReceive('search')->with($input1)->andReturn($output1);
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/667781c3-344d-44d8-0095-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+    }
+    
+
+    public function testSessionUserId() {
+        $input1 = json_decode('{"index":"'.$this->index_pre.'crmnew_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"actual_amount"}},{"bool":{"must":[{"match":{"industry":{"query":"Insurance","operator":"and"}}},{"bool":{"should":[{"match":{"owner_username":{"query":"john","operator":"and"}}},{"match":{"owner_username":{"query":"1","operator":"and"}}}]}}]}}]}},"_source":["*","owner_username"],"aggs":{"groupdata":{"terms":{"field":"owner_username.keyword","size":10000},"aggs":{"value":{"sum":{"field":"actual_amount"}}}}},"explain":true},"_source":["*","owner_username"],"from":0,"size":0}',true);
+         $output1 = json_decode('{"took":378,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}',true);  //This is a dummy output
+         $clientMock = Mockery::mock('Elasticsearch\Client');
+         $this->elasticService->setElasticClient($clientMock);
+         $indexMock = Mockery::mock('Elasticsearch\Namespaces\IndicesNamespace');
+         $clientMock->shouldReceive('indices')->andReturn($indexMock);
+         $indexMock->shouldReceive('create')->withAnyArgs();
+         $clientMock->shouldReceive('search')->with($input1)->andReturn($output1);
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/667781c3-344d-44d8-1195-f2c3130bafbc?data=true', 'GET');
+//        $this->dispatch('/analytics/widget/333381c3-040d-44d8-9295-f2c3130bafbc?data=true&filter=%5B%5B%22owner_username%22%2C%22%3D%3D%22%2C%22session%3Auserid%22%5D%2C%22AND%22%2C%5B%22industry%22%2C%22%3D%3D%22%2C%22Insurance%22%5D%5D', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+    }
+
+    public function testTargetWithGroup() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123432c3-040d-4444-9295-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","budget_amount":1500,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","budget_amount":3000,"red_limit":"2000","yellow_limit":"3000","green_limit":"4000"},{"owner_username":"jane","budget_amount":5000,"red_limit":"10000","yellow_limit":"25000","green_limit":"35000"}]');
+    }
+
+
+    public function testTargetSingleValue() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/667781c3-344d-44d8-9295-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['targets']);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($jsoncontent, '{"red_limit":"2000","yellow_limit":"3000","green_limit":"4000","color":"green"}');
+    }
+
+    public function testGroupingSingleTarget() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123432c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","industry":"Insurance","budget_amount":3000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"mark","industry":"Insurance","budget_amount":3000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"jane","industry":"Insurance","budget_amount":5000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"},{"owner_username":"john","industry":"Software","budget_amount":2000,"red_limit":"1000","yellow_limit":"2000","green_limit":"3000"}]');
+    }
+
+    public function testTargetWithSingleValue() {
+        if (enableElastic!=0) {
+            $this->setElasticData();
+        } else {
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123781c3-040d-44d8-1111-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['widget']['data'], '13400');
+        $jsoncontent = json_encode($content['data']['widget']['targets']);
+        $this->assertEquals($jsoncontent, '{"red_limit":"10000","yellow_limit":"25000","green_limit":"35000","color":"yellow"}');
+
+    }
+    
+    public function testWithPivot() {
+    if (enableElastic!=0) {
+        $this->setElasticData();
+    } else {
+        $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
+    }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true&pivot=1', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","Insurance":1000,"Software":2000},{"owner_username":"mark","Insurance":6000,"Software":null},{"owner_username":"jane","Insurance":5000,"Software":null}]');
+    }
+
+    public function testGetWith2OverridingFilterParametersData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123781c3-040d-44d8-1221-f2c3130bafbc?data=true&filter=%5B%5B%22owner_username%22%2C%22%3D%3D%22%2C%22john%22%5D%2C%22AND%22%2C%5B%22industry%22%2C%22%3D%3D%22%2C%22Software%22%5D%5D', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"mark","budget_amount":6000,"actual_amount":5600},{"owner_username":"john","actual_amount":500}]');
+    }
+
+
+
+    public function testGetWith1OverridingFilterParametersData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123781c3-040d-44d8-1331-f2c3130bafbc?data=true&filter=%5B%5B%22owner_username%22%2C%22%3D%3D%22%2C%22john%22%5D%2C%22AND%22%2C%5B%22industry%22%2C%22%3D%3D%22%2C%22Software%22%5D%5D', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","actual_amount":500,"budget_amount":3000}]');
+    }
 
 }

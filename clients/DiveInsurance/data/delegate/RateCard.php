@@ -13,7 +13,8 @@ class Ratecard extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {  
         $this->logger->info("Executing Rate Card -STart".print_r($data,true));
-        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
+        $operation = " <= ";
+        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date ".$operation." '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
         $this->logger->info("Rate Card query -> $select");
        
@@ -33,10 +34,24 @@ class Ratecard extends AbstractAppDelegate
                         $premiumRateCardDetails[$rate['key']] = $rate['premium'];
                     }
                 }
+                if(isset($rate['downpayment'])){
+                    $premiumRateCardDetails[$rate['key']."_downpayment"] = $rate['downpayment'];    
+                }else{
+                    $premiumRateCardDetails[$rate['key']."_downpayment"] = 0;
+                }
+                if(isset($rate['installment_count'])){
+                    $premiumRateCardDetails[$rate['key']."_installments"] = $rate['installment_count'];
+                }else{
+                    $premiumRateCardDetails[$rate['key']."_installments"] = 0;
+                }
+                if(isset($rate['installment_amount'])){
+                    $premiumRateCardDetails[$rate['key']."_installment_amount"] = $rate['installment_amount'];
+                }else{
+                    $premiumRateCardDetails[$rate['key']."_installment_amount"] = 0;
+                }
             }
             unset($rate);
         }
-
         foreach ($data as $key => $value) {
             if(is_string($value))
             {
@@ -47,14 +62,14 @@ class Ratecard extends AbstractAppDelegate
             }
         }
 
-        if($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store'){
+        if($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
             $premiumRateCardDetails['stateTaxData'] = $this->getStateTaxData($data,$persistenceService);
         }
-            
+
         if(isset($data["quote_due_date"]) || isset($data['quoteRequirement'])){
             $data['quote_due_date'] = '';
             $data['quoteInfo'] = "";
-            $data['quoteInfoOther'] = "";
+            $data['quoteInfoOther'] = array();
             $data['marineX'] = isset($data['marineX']) ? "" : "";
             $data['captainX'] = isset($data['captainX']) ? "" : "";
         }
@@ -71,9 +86,9 @@ class Ratecard extends AbstractAppDelegate
     private function getStateTaxData($data,$persistenceService){
         $year = date('Y');
         if($data['product'] == 'Dive Boat'){
-            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE coverage = 'group' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."' and `year` = ".$year;
-        }else if($data['product'] == 'Dive Store'){
-            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."' and `year` = ".$year;
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE coverage = 'group' and `year` = ".$year;
+        }else if($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability'){
+            $selectTax = "Select state, coverage, percentage FROM state_tax WHERE `year` = ".$year;
         }
         $stateTaxResult = $persistenceService->selectQuery($selectTax);
 

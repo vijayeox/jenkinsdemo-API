@@ -10,25 +10,33 @@ use Oxzion\AppDelegate\UserContextTrait;
 class UpdateCarrierandPolicyNumber extends AbstractAppDelegate
 {
     use UserContextTrait;
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
 
     // State Tax values are fetched here
-    public function execute(array $data,Persistence $persistenceService)
-    {  
-        if(AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')){ 
-            $data = $this->updateCarrierPolicyNumber($data,$persistenceService);
+    public function execute(array $data, Persistence $persistenceService)
+    {
+        $this->logger->info("Update Carrier/Policy Number ------" . print_r($data, true));
+        if (AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')) {
+            try {
+                $this->updateCarrierPolicyNumber($data, $persistenceService);
+            } catch (Exception $e) {
+                $this->logger->info("Carrier/Policy Number Update Failed -----" . print_r($e, true));
+                throw new DelegateException("Update Failed.Please Try again", 'update_failed');
+            }
             return $data;
-        }else{
-            throw new DelegateException("You do not access to this API",'no_access');
+        } else {
+            $this->logger->info("Update Carrier/Policy Number : You do not have access to this API");
+            throw new DelegateException("You do not have access to this API", 'no_access');
         }
     }
 
 
-    private function updateCarrierPolicyNumber(&$data,$persistenceService){
-        $updateQuery = "UPDATE carrier_policy SET carrier = '".$data['carrier']."',policy_number = '".$data['policy_number']."' WHERE `year` = ".$data['year']." AND product = '".$data['product']."'";
+    private function updateCarrierPolicyNumber(&$data, $persistenceService)
+    {
+        $updateQuery = "UPDATE carrier_policy SET carrier = '" . $data['carrier'] . "',policy_number = '" . $data['policy_number'] . "' WHERE id = " . $data['id'];
         $result = $persistenceService->updateQuery($updateQuery);
     }
-
 }

@@ -72,7 +72,7 @@ export default class Panel extends EventEmitter {
       if(self.inited) {
         self.destroy();
         self.init();
-        self.setPosition(this.options.position);      
+        self.setPosition(this.options.position);
       }
     });
     this.formatDate = this.formatDate.bind(this);
@@ -126,6 +126,15 @@ export default class Panel extends EventEmitter {
 
     const _ = this.core.make('osjs/locale').translate;
     const __ = this.core.make('osjs/locale').translatable(languages);
+
+    let footerElement = document.createElement('div');
+    footerElement.classList.add('footer-CR');
+    footerElement.id = 'footer-CR';
+    footerElement.innerHTML = '<div class="coppyRight">'
+         + 'Copyright © 2004-2020 EOX Vantage. All rights reserved.'
+         + '</div>  ';
+
+    this.core.$root.appendChild(footerElement);
 
     this.$element = document.createElement('div');
     this.$element.classList.add('osjs-panel');

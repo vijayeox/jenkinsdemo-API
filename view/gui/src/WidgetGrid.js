@@ -5,7 +5,9 @@ import { Grid, GridColumn } from '@progress/kendo-react-grid';
 import { filterBy } from '@progress/kendo-data-query';
 import { orderBy } from '@progress/kendo-data-query';
 import { process } from '@progress/kendo-data-query';
+import {IntlService} from '@progress/kendo-react-intl'
 import { ExcelExport } from '@progress/kendo-react-excel-export';
+import WidgetDrillDownHelper from './WidgetDrillDownHelper';
 
 export default class WidgetGrid extends React.Component {
     constructor(props) {
@@ -14,6 +16,7 @@ export default class WidgetGrid extends React.Component {
         this.allData = props.data ? props.data : [];
         this.filteredData = null;
         let configuration = props.configuration;
+        this.isDrillDownTable = props.isDrillDownTable;
         this.resizable = configuration ? (configuration.resizable ? configuration.resizable : false) : false;
         this.filterable = configuration ? (configuration.filterable ? configuration.filterable : false) : false;
         this.groupable = configuration ? (configuration.groupable ? configuration.groupable : false) : false;
@@ -76,10 +79,10 @@ export default class WidgetGrid extends React.Component {
     }
 
     prepareData = (refilter) => {
-        if(this.allData){
-            this.allData.map(data=>{
+        if (this.allData) {
+            this.allData.map(data => {
                 //trimmimg time from date in order for date filter to work
-                data.date?data.date.setHours(0,0,0,0):null
+                data.date ? data.date.setHours(0, 0, 0, 0) : null
             })
         }
         if (this.state.sort) {
@@ -92,7 +95,7 @@ export default class WidgetGrid extends React.Component {
         let pagination = this.state.pagination;
         let displayedData = process(this.filteredData, {
             take: pagination.take,
-            skip: pagination.skip,
+            skip: this.state.filter ? (refilter ? 0 : pagination.skip) : pagination.skip,
             group: this.state.group
         });
         this.setState({
@@ -166,37 +169,115 @@ export default class WidgetGrid extends React.Component {
         console.log(e);
     }
 
+    drillDownClick = (evt) => {
+        WidgetDrillDownHelper.drillDownClicked(WidgetDrillDownHelper.findWidgetElement(evt.nativeEvent ? evt.nativeEvent.target : evt.target), evt.dataItem)
+        ReactDOM.unmountComponentAtNode(this.props.canvasElement)
+
+    }
+
+    hasBackButton() {
+        if (this.props.canvasElement && this.props.canvasElement.parentElement) {
+            let backbutton = this.props.canvasElement.parentElement.getElementsByClassName('oxzion-widget-roll-up-button')
+            if (backbutton.length > 0)
+                return true
+            else
+                return false
+        }
+        else {
+            return false
+        }
+
+    }
+
+    cellRender(tdElement, cellProps, thiz) {
+        if (cellProps.rowType === 'groupFooter') {
+            let element = null
+            if (thiz.props.configuration["groupable"] && thiz.props.configuration["groupable"]!=false && thiz.props.configuration["groupable"]["aggregate"]) {
+                let aggregateColumns = thiz.props.configuration["groupable"]["aggregate"]
+                let sum = 0
+                let kendo_service=new IntlService()
+                let formattedSum=sum
+                aggregateColumns.forEach(column => {
+                    if (cellProps.field == column.field) {
+                        cellProps.dataItem.items.forEach(item => {
+                            if(typeof(item[column.field])=="number"){
+                                sum += item[column.field]
+                            }
+                        })
+                        formattedSum=sum
+                        if(column.format)
+                        {
+                            formattedSum=kendo_service.toString(sum,column.format)
+                        }
+                        element = <td>{formattedSum}</td>
+
+                    }
+                })
+                if (element != null) {
+                    return <td>{formattedSum}</td>
+                }
+            }
+        }
+        return tdElement;
+    }
+    Aggregate = (props, configuration) => {
+        let total = 0
+        if (this.state.displayedData.data) {
+            total = this.state.displayedData.data.reduce((acc, current) => acc + (typeof (current[props.field]) == "number" ? current[props.field] : 0), 0)
+        }
+        if (!Number.isNaN(total)) {
+            let formattedSum=total
+            if(configuration.format){
+                let kendo_service=new IntlService()
+                formattedSum=kendo_service.toString(total,configuration.format)
+            }
+            return (
+                
+                <td colSpan={props.colSpan} style={configuration.style}>
+                    {configuration.value}{formattedSum}
+                </td>
+            );
+        } return <td></td>
+    }
+
+
     render() {
         let thiz = this;
+        let hasBackButton = this.hasBackButton()
+
         function getColumns() {
             let columns = []
             for (const config of thiz.columnConfig) {
-                columns.push(<GridColumn key={config['field']} {...config} />);
+                if (config['footerAggregate']) {
+                    columns.push(<GridColumn key={config['field']} {...config} footerCell={(props) => thiz.Aggregate(props, config['footerAggregate'])} />);
+                }
+                else {
+                    columns.push(<GridColumn key={config['field']} {...config} />);
+                }
             }
             return columns;
         }
 
         let gridTag = <Grid
             style={{ height: this.height, width: this.width }}
+            className={this.isDrillDownTable ? "drillDownStyle" : ""}
             data={this.state.displayedData}
             resizable={this.resizable}
             reorderable={this.reorderable}
-
+            cellRender={(tdelement, cellProps) => this.cellRender(tdelement, cellProps, this)}
             filterable={this.filterable}
             filter={this.state.filter}
             onFilterChange={this.gridFilterChanged}
-
             pageSize={this.pageSize}
             {...this.pagerConfig} //Sets grid "pageable" property
             total={this.getFilteredRowCount()}
             skip={this.state.pagination.skip}
             take={this.state.pagination.take}
             onPageChange={this.gridPageChanged}
-
             sortable={this.sortable}
             sort={this.state.sort}
             onSortChange={this.gridSortChanged}
-
+            onRowClick={this.drillDownClick}
             groupable={this.groupable}
             group={this.state.group}
             onGroupChange={this.gridGroupChanged}
@@ -209,16 +290,14 @@ export default class WidgetGrid extends React.Component {
 
         return (
             <>
+                {this.isDrillDownTable &&
+                    <div className="oxzion-widget-drilldown-table-icon" style={hasBackButton ? { right: "5%" } : { right: "7px" }} title="Drilldown Table">
+                        <i className="fas fa-angle-double-down fa-lg"></i>
+                    </div>
+                }
                 {this.exportToExcel &&
                     <>
-                        <div style={{
-                            float: "right",
-                            top: "20px",
-                            position: "relative",
-                            zIndex: "10",
-                            width: "16px",
-                            cursor: "pointer"
-                        }} onClick={this.saveAsExcel}><i className="fa fa-file-excel"></i></div>
+                        <div className="oxzion-widget-drilldown-excel-icon" style={hasBackButton ? { right: "5%" } : { right: "10px" }} onClick={this.saveAsExcel}><i className="fa fa-file-excel fa-lg"></i></div>
                         <ExcelExport
                             data={this.allData}
                             ref={exporter => this.excelExporter = exporter}

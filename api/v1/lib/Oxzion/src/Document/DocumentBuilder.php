@@ -32,8 +32,7 @@ class DocumentBuilder {
     */
     public function generateDocument($template, $data, $destination, $options = null){
         $this->logger->info("Template - $template");
-        $content = $this->templateService->getContent($template, $data);
-        $this->logger->info("Content  - $content");
+        $content = $this->templateService->getContent($template, $data, $options);
         $append = array();
         $prepend = array();
         $header = null;
@@ -62,8 +61,28 @@ class DocumentBuilder {
        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend,$generateOptions);
     }
 
-    public function fillPDFForm($template,$data,$destination) {
-        return $this->documentGenerator->fillPDFForm($template,$data,$destination);
+    public function fillPDFForm($template, $data, $destination)
+    {
+        $templatePath =$this->templateService->getTemplatePath($template, $data);
+        $this->logger->info("fillPDFForm Full Template Path \n" . $templatePath . "/" . $template);
+        return $this->documentGenerator->fillPDFForm($templatePath."/".$template,$data,$destination);
+    }
+
+      /**
+    *  $template - string - template name
+    *  $data - array - the context data to process the template
+    *               orgUuid - if present will be used else current logged in org uuid 
+    *                         will be used 
+    *  $destination - string - the file path of the destination file
+    *  $sheets - array -  (optional) 
+    *               List of sheets to be processed
+    */
+    public function fillExcelTemplate($template, $data, $destination, $sheets = null){
+        $options = array( "templateType" => TemplateService::EXCEL_TEMPLATE, "fileLocation" => $destination);
+        if($sheets){
+            $options["sheets"] = $sheets;
+        }
+        return $this->templateService->getContent($template, $data, $options);
     }
 
     public function copyTemplateToDestination($template,$destination){
@@ -73,4 +92,11 @@ class DocumentBuilder {
         FileUtils::copy($sourcePath,$template,$destinationPath);
         return;
     }
+
+    public function mergePDF(array $sourceArray,$destination)
+    {
+        $this->logger->info("Merge documents");
+        return $this->documentGenerator->mergeDocuments( $sourceArray,$destination);
+    }
+    
 }

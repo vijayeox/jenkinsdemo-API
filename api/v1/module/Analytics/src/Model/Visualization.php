@@ -2,45 +2,41 @@
 
 namespace Analytics\Model;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class Visualization extends Entity
-{
-    protected $data = array(
-        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE , 'required' => FALSE),
-        'name' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'created_by' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'date_created' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE , 'required' => FALSE),
-        'org_id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'isdeleted' => array('type' => parent::BOOLEANVAL, 'value' => false, 'readonly' => FALSE , 'required' => FALSE),
-        'configuration' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'renderer' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'type' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE)
-    );
+class Visualization extends Entity {
+    protected static $MODEL = [
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => TRUE ,    'required' => FALSE],
+        'name' =>           ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE ,    'required' => FALSE],
+        'org_id' =>         ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
+        'isdeleted' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE ,   'required' => FALSE, 'value' => FALSE],
+        'configuration' =>  ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'renderer' =>       ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
+        'type' =>           ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE, 
+            //Dynamic validation code is run using PHP eval function. It runs in the context of Entity. 
+            //Dynamic code has access to following implicit variables:
+            //      $data - Arraay containing all the properties of this entity.
+            //      $value - Value of the property being validated.
+            //      $property - Name of the property being validated.
+            //Dynamically evaluated code should return:
+            //      NULL if validation passes.
+            //      Validation error message if validation fails.
+            //Dynamically evaluated code may also throw InvalidPropertyValueException 
+            //(\Oxzion\InvalidPropertyValueException) if validation fails.
+            'dynamicValidation' => '
+                $allowedValues = ["chart", "html", "inline", "table"];
+                return in_array($value, $allowedValues) ? 
+                    NULL : "Value not in list:" . json_encode($allowedValues);
+            '],
+        'version' =>        ['type' => Type::INTEGER,   'readonly' => FALSE,    'required' => FALSE]
+    ];
 
-    public function validate()
-    {
-        $this->completeValidation();
-    }
-
-    public function updateValidate()
-    {
-        $this->typeChecker();
-    }
-
-    public function validateType($type)
-    {
-        if($type == 'Aggregate' || $type == 'Bar' || $type == 'Line' || $type == 'Pie')
-            return;
-        else
-        {
-            $errors = array('data' => 'Type must be Aggregate, Bar, Line or Pie');
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
-        }
+    public function &getModel() {
+        return self::$MODEL;
     }
 }

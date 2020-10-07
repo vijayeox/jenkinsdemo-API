@@ -12,6 +12,9 @@ const register = (core, args, options, metadata) => {
       id: metadata.name + "_Window",
       title: metadata.title.en_EN,
       icon: proc.resource(icon_white),
+      state: {
+        maximized: true 
+      },
       attributes: {
         classNames: ["Window_" + metadata.name],
         dimension: {

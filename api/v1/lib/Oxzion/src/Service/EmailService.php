@@ -101,6 +101,9 @@ class EmailService extends AbstractService
         foreach ($result->toArray() as $account) {
             $account['token'] = json_decode($account['token']);
             $account['password'] = TwoWayEncryption::decrypt($account['password']);
+            if($account['password'] == null){
+                throw new ServiceException("Password Decryption failed", 'password.decrypt.fail');   
+            }
             $accounts[] = $account;
         }
         return $accounts;
@@ -122,6 +125,9 @@ class EmailService extends AbstractService
         if ($pw) {
             foreach ($resultSet->toArray() as $account) {
                 $account['password'] = TwoWayEncryption::decrypt($account['password']);
+                if($account['password'] == null){
+                    throw new ServiceException("Password Decryption failed", 'password.decrypt.fail');   
+                }
                 $accounts[] = $account;
             }
         } else {
@@ -147,6 +153,9 @@ class EmailService extends AbstractService
         $accounts = array();
         foreach ($resultSet->toArray() as $account) {
             $account['password'] = TwoWayEncryption::decrypt($account['password']);
+            if($account['password'] == null){
+                throw new ServiceException("Password Decryption failed", 'password.decrypt.fail');   
+            }
             $accounts[] = $account;
         }
         return $accounts;
@@ -156,8 +165,8 @@ class EmailService extends AbstractService
     {
         try {
             $userId = AuthContext::get(AuthConstants::USER_ID);
-            $queryString = "select email from ox_user";
-            $where = "where id = " . $userId;
+            $queryString = "select up.email from ox_user u inner join ox_user_profile up on up.id = u.user_profile_id";
+            $where = "where u.id = " . $userId;
             $resultSet = $this->executeQuerywithParams($queryString, $where)->toArray();
             $email = array_column($resultSet, 'email');
             $queryString = "select * from email_setting_user";

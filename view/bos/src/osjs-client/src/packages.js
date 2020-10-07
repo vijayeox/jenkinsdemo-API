@@ -32,33 +32,33 @@ import Application from './application';
 import Preloader from './utils/preloader';
 
 /**
- * A registered package reference
- * @property {Object} metadata Package metadata
- * @property {Function} callback Callback to instanciate
- * @typedef PackageReference
- */
+* A registered package reference
+* @property {Object} metadata Package metadata
+* @property {Function} callback Callback to instanciate
+* @typedef PackageReference
+*/
 
 /**
- * A package metadata
- * @property {String} name The package name
- * @property {String} [category] Package category
- * @property {String} [icon] Package icon
- * @property {Boolean} [singleton] If only one instance allowed
- * @property {Boolean} [autostart] Autostart on boot
- * @property {Boolean} [hidden] Hide from launch menus etc.
- * @property {String} [server] Server script filename
- * @property {String[]} [groups] Only available for users in this group
- * @property {String[]} [files] Files to preload
- * @property {Map<String, String>} title A map of locales and titles
- * @property {Map<String, String>} description A map of locales and titles
- * @typedef PackageMetadata
- */
+* A package metadata
+* @property {String} name The package name
+* @property {String} [category] Package category
+* @property {String} [icon] Package icon
+* @property {Boolean} [singleton] If only one instance allowed
+* @property {Boolean} [autostart] Autostart on boot
+* @property {Boolean} [hidden] Hide from launch menus etc.
+* @property {String} [server] Server script filename
+* @property {String[]} [groups] Only available for users in this group
+* @property {String[]} [files] Files to preload
+* @property {Map<String, String>} title A map of locales and titles
+* @property {Map<String, String>} description A map of locales and titles
+* @typedef PackageMetadata
+*/
 
 /**
- * Package Manager
- *
- * @desc Handles indexing, loading and launching of OS.js packages
- */
+* Package Manager
+*
+* @desc Handles indexing, loading and launching of OS.js packages
+*/
 export default class Packages {
 
   /**
@@ -126,6 +126,10 @@ export default class Packages {
     }
 
     this.inited = true;
+
+    let helper = this.core;
+    let jwttoken = this.core.make('oxzion/profile').getAuth();
+    setInterval(function () { CheckAuthToken(helper, jwttoken.key); }, 300000);
 
     const manifest = this.core.config('packages.manifest');
 
@@ -228,12 +232,12 @@ export default class Packages {
     }
 
     const preloads = (metadata.files || [])
-      .map(f => this.core.url(f, {}, Object.assign({type}, metadata)));
+      .map(f => this.core.url(f, {}, Object.assign({ type }, metadata)));
 
     return this.preloader.load(preloads)
       .then(result => {
         return Object.assign(
-          {elements: {}},
+          { elements: {} },
           result,
           this.packages.find(pkg => pkg.metadata.name === name) || {}
         );
@@ -258,7 +262,7 @@ export default class Packages {
           title: _('ERR_PACKAGE_EXCEPTION', name),
           message: _('ERR_PACKAGE_EXCEPTION', name),
           error: e
-        }, () => { /* noop */});
+        }, () => { /* noop */ });
       } else {
         alert(`${_('ERR_PACKAGE_EXCEPTION', name)}: ${e.stack || e}`);
       }
@@ -274,7 +278,7 @@ export default class Packages {
     };
 
     const preloads = metadata.files
-      .map(f => this.core.url(f, {}, Object.assign({type: 'apps'}, metadata)));
+      .map(f => this.core.url(f, {}, Object.assign({ type: 'apps' }, metadata)));
 
     const create = found => {
       let app;
@@ -307,7 +311,7 @@ export default class Packages {
     };
 
     return this.preloader.load(preloads, options.forcePreload === true)
-      .then(({errors}) => {
+      .then(({ errors }) => {
         if (errors.length) {
           fail(_('ERR_PACKAGE_LOAD', name, errors.join(', ')));
         }
@@ -340,8 +344,8 @@ export default class Packages {
             return prev;
           }, {});
           const appName = queryObj.app;
-          if(appName === pkg.name) {
-            if(queryObj.params) {
+          if (appName === pkg.name) {
+            if (queryObj.params) {
               params = queryObj.params;
             }
           }
@@ -411,7 +415,7 @@ export default class Packages {
 
 
     const filterBlacklist = iter => details.key.blackListedApps instanceof Object
-      ? !details.key.blackListedApps[iter.name] 
+      ? !details.key.blackListedApps[iter.name]
       : true;
 
     return metadata
@@ -445,3 +449,33 @@ export default class Packages {
     });
   }
 }
+
+function CheckAuthToken(helper, jwttoken) {
+  let response = ValidateTokenJWT(helper, jwttoken).then((response) => {
+    if (response["status"] != "success") {
+      let response = RefreshTokenJWT(helper, jwttoken).then((response) => {
+        if (response["status"] != "success") {
+          logout(helper).then((response) => {
+          });
+        }
+      });
+    }
+  });
+  return true;
+}
+const ValidateTokenJWT = async (helper, jwttoken) => {
+  let helpers = helper.make("oxzion/restClient");
+  let result = await helpers.request("v1", "/validatetoken", { jwt: jwttoken }, "filepost");
+  return result;
+};
+const logout = async (helper) => {
+  alert("session expired!. Please log in again");
+  await helper.make('osjs/session').save();
+  await helper.make('oxzion/usersession').set();
+  helper.make('osjs/auth').logout();
+};
+const RefreshTokenJWT = async (helper, jwttoken) => {
+  let helpers = helper.make("oxzion/restClient");
+  let result = await helpers.request("v1", "/refreshtoken", { jwt: jwttoken }, "filepost");
+  return result;
+};

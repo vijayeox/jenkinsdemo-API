@@ -56,6 +56,9 @@ content:
                 -
                     title: PADI
                     field: padi
+                    cell: '<td>{item.identifier_field == "business_padi" ? item.business_padi : item.padi}</td>'
+                    multiFieldFilter:
+                        - business_padi
                 -
                     title: Name
                     field: firstname
@@ -66,6 +69,12 @@ content:
                 -
                     title: 'Policy Start Date'
                     field: start_date
+                    cell: '<td>{moment(item.start_date).format("MM-DD-YYYY")}</td>'
+                    filter: date
+                    filterFormat: MM-DD-YYYY
                 -
                     title: 'Policy End Date'
                     field: end_date
+                    cell: '<td>{moment(item.end_date).format("MM-DD-YYYY")}</td>'
+                    filter: date
+                    filterFormat: MM-DD-YYYY

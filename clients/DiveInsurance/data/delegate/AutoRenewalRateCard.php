@@ -10,7 +10,7 @@ require_once __DIR__."/RateCard.php";
 class AutoRenewalRateCard extends RateCard{
     public function __construct(){
         parent::__construct();
-        $this->unsetVariables = array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents');
+        $this->unsetVariables = array('workflowInstanceId','policy_id','certificate_no','start_date','end_date','documents','previous_policy_data');
     }
 
     // Premium Calculation values are fetched here
@@ -33,8 +33,6 @@ class AutoRenewalRateCard extends RateCard{
             $policy_period = "July 01,".$startYear." - June 30,".$endYear;
             $data['start_date_range'] = array("label" => $policy_period,"value" => $data['start_date']); 
         }
-       
-
         $this->logger->info("AUTO RATE CARD PERSISTENCE".print_r($data,true));
         $data = parent::execute($data,$persistenceService);
 
@@ -50,7 +48,7 @@ class AutoRenewalRateCard extends RateCard{
             $this->IPLRates($data,$result);
         } else if($data['product'] == 'Emergency First Response'){
             $coverageList = array();
-            array_push($coverageList,$data['liabilityCoverage']);
+            array_push($coverageList,$data['excessLiability']);
             $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
             $result = json_decode($result,true);
             $this->EFRRates($data,$result);
@@ -60,6 +58,7 @@ class AutoRenewalRateCard extends RateCard{
             $this->DiveStoreRates($data);
         }
         $data['policyStatus'] = 'AutoRenewal Pending';
+        $data['previous_policy_data'] = json_encode(array());
         $this->logger->info("AutoRenewalRateCard Final DATA".print_r($data,true));
         return $data;
     }
@@ -101,11 +100,18 @@ class AutoRenewalRateCard extends RateCard{
 
     private function EFRRates(&$data,$coverages){
         $this->logger->info("EFR RATES");
-        if(isset($coverages[$data['liabilityCoverage']])){
-            $data['LiabilityVal'] = $coverages[$data['liabilityCoverage']];
+        if(isset($coverages[$data['liabilityCoverage1000000']])&& !isset($data['liabilityCoverage1000000'])){
+            $data['liabilityVal'] = $coverages['liabilityCoverage1000000'];
+        } else {
+            $data['liabilityVal'] = $data['liabilityCoverage1000000'];
         }
-        $data['coverageAmount'] = $data[$data['liabilityCoverage']];
-        $data['amount'] = (float)$data['coverageAmount'];
+        if(isset($coverages[$data['excessLiability']])&& !isset($data['excessLiabilityVal'])){
+            $data['excessLiabilityVal'] = $coverages[$data['excessLiability']];
+        } else {
+            $data['excessLiabilityVal'] = $data[$data['excessLiability']];
+        }
+        $data['coverageAmount'] = (float) $data['liabilityVal']+ (float) $data['excessLiabilityVal'];
+        $data['amount'] = (float) $data['coverageAmount'];
     }
 
     private function DiveBoatRates(&$data){
@@ -518,7 +524,7 @@ else {
     $data['nonDivingPoolAmount'] = 0;
 }
 
-if($data["medicalExpensePLCheckBox"] == "true" || $data["medicalExpensePLCheckBox"] == true){
+if($data["medicalPayment"] == "true" || $data["medicalPayment"] == true){
     $data['MedicalExpenseFP'] = (isset($data["medicalExpense"])?$data["medicalExpense"]:0);
 }
 else{

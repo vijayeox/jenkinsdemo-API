@@ -34,7 +34,7 @@ class FormService extends AbstractService
     {
         $this->logger->info("EXECUTING CREATE FORM ");
         $form = new Form();
-        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
+        $data['uuid'] = (isset($data['uuid']) && !empty($data['uuid'])) ? $data['uuid'] :  UuidUtil::uuid();
         $template = $this->parseForm($data, $fieldReference);
         if($template == 0){
             return 0;
@@ -212,6 +212,7 @@ class FormService extends AbstractService
             return 0;
         }
         if(count($errors) > 0){
+            $this->logger->info("Form Field mapping Errors ".json_encode($errors, JSON_PRETTY_PRINT));
             $validationException = new ValidationException();
             $validationException->setErrors($errors);
             throw $validationException;

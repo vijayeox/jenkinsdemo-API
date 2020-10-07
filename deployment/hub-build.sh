@@ -42,6 +42,15 @@ buildhelp()
     echo -e "17. insuranceoi           -${YELLOW}For packaging insuranceoi app.${RESET}"
     echo -e "18. finance               -${YELLOW}For packaging Finance app.${RESET}"
     echo -e "19. transportation        -${YELLOW}For packaging Transportation app.${RESET}"
+    echo -e "20. axon                  -${YELLOW}For packaging axon app.${RESET}"
+    echo -e "21. covid                 -${YELLOW}For packaging covid app.${RESET}"
+    echo -e "22. riscom                -${YELLOW}For packaging riscom app.${RESET}"
+    echo -e "23. biofi                 -${YELLOW}For packaging biofi app.${RESET}"
+    echo -e "24. tennant               -${YELLOW}For packaging tennant app.${RESET}"
+    echo -e "25. bsri                  -${YELLOW}For packaging bsri app.${RESET}"
+    echo -e "26. hiig                  -${YELLOW}For packaging hiig app.${RESET}"
+    echo -e "27. arrowhead             -${YELLOW}For packaging ArrowHead app.${RESET}"
+    echo -e "28. appbuilder            -${YELLOW}For packaging EOXAppBuilder app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -131,6 +140,8 @@ workflow()
     mkdir -p build/integrations/workflow
     cd ${OXHOME}/integrations/workflow
     echo -e "${YELLOW}Building workflow....${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/integrations/workflow/ProcessEngine/src/main/resources/* ProcessEngine/src/main/resources/
     docker run -t -v ${PWD}:/camunda --entrypoint ./dockerbuild.sh workflow_build
     echo -e "${YELLOW}Building workflow completed....${RESET}"
     echo -e "${YELLOW}Copying workflow to build folder....${RESET}"
@@ -233,6 +244,96 @@ transportation()
     echo -e "${YELLOW}Copying clients Transportation Completed.${RESET}"
 
 }
+arrowhead()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Arrowhead to build folder.${RESET}"
+    rsync -rl clients/ArrowHead/ ./build/clients/ArrowHead/
+    echo -e "${YELLOW}Copying clients Arrowhead Completed.${RESET}"
+
+}
+axon()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients AXON to build folder.${RESET}"
+    rsync -rl clients/AXON/ ./build/clients/AXON/
+    echo -e "${YELLOW}Copying clients AXON Completed.${RESET}"
+
+}
+covid()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Covid19 to build folder.${RESET}"
+    rsync -rl clients/Covid19/ ./build/clients/Covid19/
+    echo -e "${YELLOW}Copying clients Covid19 Completed.${RESET}"
+
+}
+riscom()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Riscom to build folder.${RESET}"
+    rsync -rl clients/RISCOM/ ./build/clients/RISCOM/
+    echo -e "${YELLOW}Copying clients Riscom Completed.${RESET}"
+
+}
+biofi()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Biofi to build folder.${RESET}"
+    rsync -rl clients/Biofi/ ./build/clients/Biofi/
+    echo -e "${YELLOW}Copying clients Biofi Completed.${RESET}"
+
+}
+tennant()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Tennant to build folder.${RESET}"
+    rsync -rl clients/Tennant/ ./build/clients/Tennant/
+    echo -e "${YELLOW}Copying clients Tennant Completed.${RESET}"
+
+}
+bsri()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients BSRI to build folder.${RESET}"
+    rsync -rl clients/BSRI/ ./build/clients/BSRI/
+    echo -e "${YELLOW}Copying clients BSRI Completed.${RESET}"
+
+}
+hiig()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients HIIG to build folder.${RESET}"
+    rsync -rl clients/HIIG/ ./build/clients/HIIG/
+    echo -e "${YELLOW}Copying clients HIIG Completed.${RESET}"
+
+}
+appbuilder()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients EOXAppBuilder to build folder.${RESET}"
+    rsync -rl clients/EOXAppBuilder/ ./build/clients/EOXAppBuilder/
+    echo -e "${YELLOW}Copying clients EOXAppBuilder Completed.${RESET}"
+
+}
 integrations()
 {
     camel
@@ -282,6 +383,49 @@ do
                 insuranceoi
                 package
                 break;;
+
+        axon)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                axon
+                package
+                break;;
+        covid)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                covid
+                package
+                break;;
+        riscom)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                riscom
+                package
+                break;;
+        biofi)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                biofi
+                package
+                break;;
+        tennant)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                tennant
+                package
+                break;;
+        bsri)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                bsri
+                package
+                break;;
+        hiig)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                hiig
+                package
+                break;;
         finance)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
@@ -306,6 +450,18 @@ do
                 transportation
                 package
                 break;;
+        arrowhead)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                arrowhead
+                package
+                break;;
+	appbuilder)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                appbuilder
+                package
+                break;;                
         camel)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
                 check_dir

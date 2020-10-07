@@ -1,7 +1,0 @@
-name: 'Trailer Current Location'
-description: 'Trailer Current Location'
-content:
-    -
-        type: Dashboard
-        content:
-            uuid: c3b1d64e-b61d-4f5e-8807-d34cd6a9c868

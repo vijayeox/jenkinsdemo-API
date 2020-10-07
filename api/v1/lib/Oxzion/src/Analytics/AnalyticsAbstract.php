@@ -6,21 +6,23 @@ use Oxzion\Service\TemplateService;
 use Logger;
 
 
-class AnalyticsAbstract
+abstract class AnalyticsAbstract implements AnalyticsEngine
 {
 
     protected $logger;
-    protected $config;
+    protected $config; //This config is config for connection not the app config. 
     protected $appConfig;
     protected $appDBAdapter;
 
-    public function __construct($config,$appDBAdapter,$appConfig) {
-        $this->config = $config;  //This config is config for connection not the app config. 
+    public function __construct($appDBAdapter,$appConfig) {
         $this->appDBAdapter = $appDBAdapter;
         $this->appConfig = $appConfig;
         $this->logger = Logger::getLogger(get_class($this));
     }
 
+    public function setConfig($config){
+        $this->config=$config;
+    }
 
     public function runQuery($app_name,$entity_name,$parameters){
         $finalResult = $this->getData($app_name,$entity_name,$parameters);
@@ -30,10 +32,43 @@ class AnalyticsAbstract
         if (isset($parameters['target'])) {
             $finalResult['target'] = $parameters['target'];
         }
+        if (!empty($parameters['pivot'])) {
+            $finalResult['data'] = $this->pivot($finalResult['data'],$parameters);
+        }
         if (isset($parameters['template'])) {
-            $finalResult['data'] = $this->applyTemplate($finalResult,$parameters);
+            $finalResult['data'] = $this->applyTemplate($finalResult['data'],$parameters);
         }
         return $finalResult;
+    }
+
+    public function pivot($data,$parameters) {
+        $groupArray=explode(',',$parameters['group']);
+        if (!isset($groupArray[0]) || !isset($groupArray[1])) {
+            throw new \Exception('Please check query. Two Groups and Field should Exist');
+        }
+        $pivotResult = [];
+        $group1 = $groupArray[0];
+        $group2 = $groupArray[1];
+        $tmpArray=[];
+        $columnKeys = [];
+        if (isset($data[0]['count'])) {
+            $valueColumn = 'count';
+        } else {
+            $valueColumn = $parameters['field'];
+        }
+        foreach ($data as $row) {
+            $tmpArray[$row[$group1]][$row[$group2]] = $row[$valueColumn];
+            if (!isset($columnKeys[$row[$group2]]))
+            {
+                $columnKeys[$row[$group2]] = null; 
+            }
+        }
+        foreach ($tmpArray as $key=>$groupArray) {
+            $array1 = $groupArray+$columnKeys;
+            $pivotResult[] = array_merge([$group1=>$key],$array1);
+        }
+        return $pivotResult;
+
     }
 
 

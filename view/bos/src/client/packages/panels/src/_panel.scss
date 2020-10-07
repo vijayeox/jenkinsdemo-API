@@ -40,8 +40,8 @@
 
   &[data-ontop=true] {
     /* Begin Oxzion customization. */
-    /* z-index: 16777271; */
-    z-index: 10009;
+    /* z-index: 9995; */
+    z-index: 9995 !important;
     /* End Oxzion customization. */
   }
 
@@ -50,7 +50,7 @@
   }
 
   &[data-position=bottom] {
-    bottom: 0;
+    bottom: 2em !important;
   }
 
   &>.osjs-panel-item {
@@ -70,6 +70,24 @@
       margin-right: $base-margin / 2;
     }
   }
+}
+
+.footer-CR{
+  display: flex;
+  min-height: 2em;
+  align-items: center;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  line-height: normal;
+  bottom: 0 !important;
+  flex-direction: row-reverse !important;
+  background-color: #275362 !important;
+  z-index: 50;
+}
+.footer-CR .coppyRight {
+  color: #fff
 }
 
 .osjs-root[data-dir="rtl"] {
@@ -124,7 +142,7 @@
 
 .appmenu-visible {
   width: 300px;
-  z-index: 16777271;
+  z-index: 9995;
 }
 
 /* Position and style the close button (top right corner) */

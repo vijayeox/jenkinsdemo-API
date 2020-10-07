@@ -10,72 +10,39 @@ use Oxzion\AppDelegate\UserContextTrait;
 class UpdatePolicyRates extends AbstractAppDelegate
 {
     use UserContextTrait;
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
 
     // Premium Calculation values are fetched here
-    public function execute(array $data,Persistence $persistenceService)
-    {  
-
-        if(AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')){
-             if($data['product'] == 'Individual Professional Liability - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Individual Professional Liability';
-            }else if($data['product'] == 'Individual Professional Liability - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Individual Professional Liability';
-            }else if($data['product'] == 'Emergency First Response - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Emergency First Response';
-            }else if($data['product'] == 'Emergency First Response - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Emergency First Response';
-            }else if($data['product'] == 'Dive Boat - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Dive Boat';
-            }else if($data['product'] == 'Dive Boat - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Dive Boat';
-            }else if($data['product'] == 'Dive Store - New Policy'){
-                $is_upgrade = 0;
-                $product = 'Dive Store';
-            }else if($data['product'] == 'Dive Store - Upgrade'){
-                $is_upgrade = 1;
-                $product = 'Dive Store';
-            }  
-           
-            if($is_upgrade == 0){
-                $data = $this->updateNewPolicyRates($data,$product,$is_upgrade,$persistenceService);
-            }else if($is_upgrade == 1){
-                $data = $this->updateUpgradePolicyRates($data,$product,$is_upgrade,$persistenceService);
+    public function execute(array $data, Persistence $persistenceService)
+    {
+        $this->logger->info("Update Policy Rates------" . print_r($data, true));
+        if (AuthContext::isPrivileged('MANAGE_ADMIN_WRITE')) {
+            try {
+                $this->updatePolicyRates($data, $persistenceService);
+            } catch (Exception $e) {
+                $this->logger->info("Premium Rates Update Failed -----" . print_r($e, true));
+                throw new DelegateException("Update Failed.Please Try again", 'update_failed');
             }
             return $data;
-        }else{
-            throw new DelegateException("You do not access to this API",'no_access');
+        } else {
+            $this->logger->info("Update Premium Rates : You do not have access to this API");
+            throw new DelegateException("You do not have access to this API", 'no_access');
         }
-        
     }
-
-
-    private function updateNewPolicyRates($data,$product,$is_upgrade,$persistenceService){
-        $total = (float)$data['premium'] + (float)$data['tax'] + (float)$data['padi_fee'];
-        $updateQuery = "UPDATE premium_rate_card SET `premium` = ".$data['premium'].",`tax` = ".$data['tax'].", padi_fee = ".$data['padi_fee'].",total = ".$total." WHERE coverage = '".$data['coverage']."' AND product = '".$product."' AND start_date = '".$data['start_date']."' AND end_date = '".$data['end_date']."' AND `is_upgrade` = ".$is_upgrade." AND `year` = ".$data['year'];
+    private function updatePolicyRates($data, $persistenceService)
+    {
+        $data['padi_fee'] = !empty($data['padi_fee']) ? $data['padi_fee'] : 0;
+        $data['premium'] = !empty($data['premium']) ? $data['premium'] : 0;
+        $data['tax'] = !empty($data['tax']) ? $data['tax'] : 0;
+        $data['downpayment'] = !empty($data['downpayment']) ? $data['downpayment'] : 'NULL';
+        $data['installment_count'] = !empty($data['installment_count']) ? $data['installment_count'] : 'NULL';
+        $data['installment_amount'] = !empty($data['installment_amount']) ? $data['installment_amount'] : 'NULL';
+        $total = (float) $data['premium'] + (float) $data['tax'] + (float) $data['padi_fee'];
+        $updateQuery = "UPDATE premium_rate_card SET `premium` = " . $data['premium'] . ",`tax` = " . $data['tax'] . ", padi_fee = " . $data['padi_fee'] . ",total = " . $total . ", downpayment = ".$data['downpayment'].", installment_count = ".$data['installment_count'].", installment_amount = ".$data['installment_amount']." WHERE id = " . $data['id'];
+        $this->logger->info(" UpdatePolicyRates Query : $updateQuery");
         $result = $persistenceService->updateQuery($updateQuery);
     }
-
-
-
-    private function updateUpgradePolicyRates($data,$product,$is_upgrade,$persistenceService){
-         $total = (float)$data['premium'] + (float)$data['tax'] + (float)$data['padi_fee'];
-         $selectQuery = "SELECT DISTINCT `key` from premium_rate_card WHERE coverage = '".$data['previous_coverage']."'";
-         $result = $persistenceService->selectQuery($selectQuery);
-         while ($result->next()) {
-            $previous_key = $result->current();
-            $previous_key = $previous_key['key'];
-         }
-         $updateQuery = "UPDATE premium_rate_card SET premium = ".$data['premium'].",tax = ".$data['tax'].",padi_fee = ".$data['padi_fee'].",total = ".$total." WHERE coverage = '".$data['coverage']."' AND previous_key = '".$previous_key."' AND product = '".$product."' AND start_date = '".$data['start_date']."' AND end_date = '".$data['end_date']."' AND is_upgrade = ".$is_upgrade." AND `year` = ".$data['year'];
-         $result = $persistenceService->updateQuery($updateQuery);
-    }
-    
 }

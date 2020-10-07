@@ -1,0 +1,57 @@
+name: 'Form Manager'
+description: 'Shows a list of forms'
+content:
+        -
+            type: List
+            content:
+                route: 'app/{{app_uuid}}/artifact/list/form'
+                disableAppId: true    
+                resizable: true
+                actions:
+                    -
+                        name: Edit
+                        rule: "true"
+                        details:
+                            -
+                                type: FormManager
+                                params:
+                                    app_uuid: '{{app_uuid}}'
+                                    content: '{{content}}'
+                        icon: 'far fa-pencil-alt'
+                    -
+                        name: Delete
+                        rule: "true"
+                        details:
+                            -
+                                type: Update
+                                successMessage: "Form deleted successfully!"
+                                params:
+                                    app_uuid: '{{app_uuid}}'
+                                    url: 'app/{{app_uuid}}/artifact/delete/form/{{name}}.json'
+                                    disableAppId: true
+                        icon: 'fas fa-trash-alt' 
+                        updateOnly: true   
+                operations:
+                    title: "Create New Form"
+                    actions:
+                        -
+                            name: Build Form
+                            rule: 'true'
+                            details:
+                                -
+                                    type: FormManager
+                                    params:
+                                        app_uuid: '{{app_uuid}}'
+                        -
+                            name: Import Form
+                            rule: 'true'
+                            details:
+                                -
+                                    type: UploadArtifact
+                                    entity: form
+                                    params:
+                                        app_uuid: '{{app_uuid}}'
+                columnConfig:
+                    -
+                        title: Name
+                        field: name

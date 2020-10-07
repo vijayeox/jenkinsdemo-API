@@ -5,6 +5,18 @@
 </head>
 <body>
 	<div>
+		{if isset($upgradeStatus)}
+			{if $upgradeStatus == true || $upgradeStatus === "true" || $upgradeStatus == 1}
+				{if isset($upgradeGroupLiability)}
+					{assign var=list value=$upgradeGroupLiability|json_decode:true}
+					{foreach from=$list item=$upgradeData}
+					    		<p class = "grp_endoUpgrade">
+					    			Effective {$upgradeData.update_date} : The Liability Limit are ${$upgradeData.combinedSingleLimit|number_format} per occurance and ${$upgradeData.annualAggregate|number_format} Annual Aggregate.
+					    		</p>
+				    {/foreach}
+				{/if}
+		    {/if}
+		{/if}
 	<div class = "second_content">
 		<hr class = "spacing1"></hr>
 			<p class = "grppolicy_notice">
@@ -13,7 +25,6 @@
 			<p class = "grppolicy_notice">
 				Notice of cancelation: The premium and any taxes or fees are fully earned upon inception and no refund is granted unless cancelled by the company.If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.
 			</p>
-		<hr class = "spacing1"></hr>
 		{if $state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/AK.tpl"}</b>
@@ -227,17 +238,13 @@
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/WY.tpl"}</b>
 				</p></center>
 			{/if}
+			<hr class = "spacing1"></hr>
+			{if isset($groupExcludedOperation) && $groupExcludedOperation != ""}
+			<p style="margin-bottom: 5px;font-size: 15px;"><b>EXCLUDED OPERATION:</b></p>
+	        		<p style="margin-top:1%;margin-left: 2%;text-align: justify;font-size: 13px;">{$groupExcludedOperation}</p>
+	        <hr></hr>
+	    	{/if}
 	</div>
-
-	{if $additional_insured == 'yes'}
-		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
-		{assign var=list value=$groupAdditionalInsured|json_decode:true}
-		{foreach from=$list item=$additional}
-	    		<p class = "grpai_list">
-	    			&nbsp&nbsp&nbsp{$additional.name}
-	    		</p>
-    		{/foreach}
-	{/if}
 	</div>
 </body>
 </html>

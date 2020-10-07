@@ -3,31 +3,26 @@
 namespace Analytics\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
+use Oxzion\Type;
 
 class Query extends Entity
 {
-    protected $data = array(
-        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE , 'required' => FALSE),
-        'name' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'datasource_id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => FALSE , 'required' => TRUE),
-        'configuration' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'ispublic' => array('type' => parent::BOOLEANVAL, 'value' => false, 'readonly' => FALSE , 'required' => FALSE),
-        'created_by' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'date_created' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE , 'required' => FALSE),
-        'org_id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
-        'isdeleted' => array('type' => parent::BOOLEANVAL, 'value' => false, 'readonly' => FALSE , 'required' => FALSE),
-        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE)
-    );
+    protected static $MODEL = [
+        'id' => ['type' => Type::INTEGER, 'readonly' => true, 'required' => false],
+        'uuid' => ['type' => Type::UUID, 'readonly' => true, 'required' => false],
+        'name' => ['type' => Type::STRING, 'readonly' => false, 'required' => true],
+        'datasource_id' => ['type' => Type::INTEGER, 'readonly' => false, 'required' => true],
+        'configuration' => ['type' => Type::STRING, 'readonly' => false, 'required' => true],
+        'ispublic' => ['type' => Type::BOOLEAN, 'readonly' => false, 'required' => false, 'value' => false],
+        'created_by' => ['type' => Type::INTEGER, 'readonly' => true, 'required' => false],
+        'date_created' => ['type' => Type::TIMESTAMP, 'readonly' => true, 'required' => false],
+        'org_id' => ['type' => Type::INTEGER, 'readonly' => true, 'required' => false],
+        'isdeleted' => ['type' => Type::BOOLEAN, 'readonly' => false, 'required' => false, 'value' => false],
+        'version' => ['type' => Type::INTEGER, 'readonly' => false, 'required' => false],
+    ];
 
-    public function validate()
+    protected function &getModel()
     {
-        $this->completeValidation();
-    }
-
-    public function updateValidate()
-    {
-        $this->typeChecker();
+        return self::$MODEL;
     }
 }

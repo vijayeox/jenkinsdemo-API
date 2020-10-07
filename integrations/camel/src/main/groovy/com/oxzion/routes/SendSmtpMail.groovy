@@ -10,6 +10,7 @@ import org.apache.camel.component.properties.PropertiesComponent
 import org.apache.camel.impl.DefaultCamelContext
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
+import org.apache.activemq.command.ActiveMQTextMessage
 
 import javax.activation.DataHandler
 import javax.activation.FileDataSource
@@ -30,7 +31,6 @@ public class SendSmtpMail extends RouteBuilder {
     void configure() throws Exception {
         CamelContext context = new DefaultCamelContext()
         PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class)
-        pc.setLocation("classpath:mail.properties")
         context.addComponent("properties", pc)
         context.addRoutes(new RouteBuilder() {
             @Override
@@ -41,19 +41,37 @@ public class SendSmtpMail extends RouteBuilder {
                         def messageIn  = exchange.getIn()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
                         logger.info("Processing Email with payload ${object}")
-                        def toList = ""
+                    
                         if(object.to){
-                            def recepientList = object.to instanceof String ? [object.to] : object.to as ArrayList
-                            for (int i=0;i<recepientList.size();i++){
-                                def recepient = recepientList.get(i)
-                                if(i<recepientList.size()-1){
-                                    toList += recepient+","
-                                } else {
-                                    toList += recepient
-                                }
-                            }
+                            def toList = ""
+                            toList = setMessageHeader(object.to)
                             messageIn.setHeader("To", toList)
                         }
+                        if(object.cc){
+                            def ccList = ""
+                            ccList = setMessageHeader(object.cc)
+                            messageIn.setHeader("Cc", ccList)
+                        }
+
+                        def smtpBccList = ""
+                        try {
+                            smtpBccList = getContext().resolvePropertyPlaceholders("{{smtp.bcc.email}}")
+                        } catch(Exception ex) {
+                            smtpBccList = ""
+                        }
+                        def bccList = ""
+                        if(object.bcc){
+                            bccList = setMessageHeader(object.bcc)
+                            if(smtpBccList){
+                                smtpBccList += ","+bccList    
+                            }else{
+                                smtpBccList += bccList
+                            }
+                        }
+                        if(smtpBccList){
+                             messageIn.setHeader("Bcc", smtpBccList)    
+                        }
+                       
                         if(object.from){
                             messageIn.setHeader("From", object.from as String)
                         } else {
@@ -70,6 +88,7 @@ public class SendSmtpMail extends RouteBuilder {
                             messageIn.setBody('')
                         }
                         messageIn.setHeader("Content-Type", "text/html")
+                        logger.info("Mail Headers" + messageIn.getHeaders() as String)
                         if(object.attachments){
                             if(object.attachments.size()>0){
                                 def attachmentList = object.attachments as ArrayList
@@ -87,12 +106,36 @@ public class SendSmtpMail extends RouteBuilder {
                         def params = [to: 'mail']
                         def jsonparams = new JsonBuilder(params).toPrettyString()
                         def stackTrace = new JsonBuilder(exception).toPrettyString()
-                        ErrorLog.log('activemq_queue',stackTrace,exchange.getMessage().getBody().toString(),jsonparams)
-                        System.out.println("handling ex")
+                        logger.info("Processing Email with payload ${exchange.getMessage().getJmsMessage()}")
+                        def message = exchange.getMessage().getJmsMessage();
+                        if (message instanceof ActiveMQTextMessage) {
+                            ActiveMQTextMessage textMessage = (ActiveMQTextMessage) message;
+                            try {
+                                String json = message.getText();
+                                logger.info(json)
+                                ErrorLog.log('activemq_queue',stackTrace,json,jsonparams)
+                            } catch (Exception e) {
+                                logger.info("Could not extract data to log from TextMessage - ${e}")
+                            }
+                        }
                     }
                 })
             }
         })
         context.start()
+    }
+
+    def setMessageHeader(header){
+        def list = ""
+        def recepientList = header instanceof String ? [header] : header as ArrayList
+        for (int i=0;i<recepientList.size();i++){
+            def recepient = recepientList.get(i)
+            if(i<recepientList.size()-1){
+                list += recepient+","
+            } else {
+                list += recepient
+            }
+        }
+       return list
     }
 }

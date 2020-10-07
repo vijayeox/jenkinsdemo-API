@@ -17,12 +17,17 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','update_date','padi'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','update_date','padi','dba'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
               for (var j = 0; j < element.length; ++j) {
                   element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+              if (css_selector_classes[css_class] == "dba") {
+                if(vars['dba'] != ""){
+                  document.getElementById("dbaName").style.display = "block";
+                }
               }
           }
       }
@@ -48,9 +53,13 @@
 
           <div class = "r_label">
           <p class ='r_label1'><b>Legal Business Name : </b> <span class="business_name"></span></p>
-          <p class ='r_label2'><b>Member #: </b><span class = "padi"></span></p>
+          <p class ='r_label2'><b>Member #: </b><span class = "business_padi"></span></p>
           </div>
-
+          <div class = "r_label">
+          <div class = "r_label1"><p  id = "dbaName" style = "display:none;"><b>DBA:</b><span class ="dba uppercase"></span></p>&nbsp</div>
+          <p class ='r_label2'>&nbsp</p>
+          </div>
+          <div style = "margin-top: 2%">&nbsp</div>
           <div>
             <p class ="r_content">To renew your Store/Resort Professional Liability policy,please follow these steps.</p>
             <p class ="r_content">1.  Review the members below and make any changes. An application is not required from each renewing member.</p>

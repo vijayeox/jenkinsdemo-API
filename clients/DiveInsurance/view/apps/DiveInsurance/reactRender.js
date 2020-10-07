@@ -19,7 +19,7 @@ module.exports = function(core, proc) {
           const params = {
             productName: req.params.productName,
             proc: proc,
-            core: core
+            core: core,
           };
           const component = ReactDOMServer.renderToString(
             <Register {...params} />
@@ -47,6 +47,8 @@ module.exports = function(core, proc) {
               <script src="../js/country.js"></script>
               <script src="../js/phonelist.js"></script>
               <script src="../js/jquery.min.js"></script>
+              <script src="../js/moment.js"></script>
+              <script src="../js/moment-tz.js"></script>
               <script src="../js/formio.full.min.js"></script>
               <script src="../js/custom.js"></script>
               <script src="../js/sweetaleart.js"></script>

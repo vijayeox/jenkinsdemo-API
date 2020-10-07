@@ -30,13 +30,23 @@
   },
   "dashboard": {
     "title": {
-      "en_EN":"Dashboard"
+      "en_EN":"Operation Intelligence"
      }
   },
   "dashboardEditor": {
     "title": {
-      "en_EN":"Edit dashboard"
+      "en_EN":"Edit OI"
     }
+  },
+  "dateFormat": {
+    "title": {
+      "en_EN":"MM/dd/YYYY"
+     }
+  },
+  "dateTimeFormat": {
+    "title": {
+      "en_EN":"MM/dd/YYYY H:i:s"
+     }
   },
   "files": [
     "main.js",

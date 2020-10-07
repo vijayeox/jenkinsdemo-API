@@ -10,20 +10,27 @@ use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
+use Oxzion\EntityNotFoundException;
 use Oxzion\Service\AbstractService;
+use Oxzion\Service\EntityService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\ValidationException;
+use Oxzion\Utils\ArrayUtils;
+use Oxzion\Model\User;
+use Oxzion\Model\UserProfile;
 
 class OrganizationService extends AbstractService
 {
     protected $table;
     private $userService;
     private $roleService;
-    private $addressService;
     protected $modelClass;
     private $messageProducer;
     private $privilegeService;
+    private $orgProfileService;
+    private $entityService;
     static $userField = array('name' => 'ox_user.name', 'id' => 'ox_user.id', 'city' => 'ox_address.city', 'country' => 'ox_address.country', 'address' => 'ox_address.address1', 'address2' => 'ox_address.address2', 'state' => 'ox_address.state');
     static $groupField = array('name' => 'oxg.name', 'description' => 'oxg.description');
     static $projectField = array('name' => 'oxp.name', 'description' => 'oxp.description', 'date_created' => 'oxp.date_created');
@@ -39,16 +46,17 @@ class OrganizationService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, AddressService $addressService, RoleService $roleService, PrivilegeService $privilegeService, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, RoleService $roleService, PrivilegeService $privilegeService, OrganizationProfileService $orgProfileService, EntityService $entityService, MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->userService = $userService;
-        $this->addressService = $addressService;
         $this->roleService = $roleService;
         $this->modelClass = new Organization();
         $this->privilegeService = $privilegeService;
         $this->messageProducer = $messageProducer;
+        $this->orgProfileService = $orgProfileService;
+        $this->entityService = $entityService;
     }
 
     /**
@@ -80,11 +88,17 @@ class OrganizationService extends AbstractService
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
 
-        try {
-            $data['name'] = isset($data['name']) ? $data['name'] : null;
-            $select = "SELECT count(name),status,uuid from ox_organization where name = '" . $data['name'] . "'";
+        try{
+            $count = 0;
+            $this->beginTransaction();
+            if (isset($data['type']) && $data['type'] == Organization::INDIVIDUAL) {
+                $data['name'] = $data['contact']['firstname']. " ". $data['contact']['lastname'];
+            }else if(!isset($data['name'])){
+                throw new ValidaTionException("Organization name required");
+            }
+            $select = "SELECT oxo.name,oxo.status,oxo.uuid from ox_organization oxo where oxo.name = '" . $data['name'] . "'";
             $result = $this->executeQuerywithParams($select)->toArray();
-            if ($result[0]['count(name)'] > 0) {
+            if (count($result) > 0) {
                 if ($result[0]['status'] == 'Inactive') {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0;
                     if ($data['reactivate'] == 1) {
@@ -92,46 +106,204 @@ class OrganizationService extends AbstractService
                         $this->logger->info("Data modified before Organization Update - " . print_r($data, true));
                         $count = $this->updateOrganization($result[0]['uuid'], $data, $files);
                         $this->uploadOrgLogo($result[0]['uuid'], $files);
-                        if ($count == 1) {
-                            return 1;
-                        }
                     } else {
                         throw new ServiceException("Organization already exists would you like to reactivate?", "org.already.exists");
                     }
                 } else {
                     throw new ServiceException("Organization already exists", "org.exists");
                 }
+            }else{
+                if (!isset($data['type']) || (isset($data['type']) && $data['type'] == Organization::BUSINESS)) {
+                    $this->orgProfileService->addOrganizationProfile($data);
+                    $data['type'] = Organization::BUSINESS;        
+                }
+                $count = $this->saveOrganizationInternal($data, $files);
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $data['name'], 'status' => $data['status'])), 'ORGANIZATION_ADDED');
             }
-            $addressid = $this->addressService->addAddress($data);
-            $data['address_id'] = $addressid;
-            $form = new Organization($data);
-            $form->validate();
-            $this->beginTransaction();
-            $count = 0;
-            $this->logger->info("Data modified before Organization Create - " . print_r($data, true));
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                throw new ServiceException("Failed to create new entity", "failed.create.org");
-            }
-            $form->id = $this->table->getLastInsertValue();
-            $data['preferences'] = json_decode($data['preferences'], true);
-            $data['id'] = $form->id;
-            $userid['id'] = $this->setupBasicOrg($data, $data['contact'], $data['preferences']);
-            if (isset($userid['id'])) {
-                $update = "UPDATE `ox_organization` SET `contactid` = '" . $userid['id'] . "' where uuid = '" . $data['uuid'] . "'";
-                $resultSet = $this->executeQueryWithParams($update);
-            } else {
-                throw new ServiceException("Failed to create new entity", "failed.create.org");
-            }
-            $insert = "INSERT INTO ox_app_registry (`org_id`,`app_id`,`date_created`,`start_options`) SELECT " . $form->id . ",id,CURRENT_TIMESTAMP(),start_options from ox_app where isdefault = 1";
-            $resultSet = $this->executeQueryWithParams($insert);
-            $this->uploadOrgLogo($data['uuid'], $files);
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $form->name, 'status' => $form->status)), 'ORGANIZATION_ADDED');
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
+        }    
+        
+        return $count;
+    }
+
+    public function registerAccount(&$data){
+        $this->logger->info("Register Account ----".print_r($data,true));
+        // if(!isset($data["business_role"])){
+        //     throw new ServiceException("Business Role not specified", "business.role.required");
+        // }
+        if(!isset($data['type'])){
+            throw new ServiceException("Business Type not specified", "business.type.required");
         }
+        if (!ArrayUtils::isKeyDefined($data, 'username')) {
+            $data['username'] = $data['email'];
+        }
+        $result = $this->userService->checkUserExists($data);
+        if($result == 1){
+            return $result;
+        }
+        $user = new User($data);
+        $userProfile = new UserProfile($data);
+        $data['contact'] = array_merge($user->toArray(),$userProfile->toArray());
+        $params = $data;
+        $params['preferences'] = array();
+        $appId = null;
+        if (isset($params['app_id'])){
+            $appId = $this->getAppId($params['app_id']);
+            $params['app_id'] = $appId;
+        }
+        if(!$appId){
+            throw new EntityNotFoundException("Invalid App Id");
+        }
+        
+        try{
+            $this->beginTransaction();
+            AuthContext::put(AuthConstants::REGISTRATION, TRUE);
+            $result = $this->createOrganization($params, NULL);
+            $data['orgId'] = $params['uuid'];
+            $this->addIdentifierForOrg($appId, $params);
+            $this->commit();
+            
+        }catch(Exception $e){
+            $this->logger->error($e->getMessage(), $e);
+            $this->rollback();
+            throw $e;
+        }
+
+        return $result;
+    }
+
+    private function getAppId($appId){
+        if ($app = $this->getIdFromUuid('ox_app', $appId)) {
+            $appId = $app;
+        } 
+
+        return $appId;
+    }
+
+    private function setupBusinessOfferings(&$params){
+        if (!isset($params['app_id']) || !isset($params['businessOffering'])){
+            return;
+        }
+        $appId = $params['app_id'];
+        $offerings = $params['businessOffering'];
+        $params['business_role_id'] = array();
+        foreach ($offerings as $offering) {
+            $offering['app_id'] = $appId;
+            $offering['id'] = $params['id'];
+            $this->setupBusinessRole($offering);
+            if(isset($appId) && isset($offering['org_business_role_id']) && count($offering['org_business_role_id']) > 0){
+                $orgBusinessRoleId = $offering['org_business_role_id'][0];
+                $this->setupOrgOffering($appId, $orgBusinessRoleId, $offering['entity']);
+                $params['business_role_id'][] = $offering['business_role_id'][0];
+            }
+        }
+        
+    }
+
+    private function setupOrgOffering($appId, $orgBusinessRoleId, $offerings){
+        $query = "DELETE FROM ox_org_offering where org_business_role_id = :orgBusinessRoleId";
+        $params = array("orgBusinessRoleId" => $orgBusinessRoleId);
+        $this->executeUpdateWithBindParameters($query, $params);
+        $query = "INSERT INTO ox_org_offering (org_business_role_id, entity_id) VALUES 
+                    (:orgBusinessRoleId, :entityId)";
+        
+        foreach ($offerings as $value) {
+            $entity = $this->entityService->getEntityByName($appId, $value);
+            if(!$entity){
+                continue;
+            }
+            $params['entityId'] = $entity['id'];
+            $this->executeUpdateWithBindParameters($query, $params);
+        }
+        
+    }
+    private function setupBusinessRole(&$params){
+        if (!isset($params['app_id']) || !isset($params['businessRole'])){
+            return;
+        }
+        $appId = $this->getAppId($params['app_id']);
+        $query = "delete from ox_org_business_role where org_id = :orgId";
+        $queryParams = ["orgId" => $params['id']];
+        $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
+        if(is_string($params['businessRole'])){
+            $businessRole = json_decode($params['businessRole'], true);
+            $businessRole = [$params['businessRole']];
+        }
+        $businessRole = isset($businessRole) ? $businessRole : $params['businessRole'];
+        $bRole = "";
+        $queryParams = ['appId'=> $appId];
+        foreach ($businessRole as $key => $value) {
+            if($bRole != "") {
+                $bRole .= ", ";     
+            }else{
+                $bRole = "(";
+            }
+            $bRole.=":param$key";
+            $queryParams["param$key"] = $value;
+        }
+        $bRole .=")";
+        $query = "INSERT INTO ox_org_business_role (org_id, business_role_id)
+                    SELECT ".$params['id'].", id from ox_business_role 
+                    WHERE app_id = :appId and name in $bRole";
+        $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
+        $this->executeUpdateWithBindParameters($query, $queryParams);
+        $query = "SELECT id, business_role_id from ox_org_business_role where org_id = :orgId";
+        $queryParams = ["orgId" => $params['id']];
+        $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        $params['business_role_id'] = array();
+        $params['org_business_role_id'] = array();
+        foreach ($result as $value) {
+            $params['business_role_id'][] = $value['business_role_id'];
+            $params['org_business_role_id'][] = $value['id'];
+        }
+    }
+    private function addIdentifierForOrg($appId, $params){
+        if ($appId && isset($params['identifier_field'])) {
+            $this->logger->info("Add identifier for Account");
+            $query = "INSERT INTO ox_wf_user_identifier(`app_id`,`org_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:appId, :orgId, :userId, :identifierName, :identifier)";
+            $queryParams = array("appId" => $appId,
+                                    "orgId" => $params['id'],
+                                    "userId" => $params['contact']['id'],
+                                    "identifierName" => $params['identifier_field'],
+                                    "identifier" => $params[$params['identifier_field']]);
+            $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
+            $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
+        }
+    }
+    private function saveOrganizationInternal(&$data, $files = NULL){
+        $form = new Organization($data);
+        $form->validate();
+        $count = 0;
+        $this->logger->info("Data modified before Organization Create - " . print_r($form, true));
+        $count = $this->table->save($form);
+        if ($count == 0) {
+            throw new ServiceException("Failed to create new Organization", "failed.create.org");
+        }
+        $form->id = $this->table->getLastInsertValue();
+        $data['preferences'] = json_decode($data['preferences'], true);
+        $data['id'] = $form->id;
+        $this->setupBusinessRole($data);
+        $defaultRoles = true;
+        if(isset($data['business_role_id'])){
+            $defaultRoles = false;
+        }
+        $this->setupBusinessOfferings($data);
+        $userId = $this->setupBasicOrg($data, $data['contact'], $data['preferences'], $defaultRoles);
+        unset($data['business_role_id']);
+        if (isset($userId)) {
+            $data['contact']['id'] = $userId;
+            $update = "UPDATE `ox_organization` SET `contactid` = '" . $userId . "' where uuid = '" . $data['uuid'] . "'";
+            $resultSet = $this->executeQueryWithParams($update);
+        } else {
+            throw new ServiceException("Failed to create new Organization", "failed.create.org");
+        }
+        $insert = "INSERT INTO ox_app_registry (`org_id`,`app_id`,`date_created`,`start_options`) SELECT " . $form->id . ",id,CURRENT_TIMESTAMP(),start_options from ox_app where isdefault = 1";
+        $resultSet = $this->executeQueryWithParams($insert);
+        $this->uploadOrgLogo($data['uuid'], $files);
+        $data['status'] = $form->status;
         return $count;
     }
 
@@ -177,10 +349,10 @@ class OrganizationService extends AbstractService
         }
     }
 
-    private function setupBasicOrg($org, $contactPerson, $orgPreferences)
+    private function setupBasicOrg($org, $contactPerson, $orgPreferences, $defaultRoles)
     {
         // adding basic roles
-        $returnArray['roles'] = $this->roleService->createBasicRoles($org['id']);
+        $returnArray['roles'] = $this->roleService->createBasicRoles($org['id'], isset($org['business_role_id']) ? $org['business_role_id'] : NULL, $defaultRoles);
         // adding a user
         $returnArray['user'] = $this->userService->createAdminForOrg($org, $contactPerson, $orgPreferences);
         return $returnArray['user'];
@@ -191,7 +363,7 @@ class OrganizationService extends AbstractService
         $create = true;
         if (isset($orgData['uuid'])) {
             try {
-                $result = $this->updateOrganization($orgData['uuid'], $orgData);
+                $result = $this->updateOrganization($orgData['uuid'], $orgData, null);
                 $create = false;
             } catch (ServiceException $e) {
                 if ($e->getMessageCode() != 'org.not.found') {
@@ -208,6 +380,7 @@ class OrganizationService extends AbstractService
                 throw $e;
             }
         }
+
         return $result;
     }
 
@@ -227,15 +400,14 @@ class OrganizationService extends AbstractService
         if (isset($data['contactid'])) {
             $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
         }
+        if (isset($data['preferences']) && (!is_string($data['preferences']))) {
+            $data['preferences'] = json_encode($data['preferences']);
+        }
         $org = $obj->toArray();
         $form = new Organization();
         $changedArray = array_merge($obj->toArray(), $data);
-
-        if (isset($changedArray['address_id'])) {
-            $this->addressService->updateAddress($changedArray['address_id'], $data);
-        } else {
-            $addressid = $this->addressService->addAddress($data);
-            $changedArray['address_id'] = $addressid;
+        if (isset($changedArray['org_profile_id'])) {
+            $this->orgProfileService->updateOrganizationProfile($changedArray['org_profile_id'],$data);
         }
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
@@ -311,12 +483,10 @@ class OrganizationService extends AbstractService
      */
     public function getOrganization($id)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_organization')
-            ->columns(array("*"))
-            ->where(array('ox_organization.id' => $id, 'status' => "Active"));
-        $response = $this->executeQuery($select)->toArray();
+        $select = "SELECT oxo.uuid, oxo.name, oxo.status, oxo.preferences, oxo.logo, oxo.theme from ox_organization oxo 
+                    where oxo.id =:id and oxo.status=:status";
+        $params = array("id" => $id, "status" => "Active");
+        $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
         if (count($response) == 0) {
             return 0;
         }
@@ -350,7 +520,10 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizationByUuid($id)
     {
-        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid from ox_organization as og join ox_address as oa on og.address_id = oa.id WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences 
+                    from ox_organization as og inner join ox_organization_profile oxop on oxop.id= og.org_profile_id 
+                    join ox_address as oa on oxop.address_id = oa.id  
+                    WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -386,8 +559,8 @@ class OrganizationService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid";
-        $from = " from ox_organization as og join ox_address as oa on og.address_id = oa.id";
+        $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences";
+        $from = " from ox_organization as og join ox_organization_profile as oxop on oxop.id = og.org_profile_id join ox_address as oa on oxop.address_id = oa.id";
         $cntQuery = "SELECT count(og.id) " . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
@@ -500,11 +673,11 @@ class OrganizationService extends AbstractService
         $where = "";
         $sort = "ox_user.name";
 
-        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.email,ox_address.address1,ox_address.address2,ox_address.city,ox_address.state,ox_address.country,ox_address.zip,ox_user.designation,
+        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.username,oxup.email,ox_address.address1,ox_address.address2,ox_address.city,ox_address.state,ox_address.country,ox_address.zip,oxemp.designation,
         case when (ox_organization.contactid = ox_user.id)
         then 1
         end as is_admin";
-        $from = " FROM ox_user inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id LEFT join ox_address on ox_user.address_id = ox_address.id";
+        $from = " FROM ox_user inner join ox_user_profile oxup on oxup.id = ox_user.user_profile_id inner join ox_employee oxemp on oxemp.user_profile_id = oxup.id inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id LEFT join ox_address on oxup.address_id = ox_address.id";
 
         $cntQuery = "SELECT count(ox_user.id)" . $from;
 
@@ -637,10 +810,9 @@ class OrganizationService extends AbstractService
         $where = "";
         $sort = "oxp.name";
 
-        $select = "SELECT oxp.uuid,oxp.name,oxp.description,subpro.name as subproject_name,subpro.uuid as subproject_uuid, oxu.uuid as manager_id, oxo.uuid as org_id";
+        $select = "SELECT oxp.uuid,oxp.name,oxp.description, oxu.uuid as manager_id, oxo.uuid as org_id";
         $from = "FROM `ox_project` as oxp
     LEFT JOIN ox_user as oxu on oxu.id = oxp.manager_id
-    LEFT JOIN ox_project as subpro on oxp.id = subpro.parent_id
     LEFT JOIN ox_organization as oxo on oxp.org_id = oxo.id";
 
         $cntQuery = "SELECT count(oxp.uuid) " . $from;
@@ -785,4 +957,29 @@ class OrganizationService extends AbstractService
         $sort = FilterUtils::sortArray($sort, $fieldName);
         return $sort;
     }
+    // YET TO BE DONE
+    // private function setUpOrgAssociationRelation(&$data){
+    //     $this->beginTransaction();
+    //     try{
+    //         foreach ($data['associations'] as &$orgAssociation) {
+    //             $orgAssociation['uuid'] = isset($orgAssociation['uuid']) ? $orgAssociation['uuid'] : UuidUtil::uuid();
+    //             $select = "SELECT id FROM `ox_association` WHERE uuid = :uuid AND org_id =:orgId";
+    //             $params = array('uuid' => $orgAssociation['uuid'],'orgId' => $data['id']);
+    //             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
+    //             $params['associationName'] = $orgAssociation['name'];
+    //             if (count($result) == 0) {
+    //                 $query = "INSERT INTO `ox_association` (`uuid`,`name`,`org_id`,`user_identifier_field`,`org_identifier_field`) VALUES (:uuid,:associationName,:orgId,:usserIdentifier,:orgIdentifier)";
+    //             }else{
+    //                 $query = "UPDATE ox_association SET name=:associationName WHERE uuid=:uuid";
+    //                 unset($params['orgId']);
+    //             }
+    //             $resultSet = $this->executeUpdateWithBindParameters($query,$params);
+    //         }
+    //         $this->commit();
+    //     }catch(Exception $e){
+    //         $this->rollback();
+    //         $this->logger->error($e->getMessage(), $e);
+    //         throw $e;
+    //     }
+    // }
 }

@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
-
+import JSONFormRenderer from "../../JSONFormRenderer"
+import { FormSchema } from "./QueryModalSchema.json"
 
 function QueryModal(props) {
   const [input, setInput] = useState({})
   const [errors, setErrors] = useState({})
+  const [formValues, setFormValues] = useState("")
+  const [formSchema, setFormSchema] = useState(FormSchema["_DEFAULT_OPTIONAL_FIELDS"])
+
+  const formBuilderRef = useRef(null)
+
   const helper = props.osjsCore.make("oxzion/restClient");
   var string_configuration = ""
 
@@ -13,13 +19,24 @@ function QueryModal(props) {
       if (props.content.length !== 0) {
         var { name, ispublic, configuration, uuid, version } = props.content;
         string_configuration = JSON.stringify(configuration)
-        setInput({ ...input, ["queryname"]: name, ["visibility"]: ispublic, ["configuration"]: string_configuration, uuid, version })
+        let datasourcename = setDataSourceDefaultValue()
+        setFormValues(props.content.configuration || {})
+        setInput({ ...input, ["queryname"]: name, ["visibility"]: ispublic, ["configuration"]: string_configuration, uuid, version, ["datasourcename"]: datasourcename })
       }
       else {
+        setFormValues(JSON.parse(props.configuration) || {})
         setInput({ ["queryname"]: "", ["datasourcename"]: props.datasourcename, ["datasourceuuid"]: props.datasourceuuid })
       }
     }
   }, [props.content])
+
+  function setDataSourceDefaultValue() {
+    let dataSourceName = []
+    props.dataSourceOptions && props.dataSourceOptions.map((option, index) => (
+      option.uuid == props.content.datasource_uuid ? dataSourceName = [option.name, option.uuid] : null
+    ))
+    return dataSourceName
+  }
 
 
   function notify(response, operation) {
@@ -43,8 +60,19 @@ function QueryModal(props) {
 
 
   function handleChange(e) {
-    let name = e.target.name;
-    let value = e.target.value;
+    let name = "";
+    let value = "";
+    if (e.target.name === "datasourcename") {
+      const selectedIndex = e.target.options.selectedIndex;
+      let uuid = e.target.options[selectedIndex].getAttribute('data-key')
+      name = e.target.name
+      value = [e.target.value, uuid];
+      errors["datasourcename"] = ""
+    }
+    else {
+      name = e.target.name;
+      value = e.target.value;
+    }
     let error = errors
     error[e.target.name] = ""
     setErrors({ ...error })
@@ -118,13 +146,16 @@ function QueryModal(props) {
 
         formData["name"] = input["queryname"]
         formData["datasource_id"] = input["datasourceuuid"]
-        formData["configuration"] = props.configuration
+        formData["configuration"] = formBuilderRef.current.getFormConfig(false);
         formData["ispublic"] = input["visibility"]
         if (operation === "Activated" || operation === "Edited") {
-          formData["configuration"] = input["configuration"]
+          formData["configuration"] = formBuilderRef.current.getFormConfig(false);
           formData["version"] = input["version"]
           formData["isdeleted"] = "0"
           requestUrl = "analytics/query/" + input["uuid"]
+          if (operation === "Edited") {
+            formData["datasource_id"] = input["datasourcename"][1]
+          }
           method = "put"
         }
         else {
@@ -219,11 +250,31 @@ function QueryModal(props) {
                 </Col>
               </Form.Group>
             }
+            {props.modalType === "Edit" &&
+              <Form.Group as={Row}>
+                <Form.Label column lg="3">Data Source Name</Form.Label>
+                <Col lg="9">
+                  <Form.Control
+                    as="select"
+                    onChange={(e) => handleChange(e)}
+                    value={input["datasourcename"] !== undefined ? input["datasourcename"][0] : -1}
+                    name="datasourcename">
+                    <option disabled value={-1} key={-1}></option>
+                    {props.dataSourceOptions && props.dataSourceOptions.map((option, index) => (
+                      <option key={option.uuid} data-key={option.uuid} value={option.name}>{option.name}</option>
+                    ))}
+                  </Form.Control>
+                </Col>
+              </Form.Group>
+            }
             <Form.Group as={Row}>
               <Form.Label column lg="3">Configuration</Form.Label>
               <Col lg="9">
-
-                <Form.Control as="textarea" name="configuration" value={input["configuration"] !== undefined ? input["configuration"] : props.configuration} onChange={handleChange} disabled={DisabledFields} />
+                {/* {props.modalType !== "Save" ? */}
+                  <JSONFormRenderer formSchema={formSchema != undefined ? formSchema : {}} values={formValues} subForm={true} ref={formBuilderRef} />
+                  {/* : */}
+                  {/* <Form.Control as="textarea" name="configuration" value={input["configuration"] !== undefined ? input["configuration"] : props.configuration} onChange={handleChange} disabled={DisabledFields} /> */}
+                {/* } */}
               </Col>
             </Form.Group>
           </>

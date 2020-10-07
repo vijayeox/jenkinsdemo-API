@@ -1,19 +1,30 @@
+ox_organization_profile:
+-
+    id: 3
+    created_by: 1
+    uuid: 'c7499a34-c100-4e41-bece-5822adca3844'
+-
+    id: 4
+    created_by: 1
+    uuid: 'c7499a34-c100-4e41-bece-5822adca3ccc'
 ox_organization:
 -
     id: 3
-    uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
     name: 'Sample Organization'
+    uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
     status: 'Active'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
     contactid: 2
+    org_profile_id: 3
 
 -
     id: 4
-    uuid: 'b6499a34-c100-4e41-bece-5822adca3mnc'
     name: 'Test Organization'
+    uuid: 'b6499a34-c100-4e41-bece-5822adca3ccc'
     status: 'Inactive'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
     contactid: 2
+    org_profile_id: 4
 ox_group:
 -
     id: 1
@@ -98,6 +109,39 @@ ox_form:
     name: "Test Form X"
     description: "Form Description"
     entity_id: 2
+ox_file:
+-
+    id: 101
+    org_id: 1
+    data: "{\"field1\":3,\"field2\":4}"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
+    form_id: 1
+    date_created: '2019-12-19 11:03:08'
+    entity_id: 1
+-
+    id: 102
+    org_id: 1
+    data: "{\"field3\":3,\"field4\":4}"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+    form_id: 2
+    date_created: '2020-01-19 11:03:08'
+    entity_id: 1
+-
+    id: 103
+    org_id: 1
+    data: "{\"some key\" : \"some value \"}"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
+    form_id: 3
+    date_created: '2020-02-19 11:03:08'
+    entity_id: 1
+-
+    id: 104
+    org_id: 1
+    data: "{\"some key2\" : \"some value2\"}"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145e"
+    form_id: 3
+    date_created: '2020-03-19 11:03:08'
+    entity_id: 1
 ox_workflow:
 -
     id: 1
@@ -148,6 +192,7 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 101
 -
     id: 2
     workflow_deployment_id: 2
@@ -156,6 +201,7 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 102
 -
     id: 3
     workflow_deployment_id: 3
@@ -164,6 +210,7 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+    file_id: 103
 ox_activity:
 -
     id: 1
@@ -276,39 +323,6 @@ ox_form_field:
     id: 2
     form_id: 1
     field_id: 2
-ox_file:
--
-    id: 101
-    org_id: 1
-    data: "{\"field1\":3,\"field2\":4}"
-    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
-    form_id: 1
-    date_created: '2019-12-19 11:03:08'
-    entity_id: 1
--
-    id: 102
-    org_id: 1
-    data: "{\"field3\":3,\"field4\":4}"
-    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
-    form_id: 2
-    date_created: '2020-01-19 11:03:08'
-    entity_id: 1
--
-    id: 103
-    org_id: 1
-    data: "{\"some key\" : \"some value \"}"
-    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
-    form_id: 3
-    date_created: '2020-02-19 11:03:08'
-    entity_id: 1
--
-    id: 104
-    org_id: 1
-    data: "{\"some key2\" : \"some value2\"}"
-    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145e"
-    form_id: 3
-    date_created: '2020-03-19 11:03:08'
-    entity_id: 1
 ox_file_attribute:
 -
     id: 1

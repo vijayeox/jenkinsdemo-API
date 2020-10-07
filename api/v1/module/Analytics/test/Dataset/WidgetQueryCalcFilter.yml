@@ -89,3 +89,58 @@ ox_widget_query:
     ox_widget_id: 121
     sequence: 1
     configuration: ''
+  -
+    ox_query_id: 120
+    ox_widget_id: 122
+    sequence: 1
+    configuration: ''
+  -
+    ox_query_id: 121
+    ox_widget_id: 123
+    sequence: 1
+    configuration: ''
+  -
+    ox_query_id: 122
+    ox_widget_id: 124
+    sequence: 1
+    configuration: ''
+  -
+    ox_query_id: 123
+    ox_widget_id: 124
+    sequence: 1
+    configuration: ''
+  -
+    ox_query_id: 116
+    ox_widget_id: 125
+    sequence: 1
+    configuration: "Sample"    
+  -
+    ox_query_id: 117
+    ox_widget_id: 125
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 114
+    ox_widget_id: 126
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 116
+    ox_widget_id: 127
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 117
+    ox_widget_id: 127
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 117
+    ox_widget_id: 128
+    sequence: 1
+    configuration: "Sample"  
+  -
+    ox_query_id: 116
+    ox_widget_id: 128
+    sequence: 1
+    configuration: "Sample"  

@@ -6,10 +6,16 @@ ox_app:
     category: "EXAMPLE_CATEGORY"
     type: 2
     status: 1
+ox_organization_profile:
+-
+    id: 120
+    uuid: "9f6c35fe-2e3e-4c6f-ad15-a61d98e8d641"
+    created_by: 1
 ox_organization:
 -   id: 120
     name: "dummyOrg"
     status: "active"
+    org_profile_id: 120
 ox_app_registry:
 -
     org_id: 120

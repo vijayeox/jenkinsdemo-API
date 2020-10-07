@@ -7,9 +7,16 @@ use Knp\Snappy\Pdf;
 use setasign\Fpdi\Tcpdf\Fpdi;
 use Oxzion\Utils\FileUtils;
 use mikehaertl\pdftk\Pdf as PDFTK;
+use Logger;
 
 class DocumentGeneratorImpl implements DocumentGenerator
 {
+    private $logger;
+    
+    public function __construct(){
+        $this->logger = Logger::getLogger(__CLASS__);
+    }
+    
     public function generateDocument($htmlContent, $destination, array $options, $signatureCerticate=null)
     {
         // if (!$options) {
@@ -93,6 +100,14 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $finalpdf = array();
         $dest = $destination;
         $myProjectDirectory = __DIR__."/../../../..";
+        if(isset($data)){
+            foreach($data as $key => $value){
+                $docData = json_decode($value,true);
+                if(is_array($docData)){
+                    unset($data[$key]);
+                }    
+            }
+        }
         $snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
         $snappy->setOption("load-error-handling",'ignore');
         $snappy->setOption("load-media-error-handling",'ignore');

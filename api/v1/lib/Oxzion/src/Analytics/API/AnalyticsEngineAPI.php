@@ -4,10 +4,10 @@ namespace Oxzion\Analytics\API;
 use Oxzion\Analytics\AnalyticsAbstract;
 
 
-class AnalyticsEngineAPI extends AnalyticsAbstract {
+abstract class AnalyticsEngineAPI extends AnalyticsAbstract {
 
-    public function __construct($config,$appDBAdapter,$appConfig) {
-      parent::__construct($config,$appDBAdapter,$appConfig);
+    public function __construct($appDBAdapter,$appConfig) {
+      parent::__construct($appDBAdapter,$appConfig);
 
     }
 

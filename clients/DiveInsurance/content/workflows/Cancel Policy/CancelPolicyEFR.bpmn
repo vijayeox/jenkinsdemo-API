@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_15ktrj6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_15ktrj6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.1.1">
   <bpmn:process id="CancelEFR" name="EFR Cancel Policy" isExecutable="true">
     <bpmn:endEvent id="EndEvent_0wm5ke0" name="Approved">
       <bpmn:incoming>SequenceFlow_0trljpl</bpmn:incoming>
@@ -18,6 +18,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command" : "file"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"CancelPolicy"}</camunda:value>
               <camunda:value>{"command" : "cancelJob", "jobName" : "autoRenewalJob"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
@@ -35,6 +36,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="cancelPolicyGeneric" />
+          <camunda:property name="fields" value="reasonForUserCancellation,csrCancellationReason,cancellationStatus" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_0opiye2</bpmn:outgoing>
@@ -110,6 +112,65 @@ if(!CancellationStatus){
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CancelEFR">
+      <bpmndi:BPMNEdge id="SequenceFlow_0us9fau_di" bpmnElement="SequenceFlow_0us9fau">
+        <di:waypoint x="530" y="210" />
+        <di:waypoint x="640" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_07jfkd3_di" bpmnElement="SequenceFlow_07jfkd3">
+        <di:waypoint x="1030" y="353" />
+        <di:waypoint x="1152" y="353" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ydanwf_di" bpmnElement="SequenceFlow_0ydanwf">
+        <di:waypoint x="280" y="235" />
+        <di:waypoint x="280" y="353" />
+        <di:waypoint x="930" y="353" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="342" y="336" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1afr2kj_di" bpmnElement="SequenceFlow_1afr2kj">
+        <di:waypoint x="810" y="235" />
+        <di:waypoint x="810" y="353" />
+        <di:waypoint x="930" y="353" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="819" y="276" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0opiye2_di" bpmnElement="SequenceFlow_0opiye2">
+        <di:waypoint x="208" y="210" />
+        <di:waypoint x="255" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1lvd7y4_di" bpmnElement="SequenceFlow_1lvd7y4">
+        <di:waypoint x="280" y="185" />
+        <di:waypoint x="280" y="110" />
+        <di:waypoint x="960" y="110" />
+        <di:waypoint x="960" y="170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="589" y="95" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1s4yql3_di" bpmnElement="SequenceFlow_1s4yql3">
+        <di:waypoint x="835" y="210" />
+        <di:waypoint x="930" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="851" y="192" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0p1x3ey_di" bpmnElement="SequenceFlow_0p1x3ey">
+        <di:waypoint x="740" y="210" />
+        <di:waypoint x="785" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_16e706u_di" bpmnElement="SequenceFlow_16e706u">
+        <di:waypoint x="305" y="210" />
+        <di:waypoint x="430" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="313" y="192" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0trljpl_di" bpmnElement="SequenceFlow_0trljpl">
+        <di:waypoint x="1030" y="210" />
+        <di:waypoint x="1152" y="210" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_0wm5ke0_di" bpmnElement="EndEvent_0wm5ke0">
         <dc:Bounds x="1152" y="192" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -143,65 +204,6 @@ if(!CancellationStatus){
       <bpmndi:BPMNShape id="ExclusiveGateway_0qojjhv_di" bpmnElement="ExclusiveGateway_0qojjhv" isMarkerVisible="true">
         <dc:Bounds x="255" y="185" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0trljpl_di" bpmnElement="SequenceFlow_0trljpl">
-        <di:waypoint x="1030" y="210" />
-        <di:waypoint x="1152" y="210" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_16e706u_di" bpmnElement="SequenceFlow_16e706u">
-        <di:waypoint x="305" y="210" />
-        <di:waypoint x="430" y="210" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="313" y="192" width="62" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0p1x3ey_di" bpmnElement="SequenceFlow_0p1x3ey">
-        <di:waypoint x="740" y="210" />
-        <di:waypoint x="785" y="210" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1s4yql3_di" bpmnElement="SequenceFlow_1s4yql3">
-        <di:waypoint x="835" y="210" />
-        <di:waypoint x="930" y="210" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="851" y="192" width="64" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1lvd7y4_di" bpmnElement="SequenceFlow_1lvd7y4">
-        <di:waypoint x="280" y="185" />
-        <di:waypoint x="280" y="110" />
-        <di:waypoint x="960" y="110" />
-        <di:waypoint x="960" y="170" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="589" y="95" width="64" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0opiye2_di" bpmnElement="SequenceFlow_0opiye2">
-        <di:waypoint x="208" y="210" />
-        <di:waypoint x="255" y="210" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1afr2kj_di" bpmnElement="SequenceFlow_1afr2kj">
-        <di:waypoint x="810" y="235" />
-        <di:waypoint x="810" y="353" />
-        <di:waypoint x="930" y="353" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="819" y="276" width="82" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0ydanwf_di" bpmnElement="SequenceFlow_0ydanwf">
-        <di:waypoint x="280" y="235" />
-        <di:waypoint x="280" y="353" />
-        <di:waypoint x="930" y="353" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="342" y="336" width="82" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_07jfkd3_di" bpmnElement="SequenceFlow_07jfkd3">
-        <di:waypoint x="1030" y="353" />
-        <di:waypoint x="1152" y="353" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0us9fau_di" bpmnElement="SequenceFlow_0us9fau">
-        <di:waypoint x="530" y="210" />
-        <di:waypoint x="640" y="210" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0gd31cj_di" bpmnElement="Task_1qiwpa8">
         <dc:Bounds x="430" y="170" width="100" height="80" />
       </bpmndi:BPMNShape>

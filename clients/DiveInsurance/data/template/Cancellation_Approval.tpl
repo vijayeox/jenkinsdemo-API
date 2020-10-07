@@ -8,7 +8,7 @@
 	<div class ="body_div_ai">
 		{if $cancellationStatus == 'approved'}
 		<p style="margin-bottom:2%">&nbsp</p> 
-		<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$CancelDate|date_format:"%m/%d/%Y"} </p>
+		<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
 			{if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
 				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>
 				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
@@ -24,6 +24,8 @@
 				<p>DUE TO BOAT SOLD.</p>
 			{elseif $reasonforCsrCancellation == 'storeSold'}
 				<p>DUE TO STORE SOLD.</p>
+			{elseif $reasonforCsrCancellation == 'businessClosed'}
+				<p>DUE TO BUSINESS CLOSED.</p>
 			{elseif $reasonforCsrCancellation == 'others'}
 				<p>DUE TO {$othersCsr}</p>
 			{/if}

@@ -22,9 +22,9 @@ trait FileTrait
         $this->appId = $appId;
     }
 
-    protected function getFile($id){
+    protected function getFile($id, $latest = false, $orgId = null){
         $this->logger->info("GET FILE");
-        return $this->fileService->getFile($id);
+        return $this->fileService->getFile($id, $latest, $orgId);
     }
 
     protected function getFileList($params,$filterparams = null){
@@ -32,7 +32,7 @@ trait FileTrait
         return $this->fileService->getFileList($this->appId,$params,$filterparams);
     }
 
-    protected function saveFile($params,$fileId){
+    protected function saveFile($params,$fileId = null){
         $this->logger->info("SAVE FILE");
         return $this->fileService->updateFile($params,$fileId);
     }
@@ -40,5 +40,29 @@ trait FileTrait
     protected function getWorkflowInstanceByFileId($fileId){
         $this->logger->info("GET FILE BY WORKFLOW INSTANCE ID");
         return $this->fileService->getWorkflowInstanceByFileId($fileId);
+    }
+
+    protected function startBatchProcessing(){
+        $this->fileService->startBatchProcessing();
+    }
+
+    protected function completeBatchProcessing(){
+        $this->fileService->completeBatchProcessing();
+    }
+
+    protected function addAttachment($params, $file){
+        return $this->fileService->addAttachment($params, $file);
+    }
+
+    protected function updateFieldValueOnFiles($data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams = null){
+        $this->fileService->updateFieldValueOnFiles($this->appId,$data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams);
+    }
+    protected function getFileVersionChangeLog($fileId,$version){
+        $this->logger->info("File Version Change Log");
+        return $this->fileService->getFileVersionChangeLog($fileId,$version);        
+    }
+
+    protected function getWorkflowInstanceStartDataFromFileId($fileId){
+        return $this->fileService->getWorkflowInstanceStartDataFromFileId($fileId);
     }
 }
