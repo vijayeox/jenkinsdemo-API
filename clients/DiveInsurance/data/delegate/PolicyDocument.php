@@ -1674,7 +1674,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             } else {
                                 $previous_lossPayees = array();
                             }
+                        }else{
+                            $previous_lossPayees = $policy['previous_lossPayees'];
+                            foreach ($previous_lossPayees as $key => $value) {
+                                if(isset($previous_lossPayees[$key]['description'])){
+                                    unset($previous_lossPayees[$key]['description']);
+                                }
+                            }
                         }
+
                         if(!is_array($data['lossPayees'])){
                             if(is_string($data['lossPayees'])){
                                 $lossPayees = json_decode($data['lossPayees'],true);
@@ -1686,7 +1694,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             } else {
                                 $lossPayees = array();
                             }
+                        }else{
+                            $lossPayees =$data['lossPayees'];
+                            foreach ($lossPayees as $key => $value) {
+                                if(isset($lossPayees[$key]['description'])){
+                                    unset($lossPayees[$key]['description']);
+                                }
+                            }
                         }
+
                         $diff = array_diff(array_map('serialize', $lossPayees), array_map('serialize', $previous_lossPayees));
                         $newlossPayees = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Loss Payees :".print_r($newlossPayees,true));
