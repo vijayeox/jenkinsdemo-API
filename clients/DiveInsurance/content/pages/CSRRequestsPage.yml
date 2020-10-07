@@ -162,6 +162,7 @@ content:
                             - 'Quote Approval Pending'
                             - 'Rejected'
                             - 'On Hold'
+                            - 'Payment To Be Verified'
                         placeholder: 'Select Status'
                 -
                     title: Product
