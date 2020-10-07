@@ -1792,7 +1792,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         $removedadditionalLocations = array_map('unserialize', $diff);
                         $this->logger->info("ARRAY DIFF OF Removed Additional Locations :".print_r($removedadditionalLocations,true));
                         if(sizeof($removedadditionalLocations) > 0){
-                            if($removedadditionalLocations[0]['name'] != ""){
+                            $first_key = key($removedadditionalLocations);
+                            if($removedadditionalLocations[$first_key]['name'] != ""){
                                 $temp['removedadditionalLocations'] = json_encode($removedadditionalLocations);
                                 $temp['propertyChanges'] = true;
                                 $temp['liabilityChanges'] = true;    
