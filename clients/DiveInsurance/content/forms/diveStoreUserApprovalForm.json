@@ -130,7 +130,7 @@
 					"label": "",
 					"value": ""
 				}],
-				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
 				"fileMaxSize": "10MB",
 				"multiple": true,
 				"clearOnHide": false,
@@ -414,7 +414,7 @@
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "Upload Consent Form",
+							"label": "Miscellaneous Attachment",
 							"tableView": false,
 							"storage": "url",
 							"webcam": true,
@@ -688,7 +688,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 60,
+	"_vid": 61,
 	"title": "Dive Store User Approval Form",
 	"display": "wizard",
 	"access": [{
@@ -705,6 +705,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-09-04T09:11:44.173Z",
+	"modified": "2020-10-07T06:06:15.307Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }

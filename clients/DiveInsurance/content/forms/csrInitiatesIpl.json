@@ -2791,7 +2791,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
@@ -2844,7 +2844,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
@@ -2897,7 +2897,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
@@ -2949,7 +2949,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
@@ -2990,7 +2990,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"validate": {
@@ -3030,7 +3030,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"validate": {
@@ -4167,7 +4167,7 @@
 								"input": true,
 								"tableView": false,
 								"hideOnChildrenHidden": false
-							  }],
+							}],
 							"width": 6,
 							"offset": 0,
 							"push": 0,
@@ -4638,7 +4638,7 @@
 							"type": "htmlelement",
 							"input": false
 						}, {
-							"label": "Upload Consent Form",
+							"label": "Miscellaneous Attachment",
 							"tableView": false,
 							"storage": "url",
 							"webcam": false,
@@ -4649,8 +4649,8 @@
 							"clearOnHide": false,
 							"key": "chequeConsentFile",
 							"type": "file",
-							"input": true,
-							"url": "/file/attachment"
+							"url": "/file/attachment",
+							"input": true
 						}],
 						"hideOnChildrenHidden": false
 					}, {
@@ -4992,7 +4992,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 605,
+	"_vid": 607,
 	"title": "CSR Initiates - IPL",
 	"display": "wizard",
 	"access": [{
@@ -5013,6 +5013,6 @@
 	"path": "csrinitiatesipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-03-10T05:45:55.432Z",
-	"modified": "2020-09-24T11:10:31.251Z",
+	"modified": "2020-10-07T06:01:27.050Z",
 	"machineName": "testdivehub:csrInitiates"
 }
