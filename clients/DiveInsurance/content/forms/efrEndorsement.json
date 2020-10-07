@@ -1457,7 +1457,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"calculateValue": "if((data.endor_attachments || data.endor_attachments !== undefined) && data.endor_attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
@@ -1496,7 +1496,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
 					"fileMaxSize": "10MB",
 					"multiple": true,
 					"clearOnHide": false,
@@ -2142,7 +2142,7 @@
 						"type": "htmlelement",
 						"input": false
 					}, {
-						"label": "Upload Consent Form",
+						"label": "Miscellaneous Attachment",
 						"tableView": false,
 						"storage": "url",
 						"webcam": true,
@@ -2153,8 +2153,8 @@
 						"clearOnHide": false,
 						"key": "chequeConsentFile",
 						"type": "file",
-						"input": true,
-						"url": "/file/attachment"
+						"url": "/file/attachment",
+						"input": true
 					}],
 					"hideOnChildrenHidden": false
 				}, {
@@ -2397,7 +2397,7 @@
 		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}"
 	}],
 	"revisions": "current",
-	"_vid": 221,
+	"_vid": 222,
 	"title": "EFR - Endorsement",
 	"display": "wizard",
 	"access": [{
@@ -2418,7 +2418,7 @@
 	"path": "efrendorsement",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-04T12:28:50.556Z",
-	"modified": "2020-10-01T09:38:36.022Z",
+	"modified": "2020-10-07T06:04:01.069Z",
 	"machineName": "testdivehub:efrEndorsement",
 	"controller": ""
 }

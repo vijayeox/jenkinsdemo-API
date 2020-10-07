@@ -360,7 +360,7 @@
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "Upload Consent Form",
+							"label": "Miscellaneous Attachment",
 							"tableView": false,
 							"storage": "url",
 							"webcam": true,
@@ -632,7 +632,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 7,
+	"_vid": 8,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -649,6 +649,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-09-28T11:10:54.549Z",
+	"modified": "2020-10-07T06:05:47.413Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
