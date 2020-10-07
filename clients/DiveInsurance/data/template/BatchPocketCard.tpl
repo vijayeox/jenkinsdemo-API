@@ -13,7 +13,7 @@
 		{/if}
 		<div class="main_div"><br/><br/><br/><br/><br/><br/><br/>
 			<div class = "details">
-				{if !(isset($individual.product) && ($individual.product == 'Dive Boat')) && !(isset($individual.product) && ($individual.product == 'Dive Store'))}
+				{if !(isset($individual.product) && ($individual.product == 'Dive Boat'))}
 				<p class = "email1" style="padding-bottom: 10px;" >{$individual.email}</p>
 				<p class = "email1" align="left">{$individual.lastname},&nbsp;{$individual.firstname}<br>{$individual.address1}<br>
 					{if isset($individual.address2) && !empty($individual.address2)}
@@ -22,13 +22,15 @@
 					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip},<br>{$individual.country}</p>
 				{/if}
 			</div>
-			<div class = "insure1" style="padding-left=5px;"><br/>
+			<div class = "insure1" style="float:right;margin-bottom:40px"><br/>
 				<div class = "main_section1" style = "font-size: 15px;">
-					<p class = "card_holder_name" style = "margin-bottom: 0px;font-size:15px">{if isset($individual.business_name)}Business Name:&nbsp;
-						<span style = "text-transform: uppercase;">{$individual.business_name}</span><br> Insured: &nbsp;<span style = "text-transform: uppercase;">{$individual.firstname}&nbsp{$individual.lastname}</span>
-					{else}Insured: &nbsp;<span style = "text-transform: uppercase;">{$individual.firstname}&nbsp{$individual.lastname}</span></p>{/if}
+					<p class = "card_holder_name" style = "margin-bottom: 0px;font-size:15px">
+                    {if isset($individual.business_name)}Business Name:&nbsp;
+						<span style = "text-transform: uppercase;">{$individual.business_name}</span><br>
+						Insured: &nbsp;<span style = "text-transform: uppercase;">{$individual.firstname}&nbsp{$individual.lastname}</span></p>
+                    {/if}
 					<br>
-					<div class = "section" style = "font-size: 15px;">
+					<div class = "section" style ="float:right;font-size: 15px;">
 						<div class = "sec1">
 							<p class = "info">Certificate #: &nbsp{$individual.certificate_no}</p>
 							<p class = "info">PADI #: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$individual.padi}</p>
@@ -39,7 +41,7 @@
 						</div>
 					</div>
 				</div>
-			</div><br/><br/><br/><br/><br/><br/><br/>
+			</div><br/><br/><br/><br/><br/><br/>
 			{if $individual.product == "Dive Store"}
 				<br/><br/><br/><br/>
 			{/if}
