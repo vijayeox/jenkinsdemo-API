@@ -67,9 +67,9 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         // Add logs for created by id and producer name who triggered submission
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
 
-        $fileUUID = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
-        $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
-        $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
+        $fileId = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
+        $orgId = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
+        $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileId, array('orgUuid' => $orgId));
         $this->logger->info("GenerateWorkbook Dest" . json_encode($fileDestination, JSON_UNESCAPED_SLASHES));
         $generatedDocumentsList = array();
         $excelData = array();
@@ -166,9 +166,9 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     array_push(
                         $excelData,
                         [
-                            "fileId" => $fileUUID,
+                            "fileId" => $fileId,
                             "appId" => $data['appId'],
-                            "orgId" => $orgUuid,
+                            "orgId" => $orgId,
                             "mapping" => [
                                 "filename" => $selectedTemplate["excelFile"],
                                 "data" => $templateData
@@ -289,14 +289,17 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 }
             }
             if ($sendNotificationMail == true) {
-                $mailResponse = $this->executeDelegate("DispatchMail", $data);
+                $tempFileData = $data;
+                $tempFileData["fileId"] = $fileId;
+                $tempFileData["orgId"] = $orgId;
+                $mailResponse = $this->executeDelegate("DispatchMail", $tempFileData);
                 $data['mailStatus'] = $mailResponse;
             }
             $data["status"] = "Generated";
         }
         $this->logger->info("Completed GenerateWorkbook with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
-        $this->saveFile($data, $fileUUID);
+        $this->saveFile($data, $fileId);
 
         if (count($excelData) > 0) {
             $selectQuery = "Select value FROM applicationConfig WHERE type ='excelMapperURL'";

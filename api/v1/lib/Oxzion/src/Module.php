@@ -352,6 +352,7 @@ class Module
                         $container->get(AdapterInterface::class),
                         $container->get(Document\DocumentBuilder::class),
                         $container->get(Service\TemplateService::class),
+                        $container->get(Service\FieldService::class),
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\FileService::class),
                         $container->get(Service\WorkflowInstanceService::class),
