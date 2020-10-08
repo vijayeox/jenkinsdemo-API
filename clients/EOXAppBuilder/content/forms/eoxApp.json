@@ -176,7 +176,7 @@
 							"label": "",
 							"value": ""
 						}],
-						"filePattern": "image/*",
+						"filePattern": "image/png",
 						"fileMaxSize": "10MB",
 						"clearOnHide": false,
 						"key": "app_icon",
@@ -203,7 +203,7 @@
 							"label": "",
 							"value": ""
 						}],
-						"filePattern": "image/*",
+						"filePattern": "image/png",
 						"fileMaxSize": "10MB",
 						"clearOnHide": false,
 						"key": "app_icon_white",
@@ -1275,7 +1275,7 @@
 				}],
 				"clearOnHide": false,
 				"validate": {
-					"custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n    console.log(\"Sadd\");\n    console.log(data.workflow);\n    valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+					"custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n  valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}"
 				},
 				"key": "workflow",
 				"type": "datagrid",
@@ -1455,7 +1455,7 @@
 							"key": "pageContent",
 							"type": "form",
 							"input": true,
-							"formRevision": 30,
+							"formRevision": 56,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Page Content",
@@ -1616,7 +1616,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 389,
+	"_vid": 391,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1635,6 +1635,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-10-05T12:24:57.740Z",
+	"modified": "2020-10-08T14:52:54.829Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }

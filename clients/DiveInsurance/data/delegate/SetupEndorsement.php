@@ -66,6 +66,15 @@ class SetupEndorsement extends AbstractAppDelegate
                 $this->endorsementRates($data,$policy,$privileges,$premiumRateCardDetails,$persistenceService);
                 array_unshift($data['previous_policy_data'],$policy);
                 $data['endorsementInProgress'] = true;
+                if(isset($data['additionalInsured'])){
+                    if($data['additionalInsured'] != ""){
+                        foreach ($data['additionalInsured'] as $key => $value) {
+                            if(!isset($value['effective_date'])){
+                                $data['additionalInsured'][$key]['effective_date'] = isset($data['start_date']) ? $data['start_date'] : $data['update_date'];
+                            }
+                        }
+                    }
+                }
             }else{
                 $this->endorsementRates($data,$data['previous_policy_data'][0],$privileges,$premiumRateCardDetails,$persistenceService);
             }
