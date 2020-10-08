@@ -200,6 +200,10 @@ content:
                                                                     <label>Total Pro Rated Premium</label>
                                                                     <p>${data.ProRataPremium.toFixed(2)}</p>
                                                                 </div>
+                                                                 <div class="form-group">
+                                                                    <label>Additional Premium</label>
+                                                                    <p class="uppercase">${data.totalAddPremium.toFixed(2)}</p>
+                                                                </div>
                                                         </div>
                                                     </div>
                                                 </div></div>'

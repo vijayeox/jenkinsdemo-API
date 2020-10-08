@@ -152,6 +152,7 @@ class PocketCard extends PolicyDocument
         $totalfiles = $files['total'];
         if($totalfiles == 0){
             $data['jobStatus'] = 'No Records Found';
+            $this->saveFile($data,$data['uuid']);
             return $data;
         } 
         $this->logger->info("pocket card - the file details of get file is : ".print_r($files['data'], true));
@@ -187,6 +188,7 @@ class PocketCard extends PolicyDocument
 
         if(empty($newData)){
             $data['jobStatus'] = 'No Records Found';
+            $this->saveFile($data,$data['uuid']);
             return $data;
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
