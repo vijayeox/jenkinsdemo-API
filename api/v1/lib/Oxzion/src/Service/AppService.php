@@ -447,6 +447,14 @@ private function installApp($orgId, $yamlData, $path){
         if (isset($yamlData['menu'])) {
             $appUuid = $yamlData['app']['uuid'];
             $sequence = 0;
+            $yamlMenuList = array_unique(array_column($yamlData['menu'], 'uuid'));
+            $list = "'" . implode("', '", $yamlMenuList) . "'";
+            $menuList = $this->getDataByParams('ox_app_menu', array(), array('app_id' => $this->getIdFromUuid('ox_app',$yamlData['app']['uuid'])))->toArray();
+            if(count($menuList) > count($yamlData['menu'])){
+                $deleteQuery = "DELETE FROM ox_app_menu WHERE app_id=:appId and uuid NOT IN ($list)";
+                $deleteParams = array('appId' => $this->getIdFromUuid('ox_app',$appUuid));
+                $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
+            }
             foreach ($yamlData['menu'] as &$menuData) {
                 $menu = $menuData;
                 $menu['sequence'] = $sequence++;
