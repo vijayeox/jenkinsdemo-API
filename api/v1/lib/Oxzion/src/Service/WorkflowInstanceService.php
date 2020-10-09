@@ -16,6 +16,7 @@ use Oxzion\Model\WorkflowInstance;
 use Oxzion\Model\WorkflowInstanceTable;
 use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Utils\ArrayUtils;
+use GuzzleHttp\Exception\ConnectException;
 
 class WorkflowInstanceService extends AbstractService
 {
@@ -66,9 +67,9 @@ class WorkflowInstanceService extends AbstractService
         $data['date_modified'] = date('Y-m-d H:i:s');
         $WorkflowInstance->exchangeArray($data);
         $WorkflowInstance->validate();
-        $this->beginTransaction();
         $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($WorkflowInstance);
             if ($count == 0) {
                 $this->rollback();
@@ -107,9 +108,9 @@ class WorkflowInstanceService extends AbstractService
         $WorkflowInstance = new WorkflowInstance();
         $WorkflowInstance->exchangeArray($changedArray);
         $WorkflowInstance->validate();
-        $this->beginTransaction();
         $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($WorkflowInstance);
             if ($count == 0) {
                 $this->rollback();
@@ -126,14 +127,10 @@ class WorkflowInstanceService extends AbstractService
 
     public function deleteWorkflowInstance($id)
     {
-        $this->beginTransaction();
         $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->delete($id);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -213,7 +210,6 @@ class WorkflowInstanceService extends AbstractService
             $params['entity_id'] = $workflow['entity_id'];
         }
         $workflowInstance = $this->setupWorkflowInstance($workflowId, null, $params);
-
         $this->logger->info("SETUP WORKFLOW RESPONSE DATA ----- " . print_r($workflowInstance, true));
 
         try {
@@ -261,7 +257,12 @@ class WorkflowInstanceService extends AbstractService
             $params['workflow_instance_id'] = $workflowInstance['id'];
             $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
             $this->logger->info("Checking Params" . print_r($params, true));
-            $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
+            try {
+                $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
+            } catch (ConnectException $e) {
+                $this->rollbackWorkflowInstanceAndFile($params);
+                throw $e;
+            }
             $this->logger->info("WorkflowInstanceId created" . print_r($workflowInstanceId, true));
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id, file_id=:fileId, start_data=:startData where id = :workflowInstanceId";
             $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'],'fileId'=>$this->getIdFromUuid('ox_file', $params['fileId']),'startData'=>is_array($fileData['data'])?json_encode($fileData['data']):$fileData['data']);
@@ -344,6 +345,38 @@ class WorkflowInstanceService extends AbstractService
         if (isset($params['identifier_field'])) {
             $data = $params;
             $test = $this->userService->checkAndCreateUser(array(), $data, true);
+        }
+    }
+
+    private function rollbackWorkflowInstanceAndFile($params)
+    {
+        $this->logger->info("CHECK BRIAN");
+        $this->logger->info("rollbackWorkflowInstanceAndFile");
+        try{
+            $this->beginTransaction();
+            $workflowInstanceId = isset($params['workflow_instance_id']) ? $params['workflow_instance_id'] : null;
+            $selectQuery = "SELECT * from ox_workflow_instance where id=:id";
+            $queryParams = array('id' => $workflowInstanceId);
+            $workflowInstance = $this->executeQueryWithBindParameters($selectQuery, $queryParams)->toArray();
+            if(isset($workflowInstance[0]['parent_workflow_instance_id']) && !empty($workflowInstance[0]['parent_workflow_instance_id'])){
+                $updateQuery = "update ox_file set data = (select completion_data from ox_workflow_instance where id = :workflow_id), last_workflow_instance_id = :workflow_id where uuid = :id";
+                $updateQueryWhere = array("id" => $params['fileId'],"workflow_id" => $workflowInstance[0]['parent_workflow_instance_id']);
+                $updateResult = $this->executeUpdateWithBindParameters($updateQuery, $updateQueryWhere);
+                $deleteQuery = "delete from ox_activity_instance where workflow_instance_id = :id";
+                $queryCondition = array("id" => $workflowInstanceId);
+                $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $queryCondition);
+                $this->deleteWorkflowInstance($workflowInstanceId);
+            } else {
+                $query = "update ox_file set last_workflow_instance_id = null where uuid = :id";
+                $queryWhere = array("id" => $params['fileId']);
+                $result = $this->executeUpdateWithBindParameters($query, $queryWhere);
+                $this->deleteWorkflowInstance($workflowInstanceId);
+                $this->fileService->deleteFile($params['fileId']);
+            }
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
     }
 
@@ -533,12 +566,11 @@ class WorkflowInstanceService extends AbstractService
             $form->exchangeArray($data);
             $this->logger->info("WorkFlow Instance Form DATA --- " . print_r($form, true));
             $form->validate();
-            $this->beginTransaction();
             try {
+                $this->beginTransaction();
                 $count = $this->table->save($form);
                 $this->logger->info("WorkFlow Instance Form DATA INSERTED--- " . print_r($count, true));
                 if ($count == 0) {
-                    $this->rollback();
                     throw new ServiceException("WorkFlow Instance Create Failed", "workflow.instance.failed");
                 }
                 $this->commit();
