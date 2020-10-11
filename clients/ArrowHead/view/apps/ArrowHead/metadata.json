@@ -3,7 +3,7 @@
   "name": "ArrowHead",
   "appId": "da8f0152-b8d3-43bf-8090-40103bb98d5e",
   "category": "utilities",
-  "autostart": false,
+  "autostart": true,
   "singleton": true,
   "icon": "icon.png",
   "icon_white": "icon_white.png",
