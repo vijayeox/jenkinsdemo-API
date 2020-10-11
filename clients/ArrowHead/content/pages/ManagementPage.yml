@@ -11,7 +11,7 @@ content:
                 sort:
                     -
                         field: date_created
-                        dir: desc                 
+                        dir: desc          
             resizable: true
             pageable:
                 buttonCount: 3
@@ -39,13 +39,21 @@ content:
                     details:
                         -
                             type: Document
-                            content: '<h5 className="totalClaimsAmount">Total Claims Paid Amount:  $ 561,464.00</h5>'
-                            # content: '<h5>Total Claims Paid Amount: {data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0), 0)}</h5>'
+                            content: '  {
+                                <h5 className="totalClaimsAmount">
+                                  Total Claims Paid Amount: ${sumTotal > 0 ?  sumTotal : 0}
+                                </h5>
+                              }'
+                            params:
+                                sumTotal: 'data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0),0)'
+                            url: 'file?filter=[{%22sort%22:[{%22field%22:%22date_created%22,%22dir%22:%22desc%22}],%22filter%22:{%22logic%22:%22and%22,%22filters%22:[{%22field%22:%22childFile%22,%22operator%22:%22eq%22,%22value%22:%221%22}]}}]'
                         -
                             type: List
                             content:
                                 route: 'file'
-                                defaultFilters: 
+                                defaultFilters:
+                                    skip: 0
+                                    take: 100
                                     sort:
                                         -
                                             field: date_created
@@ -54,10 +62,10 @@ content:
                                         logic: and
                                         filters:
                                             - 
-                                                field: fileId
+                                                field: childFile
                                                 operator: eq
-                                                value: '{{uuid}}'
-                                filterable: true           
+                                                value: '1'
+                                filterable: false           
                                 resizable: true
                                 sortable: 
                                     allowUnsort: true
@@ -75,7 +83,7 @@ content:
                                                 -
                                                     type: Form
                                                     form_id: 055cdece-c75c-4d33-b32c-800e05421406
-                                                    fileId: '{{uuid}}'      
+                                                    parentFileId: '{{uuid}}'      
                                 actions:
                                      -
                                          name: Edit
