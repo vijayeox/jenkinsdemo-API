@@ -170,8 +170,16 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     color: white;
   }
 
-  .btn-wizard-nav-submit{
+  .btn-wizard-nav-submit {
     display: none;
+  }
+
+  .totalClaimsAmount {
+    text-align: center;
+    color: #212529;
+    background-color: #55b089;
+    padding: 8px;
+    border-radius: 25px;
   }
 
   .formLoader {

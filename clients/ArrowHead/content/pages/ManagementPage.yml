@@ -34,13 +34,102 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
                 -
-                    name: Claim
+                    name: Claims
                     rule: 'profile.privileges.MANAGE_POLICY_APPLICATION_CREATE == true && row.status == "Generated"'
                     details:
                         -
-                            type: Form
-                            form_id: 055cdece-c75c-4d33-b32c-800e05421406
-                            fileId: '{{uuid}}'
+                            type: Document
+                            content: '<h5 className="totalClaimsAmount">Total Claims Paid Amount:  $ 561,464.00</h5>'
+                            # content: '<h5>Total Claims Paid Amount: {data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0), 0)}</h5>'
+                        -
+                            type: List
+                            content:
+                                route: 'file'
+                                defaultFilters: 
+                                    sort:
+                                        -
+                                            field: date_created
+                                            dir: desc
+                                    filter:
+                                        logic: and
+                                        filters:
+                                            - 
+                                                field: fileId
+                                                operator: eq
+                                                value: '{{uuid}}'
+                                filterable: true           
+                                resizable: true
+                                sortable: 
+                                    allowUnsort: true
+                                    mode: single
+                                gridToolbar: '<h5> {data.namedInsured} - Claims Summary</h5>'
+                                wrapStyle:
+                                    height: "90%"
+                                operations:
+                                    title: "Add New Claim"
+                                    actions:
+                                        -
+                                            name: Add New Claim
+                                            rule: "true"
+                                            details:
+                                                -
+                                                    type: Form
+                                                    form_id: 055cdece-c75c-4d33-b32c-800e05421406
+                                                    fileId: '{{uuid}}'      
+                                actions:
+                                     -
+                                         name: Edit
+                                         rule: "true"
+                                         details:
+                                             -
+                                                type: Form
+                                                form_id: 055cdece-c75c-4d33-b32c-800e05421406
+                                                fileId: '{{uuid}}'
+                                         icon: 'far fa-pencil-alt'
+                                columnConfig:
+                                    -
+                                        title: Value Date
+                                        field: valueDate
+                                        cell: '<td>{formatDate(item.valueDate)}</td>'
+                                        filter: date
+                                        filterFormat: YYYY-MM-DD
+                                    -
+                                        title: Loss Date
+                                        field: lossDate
+                                        cell: '<td>{formatDate(item.lossDate)}</td>'
+                                        filter: date
+                                        filterFormat: YYYY-MM-DD
+                                    -
+                                        title: "Paid Amount"
+                                        field: paid
+                                        filter: numeric
+                                    - 
+                                        title: "Reserve Amount"
+                                        field: reserve
+                                        filter: numeric
+                                    - 
+                                        title: Total Amount
+                                        field: total
+                                        filter: numeric
+                                    - 
+                                        title: Level 1
+                                        field: claimlevel1
+                                        filterCell:
+                                            type: dropdown
+                                            listItems:
+                                                - "EPL"
+                                                - "Crime"
+                                                - "DOL - non-accident"
+                                                - "Auto Accident- Owned Auto"
+                                                - "Sales Practice"
+                                                - "Garagekeepers"
+                                                - "Products Liability"
+                                                - "Other General Liability"
+                                                - "Property"
+                                            placeholder: 'Select Level'
+                                    - 
+                                        title: Carrier
+                                        field: carrier
                     icon: 'far fa-hand-holding-usd'
                 -
                     name: 'Retry'
