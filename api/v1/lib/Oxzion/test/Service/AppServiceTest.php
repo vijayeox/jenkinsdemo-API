@@ -585,7 +585,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testSetupAppView()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp', 'title' => 'Dummy App'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $config = $this->getApplicationConfig();
