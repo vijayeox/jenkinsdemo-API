@@ -150,7 +150,7 @@ class EntityControllerTest extends ControllerTest
         $this->assertMatchedRouteName('appentity');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Entity not found for the App');
+        $this->assertEquals($content['message'], 'Entity not found.');
     }
 
     public function testDelete()
