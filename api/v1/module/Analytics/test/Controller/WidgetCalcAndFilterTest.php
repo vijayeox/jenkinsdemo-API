@@ -12,7 +12,7 @@ use Oxzion\Auth\AuthContext;
 use Mockery;
 use Oxzion\Auth\AuthConstants;
 
-class WidgetConWidgetCalcAndFilterTest extends ControllerTest
+class WidgetCalcAndFilterTest extends ControllerTest
 {
     private $mock;
     private $index_pre;
