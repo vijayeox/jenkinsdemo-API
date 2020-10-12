@@ -244,7 +244,11 @@ class AppService extends AbstractService
                 $this->logger->info("\n App Data processing - " . print_r($value, true));
                 switch ($value) {
                     case 'initialize':
-                    $this->createOrUpdateApp($ymlData);
+                    $temp = $this->createOrUpdateApp($ymlData);
+                    if($temp){
+                        FileUtils::copyDir($path, $temp);
+                        $path = $temp;
+                    }
                     $this->processBusinessRoles($ymlData);
                     $this->createAppPrivileges($ymlData);
                     $this->createRole($ymlData);
@@ -896,15 +900,16 @@ private function checkWorkflowData(&$data,$appUuid)
             $queryParams = ['name' => $appData['name']];
         }
         $queryResult = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
-
+        if(!isset($appData['title'])){
+            $appData['title'] = $appData['name'];
+        }
+        
         //Create the app if not found.
         if (0 == count($queryResult)) {
-            //UUID is invalid. Threfore remove it.
-            unset($appData['uuid']);
             $temp = ['app' => $appData];
             $createResult = $this->createApp($temp);
             ArrayUtils::merge($appData, $createResult['app']);
-            return;
+            return AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData).DIRECTORY_SEPARATOR;
         }
 
         //App is found. Update the app.

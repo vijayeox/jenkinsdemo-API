@@ -378,13 +378,13 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
-        $data = ['path' => __DIR__ . '/../../sampleapp/'];
+        $path = __DIR__ . '/../../sampleapp/';
+        $data = ['path' => $path];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -533,9 +533,9 @@ class AppControllerTest extends ControllerTest
         }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
@@ -592,6 +592,12 @@ class AppControllerTest extends ControllerTest
         $latestAppData = $this->executeQueryTest($query)[0];
     }
 
+    private function setupAppFolder($path){
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appData = $appService->loadAppDescriptor($path);
+        $path = $appService->setupOrUpdateApplicationDirectoryStructure($appData);
+        return $path."/";
+    }
     public function testDeployAppWithWrongNameInDatabase()
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application9.yml');
@@ -600,13 +606,14 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForAppService();
             $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
-        $data = ['path' => __DIR__ . '/../../sampleapp/'];
+        $path = __DIR__ . '/../../sampleapp/';
+        $path = $this->setupAppFolder($path);
+        $data = ['path' => $path];
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -649,11 +656,11 @@ class AppControllerTest extends ControllerTest
         }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $this->assertEquals(isset($yaml['app']['uuid']), true);
         $appName = $yaml['app']['name'];
@@ -746,7 +753,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -775,7 +782,10 @@ class AppControllerTest extends ControllerTest
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application6.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../../sampleapp/'];
+        $path = __DIR__ . '/../../sampleapp/';
+        $path = $this->setupAppFolder($path);
+        $data = ['path' => $path];
+
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -784,12 +794,13 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForAppService();
             $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
+
         $this->dispatch('/app/deployapp', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -822,7 +833,10 @@ class AppControllerTest extends ControllerTest
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application6.yml');
         $this->initAuthToken($this->adminUser);
-        $data = ['path' => __DIR__ . '/../../sampleapp/'];
+        $path = __DIR__ . '/../../sampleapp/';
+        $path = $this->setupAppFolder($path);
+        $data = ['path' => $path];
+
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -836,7 +850,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -888,7 +902,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = __DIR__ . '/../../sampleapp/';
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -931,7 +945,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = $data['path'];
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
