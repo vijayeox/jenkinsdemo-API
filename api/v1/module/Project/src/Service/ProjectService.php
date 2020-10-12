@@ -333,7 +333,7 @@ class ProjectService extends AbstractService
                         inner join ox_user_project on ox_user_project.project_id = ox_project.id 
                         inner join ox_user on ox_project.manager_id = ox_user.id 
                         left join ox_project as parent on ox_project.parent_id = parent.id ";
-        $where = "where ox_user_project.user_id ='" . $userId . "' AND ox_project.account_id=" . AuthContext::get(AuthConstants::ACCOUNT_ID) . " AND ox_project.isdeleted!=1";
+        $where = "where ox_user_project.user_id ='" . $userId . "' AND ox_project.isdeleted!=1";
         $order = "order by ox_project.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();

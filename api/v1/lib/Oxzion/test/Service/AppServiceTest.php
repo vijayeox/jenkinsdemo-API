@@ -274,14 +274,14 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessEntityWithRule()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'entity' => array(array( 'name' => 'Individual Professional Liability', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text','ryg_rule' => '{item.policyStatus == \"Completed\" ? (\n<td style=\"color:green;background-color:green\"> {item.policyStatus} </td>\n ) :  (item.policyStatus == \"In Progress\" ? (<td style=\"color:yellow\"> {item.policyStatus} </td>) : (\n <td>{item.policyStatus}</td>\n))}')))));
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'entity' => array(array( 'name' => 'Individual Professional Liability','ryg_rule' => '{item.policyStatus == \"Completed\" ? (\n<td style=\"color:green;background-color:green\"> {item.policyStatus} </td>\n ) :  (item.policyStatus == \"In Progress\" ? (<td style=\"color:yellow\"> {item.policyStatus} </td>) : (\n <td>{item.policyStatus}</td>\n))}', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text')))));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $sqlQuery = "SELECT * FROM ox_app_entity WHERE app_id = 299";
         $content = $appService->processEntity($data);
         $sqlQuery = "SELECT * FROM ox_app_entity WHERE app_id = 299";
         $result = $this->executeQueryTest($sqlQuery);
         $this->assertEquals($result[0]['name'],$data['entity'][0]['name'] );
-        $this->assertEquals($result[0]['ryg_rule'],$data['entity'][0]['field'][0]['ryg_rule']);
+        $this->assertEquals($result[0]['ryg_rule'],$data['entity'][0]['ryg_rule']);
     }
 
     public function testProcessForm()
@@ -588,6 +588,11 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'));        
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $config = $this->getApplicationConfig();
+        $eoxapp = $config['DATA_FOLDER'] . 'eoxapps';
+        if(!is_dir($path . 'view/apps/eoxapps')){
+            FileUtils::copyDir($eoxapp,$path);
+        }
         $content = $appService->setupAppView($data, $path);
         $appname = $path . 'view/apps/DummyApp' ;
         $result = is_dir($appname);

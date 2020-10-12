@@ -154,7 +154,7 @@ class MenuItemService extends AbstractService
                         if(AuthContext::isPrivileged($privilegeList['eq']) && !AuthContext::isPrivileged($privilegeList['neq'])){
                              array_push($menuArray,$menuItem);
                         }
-                    }else if(AuthContext::isPrivileged($menuItem['privilege_name'])){
+                    }else if(AuthContext::isPrivileged($menuItem['privilege_name']) || AuthContext::isPrivileged($menuItem['privilege_name'] . "_READ")){
                         array_push($menuArray,$menuItem);
                     }
                 }else{

@@ -19,7 +19,7 @@ class Widget extends Entity {
         'configuration' =>      ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
         'expression' =>         ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => FALSE],
         'version' =>            ['type' => Type::INTEGER,   'readonly' => FALSE,    'required' => FALSE],
-        'no_filter_override' => ['type' => Type::BOOLEAN,   'readonly' => FALSE ,   'required' => FALSE, 'value' => FALSE]
+        'exclude_overrides' => ['type' => Type::STRING,   'readonly' => FALSE ,   'required' => FALSE]
     ];
 
     public function &getModel() {

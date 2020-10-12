@@ -33,14 +33,25 @@
 			"input": 1,
 			"tableView": false
 		}, {
-			"type": "documentviewer",
+			"label": "quoteDocuments",
+			"redrawOn": "data",
+			"calculateValue": "value = {};\nif(data.quoteDocuments)\n{\n  if(typeof data.quoteDocuments === 'object'){\n    value = data.quoteDocuments;  \n  }else{\n    var documents = {};\n    data.quoteDocuments.map(item,key => {\n      documents[key] = item;\n    });\n    value = documents;\n  }\n}",
 			"key": "quoteDocuments",
+			"properties": {
+				"data_type": "list"
+			},
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"type": "documentviewer",
+			"key": "quoteDocuments1",
 			"label": "Policy Documents",
-			"calculateValue": "value = (data['documents'])",
+			"calculateValue": "value = (data['quoteDocuments'])",
 			"hideLabel": true,
 			"inputType": "documentviewer",
 			"input": 1,
-			"refreshOn": "documents",
+			"refreshOn": "quoteDocuments",
 			"tableView": false,
 			"protected": true,
 			"persistent": false
@@ -349,7 +360,7 @@
 							"input": true,
 							"hideOnChildrenHidden": false
 						}, {
-							"label": "Upload Consent Form",
+							"label": "Miscellaneous Attachment",
 							"tableView": false,
 							"storage": "url",
 							"webcam": true,
@@ -621,7 +632,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 5,
+	"_vid": 8,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -638,6 +649,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-09-04T09:13:09.543Z",
+	"modified": "2020-10-07T06:05:47.413Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

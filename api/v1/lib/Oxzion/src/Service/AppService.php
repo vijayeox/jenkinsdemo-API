@@ -446,6 +446,14 @@ class AppService extends AbstractService
         if (isset($yamlData['menu'])) {
             $appUuid = $yamlData['app']['uuid'];
             $sequence = 0;
+            $yamlMenuList = array_unique(array_column($yamlData['menu'], 'uuid'));
+            $list = "'" . implode("', '", $yamlMenuList) . "'";
+            $menuList = $this->getDataByParams('ox_app_menu', array(), array('app_id' => $this->getIdFromUuid('ox_app',$yamlData['app']['uuid'])))->toArray();
+            if(count($menuList) > count($yamlData['menu'])){
+                $deleteQuery = "DELETE FROM ox_app_menu WHERE app_id=:appId and uuid NOT IN ($list)";
+                $deleteParams = array('appId' => $this->getIdFromUuid('ox_app',$appUuid));
+                $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
+            }
             foreach ($yamlData['menu'] as &$menuData) {
                 $menu = $menuData;
                 $menu['sequence'] = $sequence++;
@@ -479,7 +487,7 @@ class AppService extends AbstractService
             $appUuid = $yamlData['app']['uuid'];
             $sequence = 0;
             foreach ($yamlData['pages'] as &$pageData) {
-                if (isset($pageData['page_name']) && !empty($pageData['page_name'])) {
+                if (isset($pageData['page_name']) && !empty($pageData['page_name']) && file_exists($path . 'content/pages/' . $pageData['page_name'])) {
                     $page = Yaml::parse(file_get_contents($path . 'content/pages/' . $pageData['page_name']));
                 }else{
                     $page = $pageData;
@@ -568,7 +576,6 @@ class AppService extends AbstractService
         $metadataPath = $appName . '/metadata.json';
         $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
         if (!FileUtils::fileExists($appName) && !FileUtils::fileExists($metadataPath)) {
-            FileUtils::copyDir($eoxapp,$path);
             FileUtils::renameFile($path . 'view/apps/eoxapps' ,$path . 'view/apps/' . $yamlData['app']['name']);
         }else{
             if(is_dir($path . 'view/apps/eoxapps')){
@@ -578,7 +585,7 @@ class AppService extends AbstractService
         $jsonData = json_decode(file_get_contents($metadataPath),true);
         $jsonData['name'] = $yamlData['app']['name'];
         $jsonData['appId'] = $yamlData['app']['uuid'];
-        $jsonData['title']['en_EN'] = $yamlData['app']['name'] == 'EOXAppBuilder' ? 'AppBuilder' : $yamlData['app']['name'];
+        $jsonData['title']['en_EN'] = $yamlData['app']['name'] == 'EOXAppBuilder' ? 'AppBuilder' : $yamlData['app']['title'];
         if (isset($yamlData['app']['description'])) {
             $jsonData['description']['en_EN'] = $yamlData['app']['description'];
         }
@@ -594,6 +601,7 @@ class AppService extends AbstractService
         $indexfileData = file_get_contents($indexScssPath);
         $indexfileData2 = str_replace('{AppName}', $yamlData['app']['name'], $indexfileData);
         file_put_contents($appName . '/index.scss', $indexfileData2);
+        FileUtils::chmod_r($path . 'view' , 0777);
     }
 
 
@@ -1175,10 +1183,6 @@ private function checkWorkflowData(&$data,$appUuid)
                 }
                 if(isset($entity['field'])){
                     foreach ($entity['field'] as $field) {
-                        if(isset($field['ryg_rule'])){
-                            $entity['ryg_rule'] = $field['ryg_rule'];
-                            $this->entityService->saveEntity($appId, $entity);
-                        }
                         $result = $this->fieldService->getFieldByName($entity['uuid'], $field['name']);
                         if ($result == 0) {
                             $field['entity_id'] = $entity['id'];

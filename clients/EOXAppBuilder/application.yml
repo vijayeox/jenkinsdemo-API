@@ -3,29 +3,13 @@ app:
     description: 'App for EOX AppBuilder'
     category: EXAMPLE_CATEGORY
     type: 1
-    autostart: true
+    autostart: false
     version: 1
     uuid: 41b77ef3-41db-4a52-8eb8-ba3ac9a9d771
     status: 4
     isdefault: false
     logo: default_app.png
     start_options: null
-org:
-    name: 'EOXAPP setup'
-    uuid: 3409c252-74ed-4512-932d-649da0f2f62d
-    email: eoxapp2@vantageagora.com
-    address1: '23611 Chagrin Blvd'
-    address2: 'Ste 320, Beachwood, Ohio 44122'
-    city: Beachwood
-    state: OH
-    zip: 44122
-    contact:
-        username: supportadmin
-        firstname: Support
-        lastname: Admin
-        email: eoxapp2@vantageagora.com
-    preferences: '{}'
-    country: 'United States'
 privilege:
     -
         name: MANAGE_APPLICATION

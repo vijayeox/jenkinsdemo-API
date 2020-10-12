@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Utils;
 use Oxzion\Utils\StringUtils;
+use DirectoryIterator;
 
 use Exception;
 
@@ -261,5 +262,20 @@ class FileUtils
             }
         }
         throw new Exception('Failed to create unique temporary file name in 100 attempts!.');
+    }
+
+    public static function chmod_r($path,int $permission = 0777) {
+        $dir = new DirectoryIterator($path);
+        foreach ($dir as $item) {
+            if(is_dir($item->getPathname())){
+                if ($item->isDir() && !$item->isDot()) {
+                    self::chmod_r($item->getPathname(),$permission);
+                } else {
+                    if(!$item->isDot()){
+                        chmod($item->getPathname(), $permission);
+                    }
+                }
+            }
+        }
     }
 }

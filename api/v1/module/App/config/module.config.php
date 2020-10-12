@@ -892,7 +892,7 @@ return [
                     'route' => '/app/:appUuid/artifact/add/:artifactType',
                     'constraints' => [
                         'appUuid' => UuidUtil::UUID_PATTERN,
-                        'artifactType' => 'form|workflow',
+                        'artifactType' => 'form|workflow|app_icon|app_icon_white',
                     ],
                     'defaults' => [
                         'controller' => Controller\AppArtifactController::class,

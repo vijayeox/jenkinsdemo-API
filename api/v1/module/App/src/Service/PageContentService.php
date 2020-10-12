@@ -92,6 +92,14 @@ class PageContentService extends AbstractService
                         $value['form_id'] = $this->getIdFromUuid('ox_form', $value['form_id']);  
                     }
                 }
+                if($value['type'] == 'DashboardManager'){
+                    if(isset($value['dashboard_uuid'])){
+                        $value['content'] = json_encode(array('uuid'=>$value['dashboard_uuid']));
+                    } else {
+                        $value['content'] = null;
+                    }
+                    unset($value['uuid']);
+                }
                 unset($value['id']);
                 if (!isset($value['id'])) {
                     $value['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -236,7 +244,6 @@ class PageContentService extends AbstractService
             }
             return $count;
         }catch(Exception $e){
-            print_r($e->getMessage());exit;
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
@@ -246,17 +253,11 @@ class PageContentService extends AbstractService
         if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
             return json_encode($data['gridContent']);
         }
-        if(isset($data['gridContent']) && is_string($data['gridContent'])){
+        if(isset($data['gridContent']) && !empty($data['gridContent']) && is_string($data['gridContent'])){
             return $data['gridContent'];
         }
-        if(isset($data['htmlContent']) && !empty($data['htmlContent']) && !is_string($data['htmlContent'])){
-            return json_encode($data['htmlContent']);
-        }
-        if(isset($data['htmlContent']) && is_string($data['htmlContent'])){
-            return $data['htmlContent'];
-        }
         if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
-            return  json_encode($data['content']);
+            return json_encode($data['content']);
         }
         if(isset($data['content']) && is_string($data['content'])){
             return $data['content'];

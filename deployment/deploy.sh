@@ -67,6 +67,8 @@ api()
         rm -Rf api/v1/data/file_docs
         rm -Rf api/v1/data/AppDeploy
         rm -Rf api/v1/data/AppSource
+        rm -Rf api/v1/data/pages
+        rm -Rf api/v1/data/entity
         rsync -rl --delete api/v1/ /var/www/api/
         ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
@@ -79,6 +81,8 @@ api()
         ln -nfs /var/lib/oxzion/api/template /var/www/api/data/template
         ln -nfs /var/lib/oxzion/api/AppDeploy /var/www/api/data/AppDeploy
         ln -nfs /var/lib/oxzion/api/AppSource /var/www/api/data/AppSource
+        ln -nfs /var/lib/oxzion/api/pages /var/www/api/data/pages
+        ln -nfs /var/lib/oxzion/api/entity /var/www/api/data/entity
         ln -nfs /var/log/oxzion/api /var/www/api/logs
         chown www-data:www-data -R /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
@@ -878,7 +882,6 @@ appbuilder()
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
         echo -e "${GREEN}Stopping view service${RESET}"
-        systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
@@ -887,6 +890,7 @@ appbuilder()
         echo -e "${YELLOW}Building EOXAppBuilder app using deployapp API${RESET}"
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=Welcome2eox!' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/EOXAppBuilder'
+        systemctl stop view
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
         service php7.2-fpm reload
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
@@ -934,7 +938,7 @@ axon
 covid
 riscom
 biofi
-tennants
+tennant
 bsri
 hiig
 appbuilder

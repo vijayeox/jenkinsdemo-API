@@ -277,7 +277,7 @@ class WidgetService extends AbstractService
                 'renderer' => $firstRow['renderer'],
                 'type' => $firstRow['type'],
                 'version' => $firstRow['version'],
-                'no_filter_override' => $firstRow['no_filter_override'],
+                'exclude_overrides' => $firstRow['exclude_overrides'],
                 'queries' => $queries,
             ];
             $response = [
@@ -297,9 +297,14 @@ class WidgetService extends AbstractService
         $uuidList = array_column($resultSet, 'query_uuid');
         $filter = null;
         $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot'];
-        if ($firstRow['no_filter_override']) {
-            unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
+        if (!empty($firstRow['exclude_overrides'])) {
+            if (strtolower($firstRow['exclude_overrides']=='all')) {
+                unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
+            } else {
+                $overRides['excludes'] = explode(',',$firstRow['exclude_overrides']);
+            }
         }
+
         if (isset($params['data'])) {
             foreach ($overRidesAllowed as $overRidesKey) {
                 if (isset($params[$overRidesKey])) {

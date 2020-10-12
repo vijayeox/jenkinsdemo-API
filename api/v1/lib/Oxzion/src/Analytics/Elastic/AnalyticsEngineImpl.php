@@ -148,6 +148,7 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		}
 		if (isset($parameters['inline_filter'])) {
 			foreach($parameters['inline_filter'] as $inlineArry) {
+				$inlineArry[3] = 'inline';
 				array_unshift($filter, $inlineArry);
 			}
 		}
@@ -157,6 +158,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'aggregates' => $aggregates, 'frequency'=>$frequency);
 		if (isset($parameters['pagesize'])) {
 			$returnarray['pagesize'] = $parameters['pagesize'];
+		}
+		if (isset($parameters['excludes'])) {
+			$returnarray['excludes'] = $parameters['excludes'];
 		}
 		if (isset($parameters['list'])) {
 				if($parameters['list']=="*"){

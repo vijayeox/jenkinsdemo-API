@@ -482,14 +482,46 @@ class WidgetConWidgetCalcAndFilterTest extends ControllerTest
     } else {
         $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
     }
-    $this->initAuthToken($this->adminUser);
-    $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true&pivot=1', 'GET');
-    $this->assertResponseStatusCode(200);
-    $this->setDefaultAsserts();
-    $content = json_decode($this->getResponse()->getContent(), true);
-    $this->assertEquals($content['status'], 'success');
-    $jsoncontent = json_encode($content['data']['widget']['data']);
-    $this->assertEquals($jsoncontent, '[{"owner_username":"john","Insurance":1000,"Software":2000},{"owner_username":"mark","Insurance":6000,"Software":null},{"owner_username":"jane","Insurance":5000,"Software":null}]');
-}
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true&pivot=1', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","Insurance":1000,"Software":2000},{"owner_username":"mark","Insurance":6000,"Software":null},{"owner_username":"jane","Insurance":5000,"Software":null}]');
+    }
+
+    public function testGetWith2OverridingFilterParametersData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123781c3-040d-44d8-1221-f2c3130bafbc?data=true&filter=%5B%5B%22owner_username%22%2C%22%3D%3D%22%2C%22john%22%5D%2C%22AND%22%2C%5B%22industry%22%2C%22%3D%3D%22%2C%22Software%22%5D%5D', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"mark","budget_amount":6000,"actual_amount":5600},{"owner_username":"john","actual_amount":500}]');
+    }
+
+
+
+    public function testGetWith1OverridingFilterParametersData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test'); 
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/123781c3-040d-44d8-1331-f2c3130bafbc?data=true&filter=%5B%5B%22owner_username%22%2C%22%3D%3D%22%2C%22john%22%5D%2C%22AND%22%2C%5B%22industry%22%2C%22%3D%3D%22%2C%22Software%22%5D%5D', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"owner_username":"john","actual_amount":500,"budget_amount":3000}]');
+    }
 
 }
