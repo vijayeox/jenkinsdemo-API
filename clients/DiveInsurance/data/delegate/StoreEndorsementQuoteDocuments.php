@@ -121,6 +121,9 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
         }else{
             $endorsementOptions = null;
         }
+        if(isset($originalData['endoAdditionalLocations'])){
+            $originalData['additionalLocations'] = $originalData['endoAdditionalLocations'];
+        }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));
         $data['orgUuid'] = $orgUuid;
         $liabilityPolicyDetails = $this->getPolicyDetails($data,$persistenceService,$data['product'],'LIABILITY');
@@ -180,7 +183,6 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
         }
         $this->diveStoreEndorsement($data,$temp,$persistenceService);
         $this->diveStoreEnorsementQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
-        $originalData['documents']=$documents;
         $originalData['quoteDocuments'] = $documents;
         $originalData['policyStatus'] = "Quote Approval Pending";
         return $originalData;

@@ -49,8 +49,21 @@
     <hr class="hrtag"></hr>
     <div class = "ai_margin">
         <b><p class = "ai_title">Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100)):</p></b>
-          {foreach from=$list item=$additional}
-            <p class = "ai_list">
+          {assign var = result value = []}
+	
+          {foreach $list as $additional}
+            <p>
+              {if (isset($additional.effective_date) && $additional.effective_date != "")}
+                {$result[$additional['effective_date']][] = $additional}
+              {/if}
+            </p>
+          {/foreach}
+          {foreach $result as $key =>$newList}
+            <p class = "ai_list" style="text-transform:none;font-size:15px;margin-bottom:5px;">Effective 
+                {$key|date_format:"%d %B %Y"}
+            </p> 
+          {foreach from=$newList item=$additional}
+            <p class = "ai_list" style="font-size: 13px;">
               {$additional.name} {if (isset($additional.businessRelation) && $additional.businessRelation != "")} (
               {if $additional.businessRelation == "confinedWaterTrainingLocation"}
                 Confined Water Training Location 
@@ -78,7 +91,8 @@
               {/if})
               {/if}
             </p>
-          {/foreach}
+          {/foreach}<br/>
+        {/foreach}
       </div>
   </div>
 </body>
