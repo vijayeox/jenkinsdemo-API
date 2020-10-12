@@ -100,7 +100,7 @@ class ServiceTest extends TestCase
     protected function tearDown()
     {
         $tm = $this->getTransactionManager();
-        $tm->rollback();
+        $tm->rollback(true);
         Console::overrideIsConsole($this->usedConsoleBackup);
         // Prevent memory leak
         $this->reset();
