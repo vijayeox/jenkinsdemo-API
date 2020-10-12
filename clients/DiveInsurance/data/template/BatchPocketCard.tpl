@@ -11,37 +11,39 @@
 		{if $val%3 == 0}
 			<p class="break"></p>
 		{/if}
-		<div class="main_div">
+		<div class="main_div"><br/><br/><br/><br/><br/><br/><br/>
 			<div class = "details">
-				{if !(isset($individual.product) && ($individual.product == 'Dive Boat')) && !(isset($individual.product) && ($individual.product == 'Dive Store'))}
-				<p class = "email">{$individual.email}</p><br>
-				<p class = "email" align="left">{$individual.lastname},&nbsp;{$individual.firstname}<br>{$individual.address1}<br>
+				{if !(isset($individual.product) && ($individual.product == 'Dive Boat'))}
+				<p class = "email1" style="padding-bottom: 10px;" >{$individual.email}</p>
+				<p class = "email1" align="left">{$individual.lastname},&nbsp;{$individual.firstname}<br>{$individual.address1}<br>
 					{if isset($individual.address2) && !empty($individual.address2)}
 						{$individual.address2}<br>
 					{/if}
 					{$individual.city},&nbsp;{$individual.state},&nbsp;{$individual.zip},<br>{$individual.country}</p>
 				{/if}
 			</div>
-			<div class = "insure1">
-				<div class = "main_section" style = "font-size: 15px;">
-					<p class = "card_holder_name" style = "margin-bottom: 0px;">{if isset($individual.business_name)}Business Name:&nbsp;
-						<span style = "text-transform: uppercase;">{$individual.business_name}</span><br> Insured: &nbsp;<span style = "text-transform: uppercase;">{$individual.firstname}&nbsp{$individual.lastname}</span>
-					{else}Insured: &nbsp;<span style = "text-transform: uppercase;">{$individual.firstname}&nbsp{$individual.lastname}</span></p>{/if}
-					<br><br>
-					<div class = "section" style = "font-size: 17px;">
+			<div class = "insure1" style="float:right;margin-bottom:40px"><br/>
+				<div class = "main_section1" style = "font-size: 15px;">
+					<p class = "card_holder_name" style = "margin-bottom: 0px;font-size:15px">
+                    {if isset($individual.business_name)}Business Name:&nbsp;
+						<span style = "text-transform: uppercase;">{$individual.business_name}</span><br> {/if}
+						Insured: &nbsp;<span style = "text-transform: uppercase;">{$individual.firstname}&nbsp{$individual.lastname}</span></p>
+                   
+					<br>
+					<div class = "section" style ="float:right;font-size: 15px;">
 						<div class = "sec1">
 							<p class = "info">Certificate #: &nbsp{$individual.certificate_no}</p>
 							<p class = "info">PADI #: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$individual.padi}</p>
 						</div>
-						<div class = "sec2">
+						<div class = "sec2" style = "font-size: 15px;">
 							<p class = "info">Effective Date:&nbsp&nbsp&nbsp{$individual.start_date|date_format:"%m/%d/%Y"}</p>
 							<p class = "info">Expiration Date: {$individual.end_date|date_format:"%m/%d/%Y"}</p>
 						</div>
 					</div>
 				</div>
-			</div><br><br><br><br><br><br><br><br>
+			</div><br/><br/><br/><br/><br/><br/>
 			{if $individual.product == "Dive Store"}
-				<br><br><br><br>
+				<br/><br/><br/><br/>
 			{/if}
 		</div>
 		{assign var=val value=$val+1}

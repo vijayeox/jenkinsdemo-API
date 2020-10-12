@@ -7,7 +7,19 @@
 <body>
 	<div class ="body_div">
 	  <hr class = "s_hrtag" style = "margin-bottom: 0px;"></hr>
-      <center><b>Store Location:&nbsp<span class ="store_location"> {$address1},{$address2},{$city},{$state},{$country},{$zip}</span></b></center>
+      <center><b>Store Location:&nbsp
+      	{if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress === "false" || $sameasmailingaddress == 0)}
+              <span class="store_location">{$mailaddress1}</span>,
+              <span class="store_location">{$mailaddress2}</span>,
+              <span class="store_location">{$physical_city}</span>,
+              <span class="store_location">{if $physical_state != '[]'}{$physical_state}{/if}</span> <span class="store_location">{$physical_zip}</span>
+        {else}
+              <span class="store_location">{$address1}</span>,
+              <span class="store_location">{$address2}</span>,
+              <span class="store_location">{$city}</span>,
+              <span class="store_location">{$state}</span> <span class="store_location">{$zip}</span>
+        {/if}
+      </b></center>
       <hr class = "s_hrtag" style = "margin-top: 0px;"></hr>
 		<div class="section_col">
 			<div class ="sec1">

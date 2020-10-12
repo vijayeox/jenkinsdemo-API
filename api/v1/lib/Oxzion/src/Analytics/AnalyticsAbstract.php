@@ -36,7 +36,7 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
             $finalResult['data'] = $this->pivot($finalResult['data'],$parameters);
         }
         if (isset($parameters['template'])) {
-            $finalResult['data'] = $this->applyTemplate($finalResult['data'],$parameters);
+            $finalResult['data'] = $this->applyTemplate($finalResult,$parameters);
         }
         return $finalResult;
     }
