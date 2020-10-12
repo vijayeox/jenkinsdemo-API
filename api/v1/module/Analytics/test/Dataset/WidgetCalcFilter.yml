@@ -215,7 +215,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: '2filteroverrides'
     configuration: ''
@@ -229,7 +229,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: '1filteroverrides'
     configuration: ''
