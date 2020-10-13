@@ -132,7 +132,7 @@ class DataSourceService extends AbstractService
 
     public function getDataStructureDetails($uuid,$params) {
         $analyticObject = $this->getAnalyticsEngine($uuid);
-   //     try {
+        try {
                 $type =(isset($params['type'])) ? $params['type']:'dataentity'; 
                 if ($type=="fields") {
                      $data=$analyticObject->getFields($params['index']);    
@@ -141,9 +141,9 @@ class DataSourceService extends AbstractService
                 } else{
                     $data=$analyticObject->getDataEntities();    
                 }
-    //    } catch(Exception $e){
-   //         throw "This Operation is not supported for the DataSource";
-   //     }
+        } catch(Exception $e){
+            throw new Exception("This Operation is not supported for the DataSource",1);
+        }
         return $data;
     }
 
