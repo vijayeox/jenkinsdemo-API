@@ -503,7 +503,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
                 if($temp['propertyCoverageSelect'] == 'yes'){
                     $this->logger->info("DOCUMENT property_coi_document");
-                    $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'propTemplate','propertyHeader','propertyFooter');
+                    $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
                 }
                 if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
                     $this->additionalDocumentsDS($temp,$documents,$dest);
