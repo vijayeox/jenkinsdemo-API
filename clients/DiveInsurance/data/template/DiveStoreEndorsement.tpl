@@ -53,7 +53,7 @@
       </div>
       {/if}
 
-      {if isset($propertyChanges) && $propertyChanges == true}
+      {if isset($propertyChanges) && $propertyChanges == true} 
       <div class = "box">
           <center><b><u>***Property Changes***</u></b></center>
 
@@ -79,17 +79,6 @@
           {/if}
           {if isset($decreased_buildingLimit) && $propertyChanges == true}
             <p>+Building Limit have been reduced by ${$decreased_liability_limit|number_format} as of the Effective date of this Endorsement</p>
-          {/if}
-          {if isset($property_added) && $property_added == true}
-          <p>Equipment Breakdown: {if isset($dspropFurniturefixturesandequip) && (int)$dspropFurniturefixturesandequip != 0}<td>Included</td>{else}<td>Not Included</td>{/if}</p>
-					<p>Business Income from dependant properties: $5,000</p>
-					<p>Robbery (per Occurrence - Inside): $2,500</p>
-					<p>Robbery (per Occurrence - Outside): $2,500</p>
-					<p>Transit Coverage (Locked Vehicle): $10,000</p>
-					<p>Employee Theft Limit: $5,000</p>
-					<p>Property of Others: $25,000</p>
-					<p>Off premises: $10,000</p>
-					<p>Glass: $5,000</p>
           {/if}
           {if isset($removedadditionalLocations) && $removedadditionalLocations != ""}
           {assign var=removedAddLoc value=$removedadditionalLocations|json_decode:true}
