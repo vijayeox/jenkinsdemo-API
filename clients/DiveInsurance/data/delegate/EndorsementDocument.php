@@ -35,10 +35,14 @@ class EndorsementDocument extends PolicyDocument
            'groupExclusions' => 'Group_Exclusions.pdf'),
       'Dive Store'
       => array(
+           'propTemplate' =>'DiveStore_Property_COI',
+           'propertyHeader' => 'DiveStorePropertyHeader.html',
+           'propertyFooter' => 'DiveStorePropertyFooter.html',
            'template' => 'DiveStoreEndorsement',
            'header' => 'DiveStoreEndorsement_header.html',
            'footer' => 'DiveStoreEndorsement_footer.html',
            'card' => 'PocketCard',
+           'cover_letter' => 'Endorsement_Delivery_Letter',
            'lheader' => 'letter_header.html',
            'lfooter' => 'letter_footer.html',
            'policy' => array('liability' => '2020-2021_Dive_Store_General_Liability_Policy.pdf','property' => '2020-2021_Dive_Store_Property_Policy.pdf'),
@@ -83,7 +87,7 @@ class EndorsementDocument extends PolicyDocument
            'template' => 'DiveStoreEndorsement',
            'header' => 'DiveStoreEndorsement_header.html',
            'footer' => 'DiveStoreEndorsement_footer.html',
-           'cover_letter' => 'Group_Professional_liability_Cover_Letter',
+           'cover_letter' => 'Endorsement_Delivery_Letter',
            'lheader' => 'letter_header.html',
            'lfooter' => 'letter_footer.html',
            'aiTemplate' => 'DiveStore_AI',
