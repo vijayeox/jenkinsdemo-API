@@ -130,6 +130,23 @@ class DataSourceService extends AbstractService
                  'total' => $count);
     }
 
+    public function getDataStructureDetails($uuid,$params) {
+        $analyticObject = $this->getAnalyticsEngine($uuid);
+   //     try {
+                $type =(isset($params['type'])) ? $params['type']:'dataentity'; 
+                if ($type=="fields") {
+                     $data=$analyticObject->getFields($params['index']);    
+                } elseif ($type=="values") {
+                    $data=$analyticObject->getValues($params['index'],$params['field']);    
+                } else{
+                    $data=$analyticObject->getDataEntities();    
+                }
+    //    } catch(Exception $e){
+   //         throw "This Operation is not supported for the DataSource";
+   //     }
+        return $data;
+    }
+
     public function getAnalyticsEngine($uuid) {
         $sql = $this->getSqlObject();
         $select = $sql->select();
