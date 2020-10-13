@@ -503,7 +503,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
                 if($temp['propertyCoverageSelect'] == 'yes'){
                     $this->logger->info("DOCUMENT property_coi_document");
-                    $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','propertyHeader','propertyFooter','property');
+                    $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'propTemplate','propertyHeader','propertyFooter');
                 }
                 if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
                     $this->additionalDocumentsDS($temp,$documents,$dest);
@@ -520,7 +520,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         unset($formData[$key]);
                     }
                 }
-                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true)){
+                if(isset($this->template[$temp['product']]['cover_letter'])){
+                    $this->logger->info("DOCUMENT cover_letter");
+                    $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
+                }
+                if(isset($temp['property_added']) && $temp['property_added'] == true){
+                    $documents['property_coi_document'] = $this->generateDocuments($temp,$dest,$options,'propTemplate','propertyHeader','propertyFooter');
+                    $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+                }
+                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true)){
                     $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
                     $endorsementDoc = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                     array_push($documents['endorsement_coi_document'], $endorsementDoc);
@@ -1290,7 +1298,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');    
             }
             if($data['product'] == 'Dive Store'){
-                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true)){
+                if(isset($temp['property_added']) && $temp['property_added'] == true){
+                    $documents['property_coi_document'] = $this->generateDocuments($temp,$dest,$options,'propTemplate','propertyHeader','propertyFooter');
+                }
+                if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true)){
                     $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
                 }
             }
@@ -1373,6 +1384,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $policy =  $policy[$length];
                 unset($data['increased_liability'],$data['new_auto_liability']);
                 $temp['additionalLocationsChanges'] = false;
+                $temp['lossPayeesChanges'] = false;
                 $data['update_date'] = $policy['update_date'];
                 if(isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])){
                     if($policy['previous_nonOwnedAutoLiabilityPL'] == 'no' && $data['nonOwnedAutoLiabilityPL'] !='no'){
@@ -1498,81 +1510,81 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['propertyChanges'] = true;
                     $temp['removed_property_coverage'] = true;
                 }else{
-                    if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
-                        if($data['propertyCoverageSelect'] == 'yes'){
+                    if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect'] && $data['propertyCoverageSelect'] == 'yes'){
                             $temp['property_added'] = true;
-                        }
-                    }
-                    if(isset($data['dspropreplacementvalue']) && isset($policy['previous_dspropreplacementvalue'])){
-                        if($data['dspropreplacementvalue'] != $policy['previous_dspropreplacementvalue']){
-                            $temp['propertyChanges'] = true;
-                            if(isset($temp['increased_buildingLimit'])){
-                                unset($temp['increased_buildingLimit']);
-                            }
-                            if(isset($temp['decreased_buildingLimit'])){
-                                unset($temp['decreased_buildingLimit']);
-                            }
-                            $buildingLimit = (int)$data['dspropreplacementvalue'] - (int)$policy['previous_dspropreplacementvalue'];
-                            if($buildingLimit < 0){
-                                $temp['decreased_buildingLimit'] = abs($buildingLimit);
-                            }else{
-                                $temp['increased_buildingLimit'] = $buildingLimit;
-                            }
-                        } else {
-                            if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
-                                if($data['propertyCoverageSelect'] == 'yes'){
-                                    $temp['increased_buildingLimit'] = $data['dspropreplacementvalue'];
+                            $temp['propertyChanges'] = false;
+                    }else{
+                       if(isset($data['dspropreplacementvalue']) && isset($policy['previous_dspropreplacementvalue'])){
+                            if($data['dspropreplacementvalue'] != $policy['previous_dspropreplacementvalue']){
+                                $temp['propertyChanges'] = true;
+                                if(isset($temp['increased_buildingLimit'])){
+                                    unset($temp['increased_buildingLimit']);
+                                }
+                                if(isset($temp['decreased_buildingLimit'])){
+                                    unset($temp['decreased_buildingLimit']);
+                                }
+                                $buildingLimit = (int)$data['dspropreplacementvalue'] - (int)$policy['previous_dspropreplacementvalue'];
+                                if($buildingLimit < 0){
+                                    $temp['decreased_buildingLimit'] = abs($buildingLimit);
+                                }else{
+                                    $temp['increased_buildingLimit'] = $buildingLimit;
+                                }
+                            } else {
+                                if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
+                                    if($data['propertyCoverageSelect'] == 'yes'){
+                                        $temp['increased_buildingLimit'] = $data['dspropreplacementvalue'];
+                                    }
                                 }
                             }
                         }
-                    }
-                    if(isset($data['lossOfBusIncome']) && isset($policy['previous_lossOfBusIncome'])){
-                        if($data['lossOfBusIncome'] != $policy['previous_lossOfBusIncome']){
-                            $temp['propertyChanges'] = true;
-                            if(isset($temp['increased_lossOfBusIncome'])){
-                                unset($temp['increased_lossOfBusIncome']);
-                            }
-                            if(isset($temp['decreased_lossOfBusIncome'])){
-                                unset($temp['decreased_lossOfBusIncome']);
-                            }
-                            $lossOfBusIncome = (int)$data['lossOfBusIncome'] - (int)$policy['previous_lossOfBusIncome'];
-                            if($lossOfBusIncome < 0){
-                                $temp['decreased_lossOfBusIncome'] = abs($lossOfBusIncome);
-                            }else{
-                                $temp['increased_lossOfBusIncome'] = $lossOfBusIncome;
-                            }
-                        } else {
-                            if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
-                                if($data['propertyCoverageSelect'] == 'yes'){
-                                    $temp['increased_lossOfBusIncome'] = $data['lossOfBusIncome'];
+                        if(isset($data['lossOfBusIncome']) && isset($policy['previous_lossOfBusIncome'])){
+                            if($data['lossOfBusIncome'] != $policy['previous_lossOfBusIncome']){
+                                $temp['propertyChanges'] = true;
+                                if(isset($temp['increased_lossOfBusIncome'])){
+                                    unset($temp['increased_lossOfBusIncome']);
                                 }
+                                if(isset($temp['decreased_lossOfBusIncome'])){
+                                    unset($temp['decreased_lossOfBusIncome']);
+                                }
+                                $lossOfBusIncome = (int)$data['lossOfBusIncome'] - (int)$policy['previous_lossOfBusIncome'];
+                                if($lossOfBusIncome < 0){
+                                    $temp['decreased_lossOfBusIncome'] = abs($lossOfBusIncome);
+                                }else{
+                                    $temp['increased_lossOfBusIncome'] = $lossOfBusIncome;
+                                }
+                            } else {
+                                if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
+                                    if($data['propertyCoverageSelect'] == 'yes'){
+                                        $temp['increased_lossOfBusIncome'] = $data['lossOfBusIncome'];
+                                    }
 
-                            }
-                        }
-                    }
-                    if(isset($data['dspropTotal']) && isset($policy['previous_dspropTotal'])){
-                        if($data['dspropTotal'] != $policy['previous_dspropTotal']){
-                            $temp['propertyChanges'] = true;
-                            if(isset($temp['increased_dspropTotal'])){
-                                unset($temp['increased_dspropTotal']);
-                            }
-                            if(isset($temp['decreased_dspropTotal'])){
-                                unset($temp['decreased_dspropTotal']);
-                            }
-                            $dspropTotal = (int)$data['dspropTotal'] - (int)$policy['previous_dspropTotal'];
-                            if($dspropTotal < 0){
-                                $temp['decreased_dspropTotal'] = abs($dspropTotal);
-                            }else{
-                                $temp['increased_dspropTotal'] = $dspropTotal;
-                            }
-                        } else {
-                            if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
-                                if($data['propertyCoverageSelect'] == 'yes'){
-                                    $temp['increased_dspropTotal'] = $data['dspropTotal'];
                                 }
                             }
                         }
-                    }    
+                        if(isset($data['dspropTotal']) && isset($policy['previous_dspropTotal'])){
+                            if($data['dspropTotal'] != $policy['previous_dspropTotal']){
+                                $temp['propertyChanges'] = true;
+                                if(isset($temp['increased_dspropTotal'])){
+                                    unset($temp['increased_dspropTotal']);
+                                }
+                                if(isset($temp['decreased_dspropTotal'])){
+                                    unset($temp['decreased_dspropTotal']);
+                                }
+                                $dspropTotal = (int)$data['dspropTotal'] - (int)$policy['previous_dspropTotal'];
+                                if($dspropTotal < 0){
+                                    $temp['decreased_dspropTotal'] = abs($dspropTotal);
+                                }else{
+                                    $temp['increased_dspropTotal'] = $dspropTotal;
+                                }
+                            } else {
+                                if ($policy['previous_propertyCoverageSelect'] != $data['propertyCoverageSelect']){
+                                    if($data['propertyCoverageSelect'] == 'yes'){
+                                        $temp['increased_dspropTotal'] = $data['dspropTotal'];
+                                    }
+                                }
+                            }
+                        }     
+                    }
                 }
                 //Please do not remove
                 if($data['additional_insured_select'] == "addAdditionalInsureds"){
@@ -1723,7 +1735,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $temp['removedlossPayees'] = "";
                         }
                         if($temp['removedlossPayees'] !="" || $temp['newlossPayees'] != ""){
-                            $temp['propertyChanges'] = true;
+                            $temp['lossPayeesChanges'] = true;
                         }
                     } else {
                         $temp['newlossPayees'] = "";
