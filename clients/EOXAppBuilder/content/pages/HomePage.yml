@@ -4,7 +4,7 @@ content:
     -
         type: List
         content:
-            route: 'app/a'
+            route: 'app'
             disableAppId: true
             filterable: true
             defaultFilters: 

@@ -99,7 +99,7 @@ class AppArtifactControllerTest extends ControllerTest {
     }
 
     public function testArtifactAddFormWrongUuid() {
-        $uuid = '11111111-1111-1111-1111-111111111111';
+        $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/add/form", 'POST');
         $this->runDefaultAsserts();
@@ -219,7 +219,7 @@ class AppArtifactControllerTest extends ControllerTest {
     }
 
     public function testArtifactAddWorkflowWrongUuid() {
-        $uuid = '11111111-1111-1111-1111-111111111111';
+        $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/add/workflow", 'POST');
         $this->runDefaultAsserts();
@@ -326,7 +326,7 @@ class AppArtifactControllerTest extends ControllerTest {
     }
 
     public function testArtifactDeleteFormWrongUuid() {
-        $uuid = '11111111-1111-1111-1111-111111111111';
+        $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/delete/form/AnyFileName.json", 'DELETE');
         $this->runDefaultAsserts();
@@ -426,7 +426,7 @@ class AppArtifactControllerTest extends ControllerTest {
     }
 
     public function testArtifactDeleteWorkflowWrongUuid() {
-        $uuid = '11111111-1111-1111-1111-111111111111';
+        $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/delete/workflow/AnyFileName.bpmn", 'DELETE');
         $this->runDefaultAsserts();
@@ -668,7 +668,7 @@ class AppArtifactControllerTest extends ControllerTest {
         ];
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, [
             'name' => 'New Application',
-            'uuid' => '11111111-1111-1111-1111-111111111111'
+            'uuid' => '11111111-1111-1111-1111-111111111112'
         ]);
         if (!mkdir($appSourceDir)) {
             throw new Exception("Failed to create app source dir ${appSourceDir}.");
@@ -711,7 +711,7 @@ class AppArtifactControllerTest extends ControllerTest {
     }
 
     public function testDownloadAppArchiveWithWrongUuid() {
-        $uuid = '11111111-1111-1111-1111-111111111111';
+        $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/archive/download", 'GET');
         $this->runDefaultAsserts();
