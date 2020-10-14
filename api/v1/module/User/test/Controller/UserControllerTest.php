@@ -1259,7 +1259,7 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']),0);
+        $this->assertEquals(count($content['data']),1);
     }
     public function testUpdatePrivacyPolicyData()
         {
