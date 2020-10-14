@@ -182,6 +182,14 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     border-radius: 25px;
   }
 
+  .totalClaimsAmountMini {
+    text-align: center;
+    color: #212529;
+    background-color: #55b089;
+    padding: 4px;
+    border-radius: 20px;
+  }
+
   .formLoader {
     display: flex;
     align-items: center;
