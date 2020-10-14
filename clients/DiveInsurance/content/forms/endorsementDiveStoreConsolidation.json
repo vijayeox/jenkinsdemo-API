@@ -217,7 +217,7 @@
             "widget": {
               "type": "calendar",
               "displayInTimezone": "utc",
-              "language": "en",
+              "locale": "en",
               "useLocaleSettings": false,
               "allowInput": false,
               "mode": "single",
@@ -3752,7 +3752,7 @@
                   "widget": {
                     "type": "calendar",
                     "displayInTimezone": "viewer",
-                    "language": "en",
+                    "locale": "en",
                     "useLocaleSettings": false,
                     "allowInput": true,
                     "mode": "single",
@@ -7265,7 +7265,7 @@
                           "widget": {
                             "type": "calendar",
                             "displayInTimezone": "viewer",
-                            "language": "en",
+                            "locale": "en",
                             "useLocaleSettings": false,
                             "allowInput": true,
                             "mode": "single",
@@ -9159,7 +9159,7 @@
                   "widget": {
                     "type": "calendar",
                     "displayInTimezone": "utc",
-                    "language": "en",
+                    "locale": "en",
                     "useLocaleSettings": false,
                     "allowInput": true,
                     "mode": "single",
@@ -9268,7 +9268,7 @@
                   "widget": {
                     "type": "calendar",
                     "displayInTimezone": "viewer",
-                    "language": "en",
+                    "locale": "en",
                     "useLocaleSettings": false,
                     "allowInput": true,
                     "mode": "single",
@@ -9329,7 +9329,7 @@
                   "widget": {
                     "type": "calendar",
                     "displayInTimezone": "viewer",
-                    "language": "en",
+                    "locale": "en",
                     "useLocaleSettings": false,
                     "allowInput": true,
                     "mode": "single",
@@ -12145,10 +12145,15 @@
         "next": true
       },
       "collapsible": false,
-      "tableView": false,
       "key": "additionalLocationsInformation",
+      "conditional": {
+        "show": false,
+        "when": "product",
+        "eq": "Group Professional Liability"
+      },
       "type": "panel",
-      "label": "Panel",
+      "label": "Additional Locations Information",
+      "tableView": false,
       "input": false,
       "components": [{
         "label": "Additional LOc",
@@ -15123,7 +15128,7 @@
             "widget": {
               "type": "calendar",
               "displayInTimezone": "viewer",
-              "language": "en",
+              "locale": "en",
               "useLocaleSettings": false,
               "allowInput": true,
               "mode": "single",
@@ -15491,7 +15496,7 @@
     "lockKey": true
   }],
   "revisions": "original",
-  "_vid": 91,
+  "_vid": 92,
   "title": "diveStoreEndorsement3",
   "display": "wizard",
   "access": [{
@@ -15502,13 +15507,13 @@
   "controller": "",
   "properties": {
     "commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveStore\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
-    "submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
+    "submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"fileSave\"},{\"command\" : \"submitWorkflow\"}]"
   },
   "settings": {},
   "name": "endorsementDiveStoreConsolidation",
   "path": "divestoreendorsement3",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-08-03T07:30:50.996Z",
-  "modified": "2020-10-06T08:28:23.463Z",
+  "modified": "2020-10-13T06:23:34.524Z",
   "machineName": "testdivehub:diveStoreEndorsement3"
 }
