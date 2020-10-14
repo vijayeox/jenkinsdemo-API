@@ -19,7 +19,19 @@ content:
                                     disableAppId: true
                          icon: 'far fa-download'
                          updateOnly: true
+                     -
+                         name: Uninstall
+                         rule: "true"
+                         details:
+                             -
+                                 type: Update
+                                 successMessage: 'Application Successfully Uninstalled'
+                                 params:
+                                    url: /app/{{app_uuid}}/uninstall/org/{{uuid}}
+                                    disableAppId: true
+                         icon: 'fas fa-trash-alt'
+                         updateOnly: true    
                 columnConfig:
                     -
-                        title: Name
+                        title: Organization Name
                         field: name

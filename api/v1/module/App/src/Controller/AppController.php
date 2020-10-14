@@ -101,10 +101,11 @@ class AppController extends AbstractApiController
      */
     public function getList()
     {
-        $this->log->info(__CLASS__ . "-> Get app list.");
+        $filterParams = $this->params()->fromQuery(); // empty method call
+        $this->log->info(__CLASS__ . "-> Get App List - " . print_r($filterParams, true));
         try {
-            $result = $this->appService->getApps();
-            return $this->getSuccessResponseWithData($result);
+            $response = $this->appService->getAppList($filterParams);
+            return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -217,11 +218,10 @@ class AppController extends AbstractApiController
      */
     public function applistAction()
     {
-        $filterParams = $this->params()->fromQuery(); // empty method call
-        $this->log->info(__CLASS__ . "-> Get App List - " . print_r($filterParams, true));
+        $this->log->info(__CLASS__ . "-> Get app list.");
         try {
-            $response = $this->appService->getAppList($filterParams);
-            return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
+            $result = $this->appService->getApps();
+            return $this->getSuccessResponseWithData($result);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -230,22 +230,23 @@ class AppController extends AbstractApiController
     }
 
     /**
-     * POST App Install API
+     * POST  appSetupToOrg API
      * @api
-     * @link /app/:appId/install/org/:orgId
+     * @link /app/:appId/:serviceType/org/:orgId
      * @method POST
      * ! Deprecated - Does not look like this api is being used any more, the method that calls the service isnt available.
      * ? Need to check if this can be removed
      * @return array of Apps
      */
 
-        public function installAppToOrgAction()
+        public function appSetupToOrgAction()
     {
         $params = $this->extractPostData();
         $data = array_merge($params, $this->params()->fromRoute());
+        $serviceType = $data['serviceType'];
         $this->log->info(__CLASS__ . "-> \n Create App Registry- " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->appService->installAppToOrg($data['appId'],$data['orgId']);
+            $count = $this->appService->installAppToOrg($data['appId'],$data['orgId'],$serviceType);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
