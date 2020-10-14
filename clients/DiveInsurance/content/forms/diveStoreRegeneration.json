@@ -1773,7 +1773,7 @@
 						"widget": {
 							"type": "calendar",
 							"displayInTimezone": "utc",
-							"language": "en",
+							"locale": "en",
 							"useLocaleSettings": false,
 							"allowInput": false,
 							"mode": "single",
@@ -4899,7 +4899,7 @@
 									"widget": {
 										"type": "calendar",
 										"displayInTimezone": "viewer",
-										"language": "en",
+										"locale": "en",
 										"useLocaleSettings": false,
 										"allowInput": true,
 										"mode": "single",
@@ -5856,6 +5856,7 @@
 							}],
 							"multiple": true,
 							"clearOnHide": false,
+							"calculateValue": "if(typeof value==\"string\"){\n  value = JSON.parse(value);\n}",
 							"validate": {
 								"multiple": true
 							},
@@ -8513,7 +8514,7 @@
 													"widget": {
 														"type": "calendar",
 														"displayInTimezone": "viewer",
-														"language": "en",
+														"locale": "en",
 														"useLocaleSettings": false,
 														"allowInput": true,
 														"mode": "single",
@@ -10969,7 +10970,7 @@
 									"widget": {
 										"type": "calendar",
 										"displayInTimezone": "viewer",
-										"language": "en",
+										"locale": "en",
 										"useLocaleSettings": false,
 										"allowInput": true,
 										"mode": "single",
@@ -11505,6 +11506,7 @@
 								}],
 								"multiple": true,
 								"clearOnHide": false,
+								"calculateValue": "if(typeof value==\"string\"){\n  value = JSON.parse(value);\n}",
 								"validate": {
 									"multiple": true
 								},
@@ -13877,7 +13879,7 @@
 		"event": "submitForm"
 	}],
 	"revisions": "current",
-	"_vid": 13,
+	"_vid": 16,
 	"title": "DiveStoreRegeneration",
 	"display": "wizard",
 	"access": [{
@@ -13888,13 +13890,13 @@
 	"controller": "",
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\":\"fileSave\"},{\"command\" : \"delegate\",\"delegate\":\"PolicyDocument\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"PolicyDocument\"},{\"command\":\"file\"},{\"command\" : \"delegate\",\"delegate\":\"NewPolicyDocumentDispatch\"}]"
 	},
 	"settings": {},
 	"name": "diveStoreRegeneration",
 	"path": "divestoreregeneration",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-18T04:16:15.109Z",
-	"modified": "2020-08-18T13:20:34.226Z",
+	"modified": "2020-10-13T09:11:24.970Z",
 	"machineName": "testdivehub:diveStoreRegeneration"
 }
