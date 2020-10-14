@@ -126,12 +126,6 @@ entity:
     -
         name: 'Policy Claims'
         override_data: true
-        field:
-            -
-                text: childFile
-                index: true
-                data_type: text
-                name: childFile
 pages:
     -
         page_name: AgentHomePage.yml
@@ -142,6 +136,9 @@ pages:
     -
         page_name: ViewWorkbooks.yml
         uuid: 92d4de60-6fa5-4df8-a688-05490c6589f9
+    -
+        page_name: ClaimsList.yml
+        uuid: f52a8856-54af-4efc-b548-3675ddb7f90f
 form:
     -
         name: 'DealerWorkbook Form'
