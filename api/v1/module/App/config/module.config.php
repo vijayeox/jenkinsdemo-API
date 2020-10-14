@@ -550,7 +550,7 @@ return [
             'filelistinguser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus]',
+                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus][/entity/:entityName[/assoc/:assocId]]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
