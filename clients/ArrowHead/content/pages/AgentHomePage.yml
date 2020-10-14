@@ -4,7 +4,7 @@ content:
     -
         type: List
         content:
-            route: 'file/user/me'
+            route: 'file/user/me/search/entity/Dealer Policy'
             filterable: true
             autoRefresh: 10000
             defaultFilters: 
