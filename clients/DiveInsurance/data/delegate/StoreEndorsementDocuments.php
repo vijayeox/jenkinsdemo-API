@@ -112,8 +112,10 @@ class StoreEndorsementDocuments extends EndorsementDocument
         if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
             $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
         }
-        if(isset($temp['property_added']) && $temp['property_added'] == true){
-            $documents['property_coi_document'] = $this->generateDocuments($temp,$dest,$options,'propTemplate','propertyHeader','propertyFooter');
+
+        if(isset($this->template[$temp['product']]['blanketForm'])){
+            $this->logger->info("DOCUMENT blanketForm");
+            $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
         if($this->type == 'endorsement') {
             if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) ){
@@ -135,6 +137,9 @@ class StoreEndorsementDocuments extends EndorsementDocument
             if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
                 $this->generateGroupDocuments($data,$temp,$documents,$previous_data,$endorsementOptions,$dest,$options,$length);
             }
+        }
+        if(isset($data['documents']['premium_summary_document'])){
+            $documents['premium_summary_document'] = $data['documents']['premium_summary_document'];    
         }
         $originalData['finalDocuments'] = $documents;
         return $originalData;

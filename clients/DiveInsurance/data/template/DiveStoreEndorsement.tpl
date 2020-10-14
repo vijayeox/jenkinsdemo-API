@@ -94,7 +94,6 @@
      {if (isset($newAddInsured) && $newAddInsured != "") || (isset($removedAddInsured) && $removedAddInsured != "")}
       <div>
         <center><b><u>***Additional Insured Schedule***</u></b></center>
-        <b><p>Additional Insured (Additional Insured status only applies when required by written contract per attached Additional Insured - Blanket Form PI-MANU-1 (01/100))</p></b>
         {if $newAddInsured != ""}
           {assign var=list value=$newAddInsured|json_decode:true}
           {assign var = result value = []}

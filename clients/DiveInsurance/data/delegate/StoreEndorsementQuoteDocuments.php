@@ -39,9 +39,6 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
              'groupExclusions' => 'Group_Exclusions.pdf'),
             'Dive Store' 
             => array(
-             'propTemplate' =>'DiveStore_Property_COI',
-             'propertyHeader' => 'DiveStorePropertyHeader.html',
-             'propertyFooter' => 'DiveStorePropertyFooter.html',
              'template' => 'DiveStoreEndorsement', 
              'header' => 'DiveStoreEndorsement_header.html',
              'footer' => 'DiveStoreEndorsement_footer.html', 
@@ -51,7 +48,6 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
              'lpheader' => 'DiveStore_Quote_LP_header.html',
              'lpfooter' => 'DiveStore_LP_footer.html',
              'aifooter' => 'DiveStore_AI_footer.html',
-             'cover_letter' => 'Endorsement_Proposal_Letter',
              'lheader' => 'letter_header.html',
              'lfooter' => 'letter_footer.html',
              'nTemplate' => 'Group_PL_NI',
@@ -83,7 +79,7 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
             => array(
              'header' => 'DiveStoreEndorsement_header.html',
              'footer' => 'DiveStoreEndorsement_footer.html', 
-             'cover_letter' => 'Endorsement_Proposal_Letter',
+             'cover_letter' => 'GPL_Quote_Cover_Letter',
              'aiTemplate' => 'DiveStore_AI',
              'aiheader' => 'DiveStore_AI_header.html',
              'lpTemplate' => 'DiveStore_LP',
@@ -187,10 +183,6 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
         }
         $this->diveStoreEndorsement($data,$temp,$persistenceService);
         $this->diveStoreEnorsementQuoteDocuments($data,$documents,$temp,$dest,$options,$previous_data,$endorsementOptions,$length);
-        $originalData['documents'] = is_string($data['documents']) ? json_decode($data['documents']) : $data['documents'];
-        if(is_array($documents)){
-            $originalData['documents'] = array_merge($originalData['documents'],$documents);
-        }
         $originalData['quoteDocuments'] = $documents;
         $originalData['policyStatus'] = "Quote Approval Pending";
         return $originalData;

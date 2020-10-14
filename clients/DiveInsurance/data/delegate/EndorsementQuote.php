@@ -38,7 +38,7 @@ class EndorsementQuote extends PolicyDocument
              'template' => 'DiveStoreEndorsement', 
              'header' => 'DiveStoreEndorsement_header.html',
              'footer' => 'DiveStoreEndorsement_footer.html', 
-             'cover_letter' => 'Endorsement_Proposal_Letter',
+             'cover_letter' => 'DS_Quote_Cover_Letter',
              'aiTemplate' => 'DiveStore_AI',
              'aiheader' => 'DiveStore_AI_header.html',
              'lpTemplate' => 'DiveStore_LP',

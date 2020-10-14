@@ -16,7 +16,6 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Driver\Pdo\Pdo;
 use Mockery;
 use Oxzion\Db\Migration\Migration;
-use Oxzion\ValidationException;
 
 class AppServiceTest extends AbstractServiceTest
 {
@@ -175,54 +174,6 @@ class AppServiceTest extends AbstractServiceTest
         $resultSet = new ResultSet();
         $result = $resultSet->initialize($result)->toArray();
         $this->assertEquals($result[0]['count'], 1);
-    }
-
-
-    public function testProcessWorkflowWithMutipleEntity()
-    {
-        AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'workflow' =>array(array('name' => 'Dive Boat Reinstate Policy', 'entity' => array('Dive Boat','Dive Store'), 'uuid' => '2d94a2f0-c64c-48e0-a4f0-f85f626f0626', 'bpmn_file' => 'Cancel Policy/ReinstatePolicyDB.bpmn')));     
-        $data1 = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'entity' => array(array( 'name' => 'Dive Boat', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text'))),array( 'name' => 'Dive Store', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text')))));   
-        $path = __DIR__ . '/../sampleapp/';
-        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        if (enableCamundaForDeployApp == 0) {
-            $mockProcessManager = $this->getMockProcessManager();
-            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
-            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
-        }
-
-        $content = $appService->processEntity($data1);
-        $content1 = $appService->processWorkflow($data, $path);
-        $adapter = $this->getDbAdapter();
-        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
-        $resultSet = new ResultSet();
-        $sqlQuery = "SELECT ow.id,ow.name,ow.entity_id,oae.name as entityName FROM ox_workflow as ow join ox_app_entity as oae on oae.id = ow.entity_id  WHERE ow.app_id = 299 and ow.name = 'Dive Boat Reinstate Policy'";
-        $statement = $adapter->query($sqlQuery);
-        $result = $statement->execute();
-        $result = $resultSet->initialize($result)->toArray();
-        $sqlQuery2 = "SELECT count(*) as count from ox_workflow_entity_mapper where workflow_id = ".$result[0]['id'];
-        $statement = $adapter->query($sqlQuery2);
-        $result2 = $statement->execute();
-        $result2 = $resultSet->initialize($result2)->toArray();
-        $this->assertEquals($result[0]['entityName'], 'Dive Boat');
-        $this->assertEquals($result2[0]['count'], 2);
-    }
-
-    public function testProcessWorkflowWithNoEntity()
-    {
-        AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array(array( 'uuid' => 'p77ea120-b028-479b-8c6e-60476b6a4459')), 'workflow' =>array(array('name' => 'Dive Boat Reinstate Policy','uuid' => '2d94a2f0-c64c-48e0-a4f0-f85f626f0626', 'bpmn_file' => 'Cancel Policy/ReinstatePolicyDB.bpmn')));     
-        $path = __DIR__ . '/../sampleapp/';
-        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        try {
-            $content = $appService->processWorkflow($data, $path);
-            $this->fail('Validation Exception - Workflow has to be associated with an entity');
-        }
-        catch(ValidationException $e) {
-            $this->assertNotNull($e);
-            $error = $e->getErrors();
-            $this->assertEquals($error['error'], "Dive Boat Reinstate Policy has to be associated with an entity");
-        }
     }
 
     public function testProcessWorkflowWithoutWorkflowInYmlData()
