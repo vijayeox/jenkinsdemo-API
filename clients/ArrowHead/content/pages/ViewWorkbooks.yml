@@ -4,7 +4,7 @@ content:
     -
         type: List
         content:
-            route: 'file'
+            route: 'file/search/entity/Dealer Policy'
             filterable: true
             defaultFilters: 
                 filter:
