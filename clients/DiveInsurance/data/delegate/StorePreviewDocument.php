@@ -113,15 +113,9 @@ class StorePreviewDocument extends PolicyDocument
                 $this->logger->info("DOCUMENT cover_letter");
                 $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
         }
-        if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']) )){ 
-            if(isset($this->template[$data['product']]['instruct'])){
-                $this->logger->info("DOCUMENT instruct");
-                $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
-            }
-
-            if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
-                $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
-            }
+        if(isset($this->template[$data['product']]['instruct'])){
+            $this->logger->info("DOCUMENT instruct");
+            $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
         }
         
         if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes'){
