@@ -24,17 +24,19 @@ class DispatchProposalDocument extends DispatchDocument {
         $fileData = $this->getFile($data['fileId'],false,$data['orgId']);
         $data = array_merge($data,$fileData['data']);
         $data['template'] = $this->template[$data['product']];
-        if(isset($data['documents']) && is_string($data['documents'])){
-            $data['documents'] = json_decode($data['documents'],true);
+        $documents = array();
+        $documents = isset($data['documents']) ? (is_string($data['documents']) ? json_decode($data['documents'],true) : $data['documents']) : array();
+        if(isset($data['previous_policy_data'])){
+           $documents = isset($data['quoteDocuments']) ? (is_string($data['quoteDocuments']) ? json_decode($data['quoteDocuments'],true) : $data['quoteDocuments']) : array();
         }
-
+      
         if(isset($data['csrApprovalAttachments']) && is_string($data['csrApprovalAttachments'])){
             $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
         }
 
         $fileData =array();
         $errorFile = array();
-        foreach($data['documents'] as $doc){
+        foreach($documents as $doc){
             if(is_array($doc)){
                 $doc = end($doc);
             }  

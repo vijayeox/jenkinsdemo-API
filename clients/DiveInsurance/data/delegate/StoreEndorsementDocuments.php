@@ -104,23 +104,17 @@ class StoreEndorsementDocuments extends EndorsementDocument
             $this->logger->info("DOCUMENT cover_letter");
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
         }
-        if(isset($this->template[$data['product']]['instruct'])){
-            $this->logger->info("DOCUMENT instruct");
-            $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
-        }
 
-        if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
-            $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
-        }
         if(isset($temp['property_added']) && $temp['property_added'] == true){
             $documents['property_coi_document'] = $this->generateDocuments($temp,$dest,$options,'propTemplate','propertyHeader','propertyFooter');
-        }
-        if($this->type == 'endorsement') {
-            if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) ){
-                $documents['endorsement_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            if(isset($this->template[$temp['product']]['businessIncomeWorksheet']))   {
+                $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp,$dest['relativePath'],'businessIncomeWorksheet');
             }
         }
-
+        if((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true)){
+            $documents['endorsement_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+        }
+   
         if($endorsementOptions['modify_groupProfessionalLiability'] == true){
             if(isset($data['groupPL'])){
                 if($data['groupProfessionalLiabilitySelect'] == 'yes'){
