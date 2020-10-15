@@ -23,17 +23,21 @@ class NewPolicyDocumentDispatch extends DispatchDocument {
     {
         $this->logger->info("New Policy Document".json_encode($data));
         $data['template'] = $this->template[$data['product']];
-        if(isset($data['documents']) && is_string($data['documents'])){
-            $data['documents'] = json_decode($data['documents'],true);
+        $documents = array();
+        $documents = isset($data['documents']) ? (is_string($data['documents']) ? json_decode($data['documents'],true) : $data['documents']) : array();
+        if(isset($data['previous_policy_data'])){
+            $documents = isset($data['mailDocuments']) ? (is_string($data['mailDocuments']) ? json_decode($data['mailDocuments'],true) : $data['mailDocuments']) : array();
+            if(isset($documents['endorsement_coi_document'])){
+                $endoDoc = end($documents['endorsement_coi_document']);
+                $documents['endorsement_coi_document'] = $endoDoc;
+            }
         }
-
         if(isset($data['csrApprovalAttachments']) && is_string($data['csrApprovalAttachments'])){
             $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
         }
-
         $fileData =array();
         $errorFile = array();
-        foreach($data['documents'] as $doc){
+        foreach($documents as $doc){
             if(is_array($doc)){
                 $doc = end($doc);
             }

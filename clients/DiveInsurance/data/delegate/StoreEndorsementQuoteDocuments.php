@@ -40,7 +40,7 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
             'Dive Store' 
             => array(
              'propTemplate' =>'DiveStore_Property_COI',
-             'propertyHeader' => 'DiveStorePropertyHeader.html',
+             'propertyHeader' => 'DiveStorePropertyEndoHeader.html',
              'propertyFooter' => 'DiveStorePropertyFooter.html',
              'template' => 'DiveStoreEndorsement', 
              'header' => 'DiveStoreEndorsement_header.html',
@@ -77,7 +77,8 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
              'rosterFooter' => 'Roster_footer.html',
              'rosterPdf' => 'Roster.pdf',
              'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
-             'groupExclusions' => 'Group_Exclusions.pdf'
+             'groupExclusions' => 'Group_Exclusions.pdf',
+             'businessIncomeWorksheet'=>'DS_Business_Income_Worksheet.pdf'
          ),
         'Group Professional Liability' 
             => array(

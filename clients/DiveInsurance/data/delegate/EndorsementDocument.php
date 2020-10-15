@@ -36,7 +36,7 @@ class EndorsementDocument extends PolicyDocument
       'Dive Store'
       => array(
            'propTemplate' =>'DiveStore_Property_COI',
-           'propertyHeader' => 'DiveStorePropertyHeader.html',
+           'propertyHeader' => 'DiveStorePropertyEndoHeader.html',
            'propertyFooter' => 'DiveStorePropertyFooter.html',
            'template' => 'DiveStoreEndorsement',
            'header' => 'DiveStoreEndorsement_header.html',
