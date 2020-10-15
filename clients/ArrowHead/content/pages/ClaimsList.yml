@@ -45,11 +45,13 @@ content:
                                 content:
                                     route: 'file/search/entity/Policy Claims'
                                     # route: 'file/search/entity/Policy Claims/assoc/{{parentFileId}}'
+                                    gridToolbar: '<p className="namedInsuredtext"> {data.namedInsured} - Claims Summary</p>'
                                     filterable: false           
                                     resizable: false
                                     sortable: false
+                                    className: claimsMiniListView
                                     wrapStyle:
-                                        height: "30%"
+                                        height: "50%"
                                     columnConfig:
                                         -
                                             title: Value Date

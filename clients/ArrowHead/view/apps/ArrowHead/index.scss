@@ -190,6 +190,19 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     border-radius: 20px;
   }
 
+  .claimsMiniListView {
+    .k-header.k-grid-toolbar {
+      background-color: #1f1946;
+      color: #f8f9fa;
+      padding: 0.65rem 1.25rem;
+      .namedInsuredtext {
+        font-family: "Lato", sans-serif;
+        margin-bottom: 0px;
+        font-size:15px;
+      }
+    }
+  }
+
   .formLoader {
     display: flex;
     align-items: center;
