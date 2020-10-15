@@ -265,12 +265,12 @@ view()
         find -L /opt/oxzion/view/themes/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/themes/  \;
         rsync -rl --delete view/ /opt/oxzion/view/
         ln -nfs /var/lib/oxzion/vfs /opt/oxzion/view/vfs
-        chown oxzion:oxzion -R /opt/oxzion/view/vfs
+        chown www-data:www-data -R /opt/oxzion/view/vfs
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         echo -e "${GREEN}Copying view Complete!${RESET}"
         echo -e "${GREEN}Starting view service${RESET}"
         chmod 777 -R /opt/oxzion/view/bos
@@ -383,8 +383,8 @@ diveinsurance()
         rm -rf /opt/oxzion/view/themes/VicenciaAndBuckleyTheme/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
@@ -416,8 +416,8 @@ insurancemanagement()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/view
         chmod 777 -R /opt/oxzion/eoxapps
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -446,13 +446,13 @@ insuranceoi()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/Insurance/
         rm -rf /opt/oxzion/view/apps/Insurance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
@@ -480,8 +480,8 @@ task()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/view
         chmod 777 -R /opt/oxzion/eoxapps
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -514,8 +514,8 @@ bridgemed()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/view
         chmod 777 -R /opt/oxzion/eoxapps
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -544,13 +544,13 @@ finance()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/Finance/
         rm -rf /opt/oxzion/view/apps/Finance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
@@ -578,13 +578,13 @@ transportation()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/Transportation/
         rm -rf /opt/oxzion/view/apps/Transportation/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
@@ -613,7 +613,7 @@ arrowhead()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/ArrowHead/
         rm -rf /opt/oxzion/view/apps/ArrowHead/node_modules
@@ -623,7 +623,7 @@ arrowhead()
         rm -rf /opt/oxzion/view/themes/ArrowHeadTheme/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
@@ -651,13 +651,13 @@ covid()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/Covid19CheckList/
         rm -rf /opt/oxzion/view/apps/Covid19CheckList/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -686,13 +686,13 @@ axon()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/AXONInsurance/
         rm -rf /opt/oxzion/view/apps/AXONInsurance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -721,13 +721,13 @@ riscom()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/RISCOMInsurance/
         rm -rf /opt/oxzion/view/apps/RISCOMInsurance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -756,13 +756,13 @@ biofi()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/BiofiFinance/
         rm -rf /opt/oxzion/view/apps/BiofiFinance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -791,13 +791,13 @@ tennant()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/TennantInsurance/
         rm -rf /opt/oxzion/view/apps/TennantInsurance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -826,13 +826,13 @@ bsri()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/BSRIInsurance/
         rm -rf /opt/oxzion/view/apps/BSRIInsurance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -861,13 +861,13 @@ hiig()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/HIIGInsurance/
         rm -rf /opt/oxzion/view/apps/HIIGInsurance/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         service php7.2-fpm reload
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
@@ -897,7 +897,7 @@ appbuilder()
         cd /opt/oxzion/view/bos/
         npm run build
         npm run package:discover
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown www-data:www-data -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
         cd /opt/oxzion/view/apps/EOXAppBuilder/
         rm -rf /opt/oxzion/view/apps/EOXAppBuilder/node_modules
@@ -907,7 +907,7 @@ appbuilder()
         rm -rf /opt/oxzion/view/themes/EOXAppbuilderTheme/node_modules
         npm install --unsafe-perm
         npm run build
-        chown oxzion:oxzion -R /opt/oxzion/view
+        chown www-data:www-data -R /opt/oxzion/view
         systemctl start view
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
