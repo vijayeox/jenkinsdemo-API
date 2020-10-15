@@ -1,0 +1,157 @@
+name: 'Claims'
+description: 'Shows a list of claims realated to a workbook'
+content:
+    -
+        type: Document
+        content:
+            jsx: '  {
+                <h5 className="totalClaimsAmount">
+                  Total Claims Amount {sumTotal}
+                </h5>
+              }'
+            params:
+                sumTotal: '(parseFloat(data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0),0))).toLocaleString("en-US", {style: "currency", currency: "USD",})'
+            url: 'file/search/entity/Policy Claims'
+        #   url: 'file/search/entity/Policy Claims/assoc/{{parentFileId}}'
+    -
+        type: List
+        content:
+            route: 'file/search/entity/Policy Claims'
+            # route: 'file/search/entity/Policy Claims/assoc/{{parentFileId}}'
+            defaultFilters:
+                skip: 0
+                take: 100
+                sort:
+                    -
+                        field: date_created
+                        dir: desc
+            filterable: false           
+            resizable: true
+            sortable: 
+                allowUnsort: true
+                mode: single
+            wrapStyle:
+                height: "90%"
+            exportToExcel:
+                fileNameTemplate: 'this.props.parentData.namedInsured + "_ClaimsExport.xlsx"'
+                columnConfig:
+                    - 
+                        title: Named Insured
+                        field: namedInsured
+                        locked: true
+                        cellOptions:
+                            textAlign: "center"
+                            verticalAlign: "center"
+                            background: "#55b089"
+                            color: "#212529"
+                            bold: true
+                    - 
+                        title: DBA
+                        field: dba
+                    -
+                        title: Value Date
+                        field: valueDate
+                        cell: 'formatDate(data.valueDate)'
+                        filter: date
+                        filterFormat: YYYY-MM-DD
+                    -
+                        title: Loss Date
+                        field: lossDate
+                        cell: 'formatDate(data.lossDate)'
+                        filter: date
+                        filterFormat: YYYY-MM-DD
+                    -
+                        title: "Paid Amount"
+                        field: paid
+                        cell: 'data.paid.toLocaleString("en-US", {style: "currency", currency: "USD",})'
+                        filter: numeric
+                    - 
+                        title: "Reserve Amount"
+                        field: reserve
+                        cell: 'data.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})'
+                        filter: numeric
+                    - 
+                        title: Total Amount
+                        field: total
+                        cell: 'data.total.toLocaleString("en-US", {style: "currency", currency: "USD",})'
+                        filter: numeric
+                    - 
+                        title: Level 1
+                        field: claimlevel1
+                        cell: 'typeof data.claimlevel1 == "string" && data.claimlevel1 != "[]" ? data.claimlevel1 : ""'
+                    - 
+                        title: Level 2
+                        field: claimlevel2
+                        cell: 'typeof data.claimlevel2 == "string" && data.claimlevel2 != "[]" ? data.claimlevel2 : ""'
+                    - 
+                        title: Level 3
+                        field: claimlevel3
+                        cell: 'typeof data.claimlevel3 == "string" && data.claimlevel3 != "[]" ? data.claimlevel3 : ""'
+            operations:
+                title: "Add New Claim"
+                actions:
+                    -
+                        name: Add New Claim
+                        rule: "true"
+                        details:
+                            -
+                                type: Page
+                                page_id: 'ed1b1e0c-5ef9-4332-8703-2a35c8d5e14b'
+            actions:
+                 -
+                     name: Edit
+                     rule: "true"
+                     details:
+                         -
+                            type: Form
+                            form_id: 055cdece-c75c-4d33-b32c-800e05421406
+                            fileId: '{{uuid}}'
+                     icon: 'far fa-pencil-alt'
+            columnConfig:
+                -
+                    title: Value Date
+                    field: valueDate
+                    cell: '<td>{formatDate(item.valueDate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: Loss Date
+                    field: lossDate
+                    cell: '<td>{formatDate(item.lossDate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: "Paid Amount"
+                    field: paid
+                    cell: '<td>{item.paid.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
+                    filter: numeric
+                - 
+                    title: "Reserve Amount"
+                    field: reserve
+                    cell: '<td>{item.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
+                    filter: numeric
+                - 
+                    title: Total Amount
+                    field: total
+                    cell: '<td>{item.total.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
+                    filter: numeric
+                - 
+                    title: Level 1
+                    field: claimlevel1
+                    cell: '<td>{typeof data.claimlevel1 == "string" && data.claimlevel1 != "[]" ? data.claimlevel1 : ""}<td>'
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - "EPL"
+                            - "Crime"
+                            - "DOL - non-accident"
+                            - "Auto Accident- Owned Auto"
+                            - "Sales Practice"
+                            - "Garagekeepers"
+                            - "Products Liability"
+                            - "Other General Liability"
+                            - "Property"
+                        placeholder: 'Select Level'
+                - 
+                    title: Carrier
+                    field: carrier
