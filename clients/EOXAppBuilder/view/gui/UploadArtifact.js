@@ -9,7 +9,7 @@ class UploadArtifact extends React.Component {
     if (this.props.entity == "app") {
       this.postURL = "/app/archive/upload";
       this.infoMessage =
-        "Please verify if the zip archive contains valid appilcaion.yml file before proceeding with the import";
+        "Please verify if the zip archive contains valid application.yml file before proceeding with the import";
       this.fileExtension = ".zip";
     } else if (this.props.entity == "form") {
       this.postURL = "app/" + this.props.params.app_uuid + "/artifact/add/form";
