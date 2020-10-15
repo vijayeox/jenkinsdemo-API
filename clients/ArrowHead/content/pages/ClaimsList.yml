@@ -6,13 +6,13 @@ content:
         content:
             jsx: '  {
                 <h5 className="totalClaimsAmount">
-                  Total Claims Amount ${sumTotal > 0 ?  sumTotal : 0}
+                  Total Claims Amount {sumTotal}
                 </h5>
               }'
             params:
-                sumTotal: 'data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0),0)'
+                sumTotal: '(parseFloat(data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0),0))).toLocaleString("en-US", {style: "currency", currency: "USD",})'
             url: 'file/search/entity/Policy Claims'
-        # url: 'file/search/entity/Policy Claims/assoc/{{parentFileId}}'
+        #   url: 'file/search/entity/Policy Claims/assoc/{{parentFileId}}'
     -
         type: List
         content:
@@ -66,14 +66,17 @@ content:
                                         -
                                             title: "Paid Amount"
                                             field: paid
+                                            cell: '<td>{item.paid.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
                                             filter: numeric
                                         - 
                                             title: "Reserve Amount"
                                             field: reserve
+                                            cell: '<td>{item.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
                                             filter: numeric
                                         - 
                                             title: Total Amount
                                             field: total
+                                            cell: '<td>{item.total.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
                                             filter: numeric
                                         - 
                                             title: Level 1
@@ -86,11 +89,11 @@ content:
                                 content:
                                     jsx: '  {
                                         <h5 className="totalClaimsAmountMini">
-                                          Total Claims Amount ${sumTotal > 0 ?  sumTotal : 0}
+                                          Total Claims Amount {sumTotal}
                                         </h5>
                                       }'
                                     params:
-                                        sumTotal: 'data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0),0)'
+                                        sumTotal: '(parseFloat(data.reduce((a, b) => (a ? a : 0) + (b.total ? b.total : 0),0))).toLocaleString("en-US", {style: "currency", currency: "USD",})'
                                     url: 'file/search/entity/Policy Claims'
                                 # url: 'file/search/entity/Policy Claims/assoc/{{parentFileId}}'
                             -
@@ -123,14 +126,17 @@ content:
                 -
                     title: "Paid Amount"
                     field: paid
+                    cell: '<td>{item.paid.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
                     filter: numeric
                 - 
                     title: "Reserve Amount"
                     field: reserve
+                    cell: '<td>{item.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
                     filter: numeric
                 - 
                     title: Total Amount
                     field: total
+                    cell: '<td>{item.total.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
                     filter: numeric
                 - 
                     title: Level 1
