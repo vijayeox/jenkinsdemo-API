@@ -63,6 +63,30 @@
 			"tableView": false,
 			"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
 		}, {
+			"label": "ApproverName",
+			"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].name;\n  }\n}",
+			"key": "approverName",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "ApproverEmailId",
+			"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].email;\n  }\n}",
+			"key": "approverEmailId",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "ApproverDesignation",
+			"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].designation;\n  }\n}",
+			"key": "approverDesignation",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
 			"title": "Approval",
 			"theme": "primary",
 			"breadcrumbClickable": true,
@@ -150,7 +174,7 @@
 					"label": "",
 					"value": ""
 				}],
-				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost,.msg",
+				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.txt,.pst,.ost,.msg",
 				"fileMaxSize": "10MB",
 				"multiple": true,
 				"clearOnHide": false,
@@ -161,8 +185,8 @@
 				"key": "csrApprovalAttachments",
 				"customConditional": "show = (!data.csrApprovalAttachments || typeof(data.csrApprovalAttachments) != 'string')",
 				"type": "file",
-				"input": true,
-				"url": "/file/attachment"
+				"url": "/file/attachment",
+				"input": true
 			}]
 		}, {
 			"title": "Payment Information",
@@ -632,7 +656,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 8,
+	"_vid": 10,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -649,6 +673,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-10-07T06:05:47.413Z",
+	"modified": "2020-10-16T04:28:01.903Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
