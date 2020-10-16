@@ -18,7 +18,7 @@
 			<p class="name">{$country}</p>
 		</div>
 
-		<p>Dear <span class ="rgaard1">{if $product == 'Group Professional Liability'} {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if} {else} {$business_name} {if isset($dba) && $dba !=""} - {$dba} {/if}{/if}</span></p>
+		<p>Dear <span class ="rgaard1">{if $product == 'Group Professional Liability'} {$firstname}, {$lastname}{if isset($initial)}, {$initial}{/if} {else} {$business_name} {if isset($dba) && $dba !=""} - {$dba} {/if}{/if}</span></p>
 		<div class = "line_space">
 		<p>Enclosed is the endorsement to your PADI Endorsed {if $product == 'Group Professional Liability'} Professional Liability {else} Dive Store {/if}policy.{if isset($notes) && $notes != ""}  This endorsement makes the following change:</p>
 		<p>{$notes}</p>
