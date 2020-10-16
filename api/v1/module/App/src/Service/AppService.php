@@ -226,9 +226,9 @@ class AppService extends AbstractService
                     case 'job': $this->processJob($ymlData);
                         break;
                     case 'symlink': $this->processSymlinks($ymlData, $path);
-                    break;
-                   default: $this->logger->info("no matching parameter found");
-                       break;
+                        break;
+                    default: $this->logger->info("no matching parameter found");
+                        break;
                }
             }
             $this->updateyml($ymlData, $path);
@@ -1010,11 +1010,13 @@ class AppService extends AbstractService
                 $entity = $entityData;
                 $entity['assoc_id'] = $assoc_id;
                 $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
-                if (!$entityRec || $entityRec['assoc_id'] != $assoc_id) {
+                if (!$entityRec) {
                     $result = $this->entityService->saveEntity($appId, $entity);
                 } else {
                     $entity['id'] = $entityRec['id'];
                     $entity['uuid'] = $entityRec['uuid'];
+                    if ($entityRec['assoc_id'] != $assoc_id)
+                       $result = $this->entityService->saveEntity($appId, $entity);
                 }
                 if(isset($entity['identifiers'])){
                     $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);
@@ -1031,7 +1033,7 @@ class AppService extends AbstractService
                     }
                 }
                 if (isset($entity['child']) && $entity['child']) {
-                    $childEntityData = ['entity' => $entityData['child'], 'app' => [['uuid' => $appId]]];
+                    $childEntityData = ['entity' => $entityData['child'], 'app' => ['uuid' => $appId]];
                     $this->processEntity($childEntityData, $entity['id']);
                     $entityData['child'] = $childEntityData['entity'];
                 }

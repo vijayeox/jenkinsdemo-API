@@ -129,9 +129,10 @@ entity:
                 name: documents
                 text: Documents
                 data_type: document
-    -
-        name: 'Policy Claims'
-        override_data: true
+        child:
+            -
+                name: 'Policy Claims'
+                override_data: true
 pages:
     -
         page_name: AgentHomePage.yml

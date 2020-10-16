@@ -550,7 +550,7 @@ return [
             'filelistinguser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus][/entity/:entityName[/assoc/:assocId]]',
+                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
@@ -567,7 +567,7 @@ return [
             'filelistfilter' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName[/assoc/:assocId]][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]]',
+                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]]',
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
