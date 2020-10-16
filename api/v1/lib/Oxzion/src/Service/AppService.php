@@ -582,6 +582,9 @@ private function installApp($orgId, $yamlData, $path){
             if(is_dir($path . 'view/apps/eoxapps')){
                 FileUtils::rmDir($path . 'view/apps/eoxapps');
             }
+            $srcIconPath = $path . '../../AppSource/'.$yamlData['app']['uuid'] .'/view/apps/eoxapps/';
+            FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
+            FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
         }
         $jsonData = json_decode(file_get_contents($metadataPath),true);
         $jsonData['name'] = $yamlData['app']['name'];
