@@ -20,12 +20,12 @@ final class Version20201015151815 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `arrowhead`.`ox_app_entity` DROP FOREIGN KEY `ox_app_entity_assoc_id_1`;");
+        $this->addSql("ALTER TABLE `ox_app_entity` DROP FOREIGN KEY `ox_app_entity_assoc_id_1`;");
         
-        $this->addSql("ALTER TABLE `arrowhead`.`ox_app_entity` 
+        $this->addSql("ALTER TABLE `ox_app_entity` 
         ADD CONSTRAINT `ox_app_entity_assoc_id_1`
         FOREIGN KEY (`assoc_id`)
-        REFERENCES `arrowhead`.`ox_app_entity` (`id`)
+        REFERENCES `ox_app_entity` (`id`)
         ON DELETE RESTRICT
         ON UPDATE CASCADE;");
 
@@ -34,12 +34,12 @@ final class Version20201015151815 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `arrowhead`.`ox_app_entity` DROP FOREIGN KEY `ox_app_entity_assoc_id_1`;");
+        $this->addSql("ALTER TABLE `ox_app_entity` DROP FOREIGN KEY `ox_app_entity_assoc_id_1`;");
         
-        $this->addSql("ALTER TABLE `arrowhead`.`ox_app_entity` 
+        $this->addSql("ALTER TABLE `ox_app_entity` 
         ADD CONSTRAINT `ox_app_entity_assoc_id_1`
         FOREIGN KEY (`assoc_id`)
-        REFERENCES `arrowhead`.`ox_app_entity` (`id`)
+        REFERENCES `ox_app_entity` (`id`)
         ON DELETE SET NULL
         ON UPDATE SET NULL;");
 
