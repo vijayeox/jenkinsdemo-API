@@ -94,7 +94,7 @@ class AppArtifactService extends AbstractService
             move_uploaded_file($_FILES['file']['tmp_name'], $targetDir.$_FILES['file']['name']);
             $fileCreated = ImageUtils::createPNGImage($targetDir.$_FILES['file']['name'],$filePath);
             return [
-                "originalName" => $filePath,
+                "originalName" => $_FILES['file']['name'],
                 "size" => filesize($filePath) 
             ];
         } else {
