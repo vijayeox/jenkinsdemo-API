@@ -35,7 +35,7 @@ content:
                     icon: 'far fa-pencil-alt'
                 -
                     name: Claims
-                    rule: 'row.status == "Generated"'
+                    rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
                     details:
                         -
                             params:

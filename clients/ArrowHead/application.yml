@@ -29,6 +29,9 @@ privilege:
     -
         name: MANAGE_POLICY_APPLICATION
         permission: 7
+    -
+        name: MANAGE_CLAIMS
+        permission: 15
 role:
     -
         name: 'Account Executive'
@@ -50,6 +53,9 @@ role:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
                 permission: 7
+            -
+                privilege_name: MANAGE_CLAIMS
+                permission: 15
         uuid: 2aaea64e-bd20-4441-8eef-4692be79b3b2
     -
         name: Underwriter
@@ -57,6 +63,9 @@ role:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
                 permission: 1
+            -
+                privilege_name: MANAGE_CLAIMS
+                permission: 7
         uuid: 2dff7054-330c-4439-aade-39336a92b0a0
 menu:
     -
@@ -76,7 +85,7 @@ menu:
         icon: 'far fa-hand-holding-usd'
         page_uuid: ba632ab9-c87d-4417-852e-fcf609b96926
         uuid: 474e61f0-4072-41c3-b4b2-c1a9ecb5ecca
-        privilege: MANAGE_POLICY_APPLICATION_READ
+        privilege: MANAGE_CLAIMS_READ
     -
         name: 'View Workbooks'
         icon: 'fas fa-home'
