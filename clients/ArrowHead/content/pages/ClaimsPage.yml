@@ -13,14 +13,22 @@ content:
                             type: List
                             content:
                                 route: 'file/search/entity/Policy Claims'
-                                # route: 'file/search/entity/Policy Claims/assoc/{{parentFileId}}'
-                                gridToolbar: '<h5>All Claims List</h5>'
+                                gridToolbar: '<h5>Claims List of all accounts</h5>'
                                 defaultFilters:
                                     sort:
                                         -
                                             field: date_created
                                             dir: desc
-                                filterable: false           
+                                pageable:
+                                    buttonCount: 5
+                                    pageSizes:
+                                        - 25
+                                        - 50
+                                        - 100
+                                        - 250
+                                        - 1000
+                                    info: true
+                                filterable: true           
                                 resizable: true
                                 sortable: 
                                     allowUnsort: true
@@ -31,7 +39,7 @@ content:
                                     fileNameTemplate: '"ClaimsExport.xlsx"'
                                     columnConfig:
                                         - 
-                                            title: Named Insured
+                                            title: Account Name
                                             field: namedInsured
                                             locked: true
                                             cellOptions:
@@ -40,15 +48,38 @@ content:
                                                 background: "#55b089"
                                                 color: "#212529"
                                                 bold: true
-                                        - 
-                                            title: DBA
-                                            field: dba
                                         -
                                             title: Value Date
                                             field: valueDate
                                             cell: 'formatDate(data.valueDate)'
                                             filter: date
                                             filterFormat: YYYY-MM-DD
+                                        - 
+                                            title: Business Name
+                                            field: dba
+                                        - 
+                                            title: Business Name
+                                            field: dba
+                                        - 
+                                            title: Address1
+                                            field: mailingAddress
+                                        - 
+                                            title: City
+                                            field: city
+                                        - 
+                                            title: State Code
+                                            field: state
+                                            cell: 'data.state.abbreviation ? data.state.abbreviation : ""'
+                                        -
+                                            title: NAICS Code
+                                            field: naicsCode
+                                        -
+                                            title: Effective Month
+                                            field: effectiveMonth
+                                            cell: 'data.effectiveMonth ? data.effectiveMonth.name : ""'
+                                        -
+                                            title: Loss Year
+                                            field: lossYear
                                         -
                                             title: Loss Date
                                             field: lossDate
@@ -65,23 +96,35 @@ content:
                                             field: reserve
                                             cell: 'data.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})'
                                             filter: numeric
+                                        -
+                                            title: "Subro/Salvage/Recovery"
+                                            field: subro
+                                            cell: 'data.subro.toLocaleString("en-US", {style: "currency", currency: "USD",})'
+                                            filter: numeric
+                                        - 
+                                            title: "LAE"
+                                            field: lae
+                                            cell: 'data.lae.toLocaleString("en-US", {style: "currency", currency: "USD",})'
+                                            filter: numeric
                                         - 
                                             title: Total Amount
                                             field: total
                                             cell: 'data.total.toLocaleString("en-US", {style: "currency", currency: "USD",})'
                                             filter: numeric
                                         - 
-                                            title: Level 1
+                                            title: Type (Level 1)
                                             field: claimlevel1
                                             cell: 'typeof data.claimlevel1 == "string" && data.claimlevel1 != "[]" ? data.claimlevel1 : ""'
                                         - 
-                                            title: Level 2
+                                            title: Sub Type (Level 2)
                                             field: claimlevel2
                                             cell: 'typeof data.claimlevel2 == "string" && data.claimlevel2 != "[]" ? data.claimlevel2 : ""'
-                                        - 
-                                            title: Level 3
-                                            field: claimlevel3
-                                            cell: 'typeof data.claimlevel3 == "string" && data.claimlevel3 != "[]" ? data.claimlevel3 : ""'                                       
+                                        -
+                                            title: Carrier
+                                            field: carrier   
+                                        -
+                                            title: LR PDF reference
+                                            field: lrPdfReference                                   
                                 actions:
                                      -
                                          name: Edit
@@ -144,6 +187,7 @@ content:
                                         field: carrier
                 - 
                     name: Add New Claim
+                    title: Search Insured
                     icon: fad fa-car-crash
                     details:
                         -
