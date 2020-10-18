@@ -90,7 +90,14 @@ class FileService extends AbstractService
         $data['form_id'] = $formId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
-        $data['assoc_id'] = isset($oldData['bos']['assoc_id']) ? $oldData['bos']['assoc_id'] : null;
+        if(isset($oldData['bos']['assoc_id'])){
+            $data['assoc_id'] = $this->getIdFromUuid('ox_file', $oldData['bos']['assoc_id']);
+            if($data['assoc_id'] == 0){
+                throw new EntityNotFoundException("File Id not found -- " . $oldData['bos']['assoc_id']);
+            }
+        } else {
+            $data['assoc_id'] = null;
+        }
         $data['data'] = $jsonData;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File();
