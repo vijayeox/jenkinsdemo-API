@@ -376,6 +376,7 @@ class FileService extends AbstractService
         $sql = $this->getSqlObject();
         $params = array();
         try {
+            $this->beginTransaction();
             $params['uuid'] = $id;
             $update = $sql->update();
             $update->table('ox_file')
@@ -383,6 +384,7 @@ class FileService extends AbstractService
                 ->where($params);
             $response = $this->executeUpdate($update);
             $id = $this->getIdFromUuid('ox_file', $id);
+            $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (isset($id)) {
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
@@ -390,6 +392,7 @@ class FileService extends AbstractService
 
             return 1;
         } catch (Exception $e) {
+            $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
@@ -1069,9 +1072,9 @@ class FileService extends AbstractService
             $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
             $whereQuery = rtrim($whereQuery, " AND ");
             if($whereQuery==" WHERE "){
-                $where = "";
+                $where = "of.is_active = 1";
             } else {
-                $where .= " " . $whereQuery ;
+                $where .= " of.is_active = 1 AND " . $whereQuery ;
             }
             $where = trim($where) != "" ? "WHERE $where" : "";
             $where = rtrim($where, " AND ");
