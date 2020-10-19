@@ -140,4 +140,26 @@ class DataSourceController extends AbstractApiController
         $result = $this->dataSourceService->getDataSourceList($params);
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
+
+    /**
+     * GET DataSource API
+     * @api
+     * @link /analytics/datasource
+     * @method GET
+     * @param      array[json]  $dataEntity    (Index or Table for fields)
+     * @param      array[json]  $field  (field for values)
+     * @return array $dataget Get Details
+     * <code>status : "success|error",
+     *              id: integer,
+     *              data: string,
+     * </code>
+     */
+    public function getDetailsAction()
+    {
+        $routeParams = $this->params()->fromRoute();
+        $uuid = $routeParams['datasourceUuid'];
+        $params = $this->params()->fromQuery();
+        $result = $this->dataSourceService->getDataStructureDetails($uuid,  $params);
+        return $this->getSuccessResponseWithData($result);
+    }
 }

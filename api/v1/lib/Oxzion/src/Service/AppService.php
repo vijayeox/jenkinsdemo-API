@@ -245,7 +245,11 @@ class AppService extends AbstractService
                 $this->logger->info("\n App Data processing - " . print_r($value, true));
                 switch ($value) {
                     case 'initialize':
-                    $this->createOrUpdateApp($ymlData);
+                    $temp = $this->createOrUpdateApp($ymlData);
+                    if($temp){
+                        FileUtils::copyDir($path, $temp);
+                        $path = $temp;
+                    }
                     $this->processBusinessRoles($ymlData);
                     $this->createAppPrivileges($ymlData);
                     $this->createRole($ymlData);
@@ -371,12 +375,21 @@ class AppService extends AbstractService
         }
     }
 
-public function installAppToOrg($appId,$orgId){
+public function installAppToOrg($appId,$orgId,$serviceType){
         $destination = $this->getAppSourceAndDeployDirectory($appId);
         $ymlData = self::loadAppDescriptor($destination['deployDir']);
-    $this->installApp($orgId,$ymlData,$destination['deployDir']);
+        switch ($serviceType) {
+            case 'install':
+                $this->installApp($orgId,$ymlData,$destination['deployDir']);
+                break;
+            case 'uninstall':
+                $this->uninstallApp($orgId,$ymlData,$destination['deployDir']);
+                break;
+            default:
+                # code...
+                break;
+        }
     }
-
 private function installApp($orgId, $yamlData, $path){
         try{
             $this->beginTransaction();
@@ -385,13 +398,67 @@ private function installApp($orgId, $yamlData, $path){
         $user = $this->userService->getContactUserForOrg($orgId);
         $this->userService->addAppRolesToUser($user['userId'],$appId);
         $result = $this->createAppRegistry($appId, $orgId);
-        $this->setupOrgLinks($path, $appId, $orgId);
+        $this->logger->info("PATH--- $path");
+        $this->setupOrgFiles($path, $orgId);
+        // Assign AppRoles to Logged in User if Logged in Org and Installed Org are same
+        if(AuthContext::get(AuthConstants::ORG_UUID) == $orgId){
+            $this->userService->addAppRolesToUser(AuthContext::get(AuthConstants::USER_UUID),$appId);
+        }
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
             throw $e;        
         }
         
+    }
+
+    private function uninstallApp($orgId, $yamlData, $path){
+        try{
+            $this->beginTransaction();
+            $appId = $yamlData['app']['uuid'];
+            $this->removeRoleData($appId,$orgId);        
+            $this->removeOrgFiles($orgId);
+            $this->commit();
+        }catch(Exception $e){
+            $this->logger->info("there is an uninstallexception: ");
+            $this->rollback();
+            throw $e;        
+        }
+        
+    }
+    private function removeRoleData($appId,$orgId){
+        $appId = $this->getIdFromUuid('ox_app',$appId);
+        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+        $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
+        if(count($roleResult) > 0){
+            $this->deleteInfo('ox_role_privilege',$appId,$orgId);
+            $this->deleteData($roleResult,'ox_user_role','role_id','role_id'); //Both migration
+            $this->deleteData($roleResult,'ox_role','id','role_id');
+        }
+        $result = $this->getDataByParams('ox_app_registry', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
+        if(count($result) > 0){
+            $this->deleteInfo('ox_app_registry',$appId,$orgId);
+        }
+    }
+
+    private function deleteData($result,$tableName,$columnName,$uniqueColumn){
+        $appSingleArray = array_unique(array_column($result,$uniqueColumn));
+        $deleteQuery = "DELETE FROM $tableName where $columnName in ('" . implode("','", $appSingleArray) . "')";
+        $this->logger->info("QUERY---- $deleteQuery");
+        $deleteResult = $this->executeQuerywithParams($deleteQuery); 
+    }
+
+    private function deleteInfo($tableName,$appId,$orgId){
+        $deleteQuery = "DELETE FROM $tableName WHERE app_id=:appId and org_id=:orgId";
+        $deleteParams = array('appId' => $appId,'orgId' => $orgId);
+        $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
+    }
+
+    private function removeOrgFiles($orgId){
+        if ($orgId) {
+            $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
+            FileUtils::rmDir($link);
+        }
     }
 
     public function processJob(&$yamlData) {
@@ -589,7 +656,7 @@ private function installApp($orgId, $yamlData, $path){
         $jsonData = json_decode(file_get_contents($metadataPath),true);
         $jsonData['name'] = $yamlData['app']['name'];
         $jsonData['appId'] = $yamlData['app']['uuid'];
-        $jsonData['title']['en_EN'] = $yamlData['app']['name'] == 'EOXAppBuilder' ? 'AppBuilder' : $yamlData['app']['title'];
+        $jsonData['title']['en_EN'] = ($yamlData['app']['name'] == 'EOXAppBuilder') ? 'AppBuilder' : isset($yamlData['app']['title']) ? $yamlData['app']['title']: $yamlData['app']['name'];
         if (isset($yamlData['app']['description'])) {
             $jsonData['description']['en_EN'] = $yamlData['app']['description'];
         }
@@ -768,16 +835,12 @@ private function checkWorkflowData(&$data,$appUuid)
         $this->setLinkAndRunBuild($path, $appId);
     }
 
-    private function setupOrgLinks($path, $appId, $orgId){
+    private function setupOrgFiles($path, $orgId){
         if ($orgId && $path) {
             $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
-            $target = $path . "data/template";
-            if (is_link($link)) {
-                FileUtils::unlink($link);
-            }
-            if (file_exists($target)) {
-                $this->setupLink($target, $link);
-            }
+            $this->logger->info("linkkk---$link");
+            $source = $path . "data/template";
+            FileUtils::copyDir($source,$link);
         }
         
     }
@@ -903,15 +966,15 @@ private function checkWorkflowData(&$data,$appUuid)
             $queryParams = ['name' => $appData['name']];
         }
         $queryResult = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
-
+        if(!isset($appData['title'])){
+            $appData['title'] = $appData['name'];
+        }
         //Create the app if not found.
         if (0 == count($queryResult)) {
-            //UUID is invalid. Threfore remove it.
-            unset($appData['uuid']);
             $temp = ['app' => $appData];
             $createResult = $this->createApp($temp);
             ArrayUtils::merge($appData, $createResult['app']);
-            return;
+            return AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData).DIRECTORY_SEPARATOR;
         }
 
         //App is found. Update the app.
@@ -1228,15 +1291,21 @@ private function checkWorkflowData(&$data,$appUuid)
     private function cleanApplicationDescriptorData($descriptorData)
     {
         if (isset($descriptorData["entity"])) {
-            $descriptorData["entity"] = array_map(function ($entity) {
-                if (isset($entity["formFieldsValidationExcel"]) && empty($entity['formFieldsValidationExcel'])) {
-                    unset($entity["formFieldsValidationExcel"]);
-                }
-                if (isset($entity['field']) && array_key_exists('name',$entity['field'][0])&& empty($entity['field'][0]['name'])) {
-                    unset($entity['field']);
-                }
-                return $entity;
-            }, $descriptorData["entity"]);
+            $descEntity = [];
+            foreach ($descriptorData["entity"] as &$value) {
+                if (isset($value["formFieldsValidationExcel"]) && empty($value['formFieldsValidationExcel'])) {
+                            unset($value["formFieldsValidationExcel"]);
+                        }
+                if (isset($value['field']) && array_key_exists('name',$value['field'][0])&& empty($value['field'][0]['name'])) {
+                            unset($value['field']);
+                        }
+
+                if (isset($value['name']) && !empty($value['name'])) {
+                    array_push($descEntity,$value); 
+                }                 
+                                             
+            }
+            $descriptorData["entity"] = $descEntity;
         }
         if (isset($descriptorData["menu"])) {
             $descriptorData["menu"] = array_map(function ($menu) {
