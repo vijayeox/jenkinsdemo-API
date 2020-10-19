@@ -13,10 +13,10 @@
             "next": true
         },
         "collapsible": false,
-        "tableView": false,
         "key": "page1",
         "type": "panel",
         "label": "App Info",
+        "tableView": false,
         "input": false,
         "components": [{
             "label": "Container",
@@ -62,6 +62,7 @@
                             "required": true,
                             "custom": "if(data.app.name && data.app.name != ''){\n      valid = (data.app.name.match(/^[a-z0-9-]+$/i)) ?  true : 'Application Name must Contain only Alphabets and Numbers.';\n}"
                         },
+                        "errorLabel": "Application Name",
                         "key": "name",
                         "type": "textfield",
                         "input": true,
@@ -276,7 +277,7 @@
             "defaultValue": "Please click on the Create App button before you proceed",
             "validateOn": "blur",
             "validate": {
-                "custom": "if (data.app.name.length > 0 && data.app.category.length > 0) {\n  valid = data.app.uuid\n    ? data.app.uuid.length > 0\n      ? true\n      : \"Create App to proceed further\"\n    : \"Create App to proceed further\";\n} else {\n  valid = true;\n}"
+                "custom": "if (data.app.name.length > 0 && data.app.category.length > 0) {\n  valid = data.app.uuid.length > 0\n      ? true\n      : \"Create App to proceed further\";\n} else {\n  valid = true;\n}"
             },
             "key": "textFieldValidate",
             "customConditional": "if(data.app.uuid && data.app.uuid != \"\"){\n  show=false;\n}else {\n  show=true;\n}",
@@ -328,6 +329,7 @@
                         "validate": {
                             "required": true
                         },
+                        "errorLabel": "Organization Name",
                         "key": "name",
                         "type": "textfield",
                         "input": true,
@@ -388,6 +390,7 @@
                         "validate": {
                             "required": true
                         },
+                        "errorLabel": "Organization Email",
                         "key": "email",
                         "type": "email",
                         "input": true,
@@ -626,6 +629,7 @@
                         "unique": true
                     },
                     "unique": true,
+                    "errorLabel": "Privilege Name",
                     "key": "name",
                     "type": "textfield",
                     "input": true
@@ -702,6 +706,7 @@
                         "unique": true
                     },
                     "unique": true,
+                    "errorLabel": "Role Name",
                     "key": "name",
                     "type": "textfield",
                     "input": true
@@ -729,6 +734,10 @@
                         "tableView": true,
                         "dataSrc": "custom",
                         "data": {
+                            "values": [{
+                                "label": "",
+                                "value": ""
+                            }],
                             "custom": "values = data.privilege.map(item =>item)"
                         },
                         "template": "<span>{{ item.name }}</span>",
@@ -737,6 +746,7 @@
                         "validate": {
                             "required": true
                         },
+                        "errorLabel": "Privilege Name",
                         "key": "privilege_name",
                         "type": "select",
                         "indexeddb": {
@@ -1409,6 +1419,7 @@
                                         "unique": true
                                     },
                                     "unique": true,
+                                    "errorLabel": "Page Name",
                                     "key": "name",
                                     "type": "textfield",
                                     "input": true,
@@ -1455,7 +1466,7 @@
                             "key": "pageContent",
                             "type": "form",
                             "input": true,
-                            "formRevision": 56,
+                            "formRevision": 79,
                             "hideOnChildrenHidden": false
                         }, {
                             "label": "Page Content",
@@ -1526,6 +1537,7 @@
                     "validate": {
                         "required": true
                     },
+                    "errorLabel": "Menu Name",
                     "key": "name",
                     "type": "textfield",
                     "input": true
@@ -1536,6 +1548,7 @@
                     "validate": {
                         "required": true
                     },
+                    "errorLabel": "Menu Icon Class",
                     "key": "icon",
                     "type": "textfield",
                     "input": true
@@ -1618,7 +1631,7 @@
         }]
     }],
     "revisions": "current",
-    "_vid": 403,
+    "_vid": 415,
     "title": "EOX App",
     "display": "wizard",
     "access": [{
@@ -1626,10 +1639,10 @@
         "type": "read_all"
     }],
     "submissionAccess": [],
-    "controller": "",
+    "controller": "var s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_1fa0d5c0-b428-499a-a490-37e4349c1060\"\n      )\n    ) {\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
     "properties": {
         "showBreadcrumbs": "true",
-        "submission_api": "{ \t\"api\": { \t\t\"method\": \"put\", \t\t\"url\": \"/app/{{app.uuid}}\" \t} }",
+        "submission_api": "{\"api\":{\"method\": \"put\",\"url\": \"/app/{{app.uuid}}\"}}",
         "clearVariables": "orgId"
     },
     "settings": {},
@@ -1637,6 +1650,6 @@
     "path": "eoxapp",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-07-26T18:44:45.687Z",
-    "modified": "2020-10-13T13:55:08.082Z",
+    "modified": "2020-10-16T15:23:57.285Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
