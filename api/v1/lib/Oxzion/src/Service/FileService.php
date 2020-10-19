@@ -1147,7 +1147,7 @@ class FileService extends AbstractService
                 }
             }
             foreach ($documentsArray as $key=>$docItem) {
-                if(isset($docItem) && !isset($docItem[0]['file']) ){
+                if(isset($docItem) && !isset($docItem[0]['file']) && !empty($docItem)){
                      $parseDocData = array();
                     foreach ($docItem as $document) {
                         if(is_array($document) && isset($document[0])){
@@ -1159,7 +1159,7 @@ class FileService extends AbstractService
                         }
                     }
                    $documentsArray[$key] =array('value' => $parseDocData,'type' => isset($document) ? 'document' : 'file');
-                   } else {
+                } else {
                     $documentsArray[$key] =array('value' => $docItem,'type' => 'file');
                 }
             }
