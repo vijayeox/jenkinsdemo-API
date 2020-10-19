@@ -255,8 +255,8 @@
     ( isset($additional.city)  && $additional.city != "" ) ||
     (isset($additional.state) && $additional.state != "" && is_string($additional.state)) ||
     (isset($additional.zip) && $additional.zip != "")}<p  class = "info"><b>
-    Location Address: </b>{if isset($additional.address) && is_string($additional.address) && $additional.address !=""}{$additional.address}{/if}<br>
-    {if isset($additional.country) && is_string($additional.country) && $additional.country !=""}{$additional.country}{/if}{if isset($additional.city)  && is_string($additional.city) && $additional.city !=""},{$additional.city}{/if}{if isset($additional.state) && is_string($additional.state)},{$additional.state}{/if}{if isset($additional.zip) && is_string($additional.zip) && $additional.zip !=""} - {$additional.zip}{/if}</p>
+    Location Address: </b>{if isset($additional.address) && is_string($additional.address) && $additional.address !=""}{$additional.address},{/if}<br>
+    {if isset($additional.city)  && is_string($additional.city) && $additional.city !=""}{$additional.city}{/if}{if isset($additional.state) && is_string($additional.state)},{$additional.state}{/if}{if isset($additional.zip) && is_string($additional.zip) && $additional.zip !=""} - {$additional.zip},{/if}<br>{if isset($additional.country) && is_string($additional.country) && $additional.country !=""}{$additional.country}{/if}</p>
     {/if}
 
     <center> <div>

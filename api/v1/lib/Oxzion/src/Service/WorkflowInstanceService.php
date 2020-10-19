@@ -131,6 +131,7 @@ class WorkflowInstanceService extends AbstractService
         try {
             $this->beginTransaction();
             $count = $this->table->delete($id);
+            $this->logger->info("deleteWorkflowInstance - count - $count");
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -211,58 +212,57 @@ class WorkflowInstanceService extends AbstractService
         }
         $workflowInstance = $this->setupWorkflowInstance($workflowId, null, $params);
         $this->logger->info("SETUP WORKFLOW RESPONSE DATA ----- " . print_r($workflowInstance, true));
-
-        try {
-            $params = $this->cleanData($params);
-            $fileData = $params;
-            $fileData['last_workflow_instance_id'] = $workflowInstance['id'];
-            if (isset($workflowInstance['parent_workflow_instance_id'])) {
-                $fileDataResult = $this->fileService->getFileByWorkflowInstanceId($workflowInstance['parent_workflow_instance_id'], false);
-                if($this->checkIfWorkflowInProgress($fileDataResult['last_workflow_instance_id'])){
-                    throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
-                }
-                $oldFileData = json_decode($fileDataResult['data'], true);
-                $fileData = array_merge($oldFileData, $fileData);
-                $file = $this->fileService->updateFile($fileData,$fileDataResult['fileId']);
-                if(!isset($fileData['uuid'])){
-                    $fileData['uuid'] = $fileDataResult['fileId'];
-                }
-                $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
-            }else{
-                if(isset($fileData['uuid'])){
-                    $select  = "SELECT of.id, of.last_workflow_instance_id from ox_file as of join ox_workflow_instance as owi on owi.id = of.last_workflow_instance_id WHERE of.uuid = :fileId";
-                    $queryParams = array('fileId' => $fileData['uuid']);
-                    $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
-                    if(count($result) == 0){
-                        $file = $this->fileService->updateFile($fileData,$fileData['uuid']);
-                        $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
-                    }else{
-                        if($this->checkIfWorkflowInProgress($result[0]['last_workflow_instance_id'])){
-                            throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
-                        }
-                        unset($fileData['uuid']);
-                    }
-                }
-                if(!isset($fileData['uuid'])){
-                    if($this->checkIfWorkflowInProgress(null, $fileData)){
+        $params = $this->cleanData($params);
+        $fileData = $params;
+        $fileData['last_workflow_instance_id'] = $workflowInstance['id'];
+        if (isset($workflowInstance['parent_workflow_instance_id'])) {
+            $fileDataResult = $this->fileService->getFileByWorkflowInstanceId($workflowInstance['parent_workflow_instance_id'], false);
+            if($this->checkIfWorkflowInProgress($fileDataResult['last_workflow_instance_id'])){
+                throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+            }
+            $oldFileData = json_decode($fileDataResult['data'], true);
+            $fileData = array_merge($oldFileData, $fileData);
+            $file = $this->fileService->updateFile($fileData,$fileDataResult['fileId']);
+            if(!isset($fileData['uuid'])){
+                $fileData['uuid'] = $fileDataResult['fileId'];
+            }
+            $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
+        }else{
+            if(isset($fileData['uuid'])){
+                $select  = "SELECT of.id, of.last_workflow_instance_id from ox_file as of join ox_workflow_instance as owi on owi.id = of.last_workflow_instance_id WHERE of.uuid = :fileId";
+                $queryParams = array('fileId' => $fileData['uuid']);
+                $result = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
+                if(count($result) == 0){
+                    $file = $this->fileService->updateFile($fileData,$fileData['uuid']);
+                    $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
+                }else{
+                    if($this->checkIfWorkflowInProgress($result[0]['last_workflow_instance_id'])){
                         throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
                     }
-                    $file = $this->fileService->createFile($fileData);    
+                    unset($fileData['uuid']);
                 }
             }
-            $this->beginTransaction();
-            $this->logger->info("File created -" . json_encode($fileData));
-            $params = $this->pruneFields($params, $workflowInstance['id']);
-            $params['fileId'] = $fileData['uuid'];
-            $params['workflow_instance_id'] = $workflowInstance['id'];
-            $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
-            $this->logger->info("Checking Params" . print_r($params, true));
-            try {
-                $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
-            } catch (ConnectException $e) {
-                $this->rollbackWorkflowInstanceAndFile($params);
-                throw $e;
+            if(!isset($fileData['uuid'])){
+                if($this->checkIfWorkflowInProgress(null, $fileData)){
+                    throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+                }
+                $file = $this->fileService->createFile($fileData);    
             }
+        }
+        $this->logger->info("File created -" . json_encode($fileData));
+        $params = $this->pruneFields($params, $workflowInstance['id']);
+        $params['fileId'] = $fileData['uuid'];
+        $params['workflow_instance_id'] = $workflowInstance['id'];
+        $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
+        $this->logger->info("Checking Params" . print_r($params, true));
+        try {
+            $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
+        } catch (ConnectException $e) {
+            $this->rollbackWorkflowInstanceAndFile($params);
+            throw $e;
+        }
+        try {
+            $this->beginTransaction();
             $this->logger->info("WorkflowInstanceId created" . print_r($workflowInstanceId, true));
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id, file_id=:fileId, start_data=:startData where id = :workflowInstanceId";
             $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'],'fileId'=>$this->getIdFromUuid('ox_file', $params['fileId']),'startData'=>is_array($fileData['data'])?json_encode($fileData['data']):$fileData['data']);
@@ -350,32 +350,39 @@ class WorkflowInstanceService extends AbstractService
 
     private function rollbackWorkflowInstanceAndFile($params)
     {
-        $this->logger->info("CHECK BRIAN");
         $this->logger->info("rollbackWorkflowInstanceAndFile");
         try{
-            $this->beginTransaction();
             $workflowInstanceId = isset($params['workflow_instance_id']) ? $params['workflow_instance_id'] : null;
+            $this->logger->info("rollbackWorkflowInstanceAndFile - WorkflowInstanceId - $workflowInstanceId");
             $selectQuery = "SELECT * from ox_workflow_instance where id=:id";
             $queryParams = array('id' => $workflowInstanceId);
             $workflowInstance = $this->executeQueryWithBindParameters($selectQuery, $queryParams)->toArray();
+            $this->logger->info("rollbackWorkflowInstanceAndFile - WorkflowInstance".print_r($workflowInstance,true));
             if(isset($workflowInstance[0]['parent_workflow_instance_id']) && !empty($workflowInstance[0]['parent_workflow_instance_id'])){
                 $updateQuery = "update ox_file set data = (select completion_data from ox_workflow_instance where id = :workflow_id), last_workflow_instance_id = :workflow_id where uuid = :id";
                 $updateQueryWhere = array("id" => $params['fileId'],"workflow_id" => $workflowInstance[0]['parent_workflow_instance_id']);
                 $updateResult = $this->executeUpdateWithBindParameters($updateQuery, $updateQueryWhere);
-                $deleteQuery = "delete from ox_activity_instance where workflow_instance_id = :id";
-                $queryCondition = array("id" => $workflowInstanceId);
-                $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $queryCondition);
+                $deleteQuery = "delete from ox_activity_instance where workflow_instance_id = $workflowInstanceId";
+                $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery);
                 $this->deleteWorkflowInstance($workflowInstanceId);
             } else {
                 $query = "update ox_file set last_workflow_instance_id = null where uuid = :id";
                 $queryWhere = array("id" => $params['fileId']);
                 $result = $this->executeUpdateWithBindParameters($query, $queryWhere);
                 $this->deleteWorkflowInstance($workflowInstanceId);
-                $this->fileService->deleteFile($params['fileId']);
+                $fileId = $this->getIdFromUuid('ox_file',$params['fileId']);
+                //Please note there is an issue with the prepared statement and cascaded delete which is why its written so primitively
+                $queryWhere = array("fileId" => $fileId);
+                $query = "delete from ox_indexed_file_attribute where file_id = $fileId";
+                $result = $this->executeUpdateWithBindParameters($query);
+                $query = "delete from ox_file_attribute where file_id = $fileId";
+                $result = $this->executeUpdateWithBindParameters($query);
+                $query = "delete from ox_file_document where file_id = $fileId";
+                $result = $this->executeUpdateWithBindParameters($query);
+                $query = "delete from ox_file where id = :fileId";
+                $result = $this->executeUpdateWithBindParameters($query, $queryWhere);
             }
-            $this->commit();
         } catch (Exception $e) {
-            $this->rollback();
             throw $e;
         }
     }
