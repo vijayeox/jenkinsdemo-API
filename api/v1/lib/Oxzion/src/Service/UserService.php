@@ -12,6 +12,8 @@ use Oxzion\Model\Organization;
 use Oxzion\Search\Elastic\IndexerImpl;
 use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
+use Oxzion\OxServiceException;
+use Oxzion\InsertFailedException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\AddressService;
 use Oxzion\Service\EmailService;
@@ -221,7 +223,7 @@ class UserService extends AbstractService
                         }
                     }
                 } else {
-                    throw new ServiceException("Username or Email Exists in other Organization", "user.email.exists");
+                    throw new InsertFailedException("Username or Email Exists in other Organization", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                 }
             }
             if (!isset($data['address1']) || empty($data['address1'])) {
