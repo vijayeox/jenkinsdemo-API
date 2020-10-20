@@ -33,6 +33,7 @@ content:
             actions:
                 -
                     name: Claims
+                    icon: 'far fa-hand-holding-usd'
                     rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
                     details:
                         -
