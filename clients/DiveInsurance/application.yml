@@ -44,14 +44,14 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 703d3a09-b7f3-49e9-9c79-74d5cae7f6e7
+        uuid: 6212d62d-4ddf-4fe6-a674-96b8884b3156
     -
         name: CSR
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
-        uuid: 41bd1503-20c8-49fc-be10-6c9a8222489c
+        uuid: e4d4a4b8-56dc-4423-86b3-c34803226bf4
 entity:
     -
         name: 'Individual Professional Liability'
@@ -175,6 +175,14 @@ entity:
                 index: true
             -
                 name: transaction_reference_number
+                data_type: text
+                index: true
+            -
+                name: groupProfessionalLiabilitySelect
+                data_type: text
+                index: true
+            -
+                name: propertyCoverageSelect
                 data_type: text
                 index: true
     -
@@ -310,7 +318,7 @@ entity:
                 text: 'Pocket Card'
                 data_type: document
     -
-        name: 'Generate Report Job'
+        name: 'Batch Report Job'
         field:
             -
                 name: jobStatus
@@ -319,6 +327,17 @@ entity:
             -
                 name: documents
                 text: 'COI Batch Reports'
+                data_type: document
+    -
+        name: 'Generate Report Job'
+        field:
+            -
+                name: jobStatus
+                text: 'Job Status'
+                data_type: text
+            -
+                name: documents
+                text: Reports
                 data_type: document
     -
         name: 'Auto Renewal'
@@ -421,6 +440,10 @@ entity:
                 name: transaction_reference_number
                 data_type: text
                 index: true
+            -
+                name: groupProfessionalLiabilitySelect
+                data_type: text
+                index: true
 pages:
     -
         page_name: UserHomePage.yml
@@ -474,8 +497,11 @@ pages:
         page_name: EFR.yml
         uuid: bb018dfd-be95-4c53-9a97-042f615f3623
     -
-        page_name: ReportPage.yml
+        page_name: BatchReportPage.yml
         uuid: 95dcfc00-e118-11ea-87d0-0242ac130003
+    -
+        page_name: GenerateReportPage.yml
+        uuid: 00868878-f6c8-46c3-b436-d11b60eaed17
 menu:
     -
         name: Home
@@ -538,11 +564,17 @@ menu:
         page_uuid: 11cd5446-c2fa-42cc-93b1-638670f4adf7
         uuid: 7794c91e-b708-41be-83e1-cc0bb6cd669a
     -
-        name: 'Batch Reports'
+        name: 'COI Batch Reports'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
         icon: 'fa fa-file-text'
         page_uuid: 95dcfc00-e118-11ea-87d0-0242ac130003
         uuid: 7595ffaa-e118-11ea-87d0-0242ac130003
+    -
+        name: 'Generate Reports'
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        icon: 'fas fa-file-excel'
+        page_uuid: 00868878-f6c8-46c3-b436-d11b60eaed17
+        uuid: 7daffd50-572e-4036-874c-dd07596a891c
     -
         name: MyAssignments
         privilege: HIDE_FOR_NOW
@@ -671,8 +703,14 @@ form:
         template_file: diveStoreRegeneration.json
         entity: 'Dive Store'
     -
+        name: 'Batch Report'
+        uuid: 98bafab4-0880-11eb-adc1-0242ac120002
+        description: 'Page for CSR generate and view COI Batch Reports'
+        template_file: batchReport.json
+        entity: 'Batch Report Job'
+    -
         name: 'Generate Report'
-        uuid: 57054a38-e117-11ea-87d0-0242ac130003
+        uuid: 84d79cfe-f3f5-11ea-adc1-0242ac120002
         description: 'Page for CSR generate and view Reports'
         template_file: generateReport.json
         entity: 'Generate Report Job'
