@@ -2,8 +2,6 @@
 <html>
 <head>
 	<link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
-   <script type="text/javascript" src="./js/moment.js"></script>
-
   <script>
   function subst() {
         var vars = {};
@@ -24,13 +22,6 @@
                 for (var j = 0; j < element.length; ++j) {
                     element[j].textContent = vars[css_selector_classes[css_class]];
                 }
-                if (css_selector_classes[css_class] == "start_date") {
-                document.getElementsByClassName(
-                  "start_date"
-                )[0].textContent = moment(
-                  vars[css_selector_classes[css_class]]
-                ).format("MM/DD/YYYY");
-              }
             }
         }
     }

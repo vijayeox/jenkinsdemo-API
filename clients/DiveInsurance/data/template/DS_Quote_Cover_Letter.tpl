@@ -37,8 +37,8 @@
 			<li>Please note: Your Dive Center general liability insurance does not cover the supervision and instruction of swimmers. This can only be covered by an individual or group professional liability policy.</li>
 		</ul>
 
-		{if isset($quoteInfo) && $quoteInfo != '[]'}
 		<p>To purchase your insurance coverage, please provide us with the following items:</p>
+		{if isset($quoteInfo) && $quoteInfo != '[]'}
 			{assign var=list value=$quoteInfo|json_decode:true}
 			{foreach from=$list item=$quoteData key = key}
 					{if $key == 'Other' &&  ($quoteData == true || $quoteData == 'true')}

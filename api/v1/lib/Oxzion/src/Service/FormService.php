@@ -34,7 +34,7 @@ class FormService extends AbstractService
     {
         $this->logger->info("EXECUTING CREATE FORM ");
         $form = new Form();
-        $data['uuid'] = (isset($data['uuid']) && !empty($data['uuid'])) ? $data['uuid'] :  UuidUtil::uuid();
+        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
         $template = $this->parseForm($data, $fieldReference);
         if($template == 0){
             return 0;

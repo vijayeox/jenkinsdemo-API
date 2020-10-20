@@ -1,6 +1,6 @@
-// import React_app from "./react-app";
+import React_app from "./react-app";
 
 let guiComponent = {
-  // SampleComponent: React_app
+  SampleComponent: React_app
 };
 export { guiComponent };

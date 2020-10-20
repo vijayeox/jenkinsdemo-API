@@ -11,7 +11,6 @@ use Oxzion\Encryption\Crypto;
 use Oxzion\ServiceException;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
-use Oxzion\Service\CommandService;
 use Oxzion\ValidationException;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
 
@@ -32,12 +31,11 @@ class AuthController extends AbstractApiControllerHelper
     private $userService;
     private $userTokenService;
     private $authService;
-    private $commandService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(AuthAdapter $authAdapter, ApiAdapter $apiAdapter, UserService $userService, UserTokenService $userTokenService, AuthService $authService, CommandService $commandService)
+    public function __construct(AuthAdapter $authAdapter, ApiAdapter $apiAdapter, UserService $userService, UserTokenService $userTokenService, AuthService $authService)
     {
         $this->authAdapter = $authAdapter;
         $this->apiAdapter = $apiAdapter;
@@ -45,7 +43,6 @@ class AuthController extends AbstractApiControllerHelper
         $this->userService = $userService;
         $this->userTokenService = $userTokenService;
         $this->authService = $authService;
-        $this->commandService = $commandService;
     }
 
     /**
@@ -131,18 +128,11 @@ class AuthController extends AbstractApiControllerHelper
     public function registerAction()
     {
         $data = $this->extractPostData();
-        if (isset($data['data'])) {
-            $data = $data['data'];
-        } 
         try {
-            if(isset($data['commands'])){
-                if(is_string($data['commands'])){
-                    if($commands = json_decode($data['commands'],true)){
-                        $data['commands'] = $commands;
-                    }
-                }
+            $result = $this->authService->executeActions($data);
+            if ($result == 0) {
+                return $this->getErrorResponse("There was an error while executing", 404);
             }
-            $result = $this->commandService->runCommand($data, $this->getRequest());
         } catch (ServiceException $e) {
             $this->log->error("Error" . $e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
@@ -152,9 +142,6 @@ class AuthController extends AbstractApiControllerHelper
         } catch (Exception $e) {
             $this->log->error("Error" . $e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        if($result == 1){
-            return $this->getErrorResponse("Error processing registration", 500);   
         }
         if (isset($result['auto_login'])) {
             $result = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']), 1);

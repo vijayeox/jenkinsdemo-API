@@ -10,9 +10,11 @@ RUN apt-get update \
   && apt-get install -y supervisor \
   && apt-get install -y unzip \
   && apt-get install -y libtidy-dev \
+  && docker-php-ext-install zip \
   && docker-php-ext-install pdo_mysql \
   && docker-php-ext-install xsl \
-  && apt-get install -y openssl libssl-dev libcurl4-openssl-dev pkg-config libpng-dev zlib1g-dev libxml2-dev redis-server
+  && apt-get install -y openssl libssl-dev libcurl4-openssl-dev pkg-config
+RUN apt-get install -y pkg-config
 RUN docker-php-ext-install xml
 RUN docker-php-ext-install json
 RUN docker-php-ext-install iconv
@@ -22,9 +24,13 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install mysqli
 RUN docker-php-ext-install tidy
 RUN docker-php-ext-install opcache
+RUN apt-get update -y && apt-get install -y libpng-dev
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install intl
-RUN docker-php-ext-install zip
+RUN apt-get update && apt-get install -y zlib1g-dev \
+  && docker-php-ext-install zip
+RUN apt-get update && \
+  apt-get install -y libxml2-dev
 RUN docker-php-ext-install soap
 RUN a2enmod rewrite \
   && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
@@ -35,6 +41,7 @@ RUN a2enmod rewrite \
   | php -- --install-dir=/usr/local/bin --filename=composer
 RUN apt-get update && \
   apt-get clean
+RUN apt-get install -y redis-server
 RUN apt-get install -y gnupg && \
   curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
   apt-get update \

@@ -5,21 +5,6 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 4
-ox_business_role:
-  - id: 10
-    uuid: "ccbf3d35-a0ee-49d3-a8ac-8e480be9dadd"
-    name: "Policy Holder"
-    created_by: 1
-    app_id: 100
-  - id: 11
-    uuid: "33bf3d35-a0ee-49d3-a8ac-8e480be9da22"
-    name: "Some Role"
-    created_by: 1
-    app_id: 100
-ox_privilege:
-  - name: MANAGE_POLICY
-    permission_allowed: 3
-    app_id: 100
 ox_wf_user_identifier:
   - id: 100
     app_id: 100
@@ -28,16 +13,16 @@ ox_wf_user_identifier:
     identifier_name: padi
     user_id: 1
 ox_role:
-  - id: 12
-    name: Admin
-    uuid: "12bf3d35-a0ee-49d3-a8ac-8e480be9daef"
-    business_role_id: 10
-ox_role_privilege:
-  - id: 500
-    role_id: 12
-    privilege_name: MANAGE_POLICY
-    permission: 3
-    app_id: 100
+  - id: 10
+    org_id: 1
+    uuid: "50457c26-037e-11ea-8d71-362b9e155667"
+    name: "new Role"
+    default_role: 1
+  - id: 11
+    org_id: 2
+    uuid: "b0971de7-0387-48ea-8f29-5d3704d967u7"
+    name: "Test Role"
+    default_role: 1
 ox_user_refresh_token:
   - user_id: 1
     salt: "5940264875c7e2a6f120969.43960974"

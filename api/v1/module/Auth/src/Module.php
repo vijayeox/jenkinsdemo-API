@@ -59,8 +59,7 @@ class Module implements ConfigProviderInterface
                         $container->get(ApiAdapter::class),
                         $container->get(UserService::class),
                         $container->get(UserTokenService::class),
-                        $container->get(Service\AuthService::class),
-                        $container->get(\Oxzion\Service\CommandService::class)
+                        $container->get(Service\AuthService::class)
                     );
                 },
             ],

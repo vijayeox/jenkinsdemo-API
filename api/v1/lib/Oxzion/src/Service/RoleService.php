@@ -18,6 +18,7 @@ class RoleService extends AbstractService
 {
     protected $table;
     protected $modelClass;
+
     public function __construct($config, $dbAdapter, RoleTable $table, PrivilegeTable $privilegeTable)
     {
         parent::__construct($config, $dbAdapter);
@@ -28,23 +29,15 @@ class RoleService extends AbstractService
     public function saveRole($params, &$data, $roleId = null)
     {
         if (isset($params['orgId'])) {
-            if (!AuthContext::get(AuthConstants::REGISTRATION) && (!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))))) {
+            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions create/update role");
             } else {
-                $orgId = $this->getIdFromUuid('ox_organization', $params['orgId']);
+                $org_id = $this->getIdFromUuid('ox_organization', $params['orgId']);
             }
         } else {
-            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            $org_id = AuthContext::get(AuthConstants::ORG_ID);
         }
-        return $this->saveRoleInternal($data, $roleId, $orgId);
-    }
-
-    public function saveTemplateRole(&$data, $roleId = null){
-        return $this->saveRoleInternal($data, $roleId);
-    }
-
-    private function saveRoleInternal(&$data, $roleId, $orgId = NULL){
         if (isset($roleId)) {
             $obj = $this->table->getByUuid($roleId, array());
             if (isset($obj)) {
@@ -58,48 +51,38 @@ class RoleService extends AbstractService
         $rolename = $data['name'];
         $data['description'] = isset($data['description']) ? $data['description'] : null;
         $data['privileges'] = isset($data['privileges']) ? $data['privileges'] : array();
-        $data['default'] = isset($data['default']) && $data['default'] ? $data['default'] : (isset($data['default_role']) ? $data['default_role'] : 0);
+        $data['default'] = isset($data['default']) ? $data['default'] : 0;
         $this->logger->info("\n Data modified before the transaction - " . print_r($data, true));
         $count = 0;
+        $this->beginTransaction();
         try {
             //First, all the other roles are changed to default role 0, and the new record added will be default role 1
-            $this->beginTransaction();
-            $clause = "";
-            $params = [];
-            if($orgId){
-                $clause .= " AND org_id =:orgId";                
-                $params['orgId'] = $orgId;
+            if ($data['default'] == 1) {
+                $queryString = "UPDATE ox_role set default_role = 0 where org_id= :orgId and id != 0";
+                $params = array("orgId" => $org_id);
+                $result = $this->executeQueryWithBindParameters($queryString, $params);
             }
-            
-            if ($data['default'] == 1 && $clause != "") {
-                $queryString = "UPDATE ox_role set default_role = 0 where id != 0 $clause";
-                $result = $this->executeUpdateWithBindParameters($queryString, $params);
-            }
-
             if (!isset($roleId) && isset($rolename)) {
-                $select = "SELECT id from ox_role where name = '" . $rolename . "' $clause";
-                $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+                $select = "SELECT id from ox_role where name = '" . $rolename . "' AND org_id =" . $org_id;
+                $result = $this->executeQuerywithParams($select)->toArray();
                 if (count($result) > 0) {
                     $roleId = $result[0]['id'];
-                    $data['id'] = $roleId;
                 }
             }
-
-            $businessRoleId = isset($data['business_role_id'])? $data['business_role_id']: 'NULL';
             if (isset($roleId)) {
-                $update = "UPDATE `ox_role` SET `name`= '" . $data['name'] . "', business_role_id = $businessRoleId, `description`= '" . 
-                            $data['description'] . "', `default_role`= '" . $data['default'] . "' WHERE `id` = '" . $roleId . "' AND name not in ('ADMIN', 'MANAGER', 'EMPLOYEE') $clause";
-                $result1 = $this->executeUpdateWithBindParameters($update,$params);
-                $count = $result1->getAffectedRows();
+                $update = "UPDATE `ox_role` SET `name`= '" . $data['name'] . "' WHERE `id` = '" . $roleId . "' AND name not in ('ADMIN', 'MANAGER', 'EMPLOYEE') AND org_id = " . $org_id;
+                $result1 = $this->runGenericQuery($update);
+                $update = "UPDATE `ox_role` SET `description`= '" . $data['description'] . "', `default_role`= '" . $data['default'] . "'WHERE `id` = '" . $roleId . "' AND org_id = " . $org_id;
+                $result1 = $this->runGenericQuery($update);
+                $count = $result1->getAffectedRows() + 1;
             } else {
                 if (!isset($rolename)) {
                     throw new ServiceException("Role name cannot be empty", "role.name.empty");
                 }
 
-                $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+                $data['uuid'] = isset($params['uuid']) ? $params['uuid'] : UuidUtil::uuid();
                 $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] : 0;
-                $data['default'] = $data['default'] ? 1 :0;
-                $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`,`is_system_role`, `default_role`, business_role_id) VALUES ('" . $rolename . "','" . $data['description'] . "','" . $data['uuid'] . "'," . ($orgId ? $orgId : 'NULL') . ",'" . $data['is_system_role'] . "','" . $data['default'] . "', $businessRoleId)";
+                $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`,`is_system_role`, `default_role`) VALUES ('" . $rolename . "','" . $data['description'] . "','" . $data['uuid'] . "','" . $org_id . "','" . $data['is_system_role'] . "','" . $data['default'] . "')";
                 $result1 = $this->runGenericQuery($insert);
                 $count = $result1->getAffectedRows();
                 if ($count > 0) {
@@ -107,12 +90,17 @@ class RoleService extends AbstractService
                     $data['id'] = $roleId;
                 }
             }
-            if (isset($data['privileges'])) {
-                $privileges = $data['privileges'];
-                $appId = isset($data['app_id']) ? $data['app_id'] : null;
-                $this->updateRolePrivileges($roleId, $data['privileges'], $orgId, $appId);
+            if ($count > 0) {
+                if (isset($data['privileges'])) {
+                    $this->updateRolePrivileges($roleId, $data['privileges'], $org_id);
+                    $query = "select * from ox_role_privilege where role_id = :roleid";
+                    $params = array("roleid" => $roleId);
+                    $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
+                }
+                $this->commit();
+            } else {
+                $this->rollback();
             }
-            $this->commit(); 
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
@@ -120,19 +108,16 @@ class RoleService extends AbstractService
         return $count;
     }
 
-    protected function updateRolePrivileges($roleId, &$privileges, $orgId = null, $appId = null)
+    protected function updateRolePrivileges($roleId, &$privileges, $orgId = null)
     {
+        $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_ID);
         try {
             $delete = "DELETE from `ox_role_privilege` where role_id =" . $roleId . "";
             $result = $this->runGenericQuery($delete);
             for ($i = 0; $i < sizeof($privileges); $i++) {
-                // TO BE REMOVED 
-                if (!isset($privileges[$i]['privilege_name']) && isset($privileges[$i]['name']))
-                {
-                    $privileges[$i]['privilege_name'] = $privileges[$i]['name'];
-                }
+                $appId = isset($privileges[$i]['app_id']) ? $privileges[$i]['app_id'] : 'NULL';
                 $insert = "INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`)
-                        SELECT " . $roleId . ",'" . $privileges[$i]['privilege_name'] . "', CASE WHEN permission_allowed >" . $privileges[$i]['permission'] . " THEN " . $privileges[$i]['permission'] . " ELSE permission_allowed END ," . ($orgId ? $orgId : 'NULL') .
+                        SELECT " . $roleId . ",'" . $privileges[$i]['privilege_name'] . "', CASE WHEN permission_allowed >" . $privileges[$i]['permission'] . " THEN " . $privileges[$i]['permission'] . " ELSE permission_allowed END ," . $orgId .
                     ", app_id from ox_privilege where name = '" . $privileges[$i]['privilege_name'] . "'";
                 $this->logger->info("Executing query $insert");
                 $resultSet = $this->runGenericQuery($insert);
@@ -311,59 +296,17 @@ class RoleService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getRolesByOrgid($orgid, array $businessRoleId = NULL)
+    public function getRolesByOrgid($orgid)
     {
-        if(!$businessRoleId || ($businessRoleId && count($businessRoleId) == 1)){
-            return $this->getDataByParams('ox_role', array(), array('org_id' => $orgid, "business_role_id" => $businessRoleId ? $businessRoleId[0] : $businessRoleId))->toArray();
-        }else{
-            $bRole = "";
-            $queryParams = $orgid ? ["orgId" => $orgid] : [];
-            foreach ($businessRoleId as $key => $value) {
-                if($bRole != ""){
-                    $bRole .= ", ";
-                }else{
-                    $bRole ="(";
-                }
-                $bRole.=":param$key";
-                $queryParams["param$key"] = $value;
-            }   
-            $bRole .= ")";
-            $orgClause = $orgid ? " and org_id = :orgId" : "";
-            $query = "select * from ox_role where business_role_id in $bRole $orgClause";
-            $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            return $result;
-        }
+        return $this->getDataByParams('ox_role', array(), array('org_id' => $orgid));
     }
 
-    public function getRolesByAppId($appId, $orgId = NULL){
-        $orgClause = "rp.org_id";
-        $params = ["appId" => $appId];
-        if($orgId){
-            $orgClause .= " = :orgId";
-            $params['orgId'] = $orgId;
-        }else{
-            $orgClause .= " IS NULL";
-        }
-        $query = "SELECT r.* from ox_role r inner join ox_role_privilege rp on rp.role_id = r.id
-                    where rp.app_id = :appId and $orgClause";
-        $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-        return $result;
-    }
-
-    public function createBasicRoles($orgid, array $businessRoleId = NULL, $defaultRoles = true)
+    public function createBasicRoles($orgid)
     {
-        $basicRoles = [];
-        if($defaultRoles){
-            $basicRoles = $this->getRolesByOrgid(null);
-        }
-        if($businessRoleId){
-            $temp = $this->getRolesByOrgid(null, $businessRoleId);
-            $basicRoles = array_merge($basicRoles, $temp);
-        }
+        $basicRoles = $this->getRolesByOrgid(null);
         try {
             foreach ($basicRoles as $basicRole) {
-                // unset($basicRole['id']);
-                unset($basicRole['uuid']);
+                unset($basicRole['id']);
                 $basicRole['org_id'] = $orgid;
                 if (!$this->createSystemRoleForOrg($basicRole)) {
                     throw new ServiceException("Failed to create basic roles", "failed.create.basicroles");
@@ -383,10 +326,6 @@ class RoleService extends AbstractService
                         SELECT " . $role['id'] . ", rp.privilege_name,rp.permission," . $role['org_id'] .
                 ",rp.app_id from ox_role_privilege rp left join ox_role r on rp.role_id = r.id
                         where r.name = '" . $role['name'] . "' and r.org_id is NULL";
-            $this->logger->info("\n Update Role Query - " . print_r($query, true));
-            if(isset($role['business_role_id'])){
-                $query .= " AND r.business_role_id = ".$role['business_role_id'];
-            }
             $count = $this->runGenericQuery($query);
             if (!$count) {
                 throw new ServiceException("Failed to update role privileges", "failed.update.default.privileges");

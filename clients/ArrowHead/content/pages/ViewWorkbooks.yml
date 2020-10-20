@@ -4,7 +4,7 @@ content:
     -
         type: List
         content:
-            route: 'file'
+            route: 'file/search/entity/Dealer Policy'
             filterable: true
             defaultFilters: 
                 filter:
@@ -32,8 +32,18 @@ content:
                 mode: single
             actions:
                 -
+                    name: Claims
+                    icon: 'far fa-hand-holding-usd'
+                    rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
+                    details:
+                        -
+                            params:
+                                page_id: 'f52a8856-54af-4efc-b548-3675ddb7f90f'
+                                params:
+                                    parentFileId: '{{uuid}}'              
+                -
                     name: 'Export'
-                    rule: '''{{status}}'' == ''Generated'''
+                    rule: 'row.status == "Generated"'
                     icon: 'far fa-file-download'
                     details:
                         -

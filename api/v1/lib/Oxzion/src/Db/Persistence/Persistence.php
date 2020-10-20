@@ -11,7 +11,6 @@ use PHPSQLParser\PHPSQLParser;
 use PHPSQLParser\PHPSQLCreator;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\App\AppArtifactNamingStrategy;
 use Zend\Db\Adapter\ParameterContainer;
 use Exception;
 
@@ -27,7 +26,8 @@ class Persistence extends AbstractService
      */
     public function __construct($config, string $appName, string $appId)
     {
-        $this->database = AppArtifactNamingStrategy::getDatabaseName(['name' => $appName, 'uuid' => $appId]);
+        $this->database = $appName.'___'.$appId;
+        $this->database = str_replace('-', '', $this->database);
         $dbConfig = array_merge(array(), $config['db']);
         $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = $this->database;

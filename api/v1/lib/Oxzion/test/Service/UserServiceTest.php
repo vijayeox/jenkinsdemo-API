@@ -34,7 +34,16 @@ class UserServiceTest extends ServiceTest
 
     private function getUserService()
     {
-        return $this->getApplicationServiceLocator()->get(\Oxzion\Service\UserService::class);
+        $config = $this->getApplicationConfig();
+        return new UserService(
+            $config,
+            $this->adapter,
+            $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class),
+            $this->getApplicationServiceLocator()->get(AddressService::class),
+            $this->getApplicationServiceLocator()->get(EmailService::class),
+            $this->getApplicationServiceLocator()->get(TemplateService::class),
+            $this->getApplicationServiceLocator()->get(MessageProducer::class)
+        );
     }
 
     public function testGetPrivileges()

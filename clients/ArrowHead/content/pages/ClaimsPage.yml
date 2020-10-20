@@ -1,0 +1,120 @@
+name: 'Claims'
+description: 'Shows a list of claims realated to a workbook'
+content:
+    -
+        type: RenderButtons
+        content:
+            buttonList:
+                - 
+                    name: View All Claims
+                    icon: fad fa-money-bill-alt
+                    details:
+                        -
+                            type: List
+                            content:
+                                route: 'file/search/entity/Policy Claims'
+                                gridToolbar: '<h5>Claims List of all accounts</h5>'
+                                defaultFilters:
+                                    sort:
+                                        -
+                                            field: date_created
+                                            dir: desc
+                                pageable:
+                                    buttonCount: 5
+                                    pageSizes:
+                                        - 25
+                                        - 50
+                                        - 100
+                                        - 250
+                                        - 1000
+                                    info: true
+                                filterable: true           
+                                resizable: true
+                                sortable: 
+                                    allowUnsort: true
+                                    mode: single
+                                wrapStyle:
+                                    height: "90%"                            
+                                actions:
+                                     -
+                                         name: Edit
+                                         rule: "true"
+                                         details:
+                                             -
+                                                type: Form
+                                                form_id: 055cdece-c75c-4d33-b32c-800e05421406
+                                                fileId: '{{uuid}}'
+                                         icon: 'far fa-pencil-alt'
+                                columnConfig:
+                                    -
+                                        title: Named Insured
+                                        field: namedInsured
+                                    -
+                                        title: Value Date
+                                        field: valueDate
+                                        cell: '<td>{formatDate(item.valueDate)}</td>'
+                                        filter: date
+                                        filterFormat: YYYY-MM-DD
+                                    -
+                                        title: Loss Date
+                                        field: lossDate
+                                        cell: '<td>{formatDate(item.lossDate)}</td>'
+                                        filter: date
+                                        filterFormat: YYYY-MM-DD
+                                    - 
+                                        title: Total Amount
+                                        field: total
+                                        cell: '<td>{item.total.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
+                                    - 
+                                        title: Carrier
+                                        field: carrier
+                - 
+                    name: Add New Claim
+                    title: Search Insured
+                    icon: fad fa-car-crash
+                    details:
+                        -
+                            type: Search
+                            content:
+                                filterColumns:
+                                    - namedInsured
+                                    - producername
+                                filterOperator : startswith
+                                filterable : false
+                                placeholder: 'Search using Named Insured or Producer Name'
+                                entity: "Dealer Policy"
+                                defaultFilters: 
+                                    filter:
+                                        logic: and
+                                        filters:
+                                            - 
+                                                field: status
+                                                operator: eq
+                                                value: Generated
+                                    sort:
+                                        -
+                                            field: date_created
+                                            dir: desc    
+                                columnConfig:
+                                    -
+                                        title: Insured
+                                        field: namedInsured
+                                    -
+                                        title: 'Producer'
+                                        field: producername
+                                passColumnConfig :
+                                    -
+                                        namedInsured
+                                    -
+                                        producername
+                                actions:
+                                    -
+                                        name: Add New Claim
+                                        icon: 'fas fa-plus-circle'
+                                        rule: 'true'
+                                        details:
+                                            -
+                                                params:
+                                                    page_id: 'ed1b1e0c-5ef9-4332-8703-2a35c8d5e14b'
+                                                    params:
+                                                        parentFileId: '{{uuid}}'  

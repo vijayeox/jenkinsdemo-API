@@ -7,7 +7,6 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
-use Oxzion\App\AppArtifactNamingStrategy;
 use Exception;
 
 class Migration extends AbstractService
@@ -24,20 +23,14 @@ class Migration extends AbstractService
      */
     public function __construct($config, $appName, $appId, $description)
     {
-        if (empty($appName) || empty($appId)) {
-            throw new Exception("appName and appId cannot be empty!");
-        }
-
         $this->description = $description;
         $this->appName = $appName;
         $this->appId = $appId;
-
+        $this->database = self::getDatabaseName($appName, $appId);
         $dbConfig = array_merge(array(), $config['db']);
         $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = 'mysql';
         $this->mysqlAdapter = new Adapter($dbConfig);
-
-        $this->database = AppArtifactNamingStrategy::getDatabaseName(['name' => $appName, 'uuid' => $appId]);
         $adapter = self::createAdapter($config, $this->database);
         parent::__construct($config, $adapter);
         $this->initDB();
@@ -49,6 +42,13 @@ class Migration extends AbstractService
         $dbConfig['database'] = $database;
         $adapter = new Adapter($dbConfig);
         return $adapter;
+    }
+
+    public static function getDatabaseName($appName, $appId)
+    {
+        $database = $appName.'___'.$appId;
+        $database = str_replace(' ', '', $database); // Replaces all spaces with hyphens.
+        return preg_replace('/[^A-Za-z0-9\_]/', '', $database, -1); // Removes special chars.
     }
 
     //this method is used only for phpunit tests. Not required to be called otherwise
@@ -66,7 +66,12 @@ class Migration extends AbstractService
      */
     private function initDB()
     {
-        $adapter = $this->mysqlAdapter;        
+        $adapter = $this->mysqlAdapter;
+        if ($this->appName === null || $this->appName === "" || $this->appId === null || $this->appId === "")
+        {
+            throw new Exception("appName and appId cannot be empty!");
+        }
+        
         try {
             $adapter->getDriver()->getConnection()->beginTransaction();
             $checkVersion = $this->checkDB(); //Code to check if the App Version is already installed.
@@ -127,7 +132,7 @@ class Migration extends AbstractService
             $result = $statement1->execute();
             $this->commit();
         } catch (Exception $e) {
-            // print_r($e->getMessage());exit;
+            print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }

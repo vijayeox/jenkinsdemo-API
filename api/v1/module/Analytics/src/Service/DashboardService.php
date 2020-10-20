@@ -8,6 +8,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FilterUtils;
+use Ramsey\Uuid\Uuid;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class DashboardService extends AbstractService
@@ -37,10 +38,12 @@ class DashboardService extends AbstractService
             if (0 == count($check)) {
                 $foundDefaultDashboard = false;
                 $dashboard->assign(['isdefault' => 1]);
-            } else {
+            }
+            else {
                 $foundDefaultDashboard = true;
             }
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             throw $e;
         }
         try {
@@ -56,7 +59,8 @@ class DashboardService extends AbstractService
             $dashboard->save();
             $this->commit();
             return $dashboard->getGenerated();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -79,14 +83,15 @@ class DashboardService extends AbstractService
             }
             $dashboard->save();
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
         return [
             'dashboard' => [
                 'version' => $dashboard->getProperty('version'),
-                'data' => $data,
+                'data' => $data
             ],
         ];
     }
@@ -97,14 +102,15 @@ class DashboardService extends AbstractService
         $dashboard->loadByUuid($uuid);
         $dashboard->assign([
             'version' => $version,
-            'isdeleted' => 1,
+            'isdeleted' => 1
         ]);
 
         try {
             $this->beginTransaction();
             $dashboard->save();
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -112,7 +118,7 @@ class DashboardService extends AbstractService
 
     public function getDashboard($uuid)
     {
-        $query = 'select uuid, name, ispublic, description, dashboard_type, date_created, content, version, if(created_by=:created_by, true, false) as is_owner, isdeleted, filter_configuration, export_configuration from ox_dashboard where org_id=:org_id and uuid=:uuid and (ispublic=true or created_by=:created_by) and isdeleted=false';
+        $query = 'select uuid, name, ispublic, description, dashboard_type, date_created, content, version, if(created_by=:created_by, true, false) as is_owner, isdeleted, filter_configuration from ox_dashboard where org_id=:org_id and uuid=:uuid and (ispublic=true or created_by=:created_by) and isdeleted=false';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -145,11 +151,12 @@ class DashboardService extends AbstractService
         }
         $where .= empty($where) ? "WHERE ${dashboardConditions}" : " AND ${dashboardConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY d.' . $paginateOptions['sort']) : '';
-        if ($paginateOptions['pageSize'] != 0) {
-            $limit = " LIMIT " . $paginateOptions['pageSize'] . " offset " . $paginateOptions['offset'];
-        } else {
+        if($paginateOptions['pageSize'] != 0) {
+            $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+        } else{
             $limit = " ";
         }
+
 
         $countQuery = "SELECT COUNT(id) as 'count' FROM ox_dashboard d ${where}";
         try {
