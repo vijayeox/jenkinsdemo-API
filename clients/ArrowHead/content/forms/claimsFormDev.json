@@ -232,6 +232,7 @@
                             "components": [
                                 {
                                     "label": "Value Date",
+                                    "displayInTimezone": "utc",
                                     "format": "MM-dd-yyyy",
                                     "placeholder": "MM-DD-YYYY",
                                     "tableView": false,
@@ -250,7 +251,7 @@
                                     "input": true,
                                     "widget": {
                                         "type": "calendar",
-                                        "displayInTimezone": "viewer",
+                                        "displayInTimezone": "utc",
                                         "locale": "en",
                                         "useLocaleSettings": false,
                                         "allowInput": true,
@@ -452,6 +453,7 @@
                             "components": [
                                 {
                                     "label": "Loss Date",
+                                    "displayInTimezone": "utc",
                                     "format": "MM-dd-yyyy",
                                     "placeholder": "MM-DD-YYYY",
                                     "tableView": false,
@@ -473,7 +475,7 @@
                                     "input": true,
                                     "widget": {
                                         "type": "calendar",
-                                        "displayInTimezone": "viewer",
+                                        "displayInTimezone": "utc",
                                         "locale": "en",
                                         "useLocaleSettings": false,
                                         "allowInput": true,
@@ -502,6 +504,7 @@
                             "components": [
                                 {
                                     "label": "Reported Date",
+                                    "displayInTimezone": "utc",
                                     "format": "MM-dd-yyyy",
                                     "placeholder": "MM-DD-YYYY",
                                     "tableView": false,
@@ -520,7 +523,7 @@
                                     "input": true,
                                     "widget": {
                                         "type": "calendar",
-                                        "displayInTimezone": "viewer",
+                                        "displayInTimezone": "utc",
                                         "locale": "en",
                                         "useLocaleSettings": false,
                                         "allowInput": true,
@@ -1071,7 +1074,8 @@
                                     "properties": {
                                         "commands": "[{ \"command\": \"fileSave\", \"entity_name\": \"Policy Claims\" }]",
                                         "exit": "false",
-                                        "notification": "Data saved successfully"
+                                        "notification": "Data saved successfully",
+                                        "postSubmitCallback": "true"
                                     },
                                     "type": "button",
                                     "event": "customButtonAction",
@@ -1142,6 +1146,6 @@
     "path": "claimsformdev",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-09-29T09:47:24.714Z",
-    "modified": "2020-10-20T11:11:00.354Z",
+    "modified": "2020-10-20T11:58:41.622Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:claimsFormDev"
 }
