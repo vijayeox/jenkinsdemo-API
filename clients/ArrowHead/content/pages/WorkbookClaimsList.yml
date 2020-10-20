@@ -44,14 +44,12 @@ content:
                             color: "#212529"
                             bold: true
                     -
+                        title: Lookup Code
+                        field: lookupCode
+                    -
                         title: Value Date
                         field: valueDate
                         cell: 'formatDate(data.valueDate)'
-                        filter: date
-                        filterFormat: YYYY-MM-DD
-                    - 
-                        title: Business Name
-                        field: dba
                     - 
                         title: Business Name
                         field: dba
@@ -64,23 +62,38 @@ content:
                     - 
                         title: State Code
                         field: state
-                        cell: 'data.state.abbreviation ? data.state.abbreviation : ""'
+                        cell: 'typeof data.state == "string" && data.state
+                                ? JSON.parse(data.state).abbreviation
+                                ? JSON.parse(data.state).abbreviation
+                                : ""
+                                : data.state && typeof data.state == "object"
+                                ? data.state.abbreviation
+                                : ""'
                     -
                         title: NAICS Code
                         field: naicsCode
                     -
                         title: Effective Month
                         field: effectiveMonth
-                        cell: 'data.effectiveMonth ? data.effectiveMonth.name : ""'
+                        cell: 'typeof data.effectiveMonth == "string" && data.effectiveMonth
+                        ? JSON.parse(data.effectiveMonth).name
+                        ? JSON.parse(data.effectiveMonth).name
+                        : ""
+                        : data.effectiveMonth && typeof data.effectiveMonth == "object"
+                        ? data.effectiveMonth.name
+                        : ""'
                     -
                         title: Loss Year
                         field: lossYear
+                        cell: 'data.lossYear ? (data.lossYear.toString().slice(0,2) + "-" + data.lossYear.toString().slice(2,4)) : "" '
                     -
                         title: Loss Date
                         field: lossDate
                         cell: 'formatDate(data.lossDate)'
-                        filter: date
-                        filterFormat: YYYY-MM-DD
+                    -
+                        title: Reported Date
+                        field: reportedDate
+                        cell: 'formatDate(data.reportedDate)'
                     -
                         title: "Paid Amount"
                         field: paid
