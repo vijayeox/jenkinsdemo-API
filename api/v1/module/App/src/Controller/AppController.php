@@ -318,11 +318,7 @@ class AppController extends AbstractApiController
                 $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
                 $params['parameters'] = rtrim($params['parameters'],",");
                 $params['parameters'] = ltrim($params['parameters'],",");
-                if(strpos($params['parameters'], ',') !== false){
-                    $params = explode(",",$params['parameters']);
-                }else{
-                    $params = array($params['parameters']);
-                }                    
+                $params = explode(",", $params['parameters']);
             }
             else{
                 $params = null;

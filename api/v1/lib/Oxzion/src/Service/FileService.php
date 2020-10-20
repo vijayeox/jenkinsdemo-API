@@ -90,6 +90,14 @@ class FileService extends AbstractService
         $data['form_id'] = $formId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
+        if(isset($oldData['bos']['assoc_id'])){
+            $data['assoc_id'] = $this->getIdFromUuid('ox_file', $oldData['bos']['assoc_id']);
+            if($data['assoc_id'] == 0){
+                throw new EntityNotFoundException("File Id not found -- " . $oldData['bos']['assoc_id']);
+            }
+        } else {
+            $data['assoc_id'] = null;
+        }
         $data['data'] = $jsonData;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File();
@@ -976,15 +984,11 @@ class FileService extends AbstractService
         if (count($result) > 0) {
             $queryParams = array();
             $queryParams['appId'] = $appId;
-            $statusFilter = "";
-            $createdFilter = "";
-            $entityFilter = "";
+            $where = "";
             $whereQuery = "";
-            $this->getEntityFilter($params,$entityFilter,$queryParams);
             $workflowJoin = "";
             $workflowFilter = "";
             if (isset($params['workflowId'])) {
-
                 // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
                 $select1 = "SELECT * from ox_workflow where uuid = :uuid";
                 $selectQuery1 = array("uuid" => $params['workflowId']);
@@ -999,20 +1003,8 @@ class FileService extends AbstractService
                     $workflowJoin = "left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id left join ox_workflow as ow on ow.id = wd.workflow_id";
                 }
             }
-            if (isset($params['gtCreatedDate'])) {
-                $createdFilter .= " of.date_created >= :gtCreatedDate AND ";
-                $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
-                $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
-            }
-            if (isset($params['ltCreatedDate'])) {
-                $createdFilter .= " of.date_created < :ltCreatedDate AND ";
-                $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
-                /* modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
-                 the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
-                 till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
-                $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
-            }
-            $where = " $workflowFilter $entityFilter $createdFilter";
+            $this->getFileFilters($params, $where, $queryParams);
+            $where = " $workflowFilter $where";
             $fromQuery = " from ox_file as `of`
             inner join ox_app_entity as en on en.id = `of`.entity_id
             inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
@@ -1256,6 +1248,7 @@ class FileService extends AbstractService
 
     private function cleanData($params)
     {
+        unset($params['bos']);
         unset($params['workflowInstanceId']);
         unset($params['activityInstanceId']);
         unset($params['workflow_instance_id']);
@@ -1576,7 +1569,41 @@ class FileService extends AbstractService
         return $sort;
     }
 
-    public function getEntityFilter(&$params,&$entityFilter,&$queryParams){
+    public function getFileFilters(&$params, &$where, &$queryParams){
+        if (isset($params['entityName'])) {
+            if(is_array($params['entityName'])){
+                $where .= " (";
+                foreach (array_values($params['entityName']) as $key => $entityName) {
+                    $where .= "en.name = :entityName".$key." OR ";
+                    $queryParams['entityName'.$key] = $entityName;
+                }
+                $where = rtrim($where, " OR ");
+                $where .= ") AND ";
+            } else {
+                $where .= " en.name = :entityName AND ";
+                $queryParams['entityName'] = $params['entityName'];
+            }
+        }
+        if (isset($params['assocId'])) {
+            if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId']))
+                $where .= " of.assoc_id = :assocId AND ";
+        }
+        if (isset($params['gtCreatedDate'])) {
+            $where .= " of.date_created >= :gtCreatedDate AND ";
+            $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
+            $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
+        }
+        if (isset($params['ltCreatedDate'])) {
+            $where .= " of.date_created < :ltCreatedDate AND ";
+            $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
+            /* modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
+             the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
+             till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
+            $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
+        }
+    }
+
+    public function getEntityFilter(&$params, &$entityFilter, &$queryParams){
         if (isset($params['entityName'])) {
             if(is_array($params['entityName'])){
                 $entityFilter = " (";
@@ -1588,11 +1615,6 @@ class FileService extends AbstractService
             } else {
                 $entityFilter = " en.name = :entityName AND ";
                 $queryParams['entityName'] = $params['entityName'];
-            }
-            if (isset($params['assocId'])) {
-                if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId'])) {
-                    $entityFilter .= " of.assoc_id = :assocId AND ";
-                }
             }
         }
     }

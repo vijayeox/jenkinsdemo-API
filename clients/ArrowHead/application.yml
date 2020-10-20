@@ -29,6 +29,9 @@ privilege:
     -
         name: MANAGE_POLICY_APPLICATION
         permission: 7
+    -
+        name: MANAGE_CLAIMS
+        permission: 15
 role:
     -
         name: 'Account Executive'
@@ -50,6 +53,9 @@ role:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
                 permission: 7
+            -
+                privilege_name: MANAGE_CLAIMS
+                permission: 15
         uuid: 2aaea64e-bd20-4441-8eef-4692be79b3b2
     -
         name: Underwriter
@@ -57,6 +63,9 @@ role:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
                 permission: 1
+            -
+                privilege_name: MANAGE_CLAIMS
+                permission: 7
         uuid: 2dff7054-330c-4439-aade-39336a92b0a0
 menu:
     -
@@ -71,6 +80,12 @@ menu:
         page_uuid: 360088d2-372e-4bf7-bb7e-7df7440dbdff
         uuid: 982e775c-ad80-43a9-b2ed-58037f5be281
         privilege: MANAGE_POLICY_APPLICATION_WRITE
+    -
+        name: Claims
+        icon: 'far fa-hand-holding-usd'
+        page_uuid: ba632ab9-c87d-4417-852e-fcf609b96926
+        uuid: 474e61f0-4072-41c3-b4b2-c1a9ecb5ecca
+        privilege: MANAGE_CLAIMS_READ
     -
         name: 'View Workbooks'
         icon: 'fas fa-home'
@@ -123,6 +138,36 @@ entity:
                 name: documents
                 text: Documents
                 data_type: document
+        child:
+            -
+                name: 'Policy Claims'
+                override_data: true
+                field:
+                    -
+                        name: namedInsured
+                        text: 'Named Insured'
+                        index: true
+                        data_type: text
+                    -
+                        name: valueDate
+                        text: 'Value Date'
+                        index: true
+                        data_type: datetime
+                    -
+                        name: lossDate
+                        text: 'Loss Date'
+                        index: true
+                        data_type: datetime
+                    -
+                        name: total
+                        text: 'Total Amount'
+                        index: true
+                        data_type: numeric
+                    -
+                        name: carrier
+                        text: Carrier
+                        index: true
+                        data_type: text
 pages:
     -
         page_name: AgentHomePage.yml
@@ -133,6 +178,15 @@ pages:
     -
         page_name: ViewWorkbooks.yml
         uuid: 92d4de60-6fa5-4df8-a688-05490c6589f9
+    -
+        page_name: AddNewClaim.yml
+        uuid: ed1b1e0c-5ef9-4332-8703-2a35c8d5e14b
+    -
+        page_name: ClaimsPage.yml
+        uuid: ba632ab9-c87d-4417-852e-fcf609b96926
+    -
+        page_name: WorkbookClaimsList.yml
+        uuid: f52a8856-54af-4efc-b548-3675ddb7f90f
 form:
     -
         name: 'DealerWorkbook Form'
