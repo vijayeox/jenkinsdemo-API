@@ -17,7 +17,7 @@ class GenerateReportMenu extends AbstractAppDelegate
 
     public function execute(array $data, Persistence $persistenceService) 
     {
-        $this->logger->info("Executing Batch Report Menu Generation with data- ".json_encode($data));
+        $this->logger->info("Executing Generate Report Menu Generation with data- ".json_encode($data));
         $params['entityName'] = 'Generate Report Job';
         $sortParams = array("field" => "date_created", "dir" => "desc");
         $filterParams = array("filters" => array());
@@ -39,35 +39,35 @@ class GenerateReportMenu extends AbstractAppDelegate
             if(isset($value['storeNumber']) && !empty($value['storeNumber'])){
                 $value['padiNumber'] = $value['storeNumber'];
             }
-            $time = strtotime($value['reportStartDate']);
-            $value['reportStartDate'] = date('Y-m-d', $time);
-            $time = strtotime($value['reportEndDate']);
-            unset($value['reportEndDate']);
-            $value['reportEndDate'] = date('Y-m-d', $time);
-            $value['generationType'] = $value['reportStartDate'].' to '.$value['reportEndDate'];
+            $time = strtotime($value['startDate']);
+            $value['startDate'] = date('Y-m-d', $time);
+            $time = strtotime($value['endDate']);
+            unset($value['endDate']);
+            $value['endDate'] = date('Y-m-d', $time);
+            $value['generationType'] = $value['startDate'].' to '.$value['endDate'];
             if(isset($value['product']) && $value['product'] == 'No Records Found'){
-                $value['reportProductType'] = $value['product'];
+                $value['productType'] = $value['product'];
             }
             else{
-                if(isset($value['reportProductType'])){
-                    if(is_string($value['reportProductType'])){
-                        $productName = json_decode($value['reportProductType'], true);
+                if(isset($value['productType'])){
+                    if(is_string($value['productType'])){
+                        $productName = json_decode($value['productType'], true);
                     } else {
                         $productName = array();
                     }
-                    if(isset($value['reportProductType']) && !empty($value['reportProductType']) && $value['reportProductType'] == 'individualProfessionalLiability'){
-                        $value['reportProductType'] = 'Individual Professional Liability';
+                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'individualProfessionalLiability'){
+                        $value['productType'] = 'Individual Professional Liability';
                     }
-                    if(isset($value['reportProductType']) && !empty($value['reportProductType']) && $value['reportProductType'] == 'emergencyFirstResponse'){
-                        $value['reportProductType'] = 'Emergency First Response';
+                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'emergencyFirstResponse'){
+                        $value['productType'] = 'Emergency First Response';
                     }
-                    if(isset($value['reportProductType']) && !empty($value['reportProductType']) && $value['reportProductType'] == 'diveBoat'){
-                        $value['reportProductType'] = 'Dive Boat';
+                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'diveBoat'){
+                        $value['productType'] = 'Dive Boat';
                     }
-                    if(isset($value['reportProductType']) && !empty($value['reportProductType']) && $value['reportProductType'] == 'diveStore'){
-                        $value['reportProductType'] = 'Dive Store';
+                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'diveStore'){
+                        $value['productType'] = 'Dive Store';
                     }
-                    $this->logger->info($value['reportProductType']);
+                    $this->logger->info($value['productType']);
                 }
             }
         }
