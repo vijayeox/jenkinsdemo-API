@@ -15,7 +15,8 @@ use Oxzion\AccessDeniedException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
-
+use Oxzion\VersionMismatchException;
+use Exception;
 
 class FileController extends AbstractApiController
 {
@@ -58,6 +59,9 @@ class FileController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Unexpected Error!",500, $data);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -94,10 +98,11 @@ class FileController extends AbstractApiController
         }
         try {
             $count = $this->fileService->updateFile($data, $id);
-            // var_dump($count);exit;
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         catch (EntityNotFoundException $e) {
             $response = ['data' => $data, 'errors' => $e->getMessage()];
@@ -118,15 +123,17 @@ class FileController extends AbstractApiController
      */
     public function delete($id)
     {
-        try {
-            $response = $this->fileService->deleteFile($id);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+        $params = $this->params()->fromQuery();
+        if (isset($params['version'])) {
+            try {
+                $response = $this->fileService->deleteFile($id,$params['version']);
+            }catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
+            }
+            return $this->getSuccessResponse();
+        } else {
+            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['id' => $id]);
         }
-        if ($response == 0) {
-            return $this->getErrorResponse("File not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
     }
     /**
      * GET File API
@@ -152,6 +159,7 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
+        print($file."\n");
         if(file_exists($file)){
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');

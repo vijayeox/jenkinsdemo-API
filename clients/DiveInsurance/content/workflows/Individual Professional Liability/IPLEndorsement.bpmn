@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.1.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.2.0">
   <bpmn:process id="IPLEndorsement" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="endorsementConsolidationIpl" />
-          <camunda:property name="fields" value="additionalInsured, country, tecRecEndorsment, section2Agreement,endorsement_options, upgradeCareerCoverage, scubaFit, cylinder, excessLiability,paymentOptions, initiatedByCsr, CSRReviewRequired, policyStatus, RejectedPolicy, approved" />
+          <camunda:property name="fields" value="AdditionalInsuredOption,additionalInsured, country, tecRecEndorsment, section2Agreement,endorsement_options, upgradeCareerCoverage, scubaFit, cylinder, excessLiability,paymentOptions, initiatedByCsr, CSRReviewRequired, policyStatus, RejectedPolicy, approved" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1m44nyk</bpmn:outgoing>
@@ -101,6 +101,7 @@ def coverage = endorsementOptions.modify_coverage
 def personalInfo = endorsementOptions.modify_personalInformation
 def additionalIn = endorsementOptions.modify_additionalInsured
 def upgradeInternationalCoverages = execution.getVariable('upgradeCareerCoverage')
+def AdditionalInsuredOption= execution.getVariable('AdditionalInsuredOption')
 
 def scubaFit = execution.getVariable('scubaFit')
 def cylinder = execution.getVariable('cylinder')
@@ -118,8 +119,8 @@ boolean result7 = false
 boolean result8 = false
 
 if(personalInfo){
-    if(country != "United States of America"){
-       result0=true 
+    if (country != "United States of America" &amp;&amp; country != "Mexico" &amp;&amp; country != "The Bahamas" &amp;&amp; country != "Turks and Caicos" &amp;&amp; country != "British Virgin Islands" &amp;&amp; country != "Cayman Islands" &amp;&amp; country != "Jamaica" &amp;&amp; country != "Aruba" &amp;&amp; country != "Curacao" &amp;&amp; country != "Grenada" &amp;&amp; country != "Barbados" &amp;&amp; country != "St Lucia" &amp;&amp; country != "Trinidad and Tobago" &amp;&amp; country != "Belize" &amp;&amp; country != "Costa Rica" &amp;&amp; country != "Dominican Republic" &amp;&amp; country != "Dominica" &amp;&amp; country != "Martinique" &amp;&amp; country != "Anguilla" &amp;&amp; country != "St Kitts and Nevis") {
+	    result8 = true;
     }
 }
 if(cylinder){
@@ -132,8 +133,8 @@ if (excessLiability) {
     result7 = true;
   }
 }
-if(coverage || additionalIn){
-if (additionalInsured) {
+if(coverage || AdditionalInsuredOption){
+if (AdditionalInsuredOption== 'addAdditionalInsureds') {
  additionalInsured.each {
   if (it.hasProperty('businessRelation') &amp;&amp; it.businessRelation == 'other') {
     result1 = true
@@ -149,18 +150,16 @@ if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternat
 }
 
 
-if(paymentOptions){
+if(coverage &amp;&amp; paymentOptions){
   if(paymentOptions == "creditCard"){
     result6 = false
   }
 }
 
-
-if(country != "United States of America" &amp;&amp; country != "Mexico" &amp;&amp; country != "The Bahamas" &amp;&amp; country != "Turks and Caicos" &amp;&amp; country != "British Virgin Islands" &amp;&amp; country != "Cayman Islands" &amp;&amp; country != "Jamaica" &amp;&amp; country != "Aruba" &amp;&amp; country != "Curacao" &amp;&amp; country != "Grenada" &amp;&amp; country != "Barbados" &amp;&amp; country != "St Lucia" &amp;&amp; country != "Trinidad and Tobago" &amp;&amp; country != "Belize" &amp;&amp; country != "Costa Rica" &amp;&amp; country != "Dominican Republic" &amp;&amp; country != "Dominica" &amp;&amp; country != "Martinique" &amp;&amp; country != "Anguilla" &amp;&amp; country != "St Kitts and Nevis"){
-	result8 = true;
-}
-
-if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "accepted" || result1 || result4 || result8 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
+if(paymentOptions == ""){
+    result6 = false
+  }
+if((initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "") &amp;&amp; (tecRecEndorsment == "withTecRecEndorsementForSelectionAbove" || result1 || result4 || result8 || scubaFit == "scubaFitInstructor" || result5||result6||result7 || result0)) {
   result3=true
 }
 execution.setVariable('CSRReviewRequired', result3)
@@ -221,6 +220,29 @@ if(initiatedByCsr == true &amp;&amp; (approved == "rejected" || approved == "onH
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="IPLEndorsement">
+      <bpmndi:BPMNEdge id="SequenceFlow_0isa8vl_di" bpmnElement="SequenceFlow_0isa8vl">
+        <di:waypoint x="654" y="364" />
+        <di:waypoint x="895" y="364" />
+        <di:waypoint x="895" y="178" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="836" y="255" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1yna7t6_di" bpmnElement="SequenceFlow_1yna7t6">
+        <di:waypoint x="447" y="706" />
+        <di:waypoint x="447" y="384" />
+        <di:waypoint x="554" y="384" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1r8i61y_di" bpmnElement="SequenceFlow_1r8i61y">
+        <di:waypoint x="692" y="681" />
+        <di:waypoint x="692" y="746" />
+        <di:waypoint x="497" y="746" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bb7law_di" bpmnElement="SequenceFlow_0bb7law">
+        <di:waypoint x="654" y="545" />
+        <di:waypoint x="692" y="545" />
+        <di:waypoint x="692" y="631" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1v1dk1z_di" bpmnElement="SequenceFlow_1v1dk1z">
         <di:waypoint x="590" y="151" />
         <di:waypoint x="305" y="375" />
@@ -297,32 +319,9 @@ if(initiatedByCsr == true &amp;&amp; (approved == "rejected" || approved == "onH
       <bpmndi:BPMNShape id="ExclusiveGateway_1t3bugk_di" bpmnElement="ExclusiveGateway_1t3bugk" isMarkerVisible="true">
         <dc:Bounds x="667" y="631" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0bb7law_di" bpmnElement="SequenceFlow_0bb7law">
-        <di:waypoint x="654" y="545" />
-        <di:waypoint x="692" y="545" />
-        <di:waypoint x="692" y="631" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1r8i61y_di" bpmnElement="SequenceFlow_1r8i61y">
-        <di:waypoint x="692" y="681" />
-        <di:waypoint x="692" y="746" />
-        <di:waypoint x="497" y="746" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1cmtn65_di" bpmnElement="Task_00721gd">
         <dc:Bounds x="397" y="706" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_1yna7t6_di" bpmnElement="SequenceFlow_1yna7t6">
-        <di:waypoint x="447" y="706" />
-        <di:waypoint x="447" y="384" />
-        <di:waypoint x="554" y="384" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0isa8vl_di" bpmnElement="SequenceFlow_0isa8vl">
-        <di:waypoint x="654" y="364" />
-        <di:waypoint x="895" y="364" />
-        <di:waypoint x="895" y="178" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="836" y="255" width="47" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

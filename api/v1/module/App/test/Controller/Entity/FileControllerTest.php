@@ -58,7 +58,7 @@ class FileControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['field1' => '1', 'field2' => '2', 'entity_id' => 1];
+        $data = ['field1' => '1', 'field2' => '2', 'entity_id' => 1,'policyStatus' => 'On Going','expiry_date' => '2019-01-01 00:00:00'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -66,8 +66,15 @@ class FileControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['field1'], $data['field1']);
-        //TODO add ox_file_attribute table data verification
-        //TODO add ox_file data column verification
+        $fileId = $content['data']['uuid'];
+
+        $selctQuery = "SELECT oxf.id, oxf.data,oxf.version as fileVersion from ox_file oxf where oxf.uuid='$fileId'";
+        $selectResult = $this->executeQueryTest($selctQuery); 
+        unset($data['entity_id']);
+        $this->assertEquals(count($selectResult), 1);
+        $this->assertEquals($selectResult[0]['fileVersion'], 1);
+        $this->assertEquals(json_decode($selectResult[0]['data'], true), $data);
+
     }
 
     public function testCreateAccess()
@@ -88,7 +95,7 @@ class FileControllerTest extends ControllerTest
     }
     public function testUpdate()
     {
-        $data = ['field1' => '2', 'field2' => '3'];
+        $data = ['field1' => '2', 'field2' => '3','version' => 1,'policyStatus' => 'On Hold','expiry_date' => '2019-01-01 00:00:00'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $selectResult = $this->getFieldUuid();
@@ -99,47 +106,65 @@ class FileControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['field1'], $data['field1']);
-        $this->assertEquals($content['data']['field2'], $data['field2']);
-        //TODO add ox_file_attribute table data
-        //TODO add ox_file data column verification
+         // Performed ox_file_attribute table data verification
+        $selctQuery = "SELECT * from ox_file oxf where oxf.uuid='d13d0c68-98c9-11e9-adc5-308d99c9145b'";
+        $selectResult = $this->executeQueryTest($selctQuery);
+        $this->assertEquals($content['data']['version'], $selectResult[0]['version']);
+
     }
+    
     public function testUpdateRestricted()
     {
-        $data = ['name' => 'Test File 1', 'app_id' => 1];
+        $data = ['name' => 'Test File 1', 'app_id' => 1, 'version' => 1];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'PUT', null);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class); // as specified in router's controller name alias
         $this->assertControllerClass('FileController');
         $this->assertMatchedRouteName('appfile');
         $this->assertResponseHeaderContains('content-type', 'application/json');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
-    }
-
-    public function testUpdateNotFound()
-    {
-        $data = ['name' => 'Test File 1', 'app_id' => 1];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/ef993a90-df86-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
     }
 
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145c', 'DELETE');
+        $selctQuery = "SELECT * from ox_file where uuid='d13d0c68-98c9-11e9-adc5-308d99c9145c'";
+        $selectResult = $this->executeQueryTest($selctQuery);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145c?version=1', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $selct = "SELECT oxf.is_active,oxf.version as fileVersion from ox_file oxf where oxf.uuid='d13d0c68-98c9-11e9-adc5-308d99c9145c'";
+        $result = $this->executeQueryTest($selct);
+        $this->assertEquals($result[0]['is_active'], 0);
+        $this->assertEquals($result[0]['fileVersion'], $selectResult[0]['version']+1 );
+    }
+
+    public function testDeleteWithWrongVersion()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145c?version=3', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Version changed');
+    }
+
+    public function testDeleteNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/465c8ff8-df82-11e9-8a34-2a2ae2dbbba3', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
     }
 
     public function testGetPdfFile()
@@ -186,7 +211,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'In Progress');
-        $this->assertEquals($content['total'], 2);
+        $this->assertEquals($content['total'] , 2);
     }
     public function testGetListOfFilesWithInvalidUserId()
     {
@@ -194,6 +219,7 @@ class FileControllerTest extends ControllerTest
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/3fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class);
@@ -318,6 +344,7 @@ class FileControllerTest extends ControllerTest
         $this->assertMatchedRouteName('filelisting');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
+        // print_r($content);exit();
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'In Progress');
         $this->assertEquals($content['total'], 1);
@@ -335,7 +362,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
-        $this->assertEquals($content['total'], 2);
+        $this->assertEquals(3, $content['total']);
     }
     public function testGetListOfFilesWithStatus2()
     {
@@ -350,7 +377,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'In Progress');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals(3, $content['total']);
     }
     public function testGetListOfFilesWithUser()
     {
@@ -413,9 +440,12 @@ class FileControllerTest extends ControllerTest
         $this->assertMatchedRouteName('filelistinguser');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['status'], 'Completed');
-        $this->assertEquals($content['data'][0]['uuid'], 'd13d0c68-98c9-11e9-adc5-308d99c91478');
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals(2, $content['total']);
+        $this->assertEquals('In Progress', $content['data'][0]['status']);
+        $this->assertEquals('f13d0c68-98c9-11e9-adc5-308d99c91478', $content['data'][0]['uuid']);
+        $this->assertEquals('Completed', $content['data'][1]['status']);
+        $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c91478', $content['data'][1]['uuid']);
+        
     }
 
     public function testGetListOfFilesWithStatusUsingMultipleFilters()

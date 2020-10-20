@@ -53,6 +53,10 @@ role:
 entity:
     -
         name: 'Individual Professional Liability'
+        uuid: 034165c1-ae53-4d3e-b111-6cd5f9e8be4e
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
         identifiers:
             -
                 identifier: padi
@@ -113,6 +117,10 @@ entity:
                 index: true
     -
         name: 'Dive Store'
+        uuid: 161a3f0f-c384-4f2d-a3da-a8a7ae51622e
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
         identifiers:
             -
                 identifier: business_padi
@@ -177,6 +185,10 @@ entity:
                 index: true
     -
         name: 'Dive Boat'
+        uuid: 2d344a48-0e06-48b6-b586-2b60a2b14120
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
         field:
             -
                 name: policyStatus
@@ -238,6 +250,10 @@ entity:
                 index: true
     -
         name: 'Emergency First Response'
+        uuid: f7ad1590-f008-4728-8892-9de50c51d5d5
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
         identifiers:
             -
                 identifier: padi
@@ -307,6 +323,7 @@ entity:
                 name: documents
                 text: 'Pocket Card'
                 data_type: document
+        uuid: 33a8793d-99d3-4f34-9a0a-29b6b1bf8fa6
     -
         name: 'Generate Report Job'
         field:
@@ -320,6 +337,7 @@ entity:
                 data_type: document
     -
         name: 'Auto Renewal'
+        uuid: 3ea49f10-ca39-11ea-87d0-0242ac130003
         field:
             -
                 name: policyStatus

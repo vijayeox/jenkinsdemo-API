@@ -45,6 +45,14 @@ body{
   border-radius: 6px;
   font-size: 11px;
 }
+
+.insure1{
+  height: 49%;
+  width: 50%;
+  float:left;
+  font-size: 18px;
+}
+
 .section{
   width:100%;
 }
@@ -162,7 +170,7 @@ p.break { page-break-after: always; }
   letter-spacing: 1px;
 }
 .card_holder_name{
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .name{

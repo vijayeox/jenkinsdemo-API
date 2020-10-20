@@ -78,16 +78,16 @@ class ForgotPasswordControllerTest extends ControllerTest
     {
         $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
         $resetCode = UuidUtil::uuid();
-        $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
+        $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 50" ;
         $this->executeUpdate($query);
         $data = ['password_reset_code' => $resetCode, 
                  'new_password' => 'password',
                  'confirm_password' => 'password'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/resetpassword', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);      
         $this->setDefaultAsserts('resetPassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         
     }

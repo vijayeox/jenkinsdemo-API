@@ -11,7 +11,6 @@ use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
-use Oxzion\Service\FieldService;
 use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\TemplateService;
@@ -30,21 +29,12 @@ class AppDelegateService extends AbstractService
     private $workflowInstanceService;
     private $activityInstanceService;
 
-    public function __construct(
-            $config,
-            $dbAdapter,
-            DocumentBuilder $documentBuilder = null,
-            TemplateService $templateService = null,
-            FieldService $fieldService,
-            MessageProducer $messageProducer,
-            FileService $fileService,
-            WorkflowInstanceService $workflowInstanceService,
-            ActivityInstanceService $activityInstanceService,
-            UserService $userService,CommentService $commentService)
+    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
+                                 MessageProducer $messageProducer, FileService $fileService, 
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
-        $this->fieldService = $fieldService;
         $this->workflowInstanceService = $workflowInstanceService;
         $this->activityInstanceService = $activityInstanceService;
         $this->messageProducer = $messageProducer;
@@ -72,23 +62,8 @@ class AppDelegateService extends AbstractService
         $this->fileService = $fileService;
     }
 
-    public function setFieldService($fieldService){
-        $this->fieldService = $fieldService;
-    }
-
     public function setAppDelegateService(){
-        $appDelegateService = new AppDelegateService($this->config,
-            $this->dbAdapter,
-            $this->documentBuilder,
-            $this->templateService,
-            $this->fieldService,
-            $this->messageProducer,
-            $this->fileService,
-            $this->workflowInstanceService,
-            $this->activityInstanceService,
-            $this->userService,
-            $this->commentService
-        );
+        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService);
         return $appDelegateService;
     }
 
@@ -122,9 +97,6 @@ class AppDelegateService extends AbstractService
                 } 
                 if (method_exists($obj, "setFileService")) {
                     $obj->setFileService($this->fileService);
-                }
-                if (method_exists($obj, "setFieldService")) {
-                    $obj->setFieldService($this->fieldService);
                 }
                 if (method_exists($obj, "setTemplateService")) {
                     $obj->setTemplateService($this->templateService);

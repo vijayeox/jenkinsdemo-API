@@ -560,29 +560,31 @@ if (data.workbooksToBeGenerated.harco == true) {
       var fiveItem = 0;
       var sixItem = 0;
       locationItem.buildingDetails.map(buildingItem => {
-        if (buildingItem.fTEmployeesFurnishedAnAuto > 0) {
-          oneItem += buildingItem.fTEmployeesFurnishedAnAuto;
-        }
-        if (buildingItem.pTEmployeesFurnishedAnAuto > 0) {
-          twoItem += buildingItem.pTEmployeesFurnishedAnAuto;
-        }
         if (
-          buildingItem.fTEmployeesWhoAreNotFurnished +
-            buildingItem.fTAllOtherEmployees >
+          buildingItem.fTEmployeesFurnishedAnAuto +
+            buildingItem.fTEmployeesWhoAreNotFurnished >
           0
         ) {
-          threeItem +=
-            buildingItem.fTEmployeesWhoAreNotFurnished +
-            buildingItem.fTAllOtherEmployees;
+          oneItem +=
+            buildingItem.fTEmployeesFurnishedAnAuto +
+            buildingItem.fTEmployeesWhoAreNotFurnished;
         }
         if (
-          buildingItem.pTEmployeesWhoAreNotFurnished +
-            buildingItem.pTAllOtherEmployees >
-          0
-        ) {
-          fourItem +=
+          buildingItem.pTEmployeesFurnishedAnAuto +
             buildingItem.pTEmployeesWhoAreNotFurnished +
-            buildingItem.pTAllOtherEmployees;
+            buildingItem.contractDriversNonEmployees >
+          0
+        ) {
+          twoItem +=
+            buildingItem.pTEmployeesFurnishedAnAuto +
+            buildingItem.pTEmployeesWhoAreNotFurnished +
+            buildingItem.contractDriversNonEmployees;
+        }
+        if (buildingItem.fTAllOtherEmployees > 0) {
+          threeItem += buildingItem.fTAllOtherEmployees;
+        }
+        if (buildingItem.pTAllOtherEmployees > 0) {
+          fourItem += buildingItem.pTAllOtherEmployees;
         }
         if (buildingItem.nonEmployeesUnderTheAge > 0) {
           fiveItem += buildingItem.nonEmployeesUnderTheAge;

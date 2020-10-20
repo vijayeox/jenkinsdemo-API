@@ -36,6 +36,14 @@ content:
                         -
                             type: Form
                             url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'  
+                -
+                    name: Endorsement
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'')'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/2bc1caaa-9628-486d-8b42-104534625994/startform
                             workflowInstanceId: '{{workflowInstanceId}}'            
                 -
                     name: 'Upgrade To IPL'
