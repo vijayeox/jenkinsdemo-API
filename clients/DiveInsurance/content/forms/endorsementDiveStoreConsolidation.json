@@ -15084,15 +15084,16 @@
                 "key": "page5Panel4Columns2",
                 "columns": [{
                     "components": [{
-                        "key": "page5Panel4Content",
                         "label": "Content",
-                        "input": false,
                         "attrs": [{
                             "value": "",
                             "attr": ""
                         }],
-                        "content": "<p> The Quote Requirements are due to prior ? </p>",
+                        "content": "<p> The Quote Requirements are due prior to ? </p>",
+                        "refreshOnChange": false,
+                        "key": "page5Panel4Content",
                         "type": "htmlelement",
+                        "input": false,
                         "hideLabel": true,
                         "hideOnChildrenHidden": false,
                         "tableView": false
@@ -15495,7 +15496,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 93,
+    "_vid": 94,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15513,6 +15514,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-10-16T04:39:50.485Z",
+    "modified": "2020-10-20T05:18:18.252Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }

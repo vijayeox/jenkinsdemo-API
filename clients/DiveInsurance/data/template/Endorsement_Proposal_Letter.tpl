@@ -28,7 +28,7 @@
 		{/if}
 
 		{if isset($quoteInfo) && $quoteInfo != '[]'}
-		<p>To make this coverage change, please provide us with the following items:</p>
+		<p>To make this coverage change, please provide us with the following items {if isset($quote_due_date) && $quote_due_date != ""}{$quote_due_date|date_format:"%m/%d/%Y"}{/if}:</p>
 			{assign var=list value=$quoteInfo|json_decode:true}
 			{foreach from=$list item=$quoteData key = key}
 					{if $key == 'Other' &&  ($quoteData == true || $quoteData == 'true')}
