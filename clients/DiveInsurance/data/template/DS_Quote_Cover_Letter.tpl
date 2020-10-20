@@ -38,7 +38,7 @@
 		</ul>
 
 		{if isset($quoteInfo) && $quoteInfo != '[]'}
-		<p>To purchase your insurance coverage, please provide us with the following items:</p>
+		<p>To purchase your insurance coverage, please provide us with the following items {$quote_due_date|date_format:"%m/%d/%Y"}:</p>
 			{assign var=list value=$quoteInfo|json_decode:true}
 			{foreach from=$list item=$quoteData key = key}
 					{if $key == 'Other' &&  ($quoteData == true || $quoteData == 'true')}
