@@ -1,17 +1,17 @@
-name: 'Manage Workbooks'
+name: 'Agent Workbooks'
 description: 'Shows a list of all policies'
 content:
     -
         type: List
         content:
-            route: 'file/search/entity/Dealer Policy'
+            route: 'file'
             filterable: true
             autoRefresh: 10000
             defaultFilters: 
                 sort:
                     -
                         field: date_created
-                        dir: desc          
+                        dir: desc                 
             resizable: true
             pageable:
                 buttonCount: 3
@@ -33,16 +33,6 @@ content:
                             form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
-                -
-                    name: Claims
-                    rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
-                    details:
-                        -
-                            params:
-                                page_id: 'f52a8856-54af-4efc-b548-3675ddb7f90f'
-                                params:
-                                    parentFileId: '{{uuid}}'                  
-                    icon: 'far fa-hand-holding-usd'
                 -
                     name: 'Retry'
                     rule: '(row.status == "Processing" && row.submissionTime) ? moment().isAfter(moment(row.submissionTime).add(3,"m")) : false'

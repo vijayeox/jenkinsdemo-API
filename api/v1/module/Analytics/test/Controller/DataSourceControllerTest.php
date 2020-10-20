@@ -42,10 +42,10 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['type'], $data['type']);

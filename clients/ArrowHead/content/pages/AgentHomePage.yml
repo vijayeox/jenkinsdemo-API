@@ -1,10 +1,10 @@
-name: 'My Workbooks'
+name: 'Agent Workbooks'
 description: 'Shows a list of users policies'
 content:
     -
         type: List
         content:
-            route: 'file/user/me/search/entity/Dealer Policy'
+            route: 'file/user/me'
             filterable: true
             autoRefresh: 10000
             defaultFilters: 

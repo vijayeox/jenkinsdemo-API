@@ -57,6 +57,10 @@ trait FileTrait
     protected function updateFieldValueOnFiles($data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams = null){
         $this->fileService->updateFieldValueOnFiles($this->appId,$data,$fieldName,$oldFieldValue,$newFieldValue,$filterparams);
     }
+    protected function getFileVersionChangeLog($fileId,$version){
+        $this->logger->info("File Version Change Log");
+        return $this->fileService->getFileVersionChangeLog($fileId,$version);        
+    }
 
     protected function getWorkflowInstanceStartDataFromFileId($fileId){
         return $this->fileService->getWorkflowInstanceStartDataFromFileId($fileId);

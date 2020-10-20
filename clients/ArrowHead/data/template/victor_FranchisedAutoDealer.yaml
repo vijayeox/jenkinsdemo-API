@@ -350,14 +350,14 @@
    cell: Check Box 35
    type: Checkbox
 -
-   key: mixingroomsurvey_areDrumsGroundedAndBondedDuringPaintTransfer
+   key: mixingroomsurvey_areDrumsGroundedAndBondedDuringPantTransfer
    method: pulloutChild
    Source Worksheet: Are drums grounded and bonded during pant transfer?
    pageName: Garage Supplemental
    cell: Check Box 37
    type: Checkbox
 -
-   key: mixingroomsurvey_raisedSill
+   key: mixingroomsurvey_raisedSil
    method: pulloutChild
    Source Worksheet: Raised Sil?
    pageName: Garage Supplemental

@@ -170,51 +170,6 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     color: white;
   }
 
-  .btn-wizard-nav-submit {
-    display: none;
-  }
-
-  .totalClaimsAmount {
-    text-align: center;
-    color: #212529;
-    background-color: $secondary;
-    padding: 8px;
-    border-radius: 25px;
-  }
-
-  .totalClaimsAmountMini {
-    text-align: center;
-    color: #212529;
-    background-color: $secondary;
-    padding: 4px;
-    border-radius: 20px;
-  }
-
-  .claimsMiniListView {
-    .k-header.k-grid-toolbar {
-      background-color: $primary-color;
-      color: #f8f9fa;
-      padding: 0.65rem 1.25rem;
-      .namedInsuredtext {
-        font-family: "Lato", sans-serif;
-        margin-bottom: 0px;
-        font-size: 15px;
-      }
-    }
-  }
-
-  .Navigation .appButtons {
-    height: 85%;
-    .moduleBtn {
-      .titles {
-        color: $primary-color;
-      }
-      .block {
-        background-color: $primary-color;
-      }
-    }
-  }
-
   .formLoader {
     display: flex;
     align-items: center;

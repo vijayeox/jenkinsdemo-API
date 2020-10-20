@@ -2,11 +2,9 @@
 
 namespace Analytics\Controller;
 
-use Exception;
 use Analytics\Model\Dashboard;
+use Exception;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ValidationException;
-use Oxzion\VersionMismatchException;
 
 class DashboardController extends AbstractApiController
 {
@@ -43,8 +41,7 @@ class DashboardController extends AbstractApiController
             $returnData = $this->dashboardService->createDashboard($data);
             array_merge($data, $returnData);
             return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -64,11 +61,10 @@ class DashboardController extends AbstractApiController
         try {
             $result = $this->dashboardService->updateDashboard($uuid, $data);
             return $this->getSuccessResponseWithData($result, 200);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        }        
+        }
     }
 
     public function delete($uuid)
@@ -77,8 +73,7 @@ class DashboardController extends AbstractApiController
         try {
             $this->dashboardService->deleteDashboard($uuid, $params['version']);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

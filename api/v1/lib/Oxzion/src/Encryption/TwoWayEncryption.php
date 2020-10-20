@@ -16,12 +16,15 @@ class TwoWayEncryption
 
     public static function decrypt($crypted_token)
     {
-        list($crypted_token, $enc_iv) = explode("::", $crypted_token);
-        ;
-        $cipher_method = 'AES-128-CTR';
-        $enc_key = openssl_digest(self::$key, 'SHA256', true);
-        $token = openssl_decrypt($crypted_token, $cipher_method, $enc_key, 0, hex2bin($enc_iv));
-        unset($crypted_token, $cipher_method, $enc_key, $enc_iv);
-        return $token;
+        if(strpos($crypted_token, "::") !== false){
+            list($crypted_token, $enc_iv) = explode("::", $crypted_token);
+            ;
+            $cipher_method = 'AES-128-CTR';
+            $enc_key = openssl_digest(self::$key, 'SHA256', true);
+            $token = openssl_decrypt($crypted_token, $cipher_method, $enc_key, 0, hex2bin($enc_iv));
+            unset($crypted_token, $cipher_method, $enc_key, $enc_iv);
+            return $token;
+        }
+        return null;
     }
 }

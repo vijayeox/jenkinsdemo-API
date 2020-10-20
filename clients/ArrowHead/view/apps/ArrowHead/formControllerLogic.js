@@ -107,7 +107,6 @@ setTimeout(function () {
     victor_AutoPhysDamage: false
   };
   data.producerConfirmation ? (data.producerConfirmation = false) : null;
-  data.managementSubmitApplication ? (data.managementSubmitApplication = false) : null;
 
   try {
     if (data.namedInsured.length == 0) {
