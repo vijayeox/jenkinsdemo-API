@@ -34,97 +34,7 @@ content:
                                     allowUnsort: true
                                     mode: single
                                 wrapStyle:
-                                    height: "90%"
-                                exportToExcel:
-                                    fileNameTemplate: '"ClaimsExport.xlsx"'
-                                    columnConfig:
-                                        - 
-                                            title: Account Name
-                                            field: namedInsured
-                                            locked: true
-                                            cellOptions:
-                                                textAlign: "center"
-                                                verticalAlign: "center"
-                                                background: "#55b089"
-                                                color: "#212529"
-                                                bold: true
-                                        -
-                                            title: Value Date
-                                            field: valueDate
-                                            cell: 'formatDate(data.valueDate)'
-                                            filter: date
-                                            filterFormat: YYYY-MM-DD
-                                        - 
-                                            title: Business Name
-                                            field: dba
-                                        - 
-                                            title: Business Name
-                                            field: dba
-                                        - 
-                                            title: Address1
-                                            field: mailingAddress
-                                        - 
-                                            title: City
-                                            field: city
-                                        - 
-                                            title: State Code
-                                            field: state
-                                            cell: 'data.state.abbreviation ? data.state.abbreviation : ""'
-                                        -
-                                            title: NAICS Code
-                                            field: naicsCode
-                                        -
-                                            title: Effective Month
-                                            field: effectiveMonth
-                                            cell: 'data.effectiveMonth ? data.effectiveMonth.name : ""'
-                                        -
-                                            title: Loss Year
-                                            field: lossYear
-                                        -
-                                            title: Loss Date
-                                            field: lossDate
-                                            cell: 'formatDate(data.lossDate)'
-                                            filter: date
-                                            filterFormat: YYYY-MM-DD
-                                        -
-                                            title: "Paid Amount"
-                                            field: paid
-                                            cell: 'data.paid.toLocaleString("en-US", {style: "currency", currency: "USD",})'
-                                            filter: numeric
-                                        - 
-                                            title: "Reserve Amount"
-                                            field: reserve
-                                            cell: 'data.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})'
-                                            filter: numeric
-                                        -
-                                            title: "Subro/Salvage/Recovery"
-                                            field: subro
-                                            cell: 'data.subro.toLocaleString("en-US", {style: "currency", currency: "USD",})'
-                                            filter: numeric
-                                        - 
-                                            title: "LAE"
-                                            field: lae
-                                            cell: 'data.lae.toLocaleString("en-US", {style: "currency", currency: "USD",})'
-                                            filter: numeric
-                                        - 
-                                            title: Total Amount
-                                            field: total
-                                            cell: 'data.total.toLocaleString("en-US", {style: "currency", currency: "USD",})'
-                                            filter: numeric
-                                        - 
-                                            title: Type (Level 1)
-                                            field: claimlevel1
-                                            cell: 'typeof data.claimlevel1 == "string" && data.claimlevel1 != "[]" ? data.claimlevel1 : ""'
-                                        - 
-                                            title: Sub Type (Level 2)
-                                            field: claimlevel2
-                                            cell: 'typeof data.claimlevel2 == "string" && data.claimlevel2 != "[]" ? data.claimlevel2 : ""'
-                                        -
-                                            title: Carrier
-                                            field: carrier   
-                                        -
-                                            title: LR PDF reference
-                                            field: lrPdfReference                                   
+                                    height: "90%"                            
                                 actions:
                                      -
                                          name: Edit
@@ -151,37 +61,10 @@ content:
                                         cell: '<td>{formatDate(item.lossDate)}</td>'
                                         filter: date
                                         filterFormat: YYYY-MM-DD
-                                    -
-                                        title: "Paid Amount"
-                                        field: paid
-                                        cell: '<td>{item.paid.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
-                                        filter: numeric
-                                    - 
-                                        title: "Reserve Amount"
-                                        field: reserve
-                                        cell: '<td>{item.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
-                                        filter: numeric
                                     - 
                                         title: Total Amount
                                         field: total
                                         cell: '<td>{item.total.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
-                                        filter: numeric
-                                    - 
-                                        title: Level 1
-                                        field: claimlevel1
-                                        filterCell:
-                                            type: dropdown
-                                            listItems:
-                                                - "EPL"
-                                                - "Crime"
-                                                - "DOL - non-accident"
-                                                - "Auto Accident- Owned Auto"
-                                                - "Sales Practice"
-                                                - "Garagekeepers"
-                                                - "Products Liability"
-                                                - "Other General Liability"
-                                                - "Property"
-                                            placeholder: 'Select Level'
                                     - 
                                         title: Carrier
                                         field: carrier
