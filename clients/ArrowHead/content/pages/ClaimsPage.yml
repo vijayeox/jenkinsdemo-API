@@ -6,7 +6,7 @@ content:
         content:
             buttonList:
                 - 
-                    name: View / Export Claims
+                    name: View All Claims
                     icon: fad fa-money-bill-alt
                     details:
                         -
@@ -80,6 +80,7 @@ content:
                                     - namedInsured
                                     - producername
                                 filterOperator : startswith
+                                filterable : false
                                 placeholder: 'Search using Named Insured or Producer Name'
                                 entity: "Dealer Policy"
                                 defaultFilters: 
