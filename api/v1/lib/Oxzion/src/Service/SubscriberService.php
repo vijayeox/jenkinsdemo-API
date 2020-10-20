@@ -152,11 +152,10 @@ class SubscriberService extends AbstractService
             $idClause = "AND s.uuid = :subscriberId";
             $params['subscriberId'] = $id;
         }
-        $query = "select up.firstname, up.lastname, u.uuid as user_id from ox_subscriber s 
+        $query = "select u.firstname, u.lastname, u.uuid as user_id from ox_subscriber s 
                         inner join ox_file of on s.file_id = of.id
                         inner join ox_user u on u.id = s.user_id
-                        inner join ox_user_profile up on up.id = u.user_profile_id
-                        where s.org_id = :orgId and of.uuid = :fileId $idClause ORDER by up.firstname";
+                        where s.org_id = :orgId and of.uuid = :fileId $idClause ORDER by u.firstname";
         $this->logger->info("Executing Query $query with params - ".print_r($params, true));
         $resultSet = $this->executeQueryWithBindParameters($query, $params);
         return $resultSet->toArray();

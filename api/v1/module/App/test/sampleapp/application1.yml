@@ -57,122 +57,115 @@ dashboard:
     -
         name: Dashboard
         content: content/Dashboard.txt
-pages:
-    -
-        name: 'My Policies'
-        description: 'Shows a list of users policies'
-        content:
-            -
-                type: Document
-                content: '<p><h2>Personal Policies</h2></p><p></p>'
-            -
-                type: List
-                content:
-                    route: 'app/{{app_id}}/file'
-                    filterable: true
-                    reorderable: true
-                    resizable: true
-                    pageable:
-                        buttonCount: 3
-                        pageSizes:
-                            - 10
-                            - 20
-                            - 50
-                        info: true
-                        actions:
-                            -
-                                name: View
-                                page_id: '1'
-                                icon: 'fas fa-envelope-open-text'
-                            -
-                                name: Claim
-                                page_id: '2'
-                                icon: 'fas fa-plus-circle'
-                            -
-                                name: Cancel
-                                page_id: '3'
-                                icon: 'far fa-window-close'
-                        columnConfig:
-                            -
-                                title: Name
-                                field: name
-                            -
-                                title: Status
-                                field: status
-                            -
-                                title: Data
-                                field: data 
-    -
-        name: 'All Policies'
-        description: 'Shows all the policies'
-        content:
-            -
-                type: List
-                content:
-                    route: 'app/{{app_id}}/file' 
-    -
-        name: 'Verify PADI details'
-        description: 'Lets CSR to input and check PADI Data'
-        content:
-            -
-                content: '<h3>Verify PADI Details</h3>'
-                type: Document
-            -
-                form_id: '750'
-                type: Form    
-    -
-        name: 'Dashboard'
-        description: 'Shows dashboard'
-        content:
-            -
-                type: Dashboard
-                dashboard: Dashboard  
-    -
-        name: 'Requests'
-        description: 'Shows requests'
-        content:
-            -
-                type: List
-                content:
-                    route: ''  
-    -
-        name: 'Manage Policies'
-        description: 'Page to manage policies'
-        content:
-            -
-                type: List
-                content:
-                    route: ''                                                                                  
 menu:
     -
         name: Home
         privilege: MANAGE_MY_POLICY_WRITE
         icon: fa-home
-        page: 'My Policies'           
+        page:
+            name: 'My Policies'
+            description: 'Shows a list of users policies'
+            content:
+                -
+                    type: Document
+                    content: '<p><h2>Personal Policies</h2></p><p></p>'
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                            actions:
+                                -
+                                    name: View
+                                    page_id: '1'
+                                    icon: 'fas fa-envelope-open-text'
+                                -
+                                    name: Claim
+                                    page_id: '2'
+                                    icon: 'fas fa-plus-circle'
+                                -
+                                    name: Cancel
+                                    page_id: '3'
+                                    icon: 'far fa-window-close'
+                            columnConfig:
+                                -
+                                    title: Name
+                                    field: name
+                                -
+                                    title: Status
+                                    field: status
+                                -
+                                    title: Data
+                                    field: data
         uuid: 1a9d7295-30bb-4e01-bab2-c24cdce902da
     -
         name: 'My History'
         privilege: MANAGE_MY_POLICY_READ
-        page: 'All Policies'            
+        page:
+            name: 'All Policies'
+            description: 'Shows all the policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
         uuid: dca2f307-42cd-4aac-b7c1-1d60c77c1d38
     -
         name: 'Verify PADI details'
-        page: 'Verify PADI details'            
+        page:
+            name: 'Verify PADI details'
+            description: 'Lets CSR to input and check PADI Data'
+            content:
+                -
+                    content: '<h3>Verify PADI Details</h3>'
+                    type: Document
+                -
+                    form_id: '750'
+                    type: Form
         uuid: 280d7505-5cdf-42a5-9a56-a3b24fc9590f
     -
         name: Home
         privilege: MANAGE_POLICY_APPROVAL_READ
-        page: 'Dashboard'            
+        page:
+            name: Dashboard
+            description: 'Shows dashboard'
+            content:
+                -
+                    type: Dashboard
+                    dashboard: Dashboard
         uuid: 68c2c44b-5102-4988-bc15-eb1d0aea52b2
     -
         name: Requests
         privilege: MANAGE_POLICY_APPROVAL_WRITE
-        page: 'Requests'            
+        page:
+            name: Requests
+            description: 'Shows requests'
+            content:
+                -
+                    type: List
+                    content:
+                        route: ''
         uuid: 729a3ac5-19b3-4bcc-b860-2f81d52e29e8
     -
         name: 'Manage Policies'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
-        page: 'Manage Policies'            
+        page:
+            name: 'Manage Policies'
+            description: 'Page to manage policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: ''
         uuid: 13960f14-0a88-43a6-a959-33457234407e
 workflow:
     -

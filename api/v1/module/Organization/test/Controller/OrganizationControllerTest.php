@@ -80,9 +80,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"rs"},{"field":"state","operator":"contains","value":"oh"}]},"sort":[{"field":"id","dir":"asc"},{"field":"uuid","dir":"dsc"}],"skip":0,"take":1}]
 ', 'GET');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], 'b0971de7-0387-48ea-8f29-5d3704d96a46');
@@ -155,10 +155,10 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'ORGANIZATION', 'status' => 'Active')), 'ORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->dispatch('/organization', 'POST', $data);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '" . $content['data']['uuid'] . "')";
         $role = $this->executeQueryTest($query);
         for ($x = 0; $x < sizeof($role); $x++) {
@@ -170,9 +170,9 @@ class OrganizationControllerTest extends ControllerTest
         $roleResult = $this->executeQueryTest($select);
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='" . $content['data']['uuid'] . "')";
         $orgResult = $this->executeQueryTest($select);
-        $select = "SELECT ox_user.*,ox_user_profile.firstname,ox_user_profile.lastname,ox_user_profile.address_id,ox_employee.designation FROM ox_user inner join ox_user_profile on ox_user_profile.id = ox_user.user_profile_id inner join ox_employee on ox_employee.user_profile_id = ox_user_profile.id where ox_user.username ='" . $contact['username'] . "'";
+        $select = "SELECT * FROM ox_user where username ='" . $contact['username'] . "'";
         $usrResult = $this->executeQueryTest($select);
-        $select = "SELECT ox_address.address1,ox_organization_profile.uuid,ox_organization.uuid,ox_organization.name, ox_organization.type from ox_address join ox_organization_profile on ox_address.id = ox_organization_profile.address_id join ox_organization on ox_organization.org_profile_id=ox_organization_profile.id where name = 'ORGANIZATION'";
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = 'ORGANIZATION'";
         $org = $this->executeQueryTest($select);
         $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '" . $content['data']['uuid'] . "')";
         $appResult = $this->executeQueryTest($query);
@@ -189,59 +189,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(isset($usrResult[0]['address_id']), true);
         $this->assertEquals($org[0]['address1'], $data['address1']);
-        $this->assertEquals($org[0]['type'], 'BUSINESS');
-        $this->assertEquals($appResult[0]['app_id'], 1);
-    }
-
-    public function testCreateIndiividualOrganization()
-    {
-        $this->initAuthToken($this->adminUser);
-        $config = $this->getApplicationConfig();
-        $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'barat@myvamla.com', 'phone' => '1234567890');
-        $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
-        $data = array('type' => 'INDIVIDUAL', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
-        $this->setJsonContent(json_encode($data));
-        $orgName = $contact['firstname']." ".$contact['lastname'];
-        if (enableActiveMQ == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => $orgName, 'status' => 'Active')), 'ORGANIZATION_ADDED')->once()->andReturn();
-        }
-        $this->dispatch('/organization', 'POST', $data);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(201);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('organization');
-        $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '" . $content['data']['uuid'] . "')";
-        $role = $this->executeQueryTest($query);
-        for ($x = 0; $x < sizeof($role); $x++) {
-            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =" . $role[$x]['id'] . "
-                AND uuid = '" . $content['data']['uuid'] . "')";
-            $rolePrivilegeResult[] = $this->executeQueryTest($query);
-        }
-        $select = "SELECT * FROM ox_user_role where role_id =" . $role[0]['id'];
-        $roleResult = $this->executeQueryTest($select);
-        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='" . $content['data']['uuid'] . "')";
-        $orgResult = $this->executeQueryTest($select);
-        $select = "SELECT ox_user.*,ox_user_profile.firstname,ox_user_profile.lastname,ox_user_profile.address_id,ox_employee.id as employeeId FROM ox_user inner join ox_user_profile on ox_user_profile.id = ox_user.user_profile_id left outer join ox_employee on ox_employee.user_profile_id = ox_user_profile.id where ox_user.username ='" . $contact['username'] . "'";
-        $usrResult = $this->executeQueryTest($select);
-        $select = "SELECT ox_organization.org_profile_id,ox_organization.uuid,ox_organization.name from ox_organization where name = '$orgName'";
-        $org = $this->executeQueryTest($select);
-        $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '" . $content['data']['uuid'] . "')";
-        $appResult = $this->executeQueryTest($query);
-        $this->assertEquals(count($role), 3);
-        $this->assertEquals(count($roleResult), 1);
-        $this->assertEquals(count($orgResult), 1);
-        $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
-        $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
-        $this->assertEquals($usrResult[0]['employeeId'], NULL);
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 34);
-        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 10);
-        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 8);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $orgName);
-        $this->assertEquals(isset($usrResult[0]['address_id']), true);
-        $this->assertEquals($org[0]['org_profile_id'], NULL);
-        $this->assertEquals($org[0]['name'], $orgName);
         $this->assertEquals($appResult[0]['app_id'], 1);
     }
 
@@ -314,13 +261,13 @@ class OrganizationControllerTest extends ControllerTest
         copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
         $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'bharatg@myvamla.com', 'phone' => '1234567890');
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
-        $data = array('name' => 'Sample Organization', 'address1' => 'HSR','city' => 'Bangalore','state' => 'KARNATAKA','zip' => '560080','contact' => json_encode($contact), 'preferences' => json_encode($preferences));
+        $data = array('name' => 'Sample Organization', 'address' => 'Bangalore', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Organization already exists');
     }
@@ -334,13 +281,13 @@ class OrganizationControllerTest extends ControllerTest
         copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
         $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'bharatg@myvamla.com', 'phone' => '1234567890');
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
-        $data = array('name' => 'Test Organization', 'address1' => 'Ariyalur', 'city' => 'Chennai','state' => 'Tamil Nadu', 'zip' =>'560079','contact' => json_encode($contact), 'preferences' => json_encode($preferences));
+        $data = array('name' => 'Test Organization', 'address' => 'Bangalore', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Organization already exists would you like to reactivate?');
     }
@@ -354,13 +301,13 @@ class OrganizationControllerTest extends ControllerTest
         copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
         $contact = array('username' => 'goku', 'firstname' => 'Bharat', 'lastname' => 'Gogineni', 'email' => 'bharatg@myvamla.com', 'phone' => '1234567890');
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
-        $data = array('name' => 'Test Organization', 'address1' => 'Ariyalur', 'city' => 'Chennai','state' => 'Tamil Nadu', 'zip' =>'560079', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences), 'reactivate' => 1);
+        $data = array('name' => 'Test Organization', 'address' => 'Bangalore', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences), 'reactivate' => 1);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['status'], 'Active');
     }
@@ -373,7 +320,7 @@ class OrganizationControllerTest extends ControllerTest
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/logo.png", $tempFolder . "logo.png");
         $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
-        $data = array('name' => 'Test Organization', 'address1' => 'Ariyalur', 'city' => 'Chennai','state' => 'Tamil Nadu', 'zip' =>'560079', 'preferences' => json_encode($preferences), 'reactivate' => 1);
+        $data = array('name' => 'Test Organization', 'address' => 'Bangalore', 'preferences' => json_encode($preferences), 'reactivate' => 1);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
         $this->assertResponseStatusCode(500);
@@ -395,11 +342,12 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
         }
         $this->dispatch('/organization', 'POST', null);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
     public function testCreateAccess()
@@ -424,7 +372,7 @@ class OrganizationControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'Cleveland Cavaliers', 'address1' => '23811 Chagrin Blvd, Ste 244', 'city' => 'Beachwood', 'state' => 'OH', 'country' => 'US', 'zip' => '44122', 'logo' => 'logo.png', 'status' => 'InActive'];
+        $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'InActive'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
@@ -433,11 +381,10 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')), 'ORGANIZATION_DELETED')->once()->andReturn();
         }
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a', 'POST', null);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT * from ox_address join ox_organization_profile on ox_address.id = ox_organization_profile.address_id 
-                    inner join ox_organization o on o.org_profile_id = ox_organization_profile.id where o.name = 'Cleveland Cavaliers'";
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = 'Cleveland Cavaliers'";
         $org = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -456,12 +403,10 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')), 'ORGANIZATION_DELETED')->once()->andReturn();
         }
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a', 'POST', null);
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        // print_r($content);exit;
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $select = "SELECT * from ox_address join ox_organization_profile on ox_address.id = ox_organization_profile.address_id 
-                    inner join ox_organization o on o.org_profile_id = ox_organization_profile.id where o.name = 'Cleveland Cavaliers'";
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = 'Cleveland Cavaliers'";
         $org = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -497,9 +442,9 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')), 'ORGANIZATION_DELETED')->once()->andReturn();
         }
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 

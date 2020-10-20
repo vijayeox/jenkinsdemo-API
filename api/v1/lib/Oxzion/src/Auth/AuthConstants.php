@@ -12,5 +12,4 @@ class AuthConstants
     const USER_UUID = 'userUuid';
     const ORG_UUID = 'orgUuid';
     const API_KEY = "apiKey";
-    const REGISTRATION = "registration";
 }

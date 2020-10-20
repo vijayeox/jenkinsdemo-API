@@ -1,33 +1,29 @@
 <?php
 
 namespace Oxzion\Model;
-use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
-use Oxzion\Type;
 
 class File extends Entity
 {
-    protected static $MODEL = [
-        'id' =>                         ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
-        'org_id' =>                     ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'uuid' =>                       ['type' => Type::UUID,      'readonly' => TRUE, 'required' => FALSE],
-        'data' =>                       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'form_id' =>                    ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'created_by' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE, 'required' => FALSE],
-        'modified_by' =>                ['type' => Type::INTEGER,   'readonly' => TRUE, 'required' => FALSE],
-        'date_created' =>               ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'date_modified' =>              ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'entity_id' =>                  ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'assoc_id' =>                   ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'is_active' =>                  ['type' => Type::BOOLEAN,   'value' => 1, 'readonly' => FALSE, 'required' => FALSE],
-        'last_workflow_instance_id' =>  ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'start_date' =>                 ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'end_date' =>                   ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'status' =>                     ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'version' =>                    ['type' => Type::INTEGER,  'value' => 1, 'readonly' => FALSE, 'required' => FALSE]
-    ];
+    protected $data = array(
+        'id'=> null,
+        'org_id' => 0,
+        'uuid' => null,
+        'data' => null,
+        'form_id' => null,
+        'created_by' => null,
+        'modified_by' => null,
+        'date_created' => null,
+        'date_modified' => null,
+        'entity_id'=>null,
+        'assoc_id'=>null,
+        'is_active'=>1,
+        'last_workflow_instance_id'=>null
+    );
+    protected $attributes = array();
 
-    public function &getModel() {
-        return self::$MODEL;
+    public function validate()
+    {
+        $required = array('uuid', 'org_id','data', 'created_by', 'date_created', 'entity_id');
+        $this->validateWithParams($required);
     }
 }

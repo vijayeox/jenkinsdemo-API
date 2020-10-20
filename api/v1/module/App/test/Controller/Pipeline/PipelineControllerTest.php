@@ -317,7 +317,7 @@ class PipelineControllerTest extends ControllerTest
         $params = json_decode('{"commands": [{"command":"startform","workflow_id":"1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"}]}', true);
         $this->setJsonContent(json_encode($params));
         $this->dispatch("/app/$appId/pipeline", 'POST', $params);
-        FileUtils::rmDir($linkFolder);
+        FileUtils::deleteDirectoryContents($linkFolder);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['appId'], "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4");

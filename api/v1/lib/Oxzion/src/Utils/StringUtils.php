@@ -32,4 +32,3 @@ class StringUtils
         return substr(str_shuffle($sourceStr), 0, $stringLength);
 	}
 }
-

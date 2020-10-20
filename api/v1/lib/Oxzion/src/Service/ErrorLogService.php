@@ -138,7 +138,7 @@ class ErrorLogService extends AbstractService
             $result = $this->incidentManager->resolveIncident($data['incidentId']);
             return $result;
         } catch (Exception $e){
-            // print_r($e->getMessage());exit;
+            print_r($e->getMessage());exit;
             throw new ServiceException("Incident resolution failed","incident.resolution.failed");
         }
     }

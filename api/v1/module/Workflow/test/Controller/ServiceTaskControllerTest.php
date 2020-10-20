@@ -135,6 +135,7 @@ class ServiceTaskControllerTest extends ControllerTest
                                       "policy_period" => "1year", 
                                       "card_expiry_date" => "10/24", 
                                       "city" => "Bangalore", 
+                                      "orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a", 
                                       "isequipmentliability" => "1", 
                                       "card_no" => "1234", 
                                       "jobUrl" => "/app/ec8942b7-aa93-4bc6-9e8c-e1371988a5d4/delegate/DispatchAutoRenewalNotification", 
@@ -355,7 +356,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_array($content['data']), true);
-        $this->assertEquals(25, count($content['data']));
+        $this->assertEquals(26, count($content['data']));
     }
         
     public function testExtractFileWithPreDefinedFields()

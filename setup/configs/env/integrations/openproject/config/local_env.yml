@@ -1,3 +1,0 @@
-OXZION_BASE_URL: "http://localhost:8080"
-OXZION_REDIRECT_URL: "http://localhost:443/?app=Task"
-OXZION_SERVER_URL: "https://staging3.eoxvantage.com:9080"

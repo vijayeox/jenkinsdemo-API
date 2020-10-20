@@ -8,7 +8,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveStoreConsolidation" />
-          <camunda:property name="fields" value="initiatedByCsr,csrApproved,policyStatus,userApproved,paymentVerified,email,identifier_field,business_padi,product" />
+          <camunda:property name="fields" value="initiatedByCsr,csrApproved,policyStatus,userApproved,paymentVerified,email,identifier_field,business_padi" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_0efnd8k</bpmn:outgoing>

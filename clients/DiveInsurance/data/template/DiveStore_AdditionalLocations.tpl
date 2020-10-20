@@ -42,13 +42,13 @@
                     <tr><td   class = "info">Policy #: {$property_policy_id}</td></tr>
                     <tr>
                         <td class = "info">Contents Limit:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">${$additionalLocationDataItem.additionalLocationPropertyTotal|number_format}</td>{else}
                         <td class = "info">Not Included</td>
                         {/if}
                     </tr>
                     <tr>
-                    {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                    {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info" id="space_left">(Sign limited to : $25,000)</td>
                         {else}
                       <td></td>
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Business Income:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">${$additionalLocationDataItem.ALLossofBusIncome|number_format}</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Building Coverage:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         {if isset($additionalLocationDataItem.additionalLocationDoYouOwntheBuilding) && $additionalLocationDataItem.additionalLocationDoYouOwntheBuilding != "no"}
                             <td  class = "info" >${$additionalLocationDataItem.ALBuildingReplacementValue|number_format}</td>
                         {else}
@@ -85,7 +85,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Business Income from dependant properties:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$5,000</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -93,7 +93,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Robbery (per Occurrence - Inside):</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$2,500</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -101,7 +101,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Robbery (per Occurrence - Outside):</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$2,500</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -109,7 +109,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Transit Coverage (Locked Vehicle):</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$10,000</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -117,7 +117,7 @@
                     </tr>
                     <tr>
                         <td class = "info">EmployeeTheft Limit:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$5,000</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -125,7 +125,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Property of Others:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$25,000</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -133,7 +133,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Off premises:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$10,000</td>
                         {else}
                         <td class = "info">Not Included</td>
@@ -141,7 +141,7 @@
                     </tr>
                     <tr>
                         <td class = "info">Glass:</td>
-                        {if isset($additionalLocationDataItem.ALpropertyCoverageSelect) && $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
+                        {if $additionalLocationDataItem.ALpropertyCoverageSelect == "yes"}
                         <td class = "info">$5,000</td>
                         {else}
                         <td class = "info">Not Included</td>
