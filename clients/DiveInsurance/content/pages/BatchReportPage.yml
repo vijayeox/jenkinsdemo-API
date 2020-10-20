@@ -1,5 +1,5 @@
-name: 'Batch Reports'
-description: 'Lets CSR generate Reports'
+name: 'COI Batch Reports'
+description: 'Lets CSR generate Batch COI Reports'
 content:
     -
         type: List
@@ -18,7 +18,7 @@ content:
                commands: 
                     -
                         command: delegate
-                        delegate: GenerateReportMenu
+                        delegate: BatchReportMenu
             actions:
                 -
                     name: 'View Report'
@@ -37,7 +37,7 @@ content:
                         details:
                             -
                                 type: Form
-                                form_id: 57054a38-e117-11ea-87d0-0242ac130003
+                                form_id: 98bafab4-0880-11eb-adc1-0242ac120002
             columnConfig:
                 -
                     title: 'Filters Used'
