@@ -1248,7 +1248,7 @@
                     "disabled": true,
                     "tableView": true,
                     "clearOnHide": false,
-                    "calculateValue": "try {\n  if (row.template.length > 0) {\n    value =\n      row.template[0].originalName.length > 0\n        ? row.template_file.split(\".\")[0]\n        : \"\";\n  }\n} catch (error) {}",
+                    "calculateValue": "try {\n  if (row.template.length > 0) {\n    value =\n      row.template[0].originalName.length > 0\n        ? row.template_file.split(\".\")[0]\n        : \"\";\n  }else{\n    value = \"\";\n  }\n} catch (error) {}",
                     "key": "name",
                     "type": "textfield",
                     "hideOnChildrenHidden": false,
@@ -1268,6 +1268,42 @@
                     "selectThreshold": 0.3,
                     "clearOnHide": false,
                     "key": "entity",
+                    "logic": [{
+                        "name": "Check if form Uploaded",
+                        "trigger": {
+                            "type": "javascript",
+                            "javascript": "result = (row.template.length > 0);"
+                        },
+                        "actions": [{
+                            "name": "Set Mandatory",
+                            "type": "property",
+                            "property": {
+                                "label": "Required",
+                                "value": "validate.required",
+                                "type": "boolean"
+                            },
+                            "state": true
+                        }]
+                    }, {
+                        "name": "Forms Not Uploaded",
+                        "trigger": {
+                            "type": "javascript",
+                            "simple": {
+                                "show": true
+                            },
+                            "javascript": "result = (row.template.length <= 0);"
+                        },
+                        "actions": [{
+                            "name": "Not Mandatory",
+                            "type": "property",
+                            "property": {
+                                "label": "Required",
+                                "value": "validate.required",
+                                "type": "boolean"
+                            },
+                            "state": false
+                        }]
+                    }],
                     "type": "select",
                     "indexeddb": {
                         "filter": {}
@@ -1382,6 +1418,39 @@
                         "multiple": true
                     },
                     "key": "entity",
+                    "logic": [{
+                        "name": "CheckIfUploaded",
+                        "trigger": {
+                            "type": "javascript",
+                            "javascript": "result = (row.template.length > 0);"
+                        },
+                        "actions": [{
+                            "name": "Set Mandatory",
+                            "type": "property",
+                            "property": {
+                                "label": "Required",
+                                "value": "validate.required",
+                                "type": "boolean"
+                            },
+                            "state": true
+                        }]
+                    }, {
+                        "name": "CheckIfNotUploaded",
+                        "trigger": {
+                            "type": "javascript",
+                            "javascript": "result = (row.template.length <= 0);"
+                        },
+                        "actions": [{
+                            "name": "NotMandatory",
+                            "type": "property",
+                            "property": {
+                                "label": "Required",
+                                "value": "validate.required",
+                                "type": "boolean"
+                            },
+                            "state": false
+                        }]
+                    }],
                     "type": "select",
                     "indexeddb": {
                         "filter": {}
@@ -1696,7 +1765,7 @@
         }]
     }],
     "revisions": "current",
-    "_vid": 421,
+    "_vid": 424,
     "title": "EOX App",
     "display": "wizard",
     "access": [{
@@ -1715,6 +1784,6 @@
     "path": "eoxapp",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-07-26T18:44:45.687Z",
-    "modified": "2020-10-19T14:11:28.761Z",
+    "modified": "2020-10-20T10:22:18.645Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
