@@ -142,6 +142,32 @@ entity:
             -
                 name: 'Policy Claims'
                 override_data: true
+                field:
+                    -
+                        name: namedInsured
+                        text: 'Named Insured'
+                        index: true
+                        data_type: text
+                    -
+                        name: valueDate
+                        text: 'Value Date'
+                        index: true
+                        data_type: datetime
+                    -
+                        name: lossDate
+                        text: 'Loss Date'
+                        index: true
+                        data_type: datetime
+                    -
+                        name: total
+                        text: 'Total Amount'
+                        index: true
+                        data_type: numeric
+                    -
+                        name: carrier
+                        text: Carrier
+                        index: true
+                        data_type: text
 pages:
     -
         page_name: AgentHomePage.yml
