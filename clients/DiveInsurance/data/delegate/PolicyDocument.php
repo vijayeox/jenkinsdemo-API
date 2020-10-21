@@ -2207,7 +2207,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if (isset($row[$sortKey])) {
                 if ($arrayType == 'additionalInsured') {
                     $businessRelation = ($row['businessRelation'] == 'other') ? $row['businessRelationOther'] : $row['businessRelation'];
-                    $padiList[$key] = array('name' => $row[$sortKey], 'businessRelation' => $businessRelation);
+                    $name = strtoupper($row[$sortKey]);
+                    $padiList[$key] = array('name' => $name, 'businessRelation' => $businessRelation);
                 } else {
                     $padiList[$key] = ($sortKey == 'name') ? strtoupper($row[$sortKey]) : $row[$sortKey];
                 }
