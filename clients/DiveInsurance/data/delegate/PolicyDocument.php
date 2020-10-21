@@ -1832,6 +1832,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $previousAddLoc = $policy['previous_additionalLocations'];
                     foreach ($previousAddLoc as $key => $val) {
                         foreach ($val as $key1 => $val1) {
+                            $previousAddLoc[$key][$key1] = (is_string($val1) || is_numeric($val1)) ? strval($val1) : ((!isset($val1) || is_null($val1)) ? "" : $val1);
                             if (!in_array($key1, $addLocRequired)) {
                                 unset($previousAddLoc[$key][$key1]);
                             }
@@ -1851,6 +1852,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $addLoc = $data['additionalLocations'];
                     foreach ($addLoc as $key => $val) {
                         foreach ($val as $key1 => $val1) {
+                            $addLoc[$key][$key1] = (is_string($val1) || is_numeric($val1)) ? strval($val1) : ((!isset($val1) || is_null($val1)) ? "" : $val1);
                             if (!in_array($key1, $addLocRequired)) {
                                 unset($addLoc[$key][$key1]);
                             }
