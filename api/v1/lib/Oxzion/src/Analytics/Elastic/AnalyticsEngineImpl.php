@@ -44,11 +44,13 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 			if ($result['type']=='group') {
 				$finalResult['data'] = $this->flattenResult($result['data'],$query);
 			} else {
-				if (isset($result['data']['value'])) {
-					$finalResult['data']  = $result['data']['value'];
-				} else {
-					$finalResult['data']  = $result['data'];
-				}
+                if (isset($result['data'])) {
+                    if (isset($result['data']['value'])) {
+                        $finalResult['data']  = $result['data']['value'];
+                    } else {
+                        $finalResult['data']  = $result['data'];
+                    }
+                }
 				if (isset($query['select'])) {
 					   $finalResult['meta']['list'] = $query['select'];
 				}
