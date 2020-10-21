@@ -10792,6 +10792,41 @@
                                     "input": true,
                                     "tableView": false,
                                     "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Address1",
+                                    "key": "address1",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Address2",
+                                    "key": "address2",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "State",
+                                    "key": "state",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Country",
+                                    "key": "country",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Zip",
+                                    "key": "zip",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
                                 }],
                                 "offset": 0,
                                 "push": 0,
@@ -14012,6 +14047,20 @@
                             "disableWeekdays": false,
                             "maxDate": null
                         }
+                    }, {
+                        "label": "quoteDueDate",
+                        "redrawOn": "quote_due_date",
+                        "calculateValue": "if(data.quote_due_date != \"\"){\n value =  moment(data.quote_due_date).format(\"YYYY-MM-DD\");\n}else{\n  value = \"\";\n}\n",
+                        "key": "quoteDueDate",
+                        "properties": {
+                            "data_type": "Date"
+                        },
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": true,
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false,
+                        "keyModified": true
                     }],
                     "width": 4,
                     "offset": 0,
@@ -14443,7 +14492,7 @@
         "input": false
     }],
     "revisions": "current",
-    "_vid": 89,
+    "_vid": 94,
     "title": "diveStoreConsolidation3",
     "display": "wizard",
     "access": [{
@@ -14461,6 +14510,6 @@
     "path": "divestoreconsolidation3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-07-28T11:29:44.022Z",
-    "modified": "2020-10-20T05:18:08.491Z",
+    "modified": "2020-10-21T06:09:44.406Z",
     "machineName": "testdivehub:diveStoreConsolidation3"
 }

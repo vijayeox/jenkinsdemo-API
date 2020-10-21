@@ -9197,6 +9197,42 @@
                                     "input": true,
                                     "tableView": false,
                                     "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Address1",
+                                    "calculateValue": "value = [{\n  \n}]",
+                                    "key": "address1",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Address2",
+                                    "key": "address2",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "State",
+                                    "key": "state",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Country",
+                                    "key": "country",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
+                                }, {
+                                    "label": "Zip",
+                                    "key": "zip",
+                                    "type": "hidden",
+                                    "input": true,
+                                    "tableView": false,
+                                    "hideOnChildrenHidden": false
                                 }],
                                 "offset": 0,
                                 "push": 0,
@@ -15143,6 +15179,20 @@
                             "disableWeekdays": false,
                             "maxDate": null
                         }
+                    }, {
+                        "label": "quoteDueDate",
+                        "redrawOn": "quote_due_date",
+                        "calculateValue": "if(data.quote_due_date != \"\"){\n value =  moment(data.quote_due_date).format(\"YYYY-MM-DD\");\n}else{\n  value = \"\";\n}\n",
+                        "key": "quoteDueDate",
+                        "properties": {
+                            "data_type": "Date"
+                        },
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": true,
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false,
+                        "keyModified": true
                     }],
                     "width": 4,
                     "offset": 0,
@@ -15496,7 +15546,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 94,
+    "_vid": 97,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15514,6 +15564,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-10-20T05:18:18.252Z",
+    "modified": "2020-10-21T06:09:49.131Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }

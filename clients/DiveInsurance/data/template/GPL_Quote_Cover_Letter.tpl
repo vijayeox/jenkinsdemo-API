@@ -28,7 +28,7 @@
 			<li>Worldwide liability coverage - except where not allowed by law.</li>
 		</ul>
 
-		<p>To purchase your insurance coverage, please provide us with the following items:</p>
+		<p>To purchase your insurance coverage, please provide us with the following items {$quoteDueDate|date_format:"%m/%d/%Y"}:</p>
 		{if isset($quoteInfo) && $quoteInfo != '[]'}
 			{assign var=list value=$quoteInfo|json_decode:true}
 			{foreach from=$list item=$quoteData key = key}
