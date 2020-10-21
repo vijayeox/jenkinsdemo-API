@@ -241,6 +241,21 @@
             }]
         }, {
             "label": "Create App",
+            "hideLabel": true,
+            "spellcheck": false,
+            "disabled": true,
+            "tableView": true,
+            "defaultValue": "Please click on the Create App button before you proceed",
+            "validateOn": "blur",
+            "validate": {
+                "custom": "if (data.app.name.length > 0 && data.app.category.length > 0) {\n  valid = data.app.uuid.length > 0\n      ? true\n      : \"Create App to proceed further\";\n} else {\n  valid = true;\n}"
+            },
+            "key": "textFieldValidate",
+            "customConditional": "if(data.app.uuid && data.app.uuid != \"\"){\n  show=false;\n}else {\n  show=true;\n}",
+            "type": "textfield",
+            "input": true
+        }, {
+            "label": "Create App",
             "action": "event",
             "showValidations": false,
             "theme": "success",
@@ -269,21 +284,6 @@
             }],
             "type": "button",
             "event": "callApi",
-            "input": true
-        }, {
-            "label": "Create App",
-            "hideLabel": true,
-            "spellcheck": false,
-            "disabled": true,
-            "tableView": true,
-            "defaultValue": "Please click on the Create App button before you proceed",
-            "validateOn": "blur",
-            "validate": {
-                "custom": "if (data.app.name.length > 0 && data.app.category.length > 0) {\n  valid = data.app.uuid.length > 0\n      ? true\n      : \"Create App to proceed further\";\n} else {\n  valid = true;\n}"
-            },
-            "key": "textFieldValidate",
-            "customConditional": "if(data.app.uuid && data.app.uuid != \"\"){\n  show=false;\n}else {\n  show=true;\n}",
-            "type": "textfield",
             "input": true
         }]
     }, {
@@ -949,7 +949,7 @@
             "defaultOpen": false,
             "layoutFixed": false,
             "enableRowGroups": false,
-            "noFirstRow": true,
+            "initEmpty": false,
             "hideLabel": true,
             "tableView": false,
             "defaultValue": [{
@@ -964,13 +964,16 @@
                     "data_type": "",
                     "index": false,
                     "ryg_rule": ""
-                }]
+                }],
+                "ryg_rule": ""
             }],
+            "clearOnHide": false,
             "validate": {
                 "minLength": 0
             },
             "key": "entity",
             "type": "datagrid",
+            "noFirstRow": false,
             "input": true,
             "components": [{
                 "label": "Columns",
@@ -1197,7 +1200,7 @@
             }]
         }]
     }, {
-        "title": "Forms And Workflows",
+        "title": "Form Manager",
         "theme": "primary",
         "breadcrumbClickable": true,
         "buttonSettings": {
@@ -1206,291 +1209,275 @@
             "next": true
         },
         "collapsible": false,
-        "tableView": false,
-        "key": "page5",
+        "key": "formsPanel",
         "type": "panel",
-        "label": "Forms And Workflows",
+        "label": "Forms",
+        "tableView": false,
         "input": false,
         "components": [{
-            "title": "Forms",
-            "theme": "primary",
-            "breadcrumbClickable": true,
-            "buttonSettings": {
-                "previous": true,
-                "cancel": true,
-                "next": true
-            },
-            "collapsible": false,
+            "label": "Forms",
+            "reorder": false,
+            "addAnotherPosition": "bottom",
+            "defaultOpen": false,
+            "layoutFixed": false,
+            "enableRowGroups": false,
+            "noFirstRow": false,
+            "hideLabel": true,
             "tableView": false,
-            "key": "formsPanel",
-            "type": "panel",
-            "label": "Panel",
-            "input": false,
+            "redrawOn": "data",
+            "validate": {
+                "custom": "if (data.formDuplicate) {\n  if (data.formDuplicate.length > 0) {\n    valid =\n      data.formDuplicate.length == new Set(data.formDuplicate.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same form more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+            },
+            "key": "formDuplicate",
+            "type": "datagrid",
+            "input": true,
             "components": [{
-                "label": "Forms",
-                "reorder": false,
-                "addAnotherPosition": "bottom",
-                "defaultOpen": false,
-                "layoutFixed": false,
-                "enableRowGroups": false,
-                "noFirstRow": false,
-                "hideLabel": true,
-                "tableView": false,
-                "redrawOn": "data",
-                "validate": {
-                    "custom": "if (data.formDuplicate) {\n  if (data.formDuplicate.length > 0) {\n    valid =\n      data.formDuplicate.length == new Set(data.formDuplicate.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same form more than once.\";\n  } else {\n    valid = true;\n  }\n}"
-                },
-                "key": "formDuplicate",
-                "type": "datagrid",
-                "input": true,
-                "components": [{
-                    "label": "Title",
-                    "disabled": true,
-                    "tableView": true,
-                    "clearOnHide": false,
-                    "calculateValue": "try {\n  if (row.template.length > 0) {\n    value =\n      row.template[0].originalName.length > 0\n        ? row.template_file.split(\".\")[0]\n        : \"\";\n  }else{\n    value = \"\";\n  }\n} catch (error) {}",
-                    "key": "name",
-                    "type": "textfield",
-                    "hideOnChildrenHidden": false,
-                    "input": true
-                }, {
-                    "label": "Entity",
-                    "widget": "choicesjs",
-                    "tableView": true,
-                    "dataSrc": "custom",
-                    "data": {
-                        "values": [{
-                            "label": "",
-                            "value": ""
-                        }],
-                        "custom": "values = data.entity.map(item=>item.name)"
-                    },
-                    "selectThreshold": 0.3,
-                    "clearOnHide": false,
-                    "key": "entity",
-                    "logic": [{
-                        "name": "Check if form Uploaded",
-                        "trigger": {
-                            "type": "javascript",
-                            "javascript": "result = (row.template.length > 0);"
-                        },
-                        "actions": [{
-                            "name": "Set Mandatory",
-                            "type": "property",
-                            "property": {
-                                "label": "Required",
-                                "value": "validate.required",
-                                "type": "boolean"
-                            },
-                            "state": true
-                        }]
-                    }, {
-                        "name": "Forms Not Uploaded",
-                        "trigger": {
-                            "type": "javascript",
-                            "simple": {
-                                "show": true
-                            },
-                            "javascript": "result = (row.template.length <= 0);"
-                        },
-                        "actions": [{
-                            "name": "Not Mandatory",
-                            "type": "property",
-                            "property": {
-                                "label": "Required",
-                                "value": "validate.required",
-                                "type": "boolean"
-                            },
-                            "state": false
-                        }]
-                    }],
-                    "type": "select",
-                    "indexeddb": {
-                        "filter": {}
-                    },
-                    "input": true
-                }, {
-                    "label": "Form File",
-                    "tableView": false,
-                    "storage": "url",
-                    "webcam": true,
-                    "fileTypes": [{
+                "label": "Title",
+                "disabled": true,
+                "tableView": true,
+                "clearOnHide": false,
+                "calculateValue": "try {\n  if (row.template.length > 0) {\n    value =\n      row.template[0].originalName.length > 0\n        ? row.template_file.split(\".\")[0]\n        : \"\";\n  }else{\n    value = \"\";\n  }\n} catch (error) {}",
+                "key": "name",
+                "type": "textfield",
+                "hideOnChildrenHidden": false,
+                "input": true
+            }, {
+                "label": "Entity",
+                "widget": "choicesjs",
+                "tableView": true,
+                "dataSrc": "custom",
+                "data": {
+                    "values": [{
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".json",
-                    "fileMaxSize": "10MB",
-                    "clearOnHide": false,
-                    "key": "template",
-                    "properties": {
-                        "absoluteUrl": "true"
+                    "custom": "values = data.entity.map(item=>item.name)"
+                },
+                "selectThreshold": 0.3,
+                "clearOnHide": false,
+                "key": "entity",
+                "logic": [{
+                    "name": "Check if form Uploaded",
+                    "trigger": {
+                        "type": "javascript",
+                        "javascript": "result = (row.template.length > 0);"
                     },
-                    "type": "file",
-                    "url": "/app/{{data.app.uuid}}/artifact/add/form",
-                    "input": true
+                    "actions": [{
+                        "name": "Set Mandatory",
+                        "type": "property",
+                        "property": {
+                            "label": "Required",
+                            "value": "validate.required",
+                            "type": "boolean"
+                        },
+                        "state": true
+                    }]
                 }, {
-                    "label": "Template File",
-                    "calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
-                    "key": "template_file",
-                    "type": "hidden",
-                    "input": true,
-                    "tableView": false
-                }, {
-                    "label": "Form Uuid",
-                    "calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
-                    "key": "uuid",
-                    "type": "hidden",
-                    "input": true,
-                    "tableView": false,
-                    "hideOnChildrenHidden": false
-                }]
+                    "name": "Forms Not Uploaded",
+                    "trigger": {
+                        "type": "javascript",
+                        "simple": {
+                            "show": true
+                        },
+                        "javascript": "result = (row.template.length <= 0);"
+                    },
+                    "actions": [{
+                        "name": "Not Mandatory",
+                        "type": "property",
+                        "property": {
+                            "label": "Required",
+                            "value": "validate.required",
+                            "type": "boolean"
+                        },
+                        "state": false
+                    }]
+                }],
+                "type": "select",
+                "indexeddb": {
+                    "filter": {}
+                },
+                "input": true
             }, {
-                "label": "Actual Form API Key",
-                "calculateValue": "try {\n  value = data.formDuplicate.map((i) => {\n    return { name: i.name, entity: i.entity, template_file: i.template_file,uuid: i.uuid };\n  });\n} catch (error) {}",
-                "key": "form",
+                "label": "Form File",
+                "tableView": false,
+                "storage": "url",
+                "webcam": true,
+                "fileTypes": [{
+                    "label": "",
+                    "value": ""
+                }],
+                "filePattern": ".json",
+                "fileMaxSize": "10MB",
+                "clearOnHide": false,
+                "key": "template",
+                "properties": {
+                    "absoluteUrl": "true"
+                },
+                "type": "file",
+                "url": "/app/{{data.app.uuid}}/artifact/add/form",
+                "input": true
+            }, {
+                "label": "Template File",
+                "calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
+                "key": "template_file",
                 "type": "hidden",
                 "input": true,
                 "tableView": false
+            }, {
+                "label": "Form Uuid",
+                "calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
+                "key": "uuid",
+                "type": "hidden",
+                "input": true,
+                "tableView": false,
+                "hideOnChildrenHidden": false
             }]
         }, {
-            "title": "Workflows",
-            "theme": "primary",
-            "breadcrumbClickable": true,
-            "buttonSettings": {
-                "previous": true,
-                "cancel": true,
-                "next": true
-            },
-            "collapsible": false,
-            "tableView": false,
-            "key": "workflowPanel",
-            "type": "panel",
+            "label": "Actual Form API Key",
+            "calculateValue": "try {\n  value = data.formDuplicate.map((i) => {\n    return { name: i.name, entity: i.entity, template_file: i.template_file,uuid: i.uuid };\n  });\n} catch (error) {}",
+            "key": "form",
+            "type": "hidden",
+            "input": true,
+            "tableView": false
+        }]
+    }, {
+        "title": "Workflow Manager",
+        "theme": "primary",
+        "breadcrumbClickable": true,
+        "buttonSettings": {
+            "previous": true,
+            "cancel": true,
+            "next": true
+        },
+        "collapsible": false,
+        "key": "workflowPanel",
+        "type": "panel",
+        "label": "Workflows",
+        "tableView": false,
+        "input": false,
+        "components": [{
             "label": "Workflows",
-            "input": false,
+            "reorder": false,
+            "addAnotherPosition": "bottom",
+            "defaultOpen": false,
+            "layoutFixed": false,
+            "enableRowGroups": false,
+            "noFirstRow": false,
+            "hideLabel": true,
+            "tableView": false,
+            "defaultValue": [{
+                "name": "",
+                "entity": [{}],
+                "template": [],
+                "bpmn_file": "",
+                "uuid": ""
+            }],
+            "clearOnHide": false,
+            "validate": {
+                "custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n  valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+            },
+            "key": "workflow",
+            "type": "datagrid",
+            "input": true,
             "components": [{
-                "label": "Workflows",
-                "reorder": false,
-                "addAnotherPosition": "bottom",
-                "defaultOpen": false,
-                "layoutFixed": false,
-                "enableRowGroups": false,
-                "noFirstRow": false,
-                "hideLabel": true,
-                "tableView": false,
-                "defaultValue": [{
-                    "name": "",
-                    "entity": [{}],
-                    "template": [],
-                    "bpmn_file": "",
-                    "uuid": ""
-                }],
+                "label": "Name",
+                "tableView": true,
                 "clearOnHide": false,
-                "validate": {
-                    "custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n  valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}"
-                },
-                "key": "workflow",
-                "type": "datagrid",
-                "input": true,
-                "components": [{
-                    "label": "Name",
-                    "tableView": true,
-                    "clearOnHide": false,
-                    "key": "name",
-                    "type": "textfield",
-                    "input": true
-                }, {
-                    "label": "Entity",
-                    "widget": "choicesjs",
-                    "tableView": true,
-                    "multiple": true,
-                    "dataSrc": "custom",
-                    "defaultValue": [{}],
-                    "data": {
-                        "values": [{
-                            "label": "",
-                            "value": ""
-                        }],
-                        "custom": "values = data.entity.map(item=>item.name)"
-                    },
-                    "selectThreshold": 0.3,
-                    "clearOnHide": false,
-                    "validate": {
-                        "multiple": true
-                    },
-                    "key": "entity",
-                    "logic": [{
-                        "name": "CheckIfUploaded",
-                        "trigger": {
-                            "type": "javascript",
-                            "javascript": "result = (row.template.length > 0);"
-                        },
-                        "actions": [{
-                            "name": "Set Mandatory",
-                            "type": "property",
-                            "property": {
-                                "label": "Required",
-                                "value": "validate.required",
-                                "type": "boolean"
-                            },
-                            "state": true
-                        }]
-                    }, {
-                        "name": "CheckIfNotUploaded",
-                        "trigger": {
-                            "type": "javascript",
-                            "javascript": "result = (row.template.length <= 0);"
-                        },
-                        "actions": [{
-                            "name": "NotMandatory",
-                            "type": "property",
-                            "property": {
-                                "label": "Required",
-                                "value": "validate.required",
-                                "type": "boolean"
-                            },
-                            "state": false
-                        }]
-                    }],
-                    "type": "select",
-                    "indexeddb": {
-                        "filter": {}
-                    },
-                    "input": true
-                }, {
-                    "label": "Workflow BPMN",
-                    "tableView": false,
-                    "storage": "url",
-                    "webcam": true,
-                    "fileTypes": [{
+                "key": "name",
+                "type": "textfield",
+                "input": true
+            }, {
+                "label": "Entity",
+                "widget": "choicesjs",
+                "tableView": true,
+                "multiple": true,
+                "dataSrc": "custom",
+                "defaultValue": [{}],
+                "data": {
+                    "values": [{
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".bpmn",
-                    "fileMaxSize": "10MB",
-                    "clearOnHide": false,
-                    "key": "template",
-                    "properties": {
-                        "absoluteUrl": "true"
+                    "custom": "values = data.entity.map(item=>item.name)"
+                },
+                "selectThreshold": 0.3,
+                "clearOnHide": false,
+                "validate": {
+                    "multiple": true
+                },
+                "key": "entity",
+                "logic": [{
+                    "name": "CheckIfUploaded",
+                    "trigger": {
+                        "type": "javascript",
+                        "javascript": "result = (row.template.length > 0);"
                     },
-                    "type": "file",
-                    "url": "/app/{{data.app.uuid}}/artifact/add/workflow",
-                    "input": true
+                    "actions": [{
+                        "name": "Set Mandatory",
+                        "type": "property",
+                        "property": {
+                            "label": "Required",
+                            "value": "validate.required",
+                            "type": "boolean"
+                        },
+                        "state": true
+                    }]
                 }, {
-                    "label": "BPMN File",
-                    "calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
-                    "key": "bpmn_file",
-                    "type": "hidden",
-                    "input": true,
-                    "tableView": false
-                }, {
-                    "label": "Workflow Uuid",
-                    "calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
-                    "key": "uuid",
-                    "type": "hidden",
-                    "input": true,
-                    "tableView": false,
-                    "hideOnChildrenHidden": false
-                }]
+                    "name": "CheckIfNotUploaded",
+                    "trigger": {
+                        "type": "javascript",
+                        "javascript": "result = (row.template.length <= 0);"
+                    },
+                    "actions": [{
+                        "name": "NotMandatory",
+                        "type": "property",
+                        "property": {
+                            "label": "Required",
+                            "value": "validate.required",
+                            "type": "boolean"
+                        },
+                        "state": false
+                    }]
+                }],
+                "type": "select",
+                "indexeddb": {
+                    "filter": {}
+                },
+                "input": true
+            }, {
+                "label": "Workflow BPMN",
+                "tableView": false,
+                "storage": "url",
+                "webcam": true,
+                "fileTypes": [{
+                    "label": "",
+                    "value": ""
+                }],
+                "filePattern": ".bpmn",
+                "fileMaxSize": "10MB",
+                "clearOnHide": false,
+                "key": "template",
+                "properties": {
+                    "absoluteUrl": "true"
+                },
+                "type": "file",
+                "url": "/app/{{data.app.uuid}}/artifact/add/workflow",
+                "input": true
+            }, {
+                "label": "BPMN File",
+                "calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
+                "key": "bpmn_file",
+                "type": "hidden",
+                "input": true,
+                "tableView": false
+            }, {
+                "label": "Workflow Uuid",
+                "calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
+                "key": "uuid",
+                "type": "hidden",
+                "input": true,
+                "tableView": false,
+                "hideOnChildrenHidden": false
             }]
         }]
     }, {
@@ -1719,7 +1706,7 @@
                             "label": "",
                             "value": ""
                         }],
-                        "custom": "var privArray = [];\ndata.privilege.map((i) => {\n  if (i.permission >= 1) {\n    privArray.push({\n      key: i.name + \"_READ\",\n      name: i.name + \" (READ)\",\n    });\n  }\n  if (i.permission >= 3) {\n    privArray.push({\n      key: i.name + \"_WRITE\",\n      name: i.name + \" (WRITE)\",\n    });\n  }\n  if (i.permission >= 7) {\n    privArray.push({\n      key: i.name + \"_CREATE\",\n      name: i.name + \" (CREATE)\",\n    });\n  }\n  if (i.permission == 15) {\n    privArray.push({\n      key: i.name + \"_DELETE\",\n      name: i.name + \" (DELETE)\",\n    });\n  }\n});\nvalues = privArray.length > 0 ? privArray : [];\n"
+                        "custom": "var privArray = [];\ndata.privilege.map((i) => {\n  if (i.permission >= 1) {\n    privArray.push({\n      key: i.name + \"_READ\",\n      name: i.name + \"_READ\",\n    });\n  }\n  if (i.permission >= 3) {\n    privArray.push({\n      key: i.name + \"_WRITE\",\n      name: i.name + \"_WRITE\",\n    });\n  }\n  if (i.permission >= 7) {\n    privArray.push({\n      key: i.name + \"_CREATE\",\n      name: i.name + \"_CREATE\",\n    });\n  }\n  if (i.permission == 15) {\n    privArray.push({\n      key: i.name + \"_DELETE\",\n      name: i.name + \"_DELETE\",\n    });\n  }\n});\nvalues = privArray.length > 0 ? privArray : [];\n"
                     },
                     "valueProperty": "key",
                     "template": "<span>{{ item.name }}</span>",
@@ -1765,7 +1752,7 @@
         }]
     }],
     "revisions": "current",
-    "_vid": 424,
+    "_vid": 441,
     "title": "EOX App",
     "display": "wizard",
     "access": [{
@@ -1784,6 +1771,6 @@
     "path": "eoxapp",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-07-26T18:44:45.687Z",
-    "modified": "2020-10-20T10:22:18.645Z",
+    "modified": "2020-10-21T05:51:26.170Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
