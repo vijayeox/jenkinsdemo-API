@@ -61,6 +61,20 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
+    public function testGetUserOrgList()
+    {
+        $this->initAuthToken($this->employeeUser);
+        $this->dispatch('/organization', 'GET');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['uuid'], '53012471-2863-4949-afb1-e69b0891c98a');
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
+        $this->assertEquals($content['total'], 1);
+    }
+
     public function testGetListWithQuery()
     {
         $this->initAuthToken($this->adminUser);

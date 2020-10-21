@@ -19,10 +19,10 @@ return [
                         'controller' => Controller\AppController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => 'MANAGE_APP_WRITE',
-                            'post' => 'MANAGE_APP_WRITE',
-                            'delete' => 'MANAGE_APP_DELETE',
-                            'get' => 'MANAGE_APP_READ',
+                            'put' => 'MANAGE_APPLICATION_WRITE',
+                            'post' => 'MANAGE_APPLICATION_WRITE',
+                            'delete' => 'MANAGE_APPLICATION_WRITE',
+                            'get' => 'MANAGE_APPLICATION_READ',
                         ],
                     ],
                 ],
@@ -112,17 +112,18 @@ return [
                     ],
                 ],
             ],
-            'installAppToOrg' => [
+            'appSetupToOrg' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/install/org/:orgId',
+                    'route' => '/app/:appId/:serviceType/org/:orgId',
                     'constraints' => [
                         'orgId' => UuidUtil::UUID_PATTERN,
                         'appId' => UuidUtil::UUID_PATTERN,
+                        'serviceType' => 'install|uninstall',
                     ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
-                        'action' => 'installAppToOrg',
+                        'action' => 'appSetupToOrg',
                         'method' => 'POST',
                     ],
                 ],
@@ -539,7 +540,7 @@ return [
             'filelistinguser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus]',
+                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
@@ -556,7 +557,7 @@ return [
             'filelistfilter' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName[/assoc/:assocId]][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]]',
+                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]]',
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',

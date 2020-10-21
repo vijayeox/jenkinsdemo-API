@@ -561,6 +561,10 @@ class OrganizationService extends AbstractService
         $sort = "name";
         $select = "SELECT og.uuid,og.name,og.subdomain,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences";
         $from = " from ox_organization as og join ox_organization_profile as oxop on oxop.id = og.org_profile_id join ox_address as oa on oxop.address_id = oa.id";
+        if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')) {
+            $from .= " JOIN ox_user_org as oxuo on oxuo.org_id = og.id ";
+            $where = " WHERE oxuo.user_id =". AuthContext::get(AuthConstants::USER_ID);
+        }
         $cntQuery = "SELECT count(og.id) " . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
