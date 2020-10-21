@@ -254,7 +254,7 @@
   "submissionAccess": [],
   "controller": "",
   "properties": {
-    "submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Batch Report Job\"},{\"command\" : \"delegate\", \"entity_name\" : \"Batch Report Job\", \"delegate\" : \"BatchReport\"}, {\"command\" : \"fileSave\", \"entity_name\" : \"Batch Report Job\"}]"
+    "submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Batch Report Job\"},{\"command\" : \"delegate\", \"async\" : \"true\", \"entity_name\" : \"Batch Report Job\", \"delegate\" : \"BatchReport\"}, {\"command\" : \"fileSave\", \"entity_name\" : \"Batch Report Job\"}]"
   },
   "settings": {},
   "name": "batchReport",
