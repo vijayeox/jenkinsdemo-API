@@ -385,29 +385,29 @@ public function execute(array $data,Persistence $persistenceService)
                         }
                         if(isset($data['groupAdditionalInsured'])){
                             if($data['groupAdditionalInsured'] != ""){
-                                foreach ($data['groupAdditionalInsured'] as $key => $value) {
-                                    if(!isset($value['effective_date'])){
-                                        $data['groupAdditionalInsured'][$key]['effective_date'] = isset($data['start_date']) ? $data['start_date'] : $data['update_date'];
+                                foreach ($data['groupAdditionalInsured'] as $key2 => $value2) {
+                                    if(!isset($value2['effective_date'])){
+                                        $data['groupAdditionalInsured'][$key2]['effective_date'] = isset($data['start_date']) ? $data['start_date'] : $data['update_date'];
                                     }
                                 }
                             }
             			}
             			if(isset($value['padi'])){
-                                    $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
-                                    $result = $persistenceService->selectQuery($select);
-                                    if($result->count() > 0){
-                                        $response = array();
-                                        while ($result->next()) {
-                                            $response[] = $result->current();
-                                        }
-                                        if(count($response) > 0){
-                                            $response[0]['rating'] = implode(",",array_column($response, 'rating'));
-                                        }
-                                        $data['groupPL'][$key]['rating'] = $response[0]['rating'];
-                                    } else {
-                                        // $data['groupPL'][$key]['rating'] = $response[0]['rating'];
-            			}
-			         }
+                            $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$value['padi']."'";
+                            $result = $persistenceService->selectQuery($select);
+                            if($result->count() > 0){
+                                $response = array();
+                                while ($result->next()) {
+                                    $response[] = $result->current();
+                                }
+                                if(count($response) > 0){
+                                    $response[0]['rating'] = implode(",",array_column($response, 'rating'));
+                                }
+                                $data['groupPL'][$key]['rating'] = $response[0]['rating'];
+                            } else {
+                                // $data['groupPL'][$key]['rating'] = $response[0]['rating'];
+            			    }
+    			        }
                     }
                 }
             }
