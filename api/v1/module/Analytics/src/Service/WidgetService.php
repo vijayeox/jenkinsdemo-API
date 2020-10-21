@@ -412,6 +412,8 @@ class WidgetService extends AbstractService
                 if (is_numeric($value)) {
                     $key2=strtolower($key2);
                     $m->evaluate("$key2 = $value");
+                } else {
+                    $m->evaluate("$key2 = 0");
                 }
             }
             $calculated = $m->evaluate($expression);
