@@ -1,26 +1,28 @@
 app:
-    name: TennantInsurance
-    uuid: 46807204-26fc-4b79-9259-3b727a12f918
-    description: 'Insurance OI Application'
-    category: Dashboards
-    type: 2
-    autostart: 'true'
+    -
+        name: TennantInsurance
+        uuid: 46807204-26fc-4b79-9259-3b727a12f918
+        description: 'Insurance OI Application'
+        category: Dashboards
+        type: 2
+        autostart: 'true'
 org:
-    name: 'Tennant'
-    uuid: 63e7ca15-b13c-4a98-8969-d59d7fd7221b
-    email: tennantinsurer@vantageagora.com
-    address1: '5555 Triangle Pkwy NW #130'
-    address2: ''
-    city: Norcross
-    state: GA
-    zip: 30092
-    contact:
-        username: tennantinsurer
-        firstname: Tennant
-        lastname: Insurer
-        email: tennant@vantageagora.com
-    preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
-    country: 'United States'
+    -
+        name: 'Tennant'
+        uuid: 63e7ca15-b13c-4a98-8969-d59d7fd7221b
+        email: tennantinsurer@vantageagora.com
+        address1: '5555 Triangle Pkwy NW #130'
+        address2: ''
+        city: Norcross
+        state: GA
+        zip: 30091
+        contact:
+            username: tennantinsurer
+            firstname: Tennant
+            lastname: Insurer
+            email: tennant@vantageagora.com
+        preferences: '{"dateformat":"MM-dd-yyyy","currency":"USD","timezone":"America/New_York"}'
+        country: 'United States'
 privilege:
     -
         name: MANAGE_TENNANTAGENT

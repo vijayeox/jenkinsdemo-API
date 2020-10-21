@@ -342,6 +342,11 @@ class FormRender extends React.Component {
         form.submission.data.fileId = this.state.fileId;
         form.submission.data["workflow_instance_id"] = undefined;
       }
+      if(this.props.parentFileId){
+        form.submission.data.fileId = undefined;
+        form.submission.data["workflow_instance_id"] = undefined;
+        form.submission.data["bos"]["assoc_id"] = this.props.parentFileId;
+      }
       return await this.callPipeline(form._form["properties"]["submission_commands"], this.cleanData(form.submission.data)).then(async response => {
         if (response.status == "success") {
           await this.deleteCacheData().then(response2 => {
@@ -740,6 +745,13 @@ class FormRender extends React.Component {
       }
     }
   }
+  async importCSS(theme){
+    try{
+      await import(theme);
+    } catch(Exception){
+      console.log("Unable to import "+theme);
+    }
+  }
 
   createForm() {
     let that = this;
@@ -776,6 +788,9 @@ class FormRender extends React.Component {
         }
         if (this.state.content["properties"]["showCancel"]) {
           options.buttonSettings = { showCancel: eval(this.state.content["properties"]["showCancel"]) };
+        }
+        if(this.state.content["properties"]["theme"]){
+          importCSS(this.state.content["properties"]["theme"]);
         }
       }
       var hooks = {
