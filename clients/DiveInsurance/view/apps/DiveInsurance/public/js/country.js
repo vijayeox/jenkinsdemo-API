@@ -159,7 +159,7 @@ var countryList = [ {
     "states": ["Camaguey", "Ciego de Avila", "Cienfuegos", "Ciudad de La Habana", "Granma", "Guantanamo", "Holguin", "Isla de la Juventud", "La Habana", "Las Tunas", "Matanzas", "Pinar del Rio", "Sancti Spiritus", "Santiago de Cuba", "Villa Clara"]
 }, {
     "country": "Curacao",
-    "states": ["Not Applicable"] 
+    "states": ["Not Applicable"]
 }, {
     "country": "Cyprus",
     "states": ["Famagusta", "Kyrenia", "Larnaca", "Limassol", "Nicosia", "Paphos"]
@@ -193,9 +193,9 @@ var countryList = [ {
 }, {
     "country": "Equatorial Guinea",
     "states": ["Annobon", "Bioko Norte", "Bioko Sur", "Centro Sur", "Kie-Ntem", "Litoral", "Wele-Nzas"]
-},{
+}, {
     "country": "England",
-    "states": [ "Avon","Bedfordshire","Berkshire","Buckinghamshire","Cambridgeshire","Cheshire","Cleveland","Cornwall","Cumbria","Derbyshire","Devon","Dorset","Durham","East Sussex","Essex","Gloucestershire","Hampshire","Herefordshire","Hertfordshire","Isle of Wight","Kent","Lancashire","Leicestershire","Lincolnshire","London","Merseyside","Middlesex","Norfolk","Northamptonshire","Northumberland","North Humberside","North Yorkshire","Nottinghamshire","Oxfordshire","Rutland","Shropshire","Somerset","South Humberside","South Yorkshire","Staffordshire","Suffolk","Surrey","Tyne and Wear","Warwickshire","West Midlands","West Sussex","West Yorkshire","Wiltshire","Worcestershire"]
+    "states": ["Avon", "Bedfordshire", "Berkshire", "Buckinghamshire", "Cambridgeshire", "Cheshire", "Cleveland", "Cornwall", "Cumbria", "Derbyshire", "Devon", "Dorset", "Durham", "East Sussex", "Essex", "Gloucestershire", "Hampshire", "Herefordshire", "Hertfordshire", "Isle of Wight", "Kent", "Lancashire", "Leicestershire", "Lincolnshire", "London", "Merseyside", "Middlesex", "Norfolk", "Northamptonshire", "Northumberland", "North Humberside", "North Yorkshire", "Nottinghamshire", "Oxfordshire", "Rutland", "Shropshire", "Somerset", "South Humberside", "South Yorkshire", "Staffordshire", "Suffolk", "Surrey", "Tyne and Wear", "Warwickshire", "West Midlands", "West Sussex", "West Yorkshire", "Wiltshire", "Worcestershire"]
 }, {
     "country": "Eritrea",
     "states": ["Anseba", "Debub", "Debubawi Keyih Bahri", "Gash Barka", "Maakel", "Semenawi Keyih Bahri"]
@@ -261,7 +261,7 @@ var countryList = [ {
     "states": ["Atlantida", "Choluteca", "Colon", "Comayagua", "Copan", "Cortes", "El Paraiso", "Francisco Morazan", "Gracias a Dios", "Intibuca", "Islas de la Bahia", "La Paz", "Lempira", "Ocotepeque", "Olancho", "Santa Barbara", "Valle", "Yoro"]
 }, {
     "country": "Hong Kong",
-    "states": ["Not Applicable"]
+    "states": ["Islands","Kwai Tsing","North","Sai Kung","Sha Tin","Tai Po","Tsuen Wan","Tuen Mun","Yuen Long","Kowloon City","Kwun Tong","Sham Shui Po","Wong Tai Sin","Yau Tsim Mong","Central and Western","Eastern","Southern","Wan Chai"]
 }, {
     "country": "Hungary",
     "states": ["Bacs-Kiskun", "Baranya", "Bekes", "Borsod-Abauj-Zemplen", "Csongrad", "Fejer", "Gyor-Moson-Sopron", "Hajdu-Bihar", "Heves", "Jasz-Nagykun-Szolnok", "Komarom-Esztergom", "Nograd", "Pest", "Somogy", "Szabolcs-Szatmar-Bereg", "Tolna", "Vas", "Veszprem", "Zala", "Bekescsaba", "Debrecen", "Dunaujvaros", "Eger", "Gyor", "Hodmezovasarhely", "Kaposvar", "Kecskemet", "Miskolc", "Nagykanizsa", "Nyiregyhaza", "Pecs", "Sopron", "Szeged", "Szekesfehervar", "Szolnok", "Szombathely", "Tatabanya", "Veszprem", "Zalaegerszeg"]
@@ -433,9 +433,9 @@ var countryList = [ {
 }, {
     "country": "Norway",
     "states": ["Akershus", "Aust-Agder", "Buskerud", "Finnmark", "Hedmark", "Hordaland", "More og Romsdal", "Nordland", "Nord-Trondelag", "Oppland", "Oslo", "Ostfold", "Rogaland", "Sogn og Fjordane", "Sor-Trondelag", "Telemark", "Troms", "Vest-Agder", "Vestfold"]
-},{
-    "country":"Northern Ireland",
-    "states": ["Antrim","Armagh","Down","Fermanagh","Londonderry","Tyrone"]
+}, {
+    "country": "Northern Ireland",
+    "states": ["Antrim", "Armagh", "Down", "Fermanagh", "Londonderry", "Tyrone"]
 }, {
     "country": "Oman",
     "states": ["Ad Dakhiliyah", "Al Batinah", "Al Wusta", "Ash Sharqiyah", "Az Zahirah", "Masqat", "Musandam", "Dhofar"]
@@ -490,9 +490,9 @@ var countryList = [ {
 }, {
     "country": "Saudi Arabia",
     "states": ["Al Bahah", "Al Hudud ash Shamaliyah", "Al Jawf", "Al Madinah", "Al Qasim", "Ar Riyad", "Ash Sharqiyah", "Asir", "Hail", "Jizan", "Makkah", "Najran", "Tabuk"]
-},{
+}, {
     "country": "Scotland",
-    "states":["Aberdeenshire","Angus","Argyll","Ayrshire","Banffshire","Berwickshire","Bute","Caithness","Clackmannanshire","Dumfriesshire","Dunbartonshire","East Lothian","Fife","Inverness-shire",    "Kincardineshire","Kinross-shire","Kirkcudbrightshire","Lanarkshire","Midlothian","Moray","Nairnshire","Orkney","Peeblesshire","Perthshire","Renfrewshire","Ross-shire","Roxburghshire","Selkirkshire","Shetland","Stirlingshire","Sutherland","West Lothian","Wigtownshire"]
+    "states": ["Aberdeenshire", "Angus", "Argyll", "Ayrshire", "Banffshire", "Berwickshire", "Bute", "Caithness", "Clackmannanshire", "Dumfriesshire", "Dunbartonshire", "East Lothian", "Fife", "Inverness-shire", "Kincardineshire", "Kinross-shire", "Kirkcudbrightshire", "Lanarkshire", "Midlothian", "Moray", "Nairnshire", "Orkney", "Peeblesshire", "Perthshire", "Renfrewshire", "Ross-shire", "Roxburghshire", "Selkirkshire", "Shetland", "Stirlingshire", "Sutherland", "West Lothian", "Wigtownshire"]
 }, {
     "country": "Senegal",
     "states": ["Dakar", "Diourbel", "Fatick", "Kaolack", "Kolda", "Louga", "Matam", "Saint-Louis", "Tambacounda", "Thies", "Ziguinchor"]
@@ -531,7 +531,7 @@ var countryList = [ {
     "states": ["Central", "North Central", "North Eastern", "North Western", "Sabaragamuwa", "Southern", "Uva", "Western"]
 }, {
     "country": "St Kitts and Nevis",
-    "states": ["Not Applicable"]
+    "states": ["Saint Peter Basseterre","Saint Mary Cayon","Christ Church Nichola Town","Saint John Capesterre","Saint Paul Capesterre","Saint Anne Sandy Point","Saint Thomas Middle Island","Trinity Palmetto Point","Saint George Basseterre","Saint James Windward","Saint Paul Charlestown","Saint George Gingerland","Saint John Figtree","Saint Thomas Lowland"]
 }, {
     "country": "St Lucia",
     "states": ["Not Applicable"]
@@ -582,8 +582,8 @@ var countryList = [ {
     "states": ["Adana", "Adiyaman", "Afyonkarahisar", "Agri", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "Aydin", "Balikesir", "Bartin", "Batman", "Bayburt", "Bilecik", "Bingol", "Bitlis", "Bolu", "Burdur", "Bursa", "Canakkale", "Cankiri", "Corum", "Denizli", "Diyarbakir", "Duzce", "Edirne", "Elazig", "Erzincan", "Erzurum", "Eskisehir", "Gaziantep", "Giresun", "Gumushane", "Hakkari", "Hatay", "Igdir", "Isparta", "Istanbul", "Izmir", "Kahramanmaras", "Karabuk", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kirikkale", "Kirklareli", "Kirsehir", "Kocaeli", "Konya", "Kutahya", "Malatya", "Manisa", "Mardin", "Mersin", "Mugla", "Mus", "Nevsehir", "Nigde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Sanliurfa", "Siirt", "Sinop", "Sirnak", "Sivas", "Tekirdag", "Tokat", "Trabzon", "Tunceli", "Usak", "Van", "Yalova", "Yozgat", "Zonguldak"]
 }, {
     "country": "Turks and Caicos",
-    "states": ["Not Applicable"]
-},{
+    "states": ["Providenciales","North Caicos","Middle Caicos","South Caicos","Grand Turk","Salt Cay"]
+}, {
     "country": "Tuvalu",
     "states": ["Not Applicable"]
 }, {
@@ -615,7 +615,7 @@ var countryList = [ {
     "states": ["An Giang", "Bac Giang", "Bac Kan", "Bac Lieu", "Bac Ninh", "Ba Ria-Vung Tau", "Ben Tre", "Binh Dinh", "Binh Duong", "Binh Phuoc", "Binh Thuan", "Ca Mau", "Cao Bang", "Dac Lak", "Dac Nong", "Dien Bien", "Dong Nai", "Dong Thap", "Gia Lai", "Ha Giang", "Hai Duong", "Ha Nam", "Ha Tay", "Ha Tinh", "Hau Giang", "Hoa Binh", "Hung Yen", "Khanh Hoa", "Kien Giang", "Kon Tum", "Lai Chau", "Lam Dong", "Lang Son", "Lao Cai", "Long An", "Nam Dinh", "Nghe An", "Ninh Binh", "Ninh Thuan", "Phu Tho", "Phu Yen", "Quang Binh", "Quang Nam", "Quang Ngai", "Quang Ninh", "Quang Tri", "Soc Trang", "Son La", "Tay Ninh", "Thai Binh", "Thai Nguyen", "Thanh Hoa", "Thua Thien-Hue", "Tien Giang", "Tra Vinh", "Tuyen Quang", "Vinh Long", "Vinh Phuc", "Yen Bai", "Can Tho", "Da Nang", "Hai Phong", "Hanoi", "Ho Chi Minh"]
 }, {
     "country": "Wales",
-    "states": ["Clwyd","Dyfed","Gwent","Gwynedd","Mid Glamorgan","Powys","South Glamorgan","West Glamorgan"]
+    "states": ["Clwyd", "Dyfed", "Gwent", "Gwynedd", "Mid Glamorgan", "Powys", "South Glamorgan", "West Glamorgan"]
 }, {
     "country": "Yemen",
     "states": ["Abyan", "Adan", "Ad Dali", "Al Bayda", "Al Hudaydah", "Al Jawf", "Al Mahrah", "Al Mahwit", "Amran", "Dhamar", "Hadramawt", "Hajjah", "Ibb", "Lahij", "Marib", "Sadah", "Sana", "Shabwah", "Taizz"]
