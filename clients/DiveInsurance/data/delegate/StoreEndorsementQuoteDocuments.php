@@ -192,7 +192,7 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
         }
         $this->diveStoreEndorsement($data, $temp, $persistenceService);
         $this->diveStoreEnorsementQuoteDocuments($data, $documents, $temp, $dest, $options, $previous_data, $endorsementOptions, $length);
-        $originalData['documents'] = is_string($data['documents']) ? json_decode($data['documents']) : $data['documents'];
+        $originalData['documents'] = is_string($data['documents']) ? json_decode($data['documents'], true) : $data['documents'];
         if (is_array($documents)) {
             $originalData['documents'] = array_merge($originalData['documents'], $documents);
         }
