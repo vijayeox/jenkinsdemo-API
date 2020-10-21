@@ -1235,11 +1235,13 @@ private function checkWorkflowData(&$data,$appUuid)
                 $entity = $entityData;
                 $entity['assoc_id'] = $assoc_id;
                 $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
-                if (!$entityRec || $entityRec['assoc_id'] != $assoc_id) {
+                if (!$entityRec) {
                     $result = $this->entityService->saveEntity($appId, $entity);
                 } else {
                     $entity['id'] = $entityRec['id'];
                     $entity['uuid'] = $entityRec['uuid'];
+                    if ($entityRec['assoc_id'] != $assoc_id)
+                       $result = $this->entityService->saveEntity($appId, $entity);
                 }
                 if(isset($entity['identifiers'])){
                     $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);
@@ -1259,7 +1261,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     }
                 }
                 if (isset($entity['child']) && $entity['child']) {
-                    $childEntityData = ['entity' => $entityData['child'], 'app' => [['uuid' => $appId]]];
+                    $childEntityData = ['entity' => $entityData['child'], 'app' => ['uuid' => $appId]];
                     $this->processEntity($childEntityData, $entity['id']);
                     $entityData['child'] = $childEntityData['entity'];
                 }
