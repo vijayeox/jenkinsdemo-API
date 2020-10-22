@@ -995,11 +995,7 @@
                                 "required": true
                             },
                             "key": "us_state",
-                            "conditional": {
-                                "show": true,
-                                "when": "country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "type": "select",
                             "indexeddb": {
                                 "filter": {}
@@ -1013,11 +1009,7 @@
                             "clearOnHide": false,
                             "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
                             "key": "non_us_state",
-                            "conditional": {
-                                "show": false,
-                                "when": "country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.country != 'United States of America' && data.country != 'Hong Kong' && data.country != 'St Kitts and Nevis' && data.country != 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "type": "textfield",
                             "input": true,
                             "hideOnChildrenHidden": false
@@ -1242,11 +1234,7 @@
                                 "required": true
                             },
                             "key": "physical_us_state",
-                            "conditional": {
-                                "show": true,
-                                "when": "physical_country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "type": "select",
                             "indexeddb": {
                                 "filter": {}
@@ -1260,11 +1248,7 @@
                             "clearOnHide": false,
                             "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
                             "key": "physical_non_us_state",
-                            "conditional": {
-                                "show": false,
-                                "when": "physical_country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.physical_country != 'United States of America' && data.physical_country != 'Hong Kong' && data.physical_country != 'St Kitts and Nevis' && data.physical_country != 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "type": "textfield",
                             "input": true,
                             "hideOnChildrenHidden": false
@@ -15546,7 +15530,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 97,
+    "_vid": 98,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15564,6 +15548,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-10-21T06:09:49.131Z",
+    "modified": "2020-10-22T08:13:36.096Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }
