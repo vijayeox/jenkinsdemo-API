@@ -1065,8 +1065,6 @@
                     }, {
                         "label": "State",
                         "tableView": true,
-                        "clearOnHide": false,
-                        "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
                         "key": "non_us_state",
                         "customConditional": "if(data.country != 'United States of America' && data.country != 'Hong Kong' && data.country != 'St Kitts and Nevis' && data.country != 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                         "type": "textfield",
@@ -1074,7 +1072,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "state",
-                        "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
+                        "calculateValue": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
                         "key": "state",
                         "type": "hidden",
                         "input": true,
@@ -1329,8 +1327,6 @@
                     }, {
                         "label": "State",
                         "tableView": true,
-                        "clearOnHide": false,
-                        "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
                         "key": "physical_non_us_state",
                         "customConditional": "if(data.physical_country != 'United States of America' && data.physical_country != 'Hong Kong' && data.physical_country != 'St Kitts and Nevis' && data.physical_country != 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                         "type": "textfield",
@@ -1338,7 +1334,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "physical_state",
-                        "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
+                        "calculateValue": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
                         "key": "physical_state",
                         "type": "hidden",
                         "input": true,
@@ -1675,7 +1671,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 200,
+    "_vid": 205,
     "title": "PADI Registration Consolidation",
     "display": "form",
     "access": [{
@@ -1689,6 +1685,6 @@
     "path": "padiregistrationconsolidation",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-21T08:06:55.909Z",
-    "modified": "2020-10-22T08:02:35.989Z",
+    "modified": "2020-10-22T12:06:17.232Z",
     "machineName": "testdivehub:padiRegistrationConsolidation"
 }

@@ -1017,7 +1017,7 @@
                             "label": "state",
                             "redrawOn": "data",
                             "customDefaultValue": "if(data.country == \"United States of America\"){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
-                            "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
+                            "calculateValue": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
                             "key": "state",
                             "type": "hidden",
                             "input": true,
@@ -1254,7 +1254,7 @@
                             "hideOnChildrenHidden": false
                         }, {
                             "label": "physical_state",
-                            "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
+                            "calculateValue": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
                             "key": "physical_state",
                             "type": "hidden",
                             "input": true,
@@ -15530,7 +15530,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 98,
+    "_vid": 99,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15548,6 +15548,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-10-22T08:13:36.096Z",
+    "modified": "2020-10-22T10:51:11.854Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }
