@@ -33,10 +33,10 @@ class BatchReport extends PolicyDocument
             $params['country'] =  $data['country'];
             $filter[] = array("field" => "country", "operator" => "eq", "value" => $params['country']);
         }
-        if(isset($data['state'])){
-            $params['state'] =  $data['state'];
+        
+            $params['state'] =  isset($data['state'])  ? $data['state'] : (is_null($data['state'])? "": $data['state']);
             $filter[] = array("field" => "state", "operator" => "eq", "value" => $params['state']);
-        }
+            $this->logger->info("state".json_encode($params));
         $params['workflowStatus'] = 'Completed';
         if($data['reportProductType'] == 'individualProfessionalLiability' || $data['reportProductType'] =='emergencyFirstResponse'){
             if($data['reportProductType'] == 'individualProfessionalLiability'){
@@ -89,7 +89,7 @@ class BatchReport extends PolicyDocument
         if(!empty($COIdocument)){
             $this->documentBuilder->mergePDF($COIdocument,$docDest);
             $data['documents']['BatchReport'] = $dest['relativePath']."COIbatchReport.pdf";
-            if(isset($data['jobStatus']) && ($data['jobStatus']=='In Force')){
+            if(isset($data['jobStatus']) && ($data['jobStatus']=='In Progress')){
                 $data['jobStatus'] = 'Completed';
             }  
         }
