@@ -98,7 +98,6 @@ class UploadArtifact extends React.Component {
             {this.infoMessage}
           </h5>
         </div>
-        <Suspense fallback={<div />}>
           <div className="col-md-10">
             <this.props.components.KendoFileUploader.Upload
               accept={this.fileExtension}
@@ -114,7 +113,6 @@ class UploadArtifact extends React.Component {
               }}
             />
           </div>
-        </Suspense>
         <div style={{ paddingTop: "10px" }}>
           <button
             type="button"
