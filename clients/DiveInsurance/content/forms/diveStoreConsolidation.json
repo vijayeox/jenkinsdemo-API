@@ -959,11 +959,7 @@
                                 "required": true
                             },
                             "key": "us_state",
-                            "conditional": {
-                                "show": true,
-                                "when": "country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "type": "select",
                             "indexeddb": {
                                 "filter": {}
@@ -977,11 +973,7 @@
                             "clearOnHide": false,
                             "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
                             "key": "non_us_state",
-                            "conditional": {
-                                "show": false,
-                                "when": "country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.country != 'United States of America' && data.country != 'Hong Kong' && data.country != 'St Kitts and Nevis' && data.country != 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "attributes": {
                                 "style": "margin-bottom:0px"
                             },
@@ -1207,11 +1199,7 @@
                                 "required": true
                             },
                             "key": "physical_us_state",
-                            "conditional": {
-                                "show": true,
-                                "when": "physical_country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "type": "select",
                             "indexeddb": {
                                 "filter": {}
@@ -1225,11 +1213,7 @@
                             "clearOnHide": false,
                             "customDefaultValue": "if(data.state !=\"\"){\n  value = data.state\n}",
                             "key": "physical_non_us_state",
-                            "conditional": {
-                                "show": false,
-                                "when": "physical_country",
-                                "eq": "United States of America"
-                            },
+                            "customConditional": "if(data.physical_country != 'United States of America' && data.physical_country != 'Hong Kong' && data.physical_country != 'St Kitts and Nevis' && data.physical_country != 'Turks and Caicos'){\n  show = true;\n}else{\n  show = false;\n}",
                             "type": "textfield",
                             "input": true,
                             "hideOnChildrenHidden": false
@@ -10974,7 +10958,7 @@
                         "defaultOpen": false,
                         "layoutFixed": false,
                         "enableRowGroups": false,
-                        "noFirstRow": false,
+                        "initEmpty": false,
                         "hideLabel": true,
                         "tableView": false,
                         "defaultValue": [{
@@ -10989,14 +10973,18 @@
                             "additionalInformation": "",
                             "doYouHaveAWrittenContract": "",
                             "additionalInsuredAttachments": [],
-                            "additionalInsuredAttachments1": []
+                            "additionalInsuredAttachments1": [],
+                            "effective_date": ""
                         }],
+                        "clearOnHide": false,
+                        "customDefaultValue": "value = data['additionalInsured']",
                         "validate": {
                             "required": true,
                             "minLength": 1
                         },
                         "key": "groupAdditionalInsured",
                         "type": "datagrid",
+                        "noFirstRow": false,
                         "input": true,
                         "components": [{
                             "clearOnHide": false,
@@ -14533,7 +14521,7 @@
         "input": false
     }],
     "revisions": "current",
-    "_vid": 101,
+    "_vid": 103,
     "title": "diveStoreConsolidation3",
     "display": "wizard",
     "access": [{
@@ -14551,6 +14539,6 @@
     "path": "divestoreconsolidation3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-07-28T11:29:44.022Z",
-    "modified": "2020-10-21T09:24:32.675Z",
+    "modified": "2020-10-22T08:13:43.668Z",
     "machineName": "testdivehub:diveStoreConsolidation3"
 }
