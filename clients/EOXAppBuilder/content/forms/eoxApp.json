@@ -14,6 +14,18 @@
         },
         "collapsible": false,
         "key": "page1",
+        "logic": [{
+            "name": "Allow Breadcrums",
+            "trigger": {
+                "type": "javascript",
+                "javascript": "console.log(data);\nresult = data.app.uuid.length > 0;"
+            },
+            "actions": [{
+                "name": "Set Breadcrum",
+                "type": "mergeComponentSchema",
+                "schemaDefinition": "schema = {breadcrumbClickable : true};"
+            }]
+        }],
         "type": "panel",
         "label": "App Info",
         "tableView": false,
@@ -235,6 +247,7 @@
                 "defaultValue": false,
                 "clearOnHide": false,
                 "key": "autostart",
+                "customConditional": "show = false;",
                 "type": "checkbox",
                 "input": true,
                 "hideOnChildrenHidden": false
@@ -1587,7 +1600,7 @@
                             "key": "pageContent",
                             "type": "form",
                             "input": true,
-                            "formRevision": 83,
+                            "formRevision": 88,
                             "hideOnChildrenHidden": false
                         }, {
                             "label": "Page Content",
@@ -1752,7 +1765,7 @@
         }]
     }],
     "revisions": "current",
-    "_vid": 441,
+    "_vid": 444,
     "title": "EOX App",
     "display": "wizard",
     "access": [{
@@ -1771,6 +1784,6 @@
     "path": "eoxapp",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-07-26T18:44:45.687Z",
-    "modified": "2020-10-21T05:51:26.170Z",
+    "modified": "2020-10-22T08:11:03.775Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
