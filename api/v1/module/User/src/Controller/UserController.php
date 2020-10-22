@@ -16,6 +16,8 @@ use Project\Service\ProjectService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Ddl\Column\Datetime;
 use Zend\View\Model\JsonModel;
+use Oxzion\InsertFailedException;
+use Oxzion\OxServiceException;
 
 class UserController extends AbstractApiController
 {
@@ -80,6 +82,8 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse($e->getMessage(), 403);
         } catch (ServiceException $e) {
             return $this->getErrorResponse($e->getMessage(), 404);
+        }catch (InsertFailedException $e) {
+            return $this->getErrorResponse($e->getMessage(), OxServiceException::ERR_CODE_PRECONDITION_FAILED);
         }
         if (is_string($count)) {
             $data['uuid'] = $count;

@@ -432,7 +432,7 @@ private function installApp($orgId, $yamlData, $path){
         $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
         if(count($roleResult) > 0){
             $this->deleteInfo('ox_role_privilege',$appId,$orgId);
-            $this->deleteData($roleResult,'ox_user_role','role_id','role_id'); //Both migration
+            $this->deleteData($roleResult,'ox_user_role','role_id','role_id');
             $this->deleteData($roleResult,'ox_role','id','role_id');
         }
         $result = $this->getDataByParams('ox_app_registry', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
@@ -650,8 +650,10 @@ private function installApp($orgId, $yamlData, $path){
                 FileUtils::rmDir($path . 'view/apps/eoxapps');
             }
             $srcIconPath = $path . '../../AppSource/'.$yamlData['app']['uuid'] .'/view/apps/eoxapps/';
-            FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
-            FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
+            if(is_dir($srcIconPath)){
+                FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
+                FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
+            }
         }
         $jsonData = json_decode(file_get_contents($metadataPath),true);
         $jsonData['name'] = $yamlData['app']['name'];
@@ -663,6 +665,7 @@ private function installApp($orgId, $yamlData, $path){
         if (isset($yamlData['app']['autostart'])) {
             $jsonData['autostart'] = $yamlData['app']['autostart'];
         }
+        $jsonData['singleton'] = true;
         file_put_contents($appName . '/metadata.json', json_encode($jsonData, JSON_PRETTY_PRINT));
         $packagePath = $appName . '/package.json';
         $jsonData = json_decode(file_get_contents($packagePath), true);
