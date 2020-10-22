@@ -316,7 +316,6 @@ class AdminPage extends React.Component {
                   : "Product"}
               </label>
               <div>
-            <React.Suspense fallback={<div>Loading...</div>}>
                 <this.OxzionGUIComponents.DropDown
                   filterable={false}
                   rawData={this.productList}
@@ -326,14 +325,12 @@ class AdminPage extends React.Component {
                   }}
                   filterable={false}
                 />
-          </React.Suspense>
               </div>
             </div>
           ) : null}
           <div className="col-md-6">
             <label style={{ fontSize: "20px" }}>Year</label>
             <div>
-            <React.Suspense fallback={<div>Loading...</div>}>
               <this.OxzionGUIComponents.DropDown
                 filterable={false}
                 rawData={this.state.yearList}
@@ -345,13 +342,11 @@ class AdminPage extends React.Component {
                 }}
                 filterable={false}
               />
-          </React.Suspense>
             </div>
           </div>
         </div>
         <div className="col-md-12 adminPageGrid">
           {this.state.product && this.state.year && (
-            <React.Suspense fallback={<div>Loading...</div>}>
             <this.OxzionGUIComponents.OX_Grid
               ref={this.parentGrid}
               appId={this.props.appId}
@@ -416,12 +411,9 @@ class AdminPage extends React.Component {
               }
               resizable={true}
             />
-        </React.Suspense>
           )}
         </div>
-        <React.Suspense fallback={<div>Loading...</div>}>
         <this.OxzionGUIComponents.Notification ref={this.notif} />
-        </React.Suspense>
         {this.state.windowVisible && this.windowCompoent}
       </div>
     );
