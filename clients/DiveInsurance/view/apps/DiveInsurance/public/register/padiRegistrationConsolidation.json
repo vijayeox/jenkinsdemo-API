@@ -1072,7 +1072,8 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "state",
-                        "calculateValue": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
+                        "redrawOn": "data",
+                        "calculateValue": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  value = data.us_state;\n} else {\n  if(!data.non_us_state || data.non_us_state == \"\"){\n    value = \" \"; \n  }else{\n    value = data.non_us_state;  \n  }\n}\n\n",
                         "key": "state",
                         "type": "hidden",
                         "input": true,
@@ -1117,7 +1118,8 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "zip",
-                        "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_zip;\n} else {\n  value = data.non_us_zip;\n}",
+                        "redrawOn": "data",
+                        "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_zip;\n} else {\n  if(!data.non_us_zip || data.non_us_zip == \"\"){\n    value = \" \"; \n  }else{\n    value = data.non_us_zip;  \n  }\n}",
                         "key": "zip",
                         "type": "hidden",
                         "input": true,
@@ -1334,7 +1336,8 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "physical_state",
-                        "calculateValue": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
+                        "redrawOn": "data",
+                        "calculateValue": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  value = data.physical_us_state;\n} else {\n  if(!data.physical_non_us_state || data.physical_non_us_state == \"\"){\n    value = \" \"; \n  }else{\n    value = data.physical_non_us_state;  \n  }\n}",
                         "key": "physical_state",
                         "type": "hidden",
                         "input": true,
@@ -1381,7 +1384,8 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "physical_zip",
-                        "calculateValue": "if(data.physical_country && data.physical_country == \"United States of America\"){\n  value = data.physical_us_zip;\n} else {\n  value = data.physical_non_us_zip;\n}",
+                        "redrawOn": "data",
+                        "calculateValue": "if(data.physical_country && data.physical_country == \"United States of America\"){\n  value = data.physical_us_zip;\n} else {\n  if(!data.physical_non_us_zip || data.physical_non_us_zip == \"\"){\n    value = \" \"; \n  }else{\n    value = data.physical_non_us_zip;  \n  }\n}",
                         "key": "physical_zip",
                         "type": "hidden",
                         "input": true,
@@ -1671,7 +1675,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 205,
+    "_vid": 209,
     "title": "PADI Registration Consolidation",
     "display": "form",
     "access": [{
@@ -1685,6 +1689,6 @@
     "path": "padiregistrationconsolidation",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-21T08:06:55.909Z",
-    "modified": "2020-10-22T12:06:17.232Z",
+    "modified": "2020-10-23T08:38:40.565Z",
     "machineName": "testdivehub:padiRegistrationConsolidation"
 }

@@ -1017,7 +1017,7 @@
                             "label": "state",
                             "redrawOn": "data",
                             "customDefaultValue": "if(data.country == \"United States of America\"){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
-                            "calculateValue": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  value = data.us_state;\n} else {\n  value = data.non_us_state;\n}",
+                            "calculateValue": "if(data.country == 'United States of America' || data.country == 'Hong Kong' || data.country == 'St Kitts and Nevis' || data.country == 'Turks and Caicos'){\n  value = data.us_state;\n} else {\n  if(!data.non_us_state || data.non_us_state == \"\"){\n    value = \" \"; \n  }else{\n    value = data.non_us_state;  \n  }\n}",
                             "key": "state",
                             "type": "hidden",
                             "input": true,
@@ -1065,7 +1065,8 @@
                             "hideOnChildrenHidden": false
                         }, {
                             "label": "zip",
-                            "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_zip;\n} else {\n  value = data.non_us_zip;\n}",
+                            "redrawOn": "data",
+                            "calculateValue": "if(data.country == \"United States of America\"){\n  value = data.us_zip;\n} else {\n  if(!data.non_us_zip || data.non_us_zip == \"\"){\n    value = \" \"; \n  }else{\n    value = data.non_us_zip;  \n  }\n}",
                             "key": "zip",
                             "type": "hidden",
                             "input": true,
@@ -1254,7 +1255,8 @@
                             "hideOnChildrenHidden": false
                         }, {
                             "label": "physical_state",
-                            "calculateValue": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  value = data.physical_us_state;\n} else {\n  value = data.physical_non_us_state;\n}",
+                            "redrawOn": "data",
+                            "calculateValue": "if(data.physical_country == 'United States of America' || data.physical_country == 'Hong Kong' || data.physical_country == 'St Kitts and Nevis' || data.physical_country == 'Turks and Caicos'){\n  value = data.physical_us_state;\n} else {\n  if(!data.physical_non_us_state || data.physical_non_us_state == \"\"){\n    value = \" \"; \n  }else{\n    value = data.physical_non_us_state;  \n  }\n}",
                             "key": "physical_state",
                             "type": "hidden",
                             "input": true,
@@ -1299,7 +1301,8 @@
                             "hideOnChildrenHidden": false
                         }, {
                             "label": "physical_zip",
-                            "calculateValue": "if(data.physical_country && data.physical_country == \"United States of America\"){\n  value = data.physical_us_zip;\n} else {\n  value = data.physical_non_us_zip;\n}",
+                            "redrawOn": "data",
+                            "calculateValue": "if(data.physical_country && data.physical_country == \"United States of America\"){\n  value = data.physical_us_zip;\n} else {\n  if(!data.physical_non_us_zip || data.physical_non_us_zip == \"\"){\n    value = \" \"; \n  }else{\n    value = data.physical_non_us_zip;  \n  }\n}",
                             "key": "physical_zip",
                             "type": "hidden",
                             "input": true,
@@ -15530,7 +15533,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 99,
+    "_vid": 102,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15548,6 +15551,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-10-22T10:51:11.854Z",
+    "modified": "2020-10-23T08:59:12.401Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }
