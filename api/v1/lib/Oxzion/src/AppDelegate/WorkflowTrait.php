@@ -44,4 +44,7 @@ trait WorkflowTrait
     public function getWorkflowInstanceDataFromFileId($fileId){
        return $this->workflowInstanceService->getWorkflowInstanceDataFromFileId($fileId);
     }
+    public function getWorkflowCompletedData($params,$filterparams = null) {
+        return $this->workflowInstanceService->getWorkflowCompletedData($params,$filterparams);
+    }
 }

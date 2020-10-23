@@ -339,6 +339,8 @@ class WorkflowInstanceService extends AbstractService
         }
         return count($result) == 1;
     }
+
+
     private function setupIdentityField($params)
     {
         $this->logger->info("setupIdentityField");
@@ -669,5 +671,67 @@ class WorkflowInstanceService extends AbstractService
             return 0;
         }
         return $result;
+    }
+    public function getWorkflowCompletedData($params,$filterParams){
+        $createdFilter = "";
+        $pageSize = " LIMIT 10";
+        $offset = " OFFSET 0";
+        $entityFilter = "";
+        $field = "";
+        $sort = "";
+        $queryParams['workflowStatus'] = $params['workflowStatus'];
+        try {
+            if (isset($params['gtCreatedDate'])) {
+                $createdFilter .= " of.date_created >= :gtCreatedDate AND ";
+                $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
+                $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
+            }
+            if (isset($params['ltCreatedDate'])) {
+                $createdFilter .= " of.date_created < :ltCreatedDate AND ";
+                $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
+                $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
+            }
+            if(isset($params['entityName'])){
+                $this->fileService->getEntityFilter($params,$entityFilter,$queryParams);
+                $entityFilter = rtrim($entityFilter, " AND ");
+            }
+            
+            $filterlogic = isset($filterParams[0]['filter']['logic']) ? $filterParams[0]['filter']['logic'] : " AND ";
+            $whereQuery = " $createdFilter $entityFilter $filterlogic";
+            $fromQuery = "from ox_file as of 
+                inner join ox_indexed_file_attribute fa on fa.file_id = of.id
+                inner join ox_field fd on fd.id = fa.field_id
+                inner join ox_workflow_instance wi on wi.file_id = of.id
+                inner join ox_app_entity as en on en.id = of.entity_id";
+            if(isset($filterParams)) {
+                $this->fileService->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
+            }
+            $whereQuery = rtrim($whereQuery, " AND ");
+            $where = trim($whereQuery) != "" ? "WHERE $whereQuery AND wi.status = :workflowStatus" : "";
+            $where = rtrim($where, " AND ");
+            $selectQuery = "SELECT DISTINCT SQL_CALC_FOUND_ROWS wi.completion_data  $field $fromQuery $where $sort $pageSize $offset";
+            $this->logger->info("Executing query - $selectQuery with params - " . json_encode($queryParams));
+            $resultSet = $this->executeQueryWithBindParameters($selectQuery, $queryParams)->toArray();
+            $countQuery = "SELECT FOUND_ROWS();";
+            $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
+            $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
+            if ($resultSet) {
+                $i = 0;
+                foreach ($resultSet as $file) {
+                    if ($file['completion_data']) {
+                        $content = json_decode($file['completion_data'], true);
+                        if ($content) {
+                            $resultSet[$i] = array_merge($file, $content);
+                        }
+                    }
+                    $i++;
+                }
+            }
+            return array('data' => $resultSet, 'total' => $countResultSet[0]['FOUND_ROWS()']);
+        }
+        catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
     }
 }

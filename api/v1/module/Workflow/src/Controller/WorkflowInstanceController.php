@@ -62,6 +62,31 @@ class WorkflowInstanceController extends AbstractApiController
         return $this->getSuccessResponseWithData($params, 200);
     }
 
+    public function completeWorkflowAction() {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $this->log->info(print_r($params, true));
+        try{
+            $response = $this->workflowInstanceService->getWorkflowCompletedData($params,$filterParams);
+            return $this->getSuccessResponseWithData($response);
+        }catch (ValidationException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (InvalidParameterException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Invalid Parameter", 406, $response);
+        } catch (EntityNotFoundException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Entity Not Found", 404, $response);
+        }catch (ServiceException $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 412, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => "Unexpected error occurred, please contact support"];
+            return $this->getErrorResponse("Errors", 500, $response);
+        }
+    }
     public function submitAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());

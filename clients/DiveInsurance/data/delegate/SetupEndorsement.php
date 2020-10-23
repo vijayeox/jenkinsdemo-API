@@ -63,6 +63,21 @@ class SetupEndorsement extends AbstractAppDelegate
                 if(isset($data['excessLiabilityPrice'])){
                     $policy['prevExcessLiabiltyPrice'] = $data['excessLiabilityPrice'];
                 }
+                if(isset($data['careerCoveragePrice'])){
+                    $policy['previous_careerCoveragePrice'] = $data['careerCoveragePrice'];
+                }
+                if(isset($data['techRecPrice'])){
+                    $policy['previous_techRecPrice'] = $data['techRecPrice'];
+                }
+                if(isset($data['scubaFitPrice'])){
+                    $policy['previous_scubaFitPrice'] = $data['scubaFitPrice'];
+                }
+                if(isset($data['cylinderPrice'])){
+                    $policy['previous_cylinderPrice'] = $data['cylinderPrice'];
+                }
+                if(isset($data['equipmentPrice'])){
+                    $policy['previous_equipmentPrice'] = $data['equipmentPrice'];
+                }
                 $this->endorsementRates($data,$policy,$privileges,$premiumRateCardDetails,$persistenceService);
                 array_unshift($data['previous_policy_data'],$policy);
                 $data['endorsementInProgress'] = true;

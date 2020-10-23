@@ -185,6 +185,19 @@ return [
                     ],
                 ],
             ],
+            'workflowInstanceCompletedData' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowinstance/complete',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'completeWorkflow',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

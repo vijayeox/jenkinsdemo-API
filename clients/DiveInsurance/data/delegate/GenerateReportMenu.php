@@ -58,14 +58,14 @@ class GenerateReportMenu extends AbstractAppDelegate
                     if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'individualProfessionalLiability'){
                         $value['productType'] = 'Individual Professional Liability';
                     }
-                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'emergencyFirstResponse'){
-                        $value['productType'] = 'Emergency First Response';
+                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'groupProfessionalLiability'){
+                        $value['productType'] = 'Group Professional Liability';
                     }
-                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'diveBoat'){
-                        $value['productType'] = 'Dive Boat';
+                    if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'diveStoreProperty'){
+                        $value['productType'] = 'Dive Store - Property';
                     }
                     if(isset($value['productType']) && !empty($value['productType']) && $value['productType'] == 'diveStore'){
-                        $value['productType'] = 'Dive Store';
+                        $value['productType'] = 'Dive Store - Liability';
                     }
                     $this->logger->info($value['productType']);
                 }
