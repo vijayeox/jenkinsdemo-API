@@ -33,11 +33,10 @@ class BatchReport extends PolicyDocument
             $params['country'] =  $data['country'];
             $filter[] = array("field" => "country", "operator" => "eq", "value" => $params['country']);
         }
-        if(!isset($data['state'])){
-            $params['state'] = "";
-        }
+    
         if(isset($data['state'])){
             if($data['country'] == "United States of America"){
+                $params['state'] = $data['state'];
                 $filter[] = array("field" => "state", "operator" => "eq", "value" => $params['state']);
             } 
         }
