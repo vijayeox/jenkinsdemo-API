@@ -1290,7 +1290,7 @@ class FileService extends AbstractService
         $createdFilter = "";
         $entityFilter = "";
         $whereQuery = "";
-        $this->getEntityFilter($params,$entityFilter,$queryParams);
+        $this->getFileFilters($params,$entityFilter,$queryParams);
         $workflowJoin = "";
         $workflowFilter = "";
         
@@ -1361,6 +1361,8 @@ class FileService extends AbstractService
             }
             return array('data' => $resultSet, 'total' => $countResultSet[0]['FOUND_ROWS()']);
         } catch (Exception $e) {
+            print_r($e->getMessage());
+            exit;
             throw new ServiceException($e->getMessage(), "app.mysql.error");
         }
     
@@ -1974,8 +1976,8 @@ class FileService extends AbstractService
             }
         }
         if (isset($params['assocId'])) {
-            if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId']))
-                $where .= " of.assoc_id = :assocId AND ";
+            $queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId']);
+            $where .= " of.assoc_id = :assocId AND ";
         }
         if (isset($params['gtCreatedDate'])) {
             $where .= " of.date_created >= :gtCreatedDate AND ";
