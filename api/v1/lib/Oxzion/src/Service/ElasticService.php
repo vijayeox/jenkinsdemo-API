@@ -58,6 +58,10 @@ class ElasticService
         return $this->client;
     }
 
+    public function setNoCore() {
+        $this->core = null;
+    }
+
     public function create($indexName,$fieldList,$settings) {
 
         $typemapper = ['int'=>'integer','text'=>'text'];
@@ -478,6 +482,15 @@ class ElasticService
 				return ;
 				break;
 		}
-	}
+    }
+
+    public function getMappings($index) {
+        $params = ['index' => $index];
+        return $this->client->indices()->getMapping($params);
+    }
+    
+    public function getIndexes() {
+        return  $this->client->cat()->indices(["index"=>"*_index"]);
+    }
 
 }

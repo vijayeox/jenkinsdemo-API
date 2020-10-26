@@ -397,6 +397,55 @@ class AppService extends AbstractService
         
     }
 
+    private function uninstallApp($orgId, $yamlData, $path){
+        try{
+            $this->beginTransaction();
+            $appId = $yamlData['app']['uuid'];
+            $this->removeRoleData($appId,$orgId);        
+            $this->removeOrgFiles($orgId);
+            $this->commit();
+        }catch(Exception $e){
+            $this->logger->info("there is an uninstallexception: ");
+            $this->rollback();
+            throw $e;        
+        }
+        
+    }
+    private function removeRoleData($appId,$orgId){
+        $appId = $this->getIdFromUuid('ox_app',$appId);
+        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+        $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
+        if(count($roleResult) > 0){
+            $this->deleteInfo('ox_role_privilege',$appId,$orgId);
+            $this->deleteData($roleResult,'ox_user_role','role_id','role_id');
+            $this->deleteData($roleResult,'ox_role','id','role_id');
+        }
+        $result = $this->getDataByParams('ox_app_registry', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
+        if(count($result) > 0){
+            $this->deleteInfo('ox_app_registry',$appId,$orgId);
+        }
+    }
+
+    private function deleteData($result,$tableName,$columnName,$uniqueColumn){
+        $appSingleArray = array_unique(array_column($result,$uniqueColumn));
+        $deleteQuery = "DELETE FROM $tableName where $columnName in ('" . implode("','", $appSingleArray) . "')";
+        $this->logger->info("QUERY---- $deleteQuery");
+        $deleteResult = $this->executeQuerywithParams($deleteQuery); 
+    }
+
+    private function deleteInfo($tableName,$appId,$orgId){
+        $deleteQuery = "DELETE FROM $tableName WHERE app_id=:appId and org_id=:orgId";
+        $deleteParams = array('appId' => $appId,'orgId' => $orgId);
+        $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
+    }
+
+    private function removeOrgFiles($orgId){
+        if ($orgId) {
+            $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
+            FileUtils::rmDir($link);
+        }
+    }
+
     public function processJob(&$yamlData) {
         $this->logger->info("Deploy App - Process Job with YamlData ");
         if(isset($yamlData['job'])){
@@ -585,17 +634,23 @@ class AppService extends AbstractService
             if(is_dir($path . 'view/apps/eoxapps')){
                 FileUtils::rmDir($path . 'view/apps/eoxapps');
             }
+            $srcIconPath = $path . '../../AppSource/'.$yamlData['app']['uuid'] .'/view/apps/eoxapps/';
+            if(is_dir($srcIconPath)){
+                FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
+                FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
+            }
         }
         $jsonData = json_decode(file_get_contents($metadataPath),true);
         $jsonData['name'] = $yamlData['app']['name'];
         $jsonData['appId'] = $yamlData['app']['uuid'];
-        $jsonData['title']['en_EN'] = $yamlData['app']['name'] == 'EOXAppBuilder' ? 'AppBuilder' : $yamlData['app']['title'];
+        $jsonData['title']['en_EN'] = ($yamlData['app']['name'] == 'EOXAppBuilder') ? 'AppBuilder' : isset($yamlData['app']['title']) ? $yamlData['app']['title']: $yamlData['app']['name'];
         if (isset($yamlData['app']['description'])) {
             $jsonData['description']['en_EN'] = $yamlData['app']['description'];
         }
         if (isset($yamlData['app']['autostart'])) {
             $jsonData['autostart'] = $yamlData['app']['autostart'];
         }
+        $jsonData['singleton'] = true;
         file_put_contents($appName . '/metadata.json', json_encode($jsonData, JSON_PRETTY_PRINT));
         $packagePath = $appName . '/package.json';
         $jsonData = json_decode(file_get_contents($packagePath), true);
@@ -1174,11 +1229,13 @@ private function checkWorkflowData(&$data,$appUuid)
                 $entity = $entityData;
                 $entity['assoc_id'] = $assoc_id;
                 $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
-                if (!$entityRec || $entityRec['assoc_id'] != $assoc_id) {
+                if (!$entityRec) {
                     $result = $this->entityService->saveEntity($appId, $entity);
                 } else {
                     $entity['id'] = $entityRec['id'];
                     $entity['uuid'] = $entityRec['uuid'];
+                    if ($entityRec['assoc_id'] != $assoc_id)
+                       $result = $this->entityService->saveEntity($appId, $entity);
                 }
                 if(isset($entity['identifiers'])){
                     $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);
@@ -1198,7 +1255,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     }
                 }
                 if (isset($entity['child']) && $entity['child']) {
-                    $childEntityData = ['entity' => $entityData['child'], 'app' => [['uuid' => $appId]]];
+                    $childEntityData = ['entity' => $entityData['child'], 'app' => ['uuid' => $appId]];
                     $this->processEntity($childEntityData, $entity['id']);
                     $entityData['child'] = $childEntityData['entity'];
                 }
@@ -1233,15 +1290,21 @@ private function checkWorkflowData(&$data,$appUuid)
     private function cleanApplicationDescriptorData($descriptorData)
     {
         if (isset($descriptorData["entity"])) {
-            $descriptorData["entity"] = array_map(function ($entity) {
-                if (isset($entity["formFieldsValidationExcel"]) && empty($entity['formFieldsValidationExcel'])) {
-                    unset($entity["formFieldsValidationExcel"]);
-                }
-                if (isset($entity['field']) && array_key_exists('name',$entity['field'][0])&& empty($entity['field'][0]['name'])) {
-                    unset($entity['field']);
-                }
-                return $entity;
-            }, $descriptorData["entity"]);
+            $descEntity = [];
+            foreach ($descriptorData["entity"] as &$value) {
+                if (isset($value["formFieldsValidationExcel"]) && empty($value['formFieldsValidationExcel'])) {
+                            unset($value["formFieldsValidationExcel"]);
+                        }
+                if (isset($value['field']) && array_key_exists('name',$value['field'][0])&& empty($value['field'][0]['name'])) {
+                            unset($value['field']);
+                        }
+
+                if (isset($value['name']) && !empty($value['name'])) {
+                    array_push($descEntity,$value); 
+                }                 
+                                             
+            }
+            $descriptorData["entity"] = $descEntity;
         }
         if (isset($descriptorData["menu"])) {
             $descriptorData["menu"] = array_map(function ($menu) {

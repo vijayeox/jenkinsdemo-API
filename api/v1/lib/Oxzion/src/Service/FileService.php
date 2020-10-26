@@ -93,6 +93,7 @@ class FileService extends AbstractService
         $data['form_id'] = $formId;
         $data['data'] = $jsonData;
         $this->setupEntityFields($entityId,$data);
+        $data['assoc_id'] = isset($oldData['bos']['assoc_id']) ? $oldData['bos']['assoc_id'] : null;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File($this->table);
         if(isset($data['id'])){
@@ -1519,6 +1520,7 @@ class FileService extends AbstractService
 
     public function cleanData($params)
     {
+        unset($params['bos']);
         unset($params['workflowInstanceId']);
         unset($params['activityInstanceId']);
         unset($params['workflow_instance_id']);
@@ -1956,7 +1958,41 @@ class FileService extends AbstractService
         return $sort;
     }
 
-    public function getEntityFilter(&$params,&$entityFilter,&$queryParams){
+    public function getFileFilters(&$params, &$where, &$queryParams){
+        if (isset($params['entityName'])) {
+            if(is_array($params['entityName'])){
+                $where .= " (";
+                foreach (array_values($params['entityName']) as $key => $entityName) {
+                    $where .= "en.name = :entityName".$key." OR ";
+                    $queryParams['entityName'.$key] = $entityName;
+                }
+                $where = rtrim($where, " OR ");
+                $where .= ") AND ";
+            } else {
+                $where .= " en.name = :entityName AND ";
+                $queryParams['entityName'] = $params['entityName'];
+            }
+        }
+        if (isset($params['assocId'])) {
+            if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId']))
+                $where .= " of.assoc_id = :assocId AND ";
+        }
+        if (isset($params['gtCreatedDate'])) {
+            $where .= " of.date_created >= :gtCreatedDate AND ";
+            $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
+            $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
+        }
+        if (isset($params['ltCreatedDate'])) {
+            $where .= " of.date_created < :ltCreatedDate AND ";
+            $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
+            /* modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then
+             the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
+             till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
+            $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
+        }
+    }
+
+    public function getEntityFilter(&$params, &$entityFilter, &$queryParams){
         if (isset($params['entityName'])) {
             if(is_array($params['entityName'])){
                 $entityFilter = " (";
@@ -1968,11 +2004,6 @@ class FileService extends AbstractService
             } else {
                 $entityFilter = " en.name = :entityName AND ";
                 $queryParams['entityName'] = $params['entityName'];
-            }
-            if (isset($params['assocId'])) {
-                if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId'])) {
-                    $entityFilter .= " of.assoc_id = :assocId AND ";
-                }
             }
         }
     }

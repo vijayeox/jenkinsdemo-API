@@ -96,6 +96,20 @@ return [
                     ],
                 ],
             ],
+            'getDSDetails' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/analytics/datasource/:datasourceUuid/getdetails',
+                    'defaults' => [
+                        'controller' => Controller\DataSourceController::class,
+                        'method' => 'GET',
+                        'action' => 'getDetails',
+                        'access' => [
+                            'getDetails' => 'MANAGE_DATASOURCE_WRITE',
+                        ],
+                    ],
+                ],
+            ],
             'visualization' => [
                 'type' => Segment::class,
                 'options' => [

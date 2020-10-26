@@ -44,11 +44,13 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 			if ($result['type']=='group') {
 				$finalResult['data'] = $this->flattenResult($result['data'],$query);
 			} else {
-				if (isset($result['data']['value'])) {
-					$finalResult['data']  = $result['data']['value'];
-				} else {
-					$finalResult['data']  = $result['data'];
-				}
+                if (isset($result['data'])) {
+                    if (isset($result['data']['value'])) {
+                        $finalResult['data']  = $result['data']['value'];
+                    } else {
+                        $finalResult['data']  = $result['data'];
+                    }
+                }
 				if (isset($query['select'])) {
 					   $finalResult['meta']['list'] = $query['select'];
 				}
@@ -265,6 +267,29 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		return $finalresult;
 	}
 
+	public function getFields($index) {
+		$elasticService = $this->elasticService;
+		$data = $elasticService->getMappings($index);
+		$fields = $data[$index]['mappings']['properties'];
+		return $fields;
+	}
+
+	public function getDataEntities() {
+		$elasticService = $this->elasticService;
+		$data = $elasticService->getIndexes();
+		$indexes = array_column($data,'index');
+		return $indexes;
+	}
+
+	public function getValues($index,$field) {
+		if (substr($index,-6)=="_index") {
+			$index = substr($index,0,strlen($index)-6);
+		}
+		$this->elasticService->setNoCore();
+		$data = $this->getData($index,null,['group'=>$field]);
+		$values = array_column($data['data'],$field);
+		return $values;
+	}
 
 }
 ?>

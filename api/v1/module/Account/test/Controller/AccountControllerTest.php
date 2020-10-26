@@ -66,6 +66,20 @@ class AccountControllerTest extends ControllerTest
         
     }
 
+    public function testGetUserOrgList()
+    {
+        $this->initAuthToken($this->employeeUser);
+        $this->dispatch('/organization', 'GET');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['uuid'], '53012471-2863-4949-afb1-e69b0891c98a');
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
+        $this->assertEquals($content['total'], 1);
+    }
+
     public function testGetListWithQuery()
     {
         $this->initAuthToken($this->adminUser);
@@ -169,7 +183,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 34);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 33);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 10);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 8);
         $this->assertEquals($content['status'], 'success');
@@ -273,7 +287,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['employeeId'], NULL);
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 34);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 33);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 10);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 8);
         $this->assertEquals($content['status'], 'success');

@@ -133,11 +133,11 @@ class WidgetService extends AbstractService
             $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('account_id' => $data['account_id']));
             $widget->setForeignKey('visualization_id', $visualizationId);
         }
-        if (isset($data['configuration']) && is_array($data['configuration'])) {
-            $data['configuration'] =  json_encode($data['configuration']);
+        if (is_array($data['configuration'])) {
+            $data['configuration'] = json_encode($data['configuration']);
         }
-        if (isset($data['expression']) && is_array($data['expression'])) {
-            $data['expression'] =  json_encode($data['expression']);
+        if (is_array($data['expression'])) {
+            $data['expression'] = json_encode($data['expression']);
         }
         $widget->assign($data); 
 
@@ -412,6 +412,8 @@ class WidgetService extends AbstractService
                 if (is_numeric($value)) {
                     $key2=strtolower($key2);
                     $m->evaluate("$key2 = $value");
+                } else {
+                    $m->evaluate("$key2 = 0");
                 }
             }
             $calculated = $m->evaluate($expression);

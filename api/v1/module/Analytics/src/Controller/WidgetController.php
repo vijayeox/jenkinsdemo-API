@@ -5,8 +5,6 @@ namespace Analytics\Controller;
 use Analytics\Model\Widget;
 use Exception;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ValidationException;
-use Oxzion\VersionMismatchException;
 
 class WidgetController extends AbstractApiController
 {
@@ -42,8 +40,7 @@ class WidgetController extends AbstractApiController
             $generated = $this->widgetService->createWidget($data);
             $data['newWidgetUuid'] = $generated['uuid'];
             return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -64,8 +61,7 @@ class WidgetController extends AbstractApiController
             $generated = $this->widgetService->updateWidget($uuid, $data);
             $data['version'] = $generated['version'];
             return $this->getSuccessResponseWithData($data, 200);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -77,8 +73,7 @@ class WidgetController extends AbstractApiController
         try {
             $this->widgetService->deleteWidget($uuid, $params['version']);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -189,11 +184,9 @@ class WidgetController extends AbstractApiController
             $result = $this->widgetService->copyWidget($params);
             $data['newWidgetUuid'] = $result['uuid'];
             return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 }
-

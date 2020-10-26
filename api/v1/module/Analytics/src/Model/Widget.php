@@ -2,10 +2,11 @@
 
 namespace Analytics\Model;
 
-use Oxzion\Type;
 use Oxzion\Model\Entity;
+use Oxzion\Type;
 
-class Widget extends Entity { 
+class Widget extends Entity
+{
     protected static $MODEL = [
         'id' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
         'uuid' =>               ['type' => Type::UUID,      'readonly' => TRUE ,    'required' => FALSE],
@@ -22,7 +23,8 @@ class Widget extends Entity {
         'exclude_overrides' => ['type' => Type::STRING,   'readonly' => FALSE ,   'required' => FALSE]
     ];
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 }

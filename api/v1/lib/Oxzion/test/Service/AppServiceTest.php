@@ -15,6 +15,7 @@ use Oxzion\App\AppArtifactNamingStrategy;
 use Oxzion\Model\App;
 use Symfony\Component\Yaml\Yaml;
 use AppTest\AppTestSetUpTearDownHelper;
+use Oxzion\ValidationException;
 
 class AppServiceTest extends AbstractServiceTest
 {
@@ -316,6 +317,20 @@ class AppServiceTest extends AbstractServiceTest
         $resultSet = new ResultSet();
         $result = $resultSet->initialize($result)->toArray();
         $this->assertEquals($result[0]['count'], 0);
+    }
+
+    public function testProcessFormWithNoEntity()
+    {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'form' => array(array('name' => 'PADI Verification', 'uuid' => 'd2ed4200-9131-4671-b0e0-de3e27c3f610', 'description' => 'Page for CSR to verify PADI details', 'template_file' => 'dummypage.json','entity' => '')));        
+        $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        try{
+            $appService->processForm($data, $path);
+            $this->fail('Expected ValidationException.');
+        }catch(ValidationException $e) {
+            $this->assertNotNull($e);
+        }
     }
 
     public function testProcessWorkflow()

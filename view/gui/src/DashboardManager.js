@@ -46,7 +46,8 @@ class DashboardManager extends React.Component {
     this.refresh = React.createRef();
     this.notif = React.createRef();
     this.restClient = this.core.make('oxzion/restClient');
-    this.deleteDashboard = this.deleteDashboard.bind(this)
+    this.deleteDashboard = this.deleteDashboard.bind(this);
+    this.myRef = React.createRef();
   }
 
   componentDidMount() {
@@ -55,6 +56,8 @@ class DashboardManager extends React.Component {
     } else {
       this.fetchDashboards(false)
     }
+
+    this.myRef.current.scrollTo(100, 100);
   }
 
   async getUserDetails(uuid) {
@@ -90,10 +93,117 @@ class DashboardManager extends React.Component {
     let dash = response.data.dashboard;
     let dashboardFilter = dash.filter_configuration != "" ? JSON.parse(dash.filter_configuration) : []
     dashData.push({ dashData: response.data });
+
+    let extractedFilterValues = this.extractFilterValues(dashboardFilter);
+    let preapredExtractedFilterValue = null
+    if (extractedFilterValues && extractedFilterValues.length > 0) {
+      preapredExtractedFilterValue = extractedFilterValues[0]
+      for (let i = 1; i < extractedFilterValues.length; i++) {
+        preapredExtractedFilterValue = this.preparefilter(preapredExtractedFilterValue, extractedFilterValues[i])
+
+      }
+    }
     inputs["dashname"] = dash
-    dashboardStack.push({ data: dash, drilldownDashboardFilter: [] })
-    this.setState({ dashboardBody: "", inputs, uuid: uuid, dashList: dashData, filterConfiguration: dashboardFilter, dashboardStack: dashboardStack })
+    dashboardStack.push({ data: dash, drilldownDashboardFilter: preapredExtractedFilterValue })
+    this.setState({ dashboardBody: "", inputs, uuid: uuid, dashList: dashData, filterConfiguration: dashboardFilter, dashboardStack: dashboardStack, drilldownDashboardFilter: preapredExtractedFilterValue })
   }
+
+  preparefilter(filter1, filter2) {
+    var filter = []
+    filter.push(filter1)
+    filter.push("AND")
+    filter.push(filter2)
+    return filter
+  }
+
+  extractFilterValues(dashboardFilter) {
+    let filterParams = []
+    dashboardFilter.map((filter, index) => {
+      let filterarray = []
+      if (filter["dataType"] == "date") {
+        var startDate = filter["startDate"]
+        var endDate = null
+        if (filter["startDate"] && filter["endDate"]) {
+          //convert startDate object to string
+          if (typeof startDate !== "string") {
+            startDate = filter["startDate"]
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          } else if (new Date(startDate)) {
+            startDate = new Date(filter["startDate"])
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          }
+
+          //single date passed
+          if (filter["operator"] === "today") {
+            filter["operator"] = "=="
+          }
+          if (filter["operator"] === "monthly" || filter["operator"] === "yearly" || filter["operator"] === "mtd" || filter["operator"] === "ytd") {
+            filter["operator"] = "gte&&lte"
+          }
+
+          //date range received
+          if (filter["operator"] == "gte&&lte") {
+            endDate = filter["endDate"]
+            if (typeof endDate !== "string") {
+              endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
+            } else if (new Date(endDate)) {
+              endDate = new Date(endDate)
+              endDate = "date:" + endDate.getFullYear() + "-" + (("0" + (endDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + endDate.getDate()).slice(-2))
+            }
+            //prepare startDate array
+            filterarray.push(filter["field"])
+            filterarray.push(">=")
+            filterarray.push(startDate)
+            filterParams.push(filterarray)
+
+
+            //prepare endDate array
+            filterarray = []
+            filterarray.push(filter["field"])
+            filterarray.push("<=")
+            filterarray.push(endDate)
+            filterParams.push(filterarray)
+          } else {
+            //if date is not a range
+            filterarray = []
+            filterarray.push(filter["field"])
+            filterarray.push(filter["operator"])
+            if (typeof startDate !== "string") {
+              startDate = filter["startDate"]
+              startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+            } else if (new Date(startDate)) {
+              startDate = new Date(filter["startDate"])
+              startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+            }
+            filterarray.push(startDate)
+            filterParams.push(filterarray)
+
+          }
+        } else {
+          filterarray.push(filter["field"])
+          filterarray.push(filter["operator"])
+          if (typeof startDate !== "string") {
+            startDate = filter["startDate"]
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          } else if (new Date(startDate)) {
+            startDate = new Date(filter["startDate"])
+            startDate = "date:" + startDate.getFullYear() + "-" + (("0" + (startDate.getMonth() + 1)).slice(-2)) + "-" + (("0" + startDate.getDate()).slice(-2))
+          }
+          filterarray.push(startDate)
+          filterParams.push(filterarray)
+        }
+      } else {
+        filterarray.push(filter["field"])
+        filterarray.push(filter["operator"])
+        filterarray.push(filter["value"]["selected"])
+        if (filter["value"].hasOwnProperty("selected")) {
+          filterParams.push(filterarray)
+        }
+      }
+    })
+    return filterParams
+  }
+
   async fetchDashboards(isRefreshed) {
     let that = this
     let helper = this.restClient;
@@ -103,6 +213,7 @@ class DashboardManager extends React.Component {
     let response = await helper.request('v1', '/analytics/dashboard?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":0}]', {}, 'get');
 
     if (response.data.length > 0) {
+
       that.setState({ dashList: response.data, uuid: '' })
       if (inputs["dashname"] != undefined) {
         //setting value of the dropdown after fetch
@@ -123,9 +234,23 @@ class DashboardManager extends React.Component {
         response.data.map(dash => {
           if (dash.isdefault === "1") {
             let dashboardFilter = dash.filter_configuration != "" ? JSON.parse(dash.filter_configuration) : []
+            // if(dashboardStack.length==0){
+            //   dashboardStack.push({ data: dash, drilldownDashboardFilter: dashboardFilter, filterConfiguration: dashboardFilter })
+            // }
             inputs["dashname"] = dash
-            !isRefreshed && dashboardStack.push({ data: dash, drilldownDashboardFilter: [] })
-            that.setState({ dashboardBody: "", inputs, dashList: response.data, uuid: dash.uuid, exportConfiguration: dash.export_configuration, filterConfiguration: dashboardFilter, dashboardStack: dashboardStack })
+            let extractedFilterValues = this.extractFilterValues(dashboardFilter);
+            let preapredExtractedFilterValue = null
+            if (extractedFilterValues && extractedFilterValues.length > 0) {
+              preapredExtractedFilterValue = extractedFilterValues[0]
+              for (let i = 1; i < extractedFilterValues.length; i++) {
+                preapredExtractedFilterValue = this.preparefilter(preapredExtractedFilterValue, extractedFilterValues[i])
+
+              }
+            }
+            !isRefreshed && dashboardStack.push({ data: dash, drilldownDashboardFilter: preapredExtractedFilterValue })
+            that.setState({ dashboardBody: "", inputs, dashList: response.data, uuid: dash.uuid, exportConfiguration: dash.export_configuration, filterConfiguration: dashboardFilter, dashboardStack: dashboardStack, drilldownDashboardFilter: preapredExtractedFilterValue })
+
+
           }
         })
       }
@@ -249,14 +374,25 @@ class DashboardManager extends React.Component {
       value = JSON.parse(event.value)
       element != undefined && element.classList.add("hide-dash-editor")
       //resetting dashboard filters on load
-      this.setState({ dashboardFilter: [],exportConfiguration:value.export_configuration })
+      let dashboardFilterConf = value["filter_configuration"] != "" ? JSON.parse(value["filter_configuration"]) : []
+      this.setState({ dashboardFilter: dashboardFilterConf, exportConfiguration: value.export_configuration })
     } else {
       name = event.target.name
       value = event.target.value
     }
     inputs[name] = value
     let dashboardFilter = value["filter_configuration"] != "" ? JSON.parse(value["filter_configuration"]) : []
-    dashboardStack.push({ data: value, drilldownDashboardFilter: [], filterConfiguration: dashboardFilter })
+    let extractedFilterValues = this.extractFilterValues(dashboardFilter);
+    let preapredExtractedFilterValue = null
+    if (extractedFilterValues && extractedFilterValues.length > 1) {
+      preapredExtractedFilterValue = extractedFilterValues[0]
+      for (let i = 1; i < extractedFilterValues.length; i++) {
+        preapredExtractedFilterValue = this.preparefilter(preapredExtractedFilterValue, extractedFilterValues[i])
+
+      }
+    }
+
+    dashboardStack.push({ data: value, drilldownDashboardFilter: preapredExtractedFilterValue, filterConfiguration: dashboardFilter })
 
     this.setState({ inputs: inputs, uuid: value["uuid"], filterConfiguration: dashboardFilter, showFilter: false, drilldownDashboardFilter: event.drilldownDashboardFilter, dashboardStack: dashboardStack })
   }
@@ -302,8 +438,8 @@ class DashboardManager extends React.Component {
     if (response.status == "success") {
       console.log(response.data.result)
       let data = response.data.result
-      let filename=this.state.inputs["dashname"]["name"]
-      exportFromJSON({ data, fileName:filename, exportType })
+      let filename = this.state.inputs["dashname"]["name"]
+      exportFromJSON({ data, fileName: filename, exportType })
     } else {
       this.notif.current.notify(
         "Could not fetch data",
@@ -316,7 +452,7 @@ class DashboardManager extends React.Component {
 
   render() {
     return (
-      <div className="dashboard">
+      <div ref={this.myRef} className="dashboard">
         <Notification ref={this.notif} />
         <Flippy
           flipDirection="horizontal" // horizontal or vertical
@@ -325,8 +461,6 @@ class DashboardManager extends React.Component {
           style={{ width: '100%', height: '100vh' }} /// these are optional style, it is not necessary
         >
           <FrontSide>
-
-
             <div id="filter-form-container" className="disappear">
               {Array.isArray(this.state.filterConfiguration) && this.state.filterConfiguration.length &&
                 <DashboardFilter

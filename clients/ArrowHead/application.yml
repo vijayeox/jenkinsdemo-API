@@ -123,6 +123,10 @@ entity:
                 name: documents
                 text: Documents
                 data_type: document
+        child:
+            -
+                name: 'Policy Claims'
+                override_data: true
 pages:
     -
         page_name: AgentHomePage.yml

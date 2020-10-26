@@ -642,7 +642,7 @@ class AppArtifactControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals('error', $content['status']);
         $this->assertEquals(500, $content['errorCode']);
-        $this->assertEquals('Database insert failed.', $content['message']);
+        $this->assertEquals('Duplicate Record.', $content['message']);
 
         //Take application snapshot after running the test.
         $appRecordSetBeforeTest = $this->executeQueryTest($query);
