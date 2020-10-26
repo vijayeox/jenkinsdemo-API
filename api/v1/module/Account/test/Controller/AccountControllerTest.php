@@ -69,7 +69,7 @@ class AccountControllerTest extends ControllerTest
     public function testGetUserOrgList()
     {
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/organization', 'GET');
+        $this->dispatch('/account', 'GET');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
