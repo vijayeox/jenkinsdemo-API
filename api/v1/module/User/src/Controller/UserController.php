@@ -13,8 +13,7 @@ use Oxzion\Service\EmployeeService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Ddl\Column\Datetime;
 use Zend\View\Model\JsonModel;
-use Oxzion\InsertFailedException;
-use Oxzion\OxServiceException;
+use Exception;
 
 class UserController extends AbstractApiController
 {
@@ -68,25 +67,11 @@ class UserController extends AbstractApiController
         try {
             $params = $this->params()->fromRoute();
             $this->userService->createUser($params, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            /*
-            PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
-            Not found = 406
-            While this is not exactly not found we don't have a better HTML error code for create.
-             */
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }catch (InsertFailedException $e) {
-            return $this->getErrorResponse($e->getMessage(), OxServiceException::ERR_CODE_PRECONDITION_FAILED);
-        }
-        if (is_string($count)) {
-            $data['uuid'] = $count;
             return $this->getSuccessResponseWithData($data, 201);
-        }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 201);
         /*
     PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
