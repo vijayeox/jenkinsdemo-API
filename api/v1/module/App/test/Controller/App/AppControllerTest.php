@@ -588,12 +588,6 @@ class AppControllerTest extends ControllerTest
         return $path."/";
     }
 
-    private function setupAppFolder($path){
-        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $appData = $appService->loadAppDescriptor($path);
-        $path = $appService->setupOrUpdateApplicationDirectoryStructure($appData);
-        return $path."/";
-    }
     public function testDeployAppWithWrongNameInDatabase()
     {
         $this->setUpTearDownHelper->setupAppDescriptor('application9.yml');
