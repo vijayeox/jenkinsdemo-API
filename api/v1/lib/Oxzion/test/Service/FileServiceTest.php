@@ -412,13 +412,9 @@ class FileServiceTest extends AbstractServiceTest
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('entityName' => 'entity1', 'assocId' => '2');
         $filterParams = null;
-        try{
-            $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
-            $this->fail("ServiceException should have been thrown with code \'app.mysql.error\'");
-        }
-        catch (ServiceException $e){
-            $this->assertEquals("app.mysql.error", $e->getMessageCode());
-        }
+        $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
+        $this->assertEmpty($result['data']);
+        
     }
 
     public function testGetFileListWithEntityNameCheckAndAssocIdPositive() {
