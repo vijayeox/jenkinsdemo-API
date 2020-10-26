@@ -549,6 +549,10 @@ class AccountService extends AbstractService
                     left join ox_organization as porg on porg.id = org.parent_id
                     left join ox_account as pacct on pacct.organization_id = porg.id
                     left join ox_address as oa on org.address_id = oa.id";
+        if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE')) {
+            $from .= " JOIN ox_account_user as oxuo on oxuo.account_id = og.id ";
+            $where = " WHERE oxuo.user_id =". AuthContext::get(AuthConstants::USER_ID);
+        }
         $cntQuery = "SELECT count(og.id) " . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
