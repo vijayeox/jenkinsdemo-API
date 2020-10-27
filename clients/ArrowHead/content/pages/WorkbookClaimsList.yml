@@ -4,11 +4,9 @@ content:
     -
         type: Document
         content:
-            jsx: '  {
-                <h5 className="totalClaimsAmount">
+            jsx: '<h5 className="totalClaimsAmount">
                   Total Claims Amount {sumTotal}
-                </h5>
-              }'
+                </h5>'
             params:
                 sumTotal: 'parseFloat(data.sumTotal).toLocaleString("en-US", {style: "currency", currency: "USD",})'
             url: 'delegate/ClaimsSummation?assocId={{parentFileId}}'
@@ -36,13 +34,6 @@ content:
                     - 
                         title: Account Name
                         field: namedInsured
-                        locked: true
-                        cellOptions:
-                            textAlign: "center"
-                            verticalAlign: "center"
-                            background: "#55b089"
-                            color: "#212529"
-                            bold: true
                     -
                         title: Lookup Code
                         field: lookupCode
@@ -97,27 +88,22 @@ content:
                     -
                         title: "Paid Amount"
                         field: paid
-                        cell: 'data.paid.toLocaleString("en-US", {style: "currency", currency: "USD",})'
                         filter: numeric
                     - 
                         title: "Reserve Amount"
                         field: reserve
-                        cell: 'data.reserve.toLocaleString("en-US", {style: "currency", currency: "USD",})'
                         filter: numeric
                     -
                         title: "Subro/Salvage/Recovery"
                         field: subro
-                        cell: 'data.subro.toLocaleString("en-US", {style: "currency", currency: "USD",})'
                         filter: numeric
                     - 
                         title: "LAE"
                         field: lae
-                        cell: 'data.lae.toLocaleString("en-US", {style: "currency", currency: "USD",})'
                         filter: numeric
                     - 
                         title: Total Amount
                         field: total
-                        cell: 'data.total.toLocaleString("en-US", {style: "currency", currency: "USD",})'
                         filter: numeric
                     - 
                         title: Type (Level 1)

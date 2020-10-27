@@ -59,11 +59,9 @@ content:
             -
                 type: Document
                 content:
-                    jsx: '  {
-                        <h5 className="totalClaimsAmountMini">
+                    jsx: '<h5 className="totalClaimsAmountMini">
                         Total Claims Amount {sumTotal}
-                        </h5>
-                    }'
+                        </h5>'
                     params:
                         sumTotal: 'parseFloat(data.sumTotal).toLocaleString("en-US", {style: "currency", currency: "USD",})'
                     url: 'delegate/ClaimsSummation?assocId={{parentFileId}}'
