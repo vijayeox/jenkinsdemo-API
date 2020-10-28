@@ -901,7 +901,13 @@
                                 "required": true
                             },
                             "key": "country",
+                            "properties": {
+                                "clear_field": "non_us_state"
+                            },
                             "type": "select",
+                            "indexeddb": {
+                                "filter": {}
+                            },
                             "input": true,
                             "lockKey": true,
                             "source": "5d347da33e9be31e15d3b115",
@@ -1134,7 +1140,13 @@
                                 "required": true
                             },
                             "key": "physical_country",
+                            "properties": {
+                                "clear_field": "physical_non_us_state"
+                            },
                             "type": "select",
+                            "indexeddb": {
+                                "filter": {}
+                            },
                             "input": true,
                             "lockKey": true,
                             "hideOnChildrenHidden": false
@@ -11889,7 +11901,7 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "clearOnHide": false,
-                        "calculateValue": "if(data['poolLiability'] != data['previous_poolLiability']){\n    if(data.doyouhaveapoolonpremisesPL == 'yes'){\n        var val;\n        if((parseFloat(data[\"poolLiability\"])||0)>50000){\n            val=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>20000){\n            val=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>0){\n            val=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n        }\n        else {\n            val=0\n        }\n        if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n          var proRataDiff = data['proRataPercentage'];\n          var preVal = data['previous_nonDivingPoolAmount'] * proRataDiff;\n          var currVal = val * proRataDiff;\n          value = (currVal - preVal).toFixed(0);\n        }else{\n          value = val;\n        }\n    } else {\n        value = 0;\n    }\n} else {\n  value =0;\n}",
+                        "calculateValue": "if(data['poolLiability'] != data['previous_poolLiability']){\n    if(data.doyouhaveapoolonpremisesPL == 'yes'){\n        var val;\n        if((parseFloat(data[\"poolLiability\"])||0)>50000){\n            val=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>20000){\n            val=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>0){\n            val=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n        }\n        else {\n            val=0\n        }\n        if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n          var proRataDiff = data['proRataPercentage'];\n          var preVal = parseFloat(data['previous_nonDivingPoolAmount']) * proRataDiff;\n          var currVal = val * proRataDiff;\n          value = (currVal - preVal).toFixed(0);\n        }else{\n          value = parseFloat(val);\n        }\n    } else {\n        value = 0;\n    }\n} else {\n  value =0;\n}",
                         "key": "endorsementNonDivingPool",
                         "type": "number",
                         "input": true,
@@ -11898,7 +11910,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "nonDivingPool",
-                        "calculateValue": "if(data['endononDivingPoolAmount'] > 0){\n  value = data['previous_nonDivingPoolAmount'] + data['endononDivingPoolAmount'];\n} else {\n  value = data['previous_nonDivingPoolAmount']\n}",
+                        "calculateValue": "if(data['endononDivingPoolAmount'] > 0){\n  value = parseFloat(data['previous_nonDivingPoolAmount']) + parseFloat(data['endononDivingPoolAmount']);\n} else {\n  value = parseFloat(data['previous_nonDivingPoolAmount'])\n}",
                         "key": "nonDivingPoolAmount",
                         "type": "hidden",
                         "input": true,
@@ -11929,7 +11941,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "MedicalExpenseFP",
-                        "calculateValue": "if(data['endoMedicalExpenseFp'] > 0){\n  value = data['previous_MedicalExpenseFP'] + data['endoMedicalExpenseFp'];\n} else {\n  value = data['previous_MedicalExpenseFP'];\n}",
+                        "calculateValue": "if(data['endoMedicalExpenseFp'] > 0){\n  value = parseFloat(data['previous_MedicalExpenseFP']) + parseFloat(data['endoMedicalExpenseFp']);\n} else {\n  value = parseFloat(data['previous_MedicalExpenseFP']);\n}",
                         "key": "MedicalExpenseFP",
                         "type": "hidden",
                         "input": true,
@@ -11955,7 +11967,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "Non-OwnedAutoFP",
-                        "calculateValue": "if(data['endoNon-OwnedAutoFP'] > 0){\n  value = data['previous_Non-OwnedAutoFP'] + data['endoNon-OwnedAutoFP'];\n} else {\n  value = data['previous_Non-OwnedAutoFP']\n}",
+                        "calculateValue": "if(data['endoNon-OwnedAutoFP'] > 0){\n  value = parseFloat(data['previous_Non-OwnedAutoFP']) + parseFloat(data['endoNon-OwnedAutoFP']);\n} else {\n  value = parseFloat(data['previous_Non-OwnedAutoFP'])\n}",
                         "key": "Non-OwnedAutoFP",
                         "type": "hidden",
                         "input": true,
@@ -11981,7 +11993,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "ExcessLiabilityFP",
-                        "calculateValue": "if(data['endoExcessLiabilityFP'] > 0){\n  value = data['previous_ExcessLiabilityFP'] + data['endoExcessLiabilityFP'];\n} else {\n  value = data['previous_ExcessLiabilityFP']\n}",
+                        "calculateValue": "if(data['endoExcessLiabilityFP'] > 0){\n  value = parseFloat(data['previous_ExcessLiabilityFP']) + parseFloat(data['endoExcessLiabilityFP']);\n} else {\n  value = parseFloat(data['previous_ExcessLiabilityFP'])\n}",
                         "key": "ExcessLiabilityFP",
                         "type": "hidden",
                         "input": true,
@@ -12007,7 +12019,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "TravelAgentEOFP",
-                        "calculateValue": "if(data['endoTravelAgentEOFP'] > 0){\n  value = data['previous_travelEnO'] + data['endoTravelAgentEOFP'];\n} else {\n  value = data['previous_travelEnO']\n}",
+                        "calculateValue": "if(data['endoTravelAgentEOFP'] > 0){\n  value = parseFloat(data['previous_travelEnO']) + parseFloat(data['endoTravelAgentEOFP']);\n} else {\n  value = parseFloat(data['previous_travelEnO'])\n}",
                         "key": "TravelAgentEOFP",
                         "type": "hidden",
                         "input": true,
@@ -12087,7 +12099,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "ContentsFP",
-                        "calculateValue": "if(data['endoContentsFP'] > 0){\n  value = data['previous_ContentsFP'] + data['endoContentsFP'];\n} else {\n  value = data['previous_ContentsFP']\n}",
+                        "calculateValue": "if(data['endoContentsFP'] > 0){\n  value = parseFloat(data['previous_ContentsFP']) + parseFloat(data['endoContentsFP']);\n} else {\n  value = parseFloat(data['previous_ContentsFP'])\n}",
                         "key": "ContentsFP",
                         "type": "hidden",
                         "input": true,
@@ -12113,7 +12125,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "LossofBusIncomeFP",
-                        "calculateValue": "if(data['endoLossofBusIncomeFP'] > 0){\n  value = data['previous_LossofBusIncomeFP'] + data['endoLossofBusIncomeFP'];\n} else {\n  value = data['previous_LossofBusIncomeFP']\n}",
+                        "calculateValue": "if(data['endoLossofBusIncomeFP'] > 0){\n  value = parseFloat(data['previous_LossofBusIncomeFP']) + parseFloat(data['endoLossofBusIncomeFP']);\n} else {\n  value = parseFloat(data['previous_LossofBusIncomeFP'])\n}",
                         "key": "LossofBusIncomeFP",
                         "type": "hidden",
                         "input": true,
@@ -12139,7 +12151,7 @@
                         "hideOnChildrenHidden": false
                     }, {
                         "label": "BuildingLimitFP",
-                        "calculateValue": "if(data['endoBuildingLimitFP'] > 0){\n  value = data['previous_BuildingLimitFP'] + data['endoBuildingLimitFP'];\n} else {\n  value = data['previous_BuildingLimitFP']\n}",
+                        "calculateValue": "if(data['endoBuildingLimitFP'] > 0){\n  value = parseFloat(data['previous_BuildingLimitFP']) + parseFloat(data['endoBuildingLimitFP']);\n} else {\n  value = parseFloat(data['previous_BuildingLimitFP'])\n}",
                         "key": "BuildingLimitFP",
                         "type": "hidden",
                         "input": true,
@@ -14147,7 +14159,7 @@
                     "hideOnChildrenHidden": false
                 }, {
                     "label": "AddILocPremium",
-                    "calculateValue": "if(data['endoAddILocPremium'] > 0){\n  value = data['previous_AddILocPremium'] + data['endoAddILocPremium'];\n} else {\n  value = data['previous_AddILocPremium']\n}",
+                    "calculateValue": "if(data['endoAddILocPremium'] > 0){\n  value = parseFloat(data['previous_AddILocPremium']) + parseFloat(data['endoAddILocPremium']);\n} else {\n  value = parseFloat(data['previous_AddILocPremium'])\n}",
                     "key": "AddILocPremium",
                     "type": "hidden",
                     "input": true,
@@ -14252,7 +14264,7 @@
                     "width": 12
                 }, {
                     "label": "AddILocTax",
-                    "calculateValue": "if(data['endoAddILocTax'] > 0){\n  value = data['previous_AddILocTax'] + data['endoAddILocTax'];\n} else {\n  value = data['previous_AddILocTax']\n}",
+                    "calculateValue": "if(data['endoAddILocTax'] > 0){\n  value = parseFloat(data['previous_AddILocTax']) + parseFloat(data['endoAddILocTax']);\n} else {\n  value = parseFloat(data['previous_AddILocTax'])\n}",
                     "key": "AddILocTax",
                     "type": "hidden",
                     "input": true,
@@ -14558,7 +14570,7 @@
                     "width": 12
                 }, {
                     "label": "PropDeductibleCredit",
-                    "calculateValue": "if(data['endoPropDeductibleCredit'] > 0){\n  value = data['previous_PropDeductibleCredit'] + data['endoPropDeductibleCredit'];\n} else {\n  value = data['previous_PropDeductibleCredit']\n}",
+                    "calculateValue": "if(data['endoPropDeductibleCredit'] > 0){\n  value = parseFloat(data['previous_PropDeductibleCredit']) + parseFloat(data['endoPropDeductibleCredit']);\n} else {\n  value = parseFloat(data['previous_PropDeductibleCredit'])\n}",
                     "key": "PropDeductibleCredit",
                     "type": "hidden",
                     "input": true,
@@ -14660,7 +14672,7 @@
                     "hideOnChildrenHidden": true
                 }, {
                     "label": "groupProfessionalLiability",
-                    "calculateValue": "if(data['endoGroupProfessionalLiability'] > 0){\n  value = data['previous_groupProfessionalLiability'] + data['endoGroupProfessionalLiability'];\n} else {\n  value = data['previous_groupProfessionalLiability']\n}",
+                    "calculateValue": "if(data['endoGroupProfessionalLiability'] > 0){\n  value = parseFloat(data['previous_groupProfessionalLiability']) + parseFloat(data['endoGroupProfessionalLiability']);\n} else {\n  value = parseFloat(data['previous_groupProfessionalLiability'])\n}",
                     "key": "groupProfessionalLiability",
                     "type": "hidden",
                     "input": true,
@@ -14850,7 +14862,7 @@
             }, {
                 "components": [{
                     "label": "totalAddPremium",
-                    "calculateValue": "if(data['endoTotalAddPremium'] > 0){\n  value = data['previous_totalAddPremium'] + data['endoTotalAddPremium'];\n} else {\n  value = data['previous_totalAddPremium']\n}",
+                    "calculateValue": "if(data['endoTotalAddPremium'] > 0){\n  value = parseFloat(data['previous_totalAddPremium']) + parseFloat(data['endoTotalAddPremium']);\n} else {\n  value = parseFloat(data['previous_totalAddPremium'])\n}",
                     "key": "totalAddPremium",
                     "type": "hidden",
                     "input": true,
@@ -15533,7 +15545,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 102,
+    "_vid": 105,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15551,6 +15563,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-10-23T08:59:12.401Z",
+    "modified": "2020-10-28T11:40:26.889Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }
