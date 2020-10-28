@@ -865,7 +865,13 @@
                                 "required": true
                             },
                             "key": "country",
+                            "properties": {
+                                "clear_field": "non_us_state"
+                            },
                             "type": "select",
+                            "indexeddb": {
+                                "filter": {}
+                            },
                             "input": true,
                             "lockKey": true,
                             "source": "5d347da33e9be31e15d3b115",
@@ -1097,6 +1103,9 @@
                                 "required": true
                             },
                             "key": "physical_country",
+                            "properties": {
+                                "clear_field": "physical_non_us_state"
+                            },
                             "type": "select",
                             "indexeddb": {
                                 "filter": {}
@@ -10507,9 +10516,10 @@
                     "defaultOpen": false,
                     "layoutFixed": false,
                     "enableRowGroups": false,
-                    "noFirstRow": true,
+                    "initEmpty": false,
                     "hideLabel": true,
                     "tableView": false,
+                    "modalEdit": true,
                     "defaultValue": [{
                         "padi": "",
                         "firstname": "",
@@ -10517,17 +10527,24 @@
                         "status": "",
                         "nameOfInstitution": "",
                         "initial": "",
-                        "start_date": "",
+                        "start_date": "2020-10-27",
                         "documentattach": [],
                         "verified": "",
                         "rating": "",
                         "document1": [],
-                        "effectiveDate": ""
+                        "effectiveDate": "10-27-2020",
+                        "email": "",
+                        "address1": "",
+                        "address2": "",
+                        "state": "",
+                        "country": "",
+                        "zip": ""
                     }],
                     "clearOnHide": false,
                     "calculateValue": "if(value && value.length > 1){\n  var length = value.length - 1;\n  if(value[length]['padi'] == \"\"){\n    value.pop(); \n  }\n}",
                     "key": "groupPL",
                     "type": "datagrid",
+                    "noFirstRow": true,
                     "input": true,
                     "components": [{
                         "label": "well",
@@ -14520,7 +14537,7 @@
         "input": false
     }],
     "revisions": "current",
-    "_vid": 109,
+    "_vid": 112,
     "title": "diveStoreConsolidation3",
     "display": "wizard",
     "access": [{
@@ -14538,6 +14555,6 @@
     "path": "divestoreconsolidation3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-07-28T11:29:44.022Z",
-    "modified": "2020-10-23T08:59:01.070Z",
+    "modified": "2020-10-28T11:39:06.370Z",
     "machineName": "testdivehub:diveStoreConsolidation3"
 }

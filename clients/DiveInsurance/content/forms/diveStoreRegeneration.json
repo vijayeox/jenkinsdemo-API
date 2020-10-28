@@ -1072,7 +1072,13 @@
                                 "required": true
                             },
                             "key": "country",
+                            "properties": {
+                                "clear_field": "non_us_state"
+                            },
                             "type": "select",
+                            "indexeddb": {
+                                "filter": {}
+                            },
                             "input": true,
                             "lockKey": true,
                             "source": "5d347da33e9be31e15d3b115",
@@ -1304,6 +1310,9 @@
                                 "required": true
                             },
                             "key": "physical_country",
+                            "properties": {
+                                "clear_field": "physical_non_us_state"
+                            },
                             "type": "select",
                             "indexeddb": {
                                 "filter": {}
@@ -14172,7 +14181,7 @@
         "event": "submitForm"
     }],
     "revisions": "current",
-    "_vid": 19,
+    "_vid": 20,
     "title": "DiveStoreRegeneration",
     "display": "wizard",
     "access": [{
@@ -14190,6 +14199,6 @@
     "path": "divestoreregeneration",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-18T04:16:15.109Z",
-    "modified": "2020-10-28T11:10:07.991Z",
+    "modified": "2020-10-28T11:38:56.951Z",
     "machineName": "testdivehub:diveStoreRegeneration"
 }
