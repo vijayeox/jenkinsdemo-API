@@ -183,24 +183,29 @@ class OrganizationService extends AbstractService
         return $appId;
     }
 
-    private function setupBusinessOfferings(&$params){
-        if (!isset($params['app_id']) || !isset($params['businessOffering'])){
+    public function removeBusinessOfferings($orgId){
+        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+        $query = "DELETE oxof, oxbr FROM ox_org_offering oxof inner join ox_org_business_role oxbr on oxbr.id = oxof.org_business_role_id where oxbr.org_id = :orgId";
+        $params = ["orgId" => $orgId];
+        $this->executeUpdateWithBindParameters($query, $params);     
+    }
+
+    public function setupBusinessOfferings($params,$orgId,$appId){
+        if (!isset($appId) || !isset($params['businessOffering'])){
             return;
         }
-        $appId = $params['app_id'];
         $offerings = $params['businessOffering'];
-        $params['business_role_id'] = array();
+        $response = array();
+        $response['businessRole'] = array();
         foreach ($offerings as $offering) {
-            $offering['app_id'] = $appId;
-            $offering['id'] = $params['id'];
-            $this->setupBusinessRole($offering);
-            if(isset($appId) && isset($offering['org_business_role_id']) && count($offering['org_business_role_id']) > 0){
-                $orgBusinessRoleId = $offering['org_business_role_id'][0];
+            $result = $this->setupBusinessRole($offering,$orgId,$appId);
+            if(isset($appId) && isset($result['org_business_role_id']) && count($result['org_business_role_id']) > 0){
+                $orgBusinessRoleId = $result['org_business_role_id'][0];
                 $this->setupOrgOffering($appId, $orgBusinessRoleId, $offering['entity']);
-                $params['business_role_id'][] = $offering['business_role_id'][0];
+                $response['businessRole'][] = $offering['businessRole'];
             }
         }
-        
+        return $response;        
     }
 
     private function setupOrgOffering($appId, $orgBusinessRoleId, $offerings){
@@ -220,13 +225,14 @@ class OrganizationService extends AbstractService
         }
         
     }
-    private function setupBusinessRole(&$params){
-        if (!isset($params['app_id']) || !isset($params['businessRole'])){
+    private function setupBusinessRole($params,$orgId,$appId){
+        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+        $appId = $this->getIdFromUuid('ox_app',$appId);
+        if (!isset($appId) || !isset($params['businessRole'])){
             return;
         }
-        $appId = $this->getAppId($params['app_id']);
         $query = "delete from ox_org_business_role where org_id = :orgId";
-        $queryParams = ["orgId" => $params['id']];
+        $queryParams = ["orgId" => $orgId];
         $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
         if(is_string($params['businessRole'])){
             $businessRole = json_decode($params['businessRole'], true);
@@ -246,19 +252,21 @@ class OrganizationService extends AbstractService
         }
         $bRole .=")";
         $query = "INSERT INTO ox_org_business_role (org_id, business_role_id)
-                    SELECT ".$params['id'].", id from ox_business_role 
+                    SELECT ".$orgId.", id from ox_business_role 
                     WHERE app_id = :appId and name in $bRole";
         $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
         $this->executeUpdateWithBindParameters($query, $queryParams);
         $query = "SELECT id, business_role_id from ox_org_business_role where org_id = :orgId";
-        $queryParams = ["orgId" => $params['id']];
+        $queryParams = ["orgId" => $orgId];
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        $params['business_role_id'] = array();
-        $params['org_business_role_id'] = array();
+        $response = array();
+        $response['business_role_id'] = array();
+        $response['org_business_role_id'] = array();
         foreach ($result as $value) {
-            $params['business_role_id'][] = $value['business_role_id'];
-            $params['org_business_role_id'][] = $value['id'];
+            $response['business_role_id'][] = $value['business_role_id'];
+            $response['org_business_role_id'][] = $value['id'];
         }
+      return $response;  
     }
     private function addIdentifierForOrg($appId, $params){
         if ($appId && isset($params['identifier_field'])) {
@@ -285,14 +293,11 @@ class OrganizationService extends AbstractService
         $form->id = $this->table->getLastInsertValue();
         $data['preferences'] = json_decode($data['preferences'], true);
         $data['id'] = $form->id;
-        $this->setupBusinessRole($data);
         $defaultRoles = true;
-        if(isset($data['business_role_id'])){
+        if(isset($data['businessOffering'])){
             $defaultRoles = false;
         }
-        $this->setupBusinessOfferings($data);
         $userId = $this->setupBasicOrg($data, $data['contact'], $data['preferences'], $defaultRoles);
-        unset($data['business_role_id']);
         if (isset($userId)) {
             $data['contact']['id'] = $userId;
             $update = "UPDATE `ox_organization` SET `contactid` = '" . $userId . "' where uuid = '" . $data['uuid'] . "'";
@@ -352,7 +357,7 @@ class OrganizationService extends AbstractService
     private function setupBasicOrg($org, $contactPerson, $orgPreferences, $defaultRoles)
     {
         // adding basic roles
-        $returnArray['roles'] = $this->roleService->createBasicRoles($org['id'], isset($org['business_role_id']) ? $org['business_role_id'] : NULL, $defaultRoles);
+        $returnArray['roles'] = $this->roleService->createBasicRoles($org['id']);
         // adding a user
         $returnArray['user'] = $this->userService->createAdminForOrg($org, $contactPerson, $orgPreferences);
         return $returnArray['user'];

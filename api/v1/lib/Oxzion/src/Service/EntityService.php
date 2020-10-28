@@ -11,13 +11,17 @@ use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Service\FormService;
 
 class EntityService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, EntityTable $table)
+    protected $formService;
+
+    public function __construct($config, $dbAdapter, EntityTable $table, FormService $formService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->formService = $formService;
     }
 
     public function saveEntity($appUuid, &$data, $createIfNotFound = true)
@@ -59,29 +63,40 @@ class EntityService extends AbstractService
     {
         $result = $this->getEntity($id, $appUuid);
         if ($result) {
-            $this->beginTransaction();
+            $obj = $this->table->getByUuid($id, array());
+            if (is_null($obj)) {
+                return 0;
+            }
+            $originalArray = $obj->toArray();
+            $entity = new Entity();
+            $originalArray['isdeleted'] = 1;
+            $entity->exchangeArray($originalArray);
             try {
-                $count = $this->table->delete($id);
+                $this->beginTransaction();
+                $count = $this->table->save($entity);
                 if ($count == 0) {
                     $this->rollback();
-                    return 0;
+                    throw new ServiceException("Failed to Delete", "failed.entity.delete");
                 }
                 $this->commit();
-            } catch (Exception $e) {
+                return $count;
+            }
+            catch (Exception $e) {
                 $this->rollback();
+                $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
-        } else {
+        }
+         else {
             throw new ServiceException("Entity Not Found", "entity.not.found");
         }
-        return $count;
     }
 
     public function getEntitys($appUuid = null, $filterArray = array())
     {
         try {
-            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where (ox_app.id=? or ox_app.uuid=?)";
-            $queryParams = array($appUuid, $appUuid);
+            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where (ox_app.id=? or ox_app.uuid=?) and ox_app_entity.isdeleted=?";
+            $queryParams = array($appUuid, $appUuid, 0);
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultSet) == 0) {
                 return array();
@@ -103,6 +118,7 @@ class EntityService extends AbstractService
                 $queryParams[] = $appId;
             }
             $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
+            $where .= "AND ox_app_entity.isdeleted = 0";
             $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where $where";
             $queryParams[] = $id;
             $this->logger->info("STATEMENT $query".print_r($queryParams,true));
@@ -195,6 +211,16 @@ class EntityService extends AbstractService
         catch(Exception $e){
             $this->rollback();
             throw $e;
+        }
+    }
+
+    public function removeEntityLinkedToApps($appId){
+        $entityRes = $this->getEntitys($appId);
+        if (count($entityRes) > 0) {
+            foreach ($entityRes as $key => $value) {
+                $this->formService->deleteFormsLinkedToApp($appId);
+                $this->deleteEntity($appId,$value['uuid']);
+            }
         }
     }
 }

@@ -118,9 +118,9 @@ class JobControllerTest extends ControllerTest
         $query = "Select count(id) from ox_job";
         $result = $this->executeQueryTest($query);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(406);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'No records found');
+        $this->assertResponseStatusCode(200);
+        $result = $this->executeQueryTest("Select * from ox_job");
+        $this->assertEquals(0, count($result));
     }
 
     public function testJobServiceCancelJob()

@@ -42,6 +42,11 @@ class AppServiceTest extends AbstractServiceTest
 
     public function getDataSet()
     {
+        switch($this->getName()) {
+            case 'testRemoveDeployedApp':
+                return new YamlDataSet(dirname(__FILE__) . "/Dataset/DeployedApp.yml");;
+            break;
+        }
         $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/AppServiceTest.yml");
         return $dataset;
     }
@@ -669,6 +674,139 @@ class AppServiceTest extends AbstractServiceTest
         catch(EntityNotFoundException $e) {
             $this->assertNotNull($e);
         }
+    }
+
+    public function testRemoveDeployedApp(){
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        $uuid = '35443300-1826-11eb-adc1-0242ac120002';
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $config = $this->getApplicationConfig();
+        $viewAppFolder = $config['APPS_FOLDER']. 'SampleApp' ;
+        $viewAppLocation =__DIR__ . '/../../../../module/App/test/sampleapp/';
+        FileUtils::symlink($viewAppLocation, $viewAppFolder);
+        try {
+            $beforePageDelete = $this->executeQueryTest("SELECT * FROM ox_app_page join ox_app on ox_app.id = ox_app_page.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(3, count($beforePageDelete));
+
+            $beforeMenuDelete = $this->executeQueryTest("SELECT * FROM ox_app_menu join ox_app on ox_app.id = ox_app_menu.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(3, count($beforePageDelete));
+
+            $beforewfDelete = $this->executeQueryTest("SELECT ox_workflow_instance.* FROM ox_workflow_instance join ox_workflow_deployment on ox_workflow_deployment.id = ox_workflow_instance.workflow_deployment_id join ox_workflow on ox_workflow.id = ox_workflow_deployment.workflow_id join ox_app on ox_app.id = ox_workflow.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(10, count($beforewfDelete));
+            $this->assertEquals(0, $beforewfDelete[0]['isdeleted']);
+
+            $beforeActivityDelete = $this->executeQueryTest("SELECT * FROM ox_activity join ox_app on ox_app.id = ox_activity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($beforeActivityDelete));
+            $this->assertEquals(0, $beforeActivityDelete[0]['isdeleted']);
+
+            $beforeActivityInstanceDelete = $this->executeQueryTest("SELECT ox_activity_instance.* FROM ox_activity_instance join ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id join ox_app on ox_app.id = ox_workflow_instance.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(12, count($beforeActivityInstanceDelete));
+            $this->assertEquals(0, $beforeActivityInstanceDelete[0]['isdeleted']);
+
+            $beforeFileDelete = $this->executeQueryTest("SELECT oxf.* from ox_file oxf inner join ox_app_entity oxae on oxae.id = oxf.entity_id inner join ox_app oxa on oxa.id = oxae.app_id where oxa.uuid='${uuid}'");
+            $this->assertEquals(10, count($beforeFileDelete));
+            $this->assertEquals(1, $beforeFileDelete[0]['is_active']);
+
+            $beforeFormsDelete = $this->executeQueryTest("SELECT * FROM ox_form join ox_app on ox_app.id = ox_form.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($beforeFormsDelete));
+            $this->assertEquals(0, $beforeFormsDelete[0]['isdeleted']);
+
+            $beforeEntityDelete = $this->executeQueryTest("SELECT * FROM ox_app_entity join ox_app on ox_app.id = ox_app_entity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($beforeEntityDelete));
+            $this->assertEquals(0, $beforeEntityDelete[0]['isdeleted']);
+
+            $beforeDelete = $this->executeQueryTest("SELECT oei.* FROM ox_entity_identifier oei 
+            right outer join ox_app_entity oxe on oei.entity_id = oxe.id
+            inner join ox_app oxa on oxa.id = oxe.app_id 
+            where oxa.uuid ='${uuid}'");
+            $this->assertEquals(2, count($beforeDelete));
+            
+            $beforeDelete1 = $this->executeQueryTest("SELECT * from ox_org_offering");
+
+            $beforeRolePriDe = $this->executeQueryTest("SELECT * FROM ox_role_privilege join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(1, count($beforeRolePriDe));
+
+            $beforeDe1 = $this->executeQueryTest("SELECT ox_role.* FROM ox_role join ox_role_privilege on ox_role_privilege.role_id = ox_role.id join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(1, count($beforeDe1));
+
+            $beforeDel2 = $this->executeQueryTest("SELECT ox_privilege.* FROM ox_privilege join ox_app on ox_app.id = ox_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(4, count($beforeDel2));
+
+            $beforeDel3 = $this->executeQueryTest("SELECT ox_app_registry.* FROM ox_app_registry join ox_app on ox_app.id = ox_app_registry.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(4, count($beforeDel3));
+
+            $appService->removeDeployedApp($uuid);
+            // JOBS Assertion
+            $result = $this->executeQueryTest("SELECT * FROM ox_job join ox_app on ox_app.id = ox_job.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            // Page
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_page join ox_app on ox_app.id = ox_app_page.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            // Menu
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_menu join ox_app on ox_app.id = ox_app_menu.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            //Entity
+            $result = $this->executeQueryTest("SELECT ox_workflow_instance.isdeleted,ox_workflow_deployment.isdeleted as wfDeploymentDelete, ox_workflow.isdeleted as wfDelete FROM ox_workflow_instance join ox_workflow_deployment on ox_workflow_deployment.id = ox_workflow_instance.workflow_deployment_id join ox_workflow on ox_workflow.id = ox_workflow_deployment.workflow_id join ox_app on ox_app.id = ox_workflow.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(10, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+            $this->assertEquals(1, $result[0]['wfDeploymentDelete']);
+            $this->assertEquals(1, $result[0]['wfDelete']);
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_activity join ox_app on ox_app.id = ox_activity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+            $this->assertEquals(1, $result[1]['isdeleted']);
+
+            $result = $this->executeQueryTest("SELECT ox_activity_instance.* FROM ox_activity_instance join ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id join ox_app on ox_app.id = ox_workflow_instance.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(12, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+
+            $result = $this->executeQueryTest("SELECT oxf.* from ox_file oxf inner join ox_app_entity oxae on oxae.id = oxf.entity_id inner join ox_app oxa on oxa.id = oxae.app_id where oxa.uuid='${uuid}'");
+            $this->assertEquals(10, count($result));
+            $this->assertEquals(0, $result[0]['is_active']);
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_form join ox_app on ox_app.id = ox_form.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_entity join ox_app on ox_app.id = ox_app_entity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+
+            // $result = $this->executeQueryTest("SELECT oei.* FROM ox_entity_identifier oei 
+            // right outer join ox_app_entity oxe on oei.entity_id = oxe.id
+            // inner join ox_app oxa on oxa.id = oxe.app_id 
+            // where oxa.uuid ='${uuid}'");
+            // $this->assertEquals(2, count($beforeDelete));
+
+            // $result = $this->executeQueryTest("SELECT ox_org_offering.* from ox_org_offering join ox_app_entity on ox_app_entity.id = ox_org_offering.entity_id join ox_app on ox_app.id = ox_app_entity.app_id WHERE ox_app.uuid='${uuid}' ");
+
+            //ox_role_privilege
+            $result = $this->executeQueryTest("SELECT * FROM ox_role_privilege join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            //ox_user_role
+
+            //ox_role
+            $result = $this->executeQueryTest("SELECT * FROM ox_role join ox_role_privilege on ox_role_privilege.role_id = ox_role.id join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+
+            //ox_privilege
+            $result = $this->executeQueryTest("SELECT * FROM ox_privilege join ox_app on ox_app.id = ox_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+
+            //ox_app_registry
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_registry join ox_app on ox_app.id = ox_app_registry.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${uuid}'");
+            $this->assertEquals(App::DELETED, $result[0]['status']);
+            $this->assertEquals($result[0]['id']."_SampleApp", $result[0]['name']);
+
+        }catch(Exception $e) {
+            $this->assertNotNull($e);
+        }
+
+
     }
 }
 

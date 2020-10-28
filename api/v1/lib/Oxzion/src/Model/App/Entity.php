@@ -22,7 +22,8 @@ class Entity extends OxzionEntity
         'date_modified' => null,
         'created_by' => null,
         'modified_by' => null,
-        "ryg_rule" => null
+        "ryg_rule" => null,
+        'isdeleted' => 0,
     );
     
     public function validate()
