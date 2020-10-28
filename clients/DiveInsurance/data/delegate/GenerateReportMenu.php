@@ -18,7 +18,7 @@ class GenerateReportMenu extends AbstractAppDelegate
     public function execute(array $data, Persistence $persistenceService) 
     {
         $this->logger->info("Executing Generate Report Menu Generation with data- ".json_encode($data));
-        $params['entityName'] = 'Generate Report Job';
+        $params['entityName'] = 'Generate Excel Report Job';
         $sortParams = array("field" => "date_created", "dir" => "desc");
         $filterParams = array("filters" => array());
         $finalFilterParams = array(array("filter" => $filterParams, "sort" => array($sortParams)));

@@ -49,7 +49,7 @@
             {
               "components": [
                 {
-                  "label": "Start Date",
+                  "label": "From",
                   "useLocaleSettings": true,
                   "allowInput": false,
                   "format": "yyyy-MM-dd",
@@ -69,7 +69,7 @@
                     "customMessage": "Please enter a valid Start Date"
                   },
                   "errorLabel": "Start Date",
-                  "key": "startDate",
+                  "key": "from",
                   "type": "datetime",
                   "input": true,
                   "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
@@ -92,6 +92,16 @@
                     "maxDate": "moment()"
                   },
                   "hideOnChildrenHidden": false
+                },
+                {
+                  "label": "StartDate",
+                  "redrawOn": "from",
+                  "calculateValue": "\nif(data.from && data.from !=\"\") \n{value = moment(data.from).format(\"YYYY-MM-DD\");}",
+                  "key": "startDate",
+                  "type": "hidden",
+                  "input": true,
+                  "tableView": false,
+                  "hideOnChildrenHidden": false
                 }
               ],
               "width": 6,
@@ -103,7 +113,7 @@
             {
               "components": [
                 {
-                  "label": "End Date",
+                  "label": "To",
                   "useLocaleSettings": true,
                   "allowInput": false,
                   "format": "yyyy-MM-dd",
@@ -123,7 +133,7 @@
                     "customMessage": "Please enter a valid End Date"
                   },
                   "errorLabel": "End Date",
-                  "key": "endDate",
+                  "key": "to",
                   "type": "datetime",
                   "input": true,
                   "suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
@@ -145,6 +155,16 @@
                     "disableWeekdays": false,
                     "maxDate": "moment()"
                   },
+                  "hideOnChildrenHidden": false
+                },
+                {
+                  "label": "EndDate",
+                  "redrawOn": "to",
+                  "calculateValue": "\nif(data.to && data.to !=\"\") {\n  value = moment(data.to).format(\"YYYY-MM-DD\");\n}\n",
+                  "key": "endDate",
+                  "type": "hidden",
+                  "input": true,
+                  "tableView": false,
                   "hideOnChildrenHidden": false
                 }
               ],
@@ -190,7 +210,7 @@
     }
   ],
   "revisions": "original",
-  "_vid": 5,
+  "_vid": 6,
   "title": "Generate Report",
   "display": "form",
   "access": [
@@ -206,13 +226,13 @@
   "submissionAccess": [],
   "controller": "",
   "properties": {
-    "submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Generate Report Job\"},{\"command\" : \"delegate\", \"entity_name\" : \"Generate Report Job\", \"delegate\" : \"GenerateReport\"}, {\"command\" : \"fileSave\", \"entity_name\" : \"Generate Report Job\"}]"
+    "submission_commands": "[{\"command\" : \"fileSave\", \"entity_name\" : \"Generate Excel Report Job\"},{\"command\" : \"delegate\",\"async\" : \"true\", \"entity_name\" : \"Generate Excel Report Job\", \"delegate\" : \"GenerateReport\"}, {\"command\" : \"fileSave\", \"entity_name\" : \"Generate Excel Report Job\"}]"
   },
   "settings": {},
   "name": "generateReport",
   "path": "generatereport",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2020-09-10T10:12:48.649Z",
-  "modified": "2020-10-15T11:44:39.629Z",
+  "modified": "2020-10-23T12:39:29.379Z",
   "machineName": "testdivehub:quarterlyReports"
 }
