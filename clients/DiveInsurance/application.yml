@@ -329,7 +329,7 @@ entity:
                 text: 'COI Batch Reports'
                 data_type: document
     -
-        name: 'Generate Report Job'
+        name: 'Generate Excel Report Job'
         field:
             -
                 name: jobStatus
@@ -713,7 +713,7 @@ form:
         uuid: 84d79cfe-f3f5-11ea-adc1-0242ac120002
         description: 'Page for CSR generate and view Reports'
         template_file: generateReport.json
-        entity: 'Generate Report Job'
+        entity: 'Generate Excel Report Job'
 job:
     -
         uuid: 5acf3bbb-4daf-4257-9931-cb7ccfcc1e03
