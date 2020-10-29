@@ -278,9 +278,19 @@ class GenerateReport extends PolicyDocument {
                 $i += 1; 
             }
             if($product == 'groupProfessionalLiability' && isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]" &&  $value['groupProfessionalLiabilitySelect'] == 'yes'){
+
                 $this->logger->info('group PL members need to be formatted to a new array');
                 if(isset($value['groupPL'])){
                     $groupData = is_string($value['groupPL']) ? json_decode($value['groupPL'], true) : $value['groupPL'];
+                    $params['status'] = 'Completed';
+                    $params['entityName'] = 'Dive Store';
+                    $endDate = date("Y-m-d" ,strtotime('-1 year',strtotime($value['end_date'])));
+                    $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'eq','value'=>$endDate);
+                    $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$value['business_padi']);
+                    $policyList = $this->getFileList($params,$filterParams);
+                    if(count($policyList['data']) > 0){
+                        $fileData = json_decode($policyList['data'][0]['data'],true);
+                    }
                 } else {
                     $groupData = array();
                 }
@@ -309,6 +319,15 @@ class GenerateReport extends PolicyDocument {
                     $groupPL = $groupData;
                 }
                 foreach ($groupPL as $key2 => $value2) {
+                    if(isset($fileData)){
+                        $key = array_search($value2['padi'], array_column($fileData['groupPL'], 'padi'));
+                        if(!is_null($key)){
+                            $response[$i]['renewal'] = "Renewal";
+                        }
+                    }
+                    else{
+                        $response[$i]['renewal'] = "New";
+                    }
                     $response[$i]['certificate_no'] = $value['certificate_no'];
                     $response[$i]['padi'] = $value2['padi'];
                     $response[$i]['business_padi'] = $value['business_padi'];
