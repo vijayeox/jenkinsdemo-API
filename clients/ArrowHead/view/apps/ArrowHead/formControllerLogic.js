@@ -81,6 +81,17 @@ s.onload = function (e) {
         }
       }
 
+      var dataGridDeleteIcons = document.getElementsByClassName(
+        "fa-times-circle-o"
+      );
+      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);
+      if (dataGridDeleteIcons.length > 0) {
+        dataGridDeleteIcons.map((item) => {
+          item.classList.add("fa-times-circle");
+          item.classList.remove("fa-times-circle-o");
+        });
+      }
+
       if (
         [...document.querySelectorAll('[ref="modalSave"]')].some(
           (i) => i.innerText == "SAVE"

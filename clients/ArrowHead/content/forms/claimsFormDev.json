@@ -91,7 +91,6 @@
                             "components": [
                                 {
                                     "label": "DBA",
-                                    "disabled": true,
                                     "tableView": true,
                                     "customDefaultValue": "value = data.parentData.dba;",
                                     "key": "dba",
@@ -110,7 +109,6 @@
                             "components": [
                                 {
                                     "label": "Address",
-                                    "disabled": true,
                                     "tableView": true,
                                     "customDefaultValue": "value = data.parentData.mailingAddress;",
                                     "key": "mailingAddress",
@@ -129,7 +127,6 @@
                             "components": [
                                 {
                                     "label": "City",
-                                    "disabled": true,
                                     "tableView": true,
                                     "customDefaultValue": "value = data.parentData.city;",
                                     "key": "city",
@@ -162,7 +159,6 @@
                                     "label": "State",
                                     "widget": "choicesjs",
                                     "placeholder": "Please Select",
-                                    "disabled": true,
                                     "tableView": true,
                                     "dataSrc": "custom",
                                     "data": {
@@ -1146,6 +1142,6 @@
     "path": "claimsformdev",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-09-29T09:47:24.714Z",
-    "modified": "2020-10-20T11:58:41.622Z",
+    "modified": "2020-10-28T18:39:34.189Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:claimsFormDev"
 }

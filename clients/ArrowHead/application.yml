@@ -168,6 +168,24 @@ entity:
                         text: Carrier
                         index: true
                         data_type: text
+    -
+        name: 'Claims Export'
+        override_data: true
+        field:
+            -
+                name: exportDate
+                text: exportDate
+                index: true
+                data_type: date
+            -
+                name: recordsCount
+                text: 'Records Count'
+                index: true
+                data_type: numeric
+            -
+                name: claimsExport
+                text: 'Claims Export'
+                data_type: document
 pages:
     -
         page_name: AgentHomePage.yml

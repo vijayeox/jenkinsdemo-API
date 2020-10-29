@@ -6,7 +6,7 @@ content:
         content:
             buttonList:
                 - 
-                    name: View All Claims
+                    name: View Claims
                     icon: fad fa-money-bill-alt
                     details:
                         -
@@ -68,6 +68,67 @@ content:
                                     - 
                                         title: Carrier
                                         field: carrier
+                - 
+                    name: Export Claims
+                    title: Export List
+                    icon: fad fa-file-excel
+                    details:
+                        -
+                            type: List
+                            content:
+                                route: 'file/search/entity/Claims Export'
+                                filterable: true
+                                defaultFilters: 
+                                    sort:
+                                        -
+                                            field: date_created
+                                            dir: desc                 
+                                resizable: true
+                                pageable:
+                                    buttonCount: 3
+                                    pageSizes:
+                                        - 10
+                                        - 20
+                                        - 50
+                                    info: true
+                                sortable: false
+                                actions:          
+                                    -
+                                        name: 'Download'
+                                        icon: 'fas fa-cloud-download'
+                                        rule: 'true'
+                                        updateOnly: true      
+                                        details:
+                                            -
+                                                type: Update
+                                                method: "GET"
+                                                params:
+                                                    url: document/ClaimsExport.xlsx?docPath={{claimsExportDocPath}}
+                                                    downloadFile: true
+                                toolbarTemplate: '<h5>List of Exports Requested</h5>'
+                                operations:
+                                    title: "Generate New Export"
+                                    actions:
+                                        -
+                                            name: Generate New Export
+                                            rule: "true"
+                                            updateOnly: true
+                                            details:
+                                                -
+                                                    type: Update
+                                                    params:
+                                                        url: command/delegate/ClaimsExcelExport
+                                                    successMessage: 'Export Completed successfully.' 
+                                columnConfig:
+                                    -
+                                        title: Export Date
+                                        field: exportDate
+                                        cell: '<td>{formatDate(item.exportDate)}</td>'
+                                        filter: date
+                                        filterFormat: YYYY-MM-DD
+                                    -
+                                        title: Records Count
+                                        field: recordsCount
                 - 
                     name: Add New Claim
                     title: Search Insured
