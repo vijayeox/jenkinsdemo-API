@@ -691,12 +691,13 @@ class WorkflowInstanceService extends AbstractService
                 $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
                 $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
             }
+            $filterlogic = " ";
             if(isset($params['entityName'])){
                 $this->fileService->getEntityFilter($params,$entityFilter,$queryParams);
                 $entityFilter = rtrim($entityFilter, " AND ");
+                $filterlogic = isset($filterParams[0]['filter']['logic']) ? $filterParams[0]['filter']['logic'] : " AND ";
+                
             }
-            
-            $filterlogic = isset($filterParams[0]['filter']['logic']) ? $filterParams[0]['filter']['logic'] : " AND ";
             $whereQuery = " $createdFilter $entityFilter $filterlogic";
             $fromQuery = "from ox_file as of 
                 inner join ox_indexed_file_attribute fa on fa.file_id = of.id
@@ -709,7 +710,7 @@ class WorkflowInstanceService extends AbstractService
             $whereQuery = rtrim($whereQuery, " AND ");
             $where = trim($whereQuery) != "" ? "WHERE $whereQuery AND wi.status = :workflowStatus" : "";
             $where = rtrim($where, " AND ");
-            $selectQuery = "SELECT DISTINCT SQL_CALC_FOUND_ROWS wi.completion_data  $field $fromQuery $where $sort $pageSize $offset";
+            $selectQuery = "SELECT DISTINCT SQL_CALC_FOUND_ROWS wi.completion_data  $field $fromQuery $where $sort";
             $this->logger->info("Executing query - $selectQuery with params - " . json_encode($queryParams));
             $resultSet = $this->executeQueryWithBindParameters($selectQuery, $queryParams)->toArray();
             $countQuery = "SELECT FOUND_ROWS();";
