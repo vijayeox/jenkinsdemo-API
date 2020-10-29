@@ -28,7 +28,7 @@ class ClaimsExcelExport extends AbstractDocumentAppDelegate
         $files = $this->getFileList($params, $filterParams);
         $sumTotal = 0;
         if ($files["total"] > 0) {
-            $fileData['exportDate'] = (new DateTime)->format('c');
+            $fileData['exportDate'] = date('Y-m-d');
             $fileData['recordsCount'] = $files["total"];
             $fileData['entity_name'] = "Claims Export";
             $this->saveFile($fileData);
