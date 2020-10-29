@@ -674,8 +674,8 @@ class WorkflowInstanceService extends AbstractService
     }
     public function getWorkflowCompletedData($params,$filterParams){
         $createdFilter = "";
-        $pageSize = " LIMIT 10";
-        $offset = " OFFSET 0";
+        $pageSize = "";
+        $offset = "";
         $entityFilter = "";
         $field = "";
         $sort = "";
