@@ -132,6 +132,7 @@
                     "timePicker": {
                         "showMeridian": false
                     },
+                    "clearOnHide": false,
                     "validate": {
                         "custom": "if (data.endoEffectiveDate){ \n  valid = ((moment(data.endoEffectiveDate).diff(moment(data['start_date'])) >=0) && (moment(data.endoEffectiveDate).diff(moment(data.end_date)) <=0)) ? true : \"Effective date should be between policy period\";\n}"
                     },
@@ -171,7 +172,7 @@
                 "components": [{
                     "label": "update_date",
                     "redrawOn": "endoEffectiveDate",
-                    "calculateValue": "value = moment(data.endoEffectiveDate).format(\"YYYY-MM-DD\");",
+                    "calculateValue": "if(data.endoEffectiveDate && data.endoEffectiveDate != \"\"){\n  value = moment(data.endoEffectiveDate).format(\"YYYY-MM-DD\");\n}\n  ",
                     "key": "update_date",
                     "type": "hidden",
                     "input": true,
@@ -3567,7 +3568,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 389,
+    "_vid": 390,
     "title": "Endorsement Consolidation - IPL",
     "display": "wizard",
     "access": [{
@@ -3588,6 +3589,6 @@
     "path": "endorsementconsolidationipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-13T11:01:28.672Z",
-    "modified": "2020-10-19T07:01:16.888Z",
+    "modified": "2020-10-29T04:07:07.987Z",
     "machineName": "testdivehub:endorsementConsolidationIpl"
 }
