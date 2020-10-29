@@ -170,7 +170,7 @@ content:
                 - 
                     title: Level 1
                     field: claimlevel1
-                    cell: '<td>{item.claimlevel1}</td>'
+                    cell: '<td>{(item.claimlevel1 != [] && item.claimlevel1 != "[]") ? item.claimlevel1 : ""}</td>'
                     filterCell:
                         type: dropdown
                         listItems:
