@@ -708,7 +708,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->fileService->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
             }
             $whereQuery = rtrim($whereQuery, " AND ");
-            $where = trim($whereQuery) != "" ? "WHERE $whereQuery AND wi.status = :workflowStatus" : "";
+            $where = trim($whereQuery) != "" ? "WHERE $whereQuery AND wi.status = :workflowStatus AND wi.completion_data IS NOT NULL" : "";
             $where = rtrim($where, " AND ");
             $selectQuery = "SELECT DISTINCT SQL_CALC_FOUND_ROWS wi.completion_data  $field $fromQuery $where $sort";
             $this->logger->info("Executing query - $selectQuery with params - " . json_encode($queryParams));
