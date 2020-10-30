@@ -244,7 +244,7 @@ class GenerateReport extends PolicyDocument {
                 $totalendorsements = sizeOf($previous_policy_data);
             }
             if(isset($value['product']) && $value['product'] == "Individual Professional Liability"){
-                $response[$i]['certificate_no'] = $value['certificate_no'];
+                $response[$i]['certificate_no'] = isset($value['certificate_no']) ? $value['certificate_no'] : "";
                 $response[$i]['PADI_No'] = $value['padi'];
                 $response[$i]['firstname'] =$value['firstname'];
                 $response[$i]['initial'] = $value['initial'];
@@ -257,22 +257,22 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['zip'] = $value['zip'];
                 $response[$i]['country'] = $value['country'];
                 $response[$i]['certificate_type'] = (isset($value['endoEffectiveDate'])) ? 'Endorsement' : 'Primary Coverage';
-                $response[$i]['renewal_new'] = $value['isRenewalFlow'] == "false"? "New" : "Renewal";
+                $response[$i]['renewal_new'] = isset($value['isRenewalFlow']) ? $value['isRenewalFlow']  == "false"? "New" : "Renewal" : "";
                 $response[$i]['program'] = isset($value['endoEffectiveDate']) ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage']);
                 $response[$i]['start_date'] = $value['start_date'];
                 $response[$i]['end_date'] = $value['end_date'];
-                $response[$i]['premium'] = $value['careerCoveragePrice'];
+                $response[$i]['premium'] = isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : "";
                 $response[$i]['equipment'] = isset($value['equipmentPrice']) && $value['equipmentPrice'] != "" || $value['equipmentPrice'] != null ? $value['equipmentPrice'] : "$0";
-                $response[$i]['excess'] = (isset($value['endoEffectiveDate'])) ? $value['excessLiabilityPricePayable'] : $value['excessLiabilityPrice'];
-                $response[$i]['scuba_fit'] = $value['scubaFitPrice'];
+                $response[$i]['excess'] = (isset($value['endoEffectiveDate'])) ? (isset($value['excessLiabilityPricePayable']) ?  $value['excessLiabilityPricePayable']: isset($value['excessLiabilityPrice']) ? $value['excessLiabilityPrice'] : "" ) : "";
+                $response[$i]['scuba_fit'] = isset($value['scubaFitPrice']) ? $value['scubaFitPrice'] : "";
                 $response[$i]['upgrade'] = ((isset($value['endoEffectiveDate'])) && ($value['careerCoveragePrice'] != "" || $value['careerCoveragePrice'] != 0 || $value['careerCoveragePrice'] != null)) ? $this->checkStatus($value['careerCoverage']) : "";
-                $response[$i]['cylinder'] = $value['cylinderPrice'];
+                $response[$i]['cylinder'] = isset($value['cylinderPrice']) ? $value['cylinderPrice'] : "" ;
                 $response[$i]['total'] = ((int) $response[$i]['premium']) + ((int)$response[$i]['equipment']) + ((int) $response[$i]['excess']) + ((int)$response[$i]['scuba_fit']) + ((int)$response[$i]['cylinder']);
                 $response[$i]['cancel_date'] = isset($value['cancelDate']) ? $value['cancelDate'] : "" ;
                 $response[$i]['cancelled'] = isset($value['cancellationStatus']) && $value['cancellationStatus'] == "approved"? "True" : "False";
                 $response[$i]['auto_renewal'] = $value['automatic_renewal']? "Yes" : "No";
                 $response[$i]['installment'] = $value['premiumFinanceSelect'] == "no" ? "No" : "Yes";
-                $response[$i]['downPayment'] = $value['downPayment'];
+                $response[$i]['downPayment'] = isset($value['downPayment']) ? $value['downPayment'] : "" ;
                 $response[$i]['totalPaid'] = $value['premiumFinanceSelect'] == "no"?  $response[$i]['total'] : $value['downPayment'];
                 $responseData['data'] = $response;
                 $i += 1; 
@@ -282,15 +282,15 @@ class GenerateReport extends PolicyDocument {
                 $this->logger->info('group PL members need to be formatted to a new array');
                 if(isset($value['groupPL'])){
                     $groupData = is_string($value['groupPL']) ? json_decode($value['groupPL'], true) : $value['groupPL'];
-                    $params['status'] = 'Completed';
-                    $params['entityName'] = 'Dive Store';
-                    $endDate = date("Y-m-d" ,strtotime('-1 year',strtotime($value['end_date'])));
-                    $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'eq','value'=>$endDate);
-                    $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$value['business_padi']);
-                    $policyList = $this->getFileList($params,$filterParams);
-                    if(count($policyList['data']) > 0){
-                        $fileData = json_decode($policyList['data'][0]['data'],true);
-                    }
+                    // $params['status'] = 'Completed';
+                    // $params['entityName'] = 'Dive Store';
+                    // $endDate = date("Y-m-d" ,strtotime('-1 year',strtotime($value['end_date'])));
+                    // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'eq','value'=>$endDate);
+                    // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$value['business_padi']);
+                    // $policyList = $this->getFileList($params,$filterParams);
+                    // if(count($policyList['data']) > 0){
+                    //     $fileData = json_decode($policyList['data'][0]['data'],true);
+                    // }
                 } else {
                     $groupData = array();
                 }
@@ -301,33 +301,36 @@ class GenerateReport extends PolicyDocument {
                 if(isset($value['previous_policy_data'])){
                     $previous_policy_data = json_decode($value['previous_policy_data'],true);
                     $totalendorsements = sizeOf($previous_policy_data);
-                    $previous_groupPL = $previous_policy_data[$totalendorsements - 1]['previous_groupPL'];
-                    $j =0;
-                    foreach ($previous_groupPL as $key2 => $value2){
-                        foreach ($groupData as $key1 => $value1) {
-                            if($value2['padi'] == $value1['padi']) {
-                                if($value2['status'] != $value1['status']){
-                                    $previous_careerCoverage[$j] = $value2;
-                                    $groupPL[$j] = $value1;
-                                    $j+= 1;
+                    if(isset($previous_policy_data[$totalendorsements - 1]['previous_groupPL'])){
+                        $previous_groupPL = $previous_policy_data[$totalendorsements - 1]['previous_groupPL'];
+                        $j =0;
+                        foreach ($previous_groupPL as $key2 => $value2){
+                            foreach ($groupData as $key1 => $value1) {
+                                if($value2['padi'] == $value1['padi']) {
+                                    if($value2['status'] != $value1['status']){
+                                        $previous_careerCoverage[$j] = $value2;
+                                        $groupPL[$j] = $value1;
+                                        $j+= 1;
+                                    }
                                 }
                             }
                         }
                     }
+                    
                 }
                 else {
                     $groupPL = $groupData;
                 }
                 foreach ($groupPL as $key2 => $value2) {
-                    if(isset($fileData)){
-                        $key = array_search($value2['padi'], array_column($fileData['groupPL'], 'padi'));
-                        if(!is_null($key)){
-                            $response[$i]['renewal'] = "Renewal";
-                        }
-                    }
-                    else{
-                        $response[$i]['renewal'] = "New";
-                    }
+                    // if(isset($fileData)){
+                    //     $key = array_search($value2['padi'], array_column($fileData['groupPL'], 'padi'));
+                    //     if(!is_null($key)){
+                    //         $response[$i]['renewal'] = "Renewal";
+                    //     }
+                    // }
+                    // else{
+                    //     $response[$i]['renewal'] = "New";
+                    // }
                     $response[$i]['certificate_no'] = $value['certificate_no'];
                     $response[$i]['padi'] = $value2['padi'];
                     $response[$i]['business_padi'] = $value['business_padi'];
@@ -355,6 +358,7 @@ class GenerateReport extends PolicyDocument {
                     $responseData['data'] = $response;
                     $i += 1; 
                 }  
+            
             }
             if(($product == "diveStoreProperty" || $product == "diveStore")){
                 $this->logger->info('Additional Locations need to be formatted to a new array');
