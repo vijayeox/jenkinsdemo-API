@@ -102,18 +102,28 @@ class GenerateReport extends PolicyDocument {
         return $formattedDate;
     }
 
-    private function excelDataMassage($data){ 
+    private function excelDataMassage($data){
         $result = array();
         foreach ($data as $key =>$List) {
             foreach ($List as $i => $response) {
-                if(array_key_exists($i,$List)){
-                    $result[$i][] = $List[$i];
+                if(is_array($response)){
+                    foreach ($response as $j => $innerResponse){
+                        if(array_key_exists($j,$response)){
+                            $result[$j][] = $response[$j];
+                        }
+                    }
                 }
+                else {
+                    if(array_key_exists($i,$List)){
+                        $result[$i][] = $List[$i];
+                    }
+                }
+
             }
+
         }
         return $result;
     }
-
     private function coverageFP($data){
         
         switch($data) {
@@ -266,24 +276,24 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['taxFiling'] = $value['state'];
                 $response[$i]['zip'] = $value['zip'];
                 $response[$i]['country'] = $value['country'];
-                $response[$i]['certificate_type'] = (isset($totalendorsements) && $totalendorsements > 0) ? 'Endorsement' : 'Primary Coverage';
+                $response[$i]['certificate_type'] = (isset($totalendorsements) && $totalendorsements > 0) || isset($value[$update_date]) ? 'Endorsement' : 'Primary Coverage';
                 $response[$i]['renewal_new'] = isset($value['isRenewalFlow']) ? $value['isRenewalFlow']  == "false"? "New" : "Renewal" : "";
-                $response[$i]['program'] = isset($totalendorsements) && $totalendorsements > 0 ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage']);
+                $response[$i]['program'] = isset($totalendorsements) && $totalendorsements > 0 ||isset($value[$update_date]) ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage']);
                 $response[$i]['start_date'] = $this->formatDate($value['start_date']);
                 $response[$i]['end_date'] = $this->formatDate($value['end_date']);
                 $response[$i]['premium'] = isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : "0";
                 $response[$i]['equipment'] = isset($value['equipmentPrice']) && $value['equipmentPrice'] != "" || $value['equipmentPrice'] != null ? $value['equipmentPrice'] : "0";
-                $response[$i]['excess'] = isset($totalendorsements) && $totalendorsements > 0 ? (isset($value['excessLiabilityPricePayable']) ?  $value['excessLiabilityPricePayable']: isset($value['excessLiabilityPrice']) ? $value['excessLiabilityPrice'] : "0" ) : "0";
+                $response[$i]['excess'] = isset($totalendorsements) && $totalendorsements > 0|| isset($value[$update_date])  ? (isset($value['excessLiabilityPricePayable']) ?  $value['excessLiabilityPricePayable']: isset($value['excessLiabilityPrice']) ? $value['excessLiabilityPrice'] : "0" ) : "0";
                 $response[$i]['scuba_fit'] = isset($value['scubaFitPrice']) ? $value['scubaFitPrice'] : "0";
                 $response[$i]['upgrade'] = (((isset($totalendorsements)) && $totalendorsements > 0) && ($value['careerCoveragePrice'] != "" || $value['careerCoveragePrice'] != 0 || $value['careerCoveragePrice'] != null)) ? $this->checkStatus($value['careerCoverage']) : "";
                 $response[$i]['cylinder'] = isset($value['cylinderPrice']) ? $value['cylinderPrice'] : "0" ;
                 $response[$i]['total'] = (((float) $response[$i]['premium']) + ((float)$response[$i]['equipment']) + ((float) $response[$i]['excess']) + ((float)$response[$i]['scuba_fit']) + ((float)$response[$i]['cylinder']));
                 $response[$i]['cancel_date'] = isset($value['cancelDate']) ? $this->formatDate($value['cancelDate']) : "" ;
                 $response[$i]['cancelled'] = isset($value['cancellationStatus']) && $value['cancellationStatus'] == "approved"? "True" : "False";
-                $response[$i]['auto_renewal'] = isset($totalendorsements) && $totalendorsements > 0 ? "No" : $value['automatic_renewal']? "Yes" : "No";
-                $response[$i]['installment'] = isset($totalendorsements) && $totalendorsements > 0 ? "No" : ($value['premiumFinanceSelect'] == "no" ? "No" : "Yes");
+                $response[$i]['auto_renewal'] = isset($totalendorsements) && $totalendorsements > 0 || isset($value[$update_date]) ? "No" : ($value['automatic_renewal']? "Yes" : "No");
+                $response[$i]['installment'] = isset($totalendorsements) && $totalendorsements > 0 || isset($value[$update_date]) ? "No" : ($value['premiumFinanceSelect'] == "no" ? "No" : "Yes");
                 $response[$i]['downPayment'] = isset($value['downPayment']) ? $value['downPayment'] : "0" ;
-                $response[$i]['totalPaid'] = isset($totalendorsements) && $totalendorsements > 0 ? $response[$i]['total'] : ($value['premiumFinanceSelect'] == "no"?  $response[$i]['total'] : $value['downPayment']);
+                $response[$i]['totalPaid'] = isset($totalendorsements) && $totalendorsements > 0 || isset($value[$update_date]) ? $response[$i]['total'] : ($value['premiumFinanceSelect'] == "no"?  $response[$i]['total'] : $value['downPayment']);
                 $responseData['data'] = $response;
                 $i += 1; 
             }
@@ -292,15 +302,6 @@ class GenerateReport extends PolicyDocument {
                 $this->logger->info('group PL members need to be formatted to a new array');
                 if(isset($value['groupPL'])){
                     $groupData = is_string($value['groupPL']) ? json_decode($value['groupPL'], true) : $value['groupPL'];
-                    // $params['status'] = 'Completed';
-                    // $params['entityName'] = 'Dive Store';
-                    // $endDate = date("Y-m-d" ,strtotime('-1 year',strtotime($value['end_date'])));
-                    // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'end_date','operator'=>'eq','value'=>$endDate);
-                    // $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'padi','operator'=>'eq','value'=>$value['business_padi']);
-                    // $policyList = $this->getFileList($params,$filterParams);
-                    // if(count($policyList['data']) > 0){
-                    //     $fileData = json_decode($policyList['data'][0]['data'],true);
-                    // }
                 } else {
                     $groupData = array();
                 }
@@ -330,15 +331,6 @@ class GenerateReport extends PolicyDocument {
                     $groupPL = $groupData;
                 }
                 foreach ($groupPL as $key2 => $value2) { 
-                    // if(isset($fileData)){
-                    //     $key = array_search($value2['padi'], array_column($fileData['groupPL'], 'padi'));
-                    //     if(!is_null($key)){
-                    //         $response[$i]['renewal'] = "Renewal";
-                    //     }
-                    // }
-                    // else{
-                    //     $response[$i]['renewal'] = "New";
-                    // }
                     if(isset($previous_careerCoverage)){
                         $key = array_search($value2['padi'], array_column($fileData['groupPL'], 'padi'));
                     }
@@ -419,60 +411,61 @@ class GenerateReport extends PolicyDocument {
                     $responsePrimary[$i]['ExcessLiability']  = isset($previous_policy['previous_ExcessLiabilityFP']) ? ((float)($value['ExcessLiabilityFP']) - (float)$previous_policy['previous_ExcessLiabilityFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['ExcessLiabilityFP']) ? "0" : $value['ExcessLiabilityFP']);
                     $responsePrimary[$i]['TravelAgent'] = isset($previous_policy['previous_TravelAgentEOFP']) ? ((float)$value['TravelAgentEOFP'] - (float)$previous_policy['previous_TravelAgentEOFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['TravelAgentEOFP']) ? "0" : $value['TravelAgentEOFP'] ); 
                     $responsePrimary[$i]['medicalExpense'] = isset($previous_policy['previous_MedicalExpenseFP']) ?  ((float)$value['MedicalExpenseFP'] - (float)$previous_policy['previous_MedicalExpenseFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['MedicalExpenseFP']) ? "0" : $value['MedicalExpenseFP'] );
-                    $responsePrimary[$i]['lakeQuarry'] = ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : (is_null($value['lakeQuarryPond']) ? "0" : $value['lakeQuarryPond']) );
+                    $responsePrimary[$i]['lakeQuarry'] = "0" ;
                     $responsePrimary[$i]['nonOwnedAuto'] = isset($previous_policy['previous_Non-OwnedAutoFP']) ? ((float)$value['Non-OwnedAutoFP'] - (float)$previous_policy['previous_Non-OwnedAutoFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['Non-OwnedAutoFP']) ? "0" : $value['Non-OwnedAutoFP']);
                 }
-                $responsePl = $responsePrimary;
+                $responseData['data'] = $responsePrimary;
                 if((isset($value['additionalLocationsSelect'])) && $value['additionalLocationsSelect'] == "yes"){
+                    $j=0;
                     foreach ($additionalLocationData as $key2 => $value2) { 
-                        if(isset($previous_additionalLocation)){
+                    if(isset($previous_additionalLocation)){
                             $key = array_search($value2['name'], array_column($previous_additionalLocation, 'name'));
-                        }
-                        $response[$i]['certificate_no'] = $value['certificate_no'];
-                        $response[$i]['business_padi'] = $value['business_padi'];
-                        $response[$i]['PADI_No_AL'] = $value2['padiNumberAL'];
-                        $response[$i]['business_name'] =$value['business_name'];
-                        $response[$i]['storeLocation'] = $value2['address'];
-                        $response[$i]['address1'] = $value2['address'];
-                        $response[$i]['address2'] = isset($value2['address2']) ? $value2['address2'] : '';
-                        $response[$i]['city'] = $value2['city'];
-                        $response[$i]['state'] = is_array($value['state']) ? " " :$value['state'] ;
-                        $response[$i]['zip'] = $value2['zip'];
-                        $response[$i]['country'] = $value2['country'];
-                        $response[$i]['taxFiling'] = is_array($value['state']) ? " " :$value['state'] ;
-                        $response[$i]['coverage'] = $this->coverageFP($value['liabilityCoverageOption']);
-                        $response[$i]['start_date'] = $this->formatDate($value['start_date']);
-                        $response[$i]['end_date'] = $this->formatDate($value['end_date']);
-                        $response[$i]['certificate_type'] =  isset($totalendorsements) && $totalendorsements > 0 ? 'Endorsement' : 'Primary Coverage';
+                    }
+                        $response[$i][$j]['certificate_no'] = $value['certificate_no'];
+                        $response[$i][$j]['business_padi'] = $value['business_padi'];
+                        $response[$i][$j]['PADI_No_AL'] = $value2['padiNumberAL'];
+                        $response[$i][$j]['business_name'] =$value['business_name'];
+                        $response[$i][$j]['storeLocation'] = $value2['address'];
+                        $response[$i][$j]['address1'] = $value2['address'];
+                        $response[$i][$j]['address2'] = isset($value2['address2']) ? $value2['address2'] : '';
+                        $response[$i][$j]['city'] = $value2['city'];
+                        $response[$i][$j]['state'] = is_array($value['state']) ? " " :$value['state'] ;
+                        $response[$i][$j]['zip'] = $value2['zip'];
+                        $response[$i][$j]['country'] = $value2['country'];
+                        $response[$i][$j]['taxFiling'] = is_array($value['state']) ? " " :$value['state'] ;
+                        $response[$i][$j]['coverage'] = $this->coverageFP($value['liabilityCoverageOption']);
+                        $response[$i][$j]['start_date'] = $this->formatDate($value['start_date']);
+                        $response[$i][$j]['end_date'] = $this->formatDate($value['end_date']);
+                        $response[$i][$j]['certificate_type'] =  isset($totalendorsements) && $totalendorsements > 0 ? 'Endorsement' : 'Primary Coverage';
                         if($product == "diveStoreProperty") { 
-                            $response[$i]['propertyDeductables'] = $value['propertyDeductibles'] == "propertyDeductibles1000"? "$1,000" : $value['propertyDeductibles'] == "propertyDeductibles2500"? "$2,500" : $value['propertyDeductibles'] == "propertyDeductibles5000"? "$5,000" : "$1,000" ;
-                            $response[$i]['catSelection'] = $value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT";
-                            $response[$i]['Addl_Cnts_Limit'] = isset($previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal']) ? ((float)$value2['additionalLocationPropertyTotal']) - (float)$previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal'] : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['additionalLocationPropertyTotal']) ? "0" : $value2['additionalLocationPropertyTotal'] );
-                            $response[$i]['Addl_Contents_Premium'] = isset($previous_additionalLocation[$key]['previous_ALContentsFP']) ? ((float)$value2['ALContentsFP'] - (float)$previous_additionalLocation[$key]['previous_ALContentsFP']) : (isset( $value2['endoALContentsFP']) ? $value2['endoALContentsFP'] :  ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALContentsFP']) ? "0" : $value2['ALContentsFP']));
-                            $response[$i]['Loss_of_Business_Income_Limit'] = isset($previous_additionalLocation[$key]['previous_ALLossofBusIncome']) ? ((float)$value2['ALLossofBusIncome'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncome']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALLossofBusIncome']) ? "0" : $value2['ALLossofBusIncome']);
-                            $response[$i]['Additional_Loss_of_Income_Premium'] = isset($previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) ? ((float)$value2['ALLossofBusIncomeFP'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) : (isset($value2['endoALLossofBusIncomeFP']) ?  $value2['endoALLossofBusIncomeFP'] : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALLossofBusIncomeFP']) ? "0" : $value2['ALLossofBusIncomeFP']));
-                            $response[$i]['buildingType'] = $value2['buildingConstruction'];
-                            $response[$i]['Building_Limit'] = isset($previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) ? ((float)$value2['ALBuildingReplacementValue'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALBuildingReplacementValue']) ? "0" : $value2['ALBuildingReplacementValue']);
-                            $response[$i]['Building_Premium'] = isset($previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) ? ((float)$value2['ALBuildingLimitFP'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) : isset($value2['endoALBuildingLimitFP']) ? $value2['endoALBuildingLimitFP']: ((isset($totalendorsements) && $totalendorsements > 0) ? "0" :(is_null($value2['ALBuildingLimitFP']) ? "0" : $value2['ALBuildingLimitFP']));
-                            $response[$i]['Total'] =  ((float)$response[$i]['Building_Premium'] + (float)$response[$i]['Additional_Loss_of_Income_Premium'] + (float)$response[$i]['Addl_Contents_Premium']);
+                            $response[$i][$j]['propertyDeductables'] = $value['propertyDeductibles'] == "propertyDeductibles1000"? "$1,000" : $value['propertyDeductibles'] == "propertyDeductibles2500"? "$2,500" : $value['propertyDeductibles'] == "propertyDeductibles5000"? "$5,000" : "$1,000" ;
+                            $response[$i][$j]['catSelection'] = $value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT";
+                            $response[$i][$j]['Addl_Cnts_Limit'] = isset($previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal']) ? ((float)$value2['additionalLocationPropertyTotal']) - (float)$previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal'] : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['additionalLocationPropertyTotal']) ? "0" : $value2['additionalLocationPropertyTotal'] );
+                            $response[$i][$j]['Addl_Contents_Premium'] = isset($previous_additionalLocation[$key]['previous_ALContentsFP']) ? ((float)$value2['ALContentsFP'] - (float)$previous_additionalLocation[$key]['previous_ALContentsFP']) : (isset( $value2['endoALContentsFP']) ? $value2['endoALContentsFP'] :  ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALContentsFP']) ? "0" : $value2['ALContentsFP']));
+                            $response[$i][$j]['Loss_of_Business_Income_Limit'] = isset($previous_additionalLocation[$key]['previous_ALLossofBusIncome']) ? ((float)$value2['ALLossofBusIncome'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncome']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALLossofBusIncome']) ? "0" : $value2['ALLossofBusIncome']);
+                            $response[$i][$j]['Additional_Loss_of_Income_Premium'] = isset($previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) ? ((float)$value2['ALLossofBusIncomeFP'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) : (isset($value2['endoALLossofBusIncomeFP']) ?  $value2['endoALLossofBusIncomeFP'] : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALLossofBusIncomeFP']) ? "0" : $value2['ALLossofBusIncomeFP']));
+                            $response[$i][$j]['buildingType'] = $value2['buildingConstruction'];
+                            $response[$i][$j]['Building_Limit'] = isset($previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) ? ((float)$value2['ALBuildingReplacementValue'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALBuildingReplacementValue']) ? "0" : $value2['ALBuildingReplacementValue']);
+                            $response[$i][$j]['Building_Premium'] = isset($previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) ? ((float)$value2['ALBuildingLimitFP'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) : isset($value2['endoALBuildingLimitFP']) ? $value2['endoALBuildingLimitFP']: ((isset($totalendorsements) && $totalendorsements > 0) ? "0" :(is_null($value2['ALBuildingLimitFP']) ? "0" : $value2['ALBuildingLimitFP']));
+                            $response[$i][$j]['Total'] =  ((float)$response[$i]['Building_Premium'] + (float)$response[$i]['Additional_Loss_of_Income_Premium'] + (float)$response[$i]['Addl_Contents_Premium']);
                         }
                         if($product == "diveStore"){
-                            $response[$i]['basepremium'] = isset($previous_additionalLocation[$key]['previous_ALCoverageFP']) ? ((float)$value2['ALCoverageFP'] - (float)$previous_additionalLocation[$key]['previous_ALCoverageFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALCoverageFP']) ? "0" : $value2['ALCoverageFP'] );
-                            $response[$i]['nonDivingPool'] = isset($previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) ? ((float)($value2['ALnonDivingPoolAmount']) - (float)$previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALnonDivingPoolAmount']) ? "0" : $value2['ALnonDivingPoolAmount']);
-                            $response[$i]['ExcessLiability']  = isset($previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) ? ((float)($value2['ALExcessLiabilityFP']) - (float)$previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALExcessLiabilityFP']) ? "0" : $value2['ALExcessLiabilityFP']);
-                            $response[$i]['TravelAgent'] = isset($previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) ? ((float)$value2['ALTravelAgentEOFP'] - (float)$previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALTravelAgentEOFP']) ? "0" : $value2['ALTravelAgentEOFP']) ; 
-                            $response[$i]['medicalExpense'] = isset($previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) ?  ((float)$value2['ALMedicalExpenseFP'] - (float)$previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : isset($value2['ALMedicalExpenseFP']) ? "0" : $value2['ALMedicalExpenseFP']) ;
-                            $response[$i]['lakeQuarry'] = isset($previous_additionalLocation[$key]['previous_ALlakeQuarry']) ? ((float)$value2['ALlakeQuarry'] - (float)$previous_additionalLocation[$key]['previous_ALlakeQuarry']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALlakeQuarry'])? "0" : $value2['ALlakeQuarry'] );
-                            $response[$i]['nonOwnedAuto'] = isset($previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) ? ((float)$value2['ALNonOwnedAutoFP'] - (float)$previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALNonOwnedAutoFP'])? "0" : $value2['ALNonOwnedAutoFP']);
+                            $response[$i][$j]['basepremium'] = isset($previous_additionalLocation[$key]['previous_ALCoverageFP']) ? ((float)$value2['ALCoverageFP'] - (float)$previous_additionalLocation[$key]['previous_ALCoverageFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALCoverageFP']) ? "0" : $value2['ALCoverageFP'] );
+                            $response[$i][$j]['nonDivingPool'] = isset($previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) ? ((float)($value2['ALnonDivingPoolAmount']) - (float)$previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALnonDivingPoolAmount']) ? "0" : $value2['ALnonDivingPoolAmount']);
+                            $response[$i][$j]['ExcessLiability']  = isset($previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) ? ((float)($value2['ALExcessLiabilityFP']) - (float)$previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALExcessLiabilityFP']) ? "0" : $value2['ALExcessLiabilityFP']);
+                            $response[$i][$j]['TravelAgent'] = isset($previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) ? ((float)$value2['ALTravelAgentEOFP'] - (float)$previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALTravelAgentEOFP']) ? "0" : $value2['ALTravelAgentEOFP']) ; 
+                            $response[$i][$j]['medicalExpense'] = isset($previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) ?  ((float)$value2['ALMedicalExpenseFP'] - (float)$previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : isset($value2['ALMedicalExpenseFP']) ? "0" : $value2['ALMedicalExpenseFP']) ;
+                            $response[$i][$j]['lakeQuarry'] = isset($previous_additionalLocation[$key]['previous_ALlakeQuarry']) ? ((float)$value2['ALlakeQuarry'] - (float)$previous_additionalLocation[$key]['previous_ALlakeQuarry']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALlakeQuarry'])? "0" : $value2['ALlakeQuarry'] );
+                            $response[$i][$j]['nonOwnedAuto'] = isset($previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) ? ((float)$value2['ALNonOwnedAutoFP'] - (float)$previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value2['ALNonOwnedAutoFP'])? "0" : $value2['ALNonOwnedAutoFP']);
                         }
-
-                        $responseData['data'] = $response;
-                        $i += 1; 
-                    } 
-                    $responseData['data'] = array_merge($responseData['data'],$responsePl);
-                    $this->logger->info('the Dive store response data is : '.print_r($responseData, true)); 
+                        $responseAl['data'] = $response;
+                        $j+= 1;
+                    }
                 }
-
+                $i += 1; 
+            }
+            if(isset($responseAl['data'])){
+                $responseData['data'] = array_merge($responseData['data'],$responseAl['data']);
             }
             $responseData['total'] = $i;
         }
