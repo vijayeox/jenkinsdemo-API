@@ -276,24 +276,24 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['taxFiling'] = $value['state'];
                 $response[$i]['zip'] = $value['zip'];
                 $response[$i]['country'] = $value['country'];
-                $response[$i]['certificate_type'] = (isset($totalendorsements) && $totalendorsements > 0) || isset($value[$update_date]) ? 'Endorsement' : 'Primary Coverage';
+                $response[$i]['certificate_type'] = (isset($totalendorsements) && $totalendorsements > 0) ? 'Endorsement' : 'Primary Coverage';
                 $response[$i]['renewal_new'] = isset($value['isRenewalFlow']) ? $value['isRenewalFlow']  == "false"? "New" : "Renewal" : "";
-                $response[$i]['program'] = isset($totalendorsements) && $totalendorsements > 0 ||isset($value[$update_date]) ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage']);
+                $response[$i]['program'] = isset($totalendorsements) && $totalendorsements > 0 ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage']);
                 $response[$i]['start_date'] = $this->formatDate($value['start_date']);
                 $response[$i]['end_date'] = $this->formatDate($value['end_date']);
                 $response[$i]['premium'] = isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : "0";
                 $response[$i]['equipment'] = isset($value['equipmentPrice']) && $value['equipmentPrice'] != "" || $value['equipmentPrice'] != null ? $value['equipmentPrice'] : "0";
-                $response[$i]['excess'] = isset($totalendorsements) && $totalendorsements > 0|| isset($value[$update_date])  ? (isset($value['excessLiabilityPricePayable']) ?  $value['excessLiabilityPricePayable']: isset($value['excessLiabilityPrice']) ? $value['excessLiabilityPrice'] : "0" ) : "0";
+                $response[$i]['excess'] = isset($totalendorsements) && $totalendorsements > 0 ? (isset($value['excessLiabilityPricePayable']) ?  $value['excessLiabilityPricePayable']: isset($value['excessLiabilityPrice']) ? $value['excessLiabilityPrice'] : "0" ) : "0";
                 $response[$i]['scuba_fit'] = isset($value['scubaFitPrice']) ? $value['scubaFitPrice'] : "0";
                 $response[$i]['upgrade'] = (((isset($totalendorsements)) && $totalendorsements > 0) && ($value['careerCoveragePrice'] != "" || $value['careerCoveragePrice'] != 0 || $value['careerCoveragePrice'] != null)) ? $this->checkStatus($value['careerCoverage']) : "";
                 $response[$i]['cylinder'] = isset($value['cylinderPrice']) ? $value['cylinderPrice'] : "0" ;
                 $response[$i]['total'] = (((float) $response[$i]['premium']) + ((float)$response[$i]['equipment']) + ((float) $response[$i]['excess']) + ((float)$response[$i]['scuba_fit']) + ((float)$response[$i]['cylinder']));
                 $response[$i]['cancel_date'] = isset($value['cancelDate']) ? $this->formatDate($value['cancelDate']) : "" ;
                 $response[$i]['cancelled'] = isset($value['cancellationStatus']) && $value['cancellationStatus'] == "approved"? "True" : "False";
-                $response[$i]['auto_renewal'] = isset($totalendorsements) && $totalendorsements > 0 || isset($value[$update_date]) ? "No" : ($value['automatic_renewal']? "Yes" : "No");
-                $response[$i]['installment'] = isset($totalendorsements) && $totalendorsements > 0 || isset($value[$update_date]) ? "No" : ($value['premiumFinanceSelect'] == "no" ? "No" : "Yes");
+                $response[$i]['auto_renewal'] = isset($totalendorsements) && $totalendorsements > 0 ? "No" : ($value['automatic_renewal']? "Yes" : "No");
+                $response[$i]['installment'] = isset($totalendorsements) && $totalendorsements > 0 ? "No" : ($value['premiumFinanceSelect'] == "no" ? "No" : "Yes");
                 $response[$i]['downPayment'] = isset($value['downPayment']) ? $value['downPayment'] : "0" ;
-                $response[$i]['totalPaid'] = isset($totalendorsements) && $totalendorsements > 0 || isset($value[$update_date]) ? $response[$i]['total'] : ($value['premiumFinanceSelect'] == "no"?  $response[$i]['total'] : $value['downPayment']);
+                $response[$i]['totalPaid'] = isset($totalendorsements) && $totalendorsements > 0 ? $response[$i]['total'] : ($value['premiumFinanceSelect'] == "no"?  $response[$i]['total'] : $value['downPayment']);
                 $responseData['data'] = $response;
                 $i += 1; 
             }
@@ -411,7 +411,7 @@ class GenerateReport extends PolicyDocument {
                     $responsePrimary[$i]['ExcessLiability']  = isset($previous_policy['previous_ExcessLiabilityFP']) ? ((float)($value['ExcessLiabilityFP']) - (float)$previous_policy['previous_ExcessLiabilityFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['ExcessLiabilityFP']) ? "0" : $value['ExcessLiabilityFP']);
                     $responsePrimary[$i]['TravelAgent'] = isset($previous_policy['previous_TravelAgentEOFP']) ? ((float)$value['TravelAgentEOFP'] - (float)$previous_policy['previous_TravelAgentEOFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['TravelAgentEOFP']) ? "0" : $value['TravelAgentEOFP'] ); 
                     $responsePrimary[$i]['medicalExpense'] = isset($previous_policy['previous_MedicalExpenseFP']) ?  ((float)$value['MedicalExpenseFP'] - (float)$previous_policy['previous_MedicalExpenseFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['MedicalExpenseFP']) ? "0" : $value['MedicalExpenseFP'] );
-                    $responsePrimary[$i]['lakeQuarry'] = "0" ;
+                    $responsePrimary[$i]['lakeQuarry'] = "0";
                     $responsePrimary[$i]['nonOwnedAuto'] = isset($previous_policy['previous_Non-OwnedAutoFP']) ? ((float)$value['Non-OwnedAutoFP'] - (float)$previous_policy['previous_Non-OwnedAutoFP']) : ((isset($totalendorsements) && $totalendorsements > 0) ? "0" : is_null($value['Non-OwnedAutoFP']) ? "0" : $value['Non-OwnedAutoFP']);
                 }
                 $responseData['data'] = $responsePrimary;
