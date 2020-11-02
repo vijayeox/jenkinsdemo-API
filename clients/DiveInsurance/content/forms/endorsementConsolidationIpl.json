@@ -2871,6 +2871,23 @@
                                 "properties": {
                                     "clear_field": "state"
                                 },
+                                "logic": [{
+                                    "name": "Disable",
+                                    "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                    },
+                                    "actions": [{
+                                        "name": "Disable",
+                                        "type": "property",
+                                        "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                        },
+                                        "state": true
+                                    }]
+                                }],
                                 "type": "select",
                                 "indexeddb": {
                                     "filter": {}
@@ -2902,20 +2919,19 @@
                                 "refreshOn": "row.country",
                                 "clearOnRefresh": true,
                                 "selectThreshold": 0.3,
-                                "clearOnHide": false,
                                 "validate": {
                                     "customMessage": "Please select the State of the Additional Insured"
                                 },
                                 "errorLabel": "Additional Insured State",
                                 "key": "state",
-                                "customConditional": "show = (row.country)",
                                 "type": "select",
                                 "indexeddb": {
                                     "filter": {}
                                 },
                                 "input": true,
                                 "lockKey": true,
-                                "hideOnChildrenHidden": false
+                                "hideOnChildrenHidden": false,
+                                "redrawOn": "row.country"
                             }],
                             "width": 4,
                             "offset": 0,
@@ -3568,7 +3584,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 390,
+    "_vid": 391,
     "title": "Endorsement Consolidation - IPL",
     "display": "wizard",
     "access": [{
@@ -3589,6 +3605,6 @@
     "path": "endorsementconsolidationipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-13T11:01:28.672Z",
-    "modified": "2020-10-29T04:07:07.987Z",
+    "modified": "2020-11-02T13:05:01.632Z",
     "machineName": "testdivehub:endorsementConsolidationIpl"
 }

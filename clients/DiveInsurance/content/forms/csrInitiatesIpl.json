@@ -3979,6 +3979,23 @@
                                 "properties": {
                                     "clear_field": "state"
                                 },
+                                "logic": [{
+                                    "name": "Disable",
+                                    "trigger": {
+                                        "type": "javascript",
+                                        "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                    },
+                                    "actions": [{
+                                        "name": "Disable",
+                                        "type": "property",
+                                        "property": {
+                                            "label": "Disabled",
+                                            "value": "disabled",
+                                            "type": "boolean"
+                                        },
+                                        "state": true
+                                    }]
+                                }],
                                 "type": "select",
                                 "indexeddb": {
                                     "filter": {}
@@ -4010,20 +4027,19 @@
                                 "refreshOn": "row.country",
                                 "clearOnRefresh": true,
                                 "selectThreshold": 0.3,
-                                "clearOnHide": false,
                                 "validate": {
                                     "customMessage": "Please select the State of the Additional Insured"
                                 },
                                 "errorLabel": "Additional Insured State",
                                 "key": "state",
-                                "customConditional": "show = (row.country)",
                                 "type": "select",
                                 "indexeddb": {
                                     "filter": {}
                                 },
                                 "input": true,
                                 "lockKey": true,
-                                "hideOnChildrenHidden": false
+                                "hideOnChildrenHidden": false,
+                                "redrawOn": "row.country"
                             }],
                             "width": 4,
                             "offset": 0,
@@ -4993,7 +5009,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 609,
+    "_vid": 610,
     "title": "CSR Initiates - IPL",
     "display": "wizard",
     "access": [{
@@ -5014,6 +5030,6 @@
     "path": "csrinitiatesipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-10T05:45:55.432Z",
-    "modified": "2020-10-27T14:17:56.909Z",
+    "modified": "2020-11-02T13:05:05.218Z",
     "machineName": "testdivehub:csrInitiates"
 }
