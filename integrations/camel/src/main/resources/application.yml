@@ -68,7 +68,7 @@ elastic:
   host: ${HOST}
   port: 9200
   core: test
-  username: elastic
+  user: elastic
   password: changeme
 twillio:
    accountSid: AC953e0337acd4c093c3b91dc3e8f39581  

@@ -5427,6 +5427,23 @@
                                     "properties": {
                                         "clear_field": "state"
                                     },
+                                    "logic": [{
+                                        "name": "Disable",
+                                        "trigger": {
+                                            "type": "javascript",
+                                            "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                        },
+                                        "actions": [{
+                                            "name": "Disable",
+                                            "type": "property",
+                                            "property": {
+                                                "label": "Disabled",
+                                                "value": "disabled",
+                                                "type": "boolean"
+                                            },
+                                            "state": true
+                                        }]
+                                    }],
                                     "type": "select",
                                     "indexeddb": {
                                         "filter": {}
@@ -5463,14 +5480,14 @@
                                     },
                                     "errorLabel": "Additional Insured State",
                                     "key": "state",
-                                    "customConditional": "show = (row.country)",
                                     "type": "select",
                                     "indexeddb": {
                                         "filter": {}
                                     },
                                     "input": true,
                                     "lockKey": true,
-                                    "hideOnChildrenHidden": false
+                                    "hideOnChildrenHidden": false,
+                                    "redrawOn": "row.country"
                                 }],
                                 "width": 4,
                                 "offset": 0,
@@ -5822,12 +5839,30 @@
                                     "selectThreshold": 0.3,
                                     "clearOnHide": false,
                                     "validate": {
-                                        "customMessage": "Please enter your country."
+                                        "customMessage": "Please select the Country of the Additional Insured"
                                     },
+                                    "errorLabel": "Additional Insured Country",
                                     "key": "country",
                                     "properties": {
                                         "clear_field": "state"
                                     },
+                                    "logic": [{
+                                        "name": "Disable",
+                                        "trigger": {
+                                            "type": "javascript",
+                                            "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                        },
+                                        "actions": [{
+                                            "name": "Disable",
+                                            "type": "property",
+                                            "property": {
+                                                "label": "Disabled",
+                                                "value": "disabled",
+                                                "type": "boolean"
+                                            },
+                                            "state": true
+                                        }]
+                                    }],
                                     "type": "select",
                                     "indexeddb": {
                                         "filter": {}
@@ -5868,7 +5903,10 @@
                                     "refreshOn": "row.country",
                                     "clearOnRefresh": true,
                                     "selectThreshold": 0.3,
-                                    "clearOnHide": false,
+                                    "validate": {
+                                        "customMessage": "Please select the State of the Additional Insured"
+                                    },
+                                    "errorLabel": "Additional Insured State",
                                     "key": "state",
                                     "type": "select",
                                     "indexeddb": {
@@ -5876,7 +5914,8 @@
                                     },
                                     "input": true,
                                     "lockKey": true,
-                                    "hideOnChildrenHidden": false
+                                    "hideOnChildrenHidden": false,
+                                    "redrawOn": "row.country"
                                 }],
                                 "width": 4,
                                 "offset": 0,
@@ -6048,12 +6087,30 @@
                                     "selectThreshold": 0.3,
                                     "clearOnHide": false,
                                     "validate": {
-                                        "customMessage": "Please enter your country."
+                                        "customMessage": "Please select the Country of the Additional Insured"
                                     },
+                                    "errorLabel": "Additional Insured Country",
                                     "key": "country",
                                     "properties": {
                                         "clear_field": "state"
                                     },
+                                    "logic": [{
+                                        "name": "Disable",
+                                        "trigger": {
+                                            "type": "javascript",
+                                            "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                        },
+                                        "actions": [{
+                                            "name": "Disable",
+                                            "type": "property",
+                                            "property": {
+                                                "label": "Disabled",
+                                                "value": "disabled",
+                                                "type": "boolean"
+                                            },
+                                            "state": true
+                                        }]
+                                    }],
                                     "type": "select",
                                     "indexeddb": {
                                         "filter": {}
@@ -6097,7 +6154,10 @@
                                     "refreshOn": "row.country",
                                     "clearOnRefresh": true,
                                     "selectThreshold": 0.3,
-                                    "clearOnHide": false,
+                                    "validate": {
+                                        "customMessage": "Please select the State of the Additional Insured"
+                                    },
+                                    "errorLabel": "Additional Insured State",
                                     "key": "state",
                                     "type": "select",
                                     "indexeddb": {
@@ -6105,7 +6165,8 @@
                                     },
                                     "input": true,
                                     "lockKey": true,
-                                    "hideOnChildrenHidden": false
+                                    "hideOnChildrenHidden": false,
+                                    "redrawOn": "row.country"
                                 }],
                                 "width": 4,
                                 "offset": 0,
@@ -6419,6 +6480,23 @@
                                         "properties": {
                                             "clear_field": "state"
                                         },
+                                        "logic": [{
+                                            "name": "Disable",
+                                            "trigger": {
+                                                "type": "javascript",
+                                                "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                            },
+                                            "actions": [{
+                                                "name": "Disable",
+                                                "type": "property",
+                                                "property": {
+                                                    "label": "Disabled",
+                                                    "value": "disabled",
+                                                    "type": "boolean"
+                                                },
+                                                "state": true
+                                            }]
+                                        }],
                                         "type": "select",
                                         "indexeddb": {
                                             "filter": {}
@@ -6462,15 +6540,16 @@
                                         "refreshOn": "row.country",
                                         "clearOnRefresh": true,
                                         "selectThreshold": 0.3,
-                                        "clearOnHide": false,
                                         "validate": {
-                                            "required": true
+                                            "required": true,
+                                            "customMessage": "Please enter your state."
                                         },
                                         "key": "state",
                                         "type": "select",
                                         "indexeddb": {
                                             "filter": {}
                                         },
+                                        "redrawOn": "row.country",
                                         "input": true,
                                         "lockKey": true,
                                         "hideOnChildrenHidden": false
@@ -10519,7 +10598,6 @@
                     "initEmpty": false,
                     "hideLabel": true,
                     "tableView": false,
-                    "modalEdit": true,
                     "defaultValue": [{
                         "padi": "",
                         "firstname": "",
@@ -10527,12 +10605,12 @@
                         "status": "",
                         "nameOfInstitution": "",
                         "initial": "",
-                        "start_date": "2020-10-27",
+                        "start_date": "2020-10-29",
                         "documentattach": [],
                         "verified": "",
                         "rating": "",
                         "document1": [],
-                        "effectiveDate": "10-27-2020",
+                        "effectiveDate": "10-29-2020",
                         "email": "",
                         "address1": "",
                         "address2": "",
@@ -11101,6 +11179,23 @@
                                         "properties": {
                                             "clear_field": "state"
                                         },
+                                        "logic": [{
+                                            "name": "Disable",
+                                            "trigger": {
+                                                "type": "javascript",
+                                                "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                            },
+                                            "actions": [{
+                                                "name": "Disable",
+                                                "type": "property",
+                                                "property": {
+                                                    "label": "Disabled",
+                                                    "value": "disabled",
+                                                    "type": "boolean"
+                                                },
+                                                "state": true
+                                            }]
+                                        }],
                                         "type": "select",
                                         "indexeddb": {
                                             "filter": {}
@@ -11132,20 +11227,19 @@
                                         "refreshOn": "row.country",
                                         "clearOnRefresh": true,
                                         "selectThreshold": 0.3,
-                                        "clearOnHide": false,
                                         "validate": {
                                             "customMessage": "Please select the State of the Additional Insured"
                                         },
                                         "errorLabel": "Additional Insured State",
                                         "key": "state",
-                                        "customConditional": "show = (row.country)",
                                         "type": "select",
                                         "indexeddb": {
                                             "filter": {}
                                         },
                                         "input": true,
                                         "lockKey": true,
-                                        "hideOnChildrenHidden": false
+                                        "hideOnChildrenHidden": false,
+                                        "redrawOn": "row.country"
                                     }],
                                     "width": 4,
                                     "offset": 0,
@@ -11513,12 +11607,30 @@
                                         "selectThreshold": 0.3,
                                         "clearOnHide": false,
                                         "validate": {
-                                            "customMessage": "Please enter your country."
+                                            "customMessage": "Please select the Country of the Additional Insured"
                                         },
+                                        "errorLabel": "Additional Insured Country",
                                         "key": "country",
                                         "properties": {
                                             "clear_field": "state"
                                         },
+                                        "logic": [{
+                                            "name": "Disable",
+                                            "trigger": {
+                                                "type": "javascript",
+                                                "javascript": "if(row.state && row.state != \"\" && row.state != undefined && typeof row.state == \"string\" && row.state.length > 0 ){\n  result = true;\n}else{\n  result = false;\n}"
+                                            },
+                                            "actions": [{
+                                                "name": "Disable",
+                                                "type": "property",
+                                                "property": {
+                                                    "label": "Disabled",
+                                                    "value": "disabled",
+                                                    "type": "boolean"
+                                                },
+                                                "state": true
+                                            }]
+                                        }],
                                         "type": "select",
                                         "indexeddb": {
                                             "filter": {}
@@ -11559,7 +11671,10 @@
                                         "refreshOn": "row.country",
                                         "clearOnRefresh": true,
                                         "selectThreshold": 0.3,
-                                        "clearOnHide": false,
+                                        "validate": {
+                                            "customMessage": "Please select the State of the Additional Insured"
+                                        },
+                                        "errorLabel": "Additional Insured State",
                                         "key": "state",
                                         "type": "select",
                                         "indexeddb": {
@@ -11567,7 +11682,8 @@
                                         },
                                         "input": true,
                                         "lockKey": true,
-                                        "hideOnChildrenHidden": false
+                                        "hideOnChildrenHidden": false,
+                                        "redrawOn": "row.country"
                                     }],
                                     "width": 4,
                                     "offset": 0,
@@ -14537,7 +14653,7 @@
         "input": false
     }],
     "revisions": "current",
-    "_vid": 112,
+    "_vid": 132,
     "title": "diveStoreConsolidation3",
     "display": "wizard",
     "access": [{
@@ -14555,6 +14671,6 @@
     "path": "divestoreconsolidation3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-07-28T11:29:44.022Z",
-    "modified": "2020-10-28T11:39:06.370Z",
+    "modified": "2020-11-02T13:02:40.851Z",
     "machineName": "testdivehub:diveStoreConsolidation3"
 }
