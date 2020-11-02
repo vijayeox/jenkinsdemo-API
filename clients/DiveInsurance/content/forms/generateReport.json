@@ -184,7 +184,7 @@
     },
     {
       "label": " jobStatus",
-      "calculateValue": "value = \"In Force\";",
+      "calculateValue": "value = \"In Progress\";",
       "key": "jobStatus",
       "type": "hidden",
       "input": true,
