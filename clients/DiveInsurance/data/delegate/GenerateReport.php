@@ -89,7 +89,7 @@ class GenerateReport extends PolicyDocument {
         );
         if(!empty($result['data'])){
             $data['documents']['GenerateReport'] = $dest['relativePath'].$selectedTemplate['template'];
-            if(isset($data['jobStatus']) && ($data['jobStatus'] == 'In Force')){
+            if(isset($data['jobStatus']) && ($data['jobStatus'] == 'In Progress')){
                 $data['jobStatus'] = 'Completed';
             }  
         }
