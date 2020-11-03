@@ -272,7 +272,9 @@ class FileUtils
                     self::chmod_r($item->getPathname(),$permission);
                 } else {
                     if(!$item->isDot()){
-                        chmod($item->getPathname(), $permission);
+                        if(!chmod($item->getPathname(), $permission)){
+                            throw new Exception('Failed to Change Permission!.');
+                        }
                     }
                 }
             }

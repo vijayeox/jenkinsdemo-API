@@ -12,7 +12,7 @@ class RestClient
     
     public function __construct($baseUrl, $params=array())
     {
-        $config = ['verify' => false,'timeout'  => 220.0];
+        $config = ['verify' => false,'timeout'  => 400.0];
         if(isset($baseUrl)) {
             $config['base_uri'] = $baseUrl;
         }

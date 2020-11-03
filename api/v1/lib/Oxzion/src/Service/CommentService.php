@@ -131,11 +131,13 @@ class CommentService extends AbstractService
         $form->validate();
         $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
