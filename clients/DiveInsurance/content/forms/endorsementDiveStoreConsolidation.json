@@ -5461,7 +5461,6 @@
                             "tableView": false,
                             "clearOnHide": false,
                             "validate": {
-                                "pattern": "[0-9\\s-]*$",
                                 "step": "any"
                             },
                             "key": "padiNumberAL",
@@ -12357,7 +12356,6 @@
                                 "tableView": false,
                                 "clearOnHide": false,
                                 "validate": {
-                                    "pattern": "[0-9\\s-]*$",
                                     "step": "any"
                                 },
                                 "key": "padiNumberAL",
@@ -15654,7 +15652,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 106,
+    "_vid": 108,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15672,6 +15670,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-11-02T13:02:29.150Z",
+    "modified": "2020-11-03T14:28:00.013Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }
