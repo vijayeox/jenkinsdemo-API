@@ -66,7 +66,7 @@ class ClaimsExcelExport extends AbstractDocumentAppDelegate
     private function excelDataMassage($data)
     {
         $result = array();
-        foreach ($data as $j =>$item) {
+        foreach ($data as $j => $item) {
             foreach ($item as $i => $response) {
                 if (
                     $i == "valueDate" ||
@@ -135,9 +135,13 @@ class ClaimsExcelExport extends AbstractDocumentAppDelegate
     private function formatDate($data)
     {
         $date = strpos($data, "T") ? explode("T", $data)[0] : $data;
-        return date(
-            "m-d-Y",
-            strtotime($date)
-        );
+        if (is_null($date)) {
+            return "Invalid Date";
+        } else {
+            return date(
+                "m-d-Y",
+                strtotime($date)
+            );
+        }
     }
 }
