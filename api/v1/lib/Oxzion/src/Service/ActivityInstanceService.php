@@ -47,7 +47,7 @@ class ActivityInstanceService extends AbstractService
                         join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id
                         LEFT JOIN ox_user_group as oug on oxa.group_id = oug.group_id
                         LEFT JOIN ox_user_role as our on oxa.role_id = our.role_id
-                        WHERE oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND
+                        WHERE oxi.isdeleted = 0 and oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND
                         (oxa.user_id =:userId OR oug.avatar_id =:userId OR our.user_id = :userId)";
         $queryParams = array("activityInstanceId" => $data['activityInstanceId'], 'userId' => AuthContext::get(AuthConstants::USER_ID));
         $this->logger->info("Executing query - ". $selectQuery . " with params - " . json_encode($queryParams));
@@ -525,8 +525,8 @@ class ActivityInstanceService extends AbstractService
                       FROM `ox_activity_instance`
                       LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id
                       LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
-                      WHERE ox_activity_instance.activity_instance_id=? and ox_activity_instance.org_id=? and ox_workflow_instance.process_instance_id=?";
-            $queryParams = array($activityInstanceId, AuthContext::get(AuthConstants::ORG_ID), $workflowInstanceId);
+                      WHERE ox_activity_instance.isdeleted= ? and ox_activity_instance.activity_instance_id=? and ox_activity_instance.org_id=? and ox_workflow_instance.process_instance_id=?";
+            $queryParams = array(0, $activityInstanceId, AuthContext::get(AuthConstants::ORG_ID), $workflowInstanceId);
             $this->logger->info("query " .$query);
             $this->logger->info("query params" . print_r($queryParams,true));
             $activityInstance = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
@@ -546,8 +546,8 @@ class ActivityInstanceService extends AbstractService
 
 
     public function getActivityChangeLog($activityInstanceId,$labelMapping=null){
-        $selectQuery = "SELECT oai.start_data, oai.completion_data ,owi.file_id from ox_activity_instance oai inner join ox_workflow_instance owi on oai.workflow_instance_id = owi.id where oai.activity_instance_id = :activityInstanceId ";
-        $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
+        $selectQuery = "SELECT oai.start_data, oai.completion_data ,owi.file_id from ox_activity_instance oai inner join ox_workflow_instance owi on oai.workflow_instance_id = owi.id where oai.isdeleted = :isDeleted and oai.activity_instance_id = :activityInstanceId ";
+        $selectQueryParams = array('isDeleted' => 0,'activityInstanceId' => $activityInstanceId);
         $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
         if(count($result) > 0){
             $recordSet = $this->fileService->getWorkflowInstanceByFileId($this->getUuidFromId('ox_file',$result[0]['file_id']));
@@ -563,17 +563,34 @@ class ActivityInstanceService extends AbstractService
 // USED IN DELEGATE
     public function getFileDataByActivityInstanceId($activityInstanceId){
         try{
+            $this->beginTransaction();
             $selectQuery = "SELECT of.data from ox_file of
                             INNER JOIN ox_workflow_instance owi on owi.file_id = of.id
                             INNER JOIN ox_activity_instance oai on oai.workflow_instance_id = owi.id where oai.activity_instance_id = :activityInstanceId ";
             $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
             $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
+            $this->commit();
             if(isset($result[0])){
                 return $result[0];
             } else {
                 return;
             }
         } catch (Exception $e) {
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+
+    public function removeActivityInstanceRecords($workflowDepId){
+        try{
+            $this->beginTransaction();
+            $update = "UPDATE ox_activity_instance SET isdeleted=:deleted WHERE workflow_instance_id IN(SELECT id from ox_workflow_instance where workflow_deployment_id=:workflowDepId)";
+            $updateParams = array('deleted' => 1, 'workflowDepId' => $workflowDepId);
+            $this->executeUpdateWithBindParameters($update,$updateParams);
+            $this->commit();
+        }catch (Exception $e) {
+            $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }

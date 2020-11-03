@@ -155,6 +155,20 @@ class JobService extends AbstractService
         return $response;        
     }
 
+    public function cancelAppJobs($appId){
+        $this->logger->info("In Cancel App Jobs");
+        try{
+            $jobList = $this->getJobsList($appId);
+            foreach ($jobList as $key => $value) {
+                $this->cancelJob($value['name'], $value['group_name'], $appId);
+            }
+        }catch(Exception $e){
+            $this->logger->info("cancel App Jobs failed".$e->getMessage());
+            throw $e;
+        }
+        
+    }
+
     public function cancelJobId($jobId, $appId, $groupName =null)
     {
         $this->logger->info("EXECUTING CANCEL JOB WITH JOB ID AS PARAMETER");        
@@ -251,12 +265,7 @@ class JobService extends AbstractService
             $params = array('appId' => $appId);
             $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
             $this->logger->info("The result is - ", print_r($result, true));
-            if(!empty($result)){
-                return $result;
-            }
-            else{
-                throw new ServiceException("No records found", "no.records.found");            
-            }
+            return $result;
         }
         catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);

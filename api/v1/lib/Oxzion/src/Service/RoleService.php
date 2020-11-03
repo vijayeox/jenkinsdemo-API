@@ -350,19 +350,12 @@ class RoleService extends AbstractService
         return $result;
     }
 
-    public function createBasicRoles($orgid, array $businessRoleId = NULL, $defaultRoles = true)
+    public function createBasicRoles($orgid/*, array $businessRoleId = NULL, $defaultRoles = true*/)
     {
         $basicRoles = [];
-        if($defaultRoles){
-            $basicRoles = $this->getRolesByOrgid(null);
-        }
-        if($businessRoleId){
-            $temp = $this->getRolesByOrgid(null, $businessRoleId);
-            $basicRoles = array_merge($basicRoles, $temp);
-        }
+        $basicRoles = $this->getRolesByOrgid(null);
         try {
             foreach ($basicRoles as $basicRole) {
-                // unset($basicRole['id']);
                 unset($basicRole['uuid']);
                 $basicRole['org_id'] = $orgid;
                 if (!$this->createSystemRoleForOrg($basicRole)) {

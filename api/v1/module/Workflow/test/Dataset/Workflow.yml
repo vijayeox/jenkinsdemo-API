@@ -14,6 +14,7 @@ ox_app_entity:
     date_created: "2019-06-26 00:00:00"
     uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    isdeleted: 0
 ox_field:
   - id: 1
     name: "fax"
@@ -138,6 +139,7 @@ ox_form:
     entity_id: 1
     created_by: 1
     date_created: "2019-03-05 09:57:08"
+    isdeleted: 0
   - id: 2
     app_id: 99
     name: "Test Form 2"
@@ -145,6 +147,7 @@ ox_form:
     entity_id: 1
     created_by: 1
     date_created: "2019-03-05 09:57:08"
+    isdeleted: 0
 ox_form_field:
   - id: 1
     form_id: 1
@@ -174,18 +177,21 @@ ox_workflow:
     process_id: "Process_1dx3jli"
     uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"
     entity_id: 1
+    isdeleted: 0
   - id: 2
     app_id: 99
     name: "Test Workflow 2"
     process_id: "Process_1dx3eer"
     uuid: "3341cd2e-cb14-11e9-a32f-2a2ae2dbcc33"
     entity_id: 1
+    isdeleted: 0
   - id: 3
     app_id: 99
     name: "Test Workflow 3"
     process_id: "Process_1dx3w3e"
     uuid: "ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11"
     entity_id: 1
+    isdeleted: 0
 ox_workflow_deployment:
   - id: 1
     workflow_id: 1
@@ -193,12 +199,14 @@ ox_workflow_deployment:
     form_id: 1
     latest: 1
     created_by: 1
+    isdeleted: 0
   - id: 2
     workflow_id: 2
     process_definition_id: "Process_1dx3eer:441b7c8b-fef7-11e9-89d4-0294414e06e4"
     form_id: 1
     latest: 1
     created_by: 1
+    isdeleted: 0
   - id: 3
     workflow_id: 3
     process_definition_id: "Process_1dx3w3e:ef1b7c8b-fef7-11e9-89d4-0294414e0633"
@@ -206,22 +214,26 @@ ox_workflow_deployment:
     latest: 1
     created_by: 1
     fields: '["padi_number", "firstname"]'
+    isdeleted: 0
 ox_activity:
   - id: 1
     app_id: 99
     workflow_deployment_id: 1
     task_id: Task_1s7qzh3
     name: "Task"
+    isdeleted: 0
   - id: 2
     app_id: 99
     workflow_deployment_id: 1
     task_id: Task_1s7qwer43
     name: "Temp Task"
+    isdeleted: 0
   - id: 3
     app_id: 99
     workflow_deployment_id: 3
     task_id: Task_1s7qwett4
     name: "Some Task"
+    isdeleted: 0
 ox_activity_form:
   - id: 1
     activity_id: 1
@@ -270,6 +282,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 11
     start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    isdeleted: 0
   - id: 2
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0798"
@@ -280,6 +293,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 12
     start_data: "New File Data"
+    isdeleted: 0
   - id: 3
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
@@ -290,6 +304,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 11
     start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    isdeleted: 0
   - id: 4
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0998"
@@ -300,6 +315,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 13
     start_data: ""
+    isdeleted: 0
   - id: 5
     workflow_deployment_id: 1
     app_id: 99
@@ -309,6 +325,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     start_data: ""
+    isdeleted: 0
 ox_file_attribute:
   - id: 1
     file_id: 11
@@ -430,6 +447,7 @@ ox_activity_instance:
     status: "Completed"
     start_date: "2019-06-26 00:00:00"
     org_id: 1
+    isdeleted: 0
   - id: 2
     activity_id: 2
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0772"
@@ -437,6 +455,7 @@ ox_activity_instance:
     status: "Completed"
     start_date: "2019-06-26 01:00:00"
     org_id: 1
+    isdeleted: 0
   - id: 3
     activity_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0723"
@@ -444,6 +463,7 @@ ox_activity_instance:
     status: "In Progress"
     start_date: "2019-06-26 02:00:00"
     org_id: 1
+    isdeleted: 0
   - id: 4
     activity_id: 1
     activity_instance_id: "446622fd-0124-11ea-a8a0-22e8105c0777"
@@ -454,6 +474,7 @@ ox_activity_instance:
     start_date: "2019-06-26 00:00:00"
     submitted_date: "2019-06-27 00:00:00"
     org_id: 1
+    isdeleted: 0
 ox_file_assignee:
   - activity_instance_id: 1
     user_id: 1

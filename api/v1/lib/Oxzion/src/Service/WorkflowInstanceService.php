@@ -130,21 +130,30 @@ class WorkflowInstanceService extends AbstractService
 
     public function deleteWorkflowInstance($id)
     {
-        $this->beginTransaction();
-        $count = 0;
+        $obj = $this->table->get($id, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $workflowInstance = new WorkflowInstance();
+        $data = $obj->toArray();
+        $data['id'] = $id;
+        $data['isdeleted'] = 1;
+        $workflowInstance->exchangeArray($data);
+        $workflowInstance->validate();
         try {
-            $count = $this->table->delete($id);
+            $this->beginTransaction();
+            $count = $this->table->save($workflowInstance);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-
         return $count;
     }
 

@@ -55,27 +55,20 @@ return [
                     ],
                 ],
             ],
-            // 'appinstall' => [
-            //     'type' => Segment::class,
-            //     'options' => [
-            //         'route' => '/app/:appId/appinstall',
-            //         'constraints' => [
-            //             'appId' => UuidUtil::UUID_PATTERN,
-            //         ],
-            //         'defaults' => [
-            //             'controller' => Controller\AppController::class,
-            //             'action' => 'installAppForOrg',
-            //             'method' => 'post',
-            //             // 'access' => [
-            //             //     // SET ACCESS CONTROL
-            //             //     'put'=> 'MANAGE_APP_WRITE',
-            //             //     'post'=> 'MANAGE_APP_WRITE',
-            //             //     'delete'=> 'MANAGE_APP_DELETE',
-            //             //     'get'=> 'VIEW_APP_READ',
-            //             // ],
-            //         ],
-            //     ],
-            // ],
+            'removeapp' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/removeapp',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'removeapp',
+                        'method' => 'DELETE',
+                    ],
+                ],
+            ],
             'applist' => [
                 'type' => Segment::class,
                 'options' => [

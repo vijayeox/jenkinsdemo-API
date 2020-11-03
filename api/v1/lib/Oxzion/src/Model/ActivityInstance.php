@@ -18,7 +18,8 @@ class ActivityInstance extends Entity
         'modified_by' => null,
         'submitted_date' => null,
         'org_id' => 0,
-        'start_date' => null
+        'start_date' => null,
+        'isdeleted' => 0,
     );
     protected $attributes = array();
 
