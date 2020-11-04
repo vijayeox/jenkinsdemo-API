@@ -682,12 +682,12 @@ class WorkflowInstanceService extends AbstractService
         $queryParams['workflowStatus'] = $params['workflowStatus'];
         try {
             if (isset($params['gtCreatedDate'])) {
-                $createdFilter .= " of.date_created >= :gtCreatedDate AND ";
+                $createdFilter .= " wi.date_modified >= :gtCreatedDate AND ";
                 $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
                 $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']));
             }
             if (isset($params['ltCreatedDate'])) {
-                $createdFilter .= " of.date_created < :ltCreatedDate AND ";
+                $createdFilter .= " wi.date_modified < :ltCreatedDate AND ";
                 $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
                 $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
             }
@@ -703,6 +703,8 @@ class WorkflowInstanceService extends AbstractService
                 inner join ox_indexed_file_attribute fa on fa.file_id = of.id
                 inner join ox_field fd on fd.id = fa.field_id
                 inner join ox_workflow_instance wi on wi.file_id = of.id
+                inner join ox_workflow_deployment owd on owd.id = wi.workflow_deployment_id 
+              	inner join ox_workflow ow on ow.id = owd.workflow_id 
                 inner join ox_app_entity as en on en.id = of.entity_id";
             if(isset($filterParams)) {
                 $this->fileService->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
@@ -710,19 +712,26 @@ class WorkflowInstanceService extends AbstractService
             $whereQuery = rtrim($whereQuery, " AND ");
             $where = trim($whereQuery) != "" ? "WHERE $whereQuery AND wi.status = :workflowStatus AND wi.completion_data IS NOT NULL" : "";
             $where = rtrim($where, " AND ");
-            $selectQuery = "SELECT DISTINCT SQL_CALC_FOUND_ROWS wi.completion_data  $field $fromQuery $where $sort";
+            $selectQuery = "SELECT DISTINCT SQL_CALC_FOUND_ROWS wi.completion_data,wi.date_modified ,ow.name $field $fromQuery $where $sort";
             $this->logger->info("Executing query - $selectQuery with params - " . json_encode($queryParams));
             $resultSet = $this->executeQueryWithBindParameters($selectQuery, $queryParams)->toArray();
             $countQuery = "SELECT FOUND_ROWS();";
             $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
             $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
+
             if ($resultSet) {
                 $i = 0;
                 foreach ($resultSet as $file) {
-                    if ($file['completion_data']) {
+                    if ($file['completion_data'] ) {
                         $content = json_decode($file['completion_data'], true);
                         if ($content) {
                             $resultSet[$i] = array_merge($file, $content);
+                            if($file['name']){
+                                $resultSet[$i]['workflow_name'] = $file['name'];
+                            }
+                            if($file['date_modified']){
+                                $resultSet[$i]['modifiedDate'] = $file['date_modified'];
+                            }
                         }
                     }
                     $i++;
