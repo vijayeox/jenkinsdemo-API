@@ -12,7 +12,8 @@
     <datasource>java:jdbc/ProcessEngine</datasource>
 
     <properties>
-      <property name="history">full</property>
+      <property name="jdbcMaxWaitTime" >120000</property>
+      <property name="history">activity</property>
       <property name="databaseSchemaUpdate">true</property>
       <property name="authorizationEnabled">false</property>
       <property name="jobExecutorDeploymentAware">false</property>
