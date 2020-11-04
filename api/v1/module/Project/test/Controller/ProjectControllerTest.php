@@ -258,7 +258,7 @@ class ProjectControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'managerId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
+        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -276,14 +276,13 @@ class ProjectControllerTest extends ControllerTest
                     from ox_project p 
                     inner join ox_user man on man.id = p.manager_id
                     inner join ox_account a on a.id = p.account_id
-                    where p.uuid = '$projectId'";
+                    where p.uuid = '".$projectId."'";
         $project = $this->executeQueryTest($select);
         $select = "SELECT * from ox_user_project where user_id =" . $project[0]['manager_id'] . " and project_id =" . $project[0]['id'];
         $oxproject = $this->executeQueryTest($select);
-
         $this->assertEquals($project[0]['name'], $data['name']);
         $this->assertEquals($project[0]['description'], $data['description']);
-        $this->assertEquals($project[0]['managerId'], $data['managerId']);
+        $this->assertEquals($project[0]['managerId'], $data['manager_id']);
         $this->assertEquals($oxproject[0]['user_id'], 1);
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
@@ -295,7 +294,7 @@ class ProjectControllerTest extends ControllerTest
     public function testCreateWithAccountID()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'managerId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
+        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -314,13 +313,13 @@ class ProjectControllerTest extends ControllerTest
                     from ox_project p 
                     inner join ox_user man on man.id = p.manager_id
                     inner join ox_account a on a.id = p.account_id
-                    where p.uuid = '$projectId'";
+                    where p.uuid = '".$projectId."'";
         $project = $this->executeQueryTest($select);
         $select = "SELECT * from ox_user_project where user_id =" . $project[0]['manager_id'] . " and project_id =" . $project[0]['id'];
         $oxproject = $this->executeQueryTest($select);
         $this->assertEquals($project[0]['name'], $data['name']);
         $this->assertEquals($project[0]['description'], $data['description']);
-        $this->assertEquals($project[0]['managerId'], $data['managerId']);
+        $this->assertEquals($project[0]['managerId'], $data['manager_id']);
         $this->assertEquals($oxproject[0]['user_id'], 1);
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
@@ -388,7 +387,7 @@ class ProjectControllerTest extends ControllerTest
     public function testCreateWithDifferentAccountID()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'managerId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
+        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $accountId = 'b0971de7-0387-48ea-8f29-5d3704d96a46';
         $this->dispatch("/account/$accountId/project", 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -401,13 +400,13 @@ class ProjectControllerTest extends ControllerTest
                     from ox_project p 
                     inner join ox_user man on man.id = p.manager_id
                     inner join ox_account a on a.id = p.account_id
-                    where p.uuid = '$projectId'";
+                    where p.uuid = '".$projectId."'";
         $project = $this->executeQueryTest($select);
         $select = "SELECT * from ox_user_project where user_id =" . $project[0]['manager_id'] . " and project_id =" . $project[0]['id'];
         $oxproject = $this->executeQueryTest($select);
         $this->assertEquals($project[0]['name'], $data['name']);
         $this->assertEquals($project[0]['description'], $data['description']);
-        $this->assertEquals($project[0]['managerId'], $data['managerId']);
+        $this->assertEquals($project[0]['managerId'], $data['manager_id']);
         $this->assertEquals($oxproject[0]['user_id'], 1);
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 2);
@@ -419,7 +418,7 @@ class ProjectControllerTest extends ControllerTest
     public function testCreateWithOutNameFailure()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['description' => 'Project Description', 'managerId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
+        $data = ['description' => 'Project Description', 'manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -456,7 +455,7 @@ class ProjectControllerTest extends ControllerTest
     public function testCreateWithParentId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'managerId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'parentId' => 'ced672bb-fe33-4f0a-b153-f1d182a02603'];
+        $data = ['name' => 'Test Project 3', 'description' => 'Project Description', 'manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'parent_id' => '2'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/project', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -473,19 +472,19 @@ class ProjectControllerTest extends ControllerTest
                     inner join ox_project parent on parent.id = p.parent_id
                     inner join ox_user man on man.id = p.manager_id
                     inner join ox_account a on a.id = p.account_id
-                    where p.uuid = '$projectId'";
+                    where p.uuid = '".$projectId."'";
         $project = $this->executeQueryTest($select);
         $select = "SELECT * from ox_user_project where user_id =" . $project[0]['manager_id'] . " and project_id =" . $project[0]['id'];
         $oxproject = $this->executeQueryTest($select);
         $this->assertEquals($project[0]['name'], $data['name']);
         $this->assertEquals($project[0]['description'], $data['description']);
-        $this->assertEquals($project[0]['managerId'], $data['managerId']);
+        $this->assertEquals($project[0]['managerId'], $data['manager_id']);
         $this->assertEquals($oxproject[0]['user_id'], 1);
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
         $this->assertEquals($project[0]['parent_id'], 2);
-        $this->assertEquals($content['data']['parentId'], $project[0]['parentId']);
+        $this->assertEquals($content['data']['parent_id'], $project[0]['parent_id']);
     }
 
     public function testUpdate()

@@ -117,11 +117,10 @@ class ProjectService extends AbstractService
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : null;
 
-            $select = "SELECT count(id),name,uuid,isdeleted from ox_project where name = '" . $data['name'] . "' AND account_id = " . $data['account_id'];
+            $select = "SELECT count(id),name,uuid,isdeleted from ox_project where name = '" . $data['name'] . "' AND account_id = " . $data['account_id'] ." GROUP BY name,uuid,isdeleted ";
 
             $result = $this->executeQuerywithParams($select)->toArray();
-
-            if ($result[0]['count(id)'] > 0) {
+            if (count($result)>0 && $result[0]['count(id)'] > 0) {
                 if ($data['name'] == $result[0]['name'] && $result[0]['isdeleted'] == 0) {
                     throw new ServiceException("Project already exists", "project.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                 } else if ($result[0]['isdeleted'] == 1) {
@@ -158,7 +157,7 @@ class ProjectService extends AbstractService
             $projectData['date_created'] = date('Y-m-d H:i:s');
             $projectData['date_modified'] = date('Y-m-d H:i:s');
             $projectData['isdeleted'] = false;
-            $select = "SELECT id,username from ox_user where uuid = '" . $projectData['managerId'] . "'";
+            $select = "SELECT id,username from ox_user where uuid = '" . $projectData['manager_id'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
             $projectData['manager_id'] = $result[0]["id"];
             $projectData['manager_login'] = $result[0]["username"];
