@@ -96,9 +96,9 @@ class AccountService extends AbstractService
             }else if(!isset($data['name'])){
                 throw new ValidaTionException("Account name required");
             }
-            $select = "SELECT count(name),oxo.status,oxo.uuid from ox_account oxo where oxo.name = '" . $data['name'] . "'";
+            $select = "SELECT count(name),oxo.status,oxo.uuid from ox_account oxo where oxo.name = '" . $data['name'] . "' GROUP BY oxo.status,oxo.uuid";
             $result = $this->executeQuerywithParams($select)->toArray();
-            if ($result[0]['count(name)'] > 0) {
+            if (count($result) && $result[0]['count(name)'] > 0) {
                 if ($result[0]['status'] == 'Inactive') {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0;
                     if ($data['reactivate'] == 1) {
