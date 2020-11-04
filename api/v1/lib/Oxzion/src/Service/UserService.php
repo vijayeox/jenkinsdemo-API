@@ -198,13 +198,13 @@ class UserService extends AbstractService
             unset($data['id']);
         }
         $params = ['username' => $data['username'],
-                    'email' => $data['email']];
-                  
+                    'email' => $data['email'],
+                    'accountId' => AuthContext::get(AuthConstants::ACCOUNT_UUID)];
         $select = "SELECT ou.id, ou.uuid, count(ou.id) as account_count, ou.status, ou.username, per.email, GROUP_CONCAT(au.account_id) as account_id 
             from ox_user as ou 
             inner join ox_account_user as au on au.user_id = ou.id 
             inner join ox_person as per on per.id = ou.person_id 
-            where ou.username = :username OR per.email = :email 
+            where ou.username ='". $params['username']. "' OR per.email ='" . $params['email']. "'  
             GROUP BY ou.id,ou.uuid,ou.status,ou.username, per.email";
         $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
         /*
