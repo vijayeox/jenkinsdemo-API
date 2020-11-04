@@ -146,7 +146,7 @@ class GroupService extends AbstractService
             $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
-            $data['managerId'] = isset($data['managerId']) ? $data['managerId'] : null;
+            $data['managerId'] = isset($data['manager_id']) ? $data['manager_id'] : null;
             $select = "SELECT id from ox_user where uuid = '" . $data['managerId'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
             if ($result) {

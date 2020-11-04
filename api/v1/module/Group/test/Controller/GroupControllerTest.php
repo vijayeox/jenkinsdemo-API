@@ -153,7 +153,7 @@ class GroupControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
+        $data = ['name' => 'Groups 22', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
@@ -178,7 +178,7 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['parentId'], $group[0]['parentId']);
         $this->assertEquals($content['data']['accountId'], $group[0]['accountId']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
+        $this->assertEquals($content['data']['manager_id'], $group[0]['managerId']);
         $this->assertEquals($content['data']['description'], $group[0]['description']);
         $this->assertEquals($content['data']['logo'], $group[0]['logo']);
         $this->assertEquals($content['data']['status'], $group[0]['status']);
@@ -245,7 +245,7 @@ class GroupControllerTest extends ControllerTest
     public function testCreateByAdminWithDifferentAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
+        $data = ['name' => 'Groups 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -271,7 +271,7 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['parentId'], $group[0]['parentId']);
         $this->assertEquals($accountId, $group[0]['accountId']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
+        $this->assertEquals($content['data']['manager_id'], $group[0]['managerId']);
         $this->assertEquals($content['data']['description'], $group[0]['description']);
         $this->assertEquals($content['data']['logo'], $group[0]['logo']);
         $this->assertEquals($content['data']['status'], $group[0]['status']);
@@ -283,7 +283,7 @@ class GroupControllerTest extends ControllerTest
     public function testCreateNewGroup()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
+        $data = ['name' => 'Groups 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
@@ -309,7 +309,7 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['parentId'], $group[0]['parentId']);
         $this->assertEquals($accountId, $group[0]['accountId']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
+        $this->assertEquals($content['data']['manager_id'], $group[0]['managerId']);
         $this->assertEquals($content['data']['description'], $group[0]['description']);
         $this->assertEquals($content['data']['logo'], $group[0]['logo']);
         $this->assertEquals('Active', $group[0]['status']);
