@@ -1414,7 +1414,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $policy =  $policy[$length];
         unset($data['increased_liability'], $data['new_auto_liability']);
         $temp['additionalLocationsChanges'] = false;
-        $temp['lossPayeesChanges'] = false;
+        $temp['lossPayeeChanges'] = false;
         $data['update_date'] = $policy['update_date'];
         if (isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])) {
             if ($policy['previous_nonOwnedAutoLiabilityPL'] == 'no' && $data['nonOwnedAutoLiabilityPL'] != 'no') {
@@ -1765,7 +1765,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['removedlossPayees'] = "";
                 }
                 if ($temp['removedlossPayees'] != "" || $temp['newlossPayees'] != "") {
-                    $temp['lossPayeesChanges'] = true;
+                    $temp['lossPayeeChanges'] = true;
                 }
             } else {
                 $temp['newlossPayees'] = "";
