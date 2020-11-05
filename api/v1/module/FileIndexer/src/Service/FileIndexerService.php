@@ -57,6 +57,37 @@ class FileIndexerService extends AbstractService
         return null;
     }
 
+    public function indexFile($fileUuid)
+    {
+        //Get all file data and relevant parameters
+        $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entityName,
+            file.data as file_data, file.uuid as file_uuid, file.is_active, file.org_id,
+            CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
+            from ox_file as file
+            INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
+            INNER JOIN ox_app as app on entity.app_id = app.id
+            INNER JOIN ox_field as field ON field.entity_id = entity.id
+            where file.uuid = :uuid";
+        $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
+        $params = array('uuid' => $fileUuid);
+        $result = $this->executeQuerywithBindParameters($select, $params)->toArray();
+
+        //Need to store file data seperately as its a json string and perform actions on the same
+        $data = $indexedData = null;
+
+        if($result) {
+            $app_name = $result[0]['app_name'];
+            $indexedData = $this->getAllFieldsWithCorrespondingValues($result[0]);
+
+            //Sending it to the elastic queue
+            $this->messageProducer->sendQueue(json_encode(array('index'=>  $app_name.'_index','body' => $indexedData,'id' => $indexedData['id'], 'operation' => 'Index', 'type' => '_doc')), 'elastic');
+            return $indexedData;
+        } else {
+            // Handle empty file data in case of some error
+            return null;
+        }
+    }
+
     public function deleteDocument($fileId)
     {
         $sql = $this->getSqlObject();
@@ -115,7 +146,7 @@ class FileIndexerService extends AbstractService
                     $this->logger->info("Executing Query - $select");
                     $bodys=$this->executeQuerywithParams($select)->toArray();
                     foreach ($bodys as $key => $value) {
-                        $bodys[$key] = $this->flattenAndModify($value);
+                        $bodys[$key] = $this->getAllFieldsWithCorrespondingValues($value);
                     }
                     $indexIdList = array_column($bodys,'id');
 
@@ -172,6 +203,40 @@ class FileIndexerService extends AbstractService
             }
         }
         return $databody;
+    }
+
+    public function getAllFieldsWithCorrespondingValues($result){
+        $entityId = $result['entity_id'];
+        $app_name = $result['app_name'];
+        $data = json_decode($result['file_data'],true);
+
+        //get all fields for a particular entity
+        $selectFields = "Select name from ox_field where entity_id = :entity_id AND parent_id IS NULL AND data_type IN ('boolean','date','datetime','numeric','text','time')";
+        $params = array('entity_id' => $entityId);
+        $fieldResult = $this->executeQuerywithBindParameters($selectFields, $params)->toArray();
+        $fieldArray = array_column($fieldResult, 'name');
+        $toBeIndexedArray = array();
+
+        //storing the values for each field from the file data
+        foreach ($fieldArray as $key => $value) {
+            if(array_key_exists($value, $data))
+            {
+                //remove old data with no type - before data types was introduced
+                if(is_array($data[$value])){
+                    $toBeIndexedArray[$value] = NULL;
+                    unset($data[$value]);
+                    continue;
+                }
+               $toBeIndexedArray[$value] = $data[$value];
+            } else {
+                $toBeIndexedArray[$value] = NULL;
+            }
+        }
+        unset($result['file_data']);
+
+        //flattening the result
+        $indexedData = array_merge($result,$toBeIndexedArray);
+        return $indexedData;
     }
 
 }
