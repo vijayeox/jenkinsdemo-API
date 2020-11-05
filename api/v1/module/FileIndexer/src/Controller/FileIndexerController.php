@@ -35,6 +35,37 @@ namespace FileIndexer\Controller;
             return $this->getErrorResponse("Failure to Index File ", 400);
         }
 
+     /**
+     * Index File API
+     * @api
+     * @link /fileindexer/file
+     * @method POST
+     * @param file uuid</br>
+     * <code>
+     *  uuid : string
+     * </code>
+     * @return array Returns a JSON Response with Status Code and File Data sent to the queue for indexing.</br>
+     * <code> status : "success|error",
+     *        data : "JSON STRING CONTAINING FILE DATA"
+     * </code>
+     */
+        public function indexFileAction() {
+            // Get the uuid entered
+            $params = $this->extractPostData();
+            $uuid  = isset($params['uuid']) ? $params['uuid'] : null;
+            if($uuid == null) {
+                //Handle no uuid being present
+                return $this->getErrorResponse("uuid must be provided", 404);
+            }
+            try {
+                $response = $this->fileIndexerService->indexFile($uuid);
+                $this->log->info(FileIndexerController::class.":File has been Indexed");
+                return $this->getSuccessResponseWithData($response);
+            } catch(Exception $e) {
+                return $this->getErrorResponse("Failure to Index File ", 400);
+            }
+        }
+
         public function batchIndexAction() {
             $params = $this->extractPostData();
             $startdate = isset($params['start_date']) ? $params['start_date'] : null;

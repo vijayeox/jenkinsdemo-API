@@ -16,6 +16,16 @@ return [
                     ],
                 ],
             ],
+            'indexFile' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/fileindexer/file',
+                    'defaults' => [
+                        'controller' => Controller\FileIndexerController::class,
+                        'action' => 'indexFile',
+                    ],
+                ],
+            ],
             'batchIndex' => [
                 'type'    => Segment::class,
                 'options' => [
