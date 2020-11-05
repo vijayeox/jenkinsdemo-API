@@ -135,7 +135,7 @@ class ClaimsExcelExport extends AbstractDocumentAppDelegate
     private function formatDate($data)
     {
         $date = strpos($data, "T") ? explode("T", $data)[0] : $data;
-        if (is_null($date)) {
+        if (is_null($date) || empty($date)) {
             return "Invalid Date";
         } else {
             return date(
