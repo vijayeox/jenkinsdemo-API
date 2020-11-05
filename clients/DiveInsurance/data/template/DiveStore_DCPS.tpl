@@ -16,14 +16,14 @@
             <b>
                 <p style="margin-top: 5px;" class="info">Store Location:
                 {if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress === "false" || $sameasmailingaddress == 0)}
-                    <span class="storeLocation uppercase">{$mailaddress1}</span>,
-                    <span class="storeLocation uppercase">{$mailaddress2}</span>,
+                    <span class="storeLocation uppercase">{$mailaddress1}</span>
+                    <span class="storeLocation uppercase">{if $mailaddress2 != ""},{$mailaddress2}{/if}</span>,
                     <span class="storeLocation uppercase">{$physical_city}</span>,
                     <span class="storeLocation uppercase">{if $physical_state != '[]'}{$physical_state}{/if}</span> <span class="uppercase">{$physical_zip}</span>
                 </p>
                 {else}
-                    <span class="storeLocation uppercase">{$address1}</span>,
-                    <span class="storeLocation uppercase">{$address2}</span>,
+                    <span class="storeLocation uppercase">{$address1}</span>
+                    <span class="storeLocation uppercase">{if $address2 != ""},{$address2}{/if}</span>,
                     <span class="storeLocation uppercase">{$city}</span>,
                     <span class="storeLocation uppercase">{$state}</span> <span class="uppercase">{$zip}</span>
                 </p>
