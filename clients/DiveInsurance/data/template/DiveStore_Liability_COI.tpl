@@ -9,13 +9,13 @@
 	  <hr class = "s_hrtag"></hr>
       <center><b>Store Location:&nbsp
       	{if isset($sameasmailingaddress) && ($sameasmailingaddress == false||$sameasmailingaddress === "false" || $sameasmailingaddress == 0)}
-              <span class="store_location">{$mailaddress1}</span>,
-              <span class="store_location">{$mailaddress2}</span>,
+              <span class="store_location">{$mailaddress1}</span>
+              <span class="store_location">{if $mailaddress2 != ""},{$mailaddress2}{/if}</span>,
               <span class="store_location">{$physical_city}</span>,
               <span class="store_location">{if $physical_state != '[]'}{$physical_state}{/if}</span> <span class="store_location">{$physical_zip}</span>
         {else}
               <span class="store_location">{$address1}</span>,
-              <span class="store_location">{$address2}</span>,
+              <span class="store_location">{if $address2 != ""},{$address2}{/if}</span>,
               <span class="store_location">{$city}</span>,
               <span class="store_location">{$state}</span> <span class="store_location">{$zip}</span>
         {/if}
