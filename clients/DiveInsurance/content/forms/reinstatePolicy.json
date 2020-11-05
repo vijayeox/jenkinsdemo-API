@@ -1,76 +1,52 @@
 {
-	"_id": "5e182530b1ff7a7c64b7bebb",
-	"type": "form",
-	"tags": [],
-	"owner": "5ddfaa682859774314661851",
-	"components": [{
-		"autofocus": false,
-		"input": true,
-		"tableView": true,
-		"inputType": "radio",
-		"label": "Are you sure you want to Reinstate Policy?",
-		"key": "confirmReinstatePolicy",
-		"values": [{
-			"value": "yes",
-			"label": "Yes",
-			"shortcut": ""
-		}, {
-			"value": "no",
-			"label": "No",
-			"shortcut": ""
-		}],
-		"defaultValue": "",
-		"protected": false,
-		"fieldSet": false,
-		"persistent": true,
-		"hidden": false,
-		"clearOnHide": true,
-		"validate": {
-			"required": false,
-			"custom": "",
-			"customPrivate": false
-		},
-		"type": "radio",
-		"labelPosition": "top",
-		"optionsLabelPosition": "right",
-		"tags": [],
-		"conditional": {
-			"show": "",
-			"when": null,
-			"eq": ""
-		},
-		"properties": {},
-		"lockKey": true
-	}, {
-		"autofocus": false,
-		"input": true,
-		"label": "Submit",
-		"tableView": false,
-		"key": "submit",
-		"size": "md",
-		"leftIcon": "",
-		"rightIcon": "",
-		"block": false,
-		"action": "submit",
-		"disableOnInvalid": false,
-		"theme": "primary",
-		"type": "button"
-	}],
-	"revisions": "",
-	"_vid": 0,
-	"title": "Reinstate Policy",
-	"display": "form",
-	"access": [{
-		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
-		"type": "read_all"
-	}],
-	"submissionAccess": [],
-	"settings": {},
-	"properties": {},
-	"name": "reinstatePolicy",
-	"path": "reinstatepolicy",
-	"project": "5ce43aa430776b2aff69301c",
-	"created": "2020-01-10T07:18:08.401Z",
-	"modified": "2020-01-10T11:53:48.200Z",
-	"machineName": "testdivehub:reinstatePolicy"
+    "_id": "5e182530b1ff7a7c64b7bebb",
+    "type": "form",
+    "tags": [],
+    "owner": "5ddfaa682859774314661851",
+    "components": [{
+        "label": "Are you sure you want to Reinstate Policy?",
+        "optionsLabelPosition": "right",
+        "inline": false,
+        "tableView": true,
+        "values": [{
+            "value": "yes",
+            "label": "Yes",
+            "shortcut": ""
+        }, {
+            "value": "no",
+            "label": "No",
+            "shortcut": ""
+        }],
+        "validate": {
+            "required": true,
+            "customMessage": "Are you sure you want to reinstate policy required."
+        },
+        "key": "confirmReinstatePolicy",
+        "type": "radio",
+        "input": true,
+        "lockKey": true
+    }, {
+        "input": true,
+        "label": "Submit",
+        "tableView": false,
+        "key": "submit",
+        "type": "button"
+    }],
+    "revisions": "",
+    "_vid": 0,
+    "title": "Reinstate Policy",
+    "display": "form",
+    "access": [{
+        "roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
+        "type": "read_all"
+    }],
+    "submissionAccess": [],
+    "settings": {},
+    "properties": {},
+    "name": "reinstatePolicy",
+    "path": "reinstatepolicy",
+    "project": "5ce43aa430776b2aff69301c",
+    "created": "2020-01-10T07:18:08.401Z",
+    "modified": "2020-11-05T07:51:03.656Z",
+    "machineName": "testdivehub:reinstatePolicy"
 }
