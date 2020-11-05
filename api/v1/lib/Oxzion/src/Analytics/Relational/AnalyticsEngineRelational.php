@@ -24,15 +24,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
     }
 
     public function setConfig($config){
-        $dbConfig['driver'] = 'Pdo';
-        $dbConfig['database'] = $config['database'];
-        $dbConfig['host'] = $config['host'];
-        $dbConfig['username'] = $config['username'];
-        $dbConfig['password'] = $config['password'];
-        $dbConfig['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=' . $config['host'] . ';charset=utf8;username=' . $config["username"] . ';password=' . $config["password"] . '';
-        $this->dbConfig = $dbConfig;
-        $this->dbAdapter = new Adapter($dbConfig);
-		parent::setConfig($dbConfig);
+		parent::setConfig($config);
     }
 
     public function getData($app_name,$entity_name,$parameters)
@@ -46,12 +38,6 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		//	print_r($formatedPara);exit;
 				$result = $this->getResultsFromPara($orgId,$parameters['view'],$formatedPara);
 				$finalResult['meta']['type'] = 'view';
-				foreach(array_keys($result) as $key) {
-					if ($result[$key]['org_id']!=$orgId) {  //Temp solution to protect with org id instead the where clause
-						$result = [];break;
-					}
-					unset($result[$key]['org_id']);
-				 }
 				 $finalResult['data'] = $result;
 			} else {
 				$formatedPara = $this->formatQuery($parameters);
@@ -124,16 +110,14 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if ($field) { 
 			if (!empty($group)) {
 				$select=$group;
-				$select[] = 'org_id';
 				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
 			} else {
-				$select = ['org_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
+				$select = [$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
 			}
 		} 
 		else {
 			if (!empty($group)) {
 				$select=$group;
-				$select[] = 'org_id';
 				$select[] = new \Zend\Db\Sql\Expression("count(*)");;
 			} 
 		}
@@ -192,7 +176,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			$select->columns($para['select']);
 		}
 		$select->from($entity_name);
-	//	$select->where(['org_id' => $orgId]);
+		$select->where(['org_id' => $orgId]);
 
 		
 		if (!empty($para['filter'])) {
