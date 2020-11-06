@@ -76,7 +76,7 @@ class DocumentController extends AbstractApiControllerHelper
         }
 
         $ext = pathinfo($attachment_location, PATHINFO_EXTENSION);
-        $dispositionType = isset($ext) && $ext=="pdf"  ? "inline" : "attachment";
+        $dispositionType = isset($ext) && (strtolower($ext) =="pdf")  ? "inline" : "attachment";
         
         if (file_exists($attachment_location)) {
             if (!headers_sent()) {

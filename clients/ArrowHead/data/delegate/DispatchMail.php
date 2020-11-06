@@ -79,7 +79,7 @@ class DispatchMail extends MailDelegate
         $data['orgUuid'] = "34bf01ab-79ca-42df-8284-965d8dbf290e";
         // $data['orgUuid'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
         $response = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
-        $this->logger->info("Mail has " . $response ? "been sent." : "not been sent.");
+        $this->logger->info("Mail has " . ($response ? "been sent." : "not been sent."));
         return $response;
     }
 
