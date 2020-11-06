@@ -251,12 +251,47 @@ class GenerateReport extends PolicyDocument {
 
         }
     }
+
+    private function groupDataDiff(&$groupLength, $data, $previousData, $requiredParams)
+    {
+        $sortAndSerialize = function ($arr) 
+        {
+            ksort($arr); 
+            return serialize($arr);
+        };
+        $previousVal = is_string($previousData) ? json_decode($previousData, true) : $previousData;
+        $this->getRequiredParams($previousVal, $requiredParams);
+        foreach ($previousVal as $key => $value) {
+            $previousVal[$key]['padi'] = strval($value['padi']);
+        }
+        $val = is_string($data) ? json_decode($data, true) :  $data;
+        $this->getRequiredParams($val, $requiredParams);
+        foreach ($val as $key => $value) {
+            $val[$key]['padi'] = strval($value['padi']);
+        }
+        $diff = array_diff(array_map($sortAndSerialize, $val),array_map($sortAndSerialize, $previousVal));
+        $newValue = array_map('unserialize', $diff);
+        return $newValue;
+    }
+    private function getRequiredParams(&$data, $requiredParams)
+    {
+        if (sizeof($requiredParams) > 0) {
+            foreach ($data as $key => $val) {
+                foreach ($val as $key1 => $val1) {
+                    if (!in_array($key1, $requiredParams)) {
+                        unset($data[$key][$key1]);
+                    }
+                }
+            }
+        }
+    }
     private function newDataArray($data,$product){
       
         $this->logger->info('Generate report data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
             $totalendorsements = 0;
+            $previous_policy_data = array();
             if(isset($value['previous_policy_data'])){
                 $previous_policy_data = json_decode($value['previous_policy_data'],true);
                 $totalendorsements = count(array_filter($previous_policy_data, 'array_filter'));
@@ -299,9 +334,10 @@ class GenerateReport extends PolicyDocument {
                 $responseData['data'] = $response;
                 $i += 1; 
             }
-            if($product == 'groupProfessionalLiability' && isset($value['groupPL']) && !empty($value['groupPL']) && $value['groupPL'] != "[]" &&  $value['groupProfessionalLiabilitySelect'] == 'yes'){
+            if($product == 'groupProfessionalLiability' && isset($value['groupPL'])){
 
                 $this->logger->info('group PL members need to be formatted to a new array');
+                $groupPLArray = array('padi', 'firstname', 'lastname', 'status','start_date');
                 if(isset($value['groupPL'])){
                     $groupData = is_string($value['groupPL']) ? json_decode($value['groupPL'], true) : $value['groupPL'];
                 } else {
@@ -311,59 +347,71 @@ class GenerateReport extends PolicyDocument {
                 $this->logger->info('value data is: '.print_r($value, true));
                 $total = count($groupData);
                 $groupPL = array();
-                if(isset($value['previous_policy_data'])){
-                    if(isset($previous_policy_data[$totalendorsements - 1]['previous_groupPL'])){
-                        $previous_groupPL = $previous_policy_data[$totalendorsements - 1]['previous_groupPL'];
-                        $j =0;
+                $groupLength = 0;
+
+                $totalendorsement = 0;
+                if(isset($value['previous_policy_data'])) {
+                   $previous_policy_data = json_decode($value['previous_policy_data'],true);
+                   $totalendorsement = sizeof($previous_policy_data);
+                   $previous_policy =  $previous_policy_data[$totalendorsement - 1];
+                    if(isset($previous_policy_data[$totalendorsement - 1]['previous_groupPL']) && !empty($previous_policy_data[$totalendorsement - 1]['previous_groupPL'])){
+                        $previous_groupPL = $previous_policy_data[$totalendorsement - 1]['previous_groupPL'];
+                        $groupPL = $this->groupDataDiff($groupLength, $value['groupPL'], $previous_groupPL, $groupPLArray);
+                        $k=0;
                         foreach ($previous_groupPL as $key2 => $value2){
-                            foreach ($groupData as $key1 => $value1) {
+                            foreach ($groupData as $key1 => $value1) { 
                                 if($value2['padi'] == $value1['padi']) {
                                     if($value2['status'] != $value1['status']){
-                                        $previous_careerCoverage[$j] = $value2;
-                                        $groupPL[$j] = $value1;
-                                        $j+= 1;
+                                        $previous_careerCoverage[$k] = $value2;
+                                        $k+= 1;
                                     }
                                 }
                             }
                         }
                     }
-                    
+
                 }
                 else {
                     $groupPL = $groupData;
                 }
+                $j=0;
+                $key = -1;
                 foreach ($groupPL as $key2 => $value2) { 
-                    if(isset($previous_careerCoverage)){
-                        $key = array_search($value2['padi'], array_column($fileData['groupPL'], 'padi'));
+                    $padi = strval($value2['padi']);
+                    if(isset($previous_careerCoverage)) {
+                        print_r($value2['padi']);
+                        $key = array_search($padi, array_column($previous_careerCoverage, 'padi'));
+
                     }
                     $group_certificate_no = ltrim($value['group_certificate_no'],'S');
-                    $response[$i]['certificate_no'] = $group_certificate_no;
-                    $response[$i]['padi'] = $value2['padi'];
-                    $response[$i]['business_padi'] = $value['business_padi'];
-                    $response[$i]['program'] = isset($previous_careerCoverage[$key]) ? $this->checkStatus($previous_careerCoverage[$key]): $this->checkStatus($value2['status']); //change
-                    $response[$i]['firstname'] = $value2['firstname'];
-                    $response[$i]['lastname'] = $value2['lastname'];
-                    $response[$i]['initial'] = $value2['initial'];
-                    $response[$i]['start_date'] = $this->formatDate($value2['start_date']);
-                    $response[$i]['end_date'] = $this->formatDate($value['end_date']);
-                    $response[$i]['address1'] = $value['address1'];
-                    $response[$i]['address2'] = isset($value['address2']) ? $value['address2'] : '';
-                    $response[$i]['city'] = $value['city'];
-                    $response[$i]['state'] = $value['state'];
-                    $response[$i]['zip'] = $value['zip'];
-                    $response[$i]['country'] = $value['country'];
-                    $response[$i]['business_name'] = $value['business_name'];
-                    $response[$i]['effectiveDate'] = $value2['effectiveDate'];
-                    $response[$i]['group_cvrg_level'] = $this->groupCoverageLevel($value['groupCoverageSelect']);
-                    $response[$i]['certificate_type'] = $value['workflow_name'] == "Dive Store Endorsement" ? 'Endorsement' : 'Primary Coverage';
-                    $response[$i]['upgrade'] = $response[$i]['certificate_type'] == 'Endorsement' && isset($previous_careerCoverage[$key]) && $previous_careerCoverage[$key] != $value2['status'] ? $this->checkStatus($value2['status']) : ''; //change
-                    $response[$i]['premium'] = $key2 == 0 ? isset($value['groupCoverage']) ? $value['groupCoverage'] : "0" : "0";
-                    $response[$i]['excess_premium'] = $key2 == 0 ? isset($value['groupExcessLiability']) ? $value['groupExcessLiability'] : "0" : "0";
-                    $response[$i]['cancel_date'] = isset($value['cancel_date']) ? $this->formatDate($value['cancel_date']) : "" ;
-                    $response[$i]['total'] =$key2 == 0 ? ((int) $response[$i]['premium'])+ ((int)$response[$i]['excess_premium']) : "0";
+                    $response[$i][$j]['certificate_no'] = $group_certificate_no;
+                    $response[$i][$j]['padi'] = $value2['padi'];
+                    $response[$i][$j]['business_padi'] = $value['business_padi'];
+                    $response[$i][$j]['program'] = isset($previous_careerCoverage[$key]) && $previous_careerCoverage[$key]['status'] != "" && !is_null($previous_careerCoverage[$key]['status'])  ? $this->checkStatus($previous_careerCoverage[$key]['status']): $this->checkStatus($value2['status']); //change
+                    $response[$i][$j]['firstname'] = $value2['firstname'];
+                    $response[$i][$j]['lastname'] = $value2['lastname'];
+                    $response[$i][$j]['initial'] = $value2['initial'];
+                    $response[$i][$j]['start_date'] = $this->formatDate($value2['start_date']);
+                    $response[$i][$j]['end_date'] = $this->formatDate($value['end_date']);
+                    $response[$i][$j]['address1'] = $value['address1'];
+                    $response[$i][$j]['address2'] = isset($value['address2']) ? $value['address2'] : '';
+                    $response[$i][$j]['city'] = $value['city'];
+                    $response[$i][$j]['state'] = $value['state'];
+                    $response[$i][$j]['zip'] = $value['zip'];
+                    $response[$i][$j]['country'] = $value['country'];
+                    $response[$i][$j]['business_name'] = $value['business_name'];
+                    $response[$i][$j]['effectiveDate'] = $this->formatDate($value2['start_date']);
+                    $response[$i][$j]['group_cvrg_level'] = $this->groupCoverageLevel($value['groupCoverageSelect']);
+                    $response[$i][$j]['certificate_type'] = $value['workflow_name'] == "Dive Store Endorsement" ? 'Endorsement' : 'Primary Coverage';
+                    $response[$i][$j]['upgrade'] = $response[$i][$j]['certificate_type'] == 'Endorsement' && isset($previous_careerCoverage[$key]['status']) && $previous_careerCoverage[$key]['status'] != $value2['status'] && $previous_careerCoverage[$key]['status'] != "" && !is_null($previous_careerCoverage[$key]['status']) ? $this->checkStatus($value2['status']) : ''; //change
+                    $response[$i][$j]['premium'] = $key2 == 0 ? ((isset($previous_policy['previous_groupCoverage']) &&  $value['workflow_name'] == "Dive Store Endorsement")? ((float)$value['groupCoverage'] - (float)($previous_policy['previous_groupCoverage'])) : (isset($value['groupCoverage'])? $value['groupCoverage']: "0")) : "0";
+                    $response[$i][$j]['excess_premium'] = $key2 == 0 ? isset($value['groupExcessLiability']) ? $value['groupExcessLiability'] : "0" : "0";
+                    $response[$i][$j]['cancel_date'] = isset($value['cancel_date']) ? $this->formatDate($value['cancel_date']) : "" ;
+                    $response[$i][$j]['total'] =$key2 == 0 ? ((int) $response[$i][$j]['premium'])+ ((int)$response[$i][$j]['excess_premium']) : "0";
                     $responseData['data'] = $response;
-                    $i += 1; 
+                    $j+= 1;
                 }  
+                $i += 1; 
             
             }
             if(($product == "diveStoreProperty" || $product == "diveStore") && ($value['workflow_name'] !== "DS Cancel Policy")){
