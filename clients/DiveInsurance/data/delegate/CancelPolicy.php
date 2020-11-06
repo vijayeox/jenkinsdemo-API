@@ -73,15 +73,18 @@ class CancelPolicy extends PolicyDocument
         $data['policyId'] = "";
         $data['propPolicyId'] = "";
         $data['groupPolicyId'] = "";
-
+        $data['propCarrierName'] = "";
+        $data['groupCarrierName'] = "";
         if ($data['product'] == "Dive Store") {
-            $data['carrierName'] = "Policy issued by " . $data['liability_carrier'];
-            $data['policyId'] = "Policy #:" . $data['liability_policy_id'];
+            $data['carrierName'] = "Liability Policy issued by " . $data['liability_carrier'];
+            $data['policyId'] = "Liability Policy #:" . $data['liability_policy_id'];
             if ($data['propertyCoverageSelect'] == "yes") {
-                $data['propPolicyId'] = "Policy #:" . $data['property_policy_id'];
+                $data['propCarrierName'] = "Property Policy issued by " . $data['property_carrier'];
+                $data['propPolicyId'] = "Property Policy #:" . $data['property_policy_id'];
             }
             if ($data['groupProfessionalLiabilitySelect'] == "yes") {
-                $data['groupPolicyId'] = "Policy #:" . $data['group_policy_id'];
+                $data['groupCarrierName'] = "Group Policy issued by " . $data['group_carrier'];
+                $data['groupPolicyId'] = "Group Policy #:" . $data['group_policy_id'];
             }
         } else if ($data['product'] == "Group Professional Liability") {
             $data['carrierName'] = "Policy issued by " . $data['group_carrier'];
