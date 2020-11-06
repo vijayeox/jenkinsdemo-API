@@ -60,6 +60,7 @@
             <directory>./lib/Oxzion/test/Service/PrivilegeServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/TemplateServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/UserServiceTest.php</directory>
+            <directory>./lib/Oxzion/test/Service/EmployeeServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/UserTokenServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/WorkflowInstanceServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/WorkflowServiceTest.php</directory>
