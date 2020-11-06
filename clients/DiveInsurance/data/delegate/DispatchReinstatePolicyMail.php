@@ -93,6 +93,7 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         if(isset($data['state'])){
             $data['state_in_short'] = $this->getStateInShort($data['state'],$persistenceService);
         }
+        $data['policyStatus'] = "In Force";
         $temp = $data;
         $temp['template'] = $this->template[$data['product']];
         if($data['product'] == 'Dive Store'){
