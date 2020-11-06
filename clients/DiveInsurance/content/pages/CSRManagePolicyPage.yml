@@ -339,6 +339,15 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     icon: 'fa fa-repeat'
+                -
+                    name: 'Reinstate Policy'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/5a2ed122-3f12-4240-b197-a24469721e87/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
+                    icon: 'fa fa-repeat'
             columnConfig:
                 -
                     title: PADI
