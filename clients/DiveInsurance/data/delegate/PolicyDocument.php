@@ -1820,7 +1820,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if (isset($policy['previous_additionalLocations']) && $policy['previous_additionalLocations'] != $data['additionalLocations']) {
                 $temp['newAdditionalLocations'] = "";
                 $temp['removedadditionalLocations'] = "";
-                $addLocRequired = array("padiNumberAL", "name", "address", "country", "city", "state", "zip", "ALpropertyCoverageSelect", "additionalLocationPropertyTotal", "ALLossofBusIncome", "additionalLocationDoYouOwntheBuilding", "ALBuildingReplacementValue", "additionalLocationFurniturefixturesAndEquipment", "ALnonDivingPoolAmount", "travelAgentEoPL", "propertyDeductibles", "ALcentralStationAlarm", "centralStationAlarm");
+                $addLocRequired = array("padiNumberAL", "name", "address", "country", "city", "state", "zip", "ALpropertyCoverageSelect", "additionalLocationPropertyTotal", "ALLossofBusIncome", "additionalLocationDoYouOwntheBuilding", "ALBuildingReplacementValue", "additionalLocationFurniturefixturesAndEquipment", "ALnonDivingPoolAmount", "travelAgentEoPL", "propertyDeductibles", "ALcentralStationAlarm", "centralStationAlarm", "ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL");
                 if (!is_array($policy['previous_additionalLocations'])) {
                     if (is_string($policy['previous_additionalLocations'])) {
                         $policy['previous_additionalLocations'] = json_decode($policy['previous_additionalLocations'], true);

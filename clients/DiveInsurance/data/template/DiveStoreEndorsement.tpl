@@ -381,6 +381,14 @@
                         <td class = "info">Not Included</td>
                         {/if}
                     </tr>
+                    <tr>
+                        <td class = "info">Lake,quarry and pond:</td>
+                        {if $additional.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL == "true"}
+                        <td class = "info">Included</td>
+                        {else}
+                        <td class = "info">Not Included</td>
+                        {/if}
+                    </tr>
                 </tbody>
             </table>
 
