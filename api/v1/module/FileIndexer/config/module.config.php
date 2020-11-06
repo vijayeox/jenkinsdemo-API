@@ -36,6 +36,16 @@ return [
                     ],
                 ],
             ],
+            'processBatchIndex' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/fileindexer/batch/process',
+                    'defaults' => [
+                        'controller' => Controller\FileIndexerController::class,
+                        'action' => 'processBatchIndex',
+                    ],
+                ],
+            ],
             'deleteIndex' => [
                 'type'    => Segment::class,
                 'options' => [

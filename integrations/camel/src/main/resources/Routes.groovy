@@ -42,6 +42,7 @@ routes {
         ['from':'activemq:queue:FILE_UPDATED', 'to':["${callback.URL}/callback/file/update",
                                                      "${callback.URL}/fileindexer/file"]],
         ['from':'activemq:queue:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]],
+        ['from':'activemq:topic:PROCESS_BATCH_INDEX', 'to':["${callback.URL}/fileindexer/batch"]],
         ['from':'activemq:topic:SEND_SMS', 'to':["${callback.URL}/callback/communication/sendsms"]],
         ['from':'activemq:topic:MAKE_CALL', 'to':["${callback.URL}/callback/communication/makecall"]],
         ['from':'activemq:topic:COMMANDS', 'to':["${callback.URL}/callback/workflow/servicetask"]]

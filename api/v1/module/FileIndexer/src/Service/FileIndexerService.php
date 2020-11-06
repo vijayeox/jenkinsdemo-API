@@ -57,6 +57,16 @@ class FileIndexerService extends AbstractService
         return null;
     }
 
+    public function processBatchIndex($data) {
+        try{
+            $this->messageProducer->sendTopic(json_encode($data), 'PROCESS_BATCH_INDEX');
+        } catch (Exception $e) {
+            $this->logger->error('Exception occured in async batch index :');
+            $this->logger->error($e);
+            throw $e;
+        }
+    }
+
     public function indexFile($fileUuid)
     {
         //Get all file data and relevant parameters
@@ -154,7 +164,7 @@ class FileIndexerService extends AbstractService
                     $select = 'SELECT file.id from ox_file as file
                     INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
                     INNER JOIN ox_app as app on entity.app_id = app.id
-                    where file.id in ('.$fileIds.') AND app.id ='.$appID.'';
+                    where file.id in ('.$fileIds.') AND app.id ='.$appID.' and file.is_active = 1';
                     $list = $this->executeQuerywithParams($select)->toArray();
                     $deleteIdList = array_column($list, 'id');
 
