@@ -26,11 +26,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             "excelFile" => "DealerGuard_Application_Open_Lot.xlsx",
             "customData" => "dealerguardOpenLot"
         ),
-        "harco" => array(
+        "victor_AutoPhysDamage" => array(
             "type" => "excel",
-            "excelFile" => "Harco.xlsm",
-            "template" => "harco.yaml",
-            "customData" => "harcoExcelData"
+            "template" => "victor_AutoPhysDamage.yaml",
+            "excelFile" => "Victor_AutoPhysDamage.xls",
+            "customData" => "victorAutoPhysicalDamage"
         ),
         "victor_FranchisedAutoDealer" => array(
             "type" => "excel",
@@ -38,11 +38,11 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             "excelFile" => "Victor_FranchisedAutoDealer.xls",
             "customData" => "franchisedAutoDealer"
         ),
-        "victor_AutoPhysDamage" => array(
+        "harco" => array(
             "type" => "excel",
-            "template" => "victor_AutoPhysDamage.yaml",
-            "excelFile" => "Victor_AutoPhysDamage.xls",
-            "customData" => "victorAutoPhysicalDamage"
+            "excelFile" => "Harco.xlsm",
+            "template" => "harco.yaml",
+            "customData" => "harcoExcelData"
         ),
         "epli" => array(
             "type" => "pdf",
@@ -273,6 +273,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 array(
                     "fullPath" => $fileDestination['absolutePath'] . "excelMapperInput.json",
                     "file" => $fileDestination['relativePath'] . "excelMapperInput.json",
+                    "created_date" => date('Y-m-d H:i:s'),
                     "originalName" => "excelMapperInput.json",
                     "type" => "file/json"
                 )
@@ -316,7 +317,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     $excelItem
                 );
                 $this->logger->info("Excel Mapper POST Request for " . $excelItem["fileId"] . "\n" . $response);
-                sleep(5);
+                sleep(7);
             }
         }
 
