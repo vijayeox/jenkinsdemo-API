@@ -10917,6 +10917,13 @@
                             "type": "columns",
                             "input": false
                         }, {
+                            "label": "Renewal",
+                            "calculateValue": "if(data.isRenewalFlow) {\n  value = true;\n}\nelse{\n  value= false;\n}",
+                            "key": "renewal",
+                            "type": "hidden",
+                            "input": true,
+                            "tableView": false
+                        }, {
                             "label": "initial",
                             "key": "initial",
                             "type": "hidden",
@@ -12419,7 +12426,7 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "clearOnHide": false,
-                        "calculateValue": "if(data.doyouhaveapoolonpremisesPL == 'yes'){\nif((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}\n} else {\n  value = 0;\n}",
+                        "calculateValue": "if(data.doyouhaveapoolonpremisesPL == 'yes'){\n    if(data.poolNonDivingActivities == \"yes\"){\n        if((parseFloat(data[\"poolLiability\"])||0)>50000){\n            value=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>20000){\n            value=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>0){\n            value=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n        }\n        else {\n            value=0\n        }\n    } else {\n        value = 0;\n    }\n} else {\n  value = 0;\n}",
                         "key": "nonDivingPoolAmount",
                         "type": "number",
                         "input": true,
@@ -14653,7 +14660,7 @@
         "input": false
     }],
     "revisions": "current",
-    "_vid": 132,
+    "_vid": 134,
     "title": "diveStoreConsolidation3",
     "display": "wizard",
     "access": [{
@@ -14671,6 +14678,6 @@
     "path": "divestoreconsolidation3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-07-28T11:29:44.022Z",
-    "modified": "2020-11-02T13:02:40.851Z",
+    "modified": "2020-11-06T10:24:17.120Z",
     "machineName": "testdivehub:diveStoreConsolidation3"
 }
