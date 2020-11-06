@@ -50,8 +50,8 @@ class EmployeeServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $data = ['firstname' => 'test', 
         'lastname' => 'test', 
-        'username' => 'prajwalqveqa', 
-        'email' => 'prajwalev@eoxvantageq1a.in', 
+        'username' => 'testuser', 
+        'email' => 'testuser@eoxvantage.in', 
         'date_of_birth' => '2020-11-02', 
         'gender' => 'Male', 
         'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f', 
@@ -83,8 +83,8 @@ class EmployeeServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $data = ['firstname' => 'test', 
         'lastname' => 'test', 
-        'username' => 'prajwalqveqa', 
-        'email' => 'prajwalev@eoxvantageq1a.in', 
+        'username' => 'testuser', 
+        'email' => 'testuser@eoxvantage.in', 
         'date_of_birth' => '2020-11-02', 
         'gender' => 'Male', 
         'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f', 
@@ -119,7 +119,7 @@ class EmployeeServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $data = [
             'uuid' => '2c7590d9-301c-4d29-bad9-38c4530e122c',
-            'username' => 'prajwalqveqa',
+            'username' => 'testuser',
             'password' => '68de082ad0afbcdb3cdec0427e38dd3f',
             'name' => 'test test',
             'account_id' => '1',
@@ -133,7 +133,7 @@ class EmployeeServiceTest extends ServiceTest
             'person_id' => '1',
             'firstname' => 'test',
             'lastname' => 'test',
-            'email' => 'prajwalev@eoxvantageq1a.in',
+            'email' => 'testuser@eoxvantage.in',
             'date_of_birth' => '2020-11-16',
             'designation' => 'Dev',
             'gender' => 'Male',
