@@ -12009,7 +12009,7 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "clearOnHide": false,
-                        "calculateValue": "if(data['poolLiability'] != data['previous_poolLiability']){\n    if(data.doyouhaveapoolonpremisesPL == 'yes'){\n        var val;\n        if((parseFloat(data[\"poolLiability\"])||0)>50000){\n            val=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>20000){\n            val=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>0){\n            val=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n        }\n        else {\n            val=0\n        }\n        if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n          var proRataDiff = data['proRataPercentage'];\n          var preVal = parseFloat(data['previous_nonDivingPoolAmount']) * proRataDiff;\n          var currVal = val * proRataDiff;\n          value = (currVal - preVal).toFixed(0);\n        }else{\n          value = parseFloat(val);\n        }\n    } else {\n        value = 0;\n    }\n} else {\n  value =0;\n}",
+                        "calculateValue": "if(data['poolLiability'] != data['previous_poolLiability']){\n    if(data.doyouhaveapoolonpremisesPL == 'yes'){\n        if(data.poolNonDivingActivities == \"yes\"){\n            var val;\n            if((parseFloat(data[\"poolLiability\"])||0)>50000){\n                val=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n            }\n            else if((parseFloat(data[\"poolLiability\"])||0)>20000){\n                val=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n            }\n            else if((parseFloat(data[\"poolLiability\"])||0)>0){\n                val=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n            }\n            else {\n                val=0\n            }\n            if(data['previous_proRataPercentage'] != data['proRataPercentage']){\n              var proRataDiff = data['proRataPercentage'];\n              var preVal = parseFloat(data['previous_nonDivingPoolAmount']) * proRataDiff;\n              var currVal = val * proRataDiff;\n              value = (currVal - preVal).toFixed(0);\n            }else{\n              value = parseFloat(val);\n            }\n        }else {\n            value = 0;\n        }\n    } else {\n        value = 0;\n    }\n} else {\n  value =0;\n}",
                         "key": "endorsementNonDivingPool",
                         "type": "number",
                         "input": true,
@@ -15652,7 +15652,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 108,
+    "_vid": 109,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15670,6 +15670,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-11-03T14:28:00.013Z",
+    "modified": "2020-11-06T10:26:10.994Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }
