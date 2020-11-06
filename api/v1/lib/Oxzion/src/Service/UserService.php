@@ -198,13 +198,13 @@ class UserService extends AbstractService
             unset($data['id']);
         }
         $params = ['username' => $data['username'],
-                    'email' => $data['email'],
-                    'accountId' => AuthContext::get(AuthConstants::ACCOUNT_UUID)];
+                    'email' => $data['email']];
+                  
         $select = "SELECT ou.id, ou.uuid, count(ou.id) as account_count, ou.status, ou.username, per.email, GROUP_CONCAT(au.account_id) as account_id 
             from ox_user as ou 
             inner join ox_account_user as au on au.user_id = ou.id 
             inner join ox_person as per on per.id = ou.person_id 
-            where ou.username ='". $params['username']. "' OR per.email ='" . $params['email']. "'  
+            where ou.username = :username OR per.email = :email 
             GROUP BY ou.id,ou.uuid,ou.status,ou.username, per.email";
         $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
         /*
@@ -236,8 +236,9 @@ class UserService extends AbstractService
             }
         }
         try{
+            $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
             if (!isset($data['address1']) || empty($data['address1'])) {
-                $addressData = $this->addressService->getOrganizationAddress( $params['accountId']);
+                $addressData = $this->addressService->getOrganizationAddress( $accountId);
                 unset($addressData['id']);
                 $data = array_merge($data, $addressData);
             }
@@ -528,6 +529,12 @@ class UserService extends AbstractService
         try {
             $this->beginTransaction();
             $this->logger->info("USER-DATA--------\n".print_r($userdata,true));
+             if (!isset($userdata['address1']) || empty($userdata['address1'])) {
+                $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
+                $addressData = $this->addressService->getOrganizationAddress( $accountId);
+                unset($addressData['id']);
+                $userdata = array_merge($userdata, $addressData);
+            }
             $this->personService->updatePerson($userdata['person_id'],$userdata);
             $userdata['name'] = $userdata['firstname'] . " " . $userdata['lastname'];
             $userdata['uuid'] = $form->uuid;

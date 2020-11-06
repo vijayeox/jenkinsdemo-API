@@ -54,11 +54,13 @@ class EmployeeService extends AbstractService
         try {
             $this->beginTransaction();
             $form->save();
+            $result = $form->getProperties();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
+        return $result;
     }
 
     public function updateEmployeeDetails($data)
@@ -73,12 +75,14 @@ class EmployeeService extends AbstractService
             return;
         }
         $id = $emp[0]['id'];
-        $obj = $this->table->get($id, array());
-        if (is_null($obj)) {
-            throw new ServiceException("Employee not found", "employee.not.found");
-        } 
-        
+        $form = new Employee($this->table);
+        if(is_numeric($id)){
+            $form->loadById($id);
+        }else{
+            $form->loadByUuid($id);
+        }
         unset($data['id']);
+        unset($data['uuid']);
         $EmpData = $data;
         $filter = NULL;
         if(isset($data['accountId'])){
@@ -99,17 +103,19 @@ class EmployeeService extends AbstractService
         }
         $EmpData['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $EmpData['date_modified'] = date('Y-m-d H:i:s');
-        $form = new Employee($this->table);
-        $changedArray = array_merge($obj->toArray(), $EmpData);
+
+        $changedArray = array_merge($form->getProperties(), $EmpData); 
         $form->assign($changedArray);
         try {
             $this->beginTransaction();
             $form->save();
+            $result = $form->getProperties();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
+        return $result;
     }
 
     private function getEmployeeAndManagerIdForUsers($userId, $managerId){
