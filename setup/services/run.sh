@@ -3,25 +3,6 @@
 # Mysql
 VOLUME_HOME="/var/lib/mysql" 
 
-echo "Editing APACHE_RUN_GROUP environment variable"
-sed -i "s/export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=staff/" /etc/apache2/envvars
-
-echo "Editing phpmyadmin config"
-sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
-    -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" \
-    -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/7.2/apache2/php.ini
-echo "Editing MySQL config"
-sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-sed -i "s/.*Listen 80*/Listen 8080/" /etc/apache2/ports.conf
-sed -i "s/.*Listen 808080*/Listen 8080/" /etc/apache2/ports.conf
-sed -i "s/user.*/user = www-data/" /etc/mysql/mysql.conf.d/mysqld.cnf
-
-sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
-
-echo "Setting up MySQL directories"
-mkdir -p /var/run/mysqld
-
-chmod 755 /etc/mysql/conf.d/my.cnf
 # install db
 if [ -n "$VAGRANT_OSX_MODE" ];then
     echo "Setting up users and groups"
@@ -32,18 +13,6 @@ else
     echo "Allowing Apache/PHP to write to the app"
     # Tweaks to give Apache/PHP write permissions to the app
     chown -R www-data:staff /var/www
-fi
-echo "Allowing Apache/PHP to write to MySQL"
-# Setup user and permissions for MySQL and Apache
-chmod -R 770 /var/lib/mysql
-chmod -R 770 /var/run/mysqld
-chown -R www-data:staff /var/lib/mysql
-chown -R www-data:staff /var/run/mysqld
-chown -R www-data:staff /var/log/mysql
-
-if [ -e /var/run/mysqld/mysqld.sock ];then
-    echo "Removing MySQL socket"
-    rm /var/run/mysqld/mysqld.sock
 fi
 
 if [[ ! -d $VOLUME_HOME/mysql ]]; then
@@ -75,15 +44,21 @@ cp /configs/env/view/apps/MailAdmin/.env.example /app/view/apps/MailAdmin/.env
 cp /configs/env/view/apps/Task/.env.example /app/view/apps/Task/.env
 cp /configs/env/view/apps/TaskAdmin/.env.example /app/view/apps/TaskAdmin/.env
 
+chmod 755 /services/*.sh
+/services/start-mysqld.sh
+
 echo "=> Setting up API Vendor Files ..."
 cd /app/api
-composer install
-dos2unix *
-/usr/bin/mysqld_safe > /dev/null 2>&1 &
-./migrations migrate
+if [ ! -f "./composer.lock" ]; then
+  composer install
+else
+  sleep 10
+fi
 
-mysqladmin -u root -proot shutdown
+dos2unix *
+
 ln -s /app/api/* /var/www
+
 #Workflow setup
 cd /app/workflow
 cd /app/workflow/IdentityService/
@@ -127,13 +102,13 @@ fi
 cp ./build/libs/camel-0.0.1-SNAPSHOT.jar ./camel.jar
 
 #view setup
-ls /app/view/view_built >> /dev/null 2>&1 && echo "Starting view" || (echo "Building view" && cd /app/view && dos2unix * && ./build.sh && touch /app/view/view_built)
+ls /app/view/view_built >> /dev/null 2>&1 && echo "Starting view" || (echo "Building view" && cd /app/view && dos2unix * && ./build.sh gui && ./build.sh iconpacks && ./build.sh themes && ./build.sh apps Admin,Announcements,Chat,Mail,Preferences && ./build.sh bos && touch /app/view/view_built)
 
 su - root /app/activemq/bin/activemq console &
 su - root /camunda/bin/catalina.sh start &
+/services/start-view.sh
+/services/start-camel.sh
+cd /app/api
+./migrations migrate
 
-# supervisord
-dos2unix /start-*
-echo "========================================================================"
-echo "Supervisord launchs: "
-exec supervisord -n -c /etc/supervisor/supervisord.conf
+/services/start-apache2.sh
