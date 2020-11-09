@@ -381,6 +381,8 @@ class AppService extends AbstractService
             foreach ($yamlData['pages'] as &$pageData) {
                 if (isset($pageData['page_name']) && !empty($pageData['page_name'])) {
                     $page = Yaml::parse(file_get_contents($path . 'content/pages/' . $pageData['page_name']));
+                } else {
+                    $page = $pageData["page_content"];
                 }
                 $page['page_id'] = $pageData['uuid'];
                 $pageId = $page['page_id'];
