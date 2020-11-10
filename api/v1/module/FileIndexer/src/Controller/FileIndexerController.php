@@ -66,11 +66,39 @@ namespace FileIndexer\Controller;
             }
         }
 
+     /**
+     * Process Batch Index API
+     * @api
+     * Meant for Asynchronous batch indexing for large number of records
+     * @link /fileindexer/batch/process
+     * @method POST
+     * @param array $data Array of elements as shown</br>
+     * <code>
+     *  app_id : string
+     *  start_date : string
+     *  end_date : string
+     * </code>
+     * @return array Returns a JSON Response with Status Code.</br>
+     * <code> status : "success|error",
+     * </code>
+     */
+        public function processBatchIndexAction() {
+            $params = $this->extractPostData();
+            try {
+                $response = $this->fileIndexerService->processBatchIndex($params);
+                $this->log->info(FileIndexerController::class.":Batch indexing process has been initiated");
+                return $this->getSuccessResponse();
+            } catch(Exception $e) {
+                return $this->getErrorResponse("Failure to Index File ", 400);
+            }
+        }
+
         public function batchIndexAction() {
             $params = $this->extractPostData();
             $startdate = isset($params['start_date']) ? $params['start_date'] : null;
             $enddate = isset($params['end_date']) ? $params['end_date'] : null;
             $appUuid = isset($params['app_id']) ? $params['app_id'] : null;
+            $this->log->info(FileIndexerController::class.":Batch indexing ");
             $this->log->info("Params- ".json_encode($params));
             try{
                 $response = $this->fileIndexerService->batchIndexer($appUuid,$startdate,$enddate);

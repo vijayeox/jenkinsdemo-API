@@ -4281,11 +4281,11 @@
             "next": true
         },
         "collapsible": false,
-        "tableView": false,
         "key": "page6",
         "customConditional": "if (data.efrToIPLUpgrade && !data.CSRReviewRequired) {\n  value = (data[\"finalAmount\"] || 0).toFixed(0);\n  if (!data[\"finalAmount\"] || data[\"finalAmount\"] < 0) {\n    show = false;\n  } else {\n    show = true;\n  }\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n} else {\n  if (data.privileges && data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"] !== null &&\n      data.privileges[\"MANAGE_POLICY_APPROVAL_WRITE\"]) {\n    show = true;\n  }\n}",
         "type": "panel",
         "label": "Payment Information",
+        "tableView": false,
         "components": [{
             "key": "page6Panel",
             "input": false,
@@ -5009,7 +5009,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 610,
+    "_vid": 612,
     "title": "CSR Initiates - IPL",
     "display": "wizard",
     "access": [{
@@ -5030,6 +5030,6 @@
     "path": "csrinitiatesipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-10T05:45:55.432Z",
-    "modified": "2020-11-02T13:05:05.218Z",
+    "modified": "2020-11-10T08:27:24.034Z",
     "machineName": "testdivehub:csrInitiates"
 }
