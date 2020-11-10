@@ -111,6 +111,7 @@ class Ratecard extends AbstractAppDelegate
         } else if ($data['padi'] == "") {
             return $data;
         }
+        $coverageOptions = array();
         $select = "Select firstname, MI as initial, lastname, business_name,rating FROM padi_data WHERE member_number ='" . $data['padi'] . "'";
         $result = $persistenceService->selectQuery($select);
         if ($result->count() > 0) {
@@ -128,13 +129,14 @@ class Ratecard extends AbstractAppDelegate
                     $coverage = $coverageLevels->current();
                     $coverageOptions[] = array('label' => $coverage['coverage_name'], 'value' => $coverage['coverage_level']);
                 }
-            } else {
-                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options and category IS NULL";
-                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
-                while ($coverageLevels->next()) {
-                    $coverage = $coverageLevels->current();
-                    $coverageOptions[] = array('label' => $coverage['coverage_name'], 'value' => $coverage['coverage_level']);
-                }
+            }
+        }
+        if (sizeof($coverageOptions) <= 0) {
+            $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+            while ($coverageLevels->next()) {
+                $coverage = $coverageLevels->current();
+                $coverageOptions[] = array('label' => $coverage['coverage_name'], 'value' => $coverage['coverage_level']);
             }
         }
         $data['careerCoverageOptions'] = $coverageOptions;
