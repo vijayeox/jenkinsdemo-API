@@ -54,13 +54,11 @@ class EmployeeService extends AbstractService
         try {
             $this->beginTransaction();
             $form->save();
-            $result = $form->getProperties();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $result;
     }
 
     public function updateEmployeeDetails($data)
@@ -76,11 +74,7 @@ class EmployeeService extends AbstractService
         }
         $id = $emp[0]['id'];
         $form = new Employee($this->table);
-        if(is_numeric($id)){
-            $form->loadById($id);
-        }else{
-            $form->loadByUuid($id);
-        }
+        $form->loadById($id);
         unset($data['id']);
         unset($data['uuid']);
         $EmpData = $data;
@@ -103,19 +97,15 @@ class EmployeeService extends AbstractService
         }
         $EmpData['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $EmpData['date_modified'] = date('Y-m-d H:i:s');
-
-        $changedArray = array_merge($form->getProperties(), $EmpData); 
-        $form->assign($changedArray);
+        $form->assign($EmpData);
         try {
             $this->beginTransaction();
             $form->save();
-            $result = $form->getProperties();
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $result;
     }
 
     private function getEmployeeAndManagerIdForUsers($userId, $managerId){

@@ -1,57 +1,57 @@
 <?php
 namespace Oxzion\Service;
 
-use Zend\Stdlib\ArrayUtils;
-use Oxzion\Test\ServiceTest;
-use Oxzion\Service\EmailService;
+use Oxzion\Test\AbstractServiceTest;
+use Zend\Db\Adapter\Adapter;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\Service\AddressService;
-use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\Service\TemplateService;
-use Oxzion\Transaction\TransactionManager;
-use Zend\Db\Adapter\Adapter;
-use Oxzion\Messaging\MessageProducer;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use Symfony\Component\Yaml\Yaml;
+use Oxzion\ServiceException;
+use Oxzion\ValidationException;
+use Oxzion\EntityNotFoundException;
+use Zend\Db\Adapter\Exception\InvalidQueryException;
+use \Exception;
+use Zend\Db\ResultSet\ResultSet;
+use Oxzion\Utils\FileUtils;
 
-class EmployeeServiceTest extends ServiceTest
+class EmployeeServiceTest extends AbstractServiceTest
 {
-    public function setUp() : void
+    public $dataset = null;
+
+    public $adapter = null;
+
+    protected function setUp(): void
     {
         $this->loadConfig();
-        // parent::setUp();
-        $config = $this->getApplicationConfig();
-        $this->adapter = new Adapter($config['db']);
-        $tm = TransactionManager::getInstance($this->adapter);
-        $tm->setRollbackOnly(true);
-        $tm->beginTransaction();
+        parent::setUp();
+        $this->EmplyService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\EmployeeService::class); 
+        $this->adapter = $this->getDbAdapter();
+        $this->adapter->getDriver()->getConnection()->setResource(static::$pdo);
     }
 
-    public function tearDown() : void
-    {
-        $tm = TransactionManager::getInstance($this->adapter);
-        $tm->rollback();
-        $_REQUEST = [];
-    }
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/Dataset/UserServiceTest.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/File.yml");
         return $dataset;
     }
 
-    private function getEmployeeService()
-    {
-        return $this->getApplicationServiceLocator()->get(\Oxzion\Service\EmployeeService::class);
+    private function runQuery($query) {
+        $statement = $this->adapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $result = $resultSet->initialize($result)->toArray();
+        return $result;
     }
 
     public function testaddEmployeeRecord()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
-        $data = ['firstname' => 'test', 
-        'lastname' => 'test', 
+        $data = ['firstname' => 'Individual', 
+        'lastname' => 'Admin', 
         'username' => 'testuser', 
-        'email' => 'testuser@eoxvantage.in', 
+        'email' => 'admintestindividual@eoxvantage.in', 
         'date_of_birth' => '2020-11-02', 
         'gender' => 'Male', 
         'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f', 
@@ -63,28 +63,29 @@ class EmployeeServiceTest extends ServiceTest
         'country' => 'US', 
         'account_id' => '1', 
         'address2' => '', 
-        'person_id' => '1', 
+        'person_id' => '152', 
         'name' => 'test test', 
         'date_created' => '2020-11-05 10:07:39', 
         'password_reset_code' => 'c347a277-e724-42ea-9b2a-c80dc62f7d7e', 
-        'created_by' => ''];
-        $content = $this->getEmployeeService()->addEmployeeRecord($data);
-        $empUuid = $content['uuid'];
-        $data['uuid'] = $empUuid;
-        $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE uuid='${empUuid}'");
-        $this->assertEquals($content['uuid'], $rows[0]['uuid']);
-        $this->assertEquals($content['org_id'], $rows[0]['org_id']);
-        $this->assertEquals($content['manager_id'], $rows[0]['manager_id']);
-        $this->assertEquals($content['person_id'], $rows[0]['person_id']);
+        'created_by' => ''
+    ];
+        $this->EmplyService->addEmployeeRecord($data);
+        $person_id = $data['person_id'];
+        $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE person_id='${person_id}'");
+        $this->assertEquals($data['manager_id'], $rows[0]['manager_id']);
+        $this->assertEquals($data['person_id'], $rows[0]['person_id']);
+        $this->assertEquals($rows[0]['designation'], "Staff");
+        $this->assertEquals($rows[0]['date_of_join'], date('Y-m-d'));
     }
-    public function testaddEmployeeWithdesignationRecord()
+
+    public function testaddEmployeeWithoutDataRecord()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
-        $data = ['firstname' => 'test', 
+        $data = ['firstname' => 'Admintest', 
         'lastname' => 'test', 
         'username' => 'testuser', 
-        'email' => 'testuser@eoxvantage.in', 
+        'email' => 'admintestindividual@eoxvantage.in', 
         'date_of_birth' => '2020-11-02', 
         'gender' => 'Male', 
         'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f', 
@@ -97,28 +98,27 @@ class EmployeeServiceTest extends ServiceTest
         'account_id' => '1', 
         'address2' => '', 
         'designation' => 'Dev',
-        'person_id' => '1', 
-        'name' => 'test test', 
+        'person_id' => '152', 
+        'name' => 'test test',
+        'date_of_join' => '2020-11-23',
         'date_created' => '2020-11-05 10:07:39', 
         'password_reset_code' => 'c347a277-e724-42ea-9b2a-c80dc62f7d7e', 
         'created_by' => ''];
-        $content = $this->getEmployeeService()->addEmployeeRecord($data);
-        $empUuid = $content['uuid'];
-        $data['uuid'] = $empUuid;
-        $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE uuid='${empUuid}'");
-        $this->assertEquals($content['uuid'], $rows[0]['uuid']);
-        $this->assertEquals($content['org_id'], $rows[0]['org_id']);
-        $this->assertEquals($content['manager_id'], $rows[0]['manager_id']);
-        $this->assertEquals($content['person_id'], $rows[0]['person_id']);
-        $this->assertEquals($content['designation'], $data['designation']);
+        $this->EmplyService->addEmployeeRecord($data);
+        $person_id = $data['person_id'];
+        $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE person_id='${person_id}'");
+        $this->assertEquals($data['manager_id'], $rows[0]['manager_id']);
+        $this->assertEquals($data['person_id'], $rows[0]['person_id']);
+        $this->assertEquals($data['designation'], $rows[0]['designation']);
+        $this->assertEquals($data['date_of_join'], $rows[0]['date_of_join']);
     }
 
-    public function testeditEmployeeWithRecord()
+    public function testupdateEmployeeWithRecord()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $data = [
-            'uuid' => '2c7590d9-301c-4d29-bad9-38c4530e122c',
+            'uuid' => 'ecfdf59d-2262-11eb-a506-485f997ffb6f',
             'username' => 'testuser',
             'password' => '68de082ad0afbcdb3cdec0427e38dd3f',
             'name' => 'test test',
@@ -133,7 +133,7 @@ class EmployeeServiceTest extends ServiceTest
             'person_id' => '1',
             'firstname' => 'test',
             'lastname' => 'test',
-            'email' => 'testuser@eoxvantage.in',
+            'email' => 'admintestindividual@eoxvantage.in',
             'date_of_birth' => '2020-11-16',
             'designation' => 'Dev',
             'gender' => 'Male',
@@ -153,16 +153,13 @@ class EmployeeServiceTest extends ServiceTest
             'modified_id' => '1',
             'date_modified' => '2020-11-06 11:30:42'
         ];
-        $content = $this->getEmployeeService()->updateEmployeeDetails($data);
-        $empUuid = $content['uuid'];
-        $data['uuid'] = $empUuid;
+        $this->EmplyService->updateEmployeeDetails($data);
+        $empUuid = $data['uuid'];
         $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE uuid='${empUuid}'");
-        $this->assertEquals($content['uuid'], $rows[0]['uuid']);
-        $this->assertEquals($content['org_id'], $rows[0]['org_id']);
-        $this->assertEquals($content['manager_id'], $rows[0]['manager_id']);
-        $this->assertEquals($content['person_id'], $rows[0]['person_id']);
-        $this->assertEquals($content['designation'], $data['designation']);
-
+        $this->assertEquals($data['uuid'], $rows[0]['uuid']);
+        $this->assertEquals($data['person_id'], $rows[0]['person_id']);
+        $this->assertEquals($data['designation'], $rows[0]['designation']);
+        $this->assertEquals($data['date_of_join'], $rows[0]['date_of_join']);
     }
-
+    
 }
