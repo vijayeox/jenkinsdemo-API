@@ -60,7 +60,6 @@
     "setasign/fpdf": "1.8.*",
     "setasign/fpdi": "^2.0",
     "apache/log4php": "2.3.0",
-    "webit/eval-math":"1.0.1",
     "nicolab/php-ftp-client": "dev-master",
     "mikehaertl/php-pdftk": "dev-master",
     "zendframework/zend-hydrator": "^3.0@dev",
