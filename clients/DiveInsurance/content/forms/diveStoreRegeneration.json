@@ -12481,7 +12481,7 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "clearOnHide": false,
-                        "calculateValue": "if(data.doyouhaveapoolonpremisesPL == 'yes'){\nif((parseFloat(data[\"poolLiability\"])||0)>50000){\nvalue=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>20000){\nvalue=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n}\nelse if((parseFloat(data[\"poolLiability\"])||0)>0){\nvalue=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n}\nelse {\nvalue=0\n}\n} else {\n  value = 0;\n}",
+                        "calculateValue": "if(data.doyouhaveapoolonpremisesPL == 'yes'){\n    if(data.poolNonDivingActivities == \"yes\"){\n        if((parseFloat(data[\"poolLiability\"])||0)>50000){\n            value=(parseFloat(data[\"poolLiabilityOver50k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>20000){\n            value=(parseFloat(data[\"poolLiabilityOver20k\"])||0)\n        }\n        else if((parseFloat(data[\"poolLiability\"])||0)>0){\n            value=(parseFloat(data[\"poolLiabilityOver0\"]||0))\n        }\n        else {\n            value=0\n        }\n    } else {\n        value = 0;\n    }\n} else {\n  value = 0;\n}",
                         "key": "nonDivingPoolAmount",
                         "type": "number",
                         "input": true,
@@ -14297,7 +14297,7 @@
         "event": "submitForm"
     }],
     "revisions": "current",
-    "_vid": 22,
+    "_vid": 23,
     "title": "DiveStoreRegeneration",
     "display": "wizard",
     "access": [{
@@ -14315,6 +14315,6 @@
     "path": "divestoreregeneration",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-18T04:16:15.109Z",
-    "modified": "2020-11-11T09:39:43.146Z",
+    "modified": "2020-11-11T12:19:03.133Z",
     "machineName": "testdivehub:diveStoreRegeneration"
 }
