@@ -508,9 +508,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->logger->info("DOCUMENT property_coi_document");
                 $documents['property_coi_document']  = $this->generateDocuments($temp, $dest, $options, 'template', 'propertyHeader', 'propertyFooter', 'property');
             }
-            if (!isset($data['regeneratePolicy']) || (isset($data['regeneratePolicy']) && empty($data['regeneratePolicy']))) {
-                $this->additionalDocumentsDS($temp, $documents, $dest);
-            }
+            $this->additionalDocumentsDS($temp, $documents, $dest);
         } else if ($data['product'] == 'Dive Store' && $this->type == 'endorsementQuote') {
             $this->diveStoreEndorsement($data, $temp, $persistenceService);
             $this->diveStoreEnorsementQuoteDocuments($data, $documents, $temp, $dest, $options, $previous_data, $endorsementOptions, $length);
