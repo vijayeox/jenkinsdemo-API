@@ -10861,7 +10861,6 @@
                     "initEmpty": false,
                     "hideLabel": true,
                     "tableView": false,
-                    "modalEdit": true,
                     "defaultValue": [{
                         "padi": "",
                         "firstname": "",
@@ -10869,12 +10868,12 @@
                         "status": "",
                         "nameOfInstitution": "",
                         "initial": "",
-                        "start_date": "2020-10-27",
+                        "start_date": "2020-11-11",
                         "documentattach": [],
                         "verified": "",
                         "rating": "",
                         "document1": [],
-                        "effectiveDate": "10-27-2020",
+                        "effectiveDate": "11-11-2020",
                         "email": "",
                         "address1": "",
                         "address2": "",
@@ -14298,7 +14297,7 @@
         "event": "submitForm"
     }],
     "revisions": "current",
-    "_vid": 21,
+    "_vid": 22,
     "title": "DiveStoreRegeneration",
     "display": "wizard",
     "access": [{
@@ -14309,13 +14308,13 @@
     "controller": "",
     "properties": {
         "commands": "[{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
-        "submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"PolicyDocument\"},{\"command\":\"file\"},{\"command\" : \"delegate\",\"delegate\":\"NewPolicyDocumentDispatch\"}]"
+        "submission_commands": "[{\"command\" : \"delegate\",\"delegate\":\"CleanUpDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"PolicyDocument\"},{\"command\":\"fileSave\"},{\"command\" : \"delegate\",\"delegate\":\"NewPolicyDocumentDispatch\"}]"
     },
     "settings": {},
     "name": "diveStoreRegeneration",
     "path": "divestoreregeneration",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-18T04:16:15.109Z",
-    "modified": "2020-11-02T13:16:53.914Z",
+    "modified": "2020-11-11T09:39:43.146Z",
     "machineName": "testdivehub:diveStoreRegeneration"
 }
