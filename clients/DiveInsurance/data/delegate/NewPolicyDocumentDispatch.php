@@ -54,6 +54,9 @@ class NewPolicyDocumentDispatch extends DispatchDocument
             }
             $docType = "General Liability";
         }
+        if(isset($data['csrmailDocuments'])){
+            $this->getSelectedDocuments($data['csrmailDocuments'],$documents);
+        }
         $this->dispatchDocument($data, $documents, $docType);
     }
 

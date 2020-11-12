@@ -43,4 +43,16 @@ abstract class DispatchDocument extends MailDelegate
             return $response;
         }
     }
+    protected function getSelectedDocuments($selected,&$documents){
+        $mailDocs = (is_string($selected) ? json_decode($selected,true) : $selected) ;
+        $selectedDocs = array();
+        $doc = isset($documents) ? (is_string($documents) ? json_decode($documents,true) : $documents) : array();
+        foreach($doc as $key => $value){
+            $this->logger->info("selected DOCUMENT --- ".json_encode($mailDocs[$key]));
+            if($mailDocs[$key] == true){
+                $selectedDocs[$key] = $doc[$key];
+            }
+        }
+        $documents = $selectedDocs;
+    }
 }
