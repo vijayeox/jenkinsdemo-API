@@ -14,6 +14,7 @@ class Ratecard extends AbstractAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing Rate Card -STart" . print_r($data, true));
+        $data['start_date'] = ($data['start_date'] == "null") ? date("Y-m-d") : $data['start_date'];
         $operation = " <= ";
         $select = "Select * FROM premium_rate_card WHERE product ='" . $data['product'] . "' AND start_date " . $operation . " '" . $data['start_date'] . "' AND is_upgrade = 0 AND end_date >= '" . $data['start_date'] . "'";
         $result = $persistenceService->selectQuery($select);
@@ -79,8 +80,10 @@ class Ratecard extends AbstractAppDelegate
         if (isset($premiumRateCardDetails)) {
             $this->logger->info("Rate Card ENd");
             $returnArray = array_merge($data, $premiumRateCardDetails);
+            $this->logger->info("Rate Card Response : updated".print_r($returnArray,true));
             return $returnArray;
         } else {
+            $this->logger->info("Rate Card Response : Not updated".print_r($data,true));
             return $data;
         }
     }
