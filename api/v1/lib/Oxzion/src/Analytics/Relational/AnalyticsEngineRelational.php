@@ -92,34 +92,41 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		
 
 		if (!empty($parameters['frequency'])) {
+		    $fieldname = "";
 			switch ($parameters['frequency']) {
 				case 1:
 					$group[] = "$datetype";
+					$fieldname = "day";
 					break;
 				case 2:
-					$group[] = "MONTH($datetype)";
+					$group[] = "MONTHNAME($datetype)";
+					$fieldname = "month";
 					break;
 				case 3:
 					$group[] = "QUARTER($datetype)";
+					$fieldname = "quarter";
 					break;
 				case 4:
 					$group[] = "YEAR($datetype)";
+					$fieldname = "year";
 					break;
 			}
 		}
-		if ($field) { 
-			if (!empty($group)) {
-				$select=$group;
-				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
+		if (!empty($group)) { 
+			if (!empty($parameters['frequency'])) {
+				$select = [$fieldname=>new \Zend\Db\Sql\Expression("$group[0]")];
 			} else {
-				$select = [$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
+				$select = $group;
 			}
-		} 
-		else {
+		}
+		if ($field) { 
+				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
+		} else {
 			if (!empty($group)) {
-				$select=$group;
-				$select[] = new \Zend\Db\Sql\Expression("count(*)");;
-			} 
+				$select['count'] = new \Zend\Db\Sql\Expression("count(*)");;
+			} else {
+				$select[]="*";
+			}
 		}
 		if ($datetype)
 			$range = "$datetype between '$startdate' and '$enddate'";
@@ -137,6 +144,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		}
 		if (isset($parameters['list'])) {
 			$listConfig=explode(",", $parameters['list']);
+			$returnarray['select'] = [];
 			foreach ($listConfig as $k => $v) {
 				if(strpos($v, "=")!==false){
 					$listitem = explode("=", $v);
@@ -151,6 +159,10 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if (isset($parameters['sort'])) {
 			$returnarray['sort'] = $parameters['sort'];
 		}
+		if (isset($parameters['frequency'])) {
+			$returnarray['frequency'] = $parameters['frequency'];
+		}
+
 		return $returnarray;
 	}
 
@@ -194,7 +206,12 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		}
 
 		if (!empty($para['group'])) {
-			$select->group($para['group']);
+			if (!empty($para['frequency'])) {
+				$group = $para['group'][0];
+				$select->group(new \Zend\Db\Sql\Expression("$group"));
+			} else {
+				$select->group($para['group']);
+			}	
 		}
 		if (!empty($para['limit'])) {
 			$select->limit($para['limit']);
@@ -203,7 +220,6 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if (!empty($para['sort'])) {
 			$select->order($para['sort']);
 		}
-	//	echo $select->getSqlString();exit;
 		$statement = $sql->prepareStatementForSqlObject($select);
 
 		$result = $statement->execute();
