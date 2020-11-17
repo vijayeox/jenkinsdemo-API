@@ -93,7 +93,7 @@ menu:
         uuid: 474e61f0-4072-41c3-b4b2-c1a9ecb5ecca
         privilege: MANAGE_CLAIMS_READ
     -
-        name: 'Phase 2 Form'
+        name: 'Phase 2'
         icon: 'far fa-flask'
         page_uuid: 65aa32d1-113e-430f-bfb5-83e085f51948
         uuid: aa8e1d75-a4a8-40cd-8317-4ed1790af71c
@@ -214,7 +214,7 @@ pages:
     -
         uuid: 65aa32d1-113e-430f-bfb5-83e085f51948
         page_content:
-            name: Claims
+            name: 'Phase 2'
             description: 'Shows a list of claims realated to a workbook'
             content:
                 -
