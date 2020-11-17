@@ -27,7 +27,7 @@ class ServiceTaskService extends AbstractService
 	public function executeServiceTask($data,$request){
         $this->logger->info("inside execute service task");
         $variables = isset($data['variables']) ? $data['variables'] : $data;
-		$this->commandService->updateOrganizationContext($variables);
+		$this->commandService->updateAccountContext($variables);
         $response = $this->commandService->runCommand($variables, $request);
         if(isset($data['processInstanceId'])){
             if(isset($response['data']) ) {

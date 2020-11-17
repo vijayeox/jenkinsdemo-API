@@ -11,7 +11,7 @@ class Target extends Entity {
         'uuid' =>               ['type' => Type::UUID,      'readonly' => TRUE ,    'required' => FALSE],
         'created_by' =>         ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
         'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => TRUE ,    'required' => FALSE],
-        'org_id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
+        'account_id' =>         ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
         'type' =>               ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => FALSE],
         'period_type' =>        ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => FALSE],
         'red_limit' =>          ['type' => Type::FLOAT,     'readonly' => FALSE ,   'required' => FALSE, 'value' => 0],

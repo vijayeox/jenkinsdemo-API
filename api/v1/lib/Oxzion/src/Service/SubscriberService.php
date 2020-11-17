@@ -50,7 +50,7 @@ class SubscriberService extends AbstractService
             return 0;
         }
         $obj['uuid'] = $data['commentId'];
-        $obj['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $obj['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $obj['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $obj['date_created'] = date('Y-m-d H:i:s');
         $form = new Subscriber();
@@ -76,7 +76,7 @@ class SubscriberService extends AbstractService
     public function updateSubscriber($id, $fileId, $data)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         if (is_null($obj)) {
             return 0;
         }
@@ -107,7 +107,7 @@ class SubscriberService extends AbstractService
     public function deleteSubscriber($id, $fileId)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         if (is_null($obj)) {
             return 0;
         }
@@ -147,7 +147,7 @@ class SubscriberService extends AbstractService
 
     private function getSubscribersInternal($fileId, $id = null){
         $idClause = "";
-        $params = array("orgId"=>AuthContext::get(AuthConstants::ORG_ID),"fileId"=>$fileId);
+        $params = array("accountId"=>AuthContext::get(AuthConstants::ACCOUNT_ID),"fileId"=>$fileId);
         if($id){
             $idClause = "AND s.uuid = :subscriberId";
             $params['subscriberId'] = $id;
@@ -155,8 +155,8 @@ class SubscriberService extends AbstractService
         $query = "select up.firstname, up.lastname, u.uuid as user_id from ox_subscriber s 
                         inner join ox_file of on s.file_id = of.id
                         inner join ox_user u on u.id = s.user_id
-                        inner join ox_user_profile up on up.id = u.user_profile_id
-                        where s.org_id = :orgId and of.uuid = :fileId $idClause ORDER by up.firstname";
+                        inner join ox_person up on up.id = u.person_id
+                        where s.account_id = :accountId and of.uuid = :fileId $idClause ORDER by up.firstname";
         $this->logger->info("Executing Query $query with params - ".print_r($params, true));
         $resultSet = $this->executeQueryWithBindParameters($query, $params);
         return $resultSet->toArray();

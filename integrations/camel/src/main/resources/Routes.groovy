@@ -5,11 +5,11 @@ if(System.getenv("HOST")){
 }
 routes {
     route = [
-        ['from':'activemq:topic:ORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/addorg"]],
-        ['from':'activemq:topic:ORGANIZATION_UPDATED', 'to':["${callback.URL}/callback/chat/updateorg"]],
-        ['from':'activemq:topic:ORGANIZATION_DELETED', 'to':["${callback.URL}/callback/chat/deleteorg"]],
-        ['from':'activemq:topic:USERTOORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/adduser"]],
-        // ['from':'activemq:topic:USERTOORGANIZATION_ALREADYEXISTS', 'to':'"callback.URL" + '],
+        ['from':'activemq:topic:ACCOUNT_ADDED', 'to':["${callback.URL}/callback/chat/addaccount"]],
+        ['from':'activemq:topic:ACCOUNT_UPDATED', 'to':["${callback.URL}/callback/chat/updateaccount"]],
+        ['from':'activemq:topic:ACCOUNT_DELETED', 'to':["${callback.URL}/callback/chat/deleteaccount"]],
+        ['from':'activemq:topic:USERTOACCOUNT_ADDED', 'to':["${callback.URL}/callback/chat/adduser"]],
+        
 
         ['from':'activemq:topic:PROJECT_ADDED', 'to':["${callback.URL}/callback/task/addproject",
                                                       "${callback.URL}/callback/chat/createchannel"]],

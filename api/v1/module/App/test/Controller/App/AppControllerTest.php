@@ -308,21 +308,16 @@ class AppControllerTest extends ControllerTest
     public function testCreateWithoutRequiredData()
     {
         $this->initAuthToken($this->adminUser);
-        $data = [
-            'app' => [
-                'type' => 2, 
-                'org_id' => 4
-            ]
-        ];
+        $data['app'] = ['type' => 2, 'account_id' => 4];
         $query = "SELECT id, name FROM ox_app ORDER BY id ASC";
         //Take a snapshot of ox_app records.
         $existingRecordSet = $this->executeQueryTest($query);
         $this->dispatch('/app', 'POST', $data);
         $newRecordSet = $this->executeQueryTest($query);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         //Assert response status etc.
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['name']['error'], 'required');
@@ -392,21 +387,23 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT id from ox_app where uuid = '" . $appUuid . "'";
         $appId = $this->executeQueryTest($query);
         $appId = $appId[0]['id'];
-        $query = "SELECT status,uuid,id from ox_organization where name = '" . $yaml['org']['name'] . "'";
-        $orgid = $this->executeQueryTest($query);
+        $query = "SELECT count(name),status,uuid,id from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $account = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count from ox_app_registry where app_id = '" . $appId . "'";
         $appRegistryResult = $this->executeQueryTest($query);
         $query = "SELECT count(name) as count FROM ox_privilege WHERE app_id = '" . $appId . "'";
         $privilege = $this->executeQueryTest($query);
         $query = "SELECT count(privilege_name) as count from ox_role_privilege WHERE app_id = '" . $appId . "'";
         $rolePrivilege = $this->executeQueryTest($query);
-        $query = "SELECT count(id) as count from ox_role WHERE org_id = '" . $orgid[0]['id'] . "'";
+        $query = "SELECT count(id) as count from ox_role WHERE account_id = '" . $account[0]['id'] . "'";
         $role = $this->executeQueryTest($query);
         $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY2' and app_id = '" . $appId . "'";
         $roleprivilege1 = $this->executeQueryTest($query);
         $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY' and app_id = '" . $appId . "'";
         $roleprivilege2 = $this->executeQueryTest($query);
-        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_POLICY_APPROVAL' and app_id = '" . $appId . "'";
+        $query = "SELECT * FROM ox_role_privilege rp
+                    inner join ox_role r on r.id = rp.role_id
+                    WHERE privilege_name = 'MANAGE_POLICY_APPROVAL'";//" and app_id = '" . $appId . "'";
         $roleprivilege3 = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count FROM ox_form WHERE app_id = " . $appId . " and name = 'sampleFormForTests'";
         $form = $this->executeQueryTest($query);
@@ -416,17 +413,17 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($form[0]['count'], 1);
         $this->assertEquals($roleprivilege1[0]['count'], 2);
         $this->assertEquals($roleprivilege2[0]['count'], 2);
-        $this->assertEquals($roleprivilege3[0]['count'], 2);
+        $this->assertEquals(count($roleprivilege3), 2);
         $this->assertEquals($role[0]['count'], 5);
         $this->assertEquals($privilege[0]['count'], 3);
         $this->assertEquals($rolePrivilege[0]['count'], 6);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $this->assertEquals($appname[0]['name'], $appName);
         $this->assertEquals($appUuid, $YmlappUuid);
         $this->assertEquals($appUuidCount, 1);
         $this->assertEquals($appRegistryResult[0]['count'], 1);
         $this->assertEquals($content['status'], 'success');
-        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
         $delegate = $this->config['DELEGATE_FOLDER'] . $appUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
@@ -603,9 +600,9 @@ class AppControllerTest extends ControllerTest
         $path = $this->setupAppFolder($path);
         $data = ['path' => $path];
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
@@ -615,10 +612,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
-        $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
-        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $account = $this->executeQueryTest($query);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
         $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
@@ -649,9 +646,9 @@ class AppControllerTest extends ControllerTest
         }
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
@@ -663,10 +660,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
-        $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
-        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $account = $this->executeQueryTest($query);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
         $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
@@ -742,9 +739,9 @@ class AppControllerTest extends ControllerTest
             $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
@@ -754,10 +751,10 @@ class AppControllerTest extends ControllerTest
         $this->assertNotEmpty($yaml['org']['contact']);
         $this->assertEquals($yaml['org']['preferences'], '{}');
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT name,status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
-        $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
-        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $account = $this->executeQueryTest($query);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
         $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
@@ -778,6 +775,7 @@ class AppControllerTest extends ControllerTest
         $path = __DIR__ . '/../../sampleapp/';
         $path = $this->setupAppFolder($path);
         $data = ['path' => $path];
+
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -786,10 +784,11 @@ class AppControllerTest extends ControllerTest
             $mockRestClient = $this->getMockRestClientForAppService();
             $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
+
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
@@ -801,12 +800,12 @@ class AppControllerTest extends ControllerTest
         $queryString = "SELECT name FROM ox_privilege WHERE app_id = '" . $idresult[0]['id'] . "'";
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
-        $query = "SELECT status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
-        $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $account = $this->executeQueryTest($query);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $this->assertEquals($privilegearray, $DBprivilege);
         $this->assertEquals($content['status'], 'success');
-        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
         $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
@@ -827,6 +826,7 @@ class AppControllerTest extends ControllerTest
         $path = __DIR__ . '/../../sampleapp/';
         $path = $this->setupAppFolder($path);
         $data = ['path' => $path];
+
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
@@ -850,12 +850,12 @@ class AppControllerTest extends ControllerTest
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
         $list = "'" . implode("', '", $DBprivilege) . "'";
-        $query = "SELECT status,uuid from ox_organization where name = '" . $yaml['org']['name'] . "'";
-        $orgid = $this->executeQueryTest($query);
-        $this->assertEquals($orgid[0]['uuid'], $yaml['org']['uuid']);
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $account = $this->executeQueryTest($query);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $this->assertNotEquals($list, 'MANAGE');
         $this->assertEquals($content['status'], 'success');
-        $template = $this->config['TEMPLATE_FOLDER'] . $orgid[0]['uuid'];
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
         $delegate = $this->config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
@@ -888,9 +888,9 @@ class AppControllerTest extends ControllerTest
             $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
         }
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
         $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
@@ -944,17 +944,17 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(1, count($queryResult));
         $this->assertEquals($YmlappUuid, $queryResult[0]['uuid']);
         $appId = $queryResult[0]['id'];
-        $query = "SELECT name,status,uuid,id from ox_organization where name = '" . $yaml['org']['name'] . "'";
-        $orgResult = $this->executeQueryTest($query);
-        $this->assertEquals(1, count($orgResult));
-        $this->assertEquals($yaml['org']['uuid'], $orgResult[0]['uuid']);
-        $this->assertEquals($yaml['org']['name'], $orgResult[0]['name']);
-        $this->assertEquals('Active', $orgResult[0]['status']);
+        $query = "SELECT name,status,uuid,id from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $acctResult = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($acctResult));
+        $this->assertEquals($yaml['org']['uuid'], $acctResult[0]['uuid']);
+        $this->assertEquals($yaml['org']['name'], $acctResult[0]['name']);
+        $this->assertEquals('Active', $acctResult[0]['status']);
         $query = "SELECT * from ox_app_registry where app_id = '" . $appId . "'";
         $appRegistryResult = $this->executeQueryTest($query);
-        $orgId = $orgResult[0]['id'];
+        $accountId = $acctResult[0]['id'];
         $this->assertEquals(1, count($appRegistryResult));
-        $this->assertEquals($orgId, $appRegistryResult[0]['org_id']);
+        $this->assertEquals($accountId, $appRegistryResult[0]['account_id']);
         $query = "SELECT name, permission_allowed as permission FROM ox_privilege WHERE app_id = '" . $appId . "'";
         $privilege = $this->executeQueryTest($query);
         $this->assertEquals(3, count($privilege));
@@ -964,19 +964,23 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(2, count($businessRole));
         $this->assertEquals($yaml['businessRole'][0]['name'], $businessRole[0]['name']);
         $this->assertEquals($yaml['businessRole'][1]['name'], $businessRole[1]['name']);
-        $query = "SELECT * from ox_role WHERE business_role_id is not null OR org_id = $orgId ORDER BY name";
+        $query = "SELECT * from ox_role 
+                    WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
         $role = $this->executeQueryTest($query);
         $this->assertEquals(7, count($role));
         $this->assertEquals($yaml['role'][0]['name'], $role[1]['name']);
-        $this->assertEquals(null, $role[1]['org_id']);
+        $this->assertEquals(null, $role[1]['account_id']);
         $this->assertEquals($businessRole[0]['id'], $role[1]['business_role_id']);
         $this->assertEquals($role[1]['name'], $role[2]['name']);
-        $this->assertEquals($orgId, $role[2]['org_id']);
+        $this->assertEquals($accountId, $role[2]['account_id']);
         $this->assertEquals($role[1]['business_role_id'], $role[2]['business_role_id']);
         $this->assertEquals($yaml['role'][1]['name'], $role[5]['name']);
-        $this->assertEquals(null, $role[5]['org_id']);
+        $this->assertEquals(null, $role[5]['account_id']);
         $this->assertEquals($businessRole[1]['id'], $role[5]['business_role_id']);
-
+        $this->assertEquals($role[5]['name'], $role[6]['name']);
+        $this->assertEquals($accountId, $role[6]['account_id']);
+        $this->assertEquals($role[5]['business_role_id'], $role[6]['business_role_id']);
+        
         $query = "SELECT rp.* from ox_role_privilege rp 
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
@@ -984,27 +988,41 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[0]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[0]['permission']);
         $this->assertEquals($role[1]['id'], $rolePrivilege[0]['role_id']);
-        $this->assertEquals(null, $rolePrivilege[0]['org_id']);
+        $this->assertEquals(null, $rolePrivilege[0]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[0]['app_id']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[1]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[1]['permission']);
         $this->assertEquals($role[2]['id'], $rolePrivilege[1]['role_id']);
-        $this->assertEquals($orgId, $rolePrivilege[1]['org_id']);
+        $this->assertEquals($accountId, $rolePrivilege[1]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[1]['app_id']);
         $this->assertEquals($yaml['role'][1]['privileges'][0]['privilege_name'], $rolePrivilege[2]['privilege_name']);
         $this->assertEquals($yaml['role'][1]['privileges'][0]['permission'], $rolePrivilege[2]['permission']);
         $this->assertEquals($role[5]['id'], $rolePrivilege[2]['role_id']);
-        $this->assertEquals(null, $rolePrivilege[2]['org_id']);
+        $this->assertEquals(null, $rolePrivilege[2]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[2]['app_id']);
+        
         $this->assertEquals($yaml['role'][1]['privileges'][1]['privilege_name'], $rolePrivilege[3]['privilege_name']);
         $this->assertEquals($yaml['role'][1]['privileges'][1]['permission'], $rolePrivilege[3]['permission']);
         $this->assertEquals($role[5]['id'], $rolePrivilege[3]['role_id']);
-        $this->assertEquals(null, $rolePrivilege[3]['org_id']);
+        $this->assertEquals(null, $rolePrivilege[3]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[3]['app_id']);
-        $query = "select * from ox_org_business_role where org_id = $orgId";
-        $orgBusinessRole = $this->executeQueryTest($query);
-        $this->assertEquals(1, count($orgBusinessRole));
-        $this->assertEquals($businessRole[0]['id'], $orgBusinessRole[0]['business_role_id']);
+
+        $this->assertEquals($yaml['role'][1]['privileges'][0]['privilege_name'], $rolePrivilege[4]['privilege_name']);
+        $this->assertEquals($yaml['role'][1]['privileges'][0]['permission'], $rolePrivilege[4]['permission']);
+        $this->assertEquals($role[6]['id'], $rolePrivilege[4]['role_id']);
+        $this->assertEquals($accountId, $rolePrivilege[4]['account_id']);
+        $this->assertEquals($appId, $rolePrivilege[4]['app_id']);
+        
+        $this->assertEquals($yaml['role'][1]['privileges'][1]['privilege_name'], $rolePrivilege[5]['privilege_name']);
+        $this->assertEquals($yaml['role'][1]['privileges'][1]['permission'], $rolePrivilege[5]['permission']);
+        $this->assertEquals($role[6]['id'], $rolePrivilege[5]['role_id']);
+        $this->assertEquals($accountId, $rolePrivilege[5]['account_id']);
+        $this->assertEquals($appId, $rolePrivilege[5]['app_id']);
+
+        $query = "select * from ox_account_business_role where account_id = $accountId";
+        $accountBusinessRole = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($accountBusinessRole));
+        $this->assertEquals($businessRole[0]['id'], $accountBusinessRole[0]['business_role_id']);
         
         $query = "select * from ox_app_entity where app_id = $appId order by name";
         $entity = $this->executeQueryTest($query);
@@ -1039,17 +1057,17 @@ class AppControllerTest extends ControllerTest
             $this->assertEquals($entity[$key]['id'], $value['entity_id']);
             $this->assertEquals($businessRole[1]['id'], $value['business_role_id']);
         }
-        $query = "SELECT * from ox_org_offering oo 
+        $query = "SELECT * from ox_account_offering oo 
                     inner join ox_app_entity ae on ae.id = oo.entity_id order by ae.name";
-        $orgOffering = $this->executeQueryTest($query);
-        $this->assertEquals(2, count($orgOffering));
-        foreach ($orgOffering as $key => $value) {
+        $acctOffering = $this->executeQueryTest($query);
+        $this->assertEquals(2, count($acctOffering));
+        foreach ($acctOffering as $key => $value) {
             $this->assertEquals($entity[$key]['id'], $value['entity_id']);
-            $this->assertEquals($orgBusinessRole[0]['id'], $value['org_business_role_id']);
+            $this->assertEquals($accountBusinessRole[0]['id'], $value['account_business_role_id']);
         }
 
         $config = $this->getApplicationConfig();
-        $template = $config['TEMPLATE_FOLDER'] . $orgResult[0]['uuid'];
+        $template = $config['TEMPLATE_FOLDER'] . $acctResult[0]['uuid'];
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
@@ -1323,11 +1341,11 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch("/app/${uuid2}", 'PUT', null);
-        $this->assertResponseStatusCode(500);
-        $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(406);
+        $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Unexpected error.');
+        $this->assertEquals($content['message'], 'UUID in URL and UUID in data set are not matching.');
         //Take database record snapshot after test.
         $recordSetAfterUpdate = $this->executeQueryTest($query);
         $this->assertEquals($recordSetBeforeUpdate, $recordSetAfterUpdate);

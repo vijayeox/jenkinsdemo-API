@@ -15,5 +15,5 @@ ox_app:
       isdefault: 0
 
 ox_app_registry:
-    - org_id: 1
+    - account_id: 1
       app_id: 100

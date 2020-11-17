@@ -18,15 +18,22 @@ class AuthSuccessListener
         foreach ($params as $key => $value) {
             AuthContext::put($key, $value);
             if ($key == AuthConstants::USERNAME) {
-                $result = $this->userService->getUserContextDetails($value);
+                $accountId = null;
+                if(isset($params[AuthConstants::ACCOUNT_ID])){
+                    $accountId = $params[AuthConstants::ACCOUNT_ID];
+                }
+                $result = $this->userService->getUserContextDetails($value, $accountId);
                 if(isset($result) && count($result)==0){
                         return [];
                 }
+
                 AuthContext::put(AuthConstants::USER_ID, $result['id']);
                 AuthContext::put(AuthConstants::NAME, $result['name']);
-                AuthContext::put(AuthConstants::ORG_ID, $result['orgid']);
-                AuthContext::put(AuthConstants::USER_UUID, $result['user_uuid']);
-                AuthContext::put(AuthConstants::ORG_UUID, $result['org_uuid']);
+                AuthContext::put(AuthConstants::ACCOUNT_ID, $result['account_id']);
+                AuthContext::put(AuthConstants::ACCOUNT_UUID, $result['accountId']);
+                AuthContext::put(AuthConstants::ORG_ID, $result['organization_id']);
+                AuthContext::put(AuthConstants::USER_UUID, $result['userId']);
+                AuthContext::put(AuthConstants::ORG_UUID, $result['organizationId']);
                 AuthContext::put(AuthConstants::PRIVILEGES, $this->userService->getPrivileges($result['id']));
                 AuthContext::put(AuthConstants::API_KEY, null);
             } elseif ($key == AuthConstants::API_KEY) {

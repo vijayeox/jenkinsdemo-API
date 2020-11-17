@@ -54,7 +54,7 @@ ox_form_field:
     field_id: 32
 ox_file:
   - id: 71
-    org_id: 1
+    account_id: 1
     data: "New File Data Without Workflow"
     uuid: "d13d0c68-98c9-22e9-adc5-308d99c9145c"
     date_created: "2019-06-28 00:00:00"
@@ -65,12 +65,12 @@ ox_file:
 ox_file_attribute:
   - id: 1222
     file_id: 71
-    org_id: 1
+    account_id: 1
     field_value: 1
     field_id: 31
   - id: 1223
     file_id: 71
-    org_id: 1
+    account_id: 1
     field_value: 1
     field_id: 32
 ox_app_menu:
@@ -91,11 +91,11 @@ ox_app_page:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
 ox_app_registry:
-  - org_id: 1
+  - account_id: 1
     app_id: 131
 ox_file_audit_log:
   - id: 71
-    org_id: 1
+    account_id: 1
     data: "New File Data Without Workflow"
     uuid: "d13d0c68-98c9-22e9-adc5-308d99c9145c"
     date_created: "2019-06-28 00:00:00"

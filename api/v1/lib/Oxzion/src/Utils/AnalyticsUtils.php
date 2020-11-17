@@ -16,8 +16,8 @@ class AnalyticsUtils
                 case "name":
                     $value = AuthContext::get(AuthConstants::NAME);
                     break;
-                case "orgid":
-                    $value = AuthContext::get(AuthConstants::ORG_ID);
+                case "accountId":
+                    $value = AuthContext::get(AuthConstants::ACCOUNT_ID);
                     break;
                 case "userid":
                     $value = AuthContext::get(AuthConstants::USER_ID);

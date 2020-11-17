@@ -17,7 +17,7 @@ class ActivityInstance extends Entity
         'status' => 0,
         'modified_by' => null,
         'submitted_date' => null,
-        'org_id' => 0,
+        'account_id' => 0,
         'start_date' => null,
         'isdeleted' => 0,
     );

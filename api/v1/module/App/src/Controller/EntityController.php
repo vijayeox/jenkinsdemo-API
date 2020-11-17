@@ -9,9 +9,6 @@ use Oxzion\Model\App\EntityTable;
 use Oxzion\Service\EntityService;
 use Exception;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\EntityNotFoundException;
-use Oxzion\ServiceException;
-use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 
 class EntityController extends AbstractApiController
@@ -48,14 +45,13 @@ class EntityController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \n Create Entity - " . print_r($data, true));
         try {
             $this->entityService->saveEntity($appUuid, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (Exception $e) {
+            unset($data['id']);
+            return $this->getSuccessResponseWithData($data, 201);
+        }catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 201);
+        
     }
 
     /**
@@ -72,11 +68,11 @@ class EntityController extends AbstractApiController
         try {
             $appUuid = $this->params()->fromRoute()['appId'];
             $result = $this->entityService->getEntitys($appUuid);
-        } catch (Exception $e) {
+            return $this->getSuccessResponseWithData($result);
+        }catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($result);
     }
 
     /**
@@ -98,20 +94,11 @@ class EntityController extends AbstractApiController
         }
         try {
             $this->entityService->saveEntity($appUuid, $data, false);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (EntityNotFoundException $e) {
-            $response = ['data' => $data];
-            return $this->getErrorResponse("Entity Not Found", 404, $response);
-        }catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 403);
+            return $this->getSuccessResponseWithData($data, 200);
         }catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($data, 200);
     }
 
     /**
@@ -128,13 +115,9 @@ class EntityController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \n Delete Entity - " . print_r($id, true) . "AppUUID - " . $appUuid);
         try {
             $response = $this->entityService->deleteEntity($appUuid, $id);
-        }catch (EntityNotFoundException $e) {
-            return $this->getErrorResponse("Entity Not Found", 404);
-        }catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        } catch (Exception $e) {
+        }catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponse();
     }
@@ -153,8 +136,9 @@ class EntityController extends AbstractApiController
         $appUuid = $this->params()->fromRoute()['appId'];
         try{
             $result = $this->entityService->getEntity($entityId, $appUuid);
-        }catch(EntityNotFoundException $e){
-            return $this->getErrorResponse("Entity not found", 404, ['id' => $entityId]);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($result);
     }
