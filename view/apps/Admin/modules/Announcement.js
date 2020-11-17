@@ -276,6 +276,8 @@ class Announcement extends React.Component {
           filterable={true}
           reorderable={true}
           resizable={true}
+          defaultToolBar={true}
+          columnMenuFilter={false}
           sortable={true}
           pageable={{ buttonCount: 3, pageSizes: [10, 20, 30], info: true }}
           columnConfig={this.prepareColumnData()}

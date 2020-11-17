@@ -401,6 +401,7 @@ class AppService extends AbstractService
         try{
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
+            $this->organizationService->removeBusinessOfferings($orgId);
             $this->removeRoleData($appId,$orgId);        
             $this->removeOrgFiles($orgId);
             $this->commit();
@@ -411,9 +412,10 @@ class AppService extends AbstractService
         }
         
     }
-    private function removeRoleData($appId,$orgId){
+    private function removeRoleData($appId,$orgId = null){
         $appId = $this->getIdFromUuid('ox_app',$appId);
         $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+        $orgId = ($orgId == 0) ? NULL : $orgId;
         $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
         if(count($roleResult) > 0){
             $this->deleteInfo('ox_role_privilege',$appId,$orgId);
@@ -433,10 +435,18 @@ class AppService extends AbstractService
         $deleteResult = $this->executeQuerywithParams($deleteQuery); 
     }
 
-    private function deleteInfo($tableName,$appId,$orgId){
-        $deleteQuery = "DELETE FROM $tableName WHERE app_id=:appId and org_id=:orgId";
-        $deleteParams = array('appId' => $appId,'orgId' => $orgId);
-        $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
+    private function deleteInfo($tableName,$appId,$orgId=null){
+        if($orgId){
+            $where = "WHERE app_id=:appId and org_id=:orgId";
+            $deleteParams['orgId'] = $orgId;
+        }else{
+            $where = "WHERE app_id=:appId";
+        }
+        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+        $deleteQuery = "DELETE FROM $tableName $where";
+        $deleteParams = array('appId' => $appId);
+        $this->logger->info("STATEMENT delq $deleteQuery".print_r($deleteParams,true));
+        $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
     }
 
     private function removeOrgFiles($orgId){
@@ -876,7 +886,7 @@ private function checkWorkflowData(&$data,$appUuid)
             }
         }
     }
-    public function createRole(&$yamlData, $templateRole = true,$orgId = null)
+    public function createRole(&$yamlData, $templateRole = true,$orgId = null,$bRole = null)
     {
         if (isset($yamlData['role'])) {
             $params = null;
@@ -895,7 +905,9 @@ private function checkWorkflowData(&$data,$appUuid)
                     continue;
                 }
                 $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
-                if(isset($role['businessRole'])){
+                if((isset($role['businessRole']) && $templateRole) ||
+                    (isset($role['businessRole']) && $bRole && 
+                    in_array($role['businessRole'],$bRole['businessRole']))){
                     $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']);
                     if(count($temp) > 0){
                         $role['business_role_id'] = $temp[0]['id'];
@@ -1080,7 +1092,8 @@ private function checkWorkflowData(&$data,$appUuid)
         $app = new App($this->table);
         $app->loadByUuid($uuid);
         $app->assign([
-            'status' => App::DELETED
+            'status' => App::DELETED,
+            'name' => $app->toArray()['id'] .'_'.$app->toArray()['name']
         ]);
         try {
             $this->beginTransaction();
@@ -1328,5 +1341,70 @@ private function checkWorkflowData(&$data,$appUuid)
             unset($descriptorData["workflow"]);
         }
         return $descriptorData;
+    }
+
+    public function removeDeployedApp($appId){
+        try{
+            $this->beginTransaction();
+            // Remove Symlinks
+            $appDetails = $this->getDataByParams('ox_app', array(), array('uuid' => $appId))->toArray();
+            $this->executePackageDiscover($appDetails[0]['name']);
+            $this->jobService->cancelAppJobs($appId);
+
+             // Page
+             $resultPage = $this->getDataByParams('ox_app_page', array(), array('app_id' => $this->getIdFromUuid('ox_app',$appId)))->toArray();
+             if(count($resultPage) > 0){
+                 foreach ($resultPage as $key => $value) {
+                     $this->pageService->deletePage($appId,$value['uuid']);
+                 }
+             }
+             // Menu
+             $resultMenu = $this->getDataByParams('ox_app_menu', array(), array('app_id' => $this->getIdFromUuid('ox_app',$appId)))->toArray();
+             if(count($resultMenu) > 0){
+                 foreach ($resultMenu as $key => $value) {
+                     $this->menuItemService->deleteMenuItem($appId,$value['uuid']);
+                 }
+             }
+
+            // ENTITY
+            $entityRes = $this->entityService->getEntitys($appId);
+            if (count($entityRes) > 0) {
+                $this->workflowService->deleteWorkflowLinkedToApp($appId);
+                $this->entityService->removeEntityLinkedToApps($appId);
+                $deleteQuery = "DELETE oei FROM ox_entity_identifier oei 
+                                right outer join ox_app_entity oxe on oei.entity_id = oxe.id
+                                inner join ox_app oxa on oxa.id = oxe.app_id 
+                                where oxa.uuid = :appId";
+                $deleteParams = array('appId' => $appId);
+                $this->logger->info("STATEMENT DELETE $deleteQuery".print_r($deleteParams,true));
+                $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams);
+            }
+            $this->businessRoleService->deleteBusinessRoleBasedOnAppId($appId); 
+            $this->removeRoleData($appId); 
+            $result = $this->getDataByParams('ox_privilege', array(), array('app_id' => $this->getIdFromUuid('ox_app',$appId)))->toArray();
+            if(count($result) > 0){
+                $this->removeRoleData($appId);
+                $this->deleteInfo('ox_privilege',$this->getIdFromUuid('ox_app',$appId));
+            }
+            $this->deleteApp($appId);
+            $this->commit();
+
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }  
+
+    }
+
+    private function executePackageDiscover($appName)
+    {
+        $link = $this->config['APPS_FOLDER'] . $appName;
+        if (is_link($link)) {
+            FileUtils::unlink($link);
+        }
+        $command_one = "cd " . $this->config['APPS_FOLDER'] . "../bos/";
+        $command_two = "npm run package:discover";
+        $output = ExecUtils::execCommand($command_one . " && " . $command_two);
+        $this->logger->info("PAckage Discover .. \n" . print_r($output, true));
     }
 }

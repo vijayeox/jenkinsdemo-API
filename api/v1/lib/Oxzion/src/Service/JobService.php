@@ -136,6 +136,20 @@ class JobService extends AbstractService
         $this->cancelJobId($jobId, $appId, $jobGroup);
     }
 
+    public function cancelAppJobs($appId){
+        $this->logger->info("In Cancel App Jobs");
+        try{
+            $jobList = $this->getJobsList($appId);
+            foreach ($jobList as $key => $value) {
+                $this->cancelJob($value['name'], $value['group_name'], $appId);
+            }
+        }catch(Exception $e){
+            $this->logger->info("cancel App Jobs failed".$e->getMessage());
+            throw $e;
+        }
+        
+    }
+
     public function cancelJobId($jobId, $appId, $groupName =null)
     {
         $this->logger->info("EXECUTING CANCEL JOB WITH JOB ID AS PARAMETER");        

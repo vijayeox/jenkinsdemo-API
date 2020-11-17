@@ -172,6 +172,28 @@ class AppController extends AbstractApiController
         }
     }
 
+        /**
+     * Remove App API
+     * @api
+     * @link /app/:appId/removeapp
+     * @method DELETE
+     * @param $uuid UUID of App to Remove Deployed App
+     * @return array success|failure response
+     */
+    public function removeappAction()
+    {   
+        $uuid = $this->params()->fromRoute()['appId'];
+        $this->log->info(__CLASS__ . "-> Remove Deployed App for ID ${uuid}.");
+        try {
+            $this->appService->removeDeployedApp($uuid);
+            return $this->getSuccessResponse();
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
+
     /**
      * GET App API
      * @api

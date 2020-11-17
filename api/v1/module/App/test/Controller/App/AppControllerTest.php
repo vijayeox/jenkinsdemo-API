@@ -984,7 +984,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT rp.* from ox_role_privilege rp 
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
-        $this->assertEquals(6, count($rolePrivilege));
+        $this->assertEquals(4, count($rolePrivilege));
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[0]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[0]['permission']);
         $this->assertEquals($role[1]['id'], $rolePrivilege[0]['role_id']);
@@ -1354,11 +1354,14 @@ class AppControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
+        $entityRecordSetBeforeDeletion = $this->executeQueryTest("SELECT id, name FROM ox_app WHERE uuid='1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4'");
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', NULL);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $entityRecordSetAfterDeletion = $this->executeQueryTest("SELECT name FROM ox_app WHERE uuid='1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4'");
+        $this->assertEquals($entityRecordSetAfterDeletion[0]['name'],$entityRecordSetBeforeDeletion[0]['id'].'_'.$entityRecordSetBeforeDeletion[0]['name'] );
     }
 
     public function testDeleteNotFound()

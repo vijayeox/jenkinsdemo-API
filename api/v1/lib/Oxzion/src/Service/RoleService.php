@@ -364,7 +364,6 @@ class RoleService extends AbstractService
         }
         try {
             foreach ($basicRoles as $basicRole) {
-                // unset($basicRole['id']);
                 unset($basicRole['uuid']);
                 $basicRole['account_id'] = $accountId;
                 $this->createSystemRoleForAccount($basicRole);

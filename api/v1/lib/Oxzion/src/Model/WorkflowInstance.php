@@ -22,7 +22,8 @@ class WorkflowInstance extends Entity
         'file_id' => 0,
         'start_data' => null,
         'completion_data' => null,
-        'entity_id' => null
+        'entity_id' => null,
+        'isdeleted' => 0,
     );
 
     public function validate()

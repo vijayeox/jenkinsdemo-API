@@ -59,3 +59,4 @@ ox_app_entity:
     app_id: 240
     created_by: 1
     date_created: "2019-10-04 18:10:47"
+    isdeleted: 0

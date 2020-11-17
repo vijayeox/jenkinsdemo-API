@@ -278,7 +278,9 @@ class Module
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\EntityService($container->get('config'), 
                                                      $dbAdapter, 
-                                                     $container->get(Model\App\EntityTable::class));
+                                                     $container->get(Model\App\EntityTable::class),
+                                                     $container->get(Service\FormService::class) 
+                                                    );
                 },
                 Model\App\EntityTable::class => function ($container) {
                     $tableGateway = $container->get(Model\App\EntityTableGateway::class);
@@ -445,7 +447,8 @@ class Module
                         $container->get(\Oxzion\Service\FileService::class),
                         $container->get(Workflow\WorkflowFactory::class),
                         $container->get(Service\ActivityService::class),
-                        $container->get(Model\WorkflowDeploymentTable::class)
+                        $container->get(Model\WorkflowDeploymentTable::class),
+                        $container->get(Service\ActivityInstanceService::class)
                     );
                 },
                 Service\UserTokenService::class => function ($container) {

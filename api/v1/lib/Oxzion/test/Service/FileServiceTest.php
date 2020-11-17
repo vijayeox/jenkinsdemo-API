@@ -424,9 +424,9 @@ class FileServiceTest extends AbstractServiceTest
         $params = array('entityName' => 'entity1', 'assocId' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b');
         $filterParams = null;
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
-        $this->assertEquals("d13d0c68-98c9-11e9-adc5-308d99c9145c",$result['data'][0]['uuid']);
+        $this->assertEquals("d13d0c68-98c9-11e9-adc5-308d99c9145b",$result['data'][0]['uuid']);
         $this->assertEquals("entity1",$result['data'][0]['entity_name']);
-        $this->assertEquals(1,$result['total']);
+        $this->assertEquals(9,$result['total']);
     }
 
     public function testGetFileListWithGreaterThanOrEqualCreatedDateCheck() {

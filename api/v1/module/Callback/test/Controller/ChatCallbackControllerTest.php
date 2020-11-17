@@ -140,11 +140,8 @@ class ChatCallbackControllerTest extends ControllerTest
 
         $this->dispatch('/callback/chat/adduser', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusercallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -165,11 +162,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/adduser', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusercallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -191,11 +185,8 @@ class ChatCallbackControllerTest extends ControllerTest
         } else {
             $this->dispatch('/callback/chat/adduser', 'POST', $data);
             $this->assertResponseStatusCode(500);
-            $this->assertModuleName('Callback');
-            $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-            $this->assertControllerClass('ChatcallbackController');
+            $this->setDefaultAsserts();
             $this->assertMatchedRouteName('addusercallback');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array) json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
         }
@@ -217,11 +208,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/adduser', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusercallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -242,11 +230,8 @@ class ChatCallbackControllerTest extends ControllerTest
         } else {
             $this->dispatch('/callback/chat/adduser', 'POST', $data);
             $this->assertResponseStatusCode(500);
-            $this->assertModuleName('Callback');
-            $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-            $this->assertControllerClass('ChatcallbackController');
+            $this->setDefaultAsserts();
             $this->assertMatchedRouteName('addusercallback');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array) json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
         }
@@ -263,11 +248,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/adduser', 'POST', $data);
         $this->assertResponseStatusCode(400);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusercallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
@@ -284,11 +266,8 @@ class ChatCallbackControllerTest extends ControllerTest
 
         $this->dispatch('/callback/chat/createchannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('createchannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -308,11 +287,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/createchannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('createchannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -333,11 +309,8 @@ class ChatCallbackControllerTest extends ControllerTest
         } else {
             $this->dispatch('/callback/chat/createchannel', 'POST', $data);
             $this->assertResponseStatusCode(500);
-            $this->assertModuleName('Callback');
-            $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-            $this->assertControllerClass('ChatcallbackController');
+            $this->setDefaultAsserts();
             $this->assertMatchedRouteName('createchannelcallback');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array) json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
         }
@@ -437,11 +410,8 @@ class ChatCallbackControllerTest extends ControllerTest
 
         $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusertochannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -464,11 +434,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusertochannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -490,11 +457,8 @@ class ChatCallbackControllerTest extends ControllerTest
         } else {
             $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
             $this->assertResponseStatusCode(500);
-            $this->assertModuleName('Callback');
-            $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-            $this->assertControllerClass('ChatcallbackController');
+            $this->setDefaultAsserts();
             $this->assertMatchedRouteName('addusertochannelcallback');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array) json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
         }
@@ -519,11 +483,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusertochannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -544,11 +505,8 @@ class ChatCallbackControllerTest extends ControllerTest
         } else {
             $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
             $this->assertResponseStatusCode(500);
-            $this->assertModuleName('Callback');
-            $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-            $this->assertControllerClass('ChatcallbackController');
+            $this->setDefaultAsserts();
             $this->assertMatchedRouteName('addusertochannelcallback');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array) json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
         }
@@ -572,11 +530,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addusertochannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -599,11 +554,8 @@ class ChatCallbackControllerTest extends ControllerTest
         } else {
             $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
             $this->assertResponseStatusCode(500);
-            $this->assertModuleName('Callback');
-            $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-            $this->assertControllerClass('ChatcallbackController');
+            $this->setDefaultAsserts();
             $this->assertMatchedRouteName('addusertochannelcallback');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array) json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
         }
@@ -637,11 +589,8 @@ class ChatCallbackControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/chat/removeuserfromchannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class);
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('removeuserfromchannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -716,11 +665,8 @@ class ChatCallbackControllerTest extends ControllerTest
 
         $this->dispatch('/callback/chat/deletechannel', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('deletechannelcallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -767,11 +713,8 @@ class ChatCallbackControllerTest extends ControllerTest
         } else {
             $this->dispatch('/callback/chat/deletechannel', 'POST', $data);
             $this->assertResponseStatusCode(500);
-            $this->assertModuleName('Callback');
-            $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-            $this->assertControllerClass('ChatcallbackController');
+            $this->setDefaultAsserts();
             $this->assertMatchedRouteName('deletechannelcallback');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array) json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
         }
@@ -790,11 +733,8 @@ class ChatCallbackControllerTest extends ControllerTest
 
         $this->dispatch('/callback/chat/removeuser', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ChatcallbackController');
+        $this->setDefaultAsserts();
         $this->assertMatchedRouteName('removeusercallback');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -898,5 +838,101 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('deletecallback');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testCreateBot()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['appName' => 'testbotuser'];
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("username" => "testbotuser", "display_name" => "testbotuser", "description" => "BOT for testbotuser"), Mockery::any())->once()->andReturn(array("body" => json_encode(array("username" => "testbotuser", "display_name" => "testbotuser"))));
+        }
+        $this->dispatch('/callback/chat/createbot', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('createbotcallback');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['username'], $data['appName']);
+        $this->assertEquals($content['data']['display_name'], $data['appName']);
+    }
+
+    public function testCreateBotAlreadyExists()
+    {
+        $data = ['appName' => 'testbotuser'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("username" => "testbotuser", "display_name" => "testbotuser", "description" => "BOT for testbotuser"), Mockery::any())->once()->andThrow($exception);
+        }
+        $this->dispatch('/callback/chat/createbot', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(400);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('createbotcallback');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+     public function testCreateBotNotFound()
+    {
+        $data = ['description' => 'A BOT for testing'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("description" => "A BOT for testing"), Mockery::any())->once()->andThrow($exception);
+        }
+        $this->dispatch('/callback/chat/createbot', 'POST', $data);
+        $this->assertResponseStatusCode(400);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('createbotcallback');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Bot Name is missing');
+    }
+
+     public function testUpdateBot()
+    {
+        $data = ['appName' => 'testbotuser', 'displayName' => 'Test BOT User'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => 'testbotuser', "id" => 111)));
+            $mockRestClient->expects('put')->with("api/v4/bots/111", array("display_name" => 'Test BOT User'), Mockery::any())->once()->andReturn(json_encode(array('display_name' => "Test BOT User")));
+        }
+        $this->dispatch('/callback/chat/updatebot', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('updatebotcallback');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['display_name'], $data['displayName']);
+    }
+    
+    public function testUpdateBotInfoNotFound()
+    {
+        $data = ['appName' => 'testbotuser'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => 'testbotuser', "id" => 111)));
+            $mockRestClient->expects('put')->with("api/v4/bots/111", array(), Mockery::any())->once()->andThrow($exception);
+        }
+
+        $this->dispatch('/callback/chat/updatebot', 'POST', $data);
+        $this->assertResponseStatusCode(400);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('updatebotcallback');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'New Display Name/ Bot Name is missing');
     }
 }

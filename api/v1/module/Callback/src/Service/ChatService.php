@@ -363,4 +363,45 @@ class ChatService extends AbstractService
             $this->logger->info("Removing User from channel Failed");
         }
     }
+
+    public function createBot($botName)
+    {
+        try {
+            $headers = $this->getAuthHeader();
+            $headers["Content-type"] = "application/json";
+            $botName = $this->sanitizeName($botName);
+            if (empty($botName)) {
+                $this->logger->info("Bot Name is missing");
+                return;
+            }
+            $response = $this->restClient->postWithHeader('api/v4/bots', array('username' => $botName, 'display_name' => $botName, 'description' => 'BOT for '.$botName), $headers);
+            return $response;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+
+    public function updateBot($botName, $displayName)
+    {
+        try {
+            $headers = $this->getAuthHeader();
+            $botName = $this->sanitizeName($botName);
+            if (empty($displayName)) {
+                $this->logger->info("New Display Name is missing");
+                return;
+            }
+            if (empty($botName)) {
+                $this->logger->info("Bot Name is missing");
+                return;
+            }
+            $userDetails = $this->getUserByUsername($botName,true);    
+            $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
+            return $response;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+
 }

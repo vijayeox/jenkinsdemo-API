@@ -146,6 +146,26 @@ return [
                     ],
                 ],
             ],
+            'createbotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/createbot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'createBot',
+                    ],
+                ],
+            ],
+            'updatebotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/updatebot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'updateBot',
+                    ],
+                ],
+            ],
             'addprojectfromcallback' => [
                 'type'    => Segment::class,
                 'options' => [

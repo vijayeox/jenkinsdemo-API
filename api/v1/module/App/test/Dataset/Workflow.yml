@@ -27,18 +27,21 @@ ox_app_entity:
     date_created: "2019-06-26 00:00:00"
     uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    isdeleted: 0
   - id: 2
     name: "entity2"
     app_id: 100
     date_created: "2019-06-26 00:00:00"
     uuid: "e13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    isdeleted: 0
   - id: 3
     name: "entity3"
     app_id: 101
     date_created: "2019-06-26 00:00:00"
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    isdeleted: 0
 ox_app_registry:
   - account_id: 1
     app_id: 99
@@ -128,12 +131,14 @@ ox_form:
     name: "Task"
     description: "Form Description"
     entity_id: 1
+    isdeleted: 0
   - id: 2
     app_id: 99
     uuid: "465c9142-df82-11e9-8a34-2a2ae2dbcce4"
     name: "Test-Form-2"
     description: "Form Description"
     entity_id: 1
+    isdeleted: 0
 ox_form_field:
   - id: 1
     form_id: 1
@@ -148,12 +153,14 @@ ox_workflow:
     process_id: "[main]"
     uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"
     entity_id: 1
+    isdeleted: 0
   - id: 2
     app_id: 99
     name: "Test Workflow 2"
     process_id: "[main]1"
     uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo"
     entity_id: 1
+    isdeleted: 0
 ox_workflow_deployment:
   - id: 1
     workflow_id: 1
@@ -161,23 +168,27 @@ ox_workflow_deployment:
     form_id: 2
     latest: 1
     created_by: 1
+    isdeleted: 0
   - id: 2
     workflow_id: 2
     process_definition_id: "[main]1:232-dfd-tr4"
     form_id: 2
     latest: 1
     created_by: 1
+    isdeleted: 0
 ox_activity:
   - id: 1
     app_id: 99
     workflow_deployment_id: 1
     name: "Task"
     entity_id: 1
+    isdeleted: 0
   - id: 2
     app_id: 99
     workflow_deployment_id: 1
     name: "Test Form 2"
     entity_id: 1
+    isdeleted: 0
 ox_activity_form:
   - id: 1
     activity_id: 1
@@ -196,6 +207,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 11
     start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2050-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    isdeleted: 0
   - id: 2
     workflow_deployment_id: 1
     process_instance_id: 2
@@ -206,6 +218,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 12
     start_data: '{"firstname" : "Rai","product": "Individual Professional Liability"}'
+    isdeleted: 0
   - id: 3
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
@@ -216,6 +229,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 13
     start_data: '{"firstname" : "Raj","product": "Individual Professional Liability"}'
+    isdeleted: 0
   - id: 4
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -226,6 +240,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 14
     start_data: '{"firstname" : "Ram","product": "Dive Boat"}'
+    isdeleted: 0
   - id: 5
     workflow_deployment_id: 1
     process_instance_id: 1
@@ -236,6 +251,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 15
     start_data: ""
+    isdeleted: 0
   - id: 6
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
@@ -246,6 +262,7 @@ ox_workflow_instance:
     created_by: 2
     file_id: 15
     start_data: '{"firstname" : "Reshma","product": "Dive Store"}'
+    isdeleted: 0
   - id: 7
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
@@ -256,6 +273,7 @@ ox_workflow_instance:
     created_by: 2
     file_id: 16
     start_data: '{"firstname" : "Arpitha","product": "Dive Store"}'
+    isdeleted: 0
 ox_app_menu:
   - id: 1
     uuid: "7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4"

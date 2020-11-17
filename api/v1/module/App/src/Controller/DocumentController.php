@@ -86,6 +86,7 @@ class DocumentController extends AbstractApiControllerHelper
                 header("Content-Type:".$mimeType );  
                 header("Content-Transfer-Encoding: Binary");
                 header("Content-Length:" . filesize($attachment_location));
+                header("Access-Control-Expose-Headers:Content-Disposition");
                 header("Content-Disposition: ". $dispositionType ."; filename=" . $params['document']);
             }
             $fp = @fopen($attachment_location, 'rb');

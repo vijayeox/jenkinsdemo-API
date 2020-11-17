@@ -11,13 +11,17 @@ use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Service\FormService;
 
 class EntityService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, EntityTable $table)
+    protected $formService;
+
+    public function __construct($config, $dbAdapter, EntityTable $table, FormService $formService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->formService = $formService;
     }
 
     public function saveEntity($appUuid, &$inputData, $createIfNotFound = true)
@@ -63,8 +67,11 @@ class EntityService extends AbstractService
                 $this->beginTransaction();
                 $this->table->delete($id);
                 $this->commit();
-            } catch (Exception $e) {
+                return $count;
+            }
+            catch (Exception $e) {
                 $this->rollback();
+                $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
         } else {

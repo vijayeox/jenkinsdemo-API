@@ -14,6 +14,7 @@ ox_app_entity:
     date_created: "2019-06-26 00:00:00"
     uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+    isdeleted: 0
 ox_field:
   - id: 1
     name: "fax"
@@ -138,6 +139,7 @@ ox_form:
     entity_id: 1
     created_by: 1
     date_created: "2019-03-05 09:57:08"
+    isdeleted: 0
   - id: 2
     app_id: 99
     name: "Test Form 2"
@@ -145,6 +147,7 @@ ox_form:
     entity_id: 1
     created_by: 1
     date_created: "2019-03-05 09:57:08"
+    isdeleted: 0
 ox_form_field:
   - id: 1
     form_id: 1
@@ -174,18 +177,21 @@ ox_workflow:
     process_id: "Process_1dx3jli"
     uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"
     entity_id: 1
+    isdeleted: 0
   - id: 2
     app_id: 99
     name: "Test Workflow 2"
     process_id: "Process_1dx3eer"
     uuid: "3341cd2e-cb14-11e9-a32f-2a2ae2dbcc33"
     entity_id: 1
+    isdeleted: 0
   - id: 3
     app_id: 99
     name: "Test Workflow 3"
     process_id: "Process_1dx3w3e"
     uuid: "ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11"
     entity_id: 1
+    isdeleted: 0
 ox_workflow_deployment:
   - id: 1
     workflow_id: 1
@@ -193,12 +199,14 @@ ox_workflow_deployment:
     form_id: 1
     latest: 1
     created_by: 1
+    isdeleted: 0
   - id: 2
     workflow_id: 2
     process_definition_id: "Process_1dx3eer:441b7c8b-fef7-11e9-89d4-0294414e06e4"
     form_id: 1
     latest: 1
     created_by: 1
+    isdeleted: 0
   - id: 3
     workflow_id: 3
     process_definition_id: "Process_1dx3w3e:ef1b7c8b-fef7-11e9-89d4-0294414e0633"
@@ -206,22 +214,26 @@ ox_workflow_deployment:
     latest: 1
     created_by: 1
     fields: '["padi_number", "firstname"]'
+    isdeleted: 0
 ox_activity:
   - id: 1
     app_id: 99
     workflow_deployment_id: 1
     task_id: Task_1s7qzh3
     name: "Task"
+    isdeleted: 0
   - id: 2
     app_id: 99
     workflow_deployment_id: 1
     task_id: Task_1s7qwer43
     name: "Temp Task"
+    isdeleted: 0
   - id: 3
     app_id: 99
     workflow_deployment_id: 3
     task_id: Task_1s7qwett4
     name: "Some Task"
+    isdeleted: 0
 ox_activity_form:
   - id: 1
     activity_id: 1
@@ -280,6 +292,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 12
     start_data: "New File Data"
+    isdeleted: 0
   - id: 3
     workflow_deployment_id: 1
     process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
@@ -300,6 +313,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 13
     start_data: ""
+    isdeleted: 0
   - id: 5
     workflow_deployment_id: 1
     app_id: 99
@@ -309,6 +323,7 @@ ox_workflow_instance:
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     start_data: ""
+    isdeleted: 0
 ox_file_attribute:
   - id: 1
     file_id: 11

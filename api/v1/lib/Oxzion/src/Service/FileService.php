@@ -604,6 +604,7 @@ class FileService extends AbstractService
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
             }
         } catch (Exception $e) {
+            $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
@@ -2627,6 +2628,17 @@ class FileService extends AbstractService
         }
         $this->logger->info("ASSIGNMENT RESULT -- ".print_r($result,true));
         return array('data' => $result, 'total' => $countResultSet[0]['count']);
+    }
+
+    public function deleteFilesLinkedToApp($appId){
+        $select = "SELECT oxf.* from ox_file oxf inner join ox_app_entity oxae on oxae.id = oxf.entity_id inner join ox_app oxa on oxa.id = oxae.app_id where oxa.uuid=:appId";
+        $params = array('appId' => $appId);
+        $resultSet = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        if (count($resultSet) > 0) {
+            foreach ($resultSet as $key => $value) {
+                $this->deleteFile($value['uuid'],$value['version']);
+            }
+        }
     }
 
 }
