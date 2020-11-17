@@ -2,6 +2,7 @@
 namespace Callback\Controller;
 
 use Callback\Service\ChatService;
+use Exception;
 use Oxzion\Controller\AbstractApiControllerHelper;
 
 class ChatCallbackController extends AbstractApiControllerHelper
@@ -150,5 +151,43 @@ class ChatCallbackController extends AbstractApiControllerHelper
             return $this->getSuccessResponseWithData(json_decode($response, true));
         }
         return $this->getErrorResponse("Removing User from Channel Failed", 400);
+    }
+
+    public function createBotAction()
+    {
+        $params = $this->extractPostData();
+        $this->log->info("Create Bot Params- " . json_encode($params));
+        try{
+            $params['botname'] = isset($params['appName']) ? $params['appName'] : null;
+            $response = $this->chatService->createBot($params['botname']);
+            if ($response) {
+                $this->log->info(ChatCallbackController::class . ":Bot User Created");
+                return $this->getSuccessResponseWithData(json_decode($response['body'], true));
+            }else{
+                return $this->getErrorResponse("Bot Name is missing", 400);
+            }
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }        
+    }
+
+    public function updateBotAction()
+    {
+        $params = $this->extractPostData();
+        try{
+            $params['botname'] = isset($params['appName']) ? $params['appName'] : null;
+            $params['displayname'] = isset($params['displayName']) ? $params['displayName'] : null;
+            $response = $this->chatService->updateBot($params['botname'], $params['displayname']);
+            if ($response) {
+                $this->log->info("Updated the BOT");
+                return $this->getSuccessResponseWithData(json_decode($response, true));
+            }else{
+                return $this->getErrorResponse("New Display Name/ Bot Name is missing", 400);
+            }
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), $e->getCode());
+        }
     }
 }
