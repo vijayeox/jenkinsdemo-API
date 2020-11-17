@@ -8,7 +8,7 @@ s.onload = function (e) {
   var appendCustomButtonTimer = setInterval(() => {
     if (
       document.getElementById(
-        "formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b"
+        "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
       )
     ) {
       if (
@@ -34,7 +34,7 @@ s.onload = function (e) {
             });
             document
               .getElementById(
-                "formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b"
+                "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
               )
               .dispatchEvent(ev);
           };
@@ -58,7 +58,7 @@ s.onload = function (e) {
             });
             document
               .getElementById(
-                "formio_loader_280dbc6d-638e-4fba-9095-8430c226ec7b"
+                "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
               )
               .dispatchEvent(ev);
           };
@@ -89,6 +89,16 @@ s.onload = function (e) {
         dataGridDeleteIcons.map((item) => {
           item.classList.add("fa-times-circle");
           item.classList.remove("fa-times-circle-o");
+        });
+      }
+
+      var locationGridDeleteIcons = document.querySelectorAll("button.locationremove");
+      locationGridDeleteIcons = Array.from(locationGridDeleteIcons);
+      if (locationGridDeleteIcons.length > 0) {
+        locationGridDeleteIcons.map((item) => {
+          if(item.childNodes.length == 3){
+            item.removeChild(item.childNodes[2]);
+          }
         });
       }
 
