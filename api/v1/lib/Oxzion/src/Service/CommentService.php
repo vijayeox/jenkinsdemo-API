@@ -39,7 +39,7 @@ class CommentService extends AbstractService
         //Additional fields that are needed for the create
         $data['text'] = isset($data['text']) ? $data['text'] : null;
         $data['file_id'] = $this->getIdFromUuid('ox_file', $fileId);
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $data['uuid'] = UuidUtil::uuid();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -74,7 +74,7 @@ class CommentService extends AbstractService
 
     private function getParentId(&$data, $fileId){
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
+        $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         if(!$obj){
             return 0;
         }
@@ -84,7 +84,7 @@ class CommentService extends AbstractService
     public function updateComment($id, $fileId, $data)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         if (!$obj) {
             return 0;
         }
@@ -118,7 +118,7 @@ class CommentService extends AbstractService
     public function deleteComment($id, $fileId)
     {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "org_id" => AuthContext::get(AuthConstants::ORG_ID)));
+        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         if (is_null($obj)) {
             return 0;
         }
@@ -160,7 +160,7 @@ class CommentService extends AbstractService
 
     private function getCommentsInternal($fileId, $id = null){
         $fileClause = "";
-        $queryParams = array("orgId"=>AuthContext::get(AuthConstants::ORG_ID),"fileId"=>$fileId);
+        $queryParams = array("accountId"=>AuthContext::get(AuthConstants::ACCOUNT_ID),"fileId"=>$fileId);
         if($id){
             $fileClause = "AND ox_comment.uuid = :commentId";
             $queryParams['commentId'] = $id;
@@ -169,7 +169,7 @@ class CommentService extends AbstractService
                     from ox_comment 
                     inner join ox_user ou on ou.id = ox_comment.created_by 
                     inner join ox_file of on of.id = ox_comment.file_id 
-                    where ox_comment.org_id = :orgId AND of.uuid = :fileId $fileClause order by ox_comment.date_created desc";
+                    where ox_comment.account_id = :accountId AND of.uuid = :fileId $fileClause order by ox_comment.date_created desc";
         $this->logger->info("Executing Query $query with params - ".print_r($queryParams, true));
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         return $resultSet;
@@ -182,7 +182,7 @@ class CommentService extends AbstractService
                         inner join ox_comment as parent on parent.id = ox_comment.parent
                         inner join ox_user ou on ou.id = ox_comment.created_by 
                         inner join ox_file of on of.id = ox_comment.file_id
-                        where parent.uuid = :commentId AND ox_comment.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_comment.isdeleted!=1 AND of.uuid = :fileId order by ox_comment.id";
+                        where parent.uuid = :commentId AND ox_comment.account_id=".AuthContext::get(AuthConstants::ACCOUNT_ID)." AND ox_comment.isdeleted!=1 AND of.uuid = :fileId order by ox_comment.id";
         $queryParams = ["commentId" => $id, "fileId" => $fileId];
         $result = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
         return $result;

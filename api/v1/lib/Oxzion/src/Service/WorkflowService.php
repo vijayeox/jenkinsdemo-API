@@ -104,8 +104,8 @@ class WorkflowService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
             $this->saveWorkflow($appId, $data);
             $workflow = $data;
             $workFlowId = $data['id'];
@@ -208,7 +208,6 @@ class WorkflowService extends AbstractService
         $data['app_id'] = $appId;
         if (!isset($data['id']) || $data['id'] == 0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-            // $data['org_id'] = isset($data['org_id']) ? $data['org_id'] :  AuthContext::get(AuthConstants::ORG_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
         if (isset($data['uuid'])) {
@@ -235,9 +234,8 @@ class WorkflowService extends AbstractService
         $form = new Workflow();
         $form->exchangeArray($data);
         $form->validate();
-        $this->beginTransaction();
-        $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count == 0) {
                 throw new ServiceException("Workflow not saved", 'workflow.save.failed');

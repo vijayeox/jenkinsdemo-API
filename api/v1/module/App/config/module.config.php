@@ -108,9 +108,9 @@ return [
             'appSetupToOrg' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/:serviceType/org/:orgId',
+                    'route' => '/app/:appId/install/account/:accountId',
                     'constraints' => [
-                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'accountId' => UuidUtil::UUID_PATTERN,
                         'appId' => UuidUtil::UUID_PATTERN,
                         'serviceType' => 'install|uninstall',
                     ],
@@ -267,10 +267,10 @@ return [
             'apppage' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId[/org/:orgId]/page[/:pageId]',
+                    'route' => '/app/:appId[/account/:accountId]/page[/:pageId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'accountId' => UuidUtil::UUID_PATTERN,
                         'pageId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
@@ -421,7 +421,7 @@ return [
             'gettempdocument' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/:appId/data/:orgId/temp/:tempId/:documentName',
+                    'route' => '/:appId/data/:accountId/temp/:tempId/:documentName',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'fileId' => UuidUtil::UUID_PATTERN,
@@ -591,7 +591,7 @@ return [
             'app_userlist' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/org/:orgId/userlist',
+                    'route' => '/app/:appId/account/:accountId/userlist',
                     'defaults' => [
                         'controller' => Controller\AppDelegateController::class,
                         'method' => 'GET',
@@ -656,10 +656,10 @@ return [
             'file_document_get' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '[/:appId]/:orgId/:fileId[/:folder]/:document',
+                    'route' => '[/:appId]/:accountId/:fileId[/:folder]/:document',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'accountId' => UuidUtil::UUID_PATTERN,
                         'fileId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [

@@ -7,11 +7,9 @@ namespace Role\Controller;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Model\Role;
 use Oxzion\Model\RoleTable;
-use Oxzion\ServiceException;
 use Oxzion\Service\RoleService;
-use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\AccessDeniedException;
+use Exception;
 
 /**
  * Role Controller
@@ -59,19 +57,12 @@ class RoleController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> \n Create Role - " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->roleService->saveRole($params, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $this->roleService->saveRole($params, $data);
+            return $this->getSuccessResponseWithData($data, 201);
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
+            return $this->exceptionToResponse($e);
+        } 
     }
 
     /**
@@ -88,11 +79,12 @@ class RoleController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \n Get Role in List- " . print_r($params, true) . "Filter Parameters - " . print_r($filterParams, true));
         try {
             $result = $this->roleService->getRoles($filterParams, $params);
-        } catch (AccessDeniedException $e) {
+            return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 403);
-        }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
     /**
      * Update Role API
@@ -108,19 +100,13 @@ class RoleController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> \n Get Role in List- " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->roleService->saveRole($params, $data, $id);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $this->roleService->saveRole($params, $data, $id);
+            return $this->getSuccessResponseWithData($data, 200);
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -136,11 +122,12 @@ class RoleController extends AbstractApiController
         try {
             $params = $this->params()->fromRoute();
             $response = $this->roleService->deleteRole($id, $params);
-        } catch (ServiceException $e) {
+            return $this->getSuccessResponse();
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponse();
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -157,11 +144,12 @@ class RoleController extends AbstractApiController
         try {
             $params = $this->params()->fromRoute();
             $result = $this->roleService->getRole($params);
-        } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -178,10 +166,11 @@ class RoleController extends AbstractApiController
         $params = $this->params()->fromRoute();
         try {
             $result = $this->roleService->getRolePrivilege($params);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 }

@@ -9,7 +9,7 @@ class File extends Entity
 {
     protected static $MODEL = [
         'id' =>                         ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
-        'org_id' =>                     ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
+        'account_id' =>                 ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
         'uuid' =>                       ['type' => Type::UUID,      'readonly' => TRUE, 'required' => FALSE],
         'data' =>                       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
         'form_id' =>                    ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],

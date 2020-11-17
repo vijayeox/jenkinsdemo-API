@@ -68,10 +68,10 @@ class DocumentController extends AbstractApiControllerHelper
         if(isset($params['docPath'])){
             $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['docPath'];
         }else{
-           $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/" . $params['fileId'] . "/" . $params['document'];
+           $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/" . $params['fileId'] . "/" . $params['document'];
 
            if (isset($params['folder1'])) {
-            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/" . $params['fileId'] . "/" . $params['folder1'] . "/" . $params['document'];
+            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/" . $params['fileId'] . "/" . $params['folder1'] . "/" . $params['document'];
            } 
         }
 
@@ -116,7 +116,7 @@ class DocumentController extends AbstractApiControllerHelper
     public function getTempDocumentAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['orgId'] . "/temp/" . $params['tempId'] . "/". $params['documentName'];
+        $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/temp/" . $params['tempId'] . "/". $params['documentName'];
 
         $ext = pathinfo($attachment_location, PATHINFO_EXTENSION);
         $dispositionType = isset($ext) && $ext=="pdf"  ? "inline" : "attachment";

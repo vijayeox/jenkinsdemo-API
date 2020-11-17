@@ -1,45 +1,33 @@
 <?php
 namespace Oxzion\Model;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity;
 
 class Employee extends Entity
 {
-    protected $data = array(
-        'id' => null,
-        'uuid' => null,
-        'org_id' => null,
-        'designation' => null,
-        'website' => null,
-        'about' => null,
-        'interest' => null,
-        'hobbies' => null,
-        'managerid' => null,
-        'selfcontribute' => null,
-        'contribute_percent' => null,
-        'eid' => null,
-        'date_created' => null,
-        'created_by' => null,
-        'modified_by' => null,
-        'date_created' => null,
-        'user_profile_id' => null,
-        'org_profile_id' => null,        
-        'date_of_join' => null,
+    protected static $MODEL = array(
+        'id' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
+        'uuid' =>               ['type' => Type::UUID,      'readonly' => FALSE, 'required' => FALSE],
+        'org_id' =>             ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
+        'designation' =>        ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'website' =>            ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'about' =>              ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'interest' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'hobbies' =>            ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'manager_id' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'selfcontribute' =>     ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
+        'contribute_percent' => ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'eid' =>                ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'date_modified' =>      ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'created_by' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
+        'person_id' =>          ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
+        'date_of_join' =>       ['type' => Type::DATE,      'readonly' => FALSE, 'required' => TRUE],
     );
 
-    public function __construct($data = array())
-    {
-        if ($data) {
-            $this->exchangeArray($data);
-        }
-    }
-
-    public function validate()
-    {
-        $required = array(
-            'designation',
-            'date_of_join',
-        );
-        $this->validateWithParams($required);
+    public function &getModel() {
+        return self::$MODEL;
     }
 }

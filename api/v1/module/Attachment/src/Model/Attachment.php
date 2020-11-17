@@ -16,7 +16,7 @@ class Attachment extends Entity
         'path' => null,
         'created_id' => null,
         'created_date' => null,
-        'org_id' => null,
+        'account_id' => null,
     );
 
     public function validate()
@@ -25,8 +25,8 @@ class Attachment extends Entity
         if ($this->data['file_name'] === null) {
             $errors["file_name"] = 'required';
         }
-        if ($this->data['org_id'] === null) {
-            $errors["org_id"] = 'required';
+        if ($this->data['account_id'] === null) {
+            $errors["account_id"] = 'required';
         }
         if ($this->data['type'] === null) {
             $errors["type"] = 'required';

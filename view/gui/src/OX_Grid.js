@@ -656,6 +656,7 @@ async buttonAction(actionCopy, rowData) {
             copyPageContent = [];
           } else {
             var pageContentObj = {};
+            mergeRowData = {...this.props.parentData,...mergeRowData}
             pageContentObj = ParameterHandler.replaceParams(this.appId,item, mergeRowData);
             copyPageContent.push(pageContentObj);
           }
@@ -675,6 +676,7 @@ async buttonAction(actionCopy, rowData) {
 }
 updateActionHandler(details, rowData) {
   var that = this;
+  rowData = {...this.props.parentData,...rowData}
   return new Promise((resolve) => {
     var queryRoute = ParameterHandler.replaceParams(this.appId,details.params.url, rowData);
     var postData = {};

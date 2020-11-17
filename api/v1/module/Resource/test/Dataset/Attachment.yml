@@ -2,9 +2,9 @@ ox_attachment:
   -
     id: 1
     uuid: 'test'
-    path: '/var/www/data/uploads/organization/1/announcements/oxzionlogo.png'
+    path: '/var/www/data/uploads/account/1/announcements/oxzionlogo.png'
     extension: 'png'
     file_name: 'oxzionlogo.png'
     type: 'ANNOUNCEMENT'
     created_id: 1
-    org_id: 1
+    account_id: 1

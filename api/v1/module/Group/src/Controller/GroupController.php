@@ -9,24 +9,24 @@ use Group\Service\GroupService;
 use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ServiceException;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Service\AccountService;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 
 class GroupController extends AbstractApiController
 {
     private $groupService;
-    private $orgService;
+    private $accountService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(GroupTable $table, GroupService $groupService, AdapterInterface $dbAdapter, OrganizationService $orgService)
+    public function __construct(GroupTable $table, GroupService $groupService, AdapterInterface $dbAdapter, AccountService $accountService)
     {
         parent::__construct($table, Group::class);
         $this->setIdentifierName('groupId');
         $this->groupService = $groupService;
-        $this->orgService = $orgService;
+        $this->accountService = $accountService;
         $this->log = $this->getLogger();
     }
 
@@ -47,10 +47,10 @@ class GroupController extends AbstractApiController
         $userId = $params['userId'];
         try {
             $groupList = $this->groupService->getGroupsforUser($userId, $data);
-        } catch (AccessDeniedException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        } //Service to get the list of groups
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($groupList);
     }
     /**
@@ -70,23 +70,18 @@ class GroupController extends AbstractApiController
     {
         $files = $this->params()->fromFiles('logo');
         $id = $this->params()->fromRoute();
-        $id['orgId'] = isset($id['orgId']) ? $id['orgId'] : null;
+        $id['accountId'] = isset($id['accountId']) ? $id['accountId'] : null;
         $this->log->info(__CLASS__ . "-> Create Group - " . json_encode($data, true));
         try {
             if (!isset($id['groupId'])) {
-                $count = $this->groupService->createGroup($data, $files, $id['orgId']);
+                $this->groupService->createGroup($data, $files, $id['accountId']);
             } else {
-                $count = $this->groupService->updateGroup($id['groupId'], $data, $files, $id['orgId']);
+                $this->groupService->updateGroup($id['groupId'], $data, $files, $id['accountId']);
             }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 201);
     }
 
@@ -103,15 +98,11 @@ class GroupController extends AbstractApiController
     {
         $this->log->info(__CLASS__ . "-> Update Group - " . json_encode($data, true));
         try {
-            $count = $this->groupService->updateGroup($id, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
+            $this->groupService->updateGroup($id, $data);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 200);
     }
 
@@ -129,13 +120,10 @@ class GroupController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> Delete Group - " . json_encode($params, true) . " for ID " .json_encode($id, true));
         try {
             $response = $this->groupService->deleteGroup($params);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 500);
         } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponse();
     }
 
@@ -162,17 +150,15 @@ class GroupController extends AbstractApiController
             if (count($result) == 0) {
                 return $this->getSuccessResponseWithData($result);
             }
-            $orgId = $this->orgService->getOrganization($result['org_id']);
+            $account = $this->accountService->getAccount($result['accountId']);
             if ($result) {
                 $baseUrl = $this->getBaseUrl();
                 $logo = $result['logo'];
-                $result['logo'] = $baseUrl . "/group/" . $orgId['uuid'] . "/logo/" . $result["uuid"];
+                $result['logo'] = $baseUrl . "/group/" . $account['uuid'] . "/logo/" . $result["uuid"];
             }
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->exceptionToResponse($e);
         } 
         return $this->getSuccessResponseWithData($result);
     }
@@ -195,16 +181,14 @@ class GroupController extends AbstractApiController
                 for ($x = 0; $x < sizeof($result['data']); $x++) {
                     $baseUrl = $this->getBaseUrl();
                     $logo = $result['data'][$x]['logo'];
-                    $orgId = $this->orgService->getOrganization($result['data'][$x]['org_id']);
-                    $result['data'][$x]['logo'] = $baseUrl . "/group/" . $orgId['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
+                    $account = $this->accountService->getAccount($result['data'][$x]['accountId']);
+                    $result['data'][$x]['logo'] = $baseUrl . "/group/" . $account['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
                 }
             }
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
@@ -219,14 +203,14 @@ class GroupController extends AbstractApiController
                 for ($x = 0; $x < sizeof($result['data']); $x++) {
                     $baseUrl = $this->getBaseUrl();
                     $logo = $result['data'][$x]['logo'];
-                    $orgId = $this->orgService->getOrganization($result['data'][$x]['org_id']);
-                    $result['data'][$x]['logo'] = $baseUrl . "/group/" . $orgId['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
+                    $account = $this->accountService->getAccount($result['data'][$x]['accountId']);
+                    $result['data'][$x]['logo'] = $baseUrl . "/group/" . $account['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
                 }
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
@@ -248,14 +232,10 @@ class GroupController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> Save User to Groups - " . json_encode($params, true));
         try {
             $count = $this->groupService->saveUser($params, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 200);
     }
 
@@ -276,15 +256,10 @@ class GroupController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> Get user list for the group - " . json_encode($params, true));
         try {
             $count = $this->groupService->getUserList($params, $filterParams);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
 }

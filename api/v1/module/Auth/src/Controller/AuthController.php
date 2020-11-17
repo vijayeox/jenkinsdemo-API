@@ -13,6 +13,7 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Oxzion\Service\CommandService;
 use Oxzion\ValidationException;
+use Oxzion\EntityNotFoundException;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
 
 class AuthController extends AbstractApiControllerHelper
@@ -86,7 +87,7 @@ class AuthController extends AbstractApiControllerHelper
         if (isset($result)) {
             if ($result->isValid()) {
                 if (isset($data['username']) && isset($data['password'])) {
-                    return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']), 0);
+                    return $this->getJwt($data['username'], $this->userService->getUserAccount($data['username']), 0);
                 } elseif (isset($data['apikey'])) {
                     return $this->getApiJwt($data['apikey']);
                 }
@@ -103,12 +104,15 @@ class AuthController extends AbstractApiControllerHelper
                 $tokenPayload = $this->decodeJwtToken($data['jwt']);
                 if (is_array($tokenPayload) || is_object($tokenPayload)) {
                     $uname = isset($tokenPayload->data->username) ? $tokenPayload->data->username : $tokenPayload['username'];
-                    $orgId = isset($tokenPayload->data->orgid) ? $tokenPayload->data->orgid : $tokenPayload['orgid'];
+                    $accountId = isset($tokenPayload->data->accountId) ? $tokenPayload->data->accountId : (isset($tokenPayload['accountId']) ?  $tokenPayload['accountId'] : null);
+                    if(!$accountId){
+                        return $this->getErrorResponse("Invalid JWT Token", 404);
+                    }
                     $userDetail = $this->userService->getUserDetailsbyUserName($uname);
                     $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : null;
                     $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($userDetail['id']);
                     if (!empty($userTokenInfo)) {
-                        $data = ['username' => $uname, 'orgid' => $orgId];
+                        $data = ['username' => $uname, 'accountId' => $accountId];
                         $dataJwt = $this->getTokenPayload($data);
                         $jwt = $this->generateJwtToken($dataJwt);
                         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
@@ -157,7 +161,7 @@ class AuthController extends AbstractApiControllerHelper
             return $this->getErrorResponse("Error processing registration", 500);   
         }
         if (isset($result['auto_login'])) {
-            $result = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']), 1);
+            $result = $this->getJwt($result['user']['username'], $this->userService->getUserAccount($result['user']['username']), 1);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -165,9 +169,9 @@ class AuthController extends AbstractApiControllerHelper
     /**
      * @ignore getJwt
      */
-    private function getJwt($userName, $orgId, $raw = 0)
+    private function getJwt($userName, $accountId, $raw = 0)
     {
-        $data = ['username' => $userName, 'orgid' => $orgId];
+        $data = ['username' => $userName, 'accountId' => $accountId];
         $dataJwt = $this->getTokenPayload($data);
         $userDetail = $this->userService->getUserDetailsbyUserName($userName);
         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
@@ -233,17 +237,16 @@ class AuthController extends AbstractApiControllerHelper
             if (isset($data["username"])) {
                 $username = $data["username"];
                 $res = $this->userService->getUserBaseProfile($username);
-
-                if ($res == 0) {
-                    return $this->getErrorResponse("Invalid User", 404);
-                } else {
-                    $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
-                    return $this->getSuccessResponseWithData(['username' => $res["name"], 'profileUrl' => $profilePicUrl]);
-                }
+                $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
+                return $this->getSuccessResponseWithData(['username' => $res["name"], 'profileUrl' => $profilePicUrl]);
+                
             } else {
                 return $this->getErrorResponse("Invalid Request", 404);
             }
-        } catch (Exception $e) {
+        } catch(EntityNotFoundException $e){
+            return $this->getErrorResponse("Invalid User", 404);
+        }
+        catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Something went wrong", 404);
         }

@@ -8,8 +8,10 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
+use Oxzion\OxServiceException;
 use Oxzion\Service\AbstractService;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Service\AccountService;
+use Oxzion\Service\UserService;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
 use Project\Model\Project;
@@ -18,7 +20,7 @@ use Project\Model\ProjectTable;
 class ProjectService extends AbstractService
 {
     private $table;
-    private $organizationService;
+    private $accountService;
     public static $fieldName = array('name' => 'ox_user.name', 'id' => 'ox_user.id');
     public static $projectFields = array("name" => "p.name", "description" => "p.description");
 
@@ -27,18 +29,19 @@ class ProjectService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, ProjectTable $table, $organizationService, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, ProjectTable $table, $accountService, $userService, MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->messageProducer = $messageProducer;
-        $this->organizationService = $organizationService;
+        $this->accountService = $accountService;
+        $this->userService = $userService;
     }
 
     public function getProjectList($filterParams = null, $params = null)
     {
         $errorMessage = "You do not have permissions to get the project list";
-        $orgId = $this->checkProjectOrganization($params, $errorMessage);
+        $accountId = $this->checkProjectAccount($params, $errorMessage);
         $pageSize = 200;
         $offset = 0;
         $where = "";
@@ -59,7 +62,9 @@ class ProjectService extends AbstractService
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];
             }
-            $where .= strlen($where) > 0 ? " AND p.isdeleted!=1 AND org_id =" . $orgId : "WHERE p.isdeleted!=1 AND org_id = " . $orgId;
+            $where .= strlen($where) > 0 ? " AND " : "WHERE ";
+            $where .= "isdeleted!=1 AND p.account_id =" . $accountId; 
+
             $sort = " ORDER BY p." . $sort;
             $limit = " LIMIT " . $pageSize . " offset " . $offset;
             $resultSet = $this->executeQuerywithParams($cntQuery . $where);
@@ -88,146 +93,135 @@ class ProjectService extends AbstractService
     public function getProjectByUuid($id, $params)
     {
         $errorMessage = "You do not have permissions to get the project list";
-        $orgId = $this->checkProjectOrganization($params, $errorMessage);
-        // if (isset($params['orgId'])) {
-        //     if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-        //         ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-        //         throw new AccessDeniedException("You do not have permissions to get the project list");
-        //     } else {
-        //         $orgId = $this->getIdFromUuid('ox_organization', $params['orgId']);
-        //     }
-        // } else {
-        //     $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        // }
-
-        // print_r($orgId);exit;
+        $accountId = $this->checkProjectAccount($params, $errorMessage);
+        
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_project')
             ->columns(array("*"))
-            ->where(array('ox_project.uuid' => $id, 'ox_project.org_id' => $orgId, 'isdeleted' => 0));
+            ->where(array('ox_project.uuid' => $id, 'ox_project.account_id' => $accountId, 'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
-        if (count($response) == 0) {
+        if (empty($response)) {
             return array();
         }
         return $response[0];
     }
 
-    public function createProject(&$data, $params = null)
+    public function createProject(&$inputData, $params = null)
     {
+        $data = $inputData;
         $errorMessage = "You do not have permissions create project";
-        $data['org_id'] = $this->checkProjectOrganization($params, $errorMessage);
+        $accountId = $this->checkProjectAccount($params, $errorMessage);
+        $data['account_id'] = $accountId;
+        $accountId = $this->getUuidFromId('ox_account', $accountId);
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : null;
 
-            $select = "SELECT count(id),name,uuid,isdeleted from ox_project where name = '" . $data['name'] . "' AND org_id = " . $data['org_id'];
+            $select = "SELECT count(id),name,uuid,isdeleted from ox_project where name = '" . $data['name'] . "' AND account_id = " . $data['account_id'] ." GROUP BY name,uuid,isdeleted ";
 
             $result = $this->executeQuerywithParams($select)->toArray();
-
-            if ($result[0]['count(id)'] > 0) {
+            if (count($result)>0 && $result[0]['count(id)'] > 0) {
                 if ($data['name'] == $result[0]['name'] && $result[0]['isdeleted'] == 0) {
-                    throw new ServiceException("Project already exists", "project.exists");
+                    throw new ServiceException("Project already exists", "project.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                 } else if ($result[0]['isdeleted'] == 1) {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : null;
                     if ($data['reactivate'] == 1) {
                         $data['isdeleted'] = 0;
-                        $orgId = $this->getUuidFromId('ox_organization', $data['org_id']);
-                        $count = $this->updateProject($result[0]['uuid'], $data, $orgId);
+                        $count = $this->updateProject($result[0]['uuid'], $data, $accountId);
+                        $inputData['uuid'] = $result[0]['uuid'];
                         return;
                     } else {
-                        throw new ServiceException("Project already exists would you like to reactivate?", "project.already.exists");
+                        throw new ServiceException("Project already exists would you like to reactivate?", "project.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                     }
                 }
             }
             $sql = $this->getSqlObject();
             $form = new Project();
             $parent_uuid = null;
-            if(isset($data['parent_id']))
+            if(isset($data['parentId']))
             {
-                $parentId = $this->getIdFromUuid('ox_project', $data['parent_id']);
-                $parent_uuid = $data['parent_id'];
+                $parentId = $this->getIdFromUuid('ox_project', $data['parentId']);
+                $parent_uuid = $data['parentId'];
                 $data['parent_id'] = $parentId;
                 $result = $this->getProjectByUuid($parent_uuid, $params);
                 $data['parent_manager_id'] = $result['manager_id'];
                 if($parentId == 0){
-                    throw new ServiceException("Project parent is invalid", "project.parent.invalid");
+                    throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
                 }
             }
             //Additional fields that are needed for the create
-            $data['uuid'] = "p" . UuidUtil::uuid();
-            $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-            $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-            $data['date_created'] = date('Y-m-d H:i:s');
-            $data['date_modified'] = date('Y-m-d H:i:s');
-            $data['isdeleted'] = false;
-            $select = "SELECT id,username from ox_user where uuid = '" . $data['manager_id'] . "'";
+            $inputData['uuid'] = $data['uuid'] = UuidUtil::uuid();
+            $projectData = $data;
+            $projectData['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+            $projectData['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+            $projectData['date_created'] = date('Y-m-d H:i:s');
+            $projectData['date_modified'] = date('Y-m-d H:i:s');
+            $projectData['isdeleted'] = false;
+            $select = "SELECT id,username from ox_user where uuid = '" . $projectData['manager_id'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
-            $data['manager_id'] = $result[0]["id"];
-            $data['manager_login'] = $result[0]["username"];
-            $org = $this->organizationService->getOrganization($data['org_id']);
-            $form->exchangeArray($data);
+            $projectData['manager_id'] = $result[0]["id"];
+            $projectData['manager_login'] = $result[0]["username"];
+            $account = $this->accountService->getAccount($projectData['account_id']);
+            $form->exchangeArray($projectData);
             $form->validate();
             $this->beginTransaction();
             $count = 0;
             $count = $this->table->save($form);
             if ($count == 0) {
-                $this->rollback();
                 throw new ServiceException("Failed to create a new entity", "failed.project.create");
             }
             $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $insert = $sql->insert('ox_user_project');
+            $insert_data = array('user_id' => $projectData['manager_id'], 'project_id' => $id);
+            $insert->values($insert_data);
+            $result = $this->executeUpdate($insert);
+            if(isset($data['manager_id']) && isset($data['parent_manager_id']) && $data['manager_id'] != $data['parent_manager_id']){
+	            $insert = $sql->insert('ox_user_project');
+	            $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $data['id']);
+	            $insert->values($insert_data);
+	            $result = $this->executeUpdate($insert);            
+	        }
             $this->commit();
+            if (isset($projectData['name'])) {
+                $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'projectname' => $projectData['name'], 'description' => $projectData['description'], 'uuid' => $projectData['uuid'], 'parent_identifier' => $parent_uuid, 'manager_login' => $projectData['manager_login'])), 'PROJECT_ADDED');
+            }
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        $insert = $sql->insert('ox_user_project');
-        $insert_data = array('user_id' => $data['manager_id'], 'project_id' => $data['id']);
-        $insert->values($insert_data);
-        $result = $this->executeUpdate($insert);
-        if(isset($data['manager_id']) && isset($data['parent_manager_id']) && $data['manager_id'] != $data['parent_manager_id']){
-            $insert = $sql->insert('ox_user_project');
-            $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $data['id']);
-            $insert->values($insert_data);
-            $result = $this->executeUpdate($insert);            
-        }
-        if (isset($data['name'])) {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'parent_identifier' => $parent_uuid, 'manager_login' => $data['manager_login'])), 'PROJECT_ADDED');
-        }
-        return $count;
     }
 
-    public function updateProject($id, $data, $orgId = null)
+    public function updateProject($id, $data, $accountId = null)
     {
-        if (isset($orgId)) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
+        if (isset($accountId)) {
+            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
+                ($accountId != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to edit the project");
             } else {
-                $data['org_id'] = $this->getIdFromUuid('ox_organization', $orgId);
+                $data['account_id'] = $this->getIdFromUuid('ox_account', $accountId);
             }
         }
         $parent_uuid = null;
-        if (isset($data['parent_id'])){
-            $parentId = $this->getIdFromUuid('ox_project', $data['parent_id']);
+        if (isset($data['parentId'])){
+            $parentId = $this->getIdFromUuid('ox_project', $data['parentId']);
             $parent_uuid = $data['parent_id'];
             $data['parent_id'] = $parentId;
             if($parentId == 0){
-                throw new ServiceException("Project parent is invalid", "project.parent.invalid");
+                throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
             }
         }
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            throw new ServiceException("Updating non-existent Project", "non.existent.project");
+            throw new ServiceException("Updating non-existent Project", "non.existent.project", OxServiceException::ERR_CODE_NOT_FOUND);
         }
-        if (isset($orgId)) {
-            if ($data['org_id'] != $obj->org_id) {
-                throw new ServiceException("Project does not belong to the organization", "project.not.found");
+        if (isset($accountId)) {
+            if ($data['account_id'] != $obj->account_id) {
+                throw new ServiceException("Project does not belong to the account", "project.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
         }
         $form = new Project();
-        if (isset($data['manager_id'])) {
-            $select = "SELECT id,username from ox_user where uuid = '" . $data['manager_id'] . "'";
+        if (isset($data['managerId'])) {
+            $select = "SELECT id,username from ox_user where uuid = '" . $data['managerId'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
             $data['manager_id'] = $result[0]["id"];
             $data['manager_login'] = $result[0]["username"];
@@ -238,8 +232,9 @@ class ProjectService extends AbstractService
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
-        $org = $this->organizationService->getOrganization($obj->org_id);
+        $account = $this->accountService->getAccount($obj->account_id);
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_project where user_id =" . $data['manager_id'] . " AND project_id = (SELECT id from ox_project where uuid = '" . $id . "')";
@@ -251,28 +246,29 @@ class ProjectService extends AbstractService
             } else {
                 throw new ServiceException("Failed to Update", "failed.update.project");
             }
+            $this->commit();
+            if (isset($data['manager_login'])) {
+                $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'],'parent_identifier' => $parent_uuid, 'manager_login' => $data['manager_login'])), 'PROJECT_UPDATED');
+            } else {
+                $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'],'parent_identifier' => $parent_uuid)), 'PROJECT_UPDATED');
+            }
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        if (isset($data['manager_login'])) {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'],'parent_identifier' => $parent_uuid, 'manager_login' => $data['manager_login'])), 'PROJECT_UPDATED');
-        } else {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'],'parent_identifier' => $parent_uuid)), 'PROJECT_UPDATED');
-        }
-        return $count;
+        
     }
 
     public function deleteProject($params)
     {
         $errorMessage = "You do not have permissions to delete the project";
-        $orgId = $this->checkProjectOrganization($params, $errorMessage);
+        $accountId = $this->checkProjectAccount($params, $errorMessage);
         $obj = $this->table->getByUuid($params['projectUuid'], array());
         if (is_null($obj)) {
-            throw new ServiceException("Entity not found", "project.not.found");
+            throw new ServiceException("Project not found", "project.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
         }
-        if ($orgId != $obj->org_id) {
-            throw new ServiceException("Project does not belong to the organization", "project.not.found");
+        if ($accountId != $obj->account_id) {
+            throw new ServiceException("Project does not belong to the account", "project.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
         }
         $form = new Project();
         $data = $obj->toArray();
@@ -281,7 +277,7 @@ class ProjectService extends AbstractService
             $result = $this->executeQueryWithParams($select)->toArray();
             if($result){
                 if(!(isset($params['force_flag']) && ($params['force_flag'] == true || $params['force_flag'] == "true")))
-                    throw new ServiceException("Project has subprojects", "project.not.found");
+                    throw new ServiceException("Project has subprojects", "project.has.subprojects", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         }
         $data['uuid'] = $params['projectUuid'];
@@ -291,35 +287,31 @@ class ProjectService extends AbstractService
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
-        $org = $this->organizationService->getOrganization($obj->org_id);
+        $account = $this->accountService->getAccount($obj->account_id);
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count == 0) {
-                $this->rollback();
                 throw new ServiceException("Failed to Delete", "failed.project.delete");
-                $update = $this->getSqlObject()
-                    ->update('ox_project')
-                    ->set(['isdeleted' => 1])
-                    ->where(['parent_id' => $data['id']]);
-                $result = $this->executeQuery($update);
             }
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $data['name'], 'uuid' => $data['uuid'])), 'PROJECT_DELETED');
+        $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'projectname' => $data['name'], 'uuid' => $data['uuid'])), 'PROJECT_DELETED');
         return $count;
     }
 
     public function getProjectsOfUser($params)
     {
         $errorMessage = "You do not have permissions to get the users of project";
-        $orgId = $this->checkProjectOrganization($params, $errorMessage);
+        $accountId = $this->checkProjectAccount($params, $errorMessage);
         try {
             $userId = AuthContext::get(AuthConstants::USER_ID);
             $queryString = "select * from ox_project
             left join ox_user_project on ox_user_project.project_id = ox_project.id";
-            $where = "where ox_user_project.user_id = " . $userId . " AND ox_project.org_id=" . $orgId . " AND ox_project.isdeleted!=1";
+            $where = "where ox_user_project.user_id = " . $userId . " AND ox_project.account_id=" . $accountId . " AND ox_project.isdeleted!=1";
             $order = "order by ox_project.id";
             $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         } catch (Exception $e) {
@@ -328,12 +320,18 @@ class ProjectService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getProjectsOfUserById($userId, $orgId = null)
+    public function getProjectsOfUserById($userId, $accountId = null)
     {
-        $orgId = isset($orgId) ? $this->getIdFromUuid('ox_organization', $orgId) :  AuthContext::get(AuthConstants::ORG_ID);
-        $queryString = "select ox_project.id,ox_project.uuid,ox_project.name,ox_project.org_id,ox_project.manager_id,ox_project.description,
-ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_user.username as manager_username, ox_user.uuid as manager_uuid from ox_project
-                inner join ox_user_project on ox_user_project.project_id = ox_project.id inner join ox_user on ox_project.manager_id = ox_user.id left join ox_project as parent on ox_project.parent_id = parent.id";
+        $accountId = isset($accountId) ? $this->getIdFromUuid('ox_account', $accountId) :  AuthContext::get(AuthConstants::ACCOUNT_ID);
+        $queryString = "SELECT ox_project.id,ox_project.uuid,ox_project.name,a.uuid as accountId, 
+                                ox_project.manager_id,ox_project.description,
+                                ox_project.isdeleted,parent.uuid as parent_identifier,
+                                ox_project.created_by, ox_user.username as manager_username, 
+                                ox_user.uuid as manager_uuid from ox_project
+                        inner join ox_account a on a.id = ox_project.account_id
+                        inner join ox_user_project on ox_user_project.project_id = ox_project.id 
+                        inner join ox_user on ox_project.manager_id = ox_user.id 
+                        left join ox_project as parent on ox_project.parent_id = parent.id ";
         $where = "where ox_user_project.user_id ='" . $userId . "' AND ox_project.isdeleted!=1";
         $order = "order by ox_project.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
@@ -343,7 +341,7 @@ ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_
     public function getUserList($params, $filterParams = null)
     {
         $errorMessage = "You do not have permissions to get the user list of project";
-        $orgId = $this->checkProjectOrganization($params, $errorMessage);
+        $accountId = $this->checkProjectAccount($params, $errorMessage);
         $pageSize = 200;
         $offset = 0;
         $where = "";
@@ -369,10 +367,11 @@ ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_
             $pageSize = $filterArray[0]['take'];
             $offset = $filterArray[0]['skip'];
         }
-        $where .= strlen($where) > 0 ? " AND ox_project.uuid = '" . $params['projectUuid'] . "' AND ox_project.isdeleted!=1 AND ox_project.org_id = " . $orgId : " WHERE ox_project.uuid = '" . $params['projectUuid'] . "' AND ox_project.isdeleted!=1 AND ox_project.org_id =" . $orgId;
+        $where .= strlen($where) > 0 ? " AND " : "WHERE ";
+        $where .= "ox_project.uuid = '" . $params['projectUuid'] . "' AND ox_project.isdeleted!=1 AND ox_project.account_id = " . $accountId; 
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
-        $resultSet = $this->executeQuerywithParams($cntQuery . $where);
+        $resultSet = $this->executeQuerywithParams($cntQuery . " ".$where);
         $count = $resultSet->toArray()[0]['count(ox_user.id)'];
         $query = $query . " " . $from . " " . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query);
@@ -386,7 +385,7 @@ ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_
     //     $userId = AuthContext::get(AuthConstants::USER_ID);
     //     $queryString = "select * from ox_project
     // left join ox_user_project on ox_user_project.project_id = ox_project.id";
-    //     $where = "where ox_user_project.user_id = " . $userId . " AND ox_project.org_id=" . AuthContext::get(AuthConstants::ORG_ID) . " AND ox_project.id=" . $id;
+    //     $where = "where ox_user_project.user_id = " . $userId . " AND ox_project.account_id=" . AuthContext::get(AuthConstants::ACCOUNT_ID) . " AND ox_project.id=" . $id;
     //     $order = "order by ox_project.id";
     //     $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
     //     return $resultSet->toArray();
@@ -395,96 +394,103 @@ ox_project.isdeleted,parent.uuid as parent_identifier,ox_project.created_by, ox_
     public function saveUser($params, $data)
     {
         $errorMessage = "You do not have permissions to add users to project";
-        $params['orgId'] = $this->checkProjectOrganization($params, $errorMessage);
-        $obj = $this->table->getByUuid($params['projectUuid'], array());
-
+        $params['account_id'] = $this->checkProjectAccount($params, $errorMessage);
+        $obj = $this->table->getByUuid($params['projectId'], array());
         if (is_null($obj)) {
-            throw new ServiceException("Entity not found", "project.not.found");
+            throw new ServiceException("Project not found", "project.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
         }
-        $org = $this->organizationService->getOrganization($obj->org_id);
-        if (isset($params['orgId'])) {
-            if ($params['orgId'] != $obj->org_id) {
-                throw new ServiceException("Project does not belong to the organization", "project.not.found");
+        $account = $this->accountService->getAccount($obj->account_id);
+        if (isset($params['account_id'])) {
+            if ($params['account_id'] != $obj->account_id) {
+                throw new ServiceException("Project does not belong to the account", "project.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
+        }else{
+            throw new ServiceException("Invalid account", "invalid.account", OxServiceException::ERR_CODE_NOT_FOUND);
         }
-        if (!isset($data['userid']) || empty($data['userid'])) {
-            throw new ServiceException("Enter User Ids", "select.user");
+        if (!isset($data['userIdList']) || empty($data['userIdList'])) {
+            throw new ServiceException("Users not selected", "select.user", OxServiceException::ERR_CODE_NOT_FOUND);
         }
-        $userArray = $this->organizationService->getUserIdList($data['userid']);
+        $userArray = $this->userService->getUserIdList($data['userIdList']);
+        if (empty($userArray)) {
+            throw new ServiceException("Users not found", "project.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
+        }
         $projectId = $obj->id;
-        if ($userArray) {
-            $userSingleArray = array_map('current', $userArray);
-            $queryString = "SELECT ox_user.id,ox_user.uuid, ox_user.username FROM ox_user_project " .
-            "inner join ox_user on ox_user.id = ox_user_project.user_id " .
-            "where ox_user_project.project_id = " . $projectId .
-            " and ox_user_project.user_id not in (" . implode(',', $userSingleArray) . ")";
-            $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
-            $query = "SELECT u.id,u.uuid, u.username, up.user_id, oup.firstname, oup.lastname, oup.email , u.timezone FROM ox_user_project up " .
-            "right join ox_user u on u.id = up.user_id and up.project_id = " . $projectId .
-            " right join ox_user_profile oup on oup.id = u.user_profile_id where u.id in (" . implode(',', $userSingleArray) . ") and up.user_id is null";
-            $insertedUser = $this->executeQuerywithParams($query)->toArray();
+        $userSingleArray = array_map('current', $userArray);
+        $queryString = "SELECT ox_user.id,ox_user.uuid, ox_user.username 
+                        FROM ox_user_project 
+                        inner join ox_user on ox_user.id = ox_user_project.user_id 
+                        where ox_user_project.project_id = $projectId
+                         and ox_user_project.user_id not in (" . implode(',', $userSingleArray) . ")";
+        $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
+        $query = "SELECT u.id,u.uuid, u.username, up.user_id, oup.firstname, oup.lastname, 
+                        oup.email , u.timezone 
+                    FROM ox_user_project up 
+                    right join ox_user u on u.id = up.user_id and up.project_id = $projectId 
+                    right join ox_person oup on oup.id = u.person_id 
+                    where u.id in (" . implode(',', $userSingleArray) . ") and up.user_id is null";
+        $insertedUser = $this->executeQuerywithParams($query)->toArray();
+        try {
             $this->beginTransaction();
-            try {
-                $delete = $this->getSqlObject()
-                    ->delete('ox_user_project')
-                    ->where(['project_id' => $projectId]);
-                $result = $this->executeQuery($delete);
-                $query = "Insert into ox_user_project(user_id,project_id) (Select ox_user.id, " . $projectId . " AS project_id from ox_user where ox_user.id in (" . implode(',', $userSingleArray) . "))";
-                $resultInsert = $this->runGenericQuery($query);
-                if (count($resultInsert) != count($userArray)) {
-                    $this->rollback();
-                    throw new ServiceException("Failed to add", "failed.to.add");
-                }
-                $this->commit();
-            } catch (Exception $e) {
-                $this->rollback();
-                throw $e;
+            $delete = $this->getSqlObject()
+                ->delete('ox_user_project')
+                ->where(['project_id' => $projectId]);
+            $result = $this->executeQuery($delete);
+            $query = "INSERT into ox_user_project(user_id,project_id) 
+                        (Select ox_user.id, $projectId AS project_id 
+                        from ox_user 
+                        where ox_user.id in (" . implode(',', $userSingleArray) . "))";
+            $resultInsert = $this->runGenericQuery($query);
+            if (count($resultInsert) != count($userArray)) {
+                throw new ServiceException("Failed to add", "failed.to.add");
             }
-            foreach ($deletedUser as $key => $value) {
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $obj->name, 'username' => $value['username'])), 'USERTOPROJECT_DELETED');
-                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'], 'projectUuid' => $obj->uuid)), 'DELETION_USERFROMPROJECT');
-
-            }
-            foreach ($insertedUser as $key => $value) {
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $obj->name, 'username' => $value['username'])), 'USERTOPROJECT_ADDED');
-                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'], 'firstname' => $value['firstname'], 'lastname' => $value['lastname'], 'email' => $value['email'], 'timezone' => $value['timezone'], 'projectUuid' => $obj->uuid)), 'ADDITION_USERTOPROJECT');
-            }
-            return 1;
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-        throw new ServiceException("Entity not found", "project.not.found");
+        foreach ($deletedUser as $key => $value) {
+            $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'projectname' => $obj->name, 'username' => $value['username'])), 'USERTOPROJECT_DELETED');
+            $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'], 'projectUuid' => $obj->uuid)), 'DELETION_USERFROMPROJECT');
+
+        }
+        foreach ($insertedUser as $key => $value) {
+            $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'projectname' => $obj->name, 'username' => $value['username'])), 'USERTOPROJECT_ADDED');
+            $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'], 'firstname' => $value['firstname'], 'lastname' => $value['lastname'], 'email' => $value['email'], 'timezone' => $value['timezone'], 'projectUuid' => $obj->uuid)), 'ADDITION_USERTOPROJECT');
+        }
+        
+        
     }
 
-    private function checkProjectOrganization($params, $errorMessage)
+    private function checkProjectAccount($params, $errorMessage)
     {
-        if (isset($params['orgId'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+        if (isset($params['accountId'])) {
+            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
+                ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
                 throw new AccessDeniedException($errorMessage);
             } else {
-                $newOrgId = $this->getIdFromUuid('ox_organization', $params['orgId']);
+                $newaccountId = $this->getIdFromUuid('ox_account', $params['accountId']);
             }
         } else {
-            $newOrgId = AuthContext::get(AuthConstants::ORG_ID);
+            $newaccountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
-        return $newOrgId;
+        return $newaccountId;
     }
 
     public function getSubprojects($params)
     {
-        try {
-            if (isset($params['projectUuid'])) {
-                $id = $this->getIdFromUuid('ox_project',$params['projectUuid']);
-                $queryString = "select oxp.name,oxp.description,oxp.uuid,oxp.date_created,ou.uuid as manager_id,sub.uuid as parent_id from ox_project as oxp INNER JOIN ox_user as ou on oxp.manager_id = ou.id INNER JOIN ox_project as sub on sub.id = oxp.parent_id where oxp.parent_id =".$id." and oxp.isdeleted <> 1";
-                $resultSet = $this->executeQuerywithParams($queryString);
-                return $resultSet->toArray();
-            }
-            else {
-                throw new Exception("UUID is not specified");
-            }
+        if (!isset($params['projectId'])) {
+            throw new ServiceException("Project not provided", "project.required", OxServiceException::ERR_CODE_NOT_FOUND);
+            
         }
-        catch(Exception $e){
-            throw $e;
-        }
+        $id = $this->getIdFromUuid('ox_project',$params['projectId']);
+        $queryString = "SELECT oxp.name,oxp.description,oxp.uuid,oxp.date_created,
+                        ou.uuid as manager_id,sub.uuid as parent_id 
+                        from ox_project as oxp 
+                        INNER JOIN ox_user as ou on oxp.manager_id = ou.id 
+                        INNER JOIN ox_project as sub on sub.id = oxp.parent_id 
+                        where oxp.parent_id = $id and oxp.isdeleted <> 1";
+        $resultSet = $this->executeQuerywithParams($queryString);
+        return $resultSet->toArray();
     }
 
 /**

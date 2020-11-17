@@ -8,10 +8,7 @@ namespace Announcement\Controller;
 use Announcement\Model\Announcement;
 use Announcement\Model\AnnouncementTable;
 use Announcement\Service\AnnouncementService;
-use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ServiceException;
-use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
 
@@ -60,22 +57,13 @@ class AnnouncementController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info("-> \nCreate announcement - " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->announcementService->createAnnouncement($data, $params);
-        } catch (ValidationException $e) {
-        $this->log->error("-> \nValidationException -".$e->getMessage(), $e);
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            $this->log->error("-> \nServiceException -".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        } catch (AccessDeniedException $e) {
-            $this->log->error("-> \nServiceException -".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 401);
+            $this->announcementService->createAnnouncement($data, $params);
+            return $this->getSuccessResponseWithData($data, 201);
         } catch (Exception $e) {
-            $this->log->error("-> \nCreate announcement -".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
     /**
      * GET List Announcement API
@@ -103,10 +91,12 @@ class AnnouncementController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> Get announcement list- " . print_r($params, true));
         try {
             $result = $this->announcementService->getAnnouncements($params);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        }
-        return $this->getSuccessResponseWithData($result);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -137,20 +127,13 @@ class AnnouncementController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> \nUpdate announcement - " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $orgId = isset($params['orgId']) ? $params['orgId'] : null;
-            $count = $this->announcementService->updateAnnouncement($id, $data, $orgId);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            $this->log->error("-> \nupdateAnnouncement -".$e->getMessage(), $e);
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            $this->log->error("-> \nupdateAnnouncement - ServiceException".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
+            $accountId = isset($params['accountId']) ? $params['accountId'] : null;
+            $this->announcementService->updateAnnouncement($id, $data, $accountId);
+            return $this->getSuccessResponseWithData($data, 200);
         } catch (Exception $e) {
-            $this->log->error("-> \nupdateAnnouncement - Exception".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
     /**
      * Delete Announcement API
@@ -165,12 +148,13 @@ class AnnouncementController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> \nDelete announcement - " . print_r($id, true) . "Parameters - " . print_r($params, true));
         try {
-            $response = $this->announcementService->deleteAnnouncement($id, $params);
-        } catch (ServiceException $e) {
-            $this->log->error("-> \n deleteAnnouncement - ServiceException".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponse();
+            $this->announcementService->deleteAnnouncement($id, $params);
+            return $this->getSuccessResponse();
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
     /**
      * GET Announcement API
@@ -183,7 +167,7 @@ class AnnouncementController extends AbstractApiController
      * {
      *  integer id,
      *  string name,
-     *  integer org_id,
+     *  integer account_id,
      *  string status,
      *  string description,
      *  string link,
@@ -201,11 +185,12 @@ class AnnouncementController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \nGet announcement - " . print_r($id, true) . "Parameters - " . print_r($params, true));
         try {
             $result = $this->announcementService->getAnnouncement($id, $params);
-        } catch (AccessDeniedException $e) {
-            $this->log->error('Error occured during get announcement for ID - ' . print_r($id, true));
-            return $this->getErrorResponse($e->getMessage(), 403);
-        }
-        return $this->getSuccessResponseWithData($result);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
     /**
      * GET List of All Announcement API
@@ -220,14 +205,12 @@ class AnnouncementController extends AbstractApiController
         $params = $this->params()->fromRoute();
         try {
             $result = $this->announcementService->getAnnouncementsList($filterParams, $params);
-        } catch (AccessDeniedException $e) {
-            $this->log->error('\ngetAnnouncementsList AccessDeniedException - ' .$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 403);
+            return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
         } catch (Exception $e) {
-            $this->log->error("-> \ngetAnnouncementsList - Exception".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     public function announcementToGroupAction()
@@ -236,13 +219,12 @@ class AnnouncementController extends AbstractApiController
         $data = $this->extractPostData();
         try {
             $count = $this->announcementService->saveGroup($params, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
+            return $this->getSuccessResponseWithData($data, 200);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     public function announcementGroupsAction()
@@ -251,12 +233,11 @@ class AnnouncementController extends AbstractApiController
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
             $count = $this->announcementService->getAnnouncementGroupList($params, $filterParams);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        }
-        return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
+            return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 }

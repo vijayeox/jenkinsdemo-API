@@ -36,10 +36,10 @@ class ContactControllerTest extends ControllerTest
         $data = [ 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['first_name'], $data['first_name']);
         $this->assertEquals($content['data']['last_name'], $data['last_name']);
@@ -49,7 +49,6 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['address_1'], $data['address_1']);
         $this->assertEquals($content['data']['address_2'], $data['address_2']);
         $this->assertEquals($content['data']['country'], $data['country']);
-        $this->assertEquals($content['data']['owner_id'], 1);
     }
 
     /*
@@ -74,12 +73,12 @@ class ContactControllerTest extends ControllerTest
         $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['first_name'], 'required');
     }
 
@@ -111,10 +110,11 @@ class ContactControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/10000', 'PUT', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Contact not found');
     }
 
     public function testDelete()
@@ -139,14 +139,14 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testgetcontactsSuccess()
+    public function testGetContactsSuccess()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/contact/search?column=1', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
 
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['myContacts'][0]['user_id'], 1);
         $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
@@ -169,18 +169,18 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['orgContacts'][3]['last_name'], 'Test');
     }
 
-    public function testgetcontactsForAllColumnsSuccess()
+    public function testGetContactsForAllColumnsSuccess()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/contact/search?column=-1', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['myContacts'][0]['user_id'], 1);
         $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
         $this->assertEquals($content['data']['myContacts'][0]['last_name'], 'Agarwal');
-        $this->assertEquals($content['data']['myContacts'][0]['phone_1'], '14034');
+        $this->assertEquals($content['data']['myContacts'][0]['phone_1'], '09383883922');
         $this->assertEquals($content['data']['myContacts'][0]['phone_list'], array('data'=>["8399547885"," 7899290200"," 123123122445"]));
         $this->assertEquals($content['data']['myContacts'][0]['email'], 'karan@myvamla.com');
         $this->assertEquals($content['data']['myContacts'][0]['email_list'], array('data'=>["raks@va.com"," asas@ox.com"]));
@@ -218,7 +218,7 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['orgContacts'][3]['email_list'], null);
     }
 
-    public function testgetcontactsWithFilter()
+    public function testGetContactsWithFilter()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/contact/search?column=-1&filter=karan', 'GET');
@@ -230,7 +230,7 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['user_id'], 1);
         $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
         $this->assertEquals($content['data']['myContacts'][0]['last_name'], 'Agarwal');
-        $this->assertEquals($content['data']['myContacts'][0]['phone_1'], '14034');
+        $this->assertEquals($content['data']['myContacts'][0]['phone_1'], '09383883922');
     }
 
 
@@ -278,14 +278,14 @@ class ContactControllerTest extends ControllerTest
         $_FILES['file']['error'] = 0;
         $_FILES['file']['size'] = 1007;
         $this->dispatch('/contact/import', 'POST');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->assertModuleName('Contact');
         $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ContactController');
         $this->assertMatchedRouteName('contactImport');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Column Headers donot match...');
+        $this->assertEquals($content['message'], 'Column Headers do not match');
     }
 
 

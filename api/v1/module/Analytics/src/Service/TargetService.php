@@ -27,7 +27,7 @@ class TargetService extends AbstractService
     public function createTarget($data)
     {
         $target = new Target($this->table);
-        $target->setForeignKey('org_id', AuthContext::get(AuthConstants::ORG_ID));
+        $target->setForeignKey('account_id', AuthContext::get(AuthConstants::ACCOUNT_ID));
         $target->assign($data);
         try {
             $this->beginTransaction();
@@ -82,8 +82,8 @@ class TargetService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_target')
-            ->columns(array('uuid','type','period_type','red_limit','yellow_limit','green_limit','trigger_after','red_workflow_id','yellow_workflow_id','yellow_workflow_id','is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'org_id','version','isdeleted'))
-            ->where(array('ox_target.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
+            ->columns(array('uuid','type','period_type','red_limit','yellow_limit','green_limit','trigger_after','red_workflow_id','yellow_workflow_id','yellow_workflow_id','is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'account_id','version','isdeleted'))
+            ->where(array('ox_target.uuid' => $uuid,'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -96,10 +96,10 @@ class TargetService extends AbstractService
         $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $where .= empty($where) ? "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            $where .= empty($where) ? "WHERE account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID) : " AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
         else{
-            $where .= empty($where) ? "WHERE isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            $where .= empty($where) ? "WHERE isdeleted <>1 AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID) : " AND isdeleted <>1 AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
         $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
@@ -109,10 +109,10 @@ class TargetService extends AbstractService
         $count=$resultSet->toArray()[0]['count'];
 
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ="SELECT uuid,type,period_type,red_limit,yellow_limit,green_limit,trigger_after,red_workflow_id,yellow_workflow_id,yellow_workflow_id,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,isdeleted FROM `ox_target`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,type,period_type,red_limit,yellow_limit,green_limit,trigger_after,red_workflow_id,yellow_workflow_id,yellow_workflow_id,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,account_id,isdeleted FROM `ox_target`".$where." ".$sort." ".$limit;
         }
         else{
-            $query ="SELECT uuid,type,period_type,red_limit,yellow_limit,green_limit,trigger_after,red_workflow_id,yellow_workflow_id,yellow_workflow_id,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id FROM `ox_target`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,type,period_type,red_limit,yellow_limit,green_limit,trigger_after,red_workflow_id,yellow_workflow_id,yellow_workflow_id,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,account_id FROM `ox_target`".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();

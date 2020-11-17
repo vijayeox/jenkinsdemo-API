@@ -38,7 +38,7 @@ RUN rm -rf /var/lib/apt/lists/* && curl -sL https://deb.nodesource.com/setup_8.x
 
 RUN add-apt-repository -y ppa:ondrej/php && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C && \
-  apt-get update && \
+  apt-get update --fix-missing && \
   apt-get -o Dpkg::Options::="--force-confnew" --force-yes -fuy upgrade && \
   apt-get -y install postfix python3-setuptools wget git apache2 php-xdebug libapache2-mod-php7.2 php7.2-fpm mysql-server zip unzip curl php7.2-cli php7.2-dev php7.2-mysql php7.2-gd php7.2-imagick php7.2-recode php7.2-tidy php7.2-xmlrpc php7.2-curl php7.2-json php7.2-msgpack php7.2-memcached php7.2-intl php7.2-sqlite3 php7.2-gmp php7.2-geoip php7.2-mbstring php7.2-xml php7.2-zip php7.2-imap php7.2-soap supervisor pdftk php7.2-imagick libapache2-mod-xsendfile dos2unix xmlstarlet tar tzdata ca-certificates nodejs zlib1g-dev libglib2.0-dev && \
   apt-get -y autoremove && \
@@ -65,20 +65,7 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
 ENV LANG en_US.UTF-8 
 ENV LC_ALL en_US.UTF-8  
 
-# Add image configuration and scripts
-ADD ./services/start-apache2.sh /start-apache2.sh
-ADD ./services/start-mysqld.sh /start-mysqld.sh
-ADD ./services/start-view.sh /start-view.sh
-ADD ./services/start-camel.sh /start-camel.sh
-#ADD run.sh /run.sh
-RUN chmod 755 /*.sh
 ADD ./configs/my.cnf /etc/mysql/conf.d/my.cnf
-ADD ./configs/supervisor/supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
-ADD ./configs/supervisor/supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
-ADD ./configs/supervisor/supervisord-view.conf /etc/supervisor/conf.d/supervisord-view.conf
-ADD ./configs/supervisor/supervisord-camel.conf /etc/supervisor/conf.d/supervisord-camel.conf
-
-RUN chmod 755 /*.sh
 
 # Remove pre-installed database
 RUN rm -rf /var/lib/mysql/*
@@ -109,10 +96,9 @@ ADD configs/phpmyadmin/config.inc.php /var/www/phpmyadmin/config.inc.php
 RUN chmod 755 /var/www/phpmyadmin/config.inc.php
 
 # Symfony 2 pre requisted
-RUN curl -sS https://getcomposer.org/installer | php
+RUN curl -sS https://getcomposer.org/installer | php -- --version=1.10.7
 RUN mv composer.phar /usr/local/bin/composer
 
-ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 RUN mkdir -p /app/api
 RUN mkdir -p /app/view
@@ -210,5 +196,24 @@ ENV WAIT_FOR_TIMEOUT=30
 ENV TZ=UTC
 ENV DEBUG=false
 
-RUN dos2unix /run.sh
-CMD ["/run.sh"]
+RUN mkdir /services
+
+RUN sed -i "s/export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=staff/" /etc/apache2/envvars
+
+RUN sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
+    -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" \
+    -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/7.2/apache2/php.ini
+RUN sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+RUN sed -i "s/.*Listen 80*/Listen 8080/" /etc/apache2/ports.conf
+RUN sed -i "s/.*Listen 808080*/Listen 8080/" /etc/apache2/ports.conf
+RUN sed -i "s/user.*/user = www-data/" /etc/mysql/mysql.conf.d/mysqld.cnf
+RUN sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
+RUN mkdir -p /var/run/mysqld \
+    && chmod 755 /etc/mysql/conf.d/my.cnf \
+    && chmod -R 770 /var/lib/mysql \
+    && chmod -R 770 /var/run/mysqld \
+    && chown -R www-data:staff /var/lib/mysql \
+    && chown -R www-data:staff /var/run/mysqld \
+    && chown -R www-data:staff /var/log/mysql
+
+CMD ["/services/run.sh"]

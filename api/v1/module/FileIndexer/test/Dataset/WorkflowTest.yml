@@ -1,4 +1,4 @@
-ox_organization_profile:
+ox_organization:
 -
     id: 3
     created_by: 1
@@ -7,7 +7,7 @@ ox_organization_profile:
     id: 4
     created_by: 1
     uuid: 'c7499a34-c100-4e41-bece-5822adca3ccc'
-ox_organization:
+ox_account:
 -
     id: 3
     name: 'Sample Organization'
@@ -15,7 +15,7 @@ ox_organization:
     status: 'Active'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
     contactid: 2
-    org_profile_id: 3
+    organization_id: 3
 
 -
     id: 4
@@ -24,13 +24,13 @@ ox_organization:
     status: 'Inactive'
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
     contactid: 2
-    org_profile_id: 4
+    organization_id: 4
 ox_group:
 -
     id: 1
     uuid : 2db1c5a3-8a82-4d5b-b60a-c648cf1e27de
     name: 'Test Group'
-    org_id: 1
+    account_id: 1
     manager_id: 1
     description: 'Description Test Data'
     logo: 'grp1.png'
@@ -43,7 +43,7 @@ ox_group:
     id: 2
     uuid : 153f3e9e-eb07-4ca4-be78-34f715bd50db
     name: 'Test Group Once Again'
-    org_id: 1
+    account_id: 1
     manager_id: 2
     parent_id : 1
     description: 'Description for the second test cases'
@@ -112,7 +112,7 @@ ox_form:
 ox_file:
 -
     id: 101
-    org_id: 1
+    account_id: 1
     data: "{\"field1\":3,\"field2\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     form_id: 1
@@ -120,7 +120,7 @@ ox_file:
     entity_id: 1
 -
     id: 102
-    org_id: 1
+    account_id: 1
     data: "{\"field3\":3,\"field4\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     form_id: 2
@@ -128,7 +128,7 @@ ox_file:
     entity_id: 1
 -
     id: 103
-    org_id: 1
+    account_id: 1
     data: "{\"some key\" : \"some value \"}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     form_id: 3
@@ -136,7 +136,7 @@ ox_file:
     entity_id: 1
 -
     id: 104
-    org_id: 1
+    account_id: 1
     data: "{\"some key2\" : \"some value2\"}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145e"
     form_id: 3
@@ -188,7 +188,7 @@ ox_workflow_instance:
     id: 1
     workflow_deployment_id: 1
     app_id: 99
-    org_id: 1
+    account_id: 1
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
@@ -197,7 +197,7 @@ ox_workflow_instance:
     id: 2
     workflow_deployment_id: 2
     app_id: 99
-    org_id: 1
+    account_id: 1
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
@@ -206,7 +206,7 @@ ox_workflow_instance:
     id: 3
     workflow_deployment_id: 3
     app_id: 97
-    org_id: 1
+    account_id: 1
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
@@ -248,21 +248,21 @@ ox_activity_instance:
     workflow_instance_id: 1
     activity_instance_id: "[activityInstanceId]"
     status: 'In Progress'
-    org_id: 1
+    account_id: 1
     activity_id: 1
 -
     id: 2
     workflow_instance_id: 2
     activity_instance_id: "[activityInstanceId]"
     status: 'In Progress'
-    org_id: 1
+    account_id: 1
     activity_id: 3
 -
     id: 3
     workflow_instance_id: 3
     activity_instance_id: "[activityInstanceId]"
     status: 'Completed'
-    org_id: 1
+    account_id: 1
     activity_id: 5
 ox_activity_form:
 -
@@ -327,37 +327,37 @@ ox_file_attribute:
 -
     id: 1
     file_id: 102
-    org_id: 1
+    account_id: 1
     field_value: 1
     field_id: 1
 -
     id: 2
     file_id: 101
-    org_id: 1
+    account_id: 1
     field_value: 1
     field_id: 2
 -
     id: 3
     file_id: 101
-    org_id: 1
+    account_id: 1
     field_value: 2
     field_id: 3
 -
     id: 4
     file_id: 101
-    org_id: 1
+    account_id: 1
     field_value: 2
     field_id: 4
 -
     id: 5
     file_id: 103
-    org_id: 1
+    account_id: 1
     field_value: 1
     field_id: 2
 -
     id: 6
     file_id: 103
-    org_id: 1
+    account_id: 1
     field_value: 1
     field_id: 4
 ox_wf_user_identifier:
@@ -367,11 +367,11 @@ ox_wf_user_identifier:
     identifier_name: 'field1'
     identifier: 1
     app_id: 99
-    org_id: 1
+    account_id: 1
 -
     id: 2
     user_id: 1
     identifier_name: 'field2'
     identifier: 1
     app_id: 99
-    org_id: 1
+    account_id: 1

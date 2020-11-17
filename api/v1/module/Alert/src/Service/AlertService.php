@@ -41,7 +41,7 @@ class AlertService extends AbstractService
     public function createAlert(&$data)
     {
         $form = new Alert();
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['status'] = $data['status'] ? $data['status'] : 1;
         $data['created_date'] = date('Y-m-d H:i:s');
@@ -149,7 +149,7 @@ class AlertService extends AbstractService
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id, ['account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)]);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -194,7 +194,7 @@ class AlertService extends AbstractService
             $select = $sql->select()
                 ->from('ox_alert')
                 ->columns(array("*"))
-                ->where(array('ox_alert.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+                ->where(array('ox_alert.account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         } catch (Exception $e) {
             throw $e;
         }

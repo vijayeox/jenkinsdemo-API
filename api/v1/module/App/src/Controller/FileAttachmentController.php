@@ -38,7 +38,7 @@ class FileAttachmentController extends AbstractApiController
      * <code>status : "success|error",
      *       data :  {
      * String stored_procedure_name
-     * int: org_id
+     * int: account_id
      * string: app_id
      * string: app_name
      * }
