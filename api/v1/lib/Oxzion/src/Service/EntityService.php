@@ -24,15 +24,15 @@ class EntityService extends AbstractService
         $this->formService = $formService;
     }
 
-    public function saveEntity($appUuid, &$data, $createIfNotFound = true)
+    public function saveEntity($appUuid, &$inputData, $createIfNotFound = true)
     {
+        $data = $inputData;
         $count = 0;
         $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $entity = new Entity($this->table);
         try{
-            $resultSet = $this->getEntity($data['uuid'], $data['app_id']);
-            $data = array_merge($resultSet, $data);
+            $entity->loadByUuid($data['uuid']);
             $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_modified'] = date('Y-m-d H:i:s');
         }catch(EntityNotFoundException $e){
@@ -44,16 +44,16 @@ class EntityService extends AbstractService
         }
         
         $this->logger->info(__CLASS__ . "-> \n Data Modified before the transaction - " . print_r($data, true));
-        $entity->exchangeArray($data);
-        $entity->validate();
+        $entity->assign($data);
         try {
             $this->beginTransaction();
-            $count = $entity->save($entity);
+            $entity->save();
             $this->commit();
             $temp = $entity->getGenerated(true);
-            $data['id'] = $temp['id'];
-            $data['uuid'] = $temp['uuid'];
-        } catch (Exception $e) {     
+            $inputData['id'] = $temp['id'];
+            $inputData['uuid'] = $temp['uuid'];
+        } catch (Exception $e) {  
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -63,21 +63,9 @@ class EntityService extends AbstractService
     {
         $result = $this->getEntity($id, $appUuid);
         if ($result) {
-            $obj = $this->table->getByUuid($id, array());
-            if (is_null($obj)) {
-                return 0;
-            }
-            $originalArray = $obj->toArray();
-            $entity = new Entity();
-            $originalArray['isdeleted'] = 1;
-            $entity->exchangeArray($originalArray);
             try {
                 $this->beginTransaction();
-                $count = $this->table->save($entity);
-                if ($count == 0) {
-                    $this->rollback();
-                    throw new ServiceException("Failed to Delete", "failed.entity.delete");
-                }
+                $this->table->delete($id);
                 $this->commit();
                 return $count;
             }
@@ -86,55 +74,51 @@ class EntityService extends AbstractService
                 $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
-        }
-         else {
-            throw new ServiceException("Entity Not Found", "entity.not.found");
+        } else {
+            throw new EntityNotFoundException("Entity Not Found");
         }
     }
 
     public function getEntitys($appUuid = null, $filterArray = array())
     {
-        try {
-            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where (ox_app.id=? or ox_app.uuid=?) and ox_app_entity.isdeleted=?";
-            $queryParams = array($appUuid, $appUuid, 0);
-            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (count($resultSet) == 0) {
-                return array();
-            }
-        } catch (Exception $e) {
-            throw $e;
-        }
+        $query = "SELECT ox_app_entity.* 
+                    from ox_app_entity 
+                    left join ox_app on ox_app.id=ox_app_entity.app_id 
+                    where (ox_app.id=? or ox_app.uuid=?)";
+        $queryParams = array($appUuid, $appUuid);
+        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         return $resultSet;
     }
 
     public function getEntity($id, $appId = null)
     {
-        try {
-            $where = "";
-            $queryParams = [];
-            if($appId){
-                $where .= is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ?";
-                $where .= " AND ";
-                $queryParams[] = $appId;
-            }
-            $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
-            $where .= "AND ox_app_entity.isdeleted = 0";
-            $query = "select ox_app_entity.* from ox_app_entity left join ox_app on ox_app.id=ox_app_entity.app_id where $where";
-            $queryParams[] = $id;
-            $this->logger->info("STATEMENT $query".print_r($queryParams,true));
-            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            if (count($resultSet) == 0) {
-                throw new EntityNotFoundException("Entity not found for id - $id ".($appId ? " and appId - $appId" : "") );
-            }
-        } catch (Exception $e) {
-            throw $e;
+        $where = "";
+        $queryParams = [];
+        if($appId){
+            $where .= is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ?";
+            $where .= " AND ";
+            $queryParams[] = $appId;
+        }
+        $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
+        $query = "SELECT ox_app_entity.* 
+                    from ox_app_entity 
+                    left join ox_app on ox_app.id=ox_app_entity.app_id 
+                    where $where";
+        $queryParams[] = $id;
+        $this->logger->info("STATEMENT $query".print_r($queryParams,true));
+        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        if (count($resultSet) == 0) {
+            throw new EntityNotFoundException("Entity not found for the App");
         }
         return $resultSet[0];
     }
 
     public function getEntityByName($appId, $entityName)
     {
-        $queryString = "SELECT en.* FROM ox_app_entity AS en INNER JOIN ox_app AS ap ON ap.id = en.app_id WHERE ap.uuid = :appId and en.name = :entityName";
+        $queryString = "SELECT en.* 
+                        FROM ox_app_entity AS en 
+                        INNER JOIN ox_app AS ap ON ap.id = en.app_id 
+                        WHERE ap.uuid = :appId and en.name = :entityName";
         $params = array("entityName" => $entityName, "appId" => $appId);
         $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
         if (count($result) == 0) {
@@ -154,7 +138,7 @@ class EntityService extends AbstractService
                 $insert = "INSERT INTO ox_entity_identifier(`entity_id`,`identifier`) 
                             VALUES (:entityId,:identifier)";
                 $params["identifier"] = $value['identifier'];
-                $result = $this->executeQueryWithBindParameters($insert, $params);
+                $result = $this->executeUpdateWithBindParameters($insert, $params);
             }
             $this->commit();
         }
@@ -178,7 +162,7 @@ class EntityService extends AbstractService
                             INNER JOIN ox_app a on a.id = br.app_id 
                             where a.uuid = :appId and br.name = :bRole)";
                 $params["bRole"] = $value['businessRole'];
-                $result = $this->executeQueryWithBindParameters($insert, $params);
+                $result = $this->executeUpdateWithBindParameters($insert, $params);
             }
             $this->commit();
         }
@@ -188,39 +172,16 @@ class EntityService extends AbstractService
         }
     }
 
-    public function getEntityOfferingOrganization($entityId){
-        $select = "SELECT org_id from ox_org_offering oof 
-                    inner join ox_org_business_role obr on obr.id = oof.org_business_role_id
+    public function getEntityOfferingAccount($entityId){
+        $select = "SELECT account_id from ox_account_offering oof 
+                    inner join ox_account_business_role obr on obr.id = oof.account_business_role_id
                     where oof.entity_id = :entityId";
         $params = ["entityId" => $entityId];
         $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
         if(count($result) > 0){
-            return $result[0]['org_id'];
+            return $result[0]['account_id'];
         }
 
         return null;
-    }
-    public function updateUuid($entityId,$uuid) {
-        try{
-            $this->beginTransaction();
-            $update = "UPDATE ox_app_entity SET uuid=:uuid where id=:entityId";
-            $params = array("uuid" => $uuid,"entityId" => $entityId);
-            $result = $this->executeUpdateWithBindParameters($update, $params);
-            $this->commit();
-        }
-        catch(Exception $e){
-            $this->rollback();
-            throw $e;
-        }
-    }
-
-    public function removeEntityLinkedToApps($appId){
-        $entityRes = $this->getEntitys($appId);
-        if (count($entityRes) > 0) {
-            foreach ($entityRes as $key => $value) {
-                $this->formService->deleteFormsLinkedToApp($appId);
-                $this->deleteEntity($appId,$value['uuid']);
-            }
-        }
     }
 }

@@ -8,7 +8,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
   -
@@ -20,7 +20,7 @@ ox_query:
     ispublic: 1
     created_by: 2
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
   -
@@ -32,7 +32,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
   -
@@ -44,7 +44,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
   -
@@ -56,7 +56,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
   -
@@ -68,7 +68,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
   -
@@ -80,7 +80,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
 
@@ -93,7 +93,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
 
@@ -106,7 +106,7 @@ ox_query:
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
 
@@ -119,6 +119,6 @@ ox_query:
     ispublic: 1
     created_by: 2
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1

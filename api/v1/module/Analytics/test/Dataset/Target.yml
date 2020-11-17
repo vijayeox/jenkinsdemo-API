@@ -12,7 +12,7 @@ ox_target:
     green_workflow_id: 333
     trigger_after: 10
     created_by: 1
-    org_id: 1
+    account_id: 1
     version: 1
     isdeleted: 0
   -
@@ -28,7 +28,7 @@ ox_target:
     green_workflow_id: 666
     trigger_after: 5
     created_by: 1
-    org_id: 1
+    account_id: 1
     version: 1
     isdeleted: 0
   -
@@ -44,6 +44,6 @@ ox_target:
     green_workflow_id: 666
     trigger_after: 5
     created_by: 1
-    org_id: 1
+    account_id: 1
     version: 1
     isdeleted: 0

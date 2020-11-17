@@ -71,7 +71,7 @@ class JobControllerTest extends ControllerTest
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/scheduleJob', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(409);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Job already exists');
     }
@@ -95,8 +95,9 @@ class JobControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/getJob/968247b6-66f9-43e4-b66e-5413e642b7ce', 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(404);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'No records found');
     }
 
     public function testGetJobsList()
@@ -118,9 +119,9 @@ class JobControllerTest extends ControllerTest
         $query = "Select count(id) from ox_job";
         $result = $this->executeQueryTest($query);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $result = $this->executeQueryTest("Select * from ox_job");
-        $this->assertEquals(0, count($result));
+        $this->assertResponseStatusCode(404);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'No records found');
     }
 
     public function testJobServiceCancelJob()
@@ -177,9 +178,8 @@ class JobControllerTest extends ControllerTest
         $newData['jobGroup'] = 'autoRenewalJob';
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJob', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $select = "Select * from ox_job";
-        $job = $this->executeQueryTest($select);
-        $this->assertResponseStatusCode(406);
+        $this->assertResponseStatusCode(404);
+        $this->assertEquals($content['message'], 'No record found');
     }
 
     public function testJobServiceCancelJobId()
@@ -241,10 +241,8 @@ class JobControllerTest extends ControllerTest
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJobId', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertNotEmpty($job);
-        $this->assertResponseStatusCode(406);
-        $this->assertEquals($content['status'], "error");
-        $this->assertEquals($content['message'], "Job Not found");
-        $this->assertEquals($content['errorCode'], 406);
+        $this->assertResponseStatusCode(200);
+        
     }
 
 }

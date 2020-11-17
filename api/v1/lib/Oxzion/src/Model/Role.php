@@ -8,7 +8,7 @@ class Role extends Entity
     protected $data = array(
         'id' => null,
         'name' => null,
-        'org_id' => 0,
+        'account_id' => 0,
         'description' => null,
         'is_system_role' => null,
         'uuid' => null,

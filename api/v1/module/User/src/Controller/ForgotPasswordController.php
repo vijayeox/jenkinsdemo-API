@@ -7,18 +7,17 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ValidationException;
-use Oxzion\ServiceException;
-
+use Exception;
 
 class ForgotPasswordController extends AbstractAPIControllerHelper
 {
 
     private $userService;
-    
+    private $log;
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
+        $this->log = $this->getLogger();
     }
 
     public function forgotPasswordAction()
@@ -27,17 +26,12 @@ class ForgotPasswordController extends AbstractAPIControllerHelper
         $username = $data['username'];
         try {
             $responseData = $this->userService->sendResetPasswordCode($username);
-            if ($responseData === 0) {
-                return $this->getErrorResponse("The username entered does not match your profile username", 404);
-            }
-        }catch (ValidationException $e) {
-                $response = ['data' => $data, 'errors' => $e->getErrors()];
-                return $this->getErrorResponse("We do not have an email on your account", 417, $response);
+            return $this->getSuccessResponseWithData($responseData, 200);
         }catch (Exception $e) {
-            $response = ['data' => $data, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Something went wrong with password reset, please contact your administrator", 500);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);   
         }
-        return $this->getSuccessResponseWithData($responseData, 200);
+        
 
     }
     public function resetPasswordAction()
@@ -50,8 +44,9 @@ class ForgotPasswordController extends AbstractAPIControllerHelper
         }
         try{
             $this->userService->resetPassword($data);
-        }catch(ServiceException $e){
-            return $this->getErrorResponse("The password reset link has expired, please try resetting again", 404);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);   
         }
         return $this->getSuccessResponse("Password reset successful", 200);
         

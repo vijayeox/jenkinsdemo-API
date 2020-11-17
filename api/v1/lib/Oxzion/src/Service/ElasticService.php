@@ -138,20 +138,20 @@ class ElasticService
         return $result['data'];
     }
 
-    public function getQueryResults($orgId, $app_name, $params)
+    public function getQueryResults($accountId, $app_name, $params)
     {
         $this->excludes = [];
         if (isset($params['excludes'])) {
             $this->excludes = $params['excludes'];
         }
-        $result = $this->filterData($orgId, $app_name, $params);
+        $result = $this->filterData($accountId, $app_name, $params);
         return $result;
     }
 
-    public function filterData($orgId, $app_name, $searchconfig)
+    public function filterData($accountId, $app_name, $searchconfig)
     {
         $boolfilter = array();
-        $tmpfilter = $this->getFilters($searchconfig, $orgId);
+        $tmpfilter = $this->getFilters($searchconfig, $accountId);
         
 		if ($tmpfilter) {
 			$boolfilterquery['query']['bool'] = $tmpfilter;
@@ -351,9 +351,9 @@ class ElasticService
 
 
 
-    protected function getFilters($searchconfig, $orgId)
+    protected function getFilters($searchconfig, $accountId)
     {
-        $mustquery['must'][] = ['term' => ['org_id' => $orgId]];
+        $mustquery['must'][] = ['term' => ['account_id' => $accountId]];
         if (!empty($searchconfig['aggregates'])) {
             $aggregates = $searchconfig['aggregates'];
             $mustquery['must'][] = array('exists' => array('field' => $aggregates[key($aggregates)]));

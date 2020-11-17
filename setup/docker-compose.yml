@@ -30,7 +30,7 @@ services:
             - "61613:61613"
             - "1883:1883"
             - "61614:61614"
-            - "3306:3306"
+            - "3307:3306"
             - "9200:9200"
             - "5601:5601"
             - "8000:8000"
@@ -44,6 +44,7 @@ services:
             - ../clients:/app/clients
             - ./mysql:/var/lib/mysql
             - ./configs:/configs
+            - ./services:/services
             - ./esdata:/usr/share/elasticsearch/data:rw
             - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
             - ./kibana.yml:/usr/share/kibana/config/kibana.yml
