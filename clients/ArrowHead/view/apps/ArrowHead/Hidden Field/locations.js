@@ -13,9 +13,11 @@ var getLocationNumber = (data) => {
 };
 
 var locationsClone = [...data.locations];
+var newLocationNumber = getLocationNumber(data);
 var rowValue = {
   ...component.defaultValue[0],
-  locationNum: getLocationNumber(data),
+  locationNum: newLocationNumber,
+  locationBuildingNum: newLocationNumber + "-1",
 };
 locationsClone.push(rowValue);
 value = locationsClone;
