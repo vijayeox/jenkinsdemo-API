@@ -35,7 +35,7 @@ class DispatchProposalDocument extends DispatchDocument {
             $data['csrApprovalAttachments'] = json_decode($data['csrApprovalAttachments'],true);
         }
         if(isset($data['csrmailDocuments'])){
-            $this->getSelectedDocuments($data['csrmailDocuments'],$documents);
+            $documents =$this->getSelectedDocuments($data['csrmailDocuments'],$documents);
         }
         $fileData =array();
         $errorFile = array();

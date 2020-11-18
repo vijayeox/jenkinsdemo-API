@@ -661,21 +661,42 @@
 			"input": false,
 			"tableView": false,
 			"components": [{
+				"label": "HTML",
+				"attrs": [{
+					"attr": "style",
+					"value": "font-size:15px"
+				}],
+				"content": "Select the documents to be mailed:<span style=\"color:red\">*</span>",
+				"refreshOnChange": false,
+				"key": "html1",
+				"type": "htmlelement",
+				"input": false,
+				"tableView": false
+			}, {
+				"label": "Select All",
+				"tableView": false,
+				"customDefaultValue": "value = true;",
+				"key": "selectAll",
+				"type": "checkbox",
+				"input": true,
+				"defaultValue": true
+			}, {
 				"label": "Select the documents to be mailed:",
 				"optionsLabelPosition": "right",
 				"customClass": "selectBox",
+				"hideLabel": true,
 				"tableView": false,
 				"defaultValue": {
-					".": false,
+					"selectAll": true,
 					"": false
 				},
 				"redrawOn": "finalDocuments",
-				"customDefaultValue": "var documents = [];\n\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  value[key] = true;\n  i+=1;\n}\ncomponent.values = documents;\n",
-				"calculateValue": "var documents = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  value[key]= true;\n  i+=1;\n}\ncomponent.values = documents;",
-				"allowCalculateOverride": true,
+				"customDefaultValue": "var documents = [];\nvar i=1;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n",
+				"calculateValue": "var documents = [];\nvar selected = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n\nif(data.selectAll){\n  for(var key in data.finalDocuments){ \n    selected[key] = true;\n  }\n  value = Object.assign({}, selected);\n}\nconsole.log(value);",
 				"validate": {
-					"required": true
+					"minSelectedCount": 1
 				},
+				"minSelectedCountMessage": "Please select the documents to be mailed",
 				"key": "csrmailDocuments",
 				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "selectboxes",
@@ -695,7 +716,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 16,
+	"_vid": 21,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -712,6 +733,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-11-12T16:01:10.177Z",
+	"modified": "2020-11-18T10:18:09.290Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
