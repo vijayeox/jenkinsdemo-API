@@ -111,21 +111,29 @@ class FormService extends AbstractService
     public function deleteForm($formUuid)
     {
         $this->logger->info("EXECUTING DELETE FORM");
-        $this->beginTransaction();
-        $count = 0;
+
+        $obj = $this->table->getByUuid($formUuid, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $originalArray = $obj->toArray();
+        $form = new Form();
+        $originalArray['isdeleted'] = 1;
+        $form->exchangeArray($originalArray);
         try {
-            $count = $this->table->delete($this->getIdFromUuid('ox_form', $formUuid), []);
+            $this->beginTransaction();
+            $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        
         return $count;
     }
 
@@ -143,7 +151,7 @@ class FormService extends AbstractService
             $query = "select f.name, e.uuid as entity_id, f.uuid as form_id from 
                       ox_form as f inner join ox_app_entity as e on e.id = f.entity_id
                       inner join ox_app as app on app.id = f.app_id
-                      $where";
+                      $where and f.isdeleted=0";
             $response = array();
             $response['data'] = $this->executeQueryWithBindParameters($query, $params)->toArray();
             return $response;
@@ -157,8 +165,8 @@ class FormService extends AbstractService
     {
         $this->logger->info("EXECUTING GET FORM");
         try{
-            $queryString = "Select name, app_id, uuid from ox_form where uuid=?";
-            $queryParams = array($uuid);
+            $queryString = "Select name, app_id, uuid from ox_form where uuid=? and isdeleted=?";
+            $queryParams = array($uuid, 0);
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             if (count($resultSet)==0) {
                 return 0;
@@ -186,7 +194,7 @@ class FormService extends AbstractService
                  left join ox_activity a on a.id = af.form_id
                  inner join ox_workflow_deployment wd on wd.form_id = f.id
                  inner join ox_workflow w on wd.workflow_id = w.id
-                 where f.uuid=:formId and wd.latest=1";
+                 where f.uuid=:formId and wd.latest=1 and f.isdeleted=0";
         $params = array("formId" => $formId);
         $this->logger->info("Executing query - $select with params - ".json_encode($params));
         $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
@@ -308,5 +316,15 @@ class FormService extends AbstractService
                     return 0;
                 }
             }            
+    }
+
+    public function deleteFormsLinkedToApp($appId){
+        $formsRes = $this->getForms($appId);
+        if (count($formsRes) > 0) {
+            foreach ($formsRes['data'] as $key => $value) {
+                $this->logger->info("FORM ID FOR DELETION---".print_r($value['form_id'],true));
+                $this->deleteForm($value['form_id']);
+            }
+        }
     }
 }

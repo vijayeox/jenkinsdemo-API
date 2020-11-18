@@ -27,7 +27,6 @@ class CRMCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('crmaddcontactcallback');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['user_id'], $data['user_id']);
         $this->assertEquals($content['data']['first_name'], $data['firstName']);
         $this->assertEquals($content['data']['last_name'], $data['lastName']);
         $this->assertEquals($content['data']['phone_1'], $data['phones'][0]);

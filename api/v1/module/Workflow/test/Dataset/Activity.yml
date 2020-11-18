@@ -1,6 +1,6 @@
 ox_file:
   - id: 15
-    org_id: 1
+    account_id: 1
     data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30", "expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","credit_card_type" : "credit","email" : "bharat@gmail.com", "padi_number" : "22233"}'
     uuid: "ee3d0c68-98c9-11e9-adc5-308d99c914ca"
     date_created: "2019-06-25 00:00:00"
@@ -12,12 +12,12 @@ ox_workflow_instance:
     workflow_deployment_id: 3
     process_instance_id: "de20b5c5-0124-11ea-a8a0-22e8105c07fe"
     app_id: 99
-    org_id: 1
+    account_id: 1
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
     file_id: 15
-    start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
+    start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11","email" : "bharat@gmail.com"}'
 ox_activity_instance:
   - id: 5
     activity_id: 3
@@ -26,5 +26,5 @@ ox_activity_instance:
     start_data: '{"firstname":"Sadhitha","product":"","fax" : "", "additionalInsured": [{"firstname":"Shwetha","city":"","age" : ""}]}'
     status: "In Progress"
     start_date: "2019-06-26 00:00:00"
-    org_id: 1
+    account_id: 1
 

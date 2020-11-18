@@ -1,21 +1,19 @@
 <?php
 namespace User\Controller;
 
-use Oro\Component\MessageQueue\Transport\Exception\Exception;
-use Oxzion\AccessDeniedException;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Model\User;
 use Oxzion\Model\UserTable;
-use Oxzion\ServiceException;
 use Oxzion\Service\EmailService;
 use Oxzion\Service\UserService;
-use Oxzion\ValidationException;
 use Project\Service\ProjectService;
+use Oxzion\Service\EmployeeService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Ddl\Column\Datetime;
 use Zend\View\Model\JsonModel;
+use Exception;
 
 class UserController extends AbstractApiController
 {
@@ -24,13 +22,14 @@ class UserController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(UserTable $table, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService, ProjectService $projectService)
+    public function __construct(UserTable $table, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService, ProjectService $projectService, EmployeeService $employeeService)
     {
         parent::__construct($table, User::class, EmailService::class);
         $this->setIdentifierName('userId');
         $this->userService = $userService;
         $this->emailService = $emailService;
         $this->projectService = $projectService;
+        $this->employeeService = $employeeService;
     }
 
     /**
@@ -67,24 +66,12 @@ class UserController extends AbstractApiController
     {
         try {
             $params = $this->params()->fromRoute();
-            $count = $this->userService->createUser($params, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            /*
-            PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
-            Not found = 406
-            While this is not exactly not found we don't have a better HTML error code for create.
-             */
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        if (is_string($count)) {
-            $data['uuid'] = $count;
+            $this->userService->createUser($params, $data);
             return $this->getSuccessResponseWithData($data, 201);
-        }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 201);
         /*
     PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
@@ -108,11 +95,11 @@ class UserController extends AbstractApiController
         $params = $this->params()->fromRoute();
         // This API should use the UUID
         try {
-            // $data = $this->table->getByUuid($id,array());
-            $data = $this->userService->getUserByUuid($id);
-            return $this->getUserInfo($data, $params);
+            $userId = $this->userService->getUserByUuid($id);
+            return $this->getUserInfo($userId, $params);
         } catch (Exception $e) {
-            return $this->getErrorResponse("User not found", 404, ['id' => $id]);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -147,11 +134,9 @@ class UserController extends AbstractApiController
         $id = AuthContext::get(AuthConstants::USER_UUID);
         try {
             $result = $this->update($id, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $result;
     }
@@ -166,8 +151,13 @@ class UserController extends AbstractApiController
     public function getList()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $result = $this->userService->getUsers($filterParams, $this->getBaseUrl());
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        try{
+            $result = $this->userService->getUsers($filterParams, $this->getBaseUrl());
+            return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -182,9 +172,10 @@ class UserController extends AbstractApiController
     {
         try {
             $id = $this->params()->fromRoute();
-            $response = $this->userService->deleteUser($id);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+            $this->userService->deleteUser($id);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponse();
     }
@@ -201,14 +192,11 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         try {
-            $response = $this->userService->assignManagerToUser($params['userId'], $params['managerId']);
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found", 404);
-            }
+            $this->employeeService->assignManagerToEmployee($params['userId'], $params['managerId']);
             return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -224,14 +212,11 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         try {
-            $response = $this->userService->removeManagerForUser($params['userId'], $params['managerId']);
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found for id - $id", 404);
-            }
+            $this->employeeService->removeManagerForEmployee($params['userId'], $params['managerId']);
             return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -247,14 +232,11 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         try {
-            $response = $this->userService->addUserToProject($params['userId'], $params['projectId']);
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found for id", 404);
-            }
+            $this->userService->addUserToProject($params['userId'], $params['projectId']);
             return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -262,8 +244,13 @@ class UserController extends AbstractApiController
     {
         $filterParams = array_merge($this->extractPostData(), $this->params()->fromQuery());
         $params = $this->params()->fromRoute();
-        $result = $this->userService->getUsers($filterParams, $this->getBaseUrl(), $params);
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        try{
+            $result = $this->userService->getUsers($filterParams, $this->getBaseUrl(), $params);
+            return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
     /**
      * Remove User from Project API
@@ -279,14 +266,11 @@ class UserController extends AbstractApiController
         $id = $params['userId'];
         $projectId = $params['projectId'];
         try {
-            $response = $this->userService->removeUserFromProject($id, $projectId);
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found for id - $id and projectid - $projectId", 404);
-            }
+            $this->userService->removeUserFromProject($id, $projectId);
             return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -310,19 +294,19 @@ class UserController extends AbstractApiController
                 return $this->getSuccessResponse("Not able to get the BlackListed Apps!");
             }
             return $this->getSuccessResponseWithData($result);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
     /**
-     * Code to searches for list of friends for the logged in user and then searches for all the other people from the organization
+     * Code to searches for list of friends for the logged in user and then searches for all the other people from the account
      * @api
      * @link /user/:userId/usersearch
      * @method userSearch
      * @param $id ID of User
-     * @return Json Array of Friends and Other employees from the organization
+     * @return Json Array of Friends and Other employees from the account
      */
 
     public function userSearchAction()
@@ -330,13 +314,13 @@ class UserController extends AbstractApiController
         $data = $this->extractPostData();
         try {
             $result = $this->userService->getUserBySearchName($data['searchVal']);
-            if ($result == null || empty($result)) {
+            if (empty($result)) {
                 return $this->getErrorResponse("No results found for " . $data['searchVal']);
             }
             return $this->getSuccessResponseWithData($result);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -350,7 +334,7 @@ class UserController extends AbstractApiController
         try {
             $userInfo = array();
             $type = (isset($params['type'])) ? ($params['type']) : 'm';
-            $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : null;
+            $params['accountId'] = isset($params['accountId']) ? $params['accountId'] : null;
             $options = explode('+', $type);
             if (in_array('a', $options)) {
                 $userInfo = $this->userService->getUser($id);
@@ -359,8 +343,8 @@ class UserController extends AbstractApiController
                     unset($options[$pos]);
                 }
             } else {
-                $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : null;
-                $userInfo = $this->userService->getUserWithMinimumDetails($id, $params['orgId']);
+                $params['accountId'] = isset($params['accountId']) ? $params['accountId'] : null;
+                $userInfo = $this->userService->getUserWithMinimumDetails($id, $params['accountId']);
             }
             foreach ($options as $key => $value) {
                 switch ($value) {
@@ -383,10 +367,10 @@ class UserController extends AbstractApiController
                         $userInfo['blackListedApps'] = $this->userService->getAppsWithoutAccessForUser();
                         break;
                     case "pr":
-                        $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id, $params['orgId']);
+                        $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id, $params['accountId']);
                         break;
                     case "role":
-                        $userInfo['role'] = $this->userService->getRolesofUser($userInfo['orgid'], $id);
+                        $userInfo['role'] = $this->userService->getRolesofUser($params['accountIdid'], $id);
                         break;
                 }
             }
@@ -395,12 +379,11 @@ class UserController extends AbstractApiController
                 $icon = $userInfo['icon'];
                 $userInfo['icon'] = $baseUrl . "/user/profile/" . $userInfo["uuid"];
             }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        if (($userInfo == 0) || (empty($userInfo))) {
+        if (empty($userInfo)) {
             return $this->getErrorResponse("User Does not Exist", 404);
         }
         return $this->getSuccessResponseWithData($userInfo);
@@ -410,23 +393,29 @@ class UserController extends AbstractApiController
     {
         $data = $this->extractPostData();
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $userDetail = $this->userService->getUser($userId, true);
-        $oldPassword = md5(sha1($data['old_password']));
-        $newPassword = md5(sha1($data['new_password']));
-        $confirmPassword = md5(sha1($data['confirm_password']));
-        if (($oldPassword == $userDetail['password']) && ($newPassword == $confirmPassword)) {
-            $formData = array('password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
-            $result = $this->update($userDetail['uuid'], $formData);
-            return $this->getSuccessResponse("Password changed successfully!");
-        } else if (($oldPassword != $userDetail['password'])) {
-            $response = ['id' => $userId];
-            return $this->getErrorResponse("Old password is not valid.", 404, $response);
-        } else if (($newPassword != $confirmPassword)) {
-            $response = ['id' => $userId];
-            return $this->getErrorResponse("Confirm password missmatch.", 404, $response);
-        } else {
-            $response = ['id' => $userId];
-            return $this->getErrorResponse("Failed to Update Password.", 404, $response);
+        try{
+            $userDetail = $this->userService->getUser($userId, true);
+            $oldPassword = md5(sha1($data['old_password']));
+            $newPassword = md5(sha1($data['new_password']));
+            $confirmPassword = md5(sha1($data['confirm_password']));
+            if (($oldPassword == $userDetail['password']) && ($newPassword == $confirmPassword)) {
+                $formData = array('password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
+                $result = $this->update($userDetail['uuid'], $formData);
+                return $this->getSuccessResponse("Password changed successfully!");
+                
+            } else if (($oldPassword != $userDetail['password'])) {
+                $response = ['id' => $userId];
+                return $this->getErrorResponse("Old password is not valid.", 404, $response);
+            } else if (($newPassword != $confirmPassword)) {
+                $response = ['id' => $userId];
+                return $this->getErrorResponse("Confirm password missmatch.", 404, $response);
+            } else {
+                $response = ['id' => $userId];
+                return $this->getErrorResponse("Failed to Update Password.", 404, $response);
+            }
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -461,16 +450,14 @@ class UserController extends AbstractApiController
     public function update($id, $data)
     {
         $params = $this->params()->fromRoute();
-        $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : null;
+        $params['accountId'] = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $response = $this->userService->updateUser($id, $data, $params['orgId']);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
+            $this->userService->updateUser($id, $data, $params['accountId']);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($response, 200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
 
     /**
@@ -482,8 +469,13 @@ class UserController extends AbstractApiController
      */
     public function getUserAppsAndPrivilegesAction()
     {
-        $responseData = $this->userService->getUserAppsAndPrivileges();
-        return $this->getSuccessResponseWithData($responseData, 200);
+        try{
+            $responseData = $this->userService->getUserAppsAndPrivileges();
+            return $this->getSuccessResponseWithData($responseData, 200);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     /**
@@ -511,16 +503,25 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $id = $params['userId'];
-        $result = $this->projectService->getProjectsOfUserById($id);
-        return $this->getSuccessResponseWithData($result);
+        try{
+            $result = $this->projectService->getProjectsOfUserById($id);
+            return $this->getSuccessResponseWithData($result);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     public function getUserDetailListAction()
     {
         $params = $this->params()->fromRoute();
-        $result = $this->userService->userProfile($params);
-        $data = $this->getSuccessResponseWithData($result, 200);
-        return $data;
+        try{
+            $result = $this->userService->getUserProfile($params);
+            return $this->getSuccessResponseWithData($result, 200);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
     public function getPolicyTermsAction()

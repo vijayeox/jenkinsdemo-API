@@ -25,15 +25,15 @@ class SearchEngineImpl implements SearchEngine
             $pagesize = (isset($parameters['pagesize'])) ? $parameters['pagesize'] : 25;
             $start = (isset($parameters['start'])) ? $parameters['start'] : 0;
             $index = ($appId) ? $appId : '_all';
-            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
             $body = array();
             if (isset($parameters['type'])) {
                 $body['query']['bool']['filter']['must'] = [
-                    ['term' => ['org_id' => $orgId]],
+                    ['term' => ['account_id' => $accountId]],
                     ['term' => ['type' => $type]],
                 ];
             } else {
-                $body['query']['bool']['filter'] = ['term' => ['org_id' => $orgId]];
+                $body['query']['bool']['filter'] = ['term' => ['account_id' => $accountId]];
             }
             $fieldList = $elasticService->getBoostFields('user');
             $body['query']['bool']['should'] = [

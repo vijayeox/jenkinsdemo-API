@@ -13,9 +13,4 @@ class EmployeeTable extends ModelTable
         $this->tableGateway = $tableGateway;
     }
 
-    public function save(Entity $data)
-    {
-        $data = $data->toArray();
-        return $this->internalSave($data);
-    }
 }

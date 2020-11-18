@@ -6,7 +6,6 @@ use App\Service\ImportService;
 use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
-use Oxzion\ValidationException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Service\UserCacheService;
 use Zend\Db\Adapter\AdapterInterface;
@@ -38,7 +37,7 @@ class CacheController extends AbstractApiController
      * <code>status : "success|error",
      *       data :  {
      * String stored_procedure_name
-     * int: org_id
+     * int: account_id
      * string: app_id
      * string: app_name
      * }
@@ -64,17 +63,10 @@ class CacheController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \n Store Cache - " . print_r($data, true));
         try {
             $count = $this->userCacheService->storeUserCache($appUuid, $data);
-            if ($count == 0) {
-                return $this->getErrorResponse("Failed to store cache", 404, $data);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 201);
     }
 
@@ -87,11 +79,13 @@ class CacheController extends AbstractApiController
           $cacheId = null;
         }
         $this->log->info(__CLASS__ . "-> \n Get Cache - " . print_r($appId, true));
-        $result = $this->userCacheService->getCache($cacheId, $appId, AuthContext::get(AuthConstants::USER_ID));
-        if ($result == 0) {
-            return $this->getSuccessResponseWithData(array());
-        }
-        return $this->getSuccessResponseWithData($result);
+        try{
+            $result = $this->userCacheService->getCache($cacheId, $appId, AuthContext::get(AuthConstants::USER_ID));
+            return $this->getSuccessResponseWithData($result);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
 
     public function cacheDeleteAction()
@@ -99,11 +93,11 @@ class CacheController extends AbstractApiController
         $appId = $this->params()->fromRoute()['appId'];
         try {
             $result = $this->userCacheService->deleteUserCache($appId);
-        } catch (Exception $e) {
-            return $this->getErrorResponse("The cache deletion has failed", 400);
-        }
-        if ($result == 0) {
             return $this->getSuccessResponse("The cache has been successfully deleted");
-        }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 }

@@ -34,8 +34,8 @@ class CommentController extends AbstractApiController
     * @param array $data Array of elements as shown
     * <code> {
     *               id : integer,
-    *               org_id : integer,
-    *               file_id: integer,
+    *               account_id : integer,
+                    file_id: integer,
     *               text : string,
     *               parent : integer,
     *} </code>

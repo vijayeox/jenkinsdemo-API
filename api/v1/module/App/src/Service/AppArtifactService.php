@@ -62,9 +62,8 @@ class AppArtifactService extends AbstractService
             if (UPLOAD_ERR_OK != $fileData['error']) {
                 throw new Exception('File upload failed.');
             }
-            $filePath = $targetDir . $fileData['name'];
-            if (file_exists($filePath)) {
-                throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
+            if (file_exists($targetDir . $fileData['name'])) {
+                FileUtils::deleteFile($fileData['name'],$targetDir);
             }
         }
         //Move/copy the files to destination.
