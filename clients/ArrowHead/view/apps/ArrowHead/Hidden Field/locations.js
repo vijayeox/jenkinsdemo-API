@@ -55,3 +55,41 @@ if (result.length > 0) {
   locationsClone.splice(locationIndex, 0, rowValue);
   value = locationsClone;
 }
+
+// ########################
+// Delete Building Event
+// ########################
+
+var rowInfo = result[0].row;
+var rowIndex = result[0].rowIndex;
+
+var locationsClone = [...data.locations];
+
+locationsClone.splice(rowIndex, 1);
+currentBuildingsSize = locationsClone.filter(
+  (i) => i.locationNum == rowInfo.locationNum
+).length;
+
+value = locationsClone.map((loc) => {
+  if (
+    loc.locationNum == rowInfo.locationNum &&
+    loc.buildingNum > rowInfo.buildingNum
+  ) {
+    return {
+      ...loc,
+      buildingNum: loc.buildingNum - 1,
+      locationBuildingNum: loc.locationNum + "-" + (loc.buildingNum - 1),
+    };
+  } else if (
+    loc.locationNum > rowInfo.locationNum &&
+    currentBuildingsSize == 0
+  ) {
+    return {
+      ...loc,
+      locationNum: loc.locationNum - 1,
+      locationBuildingNum: loc.locationNum - 1 + "-" + loc.buildingNum,
+    };
+  } else {
+    return loc;
+  }
+});
