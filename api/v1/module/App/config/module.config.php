@@ -108,7 +108,7 @@ return [
             'appSetupToOrg' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/install/account/:accountId',
+                    'route' => '/app/:appId/:serviceType/account/:accountId',
                     'constraints' => [
                         'accountId' => UuidUtil::UUID_PATTERN,
                         'appId' => UuidUtil::UUID_PATTERN,
