@@ -15,7 +15,7 @@ content:
                                  type: Update
                                  successMessage: 'Application Successfully Installed'
                                  params:
-                                    url: /app/{{app_uuid}}/install/org/{{uuid}}
+                                    url: /app/{{app_uuid}}/install/account/{{uuid}}
                                     disableAppId: true
                          icon: 'far fa-download'
                          updateOnly: true
@@ -27,7 +27,7 @@ content:
                                  type: Update
                                  successMessage: 'Application Successfully Uninstalled'
                                  params:
-                                    url: /app/{{app_uuid}}/uninstall/org/{{uuid}}
+                                    url: /app/{{app_uuid}}/uninstall/account/{{uuid}}
                                     disableAppId: true
                          icon: 'fas fa-trash-alt'
                          updateOnly: true    
