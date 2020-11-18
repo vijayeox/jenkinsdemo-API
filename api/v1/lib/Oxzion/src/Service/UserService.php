@@ -1265,14 +1265,26 @@ class UserService extends AbstractService
                 $appId = $data['app_id'];
             }
             $from .= " INNER JOIN ox_wf_user_identifier ui ON ui.user_id = u.id";
-            $where .= " AND ui.app_id = :appId AND ui.org_id = :orgId
-                        OR (ui.identifier = :identifier AND ui.identifier_name = :identifierName)";
+            $where .= " AND ui.app_id = :appId AND ui.org_id = :orgId";
+            //Skip identifier condition and only check for name and email on transfer of ownership
+            if(isset($data['CreateNewUser']) && ($data['CreateNewUser'] == true || $data['CreateNewUser'] == "
+                true")){
+                $where .= " ";
+                //unset dynamic flag to prevent creation again
+                unset($data['CreateNewUser']);
+            } else {
+                $where .= " OR (ui.identifier = :identifier AND ui.identifier_name = :identifierName)";
+            }
             $queryParams = array_merge($queryParams, array("appId" => $appId,
-                "orgId" => $orgId,
-                "identifier" => $data[$data['identifier_field']],
-                "identifierName" => $data['identifier_field']));
+                "orgId" => $orgId));
+            if(!isset($data['CreateNewUser']) || !($data['CreateNewUser'] == true || $data['CreateNewUser'] == "
+                true")){
+                $queryParams["identifier"] = $data[$data['identifier_field']];
+                $queryParams["identifierName"] = $data['identifier_field'];
+            }
             $handleUserIdentifier = true;
         }
+
         if (isset($data['date_of_birth'])) {
             $data['date_of_birth'] = date_format(date_create($data['date_of_birth']), "Y-m-d");
         }
