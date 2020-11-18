@@ -1178,7 +1178,7 @@ class UserService extends AbstractService
                             oxa.state,oxa.country,oxa.zip,acct.logo, org.uuid, org.labelfile,
                             org.languagefile,acct.status 
                     from ox_account as acct 
-                    LEFT join ox_organization org on org.id=acct.org_id 
+                    LEFT join ox_organization org on org.id=acct.organization_id 
                     LEFT join ox_address as oxa on oxa.id = org.address_id 
                     LEFT JOIN ox_account_user as uo ON uo.account_id=acct.id
                     LEFT JOIN ox_user as u on u.id = uo.user_id

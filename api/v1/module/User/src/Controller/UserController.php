@@ -381,7 +381,6 @@ class UserController extends AbstractApiController
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            print_r($e->getMessage());exit;
             return $this->exceptionToResponse($e);
         }
         if (empty($userInfo)) {
