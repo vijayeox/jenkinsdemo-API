@@ -761,6 +761,7 @@ class UserService extends AbstractService
         if($activeAccount){
             $result['active_account'] = $activeAccount;
             $result['accountId'] = $activeAccount['accountId'];
+            $result['id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
         $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
