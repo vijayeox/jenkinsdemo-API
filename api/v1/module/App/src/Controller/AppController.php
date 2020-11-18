@@ -254,7 +254,7 @@ class AppController extends AbstractApiController
     /**
      * POST  appSetupToOrg API
      * @api
-     * @link /app/:appId/:serviceType/org/:orgId
+     * @link /app/:appId/:serviceType/account/:accountId
      * @method POST
      * ! Deprecated - Does not look like this api is being used any more, the method that calls the service isnt available.
      * ? Need to check if this can be removed
@@ -268,7 +268,7 @@ class AppController extends AbstractApiController
         $serviceType = $data['serviceType'];
         $this->log->info(__CLASS__ . "-> \n Create App Registry- " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->appService->installAppToOrg($data['appId'],$data['orgId'],$serviceType);
+            $count = $this->appService->installAppToOrg($data['appId'],$data['accountId'],$serviceType);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);

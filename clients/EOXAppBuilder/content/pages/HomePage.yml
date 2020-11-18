@@ -115,6 +115,7 @@ content:
                 actions:
                     -
                         name: Build Application
+                        icon: 'fa fa-pencil-alt'
                         rule: 'true'
                         details:
                             -
@@ -122,6 +123,7 @@ content:
                                 form_id: 1fa0d5c0-b428-499a-a490-37e4349c1060
                     -
                         name: Import Application
+                        icon: 'fa fa-cloud-upload'
                         rule: 'true'
                         details:
                             -
