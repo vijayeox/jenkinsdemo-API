@@ -173,10 +173,9 @@ return [
             'appfile' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/form/:formId/file[/:id]',
+                    'route' => '/app/:appId/file[/:id]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'formId' => UuidUtil::UUID_PATTERN,
                         'id' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
