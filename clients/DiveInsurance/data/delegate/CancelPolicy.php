@@ -3,6 +3,8 @@
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 require_once __DIR__ . "/PolicyDocument.php";
 
@@ -54,6 +56,11 @@ class CancelPolicy extends PolicyDocument
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing Cancel Policy with data- " . json_encode($data));
+        if(isset($data['data'])) {
+            $fileData = json_decode($data['data'],true);
+            unset($data['data']);
+            $data = array_merge($fileData,$data);
+        }
         if (isset($data['cancellationDate'])) {
             $data['cancellationDate'] = "";
         }

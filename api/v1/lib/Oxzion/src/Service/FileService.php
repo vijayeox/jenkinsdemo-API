@@ -64,6 +64,12 @@ class FileService extends AbstractService
             $formId = null;
         }
 
+        if(isset($data['assocId'])) {
+            $assocId = $this->getIdFromUuid('ox_file', $data['assocId']);
+        } else {
+            $assocId = null;
+        }
+
         $data['uuid'] = $uuid = isset($data['uuid']) && UuidUtil::isValidUuid($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
@@ -90,6 +96,7 @@ class FileService extends AbstractService
         $data['form_id'] = $formId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
+        $data['assoc_id'] = $assocId;
         $data['data'] = $jsonData;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File();

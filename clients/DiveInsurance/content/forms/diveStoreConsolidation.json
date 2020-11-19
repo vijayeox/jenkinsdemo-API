@@ -431,6 +431,23 @@
                         "input": true,
                         "tableView": false,
                         "hideOnChildrenHidden": false
+                    }, {
+                        "label": "transfer",
+                        "customDefaultValue": "value = false;",
+                        "key": "transfer",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                    }, {
+                        "label": "iterations",
+                        "customDefaultValue": "value = 1;",
+                        "calculateValue": " ",
+                        "key": "iterations",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
                     }],
                     "width": 4,
                     "offset": 0,
@@ -6541,10 +6558,26 @@
                                         "clearOnRefresh": true,
                                         "selectThreshold": 0.3,
                                         "validate": {
-                                            "required": true,
                                             "customMessage": "Please enter your state."
                                         },
                                         "key": "state",
+                                        "logic": [{
+                                            "name": "REquired",
+                                            "trigger": {
+                                                "type": "javascript",
+                                                "javascript": "if(row.country && row.country == \"United States of America\"){\n  result = true;\n}else{\n  result = false;\n}"
+                                            },
+                                            "actions": [{
+                                                "name": "required",
+                                                "type": "property",
+                                                "property": {
+                                                    "label": "Required",
+                                                    "value": "validate.required",
+                                                    "type": "boolean"
+                                                },
+                                                "state": true
+                                            }]
+                                        }],
                                         "type": "select",
                                         "indexeddb": {
                                             "filter": {}
@@ -6578,10 +6611,26 @@
                                         "tableView": false,
                                         "clearOnHide": false,
                                         "validate": {
-                                            "required": true,
                                             "custom": "if(input && input !== ''){\n  if(input.length <= 12){\n      valid = (input.match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (input.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
                                         },
                                         "key": "zip",
+                                        "logic": [{
+                                            "name": "required",
+                                            "trigger": {
+                                                "type": "javascript",
+                                                "javascript": "if(row.country && row.country == \"United States of America\"){\n  result = true;\n}else{\n  result = false;\n}"
+                                            },
+                                            "actions": [{
+                                                "name": "required",
+                                                "type": "property",
+                                                "property": {
+                                                    "label": "Required",
+                                                    "value": "validate.required",
+                                                    "type": "boolean"
+                                                },
+                                                "state": true
+                                            }]
+                                        }],
                                         "type": "textfield",
                                         "input": true,
                                         "hideOnChildrenHidden": false
@@ -14484,6 +14533,63 @@
             "tableView": false,
             "protected": true,
             "persistent": false
+        }, {
+            "title": "   ",
+            "theme": "primary",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+                "previous": true,
+                "cancel": true,
+                "next": true
+            },
+            "collapsible": false,
+            "key": "panel1",
+            "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+            "type": "panel",
+            "label": "   ",
+            "input": false,
+            "tableView": false,
+            "components": [{
+                "label": "HTML",
+                "attrs": [{
+                    "attr": "style",
+                    "value": "font-size:15px"
+                }],
+                "content": "Select the documents to be mailed:<span style=\"color:red\">*</span>",
+                "refreshOnChange": false,
+                "key": "html1",
+                "type": "htmlelement",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Select All",
+                "tableView": false,
+                "defaultValue": true,
+                "key": "selectAll",
+                "type": "checkbox",
+                "input": true
+            }, {
+                "label": "Select the documents to be mailed:",
+                "optionsLabelPosition": "right",
+                "hideLabel": true,
+                "tableView": false,
+                "defaultValue": {
+                    ".": false,
+                    "": false
+                },
+                "redrawOn": "quoteDocuments",
+                "customDefaultValue": "var documents = [];\nvar i=0;\nfor(var key in data.quoteDocuments){\n  documents[i] = {label : data.quoteDocuments[key].substring(data.quoteDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;",
+                "calculateValue": "var documents = [];\nvar selected = [];\nvar i=0;\nfor(var key in data.quoteDocuments){\n  documents[i] = {label : data.quoteDocuments[key].substring(data.quoteDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\nif(data.selectAll){\n  for(var key in data.quoteDocuments){\n    selected[key] = true;\n  }\n  value = Object.assign({}, selected);\n  \n}\nconsole.log(value);",
+                "validate": {
+                    "minSelectedCount": 1
+                },
+                "minSelectedCountMessage": "Please select the documents to be mailed",
+                "key": "csrmailDocuments",
+                "customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+                "type": "selectboxes",
+                "input": true,
+                "inputType": "checkbox"
+            }]
         }]
     }, {
         "input": true,
@@ -14660,7 +14766,7 @@
         "input": false
     }],
     "revisions": "current",
-    "_vid": 135,
+    "_vid": 161,
     "title": "diveStoreConsolidation3",
     "display": "wizard",
     "access": [{
@@ -14678,6 +14784,6 @@
     "path": "divestoreconsolidation3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-07-28T11:29:44.022Z",
-    "modified": "2020-11-06T11:25:09.518Z",
+    "modified": "2020-11-19T03:43:39.331Z",
     "machineName": "testdivehub:diveStoreConsolidation3"
 }

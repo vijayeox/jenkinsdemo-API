@@ -1301,13 +1301,14 @@
             "next": true
         },
         "collapsible": false,
-        "tableView": false,
         "key": "coveragePage",
         "properties": {
             "commands": "[{\"command\" : \"delegate\", \"delegate\" : \"RateCard\"}]"
         },
+        "nextPage": "if (data.amount && data.amount != 0 && data.amount != null && data.amount != \"\" && data.amount != \"null\") {\n  next = \"page4\";\n} else {\n  next = \"coveragePage\";\n}",
         "type": "panel",
         "label": "Coverage",
+        "tableView": false,
         "components": [{
             "key": "page3Panel3",
             "input": false,
@@ -2640,6 +2641,19 @@
                     "key": "finalAmount",
                     "type": "hidden",
                     "input": true,
+                    "tableView": false
+                }, {
+                    "label": "HTML",
+                    "attrs": [{
+                        "attr": "style",
+                        "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
+                    }],
+                    "content": "Invalid amount.Please try again later.",
+                    "refreshOnChange": false,
+                    "key": "html11",
+                    "customConditional": "if(data.amount == 0 && data.careerCoverage != \"\"){\n  show = true;\n}else{\n  show = false;\n}\n  ",
+                    "type": "htmlelement",
+                    "input": false,
                     "tableView": false
                 }],
                 "tableView": false,
@@ -5009,7 +5023,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 612,
+    "_vid": 616,
     "title": "CSR Initiates - IPL",
     "display": "wizard",
     "access": [{
@@ -5030,6 +5044,6 @@
     "path": "csrinitiatesipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-10T05:45:55.432Z",
-    "modified": "2020-11-10T08:27:24.034Z",
+    "modified": "2020-11-13T08:52:49.766Z",
     "machineName": "testdivehub:csrInitiates"
 }

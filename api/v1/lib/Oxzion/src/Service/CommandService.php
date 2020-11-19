@@ -167,6 +167,10 @@ class CommandService extends AbstractService
                 $this->logger->info("START FORM");
                 return $this->getStartForm($data);
                 break;
+            case 'register_user':
+                $this->logger->info("START FORM");
+                return $this->registerUser($data);
+                break;
             case 'verify_user':
                 $this->logger->info("Verify User");
                 return $this->verifyUser($data);
@@ -685,6 +689,18 @@ class CommandService extends AbstractService
         if(isset($data['workflowInstanceId']) && isset($data['activityInstanceId'])){
             $result = $this->workflowInstanceService->getActivityInstanceForm($data); 
             return $result;   
+        }
+    }
+
+    //Register a new user
+    protected function registerUser(&$data) {
+        $this->logger->info("Register User");
+        try{
+            $result = $this->userService->checkAndCreateUser(array(), $data, true);
+            return $result;
+        } catch(Exception $e) {
+            $this->logger->info("Register User Exception" . print_r($e->getMessage(), true));
+            throw $e;
         }
     }
 }
