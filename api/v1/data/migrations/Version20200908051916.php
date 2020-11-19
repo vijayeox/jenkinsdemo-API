@@ -45,6 +45,8 @@ final class Version20200908051916 extends AbstractMigration
         //user_role
         $this->addSql("ALTER TABLE ox_user_role ADD COLUMN `account_user_id` INT(32),
                         ADD CONSTRAINT FOREIGN KEY (`account_user_id`) REFERENCES ox_account_user(`id`)");
+        $this->addSql("ALTER TABLE ox_user_role DROP FOREIGN KEY app_role;");
+        $this->addSql("ALTER TABLE ox_user_role DROP FOREIGN KEY app_user;");
         $this->addSql("ALTER TABLE ox_user_role DROP INDEX uniq_id");
         $this->addSql("UPDATE ox_user_role 
                         inner join ox_user u on ox_user_role.user_id = u.id
