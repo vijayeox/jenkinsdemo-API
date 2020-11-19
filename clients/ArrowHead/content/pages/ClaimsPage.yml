@@ -36,15 +36,27 @@ content:
                                 wrapStyle:
                                     height: "90%"                            
                                 actions:
-                                     -
-                                         name: Edit
-                                         rule: "true"
-                                         details:
-                                             -
+                                    -
+                                        name: Edit
+                                        rule: "true"
+                                        details:
+                                            -
                                                 type: Form
                                                 form_id: 055cdece-c75c-4d33-b32c-800e05421406
                                                 fileId: '{{uuid}}'
-                                         icon: 'far fa-pencil-alt'
+                                        icon: 'far fa-pencil-alt'
+                                    -
+                                        name: Delete
+                                        rule: "profile.privileges.MANAGE_CLAIMS_DELETE == true"
+                                        confirmationMessage: "Are you sure you want to delete the record?  &#13;&#10; This cannot be undone."
+                                        updateOnly: true      
+                                        details:
+                                            -
+                                                type: Update
+                                                method: "DELETE"
+                                                params:
+                                                    url: file/{{uuid}}
+                                        icon: 'far fa-trash-alt'
                                 columnConfig:
                                     -
                                         title: Named Insured
