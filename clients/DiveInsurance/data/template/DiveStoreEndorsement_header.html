@@ -17,7 +17,7 @@
               vars[temp_var[0]] = unescape(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier','business_padi','dba','property_carrier','property_policy_id'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','liability_policy_id','address1','address2','state_in_short','update_date','business_name','liability_carrier','business_padi','dba','property_carrier','property_policy_id','lossPayeeChanges'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -53,6 +53,9 @@
         document.getElementById("liabilityCoverages").style.display = "block";
       }
       if(vars['propertyChanges'] == true || vars['propertyChanges'] == 'true'){
+        document.getElementById("propertyCoverages").style.display = "block";
+      }
+      if(vars['lossPayeeChanges'] == true || vars['lossPayeeChanges'] == 'true'){
         document.getElementById("propertyCoverages").style.display = "block";
       }
       agentInfo();
