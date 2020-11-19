@@ -28,7 +28,7 @@ privilege:
         permission: 7
     -
         name: MANAGE_POLICY_APPLICATION
-        permission: 7
+        permission: 15
     -
         name: MANAGE_CLAIMS
         permission: 15
@@ -52,7 +52,7 @@ role:
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
-                permission: 7
+                permission: 15
             -
                 privilege_name: MANAGE_CLAIMS
                 permission: 15

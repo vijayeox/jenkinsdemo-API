@@ -9,6 +9,10 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   overflow: visible !important;
 }
 
+.swal2-title{
+  white-space: pre-line;
+}
+
 .swal2-icon.swal2-warning::before {
   content: unset;
 }
