@@ -1,10 +1,10 @@
-name: 'Organization Installer'
-description: 'Shows a list of Organizations to install the Application'
+name: 'Account Installer'
+description: 'Shows a list of Accounts to install the Application'
 content:
         -
             type: List
             content:
-                route: 'organization'
+                route: 'account'
                 disableAppId: true
                 actions:
                      -
