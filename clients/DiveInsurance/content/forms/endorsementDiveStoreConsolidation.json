@@ -5810,6 +5810,7 @@
                                     "value": "no",
                                     "shortcut": ""
                                 }],
+                                "clearOnHide": false,
                                 "validate": {
                                     "required": true
                                 },
@@ -5882,7 +5883,7 @@
                                                     "label": "Furniture, fixtures and equipment",
                                                     "prefix": "$",
                                                     "mask": false,
-                                                    "spellcheck": true,
+                                                    "spellcheck": false,
                                                     "tableView": true,
                                                     "delimiter": true,
                                                     "requireDecimal": false,
@@ -15741,7 +15742,7 @@
         "lockKey": true
     }],
     "revisions": "original",
-    "_vid": 123,
+    "_vid": 125,
     "title": "diveStoreEndorsement3",
     "display": "wizard",
     "access": [{
@@ -15759,6 +15760,6 @@
     "path": "divestoreendorsement3",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-08-03T07:30:50.996Z",
-    "modified": "2020-11-18T14:12:53.186Z",
+    "modified": "2020-11-19T07:35:27.735Z",
     "machineName": "testdivehub:diveStoreEndorsement3"
 }
