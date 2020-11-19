@@ -1835,6 +1835,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 unset($previousAddLoc[$key][$key1]);
                             }
                         }
+                        foreach ($addLocRequired as $key1 => $val1) {
+                            if (!array_key_exists($val1, $previousAddLoc[$key])) {
+                                $previousAddLoc[$key][$val1] = "";
+                            }
+                        }
+                        ksort($previousAddLoc[$key]);
                     }
                 } else {
                     $previousAddLoc = array();
@@ -1855,6 +1861,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 unset($addLoc[$key][$key1]);
                             }
                         }
+                        foreach ($addLocRequired as $val1) {
+                            if (!array_key_exists($val1, $addLoc[$key])) {
+                                $addLoc[$key][$val1] = "";
+                            }
+                        }
+                        ksort($addLoc[$key]);
                     }
                 } else {
                     $addLoc = array();
