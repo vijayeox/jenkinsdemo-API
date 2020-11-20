@@ -37,7 +37,10 @@ routes {
             ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser"]],
             ['from':'activemq:topic:FILE_ADDED', 'to':["${callback.URL}/fileindexer"]],
             ['from':'activemq:topic:FILE_UPDATED', 'to':["${callback.URL}/fileindexer"]],
-            ['from':'activemq:topic:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]]
+            ['from':'activemq:topic:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]],
+            ['from':'activemq:topic:CHAT_NOTIFICATION_CREATED', 'to':["${callback.URL}/callback/chat/createbot"]],
+            ['from':'activemq:topic:CHAT_NOTIFICATION_UPDATED', 'to':["${callback.URL}/callback/chat/updatebot"]],
+            ['from':'activemq:topic:CHAT_APPBOT_NOTIFICATION', 'to':["${callback.URL}/callback/chat/appbotnotification"]]
             // ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}"]],
             // ['from':'activemq:topic:USER_DELETED', 'to':["${callback.URL}"]]
     ]
