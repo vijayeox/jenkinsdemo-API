@@ -165,6 +165,11 @@ class AccountService extends AbstractService
             AuthContext::put(AuthConstants::REGISTRATION, TRUE);
             $this->createAccount($params, NULL);
             $data['accountId'] = $params['uuid'];
+            $this->setupBusinessRole($data,$data['accountId'],$this->getUuidFromId('ox_app',$appId));
+            $this->roleService->createRolesByBusinessRole($data['accountId'],$appId);
+            $user = $this->getContactUserForAccount($data['accountId']);
+            $this->userService->addAppRolesToUser($user['accountUserId'],$appId);
+
             $this->addIdentifierForAccount($appId, $params);
             $this->commit();
             
@@ -184,24 +189,29 @@ class AccountService extends AbstractService
         return $appId;
     }
 
-    private function setupBusinessOfferings(&$params){
-        if (!isset($params['app_id']) || !isset($params['businessOffering'])){
+    public function removeBusinessOfferings($accountId){
+        $accountId = $this->getIdFromUuid('ox_account',$accountId);
+        $query = "DELETE oxaf, oxbr FROM ox_account_offering oxaf inner join ox_account_business_role oxbr on oxbr.id = oxaf.account_business_role_id where oxbr.account_id = :accountId";
+        $params = ["accountId" => $accountId];
+        $this->executeUpdateWithBindParameters($query, $params);     
+    }
+
+    public function setupBusinessOfferings($params,$accountId,$appId){
+        if (!isset($appId) || !isset($params['businessOffering'])){
             return;
         }
-        $appId = $params['app_id'];
         $offerings = $params['businessOffering'];
-        $params['business_role_id'] = array();
+        $response = array();
+        $response['businessRole'] = array();
         foreach ($offerings as $offering) {
-            $offering['app_id'] = $appId;
-            $offering['id'] = $params['id'];
-            $this->setupBusinessRole($offering);
-            if(isset($appId) && isset($offering['account_business_role_id']) && count($offering['account_business_role_id']) > 0){
-                $acctBusinessRoleId = $offering['account_business_role_id'][0];
+            $result = $this->setupBusinessRole($offering,$accountId,$appId);
+            if(isset($appId) && isset($result['account_business_role_id']) && count($result['account_business_role_id']) > 0){
+                $acctBusinessRoleId = $result['account_business_role_id'][0];
                 $this->setupAcctOffering($appId, $acctBusinessRoleId, $offering['entity']);
-                $params['business_role_id'][] = $offering['business_role_id'][0];
+                $response['businessRole'][] = $offering['businessRole'];
             }
         }
-        
+        return $response;        
     }
 
     private function setupAcctOffering($appId, $acctBusinessRoleId, $offerings){
@@ -221,13 +231,14 @@ class AccountService extends AbstractService
         }
         
     }
-    private function setupBusinessRole(&$params){
-        if (!isset($params['app_id']) || !isset($params['businessRole'])){
+    private function setupBusinessRole($params,$accountId,$appId){
+        $accountId = $this->getIdFromUuid('ox_account',$accountId);
+        $appId = $this->getIdFromUuid('ox_app',$appId);
+        if (!isset($appId) || !isset($params['businessRole'])){
             return;
         }
-        $appId = $this->getAppId($params['app_id']);
         $query = "delete from ox_account_business_role where account_id = :accountId";
-        $queryParams = ["accountId" => $params['id']];
+        $queryParams = ["accountId" => $accountId];
         $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
         if(is_string($params['businessRole'])){
             $businessRole = json_decode($params['businessRole'], true);
@@ -247,19 +258,21 @@ class AccountService extends AbstractService
         }
         $bRole .=")";
         $query = "INSERT INTO ox_account_business_role (account_id, business_role_id)
-                    SELECT ".$params['id'].", id from ox_business_role 
+                    SELECT ".$accountId.", id from ox_business_role 
                     WHERE app_id = :appId and name in $bRole";
         $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
         $this->executeUpdateWithBindParameters($query, $queryParams);
         $query = "SELECT id, business_role_id from ox_account_business_role where account_id = :accountId";
-        $queryParams = ["accountId" => $params['id']];
+        $queryParams = ["accountId" => $accountId];
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        $params['business_role_id'] = array();
-        $params['account_business_role_id'] = array();
+        $response = array();
+        $response['business_role_id'] = array();
+        $response['account_business_role_id'] = array();
         foreach ($result as $value) {
-            $params['business_role_id'][] = $value['business_role_id'];
-            $params['account_business_role_id'][] = $value['id'];
+            $response['business_role_id'][] = $value['business_role_id'];
+            $response['account_business_role_id'][] = $value['id'];
         }
+        return $response;
     }
     private function addIdentifierForAccount($appId, $params){
         if ($appId && isset($params['identifier_field'])) {
@@ -282,14 +295,11 @@ class AccountService extends AbstractService
         $temp = $form->getGenerated(true);
         $data['id'] = $temp['id'];
         $data['uuid'] = $temp['uuid'];
-        $this->setupBusinessRole($data);
         $defaultRoles = true;
-        if(isset($data['business_role_id'])){
+        if(isset($data['businessOffering'])){
             $defaultRoles = false;
         }
-        $this->setupBusinessOfferings($data);
         $userId = $this->setupBasicAccount($data, $data['contact'], $data['preferences'], $defaultRoles);
-        unset($data['business_role_id']);
         if (isset($userId)) {
             $userId = $this->getIdFromUuid('ox_user', $userId);
             $data['contact']['id'] = $userId;
@@ -349,7 +359,7 @@ class AccountService extends AbstractService
     private function setupBasicAccount($account, $contactPerson, $accountPreferences, $defaultRoles)
     {
         // adding basic roles
-        $returnArray['roles'] = $this->roleService->createBasicRoles($account['id'], isset($account['business_role_id']) ? $account['business_role_id'] : NULL, $defaultRoles);
+        $returnArray['roles'] = $this->roleService->createBasicRoles($account['id']);
         // adding a user
         $returnArray['user'] = $this->userService->createAdminForAccount($account, $contactPerson, $accountPreferences);
         return $returnArray['user'];
@@ -361,8 +371,8 @@ class AccountService extends AbstractService
             try {
                 $this->updateAccount($accountData['uuid'], $accountData, null);
                 return;
-            } catch (ServiceException $e) {
-                if ($e->getMessageCode() != 'account.not.found') {
+            }catch (Exception $e) {
+                if (!$e instanceof EntityNotFoundException) {
                     throw $e;
                 }
             }
@@ -382,10 +392,6 @@ class AccountService extends AbstractService
      */
     public function updateAccount($id, &$data, $files = null)
     {
-        $obj = $this->table->getByUuid($id, array());
-        if (is_null($obj)) {
-            throw new ServiceException("Entity not found for UUID", "account.not.found");
-        }
         if (isset($data['contactid'])) {
             $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
         }
@@ -394,14 +400,16 @@ class AccountService extends AbstractService
         }
         
         $form = new Account($this->table);
-        $changedArray = array_merge($obj->toArray(), $data);
-        if (isset($changedArray['organization_id'])) {
-            $this->organizationService->updateOrganization($changedArray['organization_id'],$data);
+        $form->loadByUuid($id);
+        $organizationId = $form->getProperty('organization_id');
+        $organizationOldName = $form->getProperty('name');
+        if (isset($organizationId)) {
+            $this->organizationService->updateOrganization($organizationId,$data);
         }
+        $changedArray = $data;
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
-        $form->assign($changedArray);
-        
+        $form->assign($changedArray);       
         try {
             $this->beginTransaction();
             $form->save();
@@ -413,11 +421,11 @@ class AccountService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        if ($obj->name != $data['name']) {
-            $this->messageProducer->sendTopic(json_encode(array('new_accountName' => $data['name'], 'old_accountName' => $obj->name, 'status' => $form->status)), 'ACCOUNT_UPDATED');
+        if ($organizationOldName != $data['name']) {
+            $this->messageProducer->sendTopic(json_encode(array('new_accountName' => $data['name'], 'old_accountName' => $organizationOldName, 'status' => $form->status)), 'ACCOUNT_UPDATED');
         }
         if ($form->status == 'InActive') {
-            $this->messageProducer->sendTopic(json_encode(array('accountName' => $obj->name, 'status' => $form->status)), 'ACCOUNT_DELETED');
+            $this->messageProducer->sendTopic(json_encode(array('accountName' => $organizationOldName, 'status' => $form->status)), 'ACCOUNT_DELETED');
         }
     }
 

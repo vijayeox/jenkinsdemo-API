@@ -13,6 +13,7 @@ use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
 use Zend\Db\Sql\Expression;
 use Exception;
+use Oxzion\Messaging\MessageProducer;
 
 /**
  * Comment Controller
@@ -23,14 +24,21 @@ class CommentService extends AbstractService
     * @var CommentService Instance of Comment Service
     */
     private $commentService;
+    private $messageProducer;
     /**
     * @ignore __construct
     */
 
-    public function __construct($config, $dbAdapter, CommentTable $table)
+    public function setMessageProducer($messageProducer)
+    {
+        $this->messageProducer = $messageProducer;
+    }
+
+    public function __construct($config, $dbAdapter, CommentTable $table, MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->messageProducer = $messageProducer;
     }
 
     public function createComment($data, $fileId)
@@ -64,6 +72,7 @@ class CommentService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
+            $this->messageProducer->sendTopic(json_encode(array('message' => $data['text'], 'fileId' => $fileId, 'from' => AuthContext::get(AuthConstants::USERNAME))), 'CHAT_APPBOT_NOTIFICATION');
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();

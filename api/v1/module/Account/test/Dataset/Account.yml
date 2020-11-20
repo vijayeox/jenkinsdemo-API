@@ -63,7 +63,7 @@ ox_account:
   -
         id: 4
         name: 'Test Organization'
-        uuid: 'b6499a34-c100-4e41-bece-5822adca3mnc'
+        uuid: 'b6499a34-c100-4e41-bece-5822adca3abc'
         status: 'Inactive'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
         contactid: 2

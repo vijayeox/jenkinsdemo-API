@@ -387,7 +387,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT id from ox_app where uuid = '" . $appUuid . "'";
         $appId = $this->executeQueryTest($query);
         $appId = $appId[0]['id'];
-        $query = "SELECT count(name),status,uuid,id from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $query = "SELECT count(name),status,uuid,id from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid,id";
         $account = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count from ox_app_registry where app_id = '" . $appId . "'";
         $appRegistryResult = $this->executeQueryTest($query);
@@ -612,7 +612,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid";
         $account = $this->executeQueryTest($query);
         $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
@@ -660,7 +660,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appdata[0]['name'], $appName);
         $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid";
         $account = $this->executeQueryTest($query);
         $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
@@ -751,7 +751,7 @@ class AppControllerTest extends ControllerTest
         $this->assertNotEmpty($yaml['org']['contact']);
         $this->assertEquals($yaml['org']['preferences'], '{}');
         $this->assertEquals($content['status'], 'success');
-        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid";
         $account = $this->executeQueryTest($query);
         $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
@@ -800,7 +800,7 @@ class AppControllerTest extends ControllerTest
         $queryString = "SELECT name FROM ox_privilege WHERE app_id = '" . $idresult[0]['id'] . "'";
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
-        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid";
         $account = $this->executeQueryTest($query);
         $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $this->assertEquals($privilegearray, $DBprivilege);
@@ -850,7 +850,7 @@ class AppControllerTest extends ControllerTest
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
         $list = "'" . implode("', '", $DBprivilege) . "'";
-        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "'";
+        $query = "SELECT count(name),status,uuid from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid";
         $account = $this->executeQueryTest($query);
         $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
         $this->assertNotEquals($list, 'MANAGE');
@@ -967,7 +967,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT * from ox_role 
                     WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
         $role = $this->executeQueryTest($query);
-        $this->assertEquals(7, count($role));
+        $this->assertEquals(6, count($role));
         $this->assertEquals($yaml['role'][0]['name'], $role[1]['name']);
         $this->assertEquals(null, $role[1]['account_id']);
         $this->assertEquals($businessRole[0]['id'], $role[1]['business_role_id']);
@@ -977,13 +977,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($yaml['role'][1]['name'], $role[5]['name']);
         $this->assertEquals(null, $role[5]['account_id']);
         $this->assertEquals($businessRole[1]['id'], $role[5]['business_role_id']);
-        $this->assertEquals($role[5]['name'], $role[6]['name']);
-        $this->assertEquals($accountId, $role[6]['account_id']);
-        $this->assertEquals($role[5]['business_role_id'], $role[6]['business_role_id']);
         
-        $query = "SELECT rp.* from ox_role_privilege rp 
+        $query = "SELECT rp.*,r.name from ox_role_privilege rp 
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
+
         $this->assertEquals(4, count($rolePrivilege));
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[0]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[0]['permission']);
@@ -1006,18 +1004,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($role[5]['id'], $rolePrivilege[3]['role_id']);
         $this->assertEquals(null, $rolePrivilege[3]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[3]['app_id']);
-
-        $this->assertEquals($yaml['role'][1]['privileges'][0]['privilege_name'], $rolePrivilege[4]['privilege_name']);
-        $this->assertEquals($yaml['role'][1]['privileges'][0]['permission'], $rolePrivilege[4]['permission']);
-        $this->assertEquals($role[6]['id'], $rolePrivilege[4]['role_id']);
-        $this->assertEquals($accountId, $rolePrivilege[4]['account_id']);
-        $this->assertEquals($appId, $rolePrivilege[4]['app_id']);
-        
-        $this->assertEquals($yaml['role'][1]['privileges'][1]['privilege_name'], $rolePrivilege[5]['privilege_name']);
-        $this->assertEquals($yaml['role'][1]['privileges'][1]['permission'], $rolePrivilege[5]['permission']);
-        $this->assertEquals($role[6]['id'], $rolePrivilege[5]['role_id']);
-        $this->assertEquals($accountId, $rolePrivilege[5]['account_id']);
-        $this->assertEquals($appId, $rolePrivilege[5]['app_id']);
 
         $query = "select * from ox_account_business_role where account_id = $accountId";
         $accountBusinessRole = $this->executeQueryTest($query);
