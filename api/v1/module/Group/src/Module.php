@@ -4,7 +4,7 @@ namespace Group;
 
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Service\AccountService;
 use Oxzion\Service\UserService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -36,9 +36,14 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\GroupService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    $orgService = $container->get(OrganizationService::class);
+                    $accoutService = $container->get(AccountService::class);
                     $userService = $container->get(UserService::class);
-                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class), $orgService, $container->get(MessageProducer::class));
+                    return new Service\GroupService($container->get('config'), 
+                                                    $dbAdapter, 
+                                                    $container->get(Model\GroupTable::class), 
+                                                    $accoutService, 
+                                                    $container->get(MessageProducer::class),
+                                                    $userService);
                 },
                 Model\GroupTable::class => function ($container) {
                     $tableGateway = $container->get(Model\GroupTableGateway::class);
@@ -63,7 +68,7 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\GroupTable::class),
                         $container->get(Service\GroupService::class),
                         $container->get(AdapterInterface::class),
-                        $container->get(OrganizationService::class)
+                        $container->get(AccountService::class)
                     );
                 },
                 Controller\GroupLogoController::class => function ($container) {

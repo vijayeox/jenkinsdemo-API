@@ -83,7 +83,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'field3' => 3,
                 'field4' => 4,
@@ -125,7 +125,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
                 'parent_id' => NULL,
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'field1' => 3,
                 'field2' => 4,
@@ -142,7 +142,7 @@ class FileIndexerControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $data['id']);
-        $this->arrayHasKey($content['data']['org_id'],1);
+        $this->arrayHasKey($content['data']['account_id'],1);
         $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
     }
 
@@ -170,7 +170,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'some key' => 'some value ',
             ),
@@ -295,7 +295,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -323,7 +323,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => NULL,
@@ -374,7 +374,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -402,7 +402,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -454,7 +454,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -506,7 +506,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -534,7 +534,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => NULL,

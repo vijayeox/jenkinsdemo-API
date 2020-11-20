@@ -64,4 +64,19 @@ class BusinessRoleService extends AbstractService
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
         return $result;
     }
+
+    public function deleteBusinessRoleBasedOnAppId($appId)
+    {
+        $result = $this->getDataByParams('ox_business_role', array(), array('app_id' => $appId))->toArray();
+        if (count($result) > 0 ) {
+            $deleteQuery = "DELETE oxof, oxbr, br FROM ox_org_offering oxof 
+                            right outer join ox_org_business_role oxbr on oxbr.id = oxof.org_business_role_id 
+                            right outer join ox_business_role br on br.id = oxbr.business_role_id 
+                            right outer join ox_entity_participant_role oepr on oepr.business_role_id = br.id
+                            right outer join ox_app a on a.id = br.app_id 
+                            WHERE a.uuid=:appId";
+            $deleteParams = array('appId' => $appId);
+            $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams);
+        }        
+    }
 }

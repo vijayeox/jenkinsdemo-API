@@ -6,12 +6,8 @@ namespace Workflow\Controller;
  */
 use Exception;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\EntityNotFoundException;
-use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
-use Oxzion\ValidationException;
 use Oxzion\Workflow\Camunda\WorkflowException;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Oxzion\Model\WorkflowInstance;
 use Oxzion\Model\WorkflowInstanceTable;
 use Oxzion\Service\ActivityInstanceService;
@@ -40,24 +36,13 @@ class WorkflowInstanceController extends AbstractApiController
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info(print_r($params, true));
         $this->log->info("executeWorkflow");
-        $this->workflowInstanceService->updateOrganizationContext($params);
+        $this->workflowInstanceService->updateAccountContext($params);
         try {
             $count = $this->workflowInstanceService->startWorkflow($params);
             $this->log->info(WorkflowInstanceController::class . "ExecuteWorkflow Response  - " . print_r($count, true));
-        } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        } catch (EntityNotFoundException $e) {
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Entity Not Found", 404, $response);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Errors", 412, $response);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => "Unexpected error occurred, please contact support"];
-            return $this->getErrorResponse("Errors", 500, $response);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($params, 200);
     }
@@ -66,27 +51,13 @@ class WorkflowInstanceController extends AbstractApiController
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info(print_r($params, true));
-        $this->workflowInstanceService->updateOrganizationContext($params);
+        $this->workflowInstanceService->updateAccountContext($params);
         try {
             $count = $this->workflowInstanceService->submitActivity($params);
             $this->log->info(WorkflowInstanceController::class . "SubmitActivity Response  - " . print_r($count, true));
-        } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        } catch (InvalidParameterException $e) {
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Invalid Parameter", 406, $response);
-        } catch (EntityNotFoundException $e) {
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Entity Not Found", 404, $response);
-        }catch (ServiceException $e) {
+        }catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Errors", 412, $response);
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => "Unexpected error occurred, please contact support"];
-            return $this->getErrorResponse("Errors", 500, $response);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($params, 200);
     }
@@ -96,22 +67,18 @@ class WorkflowInstanceController extends AbstractApiController
         $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info("Post Data- " . print_r(json_encode($data), true));
         try {
-            $response = $this->activityInstanceService->claimActivityInstance($data);
+            $this->activityInstanceService->claimActivityInstance($data);
             $this->log->info("Claim Activity Instance Successful");
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found", 404);
-            }
             return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $this->log->info("Exception at claim Activity Instance-" . $e->getMessage());
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (WorkflowException $e) {
+        }catch (WorkflowException $e) {
             $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
             if ($e->getReason() == 'TaskAlreadyClaimedException') {
                 return $this->getErrorResponse("Task is already claimed", 409);
             }
-            return $this->getErrorResponse($e->getMessage(), 409);
+            return $this->exceptionToResponse($e);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -120,16 +87,12 @@ class WorkflowInstanceController extends AbstractApiController
         $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info("Post Data- " . print_r(json_encode($data), true));
         try {
-            $response = $this->activityInstanceService->unclaimActivityInstance($data);
+            $this->activityInstanceService->unclaimActivityInstance($data);
             $this->log->info("Unclaim Activity Instance Successful");
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found", 404);
-            }
             return $this->getSuccessResponse();
-        } 
-        catch (WorkflowException $e) {
-            $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
-            return $this->getErrorResponse($e->getMessage(), 409);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -138,19 +101,12 @@ class WorkflowInstanceController extends AbstractApiController
         $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info("Post Data- " . print_r(json_encode($data), true));
         try {
-            $response = $this->activityInstanceService->reclaimActivityInstance($data);
+            $this->activityInstanceService->reclaimActivityInstance($data);
             $this->log->info("Reclaim Activity Instance Successful");
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found", 404);
-            }
             return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $this->log->info("Exception at reclaim Activity Instance-" . $e->getMessage());
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (WorkflowException $e) {
-            $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
-            return $this->getErrorResponse($e->getMessage(), 409);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -162,9 +118,6 @@ class WorkflowInstanceController extends AbstractApiController
         if (isset($data['activityInstanceId'])) {
             try {
                 $response = $this->activityInstanceService->getActivityInstanceForm($data);
-                if ($response == 0) {
-                    return $this->getErrorResponse("Entity not found", 404);
-                }
                 return $this->getSuccessResponseWithData($response);
             } catch (ValidationException $e) {
                 $this->log->info("Exception while getting Activity Instance form-" . $e->getMessage());

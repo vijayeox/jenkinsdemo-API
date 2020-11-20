@@ -17,6 +17,7 @@ class Activity extends Entity
         'modified_by'=>null,
         'date_created'=>null,
         'date_modified'=>null,
+        'isdeleted' => 0,
     );
     public function validate()
     {

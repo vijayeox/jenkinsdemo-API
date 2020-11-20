@@ -3,7 +3,7 @@ ox_group:
     id: 1
     uuid: c99ac1b0-90ee-11e9-b683-526af7764f64
     name: "HR Group"
-    org_id: 1
+    account_id: 1
     manager_id: 2
     status: "Active"
     date_created: "2019-03-05 09:57:08"

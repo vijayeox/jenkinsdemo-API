@@ -94,7 +94,7 @@ class AppController extends AbstractApiController
      * int created_by,
      * int modified_by,
      * int isdeleted,
-     * int org_id,
+     * int account_id,
      * string start_options
      * }
      * </code>
@@ -172,6 +172,28 @@ class AppController extends AbstractApiController
         }
     }
 
+        /**
+     * Remove App API
+     * @api
+     * @link /app/:appId/removeapp
+     * @method DELETE
+     * @param $uuid UUID of App to Remove Deployed App
+     * @return array success|failure response
+     */
+    public function removeappAction()
+    {   
+        $uuid = $this->params()->fromRoute()['appId'];
+        $this->log->info(__CLASS__ . "-> Remove Deployed App for ID ${uuid}.");
+        try {
+            $this->appService->removeDeployedApp($uuid);
+            return $this->getSuccessResponse();
+        }
+        catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
+
     /**
      * GET App API
      * @api
@@ -191,7 +213,7 @@ class AppController extends AbstractApiController
      * int created_by,
      * int modified_by,
      * int isdeleted,
-     * int org_id,
+     * int account_id,
      * string start_options
      * }
      * </code>
@@ -232,7 +254,7 @@ class AppController extends AbstractApiController
     /**
      * POST  appSetupToOrg API
      * @api
-     * @link /app/:appId/:serviceType/org/:orgId
+     * @link /app/:appId/:serviceType/account/:accountId
      * @method POST
      * ! Deprecated - Does not look like this api is being used any more, the method that calls the service isnt available.
      * ? Need to check if this can be removed
@@ -246,7 +268,7 @@ class AppController extends AbstractApiController
         $serviceType = $data['serviceType'];
         $this->log->info(__CLASS__ . "-> \n Create App Registry- " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->appService->installAppToOrg($data['appId'],$data['orgId'],$serviceType);
+            $count = $this->appService->installAppToOrg($data['appId'],$data['accountId'],$serviceType);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);

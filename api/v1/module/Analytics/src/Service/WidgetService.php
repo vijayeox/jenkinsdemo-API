@@ -12,7 +12,7 @@ use Oxzion\ValidationException;
 use Oxzion\InsertFailedException;
 use Oxzion\EntityNotFoundException;
 use Ramsey\Uuid\Uuid;
-use Webit\Util\EvalMath\EvalMath;
+use Oxzion\Utils\EvalMath;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class WidgetService extends AbstractService
@@ -42,13 +42,13 @@ class WidgetService extends AbstractService
             $data['expression'] = json_encode($data['expression']);
         }
 
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $widget = new Widget($this->table);
         $widget->assign($data);
-        $widget->setForeignKey('org_id', $orgId);
+        $widget->setForeignKey('account_id', $accountId);
         if (isset($data['visualization_uuid'])) {
-            //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
-            $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $orgId));
+            //TODO: Query visualization with account_id, ispublic and created_by filters to ensure current user has permission to read it.
+            $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('account_id' => $accountId));
             $widget->setForeignKey('visualization_id', $visualizationId);
         }
 
@@ -59,11 +59,11 @@ class WidgetService extends AbstractService
 
             //Insert the queries related to this widget.
             $widgetIdSelectionQuery = '(SELECT w.id FROM ox_widget w 
-                WHERE w.uuid=:widgetUuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by))';
+                WHERE w.uuid=:widgetUuid and w.account_id=:account_id and (w.ispublic=true OR w.created_by=:created_by))';
             $queryIdSelectionQuery = '(SELECT q.id FROM ox_query q 
-                WHERE q.uuid=:queryUuid and q.org_id=:org_id and (q.ispublic=true OR q.created_by=:created_by))';
+                WHERE q.uuid=:queryUuid and q.account_id=:account_id and (q.ispublic=true OR q.created_by=:created_by))';
             $createdBy = AuthContext::get(AuthConstants::USER_ID);
-            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
             $sequence = 0;
             foreach ($data['queries'] as $query) {
                 $queryUuid = $query['uuid'];
@@ -80,7 +80,7 @@ class WidgetService extends AbstractService
                     'sequence' => $sequence,
                     'configuration' => $queryConfiguration,
                     'created_by' => $createdBy,
-                    'org_id' => $orgId,
+                    'account_id' => $accountId,
                 ];
                 $result = $this->executeQueryWithBindParameters($query, $queryParams);
                 if (1 != $result->count()) {
@@ -114,10 +114,10 @@ class WidgetService extends AbstractService
             throw new Exception("UUID mismatch in URL and the request parameter.");
         }
 
-        $query = 'SELECT w.id from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
+        $query = 'SELECT w.id from ox_widget as w where w.uuid=:uuid and w.account_id=:account_id and (w.ispublic=true OR w.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'uuid' => $uuid,
         ];
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
@@ -129,8 +129,8 @@ class WidgetService extends AbstractService
         $widget->loadByUuid($uuid);
 
         if (isset($data['visualization_uuid'])) {
-            //TODO: Query visualization with org_id, ispublic and created_by filters to ensure current user has permission to read it.
-            $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('org_id' => $data['org_id']));
+            //TODO: Query visualization with account_id, ispublic and created_by filters to ensure current user has permission to read it.
+            $visualizationId = $this->getIdFromUuid('ox_visualization', $data['visualization_uuid'], array('account_id' => $data['account_id']));
             $widget->setForeignKey('visualization_id', $visualizationId);
         }
         if (is_array($data['configuration'])) {
@@ -159,14 +159,14 @@ class WidgetService extends AbstractService
                 } else {
                     $queryConfiguration = '';
                 }
-                $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT w.id FROM ox_widget w WHERE uuid=:widgetUuid), (SELECT q.id FROM ox_query q WHERE q.uuid=:queryUuid and q.org_id=:org_id and (q.ispublic=true OR q.created_by=:created_by)), :sequence, :configuration)';
+                $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT w.id FROM ox_widget w WHERE uuid=:widgetUuid), (SELECT q.id FROM ox_query q WHERE q.uuid=:queryUuid and q.account_id=:account_id and (q.ispublic=true OR q.created_by=:created_by)), :sequence, :configuration)';
                 $queryParams = [
                     'widgetUuid' => $data['uuid'],
                     'queryUuid' => $queryUuid,
                     'sequence' => $sequence,
                     'configuration' => $queryConfiguration,
                     'created_by' => AuthContext::get(AuthConstants::USER_ID),
-                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+                    'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
                 ];
                 $result = $this->executeQueryWithBindParameters($query, $queryParams);
                 if (1 != $result->count()) {
@@ -209,10 +209,10 @@ class WidgetService extends AbstractService
 
     public function getWidgetByName($name)
     {
-        $query = 'SELECT w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, IF(w.created_by=:created_by, true, false) AS is_owner, w.version,v.renderer, v.type FROM ox_widget w JOIN ox_visualization v ON w.visualization_id=v.id WHERE w.isdeleted=false AND w.org_id=:org_id AND w.name=:name AND (w.ispublic=true OR w.created_by=:created_by)';
+        $query = 'SELECT w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, IF(w.created_by=:created_by, true, false) AS is_owner, w.version,v.renderer, v.type FROM ox_widget w JOIN ox_visualization v ON w.visualization_id=v.id WHERE w.isdeleted=false AND w.account_id=:account_id AND w.name=:name AND (w.ispublic=true OR w.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'name' => $name,
         ];
         try {
@@ -239,10 +239,10 @@ class WidgetService extends AbstractService
     public function getWidget($uuid, $params)
     {
         $overRides = [];
-        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, w.exclude_overrides, IF(w.created_by=:created_by, true, false) AS is_owner, w.version,v.renderer, v.type, q.uuid AS query_uuid, wq.sequence AS query_sequence, wq.configuration AS query_configuration FROM ox_widget w JOIN ox_visualization v on w.visualization_id=v.id JOIN ox_widget_query wq ON w.id=wq.ox_widget_id JOIN ox_query q ON wq.ox_query_id=q.id WHERE w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid AND (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
+        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, w.exclude_overrides, IF(w.created_by=:created_by, true, false) AS is_owner, w.version,v.renderer, v.type, q.uuid AS query_uuid, wq.sequence AS query_sequence, wq.configuration AS query_configuration FROM ox_widget w JOIN ox_visualization v on w.visualization_id=v.id JOIN ox_widget_query wq ON w.id=wq.ox_widget_id JOIN ox_query q ON wq.ox_query_id=q.id WHERE w.isdeleted=false and w.account_id=:account_id and w.uuid=:uuid AND (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'uuid' => $uuid,
         ];
         try {
@@ -430,9 +430,9 @@ class WidgetService extends AbstractService
         $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
-            $widgetConditions = '(w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+            $widgetConditions = '(w.account_id = ' . AuthContext::get(AuthConstants::ACCOUNT_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
         } else {
-            $widgetConditions = '(w.isdeleted <> 1) AND (w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+            $widgetConditions = '(w.isdeleted <> 1) AND (w.account_id = ' . AuthContext::get(AuthConstants::ACCOUNT_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
         }
         $where .= empty($where) ? "WHERE ${widgetConditions}" : " AND ${widgetConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY w.' . $paginateOptions['sort']) : '';
@@ -472,10 +472,10 @@ class WidgetService extends AbstractService
         }
 
         $widgetUuid = $params['widgetUuid'];
-        $query = 'SELECT w.id, w.name, w.visualization_id, w.ispublic, w.configuration, w.expression from ox_widget as w where w.uuid=:uuid and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by)';
+        $query = 'SELECT w.id, w.name, w.visualization_id, w.ispublic, w.configuration, w.expression from ox_widget as w where w.uuid=:uuid and w.account_id=:account_id and (w.ispublic=true OR w.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'uuid' => $widgetUuid,
         ];
         try {

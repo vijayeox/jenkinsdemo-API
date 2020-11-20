@@ -27,7 +27,7 @@ class AttachmentControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/announcements/";
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/oxzionlogo.png", $tempFolder . "oxzionlogo.png");
         $data = array('type' => 'ANNOUNCEMENT', 'files' => array(array('extension' => 'png', 'uuid' => 'test', 'file_name' => 'oxzionlogo')));
@@ -40,13 +40,13 @@ class AttachmentControllerTest extends ControllerTest
         $_FILES['file']['size'] = 1007;
 
         $this->dispatch('/attachment', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('Attachment');
         $this->assertControllerName(AttachmentController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AttachmentController');
         $this->assertMatchedRouteName('attachment');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -54,7 +54,7 @@ class AttachmentControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/announcements/";
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/oxzionlogo.png", $tempFolder . "oxzionlogo.png");
 
@@ -76,7 +76,7 @@ class AttachmentControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/announcements/";
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__ . "/../files/oxzionlogo.png", $tempFolder . "oxzionlogo.png");
         $data = array('type' => 'ANNOUNCEMENT');

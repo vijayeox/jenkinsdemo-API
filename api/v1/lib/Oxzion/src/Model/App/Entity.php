@@ -2,32 +2,31 @@
 
 namespace Oxzion\Model\App;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity as OxzionEntity;
 use Oxzion\ValidationException;
 
 class Entity extends OxzionEntity
 {
-    protected $data = array(
-        'id' => 0,
-        'uuid' => 0,
-        'start_date_field' => null,
-        'end_date_field' => null,
-        'status_field' => null,
-        'name' => null,
-        'app_id' => 0,
-        'assoc_id' => null,
-        'description'=> null,
-        'override_data' => false,
-        'date_created' => null,
-        'date_modified' => null,
-        'created_by' => null,
-        'modified_by' => null,
-        "ryg_rule" => null
-    );
+    protected static $MODEL = [
+        'id' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
+        'uuid' =>               ['type' => Type::UUID,      'readonly' => FALSE,  'required' => FALSE],
+        'start_date_field' =>   ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'end_date_field' =>     ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'status_field' =>       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'name' =>               ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
+        'app_id' =>             ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
+        'assoc_id' =>           ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'description'=>         ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'override_data' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE, 'value' => FALSE],
+        'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'date_modified' =>      ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'created_by' =>         ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
+        'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
+        'ryg_rule' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
+    ];
     
-    public function validate()
-    {
-        $dataArray = array("name","app_id");
-        $this->validateWithParams($dataArray);
+    public function &getModel() {
+        return self::$MODEL;
     }
 }

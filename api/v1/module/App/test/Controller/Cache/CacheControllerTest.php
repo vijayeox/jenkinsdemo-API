@@ -67,9 +67,9 @@ class CacheControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/eedebfcc-df80-11e9-8a34-2a2ae2dbcce4/deletecache', 'DELETE');
         $this->assertMatchedRouteName('remove_app_cache');
-        $this->assertResponseStatusCode(400);
+        $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], "The cache deletion has failed");
+        $this->assertEquals($content['message'], "Invalid AppId - Cache not deleted");
     }
 }

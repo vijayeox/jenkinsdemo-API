@@ -22,14 +22,14 @@ class UserSessionService extends AbstractService
         $sql = $this->getSqlObject();
         if (count($resultSet) == 0) {
             $insert = $sql->insert('ox_user_session');
-            $insertData = array('user_id' => AuthContext::get(AuthConstants::USER_ID), 'org_id' => AuthContext::get(AuthConstants::ORG_ID), 'data' => $data['data'], 'date_modified' => date('Y-m-d H:i:s'));
+            $insertData = array('user_id' => AuthContext::get(AuthConstants::USER_ID), 'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID), 'data' => $data['data'], 'date_modified' => date('Y-m-d H:i:s'));
             $insert->values($insertData);
             $result = $this->executeUpdate($insert);
         } else {
             $updatedData['data'] = $data['data'];
             $updatedData['date_modified'] = date('Y-m-d H:i:s');
             $update = $sql->update('ox_user_session')->set($updatedData)
-            ->where(array('ox_user_session.user_id' => AuthContext::get(AuthConstants::USER_ID),'ox_user_session.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+            ->where(array('ox_user_session.user_id' => AuthContext::get(AuthConstants::USER_ID),'ox_user_session.account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
             $result = $this->executeUpdate($update);
         }
     }
@@ -40,7 +40,7 @@ class UserSessionService extends AbstractService
         $select = $sql->select();
         $select->from('ox_user_session')
         ->columns(array('data'))
-        ->where(array('user_id' => AuthContext::get(AuthConstants::USER_ID),'org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->where(array('user_id' => AuthContext::get(AuthConstants::USER_ID),'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeQuery($select)->toArray();
         return array_column($result, 'data');
     }

@@ -1,6 +1,7 @@
 import React from "react";
 import JsxParser from "react-jsx-parser";
 import moment from "moment";
+import ParameterHandler from "./ParameterHandler";
 
 class HTMLViewer extends React.Component {
   constructor(props) {
@@ -56,6 +57,68 @@ class HTMLViewer extends React.Component {
       this.setState({ content: this.props.content });
     }
   }
+  isHTML(str) {
+    var a = document.createElement('div');
+    a.innerHTML = str;
+    for (var c = a.childNodes, i = c.length; i--; ) {
+      if (c[i].nodeType == 1) return true; 
+    }
+    return false;
+  }
+  searchAndReplaceParams(content,params){
+    var regex = /\{data\.(.*)?\}/g;
+    let m;
+    var matches=[];
+    do {
+      m = regex.exec(content)
+      if(m){
+        if (m.index === regex.lastIndex) {
+          regex.lastIndex++;
+        }
+        matches.push(m);
+      }
+    } while (m);
+    matches.forEach((match, groupIndex) => {
+      if(params[match[1]] !=undefined && this.isHTML(params[match[1]])){
+        content = content.replace(
+          match[0],
+          params[match[1]]
+          );
+      }
+    });
+    content = this.getXrefFields(content);
+    return content
+  }
+  getXrefFields(content){
+    var regex = /\{file\.(.*)?\}/g;
+    let m;
+    var editContent=content;
+    var matches=[];
+    do {
+      m = regex.exec(content)
+      if(m){
+        if (m.index === regex.lastIndex) {
+          regex.lastIndex++;
+        }
+        matches.push(m);
+      }
+    } while (m);
+    matches.forEach((match, groupIndex) => {
+      var field = match[1].split(':');
+      console.log(field)
+      this.getFileDetails(field[0]).then(response => {
+        if (response.status == "success") {
+            var fileData = response.data;
+            if(field[1] && fileData.data && fileData.data[field[1]]){
+              console.log(fileData.data[field[1]]);
+              console.log(match[0]);
+              content = content.replace(match[0],fileData.data[field[1]]);
+            }
+        }
+      });
+    });
+    return editContent
+  }
 
   render() {
       
@@ -85,13 +148,19 @@ class HTMLViewer extends React.Component {
     return moment(dateTime).format(userDateTimeFomat);
   };
 
+  var fileData = {};
+  for (const [key, value] of Object.entries(this.state.fileData)) {
+    fileData[key] = value;
+  }
+  var content = this.searchAndReplaceParams(this.state.content,fileData);
+  console.log(content);
     return (
       this.state.dataReady && (
         <JsxParser className ={this.props.className}
-          jsx={this.state.content}
+          jsx={content}
           bindings={{
-            data: this.state.fileData ? this.state.fileData : {},
-            item: this.state.fileData ? this.state.fileData : {},
+            data: fileData ? fileData : {},
+            item: fileData ? fileData : {},
             moment: moment,
             formatDate: formatDate,
             formatDateWithoutTimezone: formatDateWithoutTimezone,

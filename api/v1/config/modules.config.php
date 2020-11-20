@@ -23,7 +23,7 @@ return [
     'Project',
     'Group',
     'Analytics',
-    'Organization',
+    'Account',
     'Attachment',
     'App',
     'Search',
