@@ -190,4 +190,19 @@ class ChatCallbackController extends AbstractApiControllerHelper
             return $this->getErrorResponse($e->getMessage(), $e->getCode());
         }
     }
+
+        public function appBotNotificationAction()
+    {
+        $params = $this->extractPostData();
+        $this->log->info("appBotNotification Params- " . json_encode($params));
+        try{
+            $response = $this->chatService->appBotNotification($params);
+            if ($response) {
+                return $this->getSuccessResponseWithData(json_decode($response, true));
+            }
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), $e->getCode());
+        }
+    }
 }

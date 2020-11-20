@@ -56,6 +56,36 @@ return [
                     ],
                 ],
             ],
+            'createbotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/createbot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'createBot',
+                    ],
+                ],
+            ],
+            'updatebotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/updatebot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'updateBot',
+                    ],
+                ],
+            ],
+            'appbotnotification' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/appbotnotification',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'appBotNotification',
+                    ],
+                ],
+            ],
             'updatecallback' => [
                 'type'    => Segment::class,
                 'options' => [
