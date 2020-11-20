@@ -107,13 +107,6 @@ class TemplateService extends AbstractService
     public function getTemplatePath($template, $params = array())
     {
         $this->logger->info("Params - ".print_r($params, true));
-        if (!isset($params['orgUuid']) && isset($params['orgId'])) {
-            $org = $this->getIdFromUuid('ox_organization', $params['orgId']);
-            if ($org != 0) {
-                $orgUuid = $params['orgId'];
-                $params['orgUuid'] = $orgUuid;
-            }
-        } 
         $this->logger->debug("In getTemplatePath");
         return ArtifactUtils::getTemplatePath($this->config, $template, $params);
     }

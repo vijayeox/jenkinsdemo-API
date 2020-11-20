@@ -136,9 +136,9 @@ class MenuItemService extends AbstractService
                         FROM ox_app_menu
                         INNER JOIN ox_app_registry ON ox_app_registry.app_id = ox_app_menu.app_id
                         LEFT JOIN ox_app_page ON ox_app_page.id = ox_app_menu.page_id
-                        where ox_app_registry.org_id = :orgId
+                        where ox_app_registry.account_id = :accountId
                         AND ox_app_menu.app_id= :appId order by ox_app_menu.sequence;";
-        $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),"appId" => $filterArray['app_id']);
+        $whereQuery = array("accountId" => AuthContext::get(AuthConstants::ACCOUNT_ID),"appId" => $filterArray['app_id']);
         $this->logger->info("Get Menu Query $queryString with params".json_encode($whereQuery));
         $resultSet = $this->executeQueryWithBindParameters($queryString,$whereQuery);
         $menuList = array();

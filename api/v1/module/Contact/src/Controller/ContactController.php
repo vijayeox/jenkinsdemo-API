@@ -49,24 +49,16 @@ class ContactController extends AbstractApiController
         $count = 0;
         try {
             if (!isset($id['contactId'])) {
-                $count = $this->contactService->createContact($data, $files);
+                $this->contactService->createContact($data, $files);
             } else {
-                $count = $this->contactService->updateContact($id, $data, $files);
+                $this->contactService->updateContact($id, $data, $files);
             }
-            if ($count == 0) {
-                return $this->getErrorResponse("Could not create the Contact", 404);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getSuccessResponseWithData($data, 201);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -82,21 +74,11 @@ class ContactController extends AbstractApiController
     {
         $files = $this->params()->fromFiles('icon');
         try {
-            // echo "Check";exit;
-            $count = $this->contactService->updateContact($id, $data, $files);
-            if ($count == 0) {
-                return $this->getErrorResponse("Entity not found for id - $id", 404);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $this->contactService->updateContact($id, $data, $files);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 200);
     }
 
@@ -110,11 +92,13 @@ class ContactController extends AbstractApiController
      */
     public function delete($id)
     {
-        $response = $this->contactService->deleteContact($id);
-        if ($response == 0) {
-            return $this->getErrorResponse("Contact not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
+        try{
+            $this->contactService->deleteContact($id);
+            return $this->getSuccessResponse();
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
 
     public function get($id)
@@ -123,7 +107,7 @@ class ContactController extends AbstractApiController
         try {
             $result = $this->contactService->getContactsByUuid($id);
             $uuid = $this->contactService->getUuidById($result[0]['owner_id']);
-            if (sizeof($result) == 0) {
+            if (empty($result)) {
                 return $this->getErrorResponse("Contact not found", 404, ['id' => $id]);
             } else {
                 if (isset($result[0]['phone_list']) && $result[0]['phone_list'] != "null" && !empty($result[0]['phone_list'])) {
@@ -142,11 +126,8 @@ class ContactController extends AbstractApiController
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($result);
     }
 
@@ -177,21 +158,31 @@ class ContactController extends AbstractApiController
      */
     public function getList()
     {
-        $result = $this->contactService->getContacts();
-        return $this->getSuccessResponseWithData($result);
+        try{
+            $result = $this->contactService->getContacts();
+            return $this->getSuccessResponseWithData($result);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
 
     public function getContactsAction()
     {
         $data = $this->params()->fromQuery();
         $this->log->info(__CLASS__ . "-> Get Contacts - " . json_encode($data, true));
-        if (isset($data['filter'])) {
-            $result = $this->contactService->getContacts($data['column'], $data['filter']);
-        } else {
-            $result = $this->contactService->getContacts($data['column']);
+        try{
+            if (isset($data['filter'])) {
+                $result = $this->contactService->getContacts($data['column'], $data['filter']);
+            } else {
+                $result = $this->contactService->getContacts($data['column']);
 
-        }
-        return $this->getSuccessResponseWithData($result);
+            }
+            return $this->getSuccessResponseWithData($result);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
 
     public function contactImportAction()
@@ -203,59 +194,58 @@ class ContactController extends AbstractApiController
                 return $this->getErrorResponse("Add file to import", 404);
             }
             $result = $this->contactService->importContactCSV($_FILES['file']);
-            if ($result == 3) {
-                return $this->getErrorResponse("Column Headers donot match...", 404, $columns);
-            }
-            if ($result == 0) {
-                return $this->getErrorResponse("Failed to insert", 404);
-            }
-            if (is_array($result)) {
-                $filename = BosUtils::randomPassword();
-                $response = $this->convertToCsv($result, $filename . '.csv');
-                return $this->getSuccessStringResponse("Validate and Import the downloaded file", 200, $response);
-            }
+            $filename = BosUtils::randomPassword();
+            $response = $this->convertToCsv($result, $filename . '.csv');
+            return $this->getSuccessStringResponse("Validate and Import the downloaded file", 200, $response);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        } catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponse("Imported Successfully", 200);
     }
 
     public function convertToCsv($data, $filename)
     {
+        if(empty($data)){
+            return "";
+        }
         FileUtils::createDirectory('/tmp/oxzion');
         $file = '/tmp/oxzion/' . $filename;
+        $fp = fopen($file, 'x');
         try {
-            $fp = fopen($file, 'x');
             foreach ($data as $line) {
                 fputcsv($fp, $line);
             }
             fclose($fp);
             $fp = fopen($file, 'rb');
             $data = file_get_contents($file);
-            fclose($fp);
             return $data;
         } catch (Exception $e) {
-            return $this->getErrorResponse("Resource not Found", 404);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } finally{
+            fclose($fp);
         }
     }
 
     public function contactExportAction()
     {
         $id = $this->extractPostData();
-        if (isset($id)) {
-            $result = $this->contactService->exportContactCSV($id);
-        } else {
-            $result = $this->contactService->exportContactCSV();
-        }
-        if (isset($result['data'])) {
-            $filename = BosUtils::randomPassword();
-            $response = $this->convertToCsv($result['data'], $filename . '.csv');
-            return $this->getSuccessStringResponse("Exported CSV Data", 200, $response);
-        }
+        try{
+            if (isset($id)) {
+                $result = $this->contactService->exportContactCSV($id);
+            } else {
+                $result = $this->contactService->exportContactCSV();
+            }
+            if (isset($result['data'])) {
+                $filename = BosUtils::randomPassword();
+                $response = $this->convertToCsv($result['data'], $filename . '.csv');
+                return $this->getSuccessStringResponse("Exported CSV Data", 200, $response);
+            }
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
 
     public function contactsDeleteAction()
@@ -263,9 +253,10 @@ class ContactController extends AbstractApiController
         $data = $this->extractPostData();
         try {
             $response = $this->contactService->mutipleContactsDelete($data);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponse();
     }
 }

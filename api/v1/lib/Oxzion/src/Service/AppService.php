@@ -44,7 +44,7 @@ class AppService extends AbstractService
     protected $workflowService;
     protected $fieldService;
     protected $formService;
-    protected $organizationService;
+    protected $accountService;
     protected $entityService;
     private $privilegeService;
     private $menuItemService;
@@ -58,14 +58,14 @@ class AppService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService,UserService $userService, BusinessRoleService $businessRoleService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $accountService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, UserService $userService, BusinessRoleService $businessRoleService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->workflowService = $workflowService;
         $this->formService = $formService;
         $this->fieldService = $fieldService;
-        $this->organizationService = $organizationService;
+        $this->accountService = $accountService;
         $this->entityService = $entityService;
         $this->privilegeService = $privilegeService;
         $this->roleService = $roleService;
@@ -93,17 +93,18 @@ class AppService extends AbstractService
     public function getApps()
     {
         $queryString = 'SELECT ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.category, ap.date_created, 
-        ap.date_modified, ap.created_by, ap.modified_by, ap.status, ar.org_id, ar.start_options 
+        ap.date_modified, ap.created_by, ap.modified_by, ap.status, a.uuid as accountId, ar.start_options 
         FROM ox_app AS ap
         LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id 
-        WHERE ar.org_id=:orgId AND ap.status!=:status AND ap.name <> \'' . AppService::EOX_RESERVED_APP_NAME . '\'';
+        LEFT JOIN ox_account a on a.id = ar.account_id
+        WHERE ar.account_id=:accountId AND ap.status!=:status AND ap.name <> \'' . AppService::EOX_RESERVED_APP_NAME . '\'';
         $queryParams = [
-            'orgId' => AuthContext::get(AuthConstants::ORG_ID),
+            'accountId' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'status' => App::DELETED
         ];
         $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
         if (empty($resultSet)) {
-            throw new EntityNotFoundException('No active registered apps found for logged-in user\'s organization.', NULL);
+            throw new EntityNotFoundException('No active registered apps found for logged-in user\'s account.', NULL);
         }
         return $resultSet;
     }
@@ -112,17 +113,18 @@ class AppService extends AbstractService
     {
         $queryString = 'SELECT ap.name, ap.uuid 
         FROM ox_app AS ap
-        LEFT JOIN ox_app_registry AS ar ON ap.id=ar.app_id AND ar.org_id=:orgId
+        LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id AND ar.account_id=:accountId
+        LEFT JOIN ox_account a on a.id = ar.account_id
         WHERE ap.status!=:statusDeleted AND ap.uuid=:uuid';
         $queryParams = [
-            'orgId' => AuthContext::get(AuthConstants::ORG_ID),
+            'accountId' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'statusDeleted' => App::DELETED, 
             'uuid' => $uuid
         ];
         $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
         if (is_null($resultSet) || empty($resultSet)) {
             throw new EntityNotFoundException('Entity not found.', 
-                ['entity' => 'Active registered app for the logged-in user\'s organization', 'uuid' => $uuid]);
+                ['entity' => 'Active registered app for the logged-in user\'s account', 'uuid' => $uuid]);
         }
         $appData = $resultSet[0];
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
@@ -142,9 +144,6 @@ class AppService extends AbstractService
         //Assign user input values AFTER assigning default values.
         $appData = $data['app'];
         $app->assign($appData);
-        if (array_key_exists(Entity::COLUMN_UUID, $appData) && !empty($appData[Entity::COLUMN_UUID])) {
-            $app->setUserGeneratedUuid($appData[Entity::COLUMN_UUID]);
-        }
         try {
             $this->beginTransaction();
             $app->save();
@@ -375,35 +374,21 @@ class AppService extends AbstractService
         }
     }
 
-public function installAppToOrg($appId,$orgId,$serviceType){
+    public function installAppToOrg($appId,$accountId){
         $destination = $this->getAppSourceAndDeployDirectory($appId);
         $ymlData = self::loadAppDescriptor($destination['deployDir']);
-        switch ($serviceType) {
-            case 'install':
-                $this->installApp($orgId,$ymlData,$destination['deployDir']);
-                break;
-            case 'uninstall':
-                $this->uninstallApp($orgId,$ymlData,$destination['deployDir']);
-                break;
-            default:
-                # code...
-                break;
-        }
+        $this->installApp($accountId,$ymlData,$destination['deployDir']);
     }
-private function installApp($orgId, $yamlData, $path){
+
+    private function installApp($accountId, $yamlData, $path){
         try{
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
-        $this->createRole($yamlData, false,$orgId);
-        $user = $this->userService->getContactUserForOrg($orgId);
-        $this->userService->addAppRolesToUser($user['userId'],$appId);
-        $result = $this->createAppRegistry($appId, $orgId);
-        $this->logger->info("PATH--- $path");
-        $this->setupOrgFiles($path, $orgId);
-        // Assign AppRoles to Logged in User if Logged in Org and Installed Org are same
-        if(AuthContext::get(AuthConstants::ORG_UUID) == $orgId){
-            $this->userService->addAppRolesToUser(AuthContext::get(AuthConstants::USER_UUID),$appId);
-        }
+            $this->createRole($yamlData, false,$accountId);
+            $user = $this->accountService->getContactUserForAccount($accountId);
+            $this->userService->addAppRolesToUser($user['accountUserId'],$appId, $accountId);
+            $result = $this->createAppRegistry($appId, $accountId);
+            $this->setupOrgLinks($path, $appId, $accountId);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -416,6 +401,7 @@ private function installApp($orgId, $yamlData, $path){
         try{
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
+            $this->organizationService->removeBusinessOfferings($orgId);
             $this->removeRoleData($appId,$orgId);        
             $this->removeOrgFiles($orgId);
             $this->commit();
@@ -426,13 +412,14 @@ private function installApp($orgId, $yamlData, $path){
         }
         
     }
-    private function removeRoleData($appId,$orgId){
+    private function removeRoleData($appId,$orgId = null){
         $appId = $this->getIdFromUuid('ox_app',$appId);
         $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+        $orgId = ($orgId == 0) ? NULL : $orgId;
         $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
         if(count($roleResult) > 0){
             $this->deleteInfo('ox_role_privilege',$appId,$orgId);
-            $this->deleteData($roleResult,'ox_user_role','role_id','role_id'); //Both migration
+            $this->deleteData($roleResult,'ox_user_role','role_id','role_id');
             $this->deleteData($roleResult,'ox_role','id','role_id');
         }
         $result = $this->getDataByParams('ox_app_registry', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
@@ -448,10 +435,18 @@ private function installApp($orgId, $yamlData, $path){
         $deleteResult = $this->executeQuerywithParams($deleteQuery); 
     }
 
-    private function deleteInfo($tableName,$appId,$orgId){
-        $deleteQuery = "DELETE FROM $tableName WHERE app_id=:appId and org_id=:orgId";
-        $deleteParams = array('appId' => $appId,'orgId' => $orgId);
-        $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
+    private function deleteInfo($tableName,$appId,$orgId=null){
+        if($orgId){
+            $where = "WHERE app_id=:appId and org_id=:orgId";
+            $deleteParams['orgId'] = $orgId;
+        }else{
+            $where = "WHERE app_id=:appId";
+        }
+        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+        $deleteQuery = "DELETE FROM $tableName $where";
+        $deleteParams = array('appId' => $appId);
+        $this->logger->info("STATEMENT delq $deleteQuery".print_r($deleteParams,true));
+        $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
     }
 
     private function removeOrgFiles($orgId){
@@ -650,8 +645,10 @@ private function installApp($orgId, $yamlData, $path){
                 FileUtils::rmDir($path . 'view/apps/eoxapps');
             }
             $srcIconPath = $path . '../../AppSource/'.$yamlData['app']['uuid'] .'/view/apps/eoxapps/';
-            FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
-            FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
+            if(is_dir($srcIconPath)){
+                FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
+                FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
+            }
         }
         $jsonData = json_decode(file_get_contents($metadataPath),true);
         $jsonData['name'] = $yamlData['app']['name'];
@@ -663,6 +660,7 @@ private function installApp($orgId, $yamlData, $path){
         if (isset($yamlData['app']['autostart'])) {
             $jsonData['autostart'] = $yamlData['app']['autostart'];
         }
+        $jsonData['singleton'] = true;
         file_put_contents($appName . '/metadata.json', json_encode($jsonData, JSON_PRETTY_PRINT));
         $packagePath = $appName . '/package.json';
         $jsonData = json_decode(file_get_contents($packagePath), true);
@@ -835,12 +833,16 @@ private function checkWorkflowData(&$data,$appUuid)
         $this->setLinkAndRunBuild($path, $appId);
     }
 
-    private function setupOrgFiles($path, $orgId){
-        if ($orgId && $path) {
-            $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
-            $this->logger->info("linkkk---$link");
-            $source = $path . "data/template";
-            FileUtils::copyDir($source,$link);
+    private function setupOrgLinks($path, $appId, $accountId){
+        if ($accountId && $path) {
+            $link = $this->config['TEMPLATE_FOLDER'] . $accountId;
+            $target = $path . "data/template";
+            if (is_link($link)) {
+                FileUtils::unlink($link);
+            }
+            if (file_exists($target)) {
+                $this->setupLink($target, $link);
+            }
         }
         
     }
@@ -884,7 +886,7 @@ private function checkWorkflowData(&$data,$appUuid)
             }
         }
     }
-    public function createRole(&$yamlData, $templateRole = true,$orgId = null)
+    public function createRole(&$yamlData, $templateRole = true,$orgId = null,$bRole = null)
     {
         if (isset($yamlData['role'])) {
             $params = null;
@@ -893,7 +895,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     $this->logger->warn("Organization not provided not processing roles!");
                     return;
                 }
-                $params['orgId'] = $orgId;
+                $params['accountId'] = $orgId;
             }
             $appId = $yamlData['app']['uuid'];
             foreach ($yamlData['role'] as &$roleData) {
@@ -903,7 +905,9 @@ private function checkWorkflowData(&$data,$appUuid)
                     continue;
                 }
                 $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
-                if(isset($role['businessRole'])){
+                if((isset($role['businessRole']) && $templateRole) ||
+                    (isset($role['businessRole']) && $bRole && 
+                    in_array($role['businessRole'],$bRole['businessRole']))){
                     $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']);
                     if(count($temp) > 0){
                         $role['business_role_id'] = $temp[0]['id'];
@@ -940,11 +944,8 @@ private function checkWorkflowData(&$data,$appUuid)
         }
         $orgdata = $orgData;
         $orgdata['app_id'] = $appId;
-        $result = $this->organizationService->saveOrganization($orgdata);
+        $this->accountService->saveAccount($orgdata);
         //setup business offering
-        if ($result == 0) {
-            throw new ServiceException("Organization could not be saved", 'org.not.saved');
-        }
         $orgData['uuid'] = $orgdata['uuid'];
         return $orgData;
     }
@@ -969,6 +970,7 @@ private function checkWorkflowData(&$data,$appUuid)
         if(!isset($appData['title'])){
             $appData['title'] = $appData['name'];
         }
+        
         //Create the app if not found.
         if (0 == count($queryResult)) {
             $temp = ['app' => $appData];
@@ -1090,7 +1092,8 @@ private function checkWorkflowData(&$data,$appUuid)
         $app = new App($this->table);
         $app->loadByUuid($uuid);
         $app->assign([
-            'status' => App::DELETED
+            'status' => App::DELETED,
+            'name' => $app->toArray()['id'] .'_'.$app->toArray()['name']
         ]);
         try {
             $this->beginTransaction();
@@ -1126,23 +1129,23 @@ private function checkWorkflowData(&$data,$appUuid)
         return $this->formService->createForm($formData);
     }
 
-    public function createAppRegistry($appId, $orgId)
+    public function createAppRegistry($appId, $accountId)
     {
         $sql = $this->getSqlObject();
-        //Code to check if the app is already registered for the organization
+        //Code to check if the app is already registered for the account
         $queryString = "select count(ar.id) as count
         from ox_app_registry as ar
         inner join ox_app ap on ap.id = ar.app_id
-        inner join ox_organization org on org.id = ar.org_id
-        where ap.uuid = :appId and org.uuid = :orgId";
-        $params = array("appId" => is_array($appId) ? $appId['value'] : $appId, "orgId" => $orgId);
+        inner join ox_account acct on acct.id = ar.account_id
+        where ap.uuid = :appId and acct.uuid = :accountId";
+        $params = array("appId" => is_array($appId) ? $appId['value'] : $appId, "accountId" => $accountId);
         $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
         if ($resultSet[0]['count'] == 0) {
             try {
                 $this->beginTransaction();
-                $insert = "INSERT into ox_app_registry (app_id, org_id, start_options)
-                select ap.id, org.id, ap.start_options from ox_app as ap, ox_organization as org where ap.uuid = :appId and org.uuid = :orgId";
-                $params = array("appId" => $appId, "orgId" => $orgId);
+                $insert = "INSERT into ox_app_registry (app_id, account_id, start_options)
+                select ap.id, acct.id, ap.start_options from ox_app as ap, ox_account as acct where ap.uuid = :appId and acct.uuid = :accountId";
+                $params = array("appId" => $appId, "accountId" => $accountId);
                 $result = $this->executeUpdateWithBindParameters($insert, $params);
                 $this->commit();
                 return $result->getAffectedRows();
@@ -1204,9 +1207,9 @@ private function checkWorkflowData(&$data,$appUuid)
             $selectquery = $this->executeQuerywithParams($query)->toArray();
             $idList = array_unique(array_map('current', $selectquery));
             for ($i = 0; $i < sizeof($idList); $i++) {
-                $insert = "INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`)
-                SELECT org.id, '" . $idList[$i] . "', now() from ox_organization as org
-                where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
+                $insert = "INSERT INTO `ox_app_registry` (`account_id`,`app_id`,`date_created`)
+                SELECT account.id, '" . $idList[$i] . "', now() from ox_account as account
+                where account.id not in(SELECT account_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
                 $result = $this->runGenericQuery($insert);
             }
             $this->commit();
@@ -1221,6 +1224,13 @@ private function checkWorkflowData(&$data,$appUuid)
     private function updateAppStatus($appSingleArray,$appType,$appStatus){
         $update = "UPDATE ox_app SET status = $appStatus where ox_app.name NOT IN ('" . implode("','", $appSingleArray) . "') and ox_app.type=".$appType;
         $this->runGenericQuery($update);
+    }
+    public function addToAppRegistry($data)
+    {
+        $this->logger->debug("Adding App to registry");
+        $data['accountId'] = isset($data['accountId']) ? $data['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID);
+        $app = $this->table->getByName($data['app_name']);
+        return $this->createAppRegistry($app->uuid, $data['accountId']);
     }
 
     public function processEntity(&$yamlData, $assoc_id = null)
@@ -1331,5 +1341,70 @@ private function checkWorkflowData(&$data,$appUuid)
             unset($descriptorData["workflow"]);
         }
         return $descriptorData;
+    }
+
+    public function removeDeployedApp($appId){
+        try{
+            $this->beginTransaction();
+            // Remove Symlinks
+            $appDetails = $this->getDataByParams('ox_app', array(), array('uuid' => $appId))->toArray();
+            $this->executePackageDiscover($appDetails[0]['name']);
+            $this->jobService->cancelAppJobs($appId);
+
+             // Page
+             $resultPage = $this->getDataByParams('ox_app_page', array(), array('app_id' => $this->getIdFromUuid('ox_app',$appId)))->toArray();
+             if(count($resultPage) > 0){
+                 foreach ($resultPage as $key => $value) {
+                     $this->pageService->deletePage($appId,$value['uuid']);
+                 }
+             }
+             // Menu
+             $resultMenu = $this->getDataByParams('ox_app_menu', array(), array('app_id' => $this->getIdFromUuid('ox_app',$appId)))->toArray();
+             if(count($resultMenu) > 0){
+                 foreach ($resultMenu as $key => $value) {
+                     $this->menuItemService->deleteMenuItem($appId,$value['uuid']);
+                 }
+             }
+
+            // ENTITY
+            $entityRes = $this->entityService->getEntitys($appId);
+            if (count($entityRes) > 0) {
+                $this->workflowService->deleteWorkflowLinkedToApp($appId);
+                $this->entityService->removeEntityLinkedToApps($appId);
+                $deleteQuery = "DELETE oei FROM ox_entity_identifier oei 
+                                right outer join ox_app_entity oxe on oei.entity_id = oxe.id
+                                inner join ox_app oxa on oxa.id = oxe.app_id 
+                                where oxa.uuid = :appId";
+                $deleteParams = array('appId' => $appId);
+                $this->logger->info("STATEMENT DELETE $deleteQuery".print_r($deleteParams,true));
+                $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams);
+            }
+            $this->businessRoleService->deleteBusinessRoleBasedOnAppId($appId); 
+            $this->removeRoleData($appId); 
+            $result = $this->getDataByParams('ox_privilege', array(), array('app_id' => $this->getIdFromUuid('ox_app',$appId)))->toArray();
+            if(count($result) > 0){
+                $this->removeRoleData($appId);
+                $this->deleteInfo('ox_privilege',$this->getIdFromUuid('ox_app',$appId));
+            }
+            $this->deleteApp($appId);
+            $this->commit();
+
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }  
+
+    }
+
+    private function executePackageDiscover($appName)
+    {
+        $link = $this->config['APPS_FOLDER'] . $appName;
+        if (is_link($link)) {
+            FileUtils::unlink($link);
+        }
+        $command_one = "cd " . $this->config['APPS_FOLDER'] . "../bos/";
+        $command_two = "npm run package:discover";
+        $output = ExecUtils::execCommand($command_one . " && " . $command_two);
+        $this->logger->info("PAckage Discover .. \n" . print_r($output, true));
     }
 }

@@ -22,24 +22,10 @@ return [
                     ],
                 ],
             ],
-            'getAppId' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/privilege/getappid',
-                    'defaults' => [
-                        'controller' => Controller\PrivilegeController::class,
-                        'method' => 'GET',
-                        'action' => 'getAppId',
-                        'access' => [
-                            'getAppId' => 'MANAGE_PRIVILEGE_WRITE',
-                        ],
-                    ],
-                ],
-            ],
             'getmasterprivilege' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/organization[/:orgId]/masterprivilege[/:roleId]',
+                    'route' => '/account[/:accountId]/masterprivilege[/:roleId]',
                     'defaults' => [
                         'controller' => Controller\PrivilegeController::class,
                         'action' => 'getMasterPrivilege',

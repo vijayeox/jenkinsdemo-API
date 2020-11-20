@@ -147,9 +147,10 @@ class FieldService extends AbstractService
         $this->logger->info("Entering to getField method in FieldService");
         try {
             $queryString = "Select ox_field.* from ox_field
-            left join ox_app on ox_app.id = ox_field.app_id
-            where ox_app.uuid=? and ox_field.uuid=?";
-            $queryParams = array($appId, $id);
+            inner join ox_app_entity as en on ox_field.entity_id = en.id
+            left join ox_app on ox_app.id = en.app_id
+            where ox_app.uuid=? and ox_field.uuid=? and en.isdeleted=?";
+            $queryParams = array($appId, $id,0);
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             if (count($resultSet) == 0) {
                 return 0;
@@ -167,8 +168,8 @@ class FieldService extends AbstractService
         try {
             $queryString = "Select oxf.* from ox_field as oxf
                             inner join ox_app_entity as en on oxf.entity_id = en.id
-            where en.uuid=? and oxf.name=?";
-            $queryParams = array($entityId, $fieldName);
+            where en.uuid=? and oxf.name=? and en.isdeleted=?";
+            $queryParams = array($entityId, $fieldName, 0);
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             if (count($resultSet) == 0) {
                 return 0;

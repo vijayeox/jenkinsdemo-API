@@ -19,7 +19,7 @@ class App extends Entity {
     protected static $MODEL = [
         'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
         'name' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'uuid' =>           ['type' => Type::UUID,      'readonly' => TRUE,  'required' => FALSE],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => FALSE,  'required' => FALSE],
         'description' =>    ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'type' =>           ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
         'isdefault' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => TRUE, 'value' => FALSE],

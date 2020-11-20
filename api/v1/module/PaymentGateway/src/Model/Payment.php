@@ -9,7 +9,7 @@ class Payment extends Entity
     protected $data = array(
         'id' => 0,
         'app_id' => null,
-        'org_id' => null,
+        'account_id' => null,
         'payment_client' => null,
         'api_url' => null,
         'server_instance_name' => null,

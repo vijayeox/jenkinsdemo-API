@@ -65,7 +65,6 @@ class FormManager extends React.Component {
     return (
       <div>
         <this.props.components.Notification ref={this.notif} />
-        <React.Suspense fallback={<div>Loading...</div>}>
           <this.OxzionGUIComponents.FormBuilder
             core={this.core}
             saveForm={this.saveForm}
@@ -73,7 +72,6 @@ class FormManager extends React.Component {
             formId={this.state.formId}
             appId={this.state.appId}
           />
-        </React.Suspense>
       </div>
     );
   }

@@ -8,7 +8,7 @@ class Comment extends Entity
 {
     protected $data = array(
         'id'=>NULL ,
-        'org_id' => NULL,
+        'account_id' => NULL,
         'parent' => null,
         'uuid' => NULL,
         'text' => NULL,

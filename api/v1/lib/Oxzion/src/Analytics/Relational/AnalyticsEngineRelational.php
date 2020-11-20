@@ -24,38 +24,30 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
     }
 
     public function setConfig($config){
-        $dbConfig['driver'] = 'Pdo';
-        $dbConfig['database'] = $config['database'];
-        $dbConfig['host'] = $config['host'];
-        $dbConfig['username'] = $config['username'];
-        $dbConfig['password'] = $config['password'];
-        $dbConfig['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=' . $config['host'] . ';charset=utf8;username=' . $config["username"] . ';password=' . $config["password"] . '';
-        $this->dbConfig = $dbConfig;
-        $this->dbAdapter = new Adapter($dbConfig);
-		parent::setConfig($dbConfig);
+		parent::setConfig($config);
     }
 
     public function getData($app_name,$entity_name,$parameters)
     {
         try {
 			
-			$orgId = AuthContext::get(AuthConstants::ORG_ID);
+			$accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
 			if (isset($parameters['view'])) {
-			//	$result = $this->getResultsFromView($orgId,$parameters['view']);	
+			//	$result = $this->getResultsFromView($accountId,$parameters['view']);	
 				$formatedPara = $this->formatQuery($parameters);
 		//	print_r($formatedPara);exit;
-				$result = $this->getResultsFromPara($orgId,$parameters['view'],$formatedPara);
+				$result = $this->getResultsFromPara($accountId,$parameters['view'],$formatedPara);
 				$finalResult['meta']['type'] = 'view';
 				foreach(array_keys($result) as $key) {
-					if ($result[$key]['org_id']!=$orgId) {  //Temp solution to protect with org id instead the where clause
+					if ($result[$key]['account_id']!=$accountId) {  //Temp solution to protect with org id instead the where clause
 						$result = [];break;
 					}
-					unset($result[$key]['org_id']);
+					unset($result[$key]['account_id']);
 				 }
 				 $finalResult['data'] = $result;
 			} else {
 				$formatedPara = $this->formatQuery($parameters);
-				$result = $this->getResultsFromPara($orgId,$app_name,$entity_name,$formatedPara);
+				$result = $this->getResultsFromPara($accountId,$app_name,$entity_name,$formatedPara);
 				$finalResult['data'] = $result;
 			}
 			return $finalResult;
@@ -106,34 +98,50 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		
 
 		if (!empty($parameters['frequency'])) {
+		    $fieldname = "";
 			switch ($parameters['frequency']) {
 				case 1:
 					$group[] = "$datetype";
+					$fieldname = "day";
 					break;
 				case 2:
-					$group[] = "MONTH($datetype)";
+					$group[] = "MONTHNAME($datetype)";
+					$fieldname = "month";
 					break;
 				case 3:
 					$group[] = "QUARTER($datetype)";
+					$fieldname = "quarter";
 					break;
 				case 4:
 					$group[] = "YEAR($datetype)";
+					$fieldname = "year";
 					break;
+			}
+		}
+		if (!empty($group)) { 
+			if (!empty($parameters['frequency'])) {
+				$select = [$fieldname=>new \Zend\Db\Sql\Expression("$group[0]")];
+			} else {
+				$select = $group;
 			}
 		}
 		if ($field) { 
 			if (!empty($group)) {
 				$select=$group;
-				$select[] = 'org_id';
+				$select[] = 'account_id';
 				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
+		} else {
+			if (!empty($group)) {
+				$select['count'] = new \Zend\Db\Sql\Expression("count(*)");;
 			} else {
-				$select = ['org_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
+			} else {
+				$select = ['account_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
 			}
 		} 
 		else {
 			if (!empty($group)) {
 				$select=$group;
-				$select[] = 'org_id';
+				$select[] = 'account_id';
 				$select[] = new \Zend\Db\Sql\Expression("count(*)");;
 			} 
 		}
@@ -153,6 +161,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		}
 		if (isset($parameters['list'])) {
 			$listConfig=explode(",", $parameters['list']);
+			$returnarray['select'] = [];
 			foreach ($listConfig as $k => $v) {
 				if(strpos($v, "=")!==false){
 					$listitem = explode("=", $v);
@@ -167,14 +176,18 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if (isset($parameters['sort'])) {
 			$returnarray['sort'] = $parameters['sort'];
 		}
+		if (isset($parameters['frequency'])) {
+			$returnarray['frequency'] = $parameters['frequency'];
+		}
+
 		return $returnarray;
 	}
 
-	public function getResultsFromView($orgId,$view) {
+	public function getResultsFromView($accountId,$view) {
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
 		$select->from($view);
-	//	$select->where(['org_id' => $orgId]);   //commented it out for now since it is clearning out the order. 
+	//	$select->where(['account_id' => $accountId]);   //commented it out for now since it is clearning out the order. 
 	//We will need this in the future so cross org by mistake is not possible
 		$statement = $sql->prepareStatementForSqlObject($select);
 		$result = $statement->execute();
@@ -183,7 +196,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		
 	}
 
-	public function getResultsFromPara($orgId,$entity_name,$para) {
+	public function getResultsFromPara($accountId,$entity_name,$para) {
 		
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
@@ -192,7 +205,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			$select->columns($para['select']);
 		}
 		$select->from($entity_name);
-	//	$select->where(['org_id' => $orgId]);
+	//	$select->where(['account_id' => $accountId]);
 
 		
 		if (!empty($para['filter'])) {
@@ -210,7 +223,12 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		}
 
 		if (!empty($para['group'])) {
-			$select->group($para['group']);
+			if (!empty($para['frequency'])) {
+				$group = $para['group'][0];
+				$select->group(new \Zend\Db\Sql\Expression("$group"));
+			} else {
+				$select->group($para['group']);
+			}	
 		}
 		if (!empty($para['limit'])) {
 			$select->limit($para['limit']);
@@ -219,7 +237,6 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if (!empty($para['sort'])) {
 			$select->order($para['sort']);
 		}
-	//	echo $select->getSqlString();exit;
 		$statement = $sql->prepareStatementForSqlObject($select);
 
 		$result = $statement->execute();

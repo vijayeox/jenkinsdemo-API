@@ -10,7 +10,7 @@ class Announcement extends Entity
         'id' => 0,
         'uuid' => null,
         'name' => null,
-        'org_id' => null,
+        'account_id' => null,
         'status' => null,
         'description' => null,
         'link' => null,

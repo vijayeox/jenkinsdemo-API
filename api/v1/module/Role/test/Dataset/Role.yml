@@ -2,19 +2,19 @@ ox_role:
   - id: 15
     name: "ADMIN-3"
     description: "Must have read,write,create and delete control"
-    org_id: 2
+    account_id: 2
     is_system_role: 0
     uuid: "53012471-2863"
   - id: 16
     name: "MANAGER-2"
     description: "Must have read and write control"
-    org_id: 1
+    account_id: 1
     is_system_role: 0
     uuid: "89a01b30-9cc9-416e-8027-1fd2083786c7"
   - id: 17
     name: "EMPLOYEE-2"
     description: "Must have read control"
-    org_id: 1
+    account_id: 1
     is_system_role: 0
     uuid: "5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073"
 
@@ -23,5 +23,5 @@ ox_role_privilege:
     role_id: 5
     privilege_name: "MANAGE_CRMADMIN"
     permission: 1
-    org_id: 1
+    account_id: 1
     app_id: 1

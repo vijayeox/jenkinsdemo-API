@@ -8,7 +8,6 @@ use Exception;
 use Oxzion\AppDelegate\AppDelegateService;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Service\UserService;
-use Oxzion\ValidationException;
 
 class AppDelegateController extends AbstractApiControllerHelper
 {
@@ -45,19 +44,14 @@ class AppDelegateController extends AbstractApiControllerHelper
         }
         $this->log->info(__CLASS__ . "-> \n Execute Delegate Start - " . print_r($data, true));
         try {
-            $this->appDelegateService->updateOrganizationContext($data);
+            $this->appDelegateService->updateAccountContext($data);
             $response = $this->appDelegateService->execute($appId, $delegate, $data);
-            if ($response == 1) {
-                return $this->getErrorResponse("Delegate not found", 404);
-            } elseif ($response == 2) {
-                return $this->getErrorResponse("Error while executing the delegate", 400);
-            }
+            $this->log->info(__CLASS__ . "-> \n End of Delegate");
+            return $this->getSuccessResponseWithData($response, 200);  
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 400);
-        }
-        $this->log->info(__CLASS__ . "-> \n End of Delegate");
-        return $this->getSuccessResponseWithData($response, 200);
+            return $this->exceptionToResponse($e);
+        } 
     }
 
     /**
@@ -65,25 +59,22 @@ class AppDelegateController extends AbstractApiControllerHelper
      * @api
      * @link /app/:appId/org/:orgId/userlist
      * @method GET
-     * @param array $data - List of all the users for the organization
+     * @param array $data - List of all the users for the account
      */
     public function userlistAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
-            if (isset($params['appId']) && isset($params['orgId'])) {
+            if (isset($params['appId']) && isset($params['accountId'])) {
                 $users = $this->userService->getUsersList($params['appId'], $params);
             } else {
                 $users = array();
             }
-        } catch (ValidationException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getSuccessResponseWithData($users);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 400);
-        }
-        return $this->getSuccessResponseWithData($users);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 }

@@ -127,7 +127,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
                 $result = $result && $arg2['padi_number'] == 22333;
                 $result = $result && $arg2['firstname'] == 'Mohan';
                 $result = $result && $arg2['workflowId'] == 'ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11';
-                $result = $result && $arg2['orgId'] == AuthContext::get(AuthConstants::ORG_UUID);
+                $result = $result && $arg2['accountId'] == AuthContext::get(AuthConstants::ACCOUNT_UUID);
                 $result = $result && isset($arg2['fileId']);
                 $result = $result && isset($arg2['workflow_instance_id']);
                 return $result;
@@ -226,7 +226,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertMatchedRouteName('workflowInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+        $this->assertEquals($content['message'], 'A Process is aleady underway for this file');
     }
 
     public function testCreateByLinkingToExistingFile()
@@ -290,7 +290,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertMatchedRouteName('workflowInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+        $this->assertEquals($content['message'], 'A Process is aleady underway for this file');
     }
 
     public function testCreateWithOngoingProcess()
@@ -318,7 +318,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertMatchedRouteName('workflowInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'A Process is aleady underway for this file');
+        $this->assertEquals($content['message'], 'A Process is aleady underway for this file');
     }
 
 // Code commented
@@ -491,7 +491,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testcompleteActivityInstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0723', 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => "3f20b5c5-0124-11ea-a8a0-22e8105c0998", 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => "Task_1s7qzh3", 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'orgid' => $this->testOrgId)];
+        $data = ['activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0723', 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => "3f20b5c5-0124-11ea-a8a0-22e8105c0998", 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => "Task_1s7qzh3", 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'accountid' => $this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activitycomplete', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -507,7 +507,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testcompleteActivityInstanceFail()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' => 'csasdassd', 'activityId' => 1, 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => 1, 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => 1, 'processVariables' => array('workflowId' => 1, 'orgid' => $this->testOrgId)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' => 'csasdassd', 'activityId' => 1, 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => 1, 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => 1, 'processVariables' => array('workflowId' => 1, 'accountid' => $this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activitycomplete'
             , 'POST', $data);
@@ -524,7 +524,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testSubmitTask()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ["val" => "91.00", "padiVerified" => true, "padi" => 2141, "work_phone" => null, "internationalNonteachingSupervisoryInstructor" => "0", "withTecRecEndorsementForSelectionAboveDeclined" => "0", "equipmentLiabilityCoverage" => "275.00", "approved" => true, 'action' => 'submit', "state" => "FL", "app_id" => "5c5b2544-a501-416c-98da-38af2cf3ff1a", "zip" => "32904", "scubaFit" => "scubaFitInstructorDeclined", "method" => "POST", "grandTotal" => 0, "tecRecEndorsment" => "withTecRecEndorsementForSelectionAbove", "entity_id" => "1", "lastname" => "METCALF", "excessLiability" => "excessLiabilityCoverage9000000", "internationalDivemasterAssistantInstructorAssistingOnly" => "127.00", "page4Panel2PanelIagree" => true, "panelColumnsValidatePadiMembership" => false, "end_date" => "2020-06-30", "access" => [], "city" => "MELBOURNE", "nonteachingSupervisoryInstructor" => "371.00", "freediveInstructor" => "371.00", "phonenumber" => "(962) 035-7215", "withTecRecEndorsementForSelectionAbove" => "0", "orgId" => "53012471-2863-4949-afb1-e69b0891c98a", "equipmentLiabilityCoverageDeclined" => "0.00", "excessLiabilityCoverage4000000" => "1459.00", "scubaFitPrice" => "0.00", "physical_zipcode" => "560027", "email" => "cativoire@aol.com", "start_date" => "2019-08-01", "physical_country" => "", "product" => "Individual Professional Liability", "excessLiabilityPrice" => "3258.00", "controller" => "Workflow\\Controller\\WorkflowInstanceController", "initial" => "S", "expiry_date" => "2019-10-18", "page5Select" => "noAdditionalInsureds", "notSelected" => "0", "retiredInstructor" => "253.00", "panelPanel3ColumnsFax" => "", "physical_city" => "Bengaluru", "internationalDivemaster" => "218.00", "country" => "United States of America", "swimInstructor" => "348.00", "cylinderPrice" => "269.00", "internationalAssistantInstructor" => "218.00", "physical_state" => "Karnataka", "careerCoverage" => "assistantInstructor", "page4Panel2Iagree" => true, "mobilephone" => "(132) 131-2312", "cylinderInspector" => "216.00", "physical_address2" => "", "physical_address1" => "Sadhitha", "MI" => "G", "excessLiabilityCoverage9000000" => "3258.00", "home_phone" => "321 952 1621", "identity_field" => "padi", "equipment" => "equipmentLiabilityCoverage", "careerCoveragePrice" => "371.00", "created_by" => "1", "country_code" => "US", "panelRegister" => false, "cylinderInstructor" => "114.00", "excessLiabilityCoverage3000000" => "1162.00", "instructor" => "643.00", "cylinderInspectorOrInstructorDeclined" => "0.00", "equipmentPrice" => "275.00", "panelPanel3ColumnsEmail2" => "", "divemaster" => "371.00", "scubaFitInstructorDeclined" => "0.00", "cylinderInspectorAndInstructor" => "269.00", "workflowId" => "4347ec07-88c2-4e84-846d-a45e59039150", "sameasmailingaddress" => false, "fileId" => "ce2b5638-bf7b-4b2d-ba85-e5397847ec79", "firstname" => "Rakshith", "excessLiabilityCoverage1000000" => "447.00", "divemasterAssistantInstructorAssistingOnly" => "253.00", "excessLiabilityCoverageDeclined" => "0.00", "page4PanelIAgree" => true, "tecRecEndorsmentPrice" => "0", "member_number" => 2141, "address2" => "", "address1" => "6100 LIVE OAK AVE", "page3Panel4Bycheckingthisbox" => true, "form_id" => "1", "excessLiabilityCoverage2000000" => "895.00", "workflow_instance_id" => "1", "scubaFitInstructor" => "60.00", "cylinder" => "cylinderInspectorAndInstructor", "assistantInstructor" => "371.00", "internationalInstructor" => "341.00", "automatic_renewal" => false];
+        $data = ["val" => "91.00", "padiVerified" => true, "padi" => 2141, "work_phone" => null, "internationalNonteachingSupervisoryInstructor" => "0", "withTecRecEndorsementForSelectionAboveDeclined" => "0", "equipmentLiabilityCoverage" => "275.00", "approved" => true, 'action' => 'submit', "state" => "FL", "app_id" => "5c5b2544-a501-416c-98da-38af2cf3ff1a", "zip" => "32904", "scubaFit" => "scubaFitInstructorDeclined", "method" => "POST", "grandTotal" => 0, "tecRecEndorsment" => "withTecRecEndorsementForSelectionAbove", "entity_id" => "1", "lastname" => "METCALF", "excessLiability" => "excessLiabilityCoverage9000000", "internationalDivemasterAssistantInstructorAssistingOnly" => "127.00", "page4Panel2PanelIagree" => true, "panelColumnsValidatePadiMembership" => false, "end_date" => "2020-06-30", "access" => [], "city" => "MELBOURNE", "nonteachingSupervisoryInstructor" => "371.00", "freediveInstructor" => "371.00", "phonenumber" => "(962) 035-7215", "withTecRecEndorsementForSelectionAbove" => "0", "accountId" => "53012471-2863-4949-afb1-e69b0891c98a", "equipmentLiabilityCoverageDeclined" => "0.00", "excessLiabilityCoverage4000000" => "1459.00", "scubaFitPrice" => "0.00", "physical_zipcode" => "560027", "email" => "cativoire@aol.com", "start_date" => "2019-08-01", "physical_country" => "", "product" => "Individual Professional Liability", "excessLiabilityPrice" => "3258.00", "controller" => "Workflow\\Controller\\WorkflowInstanceController", "initial" => "S", "expiry_date" => "2019-10-18", "page5Select" => "noAdditionalInsureds", "notSelected" => "0", "retiredInstructor" => "253.00", "panelPanel3ColumnsFax" => "", "physical_city" => "Bengaluru", "internationalDivemaster" => "218.00", "country" => "United States of America", "swimInstructor" => "348.00", "cylinderPrice" => "269.00", "internationalAssistantInstructor" => "218.00", "physical_state" => "Karnataka", "careerCoverage" => "assistantInstructor", "page4Panel2Iagree" => true, "mobilephone" => "(132) 131-2312", "cylinderInspector" => "216.00", "physical_address2" => "", "physical_address1" => "Sadhitha", "MI" => "G", "excessLiabilityCoverage9000000" => "3258.00", "home_phone" => "321 952 1621", "identity_field" => "padi", "equipment" => "equipmentLiabilityCoverage", "careerCoveragePrice" => "371.00", "created_by" => "1", "country_code" => "US", "panelRegister" => false, "cylinderInstructor" => "114.00", "excessLiabilityCoverage3000000" => "1162.00", "instructor" => "643.00", "cylinderInspectorOrInstructorDeclined" => "0.00", "equipmentPrice" => "275.00", "panelPanel3ColumnsEmail2" => "", "divemaster" => "371.00", "scubaFitInstructorDeclined" => "0.00", "cylinderInspectorAndInstructor" => "269.00", "workflowId" => "4347ec07-88c2-4e84-846d-a45e59039150", "sameasmailingaddress" => false, "fileId" => "ce2b5638-bf7b-4b2d-ba85-e5397847ec79", "firstname" => "Rakshith", "excessLiabilityCoverage1000000" => "447.00", "divemasterAssistantInstructorAssistingOnly" => "253.00", "excessLiabilityCoverageDeclined" => "0.00", "page4PanelIAgree" => true, "tecRecEndorsmentPrice" => "0", "member_number" => 2141, "address2" => "", "address1" => "6100 LIVE OAK AVE", "page3Panel4Bycheckingthisbox" => true, "form_id" => "1", "excessLiabilityCoverage2000000" => "895.00", "workflow_instance_id" => "1", "scubaFitInstructor" => "60.00", "cylinder" => "cylinderInspectorAndInstructor", "assistantInstructor" => "371.00", "internationalInstructor" => "341.00", "automatic_renewal" => false];
         $this->setJsonContent(json_encode($data));
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
@@ -574,7 +574,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
                 $result = $result && $arg2['padi_number'] == 2141;
                 $result = $result && $arg2['firstname'] == 'Rakshith';
                 $result = $result && $arg2['workflowId'] == 'ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11';
-                $result = $result && $arg2['orgId'] == AuthContext::get(AuthConstants::ORG_UUID);
+                $result = $result && $arg2['accountId'] == AuthContext::get(AuthConstants::ACCOUNT_UUID);
                 $result = $result && $arg2['fileId'] == 'ee3d0c68-98c9-11e9-adc5-308d99c914ca';
                 $result = $result && $arg2['workflow_instance_id'] == 6;
                 $result = $result && $arg2['workflowInstanceId'] == 'de20b5c5-0124-11ea-a8a0-22e8105c07fe';
@@ -586,7 +586,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
                 $data['activityInstanceId'] = "e36622fd-0124-11ea-a8a0-22e8105c07af";
                 $data['taskId'] = 'Task_1s7qwett4';
                 $data['processVariables'] = ['workflowId' => 'ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11',
-                                             'orgId' => AuthContext::get(AuthConstants::ORG_UUID)];
+                                             'accountId' => AuthContext::get(AuthConstants::ACCOUNT_UUID)];
                 $activityService->completeActivityInstance($data);
             });
             $workflowService->setActivityEngine($mockProcessEngine);

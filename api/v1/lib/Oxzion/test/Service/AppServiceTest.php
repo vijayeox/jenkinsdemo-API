@@ -15,6 +15,7 @@ use Oxzion\App\AppArtifactNamingStrategy;
 use Oxzion\Model\App;
 use Symfony\Component\Yaml\Yaml;
 use AppTest\AppTestSetUpTearDownHelper;
+use Oxzion\ValidationException;
 
 class AppServiceTest extends AbstractServiceTest
 {
@@ -41,6 +42,11 @@ class AppServiceTest extends AbstractServiceTest
 
     public function getDataSet()
     {
+        switch($this->getName()) {
+            case 'testRemoveDeployedApp':
+                return new YamlDataSet(dirname(__FILE__) . "/Dataset/DeployedApp.yml");;
+            break;
+        }
         $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/AppServiceTest.yml");
         return $dataset;
     }
@@ -61,17 +67,17 @@ class AppServiceTest extends AbstractServiceTest
         return $mockRestClient;
     }
 
-    public function testGetAppsOfOrganizationWithApps() {
+    public function testGetAppsOfAccountWithApps() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $apps = $appService->getApps();
         $this->assertEquals(7, count($apps));
     }
 
-    public function testGetAppsOfOrganizationWithoutApps() {
+    public function testGetAppsOfAccountWithoutApps() {
         AuthContext::put(AuthConstants::USER_ID, '5');
-        AuthContext::put(AuthConstants::ORG_ID, '2');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '2');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $apps = $appService->getApps();
@@ -84,7 +90,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testGetAppWithValidUuid() {
         AuthContext::put(AuthConstants::USER_ID, 6);
-        AuthContext::put(AuthConstants::ORG_ID, 300);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
         $appService->setupOrUpdateApplicationDirectoryStructure([
@@ -102,7 +108,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testCreateAppPreBuilt() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $data = [
             'app' => [
@@ -142,7 +148,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testCreateAppMyApp() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $data = [
             'app' => [
@@ -196,7 +202,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testGetAppWithInvalidUuid() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $app = $appService->getApp('11111111-1111-1111-1111-111111111111');
@@ -276,14 +282,10 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'entity' => array(array( 'name' => 'Individual Professional Liability','ryg_rule' => '{item.policyStatus == \"Completed\" ? (\n<td style=\"color:green;background-color:green\"> {item.policyStatus} </td>\n ) :  (item.policyStatus == \"In Progress\" ? (<td style=\"color:yellow\"> {item.policyStatus} </td>) : (\n <td>{item.policyStatus}</td>\n))}', 'field' => array(array('name' => 'policyStatus', 'text' => 'Policy Status', 'data_type' => 'text')))));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $sqlQuery = "SELECT * FROM ox_app_entity WHERE app_id = 299";
         $content = $appService->processEntity($data);
-        $sqlQuery = "SELECT name,ryg_rule FROM ox_app_entity WHERE app_id = 299";
-        $adapter = $this->getDbAdapter();
-        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
-        $statement = $adapter->query($sqlQuery);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $result = $resultSet->initialize($result)->toArray();
+        $sqlQuery = "SELECT * FROM ox_app_entity WHERE app_id = 299";
+        $result = $this->executeQueryTest($sqlQuery);
         $this->assertEquals($result[0]['name'],$data['entity'][0]['name'] );
         $this->assertEquals($result[0]['ryg_rule'],$data['entity'][0]['ryg_rule']);
     }
@@ -320,6 +322,20 @@ class AppServiceTest extends AbstractServiceTest
         $resultSet = new ResultSet();
         $result = $resultSet->initialize($result)->toArray();
         $this->assertEquals($result[0]['count'], 0);
+    }
+
+    public function testProcessFormWithNoEntity()
+    {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'form' => array(array('name' => 'PADI Verification', 'uuid' => 'd2ed4200-9131-4671-b0e0-de3e27c3f610', 'description' => 'Page for CSR to verify PADI details', 'template_file' => 'dummypage.json','entity' => '')));        
+        $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        try{
+            $appService->processForm($data, $path);
+            $this->fail('Expected ValidationException.');
+        }catch(ValidationException $e) {
+            $this->assertNotNull($e);
+        }
     }
 
     public function testProcessWorkflow()
@@ -431,7 +447,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testProcessJob()
     {
-        AuthContext::put(AuthConstants::ORG_ID, '300');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '300');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
@@ -469,7 +485,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateRole()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_UUID, 'a77ea120-b028-479b-8c6e-60476b6a4456');        
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, 'a77ea120-b028-479b-8c6e-60476b6a4456');        
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'role' => array(array('name' => 'Policy Holder', 'default' => '1', 'privileges' => array(array('privilege_name' => 'MANAGE_MY_POLICY', 'permission' => '3')),'uuid' => '703d3a09-b7f3-49e9-9c79-74d5cae7f6e7')));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
@@ -495,7 +511,7 @@ class AppServiceTest extends AbstractServiceTest
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
-        $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and org_id = 300";
+        $sqlQuery = "SELECT count(*) as count FROM ox_role WHERE name = 'Policy Holder' and account_id = 300";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);
@@ -508,11 +524,13 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateOrg()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_UUID, 'e1033dc0-126b-40ba-89e0-d3061bdeda4p');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('name' => 'V&B', 'uuid' => 'e1033dc0-126b-40ba-89e0-d3061bdeda4p','email' => 'vb07@gmail.com','address1' => '6 bCenterpoint','address2' => 'Dr.','city' => 'La Palma','state' => 'CA','zip' => '90623','country' => 'United States','contact' => array('username' => 'vb07.gmail.com','firstname' => 'Admin','lastname' => 'User','email' => 'vb07@gmail.com'),'preferences' => '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'));
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
+        AuthContext::put(AuthConstants::PRIVILEGES, ['MANAGE_ACCOUNT_WRITE' => TRUE]);
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('name' => 'V&B', 'uuid' => 'e1033dc0-126b-40ba-89e0-d3061bdeda42','email' => 'vb07@gmail.com','address1' => '6 bCenterpoint','address2' => 'Dr.','city' => 'La Palma','state' => 'CA','zip' => '90623','country' => 'United States','contact' => array('username' => 'vb07.gmail.com','firstname' => 'Admin','lastname' => 'User','email' => 'vb07@gmail.com'),'preferences' => '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->setupOrg($data);
-        $sqlQuery = "SELECT count(*) as count FROM ox_organization";
+        $sqlQuery = "SELECT count(*) as count FROM ox_account";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);
@@ -529,7 +547,7 @@ class AppServiceTest extends AbstractServiceTest
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->setupOrg($data);
-        $sqlQuery = "SELECT count(name) as count FROM ox_organization WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
+        $sqlQuery = "SELECT count(name) as count FROM ox_account WHERE uuid = 'e1033dc0-126b-40ba-89e0-d3061bdeda4c'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $statement = $adapter->query($sqlQuery);
@@ -587,7 +605,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testSetupAppView()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp', 'title' => 'Dummy App'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $config = $this->getApplicationConfig();
@@ -635,7 +653,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testDeleteApp() {
         AuthContext::put(AuthConstants::USER_ID, 6);
-        AuthContext::put(AuthConstants::ORG_ID, 300);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $uuid = 'a77ea120-b028-479b-8c6e-60476b6a4459';
         $appService->deleteApp($uuid, 0);
@@ -645,7 +663,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testDeleteAppWithInvalidUuid() {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ORG_ID, '1');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $appService->deleteApp('11111111-1111-1111-1111-111111111111', 0);
@@ -654,6 +672,139 @@ class AppServiceTest extends AbstractServiceTest
         catch(EntityNotFoundException $e) {
             $this->assertNotNull($e);
         }
+    }
+
+    public function testRemoveDeployedApp(){
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        $uuid = '35443300-1826-11eb-adc1-0242ac120002';
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $config = $this->getApplicationConfig();
+        $viewAppFolder = $config['APPS_FOLDER']. 'SampleApp' ;
+        $viewAppLocation =__DIR__ . '/../../../../module/App/test/sampleapp/';
+        FileUtils::symlink($viewAppLocation, $viewAppFolder);
+        try {
+            $beforePageDelete = $this->executeQueryTest("SELECT * FROM ox_app_page join ox_app on ox_app.id = ox_app_page.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(3, count($beforePageDelete));
+
+            $beforeMenuDelete = $this->executeQueryTest("SELECT * FROM ox_app_menu join ox_app on ox_app.id = ox_app_menu.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(3, count($beforePageDelete));
+
+            $beforewfDelete = $this->executeQueryTest("SELECT ox_workflow_instance.* FROM ox_workflow_instance join ox_workflow_deployment on ox_workflow_deployment.id = ox_workflow_instance.workflow_deployment_id join ox_workflow on ox_workflow.id = ox_workflow_deployment.workflow_id join ox_app on ox_app.id = ox_workflow.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(10, count($beforewfDelete));
+            $this->assertEquals(0, $beforewfDelete[0]['isdeleted']);
+
+            $beforeActivityDelete = $this->executeQueryTest("SELECT * FROM ox_activity join ox_app on ox_app.id = ox_activity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($beforeActivityDelete));
+            $this->assertEquals(0, $beforeActivityDelete[0]['isdeleted']);
+
+            $beforeActivityInstanceDelete = $this->executeQueryTest("SELECT ox_activity_instance.* FROM ox_activity_instance join ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id join ox_app on ox_app.id = ox_workflow_instance.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(12, count($beforeActivityInstanceDelete));
+            $this->assertEquals(0, $beforeActivityInstanceDelete[0]['isdeleted']);
+
+            $beforeFileDelete = $this->executeQueryTest("SELECT oxf.* from ox_file oxf inner join ox_app_entity oxae on oxae.id = oxf.entity_id inner join ox_app oxa on oxa.id = oxae.app_id where oxa.uuid='${uuid}'");
+            $this->assertEquals(10, count($beforeFileDelete));
+            $this->assertEquals(1, $beforeFileDelete[0]['is_active']);
+
+            $beforeFormsDelete = $this->executeQueryTest("SELECT * FROM ox_form join ox_app on ox_app.id = ox_form.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($beforeFormsDelete));
+            $this->assertEquals(0, $beforeFormsDelete[0]['isdeleted']);
+
+            $beforeEntityDelete = $this->executeQueryTest("SELECT * FROM ox_app_entity join ox_app on ox_app.id = ox_app_entity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($beforeEntityDelete));
+            $this->assertEquals(0, $beforeEntityDelete[0]['isdeleted']);
+
+            $beforeDelete = $this->executeQueryTest("SELECT oei.* FROM ox_entity_identifier oei 
+            right outer join ox_app_entity oxe on oei.entity_id = oxe.id
+            inner join ox_app oxa on oxa.id = oxe.app_id 
+            where oxa.uuid ='${uuid}'");
+            $this->assertEquals(2, count($beforeDelete));
+            
+            $beforeDelete1 = $this->executeQueryTest("SELECT * from ox_org_offering");
+
+            $beforeRolePriDe = $this->executeQueryTest("SELECT * FROM ox_role_privilege join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(1, count($beforeRolePriDe));
+
+            $beforeDe1 = $this->executeQueryTest("SELECT ox_role.* FROM ox_role join ox_role_privilege on ox_role_privilege.role_id = ox_role.id join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(1, count($beforeDe1));
+
+            $beforeDel2 = $this->executeQueryTest("SELECT ox_privilege.* FROM ox_privilege join ox_app on ox_app.id = ox_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(4, count($beforeDel2));
+
+            $beforeDel3 = $this->executeQueryTest("SELECT ox_app_registry.* FROM ox_app_registry join ox_app on ox_app.id = ox_app_registry.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(4, count($beforeDel3));
+
+            $appService->removeDeployedApp($uuid);
+            // JOBS Assertion
+            $result = $this->executeQueryTest("SELECT * FROM ox_job join ox_app on ox_app.id = ox_job.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            // Page
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_page join ox_app on ox_app.id = ox_app_page.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            // Menu
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_menu join ox_app on ox_app.id = ox_app_menu.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            //Entity
+            $result = $this->executeQueryTest("SELECT ox_workflow_instance.isdeleted,ox_workflow_deployment.isdeleted as wfDeploymentDelete, ox_workflow.isdeleted as wfDelete FROM ox_workflow_instance join ox_workflow_deployment on ox_workflow_deployment.id = ox_workflow_instance.workflow_deployment_id join ox_workflow on ox_workflow.id = ox_workflow_deployment.workflow_id join ox_app on ox_app.id = ox_workflow.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(10, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+            $this->assertEquals(1, $result[0]['wfDeploymentDelete']);
+            $this->assertEquals(1, $result[0]['wfDelete']);
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_activity join ox_app on ox_app.id = ox_activity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+            $this->assertEquals(1, $result[1]['isdeleted']);
+
+            $result = $this->executeQueryTest("SELECT ox_activity_instance.* FROM ox_activity_instance join ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id join ox_app on ox_app.id = ox_workflow_instance.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(12, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+
+            $result = $this->executeQueryTest("SELECT oxf.* from ox_file oxf inner join ox_app_entity oxae on oxae.id = oxf.entity_id inner join ox_app oxa on oxa.id = oxae.app_id where oxa.uuid='${uuid}'");
+            $this->assertEquals(10, count($result));
+            $this->assertEquals(0, $result[0]['is_active']);
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_form join ox_app on ox_app.id = ox_form.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_entity join ox_app on ox_app.id = ox_app_entity.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(2, count($result));
+            $this->assertEquals(1, $result[0]['isdeleted']);
+
+            // $result = $this->executeQueryTest("SELECT oei.* FROM ox_entity_identifier oei 
+            // right outer join ox_app_entity oxe on oei.entity_id = oxe.id
+            // inner join ox_app oxa on oxa.id = oxe.app_id 
+            // where oxa.uuid ='${uuid}'");
+            // $this->assertEquals(2, count($beforeDelete));
+
+            // $result = $this->executeQueryTest("SELECT ox_org_offering.* from ox_org_offering join ox_app_entity on ox_app_entity.id = ox_org_offering.entity_id join ox_app on ox_app.id = ox_app_entity.app_id WHERE ox_app.uuid='${uuid}' ");
+
+            //ox_role_privilege
+            $result = $this->executeQueryTest("SELECT * FROM ox_role_privilege join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+            //ox_user_role
+
+            //ox_role
+            $result = $this->executeQueryTest("SELECT * FROM ox_role join ox_role_privilege on ox_role_privilege.role_id = ox_role.id join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+
+            //ox_privilege
+            $result = $this->executeQueryTest("SELECT * FROM ox_privilege join ox_app on ox_app.id = ox_privilege.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+
+            //ox_app_registry
+            $result = $this->executeQueryTest("SELECT * FROM ox_app_registry join ox_app on ox_app.id = ox_app_registry.app_id WHERE ox_app.uuid='${uuid}'");
+            $this->assertEquals(0, count($result));
+
+            $result = $this->executeQueryTest("SELECT * FROM ox_app WHERE uuid='${uuid}'");
+            $this->assertEquals(App::DELETED, $result[0]['status']);
+            $this->assertEquals($result[0]['id']."_SampleApp", $result[0]['name']);
+
+        }catch(Exception $e) {
+            $this->assertNotNull($e);
+        }
+
+
     }
 }
 

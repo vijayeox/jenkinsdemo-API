@@ -9,7 +9,7 @@ class Metafield extends Entity
     protected $data = array(
         'id'=>0,
         'name'=>null,
-        'org_id'=>null,
+        'account_id'=>null,
         'text'=>null,
         'data_type'=>null,
         'options'=>null,
@@ -23,7 +23,7 @@ class Metafield extends Entity
     );
     public function validate()
     {
-        $required = array('name','org_id','formid','data_type','sequence');
+        $required = array('name','account_id','formid','data_type','sequence');
         $this->validateWithParams($required);
     }
 }

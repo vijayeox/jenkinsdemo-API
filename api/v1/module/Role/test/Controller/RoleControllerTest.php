@@ -45,10 +45,10 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 5);
     }
 
-    public function testGetListWithOrgId()
+    public function testGetListWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -63,10 +63,10 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 5);
     }
 
-    public function testGetListWithDifferentOrgId()
+    public function testGetListWithDifferentAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -83,10 +83,10 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 4);
     }
 
-    public function testGetListMyManagerWithDifferentOrgId()
+    public function testGetListMyManagerWithDifferentAccountId()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'GET');
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
@@ -138,10 +138,10 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 5);
     }
 
-    public function testGetListWithQuerySortWithOrgId()
+    public function testGetListWithQuerySortWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":1}]', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -155,7 +155,7 @@ class RoleControllerTest extends ControllerTest
     public function testRolePrivilege()
     {
         $this->initAuthToken($this->adminUser);
-        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and account_id = 1";
         $result = $this->executeUpdate($update);
         $this->dispatch('/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
         $this->assertResponseStatusCode(200);
@@ -165,62 +165,62 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(18, count($content['data']));
+        $this->assertEquals(31, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if ($val['privilege_name'] == "MANAGE_ANNOUNCEMENT") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
-                $this->assertEquals($val['app_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
+                $this->assertEquals($val['app_id'], null);
             }
             if ($val['privilege_name'] == "MANAGE_CRM") {
                 $this->assertEquals($val['permission'], 1);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 9);
             }
             if ($val['privilege_name'] == "MANAGE_EMAIL") {
                 $this->assertEquals($val['permission'], 1);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_GROUP") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_MYAPP") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 3);
             }
-            if ($val['privilege_name'] == "MANAGE_ORGANIZATION") {
+            if ($val['privilege_name'] == "MANAGE_ACCOUNT") {
                 $this->assertEquals($val['permission'], 15);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_PROJECT") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_ROLE") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_USER") {
                 $this->assertEquals($val['permission'], 15);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
         }
     }
 
-    public function testRolePrivilegeWithOrgID()
+    public function testRolePrivilegeWithAccountID()
     {
         $this->initAuthToken($this->adminUser);
-        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and account_id = 1";
         $result = $this->executeUpdate($update);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Role');
@@ -229,60 +229,60 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(18, count($content['data']));
+        $this->assertEquals(31, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if ($val['privilege_name'] == "MANAGE_ANNOUNCEMENT") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
-                $this->assertEquals($val['app_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
+                $this->assertEquals($val['app_id'], null);
             }
             if ($val['privilege_name'] == "MANAGE_CRM") {
                 $this->assertEquals($val['permission'], 1);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 9);
             }
             if ($val['privilege_name'] == "MANAGE_EMAIL") {
                 $this->assertEquals($val['permission'], 1);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_GROUP") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_MYAPP") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 3);
             }
-            if ($val['privilege_name'] == "MANAGE_ORGANIZATION") {
+            if ($val['privilege_name'] == "MANAGE_ACCOUNT") {
                 $this->assertEquals($val['permission'], 15);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_PROJECT") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_ROLE") {
                 $this->assertEquals($val['permission'], 3);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
             if ($val['privilege_name'] == "MANAGE_USER") {
                 $this->assertEquals($val['permission'], 15);
-                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
         }
     }
 
-    public function testRolePrivilegeWithInvalidOrgID()
+    public function testRolePrivilegeWithInvalidAccountID()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
@@ -310,7 +310,7 @@ class RoleControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and account_id = 1";
         $result = $this->executeUpdate($update);
         $this->dispatch('/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45', 'GET');
         $this->assertResponseStatusCode(200);
@@ -319,31 +319,31 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(32, count($content['data']['privileges']));
+        $this->assertEquals(31, count($content['data']['privileges']));
     }
 
-    public function testGetWithOrgId()
+    public function testGetWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and account_id = 1";
         $result = $this->executeUpdate($update);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(32, count($content['data']['privileges']));
+        $this->assertEquals(31, count($content['data']['privileges']));
     }
 
-    public function testGetWithDifferentOrgId()
+    public function testGetWithDifferentAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/role/89a01b30-9cc9-416e-8027-1fd2083786c7', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'], array());
     }
@@ -352,10 +352,10 @@ class RoleControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/role/a0c8bfdf-bfe6-11e9-b282-68ec', 'GET');
-        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'], array());
+        $this->assertResponseStatusCode(404);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Invalid Role');
     }
 
     public function testCreateRole()
@@ -381,13 +381,13 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($result[1]['privilege_name'], 'MANAGE_ROLE');
     }
 
-    public function testCreateRoleWithOrgId()
+    public function testCreateRoleWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $data = array('name' => 'SUPER ADMIN', 'description' => 'Must have read and write control',
             'privileges' => array(['privilege_name' => 'MANAGE_ADMIN', 'permission' => '15'], ['privilege_name' => 'MANAGE_ROLE', 'permission' => '1'], ['privilege_name' => 'MANAGE_ALERT', 'permission' => '3']));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST', $data);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
         $id = $this->executeQueryTest($select);
@@ -409,12 +409,12 @@ class RoleControllerTest extends ControllerTest
         $data = array('name' => 'SUPER ADMIN', 'description' => 'Must have read and write control',
             'privileges' => array(['privilege_name' => 'MANAGE_ADMIN', 'permission' => '15'], ['privilege_name' => 'MANAGE_ROLE', 'permission' => '1'], ['privilege_name' => 'MANAGE_ALERT', 'permission' => '3']));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST', $data);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
         $id = $this->executeQueryTest($select);
 
-        $select1 = "SELECT * from ox_role_privilege where role_id = " . $id[0]['id'] . " and org_id = 1";
+        $select1 = "SELECT * from ox_role_privilege where role_id = " . $id[0]['id'] . " and account_id = 1";
         $result = $this->executeQueryTest($select1);
 
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -425,13 +425,13 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($result[1]['privilege_name'], 'MANAGE_ROLE');
     }
 
-    public function testCreateRoleWithDifferentOrgId()
+    public function testCreateRoleWithDifferentAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $data = array('name' => 'SUPER ADMIN', 'description' => 'Must have read and write control',
             'privileges' => array(['privilege_name' => 'MANAGE_ADMIN', 'permission' => '15'], ['privilege_name' => 'MANAGE_ROLE', 'permission' => '1'], ['privilege_name' => 'MANAGE_ALERT', 'permission' => '3']));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'POST', $data);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
         $id = $this->executeQueryTest($select);
@@ -456,7 +456,7 @@ class RoleControllerTest extends ControllerTest
         $this->dispatch('/role/53012471-2863', 'PUT');
         $this->assertResponseStatusCode(200);
 
-        $select = "SELECT id from ox_role where name = 'ADMIN' AND org_id = 1";
+        $select = "SELECT id from ox_role where name = 'ADMIN' AND account_id = 1";
         $id = $this->executeQueryTest($select);
 
         $select1 = "SELECT * from ox_role_privilege where role_id = " . $id[0]['id'];
@@ -466,19 +466,19 @@ class RoleControllerTest extends ControllerTest
 
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(count($result), 34);
+        $this->assertEquals(count($result), 33);
     }
 
-    public function testUpdatePrivilegePermissionWithOrgID()
+    public function testUpdatePrivilegePermissionWithAccountID()
     {
         $this->initAuthToken($this->adminUser);
         $data = array('name' => 'ADMIN', 'description' => 'Must have write control',
             'privileges' => array(['id' => '1', 'privilege_name' => 'MANAGE_ANNOUNCEMENT', 'permission' => '15'], ['id' => '14', 'privilege_name' => 'MANAGE_FORM', 'permission' => '1'], ['id' => '4', 'privilege_name' => 'MANAGE_ALERT', 'permission' => '3']));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'PUT');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'PUT');
 
         $this->assertResponseStatusCode(200);
-        $select = "SELECT id from ox_role where name = 'ADMIN' AND org_id = 1";
+        $select = "SELECT id from ox_role where name = 'ADMIN' AND account_id = 1";
         $id = $this->executeQueryTest($select);
 
         $select1 = "SELECT * from ox_role_privilege where role_id = " . $id[0]['id'];
@@ -487,7 +487,7 @@ class RoleControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(count($result), 34);
+        $this->assertEquals(count($result), 33);
     }
 
     public function testAddNewPrivilege()
@@ -517,7 +517,7 @@ class RoleControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'ADMIN_SUPER', 'org_id' => 2];
+        $data = ['name' => 'ADMIN_SUPER', 'account_id' => 2];
         $this->dispatch('/role', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -529,7 +529,7 @@ class RoleControllerTest extends ControllerTest
     public function testCreateAccess()
     {
         $this->initAuthToken($this->employeeUser);
-        $data = ['name' => 'ADMIN_SUPER 1', 'org_id' => 4];
+        $data = ['name' => 'ADMIN_SUPER 1', 'account_id' => 4];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/role', 'POST', null);
         $this->assertResponseStatusCode(401);
@@ -582,21 +582,21 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteWithInvalidOrgId()
+    public function testDeleteWithInvalidAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'DELETE');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Role does not belong to the organization');
+        $this->assertEquals($content['message'], 'Role does not belong to the account');
     }
 
     public function testDeleteWithInvalidRoleId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53471-2863', 'DELETE');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/role/53471-2863', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -604,10 +604,10 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Role not found');
     }
 
-    public function testDeleteWithOrgId()
+    public function testDeleteWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role/53012471-2863', 'DELETE');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/role/53012471-2863', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
