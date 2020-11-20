@@ -700,65 +700,6 @@
 				"persistent": false
 			}],
 			"hideOnChildrenHidden": false
-		}, {
-			"title": "  ",
-			"theme": "primary",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"key": "mailDocuments",
-			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-			"type": "panel",
-			"label": "  ",
-			"input": false,
-			"tableView": false,
-			"components": [{
-				"label": "HTML",
-				"attrs": [{
-					"attr": "style",
-					"value": "font-size:15px"
-				}],
-				"content": "Select the documents to be mailed:<span style=\"color:red\">*</span>",
-				"refreshOnChange": false,
-				"key": "html1",
-				"type": "htmlelement",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "Select All",
-				"tableView": false,
-				"defaultValue": true,
-				"key": "selectAll",
-				"type": "checkbox",
-				"input": true
-			}, {
-				"label": "Select the documents to be mailed:",
-				"optionsLabelPosition": "right",
-				"customClass": "selectBox",
-				"hideLabel": true,
-				"tableView": false,
-				"defaultValue": {
-					"selectAll": true,
-					"": false
-				},
-				"redrawOn": "finalDocuments",
-				"customDefaultValue": "var documents = [];\nvar i=1;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n",
-				"calculateValue": "var documents = [];\nvar selected = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n\nif(data.selectAll){\n  for(var key in data.finalDocuments){ \n    selected[key] = true;\n  }\n  value = Object.assign({}, selected);\n}\nconsole.log(value);",
-				"validate": {
-					"minSelectedCount": 1
-				},
-				"minSelectedCountMessage": "Please select the documents to be mailed",
-				"key": "csrmailDocuments",
-				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
-				"type": "selectboxes",
-				"input": true,
-				"inputType": "checkbox",
-				"template": "<span>{{ item.label }}</span>"
-			}]
 		}]
 	}, {
 		"label": "Submit",
@@ -771,7 +712,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 91,
+	"_vid": 92,
 	"title": "Dive Store User Approval Form",
 	"display": "wizard",
 	"access": [{
@@ -788,6 +729,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-11-18T09:44:54.035Z",
+	"modified": "2020-11-20T07:22:13.021Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }
