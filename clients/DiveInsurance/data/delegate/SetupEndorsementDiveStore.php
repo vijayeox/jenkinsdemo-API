@@ -281,7 +281,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                     foreach ($data['additionalLocations'] as $key => $value) {
                         $additionalLocations = $data['additionalLocations'][$key];
                         $additionalLocations['previous_ALCoverageFP'] = isset($additionalLocations['ALCoverageFP']) ? $additionalLocations['ALCoverageFP'] : 0;
-                        $additionalLocations['previous_ALPoolLiability'] = isset($additionalLocations['ALPoolLiability']) ? $additionalLocations['ALPoolLiability'] : 0;
+                        $additionalLocations['previous_ALPoolLiability'] = isset($additionalLocations['ALpoolLiability']) ? $additionalLocations['ALpoolLiability'] : 0;
                         $additionalLocations['previous_ALTravelAgentEOFP'] = isset($additionalLocations['ALTravelAgentEOFP']) ? $additionalLocations['ALTravelAgentEOFP'] : 0;
                         $additionalLocations['previous_ALMedicalExpenseFP'] = isset($additionalLocations['ALMedicalExpenseFP']) ? $additionalLocations['ALMedicalExpenseFP'] : 0;
                         $additionalLocations['previous_ALNonOwnedAutoFP'] = isset($additionalLocations['ALNonOwnedAutoFP']) ? $additionalLocations['ALNonOwnedAutoFP'] : 0;

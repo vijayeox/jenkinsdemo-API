@@ -1270,8 +1270,6 @@ class UserService extends AbstractService
             if(isset($data['CreateNewUser']) && ($data['CreateNewUser'] == true || $data['CreateNewUser'] == "
                 true")){
                 $where .= " ";
-                //unset dynamic flag to prevent creation again
-                unset($data['CreateNewUser']);
             } else {
                 $where .= " OR (ui.identifier = :identifier AND ui.identifier_name = :identifierName)";
             }
@@ -1282,6 +1280,8 @@ class UserService extends AbstractService
                 $queryParams["identifier"] = $data[$data['identifier_field']];
                 $queryParams["identifierName"] = $data['identifier_field'];
             }
+            //unset dynamic flag to prevent creation again
+            unset($data['CreateNewUser']);
             $handleUserIdentifier = true;
         }
 

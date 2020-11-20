@@ -141,7 +141,7 @@ content:
                 -
                     title: PADI
                     field: padi
-                    cell: '<td>{item.identifier_field == "business_padi" ? item.business_padi : item.padi}</td>'
+                    cell: '<td>{item.transfer == "true" || item.transfer == true ? (item.identifier_field == "business_padi" ? item.business_padi+"R"+item.iterations : item.padi) : (item.identifier_field == "business_padi" ? item.business_padi : item.padi)}</td>'
                     multiFieldFilter:
                         - business_padi
                 -
