@@ -130,13 +130,13 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 				$select=$group;
 				$select[] = 'account_id';
 				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
-		} else {
-			if (!empty($group)) {
-				$select['count'] = new \Zend\Db\Sql\Expression("count(*)");;
 			} else {
-			} else {
+				if (!empty($group)) {
+					$select['count'] = new \Zend\Db\Sql\Expression("count(*)");
+				} else {
 				$select = ['account_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
 			}
+		}
 		} 
 		else {
 			if (!empty($group)) {
