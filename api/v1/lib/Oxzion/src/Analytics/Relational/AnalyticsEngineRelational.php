@@ -125,6 +125,13 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 				$select = $group;
 			}
 		}
+		if (!empty($group)) { 
+			if (!empty($parameters['frequency'])) {
+				$select = [$fieldname=>new \Zend\Db\Sql\Expression("$group[0]")];
+			} else {
+				$select = $group;
+			}
+		}
 		if ($field) { 
 			if (!empty($group)) {
 				$select=$group;
@@ -132,18 +139,10 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
 		} else {
 			if (!empty($group)) {
-				$select['count'] = new \Zend\Db\Sql\Expression("count(*)");;
-			} else {
+				$select['count'] = new \Zend\Db\Sql\Expression("count(*)");
 			} else {
 				$select = ['account_id',$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
 			}
-		} 
-		else {
-			if (!empty($group)) {
-				$select=$group;
-				$select[] = 'account_id';
-				$select[] = new \Zend\Db\Sql\Expression("count(*)");;
-			} 
 		}
 		if ($datetype)
 			$range = "$datetype between '$startdate' and '$enddate'";
