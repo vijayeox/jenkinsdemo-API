@@ -49,7 +49,9 @@ abstract class DispatchDocument extends MailDelegate
         $doc = isset($documents) ? (is_string($documents) ? json_decode($documents,true) : $documents) : array();
         
         foreach($doc as $key => $value){
-            if($mailDocs[$key] == true){
+            
+            if(isset($mailDocs[$key]) && $mailDocs[$key] == true){
+                
                 $selectedDocs[$key] = $doc[$key];
             }
         }
