@@ -454,7 +454,7 @@ class UserService extends AbstractService
     private function addUserRole($accountUserId, $roleName)
     {
         if (!is_numeric($accountUserId)) {
-            $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('uuid' => $accountUserId))->toArray();
+            $user = $this->getDataByParams('ox_user', array('id', 'account_id'), array('uuid' => $accountUserId))->toArray();
         }else{
            $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('id' => $accountUserId))->toArray(); 
         }

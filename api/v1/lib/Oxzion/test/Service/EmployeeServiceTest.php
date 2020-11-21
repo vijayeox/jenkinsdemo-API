@@ -156,7 +156,6 @@ class EmployeeServiceTest extends AbstractServiceTest
         $this->EmplyService->updateEmployeeDetails($data);
         $personId = $data['person_id'];
         $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE id='${personId}'");
-        $this->assertEquals($data['uuid'], $rows[0]['uuid']);
         $this->assertEquals($data['person_id'], $rows[0]['person_id']);
         $this->assertEquals($data['designation'], $rows[0]['designation']);
         $this->assertEquals($data['date_of_join'], $rows[0]['date_of_join']);
