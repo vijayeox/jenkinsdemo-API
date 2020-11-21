@@ -1278,8 +1278,7 @@ private function checkWorkflowData(&$data,$appUuid)
                 } else {
                     $entity['id'] = $entityRec['id'];
                     $entity['uuid'] = $entityRec['uuid'];
-                    if ($entityRec['assoc_id'] != $assoc_id)
-                       $result = $this->entityService->saveEntity($appId, $entity);
+                    $result = $this->entityService->saveEntity($appId, $entity);
                 }
                 if(isset($entity['identifiers'])){
                     $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);
