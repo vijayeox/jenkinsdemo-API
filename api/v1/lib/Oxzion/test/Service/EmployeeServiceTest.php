@@ -118,7 +118,7 @@ class EmployeeServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $data = [
-            'uuid' => 'ecfdf59d-2262-11eb-a506-485f997ffb6f',
+            'uuid' => '0bd8934b-2a80-11eb-af3f-283a4d5cd637',
             'username' => 'testuser',
             'password' => '68de082ad0afbcdb3cdec0427e38dd3f',
             'name' => 'test test',
@@ -154,9 +154,8 @@ class EmployeeServiceTest extends AbstractServiceTest
             'date_modified' => '2020-11-06 11:30:42'
         ];
         $this->EmplyService->updateEmployeeDetails($data);
-        $empUuid = $data['uuid'];
-        $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE uuid='${empUuid}'");
-        $this->assertEquals($data['uuid'], $rows[0]['uuid']);
+        $personId = $data['person_id'];
+        $rows = $this->executeQueryTest("SELECT * FROM ox_employee WHERE id='${personId}'");
         $this->assertEquals($data['person_id'], $rows[0]['person_id']);
         $this->assertEquals($data['designation'], $rows[0]['designation']);
         $this->assertEquals($data['date_of_join'], $rows[0]['date_of_join']);

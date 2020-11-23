@@ -1039,7 +1039,7 @@
 				"formFieldsValidationExcel": [],
 				"start_date_field": "",
 				"end_date_field": "",
-				"statusField": "",
+				"status_field": "",
 				"field": [{
 					"name": "",
 					"text": "",
@@ -1165,7 +1165,7 @@
 										"label": "Status field",
 										"tooltip": "The Status Field which is used in the Entity",
 										"tableView": true,
-										"key": "statusField",
+										"key": "status_field",
 										"type": "textfield",
 										"input": true,
 										"hideOnChildrenHidden": false

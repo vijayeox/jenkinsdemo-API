@@ -18,6 +18,7 @@ ox_workflow_instance:
     created_by: 1
     file_id: 15
     start_data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "ef41cd2e-cb14-11e9-a32f-2a2ae2dbcc11","email" : "bharat@gmail.com"}'
+    isdeleted: 0
 ox_activity_instance:
   - id: 5
     activity_id: 3

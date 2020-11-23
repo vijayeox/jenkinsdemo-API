@@ -223,20 +223,21 @@ class JobService extends AbstractService
     public function getJobsList($appId)
     {
         $this->logger->info("EXECUTING GET JOB DETAILS FOR JOB ID");
-        $appId = $this->getIdFromUuid('ox_app', $appId);
-        if(!isset($appId)){
-            throw new ServiceException("app id not specified",'appid.not.specified', OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
-        }
-        $this->logger->info("EXECUTING GET JOBS LIST");
-        $query = 'SELECT * from ox_job where app_id = :appId';
-        $params = array('appId' => $appId);
-        $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
-        $this->logger->info("The result is - ", print_r($result, true));
-        if(!empty($result)){
+        try{
+            $appId = $this->getIdFromUuid('ox_app', $appId);
+            if(!isset($appId)){
+                throw new ServiceException("app id not specified",'appid.not.specified');            
+            }
+            $this->logger->info("EXECUTING GET JOBS LIST");
+            $query = 'SELECT * from ox_job where app_id = :appId';
+            $params = array('appId' => $appId);
+            $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
+            $this->logger->info("The result is - ", print_r($result, true));
             return $result;
         }
-        else{
-            throw new ServiceException("No records found", "no.records.found", OxServiceException::ERR_CODE_NOT_FOUND);            
+        catch(Exception $e){
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
     }
 }

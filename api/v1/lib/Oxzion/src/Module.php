@@ -57,7 +57,8 @@ class Module
                                                 $container->get(\App\Service\MenuItemService::class), 
                                                 $container->get(\App\Service\PageService::class),
                                                 $container->get(\Oxzion\Service\UserService::class),
-                                                $container->get(\Oxzion\Service\BusinessRoleService::class)
+                                                $container->get(\Oxzion\Service\BusinessRoleService::class),
+                                                $container->get(Messaging\MessageProducer::class)
                         );
                 },
                 Model\AppTable::class => function ($container) {
@@ -122,7 +123,8 @@ class Module
                                                             $container->get(Messaging\MessageProducer::class),
                                                             $container->get(\Oxzion\Service\FieldService::class),
                                                             $container->get(\Oxzion\Service\EntityService::class),
-                                                            $container->get(\Oxzion\Model\FileAttachmentTable::class));
+                                                            $container->get(\Oxzion\Model\FileAttachmentTable::class),
+                                                            $container->get(\Oxzion\Service\SubscriberService::class));
                 },
                 Service\RoleService::class => function ($container) {
                     return new Service\RoleService(
@@ -193,7 +195,7 @@ class Module
                 },
                 \Oxzion\Service\CommentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\CommentTable::class));
+                    return new \Oxzion\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\CommentTable::class),$container->get(Messaging\MessageProducer::class));
                 },
                 \Oxzion\Service\SubscriberService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);

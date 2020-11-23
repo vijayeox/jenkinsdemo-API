@@ -352,16 +352,10 @@ class RoleService extends AbstractService
         return $result;
     }
 
-    public function createBasicRoles($accountId, array $businessRoleId = NULL, $defaultRoles = true)
+    public function createBasicRoles($accountId)
     {
         $basicRoles = [];
-        if($defaultRoles){
-            $basicRoles = $this->getRolesByAccountId(null);
-        }
-        if($businessRoleId){
-            $temp = $this->getRolesByAccountId(null, $businessRoleId);
-            $basicRoles = array_merge($basicRoles, $temp);
-        }
+        $basicRoles = $this->getRolesByAccountId(null);
         try {
             foreach ($basicRoles as $basicRole) {
                 unset($basicRole['uuid']);
@@ -390,5 +384,38 @@ class RoleService extends AbstractService
             throw new ServiceException("Failed to update role privileges", "failed.update.default.privileges");
         } 
     
+    }
+
+    public function createRolesByBusinessRole($accountId, $appId)
+    {
+        try{
+            $this->beginTransaction();
+            $sqlQuery = "INSERT INTO ox_role(`name`,`description`,`account_id`,
+                    `is_system_role`,`uuid`,`default_role`,`business_role_id`) 
+                    (SELECT oxr.name,oxr.description,obr.account_id,oxr.is_system_role,UUID(),oxr.default_role,oxr.business_role_id 
+                    FROM ox_role oxr 
+                    inner join ox_account_business_role obr on obr.business_role_id = oxr.business_role_id
+                    inner join ox_business_role br on  br.id = obr.business_role_id
+                    where obr.account_id = :accountId and br.app_id = :appId)";
+            $params = ["accountId" => is_numeric($accountId) ? $accountId : $this->getIdFromUuid('ox_account',$accountId), "appId" => $appId];
+            $this->logger->info("ROLE QUERY--$sqlQuery with params---".print_r($params,true));
+            $this->executeUpdateWithBindParameters($sqlQuery,$params);
+            $sqlQuery = "INSERT INTO ox_role_privilege (`role_id`,`privilege_name`,
+                        `permission`,`account_id`,`app_id`)
+                        (SELECT acr.id,oxrp.privilege_name,oxrp.permission,acr.account_id,oxrp.app_id
+                        FROM ox_role_privilege oxrp 
+                        inner join ox_role oxr on oxr.id = oxrp.role_id and oxrp.app_id = :appId
+                        inner join ox_role acr on acr.name = oxr.name and acr.business_role_id = oxr.business_role_id
+                        inner join ox_account_business_role obr on obr.business_role_id = oxr.business_role_id
+                        inner join ox_business_role br on  br.id = obr.business_role_id
+                        WHERE obr.account_id = :accountId and br.app_id = :appId)";
+            $this->logger->info("ROLE Privilege QUERY--$sqlQuery with params---".print_r($params,true));
+            $this->executeUpdateWithBindParameters($sqlQuery,$params);
+            $this->commit();
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }       
+
     }
 }

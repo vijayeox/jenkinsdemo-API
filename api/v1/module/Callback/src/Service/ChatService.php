@@ -4,6 +4,8 @@ namespace Callback\Service;
 use Exception;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\RestClient;
+use Oxzion\Service\FileService;
+use Oxzion\Service\SubscriberService;
 
 class ChatService extends AbstractService
 {
@@ -16,12 +18,15 @@ class ChatService extends AbstractService
         $this->restClient = $restClient;
     }
 
-    public function __construct($config)
+    public function __construct($config, FileService $fileService, SubscriberService $subscriberService)
     {
         parent::__construct($config, null);
         $chatServerUrl = $this->config['chat']['chatServerUrl'];
         $this->restClient = new RestClient($this->config['chat']['chatServerUrl']);
         $this->authToken = $this->config['chat']['authToken']; //PAT
+        $this->appBotUrl = $this->config['chat']['appBotUrl'];
+        $this->fileService = $fileService;
+        $this->subscriberService = $subscriberService;
     }
 
     private function getAuthHeader()
@@ -395,7 +400,7 @@ class ChatService extends AbstractService
                 $this->logger->info("Bot Name is missing");
                 return;
             }
-            $userDetails = $this->getUserByUsername($botName,true);    
+            $userDetails = $this->getUserByUsername($botName,true);     
             $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
             return $response;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -404,4 +409,21 @@ class ChatService extends AbstractService
         }
     }
 
+    public function appBotNotification($params){
+        $this->logger->info("appBotNotification");
+        try{
+            $headers = $this->getAuthHeader();
+            $appDetails = $this->fileService->getAppDetailsBasedOnFileId($params['fileId']);
+            $subscribers =  $this->subscriberService->getSubscribers($params['fileId']);
+            $subscribersToList = array_column($subscribers, 'username');
+            $subscribersList = implode(',', $subscribersToList);
+            $this->logger->info("subscribersList---".print_r($subscribersList,true));
+            $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', array('appName' => $appDetails['appName'], 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList), $headers);
+
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+    // partipnts based on fileId
 }

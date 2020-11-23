@@ -424,9 +424,9 @@ class FileServiceTest extends AbstractServiceTest
         $params = array('entityName' => 'entity1', 'assocId' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b');
         $filterParams = null;
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
-        $this->assertEquals("d13d0c68-98c9-11e9-adc5-308d99c9145b",$result['data'][0]['uuid']);
+        $this->assertEquals("d13d0c68-98c9-11e9-adc5-308d99c9145c",$result['data'][0]['uuid']);
         $this->assertEquals("entity1",$result['data'][0]['entity_name']);
-        $this->assertEquals(9,$result['total']);
+        $this->assertEquals(1,$result['total']);
     }
 
     public function testGetFileListWithGreaterThanOrEqualCreatedDateCheck() {
@@ -507,6 +507,20 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $this->assertEquals(1, count($sqlQuery2Result));
         $fileId = $sqlQuery2Result[0]['id'];
+        $startData = json_decode($sqlQuery2Result[0]['data'],true);
+        if (isset($startData['entity_id'])) {
+            unset($startData['entity_id']);
+        }
+        if (isset($startData['start_date'])|| empty($startData['start_date'])) {
+            unset($startData['start_date']);
+        }
+        if (isset($startData['end_date'])|| empty($startData['end_date'])) {
+            unset($startData['end_date']);
+        }
+        if (isset($startData['status'])|| empty($startData['status'])) {
+            unset($startData['status']);
+        }
+        $sqlQuery2Result[0]['data'] = json_encode($startData);
         $this->assertEquals($data['data'], $sqlQuery2Result[0]['data']);
         if(!$accountId){
             $this->assertEquals(AuthContext::get(AuthConstants::ACCOUNT_ID), $sqlQuery2Result[0]['account_id']);
@@ -796,6 +810,7 @@ class FileServiceTest extends AbstractServiceTest
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid);
         $result = $this->fileService->updateFile($data, $fileId);
         $data['uuid'] = $fileId;
+        $date = date_format(date_create(null),"Y-m-d H:m:s");
         $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30 00:00:00","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","field1":1,"field2":2}';
         $indexedFields = [['field' => 'field1', 'type' => 'TEXT', 'id' => 1],
                           ['field' => 'expiry_date', 'type' => 'DATE', 'id' => 3],
@@ -1012,7 +1027,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery2 = 'SELECT fa.*, f.name FROM ox_file_document fa inner join ox_field f on f.id = fa.field_id 
                         where file_id = '.$dataset['ox_file'][9]['id'];
         $queryResult1 = $this->runQuery($sqlQuery2);
-        $data = array('datagrid' => array(0 => array('firstname' => 'manduk','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" ))), 1 => array('firstname' => 'marmade','lastname' => 'hamil', 'padi' => 322, 'id_document' => array(array("file" => "SampleAttachment1.txt", "path" => __DIR__."/Dataset")))));
+        $data = array('datagrid' => array(0 => array('firstname' => 'manduk','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" ))), 1 => array('firstname' => 'marmade','lastname' => 'hamil', 'padi' => 322, 'id_document' => array(array("file" => "SampleAttachment1.txt", "path" => __DIR__."/Dataset")))),'entity_id' => '4', 'start_date' => date_format(date_create(null),'Y-m-d H:m:s'), 'end_date' => date_format(date_create(null),'Y-m-d H:m:s'),'status' => null);
         $result = $this->fileService->updateFile($data,$fileId);
         $dataSqlQuery = "SELECT data FROM ox_file where uuid ='".$fileId."'";
         $queryResult2 = $this->runQuery($dataSqlQuery);
@@ -1431,5 +1446,18 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertCount(1,[$result['data'][0]['rygRule']]);
         $this->assertEquals(1,$result['total']);
     }
+
+//         public function testFileCreateWithSubscribers() {
+//         $dataset = $this->dataset;
+//         $appUuid = $dataset['ox_app'][0]['uuid'];
+//         $formId = $dataset['ox_form'][0]['uuid'];
+//         $entityId = $dataset['ox_app_entity'][0]['id'];
+//         $data = array('field1' => '32325', 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId, 'observers' => ["",""]);
+//         $result = $this->fileService->createFile($data);
+//         $this->performFileAssertions($result, $data, 2);
+           
+    
+
+// }
 
 }

@@ -9,6 +9,22 @@ ox_business_role:
     name: "Agency"
     app_id: 99
     created_by: 1
+ox_role:
+  - id: 101
+    name: "Policy Holder"
+    business_role_id: 100
+    uuid: "be6ba94e-2aee-11eb-adc1-0242ac120002"    
+ox_privilege:
+  - id: 201
+    name: "MANAGE MY POLICY"    
+    app_id: 99
+    permission_allowed: 3
+ox_role_privilege:
+  - id: 301
+    role_id: 101
+    privilege_name: "MANAGE MY POLICY"
+    app_id: 99
+    permission: 3    
 ox_entity_participant_role:
   - entity_id: 1
     business_role_id: 100

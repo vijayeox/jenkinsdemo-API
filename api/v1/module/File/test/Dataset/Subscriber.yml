@@ -37,9 +37,7 @@ ox_subscriber:
     account_id: 1
     file_id: 1
     created_by: 1
-    modified_by: 1
     date_created: '2019-01-08 04:15:37'
-    date_modified: '2019-01-08 04:15:37'
     uuid: "3ff78f56-5748-406b-9ce9-426242c5afc5"
   -
     id: 2
@@ -47,7 +45,5 @@ ox_subscriber:
     account_id: 1
     file_id: 1
     created_by: 1
-    modified_by: 1
     date_created: '2019-01-08 04:15:37'
-    date_modified: '2019-01-08 04:15:37'
     uuid: "43f78f56-5748-406b-9ce9-426242c5afd6"
