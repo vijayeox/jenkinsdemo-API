@@ -273,7 +273,7 @@ class UserControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
@@ -318,7 +318,7 @@ class UserControllerTest extends ControllerTest
         $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
 
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');

@@ -26,6 +26,15 @@ class ChatCallbackControllerTest extends ControllerTest
         $chatService->setRestClient($mockRestClient);
         return $mockRestClient;
     }
+
+    protected function setDefaultAsserts()
+    {
+        $this->assertModuleName('Callback');
+        $this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ChatcallbackController');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
+
     public function testAddAccount()
     {
         $this->initAuthToken($this->adminUser);

@@ -18,7 +18,16 @@ final class Version20200908051916 extends AbstractMigration
     }
 
     public function up(Schema $schema) : void
-    {
+    {   
+        $database = $this->connection->getDatabase();
+        $sql = "SELECT count(CONSTRAINT_NAME) as count
+                    from information_schema.TABLE_CONSTRAINTS 
+                    where table_schema =  '$database'
+                      and table_name = 'ox_user_role'
+                      and CONSTRAINT_TYPE = 'FOREIGN KEY'
+                      and CONSTRAINT_NAME = 'app_user'";
+        $result = $this->connection->fetchArray($sql);
+
         $this->addSql("RENAME TABLE ox_organization TO ox_account,
                                     ox_organization_profile TO ox_organization,
                                     ox_user_org TO ox_account_user,
@@ -45,14 +54,16 @@ final class Version20200908051916 extends AbstractMigration
         //user_role
         $this->addSql("ALTER TABLE ox_user_role ADD COLUMN `account_user_id` INT(32),
                         ADD CONSTRAINT FOREIGN KEY (`account_user_id`) REFERENCES ox_account_user(`id`)");
-        $this->addSql("ALTER TABLE ox_user_role DROP FOREIGN KEY app_role;");
-        $this->addSql("ALTER TABLE ox_user_role DROP FOREIGN KEY app_user;");
-        $this->addSql("ALTER TABLE ox_user_role DROP INDEX uniq_id");
         $this->addSql("UPDATE ox_user_role 
                         inner join ox_user u on ox_user_role.user_id = u.id
                         inner join ox_account_user au on u.id=au.user_id and 
                                                          u.account_id = au.account_id
                         SET ox_user_role.account_user_id = au.id");
+        
+        if ($result && $result[0]) {
+            $this->addSql("ALTER TABLE ox_user_role DROP FOREIGN KEY app_user");
+        }
+        $this->addSql("ALTER TABLE ox_user_role DROP INDEX uniq_id");
         $this->addSql("ALTER TABLE ox_user_role DROP COLUMN `user_id`");
         $this->addSql("ALTER TABLE ox_user_role ADD UNIQUE INDEX uniq_account_user_role_idx (role_id, account_user_id)");
         //user_profile -> person
@@ -83,7 +94,7 @@ final class Version20200908051916 extends AbstractMigration
         $this->addSql("ALTER TABLE ox_employee CHANGE `org_profile_id` `org_id` INT(32)");
         $this->addSql("ALTER TABLE ox_employee CHANGE `user_profile_id` `person_id` INT(32)");
         $this->addSql("ALTER TABLE ox_employee ADD COLUMN `manager_id` INT(32)");
-        $this->addSql("ALTER TABLE ox_employee ADD CONSTRAINT FOREIGN KEY (`manager_id`) REFERENCES ox_user(`id`)");
+        $this->addSql("ALTER TABLE ox_employee ADD CONSTRAINT FOREIGN KEY (`manager_id`) REFERENCES ox_employee(`id`)");
         $this->addSql("UPDATE ox_employee em 
                         INNER JOIN ox_user u on em.managerid = u.id
                         INNER JOIN ox_employee e on e.person_id = u.person_id

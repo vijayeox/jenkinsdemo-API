@@ -719,7 +719,7 @@ class AppServiceTest extends AbstractServiceTest
             where oxa.uuid ='${uuid}'");
             $this->assertEquals(2, count($beforeDelete));
             
-            $beforeDelete1 = $this->executeQueryTest("SELECT * from ox_org_offering");
+            $beforeDelete1 = $this->executeQueryTest("SELECT * from ox_account_offering");
 
             $beforeRolePriDe = $this->executeQueryTest("SELECT * FROM ox_role_privilege join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
             $this->assertEquals(1, count($beforeRolePriDe));
