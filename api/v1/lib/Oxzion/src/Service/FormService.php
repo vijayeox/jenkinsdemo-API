@@ -144,7 +144,7 @@ class FormService extends AbstractService
             $where = "";
             $params = array();
             if (isset($appUuid)) {
-                $where ."where app.uuid = :appId";
+                $where .="where app.uuid = :appId";
                 $params['appId'] = $appUuid;
             }
             //TODO handle the $filterArray using FilterUtils
@@ -153,6 +153,7 @@ class FormService extends AbstractService
                       inner join ox_app as app on app.id = f.app_id
                       $where and f.isdeleted=0";
             $response = array();
+            $this->logger->info("GET FORM QUERY-- $query with params--".print_r($params,true));
             $response['data'] = $this->executeQueryWithBindParameters($query, $params)->toArray();
             return $response;
         } catch (Exception $e) {

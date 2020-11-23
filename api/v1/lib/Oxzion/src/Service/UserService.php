@@ -232,7 +232,7 @@ class UserService extends AbstractService
                     return $result[0]['uuid'];
                 }
             } else {
-                throw new ServiceException("Username or Email Exists in other Account", "user.email.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+                throw new InsertFailedException("Username or Email Exists in other Account", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         }
         try{
@@ -441,36 +441,47 @@ class UserService extends AbstractService
         return $data['uuid'];
     }
 
-    public function addAppRolesToUser($accountUserId,$appId, $accountId){
+    public function addAppRolesToUser($accountUserId,$appId){
         if (isset($appId)) {
-            $appId = $this->getIdFromUuid('ox_app',$appId);
+            $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
             $result = $this->roleService->getRolesByAppId($appId);
             foreach ($result as $role) {
-                $this->addUserRole($accountUserId,$role['name'], $accountId);
+                $this->addUserRole($accountUserId,$role['name']);
             }
         }
     }
 
-    private function addUserRole($accountUserId, $roleName, $accountId)
+    private function addUserRole($accountUserId, $roleName)
     {
-        $role = $this->getDataByParams('ox_role', array('id'), array('account_id' => $accountId, 'name' => $roleName))->toArray();
-        if (!empty($role)) {
-            $userRole = $this->getDataByParams('ox_user_role', array(), array('account_user_id' => $accountUserId, 'role_id' => $role[0]['id']))->toArray();
-            if (empty($userRole)) {
-                $data = array(
-                    'accountUserId' => $accountUserId,
-                    'roleId' => $role[0]['id'],
-                );
-                $query = "INSERT INTO ox_user_role(account_user_id, role_id)
-                            VALUES (:accountUserId, :roleId)";
-                $this->executeUpdateWithBindParameters($query, $data);
-                
-            } 
+        if (!is_numeric($accountUserId)) {
+            $user = $this->getDataByParams('ox_user', array('id', 'account_id'), array('uuid' => $accountUserId))->toArray();
         }else{
-            return 2;
-        } 
-    
+           $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('id' => $accountUserId))->toArray(); 
+        }
+        if ($user){
+            if ($role = $this->getDataByParams('ox_role', array('id'), array('account_id' => $user[0]['account_id'], 'name' => $roleName))->toArray()) {
+                if (!empty($role)) {
+                    if (!$this->getDataByParams('ox_user_role', array(), array('account_user_id' => $user[0]['id'], 'role_id' => $role[0]['id']))->toArray()) {
+                        $data = array(array(
+                            'account_user_id' => $user[0]['id'],
+                            'role_id' => $role[0]['id'],
+                        ));
+                        $result = $this->multiInsertOrUpdate('ox_user_role', $data);
+                        if ($result->getAffectedRows() == 0) {
+                            return $result;
+                        }
+                        return 1;
+                    } else {
+                        return 3;
+                    }
+                }
+            } else {
+                return 2;
+            }
+        }
+        return 0;
     }
+
 
     private function generateUserIndexForElastic($data)
     {

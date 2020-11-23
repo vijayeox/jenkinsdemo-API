@@ -59,23 +59,27 @@ class EntityService extends AbstractService
         }
     }
 
-    public function deleteEntity($appUuid, $id)
+public function deleteEntity($appUuid, $id)
     {
         $result = $this->getEntity($id, $appUuid);
-        if ($result) {
+        if ($result) {            
+            $entity = new Entity($this->table);
+            $entity->loadByUuid($id);
+            $data = ["isdeleted" => 1];
+            $entity->assign($data);
             try {
                 $this->beginTransaction();
-                $this->table->delete($id);
+                $entity->save($entity);
                 $this->commit();
-                return $count;
             }
             catch (Exception $e) {
                 $this->rollback();
                 $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
-        } else {
-            throw new EntityNotFoundException("Entity Not Found");
+        }
+         else {
+            throw new ServiceException("Entity Not Found", "entity.not.found");
         }
     }
 
@@ -183,5 +187,15 @@ class EntityService extends AbstractService
         }
 
         return null;
+    }
+
+    public function removeEntityLinkedToApps($appId){
+        $entityRes = $this->getEntitys($appId);
+        if (count($entityRes) > 0) {
+            foreach ($entityRes as $key => $value) {
+                $this->formService->deleteFormsLinkedToApp($appId);
+                $this->deleteEntity($appId,$value['uuid']);
+            }
+        }
     }
 }

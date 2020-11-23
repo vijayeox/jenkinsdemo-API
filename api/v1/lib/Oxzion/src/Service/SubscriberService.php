@@ -50,7 +50,7 @@ class SubscriberService extends AbstractService
             return 0;
         }
         $obj['uuid'] = $data['commentId'];
-        $obj['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
+        $obj['account_id'] = $data['account_id'] ? $data['account_id'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $obj['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $obj['date_created'] = date('Y-m-d H:i:s');
         $form = new Subscriber();
@@ -73,63 +73,33 @@ class SubscriberService extends AbstractService
         return $data;
     }
 
-    public function updateSubscriber($id, $fileId, $data)
+    public function updateSubscriber($data,$fileId)
     {
-        $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
-        if (is_null($obj)) {
-            return 0;
-        }
-        $data['user_id'] = $this->getIdFromUuid('ox_user', $data['user_id']);
-        if(!$data['user_id']){
-            return -1;
-        }
-        $form = new Subscriber();
-        $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
-        $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_modified'] = date('Y-m-d H:i:s');
-        $form->exchangeArray($data);
-        $form->validate();
-        $count = 0;
         try {
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-        } catch (Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
-        return $count;
-    }
+            $this->beginTransaction();
+            $fId = $this->getIdFromUuid("ox_file", $fileId);
+            $userList = is_array($data['subscribers']) ? "'" . implode ( "','", $data['subscribers'] ) . "'" : trim($data['subscribers'],"[]");
+            $deleteQuery = "DELETE FROM ox_subscriber WHERE file_id=:fileId AND user_id not in(SELECT id FROM ox_user where uuid in($userList))";
+            $queryParams = ["fileId" => $fId];
+            $this->logger->info("Subscriber Delete Query-- $deleteQuery with params".print_r($queryParams,true));
+            $resultSet = $this->executeUpdateWithBindParameters($deleteQuery, $queryParams);
 
-    public function deleteSubscriber($id, $fileId)
-    {
-        $fId = $this->getIdFromUuid("ox_file", $fileId);
-        $obj = $this->table->getByUuid($id, array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
-        if (is_null($obj)) {
-            return 0;
-        }
-        $form = new Subscriber();
-        $data = $obj->toArray();
-        $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['isdeleted'] = 1;
-        $form->exchangeArray($data);
-        $form->validate();
-        $count = 0;
-        try {
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
+            $insertQuery = "INSERT INTO ox_subscriber (`user_id`,`account_id`,`file_id`,
+                            `uuid`,`created_by`,`date_created`)
+                            (SELECT u.id,:accountId,:fileId,UUID(),:createdBy,now() 
+                            FROM ox_user as u 
+                            LEFT JOIN ox_subscriber as s on s.user_id=u.id and s.file_id =:fileId
+                            WHERE u.uuid in ($userList) 
+                            AND s.user_id is NULL)";
+            $insertParams = array("accountId" => $data['account_id'] ? $data['account_id'] :            AuthContext::get(AuthConstants::ACCOUNT_ID) ,
+                            "fileId" => $fId , "createdBy" => AuthContext::get(AuthConstants::USER_ID));
+            $this->logger->info("Subscriber Insert Query-- $insertQuery with params".print_r($insertParams,true));
+            $result = $this->executeUpdateWithBindParameters($insertQuery, $insertParams);
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;
     }
 
     public function getSubscriber($id, $fileId){
@@ -147,16 +117,16 @@ class SubscriberService extends AbstractService
 
     private function getSubscribersInternal($fileId, $id = null){
         $idClause = "";
-        $params = array("accountId"=>AuthContext::get(AuthConstants::ACCOUNT_ID),"fileId"=>$fileId);
+        $params = array("fileId"=>$fileId); 
         if($id){
             $idClause = "AND s.uuid = :subscriberId";
             $params['subscriberId'] = $id;
         }
-        $query = "select up.firstname, up.lastname, u.uuid as user_id from ox_subscriber s 
+        $query = "select up.firstname, up.lastname, u.username, u.uuid as user_id from ox_subscriber s 
                         inner join ox_file of on s.file_id = of.id
                         inner join ox_user u on u.id = s.user_id
                         inner join ox_person up on up.id = u.person_id
-                        where s.account_id = :accountId and of.uuid = :fileId $idClause ORDER by up.firstname";
+                        where of.uuid = :fileId $idClause ORDER by up.firstname";
         $this->logger->info("Executing Query $query with params - ".print_r($params, true));
         $resultSet = $this->executeQueryWithBindParameters($query, $params);
         return $resultSet->toArray();
