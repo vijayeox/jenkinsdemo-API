@@ -703,4 +703,37 @@ class CommandService extends AbstractService
             throw $e;
         }
     }
+
+    public function batchProcess(&$data,$request) {
+        try {
+            if(isset($data['fileList'])) {
+                $fileList = $data['fileList'];
+                foreach ($fileList as $key => $value) {
+                    $data['fileId'] = $value;
+                    try {
+                        $this->runCommand($data,$request);
+                    } catch (ValidationException $e) {
+                        $this->logger->error("FILE - $value - :Exception while Performing Service Task-" . $e->getMessage(), $e);
+                        continue;
+                    } catch (EntityNotFoundException $e) {
+                        $this->logger->info("FILE - $value -:Entity Not found -" . $e->getMessage());
+                        continue;
+                    } catch (WorkflowException $e) {
+                        $this->logger->info("FILE - $value -Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
+                        continue;
+                    } catch (Exception $e) {
+                        $this->logger->error("FILE - $value - :Error -" . $e->getMessage(), $e);
+                        continue;
+                    }
+                }
+            } else {
+                $validationException = new ValidationException();
+                $validationException->setErrors(["fileList is missing"]);
+                throw $validationException;
+            }
+        } catch(Exception $e) {
+            $this->logger->info("Batch Process Exception" . print_r($e->getMessage(), true));
+            throw $e;
+        }
+    }
 }

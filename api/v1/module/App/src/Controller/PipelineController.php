@@ -69,4 +69,31 @@ class PipelineController extends AbstractApiController
             return $this->getErrorResponse("An error occurred! Please try again later.", 500, $response);
         }
     }
+
+    public function executeBatchPipelineAction(){
+        $this->log->info("BATCH PIPELINE CONTROLLER");
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $params = array_merge($params,$this->params()->fromQuery());
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $params['appId'] = $appUuid;
+        if(isset($params['commands'])){
+            if(is_string($params['commands'])){
+                if($commands = json_decode($params['commands'],true)){
+                    $params['commands'] = $commands;
+                }
+            }
+        }
+        unset($params['method']);
+        unset($params['controller']);
+        unset($params['action']);
+        unset($params['access']);
+        try {
+            $this->commandService->batchProcess($params,$this->getRequest());
+            return $this->getSuccessResponse();
+        } catch (Exception $e) {
+            $this->log->error(":Error -" . $e->getMessage(), $e);
+            $response = ['data' => $params];
+            return $this->getErrorResponse("An error occurred! Please try again later.", 500, $response);
+        }
+    }
 }
