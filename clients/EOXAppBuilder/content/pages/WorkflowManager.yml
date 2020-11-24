@@ -26,6 +26,7 @@ content:
                     actions:
                         -
                             name: Import Workflow
+                            icon: 'fa fa-cloud-upload'
                             rule: 'true'
                             details:
                                 -
