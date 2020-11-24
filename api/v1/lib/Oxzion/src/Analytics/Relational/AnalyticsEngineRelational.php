@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Analytics\Relational;
 
+use Exception;
 use Oxzion\Analytics\AnalyticsAbstract;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
@@ -200,7 +201,6 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract
         $result = $statement->execute();
         $resultSet = new ResultSet();
         return $resultSet->initialize($result)->toArray();
-
     }
 
     public function getResultsFromPara($accountId, $entity_name, $para)
@@ -208,13 +208,10 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract
 
         $sql = new Sql($this->dbAdapter);
         $select = $sql->select();
-//        print_r($para['select']);exit;
         if (!empty($para['select'])) {
             $select->columns($para['select']);
         }
         $select->from($entity_name);
-        //    $select->where(['account_id' => $accountId]);
-
         if (!empty($para['filter'])) {
             $this->filterFields = array();
             foreach ($para['filter'] as $filter) {
@@ -245,11 +242,9 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract
             $select->order($para['sort']);
         }
         $statement = $sql->prepareStatementForSqlObject($select);
-
         $result = $statement->execute();
         $resultSet = new ResultSet();
         return $resultSet->initialize($result)->toArray();
-
     }
 
     protected function createFilter($filter, $where)
@@ -291,15 +286,12 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract
                     } else {
                         $where->in($column, $value);
                     }
-
                 } else {
                     $functionName = $symMapping[$condition];
                     $where->$functionName($column, $value);
                 }
                 $this->filterTmpFields[] = $column;
             }
-
         }
     }
-
 }
