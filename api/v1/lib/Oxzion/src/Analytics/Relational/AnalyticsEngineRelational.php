@@ -94,44 +94,15 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract
         $operation = strtolower($parameters['operation']);
         $group = array();
 
-	private function formatQuery($parameters) {
-		$range=null;
-		$field = null;
-		$filter =array();
-		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
-		if (!empty($parameters['date-period'])) $dateperiod = $parameters['date-period'];
-		if (!empty($parameters['date_period'])) $dateperiod =  $parameters['date_period'];
-
-		if (!empty($dateperiod)) {
-			$period = explode('/', $dateperiod);
-			$startdate = date('Y-m-d', strtotime($period[0]));
-			$enddate =  date('Y-m-d', strtotime($period[1]));
-		} else {
-			$startdate = date('Y').'-01-01';
-			$enddate = date('Y').'-12-31';
-		}
-		if (!empty($parameters['field'])) {
-			if (substr(strtolower($parameters['field']), 0, 5) == 'date(') {
-				$parameters['field'] = substr($parameters['field'], 5, -1);
-			}
-			$field = $parameters['field'];
-		}
-
-		if (!isset($parameters['operation'])) {
-			$parameters['operation'] = 'count';
-		}
-		$operation = strtolower($parameters['operation']);
-		$group = array();
-
-		if (!empty($parameters['group'])) {
-			$parameters['frequency'] = null;  //frequency 4 is to override time frequecy by group
-			if (is_array($parameters['group'])) {
-				$group = $parameters['group'];
-			} else {
-				$group = explode(',',$parameters['group']);
-			}
-		} 
-		$select = array();
+        if (!empty($parameters['group'])) {
+            $parameters['frequency'] = null; //frequency 4 is to override time frequecy by group
+            if (is_array($parameters['group'])) {
+                $group = $parameters['group'];
+            } else {
+                $group = explode(',', $parameters['group']);
+            }
+        }
+        $select = array();
 
         if (!empty($parameters['frequency'])) {
             $fieldname = "";
