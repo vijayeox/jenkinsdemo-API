@@ -700,6 +700,14 @@
 				"persistent": false
 			}],
 			"hideOnChildrenHidden": false
+		}, {
+			"label": "CSR Mail Documents",
+			"redrawOn": "finalDocuments",
+			"calculateValue": "value = \"\";",
+			"key": "csrmailDocuments",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}]
 	}, {
 		"label": "Submit",
@@ -712,7 +720,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 92,
+	"_vid": 97,
 	"title": "Dive Store User Approval Form",
 	"display": "wizard",
 	"access": [{
@@ -729,6 +737,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-11-20T07:22:13.021Z",
+	"modified": "2020-11-24T06:18:19.827Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }

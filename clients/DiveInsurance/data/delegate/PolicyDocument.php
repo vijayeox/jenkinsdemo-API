@@ -1018,7 +1018,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         } else if ($multiple == true) {
             $docDest = $dest['absolutePath'] . $template . $indexKey . '.pdf';
-        } else {
+        } else if($this->type == 'cancel'){
+            $cancelDate = date_format(date_create($data['cancelDate']), 'Md');
+            $docDest = $dest['absolutePath'] . $template . '_' . $cancelDate . '.pdf';
+        }else {
             $docDest = $dest['absolutePath'] . $template . '.pdf';
             if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
                 $updateDate = date_format(date_create($data['update_date']), 'Md');
@@ -1066,7 +1069,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if ($multiple) {
                 return $dest['relativePath'] . $template . $indexKey . '.pdf';
             }
-            if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
+            if($this->type == 'cancel'){
+                $cancelDate = date_format(date_create($data['cancelDate']), 'Md');
+                return $dest['relativePath'] . $template . '_' . $cancelDate . '.pdf';
+            }else if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
                 $updateDate = date_format(date_create($data['update_date']), 'Md');
                 return $dest['relativePath'] . $template . '_' . $updateDate . '.pdf';
             } else {
@@ -1835,7 +1841,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                                 unset($previousAddLoc[$key][$key1]);
                             }
                         }
-                        foreach ($addLocRequired as $key1 => $val1) {
+                        foreach ($addLocRequired as $val1) {
                             if (!array_key_exists($val1, $previousAddLoc[$key])) {
                                 $previousAddLoc[$key][$val1] = "";
                             }
@@ -2299,8 +2305,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if (sizeof($requiredParams) > 0) {
             foreach ($data as $key => $val) {
                 foreach ($val as $key1 => $val1) {
+                    $data[$key][$key1] = (is_string($val1) || is_numeric($val1)) ? strval($val1) : ((!isset($val1) || is_null($val1)) ? "" : $val1);
                     if (!in_array($key1, $requiredParams)) {
                         unset($data[$key][$key1]);
+                    }
+                }
+                foreach ($requiredParams as $val1) {
+                    if (!array_key_exists($val1, $data[$key])) {
+                        $data[$key][$val1] = false;
                     }
                 }
             }
@@ -2313,7 +2325,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $length = sizeof($previous_data);
         $policy =  $previous_data[$length - 1];
         $groupLength = 0;
-        $groupPLArray = array('padi', 'firstname', 'lastname', 'rating', 'status', 'nameOfInstitution');
+        $groupPLArray = array('padi', 'firstname', 'lastname', 'rating', 'status', 'nameOfInstitution','upgradeStatus','cancel');
         $groupAIArray = array('name', 'address', 'city', 'state', 'country', 'zip');
 
         if (isset($data['upgradeGroupLiability'])) {

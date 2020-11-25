@@ -688,6 +688,23 @@ return [
                     ],
                 ],
             ],
+            'pipeline_batch_execute' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/pipeline/batchprocess',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\PipelineController::class,
+                        'method' => 'POST',
+                        'action' => 'executeBatchPipeline',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'commands_execute' => [
                 'type' => Segment::class,
                 'options' => [
