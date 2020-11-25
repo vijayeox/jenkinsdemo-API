@@ -521,4 +521,18 @@ class ActivityInstanceService extends AbstractService
             return;
         }
     }
+
+    public function removeActivityInstanceRecords($workflowDepId){
+        try{
+            $this->beginTransaction();
+            $update = "UPDATE ox_activity_instance SET isdeleted=:deleted WHERE workflow_instance_id IN(SELECT id from ox_workflow_instance where workflow_deployment_id=:workflowDepId)";
+            $updateParams = array('deleted' => 1, 'workflowDepId' => $workflowDepId);
+            $this->executeUpdateWithBindParameters($update,$updateParams);
+            $this->commit();
+        }catch (Exception $e) {
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
 }

@@ -609,7 +609,7 @@ class AnnouncementService extends AbstractService
             $offset = $filterArray[0]['skip'];
         }
         $account = isset($accountId)?",".$accountId:"";
-        $where .= strlen($where) > 0 ? " AND " : "WHERE ";
+        $where .= strlen($where) > 0 ? " AND " : " WHERE ";
         $where .= "account_id in (null".$account.") AND end_date >= curdate() AND ann.type ='HOMESCREEN'";
         
         $sort = " ORDER BY " . $sort;

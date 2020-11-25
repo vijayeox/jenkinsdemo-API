@@ -34,6 +34,7 @@ use Oxzion\App\AppArtifactNamingStrategy;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 use Oxzion\Service\UserService;
+use Oxzion\Messaging\MessageProducer;
 
 class AppService extends AbstractService
 {
@@ -54,11 +55,17 @@ class AppService extends AbstractService
     private $roleService;
     private $userService;
     private $businessRoleService;
+    private $messageProducer;
+
+    public function setMessageProducer($messageProducer)
+    {
+        $this->messageProducer = $messageProducer;
+    }
 
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $accountService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, UserService $userService, BusinessRoleService $businessRoleService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $accountService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, UserService $userService, BusinessRoleService $businessRoleService, MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -74,6 +81,7 @@ class AppService extends AbstractService
         $this->jobService = $jobService;
         $this->businessRoleService = $businessRoleService;
         $this->userService = $userService;
+        $this->messageProducer = $messageProducer;
         $this->restClient = new RestClient(null);
         $this->appDeployOptions = array("initialize", "entity", "workflow", "form", "page", "menu", "job", "migration", "view", "symlink");
     }
@@ -153,6 +161,9 @@ class AppService extends AbstractService
             $data['app'] = $appData;
             if (App::MY_APP == $app->getProperty('type')) {
                 $this->setupOrUpdateApplicationDirectoryStructure($data);
+            }
+            if (isset($data['app']['chat_notification']) && $data['app']['chat_notification'] === true) {
+                $this->messageProducer->sendTopic(json_encode(array('appName' => $data['app']['name'])), 'CHAT_NOTIFICATION_CREATED');
             }
             //Commit database transaction only after application setup is successful.
             $this->commit();
@@ -374,21 +385,37 @@ class AppService extends AbstractService
         }
     }
 
-    public function installAppToOrg($appId,$accountId){
+    public function installAppToOrg($appId,$accountId,$serviceType){
         $destination = $this->getAppSourceAndDeployDirectory($appId);
         $ymlData = self::loadAppDescriptor($destination['deployDir']);
-        $this->installApp($accountId,$ymlData,$destination['deployDir']);
+        switch ($serviceType) {
+            case 'install':
+                $this->installApp($accountId,$ymlData,$destination['deployDir']);
+                break;
+            case 'uninstall':
+                $this->uninstallApp($accountId,$ymlData,$destination['deployDir']);
+                break;
+            default:
+                # code...
+                break;
+        }
     }
 
     private function installApp($accountId, $yamlData, $path){
         try{
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
-            $this->createRole($yamlData, false,$accountId);
+            $bRoleResult = $this->accountService->setupBusinessOfferings($yamlData['org'],$accountId,$appId);
+            $this->createRole($yamlData, false,$accountId,$bRoleResult);
             $user = $this->accountService->getContactUserForAccount($accountId);
-            $this->userService->addAppRolesToUser($user['accountUserId'],$appId, $accountId);
+            $this->userService->addAppRolesToUser($user['accountUserId'],$appId);
             $result = $this->createAppRegistry($appId, $accountId);
-            $this->setupOrgLinks($path, $appId, $accountId);
+            $this->logger->info("PATH--- $path");
+            $this->setupAccountFiles($path, $accountId);
+            // Assign AppRoles to Logged in User if Logged in Org and Installed Org are same
+            if(AuthContext::get(AuthConstants::ACCOUNT_UUID) == $accountId){
+                $this->userService->addAppRolesToUser(AuthContext::get(AuthConstants::USER_UUID),$appId);
+            }
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -397,13 +424,13 @@ class AppService extends AbstractService
         
     }
 
-    private function uninstallApp($orgId, $yamlData, $path){
+    private function uninstallApp($accountId, $yamlData, $path){
         try{
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
-            $this->organizationService->removeBusinessOfferings($orgId);
-            $this->removeRoleData($appId,$orgId);        
-            $this->removeOrgFiles($orgId);
+            $this->accountService->removeBusinessOfferings($accountId);
+            $this->removeRoleData($appId,$accountId);        
+            $this->removeAccountFiles($accountId);
             $this->commit();
         }catch(Exception $e){
             $this->logger->info("there is an uninstallexception: ");
@@ -412,19 +439,20 @@ class AppService extends AbstractService
         }
         
     }
-    private function removeRoleData($appId,$orgId = null){
+
+    private function removeRoleData($appId,$accountId = null){
         $appId = $this->getIdFromUuid('ox_app',$appId);
-        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
-        $orgId = ($orgId == 0) ? NULL : $orgId;
-        $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
+        $accountId = $this->getIdFromUuid('ox_account',$accountId);
+        $accountId = ($accountId == 0) ? NULL : $accountId;
+        $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'account_id' => $accountId))->toArray();
         if(count($roleResult) > 0){
-            $this->deleteInfo('ox_role_privilege',$appId,$orgId);
+            $this->deleteInfo('ox_role_privilege',$appId,$accountId);
             $this->deleteData($roleResult,'ox_user_role','role_id','role_id');
             $this->deleteData($roleResult,'ox_role','id','role_id');
         }
-        $result = $this->getDataByParams('ox_app_registry', array(), array('app_id' => $appId,'org_id' => $orgId))->toArray();
+        $result = $this->getDataByParams('ox_app_registry', array(), array('app_id' => $appId,'account_id' => $accountId))->toArray();
         if(count($result) > 0){
-            $this->deleteInfo('ox_app_registry',$appId,$orgId);
+            $this->deleteInfo('ox_app_registry',$appId,$accountId);
         }
     }
 
@@ -435,23 +463,23 @@ class AppService extends AbstractService
         $deleteResult = $this->executeQuerywithParams($deleteQuery); 
     }
 
-    private function deleteInfo($tableName,$appId,$orgId=null){
-        if($orgId){
-            $where = "WHERE app_id=:appId and org_id=:orgId";
-            $deleteParams['orgId'] = $orgId;
+    private function deleteInfo($tableName,$appId,$accountId=null){
+        if($accountId){
+            $where = "WHERE app_id=:appId and account_id=:accountId";
+            $deleteParams['accountId'] = $accountId;
         }else{
             $where = "WHERE app_id=:appId";
         }
         $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
         $deleteQuery = "DELETE FROM $tableName $where";
-        $deleteParams = array('appId' => $appId);
+        $deleteParams['appId'] = $appId;
         $this->logger->info("STATEMENT delq $deleteQuery".print_r($deleteParams,true));
         $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
     }
 
-    private function removeOrgFiles($orgId){
-        if ($orgId) {
-            $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
+    private function removeAccountFiles($accountId){
+        if ($accountId) {
+            $link = $this->config['TEMPLATE_FOLDER'] . $accountId;
             FileUtils::rmDir($link);
         }
     }
@@ -653,7 +681,8 @@ class AppService extends AbstractService
         $jsonData = json_decode(file_get_contents($metadataPath),true);
         $jsonData['name'] = $yamlData['app']['name'];
         $jsonData['appId'] = $yamlData['app']['uuid'];
-        $jsonData['title']['en_EN'] = ($yamlData['app']['name'] == 'EOXAppBuilder') ? 'AppBuilder' : isset($yamlData['app']['title']) ? $yamlData['app']['title']: $yamlData['app']['name'];
+        $jsonData['category'] = isset($yamlData['app']['category']) ? $yamlData['app']['category'] : null ;
+        $displayName = $jsonData['title']['en_EN'] = ($yamlData['app']['name'] == 'EOXAppBuilder') ? 'AppBuilder' : isset($yamlData['app']['title']) ? $yamlData['app']['title']: $yamlData['app']['name'];
         if (isset($yamlData['app']['description'])) {
             $jsonData['description']['en_EN'] = $yamlData['app']['description'];
         }
@@ -671,6 +700,10 @@ class AppService extends AbstractService
         $indexfileData2 = str_replace('{AppName}', $yamlData['app']['name'], $indexfileData);
         file_put_contents($appName . '/index.scss', $indexfileData2);
         FileUtils::chmod_r($path . 'view' , 0777);
+        $this->logger->info("\n View json data " . print_r($displayName,true));
+        if (isset($yamlData['app']['chat_notification']) &&  $yamlData['app']['chat_notification'] === true) {
+            $this->messageProducer->sendTopic(json_encode(array('appName' => $jsonData['name'], 'displayName' => $displayName)), 'CHAT_NOTIFICATION_UPDATED');
+        }
     }
 
 
@@ -833,16 +866,12 @@ private function checkWorkflowData(&$data,$appUuid)
         $this->setLinkAndRunBuild($path, $appId);
     }
 
-    private function setupOrgLinks($path, $appId, $accountId){
+    private function setupAccountFiles($path, $accountId){
         if ($accountId && $path) {
             $link = $this->config['TEMPLATE_FOLDER'] . $accountId;
-            $target = $path . "data/template";
-            if (is_link($link)) {
-                FileUtils::unlink($link);
-            }
-            if (file_exists($target)) {
-                $this->setupLink($target, $link);
-            }
+            $this->logger->info("linkkk---$link");
+            $source = $path . "data/template";
+            FileUtils::copyDir($source,$link);
         }
         
     }
@@ -912,6 +941,8 @@ private function checkWorkflowData(&$data,$appUuid)
                     if(count($temp) > 0){
                         $role['business_role_id'] = $temp[0]['id'];
                     }
+                }else if (isset($role['businessRole'])) {
+                    continue;
                 }
                 $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
                 if($templateRole){
@@ -1247,8 +1278,7 @@ private function checkWorkflowData(&$data,$appUuid)
                 } else {
                     $entity['id'] = $entityRec['id'];
                     $entity['uuid'] = $entityRec['uuid'];
-                    if ($entityRec['assoc_id'] != $assoc_id)
-                       $result = $this->entityService->saveEntity($appId, $entity);
+                    $result = $this->entityService->saveEntity($appId, $entity);
                 }
                 if(isset($entity['identifiers'])){
                     $result = $this->entityService->saveIdentifiers($entity['id'], $entity['identifiers']);

@@ -336,7 +336,7 @@ class AccountControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
         $this->assertEquals($content['status'], 'error');
@@ -356,7 +356,7 @@ class AccountControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('account');
         $this->assertEquals($content['status'], 'error');
