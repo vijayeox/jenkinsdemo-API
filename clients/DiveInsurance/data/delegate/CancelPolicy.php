@@ -56,10 +56,10 @@ class CancelPolicy extends PolicyDocument
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing Cancel Policy with data- " . json_encode($data));
-        if(isset($data['data'])) {
-            $fileData = json_decode($data['data'],true);
+        if (isset($data['data'])) {
+            $fileData = json_decode($data['data'], true);
             unset($data['data']);
-            $data = array_merge($fileData,$data);
+            $data = array_merge($fileData, $data);
         }
         if (isset($data['cancellationDate'])) {
             $data['cancellationDate'] = "";
@@ -72,7 +72,7 @@ class CancelPolicy extends PolicyDocument
         }
         $value = json_decode($data['reasonforCsrCancellation'], true);
         $data['reasonforCsrCancellation'] = $value['value'];
-        $data['reinstateDocuments'] = $data['documents'];
+        // $data['reinstateDocuments'] = $data['documents'];
         $data['reasonforRejection'] = isset($data['reasonforRejection']) ? $data['reasonforRejection'] : "Not Specified";
         $data['cancelDate'] = isset($data['cancelDate']) ? $data['cancelDate'] : date_create()->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";
@@ -125,7 +125,14 @@ class CancelPolicy extends PolicyDocument
             }
         }
         $this->logger->info("execute generate documents");
-        $data['documents'] = array("cancel_doc" => $this->generateDocuments($data, $dest, $options, 'template', 'header', 'footer'));
+        $cancelDoc = $this->generateDocuments($data, $dest, $options, 'template', 'header', 'footer');
+        $data['documents'] = isset($data['documents']) ? (is_string($data['documents']) ?  json_decode($data['documents'],true) : $data['documents']) : array();
+        if (isset($data['documents']['cancel_doc'])) {
+            $data['documents']['cancel_doc'] = is_string($data['documents']['cancel_doc']) ? json_decode($data['documents']['cancel_doc'], true) : $data['documents']['cancel_doc'];
+        }else{
+            $data['documents']['cancel_doc'] = array();
+        }
+        array_unshift($data['documents']['cancel_doc'], $cancelDoc);
         unset($data['carrierName']);
         unset($data['policyId']);
         unset($data['propPolicyId']);
