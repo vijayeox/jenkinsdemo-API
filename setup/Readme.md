@@ -75,7 +75,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 ``` 
 - To build the Docker image use the following command 
 ```bash
-$ docker-compose --build
+$ docker-compose build
 ```
 
 - To start api, camunda workflow, camel with activemq, view run below command 
