@@ -431,7 +431,8 @@
 							"label": "custom",
 							"input": true,
 							"tableView": false,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"refreshOn":"data"
 						}, {
 							"label": "Content",
 							"attrs": [{
