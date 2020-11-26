@@ -185,6 +185,10 @@ entity:
                 name: propertyCoverageSelect
                 data_type: text
                 index: true
+            -
+                name: proposalDocuments
+                text: 'Proposal Documents'
+                data_type: document
     -
         name: 'Dive Boat'
         field:
@@ -444,6 +448,10 @@ entity:
                 name: groupProfessionalLiabilitySelect
                 data_type: text
                 index: true
+            -
+                name: proposalDocuments
+                text: 'Proposal Documents'
+                data_type: document
 pages:
     -
         page_name: UserHomePage.yml

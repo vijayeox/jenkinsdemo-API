@@ -139,9 +139,9 @@ class StoreQuoteDocuments extends PolicyDocument
             }
         }
         $data['dest'] = $dest;
-        FileUtils::deleteDirectoryContents($dest['absolutePath'].'Quote/');
-        $dest['relativePath'] = $dest['relativePath'].'Quote/';
-        $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
+        $data['proposalCount'] = isset($data['proposalCount']) ? $data['proposalCount'] : 1;
+        $dest['relativePath'] = $dest['relativePath'].'Quote_'.$data['proposalCount'].'/';
+        $dest['absolutePath'] = $dest['absolutePath'].'Quote_'.$data['proposalCount'].'/';
         $documents = array();
         $temp = $data;
         foreach ($temp as $key => $value) {

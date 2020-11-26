@@ -15627,6 +15627,13 @@
 				"input": true,
 				"inputType": "checkbox"
 			}]
+		}, {
+			"label": "proposalCount",
+			"defaultValue": "1",
+			"key": "proposalCount",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}]
 	}, {
 		"title": "Approval",
@@ -15741,7 +15748,7 @@
 		"lockKey": true
 	}],
 	"revisions": "original",
-	"_vid": 126,
+	"_vid": 127,
 	"title": "diveStoreEndorsement3",
 	"display": "wizard",
 	"access": [{
@@ -15752,13 +15759,13 @@
 	"controller": "",
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\",\"delegate\" : \"SetupEndorsementDiveStore\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"},{\"command\" : \"delegate\",\"delegate\":\"PadiRatingList\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"submitWorkflow\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"ProposalDocList\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"settings": {},
 	"name": "endorsementDiveStoreConsolidation",
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-11-23T10:17:11.670Z",
+	"modified": "2020-11-26T10:54:02.639Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }

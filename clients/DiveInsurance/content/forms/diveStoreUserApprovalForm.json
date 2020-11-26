@@ -76,6 +76,22 @@
 			"tableView": false,
 			"hideOnChildrenHidden": false
 		}, {
+			"label": "proposalCount",
+			"defaultValue": "1",
+			"key": "proposalCount",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "proposalCountFlag",
+			"defaultValue": "false",
+			"persistent": false,
+			"protected": true,
+			"key": "proposalCountFlag",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"key": "page5Panel2",
 			"input": false,
 			"title": "Approval",
@@ -719,9 +735,9 @@
 		"event": "submitForm",
 		"input": true
 	}],
-	"controller": "",
+	"controller": "data.functions = {\n  userApprovedChanged: () => {\n    if(data.userApproved == 'rejected' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  },\n  paymentVerifiedChanged: () => {\n    if(data.paymentVerified == 'declined' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n       }\n  }\n};",
 	"revisions": "current",
-	"_vid": 97,
+	"_vid": 101,
 	"title": "Dive Store User Approval Form",
 	"display": "wizard",
 	"access": [{
@@ -738,6 +754,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-11-24T06:18:19.827Z",
+	"modified": "2020-11-26T08:11:37.204Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }

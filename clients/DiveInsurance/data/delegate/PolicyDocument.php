@@ -741,6 +741,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['endorsementInProgress'] = false;
         }
         $data['isRenewalFlow'] = false;
+        if($this->type == "policy" && ($data['product'] == "Dive Store" || $data['product'] == "Group Professional Liability")){
+            if(isset($data['proposalCount'])){
+                unset($data['proposalCount']);
+            }
+        } 
         $this->logger->info("Policy Document Generation", print_r($data, true));
         return $data;
     }
@@ -1023,7 +1028,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         } else if($this->type == 'cancel'){
             $cancelDate = date_format(date_create($data['cancelDate']), 'Md');
             $docDest = $dest['absolutePath'] . $template . '_' . $cancelDate . '.pdf';
-        }else {
+        }else if ($this->type == 'quote' || $this->type == 'endorsementQuote'){
+            $docDest = $dest['absolutePath'] . $template . '_' . $data['proposalCount'] . '.pdf';
+        }else{
             $docDest = $dest['absolutePath'] . $template . '.pdf';
             if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
                 $updateDate = date_format(date_create($data['update_date']), 'Md');
@@ -1077,6 +1084,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
                 $updateDate = date_format(date_create($data['update_date']), 'Md');
                 return $dest['relativePath'] . $template . '_' . $updateDate . '.pdf';
+            }else if ($this->type == 'quote' || $this->type == 'endorsementQuote'){
+                return $dest['relativePath'] . $template . '_' . $data['proposalCount'] . '.pdf';
             } else {
                 return $dest['relativePath'] . $template . '.pdf';
             }
@@ -1420,7 +1429,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $policy =  $policy[$length];
         unset($data['increased_liability'], $data['new_auto_liability']);
         $temp['additionalLocationsChanges'] = false;
-        $temp['lossPayeesChanges'] = false;
+        $temp['lossPayeeChanges'] = false;
         $data['update_date'] = $policy['update_date'];
         if (isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])) {
             if ($policy['previous_nonOwnedAutoLiabilityPL'] == 'no' && $data['nonOwnedAutoLiabilityPL'] != 'no') {
@@ -1771,7 +1780,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $temp['removedlossPayees'] = "";
                 }
                 if ($temp['removedlossPayees'] != "" || $temp['newlossPayees'] != "") {
-                    $temp['lossPayeesChanges'] = true;
+                    $temp['lossPayeeChanges'] = true;
                 }
             } else {
                 $temp['newlossPayees'] = "";
@@ -1826,7 +1835,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if (isset($policy['previous_additionalLocations']) && $policy['previous_additionalLocations'] != $data['additionalLocations']) {
                 $temp['newAdditionalLocations'] = "";
                 $temp['removedadditionalLocations'] = "";
-                $addLocRequired = array("padiNumberAL", "name", "address", "country", "city", "state", "zip", "ALpropertyCoverageSelect", "additionalLocationPropertyTotal", "ALLossofBusIncome", "additionalLocationDoYouOwntheBuilding", "ALBuildingReplacementValue", "additionalLocationFurniturefixturesAndEquipment", "ALnonDivingPoolAmount", "travelAgentEoPL", "propertyDeductibles", "ALcentralStationAlarm", "centralStationAlarm");
+                $addLocRequired = array("padiNumberAL", "name", "address", "country", "city", "state", "zip", "ALpropertyCoverageSelect", "additionalLocationPropertyTotal", "ALLossofBusIncome", "additionalLocationDoYouOwntheBuilding", "ALBuildingReplacementValue", "additionalLocationFurniturefixturesAndEquipment", "ALnonDivingPoolAmount", "travelAgentEoPL", "propertyDeductibles", "ALcentralStationAlarm", "centralStationAlarm","ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL");
                 if (!is_array($policy['previous_additionalLocations'])) {
                     if (is_string($policy['previous_additionalLocations'])) {
                         $policy['previous_additionalLocations'] = json_decode($policy['previous_additionalLocations'], true);
