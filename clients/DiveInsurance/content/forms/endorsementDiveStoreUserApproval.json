@@ -87,6 +87,22 @@
 			"tableView": false,
 			"hideOnChildrenHidden": false
 		}, {
+			"label": "proposalCount",
+			"defaultValue": "1",
+			"key": "proposalCount",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "proposalCountFlag",
+			"defaultValue": "false",
+			"persistent": false,
+			"protected": true,
+			"key": "proposalCountFlag",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"title": "Approval",
 			"theme": "primary",
 			"breadcrumbClickable": true,
@@ -113,6 +129,7 @@
 					"optionsLabelPosition": "right",
 					"inline": false,
 					"tableView": true,
+					"defaultValue": "accepted",
 					"values": [{
 						"value": "accepted",
 						"label": "Accept",
@@ -122,6 +139,9 @@
 						"label": "Decline",
 						"shortcut": ""
 					}],
+					"clearOnHide": false,
+					"calculateValue": "if(data.userApproved == \"\"){\n  value = \"accepted\";\n}",
+					"allowCalculateOverride": true,
 					"validate": {
 						"required": true
 					},
@@ -431,7 +451,8 @@
 							"label": "custom",
 							"input": true,
 							"tableView": false,
-							"hideOnChildrenHidden": false
+							"hideOnChildrenHidden": false,
+							"refreshOn":"data"
 						}, {
 							"label": "Content",
 							"attrs": [{
@@ -622,7 +643,7 @@
 				"label": "finalDocuments",
 				"persistent": false,
 				"protected": true,
-				"calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}\nconsole.log(value);",
+				"calculateValue": "value = {};\nif(data.finalDocuments){\n  if(typeof data.finalDocuments === 'object'){\n    value = data.finalDocuments;  \n  }else{\n    var documents = {};\n    data.finalDocuments.map(item,key => {\n      finalDocuments[key] = item;\n    });\n    value = finalDocuments;\n  }\n}\n",
 				"key": "finalDocuments",
 				"properties": {
 					"data_type": "list"
@@ -675,11 +696,10 @@
 			}, {
 				"label": "Select All",
 				"tableView": false,
-				"customDefaultValue": "value = true;",
+				"defaultValue": true,
 				"key": "selectAll",
 				"type": "checkbox",
-				"input": true,
-				"defaultValue": true
+				"input": true
 			}, {
 				"label": "Select the documents to be mailed:",
 				"optionsLabelPosition": "right",
@@ -692,7 +712,7 @@
 				},
 				"redrawOn": "finalDocuments",
 				"customDefaultValue": "var documents = [];\nvar i=1;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n",
-				"calculateValue": "var documents = [];\nvar selected = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n\nif(data.selectAll){\n  for(var key in data.finalDocuments){ \n    selected[key] = true;\n  }\n  value = Object.assign({}, selected);\n}\nconsole.log(value);",
+				"calculateValue": "var documents = [];\nvar selected = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n\nif(data.selectAll){\n  for(var key in data.finalDocuments){ \n    selected[key] = true;\n  }\n  value = Object.assign({}, selected);\n}\n",
 				"validate": {
 					"minSelectedCount": 1
 				},
@@ -714,9 +734,9 @@
 		"event": "submitForm",
 		"input": true
 	}],
-	"controller": "",
+	"controller": "data.functions = {\n  userApprovedChanged: () => {\n    if(data.userApproved == 'rejected' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  },\n  paymentVerifiedChanged: () => {\n    if(data.paymentVerified == 'declined' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.userApproved = \"rejected\";\n      data.proposalCountFlag = true;\n    }\n  }\n};",
 	"revisions": "current",
-	"_vid": 21,
+	"_vid": 31,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -733,6 +753,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-11-18T10:18:09.290Z",
+	"modified": "2020-11-26T10:20:30.714Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }

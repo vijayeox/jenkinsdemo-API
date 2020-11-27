@@ -375,6 +375,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                     if (!isset($value['effectiveDate'])) {
                         $data['groupPL'][$key]['effectiveDate'] = isset($value['start_date']) ? $value['start_date'] : $data['update_date'];
                     } else if ($value['effectiveDate'] == "") {
+                        $value['start_date'] = $data['groupPL'][$key]['start_date'] = ($value['start_date'] == 'Invalid Date') ? $data['start_date'] : $value['start_date'];
                         $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                         $data['groupPL'][$key]['existingEffectiveDate'] = date_format(date_create($value['start_date']), 'm-d-Y');
                         $data['groupPL'][$key]['newMembereffectiveDate'] = date_format(date_create($value['start_date']), 'm-d-Y');
