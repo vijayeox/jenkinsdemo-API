@@ -93,5 +93,9 @@ $ docker exec -it setup_eox_1 bash
 ### 7. <u>You can access the mysql using phpmyadmin through the [url](http://localhost:8080/phpmyadmin)</u>
 ### 8. <u>You can access the ActiveMq console through the [url](http://localhost:8161/)</u>
 ### 9. <u>You can connect to mysql from the bash prompt using mysql -hlocalhost -u<user> -p</u>
+### 10. <u>To connect to mysql from tools on your host machine run tne following sql, restart the docker and connect using port 3307.</u>
+```bash
+UPDATE mysql.user set host = '%' where user = 'root';
+```
 
 ### Note 1: if you start application using docker-compose at root level of the project, then you have to update crdential only in .env file at root level, but if you run each application separately by entering into services, then update .env at respective places.
