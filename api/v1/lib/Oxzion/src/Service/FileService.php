@@ -638,12 +638,24 @@ class FileService extends AbstractService
     public function getFile($id, $latest = false, $accountId = null)
     {
         try {
+            print_r(AuthContext::get(AuthConstants::ACCOUNT_ID));
             $this->logger->info("FILE ID  ------" . json_encode($id));
-            $accountId = isset($accountId) ? $this->getIdFromUuid('ox_account', $accountId) :
-                                    AuthContext::get(AuthConstants::ACCOUNT_ID);
+            if (isset($accountId) && !is_numeric($accountId)) {
+                $accountId = $this->getIdFromUuid('ox_account', $accountId);
+            }elseif (!isset($accountId)) {
+                $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+            }else{
+                $accountId = $accountId;
+            }
+
+            $this->logger->info("ACCOUNT ID-----".json_encode($accountId));
+            // $accountId = isset($accountId) ? $this->getIdFromUuid('ox_account', $accountId) :
+                                    // AuthContext::get(AuthConstants::ACCOUNT_ID);
             $params = array('id' => $id,
                 'accountId' => $accountId);
-            $select = "SELECT id, uuid, data, entity_id  from ox_file where uuid = :id AND account_id = :accountId";
+            $select = "SELECT oxf.id, oxf.uuid, oxf.data, oxf.entity_id, oae.name as entity_name from ox_file oxf 
+                        inner join ox_app_entity oae on oae.id = oxf.entity_id
+                        where oxf.uuid = :id AND oxf.account_id = :accountId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
             $this->logger->info("FILE DATA ------" . json_encode($result));
@@ -653,7 +665,7 @@ class FileService extends AbstractService
                         $result[0]['data'] = json_decode($result[0]['data'], true);
                     }
                     unset($result[0]['id']);
-                    $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
+                    $this->logger->info("FILE DATA SUCCESS ------" . print_r($result[0],true));
                     return $result[0];
             }
             return 0;
@@ -2661,7 +2673,7 @@ class FileService extends AbstractService
     
     public function getAppDetailsBasedOnFileId($fileId){
         try{
-            $querySet = "SELECT oxa.name as appName
+            $querySet = "SELECT oxa.name as appName, oxa.app_properties, oxf.account_id
                         FROM ox_file oxf
                         INNER JOIN ox_app_entity oxe ON oxe.id = oxf.entity_id
                         INNER JOIN ox_app oxa on oxa.id = oxe.app_id
@@ -2673,7 +2685,7 @@ class FileService extends AbstractService
             }                     
             return 0;
         } catch(Exception $e){
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
