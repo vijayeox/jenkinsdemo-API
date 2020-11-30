@@ -502,8 +502,7 @@
 							"label": "custom",
 							"input": true,
 							"tableView": false,
-							"hideOnChildrenHidden": false,
-							"refreshOn":"data"
+							"hideOnChildrenHidden": false
 						}, {
 							"label": "Content",
 							"attrs": [{
@@ -735,7 +734,7 @@
 		"event": "submitForm",
 		"input": true
 	}],
-	"controller": "data.functions = {\n  userApprovedChanged: () => {\n    if(data.userApproved == 'rejected' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  },\n  paymentVerifiedChanged: () => {\n    if(data.paymentVerified == 'declined' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n       }\n  }\n};",
+	"controller": "data.functions = {\n  userApprovedChanged: () => {\n    if(data.userApproved == 'rejected' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = (data.proposalCount == \"\") ? 0 : data.proposalCount;\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  },\n  paymentVerifiedChanged: () => {\n    if(data.paymentVerified == 'declined' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = (data.proposalCount == \"\") ? 0 : data.proposalCount;\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  }\n};",
 	"revisions": "current",
 	"_vid": 101,
 	"title": "Dive Store User Approval Form",
@@ -754,6 +753,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-11-26T08:11:37.204Z",
+	"modified": "2020-11-27T11:52:48.445Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }
