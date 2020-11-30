@@ -849,41 +849,42 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testCreateBot()
+    public function testSaveBotWithoutName()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['appName' => 'testbotuser'];
-        if (enableMattermost == 0) {
-            $mockRestClient = $this->getMockRestClientForChatService();
-            $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("username" => "testbotuser", "display_name" => "testbotuser", "description" => "BOT for testbotuser"), Mockery::any())->once()->andReturn(array("body" => json_encode(array("username" => "testbotuser", "display_name" => "testbotuser"))));
-        }
-        $this->dispatch('/callback/chat/createbot', 'POST', $data);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('createbotcallback');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], $data['appName']);
-        $this->assertEquals($content['data']['display_name'], $data['appName']);
-    }
-
-    public function testCreateBotAlreadyExists()
-    {
-        $data = ['appName' => 'testbotuser'];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
+        $data = ['appName' => ''];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-            $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("username" => "testbotuser", "display_name" => "testbotuser", "description" => "BOT for testbotuser"), Mockery::any())->once()->andThrow($exception);
+            $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("appName" => ""), Mockery::any())->once()->andThrow($exception);
         }
-        $this->dispatch('/callback/chat/createbot', 'POST', $data);
+        $this->dispatch('/callback/chat/savebot', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('createbotcallback');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertMatchedRouteName('savebotcallback');
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Bot Name is missing');
+    }
+
+    public function testSaveBotCreation()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['appName' => 'testbotuser'];
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn($exception);
+            $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("username" => "testbotuser", "display_name" => "testbotuser", "description" => "BOT for testbotuser"), Mockery::any())->once()->andReturn(array("body" => json_encode(array("username" => "testbotuser", "display_name" => "testbotuser"))));
+        }
+        $this->dispatch('/callback/chat/savebot', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('savebotcallback');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['username'], $data['appName']);
+        $this->assertEquals($content['data']['display_name'], $data['appName']);
     }
 
      public function testCreateBotNotFound()
@@ -896,52 +897,109 @@ class ChatCallbackControllerTest extends ControllerTest
             $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
             $mockRestClient->expects('postWithHeader')->with("api/v4/bots", array("description" => "A BOT for testing"), Mockery::any())->once()->andThrow($exception);
         }
-        $this->dispatch('/callback/chat/createbot', 'POST', $data);
+        $this->dispatch('/callback/chat/savebot', 'POST', $data);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('createbotcallback');
+        $this->assertMatchedRouteName('savebotcallback');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Bot Name is missing');
     }
 
-     public function testUpdateBot()
+     public function testSaveBotUpdation()
     {
-        $data = ['appName' => 'testbotuser', 'displayName' => 'Test BOT User'];
+        $data = ['appName' => 'testbotuser', 'displayName' => 'Test BOT User' , 'delete_at' => 0];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
-            $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => 'testbotuser', "id" => 111)));
+            $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => 'testbotuser', "id" => 111, "delete_at" => 0)));
             $mockRestClient->expects('put')->with("api/v4/bots/111", array("display_name" => 'Test BOT User'), Mockery::any())->once()->andReturn(json_encode(array('display_name' => "Test BOT User")));
         }
-        $this->dispatch('/callback/chat/updatebot', 'POST', $data);
+        $this->dispatch('/callback/chat/savebot', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('updatebotcallback');
+        $this->assertMatchedRouteName('savebotcallback');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['display_name'], $data['displayName']);
     }
-    
-    public function testUpdateBotInfoNotFound()
+
+    public function testSaveBotEnable()
     {
-        $data = ['appName' => 'testbotuser'];
+        $data = ['appName' => 'testbotuser', 'displayName' => 'Test BOT User' , 'delete_at' => 191819180];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
+            $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => 'testbotuser', "id" => 111, "delete_at" => 1911910)));
+            $mockRestClient->expects('postWithHeader')->with("api/v4/bots/111/enable", array(), Mockery::any())->once()->andReturn(json_encode(array('display_name' => "Test BOT User")));
+        }
+        $this->dispatch('/callback/chat/savebot', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('savebotcallback');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['display_name'], $data['displayName']);
+    }
+
+    public function testSaveBotUpdateWithProfileImage()
+    {
+        $data = ['appName' => 'testbotuser','delete_at' => 0, 'displayName' => 'Test BOT User', 'profileImage' => __DIR__."/../files/icon.png"];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => 'testbotuser', "id" => 111, 'delete_at' => 0)));
+            $mockRestClient->expects('put')->with("api/v4/bots/111", array("display_name" => 'Test BOT User'), Mockery::any())->once()->andReturn(json_encode(array('display_name' => "Test BOT User")));
+            $mockRestClient->expects('postMultiPart')->with("api/v4/users/111/image", array(), array("image" => __DIR__."/../files/icon.png"), Mockery::any())->once()->andReturn(json_encode(array("status" => "OK")));
+        }
+        $this->dispatch('/callback/chat/savebot', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('savebotcallback');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['display_name'], $data['displayName']);
+    }
+
+    public function testDisableBot()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['appName' => 'testbotuser'];
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
             $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
             $mockRestClient->expects('get')->with("api/v4/users/username/testbotuser", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => 'testbotuser', "id" => 111)));
-            $mockRestClient->expects('put')->with("api/v4/bots/111", array(), Mockery::any())->once()->andThrow($exception);
+            $mockRestClient->expects('postWithHeader')->with("api/v4/bots/111/disable", array(), Mockery::any())->once()->andReturn(array("body" => json_encode(array("username" => "testbotuser", "display_name" => "testbotuser" , "delete_at" => 2121212121))));
         }
+        $this->dispatch('/callback/chat/disablebot', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('disablebotcallback');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertNotEquals($content['data']['delete_at'], 0);
+    }
 
-        $this->dispatch('/callback/chat/updatebot', 'POST', $data);
+        public function testDisableBotNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['appName' => 'testbotusernew'];
+        if (enableMattermost == 0) {
+            $mockRestClient = $this->getMockRestClientForChatService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('get')->with("api/v4/users/username/testbotusernew", array(), Mockery::any())->once()->andReturn($exception);
+        }
+        $this->dispatch('/callback/chat/disablebot', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('updatebotcallback');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertMatchedRouteName('disablebotcallback');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'New Display Name/ Bot Name is missing');
     }
+
+    //APP BOT NOTIFICATION TESTS
+
 }

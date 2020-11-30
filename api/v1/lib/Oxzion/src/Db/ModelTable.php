@@ -221,7 +221,12 @@ abstract class ModelTable
             $this->setCreatedByAndDate($data);
             try {
                 $rows = $this->tableGateway->insert($data);
-            } catch (Exception $e) {   
+            } catch (Exception $e) {
+                if(strpos($e->getMessage(),'Duplicate')){
+                    throw new InsertFailedException('Duplicate Record.',
+                    ['table' => $this->tableGateway->getTable(), 'data' => $data],
+                    InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
+                }                   
                 throw new InsertFailedException($e->getMessage(),
                     ['table' => $this->tableGateway->getTable(), 'data' => $data],
                     InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
