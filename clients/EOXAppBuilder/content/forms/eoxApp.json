@@ -260,6 +260,47 @@
 				"type": "checkbox",
 				"input": true,
 				"hideOnChildrenHidden": false
+			}, {
+				"title": "Notifications",
+				"theme": "info",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"collapsible": false,
+				"key": "notifications",
+				"customConditional": "show = false;",
+				"type": "panel",
+				"label": "Notifications",
+				"input": false,
+				"tableView": false,
+				"components": [{
+					"label": "File Comments on Chat",
+					"tableView": false,
+					"defaultValue": false,
+					"key": "fileCommentsOnChat",
+					"logic": [{
+						"name": "Disable Chat - Not Allowed",
+						"trigger": {
+							"type": "javascript",
+							"javascript": "result = (data.app.fileCommentsOnChat === true) \nconsole.log(result);"
+						},
+						"actions": [{
+							"name": "Not allowed",
+							"type": "property",
+							"property": {
+								"label": "Disabled",
+								"value": "disabled",
+								"type": "boolean"
+							},
+							"state": true
+						}]
+					}],
+					"type": "checkbox",
+					"input": true
+				}]
 			}]
 		}, {
 			"label": "Create App",
@@ -1712,7 +1753,7 @@
 							"key": "pageContent",
 							"type": "form",
 							"input": true,
-							"formRevision": 98,
+							"formRevision": 100,
 							"hideOnChildrenHidden": false
 						}, {
 							"label": "Page Content",
@@ -1879,10 +1920,90 @@
 					"tableView": false
 				}]
 			}]
+		}, {
+			"title": "Entity Page",
+			"theme": "primary",
+			"breadcrumbClickable": true,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"collapsible": false,
+			"key": "entityPagePanel",
+			"type": "panel",
+			"label": "Entity Page",
+			"input": false,
+			"tableView": false,
+			"components": [{
+				"label": "Data Grid",
+				"reorder": false,
+				"addAnotherPosition": "bottom",
+				"defaultOpen": false,
+				"layoutFixed": false,
+				"enableRowGroups": false,
+				"initEmpty": false,
+				"hideLabel": true,
+				"tableView": false,
+				"defaultValue": [{
+					"entity": {},
+					"page": {}
+				}],
+				"clearOnHide": false,
+				"key": "entity_page",
+				"type": "datagrid",
+				"input": true,
+				"components": [{
+					"label": "Entity",
+					"widget": "choicesjs",
+					"tooltip": "The Entity the Form is Associated to",
+					"tableView": true,
+					"dataSrc": "custom",
+					"data": {
+						"values": [{
+							"label": "",
+							"value": ""
+						}],
+						"custom": "values = data.entity.map(item=>item.name)"
+					},
+					"selectThreshold": 0.3,
+					"clearOnHide": false,
+					"key": "entity",
+					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
+					"input": true
+				}, {
+					"label": "Page",
+					"widget": "choicesjs",
+					"tooltip": "The Page which will open from the Menu",
+					"tableView": true,
+					"dataSrc": "custom",
+					"data": {
+						"values": [{
+							"label": "",
+							"value": ""
+						}],
+						"custom": "values = data.pages.map(item=>item.name)"
+					},
+					"selectThreshold": 0.3,
+					"clearOnHide": false,
+					"validate": {
+						"required": true
+					},
+					"key": "page",
+					"type": "select",
+					"indexeddb": {
+						"filter": {}
+					},
+					"input": true
+				}]
+			}]
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 463,
+	"_vid": 473,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -1901,6 +2022,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-11-11T13:50:24.293Z",
+	"modified": "2020-11-19T16:26:40.723Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }

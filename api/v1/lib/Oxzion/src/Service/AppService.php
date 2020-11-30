@@ -590,6 +590,10 @@ class AppService extends AbstractService
                 $pageData['uuid'] = $page['uuid'];
             }
         }
+        
+        if (isset($yamlData['entity_page']) && !empty($yamlData['entity_page'])){
+                
+        }
     }
 
     public function processForm(&$yamlData, $path)
