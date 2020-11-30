@@ -45,6 +45,7 @@ content:
                         -
                             name: Import Form
                             rule: 'true'
+                            icon: 'fa fa-cloud-upload'
                             details:
                                 -
                                     type: UploadArtifact

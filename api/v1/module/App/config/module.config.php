@@ -464,6 +464,17 @@ return [
                     ],
                 ],
             ],
+            'entity_page' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/entity/:entityId/page',
+                    'defaults' => [
+                        'controller' => Controller\EntityController::class,
+                        'action' => 'page',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
             'fileremainder' => [
                 'type' => Segment::class,
                 'options' => [

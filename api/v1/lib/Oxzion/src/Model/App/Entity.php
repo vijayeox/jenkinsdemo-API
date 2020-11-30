@@ -23,7 +23,8 @@ class Entity extends OxzionEntity
         'date_modified' =>      ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
         'created_by' =>         ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
         'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
-        'ryg_rule' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
+        'ryg_rule' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'page_id' =>            ['type' => Type::INTEGER,   'readonly' => FALSE , 'required' => FALSE]
     ];
     
     public function &getModel() {

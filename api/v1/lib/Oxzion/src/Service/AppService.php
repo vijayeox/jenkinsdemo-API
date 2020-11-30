@@ -151,6 +151,7 @@ class AppService extends AbstractService
         ]);
         //Assign user input values AFTER assigning default values.
         $appData = $data['app'];
+        $appData['app_properties'] = json_encode(array("chat_notification" => isset($appData['chat_notification']) ? $appData['chat_notification'] : "" , "appIdentifiers" => isset($appData['appIdentifiers']) ? $appData['appIdentifiers'] : ""));
         $app->assign($appData);
         try {
             $this->beginTransaction();
@@ -162,8 +163,12 @@ class AppService extends AbstractService
             if (App::MY_APP == $app->getProperty('type')) {
                 $this->setupOrUpdateApplicationDirectoryStructure($data);
             }
-            if (isset($data['app']['chat_notification']) && $data['app']['chat_notification'] === true) {
-                $this->messageProducer->sendTopic(json_encode(array('appName' => $data['app']['name'])), 'CHAT_NOTIFICATION_CREATED');
+            if(isset($data['app']['app_properties'])){
+                $appProperties = json_decode($data['app']['app_properties'],true);
+                $chatNotification = $appProperties['chat_notification'];
+            }
+            if ($chatNotification === true) {
+                $this->messageProducer->sendTopic(json_encode(array('appName' => $data['app']['name'],'displayName' => $data['app']['title'])), 'SAVE_CHAT_BOT');
             }
             //Commit database transaction only after application setup is successful.
             $this->commit();
@@ -590,6 +595,10 @@ class AppService extends AbstractService
                 $pageData['uuid'] = $page['uuid'];
             }
         }
+        
+        if (isset($yamlData['entity_page']) && !empty($yamlData['entity_page'])){
+                
+        }
     }
 
     public function processForm(&$yamlData, $path)
@@ -701,8 +710,16 @@ class AppService extends AbstractService
         file_put_contents($appName . '/index.scss', $indexfileData2);
         FileUtils::chmod_r($path . 'view' , 0777);
         $this->logger->info("\n View json data " . print_r($displayName,true));
-        if (isset($yamlData['app']['chat_notification']) &&  $yamlData['app']['chat_notification'] === true) {
-            $this->messageProducer->sendTopic(json_encode(array('appName' => $jsonData['name'], 'displayName' => $displayName)), 'CHAT_NOTIFICATION_UPDATED');
+        $chatNotification = "";
+        if(isset($yamlData['app']['app_properties'])){
+            $appProperties = json_decode($yamlData['app']['app_properties'],true);
+            $chatNotification = $appProperties['chat_notification'];
+        }
+        if ($chatNotification === true) {
+            $this->messageProducer->sendTopic(json_encode(array('appName' => $jsonData['name'], 'displayName' => $displayName ,"profileImage" => $srcIconPath.'icon.png')), 'SAVE_CHAT_BOT');
+        }
+        if ($chatNotification === false) {
+            $this->messageProducer->sendTopic(json_encode(array('appName' => $jsonData['name'])), 'DISABLE_CHAT_BOT');    
         }
     }
 
@@ -1081,6 +1098,7 @@ private function checkWorkflowData(&$data,$appUuid)
     public function updateApp($uuid, &$data)
     {
         $appData = $data['app'];
+        $appData['app_properties'] = json_encode(array("chat_notification" => isset($appData['chat_notification']) ? $appData['chat_notification'] : "" , "appIdentifiers" => isset($appData['appIdentifiers']) ? $appData['appIdentifiers'] : ""));
         if (array_key_exists('uuid', $appData) && ($uuid != $appData['uuid'])) {
             throw new InvalidParameterException('UUID in URL and UUID in data set are not matching.');
         }
@@ -1301,6 +1319,16 @@ private function checkWorkflowData(&$data,$appUuid)
                     $childEntityData = ['entity' => $entityData['child'], 'app' => ['uuid' => $appId]];
                     $this->processEntity($childEntityData, $entity['id']);
                     $entityData['child'] = $childEntityData['entity'];
+                }
+                if (isset($entity['pageContent']) && !empty($entity['pageContent'])){
+                    $pageId = isset($entity['page_uuid']) ? $entity['page_uuid'] : UuidUtil::uuid();
+                    $page = $entity['pageContent']['data'];
+                    $page['name'] = $entity['name'];
+                    $routedata = array("appId" => $appId);
+                    $result = $this->pageService->savePage($routedata, $page, $pageId);
+                    $entityData['page_uuid'] = $page['uuid'];
+                    $entityData['page_id'] = $entity['page_id'] = $page['id'];
+                    $result = $this->entityService->saveEntity($appId, $entity);
                 }
             }
         }

@@ -12,16 +12,19 @@ use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Service\FormService;
+use App\Service\PageContentService;
 
 class EntityService extends AbstractService
 {
     protected $formService;
+    protected $pageContentService;
 
-    public function __construct($config, $dbAdapter, EntityTable $table, FormService $formService)
+    public function __construct($config, $dbAdapter, EntityTable $table, FormService $formService,PageContentService $pageContentService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->formService = $formService;
+        $this->pageContentService = $pageContentService;
     }
 
     public function saveEntity($appUuid, &$inputData, $createIfNotFound = true)
@@ -197,5 +200,31 @@ public function deleteEntity($appUuid, $id)
                 $this->deleteEntity($appId,$value['uuid']);
             }
         }
+    }
+    public function getEntityPage($id, $appId = null)
+    {
+        $where = "";
+        $queryParams = [];
+        if($appId){
+            $where .= is_numeric($appId) ? "ox_app.id = ?" : "ox_app.uuid = ?";
+            $where .= " AND ";
+            $queryParams[] = $appId;
+        }
+        $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
+        $query = "SELECT ox_app_page.uuid,ox_app_entity.enable_comments,ox_app_entity.enable_documents 
+                    from ox_app_entity 
+                    right join ox_app on ox_app.id=ox_app_entity.app_id 
+                    right join ox_app_page on ox_app_page.id=ox_app_entity.page_id 
+                    where $where";
+        $queryParams[] = $id;
+        $this->logger->info("STATEMENT $query".print_r($queryParams,true));
+        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        if (count($resultSet) == 0) {
+            throw new EntityNotFoundException("Entity not found for the App");
+        }
+        $result = $resultSet[0];
+        $content = $this->pageContentService->getPageContent($appId, $resultSet[0]['uuid']);
+        $result['content'] = $content['content'];
+        return $result;
     }
 }
