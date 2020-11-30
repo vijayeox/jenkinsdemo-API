@@ -7,7 +7,7 @@ content:
                     buttonList:
                           -
                                 name: Endorsement
-                                rule: '(''{{policyStatus}}'' == ''In Force'')'
+                                rule: '(rowData.policyStatus == "In Force")'
                                 details:
                                   -
                                       type: Form
@@ -17,7 +17,7 @@ content:
                           -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                rule: '(rowData.policyStatus == "In Force" && moment().isSameOrBefore(moment(rowData.end_date)))'
                                 details:
                                   -
                                       type: Form
@@ -30,7 +30,7 @@ content:
                                       type: Form
                                       url: workflow/5a2ed122-3f12-4240-b197-a24469721e87/startform
                                       workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                rule: '(rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.end_date)))'
                                 icon: 'fa fa-repeat'
         -
             type: TabSegment

@@ -7,7 +7,7 @@ content:
                     buttonList:
                           -
                                 name: Endorsement
-                                rule: '(''{{policyStatus}}'' == ''In Force'')'
+                                rule: '(rowData.policyStatus == "In Force")'
                                 details:
                                   -
                                       type: Form
@@ -17,7 +17,7 @@ content:
                           -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-ban'
-                                rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                rule: '(rowData.policyStatus == "In Force" && moment().isSameOrBefore(moment(rowData.end_date)))'
                                 details:
                                   -
                                       type: Form
@@ -30,7 +30,7 @@ content:
                                       type: Form
                                       url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
                                       workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                                rule: '(rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.end_date)))'
                                 icon: 'fa fa-repeat'
         -
             type: TabSegment
