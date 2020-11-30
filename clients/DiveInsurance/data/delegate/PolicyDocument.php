@@ -1026,6 +1026,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         } else if($this->type == 'cancel'){
             $cancelDate = date_format(date_create($data['cancelDate']), 'Md');
             $docDest = $dest['absolutePath'] . $template . '_' . $cancelDate . '.pdf';
+        }else if($this->type == 'reinstate'){
+            $reinstateDate = date_format(date_create($data['reinstateDate']), 'Md');
+            $docDest = $dest['absolutePath'] . $template . '_' . $reinstateDate . '.pdf';
         }else if ($this->type == 'quote' || $this->type == 'endorsementQuote'){
             $docDest = $dest['absolutePath'] . $template . '_' . $data['proposalCount'] . '.pdf';
         }else{
@@ -1076,7 +1079,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if ($multiple) {
                 return $dest['relativePath'] . $template . $indexKey . '.pdf';
             }
-            if($this->type == 'cancel'){
+            if($this->type == 'reinstate'){
+                $reinstateDate = date_format(date_create($data['reinstateDate']), 'Md');
+                return $dest['relativePath'] . $template . '_' . $reinstateDate . '.pdf';
+            }else if($this->type == 'cancel'){
                 $cancelDate = date_format(date_create($data['cancelDate']), 'Md');
                 return $dest['relativePath'] . $template . '_' . $cancelDate . '.pdf';
             }else if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {

@@ -9,7 +9,7 @@ use Oxzion\Auth\AuthConstants;
 require_once __DIR__ . "/PolicyDocument.php";
 
 
-class CancelPolicy extends PolicyDocument
+class ReinstatePolicy extends PolicyDocument
 {
     protected $documentBuilder;
     protected $type;
@@ -18,36 +18,36 @@ class CancelPolicy extends PolicyDocument
     public function __construct()
     {
         parent::__construct();
-        $this->type = 'cancel';
+        $this->type = 'reinstate';
         $this->template = array(
             'Individual Professional Liability'
             => array(
-                'template' => 'Cancellation_Approval',
-                'header' => 'Cancellation_header.html',
+                'template' => 'Reinstate_Approval',
+                'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Emergency First Response'
             => array(
-                'template' => 'Cancellation_Approval',
-                'header' => 'Cancellation_header.html',
+                'template' => 'Reinstate_Approval',
+                'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Dive Boat'
             => array(
-                'template' => 'Cancellation_Approval',
-                'header' => 'Cancellation_header.html',
+                'template' => 'Reinstate_Approval',
+                'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Dive Store'
             => array(
-                'template' => 'Cancellation_Approval',
-                'header' => 'Cancellation_header.html',
+                'template' => 'Reinstate_Approval',
+                'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Group Professional Liability'
             => array(
-                'template' => 'Cancellation_Approval',
-                'header' => 'Cancellation_header.html',
+                'template' => 'Reinstate_Approval',
+                'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             )
         );
@@ -55,27 +55,13 @@ class CancelPolicy extends PolicyDocument
 
     public function execute(array $data, Persistence $persistenceService)
     {
-        $this->logger->info("Executing Cancel Policy with data- " . json_encode($data));
-        if (isset($data['data'])) {
-            $fileData = json_decode($data['data'], true);
-            unset($data['data']);
-            $data = array_merge($fileData, $data);
-        }
-        if (isset($data['cancellationDate'])) {
-            $data['cancellationDate'] = "";
-        }
+        $this->logger->info("Executing Reinstate Policy with data- " . json_encode($data));
         $options = array();
         foreach ($data as $key => $row) {
             if (is_array($row)) {
                 $data[$key] = json_encode($row);
             }
         }
-        $value = json_decode($data['reasonforCsrCancellation'], true);
-        $data['reasonforCsrCancellation'] = $value['value'];
-        // $data['reinstateDocuments'] = $data['documents'];
-        $data['reasonforRejection'] = isset($data['reasonforRejection']) ? $data['reasonforRejection'] : "Not Specified";
-        $data['cancelDate'] = isset($data['cancelDate']) ? $data['cancelDate'] : date_create()->format("Y-m-d");
-        $data['policyStatus'] = "Cancelled";
         $data['carrierName'] = "";
         $data['policyId'] = "";
         $data['propPolicyId'] = "";
@@ -100,23 +86,47 @@ class CancelPolicy extends PolicyDocument
             $data['carrierName'] = "Policy issued by " . $data['carrier'];
             $data['policyId'] = "Policy #:" . $data['policy_id'];
         }
-        $data['confirmReinstatePolicy'] = '';
-        if ($data['reasonforCsrCancellation'] == 'nonPaymentOfPremium') {
-            $this->logger->info("Processing nonPaymentOfPremium");
-            $temp = date_create();
-            $data['ReinstatePolicyPeriod'] = $temp->add(new DateInterval("P10D"))->format("Y-m-d");
-        } else if ($data['reasonforCsrCancellation'] == 'padiMembershipNotCurrent') {
-            $this->logger->info("Processing padiMembershipNotCurrent");
-            $temp = date_create();
-            $data['ReinstatePolicyPeriod'] = $temp->add(new DateInterval("P45D"))->format("Y-m-d");
-        }
         if (isset($data['state'])) {
             $data['state_in_short'] = $this->getStateInShort($data['state'], $persistenceService);
         }
+        if(isset($data[$data['jobName']])){
+            $data[$data['jobName']] = "";
+        }
+        if(isset($data['reasonforRejection'])){
+            $data['reasonforRejection'] = '';
+        }
+        if(isset($data['userCancellationReason'])){
+            $data['userCancellationReason'] = '';
+        }
+        if(isset($data['othersCsr'])){
+            $data['othersCsr'] = '';
+        }
+        if(isset($data['reinstateAmount'])){
+            $data['reinstateAmount'] = '';
+        }
+        if(isset($data['reasonforCsrCancellation'])){
+            $data['reasonforCsrCancellation'] = '';
+        }
+        if(isset($data['cancellationStatus'])){
+            $data['cancellationStatus'] = '';
+        }
+        if(isset($data['csrCancellationReason'])){
+            $data['csrCancellationReason'] = '';
+        }
+        if(isset($data['othersUser'])){
+            $data['othersUser'] = '';
+        }
+        if(isset($data['reasonForUserCancellation'])){
+            $data['reasonForUserCancellation'] = '';
+        }
+        if(isset($data['userAgreement'])){
+            $data['userAgreement'] = '';
+        }
+        $data['policyStatus'] = "In Force";
+        
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : (isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
         $dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['fileId'], array('orgUuid' => $orgUuid));
         $this->logger->info('the  destination consists of : ' . print_r($dest, true));
-        
         if(isset($data['previous_policy_data'])){
             $previous_policy = is_string($data['previous_policy_data']) ? json_decode($data['previous_policy_data'],true) : $data['previous_policy_data'];
             if(sizeof($previous_policy) > 0){
@@ -129,14 +139,14 @@ class CancelPolicy extends PolicyDocument
             }
         }
         $this->logger->info("execute generate documents");
-        $cancelDoc = $this->generateDocuments($data, $dest, $options, 'template', 'header', 'footer');
+        $reinstateDoc = $this->generateDocuments($data, $dest, $options, 'template', 'header', 'footer');
         $data['documents'] = isset($data['documents']) ? (is_string($data['documents']) ?  json_decode($data['documents'],true) : $data['documents']) : array();
-        if (isset($data['documents']['cancel_doc'])) {
-            $data['documents']['cancel_doc'] = is_string($data['documents']['cancel_doc']) ? json_decode($data['documents']['cancel_doc'], true) : $data['documents']['cancel_doc'];
+        if (isset($data['documents']['reinstate_doc'])) {
+            $data['documents']['reinstate_doc'] = is_string($data['documents']['reinstate_doc']) ? json_decode($data['documents']['reinstate_doc'], true) : $data['documents']['reinstate_doc'];
         }else{
-            $data['documents']['cancel_doc'] = array();
+            $data['documents']['reinstate_doc'] = array();
         }
-        array_push($data['documents']['cancel_doc'], $cancelDoc);
+        array_push($data['documents']['reinstate_doc'], $reinstateDoc);
         unset($data['carrierName']);
         unset($data['policyId']);
         unset($data['propPolicyId']);

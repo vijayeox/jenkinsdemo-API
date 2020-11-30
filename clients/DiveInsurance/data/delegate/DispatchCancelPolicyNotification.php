@@ -40,7 +40,7 @@ class DispatchCancelPolicyNotification extends DispatchDocument
             $this->logger->info("REQUIRED DOCUMENT --- cancel_doc");
             $fileData = array();
             if (isset($data['documents']['cancel_doc'])) {
-                $file = $this->destination . $data['documents']['cancel_doc'][0];
+                $file = $this->destination . end($data['documents']['cancel_doc']);
                 if (file_exists($file)) {
                     array_push($fileData, $file);
                 } else {

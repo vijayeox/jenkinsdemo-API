@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <link href="./css/template_css.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="./AgentInfo.js"></script>
+    <script type="text/javascript" src="./js/moment.js"></script>
+    <script>
+        function subst() {
+            var vars = {};
+            var data = {};
+            var split = {};
+
+            var query_strings_from_url = document.location.search.substring(1).split('&');
+            for (var query_string in query_strings_from_url) {
+                if (query_strings_from_url.hasOwnProperty(query_string)) {
+                    var temp_var = query_strings_from_url[query_string].split('=', 2);
+                    vars[temp_var[0]] = unescape(temp_var[1]);
+                }
+            }
+            var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section',
+                'subsection', 'cancelDate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages',
+                'start_date', 'license_number', 'firstname', 'lastname', 'city', 'state',
+                'country', 'zip', 'certificate_no', 'padi', 'end_date', 'policy_id',
+                'address1', 'address2', 'single_limit', 'annual_aggregate', 'carrier', 'product',
+                'liability_policy_id', 'property_policy_id', 'liability_carrier', 'property_carrier',
+                'group_carrier', 'group_policy_id', 'carrierName', 'propCarrierName', 'groupCarrierName', 'policyId', 'propPolicyId', 'groupPolicyId','reinstateDate'
+            ];
+
+            for (var css_class in css_selector_classes) {
+                if (css_selector_classes.hasOwnProperty(css_class)) {
+                    var element = document.getElementsByClassName(
+                        css_selector_classes[css_class]
+                    );
+                    for (var j = 0; j < element.length; ++j) {
+                        element[j].textContent = vars[css_selector_classes[css_class]];
+                    }
+                    if (css_selector_classes[css_class] == "start_date") {
+                        document.getElementsByClassName(
+                            "start_date"
+                        )[0].textContent = moment(
+                            vars[css_selector_classes[css_class]]
+                        ).format("DD MMMM YYYY");
+                    }
+                    if (css_selector_classes[css_class] == "reinstateDate") {
+                        document.getElementsByClassName(
+                            "reinstateDate"
+                        )[0].textContent = moment(
+                            vars[css_selector_classes[css_class]]
+                        ).format("DD MMMM YYYY");
+                    }
+
+                    if (css_selector_classes[css_class] == "end_date") {
+                        document.getElementsByClassName("end_date")[0].textContent =
+                            moment(vars[css_selector_classes[css_class]]).format(
+                                "DD MMMM YYYY"
+                            ) + " - 12:01:00 AM";
+                    }
+                    document.getElementsByClassName("padi_no")[0].textContent = vars[vars['identifier_field']];
+                }
+            }
+            agentInfo();
+        }
+    </script>
+</head>
+
+<body onload="subst()">
+    <div class="main_group">
+        <p class="acbf"></p>
+        <center>
+            <div class="title1"><b>REINSTATE NOTICE</b></div>
+        </center>
+        <div class="spacer"></div><br>
+
+        <div class="gcontent">
+            <div class="content1">
+                <b class="caption">Agent information</b>
+                <div class="caption1">
+                    <p class="info_efr" id="nameVal"></p>
+                    <p class="info" id="addressLineVal"></p>
+                    <p class="info" id="addressLine2Val"></p>
+                    <p class="info" style="margin-bottom:2px;"><span id="phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id="faxVal"></span></p>
+                    <p class="info" style="margin-bottom:2px;" id="phone2Val"></p>
+                    <p class="info">License#: <span class="license_number"></span></p>
+                </div>
+                <hr align="left" width="80%"></hr>
+                <b class="caption2">Insured's Name and Mailing Address:</b>
+                <p class="details"><span class="firstname"></span>&nbsp<span class="lastname"></span></p>
+                <p class="details"><span class="address1"></span></p>
+                <p class="details"><span class="address2"></span></p>
+                <p class="details"><span class="city"></span>, <span class="state"></span> &nbsp<span class="zip"></span></p>
+                <p class="details"><span class="country"></span></p>
+                <div class="p_margin">&nbsp</div>
+                <div class="p_margin">&nbsp</div>
+                <div class="p_margin">&nbsp</div>
+            </div>
+            <div class="content2">
+                <div class="certificate_data">
+                    <table border="0" width="450px">
+                        <tr>
+                            <td>Date:</td>
+                            <td><span class="reinstateDate"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Certificate #:</td>
+                            <td><span class="certificate_no"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Member #:</td>
+                            <td><span class="padi_no"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Certificate Effective Date: &nbsp; &nbsp; &nbsp;</td>
+                            <td><span class="start_date"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Certificate Expiration Date:</td>
+                            <td width="0px"><span class="end_date"></span></td>
+                        </tr>
+                    </table><br>
+                    <hr width="550px"></hr><br>
+                </div>
+            </div>
+            <p class="p_margin policyfont"><span class="carrierName"></span></p>
+            <p class="p_margin policyfont"><span class="policyId"></span></p>
+            <p class="p_margin policyfont"><span class="propCarrierName"></span></p>
+            <p class="p_margin policyfont"><span class="propPolicyId"></span></p>
+            <p class="p_margin policyfont"><span class="groupCarrierName"></span></p>
+            <p class="p_margin policyfont"><span class="groupPolicyId"></span></p>
+            <p class="p_margin"></p>
+            <p class="p_margin"></p>
+        </div>
+    </div><br><br>
+    <div style="margin-bottom:2%"></div>
+    <div class="spacer" style="margin-top: 15%"></div>
+    <center>
+        <div class="title3"><b>COVERAGE: PADI ENDORSED DIVE CENTER INSURANCE</b></div>
+    </center>
+    <div class="spacer"></div>
+</body>
+
+</html>
