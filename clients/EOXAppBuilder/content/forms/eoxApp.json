@@ -1312,6 +1312,7 @@
 										"label": "View Layout",
 										"tableView": false,
 										"form": "5f21c1bdbba30150d672d0cf",
+										"calculateValue": "var pagesList = data.pages.map((i) => {\n return { name: i.name, uuid: i.uuid };\n});\nif (data.form !== \"\") {\n  var formsList = data.form.map((i) => {\n    return { name: i.name, uuid: i.uuid };\n  });\n}\n\nif (value) {\n  if (value.data) {\n    value.data.pagesList = pagesList;\n    value.data.formsList = formsList;\n  }\n}",
 										"key": "pageContent",
 										"type": "form",
 										"input": true,
@@ -2101,7 +2102,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 495,
+	"_vid": 496,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -2120,6 +2121,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-11-28T05:39:04.137Z",
+	"modified": "2020-11-30T07:50:10.361Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
