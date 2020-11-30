@@ -1320,6 +1320,16 @@ private function checkWorkflowData(&$data,$appUuid)
                     $this->processEntity($childEntityData, $entity['id']);
                     $entityData['child'] = $childEntityData['entity'];
                 }
+                if (isset($entity['pageContent']) && !empty($entity['pageContent'])){
+                    $pageId = isset($entity['page_uuid']) ? $entity['page_uuid'] : UuidUtil::uuid();
+                    $page = $entity['pageContent']['data'];
+                    $page['name'] = $entity['name'];
+                    $routedata = array("appId" => $appId);
+                    $result = $this->pageService->savePage($routedata, $page, $pageId);
+                    $entityData['page_uuid'] = $page['uuid'];
+                    $entityData['page_id'] = $entity['page_id'] = $page['id'];
+                    $result = $this->entityService->saveEntity($appId, $entity);
+                }
             }
         }
     }

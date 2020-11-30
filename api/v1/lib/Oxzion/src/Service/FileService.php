@@ -638,7 +638,6 @@ class FileService extends AbstractService
     public function getFile($id, $latest = false, $accountId = null)
     {
         try {
-            print_r(AuthContext::get(AuthConstants::ACCOUNT_ID));
             $this->logger->info("FILE ID  ------" . json_encode($id));
             if (isset($accountId) && !is_numeric($accountId)) {
                 $accountId = $this->getIdFromUuid('ox_account', $accountId);
@@ -653,7 +652,7 @@ class FileService extends AbstractService
                                     // AuthContext::get(AuthConstants::ACCOUNT_ID);
             $params = array('id' => $id,
                 'accountId' => $accountId);
-            $select = "SELECT oxf.id, oxf.uuid, oxf.data, oxf.entity_id, oae.name as entity_name from ox_file oxf 
+            $select = "SELECT oxf.id, oxf.uuid, oxf.data, oae.uuid as entity_id, oae.name as entity_name from ox_file oxf 
                         inner join ox_app_entity oae on oae.id = oxf.entity_id
                         where oxf.uuid = :id AND oxf.account_id = :accountId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
