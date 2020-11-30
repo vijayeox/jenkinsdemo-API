@@ -45,8 +45,8 @@ routes {
         ['from':'activemq:topic:SEND_SMS', 'to':["${callback.URL}/callback/communication/sendsms"]],
         ['from':'activemq:topic:MAKE_CALL', 'to':["${callback.URL}/callback/communication/makecall"]],
         ['from':'activemq:topic:COMMANDS', 'to':["${callback.URL}/callback/workflow/servicetask"]],
-            ['from':'activemq:topic:CHAT_NOTIFICATION_CREATED', 'to':["${callback.URL}/callback/chat/createbot"]],
-            ['from':'activemq:topic:CHAT_NOTIFICATION_UPDATED', 'to':["${callback.URL}/callback/chat/updatebot"]],
+            ['from':'activemq:topic:SAVE_CHAT_BOT', 'to':["${callback.URL}/callback/chat/savebot"]],
+            ['from':'activemq:topic:DISABLE_CHAT_BOT', 'to':["${callback.URL}/callback/chat/disablebot"]],
             ['from':'activemq:topic:CHAT_APPBOT_NOTIFICATION', 'to':["${callback.URL}/callback/chat/appbotnotification"]]
         // ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}"]],
         // ['from':'activemq:topic:USER_DELETED', 'to':["${callback.URL}"]]

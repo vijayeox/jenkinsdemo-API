@@ -153,16 +153,17 @@ class ChatCallbackController extends AbstractApiControllerHelper
         return $this->getErrorResponse("Removing User from Channel Failed", 400);
     }
 
-    public function createBotAction()
+    public function saveBotAction()
     {
         $params = $this->extractPostData();
-        $this->log->info("Create Bot Params- " . json_encode($params));
+        $this->log->info("Save Bot Params- " . json_encode($params));
         try{
-            $params['botname'] = isset($params['appName']) ? $params['appName'] : null;
-            $response = $this->chatService->createBot($params['botname']);
+            $params['botName'] = isset($params['appName']) ? $params['appName'] : null;
+            $response = $this->chatService->saveBot($params);
             if ($response) {
-                $this->log->info(ChatCallbackController::class . ":Bot User Created");
-                return $this->getSuccessResponseWithData(json_decode($response['body'], true));
+                $this->log->info(ChatCallbackController::class . ":Bot User Created / Updated");
+                $response = is_array($response) ? $response['body'] : $response;
+                return $this->getSuccessResponseWithData(json_decode($response, true));
             }else{
                 return $this->getErrorResponse("Bot Name is missing", 400);
             }
@@ -172,26 +173,25 @@ class ChatCallbackController extends AbstractApiControllerHelper
         }        
     }
 
-    public function updateBotAction()
+    public function disableBotAction()
     {
         $params = $this->extractPostData();
+        $this->log->info("Disable Bot Params- " . json_encode($params));
         try{
-            $params['botname'] = isset($params['appName']) ? $params['appName'] : null;
-            $params['displayname'] = isset($params['displayName']) ? $params['displayName'] : null;
-            $response = $this->chatService->updateBot($params['botname'], $params['displayname']);
+            $botName = isset($params['appName']) ? $params['appName'] : null;
+            $response = $this->chatService->disableBot($botName);
             if ($response) {
-                $this->log->info("Updated the BOT");
-                return $this->getSuccessResponseWithData(json_decode($response, true));
+                return $this->getSuccessResponseWithData(json_decode($response['body'], true));
             }else{
-                return $this->getErrorResponse("New Display Name/ Bot Name is missing", 400);
+                return $this->getErrorResponse("No Bot with the specified name was found", 400);
             }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), $e->getCode());
-        }
+            return $this->getErrorResponse($e->getMessage(), 400);
+        }        
     }
 
-        public function appBotNotificationAction()
+    public function appBotNotificationAction()
     {
         $params = $this->extractPostData();
         $this->log->info("appBotNotification Params- " . json_encode($params));

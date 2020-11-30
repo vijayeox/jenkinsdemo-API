@@ -25,6 +25,7 @@ class ChatService extends AbstractService
         $this->restClient = new RestClient($this->config['chat']['chatServerUrl']);
         $this->authToken = $this->config['chat']['authToken']; //PAT
         $this->appBotUrl = $this->config['chat']['appBotUrl'];
+        $this->applicationUrl = $this->config['applicationUrl'];
         $this->fileService = $fileService;
         $this->subscriberService = $subscriberService;
     }
@@ -369,7 +370,59 @@ class ChatService extends AbstractService
         }
     }
 
-    public function createBot($botName)
+    public function saveBot($botParams)
+    {
+        try {
+            $headers = $this->getAuthHeader();
+            $headers["Content-type"] = "application/json";
+            $botName = $this->sanitizeName($botParams['botName']);
+            if (empty($botName)) {
+                $this->logger->info("Bot Name is missing");
+                return;
+            }
+            $displayName = isset($botParams['displayName']) ? $botParams['displayName'] : $botName;
+            $userDetails = $this->getUserByUsername($botName,false);
+            $this->logger->info("USER DETILS--".print_r($userDetails,true));
+            if (isset($userDetails) && count($userDetails) > 0) {
+                if ($userDetails['delete_at'] == 0) {
+                    //Update bot
+                    $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
+                    if (isset($botParams['profileImage']) && !empty($botParams['profileImage'])) {
+                        $this->updateProfileImage($botName,$botParams['profileImage']);
+                    }
+                }else{
+                    //Enable bot
+                    $response = $this->enableBot($botName);
+                }
+            }else{
+                //Create bot
+                $response = $this->restClient->postWithHeader('api/v4/bots', array('username' => $botName, 'display_name' => $displayName, 'description' => 'BOT for '.$botName), $headers);
+            }
+            return $response;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
+
+    private function updateProfileImage($botName, $img){
+       try {
+            $headers = $this->getAuthHeader();
+            $botName = $this->sanitizeName($botName);
+            if (empty($botName)) {
+                $this->logger->info("Bot Name is missing");
+                return;
+            }
+            $userDetails = $this->getUserByUsername($botName,false);
+            $response = $this->restClient->postMultiPart('api/v4/users/' . $userDetails['id'].'/image', array(),array("image" => $img),$headers);
+            return $response;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        } 
+    }
+
+    public function disableBot($botName)
     {
         try {
             $headers = $this->getAuthHeader();
@@ -379,30 +432,36 @@ class ChatService extends AbstractService
                 $this->logger->info("Bot Name is missing");
                 return;
             }
-            $response = $this->restClient->postWithHeader('api/v4/bots', array('username' => $botName, 'display_name' => $botName, 'description' => 'BOT for '.$botName), $headers);
-            return $response;
+            $botDetails = $this->getUserByUsername($botName,false);
+            if (isset($botDetails) && count($botDetails) > 0) {
+                $response = $this->restClient->postWithHeader('api/v4/bots/' . $botDetails['id'].'/disable', array(), $headers);
+                return $response;
+            }  else{
+                $this->logger->info("No Bot with the specified name was found");
+                return 0;                
+            }
+
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
 
-    public function updateBot($botName, $displayName)
+    private function enableBot($botName)
     {
         try {
             $headers = $this->getAuthHeader();
+            $headers["Content-type"] = "application/json";
             $botName = $this->sanitizeName($botName);
-            if (empty($displayName)) {
-                $this->logger->info("New Display Name is missing");
-                return;
-            }
             if (empty($botName)) {
                 $this->logger->info("Bot Name is missing");
                 return;
             }
-            $userDetails = $this->getUserByUsername($botName,true);     
-            $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
-            return $response;
+            $botDetails = $this->getUserByUsername($botName,false);
+            if (isset($botDetails) && count($botDetails) > 0) {
+                $response = $this->restClient->postWithHeader('api/v4/bots/' . $botDetails['id'].'/enable', array(), $headers);
+                return $response;
+            }            
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -414,11 +473,22 @@ class ChatService extends AbstractService
         try{
             $headers = $this->getAuthHeader();
             $appDetails = $this->fileService->getAppDetailsBasedOnFileId($params['fileId']);
+            $appProperties = json_decode($appDetails['app_properties'],true);
+            $fileDetails = $this->fileService->getFile($params['fileId'], false,$appDetails['account_id']);
+            $fileDetails['data']['entity_name'] = $fileDetails['entity_name'];
+            $fileData = $fileDetails['data'];
+            $title = $appProperties['appIdentifiers'];// ${entity_name} App ${name}
+            preg_match_all('/[$][{](.*?)\}/', $title, $matches);
+            if (is_array($matches[0]) && count($matches[0]) > 0) {
+                for ($i=0; $i < count($matches[0]); $i++) { 
+                    $title = str_replace($matches[0][$i], (isset($fileData[$matches[1][$i]]) ? $fileData[$matches[1][$i]] : null ), $title);
+                }
+            }
+            $url = $this->applicationUrl.'/?app='.$appDetails['appName'];
             $subscribers =  $this->subscriberService->getSubscribers($params['fileId']);
             $subscribersToList = array_column($subscribers, 'username');
             $subscribersList = implode(',', $subscribersToList);
-            $this->logger->info("subscribersList---".print_r($subscribersList,true));
-            $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', array('appName' => $appDetails['appName'], 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList), $headers);
+            $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', array('appName' => $appDetails['appName'], 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url), $headers);
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
@@ -426,4 +496,5 @@ class ChatService extends AbstractService
         }
     }
     // partipnts based on fileId
+
 }

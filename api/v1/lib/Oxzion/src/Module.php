@@ -281,7 +281,8 @@ class Module
                     return new Service\EntityService($container->get('config'), 
                                                      $dbAdapter, 
                                                      $container->get(Model\App\EntityTable::class),
-                                                     $container->get(Service\FormService::class) 
+                                                     $container->get(Service\FormService::class) ,
+                                                     $container->get(\App\Service\PageContentService::class) 
                                                     );
                 },
                 Model\App\EntityTable::class => function ($container) {
