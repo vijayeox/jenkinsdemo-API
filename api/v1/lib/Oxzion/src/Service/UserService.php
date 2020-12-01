@@ -745,7 +745,7 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = "SELECT ou.uuid,ou.username,per.firstname,per.lastname,ou.name,
-                          per.email,au.uuid as accountId,au.type,ou.icon,oa.address1,oa.address2,oa.city,
+                          per.email,au.uuid as accountId,ou.icon,oa.address1,oa.address2,oa.city,
                           oa.state, oa.country,oa.zip,per.date_of_birth,oxemp.designation,
                           per.phone,per.gender,oxemp.website,oxemp.about,
                           man.uuid as managerId,ou.timezone,oxemp.date_of_join,
