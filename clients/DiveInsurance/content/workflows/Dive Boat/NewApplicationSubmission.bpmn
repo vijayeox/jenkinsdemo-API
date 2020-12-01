@@ -10,6 +10,7 @@
       <bpmn:incoming>SequenceFlow_122vx8d</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1emc58i</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0noc98y</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1pyq683</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0a6b2gy</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1bu9f8a</bpmn:outgoing>
     </bpmn:userTask>
@@ -20,6 +21,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveBoatConsolidation" />
+          <camunda:property name="fields" value="initiatedByCsr,csrApproved,policyStatus,userApproved,paymentVerified,email,identifier_field,padi,product" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1xzj7sg</bpmn:outgoing>
@@ -28,6 +30,8 @@
       <bpmn:incoming>SequenceFlow_0ny6hpc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00zvmz5</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0noc98y</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_159lelm</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1pyq683</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="UserTask_1ffuff9" name="Customer Approval and payment" camunda:asyncAfter="true" camunda:candidateUsers="{{participant:identifier_field}},{{role:CSR}}">
       <bpmn:extensionElements>
@@ -53,6 +57,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
+              <camunda:value>{"command" : "file"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate":"QuoteDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
@@ -68,7 +73,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "delegate", "delegate" : "DocumentSaveDelegate"}</camunda:value>
+              <camunda:value>{"command" : "file"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "PolicyDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "NewPolicyDocumentDispatch"}</camunda:value>
@@ -77,6 +82,7 @@
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1wrtl1o</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_159lelm</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1s4hz0o</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="ServiceTask_0ujmkhk" name="CSR Cancel policy Mail" camunda:expression="0">
@@ -172,12 +178,18 @@ execution.setVariable('CSRReviewRequired',true);</camunda:script>
       <bpmn:outgoing>SequenceFlow_1ow44zk</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_00zvmz5" name="Yes" sourceRef="ExclusiveGateway_0ig8eti" targetRef="ServiceTask_0kqlgqd">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="accepted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="accepted" &amp;&amp; paymentVerified == ""}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0noc98y" name="No" sourceRef="ExclusiveGateway_0ig8eti" targetRef="UserTask_0h45jpd">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userApproved =="rejected" }</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1ow44zk" sourceRef="ServiceTask_0kqlgqd" targetRef="UserTask_0v6b5bh" />
+    <bpmn:sequenceFlow id="SequenceFlow_159lelm" sourceRef="ExclusiveGateway_0ig8eti" targetRef="ServiceTask_1e7jxo6">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paymentVerified == "approved"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1pyq683" sourceRef="ExclusiveGateway_0ig8eti" targetRef="UserTask_0h45jpd">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paymentVerified != null and paymentVerified == "declined"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DiveBoatNewPolicy">
@@ -320,6 +332,18 @@ execution.setVariable('CSRReviewRequired',true);</camunda:script>
       <bpmndi:BPMNEdge id="SequenceFlow_1ow44zk_di" bpmnElement="SequenceFlow_1ow44zk">
         <di:waypoint x="1350" y="325" />
         <di:waypoint x="1420" y="325" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_159lelm_di" bpmnElement="SequenceFlow_159lelm">
+        <di:waypoint x="1140" y="350" />
+        <di:waypoint x="1140" y="470" />
+        <di:waypoint x="1950" y="470" />
+        <di:waypoint x="1950" y="354" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1pyq683_di" bpmnElement="SequenceFlow_1pyq683">
+        <di:waypoint x="1140" y="300" />
+        <di:waypoint x="1140" y="160" />
+        <di:waypoint x="590" y="160" />
+        <di:waypoint x="590" y="285" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

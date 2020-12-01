@@ -45,7 +45,7 @@
   </div>
   <div class = "spacing_div">&nbsp</div>
   <hr class = "footer_line1"></hr>
-  <b><center><p class ="title_value">{if $loss_payees == 'yes'}
+  <b><center><p class ="title_value">{if $lossPayeesSelect == 'yes'}
    CERTIFICATE HAS LOSS PAYEES (SEE ATTACHED).
    {else}
    CERTIFICATE DOES NOT HAVE LOSS PAYEES.

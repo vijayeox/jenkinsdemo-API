@@ -259,6 +259,14 @@ content:
                             params:
                                 page_id: 'bb018dfd-be95-4c53-9a97-042f615f3623'
                 -
+                    name: 'View Policy'
+                    icon: 'fa fa-envelope-open'
+                    rule: '(''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Dive Boat'')'
+                    details:
+                        -
+                            params:
+                                page_id: '66880cde-ffe6-42f5-9c8f-71a5c3e921ca'
+                -
                     name: 'Cancel Policy'
                     icon: 'fa fa-ban'
                     rule: '(row.policyStatus == "In Force" && row.entity_name == "Individual Professional Liability" && moment().isSameOrBefore(moment(row.end_date)) && row.status != "In Progress")'

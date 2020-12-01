@@ -510,6 +510,9 @@ pages:
     -
         page_name: GenerateReportPage.yml
         uuid: 00868878-f6c8-46c3-b436-d11b60eaed17
+    -
+        page_name: DiveBoat.yml
+        uuid: 66880cde-ffe6-42f5-9c8f-71a5c3e921ca
 menu:
     -
         name: Home
