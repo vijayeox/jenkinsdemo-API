@@ -8,7 +8,7 @@
 	 <div class ="body_div">
 		<center>
       <div>
-		<b><p class = "title">{if $loss_payees == 'yes'}
+		<b><p class = "title">{if $lossPayeesSelect == 'yes'}
 			CERTIFICATE HAS LOSS PAYEES (SEE ATTACHED).
 		{else}
 			CERTIFICATE DOES NOT HAVE LOSS PAYEES.

@@ -59,7 +59,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'lpheader' => 'DiveBoat_LP_header.html',
                 'lpfooter' => 'DiveBoat_LP_footer.html',
                 'gtemplate' => 'Group_PL_COI',
-                'gheader' => 'Group_header.html',
+                'gheader' => 'Group_header_DS.html',
                 'gfooter' => 'Group_footer.html',
                 'nTemplate' => 'Group_PL_NI',
                 'nheader' => 'Group_NI_header.html',
@@ -69,7 +69,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'anifooter' => null,
                 'waterEndorsement' => 'DB_In_Water_Crew_Endorsement.pdf',
                 'blanketForm' => 'DB_AI_Blanket_Endorsement.pdf',
-                'groupExclusions' => 'Group_Exclusions.pdf'
+                'groupExclusions' => 'Group_Exclusions.pdf',
+                'groupPolicy' => "2020-2021_Group_Professional_Liability_Policy.pdf",
+                'gaitemplate' => 'Group_AI',
+                'gaiheader' => 'Group_AI_header.html',
+                'gaifooter' => 'Group_AI_footer.html',
             ),
             'Dive Store'
             => array(
@@ -322,7 +326,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp, $dest, $options, 'aiTemplate', 'aiheader', 'aifooter');
                 }
             }
-            if (isset($temp['groupPL']) && $temp['groupProfessionalLiability'] == 'yes') {
+            if (isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes') {
                 $this->generateGroupDocuments($data, $temp, $documents, $previous_data, $endorsementOptions, $dest, $options, $length);
             }
 
@@ -373,29 +377,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if (isset($this->template[$temp['product']]['blanketForm'])) {
                 $this->logger->info("DOCUMENT blanketForm");
                 $documents['blanket_document'] = $this->copyDocuments($temp, $dest['relativePath'], 'blanketForm');
-            }
-
-            if (isset($temp['groupPL']) && !empty($temp['groupPL'])) {
-                if (isset($this->template[$temp['product']]['card'])) {
-                    $this->logger->info('inside dive boat pocket card');
-                    $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : (isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
-                    //$dest = ArtifactUtils::getDocumentFilePath($this->destination, $data['uuid'], array('orgUuid' => $orgUuid));
-                    $template = $this->template[$temp['product']]['card'];
-                    $options = array();
-                    $docDest = $dest['absolutePath'] . $template . '.pdf';
-                    $result = $this->newDataArray($temp);
-                    if (!isset($result) || empty($result)) {
-                        $this->logger->warn('no pocket card generated');
-                    } else {
-                        $newData = json_encode($result);
-                        $docdata = array('data' => $newData);
-                        unset($NewData);
-                        unset($newData);
-                        $this->logger->info("Data is: " . print_r($docdata, true));
-                        $this->documentBuilder->generateDocument($template, $docdata, $docDest, $options);
-                        $documents['PocketCard'] = $dest['relativePath'] . $template . '.pdf';
-                    }
-                }
             }
         } else if ($data['product'] == "Dive Store" || $data['product'] == 'Group Professional Liability') {
             if ($this->type != 'endorsementQuote' && $this->type != "quote") {
@@ -781,11 +762,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
                     if (isset($data['groupPL'])) {
                         $groupVal = false;
-                        if ($data['product'] == 'Dive Boat') {
-                            if ($data['groupProfessionalLiability'] == 'yes') {
-                                $groupVal = true;
-                            }
-                        } else if ($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability') {
+                        if ($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability') {
                             if ($data['groupProfessionalLiabilitySelect'] == 'yes') {
                                 $groupVal = true;
                             }
@@ -807,15 +784,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['certificate_no'] = $coi_number;
                 if (isset($data['groupPL'])) {
                     $groupVal = false;
-                    if ($data['product'] == 'Dive Boat') {
-                        if ($data['groupProfessionalLiability'] == 'yes') {
-                            $groupVal = true;
-                        }
-                    } else if ($data['product'] == 'Dive Store') {
-                        if ($data['groupProfessionalLiabilitySelect'] == 'yes') {
-                            $groupVal = true;
-                        }
-                    } else if ($data['product'] == 'Group Professional Liability') {
+                    if ($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability') {
                         if ($data['groupProfessionalLiabilitySelect'] == 'yes') {
                             $groupVal = true;
                         }
@@ -856,15 +825,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
         if (isset($data['groupPL'])) {
             $groupVal = false;
-            if ($data['product'] == 'Dive Boat') {
-                if ($data['groupProfessionalLiability'] == 'yes') {
-                    $groupVal = true;
-                }
-            } else if ($data['product'] == 'Dive Store') {
-                if ($data['groupProfessionalLiabilitySelect'] == 'yes') {
-                    $groupVal = true;
-                }
-            } else if ($data['product'] == 'Group Professional Liability') {
+            if ($data['product'] == 'Dive Boat' || $data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability') {
                 if ($data['groupProfessionalLiabilitySelect'] == 'yes') {
                     $groupVal = true;
                 }
@@ -1029,7 +990,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }else if($this->type == 'reinstate'){
             $reinstateDate = date_format(date_create($data['reinstateDate']), 'Md');
             $docDest = $dest['absolutePath'] . $template . '_' . $reinstateDate . '.pdf';
-        }else if ($this->type == 'quote' || $this->type == 'endorsementQuote'){
+        }else if (($this->type == 'quote' || $this->type == 'endorsementQuote') && $data['product'] != 'Dive Boat'){
             $docDest = $dest['absolutePath'] . $template . '_' . $data['proposalCount'] . '.pdf';
         }else{
             $docDest = $dest['absolutePath'] . $template . '.pdf';
@@ -1088,7 +1049,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
                 $updateDate = date_format(date_create($data['update_date']), 'Md');
                 return $dest['relativePath'] . $template . '_' . $updateDate . '.pdf';
-            }else if ($this->type == 'quote' || $this->type == 'endorsementQuote'){
+            }else if (($this->type == 'quote' || $this->type == 'endorsementQuote') && $data['product'] != 'Dive Boat'){
                 return $dest['relativePath'] . $template . '_' . $data['proposalCount'] . '.pdf';
             } else {
                 return $dest['relativePath'] . $template . '.pdf';
