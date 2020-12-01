@@ -53,7 +53,7 @@ content:
                     - 
                         title: State Code
                         field: state
-                        cell: 'typeof data.state == "string" && data.state
+                        cell: 'typeof data.state == "string" && data.state && data.state.includes("abbreviation")
                                 ? JSON.parse(data.state).abbreviation
                                 ? JSON.parse(data.state).abbreviation
                                 : ""
