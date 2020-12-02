@@ -2283,7 +2283,7 @@
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
                     "fileMaxSize": "10MB",
                     "multiple": true,
                     "validate": {
@@ -2336,7 +2336,7 @@
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
                     "fileMaxSize": "10MB",
                     "multiple": true,
                     "clearOnHide": false,
@@ -2390,7 +2390,7 @@
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
                     "fileMaxSize": "10MB",
                     "multiple": true,
                     "clearOnHide": false,
@@ -2444,7 +2444,7 @@
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
                     "fileMaxSize": "10MB",
                     "multiple": true,
                     "clearOnHide": false,
@@ -2485,7 +2485,7 @@
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
                     "fileMaxSize": "10MB",
                     "multiple": true,
                     "clearOnHide": false,
@@ -2524,7 +2524,7 @@
                         "label": "",
                         "value": ""
                     }],
-                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+                    "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost",
                     "fileMaxSize": "10MB",
                     "multiple": true,
                     "clearOnHide": false,
@@ -3584,7 +3584,7 @@
     }],
     "controller": "",
     "revisions": "current",
-    "_vid": 391,
+    "_vid": 392,
     "title": "Endorsement Consolidation - IPL",
     "display": "wizard",
     "access": [{
@@ -3605,6 +3605,6 @@
     "path": "endorsementconsolidationipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2020-03-13T11:01:28.672Z",
-    "modified": "2020-11-02T13:05:01.632Z",
+    "modified": "2020-12-01T06:41:29.237Z",
     "machineName": "testdivehub:endorsementConsolidationIpl"
 }
