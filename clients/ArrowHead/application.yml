@@ -28,7 +28,7 @@ privilege:
         permission: 7
     -
         name: MANAGE_POLICY_APPLICATION
-        permission: 7
+        permission: 15
     -
         name: MANAGE_CLAIMS
         permission: 15
@@ -52,7 +52,7 @@ role:
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
-                permission: 7
+                permission: 15
             -
                 privilege_name: MANAGE_CLAIMS
                 permission: 15
@@ -92,6 +92,12 @@ menu:
         page_uuid: ba632ab9-c87d-4417-852e-fcf609b96926
         uuid: 474e61f0-4072-41c3-b4b2-c1a9ecb5ecca
         privilege: MANAGE_CLAIMS_READ
+    -
+        name: 'Phase 2'
+        icon: 'far fa-flask'
+        page_uuid: 65aa32d1-113e-430f-bfb5-83e085f51948
+        uuid: aa8e1d75-a4a8-40cd-8317-4ed1790af71c
+        privilege: MANAGE_POLICY_APPLICATION_WRITE
 entity:
     -
         name: 'Dealer Policy'
@@ -205,6 +211,15 @@ pages:
     -
         page_name: WorkbookClaimsList.yml
         uuid: f52a8856-54af-4efc-b548-3675ddb7f90f
+    -
+        uuid: 65aa32d1-113e-430f-bfb5-83e085f51948
+        page_content:
+            name: 'Phase 2'
+            description: 'Shows a list of claims realated to a workbook'
+            content:
+                -
+                    type: Form
+                    form_id: 1d9c6d64-469d-4401-9b64-d7f47316c157
 form:
     -
         name: 'DealerWorkbook Form'
@@ -217,4 +232,10 @@ form:
         uuid: 055cdece-c75c-4d33-b32c-800e05421406
         description: 'Claims form'
         template_file: claimsFormDev.json
+        entity: 'Dealer Policy'
+    -
+        name: Phase2Form
+        uuid: 1d9c6d64-469d-4401-9b64-d7f47316c157
+        description: 'Phase 2 Form'
+        template_file: dealerWorkbookPhase2.json
         entity: 'Dealer Policy'

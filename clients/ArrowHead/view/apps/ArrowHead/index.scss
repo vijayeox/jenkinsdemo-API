@@ -9,6 +9,10 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   overflow: visible !important;
 }
 
+.swal2-title{
+  white-space: pre-line;
+}
+
 .swal2-icon.swal2-warning::before {
   content: unset;
 }
@@ -96,6 +100,39 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
         padding-left: 1px;
         margin-right: 1rem;
       }
+    }
+  }
+
+  .formio-component-locationSchedule{
+    text-align: center;
+  }
+  .locationsDataGrid {
+    .form-group {
+      padding-bottom: 5px;
+      margin-bottom: 5px;
+    }
+    tr[ref="datagrid-locations-row"] {
+      td[ref="datagrid-locations"] {
+        padding: 0.5rem;
+      }
+    }
+    .formio-component-modal-wrapper-well {
+      height: 35px;
+      div[ref="openModalWrapper"] {
+        label.control-label {
+          display: none;
+        }
+        br {
+          display: none;
+        }
+      }
+    }
+    .locHidden {
+      display: none;
+    }
+    .addBuildingButton {
+      padding-bottom: 5px;
+      height: 35px;
     }
   }
 
