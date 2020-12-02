@@ -1172,19 +1172,31 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['group_ai_certificate'] = $this->generateDocuments($temp, $dest, $options, 'gaitemplate', 'gaiheader', 'gaifooter');
             }
         } else if ($this->type == 'endorsementQuote') {
-            $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, false);
+            if ($data['previous_groupProfessionalLiabilitySelect'] != $data['groupProfessionalLiabilitySelect'] && $data['groupProfessionalLiabilitySelect'] == "yes") {
+                $temp['start_date'] = $data['update_date'];
+                $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, false);
+                $temp['start_date'] = $data['start_date'];
+            }
+            else {
+                $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, false);
+            }
         } else {
             $this->logger->info("DOCUMENT groupPL");
 
             if ($this->type == 'endorsement') {
                 if ($endorsementOptions['modify_groupProfessionalLiability'] == true) {
-                    $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, true);
                     if ($data['previous_groupProfessionalLiabilitySelect'] != $data['groupProfessionalLiabilitySelect'] && $data['groupProfessionalLiabilitySelect'] == "yes") {
+                        $temp['start_date'] = $data['update_date'];
                         $documents['group_policy_document'] = $this->copyDocuments($temp, $dest['relativePath'], 'groupPolicy');
                         if (isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability') {
                             $this->logger->info("DOCUMENT GLblanketForm");
                             $documents['group_blanket_document'] = $this->copyDocuments($temp, $dest['relativePath'], 'GLblanketForm');
                         }
+                        $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, true);
+                        $temp['start_date'] = $data['start_date'];
+                    }
+                    else {
+                        $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, true);
                     }
                 }
             } else {
