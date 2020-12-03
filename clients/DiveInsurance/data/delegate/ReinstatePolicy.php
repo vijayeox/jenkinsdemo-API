@@ -22,31 +22,31 @@ class ReinstatePolicy extends PolicyDocument
         $this->template = array(
             'Individual Professional Liability'
             => array(
-                'template' => 'Reinstate_Approval',
+                'template' => 'Reinstatement_Approval',
                 'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Emergency First Response'
             => array(
-                'template' => 'Reinstate_Approval',
+                'template' => 'Reinstatement_Approval',
                 'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Dive Boat'
             => array(
-                'template' => 'Reinstate_Approval',
+                'template' => 'Reinstatement_Approval',
                 'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Dive Store'
             => array(
-                'template' => 'Reinstate_Approval',
+                'template' => 'Reinstatement_Approval',
                 'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             ),
             'Group Professional Liability'
             => array(
-                'template' => 'Reinstate_Approval',
+                'template' => 'Reinstatement_Approval',
                 'header' => 'Reinstate_header.html',
                 'footer' => 'Cancellation_footer.html'
             )
@@ -68,23 +68,36 @@ class ReinstatePolicy extends PolicyDocument
         $data['groupPolicyId'] = "";
         $data['propCarrierName'] = "";
         $data['groupCarrierName'] = "";
+        $data['coverageTitle'] = "";
+        $data['multiplePolicy'] = "no";
         if ($data['product'] == "Dive Store") {
             $data['carrierName'] = "Liability Policy issued by " . $data['liability_carrier'];
             $data['policyId'] = "Liability Policy #:" . $data['liability_policy_id'];
+            $data['coverageTitle'] = "GENERAL LIABILITY";
             if ($data['propertyCoverageSelect'] == "yes") {
+                $data['multiplePolicy'] = "yes";
                 $data['propCarrierName'] = "Property Policy issued by " . $data['property_carrier'];
                 $data['propPolicyId'] = "Property Policy #:" . $data['property_policy_id'];
+                $data['coverageTitle'] = "GENERAL LIABILITY,PROPERTY";
             }
             if ($data['groupProfessionalLiabilitySelect'] == "yes") {
+                $data['multiplePolicy'] = "yes";
                 $data['groupCarrierName'] = "Group Policy issued by " . $data['group_carrier'];
                 $data['groupPolicyId'] = "Group Policy #:" . $data['group_policy_id'];
+                $data['coverageTitle'] = "GENERAL LIABILITY,PROPERTY,GROUP PROFESSIONAL LIABILITY";
             }
         } else if ($data['product'] == "Group Professional Liability") {
             $data['carrierName'] = "Policy issued by " . $data['group_carrier'];
             $data['policyId'] = "Policy #:" . $data['group_policy_id'];
-        } else {
+            $data['coverageTitle'] = "GROUP PROFESSIONAL LIABILITY";
+        } else if($data['product'] == "Individual Professional Liability"){
             $data['carrierName'] = "Policy issued by " . $data['carrier'];
             $data['policyId'] = "Policy #:" . $data['policy_id'];
+            $data['coverageTitle'] = "INDIVIDUAL PROFESSIONAL LIABILITY";
+        }else if($data['product'] == "Emergency First Response"){
+            $data['carrierName'] = "Policy issued by " . $data['carrier'];
+            $data['policyId'] = "Policy #:" . $data['policy_id'];
+            $data['coverageTitle'] = "EMERGENCY FIRST RESPONSE";
         }
         if (isset($data['state'])) {
             $data['state_in_short'] = $this->getStateInShort($data['state'], $persistenceService);
@@ -151,6 +164,8 @@ class ReinstatePolicy extends PolicyDocument
         unset($data['policyId']);
         unset($data['propPolicyId']);
         unset($data['groupPolicyId']);
+        unset($data['multiplePolicy']);
+        unset($data['coverageTitle']);
         return $data;
     }
 }

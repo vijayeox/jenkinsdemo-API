@@ -6,6 +6,7 @@ use Oxzion\Encryption\Crypto;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\AppDelegate\FileTrait;
+use Oxzion\DelegateException;
 require_once __DIR__."/DispatchDocument.php";
 
 class DispatchReinstatePolicyMail extends DispatchDocument
@@ -42,11 +43,11 @@ class DispatchReinstatePolicyMail extends DispatchDocument
                     throw new DelegateException('Reinstate Document Not Found','file.not.found',0,array($file));
                 }
             }else{
-                $this->logger->error("Reinstate Document Not Found - ".$file);
+                $this->logger->error("Reinstate Document Not Found");
                     throw new DelegateException('Reinstate Document Not Found','file.not.found');
             }
         }else{
-            $this->logger->error("Reinstate Document Not Found - ".$file);
+            $this->logger->error("Reinstate Document Not Found");
             throw new DelegateException('Reinstate Document Not Found','file.not.found');
         }
         if($data['product'] == 'Dive Store'){
