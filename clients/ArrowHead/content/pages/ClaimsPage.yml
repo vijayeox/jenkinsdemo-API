@@ -36,15 +36,17 @@ content:
                                 wrapStyle:
                                     height: "90%"                            
                                 actions:
-                                    # -
-                                    #     name: Edit
-                                    #     rule: "true"
-                                    #     details:
-                                    #         -
-                                    #             type: Form
-                                    #             form_id: 055cdece-c75c-4d33-b32c-800e05421406
-                                    #             fileId: '{{uuid}}'
-                                    #     icon: 'far fa-pencil-alt'
+                                    -
+                                        name: Edit
+                                        rule: "true"
+                                        details:
+                                            -
+                                                type: Form
+                                                form_id: 055cdece-c75c-4d33-b32c-800e05421406
+                                                fileId: '{{uuid}}'
+                                                data:
+                                                    hideCreateNew: true
+                                        icon: 'far fa-pencil-alt'
                                     -
                                         name: Delete
                                         rule: "profile.privileges.MANAGE_CLAIMS_DELETE == true"
