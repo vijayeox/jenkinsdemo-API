@@ -130,16 +130,17 @@ content:
                                 type: Page
                                 page_id: 'ed1b1e0c-5ef9-4332-8703-2a35c8d5e14b'
             actions:
-                # -
-                #     name: Edit
-                #     rule: "profile.privileges.MANAGE_CLAIMS_WRITE == true"
-                #     details:
-                #         -
-                #             type: Form
-                #             form_id: 055cdece-c75c-4d33-b32c-800e05421406
-                #             fileId: '{{uuid}}'
-                #             parentFileId: '{{parentFileId}}'
-                #     icon: 'far fa-pencil-alt'
+                -
+                    name: Edit
+                    rule: "profile.privileges.MANAGE_CLAIMS_WRITE == true"
+                    details:
+                        -
+                            type: Form
+                            form_id: 055cdece-c75c-4d33-b32c-800e05421406
+                            fileId: '{{uuid}}'
+                            data:
+                                hideCreateNew: true
+                    icon: 'far fa-pencil-alt'
                 -
                     name: Delete
                     rule: "profile.privileges.MANAGE_CLAIMS_DELETE == true"
