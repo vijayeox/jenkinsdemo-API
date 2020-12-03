@@ -789,5 +789,8 @@ th {
 }
 
 .policyfont {
-    font-size: 15px;
+    font-size: 12px;
+}
+.cancelFont {
+    font-size: 5px;
 }

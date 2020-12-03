@@ -10,44 +10,44 @@
 		<p style="margin-bottom:2%">&nbsp</p>
 		{if $product == 'Dive Store'}
 			{if $multiplePolicy == "yes"}
-				<p>THE ABOVE POLICIES ARE HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
+				<p class = "cancelFont">THE ABOVE POLICIES ARE HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
 			{else}
-				<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
+				<p class = "cancelFont">THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
 			{/if}
 		{else}
-			<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
+			<p class = "cancelFont">THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
 		{/if}
 			{if $reasonforCsrCancellation == 'nonPaymentOfPremium' && $product == 'Dive Store'}
-				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>
-				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
+				<p class = "cancelFont">DUE TO NON-PAYMENT OF PREMIUM.</p>
+				<p class = "cancelFont">TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE TO THE FINANCE COMPANY.</p>
 			{elseif $reasonforCsrCancellation == 'nonPaymentOfPremium' && $product != 'Dive Store'}
-				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>
-				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
+				<p class = "cancelFont">DUE TO NON-PAYMENT OF PREMIUM.</p>
+				<p class = "cancelFont">TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE.</p>
 			{elseif $reasonforCsrCancellation == 'padiMembershipNotCurrent'}
-				<p>DUE TO PADI MEMBERSHIP NOT CURRENT.</p>
-				<p>TO REINSTATE COVERAGE, MEMBERSHIP MUST BE RENEWED WITHIN 45 DAYS OF THIS NOTICE</p>
+				<p class = "cancelFont">DUE TO PADI MEMBERSHIP NOT CURRENT.</p>
+				<p class = "cancelFont">TO REINSTATE COVERAGE, MEMBERSHIP MUST BE RENEWED WITHIN 45 DAYS OF THIS NOTICE</p>
 			{elseif $reasonforCsrCancellation == 'nonSufficientFunds' && $product == 'Dive Store'}
-				<p>NON-PAYMENT OF PREMIUM DUE TO NON-SUFFICIENT FUNDS.</p>
-				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
+				<p class = "cancelFont">NON-PAYMENT OF PREMIUM DUE TO NON-SUFFICIENT FUNDS.</p>
+				<p class = "cancelFont">TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE TO THE FINANCE COMPANY.</p>
 			{elseif $reasonforCsrCancellation == 'nonSufficientFunds' && $product != 'Dive Store'}
-				<p>NON-PAYMENT OF PREMIUM DUE TO NON-SUFFICIENT FUNDS.</p>
-				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
+				<p class = "cancelFont">NON-PAYMENT OF PREMIUM DUE TO NON-SUFFICIENT FUNDS.</p>
+				<p class = "cancelFont">TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE.</p>
 			{elseif $reasonforCsrCancellation == 'boatSold'}
-				<p>DUE TO BOAT SOLD.</p>
+				<p class = "cancelFont">DUE TO BOAT SOLD.</p>
 			{elseif $reasonforCsrCancellation == 'storeSold'}
-				<p>DUE TO STORE SOLD.</p>
+				<p class = "cancelFont">DUE TO STORE SOLD.</p>
 			{elseif $reasonforCsrCancellation == 'businessClosed'}
-				<p>DUE TO BUSINESS CLOSED.</p>
+				<p class = "cancelFont">DUE TO BUSINESS CLOSED.</p>
 			{elseif $reasonforCsrCancellation == 'others'}
-				<p>DUE TO {$othersCsr}</p>
+				<p class = "cancelFont">DUE TO {$othersCsr}</p>
 			{/if}
 		{elseif $cancellationStatus == 'notApproved'}
-		<p>THE ABOVE POLICY IS NOT CANCELLED.</p>
-		<p>DUE TO {$reasonforRejection}</p>
+		<p class = "cancelFont">THE ABOVE POLICY IS NOT CANCELLED.</p>
+		<p class = "cancelFont">DUE TO {$reasonforRejection}</p>
 		{/if}
 	</div>
 </body>
