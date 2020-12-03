@@ -1101,8 +1101,9 @@
                                         "postSubmitCallback": "true",
                                         "persistLoader": "true"
                                     },
+                                    "customConditional": "show = !data.hideCreateNew",
                                     "type": "button",
-                                    "custom": "if (form.errors.length == 0) {\n  form.emit(\"customEvent\", {\n    data: data,\n    type: \"customButtonAction\",\n    component: component,\n  });\n  setTimeout(function () {\n    form.emit(\"customEvent\", {\n      type: \"resetState\",\n      state: {\n        fileId: null,\n      },\n    });\n  }, 1500);\n  setTimeout(function () {\n    var resetData = {\n        bos: data.bos\n        ? {\n            ...data.bos,\n            fileId: null,\n          }\n        : {},\n      lossDate: \"\",\n      reportedDate: \"\",\n\n      carrier: \"\",\n      lrPdfReference: \"\",\n\n      paid: 0,\n      reserve: 0,\n      subro: 0,\n      lae: 0,\n      total: 0,\n\n      claimlevel1: {},\n      claimlevel2: {},\n      claimlevel3: {},\n    };\n    data = {\n      ...data,\n      ...resetData,\n      fileId: \"\",\n      uuid: \"\",\n    };\n    form.setValue({ data: data });\n    form.emit(\"customEvent\", {\n      data: data,\n      type: \"formLoader\",\n      state: false,\n    });\n  }, 2000);\n}\n",
+                                    "custom": "if (form.errors.length == 0) {\n  form.emit(\"customEvent\", {\n    data: data,\n    type: \"customButtonAction\",\n    component: component,\n  });\n  setTimeout(function () {\n    form.emit(\"customEvent\", {\n      type: \"resetState\",\n      state: {\n        fileId: undefined,\n      },\n    });\n  }, 1500);\n  setTimeout(function () {\n    var resetData = {\n        bos: data.bos\n        ? {\n            ...data.bos,\n            fileId: undefined,\n          }\n        : {},\n      lossDate: \"\",\n      reportedDate: \"\",\n\n      carrier: \"\",\n      lrPdfReference: \"\",\n\n      paid: 0,\n      reserve: 0,\n      subro: 0,\n      lae: 0,\n      total: 0,\n\n      claimlevel1: {},\n      claimlevel2: {},\n      claimlevel3: {},\n    };\n    data = {\n      ...data,\n      ...resetData,\n      fileId: \"\",\n      uuid: \"\",\n    };\n    form.setValue({ data: data });\n    form.emit(\"customEvent\", {\n      data: data,\n      type: \"formLoader\",\n      state: false,\n    });\n  }, 2000);\n}\n",
                                     "input": true,
                                     "hideOnChildrenHidden": false
                                 }
@@ -1163,6 +1164,6 @@
     "path": "claimsformdev",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-09-29T09:47:24.714Z",
-    "modified": "2020-12-01T10:52:26.880Z",
+    "modified": "2020-12-02T11:53:24.329Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:claimsFormDev"
 }
