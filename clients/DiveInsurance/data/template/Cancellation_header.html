@@ -24,7 +24,7 @@
                 'country', 'zip', 'certificate_no', 'padi', 'end_date', 'policy_id',
                 'address1', 'address2', 'single_limit', 'annual_aggregate', 'carrier', 'product',
                 'liability_policy_id', 'property_policy_id', 'liability_carrier', 'property_carrier',
-                'group_carrier', 'group_policy_id', 'carrierName', 'propCarrierName', 'groupCarrierName', 'policyId', 'propPolicyId', 'groupPolicyId'
+                'group_carrier', 'group_policy_id', 'carrierName', 'propCarrierName', 'groupCarrierName', 'policyId', 'propPolicyId', 'groupPolicyId','coverageTitle'
             ];
 
             for (var css_class in css_selector_classes) {
@@ -40,7 +40,7 @@
                             "start_date"
                         )[0].textContent = moment(
                             vars[css_selector_classes[css_class]]
-                        ).format("DD MMMM YYYY");
+                        ).format("DD MMMM YYYY") + " - 12:01:00 AM";
                     }
                     if (css_selector_classes[css_class] == "cancelDate") {
                         document.getElementsByClassName(
@@ -134,7 +134,7 @@
     <div style="margin-bottom:2%"></div>
     <div class="spacer" style="margin-top: 15%"></div>
     <center>
-        <div class="title3"><b>COVERAGE: PADI ENDORSED DIVE CENTER INSURANCE</b></div>
+        <div class="title3"><b>COVERAGE: <span class = 'coverageTitle'></span></b></div>
     </center>
     <div class="spacer"></div>
 </body>

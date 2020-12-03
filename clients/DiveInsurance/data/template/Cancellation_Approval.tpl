@@ -8,7 +8,15 @@
 	<div class ="body_div_ai">
 		{if $cancellationStatus == 'approved'}
 		<p style="margin-bottom:2%">&nbsp</p>
-		<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
+		{if $product == 'Dive Store'}
+			{if $multiplePolicy == "yes"}
+				<p>THE ABOVE POLICIES ARE HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
+			{else}
+				<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
+			{/if}
+		{else}
+			<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$cancelDate|date_format:"%m/%d/%Y"} </p>
+		{/if}
 			{if $reasonforCsrCancellation == 'nonPaymentOfPremium' && $product == 'Dive Store'}
 				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>
 				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
