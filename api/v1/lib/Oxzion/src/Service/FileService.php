@@ -1494,52 +1494,63 @@ class FileService extends AbstractService
     }
     public function addAttachment($params,$file)
     {
-        $fileArray = array();
-        $data = array();
-        $fileStorage = AuthContext::get(AuthConstants::ORG_UUID) . "/temp/";
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['uuid'] = UuidUtil::uuid();
-        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $tempname = str_replace(".".$ext, "", $file['name']);
-        $data['name'] = $tempname.".".$ext;
-        $data['originalName'] = $tempname.".".$ext;
-        $data['extension'] = $ext;
-        $form = new FileAttachment();
-        $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
-        $data['type'] = $file['type'];
-        if (!isset($params['fileId'])) {
-            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
-            $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
-            $data['path'] = $path;
-            $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
-        }else{
-            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/';
-            $data['file'] = AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-            $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-            $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
-        }
-        $form->exchangeArray($data);
-        $form->validate();
-        $count = $this->attachmentTable->save($form);
-        $id = $this->attachmentTable->getLastInsertValue();
-        $data['id'] = $id;
-        $file['name'] = $data['name'];
-        $fileStored = FileUtils::storeFile($file, $folderPath);
-        $data['size'] = filesize($data['path']);
-        if (isset($params['fileId'])) {
-            $filterArray['text'] = $params['fieldLabel'];
-            $filter['uuid'] = $params['fileId'];
-            $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $filter, null)->toArray();
-            $fileArray['entity_id'] = $fileRecord[0]['entity_id'];
-            $fieldName = $this->getDataByParams('ox_field', array("name"), $filterArray, null)->toArray();
-            if (count($fileRecord) > 0) {
-               $fileData = json_decode($fileRecord[0]['data'],true);
-               $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
-               $this->updateFile($fileData,$params['fileId']);
+        try {
+            $fileArray = array();
+            $data = array();
+            $fileStorage = AuthContext::get(AuthConstants::ORG_UUID) . "/temp/";
+            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+            $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['uuid'] = UuidUtil::uuid();
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $tempname = str_replace(".".$ext, "", $file['name']);
+            $data['name'] = $tempname.".".$ext;
+            $data['originalName'] = $tempname.".".$ext;
+            $data['extension'] = $ext;
+            $form = new FileAttachment();
+            $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
+            $data['type'] = $file['type'];
+            if (!preg_match('/^([-\.\w]+)$/', $file['name'])){
+                throw new ServiceException("Unsupported Filename", "attachment.filename.invalid");
             }
+            if (!isset($params['fileId'])) {
+                $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
+                $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
+                $data['path'] = $path;
+                $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
+            }else{
+                $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/';
+                $data['file'] = AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+                $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ORG_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+                $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
+            }
+            $form->exchangeArray($data);
+            $form->validate();
+            $count = $this->attachmentTable->save($form);
+            $id = $this->attachmentTable->getLastInsertValue();
+            $data['id'] = $id;
+            $file['name'] = $data['name'];
+            $fileStored = FileUtils::storeFile($file, $folderPath);
+            $data['size'] = filesize($data['path']);
+            if (isset($params['fileId'])) {
+                $filterArray['text'] = $params['fieldLabel'];
+                $filter['uuid'] = $params['fileId'];
+                $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $filter, null)->toArray();
+                $fileArray['entity_id'] = $fileRecord[0]['entity_id'];
+                $fieldName = $this->getDataByParams('ox_field', array("name"), $filterArray, null)->toArray();
+                if (count($fileRecord) > 0) {
+                $fileData = json_decode($fileRecord[0]['data'],true);
+                $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
+                $this->updateFile($fileData,$params['fileId']);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-        return $data;
+            
+       
+        
     }
 
     public function deleteAttachment($params)
