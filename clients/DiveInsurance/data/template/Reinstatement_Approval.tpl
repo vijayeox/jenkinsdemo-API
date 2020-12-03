@@ -9,12 +9,12 @@
 		<p style="margin-bottom:2%">&nbsp</p>
 		{if $product == 'Dive Store'}
 			{if $multiplePolicy == "yes"}
-				<p>THE ABOVE POLICIES ARE HEREBY REINSTATED EFFECTIVE: {$reinstateDate|date_format:"%m/%d/%Y"} </p>
+				<p class = "cancelFont">THE ABOVE POLICIES ARE HEREBY REINSTATED EFFECTIVE: {$reinstateDate|date_format:"%m/%d/%Y"} </p>
 			{else}
-				<p>THE ABOVE POLICY IS HEREBY REINSTATED EFFECTIVE: {$reinstateDate|date_format:"%m/%d/%Y"} </p>
+				<p class = "cancelFont">THE ABOVE POLICY IS HEREBY REINSTATED EFFECTIVE: {$reinstateDate|date_format:"%m/%d/%Y"} </p>
 			{/if}
 		{else}
-			<p>THE ABOVE POLICY IS HEREBY REINSTATED EFFECTIVE: {$reinstateDate|date_format:"%m/%d/%Y"} </p>
+			<p class = "cancelFont">THE ABOVE POLICY IS HEREBY REINSTATED EFFECTIVE: {$reinstateDate|date_format:"%m/%d/%Y"} </p>
 		{/if}
 	</div>
 </body>

@@ -999,7 +999,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $docDest = $dest['absolutePath'] . $template . '_' . $updateDate . '.pdf';
             }
         }
-        if ($template == 'Group_PL_COI' || $template == 'Group_PL_COI_DS' || $template == 'Group_PL_COI_DS_Endorsement') {
+        if ($template == 'Group_PL_COI' || $template == 'Group_PL_COI_DS' || $template == 'Group_PL_COI_DS_Endorsement' || $this->type == "cancel" || $this->type == "reinstate") {
             $options['generateOptions'] = array('disable_smart_shrinking' => 1);
         }
         if (isset($headerKey) && $headerKey != null) {
