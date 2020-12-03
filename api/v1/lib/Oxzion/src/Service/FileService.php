@@ -1536,10 +1536,15 @@ class FileService extends AbstractService
                 $filter['uuid'] = $params['fileId'];
                 $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $filter, null)->toArray();
                 $fileArray['entity_id'] = $fileRecord[0]['entity_id'];
+          		$filterArray['entity_id'] = $fileRecord[0]['entity_id'];
                 $fieldName = $this->getDataByParams('ox_field', array("name"), $filterArray, null)->toArray();
                 if (count($fileRecord) > 0) {
                 $fileData = json_decode($fileRecord[0]['data'],true);
-                $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
+                $check = $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
+                if(!$check) {
+                    //When the field doesn't exist in file data
+                    $fileData[$fieldName[0]['name']] = array($data);               
+                }
                 $this->updateFile($fileData,$params['fileId']);
                 }
             }
