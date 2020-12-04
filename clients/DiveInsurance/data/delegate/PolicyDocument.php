@@ -991,6 +991,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $reinstateDate = date_format(date_create($data['reinstateDate']), 'Md');
             $docDest = $dest['absolutePath'] . $template . '_' . $reinstateDate . '.pdf';
         }else if (($this->type == 'quote' || $this->type == 'endorsementQuote') && $data['product'] != 'Dive Boat'){
+            $data['proposalCount']=isset($data['proposalCount'])?$data['proposalCount']:1;
             $docDest = $dest['absolutePath'] . $template . '_' . $data['proposalCount'] . '.pdf';
         }else{
             $docDest = $dest['absolutePath'] . $template . '.pdf';
