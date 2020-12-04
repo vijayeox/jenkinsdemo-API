@@ -92,13 +92,13 @@ class CancelPolicy extends PolicyDocument
                 $data['multiplePolicy'] = "yes";
                 $data['propCarrierName'] = "Property Policy issued by " . $data['property_carrier'];
                 $data['propPolicyId'] = "Property Policy #:" . $data['property_policy_id'];
-                $data['coverageTitle'] = "GENERAL LIABILITY,PROPERTY";
+                $data['coverageTitle'] = $data['coverageTitle'].",PROPERTY";
             }
             if ($data['groupProfessionalLiabilitySelect'] == "yes") {
                 $data['multiplePolicy'] = "yes";
                 $data['groupCarrierName'] = "Group Policy issued by " . $data['group_carrier'];
                 $data['groupPolicyId'] = "Group Policy #:" . $data['group_policy_id'];
-                $data['coverageTitle'] = "GENERAL LIABILITY,PROPERTY,GROUP PROFESSIONAL LIABILITY";
+                $data['coverageTitle'] = $data['coverageTitle'].",GROUP PROFESSIONAL LIABILITY";
             }
         } else if ($data['product'] == "Group Professional Liability") {
             $data['carrierName'] = "Policy issued by " . $data['group_carrier'];
