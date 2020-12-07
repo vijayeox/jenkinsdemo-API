@@ -182,4 +182,26 @@ class EntityController extends AbstractApiController
     //         return $this->getErrorResponse($e->getMessage(), 417);
     //     }
     // }
+
+    /**
+     * GET Entity API
+     * @api
+     * @link /app/appId/entity[/:id]
+     * @method GET
+     * @param $id ID of Entity
+     * @return array $data
+     * @return array Returns a JSON Response with Status Code and Created Entity.
+     */
+    public function pageAction()
+    {
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $entityId = $this->params()->fromRoute()['entityId'];
+        try{
+            $result = $this->entityService->getEntityPage($entityId, $appUuid);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
 }

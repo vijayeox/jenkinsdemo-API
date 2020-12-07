@@ -10,6 +10,7 @@ app:
     isdefault: false
     logo: default_app.png
     start_options: null
+    title: EOXAppBuilder
 privilege:
     -
         name: MANAGE_APPLICATION

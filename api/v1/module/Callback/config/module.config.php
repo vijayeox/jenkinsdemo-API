@@ -56,23 +56,23 @@ return [
                     ],
                 ],
             ],
-            'createbotcallback' => [
+            'savebotcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/createbot',
+                    'route'    => '/callback/chat/savebot',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'createBot',
+                        'action' => 'saveBot',
                     ],
                 ],
             ],
-            'updatebotcallback' => [
+            'disablebotcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/updatebot',
+                    'route'    => '/callback/chat/disablebot',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'updateBot',
+                        'action' => 'disableBot',
                     ],
                 ],
             ],

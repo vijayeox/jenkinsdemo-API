@@ -49,7 +49,7 @@ class RestClient
         return $response->getBody()->getContents();
     }
 
-    public function postMultiPart($url, $formParams = array(), $fileParams = array())
+    public function postMultiPart($url, $formParams = array(), $fileParams = array(), array $headers = null)
     {
         $boundary = uniqid();
         $multipart_form = array();
@@ -63,7 +63,11 @@ class RestClient
                 $multipart_form[] = array('name' => $key, 'contents' => fopen($value, 'r'), 'headers' => ['Content-Type' => 'application/octet-stream']);
             }
         }
-        $params = ['headers' => ['Connection' => 'close', 'Content-Type' => 'multipart/form-data; boundary=' . $boundary], 'body' => new MultipartStream($multipart_form, $boundary)];
+        $headerList = ['Connection' => 'close', 'Content-Type' => 'multipart/form-data; boundary=' . $boundary];
+        if ($headers) {
+            $headerList = array_merge($headerList, $headers);
+        }
+        $params = ['headers' => $headerList, 'body' => new MultipartStream($multipart_form, $boundary)];
         try {
             $response = $this->client->post($url, $params);
             $var = $response->getBody()->getContents();
