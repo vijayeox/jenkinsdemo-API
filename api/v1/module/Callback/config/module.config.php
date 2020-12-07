@@ -66,6 +66,16 @@ return [
                     ],
                 ],
             ],
+            'postfilecommentcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/postfilecomment',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'postFileComment',
+                    ],
+                ],
+            ],
             'disablebotcallback' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -309,9 +319,9 @@ return [
         ],
     ],
     
-    'view_manager' => [
+     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

@@ -196,13 +196,24 @@ class ChatCallbackController extends AbstractApiControllerHelper
         $params = $this->extractPostData();
         $this->log->info("appBotNotification Params- " . json_encode($params));
         try{
-            $response = $this->chatService->appBotNotification($params);
-            if ($response) {
-                return $this->getSuccessResponseWithData(json_decode($response, true));
-            }
+            $this->chatService->appBotNotification($params);
+            return $this->getSuccessResponse();
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function postFileCommentAction()
+    {
+        $params = $this->extractPostData();
+        $this->log->info("postFileComment Params- " . json_encode($params));
+        try{
+            $this->chatService->postFileComment($params);
+            return $this->getSuccessResponse();
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 }
