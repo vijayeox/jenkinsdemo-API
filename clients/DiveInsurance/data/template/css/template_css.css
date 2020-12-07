@@ -144,6 +144,10 @@ body {
     margin-top: 0px;
     margin-bottom: 5px;
 }
+.p_margin1{
+    margin-top: 0px;
+    margin-bottom: 1px;
+}
 
 .policy {
     font-family: sans-serif;
@@ -481,8 +485,11 @@ body {
 }
 
 .gcontent {
-    width: 100%;
+   
     margin-bottom: 2%;
+}
+.gcontent1{
+    width: 100%;   
 }
 
 .gpolicy_notice1 {
@@ -689,6 +696,12 @@ th {
 .grpp_margin {
     margin-top: 0px;
     margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.grpp_margin1 {
+    margin-top: 0px;
+    margin-bottom: 1px;
     font-size: 13px;
 }
 

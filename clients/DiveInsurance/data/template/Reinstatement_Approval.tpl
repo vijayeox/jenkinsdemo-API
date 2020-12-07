@@ -6,6 +6,11 @@
 </head>
 <body>
 	<div class ="body_div_ai">
+		<div class="spacer" ></div>
+		<center>
+			<div class="title3"><b>COVERAGE: {$coverageTitle}</b></div>
+		</center>
+		<div class="spacer"></div>
 		<p style="margin-bottom:2%">&nbsp</p>
 		{if $product == 'Dive Store'}
 			{if $multiplePolicy == "yes"}
