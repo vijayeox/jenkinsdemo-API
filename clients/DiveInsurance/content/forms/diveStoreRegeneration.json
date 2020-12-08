@@ -4245,7 +4245,7 @@
                                         "eq": "yes"
                                     },
                                     "type": "file",
-                                    "url": "/file/attachments",
+                                    "url": "/file/attachment",
                                     "input": true
                                 }, {
                                     "label": " Is pool equipment/chemicals regularly maintained?",
@@ -8098,7 +8098,7 @@
                                                             "eq": "yes"
                                                         },
                                                         "type": "file",
-                                                        "url": "/file/attachments",
+                                                        "url": "/file/attachment",
                                                         "input": true
                                                     }, {
                                                         "label": " Is pool equipment/chemicals regularly maintained?",
@@ -9261,7 +9261,7 @@
                                                             "eq": "yes"
                                                         },
                                                         "type": "file",
-                                                        "url": "/file/attachments",
+                                                        "url": "/file/attachment",
                                                         "input": true
                                                     }, {
                                                         "label": "Is swimming area marked by boundary buoys or rope?",

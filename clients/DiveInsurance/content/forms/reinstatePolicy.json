@@ -105,7 +105,7 @@
 				"calculateValue": "if(!data.reinstateEffDate || data.reinstateEffDate == \"\"){\n  value = moment(data.cancelDate).format('YYYY-MM-DD');\n}",
 				"validate": {
 					"required": true,
-					"custom": "if(data.reinstateEffDate){\n  valid = (moment(data.reinstateEffDate).format('MM-DD-YYYY') >= moment(data.cancelDate).format('MM-DD-YYYY')) ? true : \"Reinstatement date should not be less than cancellation date \"+moment(data.cancelDate).format('MM-DD-YYYY');\n}"
+					"custom": "if (data.reinstateEffDate){ \n  valid = ((moment(data.reinstateEffDate).diff(moment(data['cancelDate'])) >=0) && (moment(data.reinstateEffDate).diff(moment(data.end_date)) <=0)) ? true : \"Reinstatement date should be between cancellation date and the policy end date\";\n}"
 				},
 				"key": "reinstateEffDate",
 				"logic": [{
@@ -232,7 +232,7 @@
 	"path": "reinstatepolicy",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-10T07:18:08.401Z",
-	"modified": "2020-12-07T06:57:56.991Z",
+	"modified": "2020-12-08T07:04:04.135Z",
 	"machineName": "testdivehub:reinstatePolicy",
 	"controller": ""
 }

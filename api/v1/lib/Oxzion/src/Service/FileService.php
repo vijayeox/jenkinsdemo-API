@@ -1510,7 +1510,7 @@ class FileService extends AbstractService
             $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
             $data['type'] = $file['type'];
             if (!preg_match('/^([-\.\w]+)$/', $file['name'])){
-                throw new ServiceException("Unsupported Filename", "attachment.filename.invalid");
+                throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except _ and -", "attachment.filename.invalid");
             }
             if (!isset($params['fileId'])) {
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
@@ -1612,6 +1612,9 @@ class FileService extends AbstractService
         try{
             if(isset($data['name'])) {
                 $newName = $data['name'];
+            }
+            if (isset($newName) && (!preg_match('/^([-\.\w]+)$/', $newName))){
+                throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except _ and -", "attachment.filename.invalid");
             }
             else {
                 throw new ServiceException("name is required and not specified", "attachment.newName.unspecified");
