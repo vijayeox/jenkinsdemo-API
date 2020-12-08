@@ -19,7 +19,9 @@ class DispatchReinstatePolicyMail extends DispatchDocument
             'Individual Professional Liability' => 'ReinstatePolicyMailTemplate',
             'Dive Boat' => 'ReinstatePolicyMailTemplate',
             'Emergency First Response' => 'ReinstatePolicyMailTemplate',
+            'Group Professional Liability' => 'ReinstatePolicyMailTemplate',
             'Dive Store' => 'ReinstatePolicyMailTemplate');
+           
         parent::__construct();
     }
 
@@ -52,7 +54,11 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         }
         if($data['product'] == 'Dive Store'){
             $subject = 'PADI Endorsed Dive Store Insurance Reinstatement - '.$data['business_padi'];
-        }else if($data['product'] == 'Dive Boat'){
+        }
+        if($data['product'] == 'Group Professional Liability') {
+            $subject = 'PADI Endorsed Group Professional Liability Insurance Reinstatement - '.$data['business_padi'];
+        }
+        else if($data['product'] == 'Dive Boat'){
             $subject = 'PADI Endorsed Dive Boat Insurance Reinstatement - '.$data['padi'];
         }else{
             $subject = 'PADI Endorsed Insurance Reinstatement - '.$data['padi'];
