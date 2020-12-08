@@ -3066,7 +3066,7 @@
 										"eq": "yes"
 									},
 									"type": "file",
-									"url": "/file/attachment",
+									"url": "/file/attachments",
 									"input": true
 								}, {
 									"type": "documentviewer",
@@ -6877,7 +6877,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachment",
+														"url": "/file/attachments",
 														"input": true,
 														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
@@ -8050,7 +8050,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachment",
+														"url": "/file/attachments",
 														"input": true
 													}, {
 														"label": "Is swimming area marked by boundary buoys or rope?",
@@ -9103,7 +9103,7 @@
 											"label": "",
 											"value": ""
 										}],
-										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  var ratingValues = padiRating.split(\",\");\n  var certificateValues = [];\n  ratingValues.forEach(function(item, index) {\n    for(var j=0;j<certificateLevel[item].length;j++){\n      certificateValues.push(certificateLevel[item][j])\n    }\n  });\n  \tvalues = certificateValues;\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+										"custom": "var certificateLevel = data.certificateLevelList;\nif(data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    values = certificateLevel['ratingList'];\n}else{\n    var padiRating = row.rating;\n    if(padiRating && padiRating != ''){\n        var ratingValues = padiRating.split(\",\");\n        var certificateValues = [];\n        ratingValues.forEach(function(item, index) {\n            for(var j=0;j<certificateLevel[item].length;j++){\n              certificateValues.push(certificateLevel[item][j])\n            }\n        });\n        values = certificateValues;\n    }else{\n        values = certificateLevel['ratingList'];\n    }\n}\n"
 									},
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
@@ -15748,7 +15748,7 @@
 		"lockKey": true
 	}],
 	"revisions": "original",
-	"_vid": 127,
+	"_vid": 128,
 	"title": "diveStoreEndorsement3",
 	"display": "wizard",
 	"access": [{
@@ -15766,6 +15766,6 @@
 	"path": "divestoreendorsement3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-08-03T07:30:50.996Z",
-	"modified": "2020-11-26T10:54:02.639Z",
+	"modified": "2020-12-08T14:27:44.087Z",
 	"machineName": "testdivehub:diveStoreEndorsement3"
 }
