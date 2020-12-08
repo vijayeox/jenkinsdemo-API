@@ -60,7 +60,8 @@ class DispatchReinstatePolicyMail extends DispatchDocument
         }
         else if($data['product'] == 'Dive Boat'){
             $subject = 'PADI Endorsed Dive Boat Insurance Reinstatement - '.$data['padi'];
-        }if($data['product'] == 'Group Professional Liability'){
+        }
+        else if($data['product'] == 'Group Professional Liability'){
             $subject = 'PADI Endorsed Insurance Reinstatement - '.$data['business_padi'];
         }else{
             $subject = 'PADI Endorsed Insurance Reinstatement - '.$data['padi'];
