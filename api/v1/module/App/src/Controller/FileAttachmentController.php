@@ -74,7 +74,8 @@ class FileAttachmentController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         catch (ServiceException $e){
-            return $this->getErrorResponse("Unsupported Filename", 404, $files);
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
         catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
