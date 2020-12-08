@@ -17,6 +17,10 @@ trait AppDelegateTrait
         $this->appDelegateService = $appDelegateService;
     }
 
+    public function getAppDelegateService() {
+        return $this->appDelegateService;
+    }
+
     protected function executeDelegate($delegateName,$data){
         return $this->appDelegateService->execute($this->appId,$delegateName,$data);
     }
