@@ -4073,7 +4073,7 @@
 										"eq": "yes"
 									},
 									"type": "file",
-									"url": "/file/attachments",
+									"url": "/file/attachment",
 									"input": true
 								}, {
 									"label": " Is pool equipment/chemicals regularly maintained?",
@@ -7883,7 +7883,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachments",
+														"url": "/file/attachment",
 														"input": true,
 														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
@@ -9047,7 +9047,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachments",
+														"url": "/file/attachment",
 														"input": true
 													}, {
 														"label": "Is swimming area marked by boundary buoys or rope?",
@@ -10273,6 +10273,7 @@
 			},
 			"selectThreshold": 0.3,
 			"clearOnHide": false,
+			"calculateValue": "if(data['product'] == 'Group Professional Liability'){\n  value = \"yes\";\n}",
 			"validate": {
 				"required": true,
 				"customMessage": "Please select if you would like to add Group Professional Liability"
@@ -14773,7 +14774,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 162,
+	"_vid": 164,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14791,6 +14792,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-11-26T10:52:43.970Z",
+	"modified": "2020-12-04T14:26:56.467Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
