@@ -7883,7 +7883,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachment",
+														"url": "/file/attachments",
 														"input": true,
 														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
@@ -9047,7 +9047,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachment",
+														"url": "/file/attachments",
 														"input": true
 													}, {
 														"label": "Is swimming area marked by boundary buoys or rope?",
@@ -10294,14 +10294,10 @@
 			"tableView": false
 		}, {
 			"label": "well",
-			"tableView": false,
 			"key": "well2",
-			"conditional": {
-				"show": true,
-				"when": "groupProfessionalLiabilitySelect",
-				"eq": "yes"
-			},
+			"customConditional": "if(data.groupProfessionalLiabilitySelect == 'yes'){\n  show = true;\n}else{\n  show = false;\n}",
 			"type": "well",
+			"tableView": false,
 			"input": false,
 			"components": [{
 				"label": "Columns",
@@ -10783,7 +10779,7 @@
 											"label": "",
 											"value": ""
 										}],
-										"custom": "var certificateLevel = data.certificateLevelList;\nvar padiRating = row.rating;\nif(padiRating && padiRating != ''){\n  var ratingValues = padiRating.split(\",\");\n  var certificateValues = [];\n  ratingValues.forEach(function(item, index) {\n    for(var j=0;j<certificateLevel[item].length;j++){\n      certificateValues.push(certificateLevel[item][j])\n    }\n  });\n  \tvalues = certificateValues;\n}else{\n  \tvalues = certificateLevel['ratingList'];\n}"
+										"custom": "var certificateLevel = data.certificateLevelList;\nif(data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    values = certificateLevel['ratingList'];\n}else{\n    var padiRating = row.rating;\n    if(padiRating && padiRating != ''){\n        var ratingValues = padiRating.split(\",\");\n        var certificateValues = [];\n        ratingValues.forEach(function(item, index) {\n            for(var j=0;j<certificateLevel[item].length;j++){\n              certificateValues.push(certificateLevel[item][j])\n            }\n        });\n        values = certificateValues;\n    }else{\n        values = certificateLevel['ratingList'];\n    }\n}\n"
 									},
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
@@ -14774,7 +14770,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 164,
+	"_vid": 169,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14792,6 +14788,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-12-04T14:26:56.467Z",
+	"modified": "2020-12-08T14:04:34.770Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
