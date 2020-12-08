@@ -1612,10 +1612,11 @@ class FileService extends AbstractService
         try{
             if(isset($data['name'])) {
                 $newName = $data['name'];
+                if (!preg_match('/^([-\.\w]+)$/', $newName)){
+                    throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except _ and -", "attachment.filename.invalid");
+                }
             }
-            if (isset($newName) && (!preg_match('/^([-\.\w]+)$/', $newName))){
-                throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except _ and -", "attachment.filename.invalid");
-            }
+
             else {
                 throw new ServiceException("name is required and not specified", "attachment.newName.unspecified");
             }
