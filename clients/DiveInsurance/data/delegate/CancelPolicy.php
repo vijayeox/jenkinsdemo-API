@@ -145,7 +145,10 @@ class CancelPolicy extends PolicyDocument
         $cancelDoc = $this->generateDocuments($data, $dest, $options, 'template', 'header', 'footer');
         $data['documents'] = isset($data['documents']) ? (is_string($data['documents']) ?  json_decode($data['documents'],true) : $data['documents']) : array();
         if (isset($data['documents']['cancel_doc'])) {
-            $data['documents']['cancel_doc'] = is_string($data['documents']['cancel_doc']) ? json_decode($data['documents']['cancel_doc'], true) : $data['documents']['cancel_doc'];
+            $cancelDocList = is_string($data['documents']['cancel_doc']) ? json_decode($data['documents']['cancel_doc'], true) : $data['documents']['cancel_doc'];
+            if(empty($cancelDocList)){
+                $data['documents']['cancel_doc'] = array(0 => $data['documents']['cancel_doc']);
+            }
         }else{
             $data['documents']['cancel_doc'] = array();
         }
