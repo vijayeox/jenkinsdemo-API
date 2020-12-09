@@ -25,14 +25,6 @@ class RenewalRateCard extends RateCard
         $this->logger->info("Renewal Rate Card DATA".print_r($data,true));
         $this->logger->info("CLEAN DATA");
 
-        //This is done so that the new year policy starts fresh as we track ownership changes over a year
-        if(isset($data['transfer'])) {
-            unset($data['transfer']);
-        }
-        if(isset($data['iterations'])) {
-            unset($data['iterations']);
-        }
-
         if(isset($data['data'])){
             if(is_string($data['data'])){
                 $data['form_data'] = json_decode($data['data'],true);
