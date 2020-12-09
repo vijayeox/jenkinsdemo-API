@@ -356,6 +356,41 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                     rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'') && (''{{status}}'' != ''In Progress'')'
                     icon: 'fa fa-repeat'
+                -
+                    name: 'Change Ownership'
+                    rule: '(''{{entity_name}}'' == ''Dive Store'') && (''{{policyStatus}}'' == ''In Force'')'
+                    details:
+                        -
+                            type: Form
+                            url: pipeline
+                            urlPostParams:
+                                appId: '{{appId}}'
+                                workflow_id: cb99e634-de00-468d-9230-d6f77d241c5b
+                                workflowInstanceId: '{{workflowInstanceId}}'
+                                cancellationStatus: 'approved'
+                                reasonforCsrCancellation: '{"value": "Change Of Ownership"}'
+                                commands:
+                                    -
+                                        command: file
+                                    -
+                                        command: delegate
+                                        delegate: CancelPolicy
+                                    -
+                                        command: cancelJob
+                                        jobName: autoRenewalJob
+                                    -
+                                        command: fileSave
+                                    -
+                                        command: delegate
+                                        delegate: DispatchCancelPolicyNotification
+                                    -
+                                        command: fileSave
+                                    -
+                                        command: delegate
+                                        delegate: StoreOwnershipTransfer
+                                    -
+                                        command: startform
+                    icon: 'fas fa-people-arrows'    
             columnConfig:
                 -
                     title: PADI
