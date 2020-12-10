@@ -295,10 +295,9 @@ class GenerateReport extends PolicyDocument {
             if(isset($value['previous_policy_data'])){
                 $previous_policy_data = json_decode($value['previous_policy_data'],true);
                 $totalendorsements = count(array_filter($previous_policy_data, 'array_filter'));
-                
             }
             if(isset($value['product']) && $value['product'] == "Individual Professional Liability"){
-
+                
                 $response[$i]['certificate_no'] = isset($value['certificate_no']) ? $value['certificate_no'] : "";
                 $response[$i]['PADI_No'] = $value['padi'];
                 $response[$i]['firstname'] =$value['firstname'];
@@ -318,7 +317,7 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['end_date'] = $this->formatDate($value['end_date']);
                 $response[$i]['premium'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : "0");
                 $response[$i]['equipment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['equipmentPrice']) && $value['equipmentPrice'] != "" || $value['equipmentPrice'] != null ? $value['equipmentPrice'] : "0");
-                $response[$i]['excess'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : ($value['workflow_name'] == "Individual Liability Endorsement" ? (isset($value['excessLiabilityPricePayable']) ?  $value['excessLiabilityPricePayable']: isset($value['excessLiabilityPrice']) ? $value['excessLiabilityPrice'] : "0" ) : "0");
+                $response[$i]['excess'] = (($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" :($value['workflow_name'] == "Individual Liability Endorsement" ? ($previous_policy_data[0]['previous_excessLiability'] == $value['excessLiability']? "0" : $value['excessLiabilityPrice']): (is_null($value['excessLiabilityPrice']) ?  "0" : $value['excessLiabilityPrice'])));
                 $response[$i]['scuba_fit'] = isset($value['scubaFitPrice']) ? $value['scubaFitPrice'] : "0";
                 $response[$i]['upgrade'] = ($value['workflow_name'] == "Individual Liability Endorsement" && ($value['careerCoveragePrice'] != "" || $value['careerCoveragePrice'] != 0 || $value['careerCoveragePrice'] != null)) ? $this->checkStatus($value['careerCoverage']) : "";
                 $response[$i]['cylinder'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['cylinderPrice']) ? $value['cylinderPrice'] : "0" );
