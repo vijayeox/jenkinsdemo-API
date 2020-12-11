@@ -179,7 +179,7 @@ class FileControllerTest extends ControllerTest
         }
         $path = $path1 . $fileId;
         if (!is_link($path)) {
-            symlink($this->config['CLIENT_FOLDER'] . 'DiveInsurance/test/Files', $path);
+            symlink(__DIR__.'/../../Files', $path);
         }
         $crypto = new Crypto();
         $documentName = $crypto->encryption($path . "/dummy.pdf");
@@ -198,6 +198,7 @@ class FileControllerTest extends ControllerTest
     }
     public function testGetListOfFilesWithUserId()
     {
+        exit;
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
