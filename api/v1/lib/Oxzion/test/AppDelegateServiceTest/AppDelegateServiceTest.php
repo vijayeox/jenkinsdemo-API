@@ -28,7 +28,7 @@ class AppDelegateServiceTest extends ServiceTest
         $this->persistence = new Persistence($config, $this->data['UUID'], $this->data['appName']);
         $path = __DIR__.'/../../../../data/delegate/'.$this->data['UUID'];
         if (!is_link($path)) {
-            symlink(__DIR__.'/../../../../../../clients/DiveInsurance/data/delegate/',$path);
+            symlink(__DIR__.'/../delegate/',$path);
         }   
         parent::setUp();           
     }
@@ -51,7 +51,7 @@ class AppDelegateServiceTest extends ServiceTest
         
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $content = $delegateService->execute($appId, 'IndividualLiabilityImpl', $data);
+        $content = $delegateService->execute($appId, 'TestDocDelegateImpl', $data);
         $this->assertEquals("Checking App Delegate", $content[0]);
     }
 }
