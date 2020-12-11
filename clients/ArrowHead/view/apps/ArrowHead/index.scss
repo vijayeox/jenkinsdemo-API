@@ -114,6 +114,13 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     tr[ref="datagrid-locations-row"] {
       td[ref="datagrid-locations"] {
         padding: 0.5rem;
+        padding-top: 7px !important;
+      }
+    }
+    tr[ref="datagrid-buildings-row"] {
+      td[ref="datagrid-buildings"] {
+        padding: 0.5rem;
+        padding-top: 7px !important;
       }
     }
     .formio-component-modal-wrapper-well {
