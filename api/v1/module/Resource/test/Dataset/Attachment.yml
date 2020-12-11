@@ -2,7 +2,7 @@ ox_attachment:
   -
     id: 1
     uuid: 'test'
-    path: '/var/www/data/uploads/account/1/announcements/oxzionlogo.png'
+    path: '/var/www/api/data/uploads/account/1/announcements/oxzionlogo.png'
     extension: 'png'
     file_name: 'oxzionlogo.png'
     type: 'ANNOUNCEMENT'
