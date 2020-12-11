@@ -22,6 +22,13 @@ var rowValue = {
 locationsClone.push(rowValue);
 value = locationsClone;
 
+var buildingsClone = [...data.buildings];
+buildingsClone.push({ locationBuildingNum: newLocationNumber + "-1" });
+result[0].buildingObject
+  ? result[0].buildingObject.setValue(buildingsClone)
+  : null;
+console.log(buildingsClone);
+
 // ########################
 // Add Building Event
 // ########################
@@ -54,6 +61,14 @@ if (result.length > 0) {
   };
   locationsClone.splice(locationIndex, 0, rowValue);
   value = locationsClone;
+
+  var buildingsClone = [...data.buildings];
+  buildingsClone.splice(locationIndex, 0, {
+    locationBuildingNum: rowValue.locationBuildingNum,
+  });
+  result[0].buildingObject
+    ? result[0].buildingObject.setValue(buildingsClone)
+    : null;
 }
 
 // ########################
@@ -93,3 +108,9 @@ value = locationsClone.map((loc) => {
     return loc;
   }
 });
+
+var buildingsClone = [...data.buildings];
+buildingsClone.splice(rowIndex, 1);
+result[0].buildingObject
+  ? result[0].buildingObject.setValue(buildingsClone)
+  : null;
