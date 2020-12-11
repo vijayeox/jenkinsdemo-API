@@ -57,7 +57,9 @@ fi
 
 dos2unix *
 
-ln -s /app/api/* /var/www
+mkdir /var/www/api
+
+ln -s /app/api/* /var/www/api
 
 #Workflow setup
 cd /app/workflow
