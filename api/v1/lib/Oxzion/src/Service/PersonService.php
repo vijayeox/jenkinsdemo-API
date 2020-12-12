@@ -54,7 +54,7 @@ class PersonService extends AbstractService
         }
     }
 
-    public function updatePerson($id, $data)
+    public function updatePerson($id, &$data)
     {
         $person = new Person($this->table);
         $person->loadById($id);
@@ -76,9 +76,13 @@ class PersonService extends AbstractService
                 }
 
             }
-            $person->exchangeArray($personData);
+            $person->assign($personData);
             $person->save();
             $this->commit();
+            if (!isset($data['firstname']) || !isset($data['lastname'])) {
+                $data['firstname'] = $person->getProperty('firstname');
+                $data['lastname'] = $person->getProperty('lastname');
+            }
         } catch (Exception $e) {
             $this->rollback();
             throw $e;

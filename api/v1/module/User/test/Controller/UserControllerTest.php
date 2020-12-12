@@ -1165,6 +1165,24 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($data['lastname'], $personData[0]['lastname']);
     }
 
+    public function testSaveMeWithPreferenceData()
+    {
+        $preferences = array('currency' => 'INR', 'timezone' => 'Asia/Calcutta', 'dateformat' => 'dd/mm/yyy');
+        $data = ['preferences' => json_encode($preferences)];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/save', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('saveMe');
+        $this->assertEquals($content['status'], 'success');
+        $query = "SELECT * from ox_user where username = '". $this->adminUser."'";
+        $userData = $this->executeQueryTest($query);
+        $query = "SELECT * from ox_person where id = ".$userData[0]['person_id'];
+        $queryData = $this->executeQueryTest($query); 
+        $this->assertEquals($queryData[0]['firstname']. " ". $queryData[0]['lastname'], $userData[0]['name']);
+    }
+
     public function testBlackListApps()
     {
         $this->initAuthToken($this->adminUser);
