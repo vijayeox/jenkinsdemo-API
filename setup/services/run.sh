@@ -71,7 +71,7 @@ else
   echo "=> Fix for windows Environment ..."
   dos2unix ./gradlew
   echo "=> Building IdentityService Plugin ..."
-  ./gradlew build
+  ./gradlew build --stacktrace -x test
   mkdir -p dist
   cp build/libs/identity_plugin-1.0.jar dist/identity_plugin.jar
 fi
@@ -83,7 +83,7 @@ else
   echo "=> Fix for windows Environment ..."
   dos2unix ./gradlew
   echo "=> Building ProcessEngine Plugin ..."
-  ./gradlew build
+  ./gradlew build --stacktrace -x test
   mkdir -p dist
   cp build/libs/processengine_plugin-1.0.jar dist/processengine_plugin.jar 
 fi
