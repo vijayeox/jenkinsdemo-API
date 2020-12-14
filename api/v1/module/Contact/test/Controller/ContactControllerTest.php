@@ -11,6 +11,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\Framework\TestResult;
 use Zend\Db\Sql\Sql;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\StringUtils;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -245,7 +246,7 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['user_id'], 1);
         $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
         $this->assertEquals($content['data']['myContacts'][0]['last_name'], 'Agarwal');
-        $this->assertEquals($content['data']['myContacts'][0]['icon'], 'http://localhost:8080/user/profile/4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals(true, StringUtils::endsWith($content['data']['myContacts'][0]['icon'], 'user/profile/4fd99e8e-758f-11e9-b2d5-68ecc57cde45'));
     }
 
 

@@ -36,10 +36,15 @@ abstract class AbstractService extends AbstractBaseService
     }
 
     protected function getOrgIdForAccountId($accountId){
+        $where = "a.uuid = :accountId";
+        if (is_numeric($accountId)) {
+            $where = "a.id =:accountId";
+        }
         $query = "SELECT o.id, o.uuid from ox_account a 
                     left outer join ox_organization o on o.id = a.organization_id
-                    where a.uuid = :accountId";
+                    where $where";
         $params = ['accountId' => $accountId];
+        $this->logger->info("Excutng query $query with---".print_r($params,true));
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
         if(count($result) > 0){
             return $result[0];
@@ -318,6 +323,7 @@ abstract class AbstractService extends AbstractBaseService
 
     public function updateAccountContext($data)
     {
+        $this->logger->info("Received Data--".print_r($data,true));
         try {
             if (isset($data['orgId']) || isset($data['accountId'])) {
                 if(isset($data['orgId'])){
@@ -329,6 +335,7 @@ abstract class AbstractService extends AbstractBaseService
                     $accountIds = ['uuid' => $data['accountId']];
                     $accountIds['id'] = $this->getIdFromUuid('ox_account', $data['accountId']);
                 }
+                $this->logger->info("AccountIdsss--".print_r($accountIds,true));
                 AuthContext::put(AuthConstants::ACCOUNT_ID, $accountIds['id']);
                 AuthContext::put(AuthConstants::ACCOUNT_UUID, $accountIds['uuid']);
                 AuthContext::put(AuthConstants::ORG_UUID, $orgIds['uuid']);
@@ -350,6 +357,8 @@ abstract class AbstractService extends AbstractBaseService
                 if (isset($userId)) {
                     AuthContext::put(AuthConstants::USER_ID, $userId);
                     AuthContext::put(AuthConstants::USER_UUID, $userUuid);
+                    $userInfo = $this->getDataByParams('ox_user', array('username') , ["id" => $userId])->toArray();
+                    AuthContext::put(AuthConstants::USERNAME, $userInfo[0]['username']);
                 }
             }
         } catch (Exception $e) {

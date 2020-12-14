@@ -157,7 +157,7 @@ class ProjectService extends AbstractService
             $projectData['date_created'] = date('Y-m-d H:i:s');
             $projectData['date_modified'] = date('Y-m-d H:i:s');
             $projectData['isdeleted'] = false;
-            $select = "SELECT id,username from ox_user where uuid = '" . $projectData['manager_id'] . "'";
+            $select = "SELECT id,username from ox_user where uuid = '" . $projectData['managerId'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
             $projectData['manager_id'] = $result[0]["id"];
             $projectData['manager_login'] = $result[0]["username"];
