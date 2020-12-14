@@ -10,7 +10,7 @@ class Entity extends OxzionEntity
 {
     protected static $MODEL = [
         'id' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
-        'uuid' =>               ['type' => Type::UUID,      'readonly' => FALSE,  'required' => FALSE],
+        'uuid' =>               ['type' => Type::UUID,      'readonly' => FALSE, 'required' => FALSE],
         'start_date_field' =>   ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'end_date_field' =>     ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'status_field' =>       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
@@ -24,7 +24,10 @@ class Entity extends OxzionEntity
         'created_by' =>         ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
         'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
         'ryg_rule' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'page_id' =>            ['type' => Type::INTEGER,   'readonly' => FALSE , 'required' => FALSE]
+        'enable_comments' =>    ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
+        'enable_documents' =>   ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
+        'ryg_rule' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'page_id' =>            ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE]
     ];
     
     public function &getModel() {

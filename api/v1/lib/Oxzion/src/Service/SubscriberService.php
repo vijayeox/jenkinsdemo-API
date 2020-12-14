@@ -115,21 +115,32 @@ class SubscriberService extends AbstractService
         return $this->getSubscribersInternal($fileId);
     }
 
-    private function getSubscribersInternal($fileId, $id = null){
+    private function getSubscribersInternal($fileId, $id = null, $userId = null){
         $idClause = "";
+        $userFilter = "";
         $params = array("fileId"=>$fileId); 
         if($id){
             $idClause = "AND s.uuid = :subscriberId";
             $params['subscriberId'] = $id;
         }
-        $query = "select up.firstname, up.lastname, u.username, u.uuid as user_id from ox_subscriber s 
+        if ($userId) {
+            $userFilter = "AND s.user_id = :userId";
+            $params['userId'] = $userId;
+        }
+        $query = "select up.firstname, up.lastname, u.username, u.uuid as user_id, oxa.uuid as account_id from ox_subscriber s 
+                        inner join ox_account oxa on oxa.id = s.account_id
                         inner join ox_file of on s.file_id = of.id
                         inner join ox_user u on u.id = s.user_id
                         inner join ox_person up on up.id = u.person_id
-                        where of.uuid = :fileId $idClause ORDER by up.firstname";
+                        where of.uuid = :fileId $idClause $userFilter ORDER by up.firstname";
         $this->logger->info("Executing Query $query with params - ".print_r($params, true));
         $resultSet = $this->executeQueryWithBindParameters($query, $params);
         return $resultSet->toArray();
+    }
+
+    public function getUserSubscriber($fileId,$id = null,$userId)
+    {
+        return $this->getSubscribersInternal($fileId,$id,$userId);
     }
 
 }
