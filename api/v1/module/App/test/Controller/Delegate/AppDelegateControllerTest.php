@@ -19,7 +19,7 @@ class AppDelegateControllerTest extends ControllerTest
         $this->config = $this->getApplicationConfig();
         $path = $this->config['DELEGATE_FOLDER']. $this->data['UUID'];
         if (!is_link($path)) {
-            symlink($this->config['CLIENT_FOLDER'].'DiveInsurance/data/delegate/', $path);
+            symlink(__DIR__.'/../../../../../lib/Oxzion/test/delegate/', $path);
         }
     }
 
@@ -42,7 +42,7 @@ class AppDelegateControllerTest extends ControllerTest
     {
         $data = array("Checking App Delegate", "Checking1");
         $appId = "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4";
-        $delegate = 'IndividualLiabilityImpl';
+        $delegate = 'TestDocDelegateImpl';
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/' . $appId . '/delegate/' . $delegate, 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -60,7 +60,7 @@ class AppDelegateControllerTest extends ControllerTest
     {
         $data = array("Checking App Delegate", "Checking1");
         $appId = "debf3d35-a0ee-49d3-a8ac-8e480be9dac7";
-        $delegate = 'IndividualLiabilityImpl123';
+        $delegate = 'TestDocDelegateImpl123';
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/' . $appId . '/delegate/' . $delegate, 'POST', $data);
         $this->assertResponseStatusCode(404);
