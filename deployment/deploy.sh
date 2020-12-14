@@ -95,6 +95,63 @@ api()
         service php7.2-fpm reload
     fi    
 }
+api2()
+{   
+    echo "this is temp dir ---> ${TEMP}"
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying API...${RESET}"
+    if [ ! -d "./api/v1" ] ;
+    then
+        echo -e "${RED}API was not was not packaged so skipping it\n${RESET}"
+    else    
+        #making the directory where api will be copied.
+        #moving to temp directory and copying required
+        echo -e "${YELLOW}Stopping Apache${RESET}"
+        service apache2 stop
+        cd ${TEMP}
+        rsync -rl api/v1/data/uploads/ /var/www/oxzion2/api/data/uploads/
+        rsync -rl --delete api/v1/data/eoxapps/ /var/lib/oxzion2/api/eoxapps/
+        rsync -rl --delete api/v1/data/migrations/ /var/lib/oxzion2/api/migrations/
+        rsync -rl api/v1/data/template/ /var/lib/oxzion2/api/template/
+        rm -Rf api/v1/data/uploads
+        rm -Rf api/v1/data/cache
+        rm -Rf api/v1/data/delegate
+        rm -Rf api/v1/data/forms
+        rm -Rf api/v1/data/eoxapps
+        rm -Rf api/v1/data/import
+        rm -Rf api/v1/data/migrations
+        rm -Rf api/v1/data/template
+        rm -Rf api/v1/data/file_docs
+        rm -Rf api/v1/data/AppDeploy
+        rm -Rf api/v1/data/AppSource
+        rm -Rf api/v1/data/pages
+        rm -Rf api/v1/data/entity
+        rsync -rl --delete api/v1/ /var/www/oxzion2/api/
+        ln -nfs /var/lib/oxzion2/api/cache /var/www/oxzion2/api/data/cache
+        ln -nfs /var/lib/oxzion2/api/uploads /var/www/oxzion2/api/data/uploads
+        ln -nfs /var/lib/oxzion2/api/delegate /var/www/oxzion2/api/data/delegate
+        ln -nfs /var/lib/oxzion2/api/forms /var/www/oxzion2/api/data/forms
+        ln -nfs /var/lib/oxzion2/api/eoxapps /var/www/oxzion2/api/data/eoxapps
+        ln -nfs /var/lib/oxzion2/api/file_docs /var/www/oxzion2/api/data/file_docs
+        ln -nfs /var/lib/oxzion2/api/import /var/www/oxzion2/api/data/import
+        ln -nfs /var/lib/oxzion2/api/migrations /var/www/oxzion2/api/data/migrations
+        ln -nfs /var/lib/oxzion2/api/template /var/www/oxzion2/api/data/template
+        ln -nfs /var/lib/oxzion2/api/AppDeploy /var/www/oxzion2/api/data/AppDeploy
+        ln -nfs /var/lib/oxzion2/api/AppSource /var/www/oxzion2/api/data/AppSource
+        ln -nfs /var/lib/oxzion2/api/pages /var/www/oxzion2/api/data/pages
+        ln -nfs /var/lib/oxzion2/api/entity /var/www/oxzion2/api/data/entity
+        ln -nfs /var/log/oxzion2/api /var/www/oxzion2/api/logs
+        chown www-data:www-data -R /var/www/oxzion2/api
+        echo -e "${GREEN}Copying API Complete!\n${RESET}"
+        echo -e "${YELLOW}Starting migrations script for API${RESET}"
+        cd /var/www/oxzion2/api
+        ./migrations migrate
+        echo -e "${GREEN}Migrations Complete!${RESET}"
+        echo -e "${GREEN}Starting Apache${RESET}"
+        service apache2 start
+        service php7.2-fpm reload
+    fi    
+}
 camel()
 {   
     cd ${TEMP}
@@ -949,6 +1006,7 @@ appbuilder()
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
 api
+api2
 view
 view2
 echo -e "${CYAN}Copying Integrations Now...\n${RESET}"
