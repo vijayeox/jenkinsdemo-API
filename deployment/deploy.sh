@@ -279,6 +279,39 @@ view()
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
+view2()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying view...${RESET}"
+    if [ ! -d "./view" ] ;
+    then
+        echo -e "${RED}VIEW was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view2
+        echo -e "${YELLOW}Stopped!${RESET}"
+        cd ${TEMP}
+        rsync -rl view/vfs/ /opt/oxzion2/view/vfs/
+        rm -Rf view/vfs
+        unlink /opt/oxzion2/view/vfs
+        find -L /opt/oxzion2/view/apps/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/apps/  \;
+        find -L /opt/oxzion2/view/themes/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/themes/  \;
+        rsync -rl --delete view/ /opt/oxzion2/view/
+        ln -nfs /var/lib/oxzion2/vfs /opt/oxzion2/view/vfs
+        chown www-data:www-data -R /opt/oxzion2/view/vfs
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion2/view/bos/
+        npm run build
+        npm run package:discover
+        chown www-data:www-data -R /opt/oxzion2/view
+        echo -e "${GREEN}Copying view Complete!${RESET}"
+        echo -e "${GREEN}Starting view service${RESET}"
+        chmod 777 -R /opt/oxzion2/view/bos
+        chmod 777 /opt/oxzion2/view/apps
+        systemctl start view2
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
 workflow()
 {
     cd ${TEMP}
@@ -917,6 +950,7 @@ unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
 api
 view
+view2
 echo -e "${CYAN}Copying Integrations Now...\n${RESET}"
 camel
 calendar
