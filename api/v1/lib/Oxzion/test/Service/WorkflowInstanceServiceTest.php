@@ -356,4 +356,37 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         }
     }
 
+
+    public function testSubmitActivityWithTimeoutError() {
+        $params = array('field1' => 1, 'field2' => 2, 'fileId' => 'f13d0c68-98c9-11e9-adc5-308d99c91478' ,'activityInstanceId' => '346622fd-0124-11ea-a8a0-22e8105c0766','workflowInstanceId' => '3f20b5c5-0124-11ea-a8a0-22e8105c0778');
+        if (enableCamunda == 0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $req = new Request('GET', '/');
+            $prev = new \Exception();
+            $mockActivityEngine->expects('completeActivity')->withAnyArgs()->once()->andThrow($prev);
+            $workflowService->setActivityEngine($mockActivityEngine);
+        }
+        $result = $this->workflowInstanceService->submitActivity($params);
+        $this->assertEquals($result, 0);
+    }
+
+    public function testSubmitActivityTimeoutError() {
+        $params = array('field1' => 1, 'field2' => 2, 'fileId' => 'f13d0c68-98c9-11e9-adc5-308d99c91478' ,'activityInstanceId' => '346622fd-0124-11ea-a8a0-22e8105c0766');
+        if (enableCamunda == 0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $prev = new \Exception();
+            $mockActivityEngine->expects('completeActivity')->withAnyArgs()->once()->andThrow(new Exception($prev));
+            $workflowService->setActivityEngine($mockActivityEngine);
+        }
+        try{
+            $result = $this->workflowInstanceService->submitActivity($params);
+        } catch(Exception $e) {
+            $fileDataQuery = "Select status from ox_activity_instance where activity_instance_id = '".$params['activityInstanceId']."'";
+            $fileDataQueryResult = $this->runQuery($fileDataQuery);
+            $this->assertEquals('In Progress',$fileDataQueryResult[0]['status']);   
+        }
+    }
+
 }

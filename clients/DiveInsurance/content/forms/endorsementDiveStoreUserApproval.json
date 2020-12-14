@@ -446,6 +446,7 @@
 							"key": "creditcardPayment",
 							"amount_field": "finalAmountPayable",
 							"label": "custom",
+							"refreshOn": "data",
 							"input": true,
 							"tableView": false,
 							"hideOnChildrenHidden": false

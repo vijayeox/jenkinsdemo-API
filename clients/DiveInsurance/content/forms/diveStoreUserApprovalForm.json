@@ -498,6 +498,7 @@
 							"type": "convergepay",
 							"key": "creditcardPayment",
 							"amount_field": "billing_amount",
+							"refreshOn": "data",
 							"description": "payment_fields",
 							"label": "custom",
 							"input": true,
