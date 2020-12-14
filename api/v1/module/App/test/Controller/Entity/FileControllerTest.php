@@ -198,7 +198,6 @@ class FileControllerTest extends ControllerTest
     }
     public function testGetListOfFilesWithUserId()
     {
-        exit;
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
