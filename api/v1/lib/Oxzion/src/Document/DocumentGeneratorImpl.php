@@ -8,6 +8,7 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 use Oxzion\Utils\FileUtils;
 use mikehaertl\pdftk\Pdf as PDFTK;
 use Logger;
+use Exception;
 
 class DocumentGeneratorImpl implements DocumentGenerator
 {
@@ -193,10 +194,10 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $result = $pdf->fillForm($data)
             ->needAppearances()
             ->saveAs($destination);
+        if(!$result){
+            throw new Exception($pdf->getError());
+        }
         return $result;
-        // if (!$result) {
-        //     throw new Exception($pdf->getError());
-        // }
                 
     }
 
