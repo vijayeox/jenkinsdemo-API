@@ -124,10 +124,10 @@ api2()
     echo -e "${YELLOW}Building API....${RESET}"
     docker run -t -v ${PWD}:/var/www v1_zf composer install -n
     cd ${OXHOME}
-    mkdir -p build/api/v1
+    mkdir -p build/api2/v1
     #copy contents of ap1v1 to build
     echo -e "${YELLOW}Copying Api/v1 to build folder....${RESET}"
-    rsync -rl --delete api/v1 build/api/
+    rsync -rl --delete api/v1 build/api2/
     echo -e "${GREEN}Building API Completed!${RESET}"
 }
 camel()
@@ -243,13 +243,13 @@ view2()
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
     cd ..
     #copy contents of view to build
-    mkdir -p build/view
+    mkdir -p build/view2
     echo -e "${YELLOW}Copying View to build folder. Please wait this may take sometime....${RESET}"
     rsync -rl --exclude=node_modules ./view ./build/
-    mkdir -p ./build/view/bos/node_modules
-    rsync -rl --delete ./view/bos/node_modules/ ./build/view/bos/node_modules/
-    rsync -rl --delete ./view/gui/node_modules/ ./build/view/gui/node_modules/
-    rsync -rl --delete ./view/node_modules/ ./build/view/node_modules/
+    mkdir -p ./build/view2/bos/node_modules
+    rsync -rl --delete ./view/bos/node_modules/ ./build/view2/bos/node_modules/
+    rsync -rl --delete ./view/gui/node_modules/ ./build/view2/gui/node_modules/
+    rsync -rl --delete ./view/node_modules/ ./build/view2/node_modules/
     echo -e "${GREEN}Copying View Completed!${RESET}"
     #building UI/view folder
     
