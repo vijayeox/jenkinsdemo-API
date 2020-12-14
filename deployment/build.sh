@@ -46,7 +46,8 @@ buildhelp()
     echo -e "17. clean           -${YELLOW}For cleaning the production server${RESET}"
     echo -e "18. setup           -${YELLOW}For fresh setup of the production server${RESET}"
     echo -e "19. package         -${YELLOW}For packaging existing build${RESET}"
-    echo -e "20. view2           -${YELLOW}For packaging UI2/View2.${RESET}
+    echo -e "20. view2           -${YELLOW}For packaging UI2/View2.${RESET}"
+    echo -e "21. api2           -${YELLOW}For packaging API2.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -99,6 +100,24 @@ api()
     echo -e "${YELLOW}Creating directory /build/api/v1...${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/api/v1/config/autoload/local.php api/v1/config/autoload/
+    echo -e "${GREEN}Copying Completed!${RESET}"
+    #building API
+    cd api/v1
+    echo -e "${YELLOW}Building API....${RESET}"
+    docker run -t -v ${PWD}:/var/www v1_zf composer install -n
+    cd ${OXHOME}
+    mkdir -p build/api/v1
+    #copy contents of ap1v1 to build
+    echo -e "${YELLOW}Copying Api/v1 to build folder....${RESET}"
+    rsync -rl --delete api/v1 build/api/
+    echo -e "${GREEN}Building API Completed!${RESET}"
+}
+api2()
+{   
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/api/v1...${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/api2/v1/config/autoload/local.php api/v1/config/autoload/
     echo -e "${GREEN}Copying Completed!${RESET}"
     #building API
     cd api/v1
@@ -321,6 +340,12 @@ do
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 api
+                package
+                break ;;
+        api2)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                api2
                 package
                 break ;;
         view)
