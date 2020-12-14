@@ -100,7 +100,7 @@ api2()
     echo "this is temp dir ---> ${TEMP}"
     cd ${TEMP}
     echo -e "${YELLOW}Copying API...${RESET}"
-    if [ ! -d "./api/v1" ] ;
+    if [ ! -d "./api2/v1" ] ;
     then
         echo -e "${RED}API was not was not packaged so skipping it\n${RESET}"
     else    
@@ -109,24 +109,24 @@ api2()
         echo -e "${YELLOW}Stopping Apache${RESET}"
         service apache2 stop
         cd ${TEMP}
-        rsync -rl api/v1/data/uploads/ /var/www/oxzion2/api/data/uploads/
-        rsync -rl --delete api/v1/data/eoxapps/ /var/lib/oxzion2/api/eoxapps/
-        rsync -rl --delete api/v1/data/migrations/ /var/lib/oxzion2/api/migrations/
-        rsync -rl api/v1/data/template/ /var/lib/oxzion2/api/template/
-        rm -Rf api/v1/data/uploads
-        rm -Rf api/v1/data/cache
-        rm -Rf api/v1/data/delegate
-        rm -Rf api/v1/data/forms
-        rm -Rf api/v1/data/eoxapps
-        rm -Rf api/v1/data/import
-        rm -Rf api/v1/data/migrations
-        rm -Rf api/v1/data/template
-        rm -Rf api/v1/data/file_docs
-        rm -Rf api/v1/data/AppDeploy
-        rm -Rf api/v1/data/AppSource
-        rm -Rf api/v1/data/pages
-        rm -Rf api/v1/data/entity
-        rsync -rl --delete api/v1/ /var/www/oxzion2/api/
+        rsync -rl api2/v1/data/uploads/ /var/www/oxzion2/api/data/uploads/
+        rsync -rl --delete api2/v1/data/eoxapps/ /var/lib/oxzion2/api/eoxapps/
+        rsync -rl --delete api2/v1/data/migrations/ /var/lib/oxzion2/api/migrations/
+        rsync -rl api2/v1/data/template/ /var/lib/oxzion2/api/template/
+        rm -Rf api2/v1/data/uploads
+        rm -Rf api2/v1/data/cache
+        rm -Rf api2/v1/data/delegate
+        rm -Rf api2/v1/data/forms
+        rm -Rf api2/v1/data/eoxapps
+        rm -Rf api2/v1/data/import
+        rm -Rf api2/v1/data/migrations
+        rm -Rf api2/v1/data/template
+        rm -Rf api2/v1/data/file_docs
+        rm -Rf api2/v1/data/AppDeploy
+        rm -Rf api2/v1/data/AppSource
+        rm -Rf api2/v1/data/pages
+        rm -Rf api2/v1/data/entity
+        rsync -rl --delete api2/v1/ /var/www/oxzion2/api/
         ln -nfs /var/lib/oxzion2/api/cache /var/www/oxzion2/api/data/cache
         ln -nfs /var/lib/oxzion2/api/uploads /var/www/oxzion2/api/data/uploads
         ln -nfs /var/lib/oxzion2/api/delegate /var/www/oxzion2/api/data/delegate
@@ -340,7 +340,7 @@ view2()
 {
     cd ${TEMP}
     echo -e "${YELLOW}Copying view...${RESET}"
-    if [ ! -d "./view" ] ;
+    if [ ! -d "./view2" ] ;
     then
         echo -e "${RED}VIEW was not packaged so skipping it\n${RESET}"
     else
@@ -348,12 +348,12 @@ view2()
         systemctl stop view2
         echo -e "${YELLOW}Stopped!${RESET}"
         cd ${TEMP}
-        rsync -rl view/vfs/ /opt/oxzion2/view/vfs/
-        rm -Rf view/vfs
+        rsync -rl view2/vfs/ /opt/oxzion2/view/vfs/
+        rm -Rf view2/vfs
         unlink /opt/oxzion2/view/vfs
-        find -L /opt/oxzion2/view/apps/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/apps/  \;
-        find -L /opt/oxzion2/view/themes/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/themes/  \;
-        rsync -rl --delete view/ /opt/oxzion2/view/
+        find -L /opt/oxzion2/view/apps/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view2/apps/  \;
+        find -L /opt/oxzion2/view/themes/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view2/themes/  \;
+        rsync -rl --delete view2/ /opt/oxzion2/view/
         ln -nfs /var/lib/oxzion2/vfs /opt/oxzion2/view/vfs
         chown www-data:www-data -R /opt/oxzion2/view/vfs
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
