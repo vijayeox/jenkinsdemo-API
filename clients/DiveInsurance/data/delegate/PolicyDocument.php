@@ -510,7 +510,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['property_coi_document'] = $this->generateDocuments($temp, $dest, $options, 'propTemplate', 'propertyHeader', 'propertyFooter');
                 $documents['property_policy_document'] = $this->copyDocuments($temp, $dest['relativePath'], 'policy', 'property');
             }
-            if ((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true)) {
+            if ((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true) || (isset($temp['policyInfoChanges']) && $temp['policyInfoChanges'] == true) || (isset($temp['policyInfoMailingChanges']) && $temp['policyInfoMailingChanges'] == true)) {
                 $documents['endorsement_coi_document'] = isset($data['documents']['endorsement_coi_document']) ? $data['documents']['endorsement_coi_document'] : array();
                 $endorsementDoc = $this->generateDocuments($temp, $dest, $options, 'template', 'header', 'footer');
                 array_push($documents['endorsement_coi_document'], $endorsementDoc);
@@ -1323,7 +1323,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp, $dest['relativePath'], 'businessIncomeWorksheet');
                 }
             }
-            if ((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true)) {
+            if ((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true) || (isset($temp['policyInfoChanges']) && $temp['policyInfoChanges'] == true) || (isset($temp['policyInfoMailingChanges']) && $temp['policyInfoMailingChanges'] == true)) {
                 $documents['endorsement_quote_coi_document'] = $this->generateDocuments($temp, $dest, $options, 'template', 'header', 'footer');
             }
         }
@@ -1409,7 +1409,31 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         unset($data['increased_liability'], $data['new_auto_liability']);
         $temp['additionalLocationsChanges'] = false;
         $temp['lossPayeeChanges'] = false;
+        $temp['policyInfoChanges'] = false;
+        $temp['policyInfoMailingChanges'] = false;
         $data['update_date'] = $policy['update_date'];
+
+        //Check if variable exist and any change has been made in physical address
+        if((isset($data['country']) && isset($data['previous_country']) && $data['country'] != $data['previous_country']) ||
+            (isset($data['address1']) && isset($data['previous_address1']) && $data['address1'] != $data['previous_address1']) ||
+            (isset($data['address2']) && isset($data['previous_address2']) && $data['address2'] != $data['previous_address2']) ||
+            (isset($data['city']) && isset($data['previous_city']) && $data['city'] != $data['previous_city']) ||
+            (isset($data['state']) && isset($data['previous_state']) && $data['state'] != $data['previous_state']) ||
+            (isset($data['zip']) && isset($data['previous_zip']) && $data['zip'] != $data['previous_zip'])){
+            $temp['policyInfoChanges'] = true;
+        }
+        if($data['sameasmailingaddress'] === "false" || $data['sameasmailingaddress'] === false){
+        //Check if variable exist and any change has been made in mailing address
+            if((isset($data['physical_country']) && isset($data['previous_physical_country']) && $data['physical_country'] != $data['previous_physical_country']) ||
+                (isset($data['mailaddress1']) && isset($data['previous_mailaddress1']) && $data['mailaddress1'] != $data['previous_mailaddress1']) ||
+                (isset($data['mailaddress2']) && isset($data['previous_mailaddress2']) && $data['mailaddress2'] != $data['previous_mailaddress2']) ||
+                (isset($data['physical_city']) && isset($data['previous_physical_city']) && $data['physical_city'] != $data['previous_physical_city']) ||
+                (isset($data['physical_state']) && isset($data['previous_physical_state']) && $data['physical_state'] != $data['previous_physical_state']) ||
+                (isset($data['physical_zip']) && isset($data['previous_physical_zip']) && $data['physical_zip'] != $data['previous_physical_zip'])){
+                $temp['policyInfoMailingChanges'] = true;
+            }
+        }
+
         if (isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])) {
             if ($policy['previous_nonOwnedAutoLiabilityPL'] == 'no' && $data['nonOwnedAutoLiabilityPL'] != 'no') {
                 $data['new_auto_liability'] = true;
