@@ -573,7 +573,7 @@
                                                 "required": true,
                                                 "custom": "if(data.zip && data.zip != ''){\n  if(data['zip'].length <= 12){\n      valid = (data['zip'].match(/^[0-9\\s-]*$/)) ?  true : 'Please enter a valid Zip Code for your region.';\n  }else{\n    valid = (data.zip.length > 12) ? 'Please enter a valid Zip Code for your region.' : true;\n  }\n}"
                                             },
-                                            "key": "zip1",
+                                            "key": "zip",
                                             "type": "textfield",
                                             "input": true,
                                             "hideOnChildrenHidden": false
@@ -606,7 +606,7 @@
                                                 "required": true,
                                                 "customMessage": "Please enter City"
                                             },
-                                            "key": "city1",
+                                            "key": "city",
                                             "type": "textfield",
                                             "input": true,
                                             "hideOnChildrenHidden": false
@@ -641,7 +641,7 @@
                                             "validate": {
                                                 "required": true
                                             },
-                                            "key": "state1",
+                                            "key": "state",
                                             "type": "select",
                                             "indexeddb": {
                                                 "filter": {}
@@ -678,7 +678,7 @@
                                                 "required": true,
                                                 "customMessage": "Please enter County"
                                             },
-                                            "key": "county1",
+                                            "key": "county",
                                             "type": "textfield",
                                             "input": true,
                                             "hideOnChildrenHidden": false,
@@ -1982,6 +1982,7 @@
             "components": [
                 {
                     "label": "locahead",
+                    "customClass": "listViewTitles",
                     "key": "locahead",
                     "type": "well",
                     "input": false,
@@ -2078,28 +2079,7 @@
                                     "pull": 0
                                 },
                                 {
-                                    "components": [
-                                        {
-                                            "label": "HTML",
-                                            "tag": "h6",
-                                            "attrs": [
-                                                {
-                                                    "attr": "style",
-                                                    "value": "font-weight:bold"
-                                                }
-                                            ],
-                                            "content": "Edit Address",
-                                            "refreshOnChange": false,
-                                            "key": "html7",
-                                            "attributes": {
-                                                "style": "text-align:center"
-                                            },
-                                            "type": "htmlelement",
-                                            "input": false,
-                                            "tableView": false,
-                                            "hideOnChildrenHidden": false
-                                        }
-                                    ],
+                                    "components": [],
                                     "size": "md",
                                     "offset": 0,
                                     "push": 0,
@@ -2563,7 +2543,68 @@
                                                                                 }
                                                                             ],
                                                                             "size": "md",
-                                                                            "width": 6,
+                                                                            "width": 3,
+                                                                            "offset": 0,
+                                                                            "push": 0,
+                                                                            "pull": 0
+                                                                        },
+                                                                        {
+                                                                            "components": [
+                                                                                {
+                                                                                    "label": "Zip Code",
+                                                                                    "spellcheck": false,
+                                                                                    "tableView": false,
+                                                                                    "validate": {
+                                                                                        "required": true,
+                                                                                        "custom": "if (row.zip && row.zip != \"\") {\n  if (row[\"zip\"].length <= 12) {\n    valid = row[\"zip\"].match(/^[0-9\\s-]*$/)\n      ? true\n      : \"Please enter a valid Zip Code\";\n  } else {\n    valid =\n      row.zip.length > 12\n        ? \"Please enter a valid Zip Code\"\n        : true;\n  }\n}"
+                                                                                    },
+                                                                                    "key": "zip",
+                                                                                    "logic": [
+                                                                                        {
+                                                                                            "name": "check enabled",
+                                                                                            "trigger": {
+                                                                                                "type": "javascript",
+                                                                                                "javascript": "result = row.isTheLocationAddressSameAsMailingAddress"
+                                                                                            },
+                                                                                            "actions": [
+                                                                                                {
+                                                                                                    "name": "disable field",
+                                                                                                    "type": "property",
+                                                                                                    "property": {
+                                                                                                        "label": "Disabled",
+                                                                                                        "value": "disabled",
+                                                                                                        "type": "boolean"
+                                                                                                    },
+                                                                                                    "state": true
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "Set value",
+                                                                                                    "type": "value",
+                                                                                                    "value": "if (value != data.zip) {\n  value = data.zip;\n}"
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    ],
+                                                                                    "type": "textfield",
+                                                                                    "input": true,
+                                                                                    "lockKey": true,
+                                                                                    "hideOnChildrenHidden": false
+                                                                                },
+                                                                                {
+                                                                                    "label": "AutoFill City & State",
+                                                                                    "action": "custom",
+                                                                                    "showValidations": false,
+                                                                                    "block": true,
+                                                                                    "tableView": false,
+                                                                                    "key": "autoFillCityState",
+                                                                                    "type": "button",
+                                                                                    "input": true,
+                                                                                    "hideOnChildrenHidden": false,
+                                                                                    "custom": "alert(\"Work In Progress\")"
+                                                                                }
+                                                                            ],
+                                                                            "size": "md",
+                                                                            "width": 2,
                                                                             "offset": 0,
                                                                             "push": 0,
                                                                             "pull": 0
@@ -2611,7 +2652,7 @@
                                                                                 }
                                                                             ],
                                                                             "size": "md",
-                                                                            "width": 3,
+                                                                            "width": 2,
                                                                             "offset": 0,
                                                                             "push": 0,
                                                                             "pull": 0
@@ -2694,14 +2735,12 @@
                                                                         {
                                                                             "components": [
                                                                                 {
-                                                                                    "label": "Zip Code",
-                                                                                    "spellcheck": false,
-                                                                                    "tableView": false,
+                                                                                    "label": "County",
+                                                                                    "tableView": true,
                                                                                     "validate": {
-                                                                                        "required": true,
-                                                                                        "custom": "if (row.zip && row.zip != \"\") {\n  if (row[\"zip\"].length <= 12) {\n    valid = row[\"zip\"].match(/^[0-9\\s-]*$/)\n      ? true\n      : \"Please enter a valid Zip Code\";\n  } else {\n    valid =\n      row.zip.length > 12\n        ? \"Please enter a valid Zip Code\"\n        : true;\n  }\n}"
+                                                                                        "required": true
                                                                                     },
-                                                                                    "key": "zip",
+                                                                                    "key": "county",
                                                                                     "logic": [
                                                                                         {
                                                                                             "name": "check enabled",
@@ -2723,39 +2762,18 @@
                                                                                                 {
                                                                                                     "name": "Set value",
                                                                                                     "type": "value",
-                                                                                                    "value": "if (value != data.zip) {\n  value = data.zip;\n}"
+                                                                                                    "value": "if (value != data.county) {\n  value = data.county;\n}"
                                                                                                 }
                                                                                             ]
                                                                                         }
                                                                                     ],
                                                                                     "type": "textfield",
                                                                                     "input": true,
-                                                                                    "lockKey": true,
                                                                                     "hideOnChildrenHidden": false
                                                                                 }
                                                                             ],
                                                                             "size": "md",
-                                                                            "width": 3,
-                                                                            "offset": 0,
-                                                                            "push": 0,
-                                                                            "pull": 0
-                                                                        },
-                                                                        {
-                                                                            "components": [
-                                                                                {
-                                                                                    "label": "County",
-                                                                                    "tableView": true,
-                                                                                    "validate": {
-                                                                                        "required": true
-                                                                                    },
-                                                                                    "key": "county",
-                                                                                    "type": "textfield",
-                                                                                    "input": true,
-                                                                                    "hideOnChildrenHidden": false
-                                                                                }
-                                                                            ],
-                                                                            "size": "md",
-                                                                            "width": 3,
+                                                                            "width": 2,
                                                                             "offset": 0,
                                                                             "push": 0,
                                                                             "pull": 0
@@ -2929,6 +2947,7 @@
             "components": [
                 {
                     "label": "locahead",
+                    "customClass": "listViewTitles",
                     "key": "locahead",
                     "type": "well",
                     "input": false,
@@ -2993,7 +3012,7 @@
                                     "offset": 0,
                                     "push": 0,
                                     "pull": 0,
-                                    "width": 6
+                                    "width": 3
                                 },
                                 {
                                     "components": [
@@ -3006,9 +3025,9 @@
                                                     "value": "font-weight:bold"
                                                 }
                                             ],
-                                            "content": "Enter Building Details",
+                                            "content": "Primary OEM",
                                             "refreshOnChange": false,
-                                            "key": "html6",
+                                            "key": "html8",
                                             "attributes": {
                                                 "style": "text-align:center"
                                             },
@@ -3019,7 +3038,44 @@
                                         }
                                     ],
                                     "size": "md",
-                                    "width": 4,
+                                    "width": 2,
+                                    "offset": 0,
+                                    "push": 0,
+                                    "pull": 0
+                                },
+                                {
+                                    "components": [
+                                        {
+                                            "label": "HTML",
+                                            "tag": "h6",
+                                            "attrs": [
+                                                {
+                                                    "attr": "style",
+                                                    "value": "font-weight:bold"
+                                                }
+                                            ],
+                                            "content": "Secondary OEM",
+                                            "refreshOnChange": false,
+                                            "key": "html9",
+                                            "attributes": {
+                                                "style": "text-align:center"
+                                            },
+                                            "type": "htmlelement",
+                                            "input": false,
+                                            "tableView": false,
+                                            "hideOnChildrenHidden": false
+                                        }
+                                    ],
+                                    "size": "md",
+                                    "offset": 0,
+                                    "push": 0,
+                                    "pull": 0,
+                                    "width": 3
+                                },
+                                {
+                                    "components": [],
+                                    "size": "md",
+                                    "width": 2,
                                     "offset": 0,
                                     "push": 0,
                                     "pull": 0
@@ -3178,7 +3234,136 @@
                                                         }
                                                     ],
                                                     "size": "md",
-                                                    "width": 6,
+                                                    "width": 3,
+                                                    "offset": 0,
+                                                    "push": 0,
+                                                    "pull": 0
+                                                },
+                                                {
+                                                    "components": [
+                                                        {
+                                                            "label": "Primary OEM",
+                                                            "widget": "choicesjs",
+                                                            "hideLabel": true,
+                                                            "tableView": true,
+                                                            "dataSrc": "custom",
+                                                            "data": {
+                                                                "values": [
+                                                                    {
+                                                                        "label": "",
+                                                                        "value": ""
+                                                                    }
+                                                                ],
+                                                                "custom": "values = [\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Cadillac\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo\"\n]"
+                                                            },
+                                                            "valueProperty": "item",
+                                                            "dataType": "string",
+                                                            "template": "<span>{{ item }}</span>",
+                                                            "selectThreshold": 0.3,
+                                                            "validate": {
+                                                                "required": true,
+                                                                "customMessage": "Please select Primary OEM"
+                                                            },
+                                                            "key": "primaryOEM",
+                                                            "customConditional": "show = row.occupancyType === 'autoSalesAndService' || row.occupancyType === 'newCarShowroomAndSales' ;",
+                                                            "logic": [
+                                                                {
+                                                                    "name": "Check Disable",
+                                                                    "trigger": {
+                                                                        "type": "javascript",
+                                                                        "javascript": "result = false;\nif (row.secondaryOEM) {\n  if (row.secondaryOEM[0]) {\n    if (row.secondaryOEM[0].constructor !== Object) {\n        result = true\n    }\n  }\n}"
+                                                                    },
+                                                                    "actions": [
+                                                                        {
+                                                                            "name": "Disable",
+                                                                            "type": "property",
+                                                                            "property": {
+                                                                                "label": "Disabled",
+                                                                                "value": "disabled",
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "state": true
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "type": "select",
+                                                            "indexeddb": {
+                                                                "filter": {}
+                                                            },
+                                                            "input": true,
+                                                            "hideOnChildrenHidden": false,
+                                                            "lockKey": true
+                                                        }
+                                                    ],
+                                                    "size": "md",
+                                                    "width": 2,
+                                                    "offset": 0,
+                                                    "push": 0,
+                                                    "pull": 0
+                                                },
+                                                {
+                                                    "components": [
+                                                        {
+                                                            "label": "Secondary OEM",
+                                                            "widget": "choicesjs",
+                                                            "placeholder": "Choose all that apply",
+                                                            "hideLabel": true,
+                                                            "disabled": true,
+                                                            "tableView": true,
+                                                            "multiple": true,
+                                                            "dataSrc": "custom",
+                                                            "data": {
+                                                                "values": [
+                                                                    {
+                                                                        "label": "",
+                                                                        "value": ""
+                                                                    }
+                                                                ],
+                                                                "custom": "var OEMList = [\n  \"None\",\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Cadillac\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo\"\n]\nvalues = OEMList.map(item => {\n  return row.primaryOEM != item ? item : false \n})"
+                                                            },
+                                                            "valueProperty": "item",
+                                                            "dataType": "object",
+                                                            "template": "<span>{{ item }}</span>",
+                                                            "refreshOn": "row.primaryOEM",
+                                                            "selectThreshold": 0.3,
+                                                            "validate": {
+                                                                "required": true,
+                                                                "multiple": true
+                                                            },
+                                                            "key": "secondaryOEM",
+                                                            "customConditional": "show =\n  row.occupancyType === \"autoSalesAndService\" ||\n  row.occupancyType === \"newCarShowroomAndSales\";",
+                                                            "logic": [
+                                                                {
+                                                                    "name": "Check Disable",
+                                                                    "trigger": {
+                                                                        "type": "javascript",
+                                                                        "javascript": "if(row.primaryOEM){\n  result = row.primaryOEM.length > 1;\n} else {\n  result = false;\n}"
+                                                                    },
+                                                                    "actions": [
+                                                                        {
+                                                                            "name": "Disable",
+                                                                            "type": "property",
+                                                                            "property": {
+                                                                                "label": "Disabled",
+                                                                                "value": "disabled",
+                                                                                "type": "boolean"
+                                                                            },
+                                                                            "state": false
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "type": "select",
+                                                            "indexeddb": {
+                                                                "filter": {}
+                                                            },
+                                                            "input": true,
+                                                            "hideOnChildrenHidden": false
+                                                        }
+                                                    ],
+                                                    "size": "md",
+                                                    "width": 3,
                                                     "offset": 0,
                                                     "push": 0,
                                                     "pull": 0
@@ -3190,11 +3375,43 @@
                                                             "customClass": "editPopup",
                                                             "modalEdit": true,
                                                             "key": "editBuildingData",
+                                                            "customConditional": "show =\n  row.occupancyType !== \"vacantLand\" &&\n  row.occupancyType !== \"autoStorageLot\" &&\n  row.occupancyType !== \"\";",
+                                                            "logic": [
+                                                                {
+                                                                    "name": "Check Occupancy Type",
+                                                                    "trigger": {
+                                                                        "type": "javascript",
+                                                                        "javascript": "result =\n  row.occupancyType == \"vacantLand\" ||\n  row.occupancyType == \"autoStorageLot\" ||\n  row.occupancyType == \"\";"
+                                                                    },
+                                                                    "actions": [
+                                                                        {
+                                                                            "name": "Hide Popup",
+                                                                            "type": "mergeComponentSchema",
+                                                                            "schemaDefinition": "schema = {modalEdit : false}"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
                                                             "type": "well",
                                                             "input": false,
                                                             "tableView": false,
                                                             "hideOnChildrenHidden": false,
                                                             "components": [
+                                                                {
+                                                                    "label": "HTML",
+                                                                    "attrs": [
+                                                                        {
+                                                                            "attr": "style",
+                                                                            "value": "text-align:center;font-weight:bold;font-size:18px;background-color: #e9ecef;padding: 5px;border-radius: 10px;color:black"
+                                                                        }
+                                                                    ],
+                                                                    "content": "Location-Building# {{row.locationBuildingNum}} &emsp; | &emsp;\n{{utils.searchComponents(form.components,\n\"occupancyType\")[0].data.values.filter(i=>i.value==row.occupancyType)[0].label}} &emsp; | &emsp;\n{{data.locations[rowIndex].address}} &emsp; | &emsp;\n{{data.locations[rowIndex].city}} {{data.locations[rowIndex].state}} {{data.locations[rowIndex].zip}}",
+                                                                    "refreshOnChange": false,
+                                                                    "key": "html1",
+                                                                    "type": "htmlelement",
+                                                                    "input": false,
+                                                                    "tableView": false
+                                                                },
                                                                 {
                                                                     "label": "Building Details",
                                                                     "columns": [
@@ -3235,147 +3452,11 @@
                                                                                                 }
                                                                                             ],
                                                                                             "size": "md",
-                                                                                            "width": 3,
+                                                                                            "width": 2,
                                                                                             "offset": 0,
                                                                                             "push": 0,
                                                                                             "pull": 0
                                                                                         },
-                                                                                        {
-                                                                                            "components": [
-                                                                                                {
-                                                                                                    "label": "Primary OEM",
-                                                                                                    "widget": "choicesjs",
-                                                                                                    "tableView": true,
-                                                                                                    "dataSrc": "custom",
-                                                                                                    "data": {
-                                                                                                        "values": [
-                                                                                                            {
-                                                                                                                "label": "",
-                                                                                                                "value": ""
-                                                                                                            }
-                                                                                                        ],
-                                                                                                        "custom": "values = [\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Cadillac\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo\"\n]"
-                                                                                                    },
-                                                                                                    "valueProperty": "item",
-                                                                                                    "dataType": "string",
-                                                                                                    "template": "<span>{{ item }}</span>",
-                                                                                                    "selectThreshold": 0.3,
-                                                                                                    "validate": {
-                                                                                                        "required": true,
-                                                                                                        "customMessage": "Please select Primary OEM"
-                                                                                                    },
-                                                                                                    "key": "primaryOEM",
-                                                                                                    "customConditional": "show = row.occupancyType === 'autoSalesAndService' || row.occupancyType === 'newCarShowroomAndSales' ;",
-                                                                                                    "logic": [
-                                                                                                        {
-                                                                                                            "name": "Check Disable",
-                                                                                                            "trigger": {
-                                                                                                                "type": "javascript",
-                                                                                                                "javascript": "result = false;\nif (row.secondaryOEM) {\n  if (row.secondaryOEM[0]) {\n    if (row.secondaryOEM[0].constructor !== Object) {\n        result = true\n    }\n  }\n}"
-                                                                                                            },
-                                                                                                            "actions": [
-                                                                                                                {
-                                                                                                                    "name": "Disable",
-                                                                                                                    "type": "property",
-                                                                                                                    "property": {
-                                                                                                                        "label": "Disabled",
-                                                                                                                        "value": "disabled",
-                                                                                                                        "type": "boolean"
-                                                                                                                    },
-                                                                                                                    "state": true
-                                                                                                                }
-                                                                                                            ]
-                                                                                                        }
-                                                                                                    ],
-                                                                                                    "type": "select",
-                                                                                                    "indexeddb": {
-                                                                                                        "filter": {}
-                                                                                                    },
-                                                                                                    "input": true,
-                                                                                                    "hideOnChildrenHidden": false,
-                                                                                                    "lockKey": true
-                                                                                                }
-                                                                                            ],
-                                                                                            "width": 3,
-                                                                                            "offset": 0,
-                                                                                            "push": 0,
-                                                                                            "pull": 0,
-                                                                                            "size": "md"
-                                                                                        },
-                                                                                        {
-                                                                                            "components": [
-                                                                                                {
-                                                                                                    "label": "Secondary OEM",
-                                                                                                    "widget": "choicesjs",
-                                                                                                    "placeholder": "Choose all that apply",
-                                                                                                    "disabled": true,
-                                                                                                    "tableView": true,
-                                                                                                    "multiple": true,
-                                                                                                    "dataSrc": "custom",
-                                                                                                    "data": {
-                                                                                                        "values": [
-                                                                                                            {
-                                                                                                                "label": "",
-                                                                                                                "value": ""
-                                                                                                            }
-                                                                                                        ],
-                                                                                                        "custom": "var OEMList = [\n  \"None\",\n  \"Acura\",\n  \"Alfa Romeo\",\n  \"Audi\",\n  \"Bentley\",\n  \"BMW\",\n  \"Cadillac\",\n  \"Chevrolet\",\n  \"Chrysler\",\n  \"Dodge\",\n  \"Ferrari\",\n  \"Fiat\",\n  \"Ford\",\n  \"Honda\",\n  \"Hyundai\",\n  \"Infiniti\",\n  \"Jaguar\",\n  \"Kia\",\n  \"Land Rover\",\n  \"Lexus\",\n  \"Lincoln\",\n  \"Mazda\",\n  \"Mercedes-Benz\",\n  \"Nissan\",\n  \"Porsche\",\n  \"Subaru\",\n  \"Toyota\",\n  \"Volkswagen\",\n  \"Volvo\"\n]\nvalues = OEMList.map(item => {\n  return row.primaryOEM != item ? item : false \n})"
-                                                                                                    },
-                                                                                                    "valueProperty": "item",
-                                                                                                    "dataType": "object",
-                                                                                                    "template": "<span>{{ item }}</span>",
-                                                                                                    "refreshOn": "row.primaryOEM",
-                                                                                                    "selectThreshold": 0.3,
-                                                                                                    "validate": {
-                                                                                                        "required": true,
-                                                                                                        "multiple": true
-                                                                                                    },
-                                                                                                    "key": "secondaryOEM",
-                                                                                                    "customConditional": "show =\n  row.occupancyType === \"autoSalesAndService\" ||\n  row.occupancyType === \"newCarShowroomAndSales\";",
-                                                                                                    "logic": [
-                                                                                                        {
-                                                                                                            "name": "Check Disable",
-                                                                                                            "trigger": {
-                                                                                                                "type": "javascript",
-                                                                                                                "javascript": "if(row.primaryOEM){\n  result = row.primaryOEM.length > 1;\n} else {\n  result = false;\n}"
-                                                                                                            },
-                                                                                                            "actions": [
-                                                                                                                {
-                                                                                                                    "name": "Disable",
-                                                                                                                    "type": "property",
-                                                                                                                    "property": {
-                                                                                                                        "label": "Disabled",
-                                                                                                                        "value": "disabled",
-                                                                                                                        "type": "boolean"
-                                                                                                                    },
-                                                                                                                    "state": false
-                                                                                                                }
-                                                                                                            ]
-                                                                                                        }
-                                                                                                    ],
-                                                                                                    "type": "select",
-                                                                                                    "indexeddb": {
-                                                                                                        "filter": {}
-                                                                                                    },
-                                                                                                    "input": true,
-                                                                                                    "hideOnChildrenHidden": false
-                                                                                                }
-                                                                                            ],
-                                                                                            "offset": 0,
-                                                                                            "push": 0,
-                                                                                            "pull": 0,
-                                                                                            "size": "md",
-                                                                                            "width": 6
-                                                                                        }
-                                                                                    ],
-                                                                                    "key": "columns15",
-                                                                                    "type": "columns",
-                                                                                    "tableView": false,
-                                                                                    "input": false
-                                                                                },
-                                                                                {
-                                                                                    "label": "Columns",
-                                                                                    "columns": [
                                                                                         {
                                                                                             "components": [
                                                                                                 {
@@ -3438,7 +3519,7 @@
                                                                                                 }
                                                                                             ],
                                                                                             "size": "md",
-                                                                                            "width": 3,
+                                                                                            "width": 2,
                                                                                             "offset": 0,
                                                                                             "push": 0,
                                                                                             "pull": 0
@@ -3490,7 +3571,7 @@
                                                                                             "components": [
                                                                                                 {
                                                                                                     "label": "Building Size",
-                                                                                                    "suffix": "Square Feet",
+                                                                                                    "suffix": "Square Ft.",
                                                                                                     "mask": false,
                                                                                                     "spellcheck": true,
                                                                                                     "tableView": false,
@@ -3510,7 +3591,7 @@
                                                                                                     "hideOnChildrenHidden": false
                                                                                                 }
                                                                                             ],
-                                                                                            "width": 3,
+                                                                                            "width": 2,
                                                                                             "offset": 0,
                                                                                             "push": 0,
                                                                                             "pull": 0,
@@ -4003,6 +4084,41 @@
                                                                                                                 {
                                                                                                                     "components": [
                                                                                                                         {
+                                                                                                                            "label": "Agreed Amount",
+                                                                                                                            "optionsLabelPosition": "right",
+                                                                                                                            "inline": true,
+                                                                                                                            "tableView": true,
+                                                                                                                            "values": [
+                                                                                                                                {
+                                                                                                                                    "value": "yes",
+                                                                                                                                    "label": "Yes",
+                                                                                                                                    "shortcut": ""
+                                                                                                                                },
+                                                                                                                                {
+                                                                                                                                    "value": "no",
+                                                                                                                                    "label": "No",
+                                                                                                                                    "shortcut": ""
+                                                                                                                                }
+                                                                                                                            ],
+                                                                                                                            "validate": {
+                                                                                                                                "required": true
+                                                                                                                            },
+                                                                                                                            "key": "agreedamount",
+                                                                                                                            "type": "radio",
+                                                                                                                            "input": true,
+                                                                                                                            "hideOnChildrenHidden": false,
+                                                                                                                            "lockKey": true
+                                                                                                                        }
+                                                                                                                    ],
+                                                                                                                    "size": "md",
+                                                                                                                    "width": 2,
+                                                                                                                    "offset": 0,
+                                                                                                                    "push": 0,
+                                                                                                                    "pull": 0
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "components": [
+                                                                                                                        {
                                                                                                                             "label": "Wind Deductible",
                                                                                                                             "widget": "choicesjs",
                                                                                                                             "placeholder": "Please Select",
@@ -4056,7 +4172,7 @@
                                                                                                                             "hideOnChildrenHidden": false
                                                                                                                         }
                                                                                                                     ],
-                                                                                                                    "width": 3,
+                                                                                                                    "width": 2,
                                                                                                                     "offset": 0,
                                                                                                                     "push": 0,
                                                                                                                     "pull": 0,
@@ -4085,7 +4201,7 @@
                                                                                                                         }
                                                                                                                     ],
                                                                                                                     "size": "md",
-                                                                                                                    "width": 3,
+                                                                                                                    "width": 2,
                                                                                                                     "offset": 0,
                                                                                                                     "push": 0,
                                                                                                                     "pull": 0
@@ -4123,42 +4239,7 @@
                                                                                                                             "inputType": "number"
                                                                                                                         }
                                                                                                                     ],
-                                                                                                                    "width": 2,
-                                                                                                                    "offset": 0,
-                                                                                                                    "push": 0,
-                                                                                                                    "pull": 0,
-                                                                                                                    "size": "md"
-                                                                                                                },
-                                                                                                                {
-                                                                                                                    "components": [
-                                                                                                                        {
-                                                                                                                            "label": "Agreed Amount",
-                                                                                                                            "optionsLabelPosition": "right",
-                                                                                                                            "inline": true,
-                                                                                                                            "tableView": true,
-                                                                                                                            "values": [
-                                                                                                                                {
-                                                                                                                                    "value": "yes",
-                                                                                                                                    "label": "Yes",
-                                                                                                                                    "shortcut": ""
-                                                                                                                                },
-                                                                                                                                {
-                                                                                                                                    "value": "no",
-                                                                                                                                    "label": "No",
-                                                                                                                                    "shortcut": ""
-                                                                                                                                }
-                                                                                                                            ],
-                                                                                                                            "validate": {
-                                                                                                                                "required": true
-                                                                                                                            },
-                                                                                                                            "key": "agreedamount",
-                                                                                                                            "type": "radio",
-                                                                                                                            "input": true,
-                                                                                                                            "hideOnChildrenHidden": false,
-                                                                                                                            "lockKey": true
-                                                                                                                        }
-                                                                                                                    ],
-                                                                                                                    "width": 2,
+                                                                                                                    "width": 3,
                                                                                                                     "offset": 0,
                                                                                                                     "push": 0,
                                                                                                                     "pull": 0,
@@ -4229,7 +4310,7 @@
                                                                                                                         }
                                                                                                                     ],
                                                                                                                     "size": "md",
-                                                                                                                    "width": 2,
+                                                                                                                    "width": 3,
                                                                                                                     "offset": 0,
                                                                                                                     "push": 0,
                                                                                                                     "pull": 0
@@ -5450,7 +5531,7 @@
                                                         }
                                                     ],
                                                     "size": "md",
-                                                    "width": 4,
+                                                    "width": 2,
                                                     "offset": 0,
                                                     "push": 0,
                                                     "pull": 0
@@ -21052,7 +21133,7 @@
         }
     ],
     "revisions": "current",
-    "_vid": 175,
+    "_vid": 194,
     "title": "Dealer Workbook Phase 2",
     "display": "wizard",
     "access": [
@@ -21066,7 +21147,7 @@
         }
     ],
     "submissionAccess": [],
-    "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157\"\n      )\n    ) {\n      if (\n        !document.getElementById(\"saveDraftCustomButton\") ||\n        !document.getElementById(\"saveDraftCloseCustomButton\")\n      ) {\n        if (!document.getElementById(\"saveDraftCloseCustomButton\")) {\n          let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n          clone.children[0].textContent = \"Save Draft And Close\";\n          clone.children[0].id = \"saveDraftCloseCustomButton\";\n          insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n          saveDraftCloseCustomButton.onclick = function () {\n            let ev = new CustomEvent(\"customButtonAction\", {\n              detail: {\n                timerVariable: appendCustomButtonTimer,\n                formData: data,\n                commands:\n                  '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n                exit: true,\n                notification: \"Data saved successfully\"\n              },\n              bubbles: false\n            });\n            document\n              .getElementById(\n                \"formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157\"\n              )\n              .dispatchEvent(ev);\n          };\n        }\n        if (!document.getElementById(\"saveDraftCustomButton\")) {\n          let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n          clone.children[0].textContent = \"Save Draft\";\n          clone.children[0].id = \"saveDraftCustomButton\";\n          insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n          saveDraftCustomButton.onclick = function () {\n            let ev = new CustomEvent(\"customButtonAction\", {\n              detail: {\n                timerVariable: appendCustomButtonTimer,\n                formData: data,\n                commands:\n                  '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n                exit: false,\n                notification: \"Data saved successfully\"\n              },\n              bubbles: false\n            });\n            document\n              .getElementById(\n                \"formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157\"\n              )\n              .dispatchEvent(ev);\n          };\n        }\n      } else {\n        if (data.producername.length > 0 && data.namedInsured.length > 0) {\n          saveDraftCustomButton.style.display == \"none\"\n            ? (saveDraftCustomButton.style.display = \"inline-block\")\n            : null;\n          saveDraftCloseCustomButton.style.display == \"none\"\n            ? (saveDraftCloseCustomButton.style.display = \"inline-block\")\n            : null;\n        } else {\n          saveDraftCustomButton.style.display == \"none\"\n            ? null\n            : (saveDraftCustomButton.style.display = \"none\");\n          saveDraftCloseCustomButton.style.display == \"none\"\n            ? null\n            : (saveDraftCloseCustomButton.style.display = \"none\");\n        }\n      }\n\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n\n      var locationGridDeleteIcons = document.querySelectorAll(\"button.locationremove\");\n      locationGridDeleteIcons = Array.from(locationGridDeleteIcons);\n      if (locationGridDeleteIcons.length > 0) {\n        locationGridDeleteIcons.map((item) => {\n          if(item.childNodes.length == 3){\n            item.removeChild(item.childNodes[2]);\n          }\n        });\n      }\n\n      if (\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].some(\n          (i) => i.innerText == \"SAVE\"\n        )\n      ) {\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].map(\n          (i) => (i.innerText = \"OK\")\n        );\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n\nsetTimeout(function () {\n  data.workbooksToBeGenerated = {\n    epli: false,\n    rpsCyber: false,\n    harco: false,\n    dealerGuard_ApplicationOpenLot: false,\n    victor_FranchisedAutoDealer: false,\n    victor_AutoPhysDamage: false\n  };\n  data.producerConfirmation ? (data.producerConfirmation = false) : null;\n  data.managementSubmitApplication ? (data.managementSubmitApplication = false) : null;\n\n  try {\n    if (data.namedInsured.length == 0) {\n      if (document.getElementsByClassName(\"pagination\").length > 0) {\n        var pageList = [\n          ...document.getElementsByClassName(\"pagination\")[0].children\n        ];\n        var GEActive = pageList.some(\n          (i) =>\n            i.children[0].innerText == \"General Information\" &&\n            i.className.includes(\"active\")\n        );\n        GEActive\n          ? pageList.map((i, index) =>\n              index !== 0 ? (i.style.cursor = \"not-allowed\") : null\n            )\n          : null;\n        pageList.map((i, index) =>\n          index !== 0\n            ? i.setAttribute(\n                \"title\",\n                \"Complete General Information page to proceed further\"\n              )\n            : null\n        );\n      }\n    }\n  } catch {}\n}, 1000);\n",
+    "controller": "function insertAfter(referenceNode, newNode) {\n  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);\n}\n\nvar s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157\"\n      )\n    ) {\n      if (\n        !document.getElementById(\"saveDraftCustomButton\") ||\n        !document.getElementById(\"saveDraftCloseCustomButton\")\n      ) {\n        if (!document.getElementById(\"saveDraftCloseCustomButton\")) {\n          let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n          clone.children[0].textContent = \"Save Draft And Close\";\n          clone.children[0].id = \"saveDraftCloseCustomButton\";\n          insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n          saveDraftCloseCustomButton.onclick = function () {\n            let ev = new CustomEvent(\"customButtonAction\", {\n              detail: {\n                timerVariable: appendCustomButtonTimer,\n                formData: data,\n                commands:\n                  '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n                exit: true,\n                notification: \"Data saved successfully\"\n              },\n              bubbles: false\n            });\n            document\n              .getElementById(\n                \"formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157\"\n              )\n              .dispatchEvent(ev);\n          };\n        }\n        if (!document.getElementById(\"saveDraftCustomButton\")) {\n          let clone = $(\"ul[id*=nav]\").children()[0].cloneNode(true);\n          clone.children[0].textContent = \"Save Draft\";\n          clone.children[0].id = \"saveDraftCustomButton\";\n          insertAfter($(\"ul[id*=nav]\").children()[0], clone);\n          saveDraftCustomButton.onclick = function () {\n            let ev = new CustomEvent(\"customButtonAction\", {\n              detail: {\n                timerVariable: appendCustomButtonTimer,\n                formData: data,\n                commands:\n                  '[{ \"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }]',\n                exit: false,\n                notification: \"Data saved successfully\"\n              },\n              bubbles: false\n            });\n            document\n              .getElementById(\n                \"formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157\"\n              )\n              .dispatchEvent(ev);\n          };\n        }\n      } else {\n        if (data.producername.length > 0 && data.namedInsured.length > 0) {\n          saveDraftCustomButton.style.display == \"none\"\n            ? (saveDraftCustomButton.style.display = \"inline-block\")\n            : null;\n          saveDraftCloseCustomButton.style.display == \"none\"\n            ? (saveDraftCloseCustomButton.style.display = \"inline-block\")\n            : null;\n        } else {\n          saveDraftCustomButton.style.display == \"none\"\n            ? null\n            : (saveDraftCustomButton.style.display = \"none\");\n          saveDraftCloseCustomButton.style.display == \"none\"\n            ? null\n            : (saveDraftCloseCustomButton.style.display = \"none\");\n        }\n      }\n\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n\n      var locationGridDeleteIcons = document.querySelectorAll(\"button.locationremove\");\n      locationGridDeleteIcons = Array.from(locationGridDeleteIcons);\n      if (locationGridDeleteIcons.length > 0) {\n        locationGridDeleteIcons.map((item) => {\n          if(item.childNodes.length == 3){\n            item.removeChild(item.childNodes[2]);\n          }\n        });\n      }\n\n      if (\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].some(\n          (i) => i.innerText == \"SAVE\"\n        )\n      ) {\n        [...document.querySelectorAll('[ref=\"modalSave\"]')].map(\n          (i) => (i.innerText = \"OK\")\n        );\n      }\n        try {\n        if (\n          document\n            .getElementsByClassName(\"formio-component-locations\")[0]\n            .contains(\n              document.getElementsByClassName(\n                \"formio-component-modal-wrapper\"\n              )[0]\n            )\n        ) {\n          var locationItems = Array.from(\n            document.getElementsByClassName(\"formio-component-modal-wrapper\")\n          );\n          locationItems.length > 0\n            ? locationItems.map((location) => {\n                location.children[0].children[2].innerText ==\n                \"Click to set value\"\n                  ? (location.children[0].children[2].innerText =\n                      \"Edit Address\")\n                  : null;\n              })\n            : null;\n        }\n      } catch {};\n       try {\n        if (\n          document\n            .getElementsByClassName(\"formio-component-buildings\")[0]\n            .contains(\n              document.getElementsByClassName(\n                \"formio-component-modal-wrapper\"\n              )[0]\n            )\n        ) {\n          var locationItems = Array.from(\n            document.getElementsByClassName(\"formio-component-modal-wrapper\")\n          );\n          locationItems.length > 0\n            ? locationItems.map((location) => {\n                location.children[0].children[2].innerText ==\n                \"Click to set value\"\n                  ? (location.children[0].children[2].innerText =\n                      \"Enter Building Details\")\n                  : null;\n              })\n            : null;\n        }\n      } catch {};\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n\nsetTimeout(function () {\n  data.workbooksToBeGenerated = {\n    epli: false,\n    rpsCyber: false,\n    harco: false,\n    dealerGuard_ApplicationOpenLot: false,\n    victor_FranchisedAutoDealer: false,\n    victor_AutoPhysDamage: false\n  };\n  data.producerConfirmation ? (data.producerConfirmation = false) : null;\n  data.managementSubmitApplication ? (data.managementSubmitApplication = false) : null;\n\n  try {\n    if (data.namedInsured.length == 0) {\n      if (document.getElementsByClassName(\"pagination\").length > 0) {\n        var pageList = [\n          ...document.getElementsByClassName(\"pagination\")[0].children\n        ];\n        var GEActive = pageList.some(\n          (i) =>\n            i.children[0].innerText == \"General Information\" &&\n            i.className.includes(\"active\")\n        );\n        GEActive\n          ? pageList.map((i, index) =>\n              index !== 0 ? (i.style.cursor = \"not-allowed\") : null\n            )\n          : null;\n        pageList.map((i, index) =>\n          index !== 0\n            ? i.setAttribute(\n                \"title\",\n                \"Complete General Information page to proceed further\"\n              )\n            : null\n        );\n      }\n    }\n  } catch {}\n}, 1000);\n",
     "properties": {
         "submission_commands": "[{\"command\": \"fileSave\", \"entity_name\": \"Dealer Policy\" }, { \"command\": \"delegate\", \"async\" : \"true\", \"entity_name\" : \"Dealer Policy\",\"delegate\": \"GenerateWorkbook\" }]",
         "showPrevious": "true",
@@ -21077,6 +21158,6 @@
     "path": "dealerworkbookphase2",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-10-27T12:25:54.065Z",
-    "modified": "2020-12-10T13:26:59.276Z",
+    "modified": "2020-12-16T10:19:01.576Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:dealerWorkbookPhase2"
 }
