@@ -103,9 +103,6 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     }
   }
 
-  .formio-component-locationSchedule{
-    text-align: center;
-  }
   .locationsDataGrid {
     .form-group {
       padding-bottom: 5px;
@@ -134,9 +131,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
         }
       }
     }
-    .buildingsColumn{
-      height: 30px;
-    }
+
     .locHidden {
       display: none;
     }
@@ -144,6 +139,10 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
       padding-bottom: 5px;
       height: 35px;
     }
+  }
+
+  .listViewTitles{
+    text-align: center;
   }
 
   .table.datagrid-table.table-bordered {
@@ -156,7 +155,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     background-color: $secondary;
   }
 
-  .formio-component-modal-wrapper.formio-component-modal-wrapper-panel {
+  .formio-component-modal-wrapper {
     .formio-dialog-close.float-right.btn.btn-secondary {
       background-color: $primary-color;
       border: solid 4px lightgray;
