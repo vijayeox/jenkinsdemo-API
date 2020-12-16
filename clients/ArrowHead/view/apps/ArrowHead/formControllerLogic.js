@@ -28,9 +28,9 @@ s.onload = function (e) {
                 commands:
                   '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
                 exit: true,
-                notification: "Data saved successfully"
+                notification: "Data saved successfully",
               },
-              bubbles: false
+              bubbles: false,
             });
             document
               .getElementById(
@@ -52,9 +52,9 @@ s.onload = function (e) {
                 commands:
                   '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
                 exit: false,
-                notification: "Data saved successfully"
+                notification: "Data saved successfully",
               },
-              bubbles: false
+              bubbles: false,
             });
             document
               .getElementById(
@@ -92,11 +92,13 @@ s.onload = function (e) {
         });
       }
 
-      var locationGridDeleteIcons = document.querySelectorAll("button.locationremove");
+      var locationGridDeleteIcons = document.querySelectorAll(
+        "button.locationremove"
+      );
       locationGridDeleteIcons = Array.from(locationGridDeleteIcons);
       if (locationGridDeleteIcons.length > 0) {
         locationGridDeleteIcons.map((item) => {
-          if(item.childNodes.length == 3){
+          if (item.childNodes.length == 3) {
             item.removeChild(item.childNodes[2]);
           }
         });
@@ -111,6 +113,54 @@ s.onload = function (e) {
           (i) => (i.innerText = "OK")
         );
       }
+      try {
+        if (
+          document
+            .getElementsByClassName("formio-component-locations")[0]
+            .contains(
+              document.getElementsByClassName(
+                "formio-component-modal-wrapper"
+              )[0]
+            )
+        ) {
+          var locationItems = Array.from(
+            document.getElementsByClassName("formio-component-modal-wrapper")
+          );
+          locationItems.length > 0
+            ? locationItems.map((location) => {
+                location.children[0].children[2].innerText ==
+                "Click to set value"
+                  ? (location.children[0].children[2].innerText =
+                      "Edit Address")
+                  : null;
+              })
+            : null;
+        }
+      } catch {}
+      try {
+        if (
+          document
+            .getElementsByClassName("formio-component-buildings")[0]
+            .contains(
+              document.getElementsByClassName(
+                "formio-component-modal-wrapper"
+              )[0]
+            )
+        ) {
+          var locationItems = Array.from(
+            document.getElementsByClassName("formio-component-modal-wrapper")
+          );
+          locationItems.length > 0
+            ? locationItems.map((location) => {
+                location.children[0].children[2].innerText ==
+                "Click to set value"
+                  ? (location.children[0].children[2].innerText =
+                      "Enter Building Details")
+                  : null;
+              })
+            : null;
+        }
+      } catch {}
     } else {
       appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;
     }
@@ -125,16 +175,18 @@ setTimeout(function () {
     harco: false,
     dealerGuard_ApplicationOpenLot: false,
     victor_FranchisedAutoDealer: false,
-    victor_AutoPhysDamage: false
+    victor_AutoPhysDamage: false,
   };
   data.producerConfirmation ? (data.producerConfirmation = false) : null;
-  data.managementSubmitApplication ? (data.managementSubmitApplication = false) : null;
+  data.managementSubmitApplication
+    ? (data.managementSubmitApplication = false)
+    : null;
 
   try {
     if (data.namedInsured.length == 0) {
       if (document.getElementsByClassName("pagination").length > 0) {
         var pageList = [
-          ...document.getElementsByClassName("pagination")[0].children
+          ...document.getElementsByClassName("pagination")[0].children,
         ];
         var GEActive = pageList.some(
           (i) =>
