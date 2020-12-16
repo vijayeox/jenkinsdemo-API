@@ -305,19 +305,6 @@
 						"label": "Columns",
 						"columns": [{
 							"components": [{
-								"label": "Message Title",
-								"placeholder": "Ex: ${entity_name}${identifier_field}",
-								"tooltip": "Message Title would be displayed at the beginning of a message thread",
-								"tableView": true,
-								"inputFormat": "raw",
-								"validate": {
-									"required": true
-								},
-								"key": "appIdentifiers",
-								"type": "textfield",
-								"input": true,
-								"hideOnChildrenHidden": false
-							}, {
 								"label": "Comment Format",
 								"placeholder": "[fromUsername] has commented on [Message Title]:[Message]",
 								"hideLabel": true,
@@ -1300,6 +1287,58 @@
 										"input": false,
 										"tableView": false
 									}, {
+										"label": "Message Title",
+										"placeholder": "Ex: ${entity_name}${identifier_field}",
+										"tooltip": "Message Title would be displayed at the beginning of a message thread",
+										"tableView": true,
+										"inputFormat": "raw",
+										"key": "title",
+										"logic": [{
+											"name": "If File Comments enabled",
+											"trigger": {
+												"type": "simple",
+												"javascript": "",
+												"simple": {
+													"show": true,
+													"when": "app.chat_notification",
+													"eq": "true"
+												}
+											},
+											"actions": [{
+												"name": "Set Mandatory",
+												"type": "property",
+												"property": {
+													"label": "Required",
+													"value": "validate.required",
+													"type": "boolean"
+												},
+												"state": true
+											}]
+										}, {
+											"name": "If File comments not enabled",
+											"trigger": {
+												"type": "simple",
+												"simple": {
+													"show": true,
+													"when": "app.chat_notification",
+													"eq": "false"
+												}
+											},
+											"actions": [{
+												"name": "Make non mandatory",
+												"type": "property",
+												"property": {
+													"label": "Required",
+													"value": "validate.required",
+													"type": "boolean"
+												},
+												"state": false
+											}]
+										}],
+										"type": "textfield",
+										"input": true,
+										"hideOnChildrenHidden": false
+									}, {
 										"label": "RYG Rule",
 										"tooltip": "The RYG Rule for the Entity\nThis is a javascript rule which is used to return the Colour Based on any and all Fields in the Entity",
 										"editor": "ace",
@@ -2104,7 +2143,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 502,
+	"_vid": 505,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -2123,6 +2162,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-12-14T08:12:19.688Z",
+	"modified": "2020-12-15T10:08:56.375Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
