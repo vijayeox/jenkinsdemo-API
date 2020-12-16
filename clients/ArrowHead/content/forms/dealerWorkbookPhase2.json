@@ -3375,13 +3375,13 @@
                                                             "customClass": "editPopup",
                                                             "modalEdit": true,
                                                             "key": "editBuildingData",
-                                                            "customConditional": "show =\n  row.occupancyType !== \"vacantLand\" &&\n  row.occupancyType !== \"autoStorageLot\" &&\n  row.occupancyType !== \"\";",
+                                                            "customConditional": "show =\n  row.occupancyType !== \"autoStorageLot\" &&\n  row.occupancyType !== \"\";",
                                                             "logic": [
                                                                 {
                                                                     "name": "Check Occupancy Type",
                                                                     "trigger": {
                                                                         "type": "javascript",
-                                                                        "javascript": "result =\n  row.occupancyType == \"vacantLand\" ||\n  row.occupancyType == \"autoStorageLot\" ||\n  row.occupancyType == \"\";"
+                                                                        "javascript": "result =\n  row.occupancyType == \"autoStorageLot\" ||\n  row.occupancyType == \"\";"
                                                                     },
                                                                     "actions": [
                                                                         {
@@ -21035,7 +21035,7 @@
         }
     ],
     "revisions": "current",
-    "_vid": 199,
+    "_vid": 200,
     "title": "Dealer Workbook Phase 2",
     "display": "wizard",
     "access": [
@@ -21060,6 +21060,6 @@
     "path": "dealerworkbookphase2",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-10-27T12:25:54.065Z",
-    "modified": "2020-12-16T12:57:22.214Z",
+    "modified": "2020-12-16T13:00:12.036Z",
     "machineName": "onboarding-qeimxlbzmdfpljg:dealerWorkbookPhase2"
 }
