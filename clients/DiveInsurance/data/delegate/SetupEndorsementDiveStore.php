@@ -165,6 +165,26 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 if ($data['end_date']) {
                     $data['end_date'] = date_format(date_create($data['end_date']), "Y-m-d");
                 }
+                $policy['previous_country'] = $data['country'];
+                $policy['previous_address1'] = $data['address1'];
+                if(!empty($data['address2'])) {
+                    $policy['previous_address2'] = $data['address2'];
+                }
+                $policy['previous_city'] = $data['city'];
+                $policy['previous_state'] = $data['state'];
+                $policy['previous_zip'] = $data['zip'];
+                if($data['sameasmailingaddress'] === "false" || $data['sameasmailingaddress'] === false) {
+                    $policy['previous_physical_country'] =$data['physical_country'];
+                    $policy['previous_mailaddress1'] =$data['mailaddress1'];
+                    if(!empty($data['mailaddress2'])) {
+                        $policy['previous_mailaddress2'] =$data['mailaddress2'];
+                    }
+                    $policy['previous_physical_city'] =$data['physical_city'];
+                    if(!empty($data['physical_state'])) {
+                        $policy['previous_physical_state'] =$data['physical_state'];
+                    }
+                    $policy['previous_physical_zip'] =$data['physical_zip'];
+                }
                 if ($data['additional_insured_select'] == "addAdditionalInsureds") {
                     foreach ($data['additionalInsured'] as $key => $value) {
                         if (!isset($value['effective_date'])) {

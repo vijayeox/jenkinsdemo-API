@@ -5,6 +5,44 @@
 </head>
 <body>
   <div class ="body_div_endo">
+
+    {if (isset($policyInfoChanges) && $policyInfoChanges == true) || (isset($policyInfoMailingChanges) && $policyInfoMailingChanges == true)} 
+      <div class = "box">
+          <center><b><u>***Policy Information Changes***</u></b></center>
+          {if isset(policyInfoChanges)}
+          <p><b>Mailing address of the store has been changed as of the Effective Date of this Endorsement</b></p>
+          <p><em><u>Removing the old location:&nbsp</u></em><br>
+              <span class="store_location">{$previous_address1}</span>
+              <span class="store_location">{if isset($previous_address2) && $previous_address2 != ""},{$previous_address2}{/if}</span>,<br>
+              <span class="store_location">{$previous_city}</span>,
+              <span class="store_location">{$previous_state}</span> <span class="store_location">{$previous_zip}</span>
+          </p>
+          <p><em><u>Adding the new location:&nbsp</u></em><br>
+              <span class="store_location">{$address1}</span>
+              <span class="store_location">{if isset($address2) && $address2 != ""},{$address2}{/if}</span>,<br>
+              <span class="store_location">{$city}</span>,
+              <span class="store_location">{$state}</span> <span class="store_location">{$zip}</span>
+          </p>
+          {/if}
+          {if isset(policyInfoChanges)}
+          <p><b>Physical address of the store has been changed as of the Effective Date of this Endorsement</b></p>
+          {if isset($previous_mailaddress1) }
+          <p><em><u>Removing the old location:&nbsp</u></em><br>
+              <span class="store_location">{$previous_mailaddress1}</span>
+              <span class="store_location">{if isset($previous_mailaddress2) && $previous_mailaddress2 != ""},{$previous_mailaddress2}{/if}</span>,
+              <span class="store_location">{$previous_physical_city}</span>,
+              <span class="store_location">{if isset(previous_physical_state) && $previous_physical_state != '[]'}{$previous_physical_state}{/if}</span> <span class="store_location">{$previous_physical_zip}</span>
+          </p>
+          {/if}
+          <p><em><u>Adding the new location:&nbsp</u></em><br>
+              <span class="store_location">{$mailaddress1}</span>
+              <span class="store_location">{if isset($mailaddress2) && $mailaddress2 != ""},{$mailaddress2}{/if}</span>,<br>
+              <span class="store_location">{$physical_city}</span>,
+              <span class="store_location">{if isset(physical_state) && $physical_state != '[]'}{$physical_state}{/if}</span>  <span class="store_location">{$physical_zip}</span>
+          </p>
+          {/if}
+      </div>
+    {/if}
       
       {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO) || (isset($removed_liability_limit) && $removed_liability_limit) || (isset($newAdditionalPremium) && $newAdditionalPremium))}
       <div class = "box">
