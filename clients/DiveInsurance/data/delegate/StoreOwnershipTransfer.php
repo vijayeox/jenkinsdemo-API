@@ -25,12 +25,22 @@ class StoreOwnershipTransfer extends PolicyDocument
         $data['assocId'] = $data['fileId'];
         unset($data['fileId']);
         unset($data['workflowInstanceId']);
+
+        //$data['iterations'] = isset($data['iterations']) ? $data['iterations'] + 1 : 1;
+        if(isset($data['iterations'])){
+            if(isset($data['transfer']) && ($data['transfer'] === true || $data['transfer'] === 'true')) {
+                $data['iterations'] = $data['iterations'] + 1;
+            } else {
+                $data['iterations'] = 1;
+            }
+        }
+        $data['iterations'] = 1;
+
         //Flag for change of ownership
         $data['transfer'] = true;
 
         //Dynamic flag for new account creation
         $data['CreateNewUser'] = true;
-        $data['iterations'] = isset($data['iterations']) ? $data['iterations'] + 1 : 1;
 
         //New account name suffixed with R + iteration
         if(isset($data['username'])) {
