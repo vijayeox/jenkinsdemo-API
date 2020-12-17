@@ -179,7 +179,7 @@ class FileControllerTest extends ControllerTest
         }
         $path = $path1 . $fileId;
         if (!is_link($path)) {
-            symlink($this->config['CLIENT_FOLDER'] . 'DiveInsurance/test/Files', $path);
+            symlink(__DIR__.'/../../Files', $path);
         }
         $crypto = new Crypto();
         $documentName = $crypto->encryption($path . "/dummy.pdf");

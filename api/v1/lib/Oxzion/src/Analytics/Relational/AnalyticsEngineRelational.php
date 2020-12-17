@@ -226,7 +226,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		$result = $statement->execute();
 		$resultSet = new ResultSet();
 		$finalResult = $resultSet->initialize($result)->toArray();
-		if (empty($group) && empty($para['list'])) {
+		if (empty($para['group']) && empty($para['list'])) {
 			$arryvalues = array_values($finalResult[0]);
 			$finalResult = $arryvalues[0];
 		}

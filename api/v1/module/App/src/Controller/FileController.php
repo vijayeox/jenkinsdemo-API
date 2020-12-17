@@ -159,7 +159,6 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
-        print($file."\n");
         if(file_exists($file)){
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');
@@ -176,7 +175,6 @@ class FileController extends AbstractApiController
                 return $this->getErrorResponse($e->getMessage(), 500);
             }
         } else {
-            print("FILE NOT");
             return $this->getErrorResponse("Document not Found", 404);
         }
     }
