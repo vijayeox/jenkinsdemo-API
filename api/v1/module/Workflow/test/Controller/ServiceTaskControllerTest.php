@@ -344,7 +344,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertEquals($content['status'], 'success');
-        unset($data['variables']['command'], $data['variables']['fileId'], $data['variables']['appId'], $data['variables']['form_id'], $data['variables']['created_by'], $data['variables']['workflow_instance_id'], $data['variables']['workflowId'], $data['variables']['accountId']);
+        unset($data['variables']['command'], $data['variables']['fileId'], $data['variables']['appId'], $data['variables']['form_id'], $data['variables']['created_by'], $data['variables']['workflow_instance_id'], $data['variables']['workflowId'], $data['variables']['accountId'], $data['variables']['entity_id']);
         $this->assertEquals($data['variables'], json_decode($result[0]['data'], true));
     }
 
@@ -358,7 +358,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertEquals($content['status'], 'success');
-        unset($data['variables']['command'], $data['variables']['fileId'], $data['variables']['appId'], $data['variables']['form_id'], $data['variables']['created_by'], $data['variables']['workflow_instance_id'], $data['variables']['workflowId'], $data['variables']['accountId']);
+        unset($data['variables']['command'], $data['variables']['fileId'], $data['variables']['appId'], $data['variables']['form_id'], $data['variables']['created_by'], $data['variables']['workflow_instance_id'], $data['variables']['workflowId'], $data['variables']['accountId'], $data['variables']['entity_id']);
         $this->assertEquals($data['variables'], json_decode($result[0]['data'], true));
     }
 

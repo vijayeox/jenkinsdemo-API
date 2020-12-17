@@ -76,6 +76,19 @@ return [
                     ],
                 ],
             ],
+            'fileRygStatusUpdate' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/updateryg[/entity/:entityName]',
+                    'defaults' => [
+                        'controller' => Controller\FileCallbackController::class,
+                        'method' => 'updateRygForFile',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'disablebotcallback' => [
                 'type'    => Segment::class,
                 'options' => [

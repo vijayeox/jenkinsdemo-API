@@ -51,14 +51,14 @@ class FileCallbackControllerTest extends ControllerTest
         $this->setService(FileService::class, $mockFileService);
         $this->dispatch('/callback/file/update', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(500);
         $this->assertModuleName('File');
         $this->assertControllerName(FileCallbackController::class); // as specified in router's controller name alias
         $this->assertControllerClass('FileCallbackController');
         $this->assertMatchedRouteName('fileCallbackUpdate');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'Some Error');
+        $this->assertEquals($content['message'], 'Some Error');
     }
 
     public function testFileUpdateWithNoId()
@@ -73,7 +73,7 @@ class FileCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('fileCallbackUpdate');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'Invalid File Id');
+        $this->assertEquals($content['message'], 'Invalid File Id');
     }
 
     public function testFileUpdateWithInvalidFileId()
@@ -91,7 +91,7 @@ class FileCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('fileCallbackUpdate');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'Invalid File Id');
+        $this->assertEquals($content['message'], 'Invalid File Id');
     }
 
     public function testFileUpdateWithException()
@@ -109,6 +109,6 @@ class FileCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('fileCallbackUpdate');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['errors'], 'Unexpected error occurred, please try later');
+        $this->assertEquals($content['message'], 'Unexpected error.');
     }
 }
