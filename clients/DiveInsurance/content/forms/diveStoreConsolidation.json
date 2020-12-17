@@ -1474,13 +1474,14 @@
 						"placeholder": " ",
 						"tableView": true,
 						"validate": {
-							"customMessage": "Please enter a valid Fax number"
+							"custom": "if(data['fax'] && data['fax'] != ''){\n  if(data['fax'].length <= 15){\n      valid = (data['fax'].match(/^\\d+$/)) ?  true : 'Please enter a valid Fax number';\n  }else{\n    valid = (data['fax'].length > 15) ? 'Please enter a valid Fax number' : true;\n  }\n}"
 						},
 						"key": "fax",
-						"type": "phoneNumber",
+						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"inputType": "tel"
 					}, {
 						"label": "Email",
 						"description": "Your certificate may be e-mailed to you from {{data.product_email_id}}. Please make sure you add this to your safe senders list",
@@ -14770,7 +14771,7 @@
 		"input": false
 	}],
 	"revisions": "current",
-	"_vid": 169,
+	"_vid": 170,
 	"title": "diveStoreConsolidation3",
 	"display": "wizard",
 	"access": [{
@@ -14788,6 +14789,6 @@
 	"path": "divestoreconsolidation3",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-07-28T11:29:44.022Z",
-	"modified": "2020-12-08T14:04:34.770Z",
+	"modified": "2020-12-17T10:52:56.369Z",
 	"machineName": "testdivehub:diveStoreConsolidation3"
 }
