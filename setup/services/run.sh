@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Mysql
-VOLUME_HOME="/var/lib/mysql" 
+VOLUME_HOME="/var/lib/mysql"
 
 # install db
 if [ -n "$VAGRANT_OSX_MODE" ];then
@@ -19,7 +19,7 @@ if [[ ! -d $VOLUME_HOME/mysql ]]; then
     echo "=> An empty or uninitialized MySQL volume is detected in $VOLUME_HOME"
     echo "=> Installing MySQL ..."
     mysqld --initialize-insecure > /dev/null 2>&1
-    echo "=> Done!"  
+    echo "=> Done!"
     /create_mysql_admin_user.sh
 else
     echo "=> Using an existing volume of MySQL"
@@ -59,7 +59,9 @@ dos2unix *
 
 mkdir /var/www/api
 
+ln -s /app/api/* /var/www
 ln -s /app/api/* /var/www/api
+chown www-data:www-data -R /app/api/*
 
 #Workflow setup
 cd /app/workflow
@@ -67,7 +69,7 @@ cd /app/workflow/IdentityService/
 
 if [ -f "dist/identity_plugin.jar" ]; then
   echo "=> IdentityService Plugin exists ..."
-else 
+else
   echo "=> Fix for windows Environment ..."
   dos2unix ./gradlew
   echo "=> Building IdentityService Plugin ..."
@@ -79,15 +81,15 @@ fi
 cd /app/workflow/ProcessEngine/
 if [ -f "dist/processengine_plugin.jar" ]; then
   echo "=> ProcessEngine Plugin exists ..."
-else 
+else
   echo "=> Fix for windows Environment ..."
   dos2unix ./gradlew
   echo "=> Building ProcessEngine Plugin ..."
   ./gradlew build --stacktrace -x test
   mkdir -p dist
-  cp build/libs/processengine_plugin-1.0.jar dist/processengine_plugin.jar 
+  cp build/libs/processengine_plugin-1.0.jar dist/processengine_plugin.jar
 fi
-# Workflow Setup 
+# Workflow Setup
 cp /app/workflow/IdentityService/dist/identity_plugin.jar /camunda/lib/identity_plugin.jar
 cp /app/workflow/ProcessEngine/dist/processengine_plugin.jar /camunda/lib/processengine_plugin.jar
 cp /app/workflow/bpm-platform.xml /camunda/conf/
@@ -95,7 +97,7 @@ cp /app/workflow/bpm-platform.xml /camunda/conf/
 cd /app/camel
 if [ -f "./build/libs/camel-0.0.1-SNAPSHOT.jar" ]; then
   echo "=> Camel Jar file exists ..."
-else 
+else
   echo "=> Fix for windows Environment ..."
   dos2unix ./gradlew
   echo "=> Building Camel Jar File ..."

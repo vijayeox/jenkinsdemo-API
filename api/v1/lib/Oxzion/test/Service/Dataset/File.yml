@@ -150,6 +150,7 @@ ox_app_entity:
     start_date_field: start_date
     end_date_field: end_date
     status_field: status
+    ryg_rule: '{"RED": {"logic": "and","filters": [{"field": "state","operator": "eq","value": "karnataka"}]},"YELLOW": {"logic": "and","filters": [{"field": "state","operator": "eq","value": "Kerala"}]},"GREEN": {"logic": "and","filters": [{"field": "state","operator": "eq","value": "Goa"}]}}'
   - id: 2
     name: "entity2"
     app_id: 100
@@ -159,6 +160,7 @@ ox_app_entity:
     start_date_field: start_date
     end_date_field: end_date
     status_field: status
+    ryg_rule: '{"RED": {"logic": "and","filters": [{"field": "field2","operator": "eq","value": "Delayed"}]},"YELLOW": {"logic": "and","filters": [{"field": "field2","operator": "eq","value": "In Progress"}]},"GREEN": {"logic": "and","filters": [{"field": "field2",			"operator": "eq","value": "Assigned"}]}}'
   - id: 3
     name: "entity3"
     app_id: 101
@@ -324,6 +326,15 @@ ox_field:
     parent_id: 10
     entity_id: 4
     index: 0
+  - id: 15
+    name: "state"
+    app_id: 99
+    data_type: "text"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 1
+    entity_id: 1
+    index: 0  
 ox_form:
   - id: 1
     app_id: 99
@@ -344,6 +355,9 @@ ox_form_field:
   - id: 2
     form_id: 1
     field_id: 2
+  - id: 3
+    form_id: 2
+    field_id: 15  
 ox_workflow:
   - id: 1
     app_id: 99
@@ -658,6 +672,7 @@ ox_file:
     last_workflow_instance_id: 1
     created_by: 1
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 12
     account_id: 1
     data: "New File Data"
@@ -667,6 +682,7 @@ ox_file:
     created_by: 1
     entity_id: 1
     assoc_id: 11
+    rygStatus: "GREEN"
   - id: 13
     account_id: 1
     data: "New File Data - In Progress"
@@ -675,6 +691,7 @@ ox_file:
     last_workflow_instance_id: 3
     created_by: 1
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 14
     account_id: 1
     data: "New File Data - Latest In Progress"
@@ -683,6 +700,7 @@ ox_file:
     last_workflow_instance_id: 4
     created_by: 1
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 15
     account_id: 1
     data: "New File Data - Latest In Progress"
@@ -691,6 +709,7 @@ ox_file:
     last_workflow_instance_id: 6
     created_by: 1
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 16
     account_id: 1
     data: "New File Data - Latest Completed"
@@ -699,6 +718,7 @@ ox_file:
     last_workflow_instance_id: 7
     created_by: 1
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 17
     account_id: 1
     data: "New File Data - Not Latest"
@@ -707,6 +727,7 @@ ox_file:
     last_workflow_instance_id: 8
     created_by: 1
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 18
     account_id: 1
     data: '{"firstname":"brian","email":"brian@gmail.com"}'
@@ -715,6 +736,7 @@ ox_file:
     last_workflow_instance_id: 10
     created_by: 2
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 19
     account_id: 1
     data: "New File Data with different Workflow- Latest"
@@ -723,6 +745,7 @@ ox_file:
     last_workflow_instance_id: 10
     created_by: 2
     entity_id: 1
+    rygStatus: "GREEN"
   - id: 20
     account_id: 1
     data: '{"datagrid":[{"padi":"1700","firstname":"Sagar","lastname":"lastname"},{"padi":"16457","firstname":"Ariel","lastname":"Marks"}]}'
@@ -731,6 +754,7 @@ ox_file:
     last_workflow_instance_id: 10
     created_by: 2
     entity_id: 4
+    rygStatus: "GREEN"
   - id: 21
     account_id: 1
     data: '{"additionalInsured":[{"name":"Fredericka Lucas","address":"Sit quisquam alias ","city":"Illo voluptates sed ","country":"United States of America","state":"Alabama","zip":47296,"additionalInsuredAttachments":[{"account_id":"3","created_id":"6","uuid":"9af76901-9490-4fdd-b1ca-ac544d59d942","name":"sample2.txt","originalName":"sample.txt","extension":"txt","created_date":"2020-09-14 12:17:01","type":"text/plain","file":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","url":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","path":"f0033dc0-126b-40ba-89e0-d3061bdeda4c/49f969ef-3fc4-44ee-a179-0524752ac554/sample2.txt","id":"3","size":282}]}],"appId":"d77ea120-b028-479b-8c6e-60476b6a4456","email":"zudi@mailinator.com","end_date":"2021-06-30 00:00:00","firstname":"Geoffrey","lastname":"Malone","name":"Geoffrey Malone"}'
@@ -739,6 +763,15 @@ ox_file:
     last_workflow_instance_id: 10
     created_by: 2
     entity_id: 3
+    rygStatus: "GREEN"
+  - id: 22
+    account_id: 1
+    data: '{"testfield1" : "TESTING"}'
+    uuid: "d13d0c68-98c9-11e9-adc5-308d78c9145c"
+    date_created: "2019-06-28 00:00:00"
+    created_by: 1
+    entity_id: 2
+    rygStatus: "GREEN"  
 ox_file_attribute:
   - id: 1
     file_id: 11
@@ -955,6 +988,14 @@ ox_file_attribute:
     field_value_text: null
     field_id: 14
     sequence: 1
+  - id: 30
+    file_id: 22
+    account_id: 1
+    field_value: "Test"
+    field_value_type: "TEXT"
+    field_value_text: "Test"
+    field_id: 15
+    sequence: 1  
 ox_file_document:
   - id: 1
     file_id: 20
@@ -1066,6 +1107,12 @@ ox_indexed_file_attribute:
     field_value_type: "TEXT"
     field_value_text: "1year"
     field_id: 8
+  - id: 12
+    file_id: 11
+    account_id: 1
+    field_value_type: "TEXT"
+    field_value_text: "karnataka"
+    field_id: 15 
 ox_entity_identifier:
   - entity_id: 1
     identifier: "field1"

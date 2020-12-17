@@ -480,20 +480,14 @@ class ChatService extends AbstractService
             $appDetails = $this->fileService->getAppDetailsBasedOnFileId($params['fileId']);
             $appProperties = json_decode($appDetails['app_properties'],true);
             $fileDetails = $this->fileService->getFile($params['fileId'], false,$appDetails['account_id']);
-            $fileDetails['data']['entity_name'] = $fileDetails['entity_name'];
-            $fileData = $fileDetails['data'];
-            $title = $appProperties['appIdentifiers'];// ${entity_name} App ${name}
-            preg_match_all('/[$][{](.*?)\}/', $title, $matches);
-            if (is_array($matches[0]) && count($matches[0]) > 0) {
-                for ($i=0; $i < count($matches[0]); $i++) { 
-                    $title = str_replace($matches[0][$i], (isset($fileData[$matches[1][$i]]) ? $fileData[$matches[1][$i]] : null ), $title);
-                }
-            }
-            $url = "<a eoxapplication=" .'"'.$appDetails['appName']. '"'. " "."file_id=" .'"'.$params['fileId'] . '"'. "></a>";
+            $title = $fileDetails['title'];            
+            $this->logger->info("APP Title--".print_r($title,true));
+            $url = "<a eoxapplication=" .'"'.$appDetails['appName']. '"'. " "."file-id=" .'"'.$params['fileId'] . '"'. "></a>";
             $this->logger->info("APP URL--".print_r($url,true));
             $subscribers =  $this->subscriberService->getSubscribers($params['fileId']);
             $subscribersToList = array_column($subscribers, 'username');
             $subscribersList = implode(',', $subscribersToList);
+            $this->logger->info("appBotUrl---".print_r($this->appBotUrl,true));
             $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', array('appName' => $appDetails['appName'], 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url), $headers);
             $this->logger->info("App Bot response---".print_r($response,true));
 

@@ -151,7 +151,7 @@ class AppService extends AbstractService
         ]);
         //Assign user input values AFTER assigning default values.
         $appData = $data['app'];
-        $appData['app_properties'] = json_encode(array("chat_notification" => isset($appData['chat_notification']) ? $appData['chat_notification'] : "" , "appIdentifiers" => isset($appData['appIdentifiers']) ? $appData['appIdentifiers'] : ""));
+        $appData['app_properties'] = json_encode(array("chat_notification" => isset($appData['chat_notification']) ? $appData['chat_notification'] : ""));
         $app->assign($appData);
         try {
             $this->beginTransaction();
@@ -716,7 +716,8 @@ class AppService extends AbstractService
             $chatNotification = $appProperties['chat_notification'];
         }
         if ($chatNotification === true) {
-            $this->messageProducer->sendTopic(json_encode(array('appName' => $jsonData['name'], 'displayName' => $displayName ,"profileImage" => $srcIconPath.'icon.png')), 'SAVE_CHAT_BOT');
+            $imagePath = $path . '../../AppSource/'.$yamlData['app']['uuid'] .'/view/apps/eoxapps/';
+            $this->messageProducer->sendTopic(json_encode(array('appName' => $jsonData['name'], 'displayName' => $displayName ,"profileImage" => $imagePath.'icon.png')), 'SAVE_CHAT_BOT');
         }
         if ($chatNotification === false) {
             $this->messageProducer->sendTopic(json_encode(array('appName' => $jsonData['name'])), 'DISABLE_CHAT_BOT');    
