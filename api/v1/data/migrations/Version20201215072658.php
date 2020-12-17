@@ -20,7 +20,7 @@ final class Version20201215072658 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `ox_file` ADD COLUMN `rygStatus` VARCHAR(10) NOT NULL DEFAULT 'Active'");
+        $this->addSql("ALTER TABLE `ox_file` ADD COLUMN `rygStatus` VARCHAR(10) NOT NULL DEFAULT 'GREEN'");
         $this->addSql("ALTER TABLE `ox_app_entity` ADD COLUMN `title` TEXT");
         $this->addSql("ALTER TABLE `ox_file` ADD COLUMN `fileTitle` TEXT");
 
