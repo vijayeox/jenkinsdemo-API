@@ -1175,12 +1175,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         } else if ($this->type == 'endorsementQuote') {
             if ($data['previous_groupProfessionalLiabilitySelect'] != $data['groupProfessionalLiabilitySelect'] && $data['groupProfessionalLiabilitySelect'] == "yes") {
-                $temp['start_date'] = $data['update_date'];
+                $data['group_start_date'] = $temp['start_date'] = $data['update_date'];
                 $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, false);
-                $temp['start_date'] = $data['start_date'];
+                $temp['start_date'] = $data['group_start_date'];
             }
             else {
+                $temp['start_date'] = $data['group_start_date'];
                 $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, false);
+                $temp['start_date'] = $data['start_date'];
             }
         } else {
             $this->logger->info("DOCUMENT groupPL");
@@ -1188,7 +1190,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if ($this->type == 'endorsement') {
                 if ($endorsementOptions['modify_groupProfessionalLiability'] == true) {
                     if ($data['previous_groupProfessionalLiabilitySelect'] != $data['groupProfessionalLiabilitySelect'] && $data['groupProfessionalLiabilitySelect'] == "yes") {
-                        $temp['start_date'] = $data['update_date'];
+                        
+                        $data['group_start_date'] = $temp['start_date'] = $data['update_date'];
                         $documents['group_policy_document'] = $this->copyDocuments($temp, $dest['relativePath'], 'groupPolicy');
                         if (isset($this->template[$temp['product']]['GLblanketForm']) && $temp['product'] != 'Group Professional Liability') {
                             $this->logger->info("DOCUMENT GLblanketForm");
@@ -1196,9 +1199,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                         $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, true);
                         $temp['start_date'] = $data['start_date'];
+                        
                     }
                     else {
+                        $temp['start_date'] = $data['group_start_date'];
                         $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, true);
+                        $temp['start_date'] = $data['start_date'];
                     }
                 }
             } else {
