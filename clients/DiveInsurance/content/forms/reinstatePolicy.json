@@ -36,6 +36,13 @@
 		"input": true,
 		"tableView": false
 	}, {
+		"label": "policyEndDate",
+		"calculateValue": "if(!data.policyEndDate || data.policyEndDate == \"\"){\n  var today = moment(data['start_date']);\n  var month = today.month();\n  var day = today.date();\n  var year = today.year();\n  if((day == 30 && month == 5) || month > 5){\n    value = (year + 1) + \"-06-30\";\n  }else{\n    value = (year)+ \"-06-30\";\n  }\n}",
+		"key": "policyEndDate",
+		"type": "hidden",
+		"input": true,
+		"tableView": false
+	}, {
 		"label": "Columns",
 		"columns": [{
 			"components": [{
@@ -105,7 +112,7 @@
 				"calculateValue": "if(!data.reinstateEffDate || data.reinstateEffDate == \"\"){\n  value = moment(data.cancelDate).format('YYYY-MM-DD');\n}",
 				"validate": {
 					"required": true,
-					"custom": "if (data.reinstateEffDate){ \n  valid = ((moment(data.reinstateEffDate).diff(moment(data['cancelDate'])) >=0) && (moment(data.reinstateEffDate).diff(moment(data.end_date)) <=0)) ? true : \"Reinstatement date should be between cancellation date and the policy end date\";\n}"
+					"custom": "if (data.reinstateEffDate){ \n  valid = ((moment(data.reinstateEffDate).diff(moment(data.start_date)) >=0) && (moment(data.reinstateEffDate).diff(moment(data.policyEndDate)) <=0)) ? true : \"Reinstatement date should be between cancellation date and the policy end date\";\n}"
 				},
 				"key": "reinstateEffDate",
 				"logic": [{
@@ -232,7 +239,7 @@
 	"path": "reinstatepolicy",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-10T07:18:08.401Z",
-	"modified": "2020-12-08T07:04:04.135Z",
+	"modified": "2020-12-18T09:54:08.551Z",
 	"machineName": "testdivehub:reinstatePolicy",
 	"controller": ""
 }
