@@ -1284,8 +1284,13 @@ class FileService extends AbstractService
                     throw new ServiceException("User Does not Exist", "app.forusernot.found");
                 }
             }
-            $identifierQuery = "select identifier_name,identifier from ox_wf_user_identifier where user_id=:userId and app_id = :appId";
-            $identifierParams = array('userId'=>$userId,'appId'=>$appId);
+            $appFilter = "";
+            if(isset($appId)){
+                $appFilter = "and app_id = :appId";
+                $identifierParams['appId'] = $appId;
+            }
+            $identifierQuery = "select identifier_name,identifier from ox_wf_user_identifier where user_id=:userId $appFilter";
+            $identifierParams['userId'] = $userId;
             $getIdentifier = $this->executeQueryWithBindParameters($identifierQuery, $identifierParams)->toArray();
             if($whereQuery != ""){
                 $whereQuery .= " AND ";
@@ -1307,20 +1312,24 @@ class FileService extends AbstractService
     {
         $this->logger->info("Inside File List API - with params - " . json_encode($params));
         $accountId = isset($params['accountId']) ? $this->getIdFromUuid('ox_account', $params['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
-        $appId = $this->getIdFromUuid('ox_app', $appUUid);
-        if (!isset($accountId)) {
-            $accountId = $params['accountId'];
+        $appFilter = "";
+        $appIdClause = "";
+        $queryParams = array();
+        if(isset($appUUid)){
+            $appId = $this->getIdFromUuid('ox_app', $appUUid);
+            $appIdClause = "AND app_id = :appId";
+            $selectQuery['appId'] = $appId;
+            $appFilter = "inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId)";
+            $queryParams['appId'] = $appId;
         }
-        $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
-        $selectQuery = array("accountId" => $accountId, "appId" => $appId);
+        $select = "SELECT * from ox_app_registry where account_id = :accountId $appIdClause";
+        $selectQuery["accountId"] = $accountId;
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
         
         if (count($result) == 0) {
             throw new ServiceException("App Does not belong to the account", "app.for.account.not.found");
         }
 
-        $queryParams = array();
-        $queryParams['appId'] = $appId;
         $statusFilter = "";
         $createdFilter = "";
         $entityFilter = "";
@@ -1334,9 +1343,12 @@ class FileService extends AbstractService
 
         $where = " $workflowFilter $entityFilter $createdFilter";
         $fromQuery = " from ox_file as `of`
-        inner join ox_app_entity as en on en.id = `of`.entity_id
-        inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
+        inner join ox_app_entity as en on en.id = `of`.entity_id $appFilter
+         ";
         $this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams);
+        if(!isset($appId)){
+            $appId = NULL;
+        }
         $this->processUserFilter($params, $appId, $fromQuery, $whereQuery, $queryParams);
         
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
@@ -2020,6 +2032,10 @@ class FileService extends AbstractService
              till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
             $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
         }
+        if (isset($params['createdBy'])) {
+            $queryParams['createdBy'] = $this->getIdFromUuid('ox_user', $params['createdBy']);
+            $where .= " of.created_by =:createdBy AND ";
+        }
     }
 
     public function getEntityFilter(&$params, &$entityFilter, &$queryParams){
@@ -2407,6 +2423,10 @@ class FileService extends AbstractService
             $whereQuery .= " of.end_date " . $filterOperator["operation"] . $val['value'] . " $filterLogic";
             return true;
         }
+        if ($val['field'] == 'rygStatus') {
+            $whereQuery .= " of.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "' $filterLogic";
+            return true;
+        }
         return false;
     }
 
@@ -2439,11 +2459,13 @@ class FileService extends AbstractService
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
         $sortjoinQuery = "";
-        $appFilter = "ox_app.uuid ='" . $appId . "'";
-
+        $appFilter = "";
+        if(isset($appId)){
+            $appFilter = "AND ox_app.uuid ='" . $appId . "'";
+        }
         $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR au.user_id = $userId)
                                 OR ox_file_assignee.user_id = $userId)
-                                AND $appFilter";
+                                $appFilter";
 
         if (!empty($filterParams)) {
             if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
@@ -2535,6 +2557,10 @@ class FileService extends AbstractService
                           }
                           if ($val['field'] == 'status') {
                             $whereQuery .= " AND ox_file.status " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                            continue;
+                          }
+                          if ($val['field'] == 'rygStatus') {
+                            $whereQuery .= " AND ox_file.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             continue;
                           }
                           if ($val['field'] == 'start_date') {
