@@ -2,6 +2,7 @@
 namespace Oxzion\Utils;
 
 use Exception;
+use Oxzion\HttpException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
@@ -33,7 +34,11 @@ class RestClient
         } catch (Exception $e) {
             return $e->getMessage();
         }
-        return $response->getBody()->getContents();
+        $var = $response->getBody()->getContents();
+        if($response->getStatusCode() != 200){
+            throw new HttpException($var,$response->getStatusCode());
+        }
+        return $var;
     }
 
     public function delete($url, $params = array(), $headers = null)
@@ -46,7 +51,11 @@ class RestClient
             $payload['headers'] = $headers;
         }
         $response = $this->client->request('DELETE', $url, $payload);
-        return $response->getBody()->getContents();
+        $var = $response->getBody()->getContents();
+        if($response->getStatusCode() != 200){
+            throw new HttpException($var,$response->getStatusCode());
+        }
+        return $var;
     }
 
     public function postMultiPart($url, $formParams = array(), $fileParams = array(), array $headers = null)
@@ -71,6 +80,9 @@ class RestClient
         try {
             $response = $this->client->post($url, $params);
             $var = $response->getBody()->getContents();
+            if($response->getStatusCode() != 200){
+                throw new HttpException($var,$response->getStatusCode());
+            }
             return $var;
         } catch (ServerException $e) {
             return $e->getMessage();
@@ -79,46 +91,34 @@ class RestClient
 
     public function post($url, $formParams = array())
     {
-        try {
-            if ($formParams) {
-                $response = $this->client->request('POST', $url, ['json' => $formParams]);
-            } else {
-                $response = $this->client->request('POST', $url, ['headers' => ['Content-Type' => 'application/json']]);
-            }
-            return $response->getBody()->getContents();
-        } catch (Exception $e) {
-            throw $e;
+        if ($formParams) {
+            $response = $this->client->request('POST', $url, ['json' => $formParams]);
+        } else {
+            $response = $this->client->request('POST', $url, ['headers' => ['Content-Type' => 'application/json']]);
         }
+        $var = $response->getBody()->getContents();
+        if($response->getStatusCode() != 200){
+            throw new HttpException($var,$response->getStatusCode());
+        }
+        return $var;
     }
 
     public function postWithHeader($url, $formParams = array(), $headers = array())
     {
-        try {
-            $response = $this->client->request('POST', $url, ['headers' => $headers, 'json' => $formParams]);
-            return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders());
-        } catch (Exception $e) {
-            throw $e;
-        }
+        $response = $this->client->request('POST', $url, ['headers' => $headers, 'json' => $formParams]);
+        return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders(),'status' =>$response->getStatusCode());
     }
 
     public function deleteWithHeader($url, $formParams = array(), $headers = array())
     {
-        try {
-            $response = $this->client->request('DELETE', $url, ['headers' => $headers, 'json' => $formParams]);
-            return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders());
-        } catch (Exception $e) {
-            throw $e;
-        }
+        $response = $this->client->request('DELETE', $url, ['headers' => $headers, 'json' => $formParams]);
+        return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders(),'status' =>$response->getStatusCode());
     }
 
     public function updateWithHeader($url, $formParams = array(), $headers = array())
     {
-        try {
-            $response = $this->client->request('PUT', $url, ['headers' => $headers, 'json' => $formParams]);
-            return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders());
-        } catch (Exception $e) {
-            throw $e;
-        }
+        $response = $this->client->request('PUT', $url, ['headers' => $headers, 'json' => $formParams]);
+        return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders(),'status' =>$response->getStatusCode());
     }
 
     public function put($url, $params = array(), $headers = null)
@@ -131,6 +131,16 @@ class RestClient
             $payload['headers'] = $headers;
         }
         $response = $this->client->request('PUT', $url, $payload);
-        return $response->getBody()->getContents();
+        $var = $response->getBody()->getContents();
+        if($response->getStatusCode() != 200){
+            throw new HttpException($var,$response->getStatusCode());
+        }
+        return $var;
+    }
+
+    public function postWithHeaderAsBody($url, string $formParams , $headers = array())
+    {
+        $response = $this->client->request('POST', $url, ['headers' => $headers, 'body' => $formParams]);
+        return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders(),'status' =>$response->getStatusCode());
     }
 }

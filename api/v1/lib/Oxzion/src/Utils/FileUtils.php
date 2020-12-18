@@ -7,8 +7,9 @@ use Exception;
 
 class FileUtils
 {
-    public static function getFileExtension($file){
-        return pathinfo($file, PATHINFO_EXTENSION);
+
+  public static function getFileExtension($file){
+    return pathinfo($file, PATHINFO_EXTENSION);
     }
 
     public static function createDirectory($directory)
@@ -279,5 +280,38 @@ class FileUtils
                 }
             }
         }
+    }
+
+    public static function getFileName($path){
+        $dir = new DirectoryIterator($path);
+        foreach ($dir as $item) {
+            $file = $item->getFilename();
+        }
+        if(!isset($file)){
+            throw new Exception('Failed to find the file name');
+        }
+        return $file;
+    }
+
+    public static function downloadFile($sourceFile, $destinationFile){
+      $fsource = fopen($sourceFile, 'rb');
+      if (!$fsource) {
+          throw new Exception('Failed to open the file');
+    }
+
+    $fdestination = fopen($destinationFile, 'wb');
+    if (!$fdestination) {
+        fclose($fsource);
+        throw new Exception('Failed to open the file');
+    }
+
+    while ($buffer = fread($fsource, 1024)) {
+        fwrite($fdestination, $buffer);
+    }
+
+    fclose($fdestination);
+    fclose($fsource);
+
+    return $fdestination;
     }
 }
