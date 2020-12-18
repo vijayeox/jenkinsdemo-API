@@ -67,14 +67,10 @@ class CacheController extends AbstractApiController
             if ($count == 0) {
                 return $this->getErrorResponse("Failed to store cache", 404, $data);
             }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
+            return $this->exceptionToResponse($e);
+        } 
         return $this->getSuccessResponseWithData($data, 201);
     }
 
@@ -87,11 +83,13 @@ class CacheController extends AbstractApiController
           $cacheId = null;
         }
         $this->log->info(__CLASS__ . "-> \n Get Cache - " . print_r($appId, true));
-        $result = $this->userCacheService->getCache($cacheId, $appId, AuthContext::get(AuthConstants::USER_ID));
-        if ($result == 0) {
-            return $this->getSuccessResponseWithData(array());
+        try{
+            $result = $this->userCacheService->getCache($cacheId, $appId, AuthContext::get(AuthConstants::USER_ID));
+            return $this->getSuccessResponseWithData($result);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($result);
     }
 
     public function cacheDeleteAction()
@@ -99,11 +97,10 @@ class CacheController extends AbstractApiController
         $appId = $this->params()->fromRoute()['appId'];
         try {
             $result = $this->userCacheService->deleteUserCache($appId);
-        } catch (Exception $e) {
-            return $this->getErrorResponse("The cache deletion has failed", 400);
-        }
-        if ($result == 0) {
             return $this->getSuccessResponse("The cache has been successfully deleted");
-        }
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
 }

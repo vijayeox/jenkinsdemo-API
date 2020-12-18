@@ -23,6 +23,49 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
         return Logger::getLogger('Controller');
     }
 
+
+    protected function exceptionToResponse(Exception $e) {
+        $errorType = OxServiceException::ERR_TYPE_ERROR;
+        $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR;
+        $context = NULL;
+            $message = NULL;
+            if ($e instanceof ValidationException) {
+                $errorType = OxServiceException::ERR_TYPE_ERROR;
+                $errorCode = OxServiceException::ERR_CODE_NOT_ACCEPTABLE; //Input data is not acceptable.
+                $message = 'Validation error(s).';
+                $context = ['errors' => $e->getErrors()];
+            }
+            else if ($e instanceof VersionMismatchException) {
+                $errorType = OxServiceException::ERR_TYPE_ERROR;
+                $errorCode = OxServiceException::ERR_CODE_PRECONDITION_FAILED; //Version mismatch is precondition failure.
+                $message = 'Entity version sent by client does not match the version on server.';
+            }
+            else if ($e instanceof OxServiceException) {
+                $errorType = $e->getErrorType();
+                $errorCode = $e->getErrorCode();
+                $message = $e->getMessage();
+                $context = $e->getContextData();
+            } 
+            else {
+                $errorType = OxServiceException::ERR_TYPE_ERROR;
+                $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR; //Unexpected error is always HTTP 500.
+                $message = 'Unexpected error.';
+            }
+            if (OxServiceException::ERR_TYPE_FAILURE == $errorType) {
+                $errorCode = OxServiceException::ERR_CODE_OK;
+            }
+    
+            $this->response->setStatusCode($errorCode);
+            $returnObj = [
+                'status' => $errorType,
+                'errorCode' => $errorCode,
+                'message' => $message
+            ];
+            if (!empty($context)) {
+                $returnObj['data'] = $context;
+            }
+            return new JsonModel($returnObj);
+    }
     /**
      * Check Request object have Authorization token or not
      * @param type $request
