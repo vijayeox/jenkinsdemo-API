@@ -300,7 +300,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testValidateTokenFail()
     {
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTY4NTg1NjIsImp0aSI6Im9BZGNqQ1JhOWJGZzdwNnNXd3oyT3RDVTdNNzR5UlJPMGhZR2NiZjhpR289IiwibmJmIjoxNTU2ODU4NTYyLCJleHAiOjE1NTY5MzA1NjIsImRhdGEiOnsidXNlcm5hbWUiOiJiaGFyYXRnIiwib3JnaWQiOiIxIn19.p7T8djg6zAaSTNeBEPK-Z_1nBA1zcgh8eZ23JdPBpUCywluG3NFqjD37C9o_Fj8zw5xIHQMi0_aKk0sgNpUPaw'];
+        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDc0OTMwNDEsImp0aSI6IkxsYUg0SDc0bjRRTzROUkhXbTl0aEl1dzd3Q01LaG0wRkdHdjZoc0JaUmM9IiwibmJmIjoxNjA3NDkzMDQxLCJleHAiOjE2MDc1NjUwNDEsImRhdGEiOnsidXNlcm5hbWUiOiJhZG1pbnRlc3QiLCJhY2NvdW50SWQiOiIxIn19.Ib-Nde1nvthuUeEIWsMlw0ZJHc6vgeWFYWwmnyausxqqoNLja7GRZjYxMac5ox29ktn7FYCS8QEOM3t9nT0TKQ'];
         $this->dispatch('/validatetoken', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
