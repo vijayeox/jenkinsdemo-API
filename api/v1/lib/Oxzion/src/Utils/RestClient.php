@@ -4,7 +4,6 @@ namespace Oxzion\Utils;
 use Exception;
 use Oxzion\HttpException;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
 
 class RestClient
@@ -77,16 +76,12 @@ class RestClient
             $headerList = array_merge($headerList, $headers);
         }
         $params = ['headers' => $headerList, 'body' => new MultipartStream($multipart_form, $boundary)];
-        try {
-            $response = $this->client->post($url, $params);
-            $var = $response->getBody()->getContents();
-            if($response->getStatusCode() != 200){
-                throw new HttpException($var,$response->getStatusCode());
-            }
-            return $var;
-        } catch (ServerException $e) {
-            return $e->getMessage();
+        $response = $this->client->post($url, $params);
+        $var = $response->getBody()->getContents();
+        if($response->getStatusCode() != 200){
+            throw new HttpException($var,$response->getStatusCode());
         }
+        return $var;  
     }
 
     public function post($url, $formParams = array())
