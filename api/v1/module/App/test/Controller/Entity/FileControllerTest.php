@@ -37,6 +37,21 @@ class FileControllerTest extends ControllerTest
         return $selectResult;
     }
 
+    public function testGetListOfFollowupsfiles()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/followups/createdBy/me', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('followups');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'] , 3);
+    }
+
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
@@ -542,6 +557,23 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testGetListOfFilesCreatedByMe()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/search/createdBy/me', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelistfilter');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'] > 0, true);
     }
     // TODO WITH WORKFLOWINSTANCEID/ NO WORKFLOWINSTANCEID - CREATEFILE/UPDATEFILE
 }

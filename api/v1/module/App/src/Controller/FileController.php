@@ -17,6 +17,8 @@ use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\VersionMismatchException;
 use Exception;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 
 class FileController extends AbstractApiController
 {
@@ -207,9 +209,12 @@ class FileController extends AbstractApiController
     */
     public function getFileListAction()
     {
-        $appUuid = $this->params()->fromRoute()['appId'];
+        $appUuid = isset($this->params()->fromRoute()['appId']) ? $this->params()->fromRoute()['appId'] : NULL ;
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
+        if(isset($params['createdBy']) && $params['createdBy'] === 'me'){
+            $params['createdBy'] = AuthContext::get(AuthConstants::USER_UUID);;
+        }
         try {
             $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         } catch (ValidationException $e) {
