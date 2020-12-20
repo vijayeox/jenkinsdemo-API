@@ -94,6 +94,12 @@ class FileServiceTest extends AbstractServiceTest
         return $result;
     }
 
+
+    public function testGetFollowUps(){
+        $result = $this->fileService->getFileList(NULL, NUll);
+        $this->assertEquals(12,$result['total']);
+    }
+
     public function testGetFileListWithrygJob() {
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];

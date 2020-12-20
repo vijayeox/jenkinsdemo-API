@@ -319,6 +319,37 @@ return [
                     ],
                 ],
             ],
+            'assignmentList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/assignmentList',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'assignments',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'followups' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/followups[/createdBy/:createdBy]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
             'form_workflow' => [
                 'type' => Segment::class,
                 'options' => [
@@ -561,7 +592,7 @@ return [
             'filelistfilter' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]]',
+                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]][/createdBy/:createdBy]',
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
