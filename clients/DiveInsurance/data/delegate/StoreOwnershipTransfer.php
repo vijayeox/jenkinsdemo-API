@@ -33,8 +33,9 @@ class StoreOwnershipTransfer extends PolicyDocument
             } else {
                 $data['iterations'] = 1;
             }
+        }else {
+            $data['iterations'] = 1;
         }
-        $data['iterations'] = 1;
 
         //Flag for change of ownership
         $data['transfer'] = true;
