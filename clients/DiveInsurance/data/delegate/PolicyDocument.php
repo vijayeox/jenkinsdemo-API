@@ -1202,7 +1202,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         
                     }
                     else {
-                        $temp['start_date'] = $data['group_start_date'];
+                        $temp['start_date'] = isset($data['group_start_date']) ? $data['group_start_date'] : $data['start_date'];
                         $this->generateGroupAdditionalDocuments($documents, $data, $temp, $previous_data, $dest, $options, true);
                         $temp['start_date'] = $data['start_date'];
                     }
