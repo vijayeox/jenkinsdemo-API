@@ -6,13 +6,12 @@ use Analytics\Model\WidgetTable;
 use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
+use Oxzion\EntityNotFoundException;
+use Oxzion\InsertFailedException;
 use Oxzion\Service\AbstractService;
+use Oxzion\Utils\EvalMath;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ValidationException;
-use Oxzion\InsertFailedException;
-use Oxzion\EntityNotFoundException;
-use Ramsey\Uuid\Uuid;
-use Oxzion\Utils\EvalMath;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class WidgetService extends AbstractService
@@ -58,9 +57,9 @@ class WidgetService extends AbstractService
             $generated = $widget->getGenerated();
 
             //Insert the queries related to this widget.
-            $widgetIdSelectionQuery = '(SELECT w.id FROM ox_widget w 
+            $widgetIdSelectionQuery = '(SELECT w.id FROM ox_widget w
                 WHERE w.uuid=:widgetUuid and w.account_id=:account_id and (w.ispublic=true OR w.created_by=:created_by))';
-            $queryIdSelectionQuery = '(SELECT q.id FROM ox_query q 
+            $queryIdSelectionQuery = '(SELECT q.id FROM ox_query q
                 WHERE q.uuid=:queryUuid and q.account_id=:account_id and (q.ispublic=true OR q.created_by=:created_by))';
             $createdBy = AuthContext::get(AuthConstants::USER_ID);
             $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
@@ -72,7 +71,7 @@ class WidgetService extends AbstractService
                 } else {
                     $queryConfiguration = '';
                 }
-                $query = "INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES 
+                $query = "INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES
                             ($widgetIdSelectionQuery, $queryIdSelectionQuery, :sequence, :configuration)";
                 $queryParams = [
                     'widgetUuid' => $generated['uuid'],
@@ -88,15 +87,14 @@ class WidgetService extends AbstractService
                     $this->logger->error('Query and parameters are:');
                     $this->logger->error($query);
                     $this->logger->error($queryParams);
-                    throw new InsertFailedException('Database insert failed.', NULL, 
-                        InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, NULL);
+                    throw new InsertFailedException('Database insert failed.', null,
+                        InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, null);
                 }
                 $sequence++;
             }
             $this->commit();
             return $generated;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -139,7 +137,7 @@ class WidgetService extends AbstractService
         if (is_array($data['expression'])) {
             $data['expression'] = json_encode($data['expression']);
         }
-        $widget->assign($data); 
+        $widget->assign($data);
 
         try {
             $this->beginTransaction();
@@ -171,15 +169,14 @@ class WidgetService extends AbstractService
                 $result = $this->executeQueryWithBindParameters($query, $queryParams);
                 if (1 != $result->count()) {
                     $this->rollback();
-                    throw new InsertFailedException('ox_widget_query insert failed.', 
+                    throw new InsertFailedException('ox_widget_query insert failed.',
                         ['table' => 'ox_widget_query', 'query' => $query, 'queryParams' => $queryParams]);
 
                 }
                 $sequence++;
             }
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -193,15 +190,14 @@ class WidgetService extends AbstractService
         $widget->loadByUuid($uuid);
         $widget->assign([
             'version' => $version,
-            'isdeleted' => 1
+            'isdeleted' => 1,
         ]);
 
         try {
             $this->beginTransaction();
             $widget->save();
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -298,10 +294,10 @@ class WidgetService extends AbstractService
         $filter = null;
         $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot'];
         if (!empty($firstRow['exclude_overrides'])) {
-            if (strtolower($firstRow['exclude_overrides']=='all')) {
+            if (strtolower($firstRow['exclude_overrides'] == 'all')) {
                 unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
             } else {
-                $overRides['excludes'] = explode(',',$firstRow['exclude_overrides']);
+                $overRides['excludes'] = explode(',', $firstRow['exclude_overrides']);
             }
         }
 
@@ -312,7 +308,7 @@ class WidgetService extends AbstractService
                 }
             }
             $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
-
+            // print_r($overRides);exit;
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];
                 if (!is_array($expressions)) {
@@ -323,28 +319,40 @@ class WidgetService extends AbstractService
                 }
             }
 
-           
             if (isset($data[0]['calculated']) && count($data) == 1) {
                 //Send only the calculated value if left oprand not specified and aggregate values
                 $data = $data[0]['calculated'];
-            } 
-
+            }
             if (is_array($data)) {
-                $data = $this->getTargets($uuid,$data,1);
+                // $data = $this->getTargets($uuid, $data, 1);
             } else {
-                $targets = $this->getTargets($uuid,$data,0);
+                // $targets = $this->getTargets($uuid, $data, 0);
                 if ($targets) {
                     $response['widget']['targets'] = $targets;
                 }
             }
             $response['widget']['data'] = $data;
-
         }
         return $response;
     }
 
+    public function getWidgetTableData($uuid)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $fieldList = array("id","uuid", "visualization_id", "ispublic", "created_by", "date_created", "account_id", "isdeleted", "name", "configuration", "version", "expression", "exclude_overrides");
+        $select->from('ox_widget')
+            ->columns($fieldList)
+            ->where(array('ox_widget.uuid' => $uuid, 'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID), 'isdeleted' => 0));
+        $response = $this->executeQuery($select)->toArray();
+        if (count($response) == 0) {
+            return 0;
+        }
+        return $response[0];
+    }
 
-    public function getTargets($uuid,$data,$isaggregate) {
+    public function getTargets($uuid, $data, $isaggregate)
+    {
         $query = 'SELECT wt.group_key,t.type, t.red_limit, t.yellow_limit, t.green_limit  FROM ox_widget w JOIN ox_widget_target wt on w.id=wt.widget_id JOIN ox_target t ON t.id=wt.target_id WHERE w.uuid=:uuid';
         $queryParams = [
             'uuid' => $uuid,
@@ -352,24 +360,27 @@ class WidgetService extends AbstractService
         try {
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultSet) == 0) {
-                if ($isaggregate)
+                if ($isaggregate) {
                     return $data;
-                else 
+                } else {
                     return null;
-            } 
+                }
+
+            }
             if ($isaggregate) {
-                if (count($resultSet)>1) {
+                if (count($resultSet) > 1) {
                     $targets = [];
-                    foreach($resultSet as $row) {
+                    foreach ($resultSet as $row) {
                         $targets[$row['group_key']]['red_limit'] = $row['red_limit'];
                         $targets[$row['group_key']]['yellow_limit'] = $row['yellow_limit'];
                         $targets[$row['group_key']]['green_limit'] = $row['green_limit'];
                     }
-                } 
+                }
                 $cols = array_keys($data[0]);
-                $group_key = $cols[0];            
+                $group_key = $cols[0];
+                // print_r($data);exit;
                 foreach ($data as $key1 => $dataset) {
-                    if (count($resultSet)>1) {
+                    if (count($resultSet) > 1) {
                         $keyvalue = $dataset[$group_key];
                         $data[$key1]['red_limit'] = $targets[$keyvalue]['red_limit'];
                         $data[$key1]['yellow_limit'] = $targets[$keyvalue]['yellow_limit'];
@@ -380,18 +391,20 @@ class WidgetService extends AbstractService
                         $data[$key1]['green_limit'] = $resultSet[0]['green_limit'];
                     }
                 }
-                return $data;                
+                return $data;
             } else {
-                $color = TargetService::checkRYG($data,$resultSet[0]['type'],$resultSet[0]['red_limit'],$resultSet[0]['yellow_limit'],$resultSet[0]['green_limit']);
-                return ['red_limit'=>$resultSet[0]['red_limit'],'yellow_limit'=>$resultSet[0]['yellow_limit'],'green_limit'=>$resultSet[0]['green_limit'],'color'=>$color];
+                $color = TargetService::checkRYG($data, $resultSet[0]['type'], $resultSet[0]['red_limit'], $resultSet[0]['yellow_limit'], $resultSet[0]['green_limit']);
+                return ['red_limit' => $resultSet[0]['red_limit'], 'yellow_limit' => $resultSet[0]['yellow_limit'], 'green_limit' => $resultSet[0]['green_limit'], 'color' => $color];
             }
 
-         } catch (Exception $e){
-             if ($isaggregate)
-                 return $data;
-             else 
-                 return null;
-         }
+        } catch (Exception $e) {
+            if ($isaggregate) {
+                return $data;
+            } else {
+                return null;
+            }
+
+        }
     }
 
     public function evaluteExpression($data, $expression)
@@ -410,14 +423,14 @@ class WidgetService extends AbstractService
             $m->evaluate('round(x,y) = (((x*(10^y))+0.5*(abs(x)/(x+0^abs(x))))%(10^10))/(10^y)');
             foreach ($dataset as $key2 => $value) {
                 if (is_numeric($value)) {
-                    $key2=strtolower($key2);
+                    $key2 = strtolower($key2);
                     $m->evaluate("$key2 = $value");
                 } else {
                     $m->evaluate("$key2 = 0");
                 }
             }
             $calculated = $m->evaluate($expression);
-            if ($calculated=='false' || $calculated=='') {
+            if ($calculated == 'false' || $calculated == '') {
                 $calculated = 0;
             }
             $data[$key1][$colName] = $calculated;
@@ -486,8 +499,7 @@ class WidgetService extends AbstractService
                     ['entity' => 'ox_widget', 'uuid' => $widgetUuid]);
             }
             $firstRow = $resultGet[0];
-        }
-        catch (ZendDbException $e) {
+        } catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error('Query and params:');
             $this->logger->error($query);

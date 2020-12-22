@@ -82,6 +82,36 @@ return [
                     ],
                 ],
             ],
+            'widgetTarget' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/analytics/target/getwidgettarget/widgetId[/:widgetId]',
+                    'defaults' => [
+                        'controller' => Controller\TargetController::class,
+                        'method' => 'GET',
+                        'action' => 'getWidgetTarget',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            // 'getKRAResult' => 'MANAGE_TARGET_READ'
+                        ],
+                    ],
+                ],
+            ],
+            'createWidgetTarget' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/analytics/target/createwidgettarget',
+                    'defaults' => [
+                        'controller' => Controller\TargetController::class,
+                        'method' => 'POST',
+                        'action' => 'createWidgetTarget',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            // 'getKRAResult' => 'MANAGE_TARGET_READ'
+                        ],
+                    ],
+                ],
+            ],
             'getKRAResult' => [
                 'type' => Segment::class,
                 'options' => [
@@ -104,9 +134,13 @@ return [
                         'controller' => Controller\DataSourceController::class,
                         'method' => 'GET',
                         'action' => 'getDetails',
-                        'access' => [
-                            'getDetails' => 'MANAGE_DATASOURCE_WRITE',
-                        ],
+                        // 'access' => [
+                        //     // SET ACCESS CONTROL
+                        //     'put' => 'MANAGE_DATASOURCE_WRITE',
+                        //     'post' => 'MANAGE_DATASOURCE_WRITE',
+                        //     'delete' => 'MANAGE_DATASOURCE_WRITE',
+                        //     'get' => 'MANAGE_DATASOURCE_READ',
+                        // ],
                     ],
                 ],
             ],
