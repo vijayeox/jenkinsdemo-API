@@ -3,10 +3,8 @@
 namespace Analytics\Controller;
 
 use Analytics\Model\Target;
-use Oxzion\Controller\AbstractApiController;
-use Oxzion\ValidationException;
-use Oxzion\VersionMismatchException;
 use Exception;
+use Oxzion\Controller\AbstractApiController;
 
 class TargetController extends AbstractApiController
 {
@@ -21,6 +19,7 @@ class TargetController extends AbstractApiController
         parent::__construct(null, __class__, Target::class);
         $this->setIdentifierName('targetUuid');
         $this->targetService = $targetService;
+        $this->log = $this->getLogger();
     }
 
     /**
@@ -36,12 +35,12 @@ class TargetController extends AbstractApiController
      */
     public function create($data)
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
+        // print_r($data);exit;
         try {
             $generated = $this->targetService->createTarget($data);
             return $this->getSuccessResponseWithData($generated, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -61,8 +60,7 @@ class TargetController extends AbstractApiController
         try {
             $version = $this->targetService->updateTarget($uuid, $data);
             return $this->getSuccessResponseWithData(['version' => $version], 200);
-        } 
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -74,8 +72,7 @@ class TargetController extends AbstractApiController
         try {
             $this->targetService->deleteTarget($uuid, $params['version']);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -129,14 +126,80 @@ class TargetController extends AbstractApiController
     public function getList()
     {
         $params = $this->params()->fromQuery();
-        $result = $this->targetService->getTargetList($params);
-        return $this->getSuccessResponseWithData($result);
+        $this->log->info(__CLASS__ . "-> Get Target list - " . json_encode($params, true));
+        try {
+            $result = $this->targetService->getTargetList($params);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
     }
 
-    public function getKRAResultAction() 
+    /**
+     * GET KRA Result API
+     * @api
+     * @link /analytics/target/getkraresult
+     * @method GET
+     * @return array $dataget list of Datasource
+     * <code>status : "success|error",
+     *              List of all the fields
+     * </code>
+     */
+    public function getKRAResultAction()
     {
         $params = $this->params()->fromQuery();
-        $result = $this->targetService->getKRAResult($params);
-        return $this->getSuccessResponseWithData($result);
+        $this->log->info(__CLASS__ . "-> Get KRA result list - " . json_encode($params, true));
+        try {
+            $result = $this->targetService->getKRAResult($params);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
+
+    /**
+     * GET KRA Result API
+     * @api
+     * @link /analytics/target/getwidgettarget/widgetId[/:widgetId]
+     * @method GET
+     * @return array $dataget list of Datasource
+     * <code>status : "success|error",
+     *              List of all the fields
+     * </code>
+     */
+    public function getWidgetTargetAction()
+    {
+        $params = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . "-> Get Widget Target - " . json_encode($params, true));
+        try {
+            $result = $this->targetService->getWidgetTarget($params);
+            return $this->getSuccessResponseWithData(['data' => $result], 201);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
+
+    /**
+     * GET KRA Result API
+     * @api
+     * @link /analytics/target/createwidgettarget
+     * @method POST
+     * @param array $data
+     * @return array Returns a JSON Response with Status Code and Created Widget Target.
+     */
+    public function createWidgetTargetAction()
+    {
+        $params = $this->extractPostData();
+        $this->log->info(__CLASS__ . "-> Create/Update Widget Target - " . json_encode($params, true));
+        try {
+            $result = $this->targetService->createWidgetTarget($params);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+        return $this->getSuccessResponseWithData($result, 201);
     }
 }
