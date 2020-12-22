@@ -30,6 +30,9 @@ final class Version20201222095551 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE `ox_widget_target` DROP COLUMN `group_value`");        
+        $this->addSql("ALTER TABLE `ox_widget_target` DROP FOREIGN KEY `ox_widget_target_FK`;");        
+        $this->addSql("ALTER TABLE `ox_widget_target` DROP FOREIGN KEY `ox_widget_target_FK_1`;");
 
     }
 }
