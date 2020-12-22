@@ -172,7 +172,6 @@ class QueryService extends AbstractService
             'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'uuid' => $uuid,
         ];
-        //      try {
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if (count($resultSet) == 0) {
             return 0;
@@ -196,11 +195,6 @@ class QueryService extends AbstractService
         }
         $configuration = json_encode($configArray);
         $result = $this->runQuery($configuration, $resultSet[0]['datasource_uuid'], $overRides);
-
-        //      } catch(Exception $e) {
-        //         return 0;
-        //     }
-
         return $result;
     }
 
@@ -248,7 +242,7 @@ class QueryService extends AbstractService
         //     $exp_sort = json_decode($parameters['sort'], 1);
         //     $parameters['sort'] = $exp_sort;
         // }
-        
+
         if (isset($parameters['filter']) && is_string($parameters['filter'])) {
             $parameters['filter'] = $this->stringDecode($parameters['filter']);
         }
@@ -280,11 +274,13 @@ class QueryService extends AbstractService
         } else {
             $entity_name = null;
         }
+        // echo "Parameters"; print_r($parameters);exit;
         $result = $analyticsEngine->runQuery($app_name, $entity_name, $parameters);
         return $result;
     }
 
-    private function stringDecode($params) {
+    private function stringDecode($params)
+    {
         if (isset($params) && is_string($params)) {
             $exp_sort = json_decode($params, 1);
             $params = $exp_sort;
@@ -358,7 +354,7 @@ class QueryService extends AbstractService
         $index = 1;
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -" . $value);
-            $queryData = $this->executeAnalyticsQuery($value, $overRides);
+            $queryData = $this->executeAnalyticsQuery($value, $overRides); 
             $this->logger->info("Executing AnalyticsQuery returned -" . print_r($queryData, true));
             if ($queryData == null || $queryData == 0) {
                 throw new InvalidInputException("uuid entered is incorrect - $value", 1);
@@ -372,7 +368,7 @@ class QueryService extends AbstractService
             if (!empty($data) && !empty($queryData['data']) && is_array($queryData['data'])) {
                 if ($aggCheck == 1) {
                     if (!empty($queryData['meta']['aggregates'])) {
-                            $data = $this->mergeData($data, $queryData['data'], $index);
+                        $data = $this->mergeData($data, $queryData['data'], $index);
                     } else {
                         throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
                     }
@@ -381,7 +377,7 @@ class QueryService extends AbstractService
                     if (!empty($queryData['meta']['aggregates'])) {
                         throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);
                     } else {
-                            $data = $this->mergeData($data, $queryData['data'], $index);
+                        $data = $this->mergeData($data, $queryData['data'], $index);
                     }
                 }
             } else {
