@@ -288,8 +288,9 @@ class AppController extends AbstractApiController
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
+        $appId = isset($params['appId']) ? $params['appId'] : NULL;
         try {
-            $assignments = $this->fileService->getAssignments($params['appId'], $filterParams);
+            $assignments = $this->fileService->getAssignments($appId, $filterParams);
             return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
         }
         catch (AccessDeniedException $e) {

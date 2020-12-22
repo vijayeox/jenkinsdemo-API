@@ -429,6 +429,7 @@ ox_file:
     entity_id: 1
     last_workflow_instance_id: 1
     version: 1
+    created_by : 2
   - id: 12
     account_id: 1
     data: '{"firstname":"Rai","product":"Individual Professional Liability"}'
@@ -437,6 +438,7 @@ ox_file:
     entity_id: 1
     last_workflow_instance_id: 2
     version: 1
+    created_by : 1
   - id: 13
     account_id: 1
     data: '{"firstname":"Raj","product":"Individual Professional Liability"}'
@@ -445,6 +447,7 @@ ox_file:
     entity_id: 1
     last_workflow_instance_id: 3
     version: 1
+    created_by : 1
   - id: 14
     account_id: 1
     data: '{"firstname":"Ram","product":"Dive Boat"}'
@@ -453,6 +456,7 @@ ox_file:
     entity_id: 1
     last_workflow_instance_id: 4
     version: 1
+    created_by : 2
   - id: 15
     account_id: 1
     data: '{"firstname":"Reshma","product":"Dive Store"}'
@@ -461,6 +465,7 @@ ox_file:
     entity_id: 1
     last_workflow_instance_id: 6
     version: 1
+    created_by : 2
   - id: 16
     account_id: 1
     data: '{"firstname":"Arpitha","product":"Dive Store"}'
@@ -469,6 +474,7 @@ ox_file:
     entity_id: 1
     last_workflow_instance_id: 7
     version: 1
+    created_by : 1
 ox_file_attribute:
   - id: 1
     file_id: 11

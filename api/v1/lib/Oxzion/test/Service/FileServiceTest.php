@@ -94,6 +94,46 @@ class FileServiceTest extends AbstractServiceTest
         return $result;
     }
 
+
+    public function testGetFollowUps(){
+        $result = $this->fileService->getFileList(NULL, NUll);
+        $this->assertEquals(12,$result['total']);
+    }
+
+    public function testGetFileListWithrygJob() {
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $params = array('entityName' => 'entity1', 'appId' => $appUuid);
+        $select1 = "Select of.rygStatus from ox_file of 
+        inner join ox_app_entity as en on en.id = of.entity_id
+        inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res1 = $this->runQuery($select1);
+        $this->assertEquals('GREEN',$res1[0]['rygStatus']);
+        $result = $this->fileService->bulkUpdateFileRygStatus($params);
+        $select = "Select of.rygStatus from ox_file of 
+                  inner join ox_app_entity as en on en.id = of.entity_id
+                  inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res = $this->runQuery($select);
+        $this->assertEquals('RED',$res[0]['rygStatus']);
+    }
+
+    public function testGetFileListWithryg() {
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $params = array( 'uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b','data' => '{"state":"Kerala"}');
+        $select1 = "Select of.rygStatus from ox_file of 
+        inner join ox_app_entity as en on en.id = of.entity_id
+        inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res1 = $this->runQuery($select1);
+        $this->assertEquals('GREEN',$res1[0]['rygStatus']);
+        $result = $this->fileService->updateRyg($params);
+        $select = "Select of.rygStatus from ox_file of 
+                  inner join ox_app_entity as en on en.id = of.entity_id
+                  inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res = $this->runQuery($select);
+        $this->assertEquals('YELLOW',$res[0]['rygStatus']);
+    }
+
     public function testGetFileListWithNoWorkflowOrUserIdInRoute() {
         $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
@@ -602,7 +642,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(11,$initialCount);
+        $this->assertEquals(12,$initialCount);
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->performFileAssertions($result, $data);
@@ -947,7 +987,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(11,$initialCount);
+        $this->assertEquals(12,$initialCount);
         $data = array('datagrid' => array(0 => array('firstname' => 'Sagar','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("name" => "SampleAttachment.txt", "extension" => "txt", "uuid" => "a9cd8b0c-3218-4fd4-b323-e3b6ce8c7d25", "path" => __DIR__."/Dataset/SampleAttachment.txt" ))), 1 => array('firstname' => 'mark','lastname' => 'hamil', 'padi' => 322,'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" )))), 'entity_id' => $entityId, 'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->assertEquals(1,$result);
@@ -1033,6 +1073,7 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult2 = $this->runQuery($dataSqlQuery);
         $this->assertEquals(2, $data['version']);
         unset($data['version']);
+        unset($data['entity_id']);
         $data['datagrid'] = json_decode($data['datagrid'], true);
         $this->assertEquals($data,json_decode($queryResult2[0]['data'], true));
         $newQueryResult = $this->runQuery($sqlQuery);
@@ -1107,16 +1148,16 @@ class FileServiceTest extends AbstractServiceTest
         $this->fileService->updateFileAttributes($fileId);
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $sqlQuery1Result = $this->runQuery($sqlQuery1);
-        $this->assertEquals(3, count($sqlQueryResult));
+        $this->assertEquals(4, count($sqlQueryResult));
         $this->assertEquals($data['field1'], $sqlQueryResult[0]['field_value_text']);
         $this->assertEquals(1, $sqlQueryResult[0]['field_id']);
         $this->assertEquals(11, $sqlQueryResult[0]['file_id']);
         $this->assertEquals($data['expiry_date'], $sqlQueryResult[1]['field_value_date']);
         $this->assertEquals(3, $sqlQueryResult[1]['field_id']);
         $this->assertEquals(11, $sqlQueryResult[1]['file_id']);
-        $this->assertEquals($data['policy_period'], $sqlQueryResult[2]['field_value_text']);
-        $this->assertEquals(8, $sqlQueryResult[2]['field_id']);
-        $this->assertEquals(11, $sqlQueryResult[2]['file_id']);
+        $this->assertEquals($data['policy_period'], $sqlQueryResult[3]['field_value_text']);
+        $this->assertEquals(8, $sqlQueryResult[3]['field_id']);
+        $this->assertEquals(11, $sqlQueryResult[3]['file_id']);
         $this->assertEquals(2, count($sqlQuery1Result));
         $this->assertEquals($data['policy_document'], json_decode($sqlQuery1Result[0]['field_value'], true));
         $this->assertEquals(5, $sqlQuery1Result[0]['field_id']);
@@ -1443,7 +1484,6 @@ class FileServiceTest extends AbstractServiceTest
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         $this->assertEquals("959640f3-8260-4a94-823e-f61ea8aff79c",$result['data'][0]['uuid']);
         $this->assertEquals($params['entityName'],$result['data'][0]['entity_name']);
-        $this->assertCount(1,[$result['data'][0]['rygRule']]);
         $this->assertEquals(1,$result['total']);
     }
 
