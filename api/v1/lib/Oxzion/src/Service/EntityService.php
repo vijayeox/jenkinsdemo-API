@@ -18,6 +18,7 @@ class EntityService extends AbstractService
 {
     protected $formService;
     protected $pageContentService;
+    private $formFileExt = ".json";
 
     public function __construct($config, $dbAdapter, EntityTable $table, FormService $formService,PageContentService $pageContentService)
     {
@@ -210,13 +211,14 @@ public function deleteEntity($appUuid, $id)
             $where .= " AND ";
             $queryParams[] = $appId;
         }
-        $where .= is_numeric($id) ? "ox_app_entity.id=?" :"ox_app_entity.uuid=?";
+        $entityId = $this->getIdFromUuid('ox_app_entity', $id);
+        $where .= "ox_app_entity.id=?";
         $query = "SELECT ox_app_page.uuid,ox_app_entity.enable_comments,ox_app_entity.enable_documents 
                     from ox_app_entity 
                     right join ox_app on ox_app.id=ox_app_entity.app_id 
                     right join ox_app_page on ox_app_page.id=ox_app_entity.page_id 
                     where $where";
-        $queryParams[] = $id;
+        $queryParams[] = $entityId;
         $this->logger->info("STATEMENT $query".print_r($queryParams,true));
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if (count($resultSet) == 0) {
@@ -224,6 +226,32 @@ public function deleteEntity($appUuid, $id)
         }
         $result = $resultSet[0];
         $content = $this->pageContentService->getPageContent($appId, $resultSet[0]['uuid']);
+        $workFlowQuery = "SELECT ox_workflow.id
+                    from ox_app_entity 
+                    right join ox_workflow on ox_app_entity.id=ox_workflow.entity_id 
+                    right join ox_app on ox_app.id=ox_app_entity.app_id 
+                    where $where";
+        $this->logger->info("STATEMENT $query".print_r($queryParams,true));
+        $workflow = $this->executeQueryWithBindParameters($workFlowQuery, $queryParams)->toArray();
+        if(count($workflow) > 0){
+            $result['has_workflow'] = 1;
+        } else {
+            $result['has_workflow'] = 0;
+            $formQuery = "Select name, app_id, uuid from ox_form where entity_id=? and isdeleted=?";
+            $formQueryParams = array($entityId, 0);
+            $entityForm = $this->executeQueryWithBindParameters($formQuery, $formQueryParams)->toArray();
+            if (count($entityForm)==0) {
+                return 0;
+            }
+            $form = $entityForm[0];
+            $path = $this->config['FORM_FOLDER'].$appId."/".$form['name'].$this->formFileExt;
+            $this->logger->info("Form template - $path");
+            $result['form_uuid'] = $form['uuid'];
+            $result['form_name'] = $form['name'];
+            if(file_exists($path)){
+               $result['form'] = file_get_contents($path);
+            }
+        }
         $result['content'] = $content['content'];
         return $result;
     }

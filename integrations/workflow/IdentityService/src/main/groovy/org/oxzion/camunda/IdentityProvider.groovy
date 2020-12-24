@@ -26,7 +26,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     org.camunda.bpm.engine.identity.User findUserById(String userId) {Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
-        String statement = 'select username,firstname,lastname,email,password from ox_user where username="'+userId+'"'
+        String statement = 'select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user  right join ox_person on ox_user.person_id=ox_person.id where ox_user.username="'+userId+'"'
         ResultSet rs = st.executeQuery(statement)
         if(rs.next()) {
             Context.getCommandContext().disableAuthorizationCheck()
@@ -80,7 +80,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         if(query.getType() != null)
             statement = "select id,name,status from ox_group where status like '%${query.getType()}%' ${orderByPart}"
         if(query.getTenantId() != null || query.tenantId)
-            statement = "select id,name,status from ox_group where orgid = '${query.getTenantId()}' ${orderByPart}"
+            statement = "select id,name,status from ox_group where account_id = '${query.getTenantId()}' ${orderByPart}"
         if(query.getUserId() !=null)
             statement = "select ox_group.id,ox_group.name,ox_group.status FROM ox_group LEFT JOIN ox_user_group ON ox_group.id=ox_user_group.group_id WHERE ox_user_group.avatar_id='"+query.getUserId()+"' "+orderByPart
         ResultSet rs = st.executeQuery(statement)
@@ -141,38 +141,38 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         try {
-            String statement = "select username,firstname,lastname,email,password from ox_user"
+            String statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id"
             String orderByPart = ""
             if(query.orderingProperties){
                 if(query.orderByUserEmail())
-                    orderByPart = "ORDER BY ox_user.email"
+                    orderByPart = "ORDER BY ox_person.email"
                 if(query.orderByUserFirstName())
-                    orderByPart = "ORDER BY ox_user.firstname"
+                    orderByPart = "ORDER BY ox_person.firstname"
                 if(query.orderByUserLastName())
-                    orderByPart = "ORDER BY ox_user.lastname"
+                    orderByPart = "ORDER BY ox_person.lastname"
                 if(query.orderByUserId())
                     orderByPart = "ORDER BY ox_user.username"
             }
             if(query.getId() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where username='${query.getId()}' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where username='${query.getId()}' ${orderByPart}"
             if(query.getIds() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where username in ('"+String.join("','", query.getIds())+"') ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where username in ('"+String.join("','", query.getIds())+"') ${orderByPart}"
             if(query.getFirstName() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where firstname='${query.getFirstName()}' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where ox_person.firstname='${query.getFirstName()}' ${orderByPart}"
             if(query.getFirstNameLike() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where firstname like'%${query.getFirstName()}%' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where ox_person.firstname like'%${query.getFirstName()}%' ${orderByPart}"
             if(query.getLastName() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where lastname='${query.getLastName()}' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where ox_person.lastname='${query.getLastName()}' ${orderByPart}"
             if(query.getLastNameLike() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where lastname like'%${query.getLastName()}%' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where ox_person.lastname like'%${query.getLastName()}%' ${orderByPart}"
             if(query.getEmail() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where email='${query.getEmail()}' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where ox_person.email='${query.getEmail()}' ${orderByPart}"
             if(query.getEmailLike() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where email like '%${query.getEmail()}%' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password from ox_user right join ox_person on ox_user.person_id=ox_person.id where ox_person.email like '%${query.getEmail()}%' ${orderByPart}"
             if(query.getGroupId() != null)
-                statement = "select username,firstname,lastname,email,password FROM ox_user LEFT JOIN ox_user_group ON ox_user.id=ox_user_group.avatar_id WHERE ox_user_group.group_id=${query.getGroupId()} ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password FROM ox_user right join ox_person on ox_user.person_id=ox_person.id LEFT JOIN ox_user_group ON ox_user.id=ox_user_group.avatar_id WHERE ox_user_group.group_id=${query.getGroupId()} ${orderByPart}"
             if(query.getTenantId() != null)
-                statement = "select username,firstname,lastname,email,password FROM ox_user WHERE orgid='${query.getTenantId()}' ${orderByPart}"
+                statement = "select ox_user.username,ox_person.firstname,ox_person.lastname,ox_person.email,ox_user.password FROM ox_user WHERE account_id='${query.getTenantId()}' ${orderByPart}"
             ResultSet rs = st.executeQuery(statement)
             ArrayList<User> users = new ArrayList<User>()
             while(rs.next()) {
@@ -188,20 +188,20 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
-        String orderByPart = "ORDER BY ox_organization.id"
+        String orderByPart = "ORDER BY ox_account.id"
         if(query.orderByTenantId())
-            orderByPart = "ORDER BY ox_organization.id"
+            orderByPart = "ORDER BY ox_account.id"
         if(query.orderByTenantName())
-            orderByPart = "ORDER BY ox_organization.name"
-        String statement = "select id,name from ox_organization"
+            orderByPart = "ORDER BY ox_account.name"
+        String statement = "select id,name from ox_account"
         if(query.getIds())
-            statement = "select id,name from ox_organization where id IN ('"+String.join("','", query.getIds())+"') ${orderByPart}"
+            statement = "select id,name from ox_account where id IN ('"+String.join("','", query.getIds())+"') ${orderByPart}"
         if(query.getId() != null)
-            statement = "select id,name from ox_organization where id=${query.getId()} ${orderByPart}"
+            statement = "select id,name from ox_account where id=${query.getId()} ${orderByPart}"
         if(query.getName() != null)
-            statement = "select id,name from ox_organization where name='${query.getName()}' ${orderByPart}"
+            statement = "select id,name from ox_account where name='${query.getName()}' ${orderByPart}"
         if(query.getNameLike() != null)
-            statement = "select id,name from ox_organization where name like'%${query.getNameLike()}' ${orderByPart}"
+            statement = "select id,name from ox_account where name like'%${query.getNameLike()}' ${orderByPart}"
         ResultSet rs = st.executeQuery(statement)
         ArrayList<Tenant> tenants = new ArrayList<Tenant>()
         while (rs.next()) {
@@ -215,7 +215,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(API_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
-        String statement = "select id,name from ox_organization where id = '"+tenantId+"'"
+        String statement = "select id,name from ox_account where id = '"+tenantId+"'"
         ResultSet rs = st.executeQuery(statement)
         if(rs.next()) {
             return new Tenant(rs.getString("id"),rs.getString("name"))
