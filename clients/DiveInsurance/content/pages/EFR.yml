@@ -30,7 +30,7 @@ content:
                                       type: Form
                                       url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
                                       workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '(rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.end_date)))'
+                                rule: '(rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.policyEndDate)))'
                                 icon: 'fa fa-repeat'
                           -
                                 name: 'Upgrade To IPL'

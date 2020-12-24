@@ -70,7 +70,7 @@ class ReinstatePolicy extends PolicyDocument
         $data['groupCarrierName'] = "";
         $data['coverageTitle'] = "";
         $data['multiplePolicy'] = "no";
-        $data['end_date'] = $data['policyEndDate'];
+        $data['end_date'] = date_format(date_create($data['policyEndDate']),'Y-m-d');
         if ($data['product'] == "Dive Store") {
             $data['carrierName'] = "Liability Policy issued by " . $data['liability_carrier'];
             $data['policyId'] = "Liability Policy #:" . $data['liability_policy_id'];

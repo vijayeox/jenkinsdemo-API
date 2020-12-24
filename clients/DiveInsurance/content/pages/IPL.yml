@@ -30,7 +30,7 @@ content:
                                       type: Form
                                       url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
                                       workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '(rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.end_date)))'
+                                rule: '(rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.policyEndDate)))'
                                 icon: 'fa fa-repeat'
         -
             type: TabSegment
