@@ -446,8 +446,8 @@
 							"key": "creditcardPayment",
 							"amount_field": "finalAmountPayable",
 							"label": "custom",
-							"refreshOn": "data",
 							"input": true,
+							"refreshOn": "data",
 							"tableView": false,
 							"hideOnChildrenHidden": false
 						}, {
@@ -612,15 +612,14 @@
 			"next": true
 		},
 		"collapsible": false,
-		"tableView": false,
-		"key": "DocumentPreview",
+		"key": "documentsPreview",
 		"properties": {
 			"commands": "[{\"command\" : \"delegate\",\"delegate\":\"StoreEndorsementDocuments\"}]"
 		},
-		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 		"type": "panel",
 		"label": "Documents Preview",
 		"input": false,
+		"tableView": false,
 		"components": [{
 			"title": "Document Preview",
 			"theme": "primary",
@@ -663,7 +662,7 @@
 			}],
 			"hideOnChildrenHidden": false
 		}, {
-			"title": "  ",
+			"title": "   ",
 			"theme": "primary",
 			"breadcrumbClickable": true,
 			"buttonSettings": {
@@ -672,10 +671,10 @@
 				"next": true
 			},
 			"collapsible": false,
-			"key": "mailDocuments",
+			"key": "panel1",
 			"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 			"type": "panel",
-			"label": "  ",
+			"label": "   ",
 			"input": false,
 			"tableView": false,
 			"components": [{
@@ -700,7 +699,6 @@
 			}, {
 				"label": "Select the documents to be mailed:",
 				"optionsLabelPosition": "right",
-				"customClass": "selectBox",
 				"hideLabel": true,
 				"tableView": false,
 				"defaultValue": {
@@ -708,8 +706,8 @@
 					"": false
 				},
 				"redrawOn": "finalDocuments",
-				"customDefaultValue": "var documents = [];\nvar i=1;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n",
-				"calculateValue": "var documents = [];\nvar selected = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\n\nif(data.selectAll){\n  for(var key in data.finalDocuments){ \n    selected[key] = true;\n  }\n  value = Object.assign({}, selected);\n}\nconsole.log(value);",
+				"customDefaultValue": "var documents = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;",
+				"calculateValue": "var documents = [];\nvar selected = [];\nvar i=0;\nfor(var key in data.finalDocuments){\n  documents[i] = {label : data.finalDocuments[key].substring(data.finalDocuments[key].lastIndexOf(\"/\") + 1), value:key }\n  i+=1;\n}\ncomponent.values = documents;\nif(data.selectAll){\n  for(var key in data.finalDocuments){\n    selected[key] = true;\n  }\n  value = Object.assign({}, selected);\n}",
 				"validate": {
 					"minSelectedCount": 1
 				},
@@ -718,8 +716,7 @@
 				"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
 				"type": "selectboxes",
 				"input": true,
-				"inputType": "checkbox",
-				"template": "<span>{{ item.label }}</span>"
+				"inputType": "checkbox"
 			}]
 		}]
 	}, {
@@ -733,7 +730,7 @@
 	}],
 	"controller": "data.functions = {\n  userApprovedChanged: () => {\n    if(data.userApproved == 'rejected' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = (data.proposalCount == \"\") ? 0 : data.proposalCount;\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  },\n  paymentVerifiedChanged: () => {\n    if(data.paymentVerified == 'declined' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = (data.proposalCount == \"\") ? 0 : data.proposalCount;\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.userApproved = \"rejected\";\n      data.proposalCountFlag = true;\n    }else if(data.paymentVerified == \"approved\"  && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = (data.proposalCount == \"\") ? 0 : data.proposalCount;\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  }\n};",
 	"revisions": "current",
-	"_vid": 32,
+	"_vid": 50,
 	"title": "Endorsement DiveStore User Approval",
 	"display": "wizard",
 	"access": [{
@@ -750,6 +747,6 @@
 	"path": "endorsementdivestoreuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-06-23T12:36:44.836Z",
-	"modified": "2020-11-27T11:46:19.032Z",
+	"modified": "2020-12-23T12:21:48.780Z",
 	"machineName": "testdivehub:endorsementDiveStoreUserApproval"
 }
