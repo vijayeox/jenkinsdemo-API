@@ -150,9 +150,17 @@ class RegenerateDocuments extends PolicyDocument
         }
         if($param == "retainPolicy"){
             $this->processFileData($fileData,$documents);
-            if($fileData['retainDocuments']){
-                $fileData['documents'] = array_merge($documents,$fileData['retainDocuments']);
+            if(isset($fileData['reinstateDocuments'])){
+                $fileData['documents'] = array_merge($documents,$fileData['reinstateDocuments']);
             }
+            unset($documents['reinstateDocuments']);
+            $this->saveFile($fileData,$fileData['fileId']);
+        }
+        if($param == "updateCancelDate"){
+            $this->processFileData($fileData,$documents);
+            $fileData['policyEndDate'] = $fileData['end_date'];
+            $fileData['end_date'] = $fileData['cancelDate'];
+            $fileData['documents'] = $documents;
             $this->saveFile($fileData,$fileData['fileId']);
         }
       }
