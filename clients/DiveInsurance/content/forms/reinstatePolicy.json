@@ -109,7 +109,7 @@
 				"enableMaxDateInput": false,
 				"enableTime": false,
 				"clearOnHide": false,
-				"calculateValue": "if(!data.reinstateEffDate || data.reinstateEffDate == \"\"){\n  value = moment(data.cancelDate).format('YYYY-MM-DD');\n}",
+				"calculateValue": "value = moment(data.cancelDate).format('YYYY-MM-DD')",
 				"validate": {
 					"required": true,
 					"custom": "if (data.reinstateEffDate){ \n  valid = ((moment(data.reinstateEffDate).diff(moment(data.start_date)) >=0) && (moment(data.reinstateEffDate).diff(moment(data.policyEndDate)) <=0)) ? true : \"Reinstatement date should be between cancellation date and the policy end date\";\n}"

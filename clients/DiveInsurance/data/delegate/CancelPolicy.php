@@ -74,8 +74,8 @@ class CancelPolicy extends PolicyDocument
         $data['reasonforCsrCancellation'] = $value['value'];
         // $data['reinstateDocuments'] = $data['documents'];
         $data['reasonforRejection'] = isset($data['reasonforRejection']) ? $data['reasonforRejection'] : "Not Specified";
-        $data['policyEndDate'] = $data['end_date'];
-        $data['cancelDate'] = isset($data['cancelDate']) ? $data['cancelDate'] : date_create()->format("Y-m-d");
+        $data['policyEndDate'] = date_format(date_create($data['end_date']),'Y-m-d');
+        $data['cancelDate'] = isset($data['cancelDate']) ? date_format(date_create($data['cancelDate']),'Y-m-d') : date_create()->format("Y-m-d");
         $data['end_date'] = $data['cancelDate'];
         $data['policyStatus'] = "Cancelled";
         $data['carrierName'] = "";
