@@ -7,6 +7,10 @@ use Oxzion\Type;
 
 class File extends Entity
 {
+    const RED = "RED";
+    const YELLOW = "YELLOW";
+    const GREEN = "GREEN";
+
     protected static $MODEL = [
         'id' =>                         ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
         'account_id' =>                 ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
@@ -24,7 +28,9 @@ class File extends Entity
         'start_date' =>                 ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
         'end_date' =>                   ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
         'status' =>                     ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'version' =>                    ['type' => Type::INTEGER,  'value' => 1, 'readonly' => FALSE, 'required' => FALSE]
+        'version' =>                    ['type' => Type::INTEGER,   'value' => 1, 'readonly' => FALSE, 'required' => FALSE],
+        'rygStatus' =>                  ['type' => Type::STRING,    'value' => 'GREEN', 'readonly' => FALSE, 'required' => FALSE],
+        'fileTitle' =>                  ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
     ];
 
     public function &getModel() {

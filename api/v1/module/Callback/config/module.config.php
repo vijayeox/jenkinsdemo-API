@@ -66,6 +66,29 @@ return [
                     ],
                 ],
             ],
+            'postfilecommentcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/postfilecomment',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'postFileComment',
+                    ],
+                ],
+            ],
+            'fileRygStatusUpdate' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/updateryg[/entity/:entityName]',
+                    'defaults' => [
+                        'controller' => Controller\FileCallbackController::class,
+                        'method' => 'updateRygForFile',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'disablebotcallback' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -309,9 +332,9 @@ return [
         ],
     ],
     
-    'view_manager' => [
+     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

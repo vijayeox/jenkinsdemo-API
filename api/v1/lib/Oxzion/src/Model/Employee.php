@@ -16,7 +16,7 @@ class Employee extends Entity
         'interest' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'hobbies' =>            ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'manager_id' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'selfcontribute' =>     ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
+        'selfcontribute' =>     ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
         'contribute_percent' => ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
         'eid' =>                ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],

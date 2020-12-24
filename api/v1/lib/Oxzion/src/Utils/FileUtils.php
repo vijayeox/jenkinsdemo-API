@@ -282,14 +282,7 @@ class FileUtils
     }
 
     public static function getFileName($path){
-        $dir = new DirectoryIterator($path);
-        foreach ($dir as $item) {
-            $file = $item->getFilename();
-        }
-        if(!isset($file)){
-            throw new Exception('Failed to find the file name');
-        }
-        return $file;
+        return basename($path);
     }
 
     public static function downloadFile($sourceFile, $destinationFile){

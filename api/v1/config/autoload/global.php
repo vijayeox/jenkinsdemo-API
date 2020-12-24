@@ -50,7 +50,8 @@ return [
     ],
     'chat' => [
         'chatServerUrl' => 'http://localhost:8065/',
-        'authToken' => ''
+        'authToken' => '',
+        'appBotUrl' => 'plugins/com.code.oxzion.mattermost.appbot-plugin/'
     ],
     'crm' => [
         'crmServerUrl' => 'http://localhost:8075/crm/public/',

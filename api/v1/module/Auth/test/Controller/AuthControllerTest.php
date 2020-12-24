@@ -302,13 +302,13 @@ class AuthControllerTest extends ControllerTest
     {
         $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDc0OTMwNDEsImp0aSI6IkxsYUg0SDc0bjRRTzROUkhXbTl0aEl1dzd3Q01LaG0wRkdHdjZoc0JaUmM9IiwibmJmIjoxNjA3NDkzMDQxLCJleHAiOjE2MDc1NjUwNDEsImRhdGEiOnsidXNlcm5hbWUiOiJhZG1pbnRlc3QiLCJhY2NvdW50SWQiOiIxIn19.Ib-Nde1nvthuUeEIWsMlw0ZJHc6vgeWFYWwmnyausxqqoNLja7GRZjYxMac5ox29ktn7FYCS8QEOM3t9nT0TKQ'];
         $this->dispatch('/validatetoken', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
         $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AuthController');
         $this->assertMatchedRouteName('validatetoken');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Token Expired');
     }

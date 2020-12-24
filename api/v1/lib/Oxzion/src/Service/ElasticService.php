@@ -173,7 +173,12 @@ class ElasticService
 			}
 		} 
         
-		$boolfilterquery['explain'] = true;
+        $boolfilterquery['explain'] = true;
+        if (!empty($searchconfig['append_account_id'])) {
+            if ($searchconfig['append_account_id']==1) {
+                $app_name = $app_name.'_'.$accountId;
+            }
+        }
         $params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
         if(empty($searchconfig['aggregates'])) {
             if (isset($searchconfig['sort'])) {

@@ -6,6 +6,8 @@ use Oxzion\Service\AbstractService;
 use Oxzion\Utils\RestClient;
 use Oxzion\Service\FileService;
 use Oxzion\Service\SubscriberService;
+use Oxzion\Service\CommentService;
+use Oxzion\Service\UserService;
 
 class ChatService extends AbstractService
 {
@@ -18,9 +20,9 @@ class ChatService extends AbstractService
         $this->restClient = $restClient;
     }
 
-    public function __construct($config, FileService $fileService, SubscriberService $subscriberService)
+    public function __construct($config, $dbAdapter, FileService $fileService, SubscriberService $subscriberService, CommentService $commentService, UserService $userService)
     {
-        parent::__construct($config, null);
+        parent::__construct($config, $dbAdapter);
         $chatServerUrl = $this->config['chat']['chatServerUrl'];
         $this->restClient = new RestClient($this->config['chat']['chatServerUrl']);
         $this->authToken = $this->config['chat']['authToken']; //PAT
@@ -28,6 +30,9 @@ class ChatService extends AbstractService
         $this->applicationUrl = $this->config['applicationUrl'];
         $this->fileService = $fileService;
         $this->subscriberService = $subscriberService;
+        $this->commentService = $commentService;
+        $this->userService = $userService;
+        $this->dbAdapter = $dbAdapter;
     }
 
     private function getAuthHeader()
@@ -469,26 +474,22 @@ class ChatService extends AbstractService
     }
 
     public function appBotNotification($params){
-        $this->logger->info("appBotNotification");
+        $this->logger->info("appBotNotification--".print_r($params,true));
         try{
             $headers = $this->getAuthHeader();
             $appDetails = $this->fileService->getAppDetailsBasedOnFileId($params['fileId']);
             $appProperties = json_decode($appDetails['app_properties'],true);
             $fileDetails = $this->fileService->getFile($params['fileId'], false,$appDetails['account_id']);
-            $fileDetails['data']['entity_name'] = $fileDetails['entity_name'];
-            $fileData = $fileDetails['data'];
-            $title = $appProperties['appIdentifiers'];// ${entity_name} App ${name}
-            preg_match_all('/[$][{](.*?)\}/', $title, $matches);
-            if (is_array($matches[0]) && count($matches[0]) > 0) {
-                for ($i=0; $i < count($matches[0]); $i++) { 
-                    $title = str_replace($matches[0][$i], (isset($fileData[$matches[1][$i]]) ? $fileData[$matches[1][$i]] : null ), $title);
-                }
-            }
-            $url = $this->applicationUrl.'/?app='.$appDetails['appName'];
+            $title = $fileDetails['title'];            
+            $this->logger->info("APP Title--".print_r($title,true));
+            $url = "<a eoxapplication=" .'"'.$appDetails['appName']. '"'. " "."file-id=" .'"'.$params['fileId'] . '"'. "></a>";
+            $this->logger->info("APP URL--".print_r($url,true));
             $subscribers =  $this->subscriberService->getSubscribers($params['fileId']);
             $subscribersToList = array_column($subscribers, 'username');
             $subscribersList = implode(',', $subscribersToList);
+            $this->logger->info("appBotUrl---".print_r($this->appBotUrl,true));
             $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', array('appName' => $appDetails['appName'], 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url), $headers);
+            $this->logger->info("App Bot response---".print_r($response,true));
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
@@ -496,5 +497,34 @@ class ChatService extends AbstractService
         }
     }
     // partipnts based on fileId
+
+    public function postFileComment($data){
+        try{
+            $this->logger->info("postFileComment---".print_r($data,true));
+            $userInfo = $this->getUser($data['senderId']);
+            $this->logger->info("Userinfo---".print_r($userInfo,true));
+            $userDetails = $this->userService->getUserContextDetails($userInfo['username']);
+            $this->logger->info("userDetails---".print_r($userDetails,true));
+            $subscribers =  $this->subscriberService->getUserSubscriber($data['FileId'],null,$userDetails['id']);
+            $this->logger->info("subscribers---".print_r($subscribers,true));
+            $context = ['accountId' => $subscribers[0]['account_id'], 'userId' => $userDetails['userId']];
+            $this->logger->info("Contexttt---".print_r($context,true));
+            $this->updateAccountContext($context);
+            $this->commentService->createComment($data,$data['FileId']);
+
+        }catch(Exception $e){
+            throw $e;
+        }
+    }
+
+    private function getUser($userId){
+        try {
+            $headers = $this->getAuthHeader();
+            $userData = $this->restClient->get('api/v4/users/' . $userId, array(), $headers);
+            return json_decode($userData, true);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            return $e->getCode();
+        }
+    }
 
 }
