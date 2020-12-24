@@ -264,7 +264,7 @@ content:
                             type: Form
                             url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{current_date}}'' <= ''{{policyEndDate}}'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
@@ -273,7 +273,7 @@ content:
                             type: Form
                             url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '((''{{disableReinstate}}'' == ''false'') || (''{{disableReinstate}}'' == ''undefined'')) && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '((''{{disableReinstate}}'' == ''false'') || (''{{disableReinstate}}'' == ''undefined'')) && (''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{current_date}}'' <= ''{{policyEndDate}}'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
@@ -282,7 +282,7 @@ content:
                             type: Form
                             url: workflow/2d94a2f0-c64c-48e0-a4f0-f85f626f0626/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Boat'') && (''{{current_date}}'' <= ''{{policyEndDate}}'')'
                     icon: 'fa fa-repeat'
                 -
                     name: 'Reinstate Policy'
@@ -291,7 +291,16 @@ content:
                             type: Form
                             url: workflow/5a2ed122-3f12-4240-b197-a24469721e87/startform
                             workflowInstanceId: '{{workflowInstanceId}}'
-                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{end_date}}'')'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Dive Store'') && (''{{current_date}}'' <= ''{{policyEndDate}}'')'
+                    icon: 'fa fa-repeat'
+                -
+                    name: 'Reinstate Policy'
+                    details:
+                        -
+                            type: Form
+                            url: workflow/5a2ed122-3f12-4240-b197-a24469721e87/startform
+                            workflowInstanceId: '{{workflowInstanceId}}'
+                    rule: '(''{{policyStatus}}'' == ''Cancelled'') && (''{{entity_name}}'' == ''Group Professional Liability'') && (''{{current_date}}'' <= ''{{policyEndDate}}'')'
                     icon: 'fa fa-repeat'
             filterColumns:
                 - padi
