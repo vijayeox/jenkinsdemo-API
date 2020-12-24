@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-        <!-- <testsuite name="Messaging Fixtures Fixtures">
+        <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Auth/test</directory>
         </testsuite>
         <testsuite name="Messaging Fixtures Fixtures">
@@ -42,9 +42,9 @@
             <directory>./module/Workflow/test/Controller/ServiceTaskControllerTest.php</directory>
             <directory>./module/Workflow/test/Controller/WorkflowInstanceCallbackControllerTest.php</directory>
             <directory>./module/Workflow/test/Controller/WorkflowInstanceControllerTest.php</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Core Fixtures">
-            <!-- <directory>./lib/Oxzion/test/AnalyticsTest</directory>
+            <directory>./lib/Oxzion/test/AnalyticsTest</directory>
             <directory>./lib/Oxzion/test/AppDelegateServiceTest</directory>
             <directory>./lib/Oxzion/test/DocumentTest</directory> 
             <directory>./lib/Oxzion/test/Migration</directory>
@@ -64,10 +64,10 @@
             <directory>./lib/Oxzion/test/Service/UserTokenServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/WorkflowInstanceServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/WorkflowServiceTest.php</directory>
-            <directory>./lib/Oxzion/test/Service/BusinessRoleServiceTest.php</directory> -->
+            <directory>./lib/Oxzion/test/Service/BusinessRoleServiceTest.php</directory>
             <directory>./lib/Oxzion/test/Service/EsignServiceTest.php</directory>
         </testsuite>
-        <!-- <testsuite name="Callback Fixtures">
+        <testsuite name="Callback Fixtures">
             <directory>./module/Callback/test</directory>
         </testsuite>
         <testsuite name="User Fixtures">
@@ -88,7 +88,7 @@
         </testsuite>    
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
-        </testsuite>  -->
+        </testsuite> 
     </testsuites> 
     <php>
         <ini name="memory_limit" value="500M" />

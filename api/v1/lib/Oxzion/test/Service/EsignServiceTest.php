@@ -65,10 +65,10 @@ class EsignServiceTest extends AbstractServiceTest
         return $data;
     }
 
-    // public function testgetAuthToken(){
-    //    $authToken = $this->EsignService->getAuthToken();
-    //    $this->assertEquals(isset($authToken),true);
-    // }
+    public function testgetAuthToken(){
+       $authToken = $this->EsignService->getAuthToken();
+       $this->assertEquals(isset($authToken),true);
+    }
 
     //TODO negative test for get auth token
 
