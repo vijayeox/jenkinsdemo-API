@@ -74,10 +74,6 @@ class DispatchCancelPolicyNotification extends DispatchDocument
             $data['policyStatus'] = "In Force";
             unset($data['confirmReinstatePolicy']);
         }
-        if (isset($data['reinstateDocuments'])) {
-            $data['reinstateDocuments'] = is_string($data['reinstateDocuments']) ? json_decode($data['reinstateDocuments'], true) : $data['reinstateDocuments'];
-            $data['documents'] = array_merge($data['reinstateDocuments'], $data['documents']);
-        }
         return $data;
     }
 }
