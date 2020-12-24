@@ -18,7 +18,6 @@ return [
                             'put' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
                             'post' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
                             'delete' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
-                            'get' => ['MANAGE_USER_READ', 'MANAGE_ACCOUNT_READ', 'MANAGE_GROUP_READ'],
                         ],
                     ],
                 ],
