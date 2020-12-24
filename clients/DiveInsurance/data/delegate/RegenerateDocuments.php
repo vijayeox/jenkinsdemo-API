@@ -158,7 +158,7 @@ class RegenerateDocuments extends PolicyDocument
         }
         if($param == "updateCancelDate"){
             $this->processFileData($fileData,$documents);
-            $fileData['policyEndDate'] = date_format(date_create($fileData['end_date']),'Y-m-d');;
+            $fileData['policyEndDate'] = date_format(date_create($fileData['end_date']),'Y-m-d');
             $fileData['end_date'] = date_format(date_create($fileData['cancelDate']),'Y-m-d');
             $fileData['documents'] = $documents;
             $this->saveFile($fileData,$fileData['fileId']);
