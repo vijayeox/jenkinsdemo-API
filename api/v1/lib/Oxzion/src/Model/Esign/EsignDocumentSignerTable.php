@@ -1,6 +1,6 @@
 <?php
 
-namespace Esign\Model;
+namespace Oxzion\Model\Esign;
 
 use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;

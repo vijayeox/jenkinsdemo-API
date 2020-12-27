@@ -133,6 +133,23 @@ class RestClient
         return $var;
     }
 
+    public function putWithBody($url, $body = array(), $headers = null)
+    {
+        $payload = array();
+        if (isset($body) && !empty($body)) {
+            $payload['json'] = $body;
+        }
+        if (isset($headers) && !empty($headers)) {
+            $payload['headers'] = $headers;
+        }
+        $response = $this->client->request('PUT', $url, $payload);
+        $var = $response->getBody()->getContents();
+        if($response->getStatusCode() != 200){
+            throw new HttpException($var,$response->getStatusCode());
+        }
+        return $var;
+    }
+
     public function postWithHeaderAsBody($url, string $formParams , $headers = array())
     {
         $response = $this->client->request('POST', $url, ['headers' => $headers, 'body' => $formParams]);

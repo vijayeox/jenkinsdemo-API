@@ -1,6 +1,6 @@
 <?php
 
-namespace Esign\Model;
+namespace Oxzion\Model\Esign;
 
 use Oxzion\Type;
 use Oxzion\Model\Entity;
@@ -22,5 +22,15 @@ class EsignDocument extends Entity
 
     public function &getModel() {
         return self::$MODEL;
+    }
+
+    public function loadByDocId($docId){
+        $obj = $this->table->getByDocId($docId);
+        if (is_null($obj) || (0 == count($obj))) {
+            throw new EntityNotFoundException('Entity not found.',
+                ['entity' => $this->table->getTableGateway()->getTable(), 'doc_id' => $docId]);
+        }
+        $this->assignInternal($obj->toArray(), false);
+        return $this;
     }
 }

@@ -10,8 +10,8 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\ResultSet\ResultSet;
 use Oxzion\EntityNotFoundException;
-use Esign\Model\EsignDocument;
-use Esign\Model\EsignDocumentSigner;
+use Oxzion\Model\Esign\EsignDocument;
+use Oxzion\Model\Esign\EsignDocumentSigner;
 use Oxzion\ValidationException;	
 use Oxzion\Utils\FileUtils;
 
@@ -25,7 +25,7 @@ class EsignServiceTest extends AbstractServiceTest
     {
         $this->loadConfig();
         parent::setUp();
-        $this->EsignService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\EsignService::class); 
+        $this->esignService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\EsignService::class); 
         $this->adapter = $this->getDbAdapter();
         $this->adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $this->config = $config = $this->getApplicationConfig();
@@ -66,7 +66,7 @@ class EsignServiceTest extends AbstractServiceTest
     }
 
     public function testgetAuthToken(){
-       $authToken = $this->EsignService->getAuthToken();
+       $authToken = $this->esignService->getAuthToken();
        $this->assertEquals(isset($authToken),true);
     }
 
@@ -93,7 +93,7 @@ class EsignServiceTest extends AbstractServiceTest
                                 "pageNumber"=>0
                              )
                             ) ]]);
-        $docId = $this->EsignService->setupDocument($refId, $documentUrl, $signers);
+        $docId = $this->esignService->setupDocument($refId, $documentUrl, $signers);
         $this->saveToFile($docId);
         $this->assertEquals(isset($docId),true);
         $query = "SELECT * from ox_esign_document where doc_id = '".$docId."'";
@@ -118,26 +118,34 @@ class EsignServiceTest extends AbstractServiceTest
      
     public function testGetStatus(){
         $docId = $this->readFromFile();
-        $status = $this->EsignService->getDocumentStatus($docId);
-        print($status."\n");
+        $status = $this->esignService->getDocumentStatus($docId);
         $this->assertEquals(isset($status),true);
         $this->assertEquals('FIELD_PLACEMENT', $status);
     }
 
     public function testGetSigningLink(){
         $docId = $this->readFromFile();
-        $data = $this->EsignService->getDocumentSigningLink($docId);
-        print_r($data);
+        $data = $this->esignService->getDocumentSigningLink($docId);
         $this->assertEquals(isset($data),true);
         $this->assertEquals(isset($data['signingLink']),true);
     }
 
-    public function testCallback(){
-        //work for test uuid
-        $uuid = '09ab7b0f-8141-45a8-9357-4f7c9d6af576';
-        $docId = '79e36ce6-9267-4ed6-9bb0-3dc1076b85a7';
-        $ref_id = '20';
-        $data = $this->EsignService->callBack($uuid,$docId,$ref_id);
-        $this->assertEquals($data,true);
+    public function testSignEvent(){
+        $docId = $this->readFromFile();
+        $query = "UPDATE ox_esign_document SET doc_id ='$docId' WHERE id=1 ";
+        $result = $this->executeUpdate($query);
+        $data = $this->esignService->signEvent($docId,'FINALIZED');
+        $query = "SELECT * from ox_esign_document where doc_id = '".$docId."'";
+        $docTable = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_esign_document_signer where esign_document_id =1 ";
+        $signerTable = $this->executeQueryTest($query);
+        $destination = $this->config['APP_ESIGN_FOLDER'];
+        $destination .= "/".$docTable[0]['uuid'].'/signed/';
+        $this->folderToClean = $destination;
+        $this->assertEquals($docTable[0]['status'],EsignDocument::COMPLETED);
+        $this->assertEquals($signerTable[0]['status'],EsignDocument::COMPLETED);
+        $this->assertEquals(true,FileUtils::fileExists($destination."/signed.pdf"));
+
     }
 }

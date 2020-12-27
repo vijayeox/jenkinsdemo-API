@@ -1,6 +1,6 @@
 <?php
 
-namespace Esign\Model;
+namespace Oxzion\Model\Esign;
 
 use Oxzion\Type;
 use Oxzion\Model\Entity;

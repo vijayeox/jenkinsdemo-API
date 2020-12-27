@@ -10,8 +10,6 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Oxzion\Model\EsignDocumentTable;
-use Oxzion\Model\EsignDocumentSignerTable;
 use Oxzion\Messaging\MessageProducer;
 
 class Module implements ConfigProviderInterface
@@ -36,26 +34,26 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 EsignService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new EsignService($container->get('config'), $dbAdapter, $container->get(Model\EsignDocumentTable::class), $container->get(Model\EsignDocumentSignerTable::class),$container->get(\Oxzion\Messaging\MessageProducer::class));
+                    return new EsignService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\Esign\EsignDocumentTable::class), $container->get(\Oxzion\Model\Esign\EsignDocumentSignerTable::class),$container->get(\Oxzion\Messaging\MessageProducer::class));
                 },
-                Model\EsignDocumentTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\EsignDocumentGateway::class);
-                    return new Model\EsignDocumentTable($tableGateway);
+                \Oxzion\Model\Esign\EsignDocumentTable::class => function ($container) {
+                    $tableGateway = $container->get(\Oxzion\Model\Esign\EsignDocumentGateway::class);
+                    return new \Oxzion\Model\Esign\EsignDocumentTable($tableGateway);
                 },
-                Model\EsignDocumentGateway::class => function ($container) {
+                \Oxzion\Model\Esign\EsignDocumentGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\EsignDocument());
+                    $resultSetPrototype->setArrayObjectPrototype(new \Oxzion\Model\Esign\EsignDocument());
                     return new TableGateway('ox_esign_document', $dbAdapter, null, $resultSetPrototype);
                 },
-                Model\EsignDocumentSignerTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\EsignDocumentSignerTableGateway::class);
-                    return new Model\EsignDocumentSignerTable($tableGateway);
+                \Oxzion\Model\Esign\EsignDocumentSignerTable::class => function ($container) {
+                    $tableGateway = $container->get(\Oxzion\Model\Esign\EsignDocumentSignerTableGateway::class);
+                    return new \Oxzion\Model\Esign\EsignDocumentSignerTable($tableGateway);
                 },
-                Model\EsignDocumentSignerTableGateway::class => function ($container) {
+                \Oxzion\Model\Esign\EsignDocumentSignerTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\EsignDocumentSigner());
+                    $resultSetPrototype->setArrayObjectPrototype(new \Oxzion\Model\Esign\EsignDocumentSigner());
                     return new TableGateway('ox_esign_document_signer', $dbAdapter, null, $resultSetPrototype);
                 },
             ],

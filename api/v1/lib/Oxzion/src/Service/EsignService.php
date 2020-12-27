@@ -5,10 +5,10 @@ use Exception;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
-use Esign\Model\EsignDocument;
-use Esign\Model\EsignDocumentTable;
-use Esign\Model\EsignDocumentSigner;
-use Esign\Model\EsignDocumentSignerTable;
+use Oxzion\Model\Esign\EsignDocument;
+use Oxzion\Model\Esign\EsignDocumentTable;
+use Oxzion\Model\Esign\EsignDocumentSigner;
+use Oxzion\Model\Esign\EsignDocumentSignerTable;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\OxServiceException;
 use Oxzion\Utils\RestClient;
@@ -18,20 +18,20 @@ class EsignService extends AbstractService
 {
 	private $table;
 	private $signerTable;
-    private $messageProducer;
+	private $messageProducer;
     /**
      * @ignore __construct
      */
     public function setMessageProducer($messageProducer)
     {
-        $this->messageProducer = $messageProducer;
+    	$this->messageProducer = $messageProducer;
     }
     public function __construct($config, $dbAdapter, EsignDocumentTable $table, EsignDocumentSignerTable $signerTable, MessageProducer $messageProducer)
     {
     	parent::__construct($config, $dbAdapter);
     	$this->table = $table;
     	$this->signerTable = $signerTable;
-        $this->messageProducer = $messageProducer;
+    	$this->messageProducer = $messageProducer;
     	$this->restClient = new RestClient($this->config['esign']['url']);
     }
 
@@ -64,54 +64,50 @@ class EsignService extends AbstractService
      *  @return access token
      *
      */
-    public function setupDocument($ref_id, $documentUrl ,array $signers)
-    {
-    	if(!isset($documentUrl) || !FileUtils::fileExists($documentUrl) || is_dir($documentUrl)){
-    		throw new ServiceException("Document not found", 'doc.not.found', OxServiceException::ERR_CODE_PRECONDITION_FAILED);
-    	}
-    	if (!$signers || count($signers) == 0) {
-    		throw new ServiceException("signers not provided", 'signers.not.provided', OxServiceException::ERR_CODE_PRECONDITION_FAILED);	
-    	}
-    	$data = array();
-    	$data['ref_id'] = $ref_id;
-    	$esignDocument = new EsignDocument($this->table);
-    	$esignDocument->assign($data);
-    	try{
-    		$this->beginTransaction();
-    		$esignDocument->save();
-    		$generated = $esignDocument->getGenerated(true);
-    		$data['uuid'] = $generated['uuid'];
-    		$id = $generated['id'];
-    		$path = $this->copySourceDocument($documentUrl, $data['uuid']);
-    		$docId = $this->uploadDocument($documentUrl, $signers);
-    		foreach ($signers['signers'] as $value) {
-    			$this->saveDocumentSigner($value, $id);
-    		}
-    		$esignDocument->assign(['doc_id' => $docId]);
-    		$esignDocument->save();
-    		$this->commit();
-    		return $docId;
-    	} catch (Exception $e) {
-    		$this->rollback();
-    		throw $e;
-    	}
-    }
+     public function setupDocument($ref_id, $documentUrl ,array $signers)
+     {
+     	if(!isset($documentUrl) || !FileUtils::fileExists($documentUrl) || is_dir($documentUrl)){
+     		throw new ServiceException("Document not found", 'doc.not.found', OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+     	}
+     	if (!$signers || count($signers) == 0) {
+     		throw new ServiceException("signers not provided", 'signers.not.provided', OxServiceException::ERR_CODE_PRECONDITION_FAILED);	
+     	}
+     	$data = array();
+     	$data['ref_id'] = $ref_id;
+     	$esignDocument = new EsignDocument($this->table);
+     	$esignDocument->assign($data);
+     	try{
+     		$this->beginTransaction();
+     		$esignDocument->save();
+     		$generated = $esignDocument->getGenerated(true);
+     		$data['uuid'] = $generated['uuid'];
+     		$id = $generated['id'];
+     		$path = $this->copySourceDocument($documentUrl, $data['uuid']);
+     		// $this->setupSubscriptions();
+     		$docId = $this->uploadDocument($documentUrl, $signers);
+     		foreach ($signers['signers'] as $value) {
+     			$this->saveDocumentSigner($value, $id);
+     		}
+     		$esignDocument->assign(['doc_id' => $docId]);
+     		$esignDocument->save();
+     		$this->commit();
+     		return $docId;
+     	} catch (Exception $e) {
+     		$this->rollback();
+     		throw $e;
+     	}
+     }
 
-    
-    private function saveDocumentSigner($data, $documentId){
-    	$signer = array();
-    	$signer['email'] = $data['participant']['email'];
-    	$signer['esign_document_id'] = $documentId;
-    	$signer['details'] = json_encode($data);
-    	try{
-    		$docSigner = new EsignDocumentSigner($this->signerTable);
-    		$docSigner->assign($signer);
-    		$docSigner->save();
-    	} catch (Exception $e) {
-    		$this->rollback();
-    		throw $e;
-    	}
-    }
+
+     private function saveDocumentSigner($data, $documentId){
+     	$signer = array();
+     	$signer['email'] = $data['participant']['email'];
+     	$signer['esign_document_id'] = $documentId;
+     	$signer['details'] = json_encode($data);
+ 		$docSigner = new EsignDocumentSigner($this->signerTable);
+ 		$docSigner->assign($signer);
+ 		$docSigner->save();
+     }
 
     /**
      * copySourceDocument
@@ -173,7 +169,7 @@ class EsignService extends AbstractService
 
 	public function getDocumentStatus($docId ){
 		$response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId,array() ,  
-											array( 'Authorization'=> 'Bearer '. $this->getAuthToken() ));
+			array( 'Authorization'=> 'Bearer '. $this->getAuthToken() ));
 		$data = json_decode($response,true);
 		return $data['data']['status'];
 
@@ -185,53 +181,46 @@ class EsignService extends AbstractService
 		$returnArray = array(
 			'name' => $data['name'],
 			'message' => isset($data['message']) ? ($data['message']) : 'Please sign here',
-			'action' => isset($data['sendEmail']) && $data['sendEmail'] ? 'EMAIL' : 'SIGNINGLINK'
+			'action' => 'send'
 		);
 
 		if(isset($data['cc']) && is_array($data['cc'])){
 			$ccList = array();
 			foreach ($data['cc'] as $cc) {
 				$ccList[] = ['name' => $cc['name'],
-										'email' => $cc['email']];
+				'email' => $cc['email']];
 			}
 			$data['cc'] = json_encode($ccList);
 		}
 		
-		$fields = [];
-		$participants = [];
+		$fields;
 		foreach ($data['signers'] as $signer) {
-			foreach ($signer['fields'] as $field) {
-				$fields[] = array(
-					'name' => $field['name'],
-					'height' => $field['height'],
-					'width' => $field['width'],
-					'pageNumber' => $field['pageNumber'],
-					'x' => $field['x'],
-					'y' => $field['y'],
-					'type' => 'SIGNATURE',
-					'required' => TRUE,
-					'assignedTo' => array(
-						'name' => $signer['participant']['name'],
-						'email' => $signer['participant']['email']
-					),
-					
+			foreach ($signer['fields'] as $key => $field) {
+				$fields = array(
+					'fields['.$key.'][name]' => $field['name'],
+					"fields[$key][height]" => $field['height'],
+					"fields[$key][width]" => $field['width'],
+					"fields[$key][pageNumber]" => $field['pageNumber'],
+					"fields[$key][x]" => $field['x'],
+					"fields[$key][y]" => $field['y'],
+					"fields[$key][type" => 'SIGNATURE',
+					"fields[$key][required]" => TRUE,
+					"fields[$key][assignedTo]" =>json_encode(array("name" => $signer['participant']['name'],"email" => $signer['participant']['email'])),
+					"participants[$key][name]" => $signer['participant']['email'], 
+					"participants[$key][email]" => $signer['participant']['email']
 				);
+				$returnArray = array_merge($returnArray, $fields);
 			}
-			$participants[] = array(
-				'name' => $signer['participant']['name'], 
-				'email' => $signer['participant']['email']
-			);
+
 		}
-		
-		$returnArray['fields'] = json_encode($fields);
-		$returnArray['participants'] = json_encode($participants);
-		print_r($returnArray);
+
 		return $returnArray;
 	}
 
-	private function subscriptions(){
+	private function setupSubscriptions(){
+		$this->setCallbackUrl();
 		$return = $this->restClient->get($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions", array(), 
-                                            array( "Authorization: Bearer". $this->getAuthToken() ));
+			array( 'Authorization'=> 'Bearer '. $this->getAuthToken() ));
 		$response = json_decode($return,true);
 		if(!isset($response)){
 			$subscribe = array(
@@ -273,6 +262,16 @@ class EsignService extends AbstractService
 		return json_decode($response, true);
 	}
 
+	private function setCallbackUrl(){
+		$header = array( "Authorization: Bearer ". $this->getAuthToken(),
+			"content-type: application/json"
+		);
+		$putData = json_encode(array(
+			"callbackUrl" => $this->config['esign']['callbackUrl']
+		));
+		$return = $this->restClient->putWithBody($this->config['esign']['docurl']."integrations/VANTAGE", $putData, $header);
+		print_r($return);exit();
+	}
 	
 
 	public function getDocumentSigningLink($docId){
@@ -282,23 +281,69 @@ class EsignService extends AbstractService
 		return json_decode($response,true);
 	}
 
-	public function callBack($uuid, $docId, $ref_id){
-		$status = $this->getDocumentStatus($docId);
-		if ($status == "FINISHED"){
-			$response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/pdf',array() ,  array( 'Authorization'=> 'Bearer '. $this->getAuthToken()
+	public function signEvent($docId, $event){
+		if($event == "FINALIZED"){
+			$this->processFinalized($docId);
 
-				));	
-			$returnData = json_decode($response,true);
-			$destination = $this->config['APP_ESIGN_FOLDER'];
-			$path = $destination.'/'.$uuid.'/signed/';
-			if (!FileUtils::fileExists($path)) {
-				FileUtils::createDirectory($path);
-			}
-			$file = FileUtils::downloadFile($returnData['downloadUrl'],$path.'signed.pdf');
-			$esignDocument = new EsignDocument($this->table);
-    		$esignDocument->assign($data);
+		}		
 
-			$this->messageProducer->sendTopic($ref_id, 'DOCUMENT_SIGNED');
-		}
 	}
+	private function processFinalized($docId){
+		$fileName = $this->downloadFile($docId);
+		try{
+     		$this->beginTransaction();
+     		$query = "UPDATE ox_esign_document SET status=:status WHERE doc_id=:docId";
+     		$param = array('status' => EsignDocument::COMPLETED,
+     						'docId' => $docId);
+     		$this->executeUpdateWithBindParameters($query,$param);
+
+			$query = "UPDATE ox_esign_document_signer as ds 
+					  INNER JOIN ox_esign_document as d ON d.id = ds.esign_document_id
+					  SET ds.status=:status 
+					  WHERE d.doc_id=:docId";
+     		$param['status'] = EsignDocumentSigner::COMPLETED;
+     		$this->executeUpdateWithBindParameters($query,$param);
+     		$this->commit();
+
+     		$refId = $this->getDataFromDocId(array("ref_id"),$docId);
+     		$data = json_encode(array('file'   => $fileName,
+     								  'refId' => $refId)); 
+     		$this->messageProducer->sendTopic($data, 'DOCUMENT_SIGNED');
+
+		} catch (Exception $e) {
+     		$this->rollback();
+     		throw $e;
+     	}
+	}
+
+	private function downloadFile($docId){
+		$response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/pdf',array() ,  array( 'Authorization'=> 'Bearer '. $this->getAuthToken()));	
+		$returnData = json_decode($response,true);
+		$uuid = $this->getDataFromDocId(array("uuid"),$docId);
+		$destination = $this->config['APP_ESIGN_FOLDER'];
+		$path = $destination.'/'.$uuid.'/signed/';
+		if (!FileUtils::fileExists($path)) {
+			FileUtils::createDirectory($path);
+		}
+		$file = $path.'signed.pdf';
+		FileUtils::downloadFile($returnData['downloadUrl'],$file);
+		return $file;
+	}
+
+	 private function getDataFromDocId(array $columns, $docId)
+    {
+        $sql = $this->getSqlObject();
+        $getID = $sql->select();
+        $getID->from('ox_esign_document')
+            ->columns($columns)
+            ->where(array('doc_id' => $docId));
+        $responseID = $this->executeQuery($getID)->toArray();
+        if ($responseID && isset($responseID[0]['uuid'])) {
+            return $responseID[0]['uuid'];
+        } else if ($responseID && isset($responseID[0]['ref_id'])){
+            return $responseID[0]['ref_id'];
+        } else{
+            return 0;
+        }
+    }
 }

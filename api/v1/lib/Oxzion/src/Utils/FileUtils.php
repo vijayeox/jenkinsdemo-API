@@ -303,7 +303,5 @@ class FileUtils
 
         fclose($fdestination);
         fclose($fsource);
-
-        return $fdestination;
     }
 }
