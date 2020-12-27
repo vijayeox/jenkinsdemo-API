@@ -28,11 +28,7 @@ class RestClient
         if (isset($headers) && !empty($headers)) {
             $payload['headers'] = $headers;
         }
-        try {
-            $response = $this->client->request('GET', $url, $payload);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
+        $response = $this->client->request('GET', $url, $payload);
         $var = $response->getBody()->getContents();
         if($response->getStatusCode() != 200){
             throw new HttpException($var,$response->getStatusCode());
