@@ -19,13 +19,10 @@ class EsignService extends AbstractService
 	private $table;
 	private $signerTable;
 	private $messageProducer;
+    private $restClient;
     /**
      * @ignore __construct
      */
-    public function setMessageProducer($messageProducer)
-    {
-    	$this->messageProducer = $messageProducer;
-    }
     public function __construct($config, $dbAdapter, EsignDocumentTable $table, EsignDocumentSignerTable $signerTable, MessageProducer $messageProducer)
     {
     	parent::__construct($config, $dbAdapter);
@@ -35,6 +32,14 @@ class EsignService extends AbstractService
     	$this->restClient = new RestClient($this->config['esign']['url']);
     }
 
+    public function setMessageProducer($messageProducer)
+    {
+        $this->messageProducer = $messageProducer;
+    }
+    
+    public function setRestClient($restClient){
+        $this->restClient = $restClient;
+    }
     /**
      * set up document
      *
@@ -59,7 +64,6 @@ class EsignService extends AbstractService
      *                  signers[].participant                   object      - Participants who will participate in signing
      *                  signers[].particpant.name               string      - Name of the signing participant
      *                  signers[].particpants.email             string      - Email of the signing participant
-     *                  sendEmail                               boolean     - Optional. To indicate if email has to be sent. 
      *
      *  @return access token
      *
@@ -139,8 +143,10 @@ class EsignService extends AbstractService
      */
     private function uploadDocument($docUrl, array $signers){
     	$data = $this->assignData($docUrl, $signers);
-    	$response = $this->restClient->postMultiPart($this->config['esign']['docurl'].'documents', $data, array(FileUtils::getFileName($docUrl) => $docUrl ),  array( 'Authorization'=> 'Bearer '. $this->getAuthToken() ));
-    	$returnDocId = json_decode($response,true);
+        $fileData = array(FileUtils::getFileName($docUrl) => $docUrl );
+        $headers = array( 'Authorization'=> 'Bearer '. $this->getAuthToken() );
+        $response = $this->restClient->postMultiPart($this->config['esign']['docurl'].'documents', $data, $fileData, $headers);
+        $returnDocId = json_decode($response,true);
     	return $returnDocId['data']['id'];
     }
 
@@ -159,11 +165,11 @@ class EsignService extends AbstractService
 		$senderemail = $this->config['esign']['email'];
 		$username = $this->config['esign']['username'];
 		$password = $this->config['esign']['password'];
-		$post  = "grant_type=client_credentials&client_id=$clientid&client_secret=$clientsecret&username=$username&password=$password&redirect_uri=http://eos.eoxvantage.com";
-
-		$response = $this->restClient->postWithHeaderAsBody($this->config['esign']['url'],$post,array('Content-Type' => 'application/x-www-form-urlencoded',
-			'Content-Length' => strlen($post)));
-		$authToken = json_decode($response['body'], true);
+		$post  = "grant_type=client_credentials&client_id=$clientid&client_secret=$clientsecret&username=$username&password=$password";
+        $headers = array('Content-Type' => 'application/x-www-form-urlencoded',
+            'Content-Length' => strlen($post));
+        $response = $this->restClient->postWithHeaderAsBody($this->config['esign']['url'],$post,$headers);
+        $authToken = json_decode($response['body'], true);
 		return $authToken['access_token'];
 	}
 
@@ -197,16 +203,16 @@ class EsignService extends AbstractService
 		foreach ($data['signers'] as $signer) {
 			foreach ($signer['fields'] as $key => $field) {
 				$fields = array(
-					'fields['.$key.'][name]' => $field['name'],
+					"fields[$key][name]" => $field['name'],
 					"fields[$key][height]" => $field['height'],
 					"fields[$key][width]" => $field['width'],
 					"fields[$key][pageNumber]" => $field['pageNumber'],
 					"fields[$key][x]" => $field['x'],
 					"fields[$key][y]" => $field['y'],
-					"fields[$key][type" => 'SIGNATURE',
+					"fields[$key][type]" => 'SIGNATURE',
 					"fields[$key][required]" => TRUE,
 					"fields[$key][assignedTo]" =>json_encode(array("name" => $signer['participant']['name'],"email" => $signer['participant']['email'])),
-					"participants[$key][name]" => $signer['participant']['email'], 
+					"participants[$key][name]" => $signer['participant']['name'], 
 					"participants[$key][email]" => $signer['participant']['email']
 				);
 				$returnArray = array_merge($returnArray, $fields);
@@ -231,7 +237,7 @@ class EsignService extends AbstractService
 				if (isset($subscribe[$event['eventType']]) && $subscribe[$event['eventType']] == false)
 					$subscribe[$event['eventType']] = true;
 				else
-					$this->deleteSubscribe($event['id']);
+					$this->deleteSubscription($event['id']);
 			}
 			foreach ($subscribe as $eventType => $value) {
 				if (!$value)
@@ -255,7 +261,7 @@ class EsignService extends AbstractService
 			return true;
 	}
 
-	private function deleteSubscribe($subscriptionId) {
+	private function deleteSubscription($subscriptionId) {
 		$header = array( "Authorization: Bearer". $this->getAuthToken()
 	);
 		$response = $this->restClient->delete($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions/".$subscriptionId, array(),$header);
@@ -275,10 +281,10 @@ class EsignService extends AbstractService
 	
 
 	public function getDocumentSigningLink($docId){
-		$response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/signinglink',array() ,  array( 'Authorization'=> 'Bearer '. $this->getAuthToken()
-
-	));
-		return json_decode($response,true);
+        $authToken = $this->getAuthToken();
+        $response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/signinglink',array() ,  array( 'Authorization'=> 'Bearer '. $authToken	));
+        $response = json_decode($response,true);
+        return $response['signingLink'];
 	}
 
 	public function signEvent($docId, $event){
@@ -306,7 +312,7 @@ class EsignService extends AbstractService
      		$this->commit();
 
      		$refId = $this->getDataFromDocId(array("ref_id"),$docId);
-     		$data = json_encode(array('file'   => $fileName,
+            $data = json_encode(array('file'   => $fileName,
      								  'refId' => $refId)); 
      		$this->messageProducer->sendTopic($data, 'DOCUMENT_SIGNED');
 
@@ -318,8 +324,8 @@ class EsignService extends AbstractService
 
 	private function downloadFile($docId){
 		$response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/pdf',array() ,  array( 'Authorization'=> 'Bearer '. $this->getAuthToken()));	
-		$returnData = json_decode($response,true);
-		$uuid = $this->getDataFromDocId(array("uuid"),$docId);
+        $returnData = json_decode($response,true);
+        $uuid = $this->getDataFromDocId(array("uuid"),$docId);
 		$destination = $this->config['APP_ESIGN_FOLDER'];
 		$path = $destination.'/'.$uuid.'/signed/';
 		if (!FileUtils::fileExists($path)) {
