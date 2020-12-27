@@ -7,10 +7,10 @@ use Zend\Router\Http\Segment;
 return [
     'router' => [
         'routes' => [
-            'esign' => [
+            'esignStatus' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/getStatus/:docID',
+                    'route' => '/status/:docId',
                     'defaults' => [
                         'controller' => Controller\EsignController::class,
                         'action' => 'getStatus',
