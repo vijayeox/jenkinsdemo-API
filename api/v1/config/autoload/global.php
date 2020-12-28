@@ -78,7 +78,7 @@ return [
         "email" => "info@vantageagora.com",
         "username" => "info@vantageagora.com",
         "password" => "CFnEWs0g",
-        "callbackUrl" => "qa3.eoxvantage.com"
+        "callbackUrl" => 'https://qa3.eoxvantage.com/esign/event'
     ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'ENTITY_FOLDER'=>__DIR__.'/../../data/entity/',

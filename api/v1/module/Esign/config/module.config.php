@@ -18,6 +18,18 @@ return [
                         ],
                     ],
                 ],
+
+            'esignCallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/esign/event',
+                    'defaults' => [
+                        'controller' => Controller\EsignCallbackController::class,
+                        'action' => 'signEvent',
+                        'method' => 'POST'
+                        ],
+                    ],
+                ]
             ],
         ],
     ];

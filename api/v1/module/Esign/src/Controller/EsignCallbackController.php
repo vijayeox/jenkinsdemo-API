@@ -6,7 +6,7 @@ use Oxzion\Service\EsignService;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
 
-class EsignController extends AbstractApiController
+class EsignCallbackController extends AbstractApiController
 {
     private $esignService;
 
@@ -18,27 +18,29 @@ class EsignController extends AbstractApiController
         $this->esignService = $esignService;
     }
 
+    public function setEsignService($esignService){
+        $this->esginService = $esignService;
+    }
     /**
-     * GET sttus API
+     * sign event callback api
      * @api
      * @link 
-     * @method GET
-     * @return get status 
+     * @method POST
+     * @return http status code
      */
-    public function getStatusAction()
+    public function signEventAction()
     {
-    	$docId = $this->params()->fromRoute()['docId'];
+    	$data = $this->extractPostData();
+        //TODO verify HASH 
         try {
-            $result = $this->esignService->getDocumentStatus($docId);
-            return $this->getSuccessResponseWithData(['status' => $result]);
+            $dataR = $this->esignService->signEvent($data['documentId'],$data['eventType']);
+            return $this->getSuccessResponse();
         }
         catch (Exception $e) {
+            print_r($e->getMessage());exit();
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-    // public function getSubscription(){
-
-    // }
 }
