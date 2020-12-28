@@ -9103,21 +9103,29 @@
 											"label": "",
 											"value": ""
 										}],
-										"custom": "var certificateLevel = data.certificateLevelList;\nif(data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    values = certificateLevel['ratingList'];\n}else{\n    var padiRating = row.rating;\n    if(padiRating && padiRating != ''){\n        var ratingValues = padiRating.split(\",\");\n        var certificateValues = [];\n        ratingValues.forEach(function(item, index) {\n            for(var j=0;j<certificateLevel[item].length;j++){\n              certificateValues.push(certificateLevel[item][j])\n            }\n        });\n        values = certificateValues;\n    }else{\n        values = certificateLevel['ratingList'];\n    }\n}\n"
+										"custom": "var certificateLevel = data.certificateLevelList;\nif(data.privileges && (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'])){\n    if(row.overrideStatus && row.overrideStatus == true){\n        values = certificateLevel['ratingList'];\n    }\n    else if(row.upgradeStatus && row.upgradeStatus == true) {\n        var padiRating = row.rating;\n        if(padiRating && padiRating != ''){\n            var ratingValues = padiRating.split(\",\");\n            var certificateValues = [];\n            ratingValues.forEach(function(item, index) {\n                for(var j=0;j<certificateLevel[item].length;j++){\n                certificateValues.push(certificateLevel[item][j])\n                }\n            });\n            values = certificateValues;\n        }else{\n            values = certificateLevel['ratingList'];\n        }\n    }\n    else{\n        values = certificateLevel['ratingList'];\n    }\n}else{\n    var padiRating = row.rating;\n    if(padiRating && padiRating != ''){\n        var ratingValues = padiRating.split(\",\");\n        var certificateValues = [];\n        ratingValues.forEach(function(item, index) {\n            for(var j=0;j<certificateLevel[item].length;j++){\n              certificateValues.push(certificateLevel[item][j])\n            }\n        });\n        values = certificateValues;\n    }else{\n        values = certificateLevel['ratingList'];\n    }\n}\n",
+										"json": "",
+										"url": "",
+										"resource": ""
 									},
 									"valueProperty": "value",
 									"selectThreshold": 0.3,
 									"clearOnHide": false,
 									"allowCalculateOverride": true,
 									"validate": {
-										"required": true
+										"required": true,
+										"custom": "",
+										"customPrivate": false,
+										"strictDateValidation": false,
+										"multiple": false,
+										"unique": false
 									},
 									"key": "status",
 									"logic": [{
 										"name": "Enable",
 										"trigger": {
 											"type": "javascript",
-											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
+											"javascript": "result = false;\nif(row.padi == \"\" || (row.upgradeStatus && row.upgradeStatus == true) || (row.overrideStatus && row.overrideStatus == true) || (moment(row.start_date) >= moment(data.update_date))){\n  result = true;\n}"
 										},
 										"actions": [{
 											"name": "Enable",
@@ -9135,7 +9143,70 @@
 										"filter": {}
 									},
 									"input": true,
-									"hideOnChildrenHidden": false
+									"hideOnChildrenHidden": false,
+									"placeholder": "",
+									"prefix": "",
+									"customClass": "",
+									"suffix": "",
+									"multiple": false,
+									"defaultValue": null,
+									"protected": false,
+									"unique": false,
+									"persistent": true,
+									"hidden": false,
+									"refreshOn": "",
+									"redrawOn": "",
+									"modalEdit": false,
+									"labelPosition": "top",
+									"description": "",
+									"errorLabel": "",
+									"tooltip": "",
+									"hideLabel": false,
+									"tabindex": "",
+									"autofocus": false,
+									"dbIndex": false,
+									"customDefaultValue": "",
+									"calculateValue": "",
+									"calculateServer": false,
+									"attributes": {},
+									"validateOn": "change",
+									"conditional": {
+										"show": null,
+										"when": null,
+										"eq": ""
+									},
+									"overlay": {
+										"style": "",
+										"left": "",
+										"top": "",
+										"width": "",
+										"height": ""
+									},
+									"encrypted": false,
+									"showCharCount": false,
+									"showWordCount": false,
+									"properties": {},
+									"allowMultipleMasks": false,
+									"idPath": "id",
+									"clearOnRefresh": false,
+									"limit": 100,
+									"lazyLoad": true,
+									"filter": "",
+									"searchEnabled": true,
+									"searchField": "",
+									"minSearch": 0,
+									"readOnlyValue": false,
+									"authenticate": false,
+									"template": "<span>{{ item.label }}</span>",
+									"selectFields": "",
+									"searchThreshold": 0.3,
+									"uniqueOptions": false,
+									"fuseOptions": {
+										"include": "score",
+										"threshold": 0.3
+									},
+									"customOptions": {},
+									"id": "eqxxzw9"
 								}],
 								"offset": 0,
 								"push": 0,
@@ -9386,11 +9457,11 @@
 								"width": 3
 							}, {
 								"components": [{
-									"label": "Verified",
+									"label": "Override",
 									"tableView": false,
 									"defaultValue": false,
-									"key": "verifiedstatus",
-									"customConditional": "if (data.privileges && data.userApprovalRequired){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']) ? true: false;\n}\nelse{\n  show = false;\n}",
+									"key": "overrideStatus",
+									"customConditional": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && row.upgradeStatus && row.upgradeStatus == true ){\n    show=true;\n  }\n  else {\n    show= false;\n  }\n}\nelse {\n    show= false;\n  }",
 									"type": "checkbox",
 									"input": true,
 									"hideOnChildrenHidden": false
