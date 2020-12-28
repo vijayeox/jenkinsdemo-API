@@ -9,7 +9,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   overflow: visible !important;
 }
 
-.swal2-title{
+.swal2-title {
   white-space: pre-line;
 }
 
@@ -141,7 +141,39 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     }
   }
 
-  .listViewTitles{
+  .formio-component-financialsYTDSales {
+    tr[ref="datagrid-financialsYTDSales-row"] {
+      td[ref="datagrid-financialsYTDSales"] {
+        padding: 0.5rem;
+        padding-top: 7px !important;
+        .financialColumns .firstLineFinancials {
+          height: 36px;
+        }
+      }
+    }
+    .locationSumColumn > div.col-md-push-0 {
+      padding: 10px;
+      height: 46px;
+    }
+  }
+
+  .formio-component-financialsYTDGrossProfits {
+    tr[ref="datagrid-financialsYTDGrossProfits-row"] {
+      td[ref="datagrid-financialsYTDGrossProfits"] {
+        padding: 0.5rem;
+        padding-top: 7px !important;
+        .financialColumns .firstLineFinancials {
+          height: 36px;
+        }
+      }
+    }
+    .locationSumColumn > div.col-md-push-0 {
+      padding: 10px;
+      height: 46px;
+    }
+  }
+
+  .listViewTitles {
     text-align: center;
   }
 
