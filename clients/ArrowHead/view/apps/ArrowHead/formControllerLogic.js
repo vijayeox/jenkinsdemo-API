@@ -113,54 +113,40 @@ s.onload = function (e) {
           (i) => (i.innerText = "OK")
         );
       }
-      try {
-        if (
-          document
-            .getElementsByClassName("formio-component-locations")[0]
-            .contains(
-              document.getElementsByClassName(
-                "formio-component-modal-wrapper"
-              )[0]
-            )
-        ) {
-          var locationItems = Array.from(
-            document.getElementsByClassName("formio-component-modal-wrapper")
-          );
-          locationItems.length > 0
-            ? locationItems.map((location) => {
-                location.children[0].children[2].innerText ==
-                "Click to set value"
-                  ? (location.children[0].children[2].innerText =
-                      "Edit Address")
-                  : null;
-              })
-            : null;
-        }
-      } catch {}
-      try {
-        if (
-          document
-            .getElementsByClassName("formio-component-buildings")[0]
-            .contains(
-              document.getElementsByClassName(
-                "formio-component-modal-wrapper"
-              )[0]
-            )
-        ) {
-          var locationItems = Array.from(
-            document.getElementsByClassName("formio-component-modal-wrapper")
-          );
-          locationItems.length > 0
-            ? locationItems.map((location) => {
-                location.children[0].children[2].innerText ==
-                "Click to set value"
-                  ? (location.children[0].children[2].innerText =
-                      "Enter Building Details")
-                  : null;
-              })
-            : null;
-        }
-      } catch {}
+      var replaceModelLabel = [
+        {
+          key: "locations",
+          text: "Edit Address",
+        },
+        {
+          key: "buildings",
+          text: "Enter Building Details",
+        },
+      ];
+      replaceModelLabel.map((item) => {
+        try {
+          if (
+            document
+              .getElementsByClassName("formio-component-" + item.key)[0]
+              .contains(
+                document.getElementsByClassName(
+                  "formio-component-modal-wrapper"
+                )[0]
+              )
+          ) {
+            var gridItems = Array.from(
+              document.getElementsByClassName("formio-component-modal-wrapper")
+            );
+            gridItems.length > 0
+              ? gridItems.map((row) => {
+                  row.children[0].children[2].innerText == "Click to set value"
+                    ? (row.children[0].children[2].innerText = item.text)
+                    : null;
+                })
+              : null;
+          }
+        } catch {}
+      });
     } else {
       appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;
     }
