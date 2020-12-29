@@ -170,6 +170,8 @@ class FilterUtils
                 $operation = ' <> ';
             } elseif ($operator == 'lte') {
                 $operation = ' <= ';
+            } elseif ($operator == '==') {
+                $operation = ' = ';
             } elseif ($operator == 'lt') {
                 $operation = ' < ';
             } elseif ($operator == 'gt') {
