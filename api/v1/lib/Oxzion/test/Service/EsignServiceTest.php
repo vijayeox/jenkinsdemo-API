@@ -16,6 +16,7 @@ use Oxzion\Model\Esign\EsignDocumentSigner;
 use Oxzion\ValidationException; 
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\ServiceException;
 
 class EsignServiceTest extends AbstractServiceTest
 {
@@ -83,6 +84,11 @@ class EsignServiceTest extends AbstractServiceTest
     }
     private function mockAuthTokenCall(){
         $mockRestClient = $this->getMockRestClient();
+        $this->mockAuthToken($mockRestClient);
+        return $mockRestClient;
+    }
+
+    private function mockAuthToken($mockRestClient){
         $clientid = $this->config['esign']['clientid'];
         $clientsecret = $this->config['esign']['clientsecret'];
         $senderemail = $this->config['esign']['email'];
@@ -92,7 +98,6 @@ class EsignServiceTest extends AbstractServiceTest
         $headers = array('Content-Type' => 'application/x-www-form-urlencoded',
         'Content-Length' => strlen($post));
         $mockRestClient->expects('postWithHeaderAsBody')->with($this->config['esign']['url'], $post, $headers)->once()->andReturn(array("body" => '{"access_token": "'.$this->authToken.'","expires_in":3600,"token_type":"Bearer"}'));
-        return $mockRestClient;
     }
 
     public function testgetAuthToken(){
@@ -104,9 +109,6 @@ class EsignServiceTest extends AbstractServiceTest
         $this->assertEquals(isset($authToken),true);
     }
 
-    //TODO negative test for get auth token
-
-    
     public function testSetupDocumentWithDocument(){
 
         AuthContext::put(AuthConstants::USER_ID, 1);
@@ -129,6 +131,34 @@ class EsignServiceTest extends AbstractServiceTest
         $documentUrl = __DIR__."/Files/$fileName";
         if (enableEsign == 0) {
             $mockRestClient = $this->mockAuthTokenCall();
+            $headers = ['Authorization'=> 'Bearer '. $this->authToken];
+            $putheader = array( "Authorization"=>" Bearer ". $this->authToken,
+            "content-type"=>" application/json");
+             $putData = array(
+                    "callbackUrl" => $this->config['esign']['callbackUrl']
+                    );
+            $mockRestClient->expects('put')->with($this->config['esign']['docurl']."integrations/VANTAGE", $putData, $putheader)->once()->andReturn();
+            $returnSub = array('lastEvaluatedKey' => '', 
+                                'data' => array(
+                                    array(
+                                        'id'            => '940720aa-a691-4809-b9d3-0121b2f2b502',
+                                        'eventType'     => 'SIGNED',
+                                        'integrationId' => 'VANTAGE'
+                                    )
+
+                                )
+                            );
+            $this->mockAuthToken($mockRestClient);
+            $mockRestClient->expects('get')->with($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions",array(), $headers)->once()->andReturn(json_encode($returnSub));
+            $this->mockAuthToken($mockRestClient);
+            $url = $this->config['esign']['docurl']."integrations/VANTAGE/subscriptions/".$returnSub['data'][0]['id'];
+            $mockRestClient->expects('delete')->with($url,array(), $headers)->once()->andReturn();
+            $this->mockAuthToken($mockRestClient);
+            $url = $this->config['esign']['docurl']."subscriptions";
+            $postData = array( "eventType" => "FINALIZED" );
+            $returnAddSub = array("id"=>"029b93e1-6b04-4a07-ab1f-2486467c2bee","integrationId"=>"VANTAGE","eventType"=>"SIGNED");
+            $mockRestClient->expects('postWithHeader')->with($url, $postData, $headers)->once()->andReturn(json_encode($returnAddSub));
+
             $data = ["name" => $signers['name'],
                      "message" => $signers['message'],
                      "action" => "send",
@@ -161,10 +191,9 @@ class EsignServiceTest extends AbstractServiceTest
                                     ]
                             ];
             $fileData = array(FileUtils::getFileName($documentUrl) => $documentUrl );
-            $headers = ['Authorization'=> 'Bearer '. $this->authToken];
-            $mockRestClient->expects('postMultiPart')->with($this->config['esign']['docurl']."documents", $data, $fileData, $headers)->once()->andReturn(json_encode($returnData));
-            
-            
+            $this->mockAuthToken($mockRestClient);
+            $mockRestClient->expects('postMultiPart')->with($this->config['esign']['docurl']."documents", $data, $fileData, $headers)->once()->andReturn(json_encode($returnData));            
+
         }
         
         $refId = '20';
@@ -194,6 +223,43 @@ class EsignServiceTest extends AbstractServiceTest
         
     }
 
+    public function testSetupDocumentWithoutDocument(){
+
+        AuthContext::put(AuthConstants::USER_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
+        $signers = array(
+                "name"=>"Signature Document",
+                "message"=>"Please sign",
+                "signers"=>[['participant' => ["email"=>"eox_user_1@gmail.com", 'name' => 'eox_user_1'],
+                            "fields"=> array(
+                                array(
+                                "name"=>"signature_field",
+                                "height"=>50,
+                                "width"=>50,
+                                "x"=>10,
+                                "y"=>84,
+                                "pageNumber"=>0
+                            )
+                            ) ]]);
+        $documentUrl ="    ";
+        $refId = '20';
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("Document not found");
+        $this->esignService->setupDocument($refId, $documentUrl, $signers);
+    }
+
+    public function testSetupDocumentWithoutSigners(){
+
+        AuthContext::put(AuthConstants::USER_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
+        $fileName = "mockpdf_with_field.pdf";
+        $signers = array();
+        $documentUrl = __DIR__."/Files/$fileName";
+        $refId = '20';
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("signers not provided");
+        $this->esignService->setupDocument($refId, $documentUrl, $signers);
+    }
      
     public function testGetStatus(){
         $docId = $this->readFromFile();

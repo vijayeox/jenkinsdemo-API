@@ -87,7 +87,7 @@ class EsignService extends AbstractService
             $data['uuid'] = $generated['uuid'];
             $id = $generated['id'];
             $path = $this->copySourceDocument($documentUrl, $data['uuid']);
-            // $this->setupSubscriptions();
+            $this->setupSubscriptions();
             $docId = $this->uploadDocument($documentUrl, $signers);
             foreach ($signers['signers'] as $value) {
                 $this->saveDocumentSigner($value, $id);
@@ -228,55 +228,58 @@ class EsignService extends AbstractService
         $return = $this->restClient->get($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions", array(), 
             array( 'Authorization'=> 'Bearer '. $this->getAuthToken() ));
         $response = json_decode($return,true);
-        if(!isset($response)){
+        if(isset($response)){
             $subscribe = array(
                 //"SIGNED" => false,
                 "FINALIZED" => false
             );
             foreach ($response['data'] as $event) {
-                if (isset($subscribe[$event['eventType']]) && $subscribe[$event['eventType']] == false)
+                if (isset($subscribe[$event['eventType']]) && $subscribe[$event['eventType']] == false){
                     $subscribe[$event['eventType']] = true;
-                else
+                }
+                else{
                     $this->deleteSubscription($event['id']);
+                }
             }
             foreach ($subscribe as $eventType => $value) {
-                if (!$value)
-                    $this->setupSubcription($eventType);
+                if (!$value){
+                    $this->addSubcription($eventType);
+                }
             }
             return true;
         }
     }
 
-    private function setupSubcription($hook) {
-        $header = array( "Authorization: Bearer". $this->getAuthToken()
+    private function addSubcription($hook) {
+        $header = array( "Authorization"=>"Bearer ". $this->getAuthToken()
     );
-        $post = json_encode(array(
+        $post = array(
             "eventType" => $hook
-        ));
+        );
         $response = $this->restClient->postWithHeader($this->config['esign']['docurl']."subscriptions", $post,$header);
-
-        if (!isset($response))
+        if (!isset($response)){
             return false;
-        else
+        }
+        else{
             return true;
+        }
     }
 
     private function deleteSubscription($subscriptionId) {
-        $header = array( "Authorization: Bearer". $this->getAuthToken()
-    );
-        $response = $this->restClient->delete($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions/".$subscriptionId, array(),$header);
-        return json_decode($response, true);
+        $header = array( "Authorization"=>"Bearer ". $this->getAuthToken());
+        $url = $this->config['esign']['docurl']."integrations/VANTAGE/subscriptions/".$subscriptionId;
+        $this->restClient->delete($url, array(),$header);
+
     }
 
     private function setCallbackUrl(){
-        $header = array( "Authorization: Bearer ". $this->getAuthToken(),
-            "content-type: application/json"
+        $header = array( "Authorization"=>" Bearer ". $this->getAuthToken(),
+            "content-type"=>" application/json"
         );
-        $putData = json_encode(array(
+        $putData = array(
             "callbackUrl" => $this->config['esign']['callbackUrl']
-        ));
-        $return = $this->restClient->putWithBody($this->config['esign']['docurl']."integrations/VANTAGE", $putData, $header);
-        print_r($return);exit();
+        );
+        $return = $this->restClient->put($this->config['esign']['docurl']."integrations/VANTAGE", $putData, $header);
     }
     
 
