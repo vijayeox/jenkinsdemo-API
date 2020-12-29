@@ -488,7 +488,10 @@ class ChatService extends AbstractService
             $subscribersToList = array_column($subscribers, 'username');
             $subscribersList = implode(',', $subscribersToList);
             $this->logger->info("appBotUrl---".print_r($this->appBotUrl,true));
-            $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', array('appName' => $appDetails['appName'], 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url), $headers);
+            $botName = $this->sanitizeName($appDetails['appName']);
+            $payLoad = array('botName' => $botName, 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url);
+            $this->logger->info("Payload---".print_r($payLoad,true));
+            $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', $payLoad, $headers);
             $this->logger->info("App Bot response---".print_r($response,true));
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
