@@ -33,8 +33,8 @@ class EsignCallbackController extends AbstractApiControllerHelper
     public function signEventAction()
     {
         $data = $this->extractPostData();
-        $hashValue = $this->checkHash($data);
-        $header = $this->getHeader();
+        $hashValue = $this->getHash($data);
+        $header = $this->getHashHeader();
         if($hashValue == $header){
             try {
                 $this->esignService->signEvent($data['documentId'],$data['eventType']);
@@ -45,18 +45,22 @@ class EsignCallbackController extends AbstractApiControllerHelper
                 return $this->exceptionToResponse($e);
             }
         }
-        return $this->getFailureResponse("hash does not match");
+        return $this->getErrorResponse("Invalid Resource", 404);
     }
 
-    public function checkHash($data){
-        $string = json_encode($data);
-        $secretKey = $this->config['esign']['clientsecret'];
-        $hashValue = hash_hmac('sha256', $string, $secretKey);
+    public function getHash($data){
+        $value = json_encode($data);
+        $seed = $this->config['esign']['clientid'];
+        $hashValue = hash_hmac('sha256', $value, $seed);
         return $hashValue;
     }
 
-    public function getHeader(){
+    public function getHashHeader(){
         $header = $this->request->getHeader("Content-HmacSHA256");
-        return $header;
+        if($header){
+            return $header->getFieldValue();
+        }else{
+            return "";
+        }
     }
 }
