@@ -150,6 +150,7 @@ ox_app_entity:
     start_date_field: start_date
     end_date_field: end_date
     status_field: status
+    subscriber_field: observers
     ryg_rule: '{"RED": {"logic": "and","filters": [{"field": "state","operator": "eq","value": "karnataka"}]},"YELLOW": {"logic": "and","filters": [{"field": "state","operator": "eq","value": "Kerala"}]},"GREEN": {"logic": "and","filters": [{"field": "state","operator": "eq","value": "Goa"}]}}'
   - id: 2
     name: "entity2"
@@ -335,6 +336,15 @@ ox_field:
     sequence: 1
     entity_id: 1
     index: 0  
+  - id: 16
+    name: "observers"
+    app_id: 99
+    data_type: "text"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 1
+    entity_id: 1
+    index: 1    
 ox_form:
   - id: 1
     app_id: 99
@@ -357,7 +367,10 @@ ox_form_field:
     field_id: 2
   - id: 3
     form_id: 2
-    field_id: 15  
+    field_id: 15 
+  - id: 4
+    form_id: 1
+    field_id: 16   
 ox_workflow:
   - id: 1
     app_id: 99
@@ -666,7 +679,7 @@ ox_file_assignee:
 ox_file:
   - id: 11
     account_id: 1
-    data: '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","app_id":"ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30","form_id":"0","entity_id":"1","created_by":"1","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","workflow_instance_id":"1","credit_card_type":"credit","workflowId":"a01a6776-431a-401e-9288-6acf3b2f3925","email":"bharat@gmail.com"}'
+    data: '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","app_id":"ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30","form_id":"0","entity_id":"1","created_by":"1","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","workflow_instance_id":"1","credit_card_type":"credit","workflowId":"a01a6776-431a-401e-9288-6acf3b2f3925","email":"bharat@gmail.com","observers":["754bc48a-3c69-4f7a-af8b-019fc984ee76"]}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     date_created: "2019-06-25 00:00:00"
     last_workflow_instance_id: 1
@@ -1113,6 +1126,12 @@ ox_indexed_file_attribute:
     field_value_type: "TEXT"
     field_value_text: "karnataka"
     field_id: 15 
+  - id: 16
+    file_id: 11
+    account_id: 1
+    field_value_type: "TEXT"
+    field_value_text: "754bc48a-3c69-4f7a-af8b-019fc984ee76"
+    field_id: 16  
 ox_entity_identifier:
   - entity_id: 1
     identifier: "field1"
