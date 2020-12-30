@@ -70,7 +70,8 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\EsignCallbackController::class => function ($container) {
                     return new Controller\EsignCallbackController(
-                        $container->get(EsignService::class));
+                        $container->get(EsignService::class),
+                        $container->get('config'));
                 },                
             ],
         ];
