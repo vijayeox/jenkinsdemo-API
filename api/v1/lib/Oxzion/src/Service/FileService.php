@@ -1509,8 +1509,8 @@ class FileService extends AbstractService
             $form = new FileAttachment();
             $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
             $data['type'] = $file['type'];
-            if (!preg_match('/^([-\.\w]+)$/', $file['name'])){
-                throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except _ and -", "attachment.filename.invalid");
+            if (!preg_match('/^[\w .-]+$/i', $file['name'])){
+                throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except -_ and space", "attachment.filename.invalid");
             }
             if (!isset($params['fileId'])) {
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
@@ -1614,8 +1614,8 @@ class FileService extends AbstractService
                 $newName = $data['name'];
                 $ext = pathinfo($newName, PATHINFO_EXTENSION);
                 $tempname = str_replace(".".$ext, "", $newName);
-                if (!preg_match('/^([-\.\w]+)$/', $tempname)){
-                    throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except _ and -", "attachment.filename.invalid");
+                if (!preg_match('/^[\w .-]+$/i', $tempname)){
+                    throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except -_ and space", "attachment.filename.invalid");
                 }
             }
             else {
