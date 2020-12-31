@@ -51,6 +51,7 @@
 						"label": "Title",
 						"description": "The Title of the Application which will be shown in the Application Menu",
 						"tooltip": "Please enter the Title of the Application which will be shown in the Application Menu",
+						"autofocus": true,
 						"tableView": true,
 						"validate": {
 							"required": true,
@@ -405,6 +406,7 @@
 		"components": [{
 			"label": "Do you want to add organization information",
 			"tooltip": "If selected a new Organization will be Created when the Application is being Deployed",
+			"autofocus": true,
 			"tableView": false,
 			"defaultValue": false,
 			"clearOnHide": false,
@@ -429,6 +431,7 @@
 					"components": [{
 						"label": "Name",
 						"tooltip": "Please enter the Name of the Organization to be created",
+						"autofocus": true,
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
@@ -815,6 +818,7 @@
 				"components": [{
 					"label": "Name",
 					"tooltip": "Please enter the Privilege Name to be used",
+					"autofocus": true,
 					"tableView": true,
 					"case": "uppercase",
 					"clearOnHide": false,
@@ -1167,6 +1171,7 @@
 										"label": "Name",
 										"tooltip": "The Name for the Entity used in the Application",
 										"showCharCount": true,
+										"autofocus": true,
 										"tableView": false,
 										"clearOnHide": false,
 										"validate": {
@@ -1274,6 +1279,47 @@
 												"tooltip": "The Subscriber Field which is used in the Entity",
 												"tableView": true,
 												"key": "subscriber_field",
+												"logic": [{
+													"name": "If File Comments enabled",
+													"trigger": {
+														"type": "simple",
+														"simple": {
+															"show": true,
+															"when": "app.chat_notification",
+															"eq": "true"
+														}
+													},
+													"actions": [{
+														"name": "Set Mandatory",
+														"type": "property",
+														"property": {
+															"label": "Required",
+															"value": "validate.required",
+															"type": "boolean"
+														},
+														"state": true
+													}]
+												}, {
+													"name": "If File Comments not enabled",
+													"trigger": {
+														"type": "simple",
+														"simple": {
+															"show": true,
+															"when": "app.chat_notification",
+															"eq": "false"
+														}
+													},
+													"actions": [{
+														"name": "Set it to Non-mandatory",
+														"type": "property",
+														"property": {
+															"label": "Required",
+															"value": "validate.required",
+															"type": "boolean"
+														},
+														"state": false
+													}]
+												}],
 												"type": "textfield",
 												"input": true,
 												"hideOnChildrenHidden": false
@@ -1547,6 +1593,7 @@
 				"label": "Entity",
 				"widget": "choicesjs",
 				"tooltip": "The Entity the Form is Associated to",
+				"autofocus": true,
 				"tableView": true,
 				"dataSrc": "custom",
 				"data": {
@@ -1686,6 +1733,7 @@
 			"components": [{
 				"label": "Name",
 				"tooltip": "Name of the Workflow",
+				"autofocus": true,
 				"tableView": true,
 				"clearOnHide": false,
 				"validate": {
@@ -1843,6 +1891,7 @@
 								"components": [{
 									"label": "Name",
 									"tooltip": "The Name of the Page",
+									"autofocus": true,
 									"tableView": true,
 									"clearOnHide": false,
 									"validate": {
@@ -2151,7 +2200,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 509,
+	"_vid": 516,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -2171,6 +2220,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2020-12-17T05:55:41.982Z",
+	"modified": "2020-12-23T05:20:23.582Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
