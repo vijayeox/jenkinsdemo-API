@@ -190,6 +190,9 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                         if (!isset($value['effective_date'])) {
                             $data['additionalInsured'][$key]['effective_date'] = isset($data['start_date']) ? $data['start_date'] : $data['update_date'];
                         }
+                        if (!isset($value['existingAddInsured'])){
+                            $data['additionalInsured'][$key]['existingAddInsured'] = uniqid();
+                        }
                     }
                     $data['previous_additionalInsured'] = $data['additionalInsured'];
                     $policy['previous_additionalInsured'] = $data['additionalInsured'];
@@ -300,6 +303,9 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 if (isset($data['additionalLocations']) && $data['additionalLocationsSelect'] == "yes") {
                     foreach ($data['additionalLocations'] as $key => $value) {
                         $additionalLocations = $data['additionalLocations'][$key];
+                        if (!isset($value['existingAddLocation'])){
+                            $additionalLocations['existingAddLocation'] = uniqid();
+                        }
                         $additionalLocations['previous_ALCoverageFP'] = isset($additionalLocations['ALCoverageFP']) ? $additionalLocations['ALCoverageFP'] : 0;
                         $additionalLocations['previous_ALPoolLiability'] = isset($additionalLocations['ALpoolLiability']) ? $additionalLocations['ALpoolLiability'] : 0;
                         $additionalLocations['previous_ALTravelAgentEOFP'] = isset($additionalLocations['ALTravelAgentEOFP']) ? $additionalLocations['ALTravelAgentEOFP'] : 0;
@@ -412,6 +418,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                     if (isset($data['groupAdditionalInsured'])) {
                         if ($data['groupAdditionalInsured'] != "") {
                             foreach ($data['groupAdditionalInsured'] as $key2 => $value2) {
+                                //add here
                                 if (!isset($value2['effective_date'])) {
                                     $data['groupAdditionalInsured'][$key2]['effective_date'] = isset($data['start_date']) ? $data['start_date'] : $data['update_date'];
                                 }

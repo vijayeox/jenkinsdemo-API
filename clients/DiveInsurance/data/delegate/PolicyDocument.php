@@ -1672,7 +1672,19 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :" . print_r($temp['newAddInsured'], true));
                 $diff = array_diff(array_map('serialize', $previousAddInsured), array_map('serialize', $addInsured));
-                $removedAddInsured = array_map('unserialize', $diff);
+                $diffAddInsured = array_map('unserialize', $diff);
+                $i = 0;
+                $removedAddInsured = array();
+                foreach($diffAddInsured as $key => $value){
+                    if(isset($value['existingAddInsured'])) {
+                        $found = in_array($value['existingAddInsured'] , array_column($newAddInsured , 'existingAddInsured'));
+                        if(!$found){
+                            $removedAddInsured[$i] = $value;
+                        }
+                    }
+                    
+                    $i+=1;
+                }
                 $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :" . print_r($removedAddInsured, true));
                 if (sizeof($removedAddInsured) > 0) {
                     $temp['removedAddInsured'] = json_encode($removedAddInsured);
@@ -1708,7 +1720,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                     $this->logger->info("ARRAY DIFF OF ADDITIONAL INSURED :" . print_r($temp['newAddInsured'], true));
                     $diff = array_diff(array_map('serialize', $data['previous_additionalInsured']), array_map('serialize', $data['additionalInsured']));
-                    $removedAddInsured = array_map('unserialize', $diff);
+                    $diffAddInsured = array_map('unserialize', $diff);
+                    $removedAddInsured = array();
+                    $i = 0;
+                    foreach($diffAddInsured as $key => $value){
+                        if(isset($value['existingAddInsured'])){
+                            $found = in_array($value['existingAddInsured'] , array_column($newAddInsured , 'existingAddInsured'));
+                            if(!$found){
+                                $removedAddInsured[$i] = $value;
+                            }
+                        }
+                        $i+=1;
+                    }
                     $this->logger->info("ARRAY DIFF OF Removed ADDITIONAL INSURED :" . print_r($removedAddInsured, true));
                     if (sizeof($removedAddInsured) > 0) {
                         $temp['removedAddInsured'] = json_encode($removedAddInsured);
@@ -1844,7 +1867,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if (isset($policy['previous_additionalLocations']) && $policy['previous_additionalLocations'] != $data['additionalLocations']) {
                 $temp['newAdditionalLocations'] = "";
                 $temp['removedadditionalLocations'] = "";
-                $addLocRequired = array("padiNumberAL", "name", "address", "country", "city", "state", "zip", "ALpropertyCoverageSelect", "additionalLocationPropertyTotal", "ALLossofBusIncome", "additionalLocationDoYouOwntheBuilding", "ALBuildingReplacementValue", "additionalLocationFurniturefixturesAndEquipment", "ALnonDivingPoolAmount", "travelAgentEoPL", "propertyDeductibles", "ALcentralStationAlarm", "centralStationAlarm","ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL");
+                $addLocRequired = array("padiNumberAL", "name", "address", "country", "city", "state", "zip", "ALpropertyCoverageSelect", "additionalLocationPropertyTotal", "ALLossofBusIncome", "additionalLocationDoYouOwntheBuilding", "ALBuildingReplacementValue", "additionalLocationFurniturefixturesAndEquipment", "ALnonDivingPoolAmount", "travelAgentEoPL", "propertyDeductibles", "ALcentralStationAlarm", "centralStationAlarm","ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL","existingAddLocation");
                 if (!is_array($policy['previous_additionalLocations'])) {
                     if (is_string($policy['previous_additionalLocations'])) {
                         $policy['previous_additionalLocations'] = json_decode($policy['previous_additionalLocations'], true);
@@ -1908,7 +1931,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $this->logger->info("ARRAY DIFF OF Additional Locations :" . print_r($temp['newAdditionalLocations'], true));
                 $diff = array_diff(array_map('serialize', $previousAddLoc), array_map('serialize', $addLoc));
-                $removedadditionalLocations = array_map('unserialize', $diff);
+                $diffadditionalLocations = array_map('unserialize', $diff);
+                $i = 0;
+                $removedadditionalLocations = array();
+                foreach($diffadditionalLocations as $key => $value){
+                    if(isset($value['existingAddLocation'])) {
+                        $found = in_array($value['existingAddLocation'] , array_column($newAdditionalLocations , 'existingAddLocation'));
+                        if(!$found){
+                            $removedadditionalLocations[$i] = $value;
+                        }
+                    }
+                    $i+=1;
+                }
                 $this->logger->info("ARRAY DIFF OF Removed Additional Locations :" . print_r($removedadditionalLocations, true));
                 if (sizeof($removedadditionalLocations) > 0) {
                     $first_key = key($removedadditionalLocations);
