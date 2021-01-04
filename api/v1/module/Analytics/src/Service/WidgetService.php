@@ -379,25 +379,25 @@ class WidgetService extends AbstractService
                         $targets[$row['group_value']]['green_limit'] = $row['green_limit'];
                     }
                 }
-                $cols = array_keys($data[0]);
-                $group_key = $cols[0];
-                // print_r($targets);
-                // print_r($data);
-                $i = 0;
-                foreach ($data as $key1 => $dataset) {
-                    if (count($resultSet) > 1) {
-                        $keyvalue = $group_key . "_" . $i;
-                        if (isset($targets[$keyvalue])) {
-                            $data[$key1]['red_limit'] = $targets[$keyvalue]['red_limit'];
-                            $data[$key1]['yellow_limit'] = $targets[$keyvalue]['yellow_limit'];
-                            $data[$key1]['green_limit'] = $targets[$keyvalue]['green_limit'];
+                if ((count($data) > 0)) {
+                    $cols = array_keys($data[0]);
+                    $group_key = $cols[0];
+                    $i = 0;
+                    foreach ($data as $key1 => $dataset) {
+                        if (count($resultSet) > 1) {
+                            $keyvalue = $group_key . "_" . $i;
+                            if (isset($targets[$keyvalue])) {
+                                $data[$key1]['red_limit'] = $targets[$keyvalue]['red_limit'];
+                                $data[$key1]['yellow_limit'] = $targets[$keyvalue]['yellow_limit'];
+                                $data[$key1]['green_limit'] = $targets[$keyvalue]['green_limit'];
+                            }
+                        } else {
+                            $data[$key1]['red_limit'] = $resultSet[0]['red_limit'];
+                            $data[$key1]['yellow_limit'] = $resultSet[0]['yellow_limit'];
+                            $data[$key1]['green_limit'] = $resultSet[0]['green_limit'];
                         }
-                    } else {
-                        $data[$key1]['red_limit'] = $resultSet[0]['red_limit'];
-                        $data[$key1]['yellow_limit'] = $resultSet[0]['yellow_limit'];
-                        $data[$key1]['green_limit'] = $resultSet[0]['green_limit'];
+                        $i++;
                     }
-                    $i++;
                 }
                 return $data;
             } else {
