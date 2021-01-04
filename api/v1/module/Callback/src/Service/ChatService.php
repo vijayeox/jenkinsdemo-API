@@ -510,7 +510,8 @@ class ChatService extends AbstractService
             $this->logger->info("userDetails---".print_r($userDetails,true));
             $subscribers =  $this->subscriberService->getUserSubscriber($data['FileId'],null,$userDetails['id']);
             $this->logger->info("subscribers---".print_r($subscribers,true));
-            $context = ['accountId' => $subscribers[0]['account_id'], 'userId' => $userDetails['userId']];
+            // TODO CHECK IF COMMENT SENDER HAVING ACCESS TO THE FILE - Subscriber or one of the partcipants
+            $context = ['accountId' => isset($subscribers[0]['account_id']) ? $subscribers[0]['account_id']: $userDetails['accountId'], 'userId' => $userDetails['userId']];
             $this->logger->info("Contexttt---".print_r($context,true));
             $this->updateAccountContext($context);
             $this->commentService->createComment($data,$data['FileId']);

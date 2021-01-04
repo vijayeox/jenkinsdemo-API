@@ -1814,7 +1814,7 @@ class FileService extends AbstractService
         }
         $form->exchangeArray($data);
         $form->validate();
-        $count = $this->attachmentTable->save2($form);
+        $count = $this->attachmentTable->save($form);
         $id = $this->attachmentTable->getLastInsertValue();
         $data['id'] = $id;
         $file['name'] = $data['name'];
