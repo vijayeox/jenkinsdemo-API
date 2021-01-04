@@ -2,7 +2,7 @@ name: 'Emergency First Response'
 description: 'View Emergency First Response Policy'
 content:
         -
-            type: ButtonAction
+            type: RenderButtons
             content:
                     buttonList:
                           -
@@ -30,7 +30,7 @@ content:
                                       type: Form
                                       url: workflow/a484ac20-0bc6-4c3f-9426-199e6fadc4a2/startform
                                       workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '(rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.policyEndDate)))'
+                                rule: '(typeof rowData.disableReinstate == "undefined" && rowData.policyStatus == "Cancelled" && moment().isSameOrBefore(moment(rowData.policyEndDate)))'
                                 icon: 'fa fa-repeat'
                           -
                                 name: 'Upgrade To IPL'
@@ -64,8 +64,9 @@ content:
                                         content: '<div class="row">
                                         <div class="col">
                                                 <div class="form-group">
-                                                    <label>Policy Status</label>
+                                                    <label>Policy Status </label>
                                                     <p> {data.policyStatus}</p>
+                                                                    <p> {moment(data.start_date).format("MM-DD-YYYY")} - {moment(data.end_date).format("MM-DD-YYYY")}</p>
                                                 </div></div></div><div class="row">
                                                 <div class="col">
                                                     <div class="card">
@@ -73,20 +74,20 @@ content:
                                                         </div>
                                                         <div class="card-body">
                                                                 <div class="form-group">
-                                                                    <label>Store Number</label>
-                                                                    <p> {data.business_padi}</p>
+                                                                    <label>PADI Member</label>
+                                                                    <p> {data.padi}</p>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Business Name</label>
-                                                                    <p> {data.business_name}</p>
+                                                                    <label>Insured Name</label>
+                                                                    <p> {data.firstname} {data.lastname}</p>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Business Type</label>
-                                                                    <p class="uppercase"> {data.entity_type}</p>
+                                                                    <label>Coverage Premium</label>
+                                                                    <p class="uppercase"> ${data.careerCoveragePrice}</p>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Policy Period</label>
-                                                                    <p> {moment(data.start_date).format("MM-DD-YYYY")} - {moment(data.end_date).format("MM-DD-YYYY")}</p>
+                                                                    <label>Excess Liability Premium</label>
+                                                                    <p class="uppercase"> ${data.excessLiabilityPrice}</p>
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -95,7 +96,6 @@ content:
                                                     <div class="card bg-light mb-3">
                                                         <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
                                                         <div class="card-body">
-                                                              <span class="uppercase">Contact: {data.firstname} {data.lastname}</span>
                                                               <span class="uppercase">{data.address1},</span>
                                                               <span class="uppercase">{data.address2},</span>
                                                               <span class="uppercase">{data.city},</span>
@@ -107,96 +107,6 @@ content:
                                                     </div>
                                                 </div>
                                             </div>'
-                                        useRowData: true
-                          -
-                            name: 'Property Information'
-                            uuid: 3de62aea-a24d-4006-8c36-e083f87d18b7
-                            content:
-                                    -
-                                        type: Document
-                                        content: '{data.propertyCoverageSelect == ''yes''?<div class="row">
-                                                <div class="col">
-                                                    <div class="card">
-                                                        <div class="card-header bg-primary text-white"><i class="fa fa-envelope"></i> Basic Information.
-                                                        </div>
-                                                        <div class="card-body">
-                                                                <div class="form-group">
-                                                                    <label>Store Number</label>
-                                                                    <p> {data.business_padi}</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Business Name</label>
-                                                                    <p> {data.business_name}</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Business Type</label>
-                                                                    <p class="uppercase"> {data.entity_type}</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Policy Period</label>
-                                                                    <p> {moment(data.start_date).format("MM-DD-YYYY")} - {moment(data.end_date).format("MM-DD-YYYY")}</p>
-                                                                </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-sm-4">
-                                                    <div class="card bg-light mb-3">
-                                                        <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
-                                                        <div class="card-body">
-                                                              <div class="uppercase">Contact: {data.firstname} {data.lastname}</div>
-                                                              <div class="uppercase">{data.address1},</div>
-                                                              <div class="uppercase">{data.address2},</div>
-                                                              <div class="uppercase">{data.city},</div>
-                                                              <div class="uppercase">{data.state}</span> <span class="uppercase">{data.zip}</div>
-                                                            <p>Email : {data.email}</p>
-                                                            <p>Website : {data.website}</p>
-                                                            <p>Work Phone Number : {data.phone_number}</p>
-                                                            <p>Fax : {data.fax}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>:<div class="row">
-                                            <div class="col">
-                                                    <div class="form-group">
-                                                        <label>Property Coverage</label>
-                                                        <p> Not Applied</p>
-                                                    </div></div></div>}'
-                                        useRowData: true
-                          -
-                            name: 'Liability Information'
-                            uuid: 4de62aea-a24d-4006-8c36-e083f87d18b7
-                            content:
-                                    -
-                                        type: Document
-                                        content: '<div class="row">
-                                                <div class="col">
-                                                    <div class="card">
-                                                        <div class="card-header bg-primary text-white">Coverages.
-                                                        </div>
-                                                        <div class="card-body">
-                                                                <div class="form-group">
-                                                                    <label>Primary Store Reciepts</label>
-                                                                    <p> ${data.dsglestmonthretailreceipt}</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Travel Agent E&O</label>
-                                                                    <p> {data.travelAgentEOReceiptsPL}</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Excess Liability</label>
-                                                                    <p class="uppercase"> {data.entity_type}</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Medical Expenses</label>
-                                                                    <p class="uppercase"> {data.medicalPayment == ''true''? "Yes" : "No" }</p>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Policy Period</label>
-                                                                    <p>  {data.doYouWantToApplyForNonOwnerAuto == ''true''? data.nonOwnedAutoLiabilityPL : No }</p>
-                                                                </div>
-                                                        </div>
-                                                    </div>
-                                                </div></div>'
                                         useRowData: true
                           -
                             name: 'Documents'
