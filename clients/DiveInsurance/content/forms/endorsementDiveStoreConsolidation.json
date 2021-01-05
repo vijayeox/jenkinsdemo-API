@@ -3066,7 +3066,7 @@
 										"eq": "yes"
 									},
 									"type": "file",
-									"url": "/file/attachments",
+									"url": "/file/attachment",
 									"input": true
 								}, {
 									"type": "documentviewer",
@@ -6877,7 +6877,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachments",
+														"url": "/file/attachment",
 														"input": true,
 														"calculateValue": "if(typeof row.ALpleaseAttachWaiversOfLiability == 'string' || row.ALpleaseAttachWaiversOfLiability[0] && row.ALpleaseAttachWaiversOfLiability[0].length == 0 ||  row.ALpleaseAttachWaiversOfLiability[0] == '[]'){\n  value = [];\n}"
 													}, {
@@ -8050,7 +8050,7 @@
 															"eq": "yes"
 														},
 														"type": "file",
-														"url": "/file/attachments",
+														"url": "/file/attachment",
 														"input": true
 													}, {
 														"label": "Is swimming area marked by boundary buoys or rope?",
