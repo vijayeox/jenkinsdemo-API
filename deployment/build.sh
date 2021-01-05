@@ -46,6 +46,8 @@ buildhelp()
     echo -e "17. clean           -${YELLOW}For cleaning the production server${RESET}"
     echo -e "18. setup           -${YELLOW}For fresh setup of the production server${RESET}"
     echo -e "19. package         -${YELLOW}For packaging existing build${RESET}"
+    echo -e "20. view2           -${YELLOW}For packaging UI2/View2.${RESET}"
+    echo -e "21. api2           -${YELLOW}For packaging API2.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -108,6 +110,24 @@ api()
     #copy contents of ap1v1 to build
     echo -e "${YELLOW}Copying Api/v1 to build folder....${RESET}"
     rsync -rl --delete api/v1 build/api/
+    echo -e "${GREEN}Building API Completed!${RESET}"
+}
+api2()
+{   
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/api/v1...${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/api2/v1/config/autoload/local.php api/v1/config/autoload/
+    echo -e "${GREEN}Copying Completed!${RESET}"
+    #building API
+    cd api/v1
+    echo -e "${YELLOW}Building API....${RESET}"
+    docker run -t -v ${PWD}:/var/www v1_zf composer install -n
+    cd ${OXHOME}
+    mkdir -p build/api2/v1
+    #copy contents of ap1v1 to build
+    echo -e "${YELLOW}Copying Api/v1 to build folder....${RESET}"
+    rsync -rl --delete api/v1 build/api2/
     echo -e "${GREEN}Building API Completed!${RESET}"
 }
 camel()
@@ -211,6 +231,29 @@ view()
     #building UI/view folder
     
 }
+view2()
+{   
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/view...${RESET}"
+    cd view
+    echo -e "${YELLOW}Build UI/view${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/view2/* ./
+    docker run -t -v ${PWD}/..:/app view ./dockerbuild.sh
+    echo -e "${GREEN}Building UI/view Completed!${RESET}"
+    cd ..
+    #copy contents of view to build
+    mkdir -p build/view2
+    echo -e "${YELLOW}Copying View to build folder. Please wait this may take sometime....${RESET}"
+    rsync -rl --exclude=node_modules ./view ./build/
+    mkdir -p ./build/view2/bos/node_modules
+    rsync -rl --delete ./view/bos/node_modules/ ./build/view2/bos/node_modules/
+    rsync -rl --delete ./view/gui/node_modules/ ./build/view2/gui/node_modules/
+    rsync -rl --delete ./view/node_modules/ ./build/view2/node_modules/
+    echo -e "${GREEN}Copying View Completed!${RESET}"
+    #building UI/view folder
+    
+}
 workflow()
 {
     cd ${OXHOME}
@@ -299,10 +342,22 @@ do
                 api
                 package
                 break ;;
+        api2)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                api2
+                package
+                break ;;
         view)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 view
+                package
+                break ;;
+        view2)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
+                check_dir
+                view2
                 package
                 break ;;
         camel)
