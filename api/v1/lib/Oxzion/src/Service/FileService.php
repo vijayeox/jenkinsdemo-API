@@ -2450,7 +2450,6 @@ class FileService extends AbstractService
 
         $subQuery .= " END ) $subFilterLogic ";
     }
-    
     public function getAssignments($appId, $filterParams)
     {
         $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -2557,23 +2556,28 @@ class FileService extends AbstractService
                       } else {
                           $filterOperator = $this->processFilters($val);
                           if ($val['field'] == 'entity_name') {
-                              $whereQuery .= " ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'".$subFilterLogic;
+                              $whereQuery = rtrim($whereQuery, " AND");
+                              $whereQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                               continue;
                           }
                           if ($val['field'] == 'status') {
-                            $whereQuery .= " `of`.status " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'".$subFilterLogic;
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.status " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             continue;
                           }
                           if ($val['field'] == 'rygStatus') {
-                            $whereQuery .= " `of`.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'".$subFilterLogic;
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             continue;
                           }
                           if ($val['field'] == 'start_date') {
-                            $whereQuery .= " `of`.start_date " . $filterOperator["operation"] . $val['value'] . "".$subFilterLogic;
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.start_date " . $filterOperator["operation"] . $val['value'] . "";
                             continue;
                           }
                           if ($val['field'] == 'end_date') {
-                            $whereQuery .= " `of`.end_date " . $filterOperator["operation"] . $val['value'] . "".$subFilterLogic;
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.end_date " . $filterOperator["operation"] . $val['value'] . "";
                             continue;
                           }
                           if ($subQuery != '') {
@@ -2656,7 +2660,7 @@ class FileService extends AbstractService
         }
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-        $fieldList2 = "distinct `of`.id,ox_app.name as appName,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
+        $fieldList2 = "distinct ox_app.name as appName,`of`.id,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
         NULL as activityInstanceId,NULL as workflowInstanceId, `of`.date_created as created_date,ox_app_entity.name as entity_name,
         NULL as activityName, `of`.date_created,
         CASE WHEN ox_file_assignee.assignee = 0 then 1
@@ -2664,10 +2668,8 @@ class FileService extends AbstractService
         end as to_be_claimed,ox_user.name as assigned_user $field";
         $countQuery = "SELECT count(id) as `count` 
                         from ((SELECT distinct ox_file_assignee.id $fromQuery $filterFromQuery $whereQuery) UNION all (SELECT distinct ox_file_assignee.id $fileQuery $filterFromQuery $whereQuery)) as t1";
-        
-        // print_r($countQuery);exit;
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
-        $fieldList = "distinct `of`.id,ox_app.name as appName,ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
+        $fieldList = "distinct ox_app.name as appName,`of`.id,ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
         ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,
         ox_activity.name as activityName, `of`.date_created,
         CASE WHEN ox_file_assignee.assignee = 0 then 1
