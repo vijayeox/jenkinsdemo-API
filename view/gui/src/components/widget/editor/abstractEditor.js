@@ -26,7 +26,8 @@ class AbstractEditor extends React.Component {
                 configuration: null,
                 expression: null,
                 drillDown: {},
-                queries: []
+                queries: [],
+                target:{singleLevel:{},multiLevel:{}}
             }
         };
         this.widgetTypes = [{ "label": "Chart", "value": "chart" }, { "label": "Inline", "value": "inline" }, { "label": "Table", "value": "table" }, { "label": "Dashboard", "value": "dashboard" }]

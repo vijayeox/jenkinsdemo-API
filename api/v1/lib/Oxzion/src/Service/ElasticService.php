@@ -245,9 +245,8 @@ class ElasticService
                  }
                  
         } else {
-
             if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
-                $value = AnalyticsUtils::checkSessionValue($value);
+                // $value = AnalyticsUtils::checkSessionValue($value);
                 if ($condition=="=="){                
                         if (!is_array($value)) {
                         $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));

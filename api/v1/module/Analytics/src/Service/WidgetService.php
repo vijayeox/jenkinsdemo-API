@@ -324,9 +324,9 @@ class WidgetService extends AbstractService
                 $data = $data[0]['calculated'];
             }
             if (is_array($data)) {
-                // $data = $this->getTargets($uuid, $data, 1);
+                $data = $this->getTargets($uuid, $data, 1);
             } else {
-                // $targets = $this->getTargets($uuid, $data, 0);
+                $targets = $this->getTargets($uuid, $data, 0);
                 if ($targets) {
                     $response['widget']['targets'] = $targets;
                 }
@@ -340,7 +340,7 @@ class WidgetService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $fieldList = array("id","uuid", "visualization_id", "ispublic", "created_by", "date_created", "account_id", "isdeleted", "name", "configuration", "version", "expression", "exclude_overrides");
+        $fieldList = array("id", "uuid", "visualization_id", "ispublic", "created_by", "date_created", "account_id", "isdeleted", "name", "configuration", "version", "expression", "exclude_overrides");
         $select->from('ox_widget')
             ->columns($fieldList)
             ->where(array('ox_widget.uuid' => $uuid, 'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID), 'isdeleted' => 0));
@@ -353,7 +353,11 @@ class WidgetService extends AbstractService
 
     public function getTargets($uuid, $data, $isaggregate)
     {
-        $query = 'SELECT wt.group_key,t.type, t.red_limit, t.yellow_limit, t.green_limit  FROM ox_widget w JOIN ox_widget_target wt on w.id=wt.widget_id JOIN ox_target t ON t.id=wt.target_id WHERE w.uuid=:uuid';
+        $query = 'SELECT wt.group_key, wt.group_value, t.type, t.red_limit, t.yellow_limit, t.green_limit
+            FROM ox_widget w
+            JOIN ox_widget_target wt on w.id=wt.widget_id
+            JOIN ox_target t ON t.id=wt.target_id
+            WHERE w.uuid=:uuid';
         $queryParams = [
             'uuid' => $uuid,
         ];
@@ -365,30 +369,34 @@ class WidgetService extends AbstractService
                 } else {
                     return null;
                 }
-
             }
             if ($isaggregate) {
                 if (count($resultSet) > 1) {
                     $targets = [];
                     foreach ($resultSet as $row) {
-                        $targets[$row['group_key']]['red_limit'] = $row['red_limit'];
-                        $targets[$row['group_key']]['yellow_limit'] = $row['yellow_limit'];
-                        $targets[$row['group_key']]['green_limit'] = $row['green_limit'];
+                        $targets[$row['group_value']]['red_limit'] = $row['red_limit'];
+                        $targets[$row['group_value']]['yellow_limit'] = $row['yellow_limit'];
+                        $targets[$row['group_value']]['green_limit'] = $row['green_limit'];
                     }
                 }
-                $cols = array_keys($data[0]);
-                $group_key = $cols[0];
-                // print_r($data);exit;
-                foreach ($data as $key1 => $dataset) {
-                    if (count($resultSet) > 1) {
-                        $keyvalue = $dataset[$group_key];
-                        $data[$key1]['red_limit'] = $targets[$keyvalue]['red_limit'];
-                        $data[$key1]['yellow_limit'] = $targets[$keyvalue]['yellow_limit'];
-                        $data[$key1]['green_limit'] = $targets[$keyvalue]['green_limit'];
-                    } else {
-                        $data[$key1]['red_limit'] = $resultSet[0]['red_limit'];
-                        $data[$key1]['yellow_limit'] = $resultSet[0]['yellow_limit'];
-                        $data[$key1]['green_limit'] = $resultSet[0]['green_limit'];
+                if ((count($data) > 0)) {
+                    $cols = array_keys($data[0]);
+                    $group_key = $cols[0];
+                    $i = 0;
+                    foreach ($data as $key1 => $dataset) {
+                        if (count($resultSet) > 1) {
+                            $keyvalue = $group_key . "_" . $i;
+                            if (isset($targets[$keyvalue])) {
+                                $data[$key1]['red_limit'] = $targets[$keyvalue]['red_limit'];
+                                $data[$key1]['yellow_limit'] = $targets[$keyvalue]['yellow_limit'];
+                                $data[$key1]['green_limit'] = $targets[$keyvalue]['green_limit'];
+                            }
+                        } else {
+                            $data[$key1]['red_limit'] = $resultSet[0]['red_limit'];
+                            $data[$key1]['yellow_limit'] = $resultSet[0]['yellow_limit'];
+                            $data[$key1]['green_limit'] = $resultSet[0]['green_limit'];
+                        }
+                        $i++;
                     }
                 }
                 return $data;

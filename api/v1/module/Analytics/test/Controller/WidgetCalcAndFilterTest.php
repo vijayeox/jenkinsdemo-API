@@ -82,8 +82,8 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Visualization.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetCalcFilter.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetQueryCalcFilter.yml");
-        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetTarget.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Target.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetTarget.yml");
         return $dataset;
     }
 

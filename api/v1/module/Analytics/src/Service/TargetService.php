@@ -172,23 +172,28 @@ class TargetService extends AbstractService
     public static function checkRYG($value, $type, $red, $yellow, $green)
     {
         $result = "";
-        if ($type == 0) {
-            if ($value <= $red) {
-                $result = "red";
-            } else if ($value <= $yellow) {
-                $result = "yellow";
-            } else {
-                $result = "green";
-            }
+        // if ($type == 0) {
+        if ($value < $red) {
+            $result = "red";
+        } else if ($value >= $red && $value < $yellow) {
+            $result = "yellow";
+        } else if ($value >= $yellow && $value < $green) {
+            $result = "green";
         } else {
-            if ($value <= $green) {
-                $result = "green";
-            } else if ($value <= $yellow) {
-                $result = "yellow";
-            } else {
-                $result = "red";
-            }
+            $result = "black";
         }
+        // } else {
+        //     if ($value < $green) {
+        //         $result = "green";
+        //     } else if ($value >= $green && $value < $yellow) {
+        //         $result = "yellow";
+        //     } else if ($value >= $yellow && $value < $red) {
+        //         $result = "red";
+        //     } else {
+        //         $result = "black";
+        //     }
+        // }
+        // echo $type . "||" . $value . "||" . $red . "||" . $yellow . "||" . $green . "||" . $result;exit;
         return $result;
     }
 
