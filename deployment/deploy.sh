@@ -95,6 +95,63 @@ api()
         service php7.2-fpm reload
     fi    
 }
+api2()
+{   
+    echo "this is temp dir ---> ${TEMP}"
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying API...${RESET}"
+    if [ ! -d "./api2/v1" ] ;
+    then
+        echo -e "${RED}API was not was not packaged so skipping it\n${RESET}"
+    else    
+        #making the directory where api will be copied.
+        #moving to temp directory and copying required
+        echo -e "${YELLOW}Stopping Apache${RESET}"
+        service apache2 stop
+        cd ${TEMP}
+        rsync -rl api2/v1/data/uploads/ /var/www/oxzion2/api/data/uploads/
+        rsync -rl --delete api2/v1/data/eoxapps/ /var/lib/oxzion2/api/eoxapps/
+        rsync -rl --delete api2/v1/data/migrations/ /var/lib/oxzion2/api/migrations/
+        rsync -rl api2/v1/data/template/ /var/lib/oxzion2/api/template/
+        rm -Rf api2/v1/data/uploads
+        rm -Rf api2/v1/data/cache
+        rm -Rf api2/v1/data/delegate
+        rm -Rf api2/v1/data/forms
+        rm -Rf api2/v1/data/eoxapps
+        rm -Rf api2/v1/data/import
+        rm -Rf api2/v1/data/migrations
+        rm -Rf api2/v1/data/template
+        rm -Rf api2/v1/data/file_docs
+        rm -Rf api2/v1/data/AppDeploy
+        rm -Rf api2/v1/data/AppSource
+        rm -Rf api2/v1/data/pages
+        rm -Rf api2/v1/data/entity
+        rsync -rl --delete api2/v1/ /var/www/oxzion2/api/
+        ln -nfs /var/lib/oxzion2/api/cache /var/www/oxzion2/api/data/cache
+        ln -nfs /var/lib/oxzion2/api/uploads /var/www/oxzion2/api/data/uploads
+        ln -nfs /var/lib/oxzion2/api/delegate /var/www/oxzion2/api/data/delegate
+        ln -nfs /var/lib/oxzion2/api/forms /var/www/oxzion2/api/data/forms
+        ln -nfs /var/lib/oxzion2/api/eoxapps /var/www/oxzion2/api/data/eoxapps
+        ln -nfs /var/lib/oxzion2/api/file_docs /var/www/oxzion2/api/data/file_docs
+        ln -nfs /var/lib/oxzion2/api/import /var/www/oxzion2/api/data/import
+        ln -nfs /var/lib/oxzion2/api/migrations /var/www/oxzion2/api/data/migrations
+        ln -nfs /var/lib/oxzion2/api/template /var/www/oxzion2/api/data/template
+        ln -nfs /var/lib/oxzion2/api/AppDeploy /var/www/oxzion2/api/data/AppDeploy
+        ln -nfs /var/lib/oxzion2/api/AppSource /var/www/oxzion2/api/data/AppSource
+        ln -nfs /var/lib/oxzion2/api/pages /var/www/oxzion2/api/data/pages
+        ln -nfs /var/lib/oxzion2/api/entity /var/www/oxzion2/api/data/entity
+        ln -nfs /var/log/oxzion2/api /var/www/oxzion2/api/logs
+        chown www-data:www-data -R /var/www/oxzion2/api
+        echo -e "${GREEN}Copying API Complete!\n${RESET}"
+        echo -e "${YELLOW}Starting migrations script for API${RESET}"
+        cd /var/www/oxzion2/api
+        ./migrations migrate
+        echo -e "${GREEN}Migrations Complete!${RESET}"
+        echo -e "${GREEN}Starting Apache${RESET}"
+        service apache2 start
+        service php7.2-fpm reload
+    fi    
+}
 camel()
 {   
     cd ${TEMP}
@@ -276,6 +333,39 @@ view()
         chmod 777 -R /opt/oxzion/view/bos
         chmod 777 /opt/oxzion/view/apps
         systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+view2()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying view...${RESET}"
+    if [ ! -d "./view2" ] ;
+    then
+        echo -e "${RED}VIEW was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view2
+        echo -e "${YELLOW}Stopped!${RESET}"
+        cd ${TEMP}
+        rsync -rl view2/vfs/ /opt/oxzion2/view/vfs/
+        rm -Rf view2/vfs
+        unlink /opt/oxzion2/view/vfs
+        find -L /opt/oxzion2/view/apps/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view2/apps/  \;
+        find -L /opt/oxzion2/view/themes/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view2/themes/  \;
+        rsync -rl --delete view2/ /opt/oxzion2/view/
+        ln -nfs /var/lib/oxzion2/vfs /opt/oxzion2/view/vfs
+        chown www-data:www-data -R /opt/oxzion2/view/vfs
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion2/view/bos/
+        npm run build
+        npm run package:discover
+        chown www-data:www-data -R /opt/oxzion2/view
+        echo -e "${GREEN}Copying view Complete!${RESET}"
+        echo -e "${GREEN}Starting view service${RESET}"
+        chmod 777 -R /opt/oxzion2/view/bos
+        chmod 777 /opt/oxzion2/view/apps
+        systemctl start view2
         echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
@@ -916,7 +1006,9 @@ appbuilder()
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
 api
+api2
 view
+view2
 echo -e "${CYAN}Copying Integrations Now...\n${RESET}"
 camel
 calendar

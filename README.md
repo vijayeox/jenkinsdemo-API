@@ -62,8 +62,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 <h5>Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it’s running:</h5>
 
 - sudo systemctl status docker
-
-			Note: Use `sudo` to run docker command
+ Note: Use `sudo` to run docker command
 		
 -----------
 
