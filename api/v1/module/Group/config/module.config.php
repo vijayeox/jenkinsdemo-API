@@ -17,8 +17,7 @@ return [
                             // SET ACCESS CONTROL
                             'put' => 'MANAGE_GROUP_WRITE',
                             'post' => 'MANAGE_GROUP_WRITE',
-                            'delete' => 'MANAGE_GROUP_WRITE',
-                            'get' => 'MANAGE_GROUP_READ',
+                            'delete' => 'MANAGE_GROUP_WRITE'
                         ],
                     ],
                 ],
