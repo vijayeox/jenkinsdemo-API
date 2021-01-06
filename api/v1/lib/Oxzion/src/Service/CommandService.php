@@ -239,6 +239,7 @@ class CommandService extends AbstractService
 
     private function registerAccount($data) {
         $this->registrationService->registerAccount($data);
+        $params = $data;
         $params['user'] = $data['contact'];
         return $params;
     }
