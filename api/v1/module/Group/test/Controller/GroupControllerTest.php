@@ -139,14 +139,14 @@ class GroupControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->employeeUser);
         $this->dispatch('/group', 'GET');
-        $this->assertResponseStatusCode(401);
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('Group');
         $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
         $this->assertControllerClass('GroupController');
         $this->assertMatchedRouteName('groups');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You have no Access to this API');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
     }
 
 // Testing to see if the Create Group function is working as intended if all the value passed are correct.
