@@ -851,10 +851,11 @@ class FileServiceTest extends AbstractServiceTest
         $result = $this->fileService->updateFile($data, $fileId);
         $data['uuid'] = $fileId;
         $date = date_format(date_create(null),"Y-m-d H:m:s");
-        $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30 00:00:00","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","field1":1,"field2":2}';
+        $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30 00:00:00","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","observers":"[\"754bc48a-3c69-4f7a-af8b-019fc984ee76\"]","field1":1,"field2":2}';
         $indexedFields = [['field' => 'field1', 'type' => 'TEXT', 'id' => 1],
                           ['field' => 'expiry_date', 'type' => 'DATE', 'id' => 3],
-                          ['field' => 'policy_period', 'type' => 'TEXT', 'id' => 8]];
+                          ['field' => 'policy_period', 'type' => 'TEXT', 'id' => 8],
+                          ['field' => 'observers', 'type' => 'TEXT', 'id' => 16]];
         $this->performFileAssertions($result, $data, 0, $indexedFields, 2);
     }
 
@@ -1148,16 +1149,16 @@ class FileServiceTest extends AbstractServiceTest
         $this->fileService->updateFileAttributes($fileId);
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $sqlQuery1Result = $this->runQuery($sqlQuery1);
-        $this->assertEquals(4, count($sqlQueryResult));
+        $this->assertEquals(5, count($sqlQueryResult));
         $this->assertEquals($data['field1'], $sqlQueryResult[0]['field_value_text']);
         $this->assertEquals(1, $sqlQueryResult[0]['field_id']);
         $this->assertEquals(11, $sqlQueryResult[0]['file_id']);
         $this->assertEquals($data['expiry_date'], $sqlQueryResult[1]['field_value_date']);
         $this->assertEquals(3, $sqlQueryResult[1]['field_id']);
         $this->assertEquals(11, $sqlQueryResult[1]['file_id']);
-        $this->assertEquals($data['policy_period'], $sqlQueryResult[3]['field_value_text']);
-        $this->assertEquals(8, $sqlQueryResult[3]['field_id']);
-        $this->assertEquals(11, $sqlQueryResult[3]['file_id']);
+        $this->assertEquals($data['policy_period'], $sqlQueryResult[4]['field_value_text']);
+        $this->assertEquals(8, $sqlQueryResult[4]['field_id']);
+        $this->assertEquals(11, $sqlQueryResult[4]['file_id']);
         $this->assertEquals(2, count($sqlQuery1Result));
         $this->assertEquals($data['policy_document'], json_decode($sqlQuery1Result[0]['field_value'], true));
         $this->assertEquals(5, $sqlQuery1Result[0]['field_id']);
@@ -1310,7 +1311,6 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals($entityId, $sqlQuery1Result[1]['entity_id']);
         $this->assertEquals(1, $sqlQuery1Result[1]['sequence']);
         $sqlQueryResult = $this->runQuery($sqlQuery2);
-        //print_r($sqlQueryResult);
         foreach ($sqlQueryResult as $key => $value) {
             $fieldValue = $sqlQueryResult[$key]['field_value'];
             if($sqlQueryResult[$key]['field_value_type'] == 'OTHER'){
@@ -1487,17 +1487,18 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(1,$result['total']);
     }
 
-//         public function testFileCreateWithSubscribers() {
-//         $dataset = $this->dataset;
-//         $appUuid = $dataset['ox_app'][0]['uuid'];
-//         $formId = $dataset['ox_form'][0]['uuid'];
-//         $entityId = $dataset['ox_app_entity'][0]['id'];
-//         $data = array('field1' => '32325', 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid, 'form_id' => $formId, 'observers' => ["",""]);
-//         $result = $this->fileService->createFile($data);
-//         $this->performFileAssertions($result, $data, 2);
-           
-    
-
-// }
+    public function testFileUpdateWithSubscribers() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][0]['uuid'];
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $id = $dataset['ox_file'][0]['id'];
+        $entityId = $dataset['ox_app_entity'][0]['id'];
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid, 'workflow_instance_id' => 1);
+        $result = $this->fileService->updateFile($data, $fileId);
+        $sqlQuery = "SELECT * FROM ox_subscriber where file_id ='".$id."'";
+        $queryResult = $this->runQuery($sqlQuery);
+        $this->assertEquals(100, $queryResult[0]['user_id']);
+        $this->assertEquals($id, $queryResult[0]['file_id']);  
+    }
 
 }

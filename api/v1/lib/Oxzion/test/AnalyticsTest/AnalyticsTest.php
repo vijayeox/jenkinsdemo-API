@@ -85,7 +85,7 @@ class AnalyticsTest extends MainControllerTest
         $ae->setConfig($this->getApplicationConfig());
         if(enableElastic==0){
           //  $this->markTestSkipped('Only Integration Test');
-          $input = '{"index":"core_11_test_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"amount"}},{"bool":{"must":[{"range":{"date_created":{"gte":"2018-01-01","format":"yyyy-MM-dd"}}},{"range":{"date_created":{"lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
+          $input = '{"index":"core_11_test_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"amount"}},{"bool":{"must":[{"range":{"date_created":{"gte":"2018-01-01","format":"yyyy-MM-dd"}}},{"range":{"date_created":{"lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":1000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
           $output = '{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":2,"value":{"value":800}},{"key":"Mike Price","doc_count":1,"value":{"value":50.5}}]}}}';
           $this->setMockData($input,$output);  
         }
@@ -104,7 +104,7 @@ class AnalyticsTest extends MainControllerTest
         $ae->setConfig($this->getApplicationConfig());
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
-            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","category","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"groupdata0":{"terms":{"field":"category.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}}}},"explain":true},"_source":["*","category","created_by"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","category","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"groupdata0":{"terms":{"field":"category.keyword","size":1000},"aggs":{"value":{"sum":{"field":"amount"}}}}}}},"explain":true},"_source":["*","category","created_by"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":2,"groupdata0":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"A","doc_count":1,"value":{"value":200}},{"key":"B","doc_count":1,"value":{"value":600}}]}},{"key":"Mike Price","doc_count":1,"groupdata0":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"A","doc_count":1,"value":{"value":50.5}}]}}]}}}';
             $this->setMockData($input,$output);  
         }
@@ -164,7 +164,7 @@ class AnalyticsTest extends MainControllerTest
             $this->setMockData($input,$output);  
         }
         AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
-        $parameters = ['field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created','list'=>'name,created_by,category'];
+        $parameters = ['date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created','list'=>'name,created_by,category'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "test document");
@@ -321,7 +321,7 @@ class AnalyticsTest extends MainControllerTest
                 ],'operation'=>'count'];
         $results = $ae->runQuery('crm', 'Lead', $parameters);
         $query = $results['meta']['query'];
-        $this->assertEquals($query,'{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"_id"}},{"bool":{"must":[{"range":{"createdAt":{"gte":"'.date("Y",strtotime("-1 year")).'-06-01","format":"yyyy-MM-dd"}}},{"range":{"createdAt":{"lte":"'.date("Y").'-07-15","format":"yyyy-MM-dd"}}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}');
+        $this->assertEquals($query,'{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"account_id":1}},{"exists":{"field":"_id"}},{"bool":{"must":[{"range":{"createdAt":{"gte":"'.date("Y",strtotime("-1 year")).'-06-01","format":"yyyy-MM-dd"}}},{"range":{"createdAt":{"lte":"2021-07-15","format":"yyyy-MM-dd"}}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"aggs":{"value":{"value_count":{"field":"_id"}}},"explain":true},"_source":["*"],"from":0,"size":0}');
     }
 
     public function testCrmComplexFilterNotNoArray() {
