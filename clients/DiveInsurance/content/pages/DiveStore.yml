@@ -128,10 +128,13 @@ content:
                                                                     <label>Property Coverages Total</label>
                                                                     <p> ${data.propertyCoverageSelect==''yes''? data.propertyCoveragesTotalPL.toFixed(2):0.00}</p>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label>ProRated Property Premium</label>
-                                                                    <p> ${data.propertyCoverageSelect==''yes''? data.propertyProRataPremium.toFixed(2):0.00}</p>
+                                                               <div class="form-group">
+                                                                    <label>ProRated Property Premium  ${data.propertyCoverageSelect==''yes''? data.propertyProRataPremium.toFixed(2):0.00}</label>
+                                                                    <p style="font-size:14px">Contents Limit:  ${ data.propertyCoverageSelect==''yes'' && data.propertyProRataPremium !== 0 ? ((data.endoContentsFP || data.endoContentsFP == 0 )?(data.endoContentsFP* data.proRataPercentage).toFixed(2) : (data.ContentsFP* data.proRataPercentage).toFixed(2)) :0.00 }</p>
+                                                                    <p style="font-size:14px">Building Limit:  ${data.propertyCoverageSelect==''yes'' && data.propertyProRataPremium !== 0 ? ((data.endoBuildingLimitFP || data.endoBuildingLimitFP == 0)? (data.endoBuildingLimitFP* data.proRataPercentage).toFixed(2) : (data.BuildingLimitFP* data.proRataPercentage).toFixed(2)) :0.00 }</p>
+                                                                    <p style="font-size:14px">Loss of Business Income:  ${data.propertyCoverageSelect==''yes'' && data.propertyProRataPremium !== 0 ? ((data.endoLossofBusIncomeFP|| data.endoLossofBusIncomeFP == 0)?(data.endoLossofBusIncomeFP* data.proRataPercentage).toFixed(2):  (data.LossofBusIncomeFP* data.proRataPercentage).toFixed(2)) :0.00}</p>
                                                                 </div>
+
                                                         </div>
                                                     </div>
                                                 </div></div>'
@@ -185,8 +188,12 @@ content:
                                                                     <p>${data.padiFee.toFixed(2)}</p>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Pro Rated Liability Premium</label>
-                                                                    <p>${data.liabilityProRataPremium.toFixed(2)}</p>
+                                                                    <label>Pro Rated Liability Premium ${data.liabilityProRataPremium.toFixed(2)}</label>
+                                                                    <p style="font-size:14px">Liability Coverage: ${ data.liabilityProRataPremium != 0 ? ((data.endorsementLiabilityCoverage || data.endorsementLiabilityCoverage ==0 ) ? (data.endorsementLiabilityCoverage * data.proRataPercentage).toFixed(2) : (data.CoverageFP * data.proRataPercentage).toFixed(2)) : 0.00}</p>
+                                                                    <p style="font-size:14px">Travel Agent E&O: ${data.liabilityProRataPremium != 0 ? ((data.endoTravelAgentEOFP || data.endoTravelAgentEOFP == 0) ? (data.endoTravelAgentEOFP * data.proRataPercentage).toFixed(2) : (data.TravelAgentEOFP * data.proRataPercentage).toFixed(2)) : 0.00}</p>
+                                                                    <p style="font-size:14px">Pool Liability: ${data.liabilityProRataPremium != 0 ? ((data.endononDivingPoolAmount || data.endononDivingPoolAmount ==0) ? (data.endononDivingPoolAmount * data.proRataPercentage).toFixed(2) : (data.nonDivingPoolAmount * data.proRataPercentage).toFixed(2)) : 0.00}</p>
+                                                                    <p style="font-size:14px">Non Owned Auto Liability: ${data.liabilityProRataPremium != 0 ? ((data.endoNon-OwnedAutoFP || data.endoNon-OwnedAutoFP ==0 ) ? (data.endoNon-OwnedAutoFP * data.proRataPercentage).toFixed(2) : (data["Non-OwnedAutoFP"] * data.proRataPercentage).toFixed(2)) : 0.00}</p>
+                                                                    <p style="font-size:14px">Medical Expenses: ${data.liabilityProRataPremium != 0 ? (data.medicalPayment=="true" || data.medicalPayment ? ((data.endoMedicalExpenseFp || data.endoMedicalExpenseFp == 0) ? (data.endoMedicalExpenseFp * data.proRataPercentage).toFixed(2) : (data.MedicalExpenseFP * data.proRataPercentage).toFixed(2)) : 0.00 ): 0.00}</p>  
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Additional Location Premium</label>
@@ -197,8 +204,9 @@ content:
                                                                     <p>${data.AddILocTax.toFixed(2)}</p>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Total Pro Rated Premium</label>
+                                                                    <label>Total Pro Rated Premium </label>
                                                                     <p>${data.ProRataPremium.toFixed(2)}</p>
+                                                                    
                                                                 </div>
                                                                  <div class="form-group">
                                                                     <label>Additional Premium</label>
