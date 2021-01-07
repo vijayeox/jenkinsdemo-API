@@ -192,9 +192,6 @@ class ElasticService
         if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
 			$results['type']='group';
-		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
-			$results = array('data'=>$result_obj['data']['hits']['total']);
-			$results['type']='value';
 		} else if (isset($result_obj['data']['aggregations'])){
 			$results = array('data'=>$result_obj['data']['aggregations']['value']['value']);
 			$results['type']='value';
@@ -246,7 +243,7 @@ class ElasticService
                  
         } else {
             if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
-                // $value = AnalyticsUtils::checkSessionValue($value);
+                $value = AnalyticsUtils::checkSessionValue($value);
                 if ($condition=="=="){                
                         if (!is_array($value)) {
                         $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
@@ -276,7 +273,7 @@ class ElasticService
     {
 
         $grouparray = null;
-        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 10000;
+        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 1000; //Note this size is only for the terms
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
             $grouptext = $searchconfig['group'][$i];
             if (substr($grouptext, 0, 7) == "period-") {
@@ -290,7 +287,12 @@ class ElasticService
                 }
                 $grouparraytmp = array('date_histogram' => array('field' => $searchconfig['frequency'], 'interval' => $interval, 'format' => $format));
             } else {
-                $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
+                if ($size!=0) {
+                    $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
+                } else {
+                    $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword'));
+                }
+                
                 $boolfilterquery['_source'][] = $grouptext;
             }
 
@@ -347,7 +349,8 @@ class ElasticService
         $aggs = null;
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
-        } else if (key($aggregates) != "count") {
+        } else if (key($aggregates) == "count") { $aggs = array('value' => array('value_count' => array('field' => '_id')));}
+        else {
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
         }
         return $aggs;
