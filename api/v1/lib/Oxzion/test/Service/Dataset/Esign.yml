@@ -1,0 +1,17 @@
+ox_esign_document:
+  -
+    id: 1
+    uuid: "1aab7b0f-8141-45a8-9357-4f7c9d6af587"
+    ref_id: "09ab7b0f-8141-45a8-9357-4f7c9d6af576"
+    status: IN_PROGRESS
+    doc_id: "79e36ce6-9267-4ed6-9bb0-3dc1076b85a7"
+    created_by: 1
+    date_created: "2020-12-12 00:00:00"
+
+ox_esign_document_signer:
+  -
+    id: 1
+    esign_document_id: 1
+    status: IN_PROGRESS
+    email: 'test@eoxvantage.com'
+    details: '{}'

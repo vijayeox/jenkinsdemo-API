@@ -230,7 +230,7 @@ class FormService extends AbstractService
         return $template;
     }
 
-    private function generateFields($fieldsList, $appId, $formId,$entityId)
+    private function generateFields($fieldsList = array(), $appId, $formId,$entityId)
     {
         try {
             $existingFieldsQuery = "select ox_field.* from ox_field where ox_field.entity_id=".$entityId.";";
@@ -277,6 +277,7 @@ class FormService extends AbstractService
     }
 
     private function saveField(&$existingFields,&$field,&$fieldsCreated,&$fieldIdArray,$appId,$formId,$entityId){
+            $foundField = false;
             if(isset($field['parent'])){
                 $parentField =  ArrayUtils::multiDimensionalSearch($existingFields,'name',$field['parent']['name']);
                 $this->logger->info("PARENT FIELD----".json_encode($parentField));
@@ -293,11 +294,11 @@ class FormService extends AbstractService
                 }
             }else{
                $foundField =  ArrayUtils::multiDimensionalSearch($existingFields,'name',$field['name']); 
-            }            
+            }
             $field['app_id'] = $appId;
             $field['entity_id'] = $entityId;
             $oxField = new Field();
-            if($foundField){
+            if(isset($foundField) && is_array($foundField)){
                 $oxField->exchangeArray($foundField);
             }
             $oxField->exchangeArray($field);
@@ -306,7 +307,7 @@ class FormService extends AbstractService
                 $fieldResult = $this->fieldService->saveField($appId, $fieldData);
                 $fieldIdArray[] = $fieldData['id'];
                 $fieldsCreated[] = $fieldData;
-                if(!$foundField){
+                if(isset($foundField) && !$foundField){
                     $existingFields[] = $fieldData;
                     $field['id'] = $fieldData['id'];
                 }
