@@ -98,6 +98,23 @@ class AppControllerTest extends ControllerTest
         $this->assertTrue(preg_match($contentTypeRegex, $contentTypeHeader) ? true : false);
     }
 
+
+
+    public function testGetListOfUserAssignments()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/assignmentList', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class);
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('assignmentList');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'], 1);
+    }
+
     public function testGetListOfAssignments()
     {
         $this->initAuthToken($this->adminUser);

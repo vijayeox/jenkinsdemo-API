@@ -4,7 +4,7 @@ content:
         -
             type: List
             content:
-                route: 'account'
+                route: 'account?filter: [{"take":1000,"skip":0}]'
                 disableAppId: true
                 actions:
                      -

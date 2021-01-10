@@ -95,16 +95,17 @@ class FileService extends AbstractService
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
         $data['data'] = $jsonData;
-        $this->setupEntityFields($entityId,$data);
-        $subscribers['subscribers'] = isset($data['subscribersList']) ? $data['subscribersList']: null;
-        unset($data['subscribersList']);
+        
+        $result = $this->setupEntityFields($entityId,$data);
+        $subscribers['subscribers'] = isset($result['subscribersList']) ? $result['subscribersList']: null;
+        unset($result['subscribersList']);
+        $data = array_merge($data, $result);
         $data['assoc_id'] = isset($oldData['bos']['assoc_id']) ? $oldData['bos']['assoc_id'] : null;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File($this->table);
         if(isset($data['id'])){
             unset($data['id']);
         }
-        //$this->logger->info("Data From Fileservice - " . print_r($data, true));
         $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
         $count = 0;
         try {
@@ -153,19 +154,20 @@ class FileService extends AbstractService
         }
         return $count;
     }
-    private function setupEntityFields($entityId,&$data){
-        $data['entity_id'] = $entityId;
+    private function setupEntityFields($entityId,$data){
+        $returnResult = [];
+        $returnResult['entity_id'] = $entityId;
         $selectQuery = "SELECT start_date_field,end_date_field,status_field,subscriber_field from ox_app_entity WHERE id =:entityId";
         $parameters = array('entityId' => $entityId);
         $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         if (count($resultQuery) > 0) {
-        // print_r($data[$resultQuery[0]['status_field']]);exit;
-            $data['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
-            $data['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
-            $data['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
-            $data['subscribersList'] = isset($data[$resultQuery[0]['subscriber_field']])?$data[$resultQuery[0]['subscriber_field']]:null;
+            $returnResult['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
+            $returnResult['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
+            $returnResult['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
+            $returnResult['subscribersList'] = isset($data[$resultQuery[0]['subscriber_field']])?$data[$resultQuery[0]['subscriber_field']]:null;
 
         }
+        return $returnResult;
     }
     private function setupFileAssignee($fileId,$file){
         $query = "delete from ox_file_assignee where file_id = :fileId";
@@ -515,10 +517,12 @@ class FileService extends AbstractService
         if(isset($data['version'])){
             $fileObject['version'] = $data['version'];
         }
-        $this->setupEntityFields($entityId,$obj);
-        $subscribers['subscribers'] = $obj['subscribersList'];
-        unset($obj['subscribersList']);
         $fileObject['data'] = json_encode($dataArray);
+        $result = $this->setupEntityFields($entityId,$dataArray);
+        $subscribers['subscribers'] = $result['subscribersList'];
+        unset($result['subscribersList']);
+        $fileObject = array_merge($fileObject, $result);
+
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
         if (isset($data['last_workflow_instance_id'])) {
@@ -1284,8 +1288,13 @@ class FileService extends AbstractService
                     throw new ServiceException("User Does not Exist", "app.forusernot.found");
                 }
             }
-            $identifierQuery = "select identifier_name,identifier from ox_wf_user_identifier where user_id=:userId and app_id = :appId";
-            $identifierParams = array('userId'=>$userId,'appId'=>$appId);
+            $appFilter = "";
+            if(isset($appId)){
+                $appFilter = "and app_id = :appId";
+                $identifierParams['appId'] = $appId;
+            }
+            $identifierQuery = "select identifier_name,identifier from ox_wf_user_identifier where user_id=:userId $appFilter";
+            $identifierParams['userId'] = $userId;
             $getIdentifier = $this->executeQueryWithBindParameters($identifierQuery, $identifierParams)->toArray();
             if($whereQuery != ""){
                 $whereQuery .= " AND ";
@@ -1307,20 +1316,24 @@ class FileService extends AbstractService
     {
         $this->logger->info("Inside File List API - with params - " . json_encode($params));
         $accountId = isset($params['accountId']) ? $this->getIdFromUuid('ox_account', $params['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
-        $appId = $this->getIdFromUuid('ox_app', $appUUid);
-        if (!isset($accountId)) {
-            $accountId = $params['accountId'];
+        $appFilter = "";
+        $appIdClause = "";
+        $queryParams = array();
+        if(isset($appUUid)){
+            $appId = $this->getIdFromUuid('ox_app', $appUUid);
+            $appIdClause = "AND app_id = :appId";
+            $selectQuery['appId'] = $appId;
+            $appFilter = "inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId)";
+            $queryParams['appId'] = $appId;
         }
-        $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
-        $selectQuery = array("accountId" => $accountId, "appId" => $appId);
+        $select = "SELECT * from ox_app_registry where account_id = :accountId $appIdClause";
+        $selectQuery["accountId"] = $accountId;
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
         
         if (count($result) == 0) {
             throw new ServiceException("App Does not belong to the account", "app.for.account.not.found");
         }
 
-        $queryParams = array();
-        $queryParams['appId'] = $appId;
         $statusFilter = "";
         $createdFilter = "";
         $entityFilter = "";
@@ -1334,9 +1347,12 @@ class FileService extends AbstractService
 
         $where = " $workflowFilter $entityFilter $createdFilter";
         $fromQuery = " from ox_file as `of`
-        inner join ox_app_entity as en on en.id = `of`.entity_id
-        inner join ox_app as oa on (oa.id = en.app_id AND oa.id = :appId) ";
+        inner join ox_app_entity as en on en.id = `of`.entity_id $appFilter
+         ";
         $this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams);
+        if(!isset($appId)){
+            $appId = NULL;
+        }
         $this->processUserFilter($params, $appId, $fromQuery, $whereQuery, $queryParams);
         
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
@@ -1798,7 +1814,7 @@ class FileService extends AbstractService
         }
         $form->exchangeArray($data);
         $form->validate();
-        $count = $this->attachmentTable->save2($form);
+        $count = $this->attachmentTable->save($form);
         $id = $this->attachmentTable->getLastInsertValue();
         $data['id'] = $id;
         $file['name'] = $data['name'];
@@ -2019,6 +2035,10 @@ class FileService extends AbstractService
              the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records
              till EOD of 2020-02-11, we need to use 2020-02-12 hence [+1] added to the date. */
             $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate'] . "+1 days"));
+        }
+        if (isset($params['createdBy'])) {
+            $queryParams['createdBy'] = $this->getIdFromUuid('ox_user', $params['createdBy']);
+            $where .= " of.created_by =:createdBy AND ";
         }
     }
 
@@ -2407,6 +2427,10 @@ class FileService extends AbstractService
             $whereQuery .= " of.end_date " . $filterOperator["operation"] . $val['value'] . " $filterLogic";
             return true;
         }
+        if ($val['field'] == 'rygStatus') {
+            $whereQuery .= " of.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "' $filterLogic";
+            return true;
+        }
         return false;
     }
 
@@ -2439,11 +2463,13 @@ class FileService extends AbstractService
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
         $sortjoinQuery = "";
-        $appFilter = "ox_app.uuid ='" . $appId . "'";
-
+        $appFilter = "";
+        if(isset($appId)){
+            $appFilter = "AND ox_app.uuid ='" . $appId . "'";
+        }
         $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR au.user_id = $userId)
                                 OR ox_file_assignee.user_id = $userId)
-                                AND $appFilter";
+                                $appFilter";
 
         if (!empty($filterParams)) {
             if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
@@ -2530,19 +2556,28 @@ class FileService extends AbstractService
                       } else {
                           $filterOperator = $this->processFilters($val);
                           if ($val['field'] == 'entity_name') {
+                              $whereQuery = rtrim($whereQuery, " AND");
                               $whereQuery .= " AND ox_app_entity.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                               continue;
                           }
                           if ($val['field'] == 'status') {
-                            $whereQuery .= " AND ox_file.status " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.status " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
+                            continue;
+                          }
+                          if ($val['field'] == 'rygStatus') {
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                             continue;
                           }
                           if ($val['field'] == 'start_date') {
-                            $whereQuery .= " AND ox_file.start_date " . $filterOperator["operation"] . $val['value'] . "";
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.start_date " . $filterOperator["operation"] . $val['value'] . "";
                             continue;
                           }
                           if ($val['field'] == 'end_date') {
-                            $whereQuery .= " AND ox_file.end_date " . $filterOperator["operation"] . $val['value'] . "";
+                            $whereQuery = rtrim($whereQuery, " AND");
+                            $whereQuery .= " AND `of`.end_date " . $filterOperator["operation"] . $val['value'] . "";
                             continue;
                           }
                           if ($subQuery != '') {
@@ -2625,7 +2660,7 @@ class FileService extends AbstractService
         }
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-        $fieldList2 = "distinct `of`.id,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
+        $fieldList2 = "distinct ox_app.name as appName,`of`.id,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
         NULL as activityInstanceId,NULL as workflowInstanceId, `of`.date_created as created_date,ox_app_entity.name as entity_name,
         NULL as activityName, `of`.date_created,
         CASE WHEN ox_file_assignee.assignee = 0 then 1
@@ -2634,7 +2669,7 @@ class FileService extends AbstractService
         $countQuery = "SELECT count(id) as `count` 
                         from ((SELECT distinct ox_file_assignee.id $fromQuery $filterFromQuery $whereQuery) UNION all (SELECT distinct ox_file_assignee.id $fileQuery $filterFromQuery $whereQuery)) as t1";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
-        $fieldList = "distinct `of`.id,ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
+        $fieldList = "distinct ox_app.name as appName,`of`.id,ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,
         ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,
         ox_activity.name as activityName, `of`.date_created,
         CASE WHEN ox_file_assignee.assignee = 0 then 1

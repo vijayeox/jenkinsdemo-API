@@ -488,7 +488,10 @@ class ChatService extends AbstractService
             $subscribersToList = array_column($subscribers, 'username');
             $subscribersList = implode(',', $subscribersToList);
             $this->logger->info("appBotUrl---".print_r($this->appBotUrl,true));
-            $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', array('appName' => $appDetails['appName'], 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url), $headers);
+            $botName = $this->sanitizeName($appDetails['appName']);
+            $payLoad = array('botName' => $botName, 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url);
+            $this->logger->info("Payload---".print_r($payLoad,true));
+            $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', $payLoad, $headers);
             $this->logger->info("App Bot response---".print_r($response,true));
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -507,7 +510,8 @@ class ChatService extends AbstractService
             $this->logger->info("userDetails---".print_r($userDetails,true));
             $subscribers =  $this->subscriberService->getUserSubscriber($data['FileId'],null,$userDetails['id']);
             $this->logger->info("subscribers---".print_r($subscribers,true));
-            $context = ['accountId' => $subscribers[0]['account_id'], 'userId' => $userDetails['userId']];
+            // TODO CHECK IF COMMENT SENDER HAVING ACCESS TO THE FILE - Subscriber or one of the partcipants
+            $context = ['accountId' => isset($subscribers[0]['account_id']) ? $subscribers[0]['account_id']: $userDetails['accountId'], 'userId' => $userDetails['userId']];
             $this->logger->info("Contexttt---".print_r($context,true));
             $this->updateAccountContext($context);
             $this->commentService->createComment($data,$data['FileId']);
