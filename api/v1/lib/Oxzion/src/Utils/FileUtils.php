@@ -280,4 +280,28 @@ class FileUtils
             }
         }
     }
+
+    public static function getFileName($path){
+        return basename($path);
+    }
+
+    public static function downloadFile($sourceFile, $destinationFile){
+        $fsource = fopen($sourceFile, 'rb');
+        if (!$fsource) {
+            throw new Exception('Failed to open the file');
+        }
+
+        $fdestination = fopen($destinationFile, 'wb');
+        if (!$fdestination) {
+            fclose($fsource);
+            throw new Exception('Failed to open the file');
+        }
+
+        while ($buffer = fread($fsource, 1024)) {
+            fwrite($fdestination, $buffer);
+        }
+
+        fclose($fdestination);
+        fclose($fsource);
+    }
 }
