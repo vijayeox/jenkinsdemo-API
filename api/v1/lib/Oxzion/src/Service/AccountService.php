@@ -582,7 +582,7 @@ class AccountService extends AbstractService
             $resultSet[$x]['contactid'] = $this->getAccountContactPersonDetails($resultSet[$x]['uuid']);
         }
         
-        return array('data' => $resultSet, 'total' => $count[0]['count(og.id)']);
+        return array('data' => $resultSet, 'total' => (int)$count[0]['count(og.id)']);
     }
 
     public function saveUser($id, $data)
@@ -713,7 +713,7 @@ class AccountService extends AbstractService
             $resultSet[$x]['icon'] = $baseUrl . "/user/profile/" . $resultSet[$x]['uuid'];
         }
         return array('data' => $resultSet,
-            'total' => $count[0]['count(ox_user.id)']);
+            'total' => (int)$count[0]['count(ox_user.id)']);
     }
 
     public function getAdminUsers($filterParams, $accountId = null)
@@ -763,7 +763,7 @@ class AccountService extends AbstractService
         $query = $select . " " . $from . " " . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         return array('data' => $resultSet,
-            'total' => $count[0]['count(DISTINCT ox_user.uuid)']);
+            'total' => (int)$count[0]['count(DISTINCT ox_user.uuid)']);
     }
 
     public function getAccountGroupsList($id, $filterParams = null)
@@ -810,7 +810,7 @@ class AccountService extends AbstractService
         $resultSet = $this->executeQuerywithParams($query)->toArray();
 
         return array('data' => $resultSet,
-            'total' => $count[0]['count(oxg.uuid)']);
+            'total' => (int)$count[0]['count(oxg.uuid)']);
 
     }
 
@@ -857,7 +857,7 @@ class AccountService extends AbstractService
         $resultSet = $this->executeQuerywithParams($query)->toArray();
 
         return array('data' => $resultSet,
-            'total' => $count[0]['count(oxp.uuid)']);
+            'total' => (int)$count[0]['count(oxp.uuid)']);
 
     }
 
@@ -906,7 +906,7 @@ class AccountService extends AbstractService
         $resultSet = $this->executeQuerywithParams($query)->toArray();
 
         return array('data' => $resultSet,
-            'total' => $count[0]['count(oxa.uuid)']);
+            'total' => (int)$count[0]['count(oxa.uuid)']);
 
     }
 
@@ -971,7 +971,7 @@ class AccountService extends AbstractService
         $resultSet = $this->executeQuerywithParams($query)->toArray();
 
         return array('data' => $resultSet,
-            'total' => $count[0]['count(oxr.uuid)']);
+            'total' => (int)$count[0]['count(oxr.uuid)']);
     }
 
     private function createWhereClause($filterArray, $fieldName = null)
