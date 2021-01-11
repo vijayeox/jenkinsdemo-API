@@ -380,6 +380,15 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 unset($rate);
             }
         }
+        $selectGroupCoverage = "select rc.* from premium_rate_card rc WHERE product = '" . $data['product'] . "' and coverage_category='GROUP_COVERAGE' and start_date <= '" . $data['update_date'] . "' AND end_date >= '" . $data['update_date'] . "'";
+        $this->logger->info("Executing Endorsement Rate Card Coverage - Group Coverage" . $selectGroupCoverage);
+        $resultGroupCoverage = $persistenceService->selectQuery($selectGroupCoverage);
+        while ($resultGroupCoverage->next()) {
+            $rate = $resultGroupCoverage->current();
+            if (isset($rate['key'])) {
+                $data[$rate['key']] = $rate['premium'];
+            }
+        }
         foreach ($policy as $key => $value) {
             if ($key != 'update_date') {
                 $data[$key] = $value;
