@@ -17,7 +17,7 @@ content:
                                         <h5>
                                         Activity: {data.activityName}
                                         Performed By: {data.activityModifiedBy} on
-                                        {moment(data.activitySubmittedDate).format("Do MMMM YYYY")}
+                                        {formatDate(data.activitySubmittedDate)}
                                         </h5>
                                     </div>'
                             useRowData: true
@@ -33,7 +33,7 @@ content:
                                             <p>
                                                 Activity: {data.activityName}
                                                 Performed By {data.activityModifiedBy} on
-                                                {moment(data.activitySubmittedDate).format("Do MMMM YYYY,  h:mm a")}
+                                                {formatDate(data.activitySubmittedDate)}
                                             </p>
                                             </div>
                                         </div>'
@@ -95,4 +95,4 @@ content:
                 -
                     title: Performed On
                     field: activitySubmittedDate
-                    cell: '<td>{moment(item.activitySubmittedDate).format("MM-DD-YYYY HH:mm:ss")}</td>'
+                    cell: '<td>{formatDate(item.activitySubmittedDate)}</td>'
