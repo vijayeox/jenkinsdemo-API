@@ -31,9 +31,9 @@ class RestClient
         $response = $this->client->request('GET', $url, $payload);
         $var = $response->getBody()->getContents();
         if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
-            throw new HttpException($var,$response->getStatusCode());
+            return $var;
         }
-        return $var;
+        throw new HttpException($var,$response->getStatusCode());
     }
 
     public function delete($url, $params = array(), $headers = null)
@@ -48,9 +48,9 @@ class RestClient
         $response = $this->client->request('DELETE', $url, $payload);
         $var = $response->getBody()->getContents();
         if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
-            throw new HttpException($var,$response->getStatusCode());
+            return $var;
         }
-        return $var;
+        throw new HttpException($var,$response->getStatusCode());
     }
 
     public function postMultiPart($url, $formParams = array(), $fileParams = array(), array $headers = null)
@@ -75,9 +75,9 @@ class RestClient
         $response = $this->client->post($url, $params);
         $var = $response->getBody()->getContents();
         if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
-            throw new HttpException($var,$response->getStatusCode());
+            return $var;
         }
-        return $var;  
+        throw new HttpException($var,$response->getStatusCode());
     }
 
     public function post($url, $formParams = array())
@@ -89,9 +89,9 @@ class RestClient
         }
         $var = $response->getBody()->getContents();
         if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
-            throw new HttpException($var,$response->getStatusCode());
+            return $var;
         }
-        return $var;
+        throw new HttpException($var,$response->getStatusCode());
     }
 
     public function postWithHeader($url, $formParams = array(), $headers = array())
@@ -124,9 +124,9 @@ class RestClient
         $response = $this->client->request('PUT', $url, $payload);
         $var = $response->getBody()->getContents();
         if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
-            throw new HttpException($var,$response->getStatusCode());
+            return $var;
         }
-        return $var;
+        throw new HttpException($var,$response->getStatusCode());
     }
 
     public function postWithHeaderAsBody($url, string $formParams , $headers = array())
