@@ -163,15 +163,22 @@ class WorkflowInstanceService extends AbstractService
     }
     public function getWorkflowInstance($id)
     {
-        $query = "SELECT oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.account_id,ow.uuid as workflow_id 
-                    from ox_workflow_instance as oxi
-                    join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
-                    join ox_workflow as ow on wd.workflow_id = ow.id
-                    where oxi.account_id=? and oxi.process_instance_id=?";
-        $queryParams = array(AuthContext::get(AuthConstants::ACCOUNT_ID), $id);
-        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        $this->logger->info("WorkflowInstance ----------" . print_r($resultSet, true));
-        return $resultSet;
+        try {
+            $query = "SELECT oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.account_id,ow.uuid as workflow_id 
+            from ox_workflow_instance as oxi
+            join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
+             join ox_workflow as ow on wd.workflow_id = ow.id
+             where oxi.account_id=? and oxi.process_instance_id=?";
+
+            // $query = "SELECT * from ox_workflow_instance where org_id=? and process_instance_id=?";
+            $queryParams = array(AuthContext::get(AuthConstants::ACCOUNT_ID), $id);
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            $this->logger->info("WorkflowInstance ----------" . print_r($resultSet, true));
+            return $resultSet;
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
     }
 
     public function startWorkflow($params)
@@ -183,7 +190,9 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['accountId'])) {
             $params['accountId'] = AuthContext::get(AuthConstants::ACCOUNT_UUID);
         }
-        $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        if (!isset($params['created_by'])) {
+            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        }
         $workflowId = $params['workflowId'];
 
         if (!isset($params['app_id'])) {
@@ -270,6 +279,7 @@ class WorkflowInstanceService extends AbstractService
             $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
             $this->commit();
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -614,18 +624,18 @@ class WorkflowInstanceService extends AbstractService
                     throw new ServiceException("WorkFlow Instance Create Failed", "workflow.instance.failed");
                 }
                 $this->commit();
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
+                $this->logger->info("SET UP WORKFLOW DATA--- " . print_r($data, true));
+            } catch (Exception $e) {
+                $this->logger->info("SET UP WORKFLOW Exception -- " . $e->getMessage() . " Trace -- " . $e->getTraceAsString());
+                $this->rollback();
+                $this->logger->error($e->getMessage(), $e);
+                throw $e;
             }
-            $this->commit();
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
-            $this->logger->info("SET UP WORKFLOW DATA--- " . print_r($data, true));
-        } catch (Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
 
-        return $data;
-        
+            return $data;
+        }
     }
 
     private function getIdFromProcessInstanceId($processInstanceId)
