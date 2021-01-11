@@ -4,7 +4,7 @@
             <div style='line-height: 24px'>Dear {$firstname}, {$username}<br/>
                 We received a request to reset your password. Use the link below to set your new password for your account. If you did not request to reset your password, ignore this email and the link will expire on its own.<br/><br/>
                 <a href="{$url}" style = "color:blue;">Click here to reset your password.</a><br/>
-                This link is active for the next 30 minutes only! <br/>  
+                This link is active for the next 24 hours only! <br/>  
             </div>
             <br/>
 Sincerely,

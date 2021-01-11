@@ -10,7 +10,7 @@
 				<br/>
 				</p>
 				<br/>
-				<p>This mail is to inform you that your policy has been reinstated effectively on {$smarty.now|date_format:"%d %B %Y"} without a lapse in coverage.</p><br/>
+				<p>This mail is to inform you that your policy has been reinstated effectively on {$reinstateDate|date_format:"%d %B %Y"} without a lapse in coverage.</p><br/>
 				
 				<p>We thank you for your long-standing relationship with PADI and Vicencia & Buckley, a Division of HUB International Insurance Services Inc. If you have any questions feel free to give us a call or send us an email.</p>
 			 <br/>

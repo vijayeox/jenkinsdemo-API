@@ -15,6 +15,8 @@ use Zend\Db\Adapter\Exception\InvalidQueryException;
 use \Exception;
 use Mockery;
 use Zend\Db\ResultSet\ResultSet;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Request;
 
 class WorkflowInstanceServiceTest extends AbstractServiceTest
 {
@@ -300,6 +302,106 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
+    }
+
+    public function testStartWorkFlowWithTimeoutError() {
+        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $req = new Request('GET', '/');
+            $prev = new \Exception();
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error',$req,$prev,['foo' => 'bar']));
+            $workflowService->setProcessEngine($mockProcessEngine);
+        }
+        $this->expectException(ConnectException::class);
+        $result = $this->workflowInstanceService->startWorkflow($params);
+    }
+
+    public function testStartWorkFlowWithTimeoutWithNoParentWorkflow() {
+        // CHECK TIMEOUT ON NEW WORKFLOW WITH NO PARENT
+        $this->getTransactionManager()->setForceRollback(true); //Ensures rollback is not used
+        $query = "SELECT 'ox_file' AS table_name, COUNT(*) as count FROM ox_file where ox_file.is_active=1
+                    UNION
+                SELECT 'ox_workflow_instance' AS table_name, COUNT(*) as count FROM ox_workflow_instance";
+        $queryResult = $this->runQuery($query);
+        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $req = new Request('GET', '/');
+            $prev = new \Exception();
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error',$req,$prev,['foo' => 'bar']));
+            $workflowService->setProcessEngine($mockProcessEngine);
+        }
+        try{
+            $result = $this->workflowInstanceService->startWorkflow($params);
+        } catch(ConnectException $e) {
+            $queryResultAfterExecution = $this->runQuery($query);
+            $this->assertEquals([], array_diff_key($queryResult, $queryResultAfterExecution));
+        }
+    }
+
+    public function testStartWorkFlowWithTimeoutUsingParentWorkflow() {
+        // CHECK TIMEOUT ON NEW WORKFLOW WITH NO PARENT
+        $this->getTransactionManager()->setForceRollback(true);
+        $query = "SELECT 'ox_file' AS table_name, COUNT(*) as count FROM ox_file where ox_file.is_active=1
+                    UNION
+                SELECT 'ox_workflow_instance' AS table_name, COUNT(*) as count FROM ox_workflow_instance";
+        $queryResult = $this->runQuery($query);
+        $updateQuery = "update ox_workflow_instance set completion_data = 'COMPLETION' where id = 1";
+        $this->executeUpdate($updateQuery);
+        $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4','uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b','parentWorkflowInstanceId' => '3f20b5c5-0124-11ea-a8a0-22e8105c0778');
+        if (enableCamunda == 0) {
+            $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $req = new Request('GET', '/');
+            $prev = new \Exception();
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error',$req,$prev,['foo' => 'bar']));
+            $workflowService->setProcessEngine($mockProcessEngine);
+        }
+        try{
+            $result = $this->workflowInstanceService->startWorkflow($params);
+        } catch(ConnectException $e) {
+            $queryResultAfterExecution = $this->runQuery($query);
+            $this->assertEquals([], array_diff_key($queryResult, $queryResultAfterExecution));
+            $fileDataQuery = "Select data from ox_file where last_workflow_instance_id = 1";
+            $fileDataQueryResult = $this->runQuery($fileDataQuery);
+            $this->assertEquals('COMPLETION',$fileDataQueryResult[0]['data']);
+        }
+    }
+
+
+    public function testSubmitActivityWithTimeoutError() {
+        $params = array('field1' => 1, 'field2' => 2, 'fileId' => 'f13d0c68-98c9-11e9-adc5-308d99c91478' ,'activityInstanceId' => '346622fd-0124-11ea-a8a0-22e8105c0766','workflowInstanceId' => '3f20b5c5-0124-11ea-a8a0-22e8105c0778');
+        if (enableCamunda == 0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $req = new Request('GET', '/');
+            $prev = new \Exception();
+            $mockActivityEngine->expects('completeActivity')->withAnyArgs()->once()->andThrow($prev);
+            $workflowService->setActivityEngine($mockActivityEngine);
+        }
+        $result = $this->workflowInstanceService->submitActivity($params);
+        $this->assertEquals($result, 0);
+    }
+
+    public function testSubmitActivityTimeoutError() {
+        $params = array('field1' => 1, 'field2' => 2, 'fileId' => 'f13d0c68-98c9-11e9-adc5-308d99c91478' ,'activityInstanceId' => '346622fd-0124-11ea-a8a0-22e8105c0766');
+        if (enableCamunda == 0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
+            $prev = new \Exception();
+            $mockActivityEngine->expects('completeActivity')->withAnyArgs()->once()->andThrow(new Exception($prev));
+            $workflowService->setActivityEngine($mockActivityEngine);
+        }
+        try{
+            $result = $this->workflowInstanceService->submitActivity($params);
+        } catch(Exception $e) {
+            $fileDataQuery = "Select status from ox_activity_instance where activity_instance_id = '".$params['activityInstanceId']."'";
+            $fileDataQueryResult = $this->runQuery($fileDataQuery);
+            $this->assertEquals('In Progress',$fileDataQueryResult[0]['status']);   
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 use Mockery as Mockery;
 use Oxzion\AppDelegate\AppDelegateService;
 use Oxzion\Db\Persistence\Persistence;
@@ -6,6 +7,7 @@ use Oxzion\DelegateException;
 use Oxzion\Test\DelegateTest;
 use Oxzion\Utils\FileUtils;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
 class DispatchPolicyTest extends DelegateTest
 {
@@ -23,7 +25,7 @@ class DispatchPolicyTest extends DelegateTest
             'description' => 'FirstAppOfTheClient',
             'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a',
         );
-        $this->persistence = new Persistence( $this->config, $this->data['UUID'], $this->data['appName']);
+        $this->persistence = new Persistence($this->config, $this->data['UUID'], $this->data['appName']);
         $path = __DIR__ . '/../../../api/v1/data/delegate/' . $this->data['UUID'];
         if (!is_link($path)) {
             symlink(__DIR__ . '/../data/delegate/', $path);
@@ -46,27 +48,27 @@ class DispatchPolicyTest extends DelegateTest
             FileUtils::rmDir($this->appFile);
         }
         FileUtils::symlink($appLocation, $this->appFile);
-        $this->chmod_r(dirname($this->config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']."/".$this->data['fileUuid']."/"), 777, 777);
+        $this->chmod_r(dirname($this->config['APP_DOCUMENT_FOLDER'] . $this->data['orgUuid'] . "/" . $this->data['fileUuid'] . "/"), 777, 777);
         parent::setUp();
     }
 
 
-    function chmod_r($dir, $dirPermissions, $filePermissions) {
-      $dp = opendir($dir);
-       while($file = readdir($dp)) {
-         if (($file == ".") || ($file == ".."))
-            continue;
-        $fullPath = $dir."/".$file;
+    function chmod_r($dir, $dirPermissions, $filePermissions)
+    {
+        $dp = opendir($dir);
+        while ($file = readdir($dp)) {
+            if (($file == ".") || ($file == ".."))
+                continue;
+            $fullPath = $dir . "/" . $file;
 
-         if(is_dir($fullPath)) {
-            chmod($fullPath, $dirPermissions);
-            $this->chmod_r($fullPath, $dirPermissions, $filePermissions);
-         } else {
-            chmod($fullPath, $filePermissions);
-         }
-
-       }
-     closedir($dp);
+            if (is_dir($fullPath)) {
+                chmod($fullPath, $dirPermissions);
+                $this->chmod_r($fullPath, $dirPermissions, $filePermissions);
+            } else {
+                chmod($fullPath, $filePermissions);
+            }
+        }
+        closedir($dp);
     }
 
     public function tearDown(): void
@@ -83,7 +85,8 @@ class DispatchPolicyTest extends DelegateTest
 
     public function getDataSet()
     {
-        return new DefaultDataSet();
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/Dataset/File.yml");
+        return $dataset;
     }
 
     public function getMockMessageProducer()
@@ -102,9 +105,10 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','card' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','blanket_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'card' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'blanket_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['padi'] = '124';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
@@ -123,7 +127,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cert.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','card' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','blanket_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cert.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'card' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'blanket_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -141,7 +145,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -160,9 +164,13 @@ class DispatchPolicyTest extends DelegateTest
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
         $data['vessel_name'] = 'Orion';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['padi'] = '435435';
+        $data['approverName'] = 'CSR1';
+        $data['approverEmailId'] = 'csr@gmail.com';
+        $data['approverDesignation'] = 'CSR';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
@@ -181,15 +189,20 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['boat_name'] = 'Orion';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/ceicate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['vessel_name'] = 'Orion';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/ceicate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['padi'] = 133;
+        $data['approverName'] = 'CSR1';
+        $data['approverEmailId'] = 'csr@gmail.com';
+        $data['approverDesignation'] = 'CSR';
+        $data['identifier_field'] = 'padi';
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $exception = $this->expectException(DelegateException::class);
+        $this->expectException(DelegateException::class);
         $this->expectExceptionMessage("Documents Not Found");
-        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $content = $delegateService->execute($appId, 'NewPolicyDocumentDispatch', $data);
         $this->assertEquals($content, array());
     }
 
@@ -202,7 +215,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
         $data['boat_name'] = 'Orion';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -221,17 +234,22 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] = array('property_coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','liability_coi_document'=>'53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','property_policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','liability_policy_document'=>'53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('property_coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'liability_coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'property_policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'liability_policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
-        
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['propertyCoverageSelect'] = 'no';
+        $data['groupProfessionalLiabilitySelect'] = 'no';
+        $data['business_padi'] = '234';
+        $data['approverName'] = 'CSR1';
+        $data['approverEmailId'] = 'csr@gmail.com';
+        $data['approverDesignation'] = 'CSR';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $content = $delegateService->execute($appId, 'NewPolicyDocumentDispatch', $data);
         $this->assertEquals($content, array());
     }
 
@@ -243,7 +261,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] =  array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cericate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] =  array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cericate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf', 'cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -262,7 +280,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -288,6 +306,8 @@ class DispatchPolicyTest extends DelegateTest
         $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['business_name'] = "ABCD";
+        $data['business_padi'] = 1234;
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
@@ -336,6 +356,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['isequipmentliability'] = 1;
         $data['equipment'] = 'Equipment';
         $data['careerCoverage'] = 'Instructor';
+        $data['careerCoverageVal'] = 234;
         $data['isexcessliability'] = 0;
         $data['excessLiability'] = 'excessLiabilityCoverageDeclined';
         $data['credit_card_type'] = 'credit';
@@ -346,6 +367,9 @@ class DispatchPolicyTest extends DelegateTest
         $data['expiry_year'] = '2019';
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['padi'] = 123;
+        $data['state_in_short'] = 'CA';
+        $data['country'] = 'US';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
@@ -369,6 +393,8 @@ class DispatchPolicyTest extends DelegateTest
         $data['cost'] = '1000000';
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['padi'] = '124';
+        $data['amount'] = 200;
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
@@ -388,16 +414,17 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
-        $data['product'] = 'Dive Boat';
-        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['product'] = 'Dive Store';
+        $data['orgId'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $data['activityInstanceId'] = '512311-2863-4949-afb1-e69b0891c98a';
         $data['workflowInstanceId'] = '212311-2863-4949-afb1-e69b0891c98a';
         $data['vessel_name'] = 'HUB';
+        $data['fileId'] = 'd1968945-9191-4a66-a86d-ee73e703234';
         if (enableCamel == 0) {
-                    $mockMessageProducer = $this->getMockMessageProducer();
-                    $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-                }
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
+        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'DispatchProposalDocument', $data);
@@ -414,17 +441,79 @@ class DispatchPolicyTest extends DelegateTest
         $data['lastname'] = 'Rai';
         $data['activityInstanceId'] = '512311-2863-4949-afb1-e69b0891c98a';
         $data['workflowInstanceId'] = '212311-2863-4949-afb1-e69b0891c98a';
-        $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
-        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['orgId'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['fileId'] = 'd1968945-9191-4a66-a86d-ee73e703234';
         if (enableCamel == 0) {
-                    $mockMessageProducer = $this->getMockMessageProducer();
-                    $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-                }
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
+        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'DispatchProposalDocument', $data);
         $this->assertEquals($content, array());
     }
 
+    public function testNewPolicyDocumentDispatch()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['documents'] = array(
+            'cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf',
+            'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf',
+            'property_coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf',
+            'group_coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf'
+        );
+        $data['product'] = 'Dive Store';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['propertyCoverageSelect'] = "yes";
+        $data['groupProfessionalLiabilitySelect'] = "yes";
+        $data['business_padi'] = 1234;
+        $data['approverName'] = 'CSR1';
+        $data['approverEmailId'] = 'csr@gmail.com';
+        $data['approverDesignation'] = 'CSR';
+        if (enableCamel == 0) {
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->times(3)->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'NewPolicyDocumentDispatch', $data);
+        $this->assertEquals($content, array());
+    }
+    public function testNewPolicyDocumentDispatchWithoutProperty()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['documents'] = array(
+            'cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf',
+            'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf',
+            'group_coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf'
+        );
+        $data['product'] = 'Dive Store';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['propertyCoverageSelect'] = "no";
+        $data['groupProfessionalLiabilitySelect'] = "yes";
+        $data['business_padi'] = 1234;
+        $data['approverName'] = 'CSR1';
+        $data['approverEmailId'] = 'csr@gmail.com';
+        $data['approverDesignation'] = 'CSR';
+        if (enableCamel == 0) {
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->twice(2)->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'NewPolicyDocumentDispatch', $data);
+        $this->assertEquals($content, array());
+    }
 }
