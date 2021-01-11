@@ -75,8 +75,8 @@ class WorkflowInstanceService extends AbstractService
         $WorkflowInstance->exchangeArray($data);
         $WorkflowInstance->validate();
         $count = 0;
+        $this->beginTransaction();
         try {
-            $this->beginTransaction();
             $count = $this->table->save($WorkflowInstance);
             if ($count == 0) {
                 $this->rollback();
@@ -88,13 +88,12 @@ class WorkflowInstanceService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
+            $this->rollback();
             switch (get_class($e)) {
                 case "Oxzion\ValidationException":
-                    $this->rollback();
                     throw $e;
                     break;
                 default:
-                    $this->rollback();
                     return 0;
                     break;
             }
@@ -227,7 +226,7 @@ class WorkflowInstanceService extends AbstractService
         if (isset($workflowInstance['parent_workflow_instance_id'])) {
             $fileDataResult = $this->fileService->getFileByWorkflowInstanceId($workflowInstance['parent_workflow_instance_id'], false);
             if ($this->checkIfWorkflowInProgress($fileDataResult['last_workflow_instance_id'])) {
-                throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+                throw new ServiceException("A Process is already underway for this file", "process.already.underway.for.file", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
             $oldFileData = json_decode($fileDataResult['data'], true);
             $fileData = array_merge($oldFileData, $fileData);
@@ -246,14 +245,14 @@ class WorkflowInstanceService extends AbstractService
                     $fileData['data'] = !isset($fileData['data']) ? $fileData : $fileData['data'];
                 } else {
                     if ($this->checkIfWorkflowInProgress($result[0]['last_workflow_instance_id'])) {
-                        throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+                        throw new ServiceException("A Process is already underway for this file", "process.already.underway.for.file", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                     }
                     unset($fileData['uuid']);
                 }
             }
             if (!isset($fileData['uuid'])) {
                 if ($this->checkIfWorkflowInProgress(null, $fileData)) {
-                    throw new ServiceException("A Process is aleady underway for this file", "process.already.underway.for.file");
+                    throw new ServiceException("A Process is already underway for this file", "process.already.underway.for.file", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                 }
                 $file = $this->fileService->createFile($fileData);
             }
@@ -270,8 +269,8 @@ class WorkflowInstanceService extends AbstractService
             $this->rollbackWorkflowInstanceAndFile($params);
             throw $e;
         }
+        $this->beginTransaction();
         try {
-            $this->beginTransaction();
             $this->logger->info("WorkflowInstanceId created" . print_r($workflowInstanceId, true));
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id, file_id=:fileId, start_data=:startData where id = :workflowInstanceId";
             $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id'], 'fileId' => $this->getIdFromUuid('ox_file', $params['fileId']), 'startData' => is_array($fileData['data']) ? json_encode($fileData['data']) : $fileData['data']);
@@ -445,8 +444,8 @@ class WorkflowInstanceService extends AbstractService
         $queryParams = array($workflowInstance[0]['id']);
         $existingFile = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if (isset($existingFile[0])) {
+            $this->beginTransaction();
             try{
-                $this->beginTransaction();
                 $this->logger->info(WorkflowInstanceService::class . "FILE UPDATE-----" . print_r($existingFile, true));
                 $file = $this->fileService->updateFile($params, $existingFile[0]['uuid']);
                 $pruneParams = $this->pruneFields($params, $params['workflow_instance_id']);
@@ -460,6 +459,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->commit();
             }catch(Exception $e){
                 $this->rollback();
+                return 0;
             }
         } else {
             throw new EntityNotFoundException("No file EntityNotFoundExceptiond for workflow instance " . $workflowInstanceId);
@@ -489,8 +489,8 @@ class WorkflowInstanceService extends AbstractService
     public function completeWorkflow($params)
     {
         $this->logger->info("Complete Workflow Params------" . print_r($params, true));
+        $this->beginTransaction();
         try {
-            $this->beginTransaction();
             $selectQuery = "SELECT ox_file.data from ox_file inner join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id where process_instance_id = :workflowInstanceId";
             $updateQueryParams = array('workflowInstanceId' => $params['processInstanceId']);
             $select = $this->executeQueryWithBindParameters($selectQuery, $updateQueryParams)->toArray();
@@ -596,12 +596,12 @@ class WorkflowInstanceService extends AbstractService
             if (isset($result[0]['id'])) {
                 $entityId = $result[0]['id'];
             } else {
-                throw new ServiceException("Invalid entity property set", "workflow.instance.failed");
+                throw new ServiceException("Invalid entity property set", "workflow.instance.failed", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         } elseif (isset($workflowResultSet) && !empty($workflowResultSet)) {
             $entityId = $workflowResultSet[0]['entity_id'];
         } else {
-            throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed");
+            throw new ServiceException("WorkFlow Instance entity failed to be set", "workflow.instance.failed", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
         }
 
         if (count($workflowResultSet)) {
@@ -616,12 +616,12 @@ class WorkflowInstanceService extends AbstractService
             $form->exchangeArray($data);
             $this->logger->info("WorkFlow Instance Form DATA --- " . print_r($form, true));
             $form->validate();
+            $this->beginTransaction();
             try {
-                $this->beginTransaction();
                 $count = $this->table->save($form);
                 $this->logger->info("WorkFlow Instance Form DATA INSERTED--- " . print_r($count, true));
                 if ($count == 0) {
-                    throw new ServiceException("WorkFlow Instance Create Failed", "workflow.instance.failed");
+                    throw new ServiceException("WorkFlow Instance Create Failed", "workflow.instance.failed", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                 }
                 $this->commit();
                 $id = $this->table->getLastInsertValue();

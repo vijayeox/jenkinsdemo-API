@@ -221,12 +221,11 @@ class FileIndexerService extends AbstractService
         $data = json_decode($result['file_data'],true);
 
         //get all fields for a particular entity
-        $selectFields = "Select name from ox_field where entity_id = :entity_id AND parent_id IS NULL AND data_type IN ('boolean','date','datetime','numeric','text','time')";
+        $selectFields = "Select name from ox_field where entity_id = :entity_id AND parent_id IS NULL AND data_type NOT IN ('file')";
         $params = array('entity_id' => $entityId);
         $fieldResult = $this->executeQuerywithBindParameters($selectFields, $params)->toArray();
         $fieldArray = array_column($fieldResult, 'name');
         $toBeIndexedArray = array();
-
         //storing the values for each field from the file data
         foreach ($fieldArray as $key => $value) {
             if(array_key_exists($value, $data))
