@@ -509,7 +509,8 @@ class Module
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(Service\ActivityInstanceService::class),
                         $container->get(Service\UserService::class),
-                        $container->get(Service\CommentService::class)
+                        $container->get(Service\CommentService::class),
+                        $container->get(Service\EsignService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {

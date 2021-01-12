@@ -58,6 +58,17 @@ return [
                     ],
                 ],
             ],
+            'esignFinalizedCallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/esign/finalized',
+                    'defaults' => [
+                        'controller' => Controller\EsignCallbackController::class,
+                        'action' => 'documentFinalized',
+                        'method' => 'POST'
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

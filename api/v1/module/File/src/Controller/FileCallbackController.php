@@ -60,4 +60,7 @@ class FileCallbackController extends AbstractApiControllerHelper
         return $this->getSuccessResponse('Success',200);
     }
     
+    public function documentFinalized($data){
+        FileUtils::storeFile($data['file'],$this->config['APP_ESIGN_FOLDER'].$data['refId']);
+    }
 }
