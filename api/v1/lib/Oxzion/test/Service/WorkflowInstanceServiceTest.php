@@ -390,8 +390,11 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $mockActivityEngine->expects('completeActivity')->withAnyArgs()->once()->andThrow($prev);
             $workflowService->setActivityEngine($mockActivityEngine);
         }
-        $result = $this->workflowInstanceService->submitActivity($params);
-        $this->assertEquals($result, 0);
+        try{
+            $result = $this->workflowInstanceService->submitActivity($params);
+        } catch(Exception $e) {
+            $this->assertEquals('Unable to execute workflow '.$params['workflowInstanceId'],$e->getMessage());   
+        }
     }
 
     public function testSubmitActivityTimeoutError() {

@@ -531,7 +531,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
             $mockProcessEngine->expects('completeActivity')->withArgs(function($arg1, $arg2){
                 $result = $arg1 == '3f6622fd-0124-11ea-a8a0-22e8105c0723';
-                $result = $result && count($arg2) == 100;
+                $result = $result && count($arg2) == 101;
                 return $result;
             })->once()->andReturnUsing(function () {
                 $activityService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);

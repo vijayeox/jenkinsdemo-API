@@ -459,7 +459,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->commit();
             }catch(Exception $e){
                 $this->rollback();
-                return 0;
+                throw new EntityNotFoundException("Unable to execute workflow " . $workflowInstanceId);
             }
         } else {
             throw new EntityNotFoundException("No file EntityNotFoundExceptiond for workflow instance " . $workflowInstanceId);
@@ -483,6 +483,7 @@ class WorkflowInstanceService extends AbstractService
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             $this->logger->info("Workflow Instance Start Failed" . $e->getMessage() . "Trace ---- " . $e->getTraceAsString());
+            throw $e;
         }
     }
 
@@ -501,6 +502,8 @@ class WorkflowInstanceService extends AbstractService
                 $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
                 $this->commit();
                 return $update->getAffectedRows();
+            } else {
+                throw new ServiceException("Invalid entity property set", "workflow.instance.entity.not.set", OxServiceException::ERR_CODE_NOT_FOUND);
             }
         } catch (Exception $e) {
             $this->logger->info(ActivityInstanceService::class . "Workflow Instance Entry Failed" . $e->getMessage());
@@ -633,7 +636,6 @@ class WorkflowInstanceService extends AbstractService
                 $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
-
             return $data;
         }
     }
