@@ -71,7 +71,7 @@ class FileIndexerService extends AbstractService
     {
         //Get all file data and relevant parameters
         $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entityName,
-            file.data as file_data, file.uuid as file_uuid, file.is_active, file.org_id,
+            file.data as file_data, file.uuid as file_uuid, file.is_active, file.account_id,
             CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
             from ox_file as file
             INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
@@ -88,7 +88,7 @@ class FileIndexerService extends AbstractService
         if($result) {
             $app_name = $result[0]['app_name'];
             $indexedData = $this->getAllFieldsWithCorrespondingValues($result[0]);
-
+            $this->logger->info("\nINDEXED DATA :".print_r($indexedData,true));
             //Sending it to the elastic queue
             $this->messageProducer->sendQueue(json_encode(array('index'=>  $app_name.'_index','body' => $indexedData,'id' => $indexedData['id'], 'operation' => 'Index', 'type' => '_doc')), 'elastic');
             return $indexedData;
