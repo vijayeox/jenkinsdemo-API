@@ -15,14 +15,14 @@ trait EsignTrait
     
     public function setEsignService(EsignService $esignService){
         $this->logger->info("SET ESIGN SERVICE");
-        $this->EsignService = $esignService;
+        $this->esignService = $esignService;
     }
 
     protected function setupDocument($ref_id, $documentUrl ,array $signers){
-        return $this->EsignService->setupDocument($ref_id, $documentUrl , $signers);
+        return $this->esignService->setupDocument($ref_id, $documentUrl , $signers);
     }
 
     protected function getDocumentSigningLink($docId){
-        return $this->EsignService->getDocumentSigningLink($docId);
+        return $this->esignService->getDocumentSigningLink($docId);
     }
 }
