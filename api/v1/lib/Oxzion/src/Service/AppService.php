@@ -848,7 +848,7 @@ private function checkWorkflowData(&$data,$appUuid)
     private function setupLinksAndBuild($path, $appId)
     {
         $link = $this->config['DELEGATE_FOLDER'] . $appId;
-        $target = $path . "data/delegate";
+        $target = $path . "/data/delegate";
         if (is_link($link)) {
             FileUtils::unlink($link);
         }
@@ -856,7 +856,7 @@ private function checkWorkflowData(&$data,$appUuid)
             $this->setupLink($target, $link);
         }
         $formlink = $this->config['FORM_FOLDER'] . $appId;
-        $formsTarget = $path . "content/forms";
+        $formsTarget = $path . "/content/forms";
         if (is_link($formlink)) {
             FileUtils::unlink($formlink);
         }
@@ -865,7 +865,7 @@ private function checkWorkflowData(&$data,$appUuid)
         }
 
         $formlink = $this->config['PAGE_FOLDER'] . $appId;
-        $formsTarget = $path . "content/pages";
+        $formsTarget = $path . "/content/pages";
         if (is_link($formlink)) {
             FileUtils::unlink($formlink);
         }
@@ -873,7 +873,7 @@ private function checkWorkflowData(&$data,$appUuid)
             $this->setupLink($formsTarget, $formlink);
         }
         $formlink = $this->config['ENTITY_FOLDER'] . $appId;
-        $formsTarget = $path . "content/entity";
+        $formsTarget = $path . "/content/entity";
         if (is_link($formlink)) {
             FileUtils::unlink($formlink);
         }
@@ -888,7 +888,7 @@ private function checkWorkflowData(&$data,$appUuid)
         if ($accountId && $path) {
             $link = $this->config['TEMPLATE_FOLDER'] . $accountId;
             $this->logger->info("linkkk---$link");
-            $source = $path . "data/template";
+            $source = $path . "/data/template";
             FileUtils::copyDir($source,$link);
         }
         

@@ -90,7 +90,7 @@ class TargetController extends AbstractApiController
      *              type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer,
+     *              account_id: integer,
      *              isdeleted: tinyint
      *   }
      * @return array Returns a JSON Response with Status Code and Created Group.
@@ -119,7 +119,7 @@ class TargetController extends AbstractApiController
      *              type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer,
+     *              account_id: integer,
      *              isdeleted: tinyint
      * </code>
      */
