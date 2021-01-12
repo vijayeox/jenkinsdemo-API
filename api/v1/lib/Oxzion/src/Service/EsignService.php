@@ -174,9 +174,12 @@ class EsignService extends AbstractService
     }
 
     public function getDocumentStatus($docId ){
+        $this->logger->info("status for doc -".$docId);
+        $auth = $this->getAuthToken();
         $response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId,array() ,  
-            array( 'Authorization'=> 'Bearer '. $this->getAuthToken() ));
+            array( 'Authorization'=> 'Bearer '. $auth ));
         $data = json_decode($response,true);
+        $this->logger->info("response doc -".$docId." is\n".print_r($data,true));
         return $data['data']['status'];
 
     }
@@ -285,6 +288,7 @@ class EsignService extends AbstractService
 
     public function getDocumentSigningLink($docId){
         $authToken = $this->getAuthToken();
+        $this->logger->info("signing link for doc -".$docId);
         $response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/signinglink',array() ,  array( 'Authorization'=> 'Bearer '. $authToken    ));
         $response = json_decode($response,true);
         return $response['signingLink'];
