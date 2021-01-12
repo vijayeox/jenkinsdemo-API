@@ -12,7 +12,8 @@ class Role extends Entity
         'description' => null,
         'is_system_role' => null,
         'uuid' => null,
-        'default_role' => 0
+        'default_role' => 0,
+        'app_id' => null
     );
 
     public function __construct($data = array())

@@ -72,6 +72,9 @@ class RoleService extends AbstractService
                 $clause .= " AND account_id =" . $accountId;
                 $params["accountId"] = $accountId;
             }
+            if(isset($data['app_id'])){
+                $clause .= " AND app_id =" . $data['app_id'];
+            }
             
             if ($data['default'] == 1 && $clause != "") {
                 $queryString = "UPDATE ox_role set default_role = 0 where id != 0 $clause";
@@ -101,8 +104,8 @@ class RoleService extends AbstractService
                 $inputData['uuid'] = $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
                 $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] : 0;
                 $data['default'] = $data['default'] ? 1 :0;
-                $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`account_id`,`is_system_role`, `default_role`, business_role_id) 
-                            VALUES ('" . $rolename . "','" . $data['description'] . "','" . $data['uuid'] . "'," . ($accountId ? $accountId : 'NULL') . ",'" . $data['is_system_role'] . "','" . $data['default'] . "', $businessRoleId)";
+                $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`account_id`,`is_system_role`, `default_role`, business_role_id, app_id) 
+                            VALUES ('" . $rolename . "','" . $data['description'] . "','" . $data['uuid'] . "'," . ($accountId ? $accountId : 'NULL') . ",'" . $data['is_system_role'] . "','" . $data['default'] . "', $businessRoleId," . (isset($data['app_id']) ? $data['app_id'] : 'NULL') . ")";
                 $result1 = $this->runGenericQuery($insert);
                 $count = $result1->getAffectedRows();
                 if ($count > 0) {
@@ -236,6 +239,12 @@ class RoleService extends AbstractService
 
         $where .= strlen($where) > 0 ? " AND " : "WHERE ";
         $where .= "account_id =" . $accountId;
+        
+        if (isset($params['app_id'])) {
+            $where .= " AND app_id=". $params['app_id'];
+        }else{
+            $where .= " AND app_id IS NULL";
+        }
 
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
@@ -346,8 +355,10 @@ class RoleService extends AbstractService
         }else{
             $acctClause .= " IS NULL";
         }
-        $query = "SELECT r.* from ox_role r inner join ox_role_privilege rp on rp.role_id = r.id
-                    where rp.app_id = :appId and $acctClause";
+        $query = "SELECT distinct r.* from ox_role r 
+                  inner join ox_role_privilege rp on rp.role_id = r.id
+                  where rp.app_id = :appId and $acctClause";
+        $this->logger->info("Excecuting Query $query with params--".print_r($params,true));
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
         return $result;
     }
@@ -391,8 +402,8 @@ class RoleService extends AbstractService
         try{
             $this->beginTransaction();
             $sqlQuery = "INSERT INTO ox_role(`name`,`description`,`account_id`,
-                    `is_system_role`,`uuid`,`default_role`,`business_role_id`) 
-                    (SELECT oxr.name,oxr.description,obr.account_id,oxr.is_system_role,UUID(),oxr.default_role,oxr.business_role_id 
+                    `is_system_role`,`uuid`,`default_role`,`business_role_id`,`app_id`) 
+                    (SELECT oxr.name,oxr.description,obr.account_id,oxr.is_system_role,UUID(),oxr.default_role,oxr.business_role_id ,$appId
                     FROM ox_role oxr 
                     inner join ox_account_business_role obr on obr.business_role_id = oxr.business_role_id
                     inner join ox_business_role br on  br.id = obr.business_role_id

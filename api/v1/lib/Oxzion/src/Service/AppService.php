@@ -1143,7 +1143,8 @@ private function checkWorkflowData(&$data,$appUuid)
         $app->loadByUuid($uuid);
         $app->assign([
             'status' => App::DELETED,
-            'name' => $app->toArray()['id'] .'_'.$app->toArray()['name']
+            'name' => $app->toArray()['id'] .'_'.$app->toArray()['name'],
+            'uuid' => UuidUtil::uuid()
         ]);
         try {
             $this->beginTransaction();
@@ -1407,7 +1408,7 @@ private function checkWorkflowData(&$data,$appUuid)
             $this->beginTransaction();
             // Remove Symlinks
             $appDetails = $this->getDataByParams('ox_app', array(), array('uuid' => $appId))->toArray();
-            $this->executePackageDiscover($appDetails[0]['name']);
+            $this->removeAppAndExecutePackageDiscover($appDetails[0]['name']);
             $this->jobService->cancelAppJobs($appId);
 
              // Page
@@ -1455,7 +1456,7 @@ private function checkWorkflowData(&$data,$appUuid)
 
     }
 
-    private function executePackageDiscover($appName)
+    private function removeAppAndExecutePackageDiscover($appName)
     {
         $link = $this->config['APPS_FOLDER'] . $appName;
         if (is_link($link)) {
