@@ -17,6 +17,7 @@ use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
 use Oxzion\Service\CommentService;
+use Oxzion\Service\EsignService;
 use Oxzion\EntityNotFoundException;
 
 class AppDelegateService extends AbstractService
@@ -31,7 +32,7 @@ class AppDelegateService extends AbstractService
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
                                  MessageProducer $messageProducer, FileService $fileService, 
-                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService)
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService,EsignService $esignService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
@@ -40,6 +41,7 @@ class AppDelegateService extends AbstractService
         $this->messageProducer = $messageProducer;
         $this->userService = $userService;
         $this->commentService = $commentService;
+        $this->esignService = $esignService;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
@@ -63,7 +65,7 @@ class AppDelegateService extends AbstractService
     }
 
     public function setAppDelegateService(){
-        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService);
+        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService,$this->esignService);
         return $appDelegateService;
     }
 
@@ -123,6 +125,9 @@ class AppDelegateService extends AbstractService
             }
             if (method_exists($obj, "setCommentService")) {
                 $obj->setCommentService($this->commentService);
+            }
+            if (method_exists($obj, "setEsignService")) {
+                $obj->setEsignService($this->esignService);
             }
             if (method_exists($obj, "setAppDelegateService")) {
                 $obj->setAppDelegateService($this->setAppDelegateService());
