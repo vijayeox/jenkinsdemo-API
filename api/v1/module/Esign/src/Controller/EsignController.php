@@ -15,6 +15,7 @@ class EsignController extends AbstractApiController
      */
     public function __construct(EsignService $esignService)
     {
+        parent::__construct();
         $this->esignService = $esignService;
     }
 
@@ -30,10 +31,11 @@ class EsignController extends AbstractApiController
     	$docId = $this->params()->fromRoute()['docId'];
         try {
             $result = $this->esignService->getDocumentStatus($docId);
+            $this->log->info("result status is ".$result);
             return $this->getSuccessResponseWithData(['status' => $result]);
         }
         catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
+            $this->log->error("error occured -".$e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }

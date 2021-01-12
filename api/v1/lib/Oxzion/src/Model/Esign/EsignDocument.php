@@ -4,6 +4,7 @@ namespace Oxzion\Model\Esign;
 
 use Oxzion\Type;
 use Oxzion\Model\Entity;
+use Oxzion\EntityNotFoundException;
 
 class EsignDocument extends Entity
 {

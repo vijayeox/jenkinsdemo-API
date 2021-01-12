@@ -4,6 +4,7 @@ namespace Oxzion\Model\Esign;
 
 use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
+use Oxzion\MultipleRowException;
 
 class EsignDocumentTable extends ModelTable
 {
@@ -13,12 +14,9 @@ class EsignDocumentTable extends ModelTable
 
     public function getByDocId($docId){
         $this->init();
-        if (is_null($filter)) {
-            $filter = array();
-        }
 
         $filter["doc_id"] = $docId;
-        $rowset = $this->tableGateway->select($filter);
+        $rowset = $this->tableGateway->select(array());
         if (0 == count($rowset)) {
             return null;
         }
