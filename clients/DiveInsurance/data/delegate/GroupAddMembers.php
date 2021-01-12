@@ -20,7 +20,7 @@ class GroupAddMembers extends AbstractAppDelegate
         if(!isset($data['member_number'])){
             return;
         }
-        $select = "Select firstname, MI as initial, lastname,rating FROM padi_data WHERE member_number ='".$data['member_number']."'";
+        $select = "Select firstname, MI as initial, lastname,address1,address2,state,zip,country_code,rating FROM padi_data WHERE member_number ='".$data['member_number']."'";
         $result = $persistenceService->selectQuery($select);
         if($result->count() > 0){
             $response = array();

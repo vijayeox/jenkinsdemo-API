@@ -1,1 +1,1 @@
-INSERT INTO coverage_options (padi_rating,coverage_level,coverage_name,category,ox_app_org_id) VALUES ('OWSI','snorklingInstructor','Snorkling Instructor','GROUP',0);
+INSERT INTO coverage_options (padi_rating,coverage_level,coverage_name,category) VALUES ('OWSI','snorklingInstructor','Snorkling Instructor','GROUP');

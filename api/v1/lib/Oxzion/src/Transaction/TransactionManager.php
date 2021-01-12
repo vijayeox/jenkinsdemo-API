@@ -6,6 +6,7 @@ class TransactionManager
     const CONTEXT_KEY = 'TRANSACTION_MANAGER';
     private $dbAdapter;
     private $rollbackOnly;
+    private $forceRollback;
     private $transactionCount;
 
     public static function getInstance($dbAdapter)
@@ -26,7 +27,16 @@ class TransactionManager
     {
         $this->dbAdapter = $dbAdapter;
         $this->rollbackOnly = false;
+        $this->forceRollback = false;
         $this->transactionCount = 0;
+    }
+
+    public function setForceRollback($forceRollback) {
+        $this->forceRollback = $forceRollback;
+    }
+
+    public function getForceRollback() {
+        return $this->forceRollback;
     }
 
     public function setRollbackOnly($rollbackOnly)
@@ -58,8 +68,12 @@ class TransactionManager
         }
     }
 
-    public function rollback()
+    public function rollback($forceRollback = false)
     {
+        if($this->rollbackOnly && !$forceRollback && $this->forceRollback){
+            $this->transactionCount--;
+            return;
+        }
         if ($this->dbAdapter->getDriver()->getConnection()->inTransaction()) {
             $this->dbAdapter->getDriver()->getConnection()->rollback();
             $this->transactionCount = 0;

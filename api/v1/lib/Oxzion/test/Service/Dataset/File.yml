@@ -248,7 +248,7 @@ ox_field:
     entity_id: 1
     index: 0
   - id: 7
-    name: "field11"
+    name: "field1"
     app_id: 99
     data_type: "numeric"
     template: '{"persistent" : "true"}'
