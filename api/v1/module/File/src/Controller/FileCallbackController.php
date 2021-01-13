@@ -7,6 +7,7 @@ use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\EntityNotFoundException;
 use Oxzion\ServiceException;
 use \Exception;
+use Oxzion\Utils\FileUtils;
 
 class FileCallbackController extends AbstractApiControllerHelper
 {
