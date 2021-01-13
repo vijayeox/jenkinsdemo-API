@@ -106,15 +106,39 @@ financeFieldList.map((field) => {
   form.getComponent(field.key + "Total").setValue(accountTotal);
 
   if (field.key == "financialsYTDSales") {
-    cloneItem.map((item, index) => {
-      if (data.buildings[index].coinsuranceamount) {
+    var minimumRecBL = cloneItem.map((item, index) => {
+      if (data.buildings[index].coinsuranceform == "yes") {
         var buildingCoinsurance = parseFloat(
           data.buildings[index].coinsuranceamount
         );
         if (buildingCoinsurance > 0) {
-          
+          return (
+            (data.includeCarSalesInBI == "no"
+              ? item.total - item.usedAutos - item.newAutos
+              : item.total) * buildingCoinsurance
+          );
         }
+      } else if (data.buildings[index].coinsuranceform == "no") {
+        var buildingMonthlyLimitation = parseFloat(
+          data.buildings[index].bimonthlylimitation
+        );
+        if (buildingMonthlyLimitation > 0) {
+          return (
+            ((data.includeCarSalesInBI == "no"
+              ? item.total - item.usedAutos - item.newAutos
+              : item.total) /
+              12) *
+            buildingMonthlyLimitation
+          );
+        }
+      } else {
+        return 0;
       }
     });
+    form.getComponent("financialsBILimit").setValue(
+      data.financialsBILimit.map((i, index) => {
+        return { ...i, recommended: minimumRecBL[index] };
+      })
+    );
   }
 });
