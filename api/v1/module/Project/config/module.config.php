@@ -40,7 +40,7 @@ return [
             'getsubproject' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/project/:projectUuid/subproject',
+                    'route' => '/project/:projectId/subproject',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'GET',
