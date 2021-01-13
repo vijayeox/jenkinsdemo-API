@@ -143,6 +143,26 @@ class RegenerateDocuments extends PolicyDocument
             $this->addAdditionalData($fileData,$dest,$temp,$persistenceService);
             $this->generateDiveStorePremiumSummary($temp,$documents,$dest,$options);
         }
+        if($param == "fileSave"){
+            $this->processFileData($fileData,$documents);
+            $fileData['documents'] = $documents;
+            $this->saveFile($fileData,$fileData['fileId']);
+        }
+        if($param == "retainPolicy"){
+            $this->processFileData($fileData,$documents);
+            if(isset($fileData['reinstateDocuments'])){
+                $fileData['documents'] = array_merge($documents,$fileData['reinstateDocuments']);
+            }
+            unset($documents['reinstateDocuments']);
+            $this->saveFile($fileData,$fileData['fileId']);
+        }
+        if($param == "updateCancelDate"){
+            $this->processFileData($fileData,$documents);
+            $fileData['policyEndDate'] = date_format(date_create($fileData['end_date']),'Y-m-d');
+            $fileData['end_date'] = date_format(date_create($fileData['cancelDate']),'Y-m-d');
+            $fileData['documents'] = $documents;
+            $this->saveFile($fileData,$fileData['fileId']);
+        }
       }
     }
 

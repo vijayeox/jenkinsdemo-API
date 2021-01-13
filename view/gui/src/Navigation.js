@@ -32,7 +32,7 @@ class Navigation extends React.Component {
     } else {
       Requests.getMenulist(this.core,this.appId).then((response) => {
         this.props.menuLoad(response["data"]);
-        if (response["data"][0]) {
+        if (response["data"] && response["data"][0]) {
           this.homepage = response["data"][0];
         }
         if (this.params && this.params.page) {
@@ -125,7 +125,7 @@ class Navigation extends React.Component {
     var that = this;
     if(e.detail.fileId){
       var filePage = [{type:"EntityViewer",fileId:e.detail.fileId}]
-      var pageContent = {pageContent: filePage,title: "View",icon: "fa fa-info",fileId: e.detail.fileId};
+      var pageContent = {pageContent: filePage,title: "View",icon: "fa fa-eye",fileId: e.detail.fileId};
       if(!this.checkIfEntityViewerPageExists(pageContent)){
         pages.push(pageContent)
       } else {

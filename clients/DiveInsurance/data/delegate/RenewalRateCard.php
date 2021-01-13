@@ -24,6 +24,7 @@ class RenewalRateCard extends RateCard
     {
         $this->logger->info("Renewal Rate Card DATA".print_r($data,true));
         $this->logger->info("CLEAN DATA");
+
         if(isset($data['data'])){
             if(is_string($data['data'])){
                 $data['form_data'] = json_decode($data['data'],true);

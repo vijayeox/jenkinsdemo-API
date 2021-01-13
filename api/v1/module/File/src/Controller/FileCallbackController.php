@@ -36,7 +36,6 @@ class FileCallbackController extends AbstractApiControllerHelper
     public function updateFileAction()
     {
         $data = $this->extractPostData();
-        
         try {
             $fileId = isset($data['id']) ? $data['id'] : null;
             if(!$fileId){

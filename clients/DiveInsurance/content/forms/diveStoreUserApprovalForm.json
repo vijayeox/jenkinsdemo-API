@@ -52,6 +52,46 @@
 			"tableView": false,
 			"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
 		}, {
+			"label": "ApproverName",
+			"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].name;\n  }\n}",
+			"key": "approverName",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "ApproverEmailId",
+			"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].email;\n  }\n}",
+			"key": "approverEmailId",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "ApproverDesignation",
+			"calculateValue": "if (data.privileges){\n  if(data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] !== null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE']){\n    value = data['userprofile'].designation;\n  }\n}",
+			"key": "approverDesignation",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"hideOnChildrenHidden": false
+		}, {
+			"label": "proposalCount",
+			"defaultValue": "1",
+			"key": "proposalCount",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"label": "proposalCountFlag",
+			"defaultValue": "false",
+			"persistent": false,
+			"protected": true,
+			"key": "proposalCountFlag",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
 			"key": "page5Panel2",
 			"input": false,
 			"title": "Approval",
@@ -130,7 +170,7 @@
 					"label": "",
 					"value": ""
 				}],
-				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+				"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.txt,.pst,.ost,.msg",
 				"fileMaxSize": "10MB",
 				"multiple": true,
 				"clearOnHide": false,
@@ -458,6 +498,7 @@
 							"type": "convergepay",
 							"key": "creditcardPayment",
 							"amount_field": "billing_amount",
+							"refreshOn": "data",
 							"description": "payment_fields",
 							"label": "custom",
 							"input": true,
@@ -676,6 +717,14 @@
 				"persistent": false
 			}],
 			"hideOnChildrenHidden": false
+		}, {
+			"label": "CSR Mail Documents",
+			"redrawOn": "finalDocuments",
+			"calculateValue": "value = \"\";",
+			"key": "csrmailDocuments",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
 		}]
 	}, {
 		"label": "Submit",
@@ -686,9 +735,9 @@
 		"event": "submitForm",
 		"input": true
 	}],
-	"controller": "",
+	"controller": "data.functions = {\n  userApprovedChanged: () => {\n    if(data.userApproved == 'rejected' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = (data.proposalCount == \"\") ? 0 : data.proposalCount;\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  },\n  paymentVerifiedChanged: () => {\n    if(data.paymentVerified == 'declined' && (data.proposalCountFlag == false || data.proposalCountFlag == \"false\")){\n      data.proposalCount = (data.proposalCount == \"\") ? 0 : data.proposalCount;\n      data.proposalCount = parseInt(data.proposalCount) + 1;\n      data.proposalCountFlag = true;\n    }\n  }\n};",
 	"revisions": "current",
-	"_vid": 61,
+	"_vid": 101,
 	"title": "Dive Store User Approval Form",
 	"display": "wizard",
 	"access": [{
@@ -705,6 +754,6 @@
 	"path": "divestoreuserapprovalform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T11:46:51.316Z",
-	"modified": "2020-10-07T06:06:15.307Z",
+	"modified": "2020-11-27T11:52:48.445Z",
 	"machineName": "testdivehub:diveStoreUserApprovalForm"
 }

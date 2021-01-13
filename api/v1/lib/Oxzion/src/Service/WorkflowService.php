@@ -104,8 +104,8 @@ class WorkflowService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
+        $this->beginTransaction();
         try {
-            $this->beginTransaction();
             $this->saveWorkflow($appId, $data);
             $workflow = $data;
             $workFlowId = $data['id'];
@@ -234,8 +234,9 @@ class WorkflowService extends AbstractService
         $form = new Workflow();
         $form->exchangeArray($data);
         $form->validate();
+        $this->beginTransaction();
+        $count = 0;
         try {
-            $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count == 0) {
                 throw new ServiceException("Workflow not saved", 'workflow.save.failed');
@@ -329,7 +330,6 @@ class WorkflowService extends AbstractService
         try {
             $this->table->save($workflow);
             $this->commit();
-            // $this->getProcessManager()->remove($data['id']);
         } catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
@@ -354,7 +354,7 @@ class WorkflowService extends AbstractService
     public function getWorkflow($id, $appId = null)
     {
         $params = array();
-        $where = "where wf.uuid = :id and wd.latest=1";// HERE 
+        $where = "where wf.uuid = :id and wd.latest=1";
         $params['id'] = $id;
         if (isset($appId)) {
             $where .= " and app.uuid = :appId";
@@ -482,5 +482,30 @@ class WorkflowService extends AbstractService
             $this->rollback();
             throw $e;
         }
+    }
+
+    private function buildSortQuery($sortOptions, &$field)
+    {
+        $sortCount = 0;
+        $sortTable = "tblf" . $sortCount;
+        $sort = " ORDER BY ";
+        foreach ($sortOptions as $key => $value) {
+            if ($value['field'] == 'entity_name') {
+                if ($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " ox_app_entity.name ";
+                $sortCount++;
+                continue;
+            }
+            if ($sortCount == 0) {
+                $sort .= $value['field'] . " " . $value['dir'];
+            } else {
+                $sort .= "," . $value['field'] . " " . $value['dir'];
+            }
+            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=ox_file.id) as " . $value['field'];
+            $sortCount += 1;
+        }
+        return $sort;
     }
 }

@@ -202,7 +202,6 @@ class EsignService extends AbstractService
             $data['cc'] = json_encode($ccList);
         }
         
-        $fields;
         foreach ($data['signers'] as $signer) {
             foreach ($signer['fields'] as $key => $field) {
                 $fields = array(

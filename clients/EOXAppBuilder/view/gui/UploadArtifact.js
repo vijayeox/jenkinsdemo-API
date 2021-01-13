@@ -91,7 +91,7 @@ class UploadArtifact extends React.Component {
         <this.props.components.Notification ref={this.notif} />
         <div className="col-md-8">
           <h5
-            class="alert alert-warning"
+            className="alert alert-warning"
             role="alert"
             style={{ paddingBottom: "10px", width: "fit-content" }}
           >
@@ -116,7 +116,7 @@ class UploadArtifact extends React.Component {
         <div style={{ paddingTop: "10px" }}>
           <button
             type="button"
-            class="btn btn-primary"
+            className="btn btn-primary"
             disabled={this.state.uploadFile.length == 0}
             onClick={() => {
               this.loader.show();

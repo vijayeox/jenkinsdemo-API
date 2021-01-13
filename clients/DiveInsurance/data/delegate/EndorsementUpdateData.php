@@ -75,74 +75,77 @@ class EndorsementUpdateData extends AbstractAppDelegate
           } 
        }
 
-
-       if($data['loss_payees'] == 'none'){
-          if(isset($data['lossPayees'])){
-                $data['lossPayees'] = array();
-          } 
-       }
-
-
-       if($data['groupProfessionalLiability'] == 'none'){
-          if(isset($data['annualReceipt'])){
-            $data['annualReceipt'] = 0.00;
+     if(isset($data['loss_payees'])){
+          if($data['loss_payees'] == 'none'){
+               if(isset($data['lossPayees'])){
+                     $data['lossPayees'] = array();
+               } 
           }
-          
-          if(isset($data['groupExcessLiabilitySelect'])){
-            $data['groupExcessLiabilitySelect'] = "";
-          }
-          
-          if(isset($data['groupCoverage'])){
-            $data['groupCoverage'] = 0.00;
-          }
-
-
-          if(isset($data['groupExcessLiability'])){
-            $data['groupExcessLiability'] = "";
-          }
-          
-          if(isset($data['groupPL'])){
-            $data['groupPL'] = array();
-          }
-
-          if(isset($data['additional_insured'])){
-                $data['additional_insured'] == 'none';
-                $data['groupAdditionalInsured'] = array();
-          }
-
-          if(isset($data['named_insureds'])){
-                $data['named_insureds'] == 'none';
-                $data['namedInsureds'] = array();
-          }
-
-          if(isset($data['groupTaxPercentage'])){
-            $data['groupTaxPercentage'] = 0.00;
-          }
-
-          if(isset($data['groupTaxAmount'])){
-            $data['groupTaxAmount'] = 0.00;
-          }
-          
-          if(isset($data['groupPadiFeeAmount'])){
-            $data['groupPadiFeeAmount'] = 0.00;
-          }
-          
-          if(isset($data['groupTotalAmount'])){
-            $data['groupTotalAmount'] = 0.00;
-          }  
-       }else{
-         if(isset($data['additional_insured'])){
-            if($data['additional_insured'] == 'none'){
-                $data['groupAdditionalInsured'] = array();
-            }
-          }
-
-          if(isset($data['named_insureds'])){
-            if($data['named_insureds'] == 'none'){
-                $data['namedInsureds'] = array();
-            }
-          }
-       }
-       return $data;
+     }
+       
+     
+     if(isset($data['groupProfessionalLiability'])){
+          if($data['groupProfessionalLiability'] == 'none'){
+               if(isset($data['annualReceipt'])){
+                 $data['annualReceipt'] = 0.00;
+               }
+               
+               if(isset($data['groupExcessLiabilitySelect'])){
+                 $data['groupExcessLiabilitySelect'] = "";
+               }
+               
+               if(isset($data['groupCoverage'])){
+                 $data['groupCoverage'] = 0.00;
+               }
+     
+     
+               if(isset($data['groupExcessLiability'])){
+                 $data['groupExcessLiability'] = "";
+               }
+               
+               if(isset($data['groupPL'])){
+                 $data['groupPL'] = array();
+               }
+     
+               if(isset($data['additional_insured'])){
+                     $data['additional_insured'] == 'none';
+                     $data['groupAdditionalInsured'] = array();
+               }
+     
+               if(isset($data['named_insureds'])){
+                     $data['named_insureds'] == 'none';
+                     $data['namedInsureds'] = array();
+               }
+     
+               if(isset($data['groupTaxPercentage'])){
+                 $data['groupTaxPercentage'] = 0.00;
+               }
+     
+               if(isset($data['groupTaxAmount'])){
+                 $data['groupTaxAmount'] = 0.00;
+               }
+               
+               if(isset($data['groupPadiFeeAmount'])){
+                 $data['groupPadiFeeAmount'] = 0.00;
+               }
+               
+               if(isset($data['groupTotalAmount'])){
+                 $data['groupTotalAmount'] = 0.00;
+               }  
+            }else{
+              if(isset($data['additional_insured'])){
+                 if($data['additional_insured'] == 'none'){
+                     $data['groupAdditionalInsured'] = array();
+                 }
+               }
+     
+               if(isset($data['named_insureds'])){
+                 if($data['named_insureds'] == 'none'){
+                     $data['namedInsureds'] = array();
+                 }
+               }
+            }     
+     }
+              return $data;
     }
 }
