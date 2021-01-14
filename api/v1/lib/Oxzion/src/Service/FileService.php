@@ -2964,5 +2964,15 @@ class FileService extends AbstractService
         }
     }
 
+    public function getFieldDataTypes($entityId,$appId) {
+        $select = "SELECT ox_field.name,ox_field.data_type from ox_field inner join ox_app_entity on ox_field.entity_id = ox_app_entity.id where ox_field.entity_id=:entityId and ox_field.app_id=:appId";
+        $params = array("entityId" => $entityId,"appId" => $appId);
+        $result = $this->executeQuerywithBindParameters($select,$params)->toArray();
+        if (count($result) == 0) {
+            return 0;
+        }
+        return $result[0];
+    }
+
 
 }
