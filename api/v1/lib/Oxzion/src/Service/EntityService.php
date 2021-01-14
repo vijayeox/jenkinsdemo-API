@@ -240,8 +240,9 @@ public function deleteEntity($appUuid, $id)
             $formQuery = "Select name, app_id, uuid from ox_form where entity_id=? and isdeleted=?";
             $formQueryParams = array($entityId, 0);
             $entityForm = $this->executeQueryWithBindParameters($formQuery, $formQueryParams)->toArray();
-            if (count($entityForm)==0) {
-                return 0;
+            if (count($entityForm) == 0 || count($entityForm) > 1) {
+                $result['has_workflow'] = 1;
+                return $result;
             }
             $form = $entityForm[0];
             $path = $this->config['FORM_FOLDER'].$appId."/".$form['name'].$this->formFileExt;
