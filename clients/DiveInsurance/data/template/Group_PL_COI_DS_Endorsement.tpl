@@ -9,6 +9,9 @@
 			{if $upgradeStatus == true || $upgradeStatus === "true" || $upgradeStatus == 1}
 				{if isset($upgradeGroupLiability)}
 					{assign var=list value=$upgradeGroupLiability|json_decode:true}
+					{if $upgradeData.annualAggregate == ""} 
+						{$upgradeData.annualAggregate = 0}
+					{/if}
 					{foreach from=$list item=$upgradeData}
 					    		<p class = "grp_endoUpgrade">
 					    			Effective {$upgradeData.update_date} : The Liability Limit are ${$upgradeData.combinedSingleLimit|number_format} per occurance and ${$upgradeData.annualAggregate|number_format} Annual Aggregate.
