@@ -11,6 +11,7 @@ use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
+use Oxzion\Service\FieldService;
 use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\TemplateService;
@@ -31,10 +32,11 @@ class AppDelegateService extends AbstractService
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
                                  MessageProducer $messageProducer, FileService $fileService, 
-                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService)
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService, FieldService $fieldService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
+        $this->fieldService = $fieldService;
         $this->workflowInstanceService = $workflowInstanceService;
         $this->activityInstanceService = $activityInstanceService;
         $this->messageProducer = $messageProducer;
@@ -97,6 +99,9 @@ class AppDelegateService extends AbstractService
                 } 
                 if (method_exists($obj, "setFileService")) {
                     $obj->setFileService($this->fileService);
+                }
+                if (method_exists($obj, "setFieldService")) {
+                    $obj->setFieldService($this->fieldService);
                 }
                 if (method_exists($obj, "setTemplateService")) {
                     $obj->setTemplateService($this->templateService);
