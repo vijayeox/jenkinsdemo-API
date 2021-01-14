@@ -510,7 +510,8 @@ class Module
                         $container->get(Service\ActivityInstanceService::class),
                         $container->get(Service\UserService::class),
                         $container->get(Service\CommentService::class),
-                        $container->get(Service\EsignService::class)
+                        $container->get(Service\EsignService::class),
+                        $container->get(Service\FieldService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {

@@ -1868,13 +1868,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $temp['newAdditionalLocations'] = "";
                 $temp['removedadditionalLocations'] = "";
                 $addLocRequired = array("padiNumberAL", "name", "address", "country", "city", "state", "zip", "ALpropertyCoverageSelect", "additionalLocationPropertyTotal", "ALLossofBusIncome", "additionalLocationDoYouOwntheBuilding", "ALBuildingReplacementValue", "additionalLocationFurniturefixturesAndEquipment", "ALnonDivingPoolAmount", "travelAgentEoPL", "propertyDeductibles", "ALcentralStationAlarm", "centralStationAlarm","ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL","existingAddLocation");
-                if (!is_array($policy['previous_additionalLocations'])) {
-                    if (is_string($policy['previous_additionalLocations'])) {
-                        $policy['previous_additionalLocations'] = json_decode($policy['previous_additionalLocations'], true);
-                    } else {
-                        $policy['previous_additionalLocations'] = array();
-                    }
-                }
+                $this->decodeJsonStringIfExistsInArr($policy['previous_additionalLocations']);
                 if (!empty($policy['previous_additionalLocations'])) {
                     $previousAddLoc = $policy['previous_additionalLocations'];
                     foreach ($previousAddLoc as $key => $val) {
@@ -1894,13 +1888,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 } else {
                     $previousAddLoc = array();
                 }
-                if (!is_array($data['additionalLocations'])) {
-                    if (is_string($data['additionalLocations'])) {
-                        $data['additionalLocations'] = json_decode($data['additionalLocations'], true);
-                    } else {
-                        $data['additionalLocations'] = array();
-                    }
-                }
+                $this->decodeJsonStringIfExistsInArr($data['additionalLocations']);
                 if (!empty($data['additionalLocations'])) {
                     $addLoc = $data['additionalLocations'];
                     foreach ($addLoc as $key => $val) {
@@ -2435,5 +2423,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $documents['endorsement_group_ani_document'] = $this->generateDocuments($temp, $dest, $options, 'ganiTemplate', 'ganiheader', 'ganifooter');
             }
         }
+    }
+
+    public function decodeJsonStringIfExistsInArr(&$data) {
+        //decodes json string if it exists in an associative array
+        if (!is_array($data)) {
+            if (is_string($data)) {
+                $data = json_decode($data, true);
+            } else {
+                $data = array();
+            }
+        }
+        return $data;
     }
 }
