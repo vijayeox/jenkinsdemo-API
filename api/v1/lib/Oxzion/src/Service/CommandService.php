@@ -737,7 +737,7 @@ class CommandService extends AbstractService
     protected function registerUser(&$data) {
         $this->logger->info("Register User");
         try{
-            $result = $this->userService->checkAndCreateUser(array(), $data, true);
+            $result = $this->userService->createUser(array(), $data, true);
             return $result;
         } catch(Exception $e) {
             $this->logger->info("Register User Exception" . print_r($e->getMessage(), true));

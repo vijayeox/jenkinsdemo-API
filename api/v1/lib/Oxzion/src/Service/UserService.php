@@ -178,7 +178,7 @@ class UserService extends AbstractService
                 $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
             }
         } else {
-            if ($account = $this->getIdFromUuid('ox_account', $params['accountId'])) {
+            if (isset($params['accountId']) && $account = $this->getIdFromUuid('ox_account', $params['accountId'])) {
                 $accountId = $account;
             } else {
                 if (isset($data['accountId']) && $data['accountId'] != '') {
