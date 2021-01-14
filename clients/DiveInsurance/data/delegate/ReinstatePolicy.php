@@ -156,9 +156,11 @@ class ReinstatePolicy extends PolicyDocument
         $reinstateDoc = $this->generateDocuments($data, $dest, $options, 'template', 'header', 'footer');
         $data['documents'] = isset($data['documents']) ? (is_string($data['documents']) ?  json_decode($data['documents'],true) : $data['documents']) : array();
         if(isset($data['reinstateDocuments'])){
-            $data['reinstateDocuments'] = is_string($data['reinstateDocuments']) ? json_decode($data['reinstateDocuments'],true) : $data['reinstateDocuments'];
-            if(sizeof($data['reinstateDocuments']) > 0) {
-                $data['documents'] = array_merge($data['documents'],$data['reinstateDocuments']);
+            if(!empty($data['reinstateDocuments'])){
+                $data['reinstateDocuments'] = is_string($data['reinstateDocuments']) ? json_decode($data['reinstateDocuments'],true) : $data['reinstateDocuments'];
+                if(sizeof($data['reinstateDocuments']) > 0) {
+                    $data['documents'] = array_merge($data['documents'],$data['reinstateDocuments']);
+                }
             }
             unset($data['reinstateDocuments']);
         }
