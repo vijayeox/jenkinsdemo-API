@@ -190,14 +190,8 @@ class RoleService extends AbstractService
         $this->beginTransaction();
         $count = 0;
         try {
-            $query = "SELECT count(*) from ox_role_privilege where role_id = :roleId ";
-            $params = array("roleId" => $obj->id);
-            $rolePrivileges = $this->executeQueryWithBindParameters($query, $params)->toArray();
-            if (!(empty($rolePrivileges))) {
-                $delete = "DELETE from `ox_role_privilege` where role_id =" . $obj->id . "";
-                $this->runGenericQuery($delete);
-            }
-            
+            $delete = "DELETE from `ox_role_privilege` where role_id =" . $obj->id . "";
+            $this->runGenericQuery($delete);            
             $count = $this->table->deleteByUuid($id);
             if ($count == 0) {
                 throw new ServiceException("Role not found", "role.not.found", OxServiceException::ERR_CODE_NOT_FOUND);

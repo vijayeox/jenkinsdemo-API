@@ -459,7 +459,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->commit();
             }catch(Exception $e){
                 $this->rollback();
-                throw new EntityNotFoundException("Unable to execute workflow " . $workflowInstanceId);
+                throw new EntityNotFoundException("Unable to execute workflow" . $workflowInstanceId);
             }
         } else {
             throw new EntityNotFoundException("No file EntityNotFoundExceptiond for workflow instance " . $workflowInstanceId);
