@@ -66,13 +66,13 @@ class GenerateReport extends PolicyDocument {
         }
         $files = $this->getWorkflowCompletedData($params,$filterParams); 
         $this->logger->info("The data returned from getWorkflowCompletedData is  ".print_r($files,true));
-        
         if(empty($files['data'])){
             $data['jobStatus'] = 'No Records Found';
             $this->saveFile($data,$data['uuid']);      
             return $data;
-        }
+        } 
         $result = $this->newDataArray($files,$data['productType']); 
+ 
         $this->logger->info("The data returned from newDataArray is  ".print_r($result,true));
         $excelData = $this->excelDataMassage($result['data']);
         $this->logger->info("Quarterly Report".print_r($excelData,true));
@@ -263,6 +263,13 @@ class GenerateReport extends PolicyDocument {
         $this->getRequiredParams($previousVal, $requiredParams);
         foreach ($previousVal as $key => $value) {
             $previousVal[$key]['padi'] = strval($value['padi']);
+            if(!isset($value['cancel'])){
+                $previousVal[$key]['cancel'] = 'false';
+            }
+            if(!isset($value['cancel_date'])){
+                $previousVal[$key]['cancel_date'] = '';
+            }
+            
         }
         $val = is_string($data) ? json_decode($data, true) :  $data;
         $this->getRequiredParams($val, $requiredParams);
@@ -286,10 +293,11 @@ class GenerateReport extends PolicyDocument {
         }
     }
     private function newDataArray($data,$product){
-      
+        
         $this->logger->info('Generate report data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
+           
             $totalendorsements = 0;
             $previous_policy_data = array();
             if(isset($value['previous_policy_data'])){
@@ -322,10 +330,10 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['upgrade'] = ($value['workflow_name'] == "Individual Liability Endorsement" && ($value['careerCoveragePrice'] != "" || $value['careerCoveragePrice'] != 0 || $value['careerCoveragePrice'] != null)) ? $this->checkStatus($value['careerCoverage']) : "";
                 $response[$i]['cylinder'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['cylinderPrice']) ? $value['cylinderPrice'] : "0" );
                 $response[$i]['total'] = (((float) $response[$i]['premium']) + ((float)$response[$i]['equipment']) + ((float) $response[$i]['excess']) + ((float)$response[$i]['scuba_fit']) + ((float)$response[$i]['cylinder']));
-                $response[$i]['cancel_date'] = $value['workflow_name'] == "IPL Cancel Policy" ? $this->formatDate($value['modifiedDate']) : "";
+                $response[$i]['cancel_date'] = $value['workflow_name'] == "IPL Cancel Policy" ? $this->formatDate($value['modifiedDate']) : ""; //cancel date
                 $response[$i]['cancelled'] =  $value['workflow_name'] == "IPL Cancel Policy" ? "True" : "False";
                 $response[$i]['reinstated'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? "True" : "False";
-                $response[$i]['reinstated_date'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? $this->formatDate($value['modifiedDate']) : "";
+                $response[$i]['reinstated_date'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? $this->formatDate($value['modifiedDate']) : ""; //reinstated date is always the cancellation date
                 $response[$i]['auto_renewal'] = $value['workflow_name'] == "Individual Liability Endorsement" ? "No" : ($value['automatic_renewal']? "Yes" : "No");
                 $response[$i]['installment'] = $value['workflow_name'] == "Individual Liability Endorsement" ? "No" : ($value['premiumFinanceSelect'] == "no" ? "No" : "Yes");
                 $response[$i]['downPayment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy" || $value['workflow_name'] == "Individual Liability Endorsement") ? "0" : (isset($value['downPayment']) ? $value['downPayment'] : "0");
@@ -336,7 +344,7 @@ class GenerateReport extends PolicyDocument {
             if($product == 'groupProfessionalLiability' && isset($value['groupPL'])){
 
                 $this->logger->info('group PL members need to be formatted to a new array');
-                $groupPLArray = array('padi', 'firstname', 'lastname', 'status','start_date');
+                $groupPLArray = array('padi', 'firstname', 'lastname', 'status','start_date','cancel','cancel_date');
                 if(isset($value['groupPL'])){
                     $groupData = is_string($value['groupPL']) ? json_decode($value['groupPL'], true) : $value['groupPL'];
                 } else {
@@ -345,10 +353,9 @@ class GenerateReport extends PolicyDocument {
                 $this->logger->info('group data is: '.print_r($groupData, true));
                 $this->logger->info('value data is: '.print_r($value, true));
                 $total = count($groupData);
+                $totalendorsement = 0;
                 $groupPL = array();
                 $groupLength = 0;
-
-                $totalendorsement = 0;
                 if(isset($value['previous_policy_data'])) {
                    $previous_policy_data = json_decode($value['previous_policy_data'],true);
                    $totalendorsement = sizeof($previous_policy_data);
@@ -356,9 +363,10 @@ class GenerateReport extends PolicyDocument {
                     if(isset($previous_policy_data[$totalendorsement - 1]['previous_groupPL']) && !empty($previous_policy_data[$totalendorsement - 1]['previous_groupPL'])){
                         $previous_groupPL = $previous_policy_data[$totalendorsement - 1]['previous_groupPL'];
                         $groupPL = $this->groupDataDiff($groupLength, $value['groupPL'], $previous_groupPL, $groupPLArray);
+                        
                         $k=0;
                         foreach ($previous_groupPL as $key2 => $value2){
-                            foreach ($groupData as $key1 => $value1) { 
+                            foreach ($groupPL as $key1 => $value1) { 
                                 if($value2['padi'] == $value1['padi']) {
                                     if($value2['status'] != $value1['status']){
                                         $previous_careerCoverage[$k] = $value2;
@@ -378,7 +386,6 @@ class GenerateReport extends PolicyDocument {
                 foreach ($groupPL as $key2 => $value2) { 
                     $padi = strval($value2['padi']);
                     if(isset($previous_careerCoverage)) {
-                        print_r($value2['padi']);
                         $key = array_search($padi, array_column($previous_careerCoverage, 'padi'));
 
                     }
@@ -405,7 +412,7 @@ class GenerateReport extends PolicyDocument {
                     $response[$i][$j]['upgrade'] = $response[$i][$j]['certificate_type'] == 'Endorsement' && isset($previous_careerCoverage[$key]['status']) && $previous_careerCoverage[$key]['status'] != $value2['status'] && $previous_careerCoverage[$key]['status'] != "" && !is_null($previous_careerCoverage[$key]['status']) ? $this->checkStatus($value2['status']) : ''; //change
                     $response[$i][$j]['premium'] = $key2 == 0 ? ((isset($previous_policy['previous_groupCoverage']) &&  $value['workflow_name'] == "Dive Store Endorsement")? ((float)$value['groupCoverage'] - (float)($previous_policy['previous_groupCoverage'])) : (isset($value['groupCoverage'])? $value['groupCoverage']: "0")) : "0";
                     $response[$i][$j]['excess_premium'] = $key2 == 0 ? isset($value['groupExcessLiability']) ? $value['groupExcessLiability'] : "0" : "0";
-                    $response[$i][$j]['cancel_date'] = isset($value['cancel_date']) ? $this->formatDate($value['cancel_date']) : "" ;
+                    $response[$i][$j]['cancel_date'] = (isset($value2['cancel']) && $value2['cancel'] == true && $value2['cancel_date'] != "")? $this->formatDate($value2['cancel_date']) : "" ;
                     $response[$i][$j]['total'] =$key2 == 0 ? ((int) $response[$i][$j]['premium'])+ ((int)$response[$i][$j]['excess_premium']) : "0";
                     $responseData['data'] = $response;
                     $j+= 1;
@@ -413,17 +420,22 @@ class GenerateReport extends PolicyDocument {
                 $i += 1; 
             
             }
-            if(($product == "diveStoreProperty" || $product == "diveStore") && ($value['workflow_name'] !== "DS Cancel Policy")){
+            
+            if($product == "diveStoreProperty" || $product == "diveStore"){
                 $this->logger->info('Additional Locations need to be formatted to a new array');
                 if((isset($value['additionalLocationsSelect'])) && $value['additionalLocationsSelect'] == "yes"){
                     $additionalLocationData = is_string($value['additionalLocations']) ? json_decode($value['additionalLocations'], true) : $value['additionalLocations'];
                 } else {
                     $additionalLocationData = array();
                 }
+                
                 if(isset($previous_policy_data)){ 
-                    $previous_policy =  $previous_policy_data[$totalendorsements - 1];
-                    $previous_additionalLocation = isset($previous_policy['previous_additionalLocations'])? $previous_policy['previous_additionalLocations'] : array();
+                    if($totalendorsements > 0){
+                        $previous_policy =  $previous_policy_data[$totalendorsements - 1];
+                        $previous_additionalLocation = isset($previous_policy['previous_additionalLocations'])? $previous_policy['previous_additionalLocations'] : array();
+                    }
                 }
+                
                 $total = count($additionalLocationData);
                 $this->logger->info('Primary location');
                 $responsePrimary[$i]['certificate_no'] = $value['certificate_no'];
@@ -442,6 +454,11 @@ class GenerateReport extends PolicyDocument {
                 $responsePrimary[$i]['start_date'] = $this->formatDate($value['start_date']);
                 $responsePrimary[$i]['end_date'] = $this->formatDate($value['end_date']);
                 $responsePrimary[$i]['certificate_type'] =   $value['workflow_name'] == "Dive Store Endorsement" ? 'Endorsement' : 'Primary Coverage';
+                $responsePrimary[$i]['cancelled'] =  $value['workflow_name'] == "DS Cancel Policy" ? 'true' : 'false';
+                $responsePrimary[$i]['cancel_date'] =  $value['workflow_name'] == "DS Cancel Policy" ?   $this->formatDate($value['cancelDate']): '';
+                $responsePrimary[$i]['reinstated'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? 'true' : 'false';
+                $responsePrimary[$i]['reinstated_date'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? (isset($value['reinstateDate'])? $this->formatDate($value['reinstateDate']) : $this->formatDate($value['modifiedDate'] )) : '';
+                
                 if($product == "diveStoreProperty"){
                     $responsePrimary[$i]['propertyDeductables'] = $value['propertyDeductibles'] == "propertyDeductibles1000"? "$1,000" : $value['propertyDeductibles'] == "propertyDeductibles2500"? "$2,500" : $value['propertyDeductibles'] == "propertyDeductibles5000"? "$5,000" : "$1,000" ;
                     $responsePrimary[$i]['catSelection'] = $value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT";
@@ -475,8 +492,9 @@ class GenerateReport extends PolicyDocument {
                     $responsePrimary[$i]['liabilityProRataPremium'] = $value['liabilityProRataPremium'];
                 
                 }
+                
                 $responseData['data'] = $responsePrimary;
-                if((isset($value['additionalLocationsSelect'])) && $value['additionalLocationsSelect'] == "yes"){
+                if((isset($value['additionalLocationsSelect'])) && $value['additionalLocationsSelect'] == "yes"  ){ //&& ($value['workflow_name'] !== "DS Cancel Policy")
                     $j=0;
                     foreach ($additionalLocationData as $key2 => $value2) { 
                     if(isset($previous_additionalLocation)){
@@ -498,6 +516,10 @@ class GenerateReport extends PolicyDocument {
                         $response[$i][$j]['start_date'] = $this->formatDate($value['start_date']);
                         $response[$i][$j]['end_date'] = $this->formatDate($value['end_date']);
                         $response[$i][$j]['certificate_type'] =  $value['workflow_name'] == "Dive Store Endorsement" ? 'Endorsement' : 'Primary Coverage';
+                        $response[$i][$j]['cancelled'] =  $value['workflow_name'] == "DS Cancel Policy" ? 'true' : 'false';
+                        $response[$i][$j]['cancel_date'] =  $value['workflow_name'] == "DS Cancel Policy" ?   $this->formatDate($value['cancelDate']): '';
+                        $response[$i][$j]['reinstated'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? 'true' : 'false';
+                        $response[$i][$j]['reinstated_date'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? (isset($value['reinstateDate'])? $this->formatDate($value['reinstateDate']) : $this->formatDate($value['modifiedDate'] )) : '';
                         if($product == "diveStoreProperty") { 
                             $response[$i][$j]['propertyDeductables'] = $value['propertyDeductibles'] == "propertyDeductibles1000"? "$1,000" : $value['propertyDeductibles'] == "propertyDeductibles2500"? "$2,500" : $value['propertyDeductibles'] == "propertyDeductibles5000"? "$5,000" : "$1,000" ;
                             $response[$i][$j]['catSelection'] = $value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT";
