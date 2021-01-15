@@ -1150,7 +1150,7 @@ class FileService extends AbstractService
         try {
             $fieldWhereQuery = $this->generateFieldWhereStatement($data);
             if (!empty($fieldWhereQuery['joinQuery'] && !empty($fieldWhereQuery['whereQuery']))) {
-                $queryStr = "Select * from ox_file as a
+                $queryStr = "Select *,f.name as appName from ox_file as a
                 join ox_form as b on (a.entity_id = b.entity_id)
                 join ox_form_field as c on (c.form_id = b.id)
                 join ox_field as d on (c.field_id = d.id)
@@ -1352,11 +1352,14 @@ class FileService extends AbstractService
         
         $this->processWorkflowFilter($params, $workflowJoin, $workflowFilter, $queryParams);
         $this->processCreatedDateFilter($params, $createdFilter, $queryParams);
-
+        if($appFilter == ""){
+            $appQuery = " inner join ox_app as oa on (oa.id = en.app_id)";
+        } else {
+            $appQuery = $appFilter;
+        }
         $where = " $workflowFilter $entityFilter $createdFilter";
         $fromQuery = " from ox_file as `of`
-        inner join ox_app_entity as en on en.id = `of`.entity_id $appFilter
-         ";
+        inner join ox_app_entity as en on en.id = `of`.entity_id $appQuery ";
         $this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams);
         if(!isset($appId)){
             $appId = NULL;
@@ -1380,7 +1383,7 @@ class FileService extends AbstractService
         $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
         $this->getFileFilterClause($whereQuery,$where);
         try {
-            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.rygStatus as fileRygStatus,of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id $field $fromQuery $where $sort $pageSize $offset";
+            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.rygStatus as fileRygStatus,of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id,oa.name as appName $field $fromQuery $where $sort $pageSize $offset";
             $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
             $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
             $countQuery = "SELECT FOUND_ROWS();";
