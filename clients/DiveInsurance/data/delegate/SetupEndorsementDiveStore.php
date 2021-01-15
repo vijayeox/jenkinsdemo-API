@@ -202,6 +202,8 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 }
                 $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
                 if ($data['groupProfessionalLiabilitySelect'] == 'yes') {
+                    $policy['previous_groupCoverageAmount'] = isset($data['groupCoverageAmount']) ? $data['groupCoverageAmount'] : 0;
+                    $policy['previous_groupExcessLiabilityAmount'] = isset($data['groupExcessLiabilityAmount']) ? $data['groupExcessLiabilityAmount'] : 0;
                     $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
                     $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
                     $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
@@ -210,6 +212,8 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                     $policy['previous_groupProfessionalLiability'] = isset($data['groupProfessionalLiability']) ? $data['groupProfessionalLiability'] : 0;
                     $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
                 } else {
+                    $policy['previous_groupCoverageAmount'] = 0;
+                    $policy['previous_groupExcessLiabilityAmount'] = 0;
                     $policy['previous_groupCoverage'] = 0;
                     $policy['previous_groupTaxAmount'] = 0;
                     $policy['previous_groupPadiFeeAmount'] = 0;

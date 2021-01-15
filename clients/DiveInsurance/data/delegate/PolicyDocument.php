@@ -495,7 +495,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->diveStoreEnorsementQuoteDocuments($data, $documents, $temp, $dest, $options, $previous_data, $endorsementOptions, $length);
         } else if ($data['product'] == 'Dive Store' && $this->type == 'endorsement') {
             $this->diveStoreEndorsement($data, $temp, $persistenceService);
-            $required = array("liabilityChanges", "increased_medicalPayment_limit", "increased_non_owned_liability_limit", "increased_liability_limit", "decreased_liability_limit", "increased_travelEnO", "removedadditionalLocations", "propertyChanges", "increased_dspropTotal", "decreased_dspropTotal", "increased_lossOfBusIncome", "decreased_lossOfBusIncome", "increased_buildingLimit", "decreased_buildingLimit", "removedadditionalLocations", "newAddInsured", "removedAddInsured", "lossPayeesSelect", "additional_insured_select", "lossPayeesSelect", "newlossPayees", "removedlossPayees", "additionalLocationsSelect", "newAdditionalLocations", "removedAdditionalLocations", "property_carrier", "property_policy_id", "liability_carrier", "liability_policy_id", "travelAgentEoPL", "propertyDeductibles", "update_date", "end_date", "dba", "state_in_short", "liabilityChanges", "propertyChanges", "license_number", "business_name", "address1", "address2", "city", "zip", "country", "certificate_no", "business_padi");
+            $required = array("liabilityChanges", "increased_medicalPayment_limit", "increased_non_owned_liability_limit","decreased_non_owned_liability_limit", "increased_liability_limit", "decreased_liability_limit", "increased_travelEnO", "removedadditionalLocations", "propertyChanges", "increased_dspropTotal", "decreased_dspropTotal", "increased_lossOfBusIncome", "decreased_lossOfBusIncome", "increased_buildingLimit", "decreased_buildingLimit", "removedadditionalLocations", "newAddInsured", "removedAddInsured", "lossPayeesSelect", "additional_insured_select", "lossPayeesSelect", "newlossPayees", "removedlossPayees", "additionalLocationsSelect", "newAdditionalLocations", "removedAdditionalLocations", "property_carrier", "property_policy_id", "liability_carrier", "liability_policy_id", "travelAgentEoPL", "propertyDeductibles", "update_date", "end_date", "dba", "state_in_short", "liabilityChanges", "propertyChanges", "license_number", "business_name", "address1", "address2", "city", "zip", "country", "certificate_no", "business_padi");
             $formData = $temp;
             foreach ($formData as $key => $val) {
                 if (!in_array($key, $formData)) {
@@ -1531,7 +1531,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if ($data['nonOwnedAutoLiabilityPL'] == 'nonOwnedAutoLiability1M') {
                         $temp['increased_non_owned_liability_limit'] = "$1,000,000";
                     } else if ($data['nonOwnedAutoLiabilityPL'] == 'nonOwnedAutoLiability100K') {
-                        if ($data['previous_nonOwnedAutoLiabilityPL'] == "$1,000,000") {
+                        if ($data['previous_nonOwnedAutoLiabilityPL'] == "nonOwnedAutoLiability1M") {
                             $temp['decreased_non_owned_liability_limit'] = "$100,000";
                         } else {
                             $temp['increased_non_owned_liability_limit'] = "$100,000";
