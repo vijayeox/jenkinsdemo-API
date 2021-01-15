@@ -27,6 +27,7 @@ class ElasticService
     private $filterFields;
     private $filterTmpFields;
     private $excludes;
+    private $elasticQuery;
 
     public function __construct()
     {
@@ -56,6 +57,10 @@ class ElasticService
 
     public function getElasticClient(){
         return $this->client;
+    }
+
+    public function getElasticQuery() {
+        return $this->elasticQuery;
     }
 
     public function setNoCore() {
@@ -245,11 +250,16 @@ class ElasticService
             if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
                 $value = AnalyticsUtils::checkSessionValue($value);
                 if ($condition=="=="){                
-                        if (!is_array($value)) {
-                        $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                    if (!is_array($value)) {
+                        if (strtolower(substr($value,0,5))=="date:") {
+                            $value = date("Y-m-d",strtotime(substr($value,5)));
+                            $subQuery['range'] = array($column => array('gte' => $value,'lte'=>$value,"format" => "yyyy-MM-dd"));
                         } else {
-                            $subQuery['terms'] = array($column => array_values($value));
-                        }    
+                            $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                        }
+                    } else {
+                        $subQuery['terms'] = array($column => array_values($value));
+                    }    
                 } elseif ($condition=="<>" || $condition=="!=") {
                         $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
                 } elseif ($condition=="NOT LIKE" || $condition=="not like") {
@@ -429,6 +439,7 @@ class ElasticService
         }
         $this->logger->debug('Elastic query:');
         $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
+        $this->elasticQuery = json_encode($q);
         $data['query'] = json_encode($q);
         $data["data"] = $this->client->search($q);
         $this->logger->debug('Data from elastic:');
