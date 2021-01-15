@@ -31,7 +31,7 @@ class EmployeeService extends AbstractService
     {
         $this->logger->info("Adding Employee Record - " . print_r($data, true));
         if (isset($data['managerId'])) {
-            $data['manager_id'] = $this->getIdFromUuid('ox_employee', $data['managerId']);
+            $data['manager_id'] = $this->getIdFromUuid('ox_user', $data['managerId']);
         }
         $EmpData = $data;
         $EmpData['uuid'] = UuidUtil::uuid();

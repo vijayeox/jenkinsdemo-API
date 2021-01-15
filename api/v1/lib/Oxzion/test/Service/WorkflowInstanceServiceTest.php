@@ -393,7 +393,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         try{
             $result = $this->workflowInstanceService->submitActivity($params);
         } catch(Exception $e) {
-            $this->assertEquals('Unable to execute workflow '.$params['workflowInstanceId'],$e->getMessage());   
+            $this->assertEquals('Unable to execute workflow'.$params['workflowInstanceId'],$e->getMessage());   
         }
     }
 

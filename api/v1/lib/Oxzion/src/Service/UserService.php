@@ -239,7 +239,7 @@ class UserService extends AbstractService
             $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
             if (!isset($data['address1']) || empty($data['address1'])) {
                 $addressData = $this->addressService->getOrganizationAddress( $accountId);
-                unset($addressData['id']);
+                $this->unsetAddressData($addressData,$data);
                 $data = array_merge($data, $addressData);
             }
             $this->beginTransaction();
@@ -552,7 +552,7 @@ class UserService extends AbstractService
              if (!isset($userdata['address1']) || empty($userdata['address1'])) {
                 $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
                 $addressData = $this->addressService->getOrganizationAddress( $accountId);
-                unset($addressData['id']);
+                $this->unsetAddressData($addressData,$userdata);
                 $userdata = array_merge($userdata, $addressData);
             }
             $this->personService->updatePerson($userdata['person_id'],$userdata);
@@ -1419,5 +1419,14 @@ class UserService extends AbstractService
         $update = $sql->update('ox_user')->set($updatedData)
         ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeUpdate($update);
+    }
+    private function unsetAddressData(&$addressData,$userdata){
+        unset($addressData['id']);
+        if (isset($userdata['country'])) {            
+            unset($addressData['country']);
+        }
+        if(isset($userdata['state'])){
+            unset($addressData['state']);
+        }
     }
 }
