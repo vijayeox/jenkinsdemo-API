@@ -24,219 +24,215 @@
 				Notice of cancelation: The premium and any taxes or fees are fully earned upon inception and no refund is granted unless cancelled by the company.If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.
 			</p>
 		<hr class = "spacing1"></hr>
-		{if $business_state == 'Alaska'}
+		{if $state == 'Alaska'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/AK.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/AK.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Alabama'}
+			{elseif $state == 'Alabama'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/AL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/AL.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Arkansas'}
+			{elseif $state == 'Arkansas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/AR.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/AR.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Arizona'}
+			{elseif $state == 'Arizona'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/AZ.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/AZ.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Colorado'}
+			{elseif $state == 'Colorado'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/CO.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/CO.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Connecticut'}
+			{elseif $state == 'Connecticut'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/CT.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/CT.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'District of Columbia'}
+			{elseif $state == 'District of Columbia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/DC.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/DC.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Delaware'}
+			{elseif $state == 'Delaware'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/DE.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/DE.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Florida'}
+			{elseif $state == 'Florida'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/FL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/FL.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Micronesia'}
+			{elseif $state == 'Micronesia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/FM.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/FM.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Georgia'}
+			{elseif $state == 'Georgia'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/GA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/GA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Hawaii'}
+			{elseif $state == 'Hawaii'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/HI.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/HI.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Iowa'}
+			{elseif $state == 'Iowa'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/IA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/IA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Idaho'}
+			{elseif $state == 'Idaho'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/ID.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/ID.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Illinois'}
+			{elseif $state == 'Illinois'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/IL.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/IL.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'International'}
+			{elseif $state == 'International'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/International.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/International.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Kansas'}
+			{elseif $state == 'Kansas'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/KS.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/KS.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Kentucky'}
+			{elseif $state == 'Kentucky'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/KY.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/KY.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Louisiana'}
+			{elseif $state == 'Louisiana'}
 				<center><p class = "notice" style = "color:red;">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/LA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/LA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Massachusetts'}
+			{elseif $state == 'Massachusetts'}
 				<center><p class = "notice">
-					<b>{include file = "{$smarty.current_dir}/SurplusLines/{$surplusLineYear}/SurplusLines/Group/{$surplusLineYear}/MA.tpl"}</b>
+					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Maryland'}
+			{elseif $state == 'Maryland'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MD.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Maine'}
+			{elseif $state == 'Maine'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/ME.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Marshall Islands'}
+			{elseif $state == 'Marshall Islands'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MH.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Michigan'}
+			{elseif $state == 'Michigan'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MI.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Minnesota'}
+			{elseif $state == 'Minnesota'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MN.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Missouri'}
+			{elseif $state == 'Missouri'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MO.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Mississippi'}
+			{elseif $state == 'Mississippi'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MS.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Montana'}
+			{elseif $state == 'Montana'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/MT.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'North Carolina'}
+			{elseif $state == 'North Carolina'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/NC.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'North Dakota'}
+			{elseif $state == 'North Dakota'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/ND.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Nebraska'}
+			{elseif $state == 'Nebraska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/NE.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'New Hampshire'}
+			{elseif $state == 'New Hampshire'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/NH.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'New Jersey'}
+			{elseif $state == 'New Jersey'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/NJ.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'New Mexico'}
+			{elseif $state == 'New Mexico'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/NM.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Nevada'}
+			{elseif $state == 'Nevada'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/NV.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'New York'}
+			{elseif $state == 'New York'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/NY.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Ohio'}
+			{elseif $state == 'Ohio'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/OH.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Oklahoma'}
+			{elseif $state == 'Oklahoma'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/OK.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Oregon'}
+			{elseif $state == 'Oregon'}
 				<center><center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/OR.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Pennsylvania'}
+			{elseif $state == 'Pennsylvania'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/PA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Palau'}
+			{elseif $state == 'Palau'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/PW.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Rhode Island'}
+			{elseif $state == 'Rhode Island'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/RI.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'South Carolina'}
+			{elseif $state == 'South Carolina'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/SC.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'South Dakota'}
+			{elseif $state == 'South Dakota'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/SD.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Tennessee'}
+			{elseif $state == 'Tennessee'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/TN.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Texas'}
+			{elseif $state == 'Texas'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/TX.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Utah'}
+			{elseif $state == 'Utah'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/UT.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Virginia'}
+			{elseif $state == 'Virginia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/VA.tpl"}</b>
 				</p></center>
 			{elseif $state == 'Virgin Islands'}
-				<center><p class = "notice">both of 
-					<b>{include file ="{$smarty.current_dir}/SurplusLines/IPL/{$surplusLineYear}/VI.tpl"}</b>
-				</p></center>
-			{elseif $business_state == 'Vermont'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/VT.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Washington'}
+			{elseif $state == 'Washington'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/WA.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Wisconsin'}
+			{elseif $state == 'Wisconsin'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/WI.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'West Virginias'}
+			{elseif $state == 'West Virginias'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/WV.tpl"}</b>
 				</p></center>
-			{elseif $business_state == 'Wyoming'}
+			{elseif $state == 'Wyoming'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/WY.tpl"}</b>
 				</p></center>

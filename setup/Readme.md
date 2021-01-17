@@ -13,6 +13,7 @@
 - Please install the recommened markdown reader by the command mentioned below to read this readme properly.
 
 $ sudo apt install remarkable
+	Note: For ubuntu 20+ use snap install remarkable
 
 <h4> 1. <u>Install Smartgit</u>: </h4>
 
@@ -58,6 +59,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 
 - sudo apt update
 - sudo apt install docker-ce
+	Note: If you are using ubuntu 20+ then follow the steps from <a href='https://docs.docker.com/engine/install/ubuntu/'>here</a>:
 
 <h5>Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it’s running:</h5>
 

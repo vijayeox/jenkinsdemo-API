@@ -7,6 +7,7 @@ use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\EntityNotFoundException;
 use Oxzion\ServiceException;
 use \Exception;
+use Oxzion\Utils\FileUtils;
 
 class FileCallbackController extends AbstractApiControllerHelper
 {
@@ -35,7 +36,6 @@ class FileCallbackController extends AbstractApiControllerHelper
     public function updateFileAction()
     {
         $data = $this->extractPostData();
-        
         try {
             $fileId = isset($data['id']) ? $data['id'] : null;
             if(!$fileId){
@@ -61,4 +61,7 @@ class FileCallbackController extends AbstractApiControllerHelper
         return $this->getSuccessResponse('Success',200);
     }
     
+    public function documentFinalized($data){
+        FileUtils::storeFile($data['file'],$this->config['APP_ESIGN_FOLDER'].$data['refId']);
+    }
 }

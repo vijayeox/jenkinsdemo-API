@@ -51,23 +51,27 @@ class ZipUtils
                 continue;
             }
             $filePath = $directory . DIRECTORY_SEPARATOR . $file;
-            // Remove prefix from file path before adding to zip.
-            $localPath = substr($filePath, $stripPathLength);
-            if (is_file($filePath)) {
-                if (!$za->addFile($filePath, $localPath)) {
-                    $za->close(); //Ignore any errors while closing.
-                    throw new ZipException('Failed to add file to zip archive.', ['file' => $localPath]);
+            $exclusions=array('dist','node_modules');
+            if(!in_array($file,$exclusions)){
+                // Remove prefix from file path before adding to zip.
+                $localPath = substr($filePath, $stripPathLength);
+                if (is_file($filePath)) {
+                    if (!$za->addFile($filePath, $localPath)) {
+                        $za->close(); //Ignore any errors while closing.
+                        throw new ZipException('Failed to add file to zip archive.', ['file' => $localPath]);
+                    }
+                    continue;
                 }
-                continue;
-            }
-            if (is_dir($filePath)) {
-                // Add sub-directory.
-                if (!$za->addEmptyDir($localPath)) {
-                    $za->close(); //Ignore any errors while closing.
-                    throw new ZipException('Failed to add sub-directory to zip archive.', ['directory' => $localPath]);
+                if (is_dir($filePath)) {
+                    // Add sub-directory.
+                    if (!$za->addEmptyDir($localPath)) {
+                        $za->close(); //Ignore any errors while closing.
+                        throw new ZipException('Failed to add sub-directory to zip archive.', ['directory' => $localPath]);
+                    }
+                    self::directoryToZip($filePath, $za, $stripPathLength);
+                    continue;
                 }
-                self::directoryToZip($filePath, $za, $stripPathLength);
-                continue;
+
             }
         }
         closedir($handle);

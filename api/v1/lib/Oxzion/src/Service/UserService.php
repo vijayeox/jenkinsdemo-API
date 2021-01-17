@@ -178,7 +178,7 @@ class UserService extends AbstractService
                 $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
             }
         } else {
-            if ($account = $this->getIdFromUuid('ox_account', $params['accountId'])) {
+            if (isset($params['accountId']) && $account = $this->getIdFromUuid('ox_account', $params['accountId'])) {
                 $accountId = $account;
             } else {
                 if (isset($data['accountId']) && $data['accountId'] != '') {
@@ -239,7 +239,7 @@ class UserService extends AbstractService
             $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
             if (!isset($data['address1']) || empty($data['address1'])) {
                 $addressData = $this->addressService->getOrganizationAddress( $accountId);
-                unset($addressData['id']);
+                $this->unsetAddressData($addressData,$data);
                 $data = array_merge($data, $addressData);
             }
             $this->beginTransaction();
@@ -418,12 +418,12 @@ class UserService extends AbstractService
                         where u.uuid = :userId and au.account_id = :accountId";
             $queryParams = ['userId' => $data['uuid'], 'accountId' => $account['id']];
             $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-            $response = $this->addUserRole($resultSet[0]['id'], 'ADMIN', $account['id']);
+            $response = $this->addUserRole($resultSet[0]['id'], 'ADMIN');
             if($response == 2){
                 //Did not find admin role so add Add all roles of account
                 $roles = $this->getDataByParams('ox_role', array('name'), array('account_id' => $account['id']))->toArray();
                 foreach ($roles as $key => $value) {
-                    $this->addUserRole($resultSet[0]['id'], $value, $data['account_id']);
+                    $this->addUserRole($resultSet[0]['id'], $value);
                 }
             }
             $this->commit();
@@ -446,12 +446,12 @@ class UserService extends AbstractService
             $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
             $result = $this->roleService->getRolesByAppId($appId);
             foreach ($result as $role) {
-                $this->addUserRole($accountUserId,$role['name']);
+                $this->addUserRole($accountUserId,$role['name'],$appId);
             }
         }
     }
 
-    private function addUserRole($accountUserId, $roleName)
+    private function addUserRole($accountUserId, $roleName, $appId = null)
     {
         if (!is_numeric($accountUserId)) {
             $user = $this->getDataByParams('ox_user', array('id', 'account_id'), array('uuid' => $accountUserId))->toArray();
@@ -459,22 +459,31 @@ class UserService extends AbstractService
            $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('id' => $accountUserId))->toArray(); 
         }
         if ($user){
-            if ($role = $this->getDataByParams('ox_role', array('id'), array('account_id' => $user[0]['account_id'], 'name' => $roleName))->toArray()) {
-                if (!empty($role)) {
-                    if (!$this->getDataByParams('ox_user_role', array(), array('account_user_id' => $user[0]['id'], 'role_id' => $role[0]['id']))->toArray()) {
-                        $data = array(array(
-                            'account_user_id' => $user[0]['id'],
-                            'role_id' => $role[0]['id'],
-                        ));
-                        $result = $this->multiInsertOrUpdate('ox_user_role', $data);
-                        if ($result->getAffectedRows() == 0) {
-                            return $result;
-                        }
-                        return 1;
-                    } else {
-                        return 3;
+            $params = ['accountId' => $user[0]['account_id'],'roleName'=> $roleName];
+            if (isset($appId)) {
+                $appClause = " And app_id=:appId";
+                $params['appId'] = $appId;
+            }else{
+                $appClause = " And app_id IS NULL";
+            }
+            $select = "select * from ox_role where account_id=".$user[0]['account_id'];
+            $tets = $this->executeQueryWithBindParameters($select,[])->toArray();
+            $select = "select id,name from ox_role where account_id=:accountId and name =:roleName $appClause";            
+            $this->logger->info("Executing Query $select with params--".print_r($params,true));
+            $role = $this->executeQueryWithBindParameters($select,$params)->toArray();
+            if (!empty($role)) {
+                if (!$this->getDataByParams('ox_user_role', array(), array('account_user_id' => $user[0]['id'], 'role_id' => $role[0]['id']))->toArray()) {
+                    $data = array(array(
+                        'account_user_id' => $user[0]['id'],
+                        'role_id' => $role[0]['id'],
+                    ));
+                    $this->logger->info("Executing Data---".print_r($data,true));
+                    $result = $this->multiInsertOrUpdate('ox_user_role', $data);
+                    if ($result->getAffectedRows() == 0) {
+                        return $result;
                     }
-                }
+                    return 1;
+                } 
             } else {
                 return 2;
             }
@@ -543,7 +552,7 @@ class UserService extends AbstractService
              if (!isset($userdata['address1']) || empty($userdata['address1'])) {
                 $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
                 $addressData = $this->addressService->getOrganizationAddress( $accountId);
-                unset($addressData['id']);
+                $this->unsetAddressData($addressData,$userdata);
                 $userdata = array_merge($userdata, $addressData);
             }
             $this->personService->updatePerson($userdata['person_id'],$userdata);
@@ -1410,5 +1419,14 @@ class UserService extends AbstractService
         $update = $sql->update('ox_user')->set($updatedData)
         ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeUpdate($update);
+    }
+    private function unsetAddressData(&$addressData,$userdata){
+        unset($addressData['id']);
+        if (isset($userdata['country'])) {            
+            unset($addressData['country']);
+        }
+        if(isset($userdata['state'])){
+            unset($addressData['state']);
+        }
     }
 }

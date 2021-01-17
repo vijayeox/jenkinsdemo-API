@@ -3,7 +3,7 @@ namespace Oxzion\AppDelegate;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\TemplateService;
 use Oxzion\Auth\AuthConstants;
-use Oxion\Auth\AuthContext;
+use Oxzion\Auth\AuthContext;
 
 
 abstract class MailDelegate extends CommunicationDelegate

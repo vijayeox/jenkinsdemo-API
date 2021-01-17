@@ -38,16 +38,18 @@ routes {
         ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser",
                                                     "${callback.URL}/callback/chat/adduser"]],
         ['from':'activemq:queue:FILE_ADDED', 'to':["${callback.URL}/callback/file/update",
-                                                    "${callback.URL}/fileindexer"]],
+                                                    "${callback.URL}/fileindexer/file"]],
         ['from':'activemq:queue:FILE_UPDATED', 'to':["${callback.URL}/callback/file/update",
-                                                     "${callback.URL}/fileindexer"]],
+                                                     "${callback.URL}/fileindexer/file"]],
         ['from':'activemq:queue:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]],
+        ['from':'activemq:topic:PROCESS_BATCH_INDEX', 'to':["${callback.URL}/fileindexer/batch"]],
         ['from':'activemq:topic:SEND_SMS', 'to':["${callback.URL}/callback/communication/sendsms"]],
         ['from':'activemq:topic:MAKE_CALL', 'to':["${callback.URL}/callback/communication/makecall"]],
         ['from':'activemq:topic:COMMANDS', 'to':["${callback.URL}/callback/workflow/servicetask"]],
             ['from':'activemq:topic:SAVE_CHAT_BOT', 'to':["${callback.URL}/callback/chat/savebot"]],
             ['from':'activemq:topic:DISABLE_CHAT_BOT', 'to':["${callback.URL}/callback/chat/disablebot"]],
-            ['from':'activemq:topic:CHAT_APPBOT_NOTIFICATION', 'to':["${callback.URL}/callback/chat/appbotnotification"]]
+            ['from':'activemq:topic:CHAT_APPBOT_NOTIFICATION', 'to':["${callback.URL}/callback/chat/appbotnotification"]],
+            ['from':'activemq:topic:DOCUMENT_SIGNED', 'to':["${callback.URL}/callback/esign/finalized"]]
         // ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}"]],
         // ['from':'activemq:topic:USER_DELETED', 'to':["${callback.URL}"]]
     ]

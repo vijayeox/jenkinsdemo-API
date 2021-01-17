@@ -25,7 +25,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
     protected $parentId;
     protected $username;
     
-    public function __construct($table, $modelClass, $parentId = null)
+    public function __construct($table = null, $modelClass = null, $parentId = null)
     {
         $this->table = $table;
         $this->log = $this->getLogger();

@@ -106,6 +106,7 @@
       "Workflow\\":"module/Workflow/src/",
       "PaymentGateway\\":"module/PaymentGateway/src/",
       "ErrorLog\\":"module/ErrorLog/src/",
+      "Esign\\":"module/Esign/src/",
       "Import\\":"module/Import/src/"
     }
   },
@@ -137,7 +138,8 @@
       "ChatCallbackTest\\": "module/Callback/test/",
       "MessagingTest\\":"module/Messaging/test/",
       "DiveInsuranceTest\\":"../../clients/Dive Insurance/test/",
-      "ErrorLogTest\\":"module/ErrorLog/test/"
+      "ErrorLogTest\\":"module/ErrorLog/test/",
+      "EsignTest\\":"module/Esign/test/"
     }
   },
   "extra": [],

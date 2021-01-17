@@ -1363,8 +1363,9 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $entityRecordSetAfterDeletion = $this->executeQueryTest("SELECT name FROM ox_app WHERE uuid='1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4'");
+        $entityRecordSetAfterDeletion = $this->executeQueryTest("SELECT name,uuid FROM ox_app WHERE id=99");
         $this->assertEquals($entityRecordSetAfterDeletion[0]['name'],$entityRecordSetBeforeDeletion[0]['id'].'_'.$entityRecordSetBeforeDeletion[0]['name'] );
+        $this->assertNotEquals($entityRecordSetAfterDeletion[0]['uuid'],'1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4' );
     }
 
     public function testDeleteNotFound()

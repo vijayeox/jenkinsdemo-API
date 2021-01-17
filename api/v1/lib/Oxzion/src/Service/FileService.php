@@ -71,6 +71,12 @@ class FileService extends AbstractService
             $formId = null;
         }
 
+        if(isset($data['assocId'])) {
+            $assocId = $this->getIdFromUuid('ox_file', $data['assocId']);
+        } else {
+            $assocId = null;
+        }
+
         $data['uuid'] = $uuid = isset($data['uuid']) && UuidUtil::isValidUuid($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
@@ -144,8 +150,10 @@ class FileService extends AbstractService
             $this->updateRyg($data);
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
+
             if (isset($result['id'])) {
-                $this->messageProducer->sendQueue(json_encode(array('id' => $result['id'])), 'FILE_ADDED');
+                $this->logger->info("THE FILE ID TO BE INDEXED IS ".$result['uuid']);
+                $this->messageProducer->sendQueue(json_encode(array('uuid' => $result['uuid'])), 'FILE_ADDED');
             }
         } catch (Exception $e) {
             $this->rollback();
@@ -1142,7 +1150,7 @@ class FileService extends AbstractService
         try {
             $fieldWhereQuery = $this->generateFieldWhereStatement($data);
             if (!empty($fieldWhereQuery['joinQuery'] && !empty($fieldWhereQuery['whereQuery']))) {
-                $queryStr = "Select * from ox_file as a
+                $queryStr = "Select *,f.name as appName from ox_file as a
                 join ox_form as b on (a.entity_id = b.entity_id)
                 join ox_form_field as c on (c.form_id = b.id)
                 join ox_field as d on (c.field_id = d.id)
@@ -1344,11 +1352,14 @@ class FileService extends AbstractService
         
         $this->processWorkflowFilter($params, $workflowJoin, $workflowFilter, $queryParams);
         $this->processCreatedDateFilter($params, $createdFilter, $queryParams);
-
+        if($appFilter == ""){
+            $appQuery = " inner join ox_app as oa on (oa.id = en.app_id)";
+        } else {
+            $appQuery = $appFilter;
+        }
         $where = " $workflowFilter $entityFilter $createdFilter";
         $fromQuery = " from ox_file as `of`
-        inner join ox_app_entity as en on en.id = `of`.entity_id $appFilter
-         ";
+        inner join ox_app_entity as en on en.id = `of`.entity_id $appQuery ";
         $this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams);
         if(!isset($appId)){
             $appId = NULL;
@@ -1372,7 +1383,7 @@ class FileService extends AbstractService
         $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
         $this->getFileFilterClause($whereQuery,$where);
         try {
-            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.rygStatus as fileRygStatus,of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id $field $fromQuery $where $sort $pageSize $offset";
+            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.rygStatus as fileRygStatus,of.uuid, wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id,oa.name as appName $field $fromQuery $where $sort $pageSize $offset";
             $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
             $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
             $countQuery = "SELECT FOUND_ROWS();";
@@ -1440,7 +1451,7 @@ class FileService extends AbstractService
                 }
             }
             foreach ($documentsArray as $key=>$docItem) {
-                if(isset($docItem) && !isset($docItem[0]['file']) ){
+                if(isset($docItem) && !isset($docItem[0]['file']) && !empty($docItem)){
                      $parseDocData = array();
                     foreach ($docItem as $document) {
                         if(is_array($document) && isset($document[0])){
@@ -1452,7 +1463,7 @@ class FileService extends AbstractService
                         }
                     }
                    $documentsArray[$key] =array('value' => $parseDocData,'type' => isset($document) ? 'document' : 'file');
-                   } else {
+                } else {
                     $documentsArray[$key] =array('value' => $docItem,'type' => 'file');
                 }
             }
@@ -1787,52 +1798,65 @@ class FileService extends AbstractService
     }
     public function addAttachment($params,$file)
     {
-        $fileArray = array();
-        $data = array();
-        $fileStorage = AuthContext::get(AuthConstants::ACCOUNT_UUID) . "/temp/";
-        $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
-        $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['uuid'] = UuidUtil::uuid();
-        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $tempname = str_replace(".".$ext, "", $file['name']);
-        $data['name'] = $tempname.".".$ext;
-        $data['originalName'] = $tempname.".".$ext;
-        $data['extension'] = $ext;
-        $form = new FileAttachment();
-        $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
-        $data['type'] = $file['type'];
-        if (!isset($params['fileId'])) {
-            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
-            $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
-            $data['path'] = $path;
-            $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
-        }else{
-            $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/';
-            $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-            $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-            $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
-        }
-        $form->exchangeArray($data);
-        $form->validate();
-        $count = $this->attachmentTable->save($form);
-        $id = $this->attachmentTable->getLastInsertValue();
-        $data['id'] = $id;
-        $file['name'] = $data['name'];
-        $fileStored = FileUtils::storeFile($file, $folderPath);
-        $data['size'] = filesize($data['path']);
-        if (isset($params['fileId'])) {
-            $filterArray['text'] = $params['fieldLabel'];
-            $filter['uuid'] = $params['fileId'];
-            $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $filter, null)->toArray();
-            $fileArray['entity_id'] = $fileRecord[0]['entity_id'];
-            $fieldName = $this->getDataByParams('ox_field', array("name"), $filterArray, null)->toArray();
-            if (count($fileRecord) > 0) {
-               $fileData = json_decode($fileRecord[0]['data'],true);
-               $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
-               $this->updateFile($fileData,$params['fileId']);
+        try {
+            $fileArray = array();
+            $data = array();
+        	$fileStorage = AuthContext::get(AuthConstants::ACCOUNT_UUID) . "/temp/";
+        	$data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
+            $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['uuid'] = UuidUtil::uuid();
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $tempname = str_replace(".".$ext, "", $file['name']);
+            $data['name'] = $tempname.".".$ext;
+            $data['originalName'] = $tempname.".".$ext;
+            $data['extension'] = $ext;
+            $form = new FileAttachment();
+            $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
+            $data['type'] = $file['type'];
+            if (!preg_match('/^[\w .-]+$/i', $file['name'])){
+                throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except -_ and space", "attachment.filename.invalid");
             }
+            if (!isset($params['fileId'])) {
+                $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
+                $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
+                $data['path'] = $path;
+                $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
+            }else{
+                $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/';
+                $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+                $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+                $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
+            }
+            $form->exchangeArray($data);
+            $form->validate();
+            $count = $this->attachmentTable->save($form);
+            $id = $this->attachmentTable->getLastInsertValue();
+            $data['id'] = $id;
+            $file['name'] = $data['name'];
+            $fileStored = FileUtils::storeFile($file, $folderPath);
+            $data['size'] = filesize($data['path']);
+            if (isset($params['fileId'])) {
+                $filterArray['text'] = $params['fieldLabel'];
+                $filter['uuid'] = $params['fileId'];
+                $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $filter, null)->toArray();
+                $fileArray['entity_id'] = $fileRecord[0]['entity_id'];
+          		$filterArray['entity_id'] = $fileRecord[0]['entity_id'];
+                $fieldName = $this->getDataByParams('ox_field', array("name"), $filterArray, null)->toArray();
+                if (count($fileRecord) > 0) {
+                $fileData = json_decode($fileRecord[0]['data'],true);
+                $check = $this->processFileDataList($fileData,$fieldName[0]['name'],$data);
+                if(!$check) {
+                    //When the field doesn't exist in file data
+                    $fileData[$fieldName[0]['name']] = array($data);               
+                }
+                $this->updateFile($fileData,$params['fileId']);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-        return $data;
     }
 
     public function deleteAttachment($params)
@@ -1889,6 +1913,11 @@ class FileService extends AbstractService
         try{
             if(isset($data['name'])) {
                 $newName = $data['name'];
+                $ext = pathinfo($newName, PATHINFO_EXTENSION);
+                $tempname = str_replace(".".$ext, "", $newName);
+                if (!preg_match('/^[\w .-]+$/i', $tempname)){
+                    throw new ServiceException("Unsupported Filename.\nFilename cannot contain special characters except -_ and space", "attachment.filename.invalid");
+                }
             }
             else {
                 throw new ServiceException("name is required and not specified", "attachment.newName.unspecified");
@@ -2054,6 +2083,11 @@ class FileService extends AbstractService
             } else {
                 $entityFilter = " en.name = :entityName AND ";
                 $queryParams['entityName'] = $params['entityName'];
+            }
+            if (isset($params['assocId'])) {
+                if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId'])) {
+                    $entityFilter .= " of.assoc_id = :assocId AND ";
+                }
             }
         }
     }
@@ -2270,6 +2304,7 @@ class FileService extends AbstractService
                                         continue;
                                     }
                                     $fromQuery .= " inner join ox_indexed_file_attribute as ".$tablePrefix." on (`of`.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on(".$val['field'].$tablePrefix.".id = ".$tablePrefix.".field_id and ". $val['field'].$tablePrefix.".name='".$val['field']."')";
+                                    $filterOperator = $this->processFilters($val);
                                     $queryString = $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "'";
                                     $whereQuery .= " (CASE  WHEN (" .$tablePrefix . ".field_value_type='TEXT') THEN " . $tablePrefix . ".field_value_text $queryString ";
 
@@ -2930,6 +2965,16 @@ class FileService extends AbstractService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function getFieldDataTypes($entityId,$appId) {
+        $select = "SELECT ox_field.name,ox_field.data_type from ox_field inner join ox_app_entity on ox_field.entity_id = ox_app_entity.id where ox_field.entity_id=:entityId and ox_field.app_id=:appId";
+        $params = array("entityId" => $entityId,"appId" => $appId);
+        $result = $this->executeQuerywithBindParameters($select,$params)->toArray();
+        if (count($result) == 0) {
+            return 0;
+        }
+        return $result[0];
     }
 
 

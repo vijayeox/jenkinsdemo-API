@@ -70,6 +70,16 @@ return [
         'jobUrl' => 'http://localhost:8085/',
         'authToken' => ''
     ],
+    'esign' => [
+        'clientid' => '6l3lpgsbrha13u8rdg9t5hq3au',
+        'clientsecret' => '3uvdithse6p3qmjvv4s3k1mcjt33p06f9iiein5sbmka9prdcqj',
+        'url' => 'https://lab-auth.insuresign.io/oauth2/token',
+        'docurl' => 'https://lab-api.insuresign.io/',
+        "email" => "info@vantageagora.com",
+        "username" => "info@vantageagora.com",
+        "password" => "CFnEWs0g",
+        "callbackUrl" => 'https://qa3.eoxvantage.com/esign/event'
+    ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'ENTITY_FOLDER'=>__DIR__.'/../../data/entity/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
@@ -82,6 +92,7 @@ return [
     'TEMPLATE_FOLDER'=>__DIR__.'/../../data/template/',
     'APP_UPLOAD_FOLDER' => __DIR__.'/../../data/app',
     'APP_DOCUMENT_FOLDER' => __DIR__.'/../../data/file_docs/',
+    'APP_ESIGN_FOLDER' => __DIR__.'/../../data/esign/',
     'CLIENT_FOLDER' => __DIR__.'/../../../../clients/',
     'APPS_FOLDER' => __DIR__."/../../../../view/apps/",
     'GUI_FOLDER' => __DIR__."/../../../../view/gui/src/externals/",
@@ -97,4 +108,5 @@ return [
     'authRequiredText' => 'Authentication Required',
     'refreshTokenPeriod' => '7',
     'paymentGatewayType'=>'DEMO'
+
 ];
