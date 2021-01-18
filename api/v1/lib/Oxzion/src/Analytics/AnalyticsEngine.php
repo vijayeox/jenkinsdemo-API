@@ -8,5 +8,6 @@ interface AnalyticsEngine
 
     public function getData($appId,$type,$parameters);
 
+    public function getQuery();
 }
 ?>

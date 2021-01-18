@@ -254,8 +254,10 @@ class ElasticService
                         if (strtolower(substr($value,0,5))=="date:") {
                             $value = date("Y-m-d",strtotime(substr($value,5)));
                             $subQuery['range'] = array($column => array('gte' => $value,'lte'=>$value,"format" => "yyyy-MM-dd"));
+                        } elseif (!is_numeric($value)) {
+                                $subQuery['match'] = array($column.".keyword" => array('query' => $value, 'operator' => 'and'));
                         } else {
-                            $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                                $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
                         }
                     } else {
                         $subQuery['terms'] = array($column => array_values($value));
