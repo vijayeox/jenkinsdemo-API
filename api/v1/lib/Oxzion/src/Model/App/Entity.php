@@ -27,7 +27,8 @@ class Entity extends OxzionEntity
         'enable_comments' =>    ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
         'enable_documents' =>   ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
         'title' =>              ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'page_id' =>            ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE]
+        'page_id' =>            ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'subscriber_field' =>   ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
     ];
     
     public function &getModel() {
