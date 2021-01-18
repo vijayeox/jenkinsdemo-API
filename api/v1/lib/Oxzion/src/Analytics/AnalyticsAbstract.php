@@ -38,6 +38,9 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         if (isset($parameters['template'])) {
             $finalResult['data'] = $this->applyTemplate($finalResult,$parameters);
         }
+        if (isset($parameters['debug'])) {
+            $finalResult['query'] = $this->getQuery();
+        }
         return $finalResult;
     }
 
