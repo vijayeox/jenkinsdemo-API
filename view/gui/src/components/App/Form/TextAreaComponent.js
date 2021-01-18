@@ -7,54 +7,36 @@ import Swal from 'sweetalert2';
 import Requests from "../../../Requests";
 import {ckeditorConfig} from '../../../CkEditorConfig';
 import '../../../public/css/ckeditorStyle.scss';
+import WidgetRenderer from '../../../WidgetRenderer';
 
 export default class TextAreaComponent extends TextArea {
 
     constructor(component, options, data) {
+        if(options.appId == null){
+            options.core = options.root.core;
+            options.appId = options.root.appId;
+            options.uiUrl = options.root.uiUrl;
+            options.formDivID = options.root.formDivID;
+            options.wrapperUrl = options.root.wrapperUrl;
+            if(options.parent && options.parent.root && options.parent.root.parent && options.parent.root.parent.appId){
+                options.core = options.parent.root.parent.core;
+                options.appId = options.parent.root.parent.appId;
+                options.uiUrl = options.parent.root.parent.uiUrl;
+                options.formDivID = options.parent.root.parent.formDivID;
+                options.wrapperUrl = options.parent.root.parent.wrapperUrl;
+            }
+        }
         super(component, options, data);
-        var root = this.getRoot();
-        component.core = null;
-        component.appId = null;
-        component.uiUrl = null;
+        component.core = options.core;
+        component.appId = options.appId;
+        component.uiUrl = options.uiUrl;
+        component.wrapperUrl = options.wrapperUrl;
+        component.formDivID = options.formDivID;
         component.loader = null;
         component.ckeditorInstance = null;
-        component.renderedCharts = {};
-        var that = this;
-        var element = null;
-        if (root && root.element) {
-            element = root.element;
-        }
-        if(root && root.root && root.root.parent && root.root.parent.root && root.root.parent.root.element && element == null){
-            element = root.root.parent.root.element;
-        }
-        if(that.parent && that.parent.root && that.parent.root.element && element == null){
-            element = that.parent.root.element;
-        }
-        if(that.parent && that.parent.rootElement && element == null){
-            element = that.parent.rootElement;
-        }
-        if(root.root && root.root.element && element == null){
-            element = root.root.element;
-        }
-        if(that.root && that.root.element && element == null){
-            element = that.root.element;
-        }
-        if(root.parent && root.parent.element && element == null){
-            element = root.parent.element;
-        }
-        if(element){
-            element.addEventListener("appDetails", function(e) {
-                component.core = e.detail.core;
-                component.appId = e.detail.appId;
-                component.uiUrl = e.detail.uiUrl;
-                component.wrapperUrl = e.detail.wrapperUrl;
-            }, true);
-            var evt = new CustomEvent("getAppDetails", {
-                detail: {}
-            });
-            element.dispatchEvent(evt);
-        }
-        if(this.component.editor == 'ckeditor'){
+        this.renderedCharts = {};
+        this.core = options.core;
+        if(component.core && this.component.editor == 'ckeditor'){
             this.editorDialogMessageHandler = function (event) {
                 let editorDialog = event.source;
                 let eventData = event.data;
@@ -88,8 +70,6 @@ export default class TextAreaComponent extends TextArea {
         if(this.component.editor != 'ckeditor'){
             return super.attachElement(element,index);
         } else {
-            var evt = new CustomEvent("getAppDetails", { detail: {} });
-            _this2.getRoot().element.dispatchEvent(evt);
             window.addEventListener('message', this.editorDialogMessageHandler, false);
             window.addEventListener('message', this.widgetDrillDownMessageHandler, false);
             var editor = _this2.setupCkEditor(_this2, element, index);
@@ -99,18 +79,18 @@ export default class TextAreaComponent extends TextArea {
     }
     setValueAt(index, value) {
         if(this.component.editor == 'ckeditor'){
-            var _this4 = this;
+            var _this2 = this;
             if(value == "" || value == null){
-                if(_this4._data[_this4.path]){
-                    value = _this4._data[_this4.path];
+                if(_this2._data[_this2.path]){
+                    value = _this2._data[_this2.path];
                 }
             }
-            if (_this4.editorsReady[index]) {
-                _this4.editorsReady[index].setData(_this4.setConvertedValue(value, index));
+            if (_this2.editorsReady[index]) {
+                _this2.editorsReady[index].setData(_this2.setConvertedValue(value, index));
             }
             CKEDITOR.instances[this.ckeditorInstance].setData(value,{
                 callback: function() {
-                    _this4.updateEditorValue(index, value);
+                    _this2.updateEditorValue(index, value);
                 }
             });
         } else {
@@ -230,13 +210,13 @@ export default class TextAreaComponent extends TextArea {
     }
 
     updateWidget = (elementId, widgetId) => {
-        var thisInstance = this;
+        var _this2 = this;
         //Dispose and cleanup if this chart had been painted previously.
-        let existingChart = thisInstance.renderedCharts[elementId];
+        let existingChart = _this2.renderedCharts[elementId];
         if (existingChart) {
             if (existingChart.dispose) {
                 existingChart.dispose();
-                thisInstance.renderedCharts[elementId] = null;
+                _this2.renderedCharts[elementId] = null;
             }
         }
 
@@ -250,14 +230,14 @@ export default class TextAreaComponent extends TextArea {
                 widgetId = widgetIdAttribute.nodeValue;
             }
         }
-        Requests.doRestRequest(component.core,`analytics/widget/${widgetId}?data=true`, {}, 'get',
+        Requests.doRestRequest(_this2.core,`analytics/widget/${widgetId}?data=true`, {}, 'get',
             function (response) {
                 let renderProperties = {}
                 renderProperties["element"] = widgetElement
                 renderProperties["widget"] = response.widget
                 renderProperties["dashboardEditMode"] = true
                 let chart = WidgetRenderer.render(renderProperties);
-                thisInstance.renderedCharts[elementId] = chart;
+                _this2.renderedCharts[elementId] = chart;
             },
             function (response) {
                 Swal.fire({
@@ -265,6 +245,6 @@ export default class TextAreaComponent extends TextArea {
                     title: 'Oops...',
                     text: 'Could not fetch contents of a widget. Please try after some time.'
                 });
-            },thisInstance.loader);
+            },_this2.loader);
     }
 }
