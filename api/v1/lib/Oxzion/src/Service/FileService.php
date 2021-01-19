@@ -172,9 +172,24 @@ class FileService extends AbstractService
             $returnResult['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
             $returnResult['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
             $returnResult['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
-            $returnResult['subscribersList'] = isset($data[$resultQuery[0]['subscriber_field']])?$data[$resultQuery[0]['subscriber_field']]:null;
+            $returnResult['subscribersList'] = array();
+            $subsc = explode (",", $resultQuery[0]['subscriber_field']);
+            for ($i=0; $i < count($subsc) ; $i++) { 
+                $this->logger->info("Subsc-----".print_r($subsc,true));
 
+                if (isset($data[$subsc[$i]]) && is_string($data[$subsc[$i]])) {
+                    $resSubs = json_decode($data[$subsc[$i]],true);
+                    if($resSubs){
+                        $returnResult['subscribersList'] = array_merge($returnResult['subscribersList'], $resSubs);
+                    }else{
+                        $returnResult['subscribersList'][] = $data[$subsc[$i]];
+                    }
+                }else if( isset($data[$subsc[$i]]) && is_array($data[$subsc[$i]])){
+                    $returnResult['subscribersList'] = array_merge($returnResult['subscribersList'], $data[$subsc[$i]]);
+                }        
+            }
         }
+        $this->logger->info("Subsc result----".print_r($returnResult,true));
         return $returnResult;
     }
     private function setupFileAssignee($fileId,$file){
