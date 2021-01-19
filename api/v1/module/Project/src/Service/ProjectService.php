@@ -138,13 +138,13 @@ class ProjectService extends AbstractService
             $sql = $this->getSqlObject();
             $form = new Project();
             $parent_uuid = null;
-            if(isset($data['parentId']))
+            $parent_uuid = isset($data['parent_id']) ? $data['parent_id'] : (isset($data['parentId']) ? $data['parentId']: 0);
+            if(isset($parent_uuid))
             {
-                $parentId = $this->getIdFromUuid('ox_project', $data['parentId']);
-                $parent_uuid = $data['parentId'];
+                $parentId = UuidUtil::isValidUuid($parent_uuid)? $this->getIdFromUuid('ox_project', $parent_uuid) : (isset($data['parent_id']) ? $data['parent_id'] : (isset($data['parentId']) ? $data['parentId']: 0));
                 $data['parent_id'] = $parentId;
-                $result = $this->getProjectByUuid($parent_uuid, $params);
-                $data['parent_manager_id'] = $result['manager_id'];
+                $projectDetails = $this->getProjectByUuid($parent_uuid, $params);
+                $data['parent_manager_id'] = $projectDetails['manager_id'];
                 if($parentId == 0){
                     throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
                 }
