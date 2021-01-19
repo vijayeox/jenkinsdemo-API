@@ -117,8 +117,8 @@ class QueryService extends AbstractService
         if (isset($params['data'])) {
             $queryResult = $this->runQuery($resultSet[0]['configuration'], $resultSet[0]['datasource_uuid']);
             $response['query']['data'] = $queryResult['data'];
-            if (isset($queryResult['query'])) {
-                $response['query']['generated']= $queryResult['query'];
+            if (isset($queryResult['targetquery'])) {
+                $response['query']['targetquery']= $queryResult['targetquery'];
             }
         }
         return $response;
@@ -209,7 +209,6 @@ class QueryService extends AbstractService
         } else {
             array_push($errors, array('message' => 'datasource_id is required'));
         }
-
         if (isset($params['configuration'])) {
             $configuration = $params['configuration'];
         } else {
@@ -221,6 +220,11 @@ class QueryService extends AbstractService
             $validationException->setErrors($errors);
             throw $validationException;
         }
+        if (isset($params['debug'])) {
+            $configtemp = json_decode($configuration,1);
+            $configtemp['debug']=$params['debug'];
+            $configuration = json_encode($configtemp);
+        }
         try {
             $result = $this->runQuery($configuration, $datasource_id);
         } catch (Exception $e) {
@@ -228,7 +232,7 @@ class QueryService extends AbstractService
             $this->logger->error($e);
             throw $e;
         }
-        return $result['data'];
+        return $result;
     }
 
     private function runQuery($configuration, $datasource_uuid, $overRides = null)
