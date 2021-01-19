@@ -117,6 +117,9 @@ class QueryService extends AbstractService
         if (isset($params['data'])) {
             $queryResult = $this->runQuery($resultSet[0]['configuration'], $resultSet[0]['datasource_uuid']);
             $response['query']['data'] = $queryResult['data'];
+            if (isset($queryResult['query'])) {
+                $response['query']['generated']= $queryResult['query'];
+            }
         }
         return $response;
     }
