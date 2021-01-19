@@ -202,9 +202,15 @@ class ProjectService extends AbstractService
             }
         }
         $parent_uuid = null;
-        if (isset($data['parent_id'])){
-            $parentId = $this->getIdFromUuid('ox_project', $data['parent_id']);
-            $parent_uuid = $data['parent_id'];
+        if (isset($data['parentId'])) {
+            $projParentId = $data['parentId'];
+        }
+        if (isset($data['parent_id'])) {
+            $projParentId = $data['parent_id'];
+        }
+        if (isset($projParentId)){
+            $parentId = $this->getIdFromUuid('ox_project', $projParentId);
+            $parent_uuid = $projParentId;
             $data['parent_id'] = $parentId;
             if($parentId == 0){
                 throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
@@ -483,8 +489,9 @@ class ProjectService extends AbstractService
             
         }
         $id = $this->getIdFromUuid('ox_project',$params['projectId']);
+        // Done Twice  - one for admin and one for PPM App
         $queryString = "SELECT oxp.name,oxp.description,oxp.uuid,oxp.date_created,
-                        ou.uuid as manager_id,sub.uuid as parent_id 
+                        ou.uuid as managerId,sub.uuid as parentId,ou.uuid as manager_id,sub.uuid as parent_id 
                         from ox_project as oxp 
                         INNER JOIN ox_user as ou on oxp.manager_id = ou.id 
                         INNER JOIN ox_project as sub on sub.id = oxp.parent_id 
