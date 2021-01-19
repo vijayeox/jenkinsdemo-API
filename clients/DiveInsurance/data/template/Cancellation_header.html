@@ -46,7 +46,8 @@
                         document.getElementsByClassName(
                             "cancelDate"
                         )[0].textContent = moment(
-                            vars[css_selector_classes[css_class]]
+                            //vars[css_selector_classes[css_class]]
+                            new Date()
                         ).format("DD MMMM YYYY");
                     }
 

@@ -1546,17 +1546,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
         if (isset($data['travelAgentEoPL']) && isset($policy['previous_travelEnO'])) {
-            if ($policy['previous_travelEnO'] == $data['travelAgentEoPL']) {
+            if ($policy['previous_travelAgentEOReceiptsPL'] == $data['travelAgentEOReceiptsPL'] && $data['travelAgentEoPL']) {
                 $data['increased_travelEnO'] = false;
             } else {
-                if ($data['travelAgentEoPL']) {
+                if($data['travelAgentEOReceiptsPL'] >= $policy['previous_travelAgentEOReceiptsPL'] && $data['travelAgentEoPL']){
                     $temp['liabilityChanges'] = true;
                     $temp['increased_travelEnO'] = "$1,000,000";
-                } else {
-                    if ($policy['previous_travelAgentEoPL'] != $data['travelAgentEoPL'] && !$data['travelAgentEoPL']) {
-                        $temp['liabilityChanges'] = true;
-                        $temp['removed_travelEnO'] = true;
-                    }
+                }else if ($data['travelAgentEoPL']) {
+                    $temp['liabilityChanges'] = true;
+                    $temp['increased_travelEnO'] = "$1,000,000";
+                } else if ($policy['previous_travelAgentEoPL'] != $data['travelAgentEoPL'] && !$data['travelAgentEoPL']) {
+                    $temp['liabilityChanges'] = true;
+                    $temp['removed_travelEnO'] = true;
                 }
             }
         }
