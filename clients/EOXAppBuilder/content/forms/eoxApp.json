@@ -7304,7 +7304,7 @@
 				"key": "name",
 				"type": "textfield",
 				"input": true,
-				"id": "eq26qg6000",
+				"id": "eq26qg6000000",
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -7374,24 +7374,7 @@
 				"modalEdit": false,
 				"multiple": true,
 				"dataSrc": "custom",
-				"defaultValue": [{
-					"name": "",
-					"formFieldsValidationExcel": [],
-					"start_date_field": "",
-					"end_date_field": "",
-					"status_field": "",
-					"subscriber_field": "",
-					"title": "",
-					"ryg_rule": "",
-					"enable_documents": false,
-					"enable_comments": false,
-					"field": [{
-						"name": "",
-						"text": "",
-						"data_type": "",
-						"index": false
-					}]
-				}],
+				"defaultValue": [],
 				"data": {
 					"values": [{
 						"label": "",
@@ -7400,7 +7383,7 @@
 					"resource": "",
 					"json": "",
 					"url": "",
-					"custom": "if(data.entity){\nvalues = data.entity.map(item=>item.name)\nif(row[component.key] && !values.includes(row[component.key])){\nrow[component.key] = \"\";\n}\n}"
+					"custom": "if(data.entity){\nvalues = data.entity.map(item=>item.name)\nif(row[component.key] && !values.includes(row[component.key])){\nrow[component.key] = \"\";\n}\n} else {\nvalues = []\n}"
 				},
 				"valueProperty": "",
 				"dataType": "",
@@ -7511,7 +7494,7 @@
 					"include": "score",
 					"threshold": 0.3
 				},
-				"id": "e4x1d6l0"
+				"id": "eyu9qu50"
 			}, {
 				"label": "Workflow BPMN",
 				"tableView": false,
@@ -7531,7 +7514,7 @@
 				"type": "file",
 				"url": "/app/{{data.app.uuid}}/artifact/add/workflow",
 				"input": true,
-				"id": "ez74me000",
+				"id": "ez74me000000",
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -7597,7 +7580,7 @@
 				"type": "hidden",
 				"input": true,
 				"tableView": false,
-				"id": "ebofypr000",
+				"id": "ebofypr000000",
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -7663,7 +7646,7 @@
 				"input": true,
 				"tableView": false,
 				"hideOnChildrenHidden": false,
-				"id": "epzkvpp000",
+				"id": "epzkvpp000000",
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -8321,7 +8304,7 @@
 					"key": "columns",
 					"type": "columns",
 					"input": false,
-					"id": "e4lpk7h0000",
+					"id": "e4lpk7h00000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -8554,7 +8537,7 @@
 					"key": "name",
 					"type": "textfield",
 					"input": true,
-					"id": "e58akj90000000",
+					"id": "e58akj900000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -8626,7 +8609,7 @@
 					"key": "icon",
 					"type": "textfield",
 					"input": true,
-					"id": "e0g58st0000000",
+					"id": "e0g58st00000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -8784,7 +8767,7 @@
 						"include": "score",
 						"threshold": 0.3
 					},
-					"id": "exomtpj000"
+					"id": "exomtpj0000"
 				}, {
 					"label": "Privilege",
 					"labelPosition": "top",
@@ -8890,7 +8873,7 @@
 						"include": "score",
 						"threshold": 0.3
 					},
-					"id": "emsfm5f0000",
+					"id": "emsfm5f00000",
 					"defaultValue": ""
 				}, {
 					"label": "Parent",
@@ -8998,14 +8981,14 @@
 						"include": "score",
 						"threshold": 0.3
 					},
-					"id": "eckzp5e00"
+					"id": "eckzp5e000"
 				}, {
 					"label": "Menu UUID",
 					"key": "uuid",
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"id": "ei17xi0000000",
+					"id": "ei17xi00000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -9233,7 +9216,7 @@
 		"id": "eenp0m4"
 	}],
 	"revisions": "current",
-	"_vid": 546,
+	"_vid": 548,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
@@ -9253,6 +9236,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2021-01-19T12:10:58.849Z",
+	"modified": "2021-01-19T12:28:47.212Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
