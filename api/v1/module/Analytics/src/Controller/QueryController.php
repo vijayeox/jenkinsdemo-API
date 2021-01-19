@@ -167,7 +167,13 @@ class QueryController extends AbstractApiController
             $response = ['data' => $data, 'errors' => 'Query could not be executed'];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        return $this->getSuccessResponseWithData(array('result' => $result));
+        if (isset($result['targetquery'])) {
+            $returnresult = ['result' => $result['data'],'targetquery' => $result['targetquery']];
+        } else {
+            $returnresult = ['result' => $result['data']];
+        }
+
+        return $this->getSuccessResponseWithData($returnresult);
     }
 
     /**
