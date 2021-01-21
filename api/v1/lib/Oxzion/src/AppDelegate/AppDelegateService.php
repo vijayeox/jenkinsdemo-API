@@ -65,7 +65,7 @@ class AppDelegateService extends AbstractService
     }
 
     public function setAppDelegateService(){
-        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService);
+        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService,$this->fieldService);
         return $appDelegateService;
     }
 
@@ -103,6 +103,7 @@ class AppDelegateService extends AbstractService
                 if (method_exists($obj, "setFieldService")) {
                     $obj->setFieldService($this->fieldService);
                 }
+               
                 if (method_exists($obj, "setTemplateService")) {
                     $obj->setTemplateService($this->templateService);
                 }
