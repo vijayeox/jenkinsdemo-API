@@ -2560,9 +2560,9 @@ class FileService extends AbstractService
             $expected =  isset($value['value']) ? $value['value'] : NULL;
             $actual = isset($data[$field]) ? $data[$field]: NULL;
             if($logic == "AND"){
-                $result = $result && $this->processCondition($operator,$actual,$expected);
+                $result = $this->processCondition($operator,$actual,$expected) && $result ;
             }else{
-                $result = $result || $this->processCondition($operator,$actual,$expected);
+                $result = $this->processCondition($operator,$actual,$expected) || $result;
             }
         }
         return $result;
@@ -2681,6 +2681,7 @@ class FileService extends AbstractService
         $this->logger->info("WHERE CONDTN---".print_r($whereQuery,true));
         $this->logger->info("WHERE CONDTN 111---".print_r($where,true));
         $whereQuery = rtrim($whereQuery, " AND ");
+        $whereQuery = ltrim($whereQuery, " and ");
         if($whereQuery==" WHERE "){
             $where = "";
         } else {
