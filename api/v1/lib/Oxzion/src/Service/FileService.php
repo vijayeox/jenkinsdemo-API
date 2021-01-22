@@ -2352,11 +2352,12 @@ class FileService extends AbstractService
             return true;
         }
         if ($val['field'] == 'start_date') {
-            $whereQuery .= " of.start_date " . $filterOperator["operation"] . $val['value'] . " $filterLogic";
+            // Use BETWEEN for Time Stamp Comparision if the operator is =(equalTo)
+            $whereQuery .= " of.start_date " . $filterOperator["operation"] . "'" . $val['value'] . "' $filterLogic";
             return true;
         }
         if ($val['field'] == 'end_date') {
-            $whereQuery .= " of.end_date " . $filterOperator["operation"] . $val['value'] . " $filterLogic";
+            $whereQuery .= " of.end_date " . $filterOperator["operation"] . "'" . $val['value'] . "' $filterLogic";
             return true;
         }
         if ($val['field'] == 'rygStatus') {
@@ -2445,8 +2446,11 @@ class FileService extends AbstractService
         }
 
         if (strlen($whereQuery) > 0) {
-            $whereQuery .= " " . $where;
+            $whereQuery .= " " . $where . " AND ";
+        }else{
+            $whereQuery = "WHERE ";
         }
+        $whereQuery .= 'of.is_active = 1';
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
         $fieldList2 = "distinct ox_app.name as appName,`of`.id,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,`of`.rygStatus,
@@ -2687,8 +2691,9 @@ class FileService extends AbstractService
         } else {
             $where .= " " . $whereQuery ;
         }
-        $where = trim($where) != "" ? "WHERE $where" : " WHERE of.is_active =1";
         $where = rtrim($where, " AND ");
+        $where = trim($where) != "" ? "WHERE $where AND " : " WHERE ";
+        $where .= "of.is_active =1";
     }
 
     private function updateFileTitle($data){
