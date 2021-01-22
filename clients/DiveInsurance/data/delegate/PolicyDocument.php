@@ -790,7 +790,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                     if ($groupVal == true) {
+                        $product = $data['product'];
+                        $data['product'] = "Group Professional Liability";
                         $data['group_certificate_no'] = 'S' . $this->generateCOINumber($data, $persistenceService);
+                        $data['product'] = $product;
                     }
                 }
             }
@@ -1171,7 +1174,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['roster_pdf'] = $this->copyDocuments($temp, $dest['relativePath'], 'rosterPdf');
             if (isset($temp['groupAdditionalInsured']) && $temp['additional_insured'] == 'yes') {
                 $this->sortArrayByParam($temp['groupAdditionalInsured'], 'name', 'additionalInsured');
-                $documents['group_ai_certificate'] = $this->generateDocuments($temp, $dest, $options, 'gaitemplate', 'gaiheader', 'gaifooter');
+                $documents['group_additional_insured_document'] = $this->generateDocuments($temp, $dest, $options, 'gaitemplate', 'gaiheader', 'gaifooter');
             }
         } else if ($this->type == 'endorsementQuote') {
             if ($data['previous_groupProfessionalLiabilitySelect'] != $data['groupProfessionalLiabilitySelect'] && $data['groupProfessionalLiabilitySelect'] == "yes") {
