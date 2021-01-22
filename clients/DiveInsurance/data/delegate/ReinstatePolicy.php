@@ -72,6 +72,7 @@ class ReinstatePolicy extends PolicyDocument
         $data['multiplePolicy'] = "no";
         $data['end_date'] = date_format(date_create($data['policyEndDate']),'Y-m-d');
         if ($data['product'] == "Dive Store") {
+            $data['reinstateName'] = $data['business_name'];
             $data['carrierName'] = "Liability Policy issued by " . $data['liability_carrier'];
             $data['policyId'] = "Liability Policy #:" . $data['liability_policy_id'];
             $data['coverageTitle'] = "GENERAL LIABILITY";
@@ -88,14 +89,17 @@ class ReinstatePolicy extends PolicyDocument
                 $data['coverageTitle'] = $data['coverageTitle'].",GROUP PROFESSIONAL LIABILITY";
             }
         } else if ($data['product'] == "Group Professional Liability") {
+            $data['reinstateName'] = $data['business_name'];
             $data['carrierName'] = "Policy issued by " . $data['group_carrier'];
             $data['policyId'] = "Policy #:" . $data['group_policy_id'];
             $data['coverageTitle'] = "GROUP PROFESSIONAL LIABILITY";
         } else if($data['product'] == "Individual Professional Liability"){
+            $data['reinstateName'] = $data['firstname']."  ".$data['lastname'];
             $data['carrierName'] = "Policy issued by " . $data['carrier'];
             $data['policyId'] = "Policy #:" . $data['policy_id'];
             $data['coverageTitle'] = "INDIVIDUAL PROFESSIONAL LIABILITY";
         }else if($data['product'] == "Emergency First Response"){
+            $data['reinstateName'] = $data['firstname']."  ".$data['lastname'];
             $data['carrierName'] = "Policy issued by " . $data['carrier'];
             $data['policyId'] = "Policy #:" . $data['policy_id'];
             $data['coverageTitle'] = "EMERGENCY FIRST RESPONSE";
