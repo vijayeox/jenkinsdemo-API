@@ -132,7 +132,7 @@ class FileController extends AbstractApiController
             }catch (VersionMismatchException $e) {
                 return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
-            return $this->getSuccessResponse();
+            return $this->getSuccessResponse("File has been deleted!");
         } else {
             return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['id' => $id]);
         }
