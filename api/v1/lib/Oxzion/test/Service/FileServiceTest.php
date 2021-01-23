@@ -99,6 +99,22 @@ class FileServiceTest extends AbstractServiceTest
         $result = $this->fileService->getFileList(NULL, NUll);
         $this->assertEquals(12,$result['total']);
     }
+    public function testGetFollowUpsWithoutInactiveFile(){
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $uuid = '37d94567-466a-46c1-8bce-9bdd4e0c0d97';
+        $select1 = "Select is_active from ox_file where uuid = '".$uuid."'";
+        $res = $this->runQuery($select1);
+        $resultBeforeUpdate = $this->fileService->getFileList($appUuid, NUll);
+        $update = "UPDATE ox_file SET is_active = 0 WHERE uuid = '".$uuid."'"; 
+        $this->executeUpdate($update);
+        $result = $this->fileService->getFileList($appUuid, NUll);
+        $select1 = "Select is_active from ox_file where uuid = '".$uuid."'";
+        $res1 = $this->runQuery($select1);
+        $this->assertNotEquals($res1[0]['is_active'],$res[0]['is_active']);
+        $this->assertNotEquals($resultBeforeUpdate['total'],$result['total']);
+        $this->assertEquals(9,$result['total']);
+    }
 
     public function testGetFileListWithrygJob() {
         $dataset = $this->dataset;
