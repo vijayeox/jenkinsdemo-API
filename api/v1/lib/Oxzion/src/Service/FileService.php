@@ -2033,7 +2033,7 @@ class FileService extends AbstractService
                 if ($sortCount > 0) {
                     $sort .= ", ";
                 }
-                $sort .= " of.date_created ".$dir;
+                $sort .= " date_created ".$dir;
                 $sortCount++;
                 continue;
             }
