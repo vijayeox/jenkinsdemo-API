@@ -48,22 +48,11 @@ class FileController extends AbstractApiController
     public function create($data)
     {
         $data['app_id'] = $this->params()->fromRoute()['appId'];
-        $formId = $this->params()->fromRoute()['formId'];
-        if ($formId) {
-            $data['form_id'] = $formId;
-        } else {
-            return $this->getFailureResponse("Form id not Found", $data);
-        }
         try {
             $count = $this->fileService->createFile($data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Unexpected Error!",500, $data);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -91,27 +80,14 @@ class FileController extends AbstractApiController
     public function update($id, $data)
     {
         $appUuId = $this->params()->fromRoute()['appId'];
-        $formUuId = $this->params()->fromRoute()['formId'];
-        if ($formUuId) {
-            $data['form_uuid'] = $formUuId;
-        }
         if ($appUuId) {
             $data['app_uuid'] = $appUuId;
         }
         try {
             $count = $this->fileService->updateFile($data, $id);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-        }
-        catch (EntityNotFoundException $e) {
-            $response = ['data' => $data, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Entity Not Found", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
