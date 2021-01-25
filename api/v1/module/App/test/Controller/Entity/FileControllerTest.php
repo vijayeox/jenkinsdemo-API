@@ -55,7 +55,7 @@ class FileControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145b', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud/d13d0c68-98c9-11e9-adc5-308d99c9145b', 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -65,7 +65,7 @@ class FileControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/202d5c14-df9a-11e9-9d36-2a2ae2dbcce4', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud/202d5c14-df9a-11e9-9d36-2a2ae2dbcce4', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -75,7 +75,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['field1' => '1', 'field2' => '2', 'entity_id' => 1,'policyStatus' => 'On Going','expiry_date' => '2019-01-01 00:00:00'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'POST', $data);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -97,7 +97,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->employeeUser);
         $data = ['field1' => '1', 'field2' => '2'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud', 'POST', null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class); // as specified in router's controller name alias
@@ -114,7 +114,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $selectResult = $this->getFieldUuid();
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/' . $selectResult[0]['uuid'] . '/file/d13d0c68-98c9-11e9-adc5-308d99c9145b', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud/d13d0c68-98c9-11e9-adc5-308d99c9145b', 'PUT', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -133,7 +133,7 @@ class FileControllerTest extends ControllerTest
         $data = ['name' => 'Test File 1', 'app_id' => 1, 'version' => 1];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud', 'PUT', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
@@ -150,7 +150,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $selctQuery = "SELECT * from ox_file where uuid='d13d0c68-98c9-11e9-adc5-308d99c9145c'";
         $selectResult = $this->executeQueryTest($selctQuery);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145c?version=1', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud/d13d0c68-98c9-11e9-adc5-308d99c9145c?version=1', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -164,7 +164,7 @@ class FileControllerTest extends ControllerTest
     public function testDeleteWithWrongVersion()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145c?version=3', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud/d13d0c68-98c9-11e9-adc5-308d99c9145c?version=3', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -175,7 +175,7 @@ class FileControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/465c8ff8-df82-11e9-8a34-2a2ae2dbbba3', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/crud/465c8ff8-df82-11e9-8a34-2a2ae2dbbba3', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
