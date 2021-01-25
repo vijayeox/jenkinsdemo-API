@@ -17,6 +17,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 	protected $dbConfig;
 	private $filterTmpFields;
 	private $filterFields;
+	private $query;
 
     public function __construct($appDBAdapter,$appConfig)  {
 		parent::__construct($appDBAdapter,$appConfig);
@@ -25,6 +26,10 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
     public function setConfig($config){
 		parent::setConfig($config);
     }
+
+	public function getQuery() {
+		return $this->query;
+	}
 
     public function getData($app_name,$entity_name,$parameters)
     {
@@ -94,7 +99,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		    $fieldname = "";
 			switch ($parameters['frequency']) {
 				case 1:
-					$group[] = "$datetype";
+					$group[] =  "DATE($datetype)";
 					$fieldname = "day";
 					break;
 				case 2:
@@ -222,6 +227,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			$select->order($para['sort']);
 		}
 		$statement = $sql->prepareStatementForSqlObject($select);
+		$this->query = $sql->buildSqlString($select);
 	//	print_r($sql->buildSqlString($select));
 		$result = $statement->execute();
 		$resultSet = new ResultSet();

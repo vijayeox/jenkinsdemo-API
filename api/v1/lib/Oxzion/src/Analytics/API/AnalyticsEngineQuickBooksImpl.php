@@ -18,6 +18,10 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI
     $this->quickbookService = $quickbookService;
   }
 
+  public function getQuery() {
+    return '';
+  }
+
   public function setConfig($config){
     parent::setConfig($config);
     $this->quickbookService->setConfig($config);

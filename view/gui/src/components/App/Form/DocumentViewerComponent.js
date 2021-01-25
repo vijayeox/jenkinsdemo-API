@@ -2,26 +2,24 @@ import Base from "formiojs/components/_classes/component/Component";
 import editForm from "formiojs/components/table/Table.form";
 import "viewerjs/dist/viewer.css";
 import Viewer from "viewerjs";
+import { Formio } from "formiojs";
+import * as _lodash from "lodash";
 
 export default class DocumentViewerComponent extends Base {
   constructor(component, options, data) {
-    super(component, options, data);
-    component.core = null;
-    component.appId = null;
-    component.uiUrl = null;
+    var formOptions = Formio.getPlugin("optionsPlugin");
+    var customOptions = _lodash.default.merge(options, formOptions);
+    if(customOptions.core == null || customOptions.core == undefined){
+        console.log(customOptions);
+    }
+    super(component, customOptions, data);
+    component.core = customOptions.core;
+    component.appId = customOptions.appId;
+    component.uiUrl = customOptions.uiUrl;
+    component.wrapperUrl = customOptions.wrapperUrl;
     this.form = this.getRoot();
     var that = this;
     component.wrapperUrl = "<p> No Files to Display</p>";
-    that.form.element.addEventListener(
-      "appDetails",
-      function(e) {
-        component.core = e.detail.core;
-        component.appId = e.detail.appId;
-        component.uiUrl = e.detail.uiUrl;
-        component.wrapperUrl = e.detail.wrapperUrl;
-      },
-      true
-    );
     this.form.on("change", changed => {
       if(changed.data[this.component.refreshOn]){
           var that = this;
@@ -97,8 +95,6 @@ export default class DocumentViewerComponent extends Base {
       console.log(dataValue + 'Not a JSON');
     }
     var that = this;
-    var evt = new CustomEvent("getAppDetails", { detail: {} });
-    this.form.element.dispatchEvent(evt);
     this.fileList = this.generateFileList(dataValue, component);
     this.redraw();
     if (dataValue && dataValue != undefined) {

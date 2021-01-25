@@ -416,12 +416,13 @@ class PageContent extends React.Component {
           item.urlPostParams,
           mergeRowData
         );
+        var listOptions = itemContent.listOptions;
         var that = this;
         if(itemContent.operations){
           if(itemContent.operations.actions){
             itemContent.operations.actions.map((action, j) => {
               var act = action;
-              if(act.details){
+              if(Array.isArray(act.details)){
                 act.details.map((detail, k) => {
                   if(detail.params){
                     Object.keys(detail.params).map(function (key, index) {
@@ -451,6 +452,9 @@ class PageContent extends React.Component {
             data={dataString}
             postSubmitCallback={this.postSubmitCallback}
             pageId={this.state.pageId}
+            sortable={sortable}
+            resizable={resizable}
+            reorderable={reorderable}
             parentData={this.state.currentRow}
             pageId={this.pageId}
             notif={this.state.notif}
@@ -466,6 +470,7 @@ class PageContent extends React.Component {
             gridToolbar={itemContent.toolbarTemplate}
             columnConfig={columnConfig}
             {...itemContent}
+            {...listOptions}
           />
         );
       } else if (item.type == "Search") {

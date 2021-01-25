@@ -1,7 +1,5 @@
 var ckeditorConfig = {
-    extraPlugins: 'oxzion,autogrow,wordcount,abbr,imagepaste,slideshow,slideshow,sourcedialog,autocorrect,autolink,tableresize,lineheight,texttransform,quicktable,preview',
-    autoGrow_minHeight: 250,
-    autoGrow_maxHeight: 400,
+    extraPlugins: 'oxzion,abbr,imagepaste,sourcedialog,autocorrect,autolink,tableresize,lineheight,texttransform,quicktable,preview',
     height: 400,
     width: '100%',
     //IMPORTANT: Need this setting to retain HTML tags as we want them. Without this setting, 
@@ -30,16 +28,6 @@ ckeditorConfig.toolbarCanCollapse ='true';
 ckeditorConfig.toolbarStartupExpanded = false;
 ckeditorConfig.pasteFromWordRemoveFontStyles = false;
 ckeditorConfig.pasteFromWordRemoveStyles = false;
-ckeditorConfig.wordcount = {
-    // Whether or not you want to show the Word Count
-    showWordCount: false,
-    // Whether or not you want to show the Char Count
-    showCharCount: true,
-     // Whether or not to include Html chars in the Char Count
-    countHTML: true,
-    charLimit: 300000,
-    
-};
 ckeditorConfig.removeButtons = 'Underline,Subscript,Superscript,ShowBlocks,PageBreak,Save,NewPage,DocProps,Print,CreateDiv,Source';
 ckeditorConfig.removePlugins = 'flash,iframe,ShowBlocks';
 module.exports.ckeditorConfig = ckeditorConfig;

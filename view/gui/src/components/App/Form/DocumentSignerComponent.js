@@ -3,13 +3,20 @@ import editForm from "formiojs/components/table/Table.form";
 import "viewerjs/dist/viewer.css";
 import Viewer from "viewerjs";
 import $ from "jquery";
+import { Formio } from "formiojs";
+import * as _lodash from "lodash";
 
 export default class DocumentSignerComponent extends Base {
   constructor(component, options, data) {
-    super(component, options, data);
-    component.core = null;
-    component.appId = null;
-    component.uiUrl = null;
+    var formOptions = Formio.getPlugin("optionsPlugin");
+    var customOptions = _lodash.default.merge(options, formOptions);
+    if(customOptions.core == null || customOptions.core == undefined){
+        console.log(customOptions);
+    }
+    super(component, customOptions, data);
+    component.core = customOptions.core;
+    component.uiUrl = customOptions.uiUrl;
+    component.wrapperUrl = customOptions.wrapperUrl;
     this.data = data;
     this.documentsList = [];
     var that = this;
@@ -22,16 +29,6 @@ export default class DocumentSignerComponent extends Base {
         }
     }
     if(element){
-      element.addEventListener("appDetails", function (e) {
-          component.core = e.detail.core;
-          component.appId = e.detail.appId;
-          component.uiUrl = e.detail.uiUrl;
-          component.wrapperUrl = e.detail.wrapperUrl;
-        },
-        true  
-      );
-      var evt = new CustomEvent("getAppDetailsForEsign", { detail: {} });
-      element.dispatchEvent(evt);
       this.formList = [
         { name: "document1", status: "unsigned" },
         { name: "document2", status: "signed" },
@@ -199,8 +196,6 @@ export default class DocumentSignerComponent extends Base {
   }
 
   render(children) {
-    var evt = new CustomEvent("getAppDetailsForEsign", { detail: {} });
-    document.dispatchEvent(evt);
     var documentsList = this.documentsList
       ? this.documentsList
       : `<p>not working</p>`;

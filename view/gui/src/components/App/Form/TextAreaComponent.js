@@ -1,60 +1,31 @@
 import TextArea from 'formiojs/components/textarea/TextArea'
 import * as _utils from 'formiojs/utils/utils'
-import * as _Formio from 'formiojs/Formio'
+import { Formio } from "formiojs";
 import * as _lodash from "lodash";
 import * as _nativePromiseOnly from "native-promise-only";
 import Swal from 'sweetalert2';
 import Requests from "../../../Requests";
 import {ckeditorConfig} from '../../../CkEditorConfig';
-import '../../../public/css/ckeditorStyle.scss';
+import '../../../public/css/ckeditorStyle.css';
+import WidgetRenderer from '../../../WidgetRenderer';
 
 export default class TextAreaComponent extends TextArea {
 
     constructor(component, options, data) {
-        super(component, options, data);
-        var root = this.getRoot();
-        component.core = null;
-        component.appId = null;
-        component.uiUrl = null;
+        var formOptions = Formio.getPlugin("optionsPlugin");
+        var customOptions = _lodash.default.merge(options, formOptions);
+        if(customOptions.core == null || customOptions.core == undefined){
+            console.log(customOptions);
+        }
+        super(component, customOptions, data);
+        component.core = customOptions.core;
+        component.uiUrl = customOptions.uiUrl;
+        component.wrapperUrl = customOptions.wrapperUrl;
         component.loader = null;
         component.ckeditorInstance = null;
-        component.renderedCharts = {};
-        var that = this;
-        var element = null;
-        if (root && root.element) {
-            element = root.element;
-        }
-        if(root && root.root && root.root.parent && root.root.parent.root && root.root.parent.root.element && element == null){
-            element = root.root.parent.root.element;
-        }
-        if(that.parent && that.parent.root && that.parent.root.element && element == null){
-            element = that.parent.root.element;
-        }
-        if(that.parent && that.parent.rootElement && element == null){
-            element = that.parent.rootElement;
-        }
-        if(root.root && root.root.element && element == null){
-            element = root.root.element;
-        }
-        if(that.root && that.root.element && element == null){
-            element = that.root.element;
-        }
-        if(root.parent && root.parent.element && element == null){
-            element = root.parent.element;
-        }
-        if(element){
-            element.addEventListener("appDetails", function(e) {
-                component.core = e.detail.core;
-                component.appId = e.detail.appId;
-                component.uiUrl = e.detail.uiUrl;
-                component.wrapperUrl = e.detail.wrapperUrl;
-            }, true);
-            var evt = new CustomEvent("getAppDetails", {
-                detail: {}
-            });
-            element.dispatchEvent(evt);
-        }
-        if(this.component.editor == 'ckeditor'){
+        this.renderedCharts = {};
+        this.core = customOptions.core;
+        if(component.core && this.component.editor == 'ckeditor'){
             this.editorDialogMessageHandler = function (event) {
                 let editorDialog = event.source;
                 let eventData = event.data;
@@ -88,8 +59,6 @@ export default class TextAreaComponent extends TextArea {
         if(this.component.editor != 'ckeditor'){
             return super.attachElement(element,index);
         } else {
-            var evt = new CustomEvent("getAppDetails", { detail: {} });
-            _this2.getRoot().element.dispatchEvent(evt);
             window.addEventListener('message', this.editorDialogMessageHandler, false);
             window.addEventListener('message', this.widgetDrillDownMessageHandler, false);
             var editor = _this2.setupCkEditor(_this2, element, index);
@@ -99,18 +68,18 @@ export default class TextAreaComponent extends TextArea {
     }
     setValueAt(index, value) {
         if(this.component.editor == 'ckeditor'){
-            var _this4 = this;
+            var _this2 = this;
             if(value == "" || value == null){
-                if(_this4._data[_this4.path]){
-                    value = _this4._data[_this4.path];
+                if(_this2._data[_this2.path]){
+                    value = _this2._data[_this2.path];
                 }
             }
-            if (_this4.editorsReady[index]) {
-                _this4.editorsReady[index].setData(_this4.setConvertedValue(value, index));
+            if (_this2.editorsReady[index]) {
+                _this2.editorsReady[index].setData(_this2.setConvertedValue(value, index));
             }
             CKEDITOR.instances[this.ckeditorInstance].setData(value,{
                 callback: function() {
-                    _this4.updateEditorValue(index, value);
+                    _this2.updateEditorValue(index, value);
                 }
             });
         } else {
@@ -135,7 +104,7 @@ export default class TextAreaComponent extends TextArea {
         var editor = null;
         try {
             CKEDITOR.dtd.$removeEmpty['span'] = false;
-            editor = CKEDITOR.replace(element, ckeditorConfig);
+            editor = CKEDITOR.appendTo(element, ckeditorConfig);
             this.ckeditorInstance = editor.name;
             var isReadOnly = _this2.options.readOnly || _this2.disabled;
             var numRows = parseInt(_this2.component.rows, 10);
@@ -145,6 +114,7 @@ export default class TextAreaComponent extends TextArea {
                 editor.ui.view.editable.editableElement.style.height = "".concat(editorHeight, "px");
             }
             editor.isReadOnly = isReadOnly;
+            editor.addContentsCss('/css/ckeditorStyle.css');
             editor.on('instanceReady', function () {
                 var dataValue = _this2.dataValue;
                 dataValue = _this2.component.multiple && Array.isArray(dataValue) ? dataValue[index] : dataValue;
@@ -154,7 +124,6 @@ export default class TextAreaComponent extends TextArea {
                         value = _this2._data[_this2.path];
                     }
                 }
-                editor.setReadOnly(isReadOnly);
                 editor.setData(value);
             });
             editor.on('oxzionWidgetInitialization', function (event) {
@@ -230,13 +199,13 @@ export default class TextAreaComponent extends TextArea {
     }
 
     updateWidget = (elementId, widgetId) => {
-        var thisInstance = this;
+        var _this2 = this;
         //Dispose and cleanup if this chart had been painted previously.
-        let existingChart = thisInstance.renderedCharts[elementId];
+        let existingChart = _this2.renderedCharts[elementId];
         if (existingChart) {
             if (existingChart.dispose) {
                 existingChart.dispose();
-                thisInstance.renderedCharts[elementId] = null;
+                _this2.renderedCharts[elementId] = null;
             }
         }
 
@@ -250,14 +219,14 @@ export default class TextAreaComponent extends TextArea {
                 widgetId = widgetIdAttribute.nodeValue;
             }
         }
-        Requests.doRestRequest(component.core,`analytics/widget/${widgetId}?data=true`, {}, 'get',
+        Requests.doRestRequest(_this2.core,`analytics/widget/${widgetId}?data=true`, {}, 'get',
             function (response) {
                 let renderProperties = {}
                 renderProperties["element"] = widgetElement
                 renderProperties["widget"] = response.widget
                 renderProperties["dashboardEditMode"] = true
                 let chart = WidgetRenderer.render(renderProperties);
-                thisInstance.renderedCharts[elementId] = chart;
+                _this2.renderedCharts[elementId] = chart;
             },
             function (response) {
                 Swal.fire({
@@ -265,6 +234,6 @@ export default class TextAreaComponent extends TextArea {
                     title: 'Oops...',
                     text: 'Could not fetch contents of a widget. Please try after some time.'
                 });
-            },thisInstance.loader);
+            },_this2.loader);
     }
 }
