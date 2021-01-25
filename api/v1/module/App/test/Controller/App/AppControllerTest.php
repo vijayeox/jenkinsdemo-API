@@ -1408,5 +1408,22 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['total'], 1);
     }
+
+     public function testGetListOfAssignmentsWithFilterAndSort()
+    {
+        $this->initAuthToken($this->adminUser);
+        $product = 'Individual Professional Liability';
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments?filter=[{"filter":{"logic":"and","filters":[{"field":"product","operator":"eq","value":"' . $product . '"}]},"sort":[{"field":"product","dir":"desc"}]}]', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class);
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('assignments');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['product'], $product);
+        $this->assertEquals($content['total'], 1);
+    }
     // NEED TO ADD INSTALL/UNINSTALL TESTS -SADHITHA
 }
