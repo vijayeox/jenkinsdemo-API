@@ -32,41 +32,25 @@
 		"input": false,
 		"components": [{
 			"label": "formsList",
-			"customClass": "",
-			"modalEdit": false,
-			"defaultValue": null,
-			"persistent": true,
-			"protected": false,
-			"dbIndex": false,
-			"encrypted": false,
-			"redrawOn": "",
-			"customDefaultValue": "",
 			"calculateValue": "var formsList = [];\nif (data.form !== \"\") {\n  formsList = data.form.map((i) => {\n    return { name: i.name, uuid: i.uuid };\n  });\n}\nvalue = formsList;",
-			"calculateServer": false,
 			"key": "formsList",
-			"tags": [],
-			"properties": {},
-			"logic": [],
-			"attributes": {},
-			"overlay": {
-				"style": "",
-				"page": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false,
 			"placeholder": "",
 			"prefix": "",
+			"customClass": "",
 			"suffix": "",
 			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
 			"unique": false,
+			"persistent": true,
 			"hidden": false,
 			"clearOnHide": true,
 			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
 			"labelPosition": "top",
 			"description": "",
 			"errorLabel": "",
@@ -75,9 +59,13 @@
 			"tabindex": "",
 			"disabled": false,
 			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateServer": false,
 			"widget": {
 				"type": "input"
 			},
+			"attributes": {},
 			"validateOn": "change",
 			"validate": {
 				"required": false,
@@ -92,49 +80,42 @@
 				"when": null,
 				"eq": ""
 			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
 			"allowCalculateOverride": false,
+			"encrypted": false,
 			"showCharCount": false,
 			"showWordCount": false,
+			"properties": {},
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "e9c954"
+			"id": "ejkti2a"
 		}, {
 			"label": "pagesList",
-			"customClass": "",
-			"modalEdit": false,
-			"defaultValue": null,
-			"persistent": true,
-			"protected": false,
-			"dbIndex": false,
-			"encrypted": false,
-			"redrawOn": "",
-			"customDefaultValue": "",
 			"calculateValue": "var pagesList;\nif(data.pages){\n  pagesList = data.pages.map((i) => {\n return { name: i.name, uuid: i.uuid };\n});\nvalue = pagesList;\n}\n",
-			"calculateServer": false,
 			"key": "pagesList",
-			"tags": [],
-			"properties": {},
-			"logic": [],
-			"attributes": {},
-			"overlay": {
-				"style": "",
-				"page": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false,
 			"placeholder": "",
 			"prefix": "",
+			"customClass": "",
 			"suffix": "",
 			"multiple": false,
+			"defaultValue": null,
+			"protected": false,
 			"unique": false,
+			"persistent": true,
 			"hidden": false,
 			"clearOnHide": true,
 			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
 			"labelPosition": "top",
 			"description": "",
 			"errorLabel": "",
@@ -143,9 +124,13 @@
 			"tabindex": "",
 			"disabled": false,
 			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateServer": false,
 			"widget": {
 				"type": "input"
 			},
+			"attributes": {},
 			"validateOn": "change",
 			"validate": {
 				"required": false,
@@ -160,12 +145,21 @@
 				"when": null,
 				"eq": ""
 			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
 			"allowCalculateOverride": false,
+			"encrypted": false,
 			"showCharCount": false,
 			"showWordCount": false,
+			"properties": {},
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "elcmsr8"
+			"id": "edulhv"
 		}, {
 			"label": "Container",
 			"tableView": false,
@@ -238,7 +232,7 @@
 				"properties": {},
 				"allowMultipleMasks": false,
 				"inputType": "hidden",
-				"id": "e181pr4"
+				"id": "ep2ut9"
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -314,7 +308,7 @@
 						"inputFormat": "plain",
 						"inputMask": "",
 						"spellcheck": true,
-						"id": "e9av9fi"
+						"id": "efa1xc"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -394,7 +388,7 @@
 						"inputType": "text",
 						"inputFormat": "plain",
 						"inputMask": "",
-						"id": "e0ot7od"
+						"id": "eq3fqu"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -464,7 +458,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "ea0d3s"
+				"id": "ew674g9"
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -540,7 +534,7 @@
 						"inputFormat": "plain",
 						"inputMask": "",
 						"spellcheck": true,
-						"id": "emawsi"
+						"id": "ezb4l6"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -682,7 +676,7 @@
 						},
 						"customOptions": {},
 						"useExactSearch": false,
-						"id": "exo4pdg"
+						"id": "et404x8"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -752,7 +746,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "el26g6"
+				"id": "e48zze9"
 			}, {
 				"label": "Columns",
 				"columns": [{
@@ -834,7 +828,7 @@
 						"privateDownload": false,
 						"imageSize": "200",
 						"fileMinSize": "0KB",
-						"id": "ezeayhl"
+						"id": "eplxlm"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -920,7 +914,7 @@
 						"privateDownload": false,
 						"imageSize": "200",
 						"fileMinSize": "0KB",
-						"id": "ewuk18g"
+						"id": "e5lfj3c"
 					}],
 					"width": 6,
 					"offset": 0,
@@ -991,7 +985,7 @@
 				"tree": false,
 				"autoAdjust": false,
 				"hideOnChildrenHidden": false,
-				"id": "eu7hsug"
+				"id": "e64bm4a"
 			}, {
 				"label": "Run automatically at startup",
 				"description": "If Enabled will Auto Start the Application Once the User Logs in",
@@ -1059,7 +1053,7 @@
 				"dataGridLabel": true,
 				"value": "",
 				"name": "",
-				"id": "e9p7r5"
+				"id": "efco84"
 			}, {
 				"title": "Notifications",
 				"theme": "info",
@@ -1140,7 +1134,7 @@
 					"dataGridLabel": true,
 					"value": "",
 					"name": "",
-					"id": "e7trs7e"
+					"id": "eppbw3l"
 				}, {
 					"title": "Comment would follow the format as shown below:",
 					"breadcrumbClickable": true,
@@ -1235,7 +1229,7 @@
 								"inputType": "text",
 								"inputFormat": "plain",
 								"inputMask": "",
-								"id": "esf6vue"
+								"id": "euced6"
 							}],
 							"offset": 0,
 							"push": 0,
@@ -1312,7 +1306,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "eouy37p"
+						"id": "ec0wqn"
 					}],
 					"placeholder": "",
 					"prefix": "",
@@ -1367,7 +1361,7 @@
 					"tree": false,
 					"theme": "default",
 					"breadcrumb": "default",
-					"id": "es8sbl6"
+					"id": "e0nam0l"
 				}],
 				"placeholder": "",
 				"prefix": "",
@@ -1426,7 +1420,7 @@
 				"allowMultipleMasks": false,
 				"tree": false,
 				"breadcrumb": "default",
-				"id": "e0t6mkc"
+				"id": "er547ue"
 			}],
 			"placeholder": "",
 			"prefix": "",
@@ -1483,7 +1477,7 @@
 			"properties": {},
 			"allowMultipleMasks": false,
 			"tree": true,
-			"id": "e3xufx"
+			"id": "e8tabc"
 		}, {
 			"label": "Create App",
 			"hideLabel": true,
@@ -1556,7 +1550,7 @@
 			"inputType": "text",
 			"inputFormat": "plain",
 			"inputMask": "",
-			"id": "eqmd9t"
+			"id": "e710vfnm"
 		}, {
 			"label": "Create Application",
 			"action": "event",
@@ -1648,7 +1642,7 @@
 			"block": false,
 			"disableOnInvalid": false,
 			"dataGridLabel": true,
-			"id": "e7nkuer"
+			"id": "edcakds"
 		}],
 		"placeholder": "",
 		"prefix": "",
@@ -1707,7 +1701,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "epuqzaf"
+		"id": "e6kou68"
 	}, {
 		"title": "Organization Info",
 		"theme": "primary",
@@ -2129,12 +2123,7 @@
 				}],
 				"validate": {
 					"minLength": 1,
-					"custom": "if (data.privilege) {\n  if (data.privilege.length > 0) {\n    valid =\n      data.privilege.length == new Set(data.privilege.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}",
-					"required": false,
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
+					"custom": "if (data.privilege) {\n  if (data.privilege.length > 0) {\n    valid =\n      data.privilege.length == new Set(data.privilege.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same privilege more than once.\";\n  } else {\n    valid = true;\n  }\n}"
 				},
 				"key": "privilege",
 				"type": "datagrid",
@@ -2149,70 +2138,13 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"unique": true,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false,
-						"multiple": false,
-						"minLength": "",
-						"maxLength": "",
-						"pattern": ""
+						"unique": true
 					},
 					"unique": true,
 					"errorLabel": "Privilege Name",
 					"key": "name",
 					"type": "textfield",
-					"input": true,
-					"id": "etgayb",
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"persistent": true,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"calculateServer": false,
-					"widget": {
-						"type": "input"
-					},
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"mask": false,
-					"inputType": "text",
-					"inputFormat": "plain",
-					"inputMask": "",
-					"spellcheck": true
+					"input": true
 				}, {
 					"label": "Permission",
 					"optionsLabelPosition": "right",
@@ -2238,172 +2170,13 @@
 					}],
 					"clearOnHide": false,
 					"validate": {
-						"required": true,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false,
-						"multiple": false,
-						"unique": false
+						"required": true
 					},
 					"key": "permission",
 					"type": "radio",
-					"input": true,
-					"id": "e6oq6b7",
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"calculateServer": false,
-					"widget": null,
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"inputType": "radio",
-					"fieldSet": false
-				}],
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateValue": "",
-				"calculateServer": false,
-				"widget": null,
-				"attributes": {},
-				"validateOn": "change",
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"tree": true,
-				"disableAddingRemovingRows": false,
-				"id": "e58ma8"
-			}],
-			"placeholder": "",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"multiple": false,
-			"defaultValue": null,
-			"protected": false,
-			"unique": false,
-			"persistent": false,
-			"hidden": false,
-			"clearOnHide": false,
-			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"hideLabel": false,
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"calculateServer": false,
-			"widget": null,
-			"attributes": {},
-			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
-			},
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"tree": false,
-			"breadcrumb": "default",
-			"id": "esjxr4a"
+					"input": true
+				}]
+			}]
 		}, {
 			"title": "Roles",
 			"theme": "primary",
@@ -2443,12 +2216,7 @@
 				}],
 				"validate": {
 					"minLength": 1,
-					"custom": "if (data.role) {\n  if (data.role.length > 0) {\n    valid =\n      data.role.length == new Set(data.role.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same role more than once.\";\n  } else {\n    valid = true;\n  }\n}",
-					"required": false,
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
+					"custom": "if (data.role) {\n  if (data.role.length > 0) {\n    valid =\n      data.role.length == new Set(data.role.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same role more than once.\";\n  } else {\n    valid = true;\n  }\n}"
 				},
 				"key": "role",
 				"type": "datagrid",
@@ -2461,71 +2229,13 @@
 					"clearOnHide": false,
 					"validate": {
 						"required": true,
-						"unique": true,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false,
-						"multiple": false,
-						"minLength": "",
-						"maxLength": "",
-						"pattern": ""
+						"unique": true
 					},
 					"unique": true,
 					"errorLabel": "Role Name",
 					"key": "name",
 					"type": "textfield",
-					"input": true,
-					"id": "ezx19g",
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"persistent": true,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"calculateServer": false,
-					"widget": {
-						"type": "input"
-					},
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"mask": false,
-					"inputType": "text",
-					"inputFormat": "plain",
-					"inputMask": "",
-					"spellcheck": true
+					"input": true
 				}, {
 					"label": "Privileges",
 					"reorder": false,
@@ -2538,12 +2248,7 @@
 					"tableView": false,
 					"clearOnHide": false,
 					"validate": {
-						"custom": "try {\n  if (row.privilegesDuplicate) {\n    if (row.privilegesDuplicate.length > 0) {\n      valid =\n        row.privilegesDuplicate.length ==\n        new Set(\n          row.privilegesDuplicate.map((i) =>\n            i.privilege_name.name.replace(/\\s/g, \"\")\n          )\n        ).size\n          ? true\n          : \"You cannot have a same privilege more than once.\";\n    } else {\n      valid = true;\n    }\n  }\n} catch (error) {}",
-						"required": false,
-						"customPrivate": false,
-						"strictDateValidation": false,
-						"multiple": false,
-						"unique": false
+						"custom": "try {\n  if (row.privilegesDuplicate) {\n    if (row.privilegesDuplicate.length > 0) {\n      valid =\n        row.privilegesDuplicate.length ==\n        new Set(\n          row.privilegesDuplicate.map((i) =>\n            i.privilege_name.name.replace(/\\s/g, \"\")\n          )\n        ).size\n          ? true\n          : \"You cannot have a same privilege more than once.\";\n    } else {\n      valid = true;\n    }\n  }\n} catch (error) {}"
 					},
 					"key": "privilegesDuplicate",
 					"type": "datagrid",
@@ -2560,21 +2265,13 @@
 								"label": "",
 								"value": ""
 							}],
-							"custom": "if(data.privilege){\n  values = data.privilege.map(item =>item)\n} else {\n  values = [];\n}",
-							"json": "",
-							"url": "",
-							"resource": ""
+							"custom": "if(data.privilege){\n  values = data.privilege.map(item =>item)\n} else {\n  values = [];\n}"
 						},
 						"template": "<span>{{ item.name }}</span>",
 						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
-							"custom": "",
-							"customPrivate": false,
-							"strictDateValidation": false,
-							"multiple": false,
-							"unique": false
+							"required": true
 						},
 						"errorLabel": "Privilege Name",
 						"key": "privilege_name",
@@ -2582,70 +2279,7 @@
 						"indexeddb": {
 							"filter": {}
 						},
-						"input": true,
-						"id": "euuywli",
-						"prefix": "",
-						"customClass": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": null,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"refreshOn": "",
-						"redrawOn": "",
-						"modalEdit": false,
-						"labelPosition": "top",
-						"description": "",
-						"hideLabel": false,
-						"tabindex": "",
-						"disabled": false,
-						"autofocus": false,
-						"dbIndex": false,
-						"customDefaultValue": "",
-						"calculateValue": "",
-						"calculateServer": false,
-						"attributes": {},
-						"validateOn": "change",
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						},
-						"overlay": {
-							"style": "",
-							"left": "",
-							"top": "",
-							"width": "",
-							"height": ""
-						},
-						"allowCalculateOverride": false,
-						"encrypted": false,
-						"showCharCount": false,
-						"showWordCount": false,
-						"properties": {},
-						"allowMultipleMasks": false,
-						"idPath": "id",
-						"clearOnRefresh": false,
-						"limit": 100,
-						"valueProperty": "",
-						"lazyLoad": true,
-						"filter": "",
-						"searchEnabled": true,
-						"searchField": "",
-						"minSearch": 0,
-						"readOnlyValue": false,
-						"authenticate": false,
-						"selectFields": "",
-						"searchThreshold": 0.3,
-						"uniqueOptions": false,
-						"fuseOptions": {
-							"include": "score",
-							"threshold": 0.3
-						},
-						"customOptions": {},
-						"useExactSearch": false
+						"input": true
 					}, {
 						"label": "Permission",
 						"optionsLabelPosition": "right",
@@ -2673,11 +2307,7 @@
 						"clearOnHide": false,
 						"validate": {
 							"required": true,
-							"custom": "valid =\n  input <= instance.component.values[instance.component.values.length - 1].value\n    ? true\n    : \"Please select a valid permission level\";",
-							"customPrivate": false,
-							"strictDateValidation": false,
-							"multiple": false,
-							"unique": false
+							"custom": "valid =\n  input <= instance.component.values[instance.component.values.length - 1].value\n    ? true\n    : \"Please select a valid permission level\";"
 						},
 						"key": "permission",
 						"logic": [{
@@ -2693,104 +2323,8 @@
 							}]
 						}],
 						"type": "radio",
-						"input": true,
-						"id": "e3yvmz",
-						"placeholder": "",
-						"prefix": "",
-						"customClass": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": null,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"refreshOn": "",
-						"redrawOn": "",
-						"modalEdit": false,
-						"labelPosition": "top",
-						"description": "",
-						"errorLabel": "",
-						"hideLabel": false,
-						"tabindex": "",
-						"autofocus": false,
-						"dbIndex": false,
-						"customDefaultValue": "",
-						"calculateValue": "",
-						"calculateServer": false,
-						"widget": null,
-						"attributes": {},
-						"validateOn": "change",
-						"conditional": {
-							"show": null,
-							"when": null,
-							"eq": ""
-						},
-						"overlay": {
-							"style": "",
-							"left": "",
-							"top": "",
-							"width": "",
-							"height": ""
-						},
-						"allowCalculateOverride": false,
-						"encrypted": false,
-						"showCharCount": false,
-						"showWordCount": false,
-						"properties": {},
-						"allowMultipleMasks": false,
-						"inputType": "radio",
-						"fieldSet": false
-					}],
-					"id": "ecrbczb",
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"calculateServer": false,
-					"widget": null,
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"tree": true,
-					"disableAddingRemovingRows": false
+						"input": true
+					}]
 				}, {
 					"label": "Default Role",
 					"redrawOn": "defaultRole",
@@ -2798,237 +2332,16 @@
 					"key": "default",
 					"type": "hidden",
 					"input": true,
-					"tableView": false,
-					"id": "e8anr1x",
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false,
-					"clearOnHide": true,
-					"refreshOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateServer": false,
-					"widget": {
-						"type": "input"
-					},
-					"attributes": {},
-					"validateOn": "change",
-					"validate": {
-						"required": false,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false,
-						"multiple": false,
-						"unique": false
-					},
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"inputType": "hidden"
+					"tableView": false
 				}, {
 					"label": "Actual Privileges Key",
 					"calculateValue": "try {\n  value = row.privilegesDuplicate.map((i) => {\n    return { privilege_name: i.privilege_name.name, permission: i.permission };\n  });\n} catch (error) {}",
 					"key": "privileges",
 					"type": "hidden",
 					"input": true,
-					"tableView": false,
-					"id": "ek3bak",
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false,
-					"clearOnHide": true,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateServer": false,
-					"widget": {
-						"type": "input"
-					},
-					"attributes": {},
-					"validateOn": "change",
-					"validate": {
-						"required": false,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false,
-						"multiple": false,
-						"unique": false
-					},
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"inputType": "hidden"
-				}],
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateValue": "",
-				"calculateServer": false,
-				"widget": null,
-				"attributes": {},
-				"validateOn": "change",
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"tree": true,
-				"disableAddingRemovingRows": false,
-				"id": "e1ocjd"
-			}],
-			"placeholder": "",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"multiple": false,
-			"defaultValue": null,
-			"protected": false,
-			"unique": false,
-			"persistent": false,
-			"hidden": false,
-			"clearOnHide": false,
-			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"hideLabel": false,
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"calculateServer": false,
-			"widget": null,
-			"attributes": {},
-			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
-			},
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"tree": false,
-			"breadcrumb": "default",
-			"id": "ezicaet"
+					"tableView": false
+				}]
+			}]
 		}, {
 			"label": "Columns",
 			"columns": [{
@@ -3042,20 +2355,12 @@
 							"label": "",
 							"value": ""
 						}],
-						"custom": "if(data.role){\nvalues = data.role.map(i=>i.name)\n}",
-						"json": "",
-						"url": "",
-						"resource": ""
+						"custom": "if(data.role){\nvalues = data.role.map(i=>i.name)\n}"
 					},
 					"selectThreshold": 0.3,
 					"clearOnHide": false,
 					"validate": {
-						"required": true,
-						"custom": "",
-						"customPrivate": false,
-						"strictDateValidation": false,
-						"multiple": false,
-						"unique": false
+						"required": true
 					},
 					"key": "defaultRole",
 					"customConditional": "show = false;",
@@ -3064,74 +2369,7 @@
 						"filter": {}
 					},
 					"input": true,
-					"hideOnChildrenHidden": false,
-					"placeholder": "",
-					"prefix": "",
-					"customClass": "",
-					"suffix": "",
-					"multiple": false,
-					"defaultValue": null,
-					"protected": false,
-					"unique": false,
-					"persistent": true,
-					"hidden": false,
-					"refreshOn": "",
-					"redrawOn": "",
-					"modalEdit": false,
-					"labelPosition": "top",
-					"description": "",
-					"errorLabel": "",
-					"tooltip": "",
-					"hideLabel": false,
-					"tabindex": "",
-					"disabled": false,
-					"autofocus": false,
-					"dbIndex": false,
-					"customDefaultValue": "",
-					"calculateValue": "",
-					"calculateServer": false,
-					"attributes": {},
-					"validateOn": "change",
-					"conditional": {
-						"show": null,
-						"when": null,
-						"eq": ""
-					},
-					"overlay": {
-						"style": "",
-						"left": "",
-						"top": "",
-						"width": "",
-						"height": ""
-					},
-					"allowCalculateOverride": false,
-					"encrypted": false,
-					"showCharCount": false,
-					"showWordCount": false,
-					"properties": {},
-					"allowMultipleMasks": false,
-					"idPath": "id",
-					"clearOnRefresh": false,
-					"limit": 100,
-					"valueProperty": "",
-					"lazyLoad": true,
-					"filter": "",
-					"searchEnabled": true,
-					"searchField": "",
-					"minSearch": 0,
-					"readOnlyValue": false,
-					"authenticate": false,
-					"template": "<span>{{ item.label }}</span>",
-					"selectFields": "",
-					"searchThreshold": 0.3,
-					"uniqueOptions": false,
-					"fuseOptions": {
-						"include": "score",
-						"threshold": 0.3
-					},
-					"customOptions": {},
-					"useExactSearch": false,
-					"id": "e49lsk"
+					"hideOnChildrenHidden": false
 				}],
 				"width": 6,
 				"offset": 0,
@@ -3149,125 +2387,8 @@
 			"tableView": false,
 			"key": "columns6",
 			"type": "columns",
-			"input": false,
-			"placeholder": "",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"multiple": false,
-			"defaultValue": null,
-			"protected": false,
-			"unique": false,
-			"persistent": false,
-			"hidden": false,
-			"clearOnHide": false,
-			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"hideLabel": false,
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"calculateServer": false,
-			"widget": null,
-			"attributes": {},
-			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
-			},
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"tree": false,
-			"autoAdjust": false,
-			"hideOnChildrenHidden": false,
-			"id": "e35oqv"
-		}],
-		"placeholder": "",
-		"prefix": "",
-		"customClass": "",
-		"suffix": "",
-		"multiple": false,
-		"defaultValue": null,
-		"protected": false,
-		"unique": false,
-		"persistent": false,
-		"hidden": false,
-		"clearOnHide": false,
-		"refreshOn": "",
-		"redrawOn": "",
-		"modalEdit": false,
-		"labelPosition": "top",
-		"description": "",
-		"errorLabel": "",
-		"tooltip": "",
-		"hideLabel": false,
-		"tabindex": "",
-		"disabled": false,
-		"autofocus": false,
-		"dbIndex": false,
-		"customDefaultValue": "",
-		"calculateValue": "",
-		"calculateServer": false,
-		"widget": null,
-		"attributes": {},
-		"validateOn": "change",
-		"validate": {
-			"required": false,
-			"custom": "",
-			"customPrivate": false,
-			"strictDateValidation": false,
-			"multiple": false,
-			"unique": false
-		},
-		"conditional": {
-			"show": null,
-			"when": null,
-			"eq": ""
-		},
-		"overlay": {
-			"style": "",
-			"left": "",
-			"top": "",
-			"width": "",
-			"height": ""
-		},
-		"allowCalculateOverride": false,
-		"encrypted": false,
-		"showCharCount": false,
-		"showWordCount": false,
-		"properties": {},
-		"allowMultipleMasks": false,
-		"tree": false,
-		"breadcrumb": "default",
-		"id": "ez2gofk"
+			"input": false
+		}]
 	}, {
 		"title": "Entities",
 		"theme": "primary",
@@ -3353,7 +2474,7 @@
 			"showWordCount": false,
 			"properties": {},
 			"allowMultipleMasks": false,
-			"id": "e7we3pb"
+			"id": "elxe6as"
 		}, {
 			"label": "Entities",
 			"reorder": false,
@@ -3494,7 +2615,7 @@
 										"inputFormat": "plain",
 										"inputMask": "",
 										"spellcheck": true,
-										"id": "egthu8"
+										"id": "e1mqwxk"
 									}],
 									"width": 6,
 									"offset": 0,
@@ -3578,7 +2699,7 @@
 										"fileMinSize": "0KB",
 										"fileMaxSize": "1GB",
 										"uploadOnly": false,
-										"id": "eqkt87p"
+										"id": "entupwn"
 									}],
 									"width": 6,
 									"offset": 0,
@@ -3649,7 +2770,7 @@
 								"allowMultipleMasks": false,
 								"tree": false,
 								"autoAdjust": false,
-								"id": "e2zw96x"
+								"id": "ej7be0p"
 							}, {
 								"label": "Columns",
 								"columns": [{
@@ -3725,7 +2846,7 @@
 										"inputFormat": "plain",
 										"inputMask": "",
 										"spellcheck": true,
-										"id": "ejdjem5"
+										"id": "e620t5k"
 									}],
 									"offset": 0,
 									"push": 0,
@@ -3805,7 +2926,7 @@
 										"inputFormat": "plain",
 										"inputMask": "",
 										"spellcheck": true,
-										"id": "edcdlmr"
+										"id": "e82gksf"
 									}],
 									"offset": 0,
 									"push": 0,
@@ -3876,7 +2997,7 @@
 								"allowMultipleMasks": false,
 								"tree": false,
 								"autoAdjust": false,
-								"id": "ee5agek8"
+								"id": "eqnvfen"
 							}, {
 								"label": "Columns",
 								"columns": [{
@@ -3955,7 +3076,7 @@
 												"inputFormat": "plain",
 												"inputMask": "",
 												"spellcheck": true,
-												"id": "eqywyzk"
+												"id": "e3wpk6"
 											}],
 											"width": 6,
 											"offset": 0,
@@ -4076,7 +3197,7 @@
 												"inputFormat": "plain",
 												"inputMask": "",
 												"spellcheck": true,
-												"id": "e5msmsf"
+												"id": "evsidmo"
 											}],
 											"width": 6,
 											"offset": 0,
@@ -4146,7 +3267,7 @@
 										"allowMultipleMasks": false,
 										"tree": false,
 										"autoAdjust": false,
-										"id": "erynfnp"
+										"id": "e5ntbg6"
 									}, {
 										"label": "Message Title",
 										"placeholder": "Ex: ${entity_name}${identifier_field}",
@@ -4261,7 +3382,7 @@
 										"inputType": "text",
 										"inputMask": "",
 										"spellcheck": true,
-										"id": "ek508gp"
+										"id": "e8acowa"
 									}, {
 										"label": "RYG Rule",
 										"tooltip": "The RYG Rule for the Entity\nThis is a javascript rule which is used to return the Colour Based on any and all Fields in the Entity",
@@ -4342,64 +3463,45 @@
 										"rows": 3,
 										"wysiwyg": false,
 										"fixedSize": true,
-										"id": "ekjpwb"
+										"id": "eqndtn"
 									}, {
 										"label": "View Layout",
-										"customClass": "",
-										"tabindex": "",
-										"hidden": false,
-										"hideLabel": false,
-										"disabled": false,
 										"tableView": false,
-										"modalEdit": false,
 										"form": "5f21c1bdbba30150d672d0cf",
-										"revision": "",
-										"reference": true,
-										"customDefaultValue": "",
 										"calculateValue": "value.data.pagesList = data.pagesList;\nvalue.data.formsList = data.formsList;",
 										"key": "pageContent",
-										"tags": [],
-										"properties": {},
-										"conditional": {
-											"show": null,
-											"when": null,
-											"eq": "",
-											"json": ""
-										},
 										"customConditional": "show = (row.name != \"\");",
-										"logic": [],
-										"attributes": {},
-										"overlay": {
-											"style": "",
-											"page": "",
-											"left": "",
-											"top": "",
-											"width": "",
-											"height": ""
-										},
 										"type": "form",
 										"input": true,
-										"formRevision": 181,
+										"formRevision": 255,
 										"hideOnChildrenHidden": false,
 										"placeholder": "",
 										"prefix": "",
+										"customClass": "",
 										"suffix": "",
 										"multiple": false,
 										"defaultValue": null,
 										"protected": false,
 										"unique": false,
 										"persistent": true,
+										"hidden": false,
 										"clearOnHide": true,
 										"refreshOn": "",
 										"redrawOn": "",
+										"modalEdit": false,
 										"labelPosition": "top",
 										"description": "",
 										"errorLabel": "",
 										"tooltip": "",
+										"hideLabel": false,
+										"tabindex": "",
+										"disabled": false,
 										"autofocus": false,
 										"dbIndex": false,
+										"customDefaultValue": "",
 										"calculateServer": false,
 										"widget": null,
+										"attributes": {},
 										"validateOn": "change",
 										"validate": {
 											"required": false,
@@ -4409,14 +3511,28 @@
 											"multiple": false,
 											"unique": false
 										},
+										"conditional": {
+											"show": null,
+											"when": null,
+											"eq": ""
+										},
+										"overlay": {
+											"style": "",
+											"left": "",
+											"top": "",
+											"width": "",
+											"height": ""
+										},
 										"allowCalculateOverride": false,
 										"encrypted": false,
 										"showCharCount": false,
 										"showWordCount": false,
+										"properties": {},
 										"allowMultipleMasks": false,
 										"src": "",
+										"reference": true,
 										"path": "",
-										"id": "efmwbvc"
+										"id": "eicsn1"
 									}],
 									"width": 12,
 									"offset": 0,
@@ -4490,7 +3606,7 @@
 										"dataGridLabel": true,
 										"value": "",
 										"name": "",
-										"id": "eumehz8"
+										"id": "erwjspw"
 									}, {
 										"label": "Enable Comments?",
 										"tableView": false,
@@ -4557,7 +3673,7 @@
 										"dataGridLabel": true,
 										"value": "",
 										"name": "",
-										"id": "ei3dly"
+										"id": "e1bqy5"
 									}],
 									"width": 6,
 									"offset": 0,
@@ -4628,7 +3744,7 @@
 								"allowMultipleMasks": false,
 								"tree": false,
 								"autoAdjust": false,
-								"id": "e3aam5"
+								"id": "edtq60b"
 							}, {
 								"label": "Linked Fields",
 								"tableView": false,
@@ -4658,7 +3774,7 @@
 										"key": "name",
 										"type": "textfield",
 										"input": true,
-										"id": "eghqjj0000000000000000",
+										"id": "e6494bm",
 										"placeholder": "",
 										"prefix": "",
 										"customClass": "",
@@ -4730,7 +3846,7 @@
 										"key": "text",
 										"type": "textfield",
 										"input": true,
-										"id": "evfhmc0000000000000000",
+										"id": "ea7z47",
 										"placeholder": "",
 										"prefix": "",
 										"customClass": "",
@@ -4829,7 +3945,7 @@
 											"filter": {}
 										},
 										"input": true,
-										"id": "e213kkh0000000000000000",
+										"id": "eb43p3",
 										"placeholder": "",
 										"prefix": "",
 										"customClass": "",
@@ -4913,7 +4029,7 @@
 										"key": "index",
 										"type": "checkbox",
 										"input": true,
-										"id": "ej9lyq80000000000000000",
+										"id": "e8qdbid",
 										"placeholder": "",
 										"prefix": "",
 										"customClass": "",
@@ -5027,7 +4143,7 @@
 									"allowMultipleMasks": false,
 									"tree": true,
 									"disableAddingRemovingRows": false,
-									"id": "eqw17au"
+									"id": "e966ppc"
 								}],
 								"hideOnChildrenHidden": false,
 								"width": 3,
@@ -5086,7 +4202,7 @@
 								"properties": {},
 								"allowMultipleMasks": false,
 								"tree": false,
-								"id": "egujm1l"
+								"id": "etqw9cs"
 							}],
 							"width": 12,
 							"offset": 0,
@@ -5163,7 +4279,7 @@
 						"tree": false,
 						"autoAdjust": false,
 						"hideOnChildrenHidden": false,
-						"id": "ex9ujqb"
+						"id": "ec8xus8"
 					}],
 					"placeholder": "",
 					"prefix": "",
@@ -5221,9 +4337,9 @@
 					"properties": {},
 					"allowMultipleMasks": false,
 					"tree": false,
-					"id": "e4z8tx"
+					"id": "e80mspm"
 				}],
-				"id": "ejp24qgi0000000000000000",
+				"id": "ewejsp",
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -5328,7 +4444,7 @@
 			"allowMultipleMasks": false,
 			"tree": true,
 			"disableAddingRemovingRows": false,
-			"id": "eqqatz"
+			"id": "egxnfo"
 		}],
 		"placeholder": "",
 		"prefix": "",
@@ -5386,7 +4502,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "en1bz2"
+		"id": "en11r5"
 	}, {
 		"title": "Form Manager",
 		"theme": "primary",
@@ -5421,12 +4537,7 @@
 			}],
 			"redrawOn": "entity",
 			"validate": {
-				"custom": "if (data.formDuplicate) {\n  if (data.formDuplicate.length > 0) {\n    valid =\n      data.formDuplicate.length == new Set(data.formDuplicate.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same form more than once.\";\n  } else {\n    valid = true;\n  }\n}",
-				"required": false,
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
+				"custom": "if (data.formDuplicate) {\n  if (data.formDuplicate.length > 0) {\n    valid =\n      data.formDuplicate.length == new Set(data.formDuplicate.map((i) => i.name.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same form more than once.\";\n  } else {\n    valid = true;\n  }\n}"
 			},
 			"key": "formDuplicate",
 			"type": "datagrid",
@@ -5442,69 +4553,7 @@
 				"key": "name",
 				"type": "textfield",
 				"hideOnChildrenHidden": false,
-				"input": true,
-				"id": "ee7mhs900000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateServer": false,
-				"widget": {
-					"type": "input"
-				},
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false,
-					"minLength": "",
-					"maxLength": "",
-					"pattern": ""
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"mask": false,
-				"inputType": "text",
-				"inputFormat": "plain",
-				"inputMask": "",
-				"spellcheck": true
+				"input": true
 			}, {
 				"label": "Entity",
 				"widget": "choicesjs",
@@ -5517,10 +4566,7 @@
 						"label": "",
 						"value": ""
 					}],
-					"custom": "if(data.entity){\nvalues = data.entity.map(item=>item.name)\nif(row[component.key] && !values.includes(row[component.key])){\n  row[component.key] = \"\";\n}\n} else {\nvalues = [];\n}",
-					"json": "",
-					"url": "",
-					"resource": ""
+					"custom": "if(data.entity){\nvalues = data.entity.map(item=>item.name)\nif(row[component.key] && !values.includes(row[component.key])){\n  row[component.key] = \"\";\n}\n} else {\nvalues = [];\n}"
 				},
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
@@ -5565,80 +4611,7 @@
 				"indexeddb": {
 					"filter": {}
 				},
-				"input": true,
-				"id": "ekfp32m00000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateValue": "",
-				"calculateServer": false,
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"idPath": "id",
-				"clearOnRefresh": false,
-				"limit": 100,
-				"valueProperty": "",
-				"lazyLoad": true,
-				"filter": "",
-				"searchEnabled": true,
-				"searchField": "",
-				"minSearch": 0,
-				"readOnlyValue": false,
-				"authenticate": false,
-				"template": "<span>{{ item.label }}</span>",
-				"selectFields": "",
-				"searchThreshold": 0.3,
-				"uniqueOptions": false,
-				"fuseOptions": {
-					"include": "score",
-					"threshold": 0.3
-				},
-				"customOptions": {},
-				"useExactSearch": false
+				"input": true
 			}, {
 				"label": "Form File",
 				"tooltip": "The JSON Form which can be obtained from Formio",
@@ -5658,130 +4631,14 @@
 				},
 				"type": "file",
 				"url": "/app/{{data.app.uuid}}/artifact/add/form",
-				"input": true,
-				"id": "ez3so8600000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateValue": "",
-				"calculateServer": false,
-				"widget": null,
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"allowMultipleMasks": false,
-				"image": false,
-				"privateDownload": false,
-				"imageSize": "200",
-				"fileMinSize": "0KB",
-				"uploadOnly": false
+				"input": true
 			}, {
 				"label": "Template File",
 				"calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
 				"key": "template_file",
 				"type": "hidden",
 				"input": true,
-				"tableView": false,
-				"id": "e0z4s9k00000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"tooltip": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateServer": false,
-				"widget": {
-					"type": "input"
-				},
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"inputType": "hidden"
+				"tableView": false
 			}, {
 				"label": "Form Uuid",
 				"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
@@ -5789,237 +4646,16 @@
 				"type": "hidden",
 				"input": true,
 				"tableView": false,
-				"hideOnChildrenHidden": false,
-				"id": "exwrc6800000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"tooltip": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateServer": false,
-				"widget": {
-					"type": "input"
-				},
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"inputType": "hidden"
-			}],
-			"placeholder": "",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"multiple": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"hidden": false,
-			"clearOnHide": true,
-			"refreshOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"calculateServer": false,
-			"widget": null,
-			"attributes": {},
-			"validateOn": "change",
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"tree": true,
-			"disableAddingRemovingRows": false,
-			"id": "ey5nbgm"
+				"hideOnChildrenHidden": false
+			}]
 		}, {
 			"label": "Actual Form API Key",
 			"calculateValue": "if(data.formDuplicate){\n  try {\n  value = data.formDuplicate.map((i) => {\n    return { name: i.name, entity: i.entity, template_file: i.template_file,uuid: i.uuid };\n  });\n} catch (error) {}\n}",
 			"key": "form",
 			"type": "hidden",
 			"input": true,
-			"tableView": false,
-			"placeholder": "",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"multiple": false,
-			"defaultValue": null,
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"hidden": false,
-			"clearOnHide": true,
-			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"hideLabel": false,
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateServer": false,
-			"widget": {
-				"type": "input"
-			},
-			"attributes": {},
-			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
-			},
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"inputType": "hidden",
-			"id": "ez7lze"
-		}],
-		"placeholder": "",
-		"prefix": "",
-		"customClass": "",
-		"suffix": "",
-		"multiple": false,
-		"defaultValue": null,
-		"protected": false,
-		"unique": false,
-		"persistent": false,
-		"hidden": false,
-		"clearOnHide": false,
-		"refreshOn": "",
-		"redrawOn": "",
-		"modalEdit": false,
-		"labelPosition": "top",
-		"description": "",
-		"errorLabel": "",
-		"tooltip": "",
-		"hideLabel": false,
-		"tabindex": "",
-		"disabled": false,
-		"autofocus": false,
-		"dbIndex": false,
-		"customDefaultValue": "",
-		"calculateValue": "",
-		"calculateServer": false,
-		"widget": null,
-		"attributes": {},
-		"validateOn": "change",
-		"validate": {
-			"required": false,
-			"custom": "",
-			"customPrivate": false,
-			"strictDateValidation": false,
-			"multiple": false,
-			"unique": false
-		},
-		"conditional": {
-			"show": null,
-			"when": null,
-			"eq": ""
-		},
-		"overlay": {
-			"style": "",
-			"left": "",
-			"top": "",
-			"width": "",
-			"height": ""
-		},
-		"allowCalculateOverride": false,
-		"encrypted": false,
-		"showCharCount": false,
-		"showWordCount": false,
-		"properties": {},
-		"allowMultipleMasks": false,
-		"tree": false,
-		"breadcrumb": "default",
-		"id": "efbwtsy"
+			"tableView": false
+		}]
 	}, {
 		"title": "Workflow Manager",
 		"theme": "primary",
@@ -6054,12 +4690,7 @@
 			}],
 			"clearOnHide": false,
 			"validate": {
-				"custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n  valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}",
-				"required": false,
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
+				"custom": "if (data.workflow) {\n  if (data.workflow.length > 0) {\n  valid =\n      data.workflow.length == new Set(data.workflow.map((i) => i.bpmn_file.replace(/\\s/g,''))).size\n        ? true\n        : \"You cannot have the same workflow more than once.\";\n  } else {\n    valid = true;\n  }\n}"
 			},
 			"key": "workflow",
 			"type": "datagrid",
@@ -6071,71 +4702,11 @@
 				"tableView": true,
 				"clearOnHide": false,
 				"validate": {
-					"maxLength": 50,
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false,
-					"minLength": "",
-					"pattern": ""
+					"maxLength": 50
 				},
 				"key": "name",
 				"type": "textfield",
-				"input": true,
-				"id": "erzt6gw0000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateValue": "",
-				"calculateServer": false,
-				"widget": {
-					"type": "input"
-				},
-				"attributes": {},
-				"validateOn": "change",
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"mask": false,
-				"inputType": "text",
-				"inputFormat": "plain",
-				"inputMask": "",
-				"spellcheck": true
+				"input": true
 			}, {
 				"label": "Entity",
 				"widget": "choicesjs",
@@ -6148,20 +4719,12 @@
 						"label": "",
 						"value": ""
 					}],
-					"custom": "if(data.entity){\nvalues = data.entity.map(item=>item.name)\nif(row[component.key] && !values.includes(row[component.key])){\nrow[component.key] = \"\";\n}\n} else {\nvalues = []\n}",
-					"json": "",
-					"url": "",
-					"resource": ""
+					"custom": "if(data.entity){\nvalues = data.entity.map(item=>item.name)\nif(row[component.key] && !values.includes(row[component.key])){\nrow[component.key] = \"\";\n}\n} else {\nvalues = []\n}"
 				},
 				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
-					"multiple": true,
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"unique": false
+					"multiple": true
 				},
 				"key": "entity",
 				"logic": [{
@@ -6201,72 +4764,7 @@
 				"indexeddb": {
 					"filter": {}
 				},
-				"input": true,
-				"id": "ez31euu0000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateValue": "",
-				"calculateServer": false,
-				"attributes": {},
-				"validateOn": "change",
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"idPath": "id",
-				"clearOnRefresh": false,
-				"limit": 100,
-				"valueProperty": "",
-				"lazyLoad": true,
-				"filter": "",
-				"searchEnabled": true,
-				"searchField": "",
-				"minSearch": 0,
-				"readOnlyValue": false,
-				"authenticate": false,
-				"template": "<span>{{ item.label }}</span>",
-				"selectFields": "",
-				"searchThreshold": 0.3,
-				"uniqueOptions": false,
-				"fuseOptions": {
-					"include": "score",
-					"threshold": 0.3
-				},
-				"customOptions": {},
-				"useExactSearch": false
+				"input": true
 			}, {
 				"label": "Workflow BPMN",
 				"tableView": false,
@@ -6285,131 +4783,14 @@
 				},
 				"type": "file",
 				"url": "/app/{{data.app.uuid}}/artifact/add/workflow",
-				"input": true,
-				"id": "ele2av0000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"tooltip": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateValue": "",
-				"calculateServer": false,
-				"widget": null,
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"allowMultipleMasks": false,
-				"image": false,
-				"privateDownload": false,
-				"imageSize": "200",
-				"fileMinSize": "0KB",
-				"uploadOnly": false
+				"input": true
 			}, {
 				"label": "BPMN File",
 				"calculateValue": "try {\n    value = row.template[0].originalName.length > 0 ?  row.template[0].originalName : \"\";\n} catch (error) {}",
 				"key": "bpmn_file",
 				"type": "hidden",
 				"input": true,
-				"tableView": false,
-				"id": "ei1tmc0000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"tooltip": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateServer": false,
-				"widget": {
-					"type": "input"
-				},
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"inputType": "hidden"
+				"tableView": false
 			}, {
 				"label": "Workflow Uuid",
 				"calculateValue": "try {\n  if (\n    !(value.length > 1) &&\n    row.template[0].originalName &&\n    row.template[0].originalName.length > 0\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}\n",
@@ -6417,172 +4798,9 @@
 				"type": "hidden",
 				"input": true,
 				"tableView": false,
-				"hideOnChildrenHidden": false,
-				"id": "ehkiskk0000",
-				"placeholder": "",
-				"prefix": "",
-				"customClass": "",
-				"suffix": "",
-				"multiple": false,
-				"defaultValue": null,
-				"protected": false,
-				"unique": false,
-				"persistent": true,
-				"hidden": false,
-				"clearOnHide": true,
-				"refreshOn": "",
-				"redrawOn": "",
-				"modalEdit": false,
-				"labelPosition": "top",
-				"description": "",
-				"errorLabel": "",
-				"tooltip": "",
-				"hideLabel": false,
-				"tabindex": "",
-				"disabled": false,
-				"autofocus": false,
-				"dbIndex": false,
-				"customDefaultValue": "",
-				"calculateServer": false,
-				"widget": {
-					"type": "input"
-				},
-				"attributes": {},
-				"validateOn": "change",
-				"validate": {
-					"required": false,
-					"custom": "",
-					"customPrivate": false,
-					"strictDateValidation": false,
-					"multiple": false,
-					"unique": false
-				},
-				"conditional": {
-					"show": null,
-					"when": null,
-					"eq": ""
-				},
-				"overlay": {
-					"style": "",
-					"left": "",
-					"top": "",
-					"width": "",
-					"height": ""
-				},
-				"allowCalculateOverride": false,
-				"encrypted": false,
-				"showCharCount": false,
-				"showWordCount": false,
-				"properties": {},
-				"allowMultipleMasks": false,
-				"inputType": "hidden"
-			}],
-			"placeholder": "",
-			"prefix": "",
-			"customClass": "",
-			"suffix": "",
-			"multiple": false,
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"hidden": false,
-			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"calculateServer": false,
-			"widget": null,
-			"attributes": {},
-			"validateOn": "change",
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"allowCalculateOverride": false,
-			"encrypted": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"properties": {},
-			"allowMultipleMasks": false,
-			"tree": true,
-			"disableAddingRemovingRows": false,
-			"id": "ehq4jy"
-		}],
-		"placeholder": "",
-		"prefix": "",
-		"customClass": "",
-		"suffix": "",
-		"multiple": false,
-		"defaultValue": null,
-		"protected": false,
-		"unique": false,
-		"persistent": false,
-		"hidden": false,
-		"clearOnHide": false,
-		"refreshOn": "",
-		"redrawOn": "",
-		"modalEdit": false,
-		"labelPosition": "top",
-		"description": "",
-		"errorLabel": "",
-		"tooltip": "",
-		"hideLabel": false,
-		"tabindex": "",
-		"disabled": false,
-		"autofocus": false,
-		"dbIndex": false,
-		"customDefaultValue": "",
-		"calculateValue": "",
-		"calculateServer": false,
-		"widget": null,
-		"attributes": {},
-		"validateOn": "change",
-		"validate": {
-			"required": false,
-			"custom": "",
-			"customPrivate": false,
-			"strictDateValidation": false,
-			"multiple": false,
-			"unique": false
-		},
-		"conditional": {
-			"show": null,
-			"when": null,
-			"eq": ""
-		},
-		"overlay": {
-			"style": "",
-			"left": "",
-			"top": "",
-			"width": "",
-			"height": ""
-		},
-		"allowCalculateOverride": false,
-		"encrypted": false,
-		"showCharCount": false,
-		"showWordCount": false,
-		"properties": {},
-		"allowMultipleMasks": false,
-		"tree": false,
-		"breadcrumb": "default",
-		"id": "egokix9"
+				"hideOnChildrenHidden": false
+			}]
+		}]
 	}, {
 		"title": "Pages And Menus",
 		"theme": "primary",
@@ -6706,7 +4924,7 @@
 									"inputFormat": "plain",
 									"inputMask": "",
 									"spellcheck": true,
-									"id": "emfxubi"
+									"id": "ee9ovg6"
 								}, {
 									"label": "Page UUID",
 									"calculateValue": "try {\n  if (\n    !(value.length > 1)\n  ) {\n    value = utils.guid();\n  }\n} catch (error) {}",
@@ -6772,7 +4990,7 @@
 									"properties": {},
 									"allowMultipleMasks": false,
 									"inputType": "hidden",
-									"id": "eo1ppxr"
+									"id": "ekjbosh"
 								}],
 								"width": 6,
 								"offset": 0,
@@ -6852,7 +5070,7 @@
 									"inputFormat": "plain",
 									"inputMask": "",
 									"spellcheck": true,
-									"id": "e6y8qb6"
+									"id": "e9mph6s"
 								}],
 								"width": 6,
 								"offset": 0,
@@ -6922,7 +5140,7 @@
 							"allowMultipleMasks": false,
 							"tree": false,
 							"autoAdjust": false,
-							"id": "eu15bio"
+							"id": "ezahxdm"
 						}, {
 							"label": "Page Content Form",
 							"customClass": "",
@@ -6936,7 +5154,7 @@
 							"revision": "",
 							"reference": true,
 							"customDefaultValue": "",
-							"calculateValue": "value.data.pagesList = data.pagesList;\nvalue.data.formsList = data.formsList;",
+							"calculateValue": "value.data.pagesList = data.pagesList;\r\nvalue.data.formsList = data.formsList;",
 							"key": "pageContent",
 							"tags": [],
 							"properties": {},
@@ -6959,7 +5177,7 @@
 							},
 							"type": "form",
 							"input": true,
-							"formRevision": 181,
+							"formRevision": 255,
 							"hideOnChildrenHidden": false,
 							"placeholder": "",
 							"prefix": "",
@@ -6996,23 +5214,10 @@
 							"allowMultipleMasks": false,
 							"src": "",
 							"path": "",
-							"id": "ey97rce"
+							"id": "ej3jihq"
 						}, {
 							"label": "Page Content",
-							"customClass": "",
-							"modalEdit": false,
-							"defaultValue": null,
-							"persistent": true,
-							"protected": false,
-							"dbIndex": false,
-							"encrypted": false,
-							"redrawOn": "",
-							"customDefaultValue": "",
-							"calculateValue": "",
-							"calculateServer": false,
 							"key": "content",
-							"tags": [],
-							"properties": {},
 							"logic": [{
 								"name": "Set Content",
 								"trigger": {
@@ -7025,27 +5230,24 @@
 									"value": "value = row.pageContent.data.content;"
 								}]
 							}],
-							"attributes": {},
-							"overlay": {
-								"style": "",
-								"page": "",
-								"left": "",
-								"top": "",
-								"width": "",
-								"height": ""
-							},
 							"type": "hidden",
 							"input": true,
 							"tableView": false,
 							"hideOnChildrenHidden": false,
 							"placeholder": "",
 							"prefix": "",
+							"customClass": "",
 							"suffix": "",
 							"multiple": false,
+							"defaultValue": null,
+							"protected": false,
 							"unique": false,
+							"persistent": true,
 							"hidden": false,
 							"clearOnHide": true,
 							"refreshOn": "",
+							"redrawOn": "",
+							"modalEdit": false,
 							"labelPosition": "top",
 							"description": "",
 							"errorLabel": "",
@@ -7054,9 +5256,14 @@
 							"tabindex": "",
 							"disabled": false,
 							"autofocus": false,
+							"dbIndex": false,
+							"customDefaultValue": "",
+							"calculateValue": "",
+							"calculateServer": false,
 							"widget": {
 								"type": "input"
 							},
+							"attributes": {},
 							"validateOn": "change",
 							"validate": {
 								"required": false,
@@ -7071,12 +5278,21 @@
 								"when": null,
 								"eq": ""
 							},
+							"overlay": {
+								"style": "",
+								"left": "",
+								"top": "",
+								"width": "",
+								"height": ""
+							},
 							"allowCalculateOverride": false,
+							"encrypted": false,
 							"showCharCount": false,
 							"showWordCount": false,
+							"properties": {},
 							"allowMultipleMasks": false,
 							"inputType": "hidden",
-							"id": "eusos4o"
+							"id": "erz389k"
 						}],
 						"width": 12,
 						"offset": 0,
@@ -7096,7 +5312,7 @@
 					"key": "columns",
 					"type": "columns",
 					"input": false,
-					"id": "epy93s5000000000000000",
+					"id": "edl340c000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -7210,7 +5426,7 @@
 				"allowMultipleMasks": false,
 				"tree": true,
 				"disableAddingRemovingRows": false,
-				"id": "e4vwmba"
+				"id": "er204xg"
 			}],
 			"placeholder": "",
 			"prefix": "",
@@ -7269,7 +5485,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "eulz2pe"
+			"id": "eb5eboj"
 		}, {
 			"title": "Menus",
 			"theme": "primary",
@@ -7329,7 +5545,7 @@
 					"key": "name",
 					"type": "textfield",
 					"input": true,
-					"id": "ezqmbtk000000000000000",
+					"id": "ew9wbm000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -7401,7 +5617,7 @@
 					"key": "icon",
 					"type": "textfield",
 					"input": true,
-					"id": "ev19stu000000000000000",
+					"id": "ee79z7000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -7485,7 +5701,7 @@
 						"filter": {}
 					},
 					"input": true,
-					"id": "e8g2oev000000000000000",
+					"id": "e4r5n3000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -7577,7 +5793,7 @@
 						"filter": {}
 					},
 					"input": true,
-					"id": "eq3qlkr000000000000000",
+					"id": "ekph729000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -7681,7 +5897,7 @@
 						"filter": {}
 					},
 					"input": true,
-					"id": "emj2avk000000000000000",
+					"id": "evlkuhe000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -7753,7 +5969,7 @@
 					"type": "hidden",
 					"input": true,
 					"tableView": false,
-					"id": "ej863r8000000000000000",
+					"id": "e8s5s6tq000000",
 					"placeholder": "",
 					"prefix": "",
 					"customClass": "",
@@ -7860,7 +6076,7 @@
 				"allowMultipleMasks": false,
 				"tree": true,
 				"disableAddingRemovingRows": false,
-				"id": "e99sryq"
+				"id": "ergpb1u"
 			}],
 			"placeholder": "",
 			"prefix": "",
@@ -7919,7 +6135,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"breadcrumb": "default",
-			"id": "evv3rj"
+			"id": "e832i5c"
 		}],
 		"placeholder": "",
 		"prefix": "",
@@ -7978,17 +6194,80 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "eeg8z5o"
+		"id": "ek013"
 	}],
 	"revisions": "current",
-	"_vid": 568,
+	"_vid": 579,
 	"title": "EOX App",
 	"display": "wizard",
 	"access": [{
+		"roles": [],
+		"type": "create_own"
+	}, {
+		"roles": [],
+		"type": "create_all"
+	}, {
+		"roles": [],
+		"type": "read_own"
+	}, {
 		"roles": ["5d70a2198e9aff51d0f3c171", "5d70a2198e9afffba0f3c172", "5d70a2198e9affff8af3c173"],
 		"type": "read_all"
+	}, {
+		"roles": [],
+		"type": "update_own"
+	}, {
+		"roles": [],
+		"type": "update_all"
+	}, {
+		"roles": [],
+		"type": "delete_own"
+	}, {
+		"roles": [],
+		"type": "delete_all"
+	}, {
+		"roles": [],
+		"type": "team_read"
+	}, {
+		"roles": [],
+		"type": "team_write"
+	}, {
+		"roles": [],
+		"type": "team_admin"
 	}],
-	"submissionAccess": [],
+	"submissionAccess": [{
+		"roles": [],
+		"type": "create_own"
+	}, {
+		"roles": [],
+		"type": "create_all"
+	}, {
+		"roles": [],
+		"type": "read_own"
+	}, {
+		"roles": [],
+		"type": "read_all"
+	}, {
+		"roles": [],
+		"type": "update_own"
+	}, {
+		"roles": [],
+		"type": "update_all"
+	}, {
+		"roles": [],
+		"type": "delete_own"
+	}, {
+		"roles": [],
+		"type": "delete_all"
+	}, {
+		"roles": [],
+		"type": "team_read"
+	}, {
+		"roles": [],
+		"type": "team_write"
+	}, {
+		"roles": [],
+		"type": "team_admin"
+	}],
 	"controller": "var s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_1fa0d5c0-b428-499a-a490-37e4349c1060\"\n      )\n    ) {\n      var dataGridDeleteIcons = document.getElementsByClassName(\n        \"fa-times-circle-o\"\n      );\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);",
 	"properties": {
 		"showBreadcrumbs": "true",
@@ -8001,6 +6280,6 @@
 	"path": "eoxapp",
 	"project": "5d70a2198e9aff60caf3c170",
 	"created": "2020-07-26T18:44:45.687Z",
-	"modified": "2021-01-21T16:53:14.812Z",
+	"modified": "2021-01-26T19:43:25.347Z",
 	"machineName": "onboarding-qeimxlbzmdfpljg:eoxApp"
 }
