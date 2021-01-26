@@ -50,7 +50,7 @@ class FileCallbackController extends AbstractApiControllerHelper
         return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function updateRygForFile(){
+    public function updateRygForFileAction(){
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
             $this->fileService->bulkUpdateFileRygStatus($params);
