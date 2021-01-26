@@ -1301,7 +1301,7 @@ class FileService extends AbstractService
         return true;
     }
 
-    private function processUserFilter($params, $appId, &$fromQuery, &$whereQuery, &$queryParams){
+    private function processUserFilter($params, $appId,$accountId, &$fromQuery, &$whereQuery, &$queryParams){
         if (isset($params['userId'])) {
             if ($params['userId'] == 'me') {
                 $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -1332,7 +1332,11 @@ class FileService extends AbstractService
                 $whereQuery .= " `of`.created_by = :userId";
                 $queryParams['userId'] = $userId;
             }
-        } 
+        }
+        if($accountId){
+            $whereQuery .= " `of`.account_id = :accountId";
+            $queryParams['accountId'] = $accountId;
+        }
     }
 
     public function getFileList($appUUid, $params, $filterParams = null)
@@ -1379,7 +1383,7 @@ class FileService extends AbstractService
         if(!isset($appId)){
             $appId = NULL;
         }
-        $this->processUserFilter($params, $appId, $fromQuery, $whereQuery, $queryParams);
+        $this->processUserFilter($params, $appId,$accountId, $fromQuery, $whereQuery, $queryParams);
         
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
         $fromQuery .= " left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
@@ -2033,7 +2037,7 @@ class FileService extends AbstractService
                 if ($sortCount > 0) {
                     $sort .= ", ";
                 }
-                $sort .= " date_created ".$dir;
+                $sort .= " of.date_created ".$dir;
                 $sortCount++;
                 continue;
             }
