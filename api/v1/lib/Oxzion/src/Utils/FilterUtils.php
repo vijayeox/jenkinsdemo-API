@@ -71,6 +71,10 @@ class FilterUtils
     {
         $where = "";
         for ($x = 0; $x < sizeof($filterList); $x++) {
+            if(!isset($filterList[$x]['operator'])){
+                print_r($filterList);exit;
+                continue;
+            }
             $operator = $filterList[$x]['operator'];
             $field = $filterList[$x]['field'];
             $field = isset($fieldMap[$field]) ? $fieldMap[$field] : $field;
@@ -166,6 +170,8 @@ class FilterUtils
                 $operation = ' <> ';
             } elseif ($operator == 'lte') {
                 $operation = ' <= ';
+            } elseif ($operator == '==') {
+                $operation = ' = ';
             } elseif ($operator == 'lt') {
                 $operation = ' < ';
             } elseif ($operator == 'gt') {

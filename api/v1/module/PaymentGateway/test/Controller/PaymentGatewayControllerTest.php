@@ -30,7 +30,7 @@ class PaymentGatewayControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['payment_client' => 'convergeTest', 'api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo", 'org_id' => $this->testOrgId, 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
+        $data = ['payment_client' => 'convergeTest', 'api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo", 'account_id' => $this->testAccountId, 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/aff3e23e-e411-11e9-a359-2a2ae2dbcce4/paymentgateway', 'POST', $data);
         $this->assertResponseStatusCode(201);

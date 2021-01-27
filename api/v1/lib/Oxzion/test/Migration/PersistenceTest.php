@@ -40,10 +40,10 @@ class PersistenceTest extends ServiceTest
         $tm->beginTransaction();
 
         if ($this->getName() == 'testInsertQueryWithJoinSelect' || $this->getName() == 'testSelectQuery' || $this->getName() == 'testSelectQueryWithJoin' || $this->getName() == 'testUpdateQuery' || $this->getName() == 'testUpdateQueryWithJoin') {
-            $insertQuery = "INSERT INTO ox_timesheet (`name`, `client_id`, `description`, `process_id`, `date_created`,`ox_app_org_id`) VALUES ('Task1', 1, 'New Task', 2, '2019-01-02 12:00:00',1)";
+            $insertQuery = "INSERT INTO ox_timesheet (`name`, `client_id`, `description`, `process_id`, `date_created`,`ox_app_account_id`) VALUES ('Task1', 1, 'New Task', 2, '2019-01-02 12:00:00',1)";
             $statement = $this->adapter->query($insertQuery);
             $result = $statement->execute();
-            $update = "UPDATE ox_timesheet_client SET ox_app_org_id = 1 where id = 1";
+            $update = "UPDATE ox_timesheet_client SET ox_app_account_id = 1 where id = 1";
             $statement = $this->adapter->query($update);
             $result = $statement->execute();
         }
@@ -65,7 +65,7 @@ class PersistenceTest extends ServiceTest
     public function testInsertQuery()
     {
         $config = $this->getApplicationConfig();
-        AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
         $insertData = array(
@@ -97,7 +97,7 @@ class PersistenceTest extends ServiceTest
     public function testInsertQueryWithJoinSelect()
     {
         $config = $this->getApplicationConfig();
-        AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
         $insertData = array(
@@ -128,7 +128,7 @@ class PersistenceTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $query = "Select * from ox_timesheet where id > 0";
-        $orgId = AuthContext::put(AuthConstants::ORG_ID,1);
+        $accountId = AuthContext::put(AuthConstants::ACCOUNT_ID,1);
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
         $result1 = $persistenceObject->selectQuery($query);
@@ -152,7 +152,7 @@ class PersistenceTest extends ServiceTest
     public function testSelectQueryWithJoin()
     {
         $config = $this->getApplicationConfig();
-        $orgId = AuthContext::put(AuthConstants::ORG_ID,1);
+        $accountId = AuthContext::put(AuthConstants::ACCOUNT_ID,1);
         $query = "SELECT `ox_timesheet`.`name`, `ox_timesheet`.`client_id`, `ox_timesheet`.`description`, `ox_timesheet`.`process_id`, `ox_timesheet`.`date_created` FROM ox_timesheet
                                 LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id where ox_timesheet.client_id = 1";
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
@@ -178,7 +178,7 @@ class PersistenceTest extends ServiceTest
     public function testUpdateQuery()
     {
         $config = $this->getApplicationConfig();
-        $orgId = AuthContext::put(AuthConstants::ORG_ID,1);
+        $accountId = AuthContext::put(AuthConstants::ACCOUNT_ID,1);
         $query = "UPDATE ox_timesheet set name = 'Updated Task' WHERE id > 0";
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
@@ -204,7 +204,7 @@ class PersistenceTest extends ServiceTest
     public function testUpdateQueryWithJoin()
     {
         $config = $this->getApplicationConfig();
-        AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         $query = "UPDATE ox_timesheet AS b
             INNER JOIN ox_timesheet_client AS g ON b.client_id = g.id
             SET b.name = 'Updated Task', b.Description = 'New Task'
@@ -236,7 +236,7 @@ class PersistenceTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $query = "Delete from ox_timesheet where id > 0";
-        $orgId = AuthContext::put(AuthConstants::ORG_ID,1);
+        $accountId = AuthContext::put(AuthConstants::ACCOUNT_ID,1);
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
         $persistenceObject->deleteQuery($query);
@@ -254,7 +254,7 @@ class PersistenceTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $query = "Delete from ox_timesheet where id > 0";
-        $orgId = AuthContext::put(AuthConstants::ORG_ID,1);
+        $accountId = AuthContext::put(AuthConstants::ACCOUNT_ID,1);
         $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->setAdapter($this->adapter);
         $persistenceObject->deleteQuery($query);

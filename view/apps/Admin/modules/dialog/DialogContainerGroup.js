@@ -18,10 +18,10 @@ export default class DialogContainer extends React.Component {
   UNSAFE_componentWillMount() {
     if (this.props.formAction == "put") {
       GetSingleEntityData(
-        "organization/" +
+        "account/" +
           this.props.selectedOrg +
           "/user/" +
-          this.props.dataItem.manager_id +
+          this.props.dataItem.managerId +
           "/profile"
       ).then(response => {
         this.setState({
@@ -31,12 +31,12 @@ export default class DialogContainer extends React.Component {
           }
         });
       });
-      this.props.dataItem.parent_id
+      this.props.dataItem.parentId
         ? GetSingleEntityData(
-            "organization/" +
+            "account/" +
               this.props.selectedOrg +
               "/group/" +
-              this.props.dataItem.parent_id
+              this.props.dataItem.parentId
           ).then(response => {
             this.setState({
               parentGroupName: {
@@ -57,7 +57,7 @@ export default class DialogContainer extends React.Component {
     this.setState({
       groupInEdit: edited
     });
-    item == "manager_id"
+    item == "managerId"
       ? this.setState({
           managerName: event.target.value
         })
@@ -88,8 +88,8 @@ export default class DialogContainer extends React.Component {
     )
     let tempData = {
       name: this.state.groupInEdit.name,
-      parent_id: this.state.groupInEdit.parent_id,
-      manager_id: this.state.groupInEdit.manager_id,
+      parentId: this.state.groupInEdit.parentId,
+      managerId: this.state.groupInEdit.managerId,
       description: this.state.groupInEdit.description
     };
 
@@ -100,7 +100,7 @@ export default class DialogContainer extends React.Component {
       }
     }
     PushData(
-      "organization/" + this.props.selectedOrg + "/group",
+      "account/" + this.props.selectedOrg + "/group",
       this.props.formAction,
       this.state.groupInEdit.uuid,
       tempData
@@ -167,13 +167,13 @@ export default class DialogContainer extends React.Component {
                     <DropDown
                       args={this.core}
                       mainList={
-                        "organization/" + this.props.selectedOrg + "/users"
+                        "account/" + this.props.selectedOrg + "/users"
                       }
                       selectedItem={this.state.managerName}
                       selectedEntityType={"text"}
                       preFetch={true}
                       onDataChange={event =>
-                        this.listOnChange(event, "manager_id")
+                        this.listOnChange(event, "managerId")
                       }
                       disableItem={this.props.diableField}
                       required={true}
@@ -186,13 +186,13 @@ export default class DialogContainer extends React.Component {
                     <DropDown
                       args={this.core}
                       mainList={
-                        "organization/" + this.props.selectedOrg + "/groups"
+                        "account/" + this.props.selectedOrg + "/groups"
                       }
                       selectedItem={this.state.parentGroupName}
                       selectedEntityType={"text"}
                       preFetch={true}
                       onDataChange={event =>
-                        this.listOnChange(event, "parent_id")
+                        this.listOnChange(event, "parentId")
                       }
                       disableItem={this.props.diableField}
                       required={false}

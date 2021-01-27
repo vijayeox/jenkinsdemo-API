@@ -226,8 +226,8 @@ abstract class ModelTable
                     throw new InsertFailedException('Duplicate Record.',
                     ['table' => $this->tableGateway->getTable(), 'data' => $data],
                     InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
-                }
-                throw new InsertFailedException('Database insert failed.',
+                }                   
+                throw new InsertFailedException($e->getMessage(),
                     ['table' => $this->tableGateway->getTable(), 'data' => $data],
                     InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
             }

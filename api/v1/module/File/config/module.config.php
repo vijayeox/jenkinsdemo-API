@@ -44,6 +44,20 @@ return [
                     ],
                 ],
             ],
+            'fileRygStatusUpdate' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/updateryg[/entity/:entityName]',
+                    'defaults' => [
+                        'controller' => Controller\FileCallbackController::class,
+                        'action' => 'updateRygForFile',
+                        'method' => 'POST',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'fileCallbackUpdate' => [
                 'type' => Segment::class,
                 'options' => [
@@ -55,6 +69,17 @@ return [
                         'access'=>[
                             // SET ACCESS CONTROL
                         ],
+                    ],
+                ],
+            ],
+            'esignFinalizedCallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/esign/finalized',
+                    'defaults' => [
+                        'controller' => Controller\EsignCallbackController::class,
+                        'action' => 'documentFinalized',
+                        'method' => 'POST'
                     ],
                 ],
             ],

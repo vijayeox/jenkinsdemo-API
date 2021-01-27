@@ -28,7 +28,6 @@ class AppArtifactService extends AbstractService
     private $table;
     private $appService;
     private $contentFolder = DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
-    private $appViewDirectory = DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'apps'. DIRECTORY_SEPARATOR.'eoxapps'. DIRECTORY_SEPARATOR;
 
     public function __construct($config, $dbAdapter, AppTable $table, AppService $appService) {
         parent::__construct($config, $dbAdapter);
@@ -48,7 +47,17 @@ class AppArtifactService extends AbstractService
             break;
             case 'app_icon':
             case 'app_icon_white':
-                $targetDir = $appSourceDir . $this->appViewDirectory;
+                $app = new App($this->table);
+                $app->loadByUuid($appUuid);
+                $appData = [
+                    'uuid' => $appUuid,
+                    'name' => $app->getProperty('name')
+                ];
+                if(is_dir($appSourceDir . '/view/apps/'.$appData['name']."/")){
+                    $targetDir = $appSourceDir . '/view/apps/'.$appData['name']."/";
+                } else {
+                    $targetDir = $appSourceDir . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'apps'. DIRECTORY_SEPARATOR.'eoxapps'. DIRECTORY_SEPARATOR;
+                }
                 return $this->uploadAppIcon($targetDir,$artifactType);
             break;
             default:
@@ -62,9 +71,8 @@ class AppArtifactService extends AbstractService
             if (UPLOAD_ERR_OK != $fileData['error']) {
                 throw new Exception('File upload failed.');
             }
-            $filePath = $targetDir . $fileData['name'];
-            if (file_exists($filePath)) {
-                throw new DuplicateFileException("File already exists.", ['file' => $filePath]);
+            if (file_exists($targetDir . $fileData['name'])) {
+                FileUtils::deleteFile($fileData['name'],$targetDir);
             }
         }
         //Move/copy the files to destination.

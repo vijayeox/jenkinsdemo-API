@@ -26,8 +26,8 @@ class FileServiceTest extends AbstractServiceTest
         $this->loadConfig();
         parent::setUp();
         $this->fileService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\FileService::class);
-        AuthContext::put(AuthConstants::ORG_ID, 1);
-        AuthContext::put(AuthConstants::ORG_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
         AuthContext::put(AuthConstants::USER_ID, 1);
         $this->dataset = $this->parseYaml();
         $this->adapter = $this->getDbAdapter();
@@ -51,6 +51,7 @@ class FileServiceTest extends AbstractServiceTest
             case "testGetFileListWithInvalidWorkflowButNoUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithPolicyHolderNoUserIdInRouteAsParticipant":
+            case "testGetFileListWithoutWorkflowButWithPolicyHolderUserIdInRouteAsParticipant":    
             case "testGetFileListWithWorkflowAndPolicyHolderUserIdInRouteAsParticipant":
             case "testGetFileListWithWorkflowStatusCheckPositiveWithParticipant":
             case "testGetFileListWithEntityNameCheckPositiveWithParticipants":
@@ -76,6 +77,7 @@ class FileServiceTest extends AbstractServiceTest
             case "testGetFileListWithInvalidWorkflowButNoUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithPolicyHolderNoUserIdInRouteAsParticipant":
+            case "testGetFileListWithoutWorkflowButWithPolicyHolderUserIdInRouteAsParticipant":
             case "testGetFileListWithWorkflowAndPolicyHolderUserIdInRouteAsParticipant":
             case "testGetFileListWithWorkflowStatusCheckPositiveWithParticipant":
             case "testGetFileListWithEntityNameCheckPositiveWithParticipants":
@@ -94,8 +96,64 @@ class FileServiceTest extends AbstractServiceTest
         return $result;
     }
 
+
+    public function testGetFollowUps(){
+        $result = $this->fileService->getFileList(NULL, NUll);
+        $this->assertEquals(12,$result['total']);
+    }
+    public function testGetFollowUpsWithoutInactiveFile(){
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $uuid = '37d94567-466a-46c1-8bce-9bdd4e0c0d97';
+        $select1 = "Select is_active from ox_file where uuid = '".$uuid."'";
+        $res = $this->runQuery($select1);
+        $resultBeforeUpdate = $this->fileService->getFileList($appUuid, NUll);
+        $update = "UPDATE ox_file SET is_active = 0 WHERE uuid = '".$uuid."'"; 
+        $this->executeUpdate($update);
+        $result = $this->fileService->getFileList($appUuid, NUll);
+        $select1 = "Select is_active from ox_file where uuid = '".$uuid."'";
+        $res1 = $this->runQuery($select1);
+        $this->assertNotEquals($res1[0]['is_active'],$res[0]['is_active']);
+        $this->assertNotEquals($resultBeforeUpdate['total'],$result['total']);
+        $this->assertEquals(9,$result['total']);
+    }
+
+    public function testGetFileListWithrygJob() {
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $params = array('entityName' => 'entity1', 'appId' => $appUuid);
+        $select1 = "Select of.rygStatus from ox_file of 
+        inner join ox_app_entity as en on en.id = of.entity_id
+        inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res1 = $this->runQuery($select1);
+        $this->assertEquals('GREEN',$res1[0]['rygStatus']);
+        $result = $this->fileService->bulkUpdateFileRygStatus($params);
+        $select = "Select of.rygStatus from ox_file of 
+                  inner join ox_app_entity as en on en.id = of.entity_id
+                  inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res = $this->runQuery($select);
+        $this->assertEquals('RED',$res[0]['rygStatus']);
+    }
+
+    public function testGetFileListWithryg() {
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $params = array( 'uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b','data' => '{"state":"Kerala"}');
+        $select1 = "Select of.rygStatus from ox_file of 
+        inner join ox_app_entity as en on en.id = of.entity_id
+        inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res1 = $this->runQuery($select1);
+        $this->assertEquals('GREEN',$res1[0]['rygStatus']);
+        $result = $this->fileService->updateRyg($params);
+        $select = "Select of.rygStatus from ox_file of 
+                  inner join ox_app_entity as en on en.id = of.entity_id
+                  inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = '".$appUuid."')";
+        $res = $this->runQuery($select);
+        $this->assertEquals('YELLOW',$res[0]['rygStatus']);
+    }
+
     public function testGetFileListWithNoWorkflowOrUserIdInRoute() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = null;
@@ -109,7 +167,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithNoWorkflowOrUserIdInRouteWithParticipants() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = null;
@@ -123,7 +181,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowButNoUserIdInRoute() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
@@ -137,7 +195,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowButNoUserIdInRouteWithParticipants() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
@@ -151,7 +209,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowButNoUserIdInRoute2() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         //Change in workflowId
@@ -164,7 +222,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowButNoUserIdInRoute2WithParticipants() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         //Change in workflowId
@@ -177,7 +235,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithoutWorkflowButWithUserIdInRoute() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->parseYaml();
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('userId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
@@ -191,7 +249,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithoutWorkflowButWithUserIdInRouteWithParticipants() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->parseYaml();
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('userId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
@@ -205,10 +263,10 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithoutWorkflowButWithPolicyHolderNoUserIdInRouteAsParticipant() {
-        AuthContext::put(AuthConstants::ORG_ID, 101);
-        AuthContext::put(AuthConstants::ORG_UUID, '1b371de7-0387-48ea-8f29-5d3704d96ad6');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 101);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '1b371de7-0387-48ea-8f29-5d3704d96ad6');
         AuthContext::put(AuthConstants::USER_ID, 101);
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->parseYaml();
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $filterParams = null;
@@ -224,10 +282,10 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithoutWorkflowButWithPolicyHolderUserIdInRouteAsParticipant() {
-        AuthContext::put(AuthConstants::ORG_ID, 101);
-        AuthContext::put(AuthConstants::ORG_UUID, '1b371de7-0387-48ea-8f29-5d3704d96ad6');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 101);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '1b371de7-0387-48ea-8f29-5d3704d96ad6');
         AuthContext::put(AuthConstants::USER_ID, 101);
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->parseYaml();
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('userId' => '864bc48a-3c69-4f7a-af8b-019fc984ee87');
@@ -243,7 +301,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowAndUserIdInRoute() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         //workflow 1 user 1
@@ -261,10 +319,10 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowAndPolicyHolderUserIdInRouteAsParticipant() {
-        AuthContext::put(AuthConstants::ORG_ID, 102);
-        AuthContext::put(AuthConstants::ORG_UUID, '2c371de7-0387-48ea-8f29-5d3704d96ae7');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 102);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '2c371de7-0387-48ea-8f29-5d3704d96ae7');
         AuthContext::put(AuthConstants::USER_ID, 102);
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         //workflow 1 user 1
@@ -281,23 +339,23 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithAppRegistryCheck() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         //Random uuid
         $appUuid = '02d8ae56-8da4-4162-a628-ab10b9514641';
         $params = array('workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcc23','userId' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $filterParams = null;
         try {
             $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
-            $this->fail("ServiceException should have been thrown with message \'App Does not belong to the org\'");
+            $this->fail("ServiceException should have been thrown with message \'App Does not belong to the account\'");
         }
         catch (ServiceException $e) {
-            $this->assertEquals("App Does not belong to the org", $e->getMessage());
-            $this->assertEquals("app.fororgnot.found", $e->getMessageCode());
+            $this->assertEquals("App Does not belong to the account", $e->getMessage());
+            $this->assertEquals("app.for.account.not.found", $e->getMessageCode());
         }
     }
 
     public function testGetFileListWithWorkflowStatusCheckPositive() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('workflowStatus' => 'Completed');
@@ -313,7 +371,7 @@ class FileServiceTest extends AbstractServiceTest
     }  
 
     public function testGetFileListWithWorkflowStatusCheckPositiveWithParticipant() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('workflowStatus' => 'Completed');
@@ -329,10 +387,10 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowStatusCheckPositiveForPolicyHolder() {
-        AuthContext::put(AuthConstants::ORG_ID, 101);
-        AuthContext::put(AuthConstants::ORG_UUID, '1b371de7-0387-48ea-8f29-5d3704d96ad6');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 101);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '1b371de7-0387-48ea-8f29-5d3704d96ad6');
         AuthContext::put(AuthConstants::USER_ID, 101);
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('workflowStatus' => 'Completed');
@@ -349,7 +407,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithWorkflowStatusCheckNegative() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('workflowStatus' => 'Random');
@@ -359,7 +417,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithEntityNameCheckPositive() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('entityName' => 'entity1');
@@ -373,7 +431,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithEntityNameCheckPositiveWithParticipants() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('entityName' => 'entity1');
@@ -387,7 +445,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithEntityNameCheckNegative() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('entityName' => 'random');
@@ -397,7 +455,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithEntityNameCheckAndAssocIdNegative(){
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('entityName' => 'random', 'assocId' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b');
@@ -407,22 +465,18 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithEntityNameCheckAndAssocIdNegative2(){
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('entityName' => 'entity1', 'assocId' => '2');
         $filterParams = null;
-        try{
-            $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
-            $this->fail("ServiceException should have been thrown with code \'app.mysql.error\'");
-        }
-        catch (ServiceException $e){
-            $this->assertEquals("app.mysql.error", $e->getMessageCode());
-        }
+        $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
+        $this->assertEmpty($result['data']);
+        
     }
 
     public function testGetFileListWithEntityNameCheckAndAssocIdPositive() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('entityName' => 'entity1', 'assocId' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b');
@@ -434,7 +488,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithGreaterThanOrEqualCreatedDateCheck() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('gtCreatedDate' => '2019-06-27');
@@ -446,7 +500,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithLesserThanOrEqualCreatedDateCheck() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('ltCreatedDate' => '2019-06-25');
@@ -458,7 +512,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithUserMe() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('userId' => 'me');
@@ -471,7 +525,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testGetFileListWithInvalidUser() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $params = array('userId' => '2b897411-ce40-481f-ae93-e004c1e63859');
@@ -487,7 +541,7 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testFileCreateWithoutEntityId() {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
@@ -501,7 +555,7 @@ class FileServiceTest extends AbstractServiceTest
         }
     }
 
-    private function performFileAssertions($result, $data, $fileParticipantCount = 1, $indexedFields = [["field" => "field1", "id" => 1, "type" => "TEXT"]], $version = 1, $orgId = NULL){
+    private function performFileAssertions($result, $data, $fileParticipantCount = 1, $indexedFields = [["field" => "field1", "id" => 1, "type" => "TEXT"]], $version = 1, $accountId = NULL){
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
         $formId = $dataset['ox_form'][0]['uuid'];
@@ -511,11 +565,25 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $this->assertEquals(1, count($sqlQuery2Result));
         $fileId = $sqlQuery2Result[0]['id'];
+        $startData = json_decode($sqlQuery2Result[0]['data'],true);
+        if (isset($startData['entity_id'])) {
+            unset($startData['entity_id']);
+        }
+        if (isset($startData['start_date'])|| empty($startData['start_date'])) {
+            unset($startData['start_date']);
+        }
+        if (isset($startData['end_date'])|| empty($startData['end_date'])) {
+            unset($startData['end_date']);
+        }
+        if (isset($startData['status'])|| empty($startData['status'])) {
+            unset($startData['status']);
+        }
+        $sqlQuery2Result[0]['data'] = json_encode($startData);
         $this->assertEquals($data['data'], $sqlQuery2Result[0]['data']);
-        if(!$orgId){
-            $this->assertEquals(AuthContext::get(AuthConstants::ORG_ID), $sqlQuery2Result[0]['org_id']);
+        if(!$accountId){
+            $this->assertEquals(AuthContext::get(AuthConstants::ACCOUNT_ID), $sqlQuery2Result[0]['account_id']);
         }else{
-            $this->assertEquals($orgId, $sqlQuery2Result[0]['org_id']);
+            $this->assertEquals($accountId, $sqlQuery2Result[0]['account_id']);
         }
         $this->assertEquals(AuthContext::get(AuthConstants::USER_ID), $sqlQuery2Result[0]['created_by']);
         if(!isset($data['form_id'])){
@@ -545,16 +613,16 @@ class FileServiceTest extends AbstractServiceTest
             
         }
         $sqlQuery2 = "SELECT fp.* FROM ox_file_participant fp 
-                        where file_id = $fileId order by org_id";
+                        where file_id = $fileId order by account_id";
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $this->assertEquals($fileParticipantCount, count($sqlQuery2Result));
         if($fileParticipantCount == 0){
             return;
         }
-        $this->assertEquals(1, $sqlQuery2Result[0]['org_id']);
+        $this->assertEquals(1, $sqlQuery2Result[0]['account_id']);
         $this->assertEquals($dataset['ox_business_role'][1]['id'], $sqlQuery2Result[0]['business_role_id']);
         if($fileParticipantCount == 2){
-            $this->assertEquals($dataset['ox_organization'][0]['id'], $sqlQuery2Result[1]['org_id']);
+            $this->assertEquals($dataset['ox_account'][0]['id'], $sqlQuery2Result[1]['account_id']);
             $this->assertEquals($dataset['ox_business_role'][0]['id'], $sqlQuery2Result[1]['business_role_id']);
         }
     }
@@ -571,8 +639,8 @@ class FileServiceTest extends AbstractServiceTest
     }
 
     public function testFileCreateWithEntityIdAsPolicyHolder() {
-        AuthContext::put(AuthConstants::ORG_ID, 100);
-        AuthContext::put(AuthConstants::ORG_UUID, 'fa371de7-0387-48ea-8f29-5d3704d96ac5');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 100);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, 'fa371de7-0387-48ea-8f29-5d3704d96ac5');
         AuthContext::put(AuthConstants::USER_ID, 100);
         $dataset = $this->dataset;
         $appUuid = $dataset['ox_app'][0]['uuid'];
@@ -592,7 +660,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(11,$initialCount);
+        $this->assertEquals(12,$initialCount);
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->performFileAssertions($result, $data);
@@ -800,10 +868,12 @@ class FileServiceTest extends AbstractServiceTest
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid);
         $result = $this->fileService->updateFile($data, $fileId);
         $data['uuid'] = $fileId;
-        $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30 00:00:00","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","field1":1,"field2":2}';
+        $date = date_format(date_create(null),"Y-m-d H:m:s");
+        $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30 00:00:00","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","observers":"[\"754bc48a-3c69-4f7a-af8b-019fc984ee76\"]","field1":1,"field2":2}';
         $indexedFields = [['field' => 'field1', 'type' => 'TEXT', 'id' => 1],
                           ['field' => 'expiry_date', 'type' => 'DATE', 'id' => 3],
-                          ['field' => 'policy_period', 'type' => 'TEXT', 'id' => 8]];
+                          ['field' => 'policy_period', 'type' => 'TEXT', 'id' => 8],
+                          ['field' => 'observers', 'type' => 'TEXT', 'id' => 16]];
         $this->performFileAssertions($result, $data, 0, $indexedFields, 2);
     }
 
@@ -936,7 +1006,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(11,$initialCount);
+        $this->assertEquals(12,$initialCount);
         $data = array('datagrid' => array(0 => array('firstname' => 'Sagar','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("name" => "SampleAttachment.txt", "extension" => "txt", "uuid" => "a9cd8b0c-3218-4fd4-b323-e3b6ce8c7d25", "path" => __DIR__."/Dataset/SampleAttachment.txt" ))), 1 => array('firstname' => 'mark','lastname' => 'hamil', 'padi' => 322,'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" )))), 'entity_id' => $entityId, 'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->assertEquals(1,$result);
@@ -1016,12 +1086,13 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery2 = 'SELECT fa.*, f.name FROM ox_file_document fa inner join ox_field f on f.id = fa.field_id 
                         where file_id = '.$dataset['ox_file'][9]['id'];
         $queryResult1 = $this->runQuery($sqlQuery2);
-        $data = array('datagrid' => array(0 => array('firstname' => 'manduk','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" ))), 1 => array('firstname' => 'marmade','lastname' => 'hamil', 'padi' => 322, 'id_document' => array(array("file" => "SampleAttachment1.txt", "path" => __DIR__."/Dataset")))));
+        $data = array('datagrid' => array(0 => array('firstname' => 'manduk','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" ))), 1 => array('firstname' => 'marmade','lastname' => 'hamil', 'padi' => 322, 'id_document' => array(array("file" => "SampleAttachment1.txt", "path" => __DIR__."/Dataset")))),'entity_id' => '4', 'start_date' => date_format(date_create(null),'Y-m-d H:m:s'), 'end_date' => date_format(date_create(null),'Y-m-d H:m:s'),'status' => null);
         $result = $this->fileService->updateFile($data,$fileId);
         $dataSqlQuery = "SELECT data FROM ox_file where uuid ='".$fileId."'";
         $queryResult2 = $this->runQuery($dataSqlQuery);
         $this->assertEquals(2, $data['version']);
         unset($data['version']);
+        unset($data['entity_id']);
         $data['datagrid'] = json_decode($data['datagrid'], true);
         $this->assertEquals($data,json_decode($queryResult2[0]['data'], true));
         $newQueryResult = $this->runQuery($sqlQuery);
@@ -1096,16 +1167,16 @@ class FileServiceTest extends AbstractServiceTest
         $this->fileService->updateFileAttributes($fileId);
         $sqlQueryResult = $this->runQuery($sqlQuery);
         $sqlQuery1Result = $this->runQuery($sqlQuery1);
-        $this->assertEquals(3, count($sqlQueryResult));
+        $this->assertEquals(5, count($sqlQueryResult));
         $this->assertEquals($data['field1'], $sqlQueryResult[0]['field_value_text']);
         $this->assertEquals(1, $sqlQueryResult[0]['field_id']);
         $this->assertEquals(11, $sqlQueryResult[0]['file_id']);
         $this->assertEquals($data['expiry_date'], $sqlQueryResult[1]['field_value_date']);
         $this->assertEquals(3, $sqlQueryResult[1]['field_id']);
         $this->assertEquals(11, $sqlQueryResult[1]['file_id']);
-        $this->assertEquals($data['policy_period'], $sqlQueryResult[2]['field_value_text']);
-        $this->assertEquals(8, $sqlQueryResult[2]['field_id']);
-        $this->assertEquals(11, $sqlQueryResult[2]['file_id']);
+        $this->assertEquals($data['policy_period'], $sqlQueryResult[4]['field_value_text']);
+        $this->assertEquals(8, $sqlQueryResult[4]['field_id']);
+        $this->assertEquals(11, $sqlQueryResult[4]['file_id']);
         $this->assertEquals(2, count($sqlQuery1Result));
         $this->assertEquals($data['policy_document'], json_decode($sqlQuery1Result[0]['field_value'], true));
         $this->assertEquals(5, $sqlQuery1Result[0]['field_id']);
@@ -1258,7 +1329,6 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals($entityId, $sqlQuery1Result[1]['entity_id']);
         $this->assertEquals(1, $sqlQuery1Result[1]['sequence']);
         $sqlQueryResult = $this->runQuery($sqlQuery2);
-        //print_r($sqlQueryResult);
         foreach ($sqlQueryResult as $key => $value) {
             $fieldValue = $sqlQueryResult[$key]['field_value'];
             if($sqlQueryResult[$key]['field_value_type'] == 'OTHER'){
@@ -1432,8 +1502,21 @@ class FileServiceTest extends AbstractServiceTest
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         $this->assertEquals("959640f3-8260-4a94-823e-f61ea8aff79c",$result['data'][0]['uuid']);
         $this->assertEquals($params['entityName'],$result['data'][0]['entity_name']);
-        $this->assertCount(1,[$result['data'][0]['rygRule']]);
         $this->assertEquals(1,$result['total']);
+    }
+
+    public function testFileUpdateWithSubscribers() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][0]['uuid'];
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $id = $dataset['ox_file'][0]['id'];
+        $entityId = $dataset['ox_app_entity'][0]['id'];
+        $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid, 'workflow_instance_id' => 1);
+        $result = $this->fileService->updateFile($data, $fileId);
+        $sqlQuery = "SELECT * FROM ox_subscriber where file_id ='".$id."'";
+        $queryResult = $this->runQuery($sqlQuery);
+        $this->assertEquals(100, $queryResult[0]['user_id']);
+        $this->assertEquals($id, $queryResult[0]['file_id']);  
     }
 
 }

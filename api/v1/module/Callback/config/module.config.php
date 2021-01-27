@@ -49,30 +49,70 @@ return [
             'addcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/addorg',
+                    'route'    => '/callback/chat/addaccount',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'addOrg',
+                        'action' => 'addAccount',
+                    ],
+                ],
+            ],
+            'savebotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/savebot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'saveBot',
+                    ],
+                ],
+            ],
+            'postfilecommentcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/postfilecomment',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'postFileComment',
+                    ],
+                ],
+            ],
+            'disablebotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/disablebot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'disableBot',
+                    ],
+                ],
+            ],
+            'appbotnotification' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/appbotnotification',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'appBotNotification',
                     ],
                 ],
             ],
             'updatecallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/updateorg',
+                    'route'    => '/callback/chat/updateaccount',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'updateOrg',
+                        'action' => 'updateAccount',
                     ],
                 ],
             ],
             'deletecallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/chat/deleteorg',
+                    'route'    => '/callback/chat/deleteaccount',
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'deleteOrg',
+                        'action' => 'deleteAccount',
                     ],
                 ],
             ],
@@ -143,6 +183,26 @@ return [
                     'defaults' => [
                         'controller' => Controller\ChatCallbackController::class,
                         'action' => 'removeUserFromChannel',
+                    ],
+                ],
+            ],
+            'createbotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/createbot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'createBot',
+                    ],
+                ],
+            ],
+            'updatebotcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/updatebot',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'updateBot',
                     ],
                 ],
             ],
@@ -259,9 +319,9 @@ return [
         ],
     ],
     
-    'view_manager' => [
+     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

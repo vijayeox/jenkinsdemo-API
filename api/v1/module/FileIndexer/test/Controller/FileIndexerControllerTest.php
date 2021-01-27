@@ -83,7 +83,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'field3' => 3,
                 'field4' => 4,
@@ -125,7 +125,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
                 'parent_id' => NULL,
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'field1' => 3,
                 'field2' => 4,
@@ -142,7 +142,7 @@ class FileIndexerControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $data['id']);
-        $this->arrayHasKey($content['data']['org_id'],1);
+        $this->arrayHasKey($content['data']['account_id'],1);
         $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
     }
 
@@ -170,9 +170,9 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
-                'some key' => 'some value ',
+                'field4' => 4,
             ),
           ))));
         }
@@ -187,7 +187,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $data['id']);
         $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
-        $this->assertEquals($content['data']['some key'], 'some value ');
+        $this->assertEquals($content['data']['field4'], 4);
     }
 
     public function testCreateScenario4()
@@ -275,7 +275,7 @@ class FileIndexerControllerTest extends ControllerTest
     {
         //Only start date is provided
         $this->initAuthToken($this->adminUser);
-        $data = ["app_id" => "5965c47d-7bc8-4ae6-ab6c-916c8d78e10f","start_date" => "2019-12-19 11:03:08"];
+        $data = ["app_id" => "5965c47d-7bc8-4ae6-ab6c-916c8d78e10f","start_date" => "2019-12-19 11:03:08",];
         $this->dispatch('/fileindexer/batch', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
@@ -295,7 +295,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -323,7 +323,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => NULL,
@@ -331,7 +331,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'activity_instance_id' => NULL,
                 'workflow_name' => NULL,
                 'activities' => NULL,
-                'some key' => 'some value ',
+                'field4' => 4,
             ),
             ))));
         }
@@ -347,7 +347,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['id'], 102);
         $this->assertEquals($content['data'][1]['id'], 103);
         $this->assertEquals($content['data'][0]['field3'], 3);
-        $this->assertEquals($content['data'][1]['some key'], 'some value ');
+        $this->assertEquals($content['data'][1]['field4'], 4);
     }
 
     public function testBatchIndexScenario2()
@@ -374,7 +374,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -402,7 +402,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -454,7 +454,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -506,7 +506,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => '1',
@@ -534,7 +534,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
-                'org_id' => '1',
+                'account_id' => '1',
                 'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
                 'user_id' => NULL,
                 'workflow_instance_id' => NULL,
@@ -542,7 +542,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'activity_instance_id' => NULL,
                 'workflow_name' => NULL,
                 'activities' => NULL,
-                'some key' => 'some value ',
+                'field4' => 4,
             ),
             ))));
         }
@@ -558,7 +558,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['id'], 102);
         $this->assertEquals($content['data'][1]['id'], 103);
         $this->assertEquals($content['data'][0]['field3'], 3);
-        $this->assertEquals($content['data'][1]['some key'], 'some value ');
+        $this->assertEquals($content['data'][1]['field4'], 4);
     }
 
     public function testBatchIndexNotFound()

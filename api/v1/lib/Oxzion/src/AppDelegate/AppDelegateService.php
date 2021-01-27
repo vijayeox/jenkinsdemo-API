@@ -11,12 +11,15 @@ use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
+use Oxzion\Service\FieldService;
 use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
 use Oxzion\Service\CommentService;
+use Oxzion\Service\EsignService;
+use Oxzion\EntityNotFoundException;
 
 class AppDelegateService extends AbstractService
 {
@@ -25,21 +28,22 @@ class AppDelegateService extends AbstractService
     private $documentBuilder;
     private $messageProducer;
     private $templateService;
-    private $organizationService;
     private $workflowInstanceService;
     private $activityInstanceService;
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,
                                  MessageProducer $messageProducer, FileService $fileService, 
-                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService)
+                                WorkflowInstanceService $workflowInstanceService,ActivityInstanceService $activityInstanceService,UserService $userService,CommentService $commentService,EsignService $esignService, FieldService $fieldService)
         {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
+        $this->fieldService = $fieldService;
         $this->workflowInstanceService = $workflowInstanceService;
         $this->activityInstanceService = $activityInstanceService;
         $this->messageProducer = $messageProducer;
         $this->userService = $userService;
         $this->commentService = $commentService;
+        $this->esignService = $esignService;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
@@ -63,7 +67,7 @@ class AppDelegateService extends AbstractService
     }
 
     public function setAppDelegateService(){
-        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService);
+        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService,$this->esignService);
         return $appDelegateService;
     }
 
@@ -73,70 +77,76 @@ class AppDelegateService extends AbstractService
         try {
             $result = $this->delegateFile($appId, $delegate);
             if ($result) {
-                $obj = new $delegate;
-                if (is_a($obj, DocumentAppDelegate::class)) {
-                    $obj->setDocumentBuilder($this->documentBuilder);
-                    $destination = $this->config['APP_DOCUMENT_FOLDER'];
-                    if (!file_exists($destination)) {
-                        FileUtils::createDirectory($destination);
-                    }
-                    $this->logger->info("Document template location - $destination");
-                    $obj->setDocumentPath($destination);
-                } else if (is_a($obj, CommunicationDelegate::class)) {
-                    $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
-                    $destination = $this->config['APP_DOCUMENT_FOLDER'];
-                    $obj->setDocumentPath($destination);
-                    $obj->setBaseUrl($this->config['applicationUrl']);
-                }else if (is_a($obj, TemplateAppDelegate::class)) {
-                    $destination = $this->config['TEMPLATE_FOLDER'];
-                    if (!file_exists($destination)) {
-                        FileUtils::createDirectory($destination);
-                    }
-                    $this->logger->info("Template location - $destination");
-                    $obj->setTemplatePath($destination);
-                } 
-                if (method_exists($obj, "setFileService")) {
-                    $obj->setFileService($this->fileService);
+	            $obj = new $delegate;
+	            if (is_a($obj, DocumentAppDelegate::class)) {
+	                $obj->setDocumentBuilder($this->documentBuilder);
+	                $destination = $this->config['APP_DOCUMENT_FOLDER'];
+	                if (!file_exists($destination)) {
+	                    FileUtils::createDirectory($destination);
+	                }
+	                $this->logger->info("Document template location - $destination");
+	                $obj->setDocumentPath($destination);
+	            } else if (is_a($obj, CommunicationDelegate::class)) {
+	                $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
+	                $destination = $this->config['APP_DOCUMENT_FOLDER'];
+	                $obj->setDocumentPath($destination);
+	                $obj->setBaseUrl($this->config['applicationUrl']);
+	            }else if (is_a($obj, TemplateAppDelegate::class)) {
+	                $destination = $this->config['TEMPLATE_FOLDER'];
+	                if (!file_exists($destination)) {
+	                    FileUtils::createDirectory($destination);
+	                }
+	                $this->logger->info("Template location - $destination");
+	                $obj->setTemplatePath($destination);
+	            } 
+	            if (method_exists($obj, "setFileService")) {
+	                $obj->setFileService($this->fileService);
+	            }
+                if (method_exists($obj, "setFieldService")) {
+                    $obj->setFieldService($this->fieldService);
                 }
-                if (method_exists($obj, "setTemplateService")) {
-                    $obj->setTemplateService($this->templateService);
-                }
-                if (method_exists($obj, "setMessageProducer")) {
-                    $obj->setMessageProducer($this->messageProducer);
-                }
-                if (method_exists($obj, "setWorkflowInstanceService")) {
-                    $obj->setWorkflowInstanceService($this->workflowInstanceService);
-                }
-                if (method_exists($obj, "setActivityInstanceService")) {
-                    $obj->setActivityInstanceService($this->activityInstanceService);
-                }
-                if (method_exists($obj, "setAppId")) {
-                    $obj->setAppId($appId);
-                }
-                if (method_exists($obj, "setUserContext")) {
-                    $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
-                        AuthContext::get(AuthConstants::NAME),
-                        AuthContext::get(AuthConstants::ORG_UUID),
-                        AuthContext::get(AuthConstants::PRIVILEGES));
-                }
-                if (method_exists($obj, "setUserService")) {
-                    $obj->setUserService($this->userService);
-                }
-                if (method_exists($obj, "setCommentService")) {
-                    $obj->setCommentService($this->commentService);
-                }
-                if (method_exists($obj, "setAppDelegateService")) {
-                    $obj->setAppDelegateService($this->setAppDelegateService());
-                }
-                $persistenceService = $this->getPersistence($appId);
+	            if (method_exists($obj, "setTemplateService")) {
+	                $obj->setTemplateService($this->templateService);
+	            }
+	            if (method_exists($obj, "setMessageProducer")) {
+	                $obj->setMessageProducer($this->messageProducer);
+	            }
+	            if (method_exists($obj, "setWorkflowInstanceService")) {
+	                $obj->setWorkflowInstanceService($this->workflowInstanceService);
+	            }
+	            if (method_exists($obj, "setActivityInstanceService")) {
+	                $obj->setActivityInstanceService($this->activityInstanceService);
+	            }
+	            if (method_exists($obj, "setAppId")) {
+	                $obj->setAppId($appId);
+	            }
+	            if (method_exists($obj, "setUserContext")) {
+	                $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
+	                    AuthContext::get(AuthConstants::NAME),
+	                    AuthContext::get(AuthConstants::ORG_UUID),
+	                    AuthContext::get(AuthConstants::PRIVILEGES));
+	            }
+	            if (method_exists($obj, "setUserService")) {
+	                $obj->setUserService($this->userService);
+	            }
+	            if (method_exists($obj, "setCommentService")) {
+	                $obj->setCommentService($this->commentService);
+	            }
+	            if (method_exists($obj, "setEsignService")) {
+	                $obj->setEsignService($this->esignService);
+	            }
+	            if (method_exists($obj, "setAppDelegateService")) {
+	                $obj->setAppDelegateService($this->setAppDelegateService());
+	            }
+	            $persistenceService = $this->getPersistence($appId);
 
-                $output = $obj->execute($dataArray, $persistenceService);
-                if (!$output) {
-                    $output = array();
-                }
-                return $output;
-            }
-            return 1;
+	            $output = $obj->execute($dataArray, $persistenceService);
+	            if (!$output) {
+	                $output = array();
+	            }
+	            return $output;
+			}
+			return 1;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -155,7 +165,7 @@ class AppDelegateService extends AbstractService
             require_once $path;
 
         } else {
-            return false;
+            throw new EntityNotFoundException("Delegate not found");
         }
         return true;
     }

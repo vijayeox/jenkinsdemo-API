@@ -17,7 +17,7 @@ class PaymentEngineImpl implements PaymentEngine
         $this->api_access_id  = $this->paymentConfigInfo->api_access_id;
         $this->api_secure_key = $this->paymentConfigInfo->api_secure_key;
         $this->location_id = $this->paymentConfigInfo->location_id;
-        $this->org_id = $this->paymentConfigInfo->org_id;
+        $this->account_id = $this->paymentConfigInfo->account_id;
         $this->js_url = $this->paymentConfig['js_url'];
     }
     public function initiatePaymentProcess(&$data)

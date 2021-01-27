@@ -25,8 +25,8 @@ class WorkflowServiceTest extends AbstractServiceTest{
         $this->loadConfig();
         parent::setUp();
         $this->workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-        AuthContext::put(AuthConstants::ORG_ID, 1);
-        AuthContext::put(AuthConstants::ORG_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
         AuthContext::put(AuthConstants::USER_ID, 1);
         $this->adapter = $this->getDbAdapter();
         $this->adapter->getDriver()->getConnection()->setResource(static::$pdo);

@@ -10,6 +10,8 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Model\UserCache;
 use Oxzion\Model\UserCacheTable;
 use Oxzion\Service\AbstractService;
+use Oxzion\ServiceException;
+use Oxzion\OxServiceException;
 
 /**
  * UserCache Controller
@@ -102,15 +104,19 @@ class UserCacheService extends AbstractService
         $form->exchangeArray($data);
         $this->logger->info("STORE USER CACHE -- Data : ".print_r($data,true));
         $form->validate();
-        $this->beginTransaction();
         $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
-            if ($count != 0 && !isset($data['id'])) {
-                $id = $this->table->getLastInsertValue();
-                $params['cacheId'] = $id;
-            } else {
-                $id = $data['id'];
+            if ($count != 0) {
+                if(!isset($data['id'])) {
+                    $id = $this->table->getLastInsertValue();
+                    $params['cacheId'] = $id;
+                } else {
+                    $id = $data['id'];
+                }
+            }else{
+                throw new ServiceException("Failed to save cache", 'cache.save.failed');
             }
             if(is_string($data['content'])){
               $content = json_decode($data['content'],true);
@@ -126,14 +132,12 @@ class UserCacheService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $count;
     }
     private function updateCacheData($id, $data)
     {
         $query = "update ox_user_cache set content = :content where id = :id";
         $params = array('content' => json_encode($data), 'id' => $id);
         $result = $this->executeUpdateWithBindParameters($query, $params);
-        return $result->getAffectedRows() > 0;
     }
 
     public function updateUserCache($id, &$data)
@@ -150,17 +154,13 @@ class UserCacheService extends AbstractService
         $form->validate();
         $count = 0;
         try {
+            $this->beginTransaction();
             $count = $this->table->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $count;
     }
 
     public function deleteUserCache($appId = null, $cacheParams = null)
@@ -168,74 +168,72 @@ class UserCacheService extends AbstractService
         $sql = $this->getSqlObject();
         $params = array();
         $userId = AuthContext::get(AuthConstants::USER_ID);
+        if (isset($userId)) {
+            $params['user_id'] = $userId;
+        }
+        if (isset($appId)) {
+            $params['app_id'] = $this->getIdFromUuid('ox_app', $appId);
+            if ($params['app_id'] == 0) {
+                throw new ServiceException("Invalid AppId - Cache not deleted", 'invalid.appid', OxServiceException::ERR_CODE_NOT_FOUND);
+            }
+        }
+        if (isset($cacheParams['cacheId'])) {
+            $obj = $this->table->get($cacheParams['cacheId'], array());
+            if (count($obj->toArray()) > 0) {
+                $params['id'] = $cacheParams['cacheId'];
+            }
+        }
+        
         try {
-            if (isset($userId)) {
-                $params['user_id'] = $userId;
-            }
-            if (isset($appId)) {
-                $params['app_id'] = $this->getIdFromUuid('ox_app', $appId);
-                if ($params['app_id'] === 0) {
-                    throw new Exception("appId is incorrect", 0);
-                }
-            }
-            if (isset($cacheParams['cacheId'])) {
-                $obj = $this->table->get($cacheParams['cacheId'], array());
-                if (count($obj->toArray()) > 0) {
-                    $params['id'] = $cacheParams['cacheId'];
-                }
-            }
+            $this->beginTransaction();
             $update = $sql->update();
             $update->table('ox_user_cache')
                 ->set(array('deleted' => 1))
                 ->where($params);
             $response = $this->executeUpdate($update);
-            return 0;
+            $this->commit();
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
+            $this->rollback();
             throw $e;
         }
     }
 
     public function getCache($id = null, $appId = null, $userId = null)
     {
-        try {
-            $sql = $this->getSqlObject();
-            $params = array();
-            if (isset($userId)) {
-                $params['user_id'] = $userId;
-            }
-            if (isset($appId)) {
-                if ($app = $this->getIdFromUuid('ox_app', $appId)) {
-                    $appId = $app;
-                } else {
-                    $appId = $appId;
-                }
-            } else {
-                $appId = null;
-            }
-            if (isset($appId)) {
-                $params['app_id'] = $appId;
-            }
-            if (isset($id)) {
-                $params['id'] = $id;
-            }
-            $params['deleted'] = 0;
-            $select = $sql->select();
-            $select->from('ox_user_cache')
-                ->columns(array("*"))
-                ->where($params);
-            $response = $this->executeQuery($select)->toArray();
-            if (count($response) == 0) {
-                return 0;
-            }
-            if ($content = json_decode($response[0]['content'], true)) {
-                return $content;
-            } else {
-                return array('content' => $response[0]['content']);
-            }
-        } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
-            throw $e;
+        $sql = $this->getSqlObject();
+        $params = array();
+        if (isset($userId)) {
+            $params['user_id'] = $userId;
         }
+        if (isset($appId)) {
+            if ($app = $this->getIdFromUuid('ox_app', $appId)) {
+                $appId = $app;
+            } else {
+                $appId = $appId;
+            }
+        } else {
+            $appId = null;
+        }
+        if (isset($appId)) {
+            $params['app_id'] = $appId;
+        }
+        if (isset($id)) {
+            $params['id'] = $id;
+        }
+        $params['deleted'] = 0;
+        $select = $sql->select();
+        $select->from('ox_user_cache')
+            ->columns(array("*"))
+            ->where($params);
+        $response = $this->executeQuery($select)->toArray();
+        if (count($response) == 0) {
+            return $response;
+        }
+        if ($content = json_decode($response[0]['content'], true)) {
+            return $content;
+        } else {
+            return array('content' => $response[0]['content']);
+        }
+    
     }
 }

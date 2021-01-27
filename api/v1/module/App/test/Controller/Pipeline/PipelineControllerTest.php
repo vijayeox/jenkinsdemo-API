@@ -61,7 +61,7 @@ class PipelineControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['subject'], 'required');
     }
 
@@ -74,7 +74,7 @@ class PipelineControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['to'], 'required');
     }
 
@@ -293,12 +293,13 @@ class PipelineControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
-        $params = ["commands" => array('{"command":"filelist", "filter" : "' . '[{\"filter\":{\"filters\":[{\"field\":\"expiry_date\",\"operator\":\"lt\",\"value\":\"' . $currentDate . '\"}]},\"sort\":[{\"field\":\"expiry_date\",\"dir\":\"asc\"}],\"skip\":0,\"take\":1}]' . '"' . '}', '{"command":"delegate", "delegate": "followup"}'), 'orgId' => "53012471-2863-4949-afb1-e69b0891c98a", "app_id" => "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4", "workFlowId" => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", "userId" => null];
+        $params = ["commands" => array('{"command":"filelist", "filter" : "' . '[{\"filter\":{\"filters\":[{\"field\":\"expiry_date\",\"operator\":\"lt\",\"value\":\"' . $currentDate . '\"}]},\"sort\":[{\"field\":\"expiry_date\",\"dir\":\"asc\"}],\"skip\":0,\"take\":1}]' . '"' . '}', '{"command":"sign_in"}'), 'orgId' => "53012471-2863-4949-afb1-e69b0891c98a", "app_id" => "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4", "workFlowId" => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", "userId" => null];
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['appId'], "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4");
+        $this->assertEquals($content['data']['auto_login'], 1);
     }
     public function testGetStartFormCommands()
     {

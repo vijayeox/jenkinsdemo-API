@@ -3,10 +3,7 @@
 namespace Project\Controller;
 
 use Exception;
-use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ServiceException;
-use Oxzion\ValidationException;
 use Project\Model\Project;
 use Project\Model\ProjectTable;
 use Project\Service\ProjectService;
@@ -56,17 +53,13 @@ class ProjectController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> \nCreate Project - " . print_r($params, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->projectService->createProject($data, $params);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
+            $this->projectService->createProject($data, $params);
+            return $this->getSuccessResponseWithData($data, 201);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -95,18 +88,14 @@ class ProjectController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> \nGet Project - " . print_r($params, true) . "Parameters - " . print_r($params, true));
         try {
-            $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : null;
-            $count = $this->projectService->updateProject($id, $data, $params['orgId']);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
+            $params['accountId'] = isset($params['accountId']) ? $params['accountId'] : null;
+            $this->projectService->updateProject($id, $data, $params['accountId']);
+            return $this->getSuccessResponseWithData($data, 200);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -128,11 +117,12 @@ class ProjectController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \nGet Project - " . print_r($params, true) . "Parameters - " . print_r($params, true));
         try {
             $result = $this->projectService->getProjectByUuid($id, $params);
-        } catch (AccessDeniedException $e) {
-            $response = ['errors' => $e->getMessage()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -148,16 +138,13 @@ class ProjectController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> \nDelete Project - " . print_r($params, true) . "Parameters - " . print_r($params, true));
         try {
-            $response = $this->projectService->deleteProject($params);
-            if ($response == 0) {
-                return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
-            }
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponse();
+            $this->projectService->deleteProject($params);
+            return $this->getSuccessResponse();
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -187,15 +174,12 @@ class ProjectController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \nGet Project List - " . print_r($params, true) . "Query Parameters - " . print_r($filterParams, true));
         try {
             $result = $this->projectService->getProjectList($filterParams, $params);
-        } catch (AccessDeniedException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
+            return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
         } catch (Exception $e) {
-            $response = ['errors' => $e->getMessage()];
-            $this->log->error("Error while getting the file list " . print_r($response, true));
-            return $this->getErrorResponse($e->getMessage(), 404, $response);
-        }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -224,14 +208,12 @@ class ProjectController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \nGet My Project List - " . print_r($params, true));
         try {
             $result = $this->projectService->getProjectsOfUser($params);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
+            return $this->getSuccessResponseWithData($result);
         } catch (Exception $e) {
-            $response = ['errors' => $e->getMessage()];
-            $this->log->error("Error while getting the file list for My Project" . print_r($response, true));
-            return $this->getErrorResponse($e->getMessage(), 404, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -251,16 +233,13 @@ class ProjectController extends AbstractApiController
         $data = $this->extractPostData();
         $this->log->info(__CLASS__ . "-> \nSave User - " . print_r($params, true) . "Parameters - " . print_r($data, true));
         try {
-            $count = $this->projectService->saveUser($params, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(), 403);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        }
-        return $this->getSuccessResponseWithData($data, 200);
+            $this->projectService->saveUser($params, $data);
+            return $this->getSuccessResponseWithData($data, 200);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     /**
@@ -278,15 +257,13 @@ class ProjectController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->projectService->getUserList($params, $filterParams);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        }
-        return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
+            $result = $this->projectService->getUserList($params, $filterParams);
+            return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 
     public function getSubprojectsAction()
@@ -295,10 +272,11 @@ class ProjectController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \nGet Project - " . print_r($params, true) . "Parameters - " . print_r($params, true));
         try {
             $result = $this->projectService->getSubprojects($params);
+            return $this->getSuccessResponseWithData($result);
         } catch (Exception $e) {
-            $response = ['errors' => $e->getMessage()];
-            return $this->getErrorResponse($e->getMessage(), 404, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
+        
     }
 }

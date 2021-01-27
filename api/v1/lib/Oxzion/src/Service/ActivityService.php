@@ -103,20 +103,30 @@ class ActivityService extends AbstractService
 
     public function deleteActivity($id)
     {
-        $this->beginTransaction();
-        $count = 0;
+        $obj = $this->table->get($id, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $activity = new Activity();
+        $data = $obj->toArray();
+        $data['id'] = $id;
+        $data['isdeleted'] = 1;
+        $activity->exchangeArray($data);
+        $activity->validate();
         try {
-            $count = $this->table->delete($id, []);
+            $this->beginTransaction();
+            $count = $this->table->save($activity);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-            throw $e;
         }
-        
+        catch (Exception $e) {
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }        
         return $count;
     }
 
@@ -125,6 +135,7 @@ class ActivityService extends AbstractService
         if (isset($appId)) {
             $filterArray['app_id'] = $appId;
         }
+        $filterArray['isdeleted'] = 0;
         $resultSet = $this->getDataByParams('ox_activity', array("*"), $filterArray, null);
         $response = array();
         $response['data'] = $resultSet->toArray();
@@ -136,11 +147,21 @@ class ActivityService extends AbstractService
         $select = $sql->select();
         $select->from('ox_activity')
         ->columns(array("*"))
-        ->where(array('ox_activity.id' => $id));
+        ->where(array('ox_activity.id' => $id,'ox_activity.isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response)==0) {
             return 0;
         }
         return $response[0];
+    }
+
+    public function deleteActivitiesLinkedToApp($appId){
+        $appId = $this->getIdFromUuid('ox_app',$appId);
+        $activityRes = $this->getActivitys($appId);
+        if (count($activityRes) > 0) {
+            foreach ($activityRes['data'] as $key => $value) {
+                $this->deleteActivity($value['id']);
+            }
+        }
     }
 }

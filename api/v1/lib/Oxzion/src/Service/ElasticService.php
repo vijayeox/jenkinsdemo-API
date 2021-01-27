@@ -27,6 +27,7 @@ class ElasticService
     private $filterFields;
     private $filterTmpFields;
     private $excludes;
+    private $elasticQuery;
 
     public function __construct()
     {
@@ -56,6 +57,10 @@ class ElasticService
 
     public function getElasticClient(){
         return $this->client;
+    }
+
+    public function getElasticQuery() {
+        return $this->elasticQuery;
     }
 
     public function setNoCore() {
@@ -138,20 +143,20 @@ class ElasticService
         return $result['data'];
     }
 
-    public function getQueryResults($orgId, $app_name, $params)
+    public function getQueryResults($accountId, $app_name, $params)
     {
         $this->excludes = [];
         if (isset($params['excludes'])) {
             $this->excludes = $params['excludes'];
         }
-        $result = $this->filterData($orgId, $app_name, $params);
+        $result = $this->filterData($accountId, $app_name, $params);
         return $result;
     }
 
-    public function filterData($orgId, $app_name, $searchconfig)
+    public function filterData($accountId, $app_name, $searchconfig)
     {
         $boolfilter = array();
-        $tmpfilter = $this->getFilters($searchconfig, $orgId);
+        $tmpfilter = $this->getFilters($searchconfig, $accountId);
         
 		if ($tmpfilter) {
 			$boolfilterquery['query']['bool'] = $tmpfilter;
@@ -173,7 +178,12 @@ class ElasticService
 			}
 		} 
         
-		$boolfilterquery['explain'] = true;
+        $boolfilterquery['explain'] = true;
+        if (!empty($searchconfig['append_account_id'])) {
+            if ($searchconfig['append_account_id']==1) {
+                $app_name = $app_name.'_'.$accountId;
+            }
+        }
         $params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
         if(empty($searchconfig['aggregates'])) {
             if (isset($searchconfig['sort'])) {
@@ -187,9 +197,6 @@ class ElasticService
         if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
 			$results['type']='group';
-		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
-			$results = array('data'=>$result_obj['data']['hits']['total']);
-			$results['type']='value';
 		} else if (isset($result_obj['data']['aggregations'])){
 			$results = array('data'=>$result_obj['data']['aggregations']['value']['value']);
 			$results['type']='value';
@@ -240,15 +247,21 @@ class ElasticService
                  }
                  
         } else {
-
             if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
                 $value = AnalyticsUtils::checkSessionValue($value);
                 if ($condition=="=="){                
-                        if (!is_array($value)) {
-                        $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                    if (!is_array($value)) {
+                        if (strtolower(substr($value,0,5))=="date:") {
+                            $value = date("Y-m-d",strtotime(substr($value,5)));
+                            $subQuery['range'] = array($column => array('gte' => $value,'lte'=>$value,"format" => "yyyy-MM-dd"));
+                        } elseif (!is_numeric($value)) {
+                                $subQuery['match'] = array($column.".keyword" => array('query' => $value, 'operator' => 'and'));
                         } else {
-                            $subQuery['terms'] = array($column => array_values($value));
-                        }    
+                                $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                        }
+                    } else {
+                        $subQuery['terms'] = array($column => array_values($value));
+                    }    
                 } elseif ($condition=="<>" || $condition=="!=") {
                         $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
                 } elseif ($condition=="NOT LIKE" || $condition=="not like") {
@@ -272,7 +285,7 @@ class ElasticService
     {
 
         $grouparray = null;
-        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 10000;
+        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 1000; //Note this size is only for the terms
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
             $grouptext = $searchconfig['group'][$i];
             if (substr($grouptext, 0, 7) == "period-") {
@@ -286,7 +299,12 @@ class ElasticService
                 }
                 $grouparraytmp = array('date_histogram' => array('field' => $searchconfig['frequency'], 'interval' => $interval, 'format' => $format));
             } else {
-                $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
+                if ($size!=0) {
+                    $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
+                } else {
+                    $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword'));
+                }
+                
                 $boolfilterquery['_source'][] = $grouptext;
             }
 
@@ -343,7 +361,8 @@ class ElasticService
         $aggs = null;
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
-        } else if (key($aggregates) != "count") {
+        } else if (key($aggregates) == "count") { $aggs = array('value' => array('value_count' => array('field' => '_id')));}
+        else {
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
         }
         return $aggs;
@@ -351,9 +370,9 @@ class ElasticService
 
 
 
-    protected function getFilters($searchconfig, $orgId)
+    protected function getFilters($searchconfig, $accountId)
     {
-        $mustquery['must'][] = ['term' => ['org_id' => $orgId]];
+        $mustquery['must'][] = ['term' => ['account_id' => $accountId]];
         if (!empty($searchconfig['aggregates'])) {
             $aggregates = $searchconfig['aggregates'];
             $mustquery['must'][] = array('exists' => array('field' => $aggregates[key($aggregates)]));
@@ -422,6 +441,7 @@ class ElasticService
         }
         $this->logger->debug('Elastic query:');
         $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
+        $this->elasticQuery = json_encode($q);
         $data['query'] = json_encode($q);
         $data["data"] = $this->client->search($q);
         $this->logger->debug('Data from elastic:');

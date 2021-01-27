@@ -55,27 +55,20 @@ return [
                     ],
                 ],
             ],
-            // 'appinstall' => [
-            //     'type' => Segment::class,
-            //     'options' => [
-            //         'route' => '/app/:appId/appinstall',
-            //         'constraints' => [
-            //             'appId' => UuidUtil::UUID_PATTERN,
-            //         ],
-            //         'defaults' => [
-            //             'controller' => Controller\AppController::class,
-            //             'action' => 'installAppForOrg',
-            //             'method' => 'post',
-            //             // 'access' => [
-            //             //     // SET ACCESS CONTROL
-            //             //     'put'=> 'MANAGE_APP_WRITE',
-            //             //     'post'=> 'MANAGE_APP_WRITE',
-            //             //     'delete'=> 'MANAGE_APP_DELETE',
-            //             //     'get'=> 'VIEW_APP_READ',
-            //             // ],
-            //         ],
-            //     ],
-            // ],
+            'removeapp' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/removeapp',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'removeapp',
+                        'method' => 'DELETE',
+                    ],
+                ],
+            ],
             'applist' => [
                 'type' => Segment::class,
                 'options' => [
@@ -115,9 +108,9 @@ return [
             'appSetupToOrg' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/:serviceType/org/:orgId',
+                    'route' => '/app/:appId/:serviceType/account/:accountId',
                     'constraints' => [
-                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'accountId' => UuidUtil::UUID_PATTERN,
                         'appId' => UuidUtil::UUID_PATTERN,
                         'serviceType' => 'install|uninstall',
                     ],
@@ -163,10 +156,9 @@ return [
             'appfile' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/form/:formId/file[/:id]',
+                    'route' => '/app/:appId/file/crud[/:id]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'formId' => UuidUtil::UUID_PATTERN,
                         'id' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
@@ -274,10 +266,10 @@ return [
             'apppage' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId[/org/:orgId]/page[/:pageId]',
+                    'route' => '/app/:appId[/account/:accountId]/page[/:pageId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'accountId' => UuidUtil::UUID_PATTERN,
                         'pageId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
@@ -321,6 +313,37 @@ return [
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'assignments',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'assignmentList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/assignmentList',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'assignments',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'followups' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/followups[/createdBy/:createdBy]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
                         'access' => [
                         ],
                     ],
@@ -428,7 +451,7 @@ return [
             'gettempdocument' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/:appId/data/:orgId/temp/:tempId/:documentName',
+                    'route' => '/:appId/data/:accountId/temp/:tempId/:documentName',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'fileId' => UuidUtil::UUID_PATTERN,
@@ -468,6 +491,17 @@ return [
                             // 'delete'=> 'MANAGE_PAGE_WRITE',
                             // 'get'=> 'MANAGE_PAGE_READ',
                         ],
+                    ],
+                ],
+            ],
+            'entity_page' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/entity/:entityId/page',
+                    'defaults' => [
+                        'controller' => Controller\EntityController::class,
+                        'action' => 'page',
+                        'method' => 'GET',
                     ],
                 ],
             ],
@@ -557,7 +591,7 @@ return [
             'filelistfilter' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]]',
+                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]][/createdBy/:createdBy]',
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
@@ -598,7 +632,7 @@ return [
             'app_userlist' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/org/:orgId/userlist',
+                    'route' => '/app/:appId/account/:accountId/userlist',
                     'defaults' => [
                         'controller' => Controller\AppDelegateController::class,
                         'method' => 'GET',
@@ -663,10 +697,10 @@ return [
             'file_document_get' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '[/:appId]/:orgId/:fileId[/:folder]/:document',
+                    'route' => '[/:appId]/:accountId/:fileId[/:folder]/:document',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'accountId' => UuidUtil::UUID_PATTERN,
                         'fileId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
@@ -689,6 +723,23 @@ return [
                         'controller' => Controller\PipelineController::class,
                         'method' => 'GET',
                         'action' => 'executePipeline',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'pipeline_batch_execute' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/pipeline/batchprocess',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\PipelineController::class,
+                        'method' => 'POST',
+                        'action' => 'executeBatchPipeline',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

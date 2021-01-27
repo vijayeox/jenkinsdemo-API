@@ -1,23 +1,23 @@
 <?php
 namespace Oxzion\Analytics\Relational;
 
+use Exception;
 use Oxzion\Analytics\AnalyticsAbstract;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
-use Zend\DB;
-use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\Analytics\AnalyticsPostProcessing;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\Sql\Where;
-use Oxzion\Utils;
+use Oxzion\Auth\AuthContext;
 use Oxzion\Utils\AnalyticsUtils;
+use Zend\DB;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Where;
+
 
 abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 	protected $dbAdapter;
 	protected $dbConfig;
 	private $filterTmpFields;
 	private $filterFields;
+	private $query;
 
     public function __construct($appDBAdapter,$appConfig)  {
 		parent::__construct($appDBAdapter,$appConfig);
@@ -27,21 +27,25 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		parent::setConfig($config);
     }
 
+	public function getQuery() {
+		return $this->query;
+	}
+
     public function getData($app_name,$entity_name,$parameters)
     {
         try {
 			
-			$orgId = AuthContext::get(AuthConstants::ORG_ID);
+			$accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
 			if (isset($parameters['view'])) {
 			//	$result = $this->getResultsFromView($orgId,$parameters['view']);	
 				$formatedPara = $this->formatQuery($parameters);
 		//	print_r($formatedPara);exit;
-				$result = $this->getResultsFromPara($orgId,$parameters['view'],$formatedPara);
+				$result = $this->getResultsFromPara($accountId,$parameters['view'],$formatedPara);
 				$finalResult['meta']['type'] = 'view';
 				 $finalResult['data'] = $result;
 			} else {
 				$formatedPara = $this->formatQuery($parameters);
-				$result = $this->getResultsFromPara($orgId,$app_name,$entity_name,$formatedPara);
+				$result = $this->getResultsFromPara($accountId,$app_name,$entity_name,$formatedPara);
 				$finalResult['data'] = $result;
 			}
 			return $finalResult;
@@ -92,34 +96,41 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		
 
 		if (!empty($parameters['frequency'])) {
+		    $fieldname = "";
 			switch ($parameters['frequency']) {
 				case 1:
-					$group[] = "$datetype";
+					$group[] =  "DATE($datetype)";
+					$fieldname = "day";
 					break;
 				case 2:
-					$group[] = "MONTH($datetype)";
+					$group[] = "MONTHNAME($datetype)";
+					$fieldname = "month";
 					break;
 				case 3:
 					$group[] = "QUARTER($datetype)";
+					$fieldname = "quarter";
 					break;
 				case 4:
 					$group[] = "YEAR($datetype)";
+					$fieldname = "year";
 					break;
 			}
 		}
-		if ($field) { 
-			if (!empty($group)) {
-				$select=$group;
-				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
+		if (!empty($group)) { 
+			if (!empty($parameters['frequency'])) {
+				$select = [$fieldname=>new \Zend\Db\Sql\Expression("$group[0]")];
 			} else {
-				$select = [$field=>new \Zend\Db\Sql\Expression("$operation($field)")];
+				$select = $group;
 			}
-		} 
-		else {
+		}
+		if ($field) { 
+				$select[$field] = new \Zend\Db\Sql\Expression("$operation($field)");
+		} else {
 			if (!empty($group)) {
-				$select=$group;
-				$select[] = new \Zend\Db\Sql\Expression("count(*)");;
-			} 
+				$select['count'] = new \Zend\Db\Sql\Expression("count(*)");;
+			} else {
+				$select[]="*";
+			}
 		}
 		if ($datetype)
 			$range = "$datetype between '$startdate' and '$enddate'";
@@ -136,7 +147,9 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			$returnarray['limit'] = $parameters['pagesize'];
 		}
 		if (isset($parameters['list'])) {
+			$returnarray['list'] =$parameters['list'];
 			$listConfig=explode(",", $parameters['list']);
+			$returnarray['select'] = [];
 			foreach ($listConfig as $k => $v) {
 				if(strpos($v, "=")!==false){
 					$listitem = explode("=", $v);
@@ -151,10 +164,14 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if (isset($parameters['sort'])) {
 			$returnarray['sort'] = $parameters['sort'];
 		}
+		if (isset($parameters['frequency'])) {
+			$returnarray['frequency'] = $parameters['frequency'];
+		}
+
 		return $returnarray;
 	}
 
-	public function getResultsFromView($orgId,$view) {
+	public function getResultsFromView($accountId,$view) {
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
 		$select->from($view);
@@ -167,7 +184,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		
 	}
 
-	public function getResultsFromPara($orgId,$entity_name,$para) {
+	public function getResultsFromPara($accountId,$entity_name,$para) {
 		
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
@@ -176,7 +193,6 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			$select->columns($para['select']);
 		}
 		$select->from($entity_name);
-		$select->where(['org_id' => $orgId]);
 
 		
 		if (!empty($para['filter'])) {
@@ -189,12 +205,19 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 				$this->filterFields=array_merge($this->filterFields,$this->filterTmpFields);			
 			}
 		}
+		$select->where(['account_id' => $accountId]);
+
 		if (!empty($para['range'])) {
 			$select->where($para['range']);
 		}
 
 		if (!empty($para['group'])) {
-			$select->group($para['group']);
+			if (!empty($para['frequency'])) {
+				$group = $para['group'][0];
+				$select->group(new \Zend\Db\Sql\Expression("$group"));
+			} else {
+				$select->group($para['group']);
+			}	
 		}
 		if (!empty($para['limit'])) {
 			$select->limit($para['limit']);
@@ -203,12 +226,17 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		if (!empty($para['sort'])) {
 			$select->order($para['sort']);
 		}
-	//	echo $select->getSqlString();exit;
 		$statement = $sql->prepareStatementForSqlObject($select);
-
+		$this->query = $sql->buildSqlString($select);
+	//	print_r($sql->buildSqlString($select));
 		$result = $statement->execute();
 		$resultSet = new ResultSet();
-        return $resultSet->initialize($result)->toArray();
+		$finalResult = $resultSet->initialize($result)->toArray();
+		if (empty($para['group']) && empty($para['list'])) {
+			$arryvalues = array_values($finalResult[0]);
+			$finalResult = $arryvalues[0];
+		}
+		return $finalResult;
 
 	}
 

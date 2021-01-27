@@ -23,7 +23,7 @@ ox_form:
     created_by: 1
 ox_file:
   - id: 1
-    org_id: 1
+    account_id: 1
     data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     date_created: "2019-06-25 00:00:00"
@@ -31,7 +31,7 @@ ox_file:
     is_active: 1
     form_id: 1
   - id: 2
-    org_id: 1
+    account_id: 1
     data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
     uuid: "e23d0c68-98c9-11e9-adc5-308d99c9146c"
     date_created: "2020-05-25 00:00:00"
@@ -41,7 +41,7 @@ ox_file:
 ox_comment:
   -
     id: 1
-    org_id: 1
+    account_id: 1
     parent: NULL
     file_id: 1
     text: "Comment 1"
@@ -53,7 +53,7 @@ ox_comment:
     uuid: "3ff78f56-5748-406b-9ce9-426242c5afc5"
   -
     id: 2
-    org_id: 1
+    account_id: 1
     parent: 1
     file_id: 1
     text: "Comment 2"
@@ -65,7 +65,7 @@ ox_comment:
     uuid: "b223d10a-32f3-438e-94e8-6ac345f612aa"
   -
     id: 3
-    org_id: 1
+    account_id: 1
     parent: 1
     file_id: 1
     text: "Comment 3"
@@ -77,7 +77,7 @@ ox_comment:
     uuid: "fcfb78b3-3389-4876-bfd9-1ffabdf50681"
   -
     id: 4
-    org_id: 1
+    account_id: 1
     parent: NULL
     file_id: 2
     text: "Comment New"

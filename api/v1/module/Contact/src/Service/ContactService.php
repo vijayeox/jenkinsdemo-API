@@ -7,6 +7,7 @@ use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\ServiceException;
+use Oxzion\OxServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
@@ -27,8 +28,9 @@ class ContactService extends AbstractService
      * @return int|string
      *
      */
-    public function createContact(&$data, $files = null)
+    public function createContact(&$inputData, $files = null)
     {
+        $data = $inputData;
         $form = new Contact();
 
         if (isset($data['uuid'])) {
@@ -37,7 +39,7 @@ class ContactService extends AbstractService
             $data['user_id'] = null;
         }
         unset($data['uuid']);
-        $data['uuid'] = UuidUtil::uuid();
+        $inputData['uuid'] = $data['uuid'] = UuidUtil::uuid();
         $data['user_id'] = (isset($data['user_id'])) ? $data['user_id'] : null;
         $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : false;
         $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
@@ -54,8 +56,7 @@ class ContactService extends AbstractService
                 $this->uploadContactIcon($data['uuid'], $data['owner_id'], $files);
             }
             if ($count == 0) {
-                $this->rollback();
-                throw new ServiceException("Could not create the contact", "could.not.create");
+                throw new ServiceException("Could not create the contact", "could.not.create", OxServiceException::ERR_CODE_UNPROCESSABLE_ENTITY);
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
@@ -71,7 +72,7 @@ class ContactService extends AbstractService
     {
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            throw new ServiceException("Could not update the group", "contact.not.found");
+            throw new ServiceException("Contact not found", "contact.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
         }
         $form = new Contact();
         $data = array_merge($obj->toArray(), $data);
@@ -87,7 +88,7 @@ class ContactService extends AbstractService
                 $this->uploadContactIcon($data['uuid'], $data['owner_id'], $files);
             }
             if ($count == 0) {
-                throw new ServiceException("Could not update the contact", "could.not.update");
+                throw new ServiceException("Could not update the contact", "could.not.update", OxServiceException::ERR_CODE_UNPROCESSABLE_ENTITY);
             }
         } catch (Exception $e) {
             throw $e;
@@ -99,9 +100,6 @@ class ContactService extends AbstractService
     {
         $select = "SELECT * from `ox_contact` where uuid = '" . $uuid . "'";
         $result = $this->executeQuerywithParams($select)->toArray();
-        if ($result == 0) {
-            return 0;
-        }
         return $result;
     }
 
@@ -114,13 +112,11 @@ class ContactService extends AbstractService
             $delete->where(['uuid' => $id]);
             $result = $this->executeUpdate($delete);
             if ($result->getAffectedRows() == 0) {
-                $this->rollback();
-                return 0;
-            } else {
-                return 1;
+                throw new ServiceException("Contact not found", 'contact.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
             }
         } catch (Exception $e) {
             $this->rollback();
+            throw $e;
         }
         return $count;
     }
@@ -128,7 +124,7 @@ class ContactService extends AbstractService
     public function getContacts($column = ContactService::ALL_FIELDS, $filter = null)
     {
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         try {
             $queryString1 = "SELECT * from (";
             if ($column == ContactService::ALL_FIELDS) {
@@ -145,19 +141,20 @@ class ContactService extends AbstractService
             $union = " UNION ";
             if ($column == "-1") {
                 $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, up.firstname as first_name, up.lastname as last_name, up.phone as phone_1, 
-                                 null as phone_list, up.email, null as email_list, org.name as company_name, null as icon_type, oe.designation,
+                                 null as phone_list, up.email, null as email_list, acct.name as company_name, null as icon_type, oe.designation,
                                  oa.address1,oa.address2,oa.city,oa.state,oa.country, oa.zip,'2' as contact_type 
-                                 from ox_user as ou inner join ox_user_profile up on up.id = ou.user_profile_id
-                                 inner join ox_organization as org on ou.orgid = org.id 
-                                 Left join ox_employee oe on oe.user_profile_id = up.id and oe.org_id = org.id
+                                 from ox_user as ou inner join ox_person up on up.id = ou.person_id
+                                 inner join ox_account as acct on ou.account_id = acct.id 
+                                 inner join ox_organization as org on org.id = acct.organization_id
+                                 left join ox_employee as oe on oe.person_id = up.id and oe.org_id = org.id
                                  left join ox_address as oa on up.address_id = oa.id";
             } else {
                 $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, up.firstname as first_name, up.lastname as last_name,null as icon_type, 
                                 '2' as contact_type  
-                                from ox_user as ou inner join ox_user_profile up on up.id = ou.user_profile_id
-                                inner join ox_organization as org on ou.orgid = org.id";
+                                from ox_user as ou inner join ox_person up on up.id = ou.person_id
+                                inner join ox_account as acct on ou.account_id = acct.id";
             }
-            $where2 = " WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
+            $where2 = " WHERE ou.account_id = " . $accountId . " AND ou.status = 'Active' and acct.status = 'Active' ";
             if ($filter == null) {
                 $and2 = '';
             } else {
@@ -223,7 +220,7 @@ class ContactService extends AbstractService
 
     public function getUuidById($userId)
     {
-        $select = "SELECT uuid from ox_user where id = " . $userId . " AND orgid = " . AuthContext::get(AuthConstants::ORG_ID);
+        $select = "SELECT uuid from ox_user where id = " . $userId . " AND account_id = " . AuthContext::get(AuthConstants::ACCOUNT_ID);
         $result = $this->executeQuerywithParams($select)->toArray();
         if ($result) {
             return $result[0]['uuid'];
@@ -431,7 +428,7 @@ class ContactService extends AbstractService
                     $requiredHeaders = array('Given Name', 'Family Name', 'E-mail 1 - Type', 'E-mail 1 - Value', 'Phone 1 - Type', 'Phone 1 - Value', 'Organization 1 - Name', 'Organization 2 - Title', 'Address 1 - Street', 'Address 1 - Extended Address', 'Address 1 - City', 'Address 1 - Region', 'Address 1 - Country', 'Address 1 - Postal Code');
                     $result = array_intersect($requiredHeaders, $columns);
                     if (count($result) != 13) {
-                        return 3;
+                        throw new ServiceException("Column Headers do not match", 'column.headers.do.not.match', OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
                     }
                     $line++;
                 } else {
@@ -518,24 +515,26 @@ class ContactService extends AbstractService
             if (count($contact) > 0) {
                 $this->persistContacts($contact, $error_list);
             }
-        } catch (Exception $e) {
-            throw $e;
         } finally {
             fclose($file_handle);
         }
-        if (count($error_list) > 1) {
-            return $error_list;
-        }
-        return 1;
+        
+        return $error_list;
+        
     }
 
     private function persistContacts($contact, &$error_list)
     {
-        $this->beginTransaction();
-        $insert = $this->multiInsertOrUpdate('ox_contact', $contact);
-        $this->commit();
-        if ($insert->getAffectedRows() == 0) {
-            array_push($error_list, $contact);
+        try{
+            $this->beginTransaction();
+            $insert = $this->multiInsertOrUpdate('ox_contact', $contact);
+            $this->commit();
+            if ($insert->getAffectedRows() == 0) {
+                array_push($error_list, $contact);
+            }
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
         }
     }
 
@@ -649,7 +648,7 @@ class ContactService extends AbstractService
     {
         try {
             if (count($data) < 1) {
-                throw new ServiceException("No Contacts to Delete", "failed.create.user");
+                throw new ServiceException("No Contacts to Delete", "failed.create.user", OxServiceException::ERR_CODE_NOT_FOUND);
             }
             $delete = "DELETE FROM ox_contact where uuid in ('" . implode("','", $data) . "') AND owner_id = " . AuthContext::get(AuthConstants::USER_ID);
             $result = $this->executeQuerywithParams($delete);

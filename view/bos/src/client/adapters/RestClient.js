@@ -10,7 +10,6 @@ export class RestClientServiceProvider extends ServiceProvider {
 		this.baseUrl = this.core.config('wrapper.url');
 	}
 
-
 	providers() {
 		return [
 			'oxzion/restClient'
@@ -96,6 +95,7 @@ export class RestClientServiceProvider extends ServiceProvider {
 	// params - *
 	// method - string
 	async makeRequest(version, action, params, method, headers = null, raw = false) {
+		this.messageBox = this.core.make("oxzion/messageDialog");
 		let userData = this.core.getUser();
 		if (action.charAt(0) == '/')
 			action = action.substr(1);
@@ -137,8 +137,7 @@ export class RestClientServiceProvider extends ServiceProvider {
 					}
 					return resp.json();
 				}
-			}
-			else if (method == 'post' || method == 'put') {
+			} else if (method == 'post' || method == 'put') {
 				let parameters = params;
 				if (typeof parameters === 'string') {
 					parameters = JSON.parse(parameters)
@@ -155,13 +154,12 @@ export class RestClientServiceProvider extends ServiceProvider {
 				} else {
 					return resp.json();
 				}
-			}
-			else if (method == 'filepost') {
+			} else if (method == 'filepost') {
 				let parameters = params;
 				let formData = new FormData();
 				for (var k in parameters) {
-					if(parameters[k].name && parameters[k].body){
-						formData.append(k, parameters[k].body,parameters[k].name);
+					if (parameters[k] && parameters[k].name && parameters[k].body) {
+						formData.append(k, parameters[k].body, parameters[k].name);
 					} else {
 						formData.append(k, parameters[k]);
 					}
@@ -173,13 +171,12 @@ export class RestClientServiceProvider extends ServiceProvider {
 						credentials: 'include',
 						headers: { "Authorization": "Bearer " + this.token }
 					})
-					if (resp.status == 400 && resp.statusText == 'Bad Request') {
-						// fall through to refresh handling
-					} else {
-						return resp.json();
-					}
-			}
-			else if (method == 'fileupload') {
+				if (resp.status == 400 && resp.statusText == 'Bad Request') {
+					// fall through to refresh handling
+				} else {
+					return resp.json();
+				}
+			} else if (method == 'fileupload') {
 				let formData = new FormData();
 				formData.append('file', params.file);
 				for (var k in params.data) {
@@ -192,27 +189,24 @@ export class RestClientServiceProvider extends ServiceProvider {
 						credentials: 'include',
 						headers: { "Authorization": "Bearer " + this.token }
 					})
-					if (resp.status == 400 && resp.statusText == 'Bad Request') {
-						// fall through to refresh handling
-					} else {
-						return resp.json();
-					}
-			}
-			else if (method == 'delete') {
+				if (resp.status == 400 && resp.statusText == 'Bad Request') {
+					// fall through to refresh handling
+				} else {
+					return resp.json();
+				}
+			} else if (method == 'delete') {
 				resp = await fetch(urlString, {
 					method: method,
 					credentials: 'include',
 					headers: reqHeaders,
 
 				})
-
 				if (resp.status == 400 && resp.statusText == 'Bad Request') {
 					// fall through to refresh handling
 				} else {
 					return resp.json();
 				}
-			}
-			else {
+			} else {
 				console.log('Unsupported method.');
 			}
 			// handling refresh
@@ -231,7 +225,6 @@ export class RestClientServiceProvider extends ServiceProvider {
 									refresh.makeRequest(version, action, params, method, headers, raw)
 										.then((res) => resolve(res))
 										.catch((res) => reject(res));
-
 								});
 							} else {
 								console.log("refresh failed..");
@@ -248,8 +241,6 @@ export class RestClientServiceProvider extends ServiceProvider {
 					return res1;
 				}
 				fooRes = await foo();
-
-
 			}
 			catch (e) {
 				return null;
@@ -262,4 +253,10 @@ export class RestClientServiceProvider extends ServiceProvider {
 		}
 	}
 
+	errorMessage(message){
+		this.messageBox.show(message, '', 'OK', false)
+		.then((response) => {
+			return response;
+		});
+	}
 }

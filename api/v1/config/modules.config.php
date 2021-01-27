@@ -23,7 +23,7 @@ return [
     'Project',
     'Group',
     'Analytics',
-    'Organization',
+    'Account',
     'Attachment',
     'App',
     'Search',
@@ -38,5 +38,6 @@ return [
     'Workflow',
     'PaymentGateway',
     'ErrorLog',
+    'Esign',
     'Import'
 ];

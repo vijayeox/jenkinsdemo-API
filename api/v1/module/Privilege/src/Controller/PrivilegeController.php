@@ -38,10 +38,12 @@ class PrivilegeController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> Get Master Privilege - " . json_encode($params, true));
         try {
             $result = $this->privilegeService->getMasterPrivilegeList($params);
+            return $this->getSuccessResponseWithData($result);
         } catch (Exception $e) {
-            throw $e;
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($result);
+        
     }
 
     /**
@@ -65,27 +67,15 @@ class PrivilegeController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> Get User Privilege - " . json_encode($params, true));
         try {
             $result = $this->privilegeService->getAppPrivilegeForUser($appId);
-            if ($result == null || empty($result)) {
+            if (empty($result)) {
                 return $this->getErrorResponse("There is nothing in your privilege list!", 404, ['id' => $appId]);
             }
-            if ($result) {
-                $result['status'] = isset($result['status']) ? $result['status'] : null;
-                if ($result['status'] === 'error') {
-                    return $this->getFailureResponse("No Privileges to show, there is something wrong with your request");
-                }
-            }
+            return $this->getSuccessResponseWithData($result);
         } catch (Exception $e) {
-            throw $e;
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponseWithData($result);
+        
     }
 
-    public function getAppIdAction()
-    {
-        $result = $this->privilegeService->getAppId();
-        if ($result == 0) {
-            return $this->getFailureResponse("Something went wrong");
-        }
-        return $this->getSuccessResponseWithData($result);
-    }
 }

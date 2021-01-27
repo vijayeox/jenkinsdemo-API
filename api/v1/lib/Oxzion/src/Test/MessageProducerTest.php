@@ -7,20 +7,9 @@ use Oxzion\Messaging\MessageProducer;
 
 class MessageProducerTest extends TestCase
 {
-    public function testOrganizationCreationUsingTopic()
+    public function testAccountCreationUsingTopic()
     {
         $mp = MessageProducer::getInstance();
-        $mp->sendTopic(json_encode(array('orgname' => 'Cleveland white', 'status' => 'Active')), 'ORGANIZATION_ADDED');
+        $mp->sendTopic(json_encode(array('accountName' => 'Cleveland white', 'status' => 'Active')), 'ACCOUNT_ADDED');
     }
-
-    // public function testOrganizationCreationUsingQueue(){
-    //     $mp = MessageProducer::getInstance();
-    //     $mp->sendQueue(json_encode(array('name' => 'Cleveland White', 'status' => 'Active')),'ORGANIZATION_ADDED');
-    // }
-
-    // public function testMail(){
-    //     $mp = MessageProducer::getInstance();
-    //     $mp->sendTopic(json_encode(array('to' => 'saditha@myvamla.com', 'from' => 'oxzion@oxzion.com',
-    //                                      'subject' => "Test", 'body' => 'Test Body')),'mail');
-    // }
 }

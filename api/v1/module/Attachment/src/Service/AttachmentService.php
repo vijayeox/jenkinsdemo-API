@@ -32,7 +32,7 @@ class AttachmentService extends AbstractService
     public function upload(array $data, $files)
     {
         $fileArray = array();
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         if (isset($data['type'])) {
             $fileArray = array();
@@ -117,7 +117,7 @@ class AttachmentService extends AbstractService
         $baseFolder = $this->config['UPLOAD_FOLDER'];
         switch ($type) {
             case 'ANNOUNCEMENT':
-                return $baseFolder . "organization/" . AuthContext::get(AuthConstants::ORG_ID) . "/announcements/";
+                return $baseFolder . "account/" . AuthContext::get(AuthConstants::ACCOUNT_ID) . "/announcements/";
             default:
                 return $baseFolder;
         }

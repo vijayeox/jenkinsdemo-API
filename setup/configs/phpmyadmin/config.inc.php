@@ -11,6 +11,9 @@
 // phpMyAdmin settings
 $cfg['VersionCheck'] = false;
 
+//no php timeout FOR LOCAL ONLY!!!
+$cfg['ExecTimeLimit'] = 0;
+
 // Server configuration
 $i = 1;
 $cfg['Servers'][$i]['AllowNoPassword'] = true;

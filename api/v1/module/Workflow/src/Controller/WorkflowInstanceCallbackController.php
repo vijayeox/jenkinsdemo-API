@@ -9,9 +9,9 @@ use Oxzion\Model\WorkflowInstance;
 use Oxzion\Service\WorkflowInstanceService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiControllerHelper;
-use Oxzion\ValidationException;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\ActivityInstanceService;
+use Exception;
 
 class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
 {
@@ -36,16 +36,9 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
                 if (isset($params['processInstanceId'])) {
                     try {
                         $response = $this->workflowInstanceService->completeWorkflow($params);
-                        if(!$response){
-                            return $this->getErrorResponse("Workflow Completion errors", 404,null);
-                        }
-                    } catch (ValidationException $e) {
+                    }catch (Exception $e) {
                         $this->log->error($e->getMessage(), $e);
-                        $response = ['data' => $params, 'errors' => $e->getErrors()];
-                        return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
-                    }catch (Exception $e){
-                        $this->log->error($e->getMessage(), $e);
-                        return $this->getErrorResponse($e->getMessage(), 500, $response);
+                        return $this->exceptionToResponse($e);
                     }
                     return $this->getSuccessResponse();
                 } else {
@@ -63,16 +56,9 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("Workflow Start errors", 404,null);
             }
             return $this->getSuccessResponse();
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
-        catch (ValidationException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
-        }  
-        catch (InvalidParameterException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Invalid Data", 404, $response);
-        }   
     }
 }

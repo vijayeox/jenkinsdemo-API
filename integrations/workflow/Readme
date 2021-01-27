@@ -1,4 +1,3 @@
-
 **********************************************
 Step to run the worflow
 
@@ -21,11 +20,19 @@ $ sudo docker run --network="host" -it -v ${PWD}:/camunda --entrypoint=bash work
 $ cd IdentityService/
 $ ./gradlew build
 
+To exclude test cases while building if test cases fail
+
+$ ./gradlew build --stacktrace -x test
+
 $ mkdir -p dist
 $ cp build/libs/identity_plugin-1.0.jar dist/identity_plugin.jar
 
 $ cd ../ProcessEngine/
 $ ./gradlew build
+
+To exclude test cases while building if test cases fail
+
+$ ./gradlew build --stacktrace -x test
 
 $ mkdir -p dist
 $ cp build/libs/processengine_plugin-1.0.jar dist/processengine_plugin.jar 

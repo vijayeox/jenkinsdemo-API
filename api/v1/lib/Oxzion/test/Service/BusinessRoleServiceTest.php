@@ -15,7 +15,7 @@ class BusinessRoleServiceTest extends AbstractServiceTest
         $this->loadConfig();
         parent::setUp();
         $this->businessRoleService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\BusinessRoleService::class);
-        AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         AuthContext::put(AuthConstants::USER_ID, 1);
         
     }

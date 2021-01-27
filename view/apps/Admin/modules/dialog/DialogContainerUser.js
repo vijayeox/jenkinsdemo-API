@@ -26,7 +26,7 @@ export default class DialogContainer extends React.Component {
     if (this.props.formAction == "put") {
       this.loader.show(this.adminWindow);
       this.getData(
-        "organization/" +
+        "account/" +
           this.props.selectedOrg +
           "/user/" +
           this.props.dataItem.uuid +
@@ -34,7 +34,7 @@ export default class DialogContainer extends React.Component {
       ).then((response) => {
         var apiResponse = response.data;
         this.getData(
-          "organization/" +
+          "account/" +
             this.props.selectedOrg +
             "/user/" +
             this.props.dataItem.uuid +
@@ -49,7 +49,7 @@ export default class DialogContainer extends React.Component {
           }
           apiResponse.project = tempProjects;
           apiResponse.manager_name = {
-            id: apiResponse.managerid,
+            id: apiResponse.managerId,
             name: apiResponse.manager_name
           };
           this.setState({
@@ -61,7 +61,7 @@ export default class DialogContainer extends React.Component {
     }
     this.loader.show(this.adminWindow);
 
-    this.getData("organization/" + this.props.selectedOrg + "/roles").then(
+    this.getData("account/" + this.props.selectedOrg + "/roles").then(
       (response) => {
         var tempUsers = [];
         for (var i = 0; i <= response.data.length - 1; i++) {
@@ -75,7 +75,7 @@ export default class DialogContainer extends React.Component {
       }
     );
 
-    this.getData("organization/" + this.props.selectedOrg + "/projects").then(
+    this.getData("account/" + this.props.selectedOrg + "/projects").then(
       (response) => {
         var tempProjects = [];
         for (var i = 0; i <= response.data.length - 1; i++) {
@@ -191,7 +191,7 @@ export default class DialogContainer extends React.Component {
     }
     if (this.props.formAction == "post") {
       PushData(
-        "organization/" + this.props.selectedOrg + "/user",
+        "account/" + this.props.selectedOrg + "/user",
         this.props.formAction,
         this.props.dataItem.uuid,
         {
@@ -204,7 +204,7 @@ export default class DialogContainer extends React.Component {
           ),
           designation: this.state.userInEdit.designation,
           gender: this.state.userInEdit.gender,
-          managerid: this.state.userInEdit.managerid,
+          managerId: this.state.userInEdit.managerId,
           role: userRoles,
           project: this.state.userInEdit.project,
           date_of_join: new Moment(this.state.userInEdit.date_of_join).format(
@@ -240,7 +240,7 @@ export default class DialogContainer extends React.Component {
         ),
         designation: this.state.userInEdit.designation,
         gender: this.state.userInEdit.gender,
-        managerid: this.state.userInEdit.managerid,
+        managerId: this.state.userInEdit.managerId,
         role: userRoles,
         project: this.state.userInEdit.project,
         date_of_join: new Moment(this.state.userInEdit.date_of_join).format(
@@ -252,6 +252,7 @@ export default class DialogContainer extends React.Component {
         zip: "",
         country: this.state.userInEdit.country
       }).then((response) => {
+        this.loader.destroy();
         if (response.status == "success") {
           this.props.action(response);
           this.props.cancel();
@@ -374,13 +375,13 @@ export default class DialogContainer extends React.Component {
                     <DropDown
                       args={this.core}
                       mainList={
-                        "organization/" + this.props.selectedOrg + "/users"
+                        "account/" + this.props.selectedOrg + "/users"
                       }
                       preFetch={true}
                       selectedItem={this.state.userInEdit.manager_name}
                       selectedEntityType={"object"}
                       onDataChange={(e) =>
-                        this.managerValueChange("managerid", e)
+                        this.managerValueChange("managerId", e)
                       }
                       disableItem={this.props.diableField}
                     />

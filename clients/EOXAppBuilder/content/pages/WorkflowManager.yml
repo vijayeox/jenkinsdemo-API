@@ -23,9 +23,11 @@ content:
                         updateOnly: true   
                 operations:
                     title: "Create New Workflow"
+                    icon: 'fa fa-cloud-upload'
                     actions:
                         -
                             name: Import Workflow
+                            icon: 'fa fa-cloud-upload'
                             rule: 'true'
                             details:
                                 -

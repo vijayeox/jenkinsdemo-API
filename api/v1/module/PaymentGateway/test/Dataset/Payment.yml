@@ -17,7 +17,7 @@ ox_payment:
   -
     id: 1
     app_id: 99
-    org_id: 1
+    account_id: 1
     payment_client: "ConvergePay"
     js_url: "https://demo.convergepay.com/hosted-payments/Checkout.js"
     api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"
@@ -26,7 +26,7 @@ ox_payment:
   -
     id: 2
     app_id: 100
-    org_id: 1
+    account_id: 1
     payment_client: "SomePay"
     js_url: "https://demo.convergepay.com/hosted-payments/Checkout.js"
     api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"

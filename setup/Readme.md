@@ -13,6 +13,7 @@
 - Please install the recommened markdown reader by the command mentioned below to read this readme properly.
 
 $ sudo apt install remarkable
+	Note: For ubuntu 20+ use snap install remarkable
 
 <h4> 1. <u>Install Smartgit</u>: </h4>
 
@@ -58,6 +59,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 
 - sudo apt update
 - sudo apt install docker-ce
+	Note: If you are using ubuntu 20+ then follow the steps from <a href='https://docs.docker.com/engine/install/ubuntu/'>here</a>:
 
 <h5>Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it’s running:</h5>
 
@@ -69,14 +71,33 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 
 ### 4. <u>Run application using [docker-compose](https://docs.docker.com/compose/)</u>
 
-- For globale crdential update, compy .env.example to .env and change the credential according to your ip and other credentislas  
+- For global credential update, copy .env.example to .env and change the credential according to your ip and other credentislas  
 ```bash
  $ cp  .env.example  .env
 ``` 
+- To build the Docker image use the following command 
+```bash
+$ docker-compose build
+```
+
 - To start api, camunda workflow, camel with activemq, view run below command 
 
 ```bash
-$ docker-compose up -d --build
+$ docker-compose up --force-recreate
 ```
-### Note 1: If you followed docker-ompose approach mentioned above, then you need to follow the scripts mentioned below
-### Note 2: if you start application using docker-compose at root level, then you have to update crdential only in .env file at root level, but if you run each application separately by entering into services, then update .env at respective places.
+- To connect to the container using bash run the following command
+```bash
+$ docker exec -it setup_eox_1 bash
+```
+
+### 5. <u>You can access the application through the [url](http://localhost:8081)</u>
+### 6. <u>The server API is available through the [url](http://localhost:8080)</u>
+### 7. <u>You can access the mysql using phpmyadmin through the [url](http://localhost:8080/phpmyadmin)</u>
+### 8. <u>You can access the ActiveMq console through the [url](http://localhost:8161/)</u>
+### 9. <u>You can connect to mysql from the bash prompt using mysql -hlocalhost -u<user> -p</u>
+### 10. <u>To connect to mysql from tools on your host machine run tne following sql, restart the docker and connect using port 3307.</u>
+```bash
+UPDATE mysql.user set host = '%' where user = 'root';
+```
+
+### Note 1: if you start application using docker-compose at root level of the project, then you have to update crdential only in .env file at root level, but if you run each application separately by entering into services, then update .env at respective places.

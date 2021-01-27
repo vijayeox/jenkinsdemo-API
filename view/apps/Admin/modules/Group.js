@@ -17,7 +17,7 @@ class Group extends React.Component {
         canEdit: this.props.userProfile.privileges.MANAGE_GROUP_WRITE,
         canDelete: this.props.userProfile.privileges.MANAGE_GROUP_WRITE
       },
-      selectedOrg: this.props.userProfile.orgid
+      selectedOrg: this.props.userProfile.accountId 
     };
     this.toggleDialog = this.toggleDialog.bind(this);
     this.child = React.createRef();
@@ -27,9 +27,9 @@ class Group extends React.Component {
     let helper = this.core.make("oxzion/restClient");
     let addGroupUsers = await helper.request(
       "v1",
-      "organization/" + this.state.selectedOrg + "/group/" + dataItem + "/save",
+      "account/" + this.state.selectedOrg + "/group/" + dataItem + "/save",
       {
-        userid: dataObject
+        userIdList: dataObject
       },
       "post"
     );
@@ -46,7 +46,7 @@ class Group extends React.Component {
       config: {
         dataItem: dataItem,
         title: "Group",
-        mainList: "organization/" + this.state.selectedOrg + "/users/list",
+        mainList: "account/" + this.state.selectedOrg + "/users/list",
         subList: "group",
         members: "Users"
       },
@@ -102,7 +102,7 @@ class Group extends React.Component {
 
   remove = dataItem => {
     DeleteEntry(
-      "organization/" + this.state.selectedOrg + "/group",
+      "account/" + this.state.selectedOrg + "/group",
       dataItem.uuid
     ).then(response => {
       this.child.current.refreshHandler(response);
@@ -135,7 +135,7 @@ class Group extends React.Component {
           args={this.core}
           orgChange={this.orgChange}
           orgSwitch={
-            this.props.userProfile.privileges.MANAGE_ORGANIZATION_WRITE
+            this.props.userProfile.privileges.MANAGE_ACCOUNT_WRITE
               ? true
               : false
           }
@@ -146,7 +146,7 @@ class Group extends React.Component {
           config={{
             showToolBar: true,
             title: "Group",
-            api: "organization/" + this.state.selectedOrg + "/groups",
+            api: "account/" + this.state.selectedOrg + "/groups",
 
             column: [
               {

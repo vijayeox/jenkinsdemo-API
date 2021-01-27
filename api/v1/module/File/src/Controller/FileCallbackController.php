@@ -7,6 +7,7 @@ use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\EntityNotFoundException;
 use Oxzion\ServiceException;
 use \Exception;
+use Oxzion\Utils\FileUtils;
 
 class FileCallbackController extends AbstractApiControllerHelper
 {
@@ -35,28 +36,32 @@ class FileCallbackController extends AbstractApiControllerHelper
     public function updateFileAction()
     {
         $data = $this->extractPostData();
-        
         try {
             $fileId = isset($data['id']) ? $data['id'] : null;
             if(!$fileId){
                 throw new EntityNotFoundException("Invalid File Id");
             }
             $this->fileService->updateFileAttributes($fileId);
-        }catch (ServiceException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $data, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Error", 412, $response);
-        }catch (EntityNotFoundException $e) {
-            $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $data, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Error", 404, $response);
         }catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            $response = ['data' => $data, 'errors' => "Unexpected error occurred, please try later"];
-            return $this->getErrorResponse("Unexpected Error", 500, $response);
+            return $this->exceptionToResponse($e);
         }
         
         return $this->getSuccessResponseWithData($data, 200);
     }
+
+    public function updateRygForFileAction(){
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            $this->fileService->bulkUpdateFileRygStatus($params);
+        }  catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+        return $this->getSuccessResponse('Success',200);
+    }
     
+    public function documentFinalized($data){
+        FileUtils::storeFile($data['file'],$this->config['APP_ESIGN_FOLDER'].$data['refId']);
+    }
 }

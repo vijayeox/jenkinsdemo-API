@@ -17,6 +17,8 @@ use Oxzion\EntityNotFoundException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\VersionMismatchException;
 use Exception;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 
 class FileController extends AbstractApiController
 {
@@ -46,22 +48,11 @@ class FileController extends AbstractApiController
     public function create($data)
     {
         $data['app_id'] = $this->params()->fromRoute()['appId'];
-        $formId = $this->params()->fromRoute()['formId'];
-        if ($formId) {
-            $data['form_id'] = $formId;
-        } else {
-            return $this->getFailureResponse("Form id not Found", $data);
-        }
         try {
             $count = $this->fileService->createFile($data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Unexpected Error!",500, $data);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -89,27 +80,14 @@ class FileController extends AbstractApiController
     public function update($id, $data)
     {
         $appUuId = $this->params()->fromRoute()['appId'];
-        $formUuId = $this->params()->fromRoute()['formId'];
-        if ($formUuId) {
-            $data['form_uuid'] = $formUuId;
-        }
         if ($appUuId) {
             $data['app_uuid'] = $appUuId;
         }
         try {
             $count = $this->fileService->updateFile($data, $id);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
-        }
-        catch (EntityNotFoundException $e) {
-            $response = ['data' => $data, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Entity Not Found", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -130,7 +108,7 @@ class FileController extends AbstractApiController
             }catch (VersionMismatchException $e) {
                 return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
-            return $this->getSuccessResponse();
+            return $this->getSuccessResponse("File has been deleted!");
         } else {
             return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['id' => $id]);
         }
@@ -159,7 +137,6 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
-        print($file."\n");
         if(file_exists($file)){
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');
@@ -176,7 +153,6 @@ class FileController extends AbstractApiController
                 return $this->getErrorResponse($e->getMessage(), 500);
             }
         } else {
-            print("FILE NOT");
             return $this->getErrorResponse("Document not Found", 404);
         }
     }
@@ -209,9 +185,12 @@ class FileController extends AbstractApiController
     */
     public function getFileListAction()
     {
-        $appUuid = $this->params()->fromRoute()['appId'];
+        $appUuid = isset($this->params()->fromRoute()['appId']) ? $this->params()->fromRoute()['appId'] : NULL ;
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
+        if(isset($params['createdBy']) && $params['createdBy'] === 'me'){
+            $params['createdBy'] = AuthContext::get(AuthConstants::USER_UUID);;
+        }
         try {
             $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         } catch (ValidationException $e) {

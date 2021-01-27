@@ -39,25 +39,25 @@ class ForgotPasswordControllerTest extends ControllerTest
     }
 
     public function getMockMessageProducer(){
-        $organizationService = $this->getApplicationServiceLocator()->get(UserService::class);
+        $userService = $this->getApplicationServiceLocator()->get(UserService::class);
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
-        $organizationService->setMessageProducer($mockMessageProducer);
+        $userService->setMessageProducer($mockMessageProducer);
         return $mockMessageProducer;
     }
 
 
     public function testForgotPassword()
     {
-        $data = ['username' => 'admintest'];
+        $data = ['username' => $this->adminUser];
         $this->setJsonContent(json_encode($data));
         if(enableCamel == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(),'mail')->once()->andReturn();
         }
         $this->dispatch('/user/me/forgotpassword', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('forgotPassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'],'admintest');
     }
@@ -71,7 +71,7 @@ class ForgotPasswordControllerTest extends ControllerTest
         $this->setDefaultAsserts('forgotPassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'The username entered does not match your profile username');
+        $this->assertEquals($content['message'], 'User not found with username or email for wrongemail@va.com');
     } 
 
     public function testResetPassword()

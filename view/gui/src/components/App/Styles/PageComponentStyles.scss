@@ -2,7 +2,7 @@ $primary-color: #275362;
 
 .Navigation {
   position: relative;
-  margin: 0 0px 0 15px;
+  padding: 0 15px;
   height: 100%;
   width: 100%;
   overflow: scroll;
@@ -12,9 +12,32 @@ $primary-color: #275362;
     display: flex;
     flex-direction: column;
   }
+  .customActions{
+    margin-top: 5px;
+  }
 
+  .toolBarButton {
+    margin: 0 10px;
+    display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 50%;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    float: right;
+  }
   .breadcrumbs {
-    padding-top: 0.8rem;
+    padding-top: 5px;
     padding-bottom: 0.8rem;
     display: flex;
     flex-direction: row;
@@ -63,6 +86,43 @@ $primary-color: #275362;
 
   .page-active , .contentDiv{
     height: 100%;
+  }
+  .activeBreadcrumb a {
+    color: #007bff !important;
+  }
+  .activeBreadcrumb a:hover {
+    color: #0056b3 !important;
+    text-decoration: underline !important;
+  }
+  .tab-link{
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+    margin-right: 0;
+    background-color: transparent;
+    border: none;
+    color: #444;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+  }
+  .Navigation .tab-link:focus{
+    outline: transparent;
+  }
+ .tab-link:hover,.tab-link:focus{
+    border-color: #e9ecef #e9ecef #dee2e6;
+  }
+  .tab-link-active{
+    border: none;
+    -webkit-box-shadow: inset 0 -2px 0 #2196F3;
+    box-shadow: inset 0 -2px 0 #2196F3;
+    color: #2196F3;
+  }
+  .tab-content .contentDiv{
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.25rem;
   }
 
   .searchBar {

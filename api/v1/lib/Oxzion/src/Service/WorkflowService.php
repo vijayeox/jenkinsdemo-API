@@ -18,6 +18,7 @@ use Oxzion\Service\FileService;
 use Oxzion\Service\FormService;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Workflow\WorkFlowFactory;
+use Oxzion\Service\ActivityInstanceService;
 
 
 class WorkflowService extends AbstractService
@@ -40,7 +41,7 @@ class WorkflowService extends AbstractService
     protected $activityService;
     static $field = array('workflow_name' => 'ox_workflow.name');
 
-    public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService, WorkflowDeploymentTable $workflowDeploymentTable)
+    public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService, WorkflowDeploymentTable $workflowDeploymentTable,ActivityInstanceService $activityInstanceService)
     {
         parent::__construct($config, $dbAdapter);
         $this->baseFolder = $this->config['UPLOAD_FOLDER'];
@@ -56,6 +57,7 @@ class WorkflowService extends AbstractService
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
         $this->activityEngine = $this->workFlowFactory->getActivity();
         $this->activityService = $activityService;
+        $this->activityInstanceService = $activityInstanceService;
     }
     public function setProcessEngine($processEngine)
     {
@@ -206,7 +208,6 @@ class WorkflowService extends AbstractService
         $data['app_id'] = $appId;
         if (!isset($data['id']) || $data['id'] == 0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-            // $data['org_id'] = isset($data['org_id']) ? $data['org_id'] :  AuthContext::get(AuthConstants::ORG_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
         if (isset($data['uuid'])) {
@@ -343,6 +344,7 @@ class WorkflowService extends AbstractService
         if (isset($appUuid)) {
             $filterArray['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         }
+        $filterArray['isdeleted'] = 0;
         $resultSet = $this->getDataByParams('ox_workflow', array("*"), $filterArray, null);
         $response = array();
         $response['data'] = $resultSet->toArray();
@@ -438,5 +440,72 @@ class WorkflowService extends AbstractService
             throw $e;
         }
         return $data;
+    }
+
+    public function deleteWorkflowLinkedToApp($appId){
+        $workflowRes = $this->getWorkflows($appId);
+        if (count($workflowRes) > 0) {
+            foreach ($workflowRes['data'] as $key => $value) {
+                $this->deleteWorkflowInstance($value['id']);
+                $this->activityService->deleteActivitiesLinkedToApp($appId);
+                $this->activityInstanceService->removeActivityInstanceRecords($value['id']);
+                $this->fileService->deleteFilesLinkedToApp($appId);
+                $this->deleteWorkflow($appId,$value['uuid']);
+                $this->deleteWorkflowDeployement($value['id']);
+            }
+        }
+    }
+    
+    private function deleteWorkflowDeployement($workflowId){
+        try{
+            $this->beginTransaction();
+            $update = "UPDATE ox_workflow_deployment SET isdeleted =:deleted where workflow_id=:workflowId and latest=:latest";
+            $updateParams = array('deleted' => 1, 'workflowId' => $workflowId, 'latest' => 1);
+            $result = $this->executeUpdateWithBindParameters($update,$updateParams);
+            $this->commit();
+
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    private function deleteWorkflowInstance($workflowDepId){
+        try{
+            $this->beginTransaction();
+            $update = "UPDATE ox_workflow_instance SET isdeleted =:deleted where workflow_deployment_id=:workflowDepId";
+            $updateParams = array('deleted' => 1, 'workflowDepId' => $workflowDepId);
+            $this->executeUpdateWithBindParameters($update,$updateParams);
+            $this->commit();
+
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    private function buildSortQuery($sortOptions, &$field)
+    {
+        $sortCount = 0;
+        $sortTable = "tblf" . $sortCount;
+        $sort = " ORDER BY ";
+        foreach ($sortOptions as $key => $value) {
+            if ($value['field'] == 'entity_name') {
+                if ($sortCount > 0) {
+                    $sort .= ", ";
+                }
+                $sort .= " ox_app_entity.name ";
+                $sortCount++;
+                continue;
+            }
+            if ($sortCount == 0) {
+                $sort .= $value['field'] . " " . $value['dir'];
+            } else {
+                $sort .= "," . $value['field'] . " " . $value['dir'];
+            }
+            $field .= " , (select " . $sortTable . ".field_value from ox_file_attribute as " . $sortTable . " inner join ox_field as " . $value['field'] . $sortTable . " on( " . $value['field'] . $sortTable . ".id = " . $sortTable . ".field_id)  WHERE " . $value['field'] . $sortTable . ".name='" . $value['field'] . "' AND " . $sortTable . ".file_id=ox_file.id) as " . $value['field'];
+            $sortCount += 1;
+        }
+        return $sort;
     }
 }

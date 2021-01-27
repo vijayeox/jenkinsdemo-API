@@ -44,7 +44,7 @@ class JwtHelper
             $tks = explode('.', $token);
             list($headb64, $bodyb64, $cryptob64) = $tks;
             $payload = json_decode(JWT::urlsafeB64Decode($bodyb64), false);
-            return array('username'=>$payload->data->username, 'orgid'=> $payload->data->orgid, 'Error'=>$e->getMessage());
+            return array('username'=>$payload->data->username, 'accountId'=> $payload->data->accountId, 'Error'=>$e->getMessage());
         }
         return $decodedToken;
     }

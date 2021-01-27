@@ -40,10 +40,10 @@ class ProfilePictureController extends AbstractApiController
         $files=substr($params['file'], strpos($params['file'], ",")+1);
         $files=base64_decode($files);
         try {
-            $count = $this->profilepictureService->uploadProfilepicture($files);
+            $this->profilepictureService->uploadProfilepicture($files);
         } catch (Exception $e) {
             $this->log->error("Failed to upload profile picture", $e);
-            return $this->getErrorResponse("Profile picture upload failed", 500);
+            return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponse("Upload successfull", 200);
         $this->log->info("Profile update controller end");

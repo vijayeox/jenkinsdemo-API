@@ -10,6 +10,8 @@ abstract class OxServiceException extends Exception {
     public const ERR_TYPE_FAILURE   = 'failure';
 
     public const ERR_CODE_OK                    = 200; //Corresponds to HTTP 200.
+    public const ERR_CODE_UNAUTHORIZED          = 401; //Corresponds to HTTP 401.
+    public const ERR_CODE_FORBIDDEN             = 403; //Corresponds to HTTP 403.
     public const ERR_CODE_NOT_FOUND             = 404; //Corresponds to HTTP 404.
     public const ERR_CODE_NOT_ACCEPTABLE        = 406; //Corresponds to HTTP 406.
     public const ERR_CODE_CONFLICT              = 409; //Corresponds to HTTP 409.

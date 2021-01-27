@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Analytics\Elastic;
 
+use Exception;
 use Oxzion\Analytics\AnalyticsEngine;
 use Elasticsearch\ClientBuilder;
 use Oxzion\Service\ElasticService;
@@ -12,7 +13,9 @@ use Oxzion\Analytics\AnalyticsAbstract;
 class AnalyticsEngineImpl extends AnalyticsAbstract {
 
 	private $hasGroup;
-    private $elasticService;
+	private $elasticService;
+	private $query;
+
     public function __construct($appDBAdapter,$appConfig, ElasticService $elasticService) {
 		parent::__construct(null,$appDBAdapter,$appConfig);
 		$this->elasticService = $elasticService;
@@ -21,7 +24,11 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
     public function setConfig($config){
     	parent::setConfig($config);
     	$this->elasticService->setConfig($config);
-    }
+	}
+	
+	public function getQuery(){
+		return $this->query;
+	}
 
     public function getData($app_name,$entity_name,$parameters)
     {
@@ -31,13 +38,14 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
             'entity_name'=>$entity_name, 
             'parameters'=>$parameters]);
         try {
-			$orgId = AuthContext::get(AuthConstants::ORG_ID);
+			$accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
 			$query = $this->formatQuery($parameters);
 			if ($entity_name) {
 				$query['filter'][]=['entity_name','==',$entity_name];
 			}
             $elasticService = $this->elasticService;
-			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
+			$result = $elasticService->getQueryResults($accountId,$app_name,$query);
+			$this->query = $elasticService->getElasticQuery();
 			$finalResult['meta'] = $query;
 			$finalResult['meta']['type'] = $result['type'];
 			$finalResult['meta']['query'] = $result['query'];
@@ -163,6 +171,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		}
 		if (isset($parameters['excludes'])) {
 			$returnarray['excludes'] = $parameters['excludes'];
+		}
+		if (isset($parameters['append_account_id'])) {
+			$returnarray['append_account_id'] = $parameters['append_account_id'];
 		}
 		if (isset($parameters['list'])) {
 				if($parameters['list']=="*"){

@@ -201,11 +201,11 @@ class PaymentService extends AbstractService
 
     protected function getPaymentInfoBasedOnGatewayType($appUuid)
     {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         try {
             $select = "SELECT ox_payment.* FROM `ox_payment`
-                    INNER JOIN ox_app on ox_app.id = ox_payment.app_id WHERE ox_app.uuid =:appUuid AND ox_payment.server_instance_name =:serverInstanceName AND ox_payment.org_id= :orgId";
-            $selectParams = array("appUuid" => $appUuid, "serverInstanceName" => $this->paymentGatewayType, "orgId" => $orgId);
+                    INNER JOIN ox_app on ox_app.id = ox_payment.app_id WHERE ox_app.uuid =:appUuid AND ox_payment.server_instance_name =:serverInstanceName AND ox_payment.account_id= :accountId";
+            $selectParams = array("appUuid" => $appUuid, "serverInstanceName" => $this->paymentGatewayType, "accountId" => $accountId);
             $gateWay = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
             if (count($gateWay)) {
                 return $gateWay[0];

@@ -24,8 +24,8 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;
-    protected $testOrgId = 1;
-    protected $testOrgUuid = "53012471-2863-4949-afb1-e69b0891c98a";
+    protected $testAccountId = 1;
+    protected $testAccountUuid = "53012471-2863-4949-afb1-e69b0891c98a";
 
 
     protected $jwtToken = array();
@@ -94,10 +94,10 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $headers->addHeaderLine('Authorization', 'Bearer ' . $token);
     }
 
-    private function getJwtToken($username)
+    protected function getJwtToken($username)
     {
         if (!isset($this->jwtToken[$username])) {
-            $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId,'orgUuid' => $this->testOrgUuid]);
+            $data = JwtHelper::getTokenPayload(['username'=>$username,'accountId' => $this->testAccountId,'accountUuid' => $this->testAccountUuid]);
             $config = $this->getApplicationConfig();
             $jwtKey = $config['jwtKey'];
             $jwtAlgo = $config['jwtAlgo'];

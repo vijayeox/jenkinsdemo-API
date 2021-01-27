@@ -17,7 +17,7 @@ class QueryService extends AbstractService
 
     private $table;
     private $datasourceService;
-    static $queryFields = array('uuid' => 'q.uuid', 'name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'org_id' => 'q.org_id');
+    static $queryFields = array('uuid' => 'q.uuid', 'name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'account_id' => 'q.account_id');
 
     public function __construct($config, $dbAdapter, QueryTable $table, $datasourceService)
     {
@@ -31,13 +31,13 @@ class QueryService extends AbstractService
         $dataSourceUuid = $data['datasource_id'];
         $dataSourceId = $this->getIdFromUuid('ox_datasource', $dataSourceUuid);
         $data['datasource_id'] = $dataSourceId;
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        $data['org_id'] = $orgId;
-        $orgUuid = $this->getUuidFromId('ox_datasource', $orgId);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+        $data['account_id'] = $accountId;
+        $accountUuid = $this->getUuidFromId('ox_datasource', $accountId);
 
         $query = new Query($this->table);
         $query->assign($data);
-        $query->setForeignKey('org_id', $orgId); //org_id is defined as readonly in the model.
+        $query->setForeignKey('account_id', $accountId); //account_id is defined as readonly in the model.
         $query->setForeignKey('datasource_id', $dataSourceId); //datasource_id is defined as readonly in the model.
         try {
             $this->beginTransaction();
@@ -49,7 +49,7 @@ class QueryService extends AbstractService
         }
         //$query->assignBack($data);
         //$data['datasource_id'] = $dataSourceUuid;
-        //$data['org_id'] = $orgUuid;
+        //$data['account_id'] = $accountUuid;
         return $query->getGenerated();
     }
 
@@ -90,10 +90,10 @@ class QueryService extends AbstractService
 
     public function getQuery($uuid, $params)
     {
-        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, if(q.created_by=:created_by, true, false) as is_owner, q.isdeleted, q.version, d.uuid as datasource_uuid, d.name as datasource_name from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid and (q.ispublic=true or q.created_by=:created_by)';
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, if(q.created_by=:created_by, true, false) as is_owner, q.isdeleted, q.version, d.uuid as datasource_uuid, d.name as datasource_name from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.account_id=:account_id and q.uuid=:uuid and (q.ispublic=true or q.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'uuid' => $uuid,
         ];
         try {
@@ -117,6 +117,9 @@ class QueryService extends AbstractService
         if (isset($params['data'])) {
             $queryResult = $this->runQuery($resultSet[0]['configuration'], $resultSet[0]['datasource_uuid']);
             $response['query']['data'] = $queryResult['data'];
+            if (isset($queryResult['targetquery'])) {
+                $response['query']['targetquery']= $queryResult['targetquery'];
+            }
         }
         return $response;
     }
@@ -126,9 +129,9 @@ class QueryService extends AbstractService
         $paginateOptions = FilterUtils::paginateLikeKendo($params, self::$queryFields);
         $where = $paginateOptions['where'];
         if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
-            $where .= empty($where) ? "WHERE (q.org_id =" . AuthContext::get(AuthConstants::ORG_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)" : " AND(q.org_id =" . AuthContext::get(AuthConstants::ORG_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)";
+            $where .= empty($where) ? "WHERE (q.account_id =" . AuthContext::get(AuthConstants::ACCOUNT_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)" : " AND(q.account_id =" . AuthContext::get(AuthConstants::ACCOUNT_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)";
         } else {
-            $where .= empty($where) ? "WHERE q.isdeleted <> 1 AND (q.org_id =" . AuthContext::get(AuthConstants::ORG_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)" : " AND q.isdeleted <> 1 AND(q.org_id =" . AuthContext::get(AuthConstants::ORG_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)";
+            $where .= empty($where) ? "WHERE q.isdeleted <> 1 AND (q.account_id =" . AuthContext::get(AuthConstants::ACCOUNT_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)" : " AND q.isdeleted <> 1 AND(q.account_id =" . AuthContext::get(AuthConstants::ACCOUNT_ID) . ") and (q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . " OR q.ispublic = 1)";
         }
         $sort = $paginateOptions['sort'] ? " ORDER BY " . $paginateOptions['sort'] : '';
         $limit = " LIMIT " . $paginateOptions['pageSize'] . " offset " . $paginateOptions['offset'];
@@ -138,9 +141,9 @@ class QueryService extends AbstractService
         $count = $resultSet->toArray()[0]['count'];
 
         if (isset($params['show_deleted']) && $params['show_deleted'] == true) {
-            $query = "SELECT q.uuid, q.name, d.uuid as datasource_uuid, q.configuration, q.ispublic, IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner, q.version, q.org_id, q.isdeleted FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
+            $query = "SELECT q.uuid,q.name,d.uuid as datasource_uuid,q.configuration,q.ispublic,IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner,q.version,q.account_id,q.isdeleted FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
         } else {
-            $query = "SELECT q.uuid, q.name, d.uuid as datasource_uuid, datasource_id, q.configuration, q.ispublic, IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner, q.version, q.org_id FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
+            $query = "SELECT q.uuid,q.name, d.uuid as datasource_uuid, datasource_id,q.configuration,q.ispublic,IF(q.created_by = " . AuthContext::get(AuthConstants::USER_ID) . ", 'true', 'false') as is_owner,q.version,q.account_id FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id " . $where . " " . $sort . " " . $limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
@@ -167,12 +170,11 @@ class QueryService extends AbstractService
 
     public function executeAnalyticsQuery($uuid, $overRides = null)
     {
-        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid';
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.account_id=:account_id and q.uuid=:uuid';
         $queryParams = [
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'uuid' => $uuid,
         ];
-        //      try {
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if (count($resultSet) == 0) {
             return 0;
@@ -196,11 +198,6 @@ class QueryService extends AbstractService
         }
         $configuration = json_encode($configArray);
         $result = $this->runQuery($configuration, $resultSet[0]['datasource_uuid'], $overRides);
-
-        //      } catch(Exception $e) {
-        //         return 0;
-        //     }
-
         return $result;
     }
 
@@ -212,7 +209,6 @@ class QueryService extends AbstractService
         } else {
             array_push($errors, array('message' => 'datasource_id is required'));
         }
-
         if (isset($params['configuration'])) {
             $configuration = $params['configuration'];
         } else {
@@ -224,6 +220,11 @@ class QueryService extends AbstractService
             $validationException->setErrors($errors);
             throw $validationException;
         }
+        if (isset($params['debug'])) {
+            $configtemp = json_decode($configuration,1);
+            $configtemp['debug']=$params['debug'];
+            $configuration = json_encode($configtemp);
+        }
         try {
             $result = $this->runQuery($configuration, $datasource_id);
         } catch (Exception $e) {
@@ -231,7 +232,7 @@ class QueryService extends AbstractService
             $this->logger->error($e);
             throw $e;
         }
-        return $result['data'];
+        return $result;
     }
 
     private function runQuery($configuration, $datasource_uuid, $overRides = null)
@@ -248,7 +249,7 @@ class QueryService extends AbstractService
         //     $exp_sort = json_decode($parameters['sort'], 1);
         //     $parameters['sort'] = $exp_sort;
         // }
-        
+
         if (isset($parameters['filter']) && is_string($parameters['filter'])) {
             $parameters['filter'] = $this->stringDecode($parameters['filter']);
         }
@@ -280,11 +281,13 @@ class QueryService extends AbstractService
         } else {
             $entity_name = null;
         }
+        // echo "Parameters"; print_r($parameters);exit;
         $result = $analyticsEngine->runQuery($app_name, $entity_name, $parameters);
         return $result;
     }
 
-    private function stringDecode($params) {
+    private function stringDecode($params)
+    {
         if (isset($params) && is_string($params)) {
             $exp_sort = json_decode($params, 1);
             $params = $exp_sort;
@@ -358,7 +361,7 @@ class QueryService extends AbstractService
         $index = 1;
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -" . $value);
-            $queryData = $this->executeAnalyticsQuery($value, $overRides);
+            $queryData = $this->executeAnalyticsQuery($value, $overRides); 
             $this->logger->info("Executing AnalyticsQuery returned -" . print_r($queryData, true));
             if ($queryData == null || $queryData == 0) {
                 throw new InvalidInputException("uuid entered is incorrect - $value", 1);
@@ -372,7 +375,7 @@ class QueryService extends AbstractService
             if (!empty($data) && !empty($queryData['data']) && is_array($queryData['data'])) {
                 if ($aggCheck == 1) {
                     if (!empty($queryData['meta']['aggregates'])) {
-                            $data = $this->mergeData($data, $queryData['data'], $index);
+                        $data = $this->mergeData($data, $queryData['data'], $index);
                     } else {
                         throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
                     }
@@ -381,7 +384,7 @@ class QueryService extends AbstractService
                     if (!empty($queryData['meta']['aggregates'])) {
                         throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);
                     } else {
-                            $data = $this->mergeData($data, $queryData['data'], $index);
+                        $data = $this->mergeData($data, $queryData['data'], $index);
                     }
                 }
             } else {

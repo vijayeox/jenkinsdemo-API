@@ -327,6 +327,9 @@ abstract class Entity implements Countable
         //Make sure 'version' is set if this is update.
         $id = array_key_exists(self::COLUMN_ID, $this->data) ? $this->data[self::COLUMN_ID] : null;
         $uuid = array_key_exists(self::COLUMN_UUID, $this->data) ? $this->data[self::COLUMN_UUID] : null;
+        if (empty($uuid) && array_key_exists(self::COLUMN_UUID, $input) && empty($input[self::COLUMN_UUID])) {
+            unset($input[self::COLUMN_UUID]);
+        }
         $isIdValid = (isset($id) && (0 != $id));
         $isUuidValid = isset($uuid);
         $isVersionInModel = array_key_exists(self::COLUMN_VERSION, $this->data);

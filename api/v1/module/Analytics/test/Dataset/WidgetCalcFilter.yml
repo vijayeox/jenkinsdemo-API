@@ -6,7 +6,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'widget1'
     configuration: 'sample config'
@@ -19,7 +19,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'widget2'
     configuration: 'sample config2'
@@ -32,7 +32,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'combinedWithExpression'
     configuration: 'sample config3'
@@ -45,7 +45,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'combinedWithSingle'
     configuration: 'sample config3'
@@ -58,7 +58,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'combinedWithSingleExpression'
     configuration: 'sample config3'
@@ -71,7 +71,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'combinedWithFilters'
     configuration: ''
@@ -84,7 +84,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'OverrideAtQueryWidget'
     configuration: 'sample config3'
@@ -97,7 +97,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'combinedWithFiltersTestingOverrides'
     configuration: ''
@@ -110,7 +110,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'listSorts'
     configuration: ''
@@ -123,7 +123,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'groupSorts'
     configuration: ''
@@ -136,7 +136,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'combinedWithSingleExpressionWithoutName'
     configuration: 'sample config3'
@@ -149,7 +149,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'testwithSession'
     configuration: 'sample config3'
@@ -162,7 +162,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'testwithSessionUserId'
     configuration: 'sample config3'
@@ -175,7 +175,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'testCombineTwoCounts'
     configuration: 'sample config3'
@@ -188,7 +188,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'NoFilterOverride'
     configuration: ''
@@ -202,7 +202,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: 'simpleonequery'
     configuration: ''
@@ -215,7 +215,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: '2filteroverrides'
     configuration: ''
@@ -229,7 +229,7 @@ ox_widget:
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     name: '1filteroverrides'
     configuration: ''

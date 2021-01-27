@@ -72,8 +72,8 @@ class Home extends React.Component {
   createBlock = () => {
     var appsList = [
       {
-        name: "Organization",
-        api: "ORGANIZATION",
+        name: "Account",
+        api: "ACCOUNT",
         icon: "apps/Admin/org.svg",
         component: Organization
       },
@@ -171,6 +171,14 @@ class Home extends React.Component {
               <img src="apps/Admin/008-development-2.svg" />
             </div>
             <div className="titles">PPM Admin</div>
+          </div>
+        ) : null}
+        {this.userProfile.privileges.MANAGE_APPLICATION ? (
+          <div onClick={()=>this.launchExternalApp("EOXAppBuilder")}>
+            <div className="block d1">
+              <img src="apps/Admin/008-development-2.svg" />
+            </div>
+            <div className="titles">App Builder</div>
           </div>
         ) : null}
 

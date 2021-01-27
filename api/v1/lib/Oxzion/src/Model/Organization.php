@@ -1,40 +1,25 @@
 <?php
 namespace Oxzion\Model;
 
+use Oxzion\Type;
 use Oxzion\Model\Entity;
 
 class Organization extends Entity
 {
-    const BUSINESS = 'BUSINESS';
-    const INDIVIDUAL = 'INDIVIDUAL';
-
-    protected $data = array(
-        'id' => null,
-        'name' => null,
-        'uuid' => null,
-        'subdomain' => null,
-        'contactid' => null,
-        'preferences' => null,
-        'theme' => 0,
-        'org_profile_id' => null,
-        'status' => 'Active',
-        'type' => 'BUSINESS'
+    protected static $MODEL = array(
+        'id' =>                     ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
+        'uuid' =>                   ['type' => Type::UUID,      'readonly' => FALSE, 'required' => FALSE],
+        'address_id' =>             ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
+        'parent_id' =>              ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'labelfile' =>              ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'languagefile' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
+        'date_created' =>           ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'date_modified' =>          ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
+        'created_by' =>             ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
+        'modified_by' =>            ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE]
     );
 
-    public function __construct($data = array())
-    {
-        if ($data) {
-            $this->exchangeArray($data);
-        }
-    }
-
-    public function validate()
-    {
-        $required = array(
-            'name',
-            'status',
-            'preferences'
-        );
-        $this->validateWithParams($required);
+    public function &getModel() {
+        return self::$MODEL;
     }
 }

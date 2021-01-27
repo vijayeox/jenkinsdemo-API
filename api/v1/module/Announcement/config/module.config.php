@@ -10,7 +10,7 @@ return [
             'announcement' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement[/:announcementId]',
+                    'route' => '/[account/:accountId/]announcement[/:announcementId]',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'access'=>[
@@ -25,7 +25,7 @@ return [
             'announcementList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement/a/:type',
+                    'route' => '/[account/:accountId/]announcement/a/:type',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'GET',
@@ -47,7 +47,7 @@ return [
             'announcementToGroup' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement/:announcementId/save',
+                    'route' => '/[account/:accountId/]announcement/:announcementId/save',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'POST',
@@ -58,7 +58,7 @@ return [
             'announcementGroups' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement/:announcementId/groups',
+                    'route' => '/[account/:accountId/]announcement/:announcementId/groups',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'GET',

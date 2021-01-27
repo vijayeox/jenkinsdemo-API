@@ -3,6 +3,7 @@ import Page from "./components/App/Page";
 import FormRender from "./components/App/FormRender";
 import { createBrowserHistory } from "history";
 import { Chip } from "@progress/kendo-react-buttons";
+import Requests from "./Requests";
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class Navigation extends React.Component {
     this.appNavigationDiv = "navigation_" + this.appId;
     this.state = {
       selected: this.props.selected,
+      customActions: [],
       pages: [],
     };
     this.homepage = null;
@@ -28,9 +30,9 @@ class Navigation extends React.Component {
         this.homepage = this.props.menus[0];
       }
     } else {
-      this.getMenulist().then((response) => {
+      Requests.getMenulist(this.core,this.appId).then((response) => {
         this.props.menuLoad(response["data"]);
-        if (response["data"][0]) {
+        if (response["data"] && response["data"][0]) {
           this.homepage = response["data"][0];
         }
         if (this.params && this.params.page) {
@@ -45,10 +47,14 @@ class Navigation extends React.Component {
           });
           this.pageActive(this.params.page);
           history.push("/");
+        } else if (this.params && this.params.fileId) {
+          this.props.selectLoad(this.homepage);
+          this.addPage({detail:{pageContent:[{type:"EntityViewer",fileId: this.params.fileId}],title: "View",icon: "fa fa-eye",fileId:this.params.fileId}})
+          // this.pageActive(this.params.page);
+          history.push("/");
         } else if (this.params && this.params.activityId) {
           this.setState({ selected: { activity_id: this.params.activityId } });
         } else if (this.proc && this.proc.args) {
-          ``;
           if (typeof this.proc.args === "string") {
             try {
               var appParams = JSON.parse(this.proc.args);
@@ -73,9 +79,7 @@ class Navigation extends React.Component {
                   detail: { pageContent: appParams.detail },
                   bubbles: true,
                 });
-                document
-                  .getElementsByClassName(this.breadcrumbDiv)[0]
-                  .dispatchEvent(ev);
+                document.getElementsByClassName(this.breadcrumbDiv)[0].dispatchEvent(ev);
               }
             } catch (e) {
               console.log("No params!");
@@ -91,21 +95,10 @@ class Navigation extends React.Component {
       });
     }
   }
-  async getMenulist() {
-    let helper = this.core.make("oxzion/restClient");
-    let menulist = await helper.request(
-      "v1",
-      "/app/" + this.appId + "/menu",
-      {},
-      "get"
-    );
-    return menulist;
-  }
+  
   pageActive(pageId) {
     if (document.getElementById(pageId + "_page")) {
-      document
-        .getElementById(pageId + "_page")
-        .classList.remove("page-inactive");
+      document.getElementById(pageId + "_page").classList.remove("page-inactive");
       document.getElementById(pageId + "_page").classList.add("page-active");
     }
   }
@@ -116,50 +109,82 @@ class Navigation extends React.Component {
     }
   }
   componentDidMount() {
-    document
-      .getElementById(this.appNavigationDiv)
-      .addEventListener("addPage", this.addPage, false);
-    document
-      .getElementById(this.appNavigationDiv)
-      .addEventListener("stepDownPage", this.stepDownPage, false);
-    document
-      .getElementById(this.appNavigationDiv)
-      .addEventListener("selectPage", this.selectPage, false);
+    document.getElementById(this.appNavigationDiv).addEventListener("addPage", this.addPage, false);
+    document.getElementById(this.appNavigationDiv).addEventListener("stepDownPage", this.stepDownPage, false);
+    document.getElementById(this.appNavigationDiv).addEventListener("selectPage", this.selectPage, false);
+    document.getElementById(this.breadcrumbDiv).addEventListener("addcustomActions", this.addcustomActions, false);
   }
 
   addPage = (e) => {
     var pages = this.state.pages;
-    pages.push(e.detail);
-    if (
-      e.detail.parentPage &&
-      document.getElementById(e.detail.parentPage + "_page")
-    ) {
+    var that = this;
+    if(e.detail.fileId){
+      var filePage = [{type:"EntityViewer",fileId:e.detail.fileId}]
+      var pageContent = {pageContent: filePage,title: "View",icon: "fa fa-eye",fileId: e.detail.fileId};
+      if(!this.checkIfEntityViewerPageExists(pageContent)){
+        pages.push(pageContent)
+      } else {
+        pages.splice(pages.length - 1, 1);
+        this.setState({
+          pages: pages,
+        });
+        setTimeout(function(){ 
+          that.addPage({detail: pageContent});
+        }, 1000);
+      }
+    } else {
+      if(!this.checkIfEntityViewerPageExists(e.detail)){
+        pages.push(e.detail)
+      } else {
+        pages.splice(pages.length - 1, 1);
+        this.setState({
+          pages: pages,
+        });
+        setTimeout(function(){ 
+          that.addPage({detail: e.detail});
+        }, 1000);
+        // this.addPage({detail: pageContent});
+        // pages.push(e.detail);
+      }
+    }
+    if (e.detail.parentPage && document.getElementById(e.detail.parentPage + "_page")) {
       this.pageInActive(e.detail.parentPage);
     } else {
-      pages.length > 0
-        ? this.pageInActive(pages[pages.length - 2].pageId)
-        : null;
+      if(pages[pages.length - 2] && pages[pages.length - 2].pageId){
+        pages.length > 0 ? this.pageInActive(pages[pages.length - 2].pageId) : null;
+      }
     }
     this.setState({ pages: pages });
+    this.resetCustomActions();
+    this.props.selectLoad({});
   };
   selectPage = (e) => {
     this.pageActive(e.detail.parentPage);
   };
-
-  componentWillReceiveProps(props) {
-    if (props.selected) {
-      var item = props.selected;
-      if (item.page_id) {
-        var page = [{ pageId: item.page_id, title: item.name }];
-        this.setState({ pages: page });
-        this.pageActive(item.page_id);
-      }
+  addcustomActions = (e) => {
+    this.setState({customActions:e.detail.customActions});
+  };
+  checkIfEntityViewerPageExists(page){
+    var last_page_key = this.state.pages.length - 1;
+    var pages = this.state.pages;
+    if(this.state.pages[last_page_key] && this.state.pages[last_page_key].pageContent && this.state.pages[last_page_key].pageContent[0] && this.state.pages[last_page_key].pageContent[0].type=="EntityViewer" && page.pageContent && (page.pageContent[0].type=="Form" || page.pageContent[0].type=="Comment")){
+      return true;
     }
+    if(this.state.pages[last_page_key] && this.state.pages[last_page_key].pageContent && this.state.pages[last_page_key].pageContent[0] && this.state.pages[last_page_key].pageContent[0].type=="Form" && page.pageContent && (page.pageContent[0].type=="EntityViewer" || page.pageContent[0].type=="Comment")){
+      return true;
+    }
+    if(this.state.pages[last_page_key] &&this.state.pages[last_page_key].pageContent  && this.state.pages[last_page_key].pageContent[0] && this.state.pages[last_page_key].pageContent[0].type=="Comment" && page.pageContent && (page.pageContent[0].type=="EntityViewer" || page.pageContent[0].type=="Form")){
+      return true;
+    }
+    if(this.state.pages[last_page_key] &&this.state.pages[last_page_key].pageContent  && this.state.pages[last_page_key].pageContent[0] && this.state.pages[last_page_key].pageContent[0].type=="EntityViewer" && page.pageContent && page.pageContent[0].type=="EntityViewer"){
+      return true;
+    }
+    return false;
   }
   componentDidUpdate(prevProps) {
     if (prevProps.selected != this.props.selected) {
       var item = this.props.selected;
-      if (item.page_id) {
+      if (item && item.page_id) {
         var page = [{ pageId: item.page_id, title: item.name }];
         this.setState({ pages: page });
         this.pageActive(item.page_id);
@@ -182,8 +207,35 @@ class Navigation extends React.Component {
         this.props.selectLoad(this.homepage);
       }
     }
+    this.resetCustomActions();
   };
-
+  resetCustomActions(){
+    this.setState({customActions:null});
+    let ev = new CustomEvent("getCustomActions", {
+      detail: {},
+      bubbles: true,
+    });
+    if(document.getElementsByClassName('page-active') && document.getElementsByClassName('page-active')[0] ){
+      var foundElement = this.getElementInsideElement(document.getElementsByClassName('page-active')[0],'customActionsToolbar');
+      if(foundElement){
+        foundElement.dispatchEvent(ev);
+      }
+    }
+  }
+getElementInsideElement(baseElement, wantedElementID) {
+  var elementToReturn;
+  for (var i = 0; i < baseElement.childNodes.length; i++) {
+      elementToReturn = baseElement.childNodes[i];
+      if (elementToReturn.id == wantedElementID) {
+          return elementToReturn;
+      } else {
+          elementToReturn = this.getElementInsideElement(elementToReturn, wantedElementID);
+          if(elementToReturn){
+            return elementToReturn;
+          }
+      }
+  }
+}
   breadcrumbClick = (currentValue, index) => {
     let data = this.state.pages.slice();
     data.splice(index + 1, data.length);
@@ -191,40 +243,36 @@ class Navigation extends React.Component {
       pages: data,
     });
     this.pageActive(currentValue.pageId);
+    this.resetCustomActions();
   };
 
   renderBreadcrumbs = () => {
     var breadcrumbsList = [];
     this.state.pages.map((currentValue, index) => {
       var clickable = false;
+      var childNode = " ";
       if (this.state.pages.length > 1 && index + 1 != this.state.pages.length) {
         clickable = true;
+      }
+      if(index != 0){
+        childNode = <div
+        style={{
+          marginRight: "5px",
+          marginLeft: "5px"
+        }}
+      > {'>'} </div>;
       }
       currentValue.title
         ? breadcrumbsList.push(
             <>
-              {index == "0" ? null : (
-                <div
-                  style={{
-                    marginRight: "5px",
-                  }}
-                />
-              )}
-              <Chip
-                text={currentValue.title}
-                value={""}
-                disabled={!clickable}
-                className={
-                  clickable ? "activeBreadcrumb" : "disabledBreadcrumb"
-                }
-                icon={currentValue.icon}
-                type={clickable || index == 0 ? "none" : "info"}
-                selected={false}
-                onClick={() => {
-                  clickable ? this.breadcrumbClick(currentValue, index) : null;
-                }}
-                removable={false}
-              />
+              {index == "0" ? null : ( <div style={{ marginRight: "5px" }} /> )}
+              {childNode}
+              <div value={""} disabled={!clickable} className={ clickable ? "activeBreadcrumb" : "disabledBreadcrumb" } type={clickable || index == 0 ? "none" : "info"} selected={false} >
+                  <a onClick={() => { clickable ? this.breadcrumbClick(currentValue, index) : null;}}>
+                    <i className={currentValue.icon} style={{ marginRight: "5px"}}></i>
+                    {currentValue.title}
+                  </a>
+              </div>
             </>
           )
         : null;
@@ -246,6 +294,7 @@ class Navigation extends React.Component {
               proc={this.props.proc}
               app={this.props.appId}
               core={this.core}
+              fileId={item.fileId}
               pageId={item.pageId}
               params={item.params}
               pageContent={item.pageContent}
@@ -262,9 +311,11 @@ class Navigation extends React.Component {
     const { expanded, selected } = this.state;
     return (
       <div id={this.appNavigationDiv} className="Navigation">
-        <div className={this.breadcrumbDiv}>
+        <div className={this.breadcrumbDiv} id={this.breadcrumbDiv}>
           {this.state.pages.length > 0 ? (
-            <div className="breadcrumbs">{this.renderBreadcrumbs()}</div>
+            <div className="row">
+            <div className="breadcrumbs col-md-9">{this.renderBreadcrumbs()}</div><div className="col-md-3 customActions" id="customActions">{this.state.customActions}</div>
+            </div>
           ) : null}
         </div>
         <div className={this.pageDiv} style={{ height: "calc(100% - 55px)" }}>

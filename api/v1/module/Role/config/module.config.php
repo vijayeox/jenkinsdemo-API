@@ -9,7 +9,7 @@ return [
             'role' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]role[/:roleId]',
+                    'route' => '/[account/:accountId/]role[/:roleId]',
                     'defaults' => [
                         'controller' => Controller\RoleController::class,
                         'access' => [
@@ -25,7 +25,7 @@ return [
             'roleprivilege' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]role/:roleId/privilege',
+                    'route' => '/[account/:accountId/]role/:roleId/privilege',
                     'defaults' => [
                         'controller' => Controller\RoleController::class,
                         'method' => 'GET',

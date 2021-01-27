@@ -25,7 +25,7 @@ class NLPTest extends ServiceTest
         if (enableNLP==0) {
             $this->markTestSkipped('Only Integration Test');
         }
-        AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         $nlp = $this->getApplicationServiceLocator()->get(NLPEngine::class);
         $response = $nlp->processText("What is the amount of sales closed this year");
         $response_array = json_decode($response, true);

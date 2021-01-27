@@ -18,12 +18,12 @@ class FileAttachment extends Entity
         'url' => null,
         'created_id' => null,
         'created_date' => null,
-        'org_id' => null,
+        'account_id' => null,
     );
 
     public function validate()
     {
-        $required = array('name', 'uuid', 'org_id');
+        $required = array('name', 'uuid', 'account_id');
         $this->validateWithParams($required);
     }
 }

@@ -26,7 +26,7 @@ class Project extends React.Component {
           this.moduleConfig.permission.canDelete
         ],
       },
-      selectedOrg: this.props.userProfile.orgid,
+      selectedOrg: this.props.userProfile.accountId,
     };
 
     this.notif = React.createRef();
@@ -45,13 +45,13 @@ class Project extends React.Component {
     let helper = this.core.make("oxzion/restClient");
     let addProjectUsers = await helper.request(
       "v1",
-      "organization/" +
+      "account/" +
         this.state.selectedOrg +
         "/project/" +
         dataItem +
         "/save",
       {
-        userid: dataObject,
+        userIdList: dataObject,
       },
       "post"
     );
@@ -66,7 +66,20 @@ class Project extends React.Component {
       temp2.push(uid);
     }
     this.pushProjectUsers(item, temp2).then((response) => {
-      this.child.current.refreshHandler(response);
+      if(response.status == 'success'){
+        this.notif.current.notify(
+          "Success",
+          "Operation succesfully completed",
+          "success"
+        )
+      }else{
+        this.notif.current.notify(
+          "Error",
+          "Operation Failed",
+          "danger"
+        )
+      }   
+      this.OX_Grid.current.refreshHandler(response);   
     });
     this.toggleDialog();
   };
@@ -150,7 +163,7 @@ class Project extends React.Component {
     }).then((result) => {
       if (result.value) {
         DeleteEntry(
-          "organization/" + this.state.selectedOrg + config.route,
+          "account/" + this.state.selectedOrg + config.route,
           dataItem.uuid
         ).then((response) => {
           if (response.message == "Project has subprojects") {
@@ -169,11 +182,16 @@ class Project extends React.Component {
             }).then((result) => {
               if (result.value) {
                 DeleteEntry(
-                  "organization/" + this.state.selectedOrg + config.route,
+                  "account/" + this.state.selectedOrg + config.route,
                   dataItem.uuid + "/true"
                 ).then((response) => {
                   response.status == "success"
-                    ? this.OX_Grid.current.refreshHandler(response)
+                    ? (this.OX_Grid.current.refreshHandler(response),
+                      this.notif.current.notify(
+                        "Operation succesfully completed",
+                        response.message,
+                        "success"
+                      ))
                     : this.notif.current.notify(
                         "Operation Failed",
                         response.message,
@@ -184,6 +202,11 @@ class Project extends React.Component {
             });
           } else if (response.status == "success") {
             this.OX_Grid.current.refreshHandler(response);
+            this.notif.current.notify(
+              "Operation succesfully completed",
+              response.message,
+              "success"
+            );
           } else {
             this.notif.current.notify(
               "Operation Failed",
@@ -205,8 +228,8 @@ class Project extends React.Component {
       config: {
         dataItem: dataItem,
         title: config.title,
-        mainList: "organization/" + this.state.selectedOrg + config.mainList,
-        subList: "organization/" + this.state.selectedOrg + config.subList,
+        mainList: "account/" + this.state.selectedOrg + config.mainList,
+        subList: "account/" + this.state.selectedOrg + config.subList,
         members: config.members,
       },
       manage: {
@@ -225,8 +248,15 @@ class Project extends React.Component {
     }
   };
 
-  cancel = () => {
+  cancel = (mode) => {
     this.setState({ itemInEdit: undefined });
+    if(mode && (mode == 'save')){
+      this.notif.current.notify(
+        "Success",
+        "Operation succesfully completed",
+        "success"
+      );
+    }
   };
 
   cloneItem(dataItem) {
@@ -312,7 +342,7 @@ class Project extends React.Component {
           args={this.core}
           orgChange={this.orgChange}
           orgSwitch={
-            this.props.userProfile.privileges.MANAGE_ORGANIZATION_WRITE
+            this.props.userProfile.privileges.MANAGE_ACCOUNT_WRITE
               ? true
               : false
           }
@@ -327,7 +357,7 @@ class Project extends React.Component {
             }
             expandable={this.listConfig.expandable ? true : undefined}
             data={
-              "organization/" +
+              "account/" +
               this.state.selectedOrg +
               "/" +
               this.listConfig.route
@@ -344,6 +374,8 @@ class Project extends React.Component {
             reorderable={true}
             resizable={true}
             sortable={true}
+            columnMenuFilter={false}
+            defaultToolBar={true}
             pageable={{ buttonCount: 3, pageSizes: [10, 20, 30], info: true }}
             columnConfig={this.prepareColumnData(this.listConfig)}
             gridToolbar={[

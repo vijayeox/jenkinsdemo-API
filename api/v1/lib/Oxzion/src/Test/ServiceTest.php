@@ -28,7 +28,7 @@ class ServiceTest extends TestCase
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;
-    protected $testOrgId = 1;
+    protected $testAccountId = 1;
 
     /**
      * @var \Zend\Mvc\ApplicationInterface
@@ -101,7 +101,7 @@ class ServiceTest extends TestCase
     protected function tearDown()
     {
         $tm = $this->getTransactionManager();
-        $tm->rollback();
+        $tm->rollback(true);
         Console::overrideIsConsole($this->usedConsoleBackup);
         // Prevent memory leak
         $this->reset();

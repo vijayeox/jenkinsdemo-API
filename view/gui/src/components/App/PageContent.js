@@ -16,7 +16,10 @@ import Page from "./Page";
 import TabSegment from "./TabSegment";
 import merge from "deepmerge";
 import "./Styles/PageComponentStyles.scss";
-import * as OxzionGUIComponents from "../../../index.js";
+import * as OxzionGUIComponents from "../../../index";
+import ParameterHandler from "./ParameterHandler";
+import PageNavigation from "../PageNavigation";
+import EntityViewer from "./EntityViewer";
 
 class PageContent extends React.Component {
   constructor(props) {
@@ -46,10 +49,12 @@ class PageContent extends React.Component {
       pageId: this.props.pageId,
       submission: this.props.submission,
       showLoader: false,
+      fileData: this.props.fileData? this.props.fileData : {},
       fileId: this.props.fileId ? this.props.fileId : null,
       isMenuOpen: false,
       currentRow: this.props.currentRow ? this.props.currentRow : {},
       title: '',
+      notif: this.notif,
       displaySection: 'DB',
       sectionData: null,
     };
@@ -72,11 +77,23 @@ class PageContent extends React.Component {
     }
   }
 
+  componentDidMount() {
+    document.getElementById(this.contentDivID)
+    ? document
+        .getElementById(this.contentDivID)
+        .addEventListener(
+          "clickAction",
+          (e) => this.buttonAction(e.detail, {}),
+          false
+        )
+    : null;
+  }
+
   renderButtons(e, action) {
     var actionButtons = [];
     Object.keys(action).map(function (key, index) {
       var row = e;
-      var string = this.replaceParams(action[key].rule, e);
+      var string = ParameterHandler.replaceParams(this.appId,action[key].rule, e);
       var _moment = moment;
       var profile = this.userprofile;
       string = string.replace(/moment/g, '_moment');
@@ -128,36 +145,21 @@ class PageContent extends React.Component {
         appId={this.appId}
         osjsCore={this.core}
         data={dataString}
+        pageId = {this.pageId}
         gridToolbar={config[0].content.toolbarTemplate}
         columnConfig={config[0].content.columnConfig}
       />
     );
   }
-  loadPage(pageId, icon, hideLoader,name,currentRow,pageContent) {
-   var parentPage = this.pageId;
-   if(this.isTab=="true"){
-     parentPage = this.parentPage;
-   }
-   let ev = new CustomEvent("addPage", {
-     detail: {
-       pageId: pageId,
-       title: name,
-       icon: icon,
-       nested: true,
-       currentRow: currentRow,
-       parentPage: parentPage,
-       pageContent: pageContent
-     },
-     bubbles: true
-   });
-   document.getElementById("navigation_"+this.appId).dispatchEvent(ev);
-   this.loader.destroy();
- }
 
-  async buttonAction(action, rowData) {
+  async buttonAction(actionCopy, rowData) {
+    var action = actionCopy;
+    if (action.content){
+      action.details = action.content;
+    }
     var mergeRowData = this.props.currentRow ? {...this.props.currentRow, ...rowData} : rowData;
     if (action.page_id) {
-      this.loadPage(action.page_id);
+      PageNavigation.loadPage(this.appId,this.pageId,action.page_id);
     } else if (action.details) {
       var pageDetails = this.state.pageContent;
       var that = this;
@@ -212,7 +214,7 @@ class PageContent extends React.Component {
             if (item.params && item.params.page_id) {
               pageId = item.params.page_id;
               if (item.params.params) {
-                var newParams = this.updatePassedParams(
+                var newParams = ParameterHandler.replaceParams(this.appId,
                   item.params.params,
                   mergeRowData
                 );
@@ -221,14 +223,14 @@ class PageContent extends React.Component {
               copyPageContent = [];
             } else {
               var pageContentObj = {};
-              pageContentObj = this.replaceParams(item, mergeRowData);
+              pageContentObj = ParameterHandler.replaceParams(this.appId,item, mergeRowData);
               copyPageContent.push(pageContentObj);
             }
           }
         });
         action.updateOnly
           ? null
-          : this.loadPage(
+          : PageNavigation.loadPage(this.appId,this.pageId,
               pageId,
               action.icon,
               true,
@@ -239,26 +241,23 @@ class PageContent extends React.Component {
       }
     }
   }
-  updatePassedParams(params,mergeRowData){
-    return this.replaceParams(params,mergeRowData);
-  }
 
   updateActionHandler(details, rowData) {
     var that = this;
     return new Promise((resolve) => {
-      var queryRoute = that.replaceParams(details.params.url, rowData);
+      var queryRoute = ParameterHandler.replaceParams(that.appId,details.params.url, rowData);
       var postData = {};
       try {
         if (details.params.postData) {
           Object.keys(details.params.postData).map((i) => {
-            postData[i] = that.replaceParams(
+            postData[i] = ParameterHandler.replaceParams(that.appId,
               details.params.postData[i],
               rowData
             );
           });
         } else {
           Object.keys(details.params).map((i) => {
-            postData[i] = that.replaceParams(
+            postData[i] = ParameterHandler.replaceParams(that.appId,
               details.params[i],
               rowData
             );
@@ -268,8 +267,8 @@ class PageContent extends React.Component {
       } catch (error) {
         postData = rowData;
       }
-      that
-        .updateCall(
+      ParameterHandler.updateCall(
+          this.core,this.appId,
           queryRoute,
           postData,
           details.params.disableAppId,
@@ -277,7 +276,7 @@ class PageContent extends React.Component {
         )
         .then((response) => {
           if (details.params.downloadFile && response.status == 200) {
-              this.downloadFile(response).then(
+              ParameterHandler.downloadFile(response).then(
                 (result) => {
                   that.setState({
                     showLoader: false,
@@ -296,152 +295,17 @@ class PageContent extends React.Component {
     });
   }
 
-  async downloadFile(response) {
-    try {
-      const file = await response.blob();
-      const fileName = response.headers
-        .get("content-disposition")
-        .split(";")
-        .find((n) => n.includes("filename="))
-        .replace("filename=", "")
-        .trim();
-  
-      if (window.navigator.msSaveOrOpenBlob)
-        // IE10+
-        window.navigator.msSaveOrOpenBlob(file, fileName);
-      else {
-        var a = document.createElement("a"),
-          url = URL.createObjectURL(file);
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function () {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 0);
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  
-  }
-
-  replaceParams(route, params) {
-    var finalParams = merge(params ? params : {}, {
-      current_date: moment().format("YYYY-MM-DD"),
-      fileId: this.state.fileId ? this.state.fileId : null,
-      appId: this.appId
-    });
-    if (typeof route == "object") {
-      var final_route = JSON.parse(JSON.stringify(route));
-      Object.keys(route).map((item) => {
-        if (/\{\{.*?\}\}/g.test(route[item])) {
-          if (finalParams[item]) {
-            final_route[item] = finalParams[item];
-          } else {
-            if (item == "appId") {
-              final_route[item] = this.appId;
-            } else if (item == "fileId" && this.state.fileId) {
-              final_route[item] = this.state.fileId;
-            } else {
-              final_route[item] = route[item];
-            }
-            final_route[item] = this.searchAndReplaceParams(route[item],finalParams)
-          }
-        } else {
-          final_route[item] = route[item];
-        }
-      });
-      return final_route;
-    } else {
-      var regex = /\{\{.*?\}\}/g;
-      let m;
-      var matches = [];
-      do {
-        m = regex.exec(route)
-        if (m) {
-          if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
-          }
-          // The result can be accessed through the `m`-variable.
-          matches.push(m);
-        }
-      } while (m);
-      matches.forEach((match, groupIndex) => {
-        var param = match[0].replace("{{", "");
-        param = param.replace("}}", "");
-        if (finalParams[param] != undefined) {
-          route = route.replace(
-            match[0],
-            finalParams[param]
-          );
-        } else {
-          route = route.replace(
-            match[0],
-            null
-          );
-        }
-      });
-      return route;
-    }
-  }
-
-  searchAndReplaceParams(route,finalParams){
-    var regex = /\{\{.*?\}\}/g;
-    let m;
-    var matches=[];
-    do {
-      m = regex.exec(route)
-      if(m){
-        if (m.index === regex.lastIndex) {
-          regex.lastIndex++;
-        }
-        matches.push(m);
-      }
-    } while (m);
-    matches.forEach((match, groupIndex) => {
-      var param = match[0].replace("{{", "");
-      param = param.replace("}}", "");
-      if(finalParams[param] !=undefined){
-        route = route.replace(
-          match[0],
-          finalParams[param]
-          );
-      } else {
-        route = route.replace(
-          match[0],
-          null
-          );
-      }
-    });
-    return route
-  }
-
   prepareDataRoute(route, params, disableAppId) {
     if (typeof route == "string") {
       if (!params) {
         params = {};
       }
-      var result = this.replaceParams(route, params);
+      var result = ParameterHandler.replaceParams(this.appId,route, params);
       result = disableAppId ? result : "app/" + this.appId + "/" + result;
       return result;
     } else {
       return route;
     }
-  }
-
-  async updateCall(route, body,disableAppId,method) {
-    let helper = this.core.make("oxzion/restClient");
-    route = disableAppId ? route : "/app/" + this.appId + "/" + route;
-    let formData = await helper.request(
-      "v1",
-      route,
-      method == "GET" ? {} : body,
-      method ? method.toLowerCase() :"post"
-    );
-    return formData;
   }
 
   setTitle = (title) => {
@@ -481,27 +345,27 @@ class PageContent extends React.Component {
       if (item.type == "Form") {
         var dataString = this.prepareDataRoute(item.url, this.state.currentRow);
         // This workflow instance id corresponds to completed workflow instance
-        var workflowInstanceId = this.replaceParams(
+        var workflowInstanceId = ParameterHandler.replaceParams(this.appId,
           item.workflowInstanceId,
           this.state.currentRow
         );
-        var workflowId = this.replaceParams(
+        var workflowId = ParameterHandler.replaceParams(this.appId,
           item.workflowId,
           this.state.currentRow
         );
-        var activityInstanceId = this.replaceParams(
+        var activityInstanceId = ParameterHandler.replaceParams(this.appId,
           item.activityInstanceId,
           this.state.currentRow
         );
-        var cacheId = this.replaceParams(
+        var cacheId = ParameterHandler.replaceParams(this.appId,
           item.cacheId,
           this.state.currentRow
         );
-        var urlPostParams = this.replaceParams(
+        var urlPostParams = ParameterHandler.replaceParams(this.appId,
           item.urlPostParams,
           this.state.currentRow
         );
-        var fileId = this.replaceParams(item.fileId, this.state.currentRow);
+        var fileId = ParameterHandler.replaceParams(this.appId,item.fileId, this.state.currentRow);
         content.push(
           <FormRender
             key={i}
@@ -523,46 +387,64 @@ class PageContent extends React.Component {
             activityInstanceId={activityInstanceId}
             parentWorkflowInstanceId={workflowInstanceId}
             dataUrl={item.dataUrl ? this.prepareDataRoute(item.dataUrl, this.state.currentRow,true) : undefined}
-            postSubmitCallback={this.postSubmitCallback}
           />
         );
       } else if (item.type == "List") {
         var itemContent = item.gridContent ? item.gridContent : item.content;
         var columnConfig = itemContent.columnConfig;
-        if (itemContent.actions) {
-          if (columnConfig[columnConfig.length - 1].title == "Actions") {
-            null;
-          } else {
-            columnConfig.push({
-              title: "Actions",
-              width: itemContent.actionsWidth ? itemContent.actionsWidth : "200px",
-              cell: (e) => this.renderButtons(e, itemContent.actions),
-              filterCell: {
-                type: "empty"
-              }
-            });
-          }
-        }
+        // if (itemContent.actions) {
+        //   if (columnConfig[columnConfig.length - 1].title == "Actions") {
+        //     null;
+        //   } else {
+        //     columnConfig.push({
+        //       title: "Actions",
+        //       width: itemContent.actionsWidth ? itemContent.actionsWidth : "200px",
+        //       cell: (e) => this.renderButtons(e, itemContent.actions),
+        //       filterCell: {
+        //         type: "empty"
+        //       }
+        //     });
+        //   }
+        // }
         var mergeRowData = this.props.params ? {...this.props.params, ...this.state.currentRow} : this.state.currentRow;
         var dataString = this.prepareDataRoute(
           itemContent.route,
           mergeRowData,
           itemContent.disableAppId
         );
-        var urlPostParams = this.replaceParams(
+        var urlPostParams = ParameterHandler.replaceParams(this.appId,
           item.urlPostParams,
           mergeRowData
         );
+        var listOptions = itemContent.listOptions;
+        var reorderable = false;
+        if(listOptions && listOptions.reorderable == "true"){
+          reorderable = true;
+        } else {
+          reorderable = false;
+        }
+        var sortable = false;
+        if(listOptions && listOptions.sortable == "true"){
+          sortable = true;
+        } else {
+          sortable = false;
+        }
+        var resizable = false;
+        if(listOptions && listOptions.resizable == "true"){
+          resizable = true;
+        } else {
+          resizable = false;
+        }
         var that = this;
         if(itemContent.operations){
           if(itemContent.operations.actions){
             itemContent.operations.actions.map((action, j) => {
               var act = action;
-              if(act.details){
+              if(Array.isArray(act.details)){
                 act.details.map((detail, k) => {
                   if(detail.params){
                     Object.keys(detail.params).map(function (key, index) {
-                      detail.params[key] = that.replaceParams(detail.params[key],mergeRowData);
+                      detail.params[key] = ParameterHandler.replaceParams(that.appId,detail.params[key],mergeRowData);
                     });
                   }
                 });
@@ -570,7 +452,7 @@ class PageContent extends React.Component {
             });
           }
         }
-        var operations = this.replaceParams(
+        var operations = ParameterHandler.replaceParams(this.appId,
           itemContent.operations,
           mergeRowData
         );
@@ -586,14 +468,20 @@ class PageContent extends React.Component {
             parentDiv={this.contentDivID}
             osjsCore={this.core}
             data={dataString}
+            postSubmitCallback={this.postSubmitCallback}
             pageId={this.state.pageId}
+            sortable={sortable}
+            resizable={resizable}
+            reorderable={reorderable}
             parentData={this.state.currentRow}
+            pageId={this.pageId}
+            notif={this.state.notif}
             urlPostParams={urlPostParams}
             gridDefaultFilters={
               itemContent.defaultFilters
                 ? typeof itemContent.defaultFilters == "string"
-                  ? JSON.parse(this.replaceParams(itemContent.defaultFilters))
-                  : this.replaceParams(itemContent.defaultFilters)
+                  ? JSON.parse(ParameterHandler.replaceParams(this.appId,itemContent.defaultFilters))
+                  : ParameterHandler.replaceParams(this.appId,itemContent.defaultFilters)
                 : undefined
             }
             gridOperations={operations}
@@ -634,10 +522,10 @@ class PageContent extends React.Component {
       } else if (item.type == "DocumentViewer") {
         var url;
         if (item.url) {
-          url = this.replaceParams(item.url, this.state.currentRow);
+          url = ParameterHandler.replaceParams(this.appId,item.url, this.state.currentRow);
         }
         if (item.content) {
-          url = this.replaceParams(item.content, this.state.currentRow);
+          url = ParameterHandler.replaceParams(this.appId,item.content, this.state.currentRow);
         }
         content.push(
           <DocumentViewer
@@ -662,18 +550,24 @@ class PageContent extends React.Component {
       } else if (item.type == "Comment") {
         var url;
         if (item.content) {
-          url = this.replaceParams(item.content, this.state.currentRow);
+          url = ParameterHandler.replaceParams(this.appId,item.content, this.state.currentRow);
         } else {
           if (item.url) {
-            url = item.url;
+            url = ParameterHandler.replaceParams(this.appId,item.url, this.state.currentRow);
           }
         }
+        var fileId;
+        if(item.fileId){
+          fileId = item.fileId;
+        }
+        console.log(item);
         content.push(
           <CommentsView
             appId={this.appId}
             key={i}
             core={this.core}
             url={url}
+            fileId={fileId}
           />
         );
       } else if (item.type == "TabSegment") {
@@ -699,10 +593,12 @@ class PageContent extends React.Component {
           />
         );
       } else if (item.type == "DashboardManager") {
+        var uuid = item.content ? (item.content.uuid? item.content.uuid: null) : null;
         content.push(
           <DashboardManager
             appId={this.appId}
-            uuid={item.content.uuid}
+            uuid={uuid}
+            content={item.content}
             args={this.core}
             key={i}
             content={item.content}
@@ -714,7 +610,7 @@ class PageContent extends React.Component {
         );
       } else if (item.type == "Page") {
         var mergeRowData = this.props.params ? {...this.props.params, ...item.params} : item.params;
-        var params = this.replaceParams(mergeRowData, this.state.currentRow);
+        var params = ParameterHandler.replaceParams(this.appId,mergeRowData, this.state.currentRow);
         content.push(
           <Page
             key={item.page_id}
@@ -730,6 +626,8 @@ class PageContent extends React.Component {
           />
         );
       } else if (item.type == "Document" || item.type == "HTMLViewer") {
+        var fileData = this.state.fileData? this.state.fileData : this.state.currentRow;
+        var fileId = item.fileId ? item.fileId : item.uuid;
         content.push(
           <HTMLViewer
             key={i}
@@ -738,11 +636,25 @@ class PageContent extends React.Component {
             appId={this.appId}
             url={
               item.url
-                ? this.replaceParams(item.url, this.state.currentRow)
+                ? ParameterHandler.replaceParams(this.appId,item.url, this.state.currentRow)
                 : undefined
             }
-            fileId={this.state.fileId}
+            fileId={fileId}
             content={item.content ? item.content : ""}
+            fileData={fileData}
+            className={item.className}
+          />
+        );
+      }else if (item.type == "EntityViewer") {
+        var fileId = this.props.fileId?this.props.fileId:this.state.currentRow.uuid;
+        content.push(
+          <EntityViewer
+            key={i}
+            core={this.core}
+            key={i}
+            appId={this.appId}
+            proc={this.props.proc}
+            fileId={fileId}
             fileData={this.state.currentRow}
             className={item.className}
           />
@@ -750,7 +662,7 @@ class PageContent extends React.Component {
       } else {
         if (this.extGUICompoents && this.extGUICompoents[item.type]) {
           this.externalComponent = this.extGUICompoents[item.type];
-          item.params = this.replaceParams(item.params, this.state.currentRow);
+          item.params = ParameterHandler.replaceParams(this.appId,item.params, this.state.currentRow);
           let guiComponent = this.extGUICompoents && this.extGUICompoents[item.type] ? (
             <this.externalComponent
               {...item}

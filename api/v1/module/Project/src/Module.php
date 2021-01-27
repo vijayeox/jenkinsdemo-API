@@ -4,7 +4,8 @@ namespace Project;
 
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Service\AccountService;
+use Oxzion\Service\UserService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -35,8 +36,14 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\ProjectService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    $orgService = $container->get(OrganizationService::class);
-                    return new Service\ProjectService($container->get('config'), $dbAdapter, $container->get(Model\ProjectTable::class), $orgService, $container->get(MessageProducer::class));
+                    $acctService = $container->get(AccountService::class);
+                    $userService = $container->get(UserService::class);
+                    return new Service\ProjectService($container->get('config'), 
+                                                      $dbAdapter, 
+                                                      $container->get(Model\ProjectTable::class), 
+                                                      $acctService, 
+                                                      $userService,
+                                                      $container->get(MessageProducer::class));
                 },
                 Model\ProjectTable::class => function ($container) {
                     $tableGateway = $container->get(Model\ProjectTableGateway::class);

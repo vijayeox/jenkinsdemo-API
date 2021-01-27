@@ -23,69 +23,60 @@ class PrivilegeService extends AbstractService
 
     public function getMasterPrivilegeList($params = null)
     {
-        if (isset($params['orgId'])) {
-            $orgId = $this->getIdFromUuid('ox_organization', $params['orgId']);
+        if (isset($params['accountId'])) {
+            $accountId = $this->getIdFromUuid('ox_account', $params['accountId']);
         } else {
-            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
-        try {
-            $select = "SELECT orp.privilege_name,orp.permission,oa.name FROM ox_role_privilege orp left join ox_app as oa on oa.id = orp.app_id
-                        WHERE orp.org_id = " . $orgId . " AND orp.role_id = (SELECT r.id FROM ox_role r WHERE r.name = 'ADMIN' and r.org_id = " . $orgId . ") ORDER BY orp.id";
-            $resultSet = $this->executeQuerywithParams($select);
-            $masterPrivilege = $resultSet->toArray();
-            if (isset($params['roleId'])) {
-                $roleId = $this->getIdFromUuid('ox_role', $params['roleId']);
-                $select = "SELECT orp.privilege_name,orp.permission FROM ox_role_privilege orp WHERE orp.org_id = " . $orgId . " AND orp.role_id =" . $roleId . " ORDER BY orp.id";
-                $resultSet = $this->executeQuerywithParams($select);
-                $rolePrivilege = $resultSet->toArray();
-                return array('masterPrivilege' => $masterPrivilege, 'rolePrivilege' => $rolePrivilege);
-            }
-        } catch (Exception $e) {
-            throw $e;
+        $select = "SELECT orp.privilege_name,orp.permission,oa.name 
+                    FROM ox_role_privilege orp 
+                    inner join ox_role r on r.id = orp.role_id
+                    left join ox_app as oa on oa.id = orp.app_id
+                    WHERE r.name = 'ADMIN' and r.account_id = :accountId 
+                    ORDER BY orp.privilege_name";
+        $queryParams = ['accountId' => $accountId];
+        $resultSet = $this->executeQueryWithBindParameters($select, $queryParams);
+        $masterPrivilege = $resultSet->toArray();
+        if (isset($params['roleId'])) {
+            $roleId = $this->getIdFromUuid('ox_role', $params['roleId']);
+            $select = "SELECT orp.privilege_name,orp.permission 
+                        FROM ox_role_privilege orp 
+                        WHERE orp.account_id = :accountId AND orp.role_id = :roleId 
+                        ORDER BY orp.privilege_name";
+            $queryParams['roleId'] = $roleId;
+            $resultSet = $this->executeQueryWithBindParameters($select, $queryParams);
+            $rolePrivilege = $resultSet->toArray();
+            return array('masterPrivilege' => $masterPrivilege, 'rolePrivilege' => $rolePrivilege);
         }
+        
         return array('masterPrivilege' => $masterPrivilege);
     }
 
     public function getAppPrivilegeForUser($appId)
     {
-        try {
-            $userId = AuthContext::get(AuthConstants::USER_ID);
-            $queryString = "select op.name, op.permission_allowed from ox_privilege as op
-                            LEFT JOIN ox_role_privilege as orp on orp.app_id = op.app_id
-                            LEFT JOIN ox_role as orl on orl.id = orp.role_id
-                            LEFT JOIN ox_user_role as our on our.role_id = orl.id
-                            LEFT JOIN  ox_user as av on av.id = our.user_id 
-                            LEFT JOIN ox_user_profile up on up.id = av.user_profile_id";
-            $where = "where av.id = " . $userId . " and op.app_id = '" . $appId . "'";
-            $order = "order by up.firstname";
-            $group = "group by op.name, op.permission_allowed";
-            $resultSet = $this->executeQuerywithParams($queryString, $where, $group, $order);
-        } catch (ValidationException $e) {
-            return $response = ['data' => $appId, 'errors' => $e->getErrors()];
-        } catch (Exception $e) {
-            throw $e;
-        }
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+        $queryString = "SELECT distinct op.name, op.permission_allowed 
+                        from ox_privilege as op
+                        LEFT JOIN ox_role_privilege as orp on orp.app_id = op.app_id
+                        LEFT JOIN ox_role as orl on orl.id = orp.role_id
+                        LEFT JOIN ox_user_role as our on our.role_id = orl.id
+                        LEFT JOIN ox_account_user au on au.id = our.account_user_id
+                        LEFT JOIN  ox_user as av on av.id = au.user_id 
+                        LEFT JOIN ox_person up on up.id = av.person_id  
+                        where av.id = :userId and op.app_id = :appId and au.account_id = :accountId 
+                        order by op.name";
+        $params = ['userId' => $userId,
+                    'accountId' => $accountId,
+                    'appId' => $appId];
+        $resultSet = $this->executeQueryWithBindParameters($queryString, $params);
         return $resultSet->toArray();
-    }
-
-    public function getAppId()
-    {
-        try {
-            $userId = AuthContext::get(AuthConstants::USER_ID);
-            $query = "select ox_role_privilege.app_id from ox_role_privilege RIGHT JOIN ox_user_role on ox_role_privilege.role_id = ox_user_role.role_id";
-            $where = "where ox_user_role.user_id = " . $userId . " AND ox_role_privilege.privilege_name = 'MANAGE_ROLE'";
-            $resultSet = $this->executeQuerywithParams($query, $where);
-            $appIdArray = $resultSet->toArray();
-            $appId = array_unique(array_column($appIdArray, 'app_id'));
-            return $appId;
-        } catch (ValidationException $e) {
-            throw $e;
-        }
     }
 
     public function getDefaultPrivileges()
     {
-        $query = "select p.* from ox_privilege p left join ox_app ap on ap.id = p.app_id and ap.isdefault=1";
+        $query = "SELECT p.* from ox_privilege p 
+                    left join ox_app ap on ap.id = p.app_id and ap.isdefault=1";
         $result = $this->executeQuerywithParams($query);
         return $result;
     }
@@ -101,13 +92,13 @@ class PrivilegeService extends AbstractService
             $queryString = "DELETE rp FROM ox_role_privilege as rp INNER JOIN ox_app as ap ON rp.app_id = ap.id WHERE ap.id = :appid AND rp.privilege_name NOT IN (" . $list . ")";
             $params = array("appid" => $appId);
             $this->logger->info("Executing query $queryString with params " . json_encode($params));
-            $result = $this->executeQueryWithBindParameters($queryString, $params);
+            $result = $this->executeUpdateWithBindParameters($queryString, $params);
 
             //delete from ox_privilege
             $queryString = "DELETE FROM ox_privilege WHERE app_id = :appid AND name NOT IN (" . $list . ")";
             $params = array("appid" => $appId);
             $this->logger->info("Executing query $queryString with params " . json_encode($params));
-            $result = $this->executeQueryWithBindParameters($queryString, $params);
+            $result = $this->executeUpdateWithBindParameters($queryString, $params);
 
             //get difference of the list and table privileges
             $queryString = "SELECT pr.name FROM ox_privilege as pr
@@ -128,15 +119,15 @@ class PrivilegeService extends AbstractService
                         $query = "INSERT INTO ox_privilege (name, permission_allowed, app_id) VALUES (:name, :permission,:appid)";
                         $params = array("name" => $value['name'], "permission" => $value['permission'], "appid" => $appId);
                         $this->logger->info("Executing query $query with params - " . json_encode($params));
-                        $result = $this->executeQueryWithBindParameters($query, $params);
+                        $result = $this->executeUpdateWithBindParameters($query, $params);
 
-                        $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id)
-                        SELECT r.id, '" . $value['name'] . "', " . $value['permission'] . ", r.org_id, reg.app_id
-                        FROM ox_role AS r INNER JOIN
-                        ox_app_registry AS reg ON r.org_id = reg.org_id
-                        WHERE reg.app_id = :appId and r.name = 'ADMIN'";
+                        $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, account_id, app_id)
+                                SELECT r.id, '" . $value['name'] . "', " . $value['permission'] . ", r.account_id, reg.app_id
+                                FROM ox_role AS r 
+                                INNER JOIN ox_app_registry AS reg ON r.account_id = reg.account_id
+                                WHERE reg.app_id = :appId and r.name = 'ADMIN'";
                         $params = array("appId" => $appId);
-                        $result = $this->executeQueryWithBindParameters($query, $params);
+                        $result = $this->executeUpdateWithBindParameters($query, $params);
                     }
                 }
             }

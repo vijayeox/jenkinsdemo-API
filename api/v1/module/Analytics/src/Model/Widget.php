@@ -14,7 +14,7 @@ class Widget extends Entity
         'ispublic' =>           ['type' => Type::BOOLEAN,   'readonly' => FALSE ,   'required' => FALSE, 'value' => FALSE],
         'created_by' =>         ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
         'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => TRUE ,    'required' => FALSE],
-        'org_id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => TRUE],
+        'account_id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => TRUE],
         'isdeleted' =>          ['type' => Type::BOOLEAN,   'readonly' => FALSE ,   'required' => FALSE, 'value' => FALSE],
         'name' =>               ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],
         'configuration' =>      ['type' => Type::STRING,    'readonly' => FALSE ,   'required' => TRUE],

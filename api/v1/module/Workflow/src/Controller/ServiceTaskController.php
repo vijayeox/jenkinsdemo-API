@@ -6,10 +6,8 @@ namespace Workflow\Controller;
  */
 use Exception;
 use Oxzion\Controller\AbstractApiControllerHelper;
-use Oxzion\EntityNotFoundException;
 use Oxzion\Service\ServiceTaskService;
 use Oxzion\Service\WorkflowInstanceService;
-use Oxzion\ValidationException;
 
 class ServiceTaskController extends AbstractApiControllerHelper
 {
@@ -70,18 +68,9 @@ class ServiceTaskController extends AbstractApiControllerHelper
             } else {
                 return $this->getSuccessResponse();
             }
-        } catch (ValidationException $e) {
-            $this->log->error(":Exception while Performing Service Task-" . $e->getMessage(), $e);
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        } catch (EntityNotFoundException $e) {
-            $this->log->info(":Entity Not found -" . $e->getMessage());
-            $response = ['data' => $data];
-            return $this->getErrorResponse($e->getMessage(), 404, $response);
-        } catch (Exception $e) {
-            $this->log->error(":Error -" . $e->getMessage(), $e);
-            $response = ['data' => $data];
-            return $this->getErrorResponse($e->getMessage(), 500, $response);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
@@ -96,9 +85,9 @@ class ServiceTaskController extends AbstractApiControllerHelper
                         if (!$response) {
                             return $this->getErrorResponse("Workflow Completion errors", 404, null);
                         }
-                    } catch (ValidationException $e) {
-                        $response = ['data' => $params, 'errors' => $e->getErrors()];
-                        return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
+                    } catch (Exception $e) {
+                        $this->log->error($e->getMessage(), $e);
+                        return $this->exceptionToResponse($e);
                     }
                     return $this->getSuccessResponseWithData($response, 200);
                 } else {

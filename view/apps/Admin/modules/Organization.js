@@ -12,9 +12,9 @@ class Organization extends React.Component {
       action: "",
       visible: false,
       permission: {
-        canAdd: this.props.userProfile.privileges.MANAGE_ORGANIZATION_CREATE,
-        canEdit: this.props.userProfile.privileges.MANAGE_ORGANIZATION_WRITE,
-        canDelete: this.props.userProfile.privileges.MANAGE_ORGANIZATION_DELETE
+        canAdd: this.props.userProfile.privileges.MANAGE_ACCOUNT_CREATE,
+        canEdit: this.props.userProfile.privileges.MANAGE_ACCOUNT_WRITE,
+        canDelete: this.props.userProfile.privileges.MANAGE_ACCOUNT_DELETE
       }
     };
     this.toggleDialog = this.toggleDialog.bind(this);
@@ -25,7 +25,7 @@ class Organization extends React.Component {
     let helper = this.core.make("oxzion/restClient");
     let addOrgUsers = await helper.request(
       "v1",
-      "/organization/" + dataItem + "/save",
+      "/account/" + dataItem + "/save",
       {
         userid: dataObject
       },
@@ -42,7 +42,7 @@ class Organization extends React.Component {
       args: this.core,
       config: {
         dataItem: dataItem,
-        title: "Organization",
+        title: "Account",
         mainList: "users/list",
         subList: "organization",
         members: "Users"
@@ -93,7 +93,7 @@ class Organization extends React.Component {
   }
 
   remove = dataItem => {
-    DeleteEntry("organization", dataItem.uuid).then(response => {
+    DeleteEntry("account", dataItem.uuid).then(response => {
       this.child.current.refreshHandler(response);
     });
   };
@@ -118,7 +118,7 @@ class Organization extends React.Component {
       <div style={{ height: "inherit" }}>
         {this.state.visible && this.addUsersTemplate}
         <TitleBar
-          title="Manage Organizations"
+          title="Manage Account"
           menu={this.props.menu}
           args={this.core}
         />
@@ -128,8 +128,8 @@ class Organization extends React.Component {
           ref={this.child}
           config={{
             showToolBar: true,
-            title: "Organization",
-            api: "organization",
+            title: "Account",
+            api: "account",
             column: [
               {
                 title: "Logo",

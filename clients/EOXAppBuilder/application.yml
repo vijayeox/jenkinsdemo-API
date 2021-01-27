@@ -10,6 +10,8 @@ app:
     isdefault: false
     logo: default_app.png
     start_options: null
+    title: AppBuilder
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
 privilege:
     -
         name: MANAGE_APPLICATION

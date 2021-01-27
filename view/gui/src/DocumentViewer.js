@@ -5,6 +5,7 @@ import { Card, Button } from "react-bootstrap";
 import "./public/css/documentViewer.scss";
 import { Upload } from "@progress/kendo-react-upload";
 import Notification from "./Notification";
+import Requests from "./Requests";
 
 export default class DocumentViewer extends Component {
   constructor(props) {
@@ -89,6 +90,15 @@ export default class DocumentViewer extends Component {
           if (response.status == "success") {
             this.uploadAttachments(fileIndex - 1);
           }
+          this.loader.destroy();
+          if(response.status == "error"){
+            this.notif.current.notify(
+              response.message,
+              "Please choose a different file.",
+              "danger"
+            )
+            
+          }
         }
       );
     }
@@ -113,21 +123,10 @@ export default class DocumentViewer extends Component {
     return response;
   }
 
-  async getDocumentsListService(url) {
-    let response = await this.helper.request(
-      "v1",
-      "/app/" + this.appId + "/" + url,
-      {},
-      "get"
-    );
-
-    return response;
-  }
-
   getDocumentsList = () => {
     if (this.props.url) {
       this.loader.show();
-      this.getDocumentsListService(this.props.url).then((response) => {
+      Requests.getDocumentsListService(this.core,this.appId,this.props.url).then((response) => {
         if (response.data) {
           var documentsList = {};
           var folderType = {};
@@ -181,36 +180,6 @@ export default class DocumentViewer extends Component {
     }
   }
 
-  async deleteFile(attachementId) {
-    let response = await this.helper.request(
-      "v1",
-      "/app/" +
-        this.appId +
-        "/file/" +
-        this.fileId +
-        "/attachment/" +
-        attachementId +
-        "/remove",
-      {},
-      "delete"
-    );
-    return response;
-  }
-
-  async renameFile(attachementId, name) {
-    let response = await this.helper.request(
-      "v1",
-      "/app/" +
-        this.appId +
-        "/file/" +
-        this.fileId +
-        "/attachment/" +
-        attachementId,
-      { name: name },
-      "post"
-    );
-    return response;
-  }
 
   generateDocumentList() {
     var accordionHTML = [];
@@ -255,8 +224,8 @@ export default class DocumentViewer extends Component {
                         >
                           <div
                             className={
-                              doc.file == this.state.selectedDocument
-                                ? this.state.selectedDocument.file
+                              this.state.selectedDocument && this.state.selectedDocument.file
+                                ? doc.file == this.state.selectedDocument.file
                                   ? "docListBody borderActive"
                                   : "docListBody border"
                                 : "docListBody border"
@@ -400,7 +369,7 @@ export default class DocumentViewer extends Component {
                 title="rename"
                 className="btn btn-dark"
                 onClick={() => {
-                  this.renameFile(
+                  Requests.renameFile(this.core,this.appId,this.fileId,
                     documentData.uuid,
                     this.state.selectedDocument.originalName
                   ).then((response) => {
@@ -439,7 +408,7 @@ export default class DocumentViewer extends Component {
               title="delete"
               className="btn btn-dark"
               onClick={() => {
-                this.deleteFile(documentData.uuid).then((response) => {
+                Requests.deleteFile(this.core,this.appId,this.fileId,documentData.uuid).then((response) => {
                   if (response.status == "success") {
                     this.notif.current.notify(
                       "Success",

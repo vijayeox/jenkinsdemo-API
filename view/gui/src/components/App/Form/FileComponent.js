@@ -1,21 +1,21 @@
 import File from 'formiojs/components/file/File'
 import * as _utils from 'formiojs/utils/utils'
+import { Formio } from "formiojs";
+import * as _lodash from "lodash";
 
 export default class FileComponent extends File { 
 
     constructor(component, options, data) {
-        super(component, options, data);
-        component.core = null;
-        component.appId = null;
-        component.uiUrl = null;
-        this.form = this.getRoot();
-        var that = this;
-        that.form.element.addEventListener("appDetails", function(e) {
-            component.core = e.detail.core;
-            component.appId = e.detail.appId;
-            component.uiUrl = e.detail.uiUrl;
-            component.wrapperUrl = e.detail.wrapperUrl;
-        },true);
+        var formOptions = Formio.getPlugin("optionsPlugin");
+        var customOptions = _lodash.default.merge(options, formOptions.options);
+        if(customOptions.core == null || customOptions.core == undefined){
+            console.log(customOptions);
+        }
+        super(component, customOptions, data);
+        component.core = customOptions.core;
+        component.appId = customOptions.appId;
+        component.uiUrl = customOptions.uiUrl;
+        component.wrapperUrl = customOptions.wrapperUrl;
     }
     upload(files){
     var _this6 = this;
@@ -163,10 +163,5 @@ export default class FileComponent extends File {
         // User is expecting an immediate notification due to attempting to download a file.
         alert(response);
       });
-    }
-    render(children){
-        var evt = new CustomEvent("getAppDetails", { detail: {} });
-        this.form.element.dispatchEvent(evt);
-        return super.render(children);
     }
 }

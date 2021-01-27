@@ -272,10 +272,36 @@ class FileUtils
                     self::chmod_r($item->getPathname(),$permission);
                 } else {
                     if(!$item->isDot()){
-                        chmod($item->getPathname(), $permission);
+                        if(!chmod($item->getPathname(), $permission)){
+                            throw new Exception('Failed to Change Permission!.');
+                        }
                     }
                 }
             }
         }
+    }
+
+    public static function getFileName($path){
+        return basename($path);
+    }
+
+    public static function downloadFile($sourceFile, $destinationFile){
+        $fsource = fopen($sourceFile, 'rb');
+        if (!$fsource) {
+            throw new Exception('Failed to open the file');
+        }
+
+        $fdestination = fopen($destinationFile, 'wb');
+        if (!$fdestination) {
+            fclose($fsource);
+            throw new Exception('Failed to open the file');
+        }
+
+        while ($buffer = fread($fsource, 1024)) {
+            fwrite($fdestination, $buffer);
+        }
+
+        fclose($fdestination);
+        fclose($fsource);
     }
 }

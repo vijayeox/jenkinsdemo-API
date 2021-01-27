@@ -64,3 +64,18 @@ div > div.oxzion-widget-drilldown-table-icon{
     color: blue;
     cursor: pointer;
 }
+
+.red {
+    color: #EE4424;
+    font-weight: bold;
+}
+
+.green {
+    color:#A3C53A;
+    font-weight: bold;
+}
+
+.yellow {
+    color: #F3BA1D;
+    font-weight: bold;
+}

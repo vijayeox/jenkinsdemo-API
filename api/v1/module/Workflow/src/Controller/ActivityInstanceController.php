@@ -10,8 +10,10 @@ use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\ValidationException;
 use Oxzion\Service\CommandService;
+use Oxzion\InvalidParameterException;
 use Oxzion\EntityNotFoundException;
 use Logger;
+use Exception;
 
 class ActivityInstanceController extends AbstractApiControllerHelper
 {
@@ -42,23 +44,19 @@ class ActivityInstanceController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         $this->log->info("Post Data- ". print_r(json_encode($data), true));
         try {
-            $response = $this->createActivityInstanceEntry($data);
+            $this->createActivityInstanceEntry($data);
             $this->log->info("Add Activity Instance Successful");
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found", 404);
-            }
-            return $this->getSuccessResponseWithData($response);
-        } catch (ValidationException $e) {
-            $this->log->info("Exception at Add Activity Instance-".$e->getMessage());
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getSuccessResponseWithData($data);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 
-    private function createActivityInstanceEntry($data){
+    private function createActivityInstanceEntry(&$data){
         $this->log->info("CREATE ACTIVITY INSTANCE ENTRY - Activity INstance");
         try{
-            $response = $this->activityInstanceService->createActivityInstanceEntry($data,$this->commandService);
+            $this->activityInstanceService->createActivityInstanceEntry($data,$this->commandService);
             $this->log->info(ActivityInstanceController::class.":Add Activity Instance Successful");
         }catch(EntityNotFoundException $e){
             $this->log->info("Entity Not FOund Instance");
@@ -67,15 +65,14 @@ class ActivityInstanceController extends AbstractApiControllerHelper
                 if(isset($variables['workflow_id']) || isset($variables['workflowId'])){
                     $workflowId = isset($variables['workflow_id'])?$variables['workflow_id']:$variables['workflowId'];
                 } else {
-                    return 0;
+                    throw new InvalidParameterException("Workflow Id not set");
                 }
                 $workflowInstance = $this->workflowInstanceService->setupWorkflowInstance($workflowId,$data['processInstanceId'],$variables);
                 if($workflowInstance){
-                    return $this->createActivityInstanceEntry($data,$this->commandService);
+                    return $this->createActivityInstanceEntry($data);
                 }
             }
         }
-        return $response;
     }
      /**
     }
@@ -91,16 +88,11 @@ class ActivityInstanceController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         $this->log->info("Post Data- ". print_r(json_encode($data), true));
         try {
-            $response = $this->activityInstanceService->completeActivityInstance($data);
-            $this->log->info("Complete Activity Instance response - ".print_r($response, true));
-            if ($response == 0 || empty($response)) {
-                return $this->getErrorResponse("Entity not found", 404);
-            }
-            return $this->getSuccessResponseWithData($response);
-        } catch (ValidationException $e) {
-            $this->log->info("Exception at Add Activity Instance-".$e->getMessage());
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            $this->activityInstanceService->completeActivityInstance($data);
+            return $this->getSuccessResponseWithData($data);
+        }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
         }
     }
 }

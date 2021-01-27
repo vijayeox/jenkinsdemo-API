@@ -7,7 +7,7 @@ ox_datasource:
     configuration: '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1
 -
@@ -18,6 +18,6 @@ ox_datasource:
     configuration: '{"data": {"user": "elastic","password": "changeme","serveraddress": "localhost","port": "9200", "core":"core", "type":"type", "scheme":"http"}}'
     created_by: 1
     date_created: '2019-06-27 07:25:06'
-    org_id: 1
+    account_id: 1
     isdeleted: 0
     version: 1

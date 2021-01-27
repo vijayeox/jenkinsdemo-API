@@ -24,7 +24,7 @@ class AnnouncementControllerTest extends ControllerTest
     protected function createDummyFile()
     {
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['UPLOAD_FOLDER'] . "organization/" . $this->testOrgId . "/announcements/temp/";
+        $tempFolder = $config['UPLOAD_FOLDER'] . "account/" . $this->testAccountId . "/announcements/temp/";
         FileUtils::createDirectory($tempFolder);
         copy(dirname(__FILE__) . "/../files/test-oxzionlogo.png", $tempFolder . "test-oxzionlogo.png");
     }
@@ -55,9 +55,9 @@ class AnnouncementControllerTest extends ControllerTest
 
     public function testGetListWithType(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/ANNOUNCEMENT', 'GET');
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/ANNOUNCEMENT', 'GET');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 3);
         $this->assertEquals($content['data'][2]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033abc');
@@ -69,16 +69,16 @@ class AnnouncementControllerTest extends ControllerTest
 
     public function testGetListWithIncorrectType(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/something', 'GET');
-        $this->assertResponseStatusCode(404);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/something', 'GET');
+        $this->assertResponseStatusCode(412);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Type must be ANNOUNCEMENT or HOMESCREEN only');
+        $this->assertEquals($content['message'], 'Announcement Type must be ANNOUNCEMENT or HOMESCREEN');
     }
 
     public function testGetListWithDifferentType() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
         $this->assertResponseStatusCode(200);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -89,10 +89,10 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Announcement 7');
     }
 
-    public function testGetListWithOrgID()
+    public function testGetListWithAccountID()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -107,7 +107,7 @@ class AnnouncementControllerTest extends ControllerTest
 
     public function testGetListWithExpirationStartDate() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
         $this->assertResponseStatusCode(200);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertNotContains('Announcement 8',array_column($content['data'],'name'));
@@ -116,7 +116,7 @@ class AnnouncementControllerTest extends ControllerTest
 
     public function testGetListWithExpirationEndDate() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
         $this->assertResponseStatusCode(200);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertNotContains('Announcement 9',array_column($content['data'],'name'));
@@ -140,10 +140,10 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
 
-    public function testGetListofAllWithOrgId()
+    public function testGetListofAllWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/ANNOUNCEMENT', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/ANNOUNCEMENT', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -157,11 +157,11 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
 
-    public function testGetListofAllByManagerInvalidOrg()
+    public function testGetListofAllByManagerInvalidAccount()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/a/ANNOUNCEMENT', 'GET');
-        $this->assertResponseStatusCode(403);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/a/ANNOUNCEMENT', 'GET');
+        $this->assertResponseStatusCode(401);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
@@ -171,10 +171,10 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You do not have permissions to get the announcement list');
     }
 
-    public function testGetListofAllByManagerValidOrg()
+    public function testGetListofAllByManagerValidAccount()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/ANNOUNCEMENT', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/ANNOUNCEMENT', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -200,10 +200,10 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'Announcement 1');
     }
 
-    public function testGetListOrgID()
+    public function testGetListAccountID()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -212,10 +212,10 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'Announcement 1');
     }
 
-    public function testGetListWithInvalidOrgID()
+    public function testGetListWithInvalidAccountID()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -235,7 +235,7 @@ class AnnouncementControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'orgId' => '53012471-2863-4949-afb1-e69b0891c98a', 'type' => 'ANNOUNCEMENT'];
+        $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'type' => 'ANNOUNCEMENT'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -248,7 +248,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['end_date'], $data['end_date']);
     }
 
-    public function testCreateWithoutOrgAsEmployeeUser()
+    public function testCreateWithoutAccountAsEmployeeUser()
     {
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'type' => 'ANNOUNCEMENT'];
@@ -260,7 +260,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testCreateWithoutOrgAsSuperUser()
+    public function testCreateWithoutAccountAsSuperUser()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'type' => 'ANNOUNCEMENT'];
@@ -276,12 +276,12 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['end_date'], $data['end_date']);
     }
 
-    public function testCreateWithOrg()
+    public function testCreateWithAccount()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'type' => 'ANNOUNCEMENT'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'POST', null);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -295,15 +295,15 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['start_date'], $data['start_date']);
         $this->assertEquals($content['data']['end_date'], $data['end_date']);
         $this->assertEquals($result[0]['name'], 'Test Announcement');
-        $this->assertEquals($result[0]['org_id'], 1);
+        $this->assertEquals($result[0]['account_id'], 1);
     }
 
-    public function testCreateOtherOrg()
+    public function testCreateOtherAccount()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'type' => 'ANNOUNCEMENT'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement', 'POST', null);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -316,7 +316,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['start_date'], $data['start_date']);
         $this->assertEquals($content['data']['end_date'], $data['end_date']);
         $this->assertEquals($result[0]['name'], 'Test Announcement');
-        $this->assertEquals($result[0]['org_id'], 2);
+        $this->assertEquals($result[0]['account_id'], 2);
     }
 
     public function testCreateWithOutNameFailure()
@@ -326,11 +326,11 @@ class AnnouncementControllerTest extends ControllerTest
         $data = ['groups' => '[{"id":1},{"id":2}]', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day"))];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['message'], 'Validation error(s).');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
@@ -339,20 +339,20 @@ class AnnouncementControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Announcement 1', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'POST', null);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'POST', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(412);
+        $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Announcement already exists');
     }
 
-    public function testCreateExistingAnnouncementWithoutOrg() {
+    public function testCreateExistingAnnouncementWithoutAccount() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Announcement 1', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -364,7 +364,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Announcement 5', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'type' => 'ANNOUNCEMENT'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'POST', null);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -377,15 +377,15 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['start_date'], $data['start_date']);
         $this->assertEquals($content['data']['end_date'], $data['end_date']);
         $this->assertEquals($result[0]['name'], 'Announcement 5');
-        $this->assertEquals($result[0]['org_id'], 1);
+        $this->assertEquals($result[0]['account_id'], 1);
     }
 
-    public function testCreateWithOtherOrg()
+    public function testCreateWithOtherAccount()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Announcement 5', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png', 'type' => 'ANNOUNCEMENT'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement', 'POST', null);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -399,7 +399,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['start_date'], $data['start_date']);
         $this->assertEquals($content['data']['end_date'], $data['end_date']);
         $this->assertEquals($result[0]['name'], 'Announcement 5');
-        $this->assertEquals($result[0]['org_id'], 1);
+        $this->assertEquals($result[0]['account_id'], 1);
     }
 
     public function testCreateAccess()
@@ -431,36 +431,34 @@ class AnnouncementControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
     }
 
-    public function testUpdateWithOrgId()
+    public function testUpdateWithAccountId()
     {
         $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png'];
         // $this->createDummyFile();
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
     }
 
-    public function testUpdateWithDifferentOrg()
+    public function testUpdateWithDifferentAccount()
     {
         $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Announcement does not belong to the organization');
+        $this->assertEquals($content['message'], 'Announcement does not belong to the account');
     }
 
     public function testUpdateWithInvalidAnnouncementId()
@@ -468,7 +466,7 @@ class AnnouncementControllerTest extends ControllerTest
         $data = ['name' => 'Test Announcement', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-b', 'PUT', null);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-b', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -517,10 +515,10 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteWithOrg()
+    public function testDeleteWithAccount()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/e66157ee-47de-4ed5-a78e-8a9195033f7a', 'DELETE');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/e66157ee-47de-4ed5-a78e-8a9195033f7a', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
 
@@ -531,10 +529,10 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($result, array());
     }
 
-    public function testDeleteWithDifferentOrg()
+    public function testDeleteWithDifferentAccount()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/e66157ee-47de-4ed5-a78e-8a9195033f7a', 'DELETE');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/e66157ee-47de-4ed5-a78e-8a9195033f7a', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -545,7 +543,7 @@ class AnnouncementControllerTest extends ControllerTest
     public function testDeleteWithInvalidAnnouncement()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/e66157ee-47de-4ed5-a78e7a', 'DELETE');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/e66157ee-47de-4ed5-a78e7a', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -561,6 +559,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Announcement not found');
     }
 
     public function testGetListOfAnnouncementGroups()
@@ -585,7 +584,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testGetListOfAnnouncementGroupsWithOrgId()
+    public function testGetListOfAnnouncementGroupsWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
@@ -593,7 +592,7 @@ class AnnouncementControllerTest extends ControllerTest
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
 
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/groups', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/groups', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -615,7 +614,7 @@ class AnnouncementControllerTest extends ControllerTest
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
 
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-29d4c-2b29238700f3/groups', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-29d4c-2b29238700f3/groups', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -626,7 +625,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'], array());
     }
 
-    public function testGetListOfAnnouncementGroupsWithInvalidOrgId()
+    public function testGetListOfAnnouncementGroupsWithInvalidAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
@@ -634,7 +633,7 @@ class AnnouncementControllerTest extends ControllerTest
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
 
-        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3/groups', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3/groups', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -674,12 +673,12 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($announcementGroup[1]['group_id'], 2);
     }
 
-    public function testsaveGroupWithOrg()
+    public function testsaveGroupWithAccount()
     {
         $data = ['groups' => array(['uuid' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'], ['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50db'])];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/save', 'POST', $data);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/save', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -702,12 +701,13 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($announcementGroup[1]['group_id'], 2);
     }
 
-    public function testsaveGroupWithInvalidOrg()
+    public function testsaveGroupWithInvalidAccount()
     {
         $data = ['groups' => array(['uuid' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'], ['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50db'])];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/5301263-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/save', 'POST', $data);
+        $this->dispatch('/account/5301263-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/save', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -715,9 +715,8 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertMatchedRouteName('announcementToGroup');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
 
-        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Announcement does not belong to the organization');
+        $this->assertEquals($content['message'], 'Account does not exist');
     }
 
     public function testsaveGroupWithInvalidAnnouncementId()
@@ -725,7 +724,7 @@ class AnnouncementControllerTest extends ControllerTest
         $data = ['groups' => array(['uuid' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'], ['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50db'])];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/5301263-4949-afb1-e69b0891c98a/announcement/90943-4508-bd4c-2b29238700f3/save', 'POST', $data);
+        $this->dispatch('/account/5301263-4949-afb1-e69b0891c98a/announcement/90943-4508-bd4c-2b29238700f3/save', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -738,7 +737,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Announcement not found');
     }
 
-    public function testsaveGroupOfDifferentOrg()
+    public function testsaveGroupOfDifferentAccount()
     {
         $data = ['groups' => array(['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50sd'])];
         // $this->createDummyFile();

@@ -11,7 +11,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Service\OrganizationService;
+use Oxzion\Service\AccountService;
 
 class Module implements ConfigProviderInterface
 {
@@ -36,7 +36,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\AnnouncementService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AnnouncementService($container->get('config'), $dbAdapter, $container->get(Model\AnnouncementTable::class), $container->get(OrganizationService::class));
+                    return new Service\AnnouncementService($container->get('config'), $dbAdapter, $container->get(Model\AnnouncementTable::class), $container->get(AccountService::class));
                 },
                 Model\AnnouncementTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AnnouncementTableGateway::class);

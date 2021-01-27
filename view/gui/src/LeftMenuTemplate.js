@@ -54,7 +54,7 @@ export default class LeftMenuTemplate extends React.Component {
   render() {
     const { expanded, selected } = this.state;
     return (
-      <div className="LeftMenuTemplate">
+      <div className={"LeftMenuTemplate"+(this.props.proc.metadata.hideMenu ? " hideMenu" : "")}>
         <SideNav
           onSelect={this.onSelect}
           onToggle={this.onToggle}
@@ -62,7 +62,7 @@ export default class LeftMenuTemplate extends React.Component {
         >
           {this.keepExpanded ? null : <SideNav.Toggle />}
           <SideNav.Nav selected={selected}>
-            {this.state.menus.map((menuitem, index) => {
+            {this.state.menus && this.state.menus.length > 0? this.state.menus.map((menuitem, index) => {
               return (
                 <NavItem eventKey={menuitem} key={index}>
                   <NavIcon>
@@ -74,8 +74,8 @@ export default class LeftMenuTemplate extends React.Component {
                       />
                     </abbr>
                   </NavIcon>
-                  <NavText style={{ paddingRight: 32 }} name={menuitem.name}>
-                    {menuitem.name}
+                  <NavText style={{ paddingRight: 32 }} name={menuitem.name} title={menuitem.name}>
+                    {menuitem.name.length > 18  ? menuitem.name.substring(0,18) + '...': menuitem.name}
                   </NavText>
                   {menuitem.submenu
                     ? menuitem.submenu.map((subMenu, index2) => {
@@ -103,8 +103,9 @@ export default class LeftMenuTemplate extends React.Component {
                             <NavText
                               style={{ paddingRight: 32 }}
                               name={subMenu.name}
+                              title={subMenu.name}
                             >
-                              {subMenu.name}
+                              {subMenu.name.length > 18  ? subMenu.name.substring(0,18) + '...': subMenu.name}
                             </NavText>
                           </NavItem>
                         );
@@ -112,7 +113,7 @@ export default class LeftMenuTemplate extends React.Component {
                     : null}
                 </NavItem>
               );
-            })}
+            }):<div>No menu found</div>}
           </SideNav.Nav>
         </SideNav>
         <Navigation

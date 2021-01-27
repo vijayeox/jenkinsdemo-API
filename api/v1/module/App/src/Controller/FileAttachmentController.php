@@ -38,7 +38,7 @@ class FileAttachmentController extends AbstractApiController
      * <code>status : "success|error",
      *       data :  {
      * String stored_procedure_name
-     * int: org_id
+     * int: account_id
      * string: app_id
      * string: app_name
      * }
@@ -72,7 +72,12 @@ class FileAttachmentController extends AbstractApiController
             $response = ['errors' => $e->getErrors()];
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (Exception $e) {
+        }
+        catch (ServiceException $e){
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
+        }
+        catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
         }
         if (!isset($_FILES['file'])) {

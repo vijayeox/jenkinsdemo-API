@@ -150,6 +150,7 @@ class DashboardControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');

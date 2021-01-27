@@ -12,10 +12,4 @@ class UserTable extends ModelTable
         parent::__construct($tableGateway);
         $this->tableGateway = $tableGateway;
     }
-
-    public function save(Entity $data)
-    {
-        $data = $data->toArray();
-        return $this->internalSave($data);
-    }
 }

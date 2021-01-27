@@ -10,7 +10,7 @@ class Subscriber extends Entity
         'id'=>null ,
         'user_id' => null,
         'file_id' => null,
-        'org_id' => null,
+        'account_id' => null,
         'uuid' => null,
         'created_by' => null,
         'modified_by' => null,

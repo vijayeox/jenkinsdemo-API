@@ -10,15 +10,14 @@ return [
             'groups' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]group[/:groupId]',
+                    'route' => '/[account/:accountId/]group[/:groupId]',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'access' => [
                             // SET ACCESS CONTROL
                             'put' => 'MANAGE_GROUP_WRITE',
                             'post' => 'MANAGE_GROUP_WRITE',
-                            'delete' => 'MANAGE_GROUP_WRITE',
-                            'get' => 'MANAGE_GROUP_READ',
+                            'delete' => 'MANAGE_GROUP_WRITE'
                         ],
                     ],
                 ],
@@ -40,7 +39,7 @@ return [
             'getusers' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]group/:groupId/users',
+                    'route' => '/[account/:accountId/]group/:groupId/users',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'GET',
@@ -54,7 +53,7 @@ return [
             'saveusers' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]group/:groupId/save',
+                    'route' => '/[account/:accountId/]group/:groupId/save',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'POST',
@@ -68,7 +67,7 @@ return [
             'groupsList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]groups/list',
+                    'route' => '/[account/:accountId/]groups/list',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'POST',
@@ -79,7 +78,7 @@ return [
             'groupLogo' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/group/:orgId/logo/:groupId',
+                    'route' => '/group/:accountId/logo/:groupId',
                     'defaults' => [
                         'controller' => Controller\GroupLogoController::class,
                     ],

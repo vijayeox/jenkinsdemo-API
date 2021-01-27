@@ -1,22 +1,9 @@
 <?php
 namespace Oxzion;
 
-class AccessDeniedException extends \Exception
+class AccessDeniedException extends OxServiceException
 {
-    private $errors = array();
-
-    public function addError($key, $value)
-    {
-        $this->errors[$key] = $value;
-    }
-
-    public function setErrors(array $errors)
-    {
-        $this->errors = $errors;
-    }
-
-    public function getErrors()
-    {
-        return $this->errors;
+    public function __construct($message){
+        parent::__construct($message, NULL, OxServiceException::ERR_CODE_UNAUTHORIZED);
     }
 }

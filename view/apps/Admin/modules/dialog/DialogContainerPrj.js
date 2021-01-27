@@ -16,7 +16,7 @@ export default class DialogContainer extends React.Component {
     this.state = {
       prjInEdit: this.props.dataItem || null,
       managerName: undefined,
-      parentProject: this.props.dataItem.parent_id,
+      parentProject: this.props.dataItem.parentId,
     };
     this.notif = React.createRef();
   }
@@ -24,10 +24,10 @@ export default class DialogContainer extends React.Component {
   UNSAFE_componentWillMount() {
     if (this.props.formAction == "put") {
       GetSingleEntityData(
-        "organization/" +
+        "account/" +
           this.props.selectedOrg +
           "/user/" +
-          this.props.dataItem.manager_id +
+          this.props.dataItem.managerId +
           "/profile"
       ).then((response) => {
         this.setState({
@@ -59,12 +59,12 @@ export default class DialogContainer extends React.Component {
     this.setState({
       prjInEdit: edited,
     });
-    item == "manager_id"
+    item == "managerId"
       ? this.setState({
           managerName: event.target.value,
         })
       : null;
-    item == "parent_id"
+    item == "parentId"
       ? this.setState({
           parentProject: event.target.value,
         })
@@ -85,14 +85,14 @@ export default class DialogContainer extends React.Component {
       {
         name: this.state.prjInEdit.name,
         description: this.state.prjInEdit.description,
-        manager_id: this.state.prjInEdit.manager_id,
-        parent_id: this.state.prjInEdit.parent_id,
+        managerId: this.state.prjInEdit.managerId,
+        parentId: this.state.prjInEdit.parentId,
       },
       this.props.selectedOrg
     ).then((response) => {
       if (response.status == "success") {
         this.props.action(response);
-        this.props.cancel();
+        this.props.cancel('save');
       } else {
         this.notif.current.notify(
           "Error",
@@ -152,12 +152,12 @@ export default class DialogContainer extends React.Component {
                     <DropDown
                       args={this.core}
                       mainList={
-                        "organization/" + this.props.selectedOrg + "/users"
+                        "account/" + this.props.selectedOrg + "/users"
                       }
                       selectedItem={this.state.managerName}
                       preFetch={true}
                       onDataChange={(event) =>
-                        this.listOnChange(event, "manager_id")
+                        this.listOnChange(event, "managerId")
                       }
                       required={true}
                       disableItem={this.props.diableField}
@@ -171,12 +171,12 @@ export default class DialogContainer extends React.Component {
                     <DropDown
                       args={this.core}
                       mainList={
-                        "organization/" + this.props.selectedOrg + "/projects"
+                        "account/" + this.props.selectedOrg + "/projects"
                       }
                       selectedItem={this.state.parentProject}
                       preFetch={true}
                       onDataChange={(event) =>
-                        this.listOnChange(event, "parent_id")
+                        this.listOnChange(event, "parentId")
                       }
                       disableItem={this.props.diableField}
                       validationMessage={"Please select the Parent project."}

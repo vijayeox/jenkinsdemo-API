@@ -13,6 +13,7 @@ use Oxzion\OxServiceException;
 use Oxzion\InsertFailedException;
 use Oxzion\UpdateFailedException;
 use Oxzion\ValidationException;
+use Oxzion\AccessDeniedException;
 use Oxzion\VersionMismatchException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\DuplicateEntityException;
@@ -91,7 +92,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
         return $parsedParams;
     }
 
-    public function findJwtToken($request)
+    protected function findJwtToken($request)
     {
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
         if ($jwtToken) {
@@ -225,13 +226,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
     $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR;
 	$context = NULL;
         $message = NULL;
-        if ($e instanceof OxServiceException) {
-            $errorType = $e->getErrorType();
-            $errorCode = $e->getErrorCode();
-            $message = $e->getMessage();
-            $context = $e->getContextData();
-        } 
-        else if ($e instanceof ValidationException) {
+        if ($e instanceof ValidationException) {
             $errorType = OxServiceException::ERR_TYPE_ERROR;
             $errorCode = OxServiceException::ERR_CODE_NOT_ACCEPTABLE; //Input data is not acceptable.
             $message = 'Validation error(s).';
@@ -241,13 +236,18 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
             $errorType = OxServiceException::ERR_TYPE_ERROR;
             $errorCode = OxServiceException::ERR_CODE_PRECONDITION_FAILED; //Version mismatch is precondition failure.
             $message = 'Entity version sent by client does not match the version on server.';
+        }
+        else if ($e instanceof OxServiceException) {
+            $errorType = $e->getErrorType();
+            $errorCode = $e->getErrorCode();
+            $message = $e->getMessage();
+            $context = $e->getContextData();
         } 
         else {
             $errorType = OxServiceException::ERR_TYPE_ERROR;
             $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR; //Unexpected error is always HTTP 500.
             $message = 'Unexpected error.';
         }
-
         if (OxServiceException::ERR_TYPE_FAILURE == $errorType) {
             $errorCode = OxServiceException::ERR_CODE_OK;
         }

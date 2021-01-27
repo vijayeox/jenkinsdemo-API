@@ -2,31 +2,25 @@ import Select from 'formiojs/components/select/Select'
 import * as _utils from 'formiojs/utils/utils'
 import * as _Formio from 'formiojs/Formio'
 import * as _lodash from "lodash";
+import { Formio } from "formiojs";
 import * as _nativePromiseOnly from "native-promise-only";
 
 export default class SelectComponent extends Select { 
 
     constructor(component, options, data) {
-        super(component, options, data);
-        component.core = null;
-        component.appId = null;
-        component.uiUrl = null;
-        this.form = this.getRoot();
-        var that = this;
-        if(that.form && that.form.element){
-            that.form.element.addEventListener("appDetails", function(e) {
-              component.core = e.detail.core;
-              component.appId = e.detail.appId;
-              component.uiUrl = e.detail.uiUrl;
-              component.wrapperUrl = e.detail.wrapperUrl;
-          },true);
-          var evt = new CustomEvent("getAppDetails", { detail: {} });
-          that.form.element.dispatchEvent(evt);
+        var formOptions = Formio.getPlugin("optionsPlugin");
+        var customOptions = _lodash.default.merge(options, formOptions.options);
+        if(customOptions.core == null || customOptions.core == undefined){
+            console.log(customOptions);
         }
+        super(component, customOptions, data);
+        component.core = customOptions.core;
+        component.uiUrl = customOptions.uiUrl;
+        component.wrapperUrl = customOptions.wrapperUrl;
+        component.appId = customOptions.appId;
+        this.form = this.getRoot();
     }
     loadItems(url, search, headers, options, method, body){
-    var evt = new CustomEvent("getAppDetails", { detail: {} });
-    this.form.element.dispatchEvent(evt);
     var _this3 = this;
     options = options || {}; // See if they have not met the minimum search requirements.
 
@@ -94,7 +88,6 @@ export default class SelectComponent extends Select {
     var helper = _this3.component.core.make("oxzion/restClient");
     helper.request("v1",(_this3.component.properties['absoluteUrl'] ? url : "/app/"+_this3.component.appId +url),body,method).then(function (response) {
       _this3.loading = false;
-      console.log(response.status);
       if(response.status=='success'){
       _this3.setItems(response, !!search);
       } else {
@@ -121,10 +114,6 @@ export default class SelectComponent extends Select {
     });
     }
     render(){
-        var evt = new CustomEvent("getAppDetails", { detail: {} });
-        if(this.form.element){
-          this.form.element.dispatchEvent(evt);
-        }
         return super.render();
     }
     updateItems(searchInput, forceUpdate){
