@@ -1334,6 +1334,9 @@ class FileService extends AbstractService
             }
         }
         if($accountId){
+            if($whereQuery != ""){
+                $whereQuery .= " AND ";
+            }
             $whereQuery .= " `of`.account_id = :accountId";
             $queryParams['accountId'] = $accountId;
         }
@@ -2037,7 +2040,7 @@ class FileService extends AbstractService
                 if ($sortCount > 0) {
                     $sort .= ", ";
                 }
-                $sort .= " of.date_created ".$dir;
+                $sort .= " date_created ".$dir;
                 $sortCount++;
                 continue;
             }
