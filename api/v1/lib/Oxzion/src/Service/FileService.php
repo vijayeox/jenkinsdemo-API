@@ -1301,7 +1301,7 @@ class FileService extends AbstractService
         return true;
     }
 
-    private function processUserFilter($params, $appId,$accountId, &$fromQuery, &$whereQuery, &$queryParams){
+    private function processUserFilter($params, $appId, &$fromQuery, &$whereQuery, &$queryParams){
         if (isset($params['userId'])) {
             if ($params['userId'] == 'me') {
                 $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -1374,6 +1374,7 @@ class FileService extends AbstractService
         }
         $where = " $workflowFilter $entityFilter $createdFilter";
         $fromQuery = " from ox_file as `of`
+        inner join ox_user as ou on `of`.created_by = `ou`.id
         inner join ox_app_entity as en on en.id = `of`.entity_id $appQuery ";
         if(!$this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams)){
             if($whereQuery != ""){
@@ -1385,7 +1386,7 @@ class FileService extends AbstractService
         if(!isset($appId)){
             $appId = NULL;
         }
-        $this->processUserFilter($params, $appId,$accountId, $fromQuery, $whereQuery, $queryParams);
+        $this->processUserFilter($params, $appId, $fromQuery, $whereQuery, $queryParams);
         
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
         $fromQuery .= " left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
@@ -1404,7 +1405,7 @@ class FileService extends AbstractService
         $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
         $this->getFileFilterClause($whereQuery,$where);
         try {
-            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.id as myId, of.account_id,of.rygStatus as fileRygStatus,of.uuid,of.version as version,  wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id,oa.name as appName $field $fromQuery $where $sort $pageSize $offset";
+            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.id as myId, of.account_id,of.rygStatus as rygStatus,of.uuid,of.version as version,  wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,of.date_modified,ou.name as created_by,en.name as entity_name,en.uuid as entity_id,oa.name as appName $field $fromQuery $where $sort $pageSize $offset";
             $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
             $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
             $countQuery = "SELECT FOUND_ROWS();";
