@@ -8,6 +8,7 @@
     "icon": "icon.svg",
     "icon_white": "icon_white.svg",
     "defaultAppforOrgs": true,
+    "hidden": true,
     "server": "server.js",
     "formio_endpoint": "https:\/\/onboarding-qeimxlbzmdfpljg.form.io",
     "title": {
