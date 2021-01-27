@@ -51,6 +51,7 @@ class FileServiceTest extends AbstractServiceTest
             case "testGetFileListWithInvalidWorkflowButNoUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithPolicyHolderNoUserIdInRouteAsParticipant":
+            case "testGetFileListWithoutWorkflowButWithPolicyHolderUserIdInRouteAsParticipant":    
             case "testGetFileListWithWorkflowAndPolicyHolderUserIdInRouteAsParticipant":
             case "testGetFileListWithWorkflowStatusCheckPositiveWithParticipant":
             case "testGetFileListWithEntityNameCheckPositiveWithParticipants":
@@ -76,6 +77,7 @@ class FileServiceTest extends AbstractServiceTest
             case "testGetFileListWithInvalidWorkflowButNoUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithUserIdInRouteWithParticipants":
             case "testGetFileListWithoutWorkflowButWithPolicyHolderNoUserIdInRouteAsParticipant":
+            case "testGetFileListWithoutWorkflowButWithPolicyHolderUserIdInRouteAsParticipant":
             case "testGetFileListWithWorkflowAndPolicyHolderUserIdInRouteAsParticipant":
             case "testGetFileListWithWorkflowStatusCheckPositiveWithParticipant":
             case "testGetFileListWithEntityNameCheckPositiveWithParticipants":
