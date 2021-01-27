@@ -1333,13 +1333,6 @@ class FileService extends AbstractService
                 $queryParams['userId'] = $userId;
             }
         }
-        if($accountId){
-            if($whereQuery != ""){
-                $whereQuery .= " AND ";
-            }
-            $whereQuery .= " `of`.account_id = :accountId";
-            $queryParams['accountId'] = $accountId;
-        }
     }
 
     public function getFileList($appUUid, $params, $filterParams = null)
@@ -1382,7 +1375,13 @@ class FileService extends AbstractService
         $where = " $workflowFilter $entityFilter $createdFilter";
         $fromQuery = " from ox_file as `of`
         inner join ox_app_entity as en on en.id = `of`.entity_id $appQuery ";
-        $this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams);
+        if(!$this->processParticipantFiltering($accountId, $fromQuery, $whereQuery, $queryParams)){
+            if($whereQuery != ""){
+                $whereQuery .= " AND ";
+            }
+            $whereQuery .= " `of`.account_id = :accountId";
+            $queryParams['accountId'] = $accountId;
+        }
         if(!isset($appId)){
             $appId = NULL;
         }
@@ -1405,7 +1404,7 @@ class FileService extends AbstractService
         $this->processFilterParams($fromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
         $this->getFileFilterClause($whereQuery,$where);
         try {
-            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.rygStatus as fileRygStatus,of.uuid,of.version as version,  wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id,oa.name as appName $field $fromQuery $where $sort $pageSize $offset";
+            $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data, of.id as myId, of.account_id,of.rygStatus as fileRygStatus,of.uuid,of.version as version,  wi.status, wi.process_instance_id as workflowInstanceId,of.date_created,en.name as entity_name,en.uuid as entity_id,oa.name as appName $field $fromQuery $where $sort $pageSize $offset";
             $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
             $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
             $countQuery = "SELECT FOUND_ROWS();";
@@ -2562,6 +2561,7 @@ class FileService extends AbstractService
     }
 
     private function verifyFieldRule($data,$rule){
+        $rule = $this->preProcessRygRule($rule);
         $logic = isset($rule['logic']) ? strtoupper($rule['logic']) : "AND";
         $filters = $rule['filters'];
         $result = true;
@@ -2670,6 +2670,7 @@ class FileService extends AbstractService
                         inner join ox_app_entity as en on en.id = `of`.entity_id
                         inner join ox_app as oa on (oa.id = en.app_id AND oa.uuid = :appId)"; 
                         $setClause = "SET of.rygStatus=:rygStatus";
+                        $rule = $this->preProcessRygRule($rule);
                         $this->processFilterParams($update,$whereQuery,$sort,$pageSize,$offset,$field,['filter' => [['filter' =>$rule]]]);
                         $this->getFileFilterClause($whereQuery, $where);
                         $queryParams['rygStatus'] = $ryg;
@@ -2847,6 +2848,29 @@ class FileService extends AbstractService
                 }
             }
             $whereQuery = rtrim($whereQuery, $filterlogic." ");
+    }
+
+        private function preProcessRygRule($rule){
+        $ruleArray = array_merge([] , $rule);
+        foreach ($ruleArray['filters'] as $key => $filterValue) {
+            switch ($filterValue['value']) {
+                case 'today':
+                    $filterValue['value'] = date('Y-m-d h:m');                
+                    break;
+                case 'today+1':
+                    $filterValue['value'] =  date('Y-m-d h:m', strtotime('tomorrow'));                    
+                    break;
+                case 'today-1':
+                    $filterValue['value'] =  date('Y-m-d h:m', strtotime('yesterday'));                    
+                    break;    
+                default:
+                    $filterValue['value'] = $filterValue['value'];
+                    break;
+            }
+            $ruleArray['filters'][$key] = $filterValue;
+        }
+        return $ruleArray;
+
     }
 
 
