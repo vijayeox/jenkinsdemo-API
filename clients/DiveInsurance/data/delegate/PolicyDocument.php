@@ -138,7 +138,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'propertyHeader' => 'DiveStorePropertyHeader.html',
                 'propertyFooter' => 'DiveStorePropertyFooter.html',
                 'psTemplate' => 'Group_DCPS',
-                'psHeader' => 'DiveStore_DCPS_header.html',
+                'psHeader' => 'Group_DCPS_header.html',
                 'psFooter' => 'DiveStore_DCPS_footer.html',
                 'card' => 'PocketCard',
                 'slWording' => 'SL_Wording.pdf',
@@ -424,6 +424,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if (isset($this->template[$temp['product']]['blanketForm'])) {
                         $this->logger->info("DOCUMENT blanketForm");
                         $documents['blanket_document'] = $this->copyDocuments($temp, $dest['relativePath'], 'blanketForm');
+                    }
+                }
+
+                if($this->type != "policy"){
+                    if($data['totalAmount'] > 0){
+                        $documents['endopremium_summary_document'] = isset($data['documents']['endopremium_summary_document']) ? $data['documents']['endopremium_summary_document'] : array();
+                        $endorsementPSDoc = $this->generateDocuments($temp, $dest, $options, 'psTemplate', 'psHeader', 'psFooter');
+                        array_push($documents['endopremium_summary_document'], $endorsementPSDoc);
                     }
                 }
 
@@ -725,6 +733,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 unset($data['proposalCount']);
             }
         } 
+        if($this->type == "endorsement" && ($data['product'] == "Dive Store" || $data['product'] == "Group Professional Liability")){
+            if(isset($data['documents']['endo_premium_summary_document'])){
+                unset($data['documents']['endo_premium_summary_document']);
+            }
+        }
         $this->logger->info("Policy Document Generation", print_r($data, true));
         return $data;
     }
@@ -998,7 +1011,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $docDest = $dest['absolutePath'] . $template . '_' . $data['proposalCount'] . '.pdf';
         }else{
             $docDest = $dest['absolutePath'] . $template . '.pdf';
-            if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
+            if (($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability') && $this->type == "endorsement" && ($template == "DiveStoreEndorsement" || $template == "Endorsement_DCPS" || $template == "Group_Endorsement_DCPS")) {
                 $updateDate = date_format(date_create($data['update_date']), 'Md');
                 $docDest = $dest['absolutePath'] . $template . '_' . $updateDate . '.pdf';
             }
@@ -1050,7 +1063,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }else if($this->type == 'cancel'){
                 $cancelDate = date_format(date_create($data['cancelDate']), 'Md');
                 return $dest['relativePath'] . $template . '_' . $cancelDate . '.pdf';
-            }else if ($data['product'] == 'Dive Store' && $this->type == "endorsement" && $template == "DiveStoreEndorsement") {
+            }else if (($data['product'] == 'Dive Store' || $data['product'] == 'Group Professional Liability') && $this->type == "endorsement" && ($template == "DiveStoreEndorsement" || $template == "Endorsement_DCPS"  || $template == "Group_Endorsement_DCPS")) {
                 $updateDate = date_format(date_create($data['update_date']), 'Md');
                 return $dest['relativePath'] . $template . '_' . $updateDate . '.pdf';
             }else if (($this->type == 'quote' || $this->type == 'endorsementQuote') && $data['product'] != 'Dive Boat'){
@@ -1339,6 +1352,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if (isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect'] == 'yes') {
             $this->generateGroupDocuments($data, $temp, $documents, $previous_data, $endorsementOptions, $dest, $options, $length);
         }
+        if($data['totalAmount'] > 0){
+            $documents['endo_premium_summary_document'] = $this->generateDocuments($temp, $dest, $options, 'psTemplate', 'psHeader', 'psFooter');
+        }
         $data['quoteDocuments'] = $documents;
     }
 
@@ -1407,6 +1423,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     }
     protected function diveStoreEndorsement(&$data, &$temp, $persistenceService)
     {
+
+        if($data['product'] == "Dive Store"){
+
         $policy = array();
         if (is_string($data['previous_policy_data'])) {
             $policy = json_decode($data['previous_policy_data'], true);
@@ -1952,6 +1971,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $this->logger->info("ARRAY DIFF OF Additional Locations :" . print_r($data['additionalLocations'], true));
             }
         }
+    }
     }
 
     private function getLiabilityLimit($data, $combinedLimit, $annualAggregate, $liabilityKey)
