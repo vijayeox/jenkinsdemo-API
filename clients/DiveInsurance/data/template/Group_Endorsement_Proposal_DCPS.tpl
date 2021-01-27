@@ -10,46 +10,19 @@
 <body>
     <p></p>
     <div class="main" style="margin-top: 3%;">
-            <div class="value_main">
-                <p>${if isset($liabilityProRataPremium)} {$liabilityProRataPremium|number_format:2} {else} $0.00 {/if}</p>
-                <p>&nbsp;</p>
-                <p>${$propertyProRataPremium|number_format:2}</p>
-                <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format:2}</p>
-                <p>${$AddILocPremium|number_format:2}</p>
-                <p>${$padiFeePL|number_format:2}</p>
-            </div>
-            <div class="sub_main">
-                <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${if isset($totalReceiptsAmount) &&  $totalReceiptsAmount}{$totalReceiptsAmount|number_format:2}{else}0{/if})</p>
-                <p>Dive Center Property Premium</p>
-                <p>Dive Center Surplus Lines Tax:</p>
-                <p>Dive Center Additional Location Premium:</p>
-                <p>Dive Center PADI Administration Fee:</p>
-            </div>
             <div class="clearfix"></div>
             <p class="hrtag sub_line"></p>
         </div>
         <div class="clearfix"></div>
-        <div class="total_main">
-            <div class="value_main">
-                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFeePL)|number_format:2}</p>
-            </div>
-            <div class="sub_main">
-                <p>Total Store Premium:</p>
-            </div>
-
-            <div class="clearfix"></div>
-            <p class="spacer2 sub_line"></p>
-        </div>
         <div class="clearfix"></div>
         <!-- second section -->
         <div class="main">
             <div class="value_main">
                 <p>
-                {if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupCoverage) && isset($groupExcessLiability)}${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
+                {if $groupProfessionalLiabilitySelect == 'yes'}{if (int)$endoGroupProfessionalLiability > 0}{if isset($endogroupCoverage) && isset($endogroupExcessLiability)}${((float)$endogroupCoverage+(float)$endogroupExcessLiability)|number_format:2}{else}$0.00{/if}{else}$0.00{/if}{else}0.00{/if}</p>
                 <p>&nbsp;</p>
-                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
-                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupPadiFeeAmount)}${$groupPadiFeeAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
+                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if (int)$endoGroupProfessionalLiability > 0}{if isset($groupTaxAmount)}${(float)$groupTaxAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}{else}0.00{/if}</p>
+                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if (int)$endoGroupProfessionalLiability > 0}{if isset($groupPadiFeeAmount)}${$groupPadiFeeAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}{else}0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
@@ -63,33 +36,12 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}</p>
+                <p>{if $groupProfessionalLiabilitySelect == 'yes'}{if (int)$endoGroupProfessionalLiability > 0}{if isset($groupTotalAmount)}${$groupTotalAmount|number_format:2}{else}$0.00{/if}{else}$0.00{/if}{else}0.00{/if}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>
             </div>
         </div>
-        
-        {if isset($totalAddPremium)}
-        <div class="main" style="margin-top: 0px;">
-            <p class="hrtag sub_line" style="margin-top: 0px;margin-bottom: 2%;"></p>
-            <div class="value_main">
-                <p>{if isset($totalAddPremium)}
-                     {if (int)$totalAddPremium < 0 }  
-                     {math equation = '(x * (-1))' x = $totalAddPremium assign='addPremium'}
-                        - ${$addPremium|number_format:2}
-                     {else}
-                        ${$totalAddPremium|number_format:2}
-                     {/if}
-                     {else} 0.00 
-                 {/if}</p>
-            </div>
-            <div class="sub_main">
-                <p>Additional Premium  : </p>
-                <p>{if isset($additionalPremiumDescription)} {if $additionalPremiumDescription != ""} ({$additionalPremiumDescription}) {/if} {/if}</p>
-            </div>
-        </div>
-        {/if}
         <div class="clearfix"></div>
         <p class="hrtag" style="margin-top: 2px;"></p>
         <div class="total_main">

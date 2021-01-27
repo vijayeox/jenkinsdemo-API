@@ -131,6 +131,9 @@ class StoreEndorsementDocuments extends EndorsementDocument
                 $this->generateGroupDocuments($data, $temp, $documents, $previous_data, $endorsementOptions, $dest, $options, $length);
             }
         }
+        if($data['totalAmount'] > 0){
+            $documents['endopremium_summary_document'] = $this->generateDocuments($temp, $dest, $options, 'psTemplate', 'psHeader', 'psFooter');
+        }
         $originalData['finalDocuments'] = $documents;
         return $originalData;
     }

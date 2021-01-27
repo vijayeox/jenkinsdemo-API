@@ -18,7 +18,7 @@
 					    				$1,000,000
 					    			{/if}
 					    				per occurance and
-					    			{if}
+					    			{if isset($upgradeData.annualAggregate)}
 					    				${$upgradeData.annualAggregate|number_format} 
 					    			{else}
 					    				$2,000,000
