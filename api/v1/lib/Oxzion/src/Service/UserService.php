@@ -250,6 +250,9 @@ class UserService extends AbstractService
             $setPasswordCode = UuidUtil::uuid();
             $data['password_reset_code'] = $setPasswordCode;
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
+            if(isset($data['date_of_birth'])){
+                $data['date_of_birth'] = date_format(date_create($data['date_of_birth']), "Y-m-d");
+            }
             $this->empService->addEmployeeRecord($data);
             if (isset($data['preferences'])) {
                 if(is_string($data['preferences'])){
@@ -562,6 +565,9 @@ class UserService extends AbstractService
             }
         }
         $userdata = array_merge($form->getProperties(), $data); //Merging the data from the db for the ID
+        if (isset($userdata['date_of_birth'])) {
+            $userdata['date_of_birth'] = date_format(date_create($userdata['date_of_birth']), "Y-m-d");
+        }
         try {
             $this->beginTransaction();
             $this->logger->info("USER-DATA--------\n".print_r($userdata,true));
@@ -589,7 +595,6 @@ class UserService extends AbstractService
                 }
                 $userdata['preferences'] = json_encode($preferences);
             }
-
             $form->assign($userdata);
             $form->save();
             if (isset($data['role'])) {
