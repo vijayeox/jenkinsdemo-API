@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     .then((response) => {
                         if (response.status == 417) {
                             Swal.showValidationMessage(
-                                `We do not have an email on your account.<br/>Contact Us:Helpline Ph: +1 216-452-0324 | Email: padi-professionals@hubinternational.com`
+                                `We do not have an email on your account.<br/>Contact Us:Helpline Ph: +1 216-452-0324 x119 | Email: padi-professionals@hubinternational.com`
                             );
                             return;
                         }

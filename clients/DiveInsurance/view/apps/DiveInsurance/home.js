@@ -136,7 +136,7 @@ class Home extends React.Component {
           <img src="/apps/DiveInsurance/img/poweredby.png"></img>
           {this.userprofile.privileges.MANAGE_POLICY_APPROVAL_WRITE == true ? (
             <div className="helpText">
-              <p>Helpline Ph: +1 216-452-0324 |</p>
+              <p>Helpline Ph: +1 216-452-0324 x119 |</p>
               <p>Email: hub-support@eoxvantage.com</p>
             </div>
           ) : null}
