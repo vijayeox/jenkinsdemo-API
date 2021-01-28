@@ -99,7 +99,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		    $fieldname = "";
 			switch ($parameters['frequency']) {
 				case 1:
-					$group[] = "$datetype";
+					$group[] =  "DATE($datetype)";
 					$fieldname = "day";
 					break;
 				case 2:
