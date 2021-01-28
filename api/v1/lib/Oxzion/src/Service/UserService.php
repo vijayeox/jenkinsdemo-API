@@ -273,8 +273,21 @@ class UserService extends AbstractService
             $form->save();
             $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
             $accountUserId = $this->addUserToAccount($form->id, $form->account_id);
-            if (isset($data['role'])) {
-                $this->addRoleToUser($accountUserId, $data['role'], $form->account_id);
+            if (isset($data['role']) && is_array($data['role'])) {
+                $skipRoleByUuid = 0;
+                foreach ($data['role'] as $roleItem) {
+                    if(isset($roleItem['uuid'])){
+                        $skipRoleByUuid = 1;
+                        break;
+                    } else {
+                        if(is_string($roleItem)){
+                            $this->addUserRole($accountUserId, $roleItem);
+                        }
+                    }
+                }
+                if($skipRoleByUuid){
+                    $this->addRoleToUser($accountUserId, $data['role'], $form->account_id);
+                }
             }
             
             $this->commit();
