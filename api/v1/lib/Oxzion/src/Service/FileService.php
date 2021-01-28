@@ -1849,6 +1849,12 @@ class FileService extends AbstractService
                 $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
                 $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
             }
+            //Check for similar file
+            $attachmentFilter['url'] = $data['url'];
+            $attachmentRecord = $this->getDataByParams('ox_file_attachment', array("url","name"), $attachmentFilter, null)->toArray();
+            if(count($attachmentRecord) > 0){
+                throw new ServiceException("Another file with a similar name exists for this record.\n Please attach a file with a different name", "attachment.filename.invalid");
+            }
             $form->exchangeArray($data);
             $form->validate();
             $count = $this->attachmentTable->save($form);
