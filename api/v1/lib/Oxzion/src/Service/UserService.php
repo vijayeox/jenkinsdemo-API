@@ -273,8 +273,26 @@ class UserService extends AbstractService
             $form->save();
             $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
             $accountUserId = $this->addUserToAccount($form->id, $form->account_id);
-            if (isset($data['role'])) {
-                $this->addRoleToUser($accountUserId, $data['role'], $form->account_id);
+            if (isset($data['role']) && is_array($data['role'])) {
+                $skipRoleByUuid = 1;
+                foreach ($data['role'] as $roleItem) {
+                    if(is_string($roleItem)){
+                        $roleQuery = "select ox_role.id,ox_role.name,oa.id as appId from ox_role left join ox_app as oa on ox_role.app_id=oa.id where ox_role.account_id=:accountId and ox_role.name =:roleName";
+                        $this->logger->info("Executing Query $roleQuery with params--".print_r(array('accountId'=>$data['account_id'],'roleName'=>$roleItem),true));
+                        $role = $this->executeQueryWithBindParameters($roleQuery,array('accountId'=>$data['account_id'],'roleName'=>$roleItem))->toArray();
+                        if(!empty($role) && $role[0]){
+                            if(isset($role[0]['appId']) && $role[0]['appId'] != null){
+                                $this->addUserRole($accountUserId, $roleItem,$role[0]['appId']);
+                            } else {
+                                $this->addUserRole($accountUserId, $roleItem);
+                            }
+                        }
+                        $skipRoleByUuid = 0;
+                    }
+                }
+                if($skipRoleByUuid){
+                    $this->addRoleToUser($accountUserId, $data['role'], $form->account_id);
+                }
             }
             
             $this->commit();
@@ -466,9 +484,7 @@ class UserService extends AbstractService
             }else{
                 $appClause = " And app_id IS NULL";
             }
-            $select = "select * from ox_role where account_id=".$user[0]['account_id'];
-            $tets = $this->executeQueryWithBindParameters($select,[])->toArray();
-            $select = "select id,name from ox_role where account_id=:accountId and name =:roleName $appClause";            
+            $select = "select id,name from ox_role where account_id=:accountId and name =:roleName $appClause";
             $this->logger->info("Executing Query $select with params--".print_r($params,true));
             $role = $this->executeQueryWithBindParameters($select,$params)->toArray();
             if (!empty($role)) {
