@@ -156,7 +156,7 @@ return [
             'appfile' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file[/:id]',
+                    'route' => '/app/:appId/file/crud[/:id]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'id' => UuidUtil::UUID_PATTERN,

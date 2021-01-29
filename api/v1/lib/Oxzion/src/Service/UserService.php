@@ -250,6 +250,9 @@ class UserService extends AbstractService
             $setPasswordCode = UuidUtil::uuid();
             $data['password_reset_code'] = $setPasswordCode;
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
+            if(isset($data['date_of_birth'])){
+                $data['date_of_birth'] = date_format(date_create($data['date_of_birth']), "Y-m-d");
+            }
             $this->empService->addEmployeeRecord($data);
             if (isset($data['preferences'])) {
                 if(is_string($data['preferences'])){
@@ -273,8 +276,26 @@ class UserService extends AbstractService
             $form->save();
             $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
             $accountUserId = $this->addUserToAccount($form->id, $form->account_id);
-            if (isset($data['role'])) {
-                $this->addRoleToUser($accountUserId, $data['role'], $form->account_id);
+            if (isset($data['role']) && is_array($data['role'])) {
+                $skipRoleByUuid = 1;
+                foreach ($data['role'] as $roleItem) {
+                    if(is_string($roleItem)){
+                        $roleQuery = "select ox_role.id,ox_role.name,oa.id as appId from ox_role left join ox_app as oa on ox_role.app_id=oa.id where ox_role.account_id=:accountId and ox_role.name =:roleName";
+                        $this->logger->info("Executing Query $roleQuery with params--".print_r(array('accountId'=>$data['account_id'],'roleName'=>$roleItem),true));
+                        $role = $this->executeQueryWithBindParameters($roleQuery,array('accountId'=>$data['account_id'],'roleName'=>$roleItem))->toArray();
+                        if(!empty($role) && $role[0]){
+                            if(isset($role[0]['appId']) && $role[0]['appId'] != null){
+                                $this->addUserRole($accountUserId, $roleItem,$role[0]['appId']);
+                            } else {
+                                $this->addUserRole($accountUserId, $roleItem);
+                            }
+                        }
+                        $skipRoleByUuid = 0;
+                    }
+                }
+                if($skipRoleByUuid){
+                    $this->addRoleToUser($accountUserId, $data['role'], $form->account_id);
+                }
             }
             
             $this->commit();
@@ -466,9 +487,7 @@ class UserService extends AbstractService
             }else{
                 $appClause = " And app_id IS NULL";
             }
-            $select = "select * from ox_role where account_id=".$user[0]['account_id'];
-            $tets = $this->executeQueryWithBindParameters($select,[])->toArray();
-            $select = "select id,name from ox_role where account_id=:accountId and name =:roleName $appClause";            
+            $select = "select id,name from ox_role where account_id=:accountId and name =:roleName $appClause";
             $this->logger->info("Executing Query $select with params--".print_r($params,true));
             $role = $this->executeQueryWithBindParameters($select,$params)->toArray();
             if (!empty($role)) {
@@ -546,6 +565,9 @@ class UserService extends AbstractService
             }
         }
         $userdata = array_merge($form->getProperties(), $data); //Merging the data from the db for the ID
+        if (isset($userdata['date_of_birth'])) {
+            $userdata['date_of_birth'] = date_format(date_create($userdata['date_of_birth']), "Y-m-d");
+        }
         try {
             $this->beginTransaction();
             $this->logger->info("USER-DATA--------\n".print_r($userdata,true));
@@ -573,7 +595,6 @@ class UserService extends AbstractService
                 }
                 $userdata['preferences'] = json_encode($preferences);
             }
-
             $form->assign($userdata);
             $form->save();
             if (isset($data['role'])) {

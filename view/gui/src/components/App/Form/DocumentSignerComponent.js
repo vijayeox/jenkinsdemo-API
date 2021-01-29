@@ -9,32 +9,19 @@ import * as _lodash from "lodash";
 export default class DocumentSignerComponent extends Base {
   constructor(component, options, data) {
     var formOptions = Formio.getPlugin("optionsPlugin");
-    var customOptions = _lodash.default.merge(options, formOptions);
+    var customOptions = _lodash.default.merge(options, formOptions.options);
     if(customOptions.core == null || customOptions.core == undefined){
         console.log(customOptions);
     }
     super(component, customOptions, data);
     component.core = customOptions.core;
+    component.appId = customOptions.appId;
     component.uiUrl = customOptions.uiUrl;
     component.wrapperUrl = customOptions.wrapperUrl;
+    this.form = this.getRoot();
+    var that = this;
     this.data = data;
     this.documentsList = [];
-    var that = this;
-    var element;
-    if (that.form && that.form.element) {
-        element = that.form.element;
-    } else {
-        if(that.form && that.form.root && that.form.root.parent && that.form.root.parent.root && that.form.root.parent.root.element){
-            element = that.form.root.parent.root.element;
-        }
-    }
-    if(element){
-      this.formList = [
-        { name: "document1", status: "unsigned" },
-        { name: "document2", status: "signed" },
-        { name: "document3", status: "unsigned" },
-      ];
-    }
   }
 
   //disable
@@ -67,35 +54,28 @@ export default class DocumentSignerComponent extends Base {
       return;
     }
     try {
-      var name = this.form._data[this.component.documentsList][
-        this.component.index
-      ].originalName;
+      var form = this.form ? this.form : this;
+      var name = form._data[this.component.documentsList][this.component.index].originalName;
     } catch (error) {
       this.redraw();
       return;
     }
     this.dataValue = name;
-
     this.previousValue = this.dataValue;
     var that = this;
-    that.documentsList =
-      `<h5>` + name + `<button id="sign_btn" >Sign Form</button></h5>`;
-    that.documentsList += `<div id="myModal" class="insuresign modal"></div>`;
+    that.documentsList = `<h5>` + name + `<button id="sign_btn_`+this.id+`" >Sign Form</button></h5>`;
+    that.documentsList += `<div id="myModal_`+this.id+`" class="insuresign modal"></div>`;
     that.redraw();
   }
 
   attach(element) {
     var that = this;
-    // this.formList.map(form=>{
-    //   this.attachEventListeners(form)
-    // })
     this.attachEventListeners({});
-
     return super.attach(element);
   }
 
   ShowPopupMessageBytype(status, message) {
-    var modal = document.getElementById("myModal");
+    var modal = document.getElementById("myModal_"+this.id);
     // Get the button that opens the modal
     var btn = document.getElementById("myBtn");
     // Get the <span> element that closes the modal
@@ -118,14 +98,11 @@ export default class DocumentSignerComponent extends Base {
     // <iframe height='100%' width='100%' src='data.url+"'></iframe>
     modalHTML += `</div>`;
 
-    $("#myModal").html(modalHTML);
-    $("#myModal").css("display", "block");
+    $("#myModal_"+this.id).html(modalHTML);
+    $("#myModal_"+this.id).css("display", "block");
     $("span.close").on("click", () => {
-      $("#myModal").css("display", "none");
+      $("#myModal_"+this.id).css("display", "none");
     });
-
-    // var modal = document.getElementById("myModal");
-    // modal.innerHTML(modalHTML)
   }
 
   pollForStatus() {
@@ -134,20 +111,19 @@ export default class DocumentSignerComponent extends Base {
         this.component.index
       ].docId;
       let helper = this.component.core.make("oxzion/restClient");
-      helper
-        .request("v1", "/status/" + docId, {}, "get")
+      helper.request("v1", "/status/" + docId, {}, "get")
         .then(function (response) {
           var that = _this2 || _this3 || _this4 || _this5 || _this6 || _this7;
           if (
             response.data["status"] == "FINALIZED" ||
             response.data["status"] == "CANCELLED"
           ) {
-            $("#myModal").css("display", "none");
+            $("#myModal_"+this.id).css("display", "none");
             that.documentsList =
               `<h5>` +
               that.component.previousValue +
-              `<button disabled id="sign_btn" >Signed</button></h5>`;
-            that.documentsList += `<div id="myModal" class="insuresign modal"></div>`;
+              `<button disabled id="sign_btn_`+this.id+`">Signed</button></h5>`;
+            that.documentsList += `<div id="myModa_`+this.id`" class="insuresign modal"></div>`;
             that.redraw();
           } else {
             that.pollForStatus();
@@ -158,59 +134,24 @@ export default class DocumentSignerComponent extends Base {
   }
 
   attachEventListeners(form) {
-    //  let button_id=form.name+"-btn"
-    //  let core=this.component.core
-    //  let helper=this.component.core.make("oxzion/restClient");
-    //  var modal = document.getElementById("myModal");
-    //  if( document.getElementById(button_id)){
-    //   document.getElementById(button_id).addEventListener("click",async()=>{
-    //   let response = await helper.request('v1', 'analytics/datasource', {}, 'get');
-    //     alert("this is "+form.name)
-    //     console.log(core)
-    //     console.log(response)
-    //     // console.log(that.core)
-    //   })
-    //  }
-
-    if (document.getElementById("sign_btn")) {
-      document
-        .getElementById("sign_btn")
-        .addEventListener("click", async () => {
+    if (document.getElementById("sign_btn_"+this.id)) {
+      document.getElementById("sign_btn_"+this.id).addEventListener("click", async () => {
           // this.ShowPopupMessageBytype("error","random message")
           //currently added a dummy cross origin link.. change the link to signing_url
-          var signingLink = this.form._data[this.component.documentsList][
-            this.component.index
-          ].signingLink;
-          this.showInsureSignModal("qwerty", signingLink);
-
+          var signingLink = this.form._data[this.component.documentsList][this.component.index].signingLink;
+          this.showInsureSignModal(this.component.documentsList+this.component.index, signingLink);
           this.pollForStatus();
-
-          // let response = await helper.request('v1', 'analytics/datasource', {}, 'get');
-          // alert("this is clicked")
-          // modal.style.display="block"
-          // console.log(core)
-          // console.log(response)
-          // console.log(that.core)
         });
     }
   }
 
   render(children) {
-    var documentsList = this.documentsList
-      ? this.documentsList
-      : `<p>not working</p>`;
-
+    var documentsList = this.documentsList ? this.documentsList : `<p>not working</p>`;
     setTimeout(() => {
       this.bindHandlers();
     }, 2000);
-
-    var row = `<button id="sign_btn" >Sign Form</button>`;
-    row += `<div id="myModal" class="insuresign modal"></div>`;
-
-    // this.formList.map(form=>{
-    // row+=`<div>Form Name:${form.name} <span>Status:${form.status}</span>`
-    // row+=form.status=="unsigned"?`<span><button id=${form.name+"-btn"} >Sign Form</button</span></div></br>`:`</div></br>`
-    // })
+    var row = `<button id="sign_btn_`+this.id+`" >Sign Form</button>`;
+    row += `<div id="myModal_`+this.id+`" class="insuresign modal"></div>`;
     return super.render(`<div>${documentsList}</div>`);
   }
 

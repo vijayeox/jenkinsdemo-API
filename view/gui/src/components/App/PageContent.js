@@ -417,6 +417,24 @@ class PageContent extends React.Component {
           mergeRowData
         );
         var listOptions = itemContent.listOptions;
+        var reorderable = false;
+        if(listOptions && listOptions.reorderable == "true"){
+          reorderable = true;
+        } else {
+          reorderable = false;
+        }
+        var sortable = false;
+        if(listOptions && listOptions.sortable == "true"){
+          sortable = true;
+        } else {
+          sortable = false;
+        }
+        var resizable = false;
+        if(listOptions && listOptions.resizable == "true"){
+          resizable = true;
+        } else {
+          resizable = false;
+        }
         var that = this;
         if(itemContent.operations){
           if(itemContent.operations.actions){
@@ -470,7 +488,6 @@ class PageContent extends React.Component {
             gridToolbar={itemContent.toolbarTemplate}
             columnConfig={columnConfig}
             {...itemContent}
-            {...listOptions}
           />
         );
       } else if (item.type == "Search") {

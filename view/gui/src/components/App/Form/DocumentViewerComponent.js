@@ -8,7 +8,7 @@ import * as _lodash from "lodash";
 export default class DocumentViewerComponent extends Base {
   constructor(component, options, data) {
     var formOptions = Formio.getPlugin("optionsPlugin");
-    var customOptions = _lodash.default.merge(options, formOptions);
+    var customOptions = _lodash.default.merge(options, formOptions.options);
     if(customOptions.core == null || customOptions.core == undefined){
         console.log(customOptions);
     }
@@ -19,10 +19,8 @@ export default class DocumentViewerComponent extends Base {
     component.wrapperUrl = customOptions.wrapperUrl;
     this.form = this.getRoot();
     var that = this;
-    component.wrapperUrl = "<p> No Files to Display</p>";
     this.form.on("change", changed => {
-      if(changed.data[this.component.refreshOn]){
-          var that = this;
+      if(changed.data[that.component.refreshOn]){
           setTimeout(function() {
             that.setValue(changed.data[that.component.refreshOn]);
             that.bindHandlers();

@@ -5,7 +5,6 @@ import {
   GridCell,
   GridColumn,
   GridDetailRow,
-  GridColumnMenuFilter,
   GridColumnMenuCheckboxFilter,
   GridNoRecords,
   GridToolbar
@@ -20,6 +19,7 @@ import { Button, DropDownButton } from "@progress/kendo-react-buttons";
 import $ from "jquery";
 import JsxParser from "react-jsx-parser";
 import moment from "moment";
+import { ColumnMenu } from './components/Grid/ColumnMenu';
 import Swal from "sweetalert2";
 import DataLoader from "./components/Grid/DataLoader";
 import DataOperation from "./components/Grid/DataOperation";
@@ -169,7 +169,7 @@ export default class OX_Grid extends React.Component {
           field={dataItem.field ? dataItem.field : undefined}
           filter={dataItem.filter ? dataItem.filter : "text"}
           filterable={this.props.columnMenuFilter==false?dataItem.filterable:undefined}
-          columnMenu={this.props.columnMenuFilter!=false?GridColumnMenuFilter:undefined}
+          columnMenu={this.props.columnMenuFilter!=false?ColumnMenu:undefined}
           filterCell={
             dataItem.filterCell ? CustomFilter(dataItem.filterCell) : undefined
           }
@@ -186,9 +186,9 @@ export default class OX_Grid extends React.Component {
             dataItem.minResizableWidth ? dataItem.minResizableWidth : undefined
           }
           orderIndex={dataItem.orderIndex ? dataItem.orderIndex : undefined}
-          reorderable={this.props.reorderable ? this.props.reorderable : (dataItem.reorderable? dataItem.reorderable: undefined)}
-          resizable={this.props.resizable ? this.props.resizable : (dataItem.resizable? dataItem.resizable: undefined)}
-          sortable={this.props.sortable ? this.props.sortable : (dataItem.sortable? dataItem.sortable: undefined)}
+          reorderable={this.props.reorderable ? (this.props.reorderable) : (dataItem.reorderable? dataItem.reorderable: undefined)}
+          resizable={this.props.resizable ? (this.props.resizable) : (dataItem.resizable? dataItem.resizable: undefined)}
+          sortable={this.props.sortable ? (this.props.sortable) : (dataItem.sortable? dataItem.sortable: undefined)}
           width={dataItem.width ? dataItem.width : undefined}
           title={dataItem.title ? dataItem.title : undefined}
         />
@@ -361,6 +361,7 @@ handleContextMenuOpen = (e, dataItem) => {
           primary={true}
           onClick={this.exportPDF}
           className={"toolBarButton"}
+          title = "Export to PDF"
         >
           <i className='fa fa-file-pdf-o'></i>
         </Button>
@@ -805,9 +806,9 @@ handleOnSelect = (e) => {
           groupable={this.props.groupable}
           style={this.props.gridStyles}
           pageable={this.props.pageable}
-          resizable={this.props.resizable}
-          reorderable={this.props.reorderable}
-          sortable={this.props.sortable}
+          resizable={(this.props.resizable?true:false)}
+          reorderable={(this.props.reorderable? true:false)}
+          sortable={(this.props.sortable? true:false)}
           scrollable={this.props.scrollable}
           onDataStateChange={this.dataStateChange}
           onExpandChange={this.props.expandable ? this.expandChange : null}
