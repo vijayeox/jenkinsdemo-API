@@ -173,6 +173,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 $policy['previous_city'] = $data['city'];
                 $policy['previous_state'] = $data['state'];
                 $policy['previous_zip'] = $data['zip'];
+                $policy['previous_sameasmailingaddress'] = $data['sameasmailingaddress'];
                 if($data['sameasmailingaddress'] === "false" || $data['sameasmailingaddress'] === false) {
                     $policy['previous_physical_country'] =$data['physical_country'];
                     $policy['previous_mailaddress1'] =$data['mailaddress1'];
