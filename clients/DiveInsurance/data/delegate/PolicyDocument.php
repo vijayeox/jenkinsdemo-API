@@ -1459,7 +1459,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 (isset($data['physical_state']) && isset($data['previous_physical_state']) && $data['physical_state'] != $data['previous_physical_state']) ||
                 (isset($data['physical_zip']) && isset($data['previous_physical_zip']) && $data['physical_zip'] != $data['previous_physical_zip'])){
                 $temp['policyInfoMailingChanges'] = true;
+            }else if($data['previous_sameasmailingaddress'] != $data['sameasmailingaddress']){
+                $temp['policyInfoMailingChanges'] = true;
             }
+        }else if($data['previous_sameasmailingaddress'] != $data['sameasmailingaddress'] && ($data['sameasmailingaddress'] === "true" || $data['sameasmailingaddress'] === true)){
+            unset($temp['mailaddress1']);
+            $temp['policyInfoMailingChanges'] = true;
         }
 
         if (isset($data['nonOwnedAutoLiabilityPL']) && isset($policy['previous_nonOwnedAutoLiabilityPL'])) {
@@ -1568,6 +1573,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
         if (isset($data['travelAgentEoPL']) && isset($policy['previous_travelEnO'])) {
+            $data['travelAgentEOReceiptsPL'] = isset($data['travelAgentEOReceiptsPL']) ? $data['travelAgentEOReceiptsPL'] : 0;
             if ($policy['previous_travelAgentEOReceiptsPL'] == $data['travelAgentEOReceiptsPL'] && $data['travelAgentEoPL']) {
                 $data['increased_travelEnO'] = false;
             } else {

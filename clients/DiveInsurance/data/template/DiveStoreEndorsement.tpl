@@ -9,7 +9,7 @@
     {if (isset($policyInfoChanges) && $policyInfoChanges == true) || (isset($policyInfoMailingChanges) && $policyInfoMailingChanges == true)} 
       <div class = "box">
           <center><b><u>***Policy Information Changes***</u></b></center>
-          {if isset(policyInfoChanges)}
+          {if isset($policyInfoChanges)}
           <p><b>Mailing address of the store has been changed as of the Effective Date of this Endorsement</b></p>
           <p><em><u>Removing the old location:&nbsp</u></em><br>
               <span class="store_location">{$previous_address1}</span>
@@ -24,22 +24,26 @@
               <span class="store_location">{$state}</span> <span class="store_location">{$zip}</span>
           </p>
           {/if}
-          {if isset(policyInfoChanges)}
-          <p><b>Physical address of the store has been changed as of the Effective Date of this Endorsement</b></p>
-          {if isset($previous_mailaddress1) }
-          <p><em><u>Removing the old location:&nbsp</u></em><br>
-              <span class="store_location">{$previous_mailaddress1}</span>
-              <span class="store_location">{if isset($previous_mailaddress2) && $previous_mailaddress2 != ""},{$previous_mailaddress2}{/if}</span>,
-              <span class="store_location">{$previous_physical_city}</span>,
-              <span class="store_location">{if isset(previous_physical_state) && $previous_physical_state != '[]'}{$previous_physical_state}{/if}</span> <span class="store_location">{$previous_physical_zip}</span>
-          </p>
-          {/if}
-          <p><em><u>Adding the new location:&nbsp</u></em><br>
-              <span class="store_location">{$mailaddress1}</span>
-              <span class="store_location">{if isset($mailaddress2) && $mailaddress2 != ""},{$mailaddress2}{/if}</span>,<br>
-              <span class="store_location">{$physical_city}</span>,
-              <span class="store_location">{if isset(physical_state) && $physical_state != '[]'}{$physical_state}{/if}</span>  <span class="store_location">{$physical_zip}</span>
-          </p>
+          {if isset($policyInfoMailingChanges)}
+            {if $policyInfoMailingChanges || $policyInfoMailingChanges == true || $policyInfoMailingChanges == "true"}
+            <p><b>Physical address of the store has been changed as of the Effective Date of this Endorsement</b></p>
+            {if isset($previous_mailaddress1) }
+            <p><em><u>Removing the old location:&nbsp</u></em><br>
+                <span class="store_location">{$previous_mailaddress1}</span>
+                <span class="store_location">{if isset($previous_mailaddress2) && $previous_mailaddress2 != ""},{$previous_mailaddress2}{/if}</span>,
+                <span class="store_location">{$previous_physical_city}</span>,
+                <span class="store_location">{if isset(previous_physical_state) && $previous_physical_state != '[]'}{$previous_physical_state}{/if}</span> <span class="store_location">{$previous_physical_zip}</span>
+            </p>
+            {/if}
+            {if isset($mailaddress1) }
+            <p><em><u>Adding the new location:&nbsp</u></em><br>
+                <span class="store_location">{$mailaddress1}</span>
+                <span class="store_location">{if isset($mailaddress2) && $mailaddress2 != ""},{$mailaddress2}{/if}</span>,<br>
+                <span class="store_location">{$physical_city}</span>,
+                <span class="store_location">{if isset(physical_state) && $physical_state != '[]'}{$physical_state}{/if}</span>  <span class="store_location">{$physical_zip}</span>
+            </p>
+            {/if}
+            {/if}
           {/if}
       </div>
     {/if}
