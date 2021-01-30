@@ -154,9 +154,29 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     }
   }
 
+  .dolModel {
+    .card-body:first-child {
+      padding-bottom: 0px;
+    }
+  }
+
+  .dolContainer {
+    margin-bottom: 0px;
+  }
+
   .listViewTitles {
     text-align: center;
   }
+
+  // .formio-component-pollutionLiabilityUnderwritingSurvey,
+  // .formio-component-underwritesurvey {
+  //   tr:first-child {
+  //     td {
+  //       // style only first td
+  //       width: 50%;
+  //     }
+  //   }
+  // }
 
   .financeDataGrid {
     tr {
