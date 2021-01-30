@@ -1,3 +1,5 @@
+// Calculate Button
+
 var DOLFieldList = [
   {
     key: "dol_12MonthAvg",
@@ -33,3 +35,15 @@ DOLFieldList.map((field) => {
   });
   form.getComponent(field.key).setValue(cloneItem);
 });
+
+// Same As Loc 1
+
+var cloneItem = [...data.dol_Protection];
+cloneItem[rowIndex] = {
+  ...row,
+  premisesLotProtection: { ...cloneItem[0].premisesLotProtection },
+  entranceQuestions: { ...cloneItem[0].entranceQuestions },
+  keyControls: { ...cloneItem[0].keyControls },
+  other: cloneItem[0].other ? cloneItem[0].other : null,
+};
+form.getComponent("dol_Protection").setValue(cloneItem);
