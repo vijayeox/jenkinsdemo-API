@@ -47,3 +47,23 @@ cloneItem[rowIndex] = {
   other: cloneItem[0].other ? cloneItem[0].other : null,
 };
 form.getComponent("dol_Protection").setValue(cloneItem);
+
+// Select All in Requested Coverage 
+
+var fieldSet = [
+  "new",
+  "demos",
+  "used",
+  "service",
+  "otherOwned",
+  "otherNonOwned",
+];
+var requestedCoverage = {};
+fieldSet.map((item) => {
+  requestedCoverage[item] = {
+    collision: "yes",
+    comp: "yes",
+    falsePretense: "yes",
+  };
+});
+form.getComponent("requestedCoverage").setValue(requestedCoverage);
