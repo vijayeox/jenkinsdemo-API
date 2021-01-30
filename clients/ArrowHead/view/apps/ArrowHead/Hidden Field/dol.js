@@ -20,7 +20,7 @@ DOLFieldList.map((field) => {
     };
     field.children.map((i) => {
       location["total_" + i] =
-        (location[i] > 0 ? location[i] : 0) +
+        (location[i] > 0 ? location[i] : 0) -
         (location["floor_" + i] > 0 ? location["floor_" + i] : 0);
       lineTotal.total += location[i] ? location[i] : 0;
       lineTotal.floor_total += location["floor_" + i]
@@ -30,7 +30,7 @@ DOLFieldList.map((field) => {
     return {
       ...location,
       ...lineTotal,
-      total_total: lineTotal.total + lineTotal.floor_total,
+      total_total: lineTotal.total - lineTotal.floor_total,
     };
   });
   form.getComponent(field.key).setValue(cloneItem);
@@ -48,7 +48,7 @@ cloneItem[rowIndex] = {
 };
 form.getComponent("dol_Protection").setValue(cloneItem);
 
-// Select All in Requested Coverage 
+// Select All in Requested Coverage
 
 var fieldSet = [
   "new",
