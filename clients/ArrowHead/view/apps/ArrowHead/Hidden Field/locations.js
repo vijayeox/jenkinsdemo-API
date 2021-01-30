@@ -22,10 +22,20 @@ var rowValue = {
 locationsClone.push(rowValue);
 value = locationsClone;
 
-data.locationFieldList.map((field) => {
+data.buildingLevelFieldList.map((field) => {
   var cloneItem = [...data[field.key]];
   cloneItem.push({
     locationBuildingNum: newLocationNumber + "-1",
+  });
+  result[0].formObject
+    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)
+    : null;
+});
+
+data.locationLevelFieldList.map((field) => {
+  var cloneItem = [...data[field.key]];
+  cloneItem.push({
+    locationNum: newLocationNumber,
   });
   result[0].formObject
     ? result[0].formObject.getComponent(field.key).setValue(cloneItem)
@@ -65,7 +75,7 @@ if (result.length > 0) {
   locationsClone.splice(locationIndex, 0, rowValue);
   value = locationsClone;
 
-  data.locationFieldList.map((field) => {
+  data.buildingLevelFieldList.map((field) => {
     var cloneItem = [...data[field.key]];
     cloneItem.splice(locationIndex, 0, {
       locationBuildingNum: rowValue.locationBuildingNum,
@@ -114,9 +124,25 @@ value = locationsClone.map((loc) => {
   }
 });
 
-data.locationFieldList.map((field) => {
+data.buildingLevelFieldList.map((field) => {
   var cloneItem = [...data[field.key]];
   cloneItem.splice(rowIndex, 1);
+  result[0].formObject
+    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)
+    : null;
+});
+
+data.locationLevelFieldList.map((field) => {
+  var cloneItem = [...data[field.key]];
+  var locationIndex = cloneItem.findIndex(
+    (item) => item.locationNum == rowInfo.locationNum
+  );
+  cloneItem.splice(locationIndex, 1);
+  cloneItem = cloneItem.map((item, index) => {
+    return locationIndex <= index
+      ? { ...item, locationNum: item.locationNum - 1 }
+      : item;
+  });
   result[0].formObject
     ? result[0].formObject.getComponent(field.key).setValue(cloneItem)
     : null;
