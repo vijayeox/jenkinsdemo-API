@@ -784,7 +784,7 @@ class UserService extends AbstractService
                     from ox_user as ou 
                     inner join ox_account au on au.id = ou.account_id
                     inner join ox_person as per on per.id = ou.person_id 
-                    inner join ox_employee as oxemp on oxemp.person_id = per.id 
+                    left join ox_employee as oxemp on oxemp.person_id = per.id 
                     left join ox_address as oa on per.address_id = oa.id 
                     left join ox_employee as man on man.id = oxemp.manager_id
                     where ou.id =" . $id . " and ou.status = 'Active'";
