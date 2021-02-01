@@ -376,11 +376,8 @@ class UserController extends AbstractApiController
             }
             if ($userInfo) {
                 $baseUrl = $this->getBaseUrl();
-                if(isset($userInfo['icon'])){
-                    $icon = $userInfo['icon'];
+                if(!isset($userInfo['icon'])){
                     $userInfo['icon'] = $baseUrl . "/user/profile/" . $userInfo["uuid"];
-                } else {
-                    $userInfo['icon'] = null;
                 }
             }
         } catch (Exception $e) {
