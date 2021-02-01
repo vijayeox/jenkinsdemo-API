@@ -142,7 +142,7 @@ class CommandService extends AbstractService
     {
         $this->logger->info("PROCESS COMMAND : command --- " . $command);
         switch ($command) {
-            case 'create_user':
+            case 'register_account':
                 return $this->registerAccount($data);
                 break;
             case 'sign_in':
@@ -193,6 +193,7 @@ class CommandService extends AbstractService
                 return $this->getStartForm($data);
                 break;
             case 'register_user':
+            case 'create_user':    
                 $this->logger->info("START FORM");
                 return $this->registerUser($data);
                 break;
