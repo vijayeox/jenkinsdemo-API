@@ -34,6 +34,19 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
                 -
+                    name: Delete
+                    rule: 'profile.privileges.MANAGE_POLICY_APPLICATION_DELETE == true'
+                    confirmationMessage: "Please confirm if you want to delete the workbook. This cannot be undone."
+                    updateOnly : true
+                    details:
+                        -
+                            type: Update
+                            method: 'DELETE'
+                            params:
+                                url: 'file/{{uuid}}'
+                                successNotification: "Workbook and its related claims have been deleted"
+                    icon: 'far fa-trash-alt'
+                -
                     name: Claims
                     rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
                     details:
