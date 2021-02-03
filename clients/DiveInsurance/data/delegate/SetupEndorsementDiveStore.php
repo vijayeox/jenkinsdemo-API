@@ -356,6 +356,12 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
         $endorsementGroupLiability = array();
         $endorsementExcessLiabilityCoverage = array();
         $endorsementLiabilityCoverageOption = array();
+        $unsetOptions = $this->unsetOptions;
+        for ($i = 0; $i < sizeof($unsetOptions); $i++) {
+            if (isset($data[$unsetOptions[$i]])) {
+                unset($data[$unsetOptions[$i]]);
+            }
+        }
         if (isset($policy['previous_excessLiabilityCoverage'])) {
             $selectCoverage = "select rc.* from premium_rate_card rc WHERE product = '" . $data['product'] . "' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '" . $data['update_date'] . "' AND end_date >= '" . $data['update_date'] . "' order by CAST(rc.previous_key as UNSIGNED) DESC";
             $resultCoverage = $persistenceService->selectQuery($selectCoverage);
@@ -394,6 +400,15 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 $data[$rate['key']] = $rate['premium'];
             }
         }
+        $selectGroupExcessLiability = "select rc.* from premium_rate_card rc WHERE product = '" . $data['product'] . "' and coverage_category='GROUP_EXCESS_LIABILITY' and start_date <= '" . $data['update_date'] . "' AND end_date >= '" . $data['update_date'] . "'";
+        $this->logger->info("Executing Endorsement Rate Card Coverage - Group Excess" . $selectGroupExcessLiability);
+        $resultGroupExcessLiability = $persistenceService->selectQuery($selectGroupExcessLiability);
+        while ($resultGroupExcessLiability->next()) {
+            $rate = $resultGroupExcessLiability->current();
+            if (isset($rate['key'])) {
+                $data[$rate['key']] = $rate['premium'];
+            }
+        }
         foreach ($policy as $key => $value) {
             if ($key != 'update_date') {
                 $data[$key] = $value;
@@ -403,12 +418,6 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
         $data['endorsementLiabilityCoverageOption'] = $endorsementLiabilityCoverageOption;
         $data['initial_combinedSingleLimit'] = $data['previous_policy_data'][0]['previous_combinedSingleLimit'];
         $data['initial_annualAggregate'] = $data['previous_policy_data'][0]['previous_annualAggregate'];
-        $unsetOptions = $this->unsetOptions;
-        for ($i = 0; $i < sizeof($unsetOptions); $i++) {
-            if (isset($data[$unsetOptions[$i]])) {
-                unset($data[$unsetOptions[$i]]);
-            }
-        }
         if (isset($data['groupPL'])) {
             if ($data['groupPL'] != "") {
                 foreach ($data['groupPL'] as $key => $value) {
