@@ -86,6 +86,7 @@ class CancelPolicy extends PolicyDocument
         $data['groupCarrierName'] = "";
         $data['coverageTitle'] = "";
         $data['multiplePolicy'] = "no";
+        $data['dbaName'] = isset($data['dba']) ? (($data['dba'] != "") ? "DBA: ".$data['dba'] : "") : "";
         if ($data['product'] == "Dive Store") {
             $data['cancellationName'] = $data['business_name'];
             $data['carrierName'] = "Liability Policy issued by " . $data['liability_carrier'];
