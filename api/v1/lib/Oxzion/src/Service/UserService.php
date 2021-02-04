@@ -774,6 +774,7 @@ class UserService extends AbstractService
     public function getUser($id, $getAllFields = false)
     {
         $sql = $this->getSqlObject();
+        $id = is_numeric($id) ? $id: $this->getIdFromUuid('ox_user',$id);
         $select = "SELECT ou.uuid,ou.username,per.firstname,per.lastname,ou.name,
                           per.email,au.uuid as accountId,ou.icon,oa.address1,oa.address2,oa.city,
                           oa.state, oa.country,oa.zip,per.date_of_birth,oxemp.designation,
