@@ -89,6 +89,8 @@ return [
     'APP_DOCUMENT_FOLDER' => __DIR__.'/../../data/file_docs/',
     'CLIENT_FOLDER' => __DIR__.'/../../../../clients/',
     'APPS_FOLDER' => __DIR__."/../../../../view/apps/",
+    'EOX_APP_SOURCE_DIR' => __DIR__.'/../../data/AppSource/',
+    'EOX_APP_DEPLOY_DIR' => __DIR__.'/../../data/AppDeploy/', 
     'GUI_FOLDER' => __DIR__."/../../../../view/gui/src/externals/",
     'THEME_FOLDER' => __DIR__."/../../../../view/themes/",
     'internalBaseUrl' => 'http://'.$host.':8080',
