@@ -1,3 +1,4 @@
+
 #!/bin/bash
 #This script is used to deploy build.zip to respective folders
 # exit when any command fails

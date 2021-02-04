@@ -435,8 +435,6 @@ class DashboardFilter extends React.Component {
     componentDidMount(props) {
         this.getDataSourceOptions()
         this.displayDefaultFilters()
-        let filterConfig = this.props.filterConfiguration
-
     }
 
     //showing only default filters on load
@@ -648,13 +646,10 @@ class DashboardFilter extends React.Component {
     saveFilter() {
         let filters
         if (this.state.filters !== undefined) {
-
             this.state.filters.filter(obj => obj !== undefined).map((filterRow, index) => {
                 if (filterRow.fieldType == 'date' && (filterRow.operator == 'ytd' || filterRow.operator == 'mtd')) {
                     this.state.filters[index]['endDate'] = new Date()
                 }
-
-
             })
             filters = this.state.filters.filter(function (obj) {
                 return obj !== undefined && obj.value !== undefined;
@@ -715,8 +710,8 @@ class DashboardFilter extends React.Component {
                         />
                     })
                     }
-                    {   // Rendered on dashboard Edtior
-                        this.props.filterMode === "CREATE" &&
+                    {(this.props.filterMode === "CREATE") ?
+                        // Rendered on dashboard Edtior
                         <Form.Group>
                             <Form.Label> Choose/Create Filters </Form.Label>
                             <Select
@@ -728,10 +723,10 @@ class DashboardFilter extends React.Component {
                                 options={this.state.createFilterOption}
                             />
                         </Form.Group>
-                    }
-                    {   // Rendered on dashboard Viewer
-                        (this.state.applyFilterOption.length !== 0 || this.props.applyFilterOption.length !== 0) &&
-                        < Form.Group >
+                        :
+                        // Rendered on dashboard Viewer
+                        (this.state.applyFilterOption.length !== 0) &&
+                        <Form.Group>
                             <Form.Label> Choose/Apply Filters </Form.Label>
                             <Select
                                 placeholder="Choose filters"
