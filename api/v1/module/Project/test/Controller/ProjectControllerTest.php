@@ -1103,4 +1103,60 @@ class ProjectControllerTest extends ControllerTest
     }
 
     //TODO Subproject Tests
+    public function testCreateSubprojectWithNewManager()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Test Project 4', 'description' => 'Child of Test Project 1', 'managerId' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45','parentId'=>'886d7eff-6bae-4892-baf8-6fefc56cbf0b'];
+        
+        //Check if the projects defined in Dataset\\Project.yml have been inserted correctly
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
+
+        //Create Subproject
+        $this->dispatch('/project', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'success');
+
+        $subprojectUuid= $content['data']['uuid'];
+
+        //Get the newly created row
+        $select = "SELECT op.*,ou.uuid as manager_uuid  FROM ox_project as op INNER JOIN ox_user as ou on op.manager_id=ou.id WHERE op.uuid = '".$subprojectUuid."'";
+        $subprojectData = $this->executeQueryTest($select);
+
+        //Get the data from the row
+        $subprojectId = $subprojectData[0]['id'];
+        $subprojectParentId = $subprojectData[0]['parent_id'];
+        $subprojectManagerUuid = $subprojectData[0]['manager_uuid'];
+        $subprojectManagerId = $subprojectData[0]['manager_id'];
+        $subprojectName = $subprojectData[0]['name'];
+        $subprojectDescription = $subprojectData[0]['description'];
+
+        //Get the row corresponding to the parent project
+        $select = "SELECT op.*, ou.uuid as parent_manager_uuid FROM ox_project as op INNER JOIN ox_user as ou on op.manager_id=ou.id WHERE op.id = '".$subprojectParentId."'";
+        $parentProjectData = $this->executeQueryTest($select);
+
+        $subprojectParentManagerUuId = $parentProjectData[0]['parent_manager_uuid'];
+        $subprojectParentManagerId = $parentProjectData[0]['manager_id'];
+        $subprojectParentUuid = $parentProjectData[0]['uuid'];
+
+        $this->assertEquals($subprojectManagerUuid, $data['managerId']);
+        $this->assertEquals($subprojectName, $data['name']);
+        $this->assertEquals($subprojectDescription, $data['description']);
+        $this->assertEquals($subprojectParentUuid, $data['parentId']);
+    
+        //Get the users corresponding to the project
+
+        $select = "SELECT user_id FROM ox_user_project WHERE project_id = '".$subprojectId."' AND user_id = '".$subprojectManagerId."'";
+        $subprojectManagerData = $this->executeQueryTest($select);
+
+        $select = "SELECT user_id FROM ox_user_project WHERE project_id = '".$subprojectId."' AND user_id = '".$subprojectParentManagerId."'";
+        $subprojectParentManagerData = $this->executeQueryTest($select);
+
+        $this->assertEquals($subprojectManagerData[0]['user_id'],$subprojectManagerId);
+        $this->assertEquals($subprojectParentManagerData[0]['user_id'],$subprojectParentManagerId);
+
+    }
+    
+
 }
