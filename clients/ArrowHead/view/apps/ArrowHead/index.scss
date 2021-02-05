@@ -5,6 +5,16 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   overflow-y: visible !important;
 }
 
+.osjs-panel-item--icon.in-window{
+  display: none;
+}
+
+.osjs-window-icon{
+  div{
+    display: none;
+  }
+}
+
 .swal2-shown {
   overflow: visible !important;
 }
@@ -31,6 +41,10 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   $secondary: #55b089;
   $secondary-dark: #282b2d;
   $secondary-light-grey: #7b7878;
+
+  .osjs-window-title{
+    color: $primary-color;
+  }
 
   .formContent {
     height: 100%;
