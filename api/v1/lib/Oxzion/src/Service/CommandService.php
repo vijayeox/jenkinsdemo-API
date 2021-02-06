@@ -101,8 +101,7 @@ class CommandService extends AbstractService
             unset($data['commands']);
             $inputData = $data;
             foreach ($commands as $index => $value) {
-                $isArray = is_array($value);
-                if (!$isArray) {
+                if (!is_array($value)) {
                     $commandJson = json_decode($value, true);
                     if(empty($commandJson)){
                         $commandJson = array("command" => $value);

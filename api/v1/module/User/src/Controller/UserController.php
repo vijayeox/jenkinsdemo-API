@@ -372,6 +372,9 @@ class UserController extends AbstractApiController
                     case "role":
                         $userInfo['role'] = $this->userService->getRolesofUser($params['accountIdid'], $id);
                         break;
+                    case "acc":
+                        $userInfo['accounts'] = $this->userService->getAccounts($id);
+                        break;
                 }
             }
             if ($userInfo) {

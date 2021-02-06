@@ -24,15 +24,14 @@ class AuthSuccessListener
                 }
                 $result = $this->userService->getUserContextDetails($value, $accountId);
                 if(isset($result) && count($result)==0){
-                        return [];
+                    return [];
                 }
-
-                AuthContext::put(AuthConstants::USER_ID, $result['id']);
                 AuthContext::put(AuthConstants::NAME, $result['name']);
+                AuthContext::put(AuthConstants::USER_ID, $result['id']);
+                AuthContext::put(AuthConstants::USER_UUID, $result['userId']);
                 AuthContext::put(AuthConstants::ACCOUNT_ID, $result['account_id']);
                 AuthContext::put(AuthConstants::ACCOUNT_UUID, $result['accountId']);
                 AuthContext::put(AuthConstants::ORG_ID, $result['organization_id']);
-                AuthContext::put(AuthConstants::USER_UUID, $result['userId']);
                 AuthContext::put(AuthConstants::ORG_UUID, $result['organizationId']);
                 AuthContext::put(AuthConstants::PRIVILEGES, $this->userService->getPrivileges($result['id']));
                 AuthContext::put(AuthConstants::API_KEY, null);
