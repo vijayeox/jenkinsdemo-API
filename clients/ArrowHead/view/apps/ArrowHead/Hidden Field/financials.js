@@ -61,21 +61,23 @@ var monthVariable =
   data.financialStatementMonths > 0 ? 12 / data.financialStatementMonths : 1;
 
 financeFieldList.map((field) => {
-  var cloneItem = [
-    ...data[
+  var cloneItem = _.merge(
+    [],
+    data[
       field.key.includes("Annual") ? field.key.split("Annual")[0] : field.key
-    ],
-  ];
+    ]
+  );
   var accountTotal = {};
   var locationTotal = 0;
   var fieldTotal = {};
 
   cloneItem = cloneItem.map((building) => {
-    field.key.includes("Annual")
-      ? childFields.map((i) => {
-          building[i] > 0 ? (building[i] = building[i] * monthVariable) : null;
-        })
-      : null;
+    if (field.key.includes("Annual")) {
+      childFields.map((i) => {
+        building[i] > 0 ? (building[i] = building[i] * monthVariable) : null;
+      });
+    }
+
     building.total = childFields
       .map((i) => (building[i] > 0 ? building[i] : 0))
       .reduce((a, b) => a + b, 0);
@@ -105,7 +107,7 @@ financeFieldList.map((field) => {
   form.getComponent(field.key).setValue(cloneItem);
   form.getComponent(field.key + "Total").setValue(accountTotal);
 
-  if (field.key == "financialsYTDSales") {
+  if (field.key == "financialsYTDSalesAnnualized") {
     var minimumRecBL = cloneItem.map((item, index) => {
       if (data.buildings[index].coinsuranceform == "yes") {
         var buildingCoinsurance = parseFloat(

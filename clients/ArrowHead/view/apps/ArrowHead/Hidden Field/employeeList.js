@@ -25,7 +25,7 @@ var sumObjectsByKey = (...objs) => {
   }, {});
 };
 
-var cloneItem = [...data["employeeList"]];
+var cloneItem = _.merge([], data.employeeList);
 var accountTotal = {};
 var locationTotal = 0;
 var fieldTotal = {};
@@ -50,6 +50,11 @@ cloneItem = cloneItem.map((building) => {
     building = { ...building, ...cleanfieldTotal };
     accountTotal.total =
       (accountTotal.total ? accountTotal.total : 0) + locationTotal;
+    accountTotal.total =
+      accountTotal.total -
+      (accountTotal.nonEmployeesUnderTheAge +
+        accountTotal.nonEmployeesYearsOldorolder +
+        accountTotal.contractDriversNonEmployees);
     locationTotal = 0;
     fieldTotal = {};
   }
