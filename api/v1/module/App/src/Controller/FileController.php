@@ -277,4 +277,22 @@ class FileController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($result, 200);
     }
+    public function auditAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            if($params['fileId']){
+                $result = $this->fileService->getAuditLog($params['fileId']);
+            } else {
+                return $this->getErrorResponse("Validation Errors", 404, "FileNotFound");
+            }
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+    }
 }

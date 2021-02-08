@@ -102,10 +102,19 @@ class FileService extends AbstractService
         $data['form_id'] = $formId;
         $data['data'] = $jsonData;
         
-        $result = $this->setupEntityFields($entityId,$data);
-        $subscribers['subscribers'] = isset($result['subscribersList']) ? $result['subscribersList']: null;
-        unset($result['subscribersList']);
-        $data = array_merge($data, $result);
+        $entityConfig = $this->setupEntityFields($entityId,$data);
+        $subscribers['subscribers'] = isset($entityConfig['subscribersList']) ? $entityConfig['subscribersList']: null;
+        $titleConfig = $entityConfig['title'];
+        $entityName = $entityConfig['name'];
+        $rygRule = $entityConfig['ryg_rule'];
+        unset($entityConfig['subscribersList']);
+        unset($entityConfig['subscribersList']);
+        unset($entityConfig['title']);
+        unset($entityConfig['name']);
+        unset($entityConfig['ryg_rule']);
+        $data['fileTitle'] = $this->evaluateFileTitle($titleConfig,$data,$entityName);
+        $data['rygStatus'] = $this->evaluateRyg($data,json_decode($rygRule,true));
+        $data = array_merge($data, $entityConfig);
         $data['assoc_id'] = isset($oldData['bos']['assoc_id']) ? $oldData['bos']['assoc_id'] : null;
         $data['last_workflow_instance_id'] = isset($oldData['last_workflow_instance_id']) ? $oldData['last_workflow_instance_id'] : null;
         $file = new File($this->table);
@@ -146,8 +155,6 @@ class FileService extends AbstractService
             $this->logger->info("Created successfully  - file record");
             $this->setupFileParticipants($result['id'], $data);
             $this->setupFileAssignee($result['id'], $data);
-            $this->updateFileTitle($data);
-            $this->updateRyg($data);
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
 
@@ -165,14 +172,18 @@ class FileService extends AbstractService
     private function setupEntityFields($entityId,$data){
         $returnResult = [];
         $returnResult['entity_id'] = $entityId;
-        $selectQuery = "SELECT start_date_field,end_date_field,status_field,subscriber_field from ox_app_entity WHERE id =:entityId";
+        $selectQuery = "SELECT name,start_date_field,end_date_field,status_field,subscriber_field,ryg_rule,title from ox_app_entity WHERE id =:entityId";
         $parameters = array('entityId' => $entityId);
+        $returnResult['ryg_rule'] = $returnResult['title'] = $returnResult['name'] = null;
         $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         if (count($resultQuery) > 0) {
             $returnResult['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
             $returnResult['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
             $returnResult['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
             $returnResult['subscribersList'] = array();
+            $returnResult['ryg_rule'] = $resultQuery[0]['ryg_rule'];
+            $returnResult['title'] = $resultQuery[0]['title'];
+            $returnResult['name'] = $resultQuery[0]['name'];
             $subsc = explode (",", $resultQuery[0]['subscriber_field']);
             for ($i=0; $i < count($subsc) ; $i++) { 
                 $this->logger->info("Subsc-----".print_r($subsc,true));
@@ -541,11 +552,18 @@ class FileService extends AbstractService
             $fileObject['version'] = $data['version'];
         }
         $fileObject['data'] = json_encode($dataArray);
-        $result = $this->setupEntityFields($entityId,$dataArray);
-        $subscribers['subscribers'] = $result['subscribersList'];
-        unset($result['subscribersList']);
-        $fileObject = array_merge($fileObject, $result);
-
+        $entityConfig = $this->setupEntityFields($entityId,$dataArray);
+        $titleConfig = $entityConfig['title'];
+        $entityName = $entityConfig['name'];
+        $rygRule = $entityConfig['ryg_rule'];
+        $subscribers['subscribers'] = $entityConfig['subscribersList'];
+        unset($entityConfig['subscribersList']);
+        unset($entityConfig['title']);
+        unset($entityConfig['name']);
+        unset($entityConfig['ryg_rule']);
+        $fileObject = array_merge($fileObject, $entityConfig);
+        $fileObject['fileTitle'] = $this->evaluateFileTitle($titleConfig,$dataArray,$entityName);
+        $fileObject['rygStatus'] = $this->evaluateRyg($dataArray,json_decode($rygRule,true));
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
         if (isset($data['last_workflow_instance_id'])) {
@@ -562,7 +580,6 @@ class FileService extends AbstractService
             $data['version'] = $result['version'];
             $count = $result['version'] - $version;
             $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
-
             if (!empty($subscribers['subscribers']) && ($subscribers['subscribers'] != '[]')) {
                 $subscribers['account_id'] = $file->getProperty('account_id');
                 $this->subscriberService->updateSubscriber($subscribers,$result['uuid']);
@@ -583,8 +600,6 @@ class FileService extends AbstractService
                 }
             }
             $this->setupFileAssignee($id, $file->toArray());
-            $this->updateFileTitle($file->toArray());
-            $this->updateRyg($file->toArray());
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
             $select = "SELECT * from ox_file where id = '".$id."'";
@@ -1174,7 +1189,7 @@ class FileService extends AbstractService
                 where f.id = " . $data['app_id'] . " and b.id = " . $data['form_id'] . " and (" . $fieldWhereQuery['whereQuery'] . ") group by a.id";
                 $this->logger->info("Executing query - $queryStr");
                 $resultSet = $this->executeQuerywithParams($queryStr);
-                return $dataSet = $resultSet->toArray();
+                return $resultSet->toArray();
             } else {
                 return 0;
             }
@@ -1183,7 +1198,7 @@ class FileService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $dataList;
+        return array();
     }
 
     private function generateFieldWhereStatement($data)
@@ -1439,7 +1454,6 @@ class FileService extends AbstractService
             return array('data' => $resultSet, 'total' => $countResultSet[0]['FOUND_ROWS()']);
         } catch (Exception $e) {
             print_r($e->getMessage());
-            exit;
             throw new ServiceException($e->getMessage(), "app.mysql.error");
         }
     
@@ -1784,8 +1798,7 @@ class FileService extends AbstractService
             }
             }
         }
-
-        if($value['type'] =='radio'){
+        if((isset($value['type']) && $value['type'] =='radio')|| (isset($value['data_type']) && $value['data_type'] =='radio')){
             $radioFields =json_decode($value['template'],true);
             if(isset($radioFields['values'])){
                 foreach ($radioFields['values'] as $key => $radiovalues) {
@@ -2307,13 +2320,22 @@ class FileService extends AbstractService
 
       public function getAuditLog($fileId){
         try{
-            $select = " SELECT ofal.data,ofal.created_by,ofal.modified_by,ofal.date_modified,ofal.date_created,ofal.id as fileId FROM ox_file_audit_log ofal WHERE ofal.uuid = :uuid";
+            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified IS NULL or ofal.date_modified = '' then ofal.date_created else ofal.date_modified end as date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id WHERE ofal.uuid = :uuid";
             $params = array('uuid' => $fileId);
             $resultSet = $this->executeQuerywithBindParameters($select,$params)->toArray();
             if (count($resultSet) == 0) {
                 return 0;
             }
-            return $resultSet;
+            $fileData = array();
+            foreach($resultSet as $key => $value){
+                if($value['version'] ==1 && $value['action']=='update'){
+                    continue;
+                }
+                $data = $value;
+                $fileDataArray['fields'] = $this->getFileVersionChangeLog($fileId,$value['version']);
+                $fileData[] = array_merge($data,$fileDataArray);
+            }
+            return array('data'=>$fileData,'total'=>count($fileData));
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -2723,16 +2745,8 @@ class FileService extends AbstractService
             if (!empty($result[0]['title'])) {
                 $title = $result[0]['title'];
                 $fileData = json_decode($data['data'],true);
-                $fileData['entity_name'] = $result[0]['entity_name'];
-                preg_match_all('/[$][{](.*?)\}/', $title, $matches);
-                if (is_array($matches[0]) && count($matches[0]) > 0) {
-                    for ($i=0; $i < count($matches[0]); $i++) { 
-                        $title = str_replace($matches[0][$i], (isset($fileData[$matches[1][$i]]) ? $fileData[$matches[1][$i]] : null ), $title);
-                    }
-                }
-                $this->logger->info("FILE TITLE---".print_r($title,true));
                 $updateFile = "UPDATE ox_file SET fileTitle=:fileTitle where uuid=:fileId";
-                $params['fileTitle'] = $title;
+                $params['fileTitle'] = $this->evaluateFileTitle($title,$fileData,$result[0]['entity_name']);
                 $this->executeUpdateWithBindParameters($updateFile,$params);
             }
             $this->commit();
@@ -2740,6 +2754,17 @@ class FileService extends AbstractService
             $this->rollback();
             throw $e;
         }
+    }
+    private function evaluateFileTitle($title,$fileData,$entityName){
+        $fileData['entity_name'] = $entityName;
+        preg_match_all('/[$][{](.*?)\}/', $title, $matches);
+        if (is_array($matches[0]) && count($matches[0]) > 0) {
+            for ($i=0; $i < count($matches[0]); $i++) { 
+                $title = str_replace($matches[0][$i], (isset($fileData[$matches[1][$i]]) ? $fileData[$matches[1][$i]] : null ), $title);
+            }
+        }
+        $this->logger->info("FILE TITLE---".print_r($title,true));
+        return $title;
     }
 
     public function getFieldDataTypes($entityId,$appId) {
