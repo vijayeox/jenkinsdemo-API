@@ -93,20 +93,25 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     $fieldMappingExcel = file_get_contents(__DIR__ . "/../template/" . $selectedTemplate["template"]);
                     $fieldMappingExcel = YMLUtils::ymlToArray($fieldMappingExcel);
                     if (isset($data[$selectedTemplate["customData"]])) {
-                        foreach ($this->checkJSON(
-                            $data[$selectedTemplate["customData"]]
-                        ) as $customKey => $customValue) {
-                            if (isset($customValue) && !empty($customValue) && !isset($data[$customKey])) {
-                                $data[$selectedTemplate["customData"] . "*" . $customKey] = $customValue;
+                        try {
+                            foreach ((array)$this->checkJSON(
+                                $data[$selectedTemplate["customData"]]
+                            ) as $customKey => $customValue) {
+                                if (isset($customValue) && !empty($customValue) && !isset($data[$customKey])) {
+                                    $data[$selectedTemplate["customData"] . "*" . $customKey] = $customValue;
+                                }
                             }
+                        } catch (Exception $e) {    
                         }
+
                         unset($data[$selectedTemplate["customData"]]);
                     }
                     foreach ($fieldMappingExcel as $fieldConfig) {
-
-                        $formFieldKey = str_contains($fieldConfig["key"], "_") ?
+                        if(isset($fieldConfig["key"])){
+                            $formFieldKey = str_contains($fieldConfig["key"], "_") ?
                             explode("_", $fieldConfig["key"])[0]
                             : $fieldConfig["key"];
+                        }
                         if (isset($data[$formFieldKey]) && !empty($data[$formFieldKey]) && $data[$formFieldKey] !== "[]") {
                             $userInputValue = $data[$formFieldKey];
                             $tempFieldConfig = $fieldConfig;
@@ -226,8 +231,12 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                     }
                     if (isset($selectedTemplate["customData"])) {
                         $customTemplateData = $this->checkJSON($data[$selectedTemplate["customData"]]);
-                        foreach ($customTemplateData as  $field => $value) {
-                            $pdfData[$field] = $value;
+                        try {
+                            foreach ((array)$customTemplateData as  $field => $value) {
+                                $pdfData[$field] = $value;
+                            }
+                        } catch (\Throwable $th) {
+                            //throw $th;
                         }
                     }
                     $pdfData = array_filter($pdfData);
