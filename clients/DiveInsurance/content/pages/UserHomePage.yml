@@ -82,7 +82,7 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'
                 -
                     name: 'Renew'
-                    rule: '("{{entity_name}}" == "Individual Professional Liability") && (''{{policyStatus}}'' == ''In Force'') '
+                    rule: 'false'
                     details:
                         -
                             type: Form
@@ -101,7 +101,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '("{{entity_name}}" == "Emergency First Response") && (''{{policyStatus}}'' == ''In Force'') '
+                    rule: 'false'
                     details:
                         -
                             type: Form
@@ -120,7 +120,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '("{{entity_name}}" == "Dive Store") && (''{{policyStatus}}'' == ''In Force'') '
+                    rule: 'false'
                     details:
                         -
                             type: Form
@@ -139,7 +139,7 @@ content:
                                         command: startform
                 -
                     name: 'Renew'
-                    rule: '("{{entity_name}}" == "Dive Boat") && (''{{policyStatus}}'' == ''In Force'') '
+                    rule: 'false'
                     details:
                         -
                             type: Form
