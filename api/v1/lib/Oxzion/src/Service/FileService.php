@@ -1855,11 +1855,11 @@ class FileService extends AbstractService
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
                 $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
                 $data['path'] = $path;
-                $data['url'] = $this->config['baseUrl']."/data/".$fileStorage.$data['uuid']."/".$data['name'];
+                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? "/".$params['appId']:"")."/data/".$fileStorage.$data['uuid']."/".$data['name'];
             }else{
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/';
                 $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-                $data['url'] = $this->config['baseUrl']."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? "/".$params['appId']:"")."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
                 $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
             }
             //Check for similar file
@@ -2397,6 +2397,10 @@ class FileService extends AbstractService
         }
         if ($val['field'] == 'rygStatus') {
             $whereQuery .= " of.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "' $filterLogic";
+            return true;
+        }
+        if ($val['field'] == 'created_by') {
+            $whereQuery .= " ou.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "' $filterLogic";
             return true;
         }
         return false;

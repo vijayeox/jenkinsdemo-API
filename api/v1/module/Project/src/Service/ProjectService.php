@@ -111,6 +111,7 @@ class ProjectService extends AbstractService
     {
         $data = $inputData;
         $errorMessage = "You do not have permissions create project";
+  
         $accountId = $this->checkProjectAccount($params, $errorMessage);
         $data['account_id'] = $accountId;
         $accountId = $this->getUuidFromId('ox_account', $accountId);
@@ -175,11 +176,15 @@ class ProjectService extends AbstractService
             $insert_data = array('user_id' => $projectData['manager_id'], 'project_id' => $id);
             $insert->values($insert_data);
             $result = $this->executeUpdate($insert);
-            if(isset($data['manager_id']) && isset($data['parent_manager_id']) && $data['manager_id'] != $data['parent_manager_id']){
-	            $insert = $sql->insert('ox_user_project');
-	            $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $data['id']);
+
+            //If the subproject and parent projects have different managers
+            //Two users need to be inserted into ox_user_projects
+            if(isset($projectData['manager_id']) && isset($data['parent_manager_id']) && $projectData['manager_id'] != $data['parent_manager_id']){
+                $insert = $sql->insert('ox_user_project');
+	            $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $id);
 	            $insert->values($insert_data);
-	            $result = $this->executeUpdate($insert);            
+                $result = $this->executeUpdate($insert);      
+                      
 	        }
             $this->commit();
             if (isset($projectData['name'])) {
