@@ -60,7 +60,7 @@ class FileAttachmentController extends AbstractApiController
     
     public function addAttachmentAction()
     {
-        $params = $this->params()->fromPost();
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
             $files = isset($_FILES['file']) ? $_FILES['file'] : $this->params()->fromFiles('files');
             if (!$files) {
