@@ -2399,6 +2399,10 @@ class FileService extends AbstractService
             $whereQuery .= " of.rygStatus " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "' $filterLogic";
             return true;
         }
+        if ($val['field'] == 'created_by') {
+            $whereQuery .= " ou.name " . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "' $filterLogic";
+            return true;
+        }
         return false;
     }
 
