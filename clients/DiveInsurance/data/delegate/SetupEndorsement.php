@@ -90,6 +90,9 @@ class SetupEndorsement extends AbstractAppDelegate
                         }
                     }
                 }
+                if(isset($data['transaction_status'])){
+                    $data['transaction_status'] = ($data['transaction_status'] == "Action Not Permitted") ? "" : $data['transaction_status'];
+                }
             }else{
                 $this->endorsementRates($data,$data['previous_policy_data'][0],$privileges,$premiumRateCardDetails,$persistenceService);
             }
