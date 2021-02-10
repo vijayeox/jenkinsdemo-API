@@ -72,7 +72,7 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $apps = $appService->getApps();
-        $this->assertEquals(7, count($apps));
+        $this->assertEquals(8, count($apps));
     }
 
     public function testGetAppsOfAccountWithoutApps() {
