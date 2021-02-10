@@ -30,7 +30,7 @@
 			    <td class = 't_title' align = "left">
 			    {if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
 			      			{if isset($value.update_date) && $value.update_date != ''}
-			      				{$value.update_date|date_format:"%m/%d/%Y"}
+			      				{$value.updateDate|date_format:"%m/%d/%Y"}
 			      			{else}
 			      				&nbsp
 			      			{/if}
@@ -41,7 +41,7 @@
 			      <td class = 't_title' align = "left">
 			      {if isset($value.cancel) && ($value.cancel == true || $value.cancel == 'true')}
 			      			{if isset($value.cancel_date) && $value.cancel_date != ''}
-			      				{$value.cancel_date|date_format:"%m/%d/%Y"}
+			      				{$value.cancelDate|date_format:"%m/%d/%Y"}
 			      			{else}
 			      				&nbsp
 			      			{/if}
