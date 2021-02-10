@@ -304,4 +304,13 @@ class FileUtils
         fclose($fdestination);
         fclose($fsource);
     }
+
+    public static function copyOnlyNewFiles($src, $dest){
+        if (!file_exists($dest)) self::createDirectory($dest);
+        $output = [];
+        if(!exec("rsync --ignore-existing $src $dest", $output)){
+            throw new Exception("Failed to Copy New Files - ".print_r($output,true));
+            
+        }
+    }
 }
