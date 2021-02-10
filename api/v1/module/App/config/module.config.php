@@ -448,6 +448,21 @@ return [
                     ],
                 ],
             ],
+            'getauditlog' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/audit',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'audit',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
             'gettempdocument' => [
                 'type' => Segment::class,
                 'options' => [

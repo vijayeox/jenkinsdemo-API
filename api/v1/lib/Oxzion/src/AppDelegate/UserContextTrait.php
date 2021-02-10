@@ -30,6 +30,9 @@ trait UserContextTrait
     public function getPrivilege(){
         return $this->privilege;
     }
+    public function getUser($userId,$getAllFields){
+        return $this->userService->getUser($userId,$getAllFields);
+    }
     public function setUserService(UserService $userService){
         $this->logger->info("SET User SERVICE");
         $this->userService = $userService;
