@@ -2320,7 +2320,7 @@ class FileService extends AbstractService
 
       public function getAuditLog($fileId){
         try{
-            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified IS NULL or ofal.date_modified = '' then ofal.date_created else ofal.date_modified end as date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id WHERE ofal.uuid = :uuid";
+            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified is NOT NULL then ofal.date_modified else ofal.date_created end as file_date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id WHERE ofal.uuid = :uuid";
             $params = array('uuid' => $fileId);
             $resultSet = $this->executeQuerywithBindParameters($select,$params)->toArray();
             if (count($resultSet) == 0) {
@@ -2328,12 +2328,13 @@ class FileService extends AbstractService
             }
             $fileData = array();
             foreach($resultSet as $key => $value){
+                $fileDataArray = [];
                 if($value['version'] ==1 && $value['action']=='update'){
                     continue;
                 }
-                $data = $value;
+                $fileDataArray = $value;
                 $fileDataArray['fields'] = $this->getFileVersionChangeLog($fileId,$value['version']);
-                $fileData[] = array_merge($data,$fileDataArray);
+                $fileData[] = $fileDataArray;
             }
             return array('data'=>$fileData,'total'=>count($fileData));
         }catch(Exception $e){
