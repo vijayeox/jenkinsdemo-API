@@ -56,6 +56,9 @@ role:
             -
                 privilege_name: MANAGE_CLAIMS
                 permission: 15
+            -
+                privilege_name: MANAGE_FILE
+                permission: 15
         uuid: 2aaea64e-bd20-4441-8eef-4692be79b3b2
     -
         name: Underwriter
