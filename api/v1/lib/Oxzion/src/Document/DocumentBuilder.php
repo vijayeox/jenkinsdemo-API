@@ -25,7 +25,8 @@ class DocumentBuilder {
     *  $data - array - the context data to process the template
     *               orgUuid - if present will be used else current logged in org uuid 
     *                         will be used 
-    *  $destination - string - the file path of the destination file
+    *  $data - MUST CONTAIN A JSON ENCODED STRING
+    *  $destination - string - the file path of the destination file(absolute path)
     *  $options - array 
     *               header - name of the header file (path will be discovered using conventions)
     *               footer - name of the footer file (path will be discovered using conventions)
