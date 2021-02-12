@@ -305,6 +305,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 $policy['previous_dsglestmonthretailreceipt'] = isset($data['dsglestmonthretailreceipt']) ? $data['dsglestmonthretailreceipt'] : 0;
                 $policy['previous_totalAddPremium'] = isset($data['totalAddPremium']) ? $data['totalAddPremium'] : 0;
                 $policy['previous_ContentsFP'] = isset($data['ContentsFP']) ? $data['ContentsFP'] : 0;
+                $policy['previous_excludedOperation'] = isset($data['excludedOperation']) ? $data['excludedOperation'] : "";
                 if (isset($data['additionalLocations']) && $data['additionalLocationsSelect'] == "yes") {
                     foreach ($data['additionalLocations'] as $key => $value) {
                         $additionalLocations = $data['additionalLocations'][$key];

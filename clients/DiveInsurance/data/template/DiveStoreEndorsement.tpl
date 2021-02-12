@@ -47,8 +47,19 @@
           {/if}
       </div>
     {/if}
-      
-      {if (isset($liabilityChanges) && $liabilityChanges == true )&& ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||(isset($removed_medicalPayment) && $removed_medicalPayment)||(isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||(isset($removed_travelEnO) && $removed_travelEnO) || (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || (isset($decreased_non_owned_liability_limit) && $decreased_non_owned_liability_limit) || (isset($increased_liability_limit) && $increased_liability_limit > 0 && $liabilityChanges == true) || (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || (isset($increased_travelEnO) && $increased_travelEnO) || (isset($removed_liability_limit) && $removed_liability_limit) || (isset($newAdditionalPremium) && $newAdditionalPremium))}
+      {if (isset($liabilityChanges) && $liabilityChanges == true )&&
+         ((isset($increased_medicalPayment_limit) && $increased_medicalPayment_limit ==true)||
+         (isset($removed_medicalPayment) && $removed_medicalPayment)||
+         (isset($removed_nonOwnedAutoLiabilityPL) && $removed_nonOwnedAutoLiabilityPL)||
+         (isset($removed_travelEnO) && $removed_travelEnO) ||
+         (isset($increased_non_owned_liability_limit) && $increased_non_owned_liability_limit) || 
+         (isset($decreased_non_owned_liability_limit) && $decreased_non_owned_liability_limit) || 
+         (isset($increased_liability_limit) && $increased_liability_limit > 0) ||
+         (isset($decreased_liability_limit) && $decreased_liability_limit > 0) || 
+         (isset($increased_travelEnO) && $increased_travelEnO) ||
+         (isset($removed_liability_limit) && $removed_liability_limit) || 
+         (isset($newAdditionalPremium) && $newAdditionalPremium) ||
+         (isset($addExcludedOperation) && $addExcludedOperation))}
       <div class = "box">
           <center><b><u>***Liability Changes***</u></b></center>
           {if isset($newAdditionalPremium) && $newAdditionalPremium}
@@ -91,6 +102,10 @@
                <p>Location : {if isset($location.address)} {$location.address} {else} {if isset($location.name)}  {$location.name} {else}  {/if}{/if} has been removed as of the Effective date of this Endorsement</p>
               {/if}
             {/foreach}
+          {/if}
+          {if isset($addExcludedOperation) && $addExcludedOperation}
+          <p>EXCLUDED OPERATION:</p>
+            <p class ="exop" style="margin-top:1px;font-size: 15px;">{$excludedOperation}</p>
           {/if}
       </div>
       {/if}
