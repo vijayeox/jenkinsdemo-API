@@ -27,6 +27,6 @@ final class Version20210212081740 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `ox_role` DROP COLUMN `app_id`");
+        $this->addSql("ALTER TABLE `ox_esign_document` DROP COLUMN `docPath`");
     }
 }
