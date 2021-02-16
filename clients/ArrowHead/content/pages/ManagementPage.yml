@@ -34,6 +34,18 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
                 -
+                    name: Comments
+                    rule: 'true'
+                    details:
+                        -
+                            type: Document
+                            content: '<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>'
+                            useRowData: true
+                        -
+                            type: Comment
+                            content: '{{uuid}}'
+                    icon: 'far fa-comment'
+                -
                     name: Claims
                     rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
                     details:

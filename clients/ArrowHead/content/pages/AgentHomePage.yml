@@ -35,6 +35,18 @@ content:
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
                 -
+                    name: Comments
+                    rule: 'true'
+                    details:
+                        -
+                            type: Document
+                            content: '<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>'
+                            useRowData: true
+                        -
+                            type: Comment
+                            content: '{{uuid}}'
+                    icon: 'far fa-comment'
+                -
                     name: 'Export'
                     rule: '''{{status}}'' == ''Generated'''
                     icon: 'far fa-file-download'
