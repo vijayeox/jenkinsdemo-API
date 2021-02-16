@@ -67,7 +67,6 @@ class TemplateService extends AbstractService
     public function getContent($templateName, $data = array(), $options = array())
     {
         $this->logger->info("Template Name:".$templateName);
-        $this->logger->info("Data context".print_r($data,true));
 
         $template = $this->getTemplateDir($templateName, $data, $options);
         $this->logger->info("Template Directory:".print_r($template['templatePath'],true));
@@ -85,7 +84,6 @@ class TemplateService extends AbstractService
         }
         try{
             $content = $client->getContent($template, $data, $options);
-            $this->logger->info("TEMPLATE CONTENT".print_r($content,true));
         }catch(Exception $e){
             print("Error - ".$e->getMessage()."\n");
             throw $e;
