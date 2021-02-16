@@ -1060,7 +1060,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['active_account']['accountId'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data']['active_account']['name'], 'Cleveland Black');
-        $this->assertEquals(count($content['data']['apps']), 7);
+        $this->assertEquals(count($content['data']['apps']), 8);
         $apps = ['Admin', 'Analytics', 'AppBuilder', 'CRM', 'MailAdmin', 'Task', 'TaskAdmin'];
         foreach ($apps as $key => $value) {
             $this->assertEquals($content['data']['apps'][$key]['name'], $value);

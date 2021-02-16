@@ -296,7 +296,6 @@ class EsignService extends AbstractService
     public function signEvent($docId, $event){
         if($event == "FINALIZED"){
             $this->processFinalized($docId);
-
         }       
 
     }
@@ -308,7 +307,6 @@ class EsignService extends AbstractService
             $param = array('status' => EsignDocument::COMPLETED,
                             'docId' => $docId);
             $this->executeUpdateWithBindParameters($query,$param);
-
             $query = "UPDATE ox_esign_document_signer as ds 
                       INNER JOIN ox_esign_document as d ON d.id = ds.esign_document_id
                       SET ds.status=:status 
@@ -316,12 +314,23 @@ class EsignService extends AbstractService
             $param['status'] = EsignDocumentSigner::COMPLETED;
             $this->executeUpdateWithBindParameters($query,$param);
             $this->commit();
-
+            $sql = $this->getSqlObject();
+            $getID = $sql->select();
+            $getID->from('ox_esign_document')
+                ->columns(array("docPath"))
+                ->where(array('doc_id' => $docId));
+            $responseID = $this->executeQuery($getID)->toArray();
+            $destinationPath = $responseID[0]["docPath"];
+            if(FileUtils::fileExists($destinationPath)){
+                FileUtils::deleteFile($destinationPath,null);
+            }
+            copy($fileName, $destinationPath);
             $refId = $this->getDataFromDocId(array("ref_id"),$docId);
+            $fileRef = explode("_",$refId);
+            $fileId = $fileRef[0];
             $data = json_encode(array('file'   => $fileName,
                                       'refId' => $refId)); 
             $this->messageProducer->sendTopic($data, 'DOCUMENT_SIGNED');
-
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
