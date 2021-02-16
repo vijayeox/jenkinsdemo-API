@@ -37,7 +37,8 @@ class GenerateReport extends PolicyDocument {
 
     public function execute(array $data, Persistence $persistenceService) 
     { 
-        $this->logger->info("Executing Quaterly Report Generation with data- ".json_encode($data));
+        $this->logger->info("Executing Report Generation with data- ".json_encode($data));
+        ini_set('max_execution_time', 300);
         $params = array();
         $filterParams = array();
         $finalData = array();
@@ -65,17 +66,15 @@ class GenerateReport extends PolicyDocument {
             $filterParams = array(array("filter" => array("logic" => "AND", "filters" => $filter)));
         }
         $files = $this->getWorkflowCompletedData($params,$filterParams); 
-        $this->logger->info("The data returned from getWorkflowCompletedData is  ".print_r($files,true));
         if(empty($files['data'])){
             $data['jobStatus'] = 'No Records Found';
             $this->saveFile($data,$data['uuid']);      
             return $data;
         } 
+    
         $result = $this->newDataArray($files,$data['productType']); 
  
-        $this->logger->info("The data returned from newDataArray is  ".print_r($result,true));
         $excelData = $this->excelDataMassage($result['data']);
-        $this->logger->info("Quarterly Report".print_r($excelData,true));
         $files['data'] = $result['data'];
         $files['total'] = sizeof($finalData);
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
@@ -94,6 +93,7 @@ class GenerateReport extends PolicyDocument {
             }  
         }
         $this->saveFile($data,$data['uuid']);
+        $this->logger->info("Completed Report Generation");
         return $data;
     }
     
@@ -293,13 +293,12 @@ class GenerateReport extends PolicyDocument {
         }
     }
     private function newDataArray($data,$product){
-        
-        $this->logger->info('Generate report data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
            
             $totalendorsements = 0;
             $previous_policy_data = array();
+        
             if(isset($value['previous_policy_data'])){
                 $previous_policy_data = json_decode($value['previous_policy_data'],true);
                 $totalendorsements = count(array_filter($previous_policy_data, 'array_filter'));
@@ -320,12 +319,13 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['country'] = $value['country'];
                 $response[$i]['certificate_type'] = $value['workflow_name'] == "Individual Liability Endorsement" ? 'Endorsement' : 'Primary Coverage';
                 $response[$i]['renewal_new'] = isset($value['isRenewalFlow']) && $value['isRenewalFlow']  == "false"? "New" : "Renewal" ;
-                $response[$i]['program'] = ($value['workflow_name'] == "Individual Liability Endorsement") ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage']);
+                $response[$i]['program'] = ($value['workflow_name'] == "Individual Liability Endorsement") ? ((sizeof($previous_policy_data) > 0) ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage'])) : $this->checkStatus($value['careerCoverage']);
                 $response[$i]['start_date'] = $this->formatDate($value['start_date']);
                 $response[$i]['end_date'] = $this->formatDate($value['end_date']);
                 $response[$i]['premium'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : "0");
-                $response[$i]['equipment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['equipmentPrice']) && $value['equipmentPrice'] != "" || $value['equipmentPrice'] != null ? $value['equipmentPrice'] : "0");
-                $response[$i]['excess'] = (($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" :($value['workflow_name'] == "Individual Liability Endorsement" ? ($previous_policy_data[0]['previous_excessLiability'] == $value['excessLiability']? "0" : $value['excessLiabilityPrice']): (is_null($value['excessLiabilityPrice']) ?  "0" : $value['excessLiabilityPrice'])));
+                $response[$i]['equipment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['equipmentPrice']) ?  (($value['equipmentPrice'] != "" || $value['equipmentPrice'] != null) ? $value['equipmentPrice'] : "0") : "0");
+                $response[$i]['excess'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ?  0 : ($value['workflow_name'] == "Individual Liability Endorsement"  ? ((sizeof($previous_policy_data) > 0) ?  ($previous_policy_data[0]['previous_excessLiability'] == $value['excessLiability'] ? "0" : $value['excessLiabilityPrice']) :  "0"): (is_null($value['excessLiabilityPrice']) ?  "0" : $value['excessLiabilityPrice']));
+                $value['careerCoveragePrice'] = isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : 0;
                 $response[$i]['scuba_fit'] = isset($value['scubaFitPrice']) ? $value['scubaFitPrice'] : "0";
                 $response[$i]['upgrade'] = ($value['workflow_name'] == "Individual Liability Endorsement" && ($value['careerCoveragePrice'] != "" || $value['careerCoveragePrice'] != 0 || $value['careerCoveragePrice'] != null)) ? $this->checkStatus($value['careerCoverage']) : "";
                 $response[$i]['cylinder'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['cylinderPrice']) ? $value['cylinderPrice'] : "0" );
@@ -335,6 +335,7 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['reinstated'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? "True" : "False";
                 $response[$i]['reinstated_date'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? $this->formatDate($value['modifiedDate']) : ""; //reinstated date is always the cancellation date
                 $response[$i]['auto_renewal'] = $value['workflow_name'] == "Individual Liability Endorsement" ? "No" : ($value['automatic_renewal']? "Yes" : "No");
+                $value['premiumFinanceSelect'] = isset($value['premiumFinanceSelect']) ? $value['premiumFinanceSelect'] : "no";
                 $response[$i]['installment'] = $value['workflow_name'] == "Individual Liability Endorsement" ? "No" : ($value['premiumFinanceSelect'] == "no" ? "No" : "Yes");
                 $response[$i]['downPayment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy" || $value['workflow_name'] == "Individual Liability Endorsement") ? "0" : (isset($value['downPayment']) ? $value['downPayment'] : "0");
                 $response[$i]['totalPaid'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? "0" : ($value['workflow_name'] == "Individual Liability Endorsement" ? $response[$i]['total'] : ($value['premiumFinanceSelect'] == "no"?  $response[$i]['total'] : $value['downPayment']));
@@ -350,8 +351,6 @@ class GenerateReport extends PolicyDocument {
                 } else {
                     $groupData = array();
                 }
-                $this->logger->info('group data is: '.print_r($groupData, true));
-                $this->logger->info('value data is: '.print_r($value, true));
                 $total = count($groupData);
                 $totalendorsement = 0;
                 $groupPL = array();
@@ -568,7 +567,6 @@ class GenerateReport extends PolicyDocument {
             $responseData['total'] = -1;
             $responseData['data'] = '';
         }
-        $this->logger->info('the response data is : '.print_r($responseData, true));
         return $responseData;
     }
 }
