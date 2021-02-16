@@ -177,8 +177,8 @@ class FileService extends AbstractService
         $returnResult['ryg_rule'] = $returnResult['title'] = $returnResult['name'] = null;
         $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         if (count($resultQuery) > 0) {
-            $returnResult['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
-            $returnResult['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
+            $returnResult['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d');
+            $returnResult['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d');
             $returnResult['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
             $returnResult['subscribersList'] = array();
             $returnResult['ryg_rule'] = $resultQuery[0]['ryg_rule'];
@@ -1019,10 +1019,11 @@ class FileService extends AbstractService
                 $fieldData['field_value_text'] = NULL;
                 $fieldData['field_value_numeric'] = NULL;
                 $fieldData['field_value_boolean'] = NULL;
+                $format = $dataType == 'date' ? 'Y-m-d' : 'Y-m-d H:i:s';
                 if(is_string($fieldvalue) && date_create($fieldvalue)){
-                    $fieldData['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
+                    $fieldData['field_value_date'] = date_format(date_create($fieldvalue),$format);
                 } else {
-                    $fieldData['field_value_date'] = date_format(date_create(),'Y-m-d H:i:s');;
+                    $fieldData['field_value_date'] = date_format(date_create(),$format);;
                 }
                 $fieldData[$field['name']] = $fieldData['field_value_date'];
                 break;
@@ -2600,7 +2601,7 @@ class FileService extends AbstractService
         $rule = $this->preProcessRygRule($rule);
         $logic = isset($rule['logic']) ? strtoupper($rule['logic']) : "AND";
         $filters = $rule['filters'];
-        $result = true;
+        $result = $logic == "AND" ? true : false;
         foreach ($filters as $value) {
             $field = $value['field'];
             $operator = $value['operator'];
@@ -2625,7 +2626,7 @@ class FileService extends AbstractService
                 $result = endsWith($actual,$expected);
                 break;
             case 'eq':
-                $result = ($actual === $expected);
+                $result = (trim($actual) === trim($expected));
                 break;
             case 'neq':
                 $result = ($actual !== $expected);
@@ -2894,13 +2895,13 @@ class FileService extends AbstractService
         foreach ($ruleArray['filters'] as $key => $filterValue) {
             switch ($filterValue['value']) {
                 case 'today':
-                    $filterValue['value'] = date('Y-m-d h:m');                
+                    $filterValue['value'] = date('Y-m-d');                
                     break;
                 case 'today+1':
-                    $filterValue['value'] =  date('Y-m-d h:m', strtotime('tomorrow'));                    
+                    $filterValue['value'] =  date('Y-m-d', strtotime('tomorrow'));                    
                     break;
                 case 'today-1':
-                    $filterValue['value'] =  date('Y-m-d h:m', strtotime('yesterday'));                    
+                    $filterValue['value'] =  date('Y-m-d', strtotime('yesterday'));                    
                     break;    
                 default:
                     $filterValue['value'] = $filterValue['value'];
