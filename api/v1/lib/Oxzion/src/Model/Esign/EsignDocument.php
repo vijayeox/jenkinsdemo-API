@@ -16,6 +16,7 @@ class EsignDocument extends Entity
         'ref_id' =>         ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
         'uuid' =>           ['type' => Type::UUID,      'readonly' => FALSE,  'required' => FALSE],
         'doc_id' =>         ['type' => Type::STRING,     'readonly' => FALSE,  'required' => FALSE],
+        'docPath' =>        ['type' => Type::STRING,     'readonly' => FALSE,  'required' => FALSE],
         'status' =>    ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE, 'value' => self::IN_PROGRESS],
         'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
         'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE]

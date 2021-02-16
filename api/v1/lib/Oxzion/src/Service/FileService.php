@@ -2327,7 +2327,7 @@ class FileService extends AbstractService
                 return 0;
             }
             $fileData = array();
-            foreach($resultSet as $key => $value){
+            foreach($resultSet as $value){
                 $fileDataArray = [];
                 if($value['version'] ==1 && $value['action']=='update'){
                     continue;

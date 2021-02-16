@@ -10,7 +10,7 @@ return [
             'esignStatus' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/status/:docId',
+                    'route' => '/esign/status/:docId',
                     'defaults' => [
                         'controller' => Controller\EsignController::class,
                         'action' => 'getStatus',
