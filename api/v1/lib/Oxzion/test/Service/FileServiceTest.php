@@ -361,12 +361,12 @@ class FileServiceTest extends AbstractServiceTest
         $params = array('workflowStatus' => 'Completed');
         $filterParams = null;
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
-        $this->assertEquals("Completed",$result['data'][0]['status']);
-        $this->assertEquals("Completed",$result['data'][1]['status']);
-        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['status']);
+        $this->assertEquals("Completed",$result['data'][0]['workflowStatus']);
+        $this->assertEquals("Completed",$result['data'][1]['workflowStatus']);
+        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['workflowStatus']);
         $this->assertEquals($dataset['ox_file'][2]['uuid'],$result['data'][2]['uuid']);
         $this->assertEquals($dataset['ox_workflow_instance'][2]['process_instance_id'],$result['data'][2]['workflowInstanceId']);
-        $this->assertEquals("Completed",$result['data'][3]['status']);
+        $this->assertEquals("Completed",$result['data'][3]['workflowStatus']);
         $this->assertEquals(8,$result['total']);
     }  
 
@@ -377,12 +377,12 @@ class FileServiceTest extends AbstractServiceTest
         $params = array('workflowStatus' => 'Completed');
         $filterParams = null;
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
-        $this->assertEquals("Completed",$result['data'][0]['status']);
-        $this->assertEquals("Completed",$result['data'][1]['status']);
-        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['status']);
+        $this->assertEquals("Completed",$result['data'][0]['workflowStatus']);
+        $this->assertEquals("Completed",$result['data'][1]['workflowStatus']);
+        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['workflowStatus']);
         $this->assertEquals($dataset['ox_file'][2]['uuid'],$result['data'][2]['uuid']);
         $this->assertEquals($dataset['ox_workflow_instance'][2]['process_instance_id'],$result['data'][2]['workflowInstanceId']);
-        $this->assertEquals("Completed",$result['data'][3]['status']);
+        $this->assertEquals("Completed",$result['data'][3]['workflowStatus']);
         $this->assertEquals(8,$result['total']);
     }
 
@@ -397,10 +397,10 @@ class FileServiceTest extends AbstractServiceTest
         $filterParams = null;
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         $this->assertEquals($dataset['ox_file'][0]['uuid'],$result['data'][0]['uuid']);
-        $this->assertEquals('Completed',$result['data'][0]['status']);
+        $this->assertEquals('Completed',$result['data'][0]['workflowStatus']);
         $this->assertEquals($dataset['ox_file'][1]['uuid'],$result['data'][1]['uuid']);
-        $this->assertEquals('Completed',$result['data'][1]['status']);
-        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['status']);
+        $this->assertEquals('Completed',$result['data'][1]['workflowStatus']);
+        $this->assertEquals($dataset['ox_workflow_instance'][2]['status'],$result['data'][2]['workflowStatus']);
         $this->assertEquals($dataset['ox_file'][2]['uuid'],$result['data'][2]['uuid']);
         $this->assertEquals($dataset['ox_workflow_instance'][2]['process_instance_id'],$result['data'][2]['workflowInstanceId']);
         $this->assertEquals(3,$result['total']);
@@ -519,7 +519,7 @@ class FileServiceTest extends AbstractServiceTest
         $filterParams = null;
         $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c9145c', $result['data'][1]['uuid']);
-        $this->assertEquals('Completed', $result['data'][1]['status']);
+        $this->assertEquals('Completed', $result['data'][1]['workflowStatus']);
         $this->assertEquals('3f20b5c5-0124-11ea-a8a0-22e8105c0790', $result['data'][2]['workflowInstanceId']);
         $this->assertEquals(7, $result['total']);
     }
@@ -599,14 +599,12 @@ class FileServiceTest extends AbstractServiceTest
                         where file_id = $fileId";
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $fileData = json_decode($data['data'], true);
-        
         $this->assertEquals(count($indexedFields), count($sqlQuery2Result));
-
         foreach ($indexedFields as $key => $value) {
             $this->assertEquals($indexedFields[$key]['id'], $sqlQuery2Result[$key]['field_id']);
             $this->assertEquals($indexedFields[$key]['type'], $sqlQuery2Result[$key]['field_value_type']);
             if($indexedFields[$key]['type'] == 'DATE'){
-                $this->assertEquals($fileData[$indexedFields[$key]['field']], $sqlQuery2Result[$key]['field_value_date']);
+                $this->assertEquals($fileData[$indexedFields[$key]['field']]." 00:00:00", $sqlQuery2Result[$key]['field_value_date']);
             }else{
                 $this->assertEquals($fileData[$indexedFields[$key]['field']], $sqlQuery2Result[$key]['field_value_text']);
             }
@@ -864,12 +862,10 @@ class FileServiceTest extends AbstractServiceTest
         $dataset = $this->dataset;
         $fileId = $dataset['ox_file'][0]['uuid'];
         $appUuid = $dataset['ox_app'][0]['uuid'];
-        $entityId = $dataset['ox_app_entity'][0]['id'];
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'version' => 1,'app_id' => $appUuid);
         $result = $this->fileService->updateFile($data, $fileId);
         $data['uuid'] = $fileId;
-        $date = date_format(date_create(null),"Y-m-d H:m:s");
-        $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30 00:00:00","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","observers":"[\"754bc48a-3c69-4f7a-af8b-019fc984ee76\"]","field1":1,"field2":2}';
+        $data['data'] = '{"firstname":"Neha","policy_period":"1year","card_expiry_date":"10\/24","city":"Bangalore","orgUuid":"53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability":"1","card_no":"1234","state":"karnataka","zip":"560030","coverage":"100000","product":"Individual Professional Liability","address2":"dhgdhdh","address1":"hjfjhfjfjfhfg","expiry_date":"2020-06-30","expiry_year":"2019","lastname":"Rai","isexcessliability":"1","credit_card_type":"credit","email":"bharat@gmail.com","observers":"[\"754bc48a-3c69-4f7a-af8b-019fc984ee76\"]","field1":1,"field2":2}';
         $indexedFields = [['field' => 'field1', 'type' => 'TEXT', 'id' => 1],
                           ['field' => 'expiry_date', 'type' => 'DATE', 'id' => 3],
                           ['field' => 'policy_period', 'type' => 'TEXT', 'id' => 8],
