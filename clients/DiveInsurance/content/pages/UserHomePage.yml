@@ -31,7 +31,7 @@ content:
                             url: 'file/{{uuid}}/document'
                 -
                     name: Endorsement
-                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                     details:
                         -
                             type: Form
@@ -39,7 +39,7 @@ content:
                             workflowInstanceId: '{{workflowInstanceId}}'  
                 -
                     name: Endorsement
-                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'')'
+                    rule: '(''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Dive Store'')'
                     details:
                         -
                             type: Form
