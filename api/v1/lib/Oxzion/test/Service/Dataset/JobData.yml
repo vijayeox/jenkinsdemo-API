@@ -1,0 +1,91 @@
+ox_job:
+  - id: 1
+    name: 129dfbe2-151d-49c8-81e9-a4b7582df65e
+    app_id: 299
+    account_id:
+    job_id:
+    group_name: JOB1
+    config: '
+      {
+      "job":
+      {
+      "url": "http:\/\/192.168.1.9:8080\/workflow\/f0efea9e-7863-4368-a9b2-baa1a1603067",
+      "data":
+      {
+      "EFR2M": "204",
+      "padi": "2165",
+      "padiVerified": "1",
+      "appId": "a77ea120-b028-479b-8c6e-60476b6a4459",
+      },
+      },
+      "schedule": { "cron": "0 4 12 18 * ? 2020" },
+      }'
+  - id: 2
+    name: 129dfbe2-151d-49c8-81e9-a4b7582df65e
+    app_id: 299
+    account_id: 300
+    job_id: 3a289705-763d-489a-b501-0755b9d4b64b
+    group_name: JOB1
+    config: '
+      [
+      {
+      "job":
+      {
+      "url": "http:\/\/192.168.1.9:8080\/workflow\/f0efea9e-7863-4368-a9b2-baa1a1603067",
+      "data":
+      {
+      "EFR2M": "204",
+      "padi": "2165",
+      "padiVerified": "1",
+      "appId": "a77ea120-b028-479b-8c6e-60476b6a4459",
+      },
+      },
+      "schedule": { "cron": "0 4 12 18 * ? 2020" },
+      },
+      ]'
+  - id: 3
+    name: 3d6321fa-6f8c-11eb-9439-0242ac130002
+    app_id: 299
+    account_id:
+    job_id:
+    group_name: JOB2
+    config: '
+      [
+      {
+      "job":
+      {
+      "url": "http:\/\/192.168.1.9:8080\/workflow\/f0efea9e-7863-4368-a9b2-baa1a1603067",
+      "data":
+      {
+      "EFR2M": "204",
+      "padi": "2165",
+      "padiVerified": "1",
+      "appId": "a77ea120-b028-479b-8c6e-60476b6a4459",
+      },
+      },
+      "schedule": { "cron": "0 4 12 18 * ? 2020" },
+      },
+      ]'
+  - id: 4
+    name: 3d6321fa-6f8c-11eb-9439-0242ac130002
+    app_id: 299
+    account_id: 300
+    job_id: aca4a3e4-6f8d-11eb-9439-0242ac130002
+    group_name: JOB2
+    config: '
+      [
+      {
+      "job":
+      {
+      "url": "http:\/\/192.168.1.9:8080\/workflow\/f0efea9e-7863-4368-a9b2-baa1a1603067",
+      "data":
+      {
+      "EFR2M": "204",
+      "padi": "2165",
+      "padiVerified": "1",
+      "appId": "a77ea120-b028-479b-8c6e-60476b6a4459",
+      },
+      },
+      "schedule": { "cron": "0 4 12 18 * ? 2020" },
+      },
+      ]'
