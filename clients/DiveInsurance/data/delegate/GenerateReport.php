@@ -88,7 +88,7 @@ class GenerateReport extends PolicyDocument {
         );
         if(!empty($result['data'])){
             $data['documents']['GenerateReport'] = $dest['relativePath'].$selectedTemplate['template'];
-            if(isset($data['jobStatus']) && ($data['jobStatus'] == 'In Progress')){
+            if(isset($data['jobStatus']) && strcmp($data['jobStatus'],'We are processing your request.Please wait for 5 mins.') == 0){
                 $data['jobStatus'] = 'Completed';
             }  
         }
