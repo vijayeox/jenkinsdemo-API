@@ -422,6 +422,7 @@ class AppService extends AbstractService
             if(AuthContext::get(AuthConstants::ACCOUNT_UUID) == $accountId){
                 $this->userService->addAppRolesToUser(AuthContext::get(AuthConstants::USER_UUID),$appId);
             }
+            $this->processJobsForAccount($appId,$accountId);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -429,6 +430,18 @@ class AppService extends AbstractService
         }
         
     }
+     public function processJobsForAccount($appId,$accountId){
+        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+        $accountId = is_numeric($accountId) ? $accountId : $this->getIdFromUuid('ox_account',$accountId);
+        $select = "SELECT * from ox_job where app_id=:appId and account_id IS NULL";
+        $params = ['appId' => $appId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        foreach ($result as $jobData) {
+            $config = json_decode($jobData['config'],true);
+            $this->logger->info("OOOO---\n".print_r($config,true));
+            $this->jobService->scheduleNewJob($jobData['name'], $jobData['group_name'], $config, $config['schedule']['cron'], $appId,$accountId);
+        }
+     }
 
     private function uninstallApp($accountId, $yamlData, $path){
         try{
@@ -437,6 +450,7 @@ class AppService extends AbstractService
             $this->accountService->removeBusinessOfferings($accountId);
             $this->removeRoleData($appId,$accountId);        
             $this->removeAccountFiles($accountId);
+            $this->uninstallJobsForAccount($appId,$accountId);
             $this->commit();
         }catch(Exception $e){
             $this->logger->info("there is an uninstallexception: ");
@@ -445,6 +459,17 @@ class AppService extends AbstractService
         }
         
     }
+
+     public function uninstallJobsForAccount($appId,$accountId){
+        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+        $accountId = is_numeric($accountId) ? $accountId : $this->getIdFromUuid('ox_account',$accountId);
+        $select = "SELECT * from ox_job where app_id=:appId and account_id=:accountId";
+        $params = ['appId' => $appId, 'accountId' => $accountId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        foreach ($result as $jobs) {
+            $this->jobService->cancelJob($jobs['name'], $jobs['group_name'], $appId,$accountId);
+        }
+     }
 
     private function removeRoleData($appId,$accountId = null){
         $appId = $this->getIdFromUuid('ox_app',$appId);
@@ -494,27 +519,26 @@ class AppService extends AbstractService
         $this->logger->info("Deploy App - Process Job with YamlData ");
         if(isset($yamlData['job'])){
             $appUuid = $yamlData['app']['uuid'];
+            $this->processDeletedJobs($yamlData['job'],$appUuid);
             foreach ($yamlData['job'] as $data) {
                 try {
-                    if(!isset($data['name']) || !isset($data['url']) || !isset($data['uuid']) || !isset($data['cron']) || !isset($data['data']))
+                    if(!isset($data['name']) || !isset($data['url']) || !isset($data['uuid']) || !isset($data['cron']))
                     {
-                        throw new ServiceException('Job Name/url/uuid/cron/data not specified', 'job.details.not.specified');                    
+                        throw new ServiceException('Job Name/url/uuid/cron not specified', 'job.details.not.specified');                    
                     }
                     $jobName = $data['uuid'];
                     $jobGroup = $data['name'];
+                    if(!isset($data['data'])){
+                        $data['data'] = [];
+                    }
+                    if(!isset($data['data']['appId'])){
+                        $data['data']['appId'] = $appUuid;
+                    }
+                    $appId = $this->getIdFromUuid('ox_app', $appUuid);
                     $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $data['url'], "data" => $data['data']), "schedule" => array("cron" => $data['cron']));
                     $cron = $data['cron'];
-                    $appId = isset($data['appId']) ? $data['appId'] : $appUuid;
-                    $appId = $this->getIdFromUuid('ox_app', $appId);
-                    $query = "SELECT id from ox_job where name = :jobName and group_name = :groupName and app_id = :appId";
-                    $params = array('jobName' => $jobName, 'groupName' => $jobGroup, 'appId' => $appId);
-                    $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-                    if(isset($result) && !empty($result))
-                    {
-                        $cancel = $this->jobService->cancelJob($jobName, $jobGroup, $appUuid);
-                    }
-                    $this->logger->info("executing schedule job ");
                     $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
+                    $this->processJobsForInstalledAccount($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
                 }
                 catch (Exception $e) {
                     $this->logger->info("there is an exception: ");
@@ -535,6 +559,35 @@ class AppService extends AbstractService
                 }
             }
         }     
+    }
+
+    private function processDeletedJobs($jobData,$appId){
+        $appId = !is_numeric($appId) ? $this->getIdFromUuid('ox_app',$appId) : $appId;
+        $yamlJobData = array_unique(array_column($jobData, 'uuid'));
+        $list = "'" . implode("', '", $yamlJobData) . "'";
+        $select = "SELECT * from ox_job where app_id=:appId and name NOT IN ($list)";
+        $params = ['appId' => $appId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        foreach ($result as $jobs) {
+            if (is_null($jobs['account_id'])) {
+                $query = 'DELETE from ox_job where id = :Id';
+                $params = array('Id' => $jobs['id']);
+                $this->executeUpdateWithBindParameters($query, $params);
+            }else{
+                $this->jobService->cancelJob($jobs['name'], $jobs['group_name'], $appId,$jobs['account_id']);
+            }
+        }  
+    }
+    private function processJobsForInstalledAccount($jobName, $jobGroup, $jobPayload, $cron,$appId){
+        $this->logger->info("CROn---\n".print_r($cron,true));
+        $appId = !is_numeric($appId) ? $this->getIdFromUuid('ox_app',$appId) : $appId;
+        $select = "SELECT oxar.account_id from ox_app_registry oxar where oxar.app_id=:appId";
+        $params = ['appId' => $appId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        $this->logger->info("DRF---".print_r($result,true));
+        foreach ($result as $account) {
+            $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId,$account['account_id']);
+        }
     }
 
     public function processMenu(&$yamlData, $path)

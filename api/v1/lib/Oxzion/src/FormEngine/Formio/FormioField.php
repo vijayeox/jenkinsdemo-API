@@ -90,6 +90,7 @@ class FormioField
                 $this->data['data_type'] = isset($field['multiple']) && $field['multiple'] ? 'list' : 'time';
                 break;
             case 'Date':
+            case 'date':
                 $this->data['data_type'] = 'date';
                 break;
             case 'file':
