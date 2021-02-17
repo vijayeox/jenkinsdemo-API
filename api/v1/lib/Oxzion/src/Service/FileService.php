@@ -177,8 +177,8 @@ class FileService extends AbstractService
         $returnResult['ryg_rule'] = $returnResult['title'] = $returnResult['name'] = null;
         $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $parameters)->toArray();
         if (count($resultQuery) > 0) {
-            $returnResult['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d H:i:s');
-            $returnResult['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d H:i:s');
+            $returnResult['start_date'] = date_format(date_create(isset($data[$resultQuery[0]['start_date_field']])?$data[$resultQuery[0]['start_date_field']]:null),'Y-m-d');
+            $returnResult['end_date'] = date_format(date_create(isset($data[$resultQuery[0]['end_date_field']])?$data[$resultQuery[0]['end_date_field']]:null),'Y-m-d');
             $returnResult['status'] = isset($data[$resultQuery[0]['status_field']])?$data[$resultQuery[0]['status_field']]:null;
             $returnResult['subscribersList'] = array();
             $returnResult['ryg_rule'] = $resultQuery[0]['ryg_rule'];
@@ -1019,10 +1019,11 @@ class FileService extends AbstractService
                 $fieldData['field_value_text'] = NULL;
                 $fieldData['field_value_numeric'] = NULL;
                 $fieldData['field_value_boolean'] = NULL;
+                $format = $dataType == 'date' ? 'Y-m-d' : 'Y-m-d H:i:s';
                 if(is_string($fieldvalue) && date_create($fieldvalue)){
-                    $fieldData['field_value_date'] = date_format(date_create($fieldvalue),'Y-m-d H:i:s');
+                    $fieldData['field_value_date'] = date_format(date_create($fieldvalue),$format);
                 } else {
-                    $fieldData['field_value_date'] = date_format(date_create(),'Y-m-d H:i:s');;
+                    $fieldData['field_value_date'] = date_format(date_create(),$format);;
                 }
                 $fieldData[$field['name']] = $fieldData['field_value_date'];
                 break;
@@ -2320,20 +2321,21 @@ class FileService extends AbstractService
 
       public function getAuditLog($fileId){
         try{
-            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified IS NULL or ofal.date_modified = '' then ofal.date_created else ofal.date_modified end as date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id WHERE ofal.uuid = :uuid";
+            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified is NOT NULL then ofal.date_modified else ofal.date_created end as file_date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id WHERE ofal.uuid = :uuid";
             $params = array('uuid' => $fileId);
             $resultSet = $this->executeQuerywithBindParameters($select,$params)->toArray();
             if (count($resultSet) == 0) {
                 return 0;
             }
             $fileData = array();
-            foreach($resultSet as $key => $value){
+            foreach($resultSet as $value){
+                $fileDataArray = [];
                 if($value['version'] ==1 && $value['action']=='update'){
                     continue;
                 }
-                $data = $value;
+                $fileDataArray = $value;
                 $fileDataArray['fields'] = $this->getFileVersionChangeLog($fileId,$value['version']);
-                $fileData[] = array_merge($data,$fileDataArray);
+                $fileData[] = $fileDataArray;
             }
             return array('data'=>$fileData,'total'=>count($fileData));
         }catch(Exception $e){
@@ -2453,6 +2455,7 @@ class FileService extends AbstractService
             LEFT JOIN ox_file as `oxf` ON `oxf`.id = ox_file_assignee.file_id
             LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id 
             LEFT JOIN ox_account_user au on au.id = ox_user_role.account_user_id
+            inner join ox_user as oxuc on `of`.created_by = `oxuc`.id
             LEFT JOIN ox_user ON ox_file_assignee.user_id = ox_user.id";
 
         $fileQuery = "FROM ox_file as `of` 
@@ -2462,6 +2465,7 @@ class FileService extends AbstractService
             LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
             LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id 
             LEFT JOIN ox_account_user au on au.id = ox_user_role.account_user_id
+            inner join ox_user as oxuc on `of`.created_by = `oxuc`.id
             LEFT JOIN ox_user ON ox_file_assignee.user_id = ox_user.id";
         if(!empty($filterParams)){
             $cacheQuery = '';
@@ -2492,7 +2496,7 @@ class FileService extends AbstractService
         $whereQuery .= 'of.is_active = 1';
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-        $fieldList2 = "distinct ox_app.name as appName,`of`.id,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,`of`.rygStatus,
+        $fieldList2 = "distinct ox_app.name as appName,`of`.id,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,oxuc.name as created_by,`of`.rygStatus,
         NULL as activityInstanceId,NULL as workflowInstanceId, `of`.date_created as created_date,ox_app_entity.name as entity_name,
         NULL as activityName, `of`.date_created,
         CASE WHEN ox_file_assignee.assignee = 0 then 1
@@ -2501,7 +2505,7 @@ class FileService extends AbstractService
         $countQuery = "SELECT count(id) as `count` 
                         from ((SELECT distinct ox_file_assignee.id $fromQuery $filterFromQuery $whereQuery) UNION all (SELECT distinct ox_file_assignee.id $fileQuery $filterFromQuery $whereQuery)) as t1";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
-        $fieldList = "distinct ox_app.name as appName,`of`.id,ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,`of`.rygStatus,
+        $fieldList = "distinct ox_app.name as appName,`of`.id as myId,ox_workflow.name as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,oxuc.name as created_by,`of`.rygStatus,
         ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date as created_date,ox_app_entity.name as entity_name,
         ox_activity.name as activityName, `of`.date_created,
         CASE WHEN ox_file_assignee.assignee = 0 then 1
@@ -2597,7 +2601,7 @@ class FileService extends AbstractService
         $rule = $this->preProcessRygRule($rule);
         $logic = isset($rule['logic']) ? strtoupper($rule['logic']) : "AND";
         $filters = $rule['filters'];
-        $result = true;
+        $result = $logic == "AND" ? true : false;
         foreach ($filters as $value) {
             $field = $value['field'];
             $operator = $value['operator'];
@@ -2622,7 +2626,7 @@ class FileService extends AbstractService
                 $result = endsWith($actual,$expected);
                 break;
             case 'eq':
-                $result = ($actual === $expected);
+                $result = (trim($actual) === trim($expected));
                 break;
             case 'neq':
                 $result = ($actual !== $expected);
@@ -2891,13 +2895,13 @@ class FileService extends AbstractService
         foreach ($ruleArray['filters'] as $key => $filterValue) {
             switch ($filterValue['value']) {
                 case 'today':
-                    $filterValue['value'] = date('Y-m-d h:m');                
+                    $filterValue['value'] = date('Y-m-d');                
                     break;
                 case 'today+1':
-                    $filterValue['value'] =  date('Y-m-d h:m', strtotime('tomorrow'));                    
+                    $filterValue['value'] =  date('Y-m-d', strtotime('tomorrow'));                    
                     break;
                 case 'today-1':
-                    $filterValue['value'] =  date('Y-m-d h:m', strtotime('yesterday'));                    
+                    $filterValue['value'] =  date('Y-m-d', strtotime('yesterday'));                    
                     break;    
                 default:
                     $filterValue['value'] = $filterValue['value'];

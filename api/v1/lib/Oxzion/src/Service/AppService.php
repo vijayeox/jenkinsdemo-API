@@ -307,6 +307,7 @@ class AppService extends AbstractService
             $appData = &$ymlData['app'];
             $appData['status'] = App::PUBLISHED;
             $this->logger->info("\n App Data before app update - " . print_r($appData, true));
+            $this->processInstalledTemplates($appData['uuid'],$path);
             $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
@@ -884,14 +885,17 @@ private function checkWorkflowData(&$data,$appUuid)
         $this->setLinkAndRunBuild($path, $appId);
     }
 
-    private function setupAccountFiles($path, $accountId){
+    private function setupAccountFiles($path, $accountId, $update = false){
         if ($accountId && $path) {
             $link = $this->config['TEMPLATE_FOLDER'] . $accountId;
             $this->logger->info("linkkk---$link");
-            $source = $path . "/data/template";
-            FileUtils::copyDir($source,$link);
-        }
-        
+            $source = rtrim($path, "/") . "/data/template";
+            if(!$update){
+                FileUtils::copyDir($source,$link);
+            }else{
+                FileUtils::copyOnlyNewFiles($source,$link);
+            }
+        }        
     }
 
     private function setupLink($target, $link)
@@ -1466,5 +1470,17 @@ private function checkWorkflowData(&$data,$appUuid)
         $command_two = "npm run package:discover";
         $output = ExecUtils::execCommand($command_one . " && " . $command_two);
         $this->logger->info("PAckage Discover .. \n" . print_r($output, true));
+    }
+
+    private function processInstalledTemplates($appId,$path){
+        $select = "SELECT oxac.uuid as accountId FROM ox_app_registry oxar
+                    INNER JOIN ox_app oxa on oxa.id = oxar.app_id
+                    INNER JOIN ox_account oxac on oxac.id = oxar.account_id
+                    WHERE oxa.uuid =:appId";
+        $params = ['appId' => $appId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        foreach ($result as $accountId) {
+            $this->setupAccountFiles($path, $accountId['accountId'],true);
+        }
     }
 }

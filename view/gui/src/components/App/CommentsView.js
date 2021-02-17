@@ -223,7 +223,6 @@ class CommentsView extends React.Component {
                                                 .tz(this.userTimezone)
                                                 .format(this.userDateFormat + " - HH:mm:ss")}</div>
                       </div>
-
                       <div className="msg-text" dangerouslySetInnerHTML={{__html : commentItem.text}}>
                       </div>
                     </div>

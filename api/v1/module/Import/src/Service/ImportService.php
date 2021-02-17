@@ -4,6 +4,7 @@ namespace Import\Service;
 use Exception;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
+use JsonException;
 
 class ImportService extends AbstractService
 {
@@ -32,14 +33,18 @@ class ImportService extends AbstractService
         $result = [];
         $type = 'elastic';
         $count = 0;
+        $bulksize = 1000;
         try {
             if (isset($data['type'])) {
                 $type = strtolower($data['type']);
             }
+            if (isset($data['bulksize'])) {
+                $bulksize = $data['bulksize'];
+            }
             foreach ($files as $file) {
                 $fileSaved = $this->saveFile($file);
                 if ($type == 'elastic') {
-                    $count = $this->importToElastic($fileSaved, $data);
+                    $count = $this->importToElastic($fileSaved, $data,$bulksize);
                 }
                 unlink($fileSaved);
                 $result[] = ['file' => $file['name'], 'recordsSent' => $count, 'message' => 'Records Sent to ActiveMQ for Indexing'];
@@ -59,7 +64,7 @@ class ImportService extends AbstractService
         return ($baseFolder . $fileName);
     }
 
-    public function importToElastic($fileName, $data)
+    public function importToElastic($fileName, $data, $bulksize)
     {
         $type = array();
         if (!isset($data['index'])) {
@@ -79,7 +84,7 @@ class ImportService extends AbstractService
         }
         $params = array();
         // $finalArray = array();
-        $i = 0;
+        $i = 1;
         try {
             while (($data = fgetcsv($file, 0, ",")) !== false) {
                 $idx = 0;
@@ -116,8 +121,18 @@ class ImportService extends AbstractService
                 $params[] = $body;
                 // $finalArray[] = $body;
                 // Every 1000 documents stop and send the bulk request
-                if ($i % 1000 == 0) {
-                    $this->messageProducer->sendQueue(json_encode(array('index' => $index, 'body' => $params, 'operation' => 'Bulk', 'type' => '_doc')), 'elastic');
+                if ($i % $bulksize == 0) {
+                   
+                    try {
+                        $json_string = json_encode(array('index' => $index, 'body' => $params, 'operation' => 'Bulk', 'type' => '_doc'));
+                        if (empty($json_string)) {
+                            throw new Exception('Could not convert to JSON the data - Builk data from '. ($i-$bulksize). ' to '.$i);
+                        }
+                        $this->messageProducer->sendQueue($json_string, 'elastic');
+                    } catch (JsonException $e) {
+                        throw new Exception('Could not convert to JSON the data - Builk data from '. ($i-$bulksize). ' to '.$i);
+                    }
+                  //  echo $json_string;
                     // erase the old bulk request
                     $params = [];
 
@@ -128,7 +143,15 @@ class ImportService extends AbstractService
             }
             // print_r($finalArray);exit;
             if (!empty($params)) {
-                $this->messageProducer->sendQueue(json_encode(array('index' => $index, 'body' => $params, 'operation' => 'Bulk', 'type' => '_doc')), 'elastic');
+                try {
+                    $json_string = json_encode(array('index' => $index, 'body' => $params, 'operation' => 'Bulk', 'type' => '_doc'));
+                    if (empty($json_string)) {
+                        throw new Exception('Could not convert to JSON the data - Builk data from '. ($i-$bulksize). ' to '.$i);
+                    }
+                    $this->messageProducer->sendQueue($json_string, 'elastic');
+                } catch (JsonException $e) {
+                    throw new Exception('Could not convert to JSON the data - Builk data from '. ($i-$bulksize). ' to '.$i);
+                }
             }
         } catch (Exception $e) {
             throw $e;

@@ -140,9 +140,9 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 10);
+        $this->assertEquals(count($content['data']), 11);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['total'], 10);
+        $this->assertEquals($content['total'], 11);
     }
 
     public function testGet()
@@ -206,7 +206,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data'][1]['name'], 'Analytics');
-        $this->assertEquals($content['total'], 10);
+        $this->assertEquals($content['total'], 11);
     }
 
     public function testGetAppListWithPageSize2()
@@ -220,7 +220,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'AppBuilder');
         $this->assertEquals($content['data'][1]['name'], 'CRM');
-        $this->assertEquals($content['total'], 10);
+        $this->assertEquals($content['total'], 11);
     }
 
     public function testCreateWithUserGeneratedUuid() {
@@ -366,6 +366,23 @@ class AppControllerTest extends ControllerTest
         //Take new shapshot of ox_app and ensure no deletions and additions have happened.
         $newRecordSet = $this->executeQueryTest($query);
         $this->assertEquals($existingRecordSet, $newRecordSet);
+    }
+
+    public function testCopyOnlyNewTemplatesOnDeploy()
+    {
+        $this->testDeployApp();
+        copy(__DIR__ . '/../../sampleapp/data/template/COIfooter.html', __DIR__ . '/../../sampleapp/data/template/COINewFooter.html');
+        copy(__DIR__ . '/../../sampleapp/sampleTemplate.html', __DIR__ . '/../../sampleapp/data/template/COIfooter.html');
+        try {
+            $this->testDeployApp();
+            $this->markTestSkipped('Skipping Test'); 
+            $template = $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/COINewFooter.html';
+            $this->assertEquals(file_exists($template), true);
+            $this->assertFileEquals($this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/COIfooter.html', $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/COINewFooter.html');
+        }finally{
+            copy(__DIR__ . '/../../sampleapp/data/template/COINewFooter.html', __DIR__ . '/../../sampleapp/data/template/COIfooter.html');
+            FileUtils::deleteFile('COINewFooter.html',__DIR__ . '/../../sampleapp/data/template/');
+        }
     }
 
     public function testDeployApp()

@@ -76,14 +76,23 @@ class CommandService extends AbstractService
         $this->logger->info("RUN COMMAND  ------" . json_encode($data));
         //TODO Execute Command Service Methods
         if (isset($data['appId'])) {
+            $appId = $this->getIdFromUuid('ox_app', $data['appId']);            
             $accountId = isset($data['accountId']) && !empty($data['accountId']) ? $this->getIdFromUuid('ox_account', $data['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
-            $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
-            $appId = $this->getIdFromUuid('ox_app', $data['appId']);
-            $selectQuery = array("accountId" => $accountId, "appId" => $appId);
-            $this->logger->info("Executing query $select with params - ".json_encode($selectQuery));
-            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
-            if (count($result) == 0) {
-                throw new ServiceException("App Does not belong to the account", "app.for.account.not.found");
+            if($accountId){
+                $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
+                $selectQuery = array("accountId" => $accountId, "appId" => $appId);
+                $this->logger->info("Executing query $select with params - ".json_encode($selectQuery));
+                $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+                if (count($result) == 0) {
+                    throw new ServiceException("App Does not belong to the account", "app.for.account.not.found");
+                }
+            }else{
+                if( (isset($data['command']) && $data['command'] != 'register_account')
+                || (isset($data['commands']) && $data['commands'][0] != 'register_account')
+                ){
+                    throw new ServiceException("You are not authorized to use this command", "app.for.register account");
+                }else{}
+                
             }
             $data['app_id'] = $appId;
         }
@@ -101,7 +110,8 @@ class CommandService extends AbstractService
             unset($data['commands']);
             $inputData = $data;
             foreach ($commands as $index => $value) {
-                if (!is_array($value)) {
+                $isArray = is_array($value);
+                if (!$isArray) {
                     $commandJson = json_decode($value, true);
                     if(empty($commandJson)){
                         $commandJson = array("command" => $value);

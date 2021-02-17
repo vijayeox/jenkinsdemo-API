@@ -225,6 +225,8 @@ public function deleteEntity($appUuid, $id)
             throw new EntityNotFoundException("Entity not found for the App");
         }
         $result = $resultSet[0];
+        $result['enable_comments'] = (int) $result['enable_comments'];
+        $result['enable_documents'] = (int) $result['enable_documents'];
         $content = $this->pageContentService->getPageContent($appId, $resultSet[0]['uuid']);
         $workFlowQuery = "SELECT ox_workflow.id
                     from ox_app_entity 
@@ -242,18 +244,18 @@ public function deleteEntity($appUuid, $id)
             $entityForm = $this->executeQueryWithBindParameters($formQuery, $formQueryParams)->toArray();
             if (count($entityForm) == 0 || count($entityForm) > 1) {
                 $result['has_workflow'] = 1;
-                return $result;
-            }
-            $form = $entityForm[0];
-            $path = $this->config['FORM_FOLDER'].$appId."/".$form['name'].$this->formFileExt;
-            $this->logger->info("Form template - $path");
-            $result['form_uuid'] = $form['uuid'];
-            $result['form_name'] = $form['name'];
-            if(file_exists($path)){
-               $result['form'] = file_get_contents($path);
+            } else {
+                $form = $entityForm[0];
+                $path = $this->config['FORM_FOLDER'].$appId."/".$form['name'].$this->formFileExt;
+                $this->logger->info("Form template - $path");
+                $result['form_uuid'] = $form['uuid'];
+                $result['form_name'] = $form['name'];
+                if(file_exists($path)){
+                   $result['form'] = file_get_contents($path);
+                }
             }
         }
-        $result['content'] = $content['content'];
+        $result['content'] = isset($content['content'])?$content['content']:null;
         return $result;
     }
 }

@@ -166,9 +166,16 @@ class FileUtils
 
     public static function deleteFile($fileName, $directory)
     {
-        if (!unlink($directory.$fileName)) {
-            throw new Exception("Could not Delete File: ${fileName} under directory ${directory}." . 
-                print_r(error_get_last(), true));
+        if($directory == null){
+            if (!unlink($fileName)) {
+                throw new Exception("Could not Delete File: ${fileName}." . 
+                    print_r(error_get_last(), true));
+            }
+        } else {
+            if (!unlink($directory.$fileName)) {
+                throw new Exception("Could not Delete File: ${fileName} under directory ${directory}." . 
+                    print_r(error_get_last(), true));
+            }
         }
     }
 
@@ -303,5 +310,14 @@ class FileUtils
 
         fclose($fdestination);
         fclose($fsource);
+    }
+
+    public static function copyOnlyNewFiles($src, $dest){
+        if (!file_exists($dest)) self::createDirectory($dest);
+        $output = [];
+        if(!exec("rsync --ignore-existing $src $dest", $output)){
+            throw new Exception("Failed to Copy New Files - ".print_r($output,true));
+            
+        }
     }
 }
