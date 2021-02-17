@@ -356,7 +356,7 @@ abstract class Entity implements Countable
                 $arr[self::COLUMN_ID] = $id;
             }
         }
-        $uuid = $this->data[self::COLUMN_UUID];
+        $uuid = isset($this->data[self::COLUMN_UUID]) ? $this->data[self::COLUMN_UUID] : null;
         if (isset($uuid)) {
             $arr[self::COLUMN_UUID] = $uuid;
         }

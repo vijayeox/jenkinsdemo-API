@@ -28,12 +28,18 @@ class AppControllerTest extends ControllerTest
     public function setUp(): void
     {
         parent::setUp();
+        if($this->getName() == 'testCopyOnlyNewTemplatesOnDeploy'){
+            $this->cleanFile();
+        }
         $this->setUpTearDownHelper->cleanAll();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
+        if($this->getName() == 'testCopyOnlyNewTemplatesOnDeploy'){
+            $this->cleanFile();
+        }
         $this->setUpTearDownHelper->cleanAll();
     }
 
@@ -88,6 +94,12 @@ class AppControllerTest extends ControllerTest
         return $mockRestClient;
     }
 
+    private function cleanFile(){
+        if(file_exists(__DIR__ . '/../../sampleapp/data/template/COINewFooter.htm')){
+            copy(__DIR__ . '/../../sampleapp/data/template/COINewFooter.html', __DIR__ . '/../../sampleapp/data/template/COIfooter.html');
+            FileUtils::deleteFile('COINewFooter.html',__DIR__ . '/../../sampleapp/data/template/');
+        }
+    }
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('App');

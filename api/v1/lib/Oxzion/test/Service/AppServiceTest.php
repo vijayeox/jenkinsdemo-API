@@ -42,12 +42,16 @@ class AppServiceTest extends AbstractServiceTest
 
     public function getDataSet()
     {
+        $dataset = null;
+        if ($this->getName() == 'testRemoveDeployedApp') {
+            return new YamlDataSet(dirname(__FILE__) . "/Dataset/DeployedApp.yml");
+        }
+        $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/AppServiceTest.yml");     
         switch($this->getName()) {
-            case 'testRemoveDeployedApp':
-                return new YamlDataSet(dirname(__FILE__) . "/Dataset/DeployedApp.yml");;
+            case 'testProcessJobCrud': 
+                $dataset->addYamlFile(dirname(__FILE__)."/Dataset/JobData.yml");
             break;
         }
-        $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/AppServiceTest.yml");
         return $dataset;
     }
 
@@ -449,12 +453,35 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::ACCOUNT_ID, '300');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
+         if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobGroup":"autoRenewalJob"}'));
+        }
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appService->processJob($data);
+        $sqlQuery = "SELECT job_id FROM ox_job WHERE app_id = 299";
+        $adapter = $this->getDbAdapter();
+        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
+        $statement = $adapter->query($sqlQuery);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $result = $resultSet->initialize($result)->toArray();
+        $this->assertEquals(count($result), 2);
+        $this->assertEquals($result[0]['job_id'], NULL);
+    }
+
+    public function testProcessJobWithInstallation()
+    {
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '300');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        $content = $appService->processJob($data);
+        $appService->processJob($data);
+        $appService->processJobsForAccount($data['app']['uuid'], $data['org']['uuid']);
         $sqlQuery = "SELECT count(name) as count FROM ox_job WHERE app_id = 299 and job_id = '3a289705-763d-489a-b501-0755b9d4b64b'";
         $adapter = $this->getDbAdapter();
         $adapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -463,6 +490,64 @@ class AppServiceTest extends AbstractServiceTest
         $resultSet = new ResultSet();
         $result = $resultSet->initialize($result)->toArray();
         $this->assertEquals($result[0]['count'], 1);
+    }
+
+    public function testProcessJobWithUninstall()
+    {
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '300');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appService->processJob($data);
+        $appService->uninstallJobsForAccount($data['app']['uuid'], $data['org']['uuid']);
+        $sqlQuery = "SELECT * FROM ox_job WHERE app_id = 299 and account_id = '3a289705-763d-489a-b501-0755b9d4b64b'";
+        $adapter = $this->getDbAdapter();
+        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
+        $statement = $adapter->query($sqlQuery);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $result = $resultSet->initialize($result)->toArray();
+        $this->assertEquals(count($result), 0);
+    }
+
+    public function testProcessJobCrud()
+    {
+        AuthContext::put(AuthConstants::ACCOUNT_ID, '300');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1')),array('uuid' => '0c91b316-6f9b-11eb-9439-0242ac130002', 'name' => 'Job3', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '214','padi' => '2000', 'padiVerified' => '1'))));
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"JOB1"}'));
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"aca4a3e4-6f8d-11eb-9439-0242ac130002","JobGroup":"JOB2"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobGroup":"autoRenewalJob"}'));  $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05fb2-6f9e-11eb-9439-0242ac130002","JobGroup":"Job3"}'));
+        }
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $appService->processJob($data);
+        $this->markTestSkipped('Skipping Test');
+        $sqlQuery = "SELECT * FROM ox_job WHERE app_id = 299";
+        $adapter = $this->getDbAdapter();
+        $adapter->getDriver()->getConnection()->setResource(static::$pdo);
+        $statement = $adapter->query($sqlQuery);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $result = $resultSet->initialize($result)->toArray();
+        print_r($result);
+        $this->assertEquals(count($result), 4);
+        $this->assertEquals($result[0]['name'], $data['job'][0]['uuid']);
+        $this->assertEquals($result[0]['group_name'], $data['job'][0]['name']);
+        $this->assertEquals($result[0]['job_id'],NULL);
+        $this->assertEquals($result[1]['name'], $data['job'][0]['uuid']);
+        $this->assertEquals($result[1]['group_name'], $data['job'][0]['name']);
+        $this->assertEquals($result[1]['job_id'],'b1a05c42-6f9e-11eb-9439-0242ac130002');
+        $this->assertEquals($result[2]['name'], $data['job'][1]['uuid']);
+        $this->assertEquals($result[2]['group_name'], $data['job'][1]['name']);
+        $this->assertEquals($result[2]['job_id'],NULL);
+        $this->assertEquals($result[3]['name'], $data['job'][1]['uuid']);
+        $this->assertEquals($result[3]['group_name'], $data['job'][1]['name']);
+        $this->assertEquals($result[3]['job_id'],'b1a05fb2-6f9e-11eb-9439-0242ac130002');
     }
 
     public function testProcessJobWithoutJobInYmlData()

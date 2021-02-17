@@ -61,21 +61,6 @@ class JobControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
     }
 
-    public function testJobServiceScheduleWhichExists()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data['jobName'] = '8cfa0709-dbb8-41f1-b7a4-a87b5dab670f';
-        $data['jobGroup'] = 'autoRenewalJob';
-        $data['cron'] = '0 0/1 * * * ? *';
-        $data['orgId'] = '1';
-        $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
-        $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/scheduleJob', 'POST', $data);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(409);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Job already exists');
-    }
-
     public function testGetJobDetails()
     {
         $this->initAuthToken($this->adminUser);
@@ -131,7 +116,7 @@ class JobControllerTest extends ControllerTest
         $data['jobName'] = '8cfa0709-dbb8-41f1-b7a4-a87b5dab670f';
         $data['jobGroup'] = 'autoRenewalJob';
         $data['cron'] = '0 0/1 * * * ? *';
-        $data['orgId'] = '1835';
+        $data['accountId'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $data['appId'] = '99';
         $data['jobPayload'] = array("job" => array("url" => 'http://localhost:8080/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6', "data" => $data), "schedule" => array("cron" => $data['cron']));
         $select = "Select * from ox_job";
@@ -146,6 +131,7 @@ class JobControllerTest extends ControllerTest
         }
         $newData['jobName'] = '8cfa0709-dbb8-41f1-b7a4-a87b5dab670f';
         $newData['jobGroup'] = 'autoRenewalJob';
+        $newData['accountId'] = $data['accountId'] ;
         $this->dispatch('/app/2c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cancelJob', 'POST', $newData);
         $content = json_decode($this->getResponse()->getContent(), true);
         $select = "Select * from ox_job";
