@@ -320,11 +320,13 @@ class EsignService extends AbstractService
                 ->columns(array("docPath"))
                 ->where(array('doc_id' => $docId));
             $responseID = $this->executeQuery($getID)->toArray();
-            $destinationPath = $responseID[0]["docPath"];
-            if(FileUtils::fileExists($destinationPath)){
-                FileUtils::deleteFile($destinationPath,null);
+            if (!empty($responseID[0]["docPath"])) {
+                $destinationPath = $responseID[0]["docPath"];
+                if(FileUtils::fileExists($destinationPath)){
+                    FileUtils::deleteFile($destinationPath,null);
+                }
+                copy($fileName, $destinationPath);
             }
-            copy($fileName, $destinationPath);
             $refId = $this->getDataFromDocId(array("ref_id"),$docId);
             $fileRef = explode("_",$refId);
             $fileId = $fileRef[0];

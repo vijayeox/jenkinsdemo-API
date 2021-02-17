@@ -120,8 +120,9 @@ class JobController extends AbstractApiController
         $jobGroup = $params['jobGroup'];
         $data['app_id'] = $this->params()->fromRoute()['appId'];
         $appId = isset($data['app_id']) ? $data['app_id'] : null;
+        $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $response = $this->jobService->cancelJob($jobName, $jobGroup, $appId);
+            $response = $this->jobService->cancelJob($jobName, $jobGroup, $appId, $accountId);
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);
