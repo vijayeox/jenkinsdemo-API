@@ -112,7 +112,7 @@ class StoreEndorsementDocuments extends EndorsementDocument
                 $documents['businessIncomeWorksheet'] = $this->copyDocuments($temp, $dest['relativePath'], 'businessIncomeWorksheet');
             }
         }
-        if ((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true)) {
+        if ((isset($temp['liabilityChanges']) && $temp['liabilityChanges'] == true) || (isset($temp['propertyChanges']) && $temp['propertyChanges'] == true) || (isset($temp['additionalLocationsChanges']) && $temp['additionalLocationsChanges'] == true) || (isset($temp['lossPayeeChanges']) && $temp['lossPayeeChanges'] == true) || (isset($temp['policyInfoChanges']) && $temp['policyInfoChanges'] == true) || (isset($temp['policyInfoMailingChanges']) && $temp['policyInfoMailingChanges'] == true)) {
             $documents['endorsement_coi_document'] = $this->generateDocuments($temp, $dest, $options, 'template', 'header', 'footer');
         }
 

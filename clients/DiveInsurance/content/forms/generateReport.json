@@ -184,7 +184,7 @@
     },
     {
       "label": " jobStatus",
-      "calculateValue": "value = \"In Progress\";",
+      "calculateValue": "value = \"We are processing your request.Please wait for 5 mins.\";",
       "key": "jobStatus",
       "type": "hidden",
       "input": true,
