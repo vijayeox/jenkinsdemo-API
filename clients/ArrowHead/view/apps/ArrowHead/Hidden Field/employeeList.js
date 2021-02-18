@@ -50,17 +50,18 @@ cloneItem = cloneItem.map((building) => {
     building = { ...building, ...cleanfieldTotal };
     accountTotal.total =
       (accountTotal.total ? accountTotal.total : 0) + locationTotal;
-    accountTotal.total =
-      accountTotal.total -
-      (accountTotal.nonEmployeesUnderTheAge +
-        accountTotal.nonEmployeesYearsOldorolder +
-        accountTotal.contractDriversNonEmployees);
     locationTotal = 0;
     fieldTotal = {};
   }
 
   return building;
 });
+
+accountTotal.total =
+  accountTotal.total -
+  (accountTotal.nonEmployeesUnderTheAge +
+    accountTotal.nonEmployeesYearsOldorolder +
+    accountTotal.contractDriversNonEmployees);
 
 form.getComponent("employeeList").setValue(cloneItem);
 form.getComponent("employeeList" + "Total").setValue(accountTotal);
