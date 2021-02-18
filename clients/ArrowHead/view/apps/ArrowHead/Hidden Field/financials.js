@@ -51,7 +51,7 @@ var childFields = [
 var sumObjectsByKey = (...objs) => {
   return objs.reduce((a, b) => {
     for (let k in b) {
-      if (b.hasOwnProperty(k)) a[k] = (a[k] || 0) + b[k];
+      if (b.hasOwnProperty(k)) a[k] = parseInt(a[k] || 0) + parseInt(b[k]);
     }
     return a;
   }, {});
@@ -74,12 +74,14 @@ financeFieldList.map((field) => {
   cloneItem = cloneItem.map((building) => {
     if (field.key.includes("Annual")) {
       childFields.map((i) => {
-        building[i] > 0 ? (building[i] = building[i] * monthVariable) : null;
+        building[i] > 0
+          ? (building[i] = (building[i] * monthVariable).toFixed(0))
+          : null;
       });
     }
 
     building.total = childFields
-      .map((i) => (building[i] > 0 ? building[i] : 0))
+      .map((i) => (building[i] > 0 ? parseInt(building[i]) : parseInt(0)))
       .reduce((a, b) => a + b, 0);
     locationTotal += building.total;
 
