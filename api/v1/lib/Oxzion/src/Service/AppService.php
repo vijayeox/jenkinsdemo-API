@@ -981,7 +981,7 @@ private function checkWorkflowData(&$data,$appUuid)
 
     public function processBusinessRoles(&$yamlData)
     {   
-        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'])) {
+        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'][0]['name'])) {
             $appId = $yamlData['app']['uuid'];
             foreach ($yamlData['businessRole'] as &$businessRole) {
                 $bRole = $businessRole;
@@ -1450,6 +1450,9 @@ private function checkWorkflowData(&$data,$appUuid)
         
         if (isset($descriptorData["form"]) && empty($descriptorData['form'][0]['name'])) {
             unset($descriptorData["form"]);
+        }
+        if (isset($descriptorData["job"]) && empty($descriptorData['job'][0]['name'])) {
+            unset($descriptorData["job"]);
         }
         if (isset($descriptorData["org"]) && empty($descriptorData['org']['name'])) {
             unset($descriptorData["org"]);
