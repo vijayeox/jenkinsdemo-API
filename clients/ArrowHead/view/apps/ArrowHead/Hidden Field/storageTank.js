@@ -45,13 +45,19 @@ var storageTankClone = _.merge(
 var { tankIndex, tankInsertPosition } = getTankIndex(data);
 
 var rowValue = {
-  locationNum: data.storageTankLocation,
-  tankIndex: tankIndex,
   LocTankIndex: data.storageTankLocation + "-" + tankIndex,
+  d1: false,
+  installationDate: "",
+  locationNum: data.storageTankLocation,
+  otherTankContents: "",
+  tankContents: "",
+  tankIndex: tankIndex,
 };
-storageTankClone.splice(tankInsertPosition, 0, rowValue);
-result[0].formObject.getComponent(component.key).setValue(storageTankClone);
 
+storageTankClone.splice(tankInsertPosition, 0, rowValue);
+window.setTimeout(() => {
+  result[0].formObject.getComponent(component.key).setValue(storageTankClone);
+},100);
 // ########################
 // Delete Tank Event
 // ########################
