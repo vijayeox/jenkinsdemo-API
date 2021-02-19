@@ -308,7 +308,10 @@ class AppService extends AbstractService
             $appData['status'] = App::PUBLISHED;
             $this->logger->info("\n App Data before app update - " . print_r($appData, true));
             $this->processInstalledTemplates($appData['uuid'],$path);
-            $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
+            $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.  
+            if(isset($ymlData['app']['oldAppName'])){
+                unset($ymlData['app']['oldAppName']);
+            }
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
             $this->removeViewAppOnError($path);
@@ -726,6 +729,13 @@ class AppService extends AbstractService
         if (!is_dir($path . 'view/apps/')) {
             FileUtils::createDirectory($path . 'view/apps/');
         }
+        if(isset($yamlData['app']['oldAppName']) && !empty($yamlData['app']['oldAppName'])&& $yamlData['app']['name'] != $yamlData['app']['oldAppName']){
+            $this->logger->info("OLDNME---".print_r($path . 'view/apps/'.$yamlData['app']['oldAppName'],true));
+            if(is_dir($path . 'view/apps/'.$yamlData['app']['oldAppName'])){
+                FileUtils::rmDir($path .'view/apps/'.$yamlData['app']['oldAppName']);
+            }
+            $this->removeAppAndExecutePackageDiscover($yamlData['app']['oldAppName']);
+        }
         $appName = $path . 'view/apps/' . $yamlData['app']['name'];
         $metadataPath = $appName . '/metadata.json';
         $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
@@ -981,7 +991,7 @@ private function checkWorkflowData(&$data,$appUuid)
 
     public function processBusinessRoles(&$yamlData)
     {   
-        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'])) {
+        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'][0]['name'])) {
             $appId = $yamlData['app']['uuid'];
             foreach ($yamlData['businessRole'] as &$businessRole) {
                 $bRole = $businessRole;
@@ -1009,14 +1019,14 @@ private function checkWorkflowData(&$data,$appUuid)
                     continue;
                 }
                 $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
-                if((isset($role['businessRole']) && $templateRole) ||
-                    (isset($role['businessRole']) && $bRole && 
-                    in_array($role['businessRole'],$bRole['businessRole']))){
-                    $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']);
+                if((!empty($role['businessRole']['name']) && isset($role['businessRole']['name']) && $templateRole) ||
+                    (!empty($role['businessRole']['name']) && isset($role['businessRole']['name']) && $bRole && 
+                    in_array($role['businessRole']['name'],$bRole['businessRole']))){
+                    $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']['name']);
                     if(count($temp) > 0){
                         $role['business_role_id'] = $temp[0]['id'];
                     }
-                }else if (isset($role['businessRole'])) {
+                }else if (isset($role['businessRole']['name']) && !empty($role['businessRole']['name'])) {
                     continue;
                 }
                 $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
@@ -1450,6 +1460,9 @@ private function checkWorkflowData(&$data,$appUuid)
         
         if (isset($descriptorData["form"]) && empty($descriptorData['form'][0]['name'])) {
             unset($descriptorData["form"]);
+        }
+        if (isset($descriptorData["job"]) && empty($descriptorData['job'][0]['name'])) {
+            unset($descriptorData["job"]);
         }
         if (isset($descriptorData["org"]) && empty($descriptorData['org']['name'])) {
             unset($descriptorData["org"]);
