@@ -1513,7 +1513,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $temp['increased_liability_limit'] = false;
                 $temp['decreased_liability_limit'] = false;
             } else {
-                if ($policy['previous_excessLiabilityCoverage'] != $data['excessLiabilityCoverage'] || ($data['excessLiabilityCoveragePrimarylimit1000000PL'] && !$data['previous_storeExcessLiabilitySelect'])) {
+                if ($policy['previous_excessLiabilityCoverage'] != $data['excessLiabilityCoverage'] && ($data['excessLiabilityCoveragePrimarylimit1000000PL'] && !$data['previous_storeExcessLiabilitySelect'])) {
                     $temp['liabilityChanges'] = true;
                     $liabilityLimit = array();
                     $liabilityLimit = $this->getLiabilityLimit($data, 'combinedSingleLimitDS', 'annualAggregateDS', 'excessLiabilityCoverage');
@@ -1553,7 +1553,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if ($policy['previous_nonOwnedAutoLiabilityPL'] == $data['nonOwnedAutoLiabilityPL'] && $data['doYouWantToApplyForNonOwnerAuto']) {
                 $data['increased_non_owned_liability_limit'] = false;
             } else {
-                if ($policy['previous_nonOwnedAutoLiabilityPL'] != $data['nonOwnedAutoLiabilityPL'] || ($data['doYouWantToApplyForNonOwnerAuto'] && !$data['previous_doYouWantToApplyForNonOwnerAuto'])) {
+                if ($policy['previous_nonOwnedAutoLiabilityPL'] != $data['nonOwnedAutoLiabilityPL'] && ($data['doYouWantToApplyForNonOwnerAuto'] && !$data['previous_doYouWantToApplyForNonOwnerAuto'])) {
                     $temp['liabilityChanges'] = true;
                     if ($data['nonOwnedAutoLiabilityPL'] == 'nonOwnedAutoLiability1M') {
                         $temp['increased_non_owned_liability_limit'] = "$1,000,000";
