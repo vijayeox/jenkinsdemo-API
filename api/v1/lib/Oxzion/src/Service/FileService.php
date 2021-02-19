@@ -1917,8 +1917,10 @@ class FileService extends AbstractService
                 $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $fileFilter, null)->toArray();
                 if(!empty($fileRecord) && !is_null($fileRecord)) {
                     $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'].'/';
-                    if(file_exists($folderPath.$attachmentName)) {
-                        $deleteFile = FileUtils::deleteFile($attachmentName,$folderPath);
+                    if(is_dir($folderPath.$attachmentName)){
+                        FileUtils::rmDir($folderPath.$attachmentName);
+                    }else if(file_exists($folderPath.$attachmentName)) {
+                        FileUtils::deleteFile($attachmentName,$folderPath);
                     }
                     $fileData = json_decode($fileRecord[0]['data'],true);
                     $this->deleteAttachmentRecordWithUuid($fileData, $attachmentFilter['uuid']);
@@ -1978,7 +1980,7 @@ class FileService extends AbstractService
                 $result = $this->executeQuery($update);
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $data['fileId'].'/';
                 if(file_exists($folderPath.$attachmentName)){
-                    $check = FileUtils::renameFile($folderPath.$attachmentName, $folderPath.$newName);
+                    rename($folderPath.$attachmentName,$folderPath.$newName);
                 }
                 $fileFilter['uuid'] = $data['fileId'];
                 $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $fileFilter, null)->toArray();
