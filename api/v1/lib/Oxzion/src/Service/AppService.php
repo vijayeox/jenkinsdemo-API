@@ -1026,7 +1026,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     if(count($temp) > 0){
                         $role['business_role_id'] = $temp[0]['id'];
                     }
-                }else if (isset($role['businessRole']['name'])) {
+                }else if (isset($role['businessRole']['name']) && !empty($role['businessRole']['name'])) {
                     continue;
                 }
                 $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
