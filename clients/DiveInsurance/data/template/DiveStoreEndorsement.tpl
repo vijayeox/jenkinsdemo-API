@@ -461,7 +461,7 @@
                         <td class = "info">Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
+                        {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1) && ($increased_travelEnO != false && $increased_travelEnO !== "false")}
                                 <td class = "info">$1,000,000</td>
                         {else}
                                 <td class = "info">Excluded</td>
