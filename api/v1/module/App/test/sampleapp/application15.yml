@@ -48,7 +48,8 @@ role:
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 5
         uuid: 45b7c4b0-d08f-4a96-a9c0-8c4df425e7d1        
-        businessRole: "Agent"
+        businessRole:
+            name: "Agent"
     -
         name: 'Policy Holder'
         default: true
@@ -60,7 +61,8 @@ role:
                 privilege_name: MANAGE_MY_POLICY2
                 permission: 5
         uuid: e10aa5de-8122-4b97-87a6-444306b62cb4
-        businessRole: "Policy Holder"
+        businessRole: 
+            name: "Policy Holder"
 entity:
     -
         name: 'Group Liability'

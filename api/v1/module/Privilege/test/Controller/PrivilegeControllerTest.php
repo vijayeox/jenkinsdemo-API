@@ -61,9 +61,9 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertEquals(count($content['data']['masterPrivilege']), 34);
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ACCOUNT');
         $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_ALERT');
-        $this->assertEquals(count($content['data']['rolePrivilege']), 12);
-        $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'], 'MANAGE_ALERT');
-        $this->assertEquals($content['data']['rolePrivilege'][1]['privilege_name'], 'MANAGE_ANALYTICS_WIDGET');
+        $this->assertEquals(count($content['data']['rolePrivilege']), 4);
+        $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'], 'MANAGE_CRM');
+        $this->assertEquals($content['data']['rolePrivilege'][1]['privilege_name'], 'MANAGE_DATASOURCE');
     }
 
     public function testGetMasterPrivilegeListWithInValidRoleId()
