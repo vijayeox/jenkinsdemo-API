@@ -1577,7 +1577,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if ($policy['previous_travelAgentEOReceiptsPL'] == $data['travelAgentEOReceiptsPL'] && $data['travelAgentEoPL']) {
                 $data['increased_travelEnO'] = false;
             } else {
-                if($data['travelAgentEOReceiptsPL'] >= $policy['previous_travelAgentEOReceiptsPL'] && $data['travelAgentEoPL']){
+                if(($data['travelAgentEOReceiptsPL'] > $policy['previous_travelAgentEOReceiptsPL']) && $data['travelAgentEoPL']){
                     $temp['liabilityChanges'] = true;
                     $temp['increased_travelEnO'] = "$1,000,000";
                 }else if ($data['travelAgentEoPL']) {
