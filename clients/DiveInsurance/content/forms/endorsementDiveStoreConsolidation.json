@@ -742,7 +742,7 @@
 						"calculateValue": "",
 						"calculateServer": false,
 						"attributes": {},
-						"validateOn": "change",
+						"validateOn": "blur",
 						"conditional": {
 							"show": null,
 							"when": null,
