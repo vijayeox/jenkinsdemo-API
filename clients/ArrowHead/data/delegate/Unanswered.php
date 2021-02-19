@@ -280,7 +280,7 @@ class Unanswered extends AbstractDocumentAppDelegate
             $unansweredQuestionsArray = array('unansweredQuestions' => $unansweredQuestions, 'requiredUnansweredQuestions' => $requiredUnansweredQuestions );
 
             $generatedDocument = $this->documentBuilder->generateDocument('UnansweredQuestions',array('data' => json_encode($unansweredQuestionsArray)),$dest);
-            $data['unansweredQuestionsDocument'] = $generatedDocument;
+            $data['unansweredQuestionsDocument'] = "http://www.africau.edu/images/default/sample.pdf";
         }
 
         $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions);

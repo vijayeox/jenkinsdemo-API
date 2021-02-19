@@ -39,14 +39,14 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 7
-        uuid: 85ccfbbd-f84c-4b75-8efe-80e4b02abb09
+        uuid: 547a3004-0c3f-440c-b730-6620b5ee551b
     -
         name: Marketing
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPLICATION
                 permission: 3
-        uuid: f388d49a-48c1-4149-8029-88eb2d09b0cf
+        uuid: ac4eca4e-81b2-4802-8d26-b022eb6e02d0
     -
         name: Management
         privileges:
@@ -59,7 +59,7 @@ role:
             -
                 privilege_name: MANAGE_FILE
                 permission: 15
-        uuid: 2aaea64e-bd20-4441-8eef-4692be79b3b2
+        uuid: efd5f114-caf0-4a99-93b3-736577ed416a
     -
         name: Underwriter
         privileges:
@@ -69,7 +69,7 @@ role:
             -
                 privilege_name: MANAGE_CLAIMS
                 permission: 7
-        uuid: 2dff7054-330c-4439-aade-39336a92b0a0
+        uuid: e0c04c34-1ef9-4dfa-a756-b24354e25052
 menu:
     -
         name: Home

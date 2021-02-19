@@ -105,7 +105,8 @@ content:
                         details:
                             -
                                 type: Form
-                                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b      
+                                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b
+                                downloadPdf: true      
             columnConfig:
                 -
                     title: Insured
