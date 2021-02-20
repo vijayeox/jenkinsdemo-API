@@ -1,6 +1,5 @@
 <?php
 namespace Oxzion\Auth;
-use Exception;
 
 class AuthContext
 {
@@ -20,7 +19,6 @@ class AuthContext
             return $context[$key];
         }
         return null;
-        
     }
     public static function getAll()
     {
@@ -30,10 +28,10 @@ class AuthContext
 
     private static function getContext()
     {
-       
         if (!isset($_REQUEST[self::CONTEXT_KEY])) {
             return array();
         }
+
         return $_REQUEST[self::CONTEXT_KEY];
     }
 

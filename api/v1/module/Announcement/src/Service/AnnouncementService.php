@@ -441,7 +441,6 @@ class AnnouncementService extends AbstractService
         } else {
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
-        // print_r('WHy you no work');exit;
         if(isset($params['type'])) {
             if(!($params['type'] == 'ANNOUNCEMENT' || $params['type'] == 'HOMESCREEN')){
                 throw new Exception("Type must be ANNOUNCEMENT or HOMESCREEN only");
@@ -476,7 +475,6 @@ class AnnouncementService extends AbstractService
             else{
                 $where .= strlen($where) > 0 ? " AND start_date <= curdate() AND end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)" : " WHERE start_date <= curdate() AND end_date >= curdate() AND type ='ANNOUNCEMENT' AND org_id IN (".$orgId.",null)";
             }
-
         }
         else {
             if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')){
