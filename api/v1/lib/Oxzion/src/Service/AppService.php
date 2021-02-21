@@ -652,10 +652,6 @@ class AppService extends AbstractService
                 $pageData['uuid'] = $page['uuid'];
             }
         }
-        
-        if (isset($yamlData['entity_page']) && !empty($yamlData['entity_page'])){
-                
-        }
     }
 
     public function processForm(&$yamlData, $path)
@@ -1389,7 +1385,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     $this->processEntity($childEntityData, $entity['id']);
                     $entityData['child'] = $childEntityData['entity'];
                 }
-                if (isset($entity['pageContent']) && !empty($entity['pageContent'])){
+                if (isset($entity['enable_view']) && $entity['enable_view'] && isset($entity['pageContent']) && !empty($entity['pageContent'])){
                     $pageId = isset($entity['page_uuid']) ? $entity['page_uuid'] : UuidUtil::uuid();
                     $page = $entity['pageContent']['data'];
                     $page['name'] = $entity['name'];
