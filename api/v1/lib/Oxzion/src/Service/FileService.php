@@ -1979,8 +1979,10 @@ class FileService extends AbstractService
                     ->where(['id' => $attachmentRecord[0]['id']]);
                 $result = $this->executeQuery($update);
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $data['fileId'].'/';
-                if(file_exists($folderPath.$attachmentName)){
-                    rename($folderPath.$attachmentName,$folderPath.$newName);
+                if(is_file($folderPath.$newName) && file_exists($folderPath.$attachmentName)){
+                    rename($folderPath.$attachmentName, $folderPath.$newName);
+                }else if(is_dir($folderPath.$attachmentName)){
+                    FileUtils::renameFile($folderPath.$attachmentName, $folderPath.$newName);
                 }
                 $fileFilter['uuid'] = $data['fileId'];
                 $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $fileFilter, null)->toArray();
