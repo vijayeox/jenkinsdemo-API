@@ -213,8 +213,7 @@ public function deleteEntity($appUuid, $id)
         }
         $entityId = $this->getIdFromUuid('ox_app_entity', $id);
         $where .= "ox_app_entity.id=?";
-        $query = "SELECT ox_app_page.uuid,ox_app_entity.enable_comments,ox_app_entity.enable_documents 
-                    from ox_app_entity 
+        $query = "SELECT ox_app_page.uuid,ox_app_entity.enable_comments,ox_app_entity.enable_documents,ox_app_entity.enable_view,ox_app_entity.enable_auditlog from ox_app_entity 
                     right join ox_app on ox_app.id=ox_app_entity.app_id 
                     right join ox_app_page on ox_app_page.id=ox_app_entity.page_id 
                     where $where";
@@ -227,6 +226,8 @@ public function deleteEntity($appUuid, $id)
         $result = $resultSet[0];
         $result['enable_comments'] = (int) $result['enable_comments'];
         $result['enable_documents'] = (int) $result['enable_documents'];
+        $result['enable_view'] = (int) $result['enable_view'];
+        $result['enable_auditlog'] = (int) $result['enable_auditlog'];
         $content = $this->pageContentService->getPageContent($appId, $resultSet[0]['uuid']);
         $workFlowQuery = "SELECT ox_workflow.id
                     from ox_app_entity 
