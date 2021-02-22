@@ -423,7 +423,8 @@ class AppService extends AbstractService
             $this->setupAccountFiles($path, $accountId);
             // Assign AppRoles to Logged in User if Logged in Org and Installed Org are same
             if(AuthContext::get(AuthConstants::ACCOUNT_UUID) == $accountId){
-                $this->userService->addAppRolesToUser(AuthContext::get(AuthConstants::USER_UUID),$appId);
+                 $user = $this->getDataByParams('ox_account_user', array('id'), array('user_id' => AuthContext::get(AuthConstants::USER_ID), 'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)))->toArray();
+                $this->userService->addAppRolesToUser($user[0]['id'],$appId);
             }
             $this->processJobsForAccount($appId,$accountId);
             $this->commit();

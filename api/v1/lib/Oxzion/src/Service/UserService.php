@@ -475,10 +475,9 @@ class UserService extends AbstractService
     private function addUserRole($accountUserId, $roleName, $appId = null)
     {
         if (!is_numeric($accountUserId)) {
-            $user = $this->getDataByParams('ox_user', array('id', 'account_id'), array('uuid' => $accountUserId))->toArray();
-        }else{
-           $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('id' => $accountUserId))->toArray(); 
+            throw new ServiceException('Invalid Parameter passed', 'invalid.parameter',OxServiceException::ERR_CODE_PRECONDITION_FAILED);            
         }
+        $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('id' => $accountUserId))->toArray();        
         if ($user){
             $params = ['accountId' => $user[0]['account_id'],'roleName'=> $roleName];
             if (isset($appId)) {
