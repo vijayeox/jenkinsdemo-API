@@ -26,6 +26,8 @@ class Entity extends OxzionEntity
         'ryg_rule' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'enable_comments' =>    ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
         'enable_documents' =>   ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
+        'enable_view' =>        ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
+        'enable_auditlog' =>    ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => FALSE],
         'title' =>              ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
         'page_id' =>            ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
         'subscriber_field' =>   ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
