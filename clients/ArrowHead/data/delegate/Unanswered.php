@@ -5,6 +5,9 @@ use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\FieldTrait;
 use Oxzion\AppDelegate\FileTrait;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\UuidUtil;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 
 class Unanswered extends AbstractDocumentAppDelegate
 {
@@ -141,8 +144,8 @@ class Unanswered extends AbstractDocumentAppDelegate
         return $finalFieldList;
     }
 
-    private function getTempLocation($name) {
-        $dest =  tempnam(sys_get_temp_dir(),$name);
+    private function getTempLocation($name,$uuid) {
+        $dest =  $this->destination.AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/".$name;
         $dest = $dest.".pdf";
         $dest = strval($dest);
         $fileCheck = FileUtils::fileExists($dest);
@@ -230,9 +233,10 @@ class Unanswered extends AbstractDocumentAppDelegate
         // $this->logger->info("Executing Unanswered Delegate with Data" . print_r($data,true));
         $unansweredQuestionArr = $unansweredQuestionFields = array();
 
+        $uuid = UuidUtil::uuid();
         //Get temp location to save file
-        $dest = $this->getTempLocation('Unanswered');
-        $dest2 = $this->getTempLocation('Answered');
+        $dest = $this->getTempLocation('Unanswered',$uuid);
+        $dest2 = $this->getTempLocation('Answered',$uuid);
 
         //List of all field for dealer policy
         $fieldListArr = $this->getFields($data['appId'],array('entityName' => 'Dealer Policy'));
@@ -278,14 +282,13 @@ class Unanswered extends AbstractDocumentAppDelegate
             $this->removeRequiredFromUnanswered($unansweredQuestions,$requiredUnansweredQuestions);
             $this->getUnansweredQuestionPrintReady($finalFieldList,$unansweredQuestions,$fieldList);
             $unansweredQuestionsArray = array('unansweredQuestions' => $unansweredQuestions, 'requiredUnansweredQuestions' => $requiredUnansweredQuestions );
-
             $generatedDocument = $this->documentBuilder->generateDocument('UnansweredQuestions',array('data' => json_encode($unansweredQuestionsArray)),$dest);
-            $data['unansweredQuestionsDocument'] = $generatedDocument;
+            $data['unansweredQuestionsDocument'] = $this->baseUrl.$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Unanswered.pdf";
         }
 
         $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions);
         $generatedDocument = $this->documentBuilder->generateDocument('AnsweredQuestions',array('data' => json_encode($answeredQuestions)),$dest2);
-        $data['answeredQuestions'] = $generatedDocument;
+        $data['answeredQuestionsDocument'] = $this->baseUrl.$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Answered.pdf";
         return $data;
     }
 }
