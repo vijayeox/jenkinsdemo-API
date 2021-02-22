@@ -887,5 +887,24 @@ class AppServiceTest extends AbstractServiceTest
 
 
     }
+    
+    public function testSetupAppViewNewAppName()
+    {
+        AuthContext::put(AuthConstants::USER_ID, '1');
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyAppNew', 'title' => 'Dummy App', 'oldAppName' => 'DummyApp'));
+        $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
+        $appService = $this->getApplicationServiceLocator()->get(AppService::class);
+        $config = $this->getApplicationConfig();
+        $eoxapp = $config['DATA_FOLDER'] . 'eoxapps';
+        if(!is_dir($path . 'view/apps/eoxapps')){
+            FileUtils::copyDir($eoxapp,$path);
+            FileUtils::renameFile($path.$eoxapp, $path.$data['app']['oldAppName']);
+        }
+        $content = $appService->setupAppView($data, $path);
+        $appnameNew = $path . 'view/apps/DummyAppNew' ;
+        $result = is_dir($appnameNew);
+        $this->assertEquals($result, 1);
+        FileUtils::rmDir($appnameNew);
+    }
 }
 
