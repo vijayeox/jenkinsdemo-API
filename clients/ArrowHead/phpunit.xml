@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-        <testsuite name="Dive Insurance Fixtures">
+        <testsuite name="Arrowhead Fixtures">
             <directory>test/</directory>
         </testsuite>
     </testsuites> 

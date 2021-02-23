@@ -228,6 +228,16 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
     }
 
+    private function decodeFileData(&$data) {
+        foreach ($data as $key => $value) {
+            if(is_string($value) && $this->isJson($value)) {
+                $data[$key] = json_decode($value,true);
+            } if(is_array($value)) {
+                $this->decodeFileData($data[$key]);
+            }
+        }
+    }
+
     public function execute(array $data, Persistence $persistenceService)
     {
         // $this->logger->info("Executing Unanswered Delegate with Data" . print_r($data,true));
@@ -249,6 +259,9 @@ class Unanswered extends AbstractDocumentAppDelegate
 
         $answeredQuestions = [];
         $unansweredQuestions = [];
+        //For file data when it gets encoded and stored in the db
+        $this->decodeFileData($fileData);
+
         $this->getAllUnansweredAndAnsweredQuestions($fileData,$unansweredQuestions, $answeredQuestions);
 
         //Data grids not filled to be added which can't be done for the children as the leaf nodes need to be removed
@@ -263,17 +276,16 @@ class Unanswered extends AbstractDocumentAppDelegate
 
         if(isset($data['unansweredQuestions'])) {
             $unansweredQuestionFields = array_column($data['unansweredQuestions'], 'api');
-
             $requiredUnansweredQuestions = [];
             //Required unanswered questions
             foreach (array_column($data['unansweredQuestions'],'api') as $api) {
                 $rowData = &$requiredUnansweredQuestions;
                 foreach (explode('.', $api) as $api_part) {
                     if (preg_match_all('/^(\w+)\[(\d+)\]$/', $api_part, $api_parts)) {
-                        $rowData[$api_parts[1][0]]['label'] = isset($finalFieldList[$key]) ? $finalFieldList[$key] : $this->getLabel($fieldList,$api_parts[1][0]);
+                        $rowData[$api_parts[1][0]]['label'] = isset($finalFieldList[$api_part]) ? $finalFieldList[$api_part] : $this->getLabel($fieldList,$api_parts[1][0]);
                         $rowData = &$rowData[$api_parts[1][0]][$api_parts[2][0]];
                     } else {
-                        $label = isset($finalFieldList[$key]) ? $finalFieldList[$key] : $this->getLabel($fieldList,$api_part);
+                        $label = isset($finalFieldList[$api_part]) ? $finalFieldList[$api_part] : $this->getLabel($fieldList,$api_part);
                         $rowData[$api_part] = $label;
                     }
                 }
