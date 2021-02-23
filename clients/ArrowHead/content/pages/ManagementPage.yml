@@ -1,131 +1,156 @@
-name: "Manage Workbooks"
-description: "Shows a list of all policies"
+name: 'Manage Workbooks'
+description: 'Shows a list of all policies'
 content:
-  - type: List
-    content:
-      route: "file/search/entity/Dealer Policy"
-      filterable: true
-      autoRefresh: 10000
-      defaultFilters:
-        sort:
-          - field: date_created
-            dir: desc
-      resizable: true
-      pageable:
-        buttonCount: 3
-        pageSizes:
-          - 10
-          - 20
-          - 50
-        info: true
-      sortable:
-        allowUnsort: true
-        mode: single
-      actions:
-        - name: Edit
-          rule: 'row.status == "In Progress" || row.status == "Review" || (profile.privileges.MANAGE_POLICY_APPLICATION_CREATE == true && row.status == "Generated")'
-          details:
-            - type: Form
-              form_id: 1d9c6d64-469d-4401-9b64-d7f47316c157
-              fileId: "{{uuid}}"
-          icon: "far fa-pencil-alt"
-        - name: Comments
-          rule: "true"
-          details:
-            - type: Document
-              content: "<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>"
-              useRowData: true
-            - type: Comment
-              content: "{{uuid}}"
-          icon: "far fa-comment"
-        - name: Claims
-          rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
-          details:
-            - params:
-                page_id: "f52a8856-54af-4efc-b548-3675ddb7f90f"
-                params:
-                  parentFileId: "{{uuid}}"
-          icon: "far fa-hand-holding-usd"
-        - name: "Retry"
-          rule: '(row.status == "Processing" && row.submissionTime) ? moment().isAfter(moment(row.submissionTime).add(3,"m")) : false'
-          icon: "far fa-redo"
-          updateOnly: true
-          details:
-            - type: Update
-              params:
-                url: "command/delegate/RetryDocumentGeneration"
-                successNotification: "Regenerating Documents. This might take several minutes."
-        - name: "Export"
-          rule: "'{{status}}' == 'Generated'"
-          icon: "far fa-file-download"
-          details:
-            - type: Document
-              content: "<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>"
-              useRowData: true
-            - type: DocumentViewer
-              url: "file/{{uuid}}/document"
-        - name: "Please Wait"
-          rule: '(row.status == "Processing" && row.submissionTime) ? moment().isBefore(moment(row.submissionTime).add(3,"m")) : false'
-          icon: "fad fa-circle-notch fa-spin"
-        - name: Delete
-          rule: "profile.privileges.MANAGE_POLICY_APPLICATION_DELETE == true"
-          confirmationMessage: "Please confirm if you want to delete the workbook. This cannot be undone."
-          updateOnly: true
-          details:
-            - type: Update
-              method: "DELETE"
-              params:
-                url: "file/{{uuid}}"
-                successNotification: "Workbook and its related claims have been deleted"
-          icon: "far fa-trash-alt"
-      toolbarTemplate: "<h5>List of workbooks</h5>"
-      operations:
-        title: "Create Workbook"
-        actions:
-          - name: Create New Workbook
-            rule: "profile.privileges.MANAGE_POLICY_APPLICATION_CREATE ==true"
-            details:
-              - type: Form
-                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b
-                downloadPdf: true
-      columnConfig:
-        - title: Insured
-          field: namedInsured
-        - title: "Producer"
-          field: producername
-        - title: "Producer Date"
-          field: producerdate
-          cell: "<td>{formatDate(item.producerdate)}</td>"
-          filter: date
-          filterFormat: YYYY-MM-DD
-        - title: "Effective Date"
-          field: effectiveDate
-          cell: "<td>{formatDate(item.effectiveDate)}</td>"
-          filter: date
-          filterFormat: YYYY-MM-DD
-        - title: "Status"
-          field: status
-          filterCell:
-            type: dropdown
-            listItems:
-              - "Generated"
-              - "Review"
-              - "Processing"
-              - "In Progress"
-            placeholder: "Select Status"
-          cell: '{item.status == "Processing" && item.submissionTime ? (
-            moment().isAfter(moment(item.submissionTime).add(3, "m")) ? (
-            <td className="policyStatusFailed"> Error Processing - Please Retry </td>
-            ) : <td> {
-            item.status +
-            " (" +
-            (item.documentsSelectedCount - item.documentsToBeGenerated + 1) +
-            " of " +
-            item.documentsSelectedCount +
-            ")"
-            }</td>
-            ) : item.status == "Review" ? (
-            <td className="policyStatusReview"> Submitted - Under Review </td>
-            ) : (
-            <td>{item.status}</td>
-            )}'
+    -
+        type: List
+        content:
+            route: 'file/search/entity/Dealer Policy'
+            filterable: true
+            autoRefresh: 10000
+            defaultFilters: 
+                sort:
+                    -
+                        field: date_created
+                        dir: desc          
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            sortable: 
+                allowUnsort: true
+                mode: single
+            actions:
+                -
+                    name: Edit
+                    rule: 'row.status == "In Progress" || row.status == "Review" || (profile.privileges.MANAGE_POLICY_APPLICATION_CREATE == true && row.status == "Generated")'
+                    details:
+                        -
+                            type: Form
+                            form_id: 1d9c6d64-469d-4401-9b64-d7f47316c157
+                            fileId: '{{uuid}}'
+                            downloadPdf: true  
+                    icon: 'far fa-pencil-alt'
+                -
+                    name: Comments
+                    rule: 'true'
+                    details:
+                        -
+                            type: Document
+                            content: '<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>'
+                            useRowData: true
+                        -
+                            type: Comment
+                            content: '{{uuid}}'
+                    icon: 'far fa-comment'
+                -
+                    name: Claims
+                    rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
+                    details:
+                        -
+                            params:
+                                page_id: 'f52a8856-54af-4efc-b548-3675ddb7f90f'
+                                params:
+                                    parentFileId: '{{uuid}}'                  
+                    icon: 'far fa-hand-holding-usd'
+                -
+                    name: 'Retry'
+                    rule: '(row.status == "Processing" && row.submissionTime) ? moment().isAfter(moment(row.submissionTime).add(3,"m")) : false'
+                    icon: 'far fa-redo'
+                    updateOnly : true
+                    details:
+                        -
+                            type: Update
+                            params:
+                                url: 'command/delegate/RetryDocumentGeneration'
+                                successNotification: "Regenerating Documents. This might take several minutes."
+                -
+                    name: 'Export'
+                    rule: '''{{status}}'' == ''Generated'''
+                    icon: 'far fa-file-download'
+                    details:
+                        -
+                            type: Document
+                            content: '<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>'
+                            useRowData: true
+                        -
+                            type: DocumentViewer
+                            url: 'file/{{uuid}}/document'
+                -
+                    name: 'Please Wait'
+                    rule: '(row.status == "Processing" && row.submissionTime) ? moment().isBefore(moment(row.submissionTime).add(3,"m")) : false'
+                    icon: 'fad fa-circle-notch fa-spin'
+                -
+                    name: Delete
+                    rule: 'profile.privileges.MANAGE_POLICY_APPLICATION_DELETE == true'
+                    confirmationMessage: "Please confirm if you want to delete the workbook. This cannot be undone."
+                    updateOnly : true
+                    details:
+                        -
+                            type: Update
+                            method: 'DELETE'
+                            params:
+                                url: 'file/{{uuid}}'
+                                successNotification: "Workbook and its related claims have been deleted"
+                    icon: 'far fa-trash-alt'
+            toolbarTemplate: '<h5>List of workbooks</h5>'
+            operations:
+                title: "Create Workbook"
+                actions:
+                    -
+                        name: Create New Workbook
+                        rule: "profile.privileges.MANAGE_POLICY_APPLICATION_CREATE ==true"
+                        details:
+                            -
+                                type: Form
+                                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b    
+                                downloadPdf: true  
+            columnConfig:
+                -
+                    title: Insured
+                    field: namedInsured
+                -
+                    title: 'Producer'
+                    field: producername
+                -
+                    title: 'Producer Date'
+                    field: producerdate
+                    cell: '<td>{formatDate(item.producerdate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: 'Effective Date'
+                    field: effectiveDate
+                    cell: '<td>{formatDate(item.effectiveDate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: 'Status'
+                    field: status
+                    filterCell:
+                        type: dropdown
+                        listItems:
+                            - 'Generated'
+                            - 'Review'
+                            - 'Processing'
+                            - 'In Progress'
+                        placeholder: 'Select Status'
+                    cell: '{item.status == "Processing" && item.submissionTime ? (
+                            moment().isAfter(moment(item.submissionTime).add(3, "m")) ? (
+                                <td className="policyStatusFailed"> Error Processing - Please Retry </td>
+                            ) : <td> {
+                                item.status +
+                                " (" +
+                                (item.documentsSelectedCount - item.documentsToBeGenerated + 1) +
+                                " of " +
+                                item.documentsSelectedCount +
+                                ")"
+                                }</td>
+                            ) : item.status == "Review" ? (
+                            <td className="policyStatusReview"> Submitted - Under Review </td>
+                            ) : (
+                            <td>{item.status}</td>
+                            )}'
