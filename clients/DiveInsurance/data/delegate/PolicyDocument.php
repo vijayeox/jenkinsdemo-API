@@ -1450,6 +1450,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             (isset($data['zip']) && isset($data['previous_zip']) && $data['zip'] != $data['previous_zip'])){
             $temp['policyInfoChanges'] = true;
         }
+
+        if(!isset($data['previous_sameasmailingaddress'])){
+            $data['previous_sameasmailingaddress'] = $data['sameasmailingaddress'];
+        }
         if($data['sameasmailingaddress'] === "false" || $data['sameasmailingaddress'] === false){
         //Check if variable exist and any change has been made in mailing address
             if((isset($data['physical_country']) && isset($data['previous_physical_country']) && $data['physical_country'] != $data['previous_physical_country']) ||
@@ -1571,6 +1575,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                 }
             }
+        }
+        if(!isset($policy['previous_travelAgentEoPL'])){
+            $policy['previous_travelAgentEoPL'] = $data['travelAgentEoPL'];
         }
         if (isset($data['travelAgentEoPL']) && isset($policy['previous_travelEnO'])) {
             $data['travelAgentEOReceiptsPL'] = isset($data['travelAgentEOReceiptsPL']) ? $data['travelAgentEOReceiptsPL'] : 0;
