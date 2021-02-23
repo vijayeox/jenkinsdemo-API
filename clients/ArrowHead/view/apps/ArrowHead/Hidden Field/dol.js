@@ -10,7 +10,7 @@ var DOLFieldList = [
     children: ["maxInventory", "maxUnits", "maxIndoor"],
   },
 ];
-
+var accountTotal = {};
 DOLFieldList.map((field) => {
   var cloneItem = [...data[field.key]];
   cloneItem = cloneItem.map((location) => {
@@ -26,13 +26,20 @@ DOLFieldList.map((field) => {
       lineTotal.floor_total += location["floor_" + i]
         ? location["floor_" + i]
         : 0;
+      accountTotal[i] =
+        (accountTotal[i] ? accountTotal[i] : 0) +
+        (location["total_" + i] ? location["total_" + i] : 0);
     });
+    accountTotal.total =
+      (accountTotal.total ? accountTotal.total : 0) +
+      (lineTotal.total - lineTotal.floor_total);
     return {
       ...location,
       ...lineTotal,
       total_total: lineTotal.total - lineTotal.floor_total,
     };
   });
+  form.getComponent(field.key + "Total").setValue(accountTotal);
   form.getComponent(field.key).setValue(cloneItem);
 });
 
