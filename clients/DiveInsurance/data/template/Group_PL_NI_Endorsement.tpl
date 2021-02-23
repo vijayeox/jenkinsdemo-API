@@ -35,7 +35,6 @@
 			      				{$value.update_date|date_format:"%m/%d/%Y"}
 			      			{else}
 			      				&nbsp
-			      			}
 			      			{/if}
 			      {else}
 			      			&nbsp

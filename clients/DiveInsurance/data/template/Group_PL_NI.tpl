@@ -29,8 +29,10 @@
 			      Yes{else}No{/if}</td>
 			    <td class = 't_title' align = "left">
 			    {if isset($value.upgradeStatus) && ($value.upgradeStatus == true || $value.upgradeStatus == 'true')}
-			      			{if isset($value.update_date) && $value.update_date != ''}
+			      			{if isset($value.updateDate) && $value.updateDate != ''}
 			      				{$value.updateDate|date_format:"%m/%d/%Y"}
+			      			{else if isset($value.update_date) && $value.update_date != ''}
+			      				{$value.update_date|date_format:"%m/%d/%Y"}
 			      			{else}
 			      				&nbsp
 			      			{/if}
@@ -40,8 +42,10 @@
 			      </td>
 			      <td class = 't_title' align = "left">
 			      {if isset($value.cancel) && ($value.cancel == true || $value.cancel == 'true')}
-			      			{if isset($value.cancel_date) && $value.cancel_date != ''}
+			      			{if isset($value.cancelDate) && $value.cancelDate != ''}
 			      				{$value.cancelDate|date_format:"%m/%d/%Y"}
+			      			{else if isset($value.cancel_date) && $value.cancel_date != ''}
+			      				{$value.cancel_date|date_format:"%m/%d/%Y"}
 			      			{else}
 			      				&nbsp
 			      			{/if}
