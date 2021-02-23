@@ -101,16 +101,16 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                                     $data[$selectedTemplate["customData"] . "*" . $customKey] = $customValue;
                                 }
                             }
-                        } catch (Exception $e) {    
+                        } catch (Exception $e) {
                         }
 
                         unset($data[$selectedTemplate["customData"]]);
                     }
                     foreach ($fieldMappingExcel as $fieldConfig) {
-                        if(isset($fieldConfig["key"])){
+                        if (isset($fieldConfig["key"])) {
                             $formFieldKey = str_contains($fieldConfig["key"], "_") ?
-                            explode("_", $fieldConfig["key"])[0]
-                            : $fieldConfig["key"];
+                                explode("_", $fieldConfig["key"])[0]
+                                : $fieldConfig["key"];
                         }
                         if (isset($data[$formFieldKey]) && !empty($data[$formFieldKey]) && $data[$formFieldKey] !== "[]") {
                             $userInputValue = $data[$formFieldKey];
@@ -475,11 +475,21 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     {
         $data = $this->checkJSON($data);
         if (str_contains($fieldConfig["key"], "_")) {
-            $childKey = explode("_", $fieldConfig["key"])[1];
-            if (isset($data[$childKey]) && !empty($data[$childKey])) {
-                $value = $data[$childKey];
+            if (count(explode("_", $fieldConfig["key"])) > 2) {
+                $childKey1 = explode("_", $fieldConfig["key"])[1];
+                $childKey2 = explode("_", $fieldConfig["key"])[2];
+                if (isset($data[$childKey1][$childKey2]) && !empty($data[$childKey1][$childKey2])) {
+                    $value = $data[$childKey1][$childKey2];
+                } else {
+                    return "";
+                }
             } else {
-                return "";
+                $childKey = explode("_", $fieldConfig["key"])[1];
+                if (isset($data[$childKey]) && !empty($data[$childKey])) {
+                    $value = $data[$childKey];
+                } else {
+                    return "";
+                }
             }
         } else {
             $formKey = $fieldConfig["key"];
