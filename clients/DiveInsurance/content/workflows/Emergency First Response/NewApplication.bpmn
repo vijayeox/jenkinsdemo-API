@@ -96,7 +96,7 @@ if(initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "")
       <bpmn:outgoing>SequenceFlow_09u0dmt</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_18cy0sx" sourceRef="ExclusiveGateway_0v1sn4o" targetRef="Task_1g1eti7">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "" || &amp;&amp; transaction_status == "Action Not Permitted"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "" || transaction_status == "Action Not Permitted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_003e5rf" sourceRef="ExclusiveGateway_0v1sn4o" targetRef="Task_0zkrs53">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; (approved == "rejected" || approved == "onHold")}</bpmn:conditionExpression>
