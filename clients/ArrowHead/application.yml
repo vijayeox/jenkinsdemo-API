@@ -223,6 +223,7 @@ pages:
                 -
                     type: Form
                     form_id: 1d9c6d64-469d-4401-9b64-d7f47316c157
+                    downloadPdf: true
 form:
     -
         name: 'DealerWorkbook Form'
