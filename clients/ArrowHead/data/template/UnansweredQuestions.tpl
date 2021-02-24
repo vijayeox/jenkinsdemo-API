@@ -41,11 +41,12 @@
       </ol>
     {/function}
 
-    <strong><h2>Arrowhead Policy Unanswered Required Questions:</h2></strong>
+    <strong><h1>Unanswered Questions</h1></strong>
+    <strong><h2>Arrowhead Policy Required Questions:</h2></strong>
     {assign var=decodedData value=$data|json_decode:true}
     {$list = $decodedData['requiredUnansweredQuestions']}
     {call name=printSection items=$list}
-    <strong><h2>Arrowhead Policy Remaining Unanswered Questions:</h2></strong>
+    <strong><h2>Arrowhead Policy Remaining Non-Required Questions:</h2></strong>
     {$list = $decodedData['unansweredQuestions']}
     {call name=printSection items=$list}
   </body>
