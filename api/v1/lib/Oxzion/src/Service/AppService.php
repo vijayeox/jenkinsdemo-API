@@ -117,7 +117,7 @@ class AppService extends AbstractService
         return $resultSet;
     }
 
-    public function getApp($uuid)
+    public function getApp($uuid,$viewPath = null)
     {
         $queryString = 'SELECT ap.name, ap.uuid 
         FROM ox_app AS ap
@@ -136,6 +136,13 @@ class AppService extends AbstractService
         }
         $appData = $resultSet[0];
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
+        if($viewPath){
+            if(file_exists($appSourceDir.'/view/apps/'.$appData['name'])){
+                return $appSourceDir.'/view/apps/'.$appData['name'];
+            }else{
+                return $appSourceDir.'/view/apps/eoxapps';
+            }
+        }
         return $this->loadAppDescriptor($appSourceDir);
     }
 
@@ -294,7 +301,8 @@ class AppService extends AbstractService
                     case 'symlink':
                     $this->processSymlinks($ymlData, $path);
                     break;
-                    case 'view':                
+                    case 'view': 
+                    $this->saveAppCss($ymlData);                   
                     $this->setupAppView($ymlData, $path);
                     break;
                     default:
@@ -308,10 +316,7 @@ class AppService extends AbstractService
             $appData['status'] = App::PUBLISHED;
             $this->logger->info("\n App Data before app update - " . print_r($appData, true));
             $this->processInstalledTemplates($appData['uuid'],$path);
-            $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.  
-            if(isset($ymlData['app']['oldAppName'])){
-                unset($ymlData['app']['oldAppName']);
-            }
+            $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED. 
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
             $this->removeViewAppOnError($path);
@@ -322,6 +327,26 @@ class AppService extends AbstractService
         return $ymlData;
     }
 
+    public function saveAppCss($ymlData){
+        $data = ['uuid' => $ymlData['app']['uuid'],
+                'name' => $ymlData['app']['name']];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data);
+        if(file_exists($appSourceDir.'/view/apps/'.$data['name'])){
+            $res =  $appSourceDir.'/view/apps/'.$data['name'];
+        }else{
+            $res = $appSourceDir.'/view/apps/eoxapps';
+        }
+        if(file_exists($res.'/index.scss')){
+            $path = pathinfo($res.'/index.scss');
+            FileUtils::copy($res.'/index.scss',$path['filename'].'_'.date("Y-m-d H:i:s").'.'.$path['extension'],$res); 
+        }
+        $this->logger->info("RED---".print_r($res,true));
+        if(isset($ymlData['cssContent']) && !empty($ymlData['cssContent'])){
+            file_put_contents($res . '/index.scss', $ymlData['cssContent']);
+            // unset($ymlData['cssContent']);
+        }
+    }
+    
     private function removeViewAppOnError($path){
         $targetPath = FileUtils::joinPath($path)."view/apps/eoxapps";
         $this->logger->info("TARGET PATH---".print_r($targetPath,true));
@@ -726,12 +751,16 @@ class AppService extends AbstractService
         if (!is_dir($path . 'view/apps/')) {
             FileUtils::createDirectory($path . 'view/apps/');
         }
+        $this->logger->info("ppp--".print_r($path,true));
         if(isset($yamlData['app']['oldAppName']) && !empty($yamlData['app']['oldAppName'])&& $yamlData['app']['name'] != $yamlData['app']['oldAppName']){
             $this->logger->info("OLDNME---".print_r($path . 'view/apps/'.$yamlData['app']['oldAppName'],true));
             if(is_dir($path . 'view/apps/'.$yamlData['app']['oldAppName'])){
                 FileUtils::rmDir($path .'view/apps/'.$yamlData['app']['oldAppName']);
             }
             $this->removeAppAndExecutePackageDiscover($yamlData['app']['oldAppName']);
+            if(isset($ymlData['app']['oldAppName'])){
+                unset($ymlData['app']['oldAppName']);
+            }
         }
         $appName = $path . 'view/apps/' . $yamlData['app']['name'];
         $metadataPath = $appName . '/metadata.json';
@@ -746,6 +775,7 @@ class AppService extends AbstractService
             if(is_dir($srcIconPath)){
                 FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
                 FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
+                FileUtils::copy($srcIconPath.'index.scss',"index.scss",$appName); // Copy css from Source to Deploy directory
             }
         }
         $jsonData = json_decode(file_get_contents($metadataPath),true);
