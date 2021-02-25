@@ -130,6 +130,20 @@ return [
                     ],
                 ],
             ],
+            'getOwner' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/account/subordinate[/:managerId]',
+                    'defaults' => [
+                        'controller' => Controller\AccountController::class,
+                        'method' => 'GET',
+                        'action' => 'getSubordinates',
+                        'access' => [
+                            'getSubordinates' => ['MANAGE_ACCOUNT_READ'],
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

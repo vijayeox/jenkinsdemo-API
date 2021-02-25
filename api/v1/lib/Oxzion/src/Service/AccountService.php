@@ -33,7 +33,7 @@ class AccountService extends AbstractService
     private $organizationService;
     private $entityService;
     static $userField = array('name' => 'ox_user.name', 'id' => 'ox_user.id', 'city' => 'ox_address.city', 'country' => 'ox_address.country', 'address' => 'ox_address.address1', 'address2' => 'ox_address.address2', 'state' => 'ox_address.state');
-    static $groupField = array('name' => 'oxg.name', 'description' => 'oxg.description');
+    static $groupField = array('name' => 'oxg.name', 'description' => 'oxg.description', 'date_created' => 'oxg.date_created');
     static $projectField = array('name' => 'oxp.name', 'description' => 'oxp.description', 'date_created' => 'oxp.date_created');
     static $announcementField = array('name' => 'oxa.name', 'description' => 'oxa.description');
     static $roleField = array('name' => 'oxr.name', 'description' => 'oxr.description');
@@ -950,7 +950,7 @@ class AccountService extends AbstractService
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $this->createSortClause($filterArray[0]['sort'], self::$roleField);
             }
-            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
+            $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 100;
             $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
 
@@ -985,6 +985,45 @@ class AccountService extends AbstractService
             return $where;
         } else {
             return "";
+        }
+    }
+    
+    public function getSubordinates($managerUuid = null){
+        if($managerUuid){
+            $managerId = $this->getIdFromUuid('ox_employee', $managerUuid);
+            return $this->getSubordinatesByManagerId($managerId);
+        } else {
+            if (!isset($accountId)) {
+                $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
+            }
+            $params = ['accountId' => $accountId];
+            $query = "SELECT oe.uuid,".$this->getSubordinateColumns().",(select count(id) from ox_employee_manager where manager_id = oe.id) as childCount from ox_employee_manager as oem inner join ox_employee oe on oem.employee_id = oe.id inner join ox_person op on oe.person_id = op.id  inner join ox_user ou on ou.person_id = op.id inner join ox_organization oo on oo.id = oe.org_id inner join ox_account oa on oa.organization_id = oo.id where oem.manager_id is NULL and oa.uuid = :accountId and ou.status='Active'";
+            $user = $this->executeQueryWithBindParameters($query, $params)->toArray();
+            if(isset($user[0])){
+                $manager = $user[0];
+                $manager['childCount'] = (int) $manager['childCount'];
+                $manager['children'] = $this->getSubordinatesByManagerId($manager['id']);
+                return $manager;
+            }
+        }
+        return array();
+    }
+    private function getSubordinateColumns(){
+        return "oe.id,ou.icon,op.firstname,op.lastname,CONCAT(op.firstname, ' ', op.lastname) as name,oe.designation as title,oe.date_of_join,op.date_of_birth,op.email,op.gender,op.phone";
+    }
+    private function getSubordinatesByManagerId($managerId){
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
+        $userParams['managerId'] = $managerId; 
+        $userParams['accountId'] = $accountId; 
+        $subOrdinatesQuery = "SELECT oe.uuid,".$this->getSubordinateColumns().",(select count(*) from ox_employee_manager where manager_id = oe.id ) as childCount from ox_employee_manager as oem inner join ox_employee oe on oem.employee_id = oe.id inner join ox_person op on oe.person_id = op.id  inner join ox_user ou on ou.person_id = op.id inner join ox_organization oo on oo.id = oe.org_id inner join ox_account oa on oa.organization_id = oo.id where oem.manager_id = :managerId and oa.uuid = :accountId and ou.status='Active'";
+        $subordinates = $this->executeQueryWithBindParameters($subOrdinatesQuery, $userParams)->toArray();
+        if(!empty($subordinates)){
+            foreach($subordinates as $k =>$v){
+                $subordinates[$k]['childCount'] = (int) $v['childCount'];
+            }
+            return $subordinates;
+        } else {
+            return array();
         }
     }
 

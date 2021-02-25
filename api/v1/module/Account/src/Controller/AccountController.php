@@ -296,4 +296,23 @@ class AccountController extends AbstractApiController
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
+    
+    /**
+     * GET Account Roles API
+     * @api
+     * @link /account/subordinates/:managerId
+     * @method GET
+     **/
+    public function getSubordinatesAction()
+    {
+        $params = $this->params()->fromRoute();
+        $managerId = isset($params['managerId']) ? $params['managerId'] : null;
+        try {
+            $result = $this->accountService->getSubordinates($managerId);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
 }
