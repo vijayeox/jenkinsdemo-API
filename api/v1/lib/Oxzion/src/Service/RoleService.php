@@ -186,12 +186,17 @@ class RoleService extends AbstractService
                 throw new ServiceException("Role does not belong to the account", "role.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
         }
+        if($obj->default_role == 1){
+            throw new ServiceException("System Roles cannot be deleted", "role.cannot.delete", OxServiceException::ERR_CODE_NOT_FOUND);
+        }
 
         $this->beginTransaction();
         $count = 0;
         try {
+            $deleteAccess = "DELETE from `ox_user_role` where role_id =" . $obj->id . "";
+            $this->runGenericQuery($deleteAccess);
             $delete = "DELETE from `ox_role_privilege` where role_id =" . $obj->id . "";
-            $this->runGenericQuery($delete);            
+            $this->runGenericQuery($delete);
             $count = $this->table->deleteByUuid($id);
             if ($count == 0) {
                 throw new ServiceException("Role not found", "role.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
