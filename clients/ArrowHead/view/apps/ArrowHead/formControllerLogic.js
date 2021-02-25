@@ -13,7 +13,8 @@ s.onload = function (e) {
     ) {
       if (
         !document.getElementById("saveDraftCustomButton") ||
-        !document.getElementById("saveDraftCloseCustomButton")
+        !document.getElementById("saveDraftCloseCustomButton") ||
+        !document.getElementById("exportPdfButton")
       ) {
         if (!document.getElementById("saveDraftCloseCustomButton")) {
           let clone = $("ul[id*=nav]").children()[0].cloneNode(true);
@@ -27,6 +28,7 @@ s.onload = function (e) {
                 formData: data,
                 commands:
                   '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
+                  // ,{ "command": "delegate", "delegate": "Unanswered"}
                 exit: true,
                 notification: "Data saved successfully",
               },
@@ -62,6 +64,44 @@ s.onload = function (e) {
               )
               .dispatchEvent(ev);
           };
+        }
+        if(!document.getElementById('exportPdfButton')){
+          var buttonList = document.querySelector(
+            "div.formio-form div ul.list-inline"
+          );
+          var listElement = document.createElement("li");
+          listElement.classList.add("list-inline-item");
+
+          var answeredButton = document.createElement("BUTTON");
+          answeredButton.innerHTML = "Export Form to PDF";
+          answeredButton.classList.add(
+            "btn",
+            "btn-secondary",
+            "btn-wizard-nav-answer"
+          );
+          answeredButton.setAttribute("id","exportPdfButton");
+          answeredButton.addEventListener("click",()=>{
+            //Create PDF
+            let pdfEvent = new CustomEvent("customButtonAction", {
+              detail: {
+                downloadPdf:true,
+                timerVariable: appendCustomButtonTimer,
+                formData: data,
+                commands:
+                  '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
+                exit: false,
+                notification: "PDF successfully created",
+              },
+              bubbles: false,
+            });
+            document
+              .getElementById(
+                "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
+              )
+              .dispatchEvent(pdfEvent);
+          })
+          listElement.appendChild(answeredButton);
+          buttonList.appendChild(listElement);
         }
       } else {
         if (data.producername.length > 0 && data.namedInsured.length > 0) {
