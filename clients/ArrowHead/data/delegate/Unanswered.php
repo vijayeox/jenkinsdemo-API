@@ -64,7 +64,7 @@ class Unanswered extends AbstractDocumentAppDelegate
         $arr = [];
         foreach ($fieldList as $field) {
             if($name == $field['name']) {
-                if($field['type'] == 'hidden') {
+                if($field['type'] == 'hidden' || $field['type'] == 'button' || $field['type'] == 'htmlelement') {
                     continue;
                 }
                 if($field['type'] == 'file' || $field['type'] == 'document') {
@@ -72,12 +72,7 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
                 if($field['template']) {
                     $label = json_decode($field['template'],true);
-                    if(isset($label['validate']['customMessage'])){
-                        $label = $label['validate']['customMessage'];
-                    }
-                    else {
-                        $label = $label['label'];
-                    }
+                    $label = $label['label'];
                 }
                 else {
                     $label = $field['text'];
@@ -91,12 +86,7 @@ class Unanswered extends AbstractDocumentAppDelegate
         $label = $field['name'];
         if($field['template']) {
             $label = json_decode($field['template'],true);
-            if(isset($label['validate']['customMessage'])){
-                $label = $label['validate']['customMessage'];
-            }
-            else {
-                $label = $label['label'];
-            }
+            $label = $label['label'];
         }
         else {
             $label = $field['text'];
@@ -108,7 +98,7 @@ class Unanswered extends AbstractDocumentAppDelegate
         $finalFieldList = [];
         foreach ($fieldList as $field) {
             $label = $field['name'];
-            if( ($field['type'] == 'hidden') || ($field['type'] == 'file') || ($field['type'] == 'document') ) {
+            if( ($field['type'] == 'hidden') || ($field['type'] == 'file') || ($field['type'] == 'document') || ($field['type'] == 'button') || ($field['type'] == 'htmlelement') ) {
                 continue;
             }
             elseif($field['type'] == 'select') {
@@ -199,7 +189,9 @@ class Unanswered extends AbstractDocumentAppDelegate
     private function getUnansweredQuestionPrintReady($finalFieldList,&$unansweredQuestions,$fieldList) {
         foreach ($unansweredQuestions as $key => $value) {
             if(is_array($value)) {
-                $unansweredQuestions[$key]['label'] = isset($finalFieldList[$key]) ? $finalFieldList[$key] : $this->getLabel($fieldList,$key);
+                if(!is_numeric($key)) {
+                    $unansweredQuestions[$key]['label'] = isset($finalFieldList[$key]) ? $finalFieldList[$key] : $this->getLabel($fieldList,$key);
+                }
                 $this->getUnansweredQuestionPrintReady($finalFieldList,$unansweredQuestions[$key],$fieldList);
             } else {
                 if($key != "label") {
@@ -238,6 +230,42 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
     }
 
+    private function cleanData(&$data) {
+        if(isset($data['textField1'])) {
+            unset($data['textField1']);
+        }
+        if(isset($data['validationMessage'])) {
+            unset($data['validationMessage']);
+        }
+        if(isset($data['textField'])) {
+            unset($data['textField']);
+        }
+        if(isset($data['submissionTime'])) {
+            unset($data['submissionTime']);
+        }
+        if(isset($data['workFlowId'])) {
+            unset($data['workFlowId']);
+        }
+        if(isset($data['documentsToBeGenerated'])) {
+            unset($data['documentsToBeGenerated']);
+        }
+        if(isset($data['documentsSelectedCount'])) {
+            unset($data['documentsSelectedCount']);
+        }
+        if(isset($data['umbrellaWarning'])) {
+            unset($data['umbrellaWarning']);
+        }
+        if(isset($data['tankIndex'])) {
+            unset($data['tankIndex']);
+        }
+        if(isset($data['locationNum'])) {
+            unset($data['locationNum']);
+        }
+        if(isset($data['textFieldIgnore'])) {
+            unset($data['textFieldIgnore']);
+        }
+    }
+
     public function execute(array $data, Persistence $persistenceService)
     {
         // $this->logger->info("Executing Unanswered Delegate with Data" . print_r($data,true));
@@ -252,7 +280,6 @@ class Unanswered extends AbstractDocumentAppDelegate
         $fieldListArr = $this->getFields($data['appId'],array('entityName' => 'Dealer Policy'));
         $fieldList = isset($fieldListArr['data']) ? $fieldListArr['data'] : array();
         $finalFieldList = $this->preProcessFields($fieldList);
-        // echo "<pre>";print_r($finalFieldList);exit;
 
         $fileDataRaw = $this->getFile($data['fileId']);
         $fileData = $fileDataRaw['data'];
@@ -263,7 +290,6 @@ class Unanswered extends AbstractDocumentAppDelegate
         $this->decodeFileData($fileData);
 
         $this->getAllUnansweredAndAnsweredQuestions($fileData,$unansweredQuestions, $answeredQuestions);
-
         //Data grids not filled to be added which can't be done for the children as the leaf nodes need to be removed
         foreach ($fileData as $key => $value) {
             if(is_string($value)) {
@@ -292,12 +318,14 @@ class Unanswered extends AbstractDocumentAppDelegate
             }
 
             $this->removeRequiredFromUnanswered($unansweredQuestions,$requiredUnansweredQuestions);
+            $this->cleanData($unansweredQuestions);
             $this->getUnansweredQuestionPrintReady($finalFieldList,$unansweredQuestions,$fieldList);
             $unansweredQuestionsArray = array('unansweredQuestions' => $unansweredQuestions, 'requiredUnansweredQuestions' => $requiredUnansweredQuestions );
             $generatedDocument = $this->documentBuilder->generateDocument('UnansweredQuestions',array('data' => json_encode($unansweredQuestionsArray)),$dest);
             $data['unansweredQuestionsDocument'] = $this->baseUrl.$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Unanswered.pdf";
         }
 
+        $this->cleanData($answeredQuestions);
         $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions);
         $generatedDocument = $this->documentBuilder->generateDocument('AnsweredQuestions',array('data' => json_encode($answeredQuestions)),$dest2);
         $data['answeredQuestionsDocument'] = $this->baseUrl.$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Answered.pdf";
