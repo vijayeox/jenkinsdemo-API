@@ -15632,7 +15632,7 @@
 		"submission_commands": "[{\"command\" : \"delegate\",\"delegate\" : \"CleanUpDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"ProposalDocList\"},{\"command\" : \"submitWorkflow\"}]"
 	},
 	"settings": {},
-	"name": "diveStoreEndorsementConsolidation",
+	"name": "endorsementDiveStoreConsolidation",
 	"path": "divestoreendorsementconsolidation",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-10-27T10:27:49.342Z",
