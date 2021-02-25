@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Utils;
 use Oxzion\Utils\StringUtils;
+use \ZipArchive;
 
 class FileUtils
 {
@@ -245,6 +246,26 @@ class FileUtils
             }
         }
         throw new Exception('Failed to create unique temporary file name in 100 attempts!.');
+    }
+
+    public static function folderSize ($dir)
+    {
+        $size = 0;
+        /* The below function can be used to get the zip file size
+            $zip = zip_open($dir);
+            if ($zip) {
+              while ($zip_entry = zip_read($zip)) {
+                print_r(zip_entry_filesize($zip_entry));print_r("\n");
+                $size = $size + zip_entry_filesize($zip_entry);
+              }
+              zip_close($zip);
+            }
+        */
+        $io = popen ( '/usr/bin/du -sk ' . $dir, 'r' );
+        $size = fgets ( $io, 4096);
+        $size = substr ( $size, 0, strpos ( $size, "\t" ) );
+        pclose ( $io );
+        return $size;
     }
 
 }

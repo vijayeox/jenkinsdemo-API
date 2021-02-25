@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Arrowhead AutoDealer</title>
-    <link href= "./css/unanswered_questions.css" rel="stylesheet" type="text/css" />
+    <link href= "{$smarty.current_dir}/css/unanswered_questions.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
 

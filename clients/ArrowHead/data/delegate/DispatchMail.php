@@ -62,21 +62,33 @@ class DispatchMail extends MailDelegate
             }
         }
 
+        $mailTemplateFlag = 0;
         if ($attachmentsAvailable) {
             FileUtils::fileExists($mailDocumentsDir . ".zip") ?
                 FileUtils::deleteFile("mailDocuments.zip", $fileDocs) : null;
             ZipUtils::zipDir($mailDocumentsDir, $mailDocumentsDir . ".zip");
-            array_push($emailAttachments,  $mailDocumentsDir . ".zip");
-            FileUtils::rmDir($mailDocumentsDir);
+            $size = FileUtils::fileExists($mailDocumentsDir . ".zip") ? filesize($mailDocumentsDir . ".zip") : 0;
+            if($size > 1000000) {
+                $mailTemplateFlag = 1;
+                $emailAttachments = [];
+                FileUtils::rmDir($mailDocumentsDir);
+            } else {
+                array_push($emailAttachments,  $mailDocumentsDir . ".zip");
+            }
         }
 
 
         $mailOptions = array();
         $mailOptions['to'] = $submissionEmail;
-        $mailOptions['subject'] = "New business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
+        if($mailTemplateFlag == 0) {
+            $mailOptions['subject'] = "New business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
+        } else {
+            $mailOptions['subject'] = "Attachment failed for new business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
+        }
         $mailOptions['attachments'] = $emailAttachments;
         $this->logger->info("Arrowhead Policy Mail " . print_r($mailOptions, true));
         $data['orgUuid'] = "34bf01ab-79ca-42df-8284-965d8dbf290e";
+        $data['mailTemplateFlag'] = $mailTemplateFlag;
         // $data['orgUuid'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
         $response = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
         $this->logger->info("Mail has " . ($response ? "been sent." : "not been sent."));
