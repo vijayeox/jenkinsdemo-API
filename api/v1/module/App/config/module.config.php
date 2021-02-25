@@ -935,6 +935,20 @@ return [
                     ],
                 ],
             ],
+            'getCssFile' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cssFile',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'method' => 'GET',
+                        'action' => 'getCssFile',
+                    ],
+                ],
+            ],
             'getArtifacts' => [
                 'type' => Segment::class,
                 'options' => [

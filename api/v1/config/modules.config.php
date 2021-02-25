@@ -39,5 +39,6 @@ return [
     'PaymentGateway',
     'ErrorLog',
     'Esign',
-    'Import'
+    'Import',
+    'Ims'
 ];

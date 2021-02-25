@@ -10,6 +10,10 @@ RUN apt-get update \
  && apt-get install -y libfreetype6-dev \
                        libjpeg62-turbo-dev \
                        libpng-dev \
+ && rm /etc/apt/preferences.d/no-debian-php \
+ && apt-get update -y \
+ && apt-get -y install libxml2-dev php-soap \
+ && docker-php-ext-install soap \
  && docker-php-ext-configure gd \
         --with-freetype-dir=/usr/include/ \
         --with-jpeg-dir=/usr/include/ \

@@ -111,6 +111,50 @@ class AppControllerTest extends ControllerTest
     }
 
 
+    public function testGetCssFileNotFound(){        
+        $this->initAuthToken($this->adminUser);
+        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+        $appName = 'SampleApp';
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}".'/view/apps/'."eoxapps/";
+        try {
+            FileUtils::deleteFile('index.scss',$appSourceDir);
+            $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cssFile','GET');
+            $content = (array)json_decode($this->getResponse()->getContent(), true);
+            $this->assertEquals($content['status'], 'error');
+            $this->assertEquals($content['message'], 'Css File not Found');
+        }catch(Exception $e){
+            throw $e;            
+        }finally{
+            if (file_exists($appSourceDir)) {
+                FileUtils::rmDir($appSourceDir);
+            }
+        }
+    }
+
+    public function testGetCssFile(){
+        $this->initAuthToken($this->adminUser);
+        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+        $appName = 'SampleApp';
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}".'/view/apps/'."${appName}";
+        try {
+            if (file_exists($appSourceDir)) {
+                FileUtils::rmDir($appSourceDir);
+                mkdir($appSourceDir);
+            }
+            $eoxSampleApp = dirname(__FILE__) . '/../../Dataset/SampleApp';
+            FileUtils::copyDir($eoxSampleApp, $appSourceDir);
+            $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cssFile','GET');
+            $content = (array)json_decode($this->getResponse()->getContent(), true);
+            $this->assertEquals($content['status'], 'success');
+            $this->assertNotEmpty($content['data']['cssContent']);
+        }catch(Exception $e){
+            throw $e;            
+        }finally{
+            if (file_exists($appSourceDir)) {
+                FileUtils::rmDir($appSourceDir);
+            }
+        }
+    }
 
     public function testGetListOfUserAssignments()
     {
@@ -1455,4 +1499,103 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
     // NEED TO ADD INSTALL/UNINSTALL TESTS -SADHITHA
+
+    public function testDeployAppOnSaveAppCss()
+    {
+        $this->setUpTearDownHelper->setupAppDescriptor('application16.yml');
+        $this->initAuthToken($this->adminUser);
+        if (enableCamundaForDeployApp == 0) {
+            $mockProcessManager = $this->getMockProcessManager();
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+        }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
+        $path = __DIR__ . '/../../sampleapp/';
+        $data = ['path' => $path];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $filename = "application.yml";
+        $yaml = Yaml::parse(file_get_contents($path . $filename));
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
+        $query = "SELECT name from ox_app where name = '" . $appName . "'";
+        $appname = $this->executeQueryTest($query);
+        $query = "SELECT uuid from ox_app where name = '" . $appName . "'";
+        $appUuid = $this->executeQueryTest($query);
+        $appUuidCount = count($appUuid[0]);
+        $appUuid = $appUuid[0]['uuid'];
+        $query = "SELECT id from ox_app where uuid = '" . $appUuid . "'";
+        $appId = $this->executeQueryTest($query);
+        $appId = $appId[0]['id'];
+        $query = "SELECT count(name),status,uuid,id from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid,id";
+        $account = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count from ox_app_registry where app_id = '" . $appId . "'";
+        $appRegistryResult = $this->executeQueryTest($query);
+        $query = "SELECT count(name) as count FROM ox_privilege WHERE app_id = '" . $appId . "'";
+        $privilege = $this->executeQueryTest($query);
+        $query = "SELECT count(privilege_name) as count from ox_role_privilege WHERE app_id = '" . $appId . "'";
+        $rolePrivilege = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count from ox_role WHERE account_id = '" . $account[0]['id'] . "'";
+        $role = $this->executeQueryTest($query);
+        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY2' and app_id = '" . $appId . "'";
+        $roleprivilege1 = $this->executeQueryTest($query);
+        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY' and app_id = '" . $appId . "'";
+        $roleprivilege2 = $this->executeQueryTest($query);
+        $query = "SELECT * FROM ox_role_privilege rp
+                    inner join ox_role r on r.id = rp.role_id
+                    WHERE privilege_name = 'MANAGE_POLICY_APPROVAL'";//" and app_id = '" . $appId . "'";
+        $roleprivilege3 = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count FROM ox_form WHERE app_id = " . $appId . " and name = 'sampleFormForTests'";
+        $form = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count FROM ox_app_menu WHERE app_id = " . $appId;
+        $menu = $this->executeQueryTest($query);
+        $this->assertEquals($menu[0]['count'], 6);
+        $this->assertEquals($form[0]['count'], 1);
+        $this->assertEquals($roleprivilege1[0]['count'], 2);
+        $this->assertEquals($roleprivilege2[0]['count'], 2);
+        $this->assertEquals(count($roleprivilege3), 2);
+        $this->assertEquals($role[0]['count'], 5);
+        $this->assertEquals($privilege[0]['count'], 3);
+        $this->assertEquals($rolePrivilege[0]['count'], 6);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
+        $this->assertEquals($appname[0]['name'], $appName);
+        $this->assertEquals($appUuid, $YmlappUuid);
+        $this->assertEquals($appUuidCount, 1);
+        $this->assertEquals($appRegistryResult[0]['count'], 1);
+        $this->assertEquals($content['status'], 'success');
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $appUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
+        $apps = $this->config['APPS_FOLDER'];
+        $fGet = file_get_contents($apps.$appName.'/index.scss');
+        $this->assertEquals($fGet,$yaml['cssContent']);
+        if (enableExecUtils != 0) {
+            if (file_exists($apps) && is_dir($apps)) {
+                if (is_link($apps . "/$appName")) {
+                    $dist = "/dist/";
+                    $nodemodules = "/node_modules/";
+                    $this->assertEquals(file_exists($apps . "/$appName" . $dist), true);
+                    $this->assertEquals(file_exists($apps . "/$appName" . $nodemodules), true);
+                }
+            }
+        }
+        $query = "SELECT * from ox_workflow where app_id = " . $appId;
+        $workflow = $this->executeQueryTest($query);
+        if (enableCamundaForDeployApp == 1) {
+            $this->assertEquals(count($workflow), 3);
+            foreach ($workflow as $wf) {
+                $this->assertNotEmpty($wf['process_id']);
+            }
+        }
+    }
 }

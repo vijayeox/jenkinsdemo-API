@@ -419,5 +419,26 @@ class AppController extends AbstractApiController
         }   
         return $params;
     }
+
+        /**
+     * GET CSS File API
+     * @api
+     * @link /app/:appId/cssFile
+     * @method GET
+     * @return array Css file content
+     */
+    public function getCssFileAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            $result = $this->appService->getApp($params['appId'],true);
+            $fileContent = file_get_contents($result.'/index.scss');
+            $data['cssContent'] = $fileContent;
+            return $this->getSuccessResponseWithData($data);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Css File not Found", 404);
+        }
+    }
 }
 
