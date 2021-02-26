@@ -163,9 +163,9 @@ content:
                                         logic: and
                                         filters:
                                             - 
-                                                field: status
+                                                field: giValidation
                                                 operator: eq
-                                                value: Generated
+                                                value: true
                                     sort:
                                         -
                                             field: date_created

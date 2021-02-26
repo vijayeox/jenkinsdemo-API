@@ -112,6 +112,11 @@ entity:
                 index: true
                 data_type: text
             -
+                name: giValidation
+                text: GIValidation
+                index: true
+                data_type: boolean
+            -
                 name: documentsToBeGenerated
                 text: documentsToBeGenerated
                 data_type: numeric
