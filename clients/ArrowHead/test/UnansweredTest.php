@@ -40,7 +40,8 @@ class UnansweredTest extends DelegateTest
 
     public function getDataSet()
     {
-        return new DefaultDataSet();
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/Dataset/Unanswered.yml");
+        return $dataset;
     }
 
     public function tearDown() : void
@@ -50,7 +51,7 @@ class UnansweredTest extends DelegateTest
         if (is_link($path)) {
             unlink($path);
         }
-        
+
         FileUtils::unlink($this->tempFile);
         $query = "DROP DATABASE " . $this->database;//comment
         $statement = $this->getDbAdapter()->query($query);
