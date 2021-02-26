@@ -107,7 +107,8 @@
       "PaymentGateway\\":"module/PaymentGateway/src/",
       "ErrorLog\\":"module/ErrorLog/src/",
       "Esign\\":"module/Esign/src/",
-      "Import\\":"module/Import/src/"
+      "Import\\":"module/Import/src/",
+      "Ims\\":"module/Ims/src/"
     }
   },
   "autoload-dev": {

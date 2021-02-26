@@ -388,16 +388,18 @@ class ChatService extends AbstractService
             $displayName = isset($botParams['displayName']) ? $botParams['displayName'] : $botName;
             $userDetails = $this->getUserByUsername($botName,false);
             $this->logger->info("USER DETILS--".print_r($userDetails,true));
-            if (isset($userDetails) && count($userDetails) > 0) {
-                if ($userDetails['delete_at'] == 0) {
-                    //Update bot
-                    $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
-                    if (isset($botParams['profileImage']) && !empty($botParams['profileImage'])) {
-                        $this->updateProfileImage($botName,$botParams['profileImage']);
+            if (isset($userDetails) && $userDetails != 404 ){
+                if(count($userDetails) > 0) {
+                    if ($userDetails['delete_at'] == 0) {
+                        //Update bot
+                        $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
+                        if (isset($botParams['profileImage']) && !empty($botParams['profileImage'])) {
+                            $this->updateProfileImage($botName,$botParams['profileImage']);
+                        }
+                    }else{
+                        //Enable bot
+                        $response = $this->enableBot($botName);
                     }
-                }else{
-                    //Enable bot
-                    $response = $this->enableBot($botName);
                 }
             }else{
                 //Create bot
