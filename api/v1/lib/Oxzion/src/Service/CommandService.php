@@ -390,7 +390,6 @@ class CommandService extends AbstractService
         }
 
         $groupName = $JobData['jobGroup'];
-        $jobPayload = array('jobid' => $JobData['jobId'], 'jobgroup' => $JobData['jobGroup']);
         $data[$jobName] = array();
         $this->jobService->cancelJobId($JobData['jobId'], $appId, $groupName);
         

@@ -117,7 +117,7 @@ class AppService extends AbstractService
         return $resultSet;
     }
 
-    public function getApp($uuid)
+    public function getApp($uuid,$viewPath = null)
     {
         $queryString = 'SELECT ap.name, ap.uuid 
         FROM ox_app AS ap
@@ -136,6 +136,13 @@ class AppService extends AbstractService
         }
         $appData = $resultSet[0];
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
+        if($viewPath){
+            if(file_exists($appSourceDir.'/view/apps/'.$appData['name'])){
+                return $appSourceDir.'/view/apps/'.$appData['name'];
+            }else{
+                return $appSourceDir.'/view/apps/eoxapps';
+            }
+        }
         return $this->loadAppDescriptor($appSourceDir);
     }
 
@@ -294,7 +301,8 @@ class AppService extends AbstractService
                     case 'symlink':
                     $this->processSymlinks($ymlData, $path);
                     break;
-                    case 'view':                
+                    case 'view': 
+                    $this->saveAppCss($ymlData);                   
                     $this->setupAppView($ymlData, $path);
                     break;
                     default:
@@ -308,7 +316,7 @@ class AppService extends AbstractService
             $appData['status'] = App::PUBLISHED;
             $this->logger->info("\n App Data before app update - " . print_r($appData, true));
             $this->processInstalledTemplates($appData['uuid'],$path);
-            $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED.    
+            $this->updateApp($appData['uuid'], $ymlData); //Update is needed because app status changed to PUBLISHED. 
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
             $this->removeViewAppOnError($path);
@@ -319,6 +327,26 @@ class AppService extends AbstractService
         return $ymlData;
     }
 
+    public function saveAppCss($ymlData){
+        $data = ['uuid' => $ymlData['app']['uuid'],
+                'name' => $ymlData['app']['name']];
+        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data);
+        if(file_exists($appSourceDir.'/view/apps/'.$data['name'])){
+            $res =  $appSourceDir.'/view/apps/'.$data['name'];
+        }else{
+            $res = $appSourceDir.'/view/apps/eoxapps';
+        }
+        if(file_exists($res.'/index.scss')){
+            $path = pathinfo($res.'/index.scss');
+            FileUtils::copy($res.'/index.scss',$path['filename'].'_'.date("Y-m-d H:i:s").'.'.$path['extension'],$res); 
+        }
+        $this->logger->info("RED---".print_r($res,true));
+        if(isset($ymlData['cssContent']) && !empty($ymlData['cssContent'])){
+            file_put_contents($res . '/index.scss', $ymlData['cssContent']);
+            // unset($ymlData['cssContent']);
+        }
+    }
+    
     private function removeViewAppOnError($path){
         $targetPath = FileUtils::joinPath($path)."view/apps/eoxapps";
         $this->logger->info("TARGET PATH---".print_r($targetPath,true));
@@ -420,8 +448,10 @@ class AppService extends AbstractService
             $this->setupAccountFiles($path, $accountId);
             // Assign AppRoles to Logged in User if Logged in Org and Installed Org are same
             if(AuthContext::get(AuthConstants::ACCOUNT_UUID) == $accountId){
-                $this->userService->addAppRolesToUser(AuthContext::get(AuthConstants::USER_UUID),$appId);
+                 $user = $this->getDataByParams('ox_account_user', array('id'), array('user_id' => AuthContext::get(AuthConstants::USER_ID), 'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)))->toArray();
+                $this->userService->addAppRolesToUser($user[0]['id'],$appId);
             }
+            $this->processJobsForAccount($appId,$accountId);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -429,6 +459,18 @@ class AppService extends AbstractService
         }
         
     }
+     public function processJobsForAccount($appId,$accountId){
+        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+        $accountId = is_numeric($accountId) ? $accountId : $this->getIdFromUuid('ox_account',$accountId);
+        $select = "SELECT * from ox_job where app_id=:appId and account_id IS NULL";
+        $params = ['appId' => $appId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        foreach ($result as $jobData) {
+            $config = json_decode($jobData['config'],true);
+            $this->logger->info("OOOO---\n".print_r($config,true));
+            $this->jobService->scheduleNewJob($jobData['name'], $jobData['group_name'], $config, $config['schedule']['cron'], $appId,$accountId);
+        }
+     }
 
     private function uninstallApp($accountId, $yamlData, $path){
         try{
@@ -437,6 +479,7 @@ class AppService extends AbstractService
             $this->accountService->removeBusinessOfferings($accountId);
             $this->removeRoleData($appId,$accountId);        
             $this->removeAccountFiles($accountId);
+            $this->uninstallJobsForAccount($appId,$accountId);
             $this->commit();
         }catch(Exception $e){
             $this->logger->info("there is an uninstallexception: ");
@@ -445,6 +488,17 @@ class AppService extends AbstractService
         }
         
     }
+
+     public function uninstallJobsForAccount($appId,$accountId){
+        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+        $accountId = is_numeric($accountId) ? $accountId : $this->getIdFromUuid('ox_account',$accountId);
+        $select = "SELECT * from ox_job where app_id=:appId and account_id=:accountId";
+        $params = ['appId' => $appId, 'accountId' => $accountId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        foreach ($result as $jobs) {
+            $this->jobService->cancelJob($jobs['name'], $jobs['group_name'], $appId,$accountId);
+        }
+     }
 
     private function removeRoleData($appId,$accountId = null){
         $appId = $this->getIdFromUuid('ox_app',$appId);
@@ -494,27 +548,26 @@ class AppService extends AbstractService
         $this->logger->info("Deploy App - Process Job with YamlData ");
         if(isset($yamlData['job'])){
             $appUuid = $yamlData['app']['uuid'];
+            $this->processDeletedJobs($yamlData['job'],$appUuid);
             foreach ($yamlData['job'] as $data) {
                 try {
-                    if(!isset($data['name']) || !isset($data['url']) || !isset($data['uuid']) || !isset($data['cron']) || !isset($data['data']))
+                    if(!isset($data['name']) || !isset($data['url']) || !isset($data['uuid']) || !isset($data['cron']))
                     {
-                        throw new ServiceException('Job Name/url/uuid/cron/data not specified', 'job.details.not.specified');                    
+                        throw new ServiceException('Job Name/url/uuid/cron not specified', 'job.details.not.specified');                    
                     }
                     $jobName = $data['uuid'];
                     $jobGroup = $data['name'];
+                    if(!isset($data['data'])){
+                        $data['data'] = [];
+                    }
+                    if(!isset($data['data']['appId'])){
+                        $data['data']['appId'] = $appUuid;
+                    }
+                    $appId = $this->getIdFromUuid('ox_app', $appUuid);
                     $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $data['url'], "data" => $data['data']), "schedule" => array("cron" => $data['cron']));
                     $cron = $data['cron'];
-                    $appId = isset($data['appId']) ? $data['appId'] : $appUuid;
-                    $appId = $this->getIdFromUuid('ox_app', $appId);
-                    $query = "SELECT id from ox_job where name = :jobName and group_name = :groupName and app_id = :appId";
-                    $params = array('jobName' => $jobName, 'groupName' => $jobGroup, 'appId' => $appId);
-                    $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-                    if(isset($result) && !empty($result))
-                    {
-                        $cancel = $this->jobService->cancelJob($jobName, $jobGroup, $appUuid);
-                    }
-                    $this->logger->info("executing schedule job ");
                     $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
+                    $this->processJobsForInstalledAccount($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
                 }
                 catch (Exception $e) {
                     $this->logger->info("there is an exception: ");
@@ -535,6 +588,35 @@ class AppService extends AbstractService
                 }
             }
         }     
+    }
+
+    private function processDeletedJobs($jobData,$appId){
+        $appId = !is_numeric($appId) ? $this->getIdFromUuid('ox_app',$appId) : $appId;
+        $yamlJobData = array_unique(array_column($jobData, 'uuid'));
+        $list = "'" . implode("', '", $yamlJobData) . "'";
+        $select = "SELECT * from ox_job where app_id=:appId and name NOT IN ($list)";
+        $params = ['appId' => $appId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        foreach ($result as $jobs) {
+            if (is_null($jobs['account_id'])) {
+                $query = 'DELETE from ox_job where id = :Id';
+                $params = array('Id' => $jobs['id']);
+                $this->executeUpdateWithBindParameters($query, $params);
+            }else{
+                $this->jobService->cancelJob($jobs['name'], $jobs['group_name'], $appId,$jobs['account_id']);
+            }
+        }  
+    }
+    private function processJobsForInstalledAccount($jobName, $jobGroup, $jobPayload, $cron,$appId){
+        $this->logger->info("CROn---\n".print_r($cron,true));
+        $appId = !is_numeric($appId) ? $this->getIdFromUuid('ox_app',$appId) : $appId;
+        $select = "SELECT oxar.account_id from ox_app_registry oxar where oxar.app_id=:appId";
+        $params = ['appId' => $appId];
+        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        $this->logger->info("DRF---".print_r($result,true));
+        foreach ($result as $account) {
+            $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId,$account['account_id']);
+        }
     }
 
     public function processMenu(&$yamlData, $path)
@@ -595,10 +677,6 @@ class AppService extends AbstractService
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
                 $pageData['uuid'] = $page['uuid'];
             }
-        }
-        
-        if (isset($yamlData['entity_page']) && !empty($yamlData['entity_page'])){
-                
         }
     }
 
@@ -673,6 +751,17 @@ class AppService extends AbstractService
         if (!is_dir($path . 'view/apps/')) {
             FileUtils::createDirectory($path . 'view/apps/');
         }
+        $this->logger->info("ppp--".print_r($path,true));
+        if(isset($yamlData['app']['oldAppName']) && !empty($yamlData['app']['oldAppName'])&& $yamlData['app']['name'] != $yamlData['app']['oldAppName']){
+            $this->logger->info("OLDNME---".print_r($path . 'view/apps/'.$yamlData['app']['oldAppName'],true));
+            if(is_dir($path . 'view/apps/'.$yamlData['app']['oldAppName'])){
+                FileUtils::rmDir($path .'view/apps/'.$yamlData['app']['oldAppName']);
+            }
+            $this->removeAppAndExecutePackageDiscover($yamlData['app']['oldAppName']);
+            if(isset($ymlData['app']['oldAppName'])){
+                unset($ymlData['app']['oldAppName']);
+            }
+        }
         $appName = $path . 'view/apps/' . $yamlData['app']['name'];
         $metadataPath = $appName . '/metadata.json';
         $eoxapp = $this->config['DATA_FOLDER'] . 'eoxapps';
@@ -686,6 +775,7 @@ class AppService extends AbstractService
             if(is_dir($srcIconPath)){
                 FileUtils::copy($srcIconPath.'icon.png',"icon.png",$appName);
                 FileUtils::copy($srcIconPath.'icon_white.png',"icon_white.png",$appName);
+                FileUtils::copy($srcIconPath.'index.scss',"index.scss",$appName); // Copy css from Source to Deploy directory
             }
         }
         $jsonData = json_decode(file_get_contents($metadataPath),true);
@@ -928,7 +1018,7 @@ private function checkWorkflowData(&$data,$appUuid)
 
     public function processBusinessRoles(&$yamlData)
     {   
-        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'])) {
+        if (isset($yamlData['businessRole']) && !empty($yamlData['businessRole'][0]['name'])) {
             $appId = $yamlData['app']['uuid'];
             foreach ($yamlData['businessRole'] as &$businessRole) {
                 $bRole = $businessRole;
@@ -956,14 +1046,14 @@ private function checkWorkflowData(&$data,$appUuid)
                     continue;
                 }
                 $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
-                if((isset($role['businessRole']) && $templateRole) ||
-                    (isset($role['businessRole']) && $bRole && 
-                    in_array($role['businessRole'],$bRole['businessRole']))){
-                    $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']);
+                if((!empty($role['businessRole']['name']) && isset($role['businessRole']['name']) && $templateRole) ||
+                    (!empty($role['businessRole']['name']) && isset($role['businessRole']['name']) && $bRole && 
+                    in_array($role['businessRole']['name'],$bRole['businessRole']))){
+                    $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']['name']);
                     if(count($temp) > 0){
                         $role['business_role_id'] = $temp[0]['id'];
                     }
-                }else if (isset($role['businessRole'])) {
+                }else if (isset($role['businessRole']['name']) && !empty($role['businessRole']['name'])) {
                     continue;
                 }
                 $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
@@ -1326,7 +1416,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     $this->processEntity($childEntityData, $entity['id']);
                     $entityData['child'] = $childEntityData['entity'];
                 }
-                if (isset($entity['pageContent']) && !empty($entity['pageContent'])){
+                if (isset($entity['enable_view']) && $entity['enable_view'] && isset($entity['pageContent']) && !empty($entity['pageContent'])){
                     $pageId = isset($entity['page_uuid']) ? $entity['page_uuid'] : UuidUtil::uuid();
                     $page = $entity['pageContent']['data'];
                     $page['name'] = $entity['name'];
@@ -1397,6 +1487,9 @@ private function checkWorkflowData(&$data,$appUuid)
         
         if (isset($descriptorData["form"]) && empty($descriptorData['form'][0]['name'])) {
             unset($descriptorData["form"]);
+        }
+        if (isset($descriptorData["job"]) && empty($descriptorData['job'][0]['name'])) {
+            unset($descriptorData["job"]);
         }
         if (isset($descriptorData["org"]) && empty($descriptorData['org']['name'])) {
             unset($descriptorData["org"]);

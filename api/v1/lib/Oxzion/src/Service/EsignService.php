@@ -78,6 +78,7 @@ class EsignService extends AbstractService
         }
         $data = array();
         $data['ref_id'] = $ref_id;
+        $data['docPath'] = $documentUrl;
         $esignDocument = new EsignDocument($this->table);
         $esignDocument->assign($data);
         try{
@@ -180,6 +181,9 @@ class EsignService extends AbstractService
             array( 'Authorization'=> 'Bearer '. $auth ));
         $data = json_decode($response,true);
         $this->logger->info("response doc -".$docId." is\n".print_r($data,true));
+        if(isset($data['data']) && isset($data['data']['status']) && $data['data']['status'] == "FINALIZED"){
+            $this->processFinalized($docId);
+        }
         return $data['data']['status'];
 
     }
@@ -190,7 +194,9 @@ class EsignService extends AbstractService
         $returnArray = array(
             'name' => $data['name'],
             'message' => isset($data['message']) ? ($data['message']) : 'Please sign here',
-            'action' => 'send'
+            'action' => 'send',
+            'callback[url]' => $callbackUrl,
+            'callback.url' => $callbackUrl
         );
 
         if(isset($data['cc']) && is_array($data['cc'])){
@@ -222,6 +228,7 @@ class EsignService extends AbstractService
 
         }
 
+        $this->logger->info("Data of Doc -".json_encode($returnArray));
         return $returnArray;
     }
 
@@ -230,6 +237,7 @@ class EsignService extends AbstractService
         $return = $this->restClient->get($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions", array(), 
             array( 'Authorization'=> 'Bearer '. $this->getAuthToken() ));
         $response = json_decode($return,true);
+        $this->logger->info("subscription Setup Response -".$return);
         if(isset($response)){
             $subscribe = array(
                 //"SIGNED" => false,
@@ -244,7 +252,7 @@ class EsignService extends AbstractService
                 }
             }
             foreach ($subscribe as $eventType => $value) {
-                if (!$value){
+                if ($value){
                     $this->addSubcription($eventType);
                 }
             }
@@ -259,6 +267,8 @@ class EsignService extends AbstractService
             "eventType" => $hook
         );
         $response = $this->restClient->postWithHeader($this->config['esign']['docurl']."subscriptions", $post,$header);
+        // $result = json_decode($response,true);
+        $this->logger->info("Add subscription Response -".json_encode($response));
         if (!isset($response)){
             return false;
         }
@@ -270,7 +280,8 @@ class EsignService extends AbstractService
     private function deleteSubscription($subscriptionId) {
         $header = array( "Authorization"=>"Bearer ". $this->getAuthToken());
         $url = $this->config['esign']['docurl']."integrations/VANTAGE/subscriptions/".$subscriptionId;
-        $this->restClient->delete($url, array(),$header);
+        $response = $this->restClient->delete($url, array(),$header);
+        $this->logger->info("remove subscription Response -".$response);
 
     }
 
@@ -294,59 +305,67 @@ class EsignService extends AbstractService
     }
 
     public function signEvent($docId, $event){
+        $this->logger->info("signing event called for doc -".$docId);
         if($event == "FINALIZED"){
             $this->processFinalized($docId);
-        }       
+        }
 
     }
     private function processFinalized($docId){
-        $fileName = $this->downloadFile($docId);
-        try{
-            $this->beginTransaction();
-            $query = "UPDATE ox_esign_document SET status=:status WHERE doc_id=:docId";
-            $param = array('status' => EsignDocument::COMPLETED,
-                            'docId' => $docId);
-            $this->executeUpdateWithBindParameters($query,$param);
-            $query = "UPDATE ox_esign_document_signer as ds 
-                      INNER JOIN ox_esign_document as d ON d.id = ds.esign_document_id
-                      SET ds.status=:status 
-                      WHERE d.doc_id=:docId";
-            $param['status'] = EsignDocumentSigner::COMPLETED;
-            $this->executeUpdateWithBindParameters($query,$param);
-            $this->commit();
-            $sql = $this->getSqlObject();
-            $getID = $sql->select();
-            $getID->from('ox_esign_document')
-                ->columns(array("docPath"))
-                ->where(array('doc_id' => $docId));
-            $responseID = $this->executeQuery($getID)->toArray();
-            $destinationPath = $responseID[0]["docPath"];
-            if(FileUtils::fileExists($destinationPath)){
-                FileUtils::deleteFile($destinationPath,null);
+        $sql = $this->getSqlObject();
+        $getID = $sql->select();
+        $getID->from('ox_esign_document')
+            ->columns(array("docPath","status","ref_id","uuid"))
+            ->where(array('doc_id' => $docId));
+        $responseID = $this->executeQuery($getID)->toArray();
+        if(count($responseID) > 0 && $responseID[0]['status'] != EsignDocument::COMPLETED){
+            $fileName = $this->downloadFile($docId,$responseID[0]['uuid']);
+            try{
+                $this->beginTransaction();
+                $query = "UPDATE ox_esign_document SET status=:status WHERE doc_id=:docId";
+                $param = array('status' => EsignDocument::COMPLETED, 'docId' => $docId);
+                $this->executeUpdateWithBindParameters($query,$param);
+                $query = "UPDATE ox_esign_document_signer as ds INNER JOIN ox_esign_document as d ON d.id = ds.esign_document_id SET ds.status=:status WHERE d.doc_id=:docId";
+                $param['status'] = EsignDocumentSigner::COMPLETED;
+                $this->executeUpdateWithBindParameters($query,$param);
+                $this->commit();
+                $this->logger->info("get Document Info -".json_encode($responseID)); 
+                if (!empty($responseID[0]["docPath"])) {
+                    $destinationPath = $responseID[0]["docPath"];
+                    if(FileUtils::fileExists($destinationPath)){
+                        FileUtils::deleteFile($destinationPath,null);
+                    }
+                    $this->logger->info("Move original File -".$fileName); 
+                    copy($fileName, $destinationPath);
+                    $this->logger->info("Destination -".$destinationPath); 
+                }
+                $refId = $responseID[0]['ref_id'];
+                $fileRef = explode("_",$refId);
+                $fileId = $fileRef[0];
+                $data = json_encode(array('file'   => $fileName,
+                                          'refId' => $refId)); 
+                $this->messageProducer->sendTopic($data, 'DOCUMENT_SIGNED');
+            } catch (Exception $e) {   
+                $this->logger->info("status for doc -".$e->getMessage());
+                $this->rollback();
+                throw $e;
             }
-            copy($fileName, $destinationPath);
-            $refId = $this->getDataFromDocId(array("ref_id"),$docId);
-            $fileRef = explode("_",$refId);
-            $fileId = $fileRef[0];
-            $data = json_encode(array('file'   => $fileName,
-                                      'refId' => $refId)); 
-            $this->messageProducer->sendTopic($data, 'DOCUMENT_SIGNED');
-        } catch (Exception $e) {
-            $this->rollback();
-            throw $e;
+        } else {
+            return;
         }
     }
 
-    private function downloadFile($docId){
-        $response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/pdf',array() ,  array( 'Authorization'=> 'Bearer '. $this->getAuthToken()));  
+    private function downloadFile($docId,$uuid=null){
+        $response = $this->restClient->get($this->config['esign']['docurl'].'documents/'.$docId.'/pdf',array() ,  array( 'Authorization'=> 'Bearer '. $this->getAuthToken())); 
+        $this->logger->info("Download Doc info -".$response); 
         $returnData = json_decode($response,true);
-        $uuid = $this->getDataFromDocId(array("uuid"),$docId);
         $destination = $this->config['APP_ESIGN_FOLDER'];
         $path = $destination.'/'.$uuid.'/signed/';
         if (!FileUtils::fileExists($path)) {
             FileUtils::createDirectory($path);
         }
         $file = $path.'signed.pdf';
+        $this->logger->info("Signed File -".$file); 
         FileUtils::downloadFile($returnData['downloadUrl'],$file);
         return $file;
     }

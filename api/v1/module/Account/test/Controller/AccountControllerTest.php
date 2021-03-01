@@ -183,9 +183,9 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 34);
-        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 11);
-        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 9);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 33);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 10);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 8);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(isset($usrResult[0]['address_id']), true);
@@ -287,9 +287,9 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['employeeId'], NULL);
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 34);
-        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 11);
-        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 9);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 33);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 10);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 8);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $accountName);
         $this->assertEquals(isset($usrResult[0]['address_id']), true);
@@ -609,7 +609,6 @@ class AccountControllerTest extends ControllerTest
         $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
         $data = ['userIdList' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
-            print("Setting up mock\n");
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'username' => 'managertest')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('accountName' => 'Cleveland Black', 'username' => 'orgadmin')), 'USERTOACCOUNT_DELETED')->once()->andReturn();
