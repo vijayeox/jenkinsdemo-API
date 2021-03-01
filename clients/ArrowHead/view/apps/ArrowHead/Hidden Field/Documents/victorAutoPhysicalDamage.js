@@ -1,12 +1,14 @@
 if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
+  var MixofInventoryNew =
+    data.dol_12MonthAvgTotal.new + data.dol_12MonthAvgTotal.used;
+  var NewFloorPlan = data.dol_12MonthAvgTotal.new;
+
   var sumNonEmployeesfurnished = 0;
   var indexValue = 0;
   var primarySecondaryOEM = [];
   var primarySecondaryOEM2 = [];
   var uniqueKeyControls = "";
   var uniqueLotProtection = "";
-  var MixofInventoryNew = 0;
-  var NewFloorPlan = 0;
   var checkMixofInventoryNew = 0;
   var checklotprotectiondolsecguards = "";
   var checklotprotectiondolaftrhrslighting = "";
@@ -21,37 +23,8 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var checkkeycontrolsdailyKeyInventory = "";
   var checkkeycontrolslockedInManagersOffice = "";
   var checkkeycontrolskeysInCars = "";
-  var nonEmployeesfurnishedAuto = 0;
-  var furnishedAutoEmployee = 0;
   var sumfurnishedAutoEmployee = 0;
   var checkBodyShop = "";
-
-  data.locationSchedule.map(row => {
-    MixofInventoryNew +=
-      (row.monthAvgNew ? row.monthAvgNew : 0) -
-      (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0) +
-      ((row.monthAvgUsed ? row.monthAvgUsed : 0) -
-        (row.insuredThroughFloorPlanUsed
-          ? row.insuredThroughFloorPlanUsed
-          : 0));
-
-    NewFloorPlan +=
-      (row.monthAvgNew ? row.monthAvgNew : 0) -
-      (row.insuredThroughFloorPlanNew ? row.insuredThroughFloorPlanNew : 0);
-  });
-
-  data.genericData.locationScheduleGridData.map(item => {
-    furnishedAutoEmployee +=
-      (item.fTEmployeesFurnishedAnAuto ? item.fTEmployeesFurnishedAnAuto : 0) +
-      (item.pTEmployeesFurnishedAnAuto ? item.pTEmployeesFurnishedAnAuto : 0) +
-      (item.nonEmployeesUnderTheAge ? item.nonEmployeesUnderTheAge : 0) +
-      (item.nonEmployeesYearsOldorolder ? item.nonEmployeesYearsOldorolder : 0);
-    nonEmployeesfurnishedAuto +=
-      (item.nonEmployeesYearsOldorolder
-        ? item.nonEmployeesYearsOldorolder
-        : 0) +
-      (item.nonEmployeesUnderTheAge ? item.nonEmployeesUnderTheAge : 0);
-  });
 
   if (NewFloorPlan > 0 && MixofInventoryNew > 0) {
     var row = NewFloorPlan / MixofInventoryNew;
@@ -80,14 +53,14 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     }
   }
 
-  data.genericData.locationScheduleGridData.map(item => {
+  data.buildings.map((item) => {
     if (
       item.occupancyType == "autoSalesAndService" ||
       item.occupancyType == "newCarShowroomAndSales" ||
       item.occupancyType == "vehicleStorageParkingGarage" ||
       item.occupancyType == "autoStorageLot"
     ) {
-      tempSecondaryOEMStore = item.secondaryOEM
+      var tempSecondaryOEMStore = item.secondaryOEM
         ? item.secondaryOEM.length > 0
           ? item.secondaryOEM
           : []
@@ -95,191 +68,176 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       primarySecondaryOEM2 = [
         ...primarySecondaryOEM2,
         item.primaryOEM,
-        ...tempSecondaryOEMStore
+        ...tempSecondaryOEMStore,
       ];
     }
   });
 
-  var DealershipStorageLocationsArray = data.locationSchedule
-    .map(locationItem => {
+  var DealershipStorageLocationsArray = data.locations
+    .map((locationItem) => {
       var resultOccupancyType = "";
       var resultPrimaryOEM = "";
-      locationItem.buildingDetails.some(buildingItem => {
-        if (
-          buildingItem.occupancyType == "autoSalesAndService" ||
-          buildingItem.occupancyType == "newCarShowroomAndSales"
-        ) {
-          resultOccupancyType = "Dealership";
-          return true;
-        } else if (
-          buildingItem.occupancyType == "vehicleStorageParkingGarage" ||
-          buildingItem.occupancyType == "autoStorageLot"
-        ) {
-          resultOccupancyType = "Storage";
-        } else {
-          resultOccupancyType =
-            resultOccupancyType == "" ? undefined : resultOccupancyType;
-        }
-      });
+      data.buildings
+        .filter((i) => i.locationNum == locationItem.locationNum)
+        .some((buildingItem) => {
+          if (
+            buildingItem.occupancyType == "autoSalesAndService" ||
+            buildingItem.occupancyType == "newCarShowroomAndSales"
+          ) {
+            resultOccupancyType = "Dealership";
+            return true;
+          } else if (
+            buildingItem.occupancyType == "vehicleStorageParkingGarage" ||
+            buildingItem.occupancyType == "autoStorageLot"
+          ) {
+            resultOccupancyType = "Storage";
+          } else {
+            resultOccupancyType =
+              resultOccupancyType == "" ? undefined : resultOccupancyType;
+          }
+        });
       tempSecondaryOEM = [];
       resultPrimaryOEM =
         [
           ...new Set(
-            locationItem.buildingDetails
-              .map(i => (i.primaryOEM ? " " + i.primaryOEM : false))
-              .filter(i => i)
-          )
+            data.buildings
+              .filter((i) => i.locationNum == locationItem.locationNum)
+              .map((i) => (i.primaryOEM ? " " + i.primaryOEM : false))
+              .filter((i) => i)
+          ),
         ] + "";
-      var copylocationItem = { ...locationItem };
-      copylocationItem.buildingDetails = "";
 
       return resultOccupancyType
         ? {
-            ...copylocationItem,
-            checkAvgExposure:
-              (locationItem.monthAvgNew > 0 ? locationItem.monthAvgNew : 0) +
-              (locationItem.monthAvgUsed > 0 ? locationItem.monthAvgUsed : 0) +
-              (locationItem.monthAvgRoadDemosFurnishedAutos > 0
-                ? locationItem.monthAvgRoadDemosFurnishedAutos
-                : 0) +
-              (locationItem.monthAvgRoadLoanersShopService > 0
-                ? locationItem.monthAvgRoadLoanersShopService
-                : 0),
+            ...locationItem,
+            checkAvgExposure: data.dol_12MonthAvg.filter(
+              (i) => i.locationNum == locationItem.locationNum
+            )[0].total,
             indexValue: (indexValue += 1),
             PrimaryOEMList: resultPrimaryOEM,
-            DOLOccupancy: resultOccupancyType
+            DOLOccupancy: resultOccupancyType,
           }
         : false;
     })
-    .filter(filterItem => (filterItem ? filterItem : false));
+    .filter((filterItem) => (filterItem ? filterItem : false));
 
-  data.dolkeycntrlsameallloc == "no"
-    ? data.locationSchedule.map(item => {
-        if (item.locationNum > 1) {
-          if (item.locationGarageLiabilityKeyControls) {
-            uniqueKeyControls += " Loc-" + item.locationNum + ": ";
-            item.locationGarageLiabilityKeyControls.none == true
-              ? (uniqueKeyControls += "None,")
-              : "";
-            item.locationGarageLiabilityKeyControls.lockbox == true
-              ? (uniqueKeyControls += "Lock Boxes,")
-              : "";
-            item.locationGarageLiabilityKeyControls.computerizedKeyVault == true
-              ? (uniqueKeyControls += "Key Machine,")
-              : "";
-            item.locationGarageLiabilityKeyControls.lockingKeyCabinet == true
-              ? (uniqueKeyControls += "Key Board,")
-              : "";
-            item.locationGarageLiabilityKeyControls.dailyKeyInventory == true
-              ? (uniqueKeyControls += "Daily Key Inventory,")
-              : "";
-            item.locationGarageLiabilityKeyControls.lockedInManagersOffice ==
-            true
-              ? (uniqueKeyControls += "Key Board,")
-              : "";
-            item.locationGarageLiabilityKeyControls.keysInCars == true
-              ? (uniqueKeyControls += "Keys in Cars,")
-              : "";
-            uniqueKeyControls = uniqueKeyControls.slice(0, -1);
-          }
-        }
-        if (item.locationNum == 1) {
-          if (item.locationGarageLiabilityKeyControls) {
-            item.locationGarageLiabilityKeyControls.none == true
-              ? (checkkeycontrolsnone = "yes")
-              : "";
-            item.locationGarageLiabilityKeyControls.lockbox == true
-              ? (checkkeycontrolslockbox = "yes")
-              : "";
-            item.locationGarageLiabilityKeyControls.computerizedKeyVault == true
-              ? (checkkeycontrolscomputerizedKeyVault = "yes")
-              : "";
-            item.locationGarageLiabilityKeyControls.lockingKeyCabinet == true
-              ? (checkkeycontrolslockingKeyCabinet = "yes")
-              : "";
-            item.locationGarageLiabilityKeyControls.dailyKeyInventory == true
-              ? (checkkeycontrolsdailyKeyInventory = "yes")
-              : "";
-            item.locationGarageLiabilityKeyControls.lockedInManagersOffice ==
-            true
-              ? (checkkeycontrolslockedInManagersOffice = "yes")
-              : "";
-            item.locationGarageLiabilityKeyControls.keysInCars == true
-              ? (checkkeycontrolskeysInCars = "yes")
-              : "";
-          }
-        }
-      })
-    : "";
+  data.dol_Protection.map((item) => {
+    if (item.locationNum > 1) {
+      if (item.keyControls) {
+        uniqueKeyControls += " Loc-" + item.locationNum + ": ";
+        item.keyControls.none == true ? (uniqueKeyControls += "None,") : "";
+        item.keyControls.lockbox == true
+          ? (uniqueKeyControls += "Lock Boxes,")
+          : "";
+        item.keyControls.computerizedKeyVault == true
+          ? (uniqueKeyControls += "Key Machine,")
+          : "";
+        item.keyControls.lockingKeyCabinet == true
+          ? (uniqueKeyControls += "Key Board,")
+          : "";
+        item.keyControls.dailyKeyInventory == true
+          ? (uniqueKeyControls += "Daily Key Inventory,")
+          : "";
+        item.keyControls.lockedInManagersOffice == true
+          ? (uniqueKeyControls += "Key Board,")
+          : "";
+        item.keyControls.keysInCars == true
+          ? (uniqueKeyControls += "Keys in Cars,")
+          : "";
+        uniqueKeyControls = uniqueKeyControls.slice(0, -1);
+      }
+    }
+    if (item.locationNum == 1) {
+      if (item.keyControls) {
+        item.keyControls.none == true ? (checkkeycontrolsnone = "yes") : "";
+        item.keyControls.lockbox == true
+          ? (checkkeycontrolslockbox = "yes")
+          : "";
+        item.keyControls.computerizedKeyVault == true
+          ? (checkkeycontrolscomputerizedKeyVault = "yes")
+          : "";
+        item.keyControls.lockingKeyCabinet == true
+          ? (checkkeycontrolslockingKeyCabinet = "yes")
+          : "";
+        item.keyControls.dailyKeyInventory == true
+          ? (checkkeycontrolsdailyKeyInventory = "yes")
+          : "";
+        item.keyControls.lockedInManagersOffice == true
+          ? (checkkeycontrolslockedInManagersOffice = "yes")
+          : "";
+        item.keyControls.keysInCars == true
+          ? (checkkeycontrolskeysInCars = "yes")
+          : "";
+      }
+    }
+  });
 
-  data.dollotprotection == "no"
-    ? data.locationSchedule.map(item => {
-        if (item.locationNum > 1) {
-          uniqueLotProtection += " Loc-" + item.locationNum + ": ";
-          if (item.dolsecguards == "yes") {
-            uniqueLotProtection += "Night Watchman,";
-          }
-          if (item.dolaftrhrslighting == "yes") {
-            uniqueLotProtection += "Security Lighting,";
-          }
-          if (item.dolEntranceQuestions.postChain == "yes") {
-            uniqueLotProtection += "Post and Chains,";
-          }
-          if (
-            item.dolsurvcammoniintrunotifi == "yes" ||
-            item.dolsurcamnotmoniotrd == "yes"
-          ) {
-            uniqueLotProtection += "Video Surveillance,";
-          }
-          if (item.dolEntranceQuestions.fullyFencedPremises == "yes") {
-            uniqueLotProtection += "Fenced,";
-          }
-          if (
-            item.dolsecguards != "yes" &&
-            item.dolaftrhrslighting != "yes" &&
-            item.dolEntranceQuestions.postChain != "yes" &&
-            item.dolsurvcammoniintrunotifi != "yes" &&
-            item.dolsurcamnotmoniotrd != "yes" &&
-            item.dolEntranceQuestions.fullyFencedPremises != "yes"
-          ) {
-            uniqueLotProtection += "None,";
-          }
-          uniqueLotProtection = uniqueLotProtection.slice(0, -1);
-        }
-        if (item.locationNum == 1) {
-          if (item.dolsecguards == "yes") {
-            checklotprotectiondolsecguards = "yes";
-          }
-          if (item.dolaftrhrslighting == "yes") {
-            checklotprotectiondolaftrhrslighting = "yes";
-          }
-          if (item.dolEntranceQuestions.postChain == "yes") {
-            checklotprotectionpostChain = "yes";
-          }
-          if (
-            item.dolsurvcammoniintrunotifi == "yes" ||
-            item.dolsurcamnotmoniotrd == "yes"
-          ) {
-            checklotprotectionsurveillance = "yes";
-          }
-          if (item.dolEntranceQuestions.fullyFencedPremises == "yes") {
-            checklotprotectionfullyFencedPremises = "yes";
-          }
-          if (
-            item.dolsecguards != "yes" &&
-            item.dolaftrhrslighting != "yes" &&
-            item.dolEntranceQuestions.postChain != "yes" &&
-            item.dolsurvcammoniintrunotifi != "yes" &&
-            item.dolsurcamnotmoniotrd != "yes" &&
-            item.dolEntranceQuestions.fullyFencedPremises != "yes"
-          ) {
-            checklotprotectionnone = "yes";
-          }
-        }
-      })
-    : "";
+  data.dol_Protection.map((item) => {
+    if (item.locationNum > 1) {
+      uniqueLotProtection += " Loc-" + item.locationNum + ": ";
+      if (item.premisesLotProtection.securityGuards == "yes") {
+        uniqueLotProtection += "Night Watchman,";
+      }
+      if (item.premisesLotProtection.afterHoursLighting == "yes") {
+        uniqueLotProtection += "Security Lighting,";
+      }
+      if (item.entranceQuestions.postChain == "yes") {
+        uniqueLotProtection += "Post and Chains,";
+      }
+      if (
+        item.entranceQuestions.camerasMonitored == "yes" ||
+        item.entranceQuestions.camerasNotMonitored == "yes"
+      ) {
+        uniqueLotProtection += "Video Surveillance,";
+      }
+      if (item.entranceQuestions.fullyFencedPremises == "yes") {
+        uniqueLotProtection += "Fenced,";
+      }
+      if (
+        item.premisesLotProtection.securityGuards != "yes" &&
+        item.premisesLotProtection.afterHoursLighting != "yes" &&
+        item.entranceQuestions.postChain != "yes" &&
+        item.entranceQuestions.camerasMonitored != "yes" &&
+        item.entranceQuestions.camerasNotMonitored != "yes" &&
+        item.entranceQuestions.fullyFencedPremises != "yes"
+      ) {
+        uniqueLotProtection += "None,";
+      }
+      uniqueLotProtection = uniqueLotProtection.slice(0, -1);
+    }
+    if (item.locationNum == 1) {
+      if (item.premisesLotProtection.securityGuards == "yes") {
+        checklotprotectiondolsecguards = "yes";
+      }
+      if (item.premisesLotProtection.afterHoursLighting == "yes") {
+        checklotprotectiondolaftrhrslighting = "yes";
+      }
+      if (item.entranceQuestions.postChain == "yes") {
+        checklotprotectionpostChain = "yes";
+      }
+      if (
+        item.entranceQuestions.camerasMonitored == "yes" ||
+        item.entranceQuestions.camerasNotMonitored == "yes"
+      ) {
+        checklotprotectionsurveillance = "yes";
+      }
+      if (item.entranceQuestions.fullyFencedPremises == "yes") {
+        checklotprotectionfullyFencedPremises = "yes";
+      }
+      if (
+        item.premisesLotProtection.securityGuards != "yes" &&
+        item.premisesLotProtection.afterHoursLighting != "yes" &&
+        item.entranceQuestions.postChain != "yes" &&
+        item.entranceQuestions.camerasMonitored != "yes" &&
+        item.entranceQuestions.camerasNotMonitored != "yes" &&
+        item.entranceQuestions.fullyFencedPremises != "yes"
+      ) {
+        checklotprotectionnone = "yes";
+      }
+    }
+  });
 
-  data.genericData.locationScheduleGridData.some(locationItem => {
+  data.buildings.some((locationItem) => {
     if (locationItem.occupancyType == "bodyShop") {
       checkBodyShop = "Yes";
       return true;
@@ -288,6 +246,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       return false;
     }
   });
+
   value = {
     checkAutobody: checkBodyShop ? checkBodyShop : "",
     checkfloodloss: data.dolflodlossdescib
@@ -296,8 +255,15 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
         : "false"
       : "",
     DealershipStorageLocationsArray: DealershipStorageLocationsArray,
-    sumNonEmployeesfurnished: nonEmployeesfurnishedAuto,
-    sumfurnishedAutoEmployee: furnishedAutoEmployee,
+    sumfurnishedAutoEmployee:
+      data.employeeListTotal.fTEmployeesFurnishedAnAuto +
+      data.employeeListTotal.pTEmployeesFurnishedAnAuto +
+      data.employeeListTotal.nonEmployeesYearsOldorolder +
+      data.employeeListTotal.nonEmployeesUnderTheAge,
+    sumNonEmployeesfurnished:
+      data.employeeListTotal.nonEmployeesYearsOldorolder +
+      data.employeeListTotal.nonEmployeesUnderTheAge,
+
     primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + "",
     checkMixofInventoryNew: checkMixofInventoryNew,
     uniqueLotProtection:
@@ -339,7 +305,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       : "",
     checkkeycontrolskeysInCars: checkkeycontrolskeysInCars
       ? checkkeycontrolskeysInCars
-      : ""
+      : "",
   };
   console.log(value);
 }
