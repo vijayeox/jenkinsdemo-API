@@ -70,6 +70,7 @@ class DispatchMail extends MailDelegate
             $size = FileUtils::fileExists($mailDocumentsDir . ".zip") ? filesize($mailDocumentsDir . ".zip") : 0;
             if($size > 1000000) {
                 $mailTemplateFlag = 1;
+                $emailAttachments = [];
                 FileUtils::rmDir($mailDocumentsDir);
             } else {
                 array_push($emailAttachments,  $mailDocumentsDir . ".zip");
