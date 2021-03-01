@@ -79,18 +79,24 @@ class DispatchMail extends MailDelegate
 
         $mailOptions = array();
         $mailOptions['to'] = $submissionEmail;
-        if($mailTemplateFlag == 0) {
-            $mailOptions['subject'] = "New business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
-        } else {
-            $mailOptions['subject'] = "Attachment failed for new business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
-        }
+        $mailOptions['subject'] = "New business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
         $mailOptions['attachments'] = $emailAttachments;
         $this->logger->info("Arrowhead Policy Mail " . print_r($mailOptions, true));
         $data['orgUuid'] = "34bf01ab-79ca-42df-8284-965d8dbf290e";
-        $data['mailTemplateFlag'] = $mailTemplateFlag;
         // $data['orgUuid'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
-        $response = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
-        $this->logger->info("Mail has " . ($response ? "been sent." : "not been sent."));
+        $response = array();
+        $responseMail1 = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
+        $response['Mail1'] = $responseMail1;
+        $this->logger->info("Mail 1 has " . ($responseMail1 ? "been sent." : "not been sent."));
+
+        if($mailTemplateFlag == 1) {
+            $mailOptions['subject'] = "Attachment failed for new business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
+            $mailOptions['attachments'] = [];
+            $data['mailTemplateFlag'] = $mailTemplateFlag;
+            $responseMail2 = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
+            $response['Mail2'] = $responseMail2;
+            $this->logger->info("Mail 2 has " . ($responseMail2 ? "been sent." : "not been sent."));
+        }
         return $response;
     }
 

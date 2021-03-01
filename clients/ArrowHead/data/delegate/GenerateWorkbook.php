@@ -303,7 +303,10 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
                 $tempFileData["fileId"] = $fileId;
                 $tempFileData["orgId"] = $orgId;
                 $mailResponse = $this->executeDelegate("DispatchMail", $tempFileData);
-                $data['mailStatus'] = $mailResponse;
+                $data['mailStatus'] = $mailResponse['Mail1'];
+                if(isset($mailResponse['Mail2'])) {
+                    $data['mailStatus2'] = $mailResponse['Mail2'];
+                }
             }
             $data["status"] = "Generated";
         }

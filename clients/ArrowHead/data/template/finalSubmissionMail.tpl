@@ -331,17 +331,17 @@
                         <p>Phone : {$businessPhone}</p>
                         <p>Email : {$businessEmail}</p>
                         <br />
-                        {if $mailTemplateFlag == 0}
-                          <p>
-                            The above referenced account has been submitted on the
-                            ArrowHead portal. Please find the attached carrier
-                            documents.
-                          </p>
-                        {else}
+                        {if isset($mailTemplateFlag)}
                           <p>
                             The above referenced account has been submitted on the
                             ArrowHead portal. Since the attachment size is too big please
                             download the files from the portal.
+                          </p>
+                        {else}
+                          <p>
+                            The above referenced account has been submitted on the
+                            ArrowHead portal. Please find the attached carrier
+                            documents.
                           </p>
                         {/if}
                         <br />
