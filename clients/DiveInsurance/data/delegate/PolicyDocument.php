@@ -2409,7 +2409,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $length = sizeof($previous_data);
         $policy =  $previous_data[$length - 1];
         $groupLength = 0;
-        $groupPLArray = array('padi', 'firstname', 'lastname', 'rating', 'status', 'nameOfInstitution','upgradeStatus','cancel');
+        $groupPLArray = array('padi', 'firstname', 'lastname', 'status', 'nameOfInstitution','upgradeStatus','cancel');
         $groupAIArray = array('name', 'address', 'city', 'state', 'country', 'zip');
 
         if (isset($data['upgradeGroupLiability'])) {
