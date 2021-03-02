@@ -14,6 +14,7 @@ use Zend\Db\Adapter\Exception\InvalidQueryException;
 use \Exception;
 use Zend\Db\ResultSet\ResultSet;
 use Oxzion\Utils\FileUtils;
+use Mockery;
 
 class FileServiceTest extends AbstractServiceTest
 {
@@ -1513,6 +1514,523 @@ class FileServiceTest extends AbstractServiceTest
         $queryResult = $this->runQuery($sqlQuery);
         $this->assertEquals(100, $queryResult[0]['user_id']);
         $this->assertEquals($id, $queryResult[0]['file_id']);  
+    }
+
+
+    //Test for file assignment for a user
+    public function testSetUserAssigneesForUser() {
+        $data = [
+        
+            "assignedToName" => "Admin Test",
+            "assignedto" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45"
+                ],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observers" => [],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+    //Test for file assignment for a owner
+    public function testSetUserAssigneesForOwner() {
+        $data = [
+        
+            "assignedToName" => "Admin Test",
+            "assignedto" => "owner",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45"
+                ],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observers" => [],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for file assignment for Manager
+    public function testSetUserAssigneesForManager() {
+        $data = [
+        
+            "assignedToName" => "Admin Test",
+            "assignedto" => "manager",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observers" => [],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for file assignment for observers data
+    public function testSetUserAssigneesForObservers() {
+        $data = [
+            "assignedToName" => "Admin Test",
+            "assignedto" => "4fd9f04d-758f-11e9-b2d5-68ecc57cde45",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observers"=>[
+                "768d1fb9-de9c-46c3-8d5c-23e0e484ce2e",
+                "fbde2453-17eb-4d7f-909a-0fccc6d53e7a"
+            ],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task",
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+    //Test for group assignees for assigned_group
+    public function testSetGroupAssigneesForAssignedGroup() {
+        $data = [
+            "assignedToName" => "Admin Test",
+            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_group" => [],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+     //Test for file assignment for group observers
+    public function testSetGroupAssigneesForObservers() {
+        $data = [
+            "assignedToName" => "Admin Test",
+            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_group"=>[
+                "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            ],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+    //Test for file assignment for roles
+    public function testSetRoleAssigneesForRoles() {
+        $data = [
+            "assignedToName" => "Admin Test",
+            "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_role"=> [],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+    //Test for file assignment for role observers
+    public function testSetRoleAssigneesForObservers() {
+        $data = [
+            "assignedToName" => "Admin Test",
+            "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_role"=>[
+                "e116dab7-ab62-4292-a9f9-06d095a86fed"
+            ],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
+        $content = $mockFileService->createFile($data);
+        $this->assertEquals(true, $content);
+    }
+
+    //Test for Updating file assignment for users 
+    public function testSetUserAssigneesForUserUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+                "assignedToName" => "Admin Test",
+                "assignedto" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                "assignedtoObj" => 
+                    [
+                        "name" => "Admin Test",
+                        "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                    ],
+                "attachments" => [],
+            
+                "description" => "",
+                "end_date" => "2021-03-04 00:00:00",
+                "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+                "name" => "cfggfkkk",
+                "next_action_date" => "2021-03-03 00:00:00",
+                "observers" => [],
+                "start_date" => "2021-03-01",
+                "status" => "Assigned",
+                "username" => "Admin Test",
+                "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+                "app_id" => 19,
+                "entity_name" => "Task",
+            
+            ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
+    }
+
+    //Test for Updating file assignment for a owner
+    public function testSetUserAssigneesForOwnerUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+            "assignedToName" => "Admin Test",
+            "assignedto" => "owner",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+        
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observers" => [],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task",
+        
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for Updating file assignment for Manager
+    public function testSetUserAssigneesForManagerUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+            "assignedToName" => "Admin Test",
+            "assignedto" => "Manager",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+        
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observers" => [],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task",
+        
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for Updating file assignment for User Observers
+    public function testSetUserAssigneesForObserversUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+            "assignedToName" => "Admin Test",
+            "assignedto" => "Manager",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+        
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observers"=>[
+                "768d1fb9-de9c-46c3-8d5c-23e0e484ce2e",
+                "fbde2453-17eb-4d7f-909a-0fccc6d53e7a"
+            ],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for Updating file assignment for Groups
+    public function testSetGroupAssigneesForAssignedGroupUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+            "assignedToName" => "Admin Test",
+            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+        
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observers"=>[
+                "768d1fb9-de9c-46c3-8d5c-23e0e484ce2e",
+                "fbde2453-17eb-4d7f-909a-0fccc6d53e7a"
+            ],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for Updating file assignment for Group Observers
+    public function testSetGroupAssigneesForObserversUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+            "assignedToName" => "Admin Test",
+            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+        
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observer_group"=>[
+                "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            ],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for Updating file assignment for Roles
+    public function testSetRoleAssigneesForRolesUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+            "assignedToName" => "Admin Test",
+            "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+        
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observer_role"=>[],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
+    }
+
+    // Test for Updating file assignment for Roles group
+    public function testSetRoleAssigneesForObserversUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $data = [
+
+            "assignedToName" => "Admin Test",
+            "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+        
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observer_role"=>[
+                "e116dab7-ab62-4292-a9f9-06d095a86fed"
+            ],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Admin Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        
+        ];
+        $mockFileService = Mockery::mock('FileService');
+        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
+        $content = $mockFileService->updateFile($data, $id);
+        $this->assertEquals(true, $content);
     }
 
 }
