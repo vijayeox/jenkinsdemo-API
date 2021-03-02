@@ -185,7 +185,7 @@ class EsignServiceTest extends AbstractServiceTest
                                         "fields" => json_encode($fields),
                                         "action" => "send",
                                         "callback" => "{}",
-                                        "group" => UuidUtil::uuid(),
+                                        "team" => UuidUtil::uuid(),
                                         "sender" => "0f3c3dd9-04fa-4e01-b6c2-e9c3340514c0",
                                         "created" => "2020-12-27T12:35:10.203Z"
                                     ]

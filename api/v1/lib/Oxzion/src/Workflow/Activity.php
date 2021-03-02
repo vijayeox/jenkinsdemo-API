@@ -15,7 +15,7 @@ interface Activity
 
     public function resolveActivity($activityId, $parameterArray);
     
-    public function getActivitiesByGroup($groupId);
+    public function getActivitiesByTeam($teamId);
 
     public function submitTaskForm($activityId, $parameterArray);
 

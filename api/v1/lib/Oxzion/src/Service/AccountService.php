@@ -33,7 +33,7 @@ class AccountService extends AbstractService
     private $organizationService;
     private $entityService;
     static $userField = array('name' => 'ox_user.name', 'id' => 'ox_user.id', 'city' => 'ox_address.city', 'country' => 'ox_address.country', 'address' => 'ox_address.address1', 'address2' => 'ox_address.address2', 'state' => 'ox_address.state');
-    static $groupField = array('name' => 'oxg.name', 'description' => 'oxg.description', 'date_created' => 'oxg.date_created');
+    static $teamField = array('name' => 'oxg.name', 'description' => 'oxg.description', 'date_created' => 'oxg.date_created');
     static $projectField = array('name' => 'oxp.name', 'description' => 'oxp.description', 'date_created' => 'oxp.date_created');
     static $announcementField = array('name' => 'oxa.name', 'description' => 'oxa.description');
     static $roleField = array('name' => 'oxr.name', 'description' => 'oxr.description');
@@ -766,7 +766,7 @@ class AccountService extends AbstractService
             'total' => (int)$count[0]['count(DISTINCT ox_user.uuid)']);
     }
 
-    public function getAccountGroupsList($id, $filterParams = null)
+    public function getAccountTeamsList($id, $filterParams = null)
     {
         if (!isset($id)) {
             throw new EntityNotFoundException("Invalid Account");
@@ -778,18 +778,18 @@ class AccountService extends AbstractService
         $sort = "oxg.name";
 
         $select = "SELECT oxg.uuid,oxg.name,oxg.description,oxu.uuid as managerId, oxg1.uuid as parent_id, oxo.uuid as accountId";
-        $from = "FROM `ox_group` as oxg
+        $from = "FROM `ox_team` as oxg
                     LEFT JOIN ox_user as oxu on oxu.id = oxg.manager_id
-                    LEFT JOIN ox_group as oxg1 on oxg.parent_id = oxg1.id
+                    LEFT JOIN ox_team as oxg1 on oxg.parent_id = oxg1.id
                     LEFT JOIN ox_account as oxo on oxg.account_id = oxo.id";
 
         $cntQuery = "SELECT count(oxg.uuid) " . $from;
 
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
-            $where = $this->createWhereClause($filterArray, self::$groupField);
+            $where = $this->createWhereClause($filterArray, self::$teamField);
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                $sort = $this->createSortClause($filterArray[0]['sort'], self::$groupField);
+                $sort = $this->createSortClause($filterArray[0]['sort'], self::$teamField);
             }
             $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 20;
             $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;

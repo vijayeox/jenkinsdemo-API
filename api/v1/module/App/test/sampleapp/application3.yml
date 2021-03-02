@@ -60,23 +60,23 @@ pages:
               - ur: ''
 menu:
   - name: Home
-    group: Policy Holder
+    team: Policy Holder
     page: My Policies
       
   - name: My History
-    group: Policy Holder
+    team: Policy Holder
     page: All Policies
       
   - name: Home
-    group: CSR
+    team: CSR
     page: Dashboard
       
   - name: Requests
-    group: CSR
+    team: CSR
     page: Requests
       
   - name: Manage Policies
-    group: CSR
+    team: CSR
     page: Manage Policies
       
 workflow:
@@ -86,7 +86,7 @@ workflow:
     entity: dummyEntity1
   - name: Group Liability
     uuid: 76dc0348-910c-4ae8-a05a-78ba47803208
-    bpmn_file: group_liability.bpmn
+    bpmn_file: team_liability.bpmn
     entity: dummyEntity1
   - name: Dive Store
     uuid: cb99e634-de00-468d-9230-d6f77d241c5b

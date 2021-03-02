@@ -78,7 +78,7 @@
             <directory>./module/User/test/Controller/UserControllerTest.php</directory>
             <directory>./module/User/test/Controller/UserSessionControllerTest.php</directory>
             <directory>./module/Email/test</directory>
-            <directory>./module/Group/test</directory>
+            <directory>./module/Team/test</directory>
             <directory>./module/Contact/test</directory>
             <directory>./module/Privilege/test</directory>
             <directory>./module/PaymentGateway/test</directory>

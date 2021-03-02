@@ -256,43 +256,43 @@ return [
                     ],
                 ],
             ],
-            'projectcreategroupfromcallback' => [
+            'projectcreateteamfromcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/task/creategroup',
+                    'route'    => '/callback/task/createteam',
                     'defaults' => [
                         'controller' => Controller\TaskCallbackController::class,
-                        'action' => 'creategroup',
+                        'action' => 'createteam',
                     ],
                 ],
             ],
-            'projectupdategroupfromcallback' => [
+            'projectupdateteamfromcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/task/updategroup',
+                    'route'    => '/callback/task/updateteam',
                     'defaults' => [
                         'controller' => Controller\TaskCallbackController::class,
-                        'action' => 'updateGroup',
+                        'action' => 'updateTeam',
                     ],
                 ],
             ],
-            'projectdeletegroupfromcallback' => [
+            'projectdeleteteamfromcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/task/deletegroup',
+                    'route'    => '/callback/task/deleteteam',
                     'defaults' => [
                         'controller' => Controller\TaskCallbackController::class,
-                        'action' => 'deleteGroup',
+                        'action' => 'deleteTeam',
                     ],
                 ],
             ],
-            'projectupdategroupusersfromcallback' => [
+            'projectupdateteamusersfromcallback' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/callback/task/updategroupusers',
+                    'route'    => '/callback/task/updateteamusers',
                     'defaults' => [
                         'controller' => Controller\TaskCallbackController::class,
-                        'action' => 'updateGroupUsers',
+                        'action' => 'updateTeamUsers',
                     ],
                 ],
             ],

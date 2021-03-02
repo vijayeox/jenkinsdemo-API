@@ -29,7 +29,7 @@ class AccountControllerTest extends ControllerTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Account.yml");
-        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Group/test/Dataset/Group.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Team/test/Dataset/Team.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Project/test/Dataset/Project.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Announcement/test/Dataset/Announcement.yml");
         return $dataset;
@@ -894,26 +894,26 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testGetAccountGroups()
+    public function testGetAccountTeams()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams', 'GET');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group');
+        $this->assertEquals($content['data'][0]['name'], 'Test Team');
         $this->assertEquals($content['data'][0]['description'], 'Description Test Data');
         $this->assertEquals($content['data'][0]['managerId'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['parent_id'], null);
         $this->assertEquals($content['data'][0]['accountId'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
-        $this->assertEquals($content['data'][1]['name'], 'Test Group 5');
-        $this->assertEquals($content['data'][1]['description'], 'Group Description');
+        $this->assertEquals($content['data'][1]['name'], 'Test Team 5');
+        $this->assertEquals($content['data'][1]['description'], 'Team Description');
         $this->assertEquals($content['data'][1]['managerId'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][2]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][2]['name'], 'Test Group Once Again');
+        $this->assertEquals($content['data'][2]['name'], 'Test Team Once Again');
         $this->assertEquals($content['data'][2]['description'], 'Description for the second test cases');
         $this->assertEquals($content['data'][2]['managerId'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][2]['parent_id'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
@@ -921,16 +921,16 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testGetAccountGroupsWithFilter()
+    public function testGetAccountTeamsWithFilter()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"oup"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"oup"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group');
+        $this->assertEquals($content['data'][0]['name'], 'Test Team');
         $this->assertEquals($content['data'][0]['description'], 'Description Test Data');
         $this->assertEquals($content['data'][0]['managerId'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['parent_id'], null);
@@ -938,51 +938,51 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testGetAccountGroupsWithSortFilter()
+    public function testGetAccountTeamsWithSortFilter()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][0]['name'], 'Test Team 5');
         $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][1]['name'], 'Test Group Once Again');
+        $this->assertEquals($content['data'][1]['name'], 'Test Team Once Again');
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testGetAccountGroupsWithPagsize()
+    public function testGetAccountTeamsWithPagsize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams?filter=[{"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group');
+        $this->assertEquals($content['data'][0]['name'], 'Test Team');
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testGetAccountGroupsWithPagination()
+    public function testGetAccountTeamsWithPagination()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"skip":1,"take":1}]', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][0]['name'], 'Test Team 5');
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testGetAccountGroupsWithInvalidAccountId()
+    public function testGetAccountTeamsWithInvalidAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-/groups?filter=[{"skip":1,"take":1}]', 'GET');
+        $this->dispatch('/account/53012471-2863-/teams?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -990,10 +990,10 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Invalid Account');
     }
 
-    public function testGetAccountGroupsWithInvalidFilter()
+    public function testGetAccountTeamsWithInvalidFilter()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);

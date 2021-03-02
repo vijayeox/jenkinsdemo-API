@@ -218,18 +218,18 @@ class AccountController extends AbstractApiController
     }
 
     /**
-     * GET Account Groups API
+     * GET Account Teams API
      * @api
-     * @link /account/:accountId/groups
+     * @link /account/:accountId/teams
      * @method GET
      **/
-    public function getListofAccountGroupsAction()
+    public function getListofAccountTeamsAction()
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
         $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $result = $this->accountService->getAccountGroupsList($accountId, $filterParams);
+            $result = $this->accountService->getAccountTeamsList($accountId, $filterParams);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);

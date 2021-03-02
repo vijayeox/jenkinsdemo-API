@@ -102,32 +102,32 @@ return [
                     ],
                 ],
             ],
-            'addUserToGroup' => [
+            'addUserToTeam' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/:userId/addusertogroup/:groupId',
+                    'route' => '/user/:userId/addusertoteam/:teamId',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'addUserToGroup',
+                        'action' => 'addUserToTeam',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'addUserToGroup' => 'MANAGE_USER_WRITE',
+                            'addUserToTeam' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],
             ],
-            'removeUserFromGroup' => [
+            'removeUserFromTeam' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/:userId/removeuserfromgroup',
+                    'route' => '/user/:userId/removeuserfromteam',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'DELETE',
-                        'action' => 'removeUserFromGroup',
+                        'action' => 'removeUserFromTeam',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'removeUserFromGroup' => 'MANAGE_USER_WRITE',
+                            'removeUserFromTeam' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],

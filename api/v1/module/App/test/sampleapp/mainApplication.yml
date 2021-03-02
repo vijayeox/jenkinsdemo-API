@@ -37,7 +37,7 @@ dashboard:
     content: content/Dashboard.txt
 menu:
   - name: Home
-    group: Policy Holder
+    team: Policy Holder
     page:
       - name: My Policies
         content:
@@ -52,7 +52,7 @@ menu:
                   - field: ''
                     title: ''
   - name: My History
-    group: Policy Holder
+    team: Policy Holder
     page:
       - name: All Policies
         content:
@@ -60,14 +60,14 @@ menu:
             content:
               - url: ''
   - name: Home
-    group: CSR
+    team: CSR
     page:
       - name: Dashboard
         content:
           - type: DASHBOARD
             dashboard: Dashboard
   - name: Requests
-    group: CSR
+    team: CSR
     page:
       - name: Requests
         content:
@@ -75,7 +75,7 @@ menu:
             content:
               - url: ''
   - name: Manage Policies
-    group: CSR
+    team: CSR
     page:
       - name: Manage Policies
         content:
@@ -89,7 +89,7 @@ workflow:
     entity: null
   - name: Group Liability
     id: 76dc0348-910c-4ae8-a05a-78ba47803208
-    bpmn_file: group_liability.bpmn
+    bpmn_file: team_liability.bpmn
   - name: Dive Store
     id: cb99e634-de00-468d-9230-d6f77d241c5b
     bpmn_file: dive_store.bpmn

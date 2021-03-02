@@ -52,7 +52,7 @@ class AnnouncementService extends AbstractService
      *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *        media_type : string,
      *        media_location : string,
-     *        groups : [{'id' : integer}.....multiple*],
+     *        teams : [{'id' : integer}.....multiple*],
      *        type: enum('HOMESCREEN','ANNOUNCEMENT')
      * </code>
      * @return integer 0|$id of Announcement Created
@@ -129,7 +129,7 @@ class AnnouncementService extends AbstractService
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      *  type: enum('HOMESCREEN','ANNOUNCEMENT')
      * }
      * </code>
@@ -184,32 +184,32 @@ class AnnouncementService extends AbstractService
     }
 
     /**
-     * @ignore updateGroups
+     * @ignore updateTeams
      */
-    protected function updateGroups($announcementId, $groups)
+    protected function updateTeams($announcementId, $teams)
     {
-        $oldGroups = array_column($this->getGroupsByAnnouncement($announcementId), 'group_id');
-        $newGroups = array_column($groups, 'id');
-        $groupsRemoved = array_diff($oldGroups, $newGroups);
-        if (count($groupsRemoved) > 0) {
-            $result['delete'] = $this->deleteGroupsByAnnouncement($announcementId, $groupsRemoved);
-            if ($result['delete'] != count($groupsRemoved) || count($groupsRemoved) == 0) {
+        $oldTeams = array_column($this->getTeamsByAnnouncement($announcementId), 'team_id');
+        $newTeams = array_column($teams, 'id');
+        $teamsRemoved = array_diff($oldTeams, $newTeams);
+        if (count($teamsRemoved) > 0) {
+            $result['delete'] = $this->deleteTeamsByAnnouncement($announcementId, $teamsRemoved);
+            if ($result['delete'] != count($teamsRemoved) || count($teamsRemoved) == 0) {
                 return 0;
             }
         }
-        $result['insert'] = $this->insertAnnouncementForGroup($announcementId, $groups);
+        $result['insert'] = $this->insertAnnouncementForTeam($announcementId, $teams);
     }
 
     /**
-     * @ignore deleteGroupsByAnnouncement
+     * @ignore deleteTeamsByAnnouncement
      */
-    protected function deleteGroupsByAnnouncement($announcementId, $groupIdList)
+    protected function deleteTeamsByAnnouncement($announcementId, $teamIdList)
     {
         $rowsAffected = 0;
-        foreach ($groupIdList as $key => $groupId) {
+        foreach ($teamIdList as $key => $teamId) {
             $sql = $this->getSqlObject();
-            $delete = $sql->delete('ox_announcement_group_mapper');
-            $delete->where(['announcement_id' => $announcementId, 'group_id' => $groupId]);
+            $delete = $sql->delete('ox_announcement_team_mapper');
+            $delete->where(['announcement_id' => $announcementId, 'team_id' => $teamId]);
             $result = $this->executeUpdate($delete);
             if ($result->getAffectedRows() == 0) {
                 break;
@@ -220,37 +220,37 @@ class AnnouncementService extends AbstractService
     }
 
     /**
-     * @ignore getGroupsByAnnouncement
+     * @ignore getTeamsByAnnouncement
      */
-    protected function getGroupsByAnnouncement($announcementId)
+    protected function getTeamsByAnnouncement($announcementId)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('ox_announcement_group_mapper')
-            ->columns(array("group_id", "announcement_id"))
-            ->where(array('ox_announcement_group_mapper.announcement_id' => $announcementId));
+        $select->from('ox_announcement_team_mapper')
+            ->columns(array("team_id", "announcement_id"))
+            ->where(array('ox_announcement_team_mapper.announcement_id' => $announcementId));
         return $this->executeQuery($select)->toArray();
     }
 
     /**
-     * @ignore insertAnnouncementForGroup
+     * @ignore insertAnnouncementForTeam
      */
-    public function insertAnnouncementForGroup($announcementId, $groups)
+    public function insertAnnouncementForTeam($announcementId, $teams)
     {
-        if(!$groups || empty($groups)){
+        if(!$teams || empty($teams)){
             return;
         }
         try {
             $this->beginTransaction();
-            $groupSingleArray = array_unique(array_map('current', $groups));
+            $teamSingleArray = array_unique(array_map('current', $teams));
             $delete = $this->getSqlObject()
-                ->delete('ox_announcement_group_mapper')
+                ->delete('ox_announcement_team_mapper')
                 ->where(['announcement_id' => $announcementId]);
             $result = $this->executeQueryString($delete);
-            $query = "INSERT into ox_announcement_group_mapper(announcement_id,group_id) 
+            $query = "INSERT into ox_announcement_team_mapper(announcement_id,team_id) 
                       SELECT $announcementId, id 
-                        from ox_group 
-                        where ox_group.uuid in (" . implode(',', $groupSingleArray) . ")";
+                        from ox_team 
+                        where ox_team.uuid in (" . implode(',', $teamSingleArray) . ")";
             $resultInsert = $this->runGenericQuery($query);
             $this->commit();
         } catch (Exception $e) {
@@ -300,11 +300,11 @@ class AnnouncementService extends AbstractService
             }
             $delete = "DELETE FROM ox_attachment where uuid = '" . $obj->media . "'";
             $this->executeQuerywithParams($delete);
-            $select = "SELECT count(announcement_id) from `ox_announcement_group_mapper` where announcement_id = " . $obj->id;
+            $select = "SELECT count(announcement_id) from `ox_announcement_team_mapper` where announcement_id = " . $obj->id;
             $count = $this->executeQuerywithParams($select)->toArray();
             if ($count[0]['count(announcement_id)'] > 0) {
                 $sql = $this->getSqlObject();
-                $delete = $sql->delete('ox_announcement_group_mapper');
+                $delete = $sql->delete('ox_announcement_team_mapper');
                 $delete->where(['announcement_id' => $obj->id]);
                 $result = $this->executeUpdate($delete);
                 if ($result->getAffectedRows() == 0 && $obj->type == 'ANNOUNCEMENT') {
@@ -332,7 +332,7 @@ class AnnouncementService extends AbstractService
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      * }
      * </code>
      */
@@ -356,10 +356,10 @@ class AnnouncementService extends AbstractService
                 a.id,a.uuid,a.name,a.account_id,a.status,a.description,a.link,a.start_date,a.end_date,a.media_type,a.media
             FROM
                 ox_announcement as a
-            LEFT JOIN ox_announcement_group_mapper as ogm
+            LEFT JOIN ox_announcement_team_mapper as ogm
             ON a.id = ogm.announcement_id
-            LEFT JOIN ox_user_group as oug
-            ON ogm.group_id = oug.group_id
+            LEFT JOIN ox_user_team as oug
+            ON ogm.team_id = oug.team_id
             WHERE oug.avatar_id = " . AuthContext::get(AuthConstants::USER_ID) . "
             AND a.account_id = ".$accountId."
             AND a.end_date >= curdate()
@@ -367,9 +367,9 @@ class AnnouncementService extends AbstractService
             SELECT a.id,a.uuid,a.name,a.account_id,a.status,a.description,a.link,a.start_date,a.end_date,a.media_type,a.media
             FROM
                 ox_announcement as a
-            LEFT JOIN ox_announcement_group_mapper as ogm
+            LEFT JOIN ox_announcement_team_mapper as ogm
             ON a.id = ogm.announcement_id
-            WHERE ogm.group_id is NULL
+            WHERE ogm.team_id is NULL
             AND a.account_id = " . $accountId . "
             AND a.end_date >= curdate( )
         ) as a
@@ -391,7 +391,7 @@ class AnnouncementService extends AbstractService
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      * }
      * </code>
      */
@@ -411,8 +411,8 @@ class AnnouncementService extends AbstractService
                         a.start_date,a.end_date,a.media_type,a.media 
                     from ox_announcement as a 
                     left join ox_account acct on acct.id = a.account_id
-                    left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id 
-                    left join ox_user_group as oug on ogm.group_id=oug.group_id 
+                    left join ox_announcement_team_mapper as ogm on a.id = ogm.announcement_id 
+                    left join ox_user_team as oug on ogm.team_id=oug.team_id 
                     where a.account_id = " . $accountId . " AND a.uuid = '" . $id . "' AND a.end_date >= curdate()";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (empty($response)) {
@@ -500,12 +500,12 @@ class AnnouncementService extends AbstractService
         return array('data' => $resultSet, 'total' => $count);
     }
 
-    public function getAnnouncementGroupList($params, $filterParams = null)
+    public function getAnnouncementTeamList($params, $filterParams = null)
     {
         if (isset($params['accountId'])) {
             if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
                 ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to get the group list of announcement");
+                throw new AccessDeniedException("You do not have permissions to get the team list of announcement");
             } else {
                 $accountId = $this->getIdFromUuid('ox_account', $params['accountId']);
             }
@@ -515,10 +515,10 @@ class AnnouncementService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $where = "";
-        $sort = "ox_group.name";
-        $query = "SELECT ox_group.uuid,ox_group.name";
-        $from = " FROM ox_group left join ox_announcement_group_mapper on ox_group.id = ox_announcement_group_mapper.group_id left join ox_announcement on ox_announcement.id = ox_announcement_group_mapper.announcement_id";
-        $cntQuery = "SELECT count(ox_group.id)" . $from;
+        $sort = "ox_team.name";
+        $query = "SELECT ox_team.uuid,ox_team.name";
+        $from = " FROM ox_team left join ox_announcement_team_mapper on ox_team.id = ox_announcement_team_mapper.team_id left join ox_announcement on ox_announcement.id = ox_announcement_team_mapper.announcement_id";
+        $cntQuery = "SELECT count(ox_team.id)" . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
             if (isset($filterArray[0]['filter'])) {
@@ -533,23 +533,23 @@ class AnnouncementService extends AbstractService
             $pageSize = $filterArray[0]['take'];
             $offset = $filterArray[0]['skip'];
         }
-        $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '" . $params['announcementId'] . "' AND ox_announcement.end_date >= now() AND ox_group.status = 1 AND ox_announcement.account_id = " . $accountId : " WHERE ox_announcement.uuid = '" . $params['announcementId'] . "' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1 AND ox_announcement.account_id = " . $accountId;
+        $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '" . $params['announcementId'] . "' AND ox_announcement.end_date >= now() AND ox_team.status = 1 AND ox_announcement.account_id = " . $accountId : " WHERE ox_announcement.uuid = '" . $params['announcementId'] . "' AND ox_announcement.end_date >= curdate() AND ox_team.status = 1 AND ox_announcement.account_id = " . $accountId;
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
-        $count = $resultSet->toArray()[0]['count(ox_group.id)'];
+        $count = $resultSet->toArray()[0]['count(ox_team.id)'];
         $query = $query . " " . $from . " " . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query);
         return array('data' => $resultSet->toArray(),
             'total' => $count);
     }
 
-    public function saveGroup($params, $data)
+    public function saveTeam($params, $data)
     {
         if (isset($params['accountId'])) {
             if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
                 ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to add groups to announcement");
+                throw new AccessDeniedException("You do not have permissions to add teams to announcement");
             } else {
                 $params['accountId'] = $this->getIdFromUuid('ox_account', $params['accountId']);
             }
@@ -570,11 +570,11 @@ class AnnouncementService extends AbstractService
         }
         $announcementId = $obj->id;
         $accountId = $params['accountId'];
-        $groupSingleArray = array_map('current', $data['groups']);
-        $delete = "DELETE oag FROM ox_announcement_group_mapper as oag
-                    inner join ox_group as og on oag.group_id = og.id where og.uuid not in ('" . implode("','", $groupSingleArray) . "') and oag.announcement_id = " . $announcementId . " and og.account_id =" . $accountId . " and og.status = 'Active'";
+        $teamSingleArray = array_map('current', $data['teams']);
+        $delete = "DELETE oag FROM ox_announcement_team_mapper as oag
+                    inner join ox_team as og on oag.team_id = og.id where og.uuid not in ('" . implode("','", $teamSingleArray) . "') and oag.announcement_id = " . $announcementId . " and og.account_id =" . $accountId . " and og.status = 'Active'";
         $result = $this->executeQuerywithParams($delete);
-        $query = "INSERT into ox_announcement_group_mapper(announcement_id,group_id) SELECT " . $announcementId . ",og.id from ox_group as og LEFT OUTER JOIN ox_announcement_group_mapper as oag on og.id = oag.group_id and oag.announcement_id = " . $announcementId . " where og.uuid in ('" . implode("','", $groupSingleArray) . "') and og.account_id = " . $accountId . " and og.status = 'Active' and oag.announcement_id is null";
+        $query = "INSERT into ox_announcement_team_mapper(announcement_id,team_id) SELECT " . $announcementId . ",og.id from ox_team as og LEFT OUTER JOIN ox_announcement_team_mapper as oag on og.id = oag.team_id and oag.announcement_id = " . $announcementId . " where og.uuid in ('" . implode("','", $teamSingleArray) . "') and og.account_id = " . $accountId . " and og.status = 'Active' and oag.announcement_id is null";
         $resultInsert = $this->runGenericQuery($query);
     }
 

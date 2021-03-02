@@ -74,16 +74,16 @@ return [
                     ],
                 ],
             ],
-            'getListofAccountGroups' => [
+            'getListofAccountTeams' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/account/:accountId/groups',
+                    'route' => '/account/:accountId/teams',
                     'defaults' => [
                         'controller' => Controller\AccountController::class,
                         'method' => 'GET',
-                        'action' => 'getListofAccountGroups',
+                        'action' => 'getListofAccountTeams',
                         'access' => [
-                            'getListofAccountGroups' => ['MANAGE_GROUP_READ'],
+                            'getListofAccountTeams' => ['MANAGE_GROUP_READ'],
                         ],
                     ],
                 ],

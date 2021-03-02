@@ -34,7 +34,7 @@ class AlertService extends AbstractService
      *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *        media_type : string,
      *        media_location : string,
-     *        groups : [{'id' : integer}.....multiple*],
+     *        teams : [{'id' : integer}.....multiple*],
      * </code>
      * @return integer 0|$id of Alert Created
      */
@@ -106,7 +106,7 @@ class AlertService extends AbstractService
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      * }
      * </code>
      * @return array Returns the Created Alert.
@@ -183,7 +183,7 @@ class AlertService extends AbstractService
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      * }
      * </code>
      */
