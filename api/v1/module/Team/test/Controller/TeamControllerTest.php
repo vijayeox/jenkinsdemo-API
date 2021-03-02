@@ -1,13 +1,13 @@
 <?php
-namespace Group;
+namespace Team;
 
-use Group\Controller\GroupController;
+use Team\Controller\TeamController;
 use Mockery;
-use Oxzion\Service\GroupService;
+use Oxzion\Service\TeamService;
 use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
-class GroupControllerTest extends ControllerTest
+class TeamControllerTest extends ControllerTest
 {
     public function setUp(): void
     {
@@ -17,38 +17,38 @@ class GroupControllerTest extends ControllerTest
 
     public function getMockMessageProducer()
     {
-        $groupService = $this->getApplicationServiceLocator()->get(Service\GroupService::class);
+        $teamService = $this->getApplicationServiceLocator()->get(Service\TeamService::class);
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
-        $groupService->setMessageProducer($mockMessageProducer);
+        $teamService->setMessageProducer($mockMessageProducer);
         return $mockMessageProducer;
     }
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Group.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Team.yml");
         return $dataset;
     }
 
     protected function setDefaultAsserts()
     {
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    public function testGetGroups()
+    public function testGetTeams()
     {
         $this->initAuthToken($this->adminUser);
-        $groupId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
-        $this->dispatch("/group/$groupId", 'GET');
+        $teamId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
+        $this->dispatch("/team/$teamId", 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($groupId, $content['data']['uuid']);
-        $this->assertEquals('Test Group', $content['data']['name']);
+        $this->assertEquals($teamId, $content['data']['uuid']);
+        $this->assertEquals('Test Team', $content['data']['name']);
         $this->assertEquals('Description Test Data', $content['data']['description']);
         $userId = '4fd99e8e-758f-11e9-b2d5-68ecc57cde45';
         $accountId = '53012471-2863-4949-afb1-e69b0891c98a';
@@ -56,186 +56,186 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($accountId, $content['data']['accountId']);
     }
 
-    public function testGetGroupsWithAccountId()
+    public function testGetTeamsWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
     }
 
-    public function testGetGroupsWithInValidAccountId()
+    public function testGetTeamsWithInValidAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
     }
 
-    public function testGetGroupsNotFound()
+    public function testGetTeamsNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/10000', 'GET');
+        $this->dispatch('/team/10000', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'], array());
     }
 
-    public function testGetGroupsListWithAccountID()
+    public function testGetTeamsListWithAccountID()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/group', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/team', 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(3, count($content['data']));
-        $groups = ['Test Group', 'Test Group 5', 'Test Group Once Again'];
-        foreach ($groups as $key => $value) {
+        $teams = ['Test Team', 'Test Team 5', 'Test Team Once Again'];
+        foreach ($teams as $key => $value) {
             $this->assertEquals($value, $content['data'][$key]['name']);
         }
     }
 
-    public function testGetGroupsforByManager()
+    public function testGetTeamsforByManager()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team', 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(401);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You do not have permissions to get the groups list');
+        $this->assertEquals($content['message'], 'You do not have permissions to get the teams list');
     }
 
-    public function testGetGroupsForManager()
+    public function testGetTeamsForManager()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group', 'GET');
+        $this->dispatch('/team', 'GET');
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
-        $this->assertMatchedRouteName('groups');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
     }
 
-    public function testGetGroupsForEmployee()
+    public function testGetTeamsForEmployee()
     {
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/group', 'GET');
+        $this->dispatch('/team', 'GET');
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
-        $this->assertMatchedRouteName('groups');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
     }
 
-// Testing to see if the Create Group function is working as intended if all the value passed are correct.
+// Testing to see if the Create Team function is working as intended if all the value passed are correct.
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $data = ['name' => 'Teams 22', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'accountName' => 'Cleveland Black')), 'GROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamname' => 'Teams 22', 'accountName' => 'Cleveland Black')), 'GROUP_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/group', 'POST', $data);
+        $this->dispatch('/team', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $select = "SELECT g.*, parent.uuid as parentId, man.uuid as managerId, a.uuid as accountId 
-                    from ox_group g
+                    from ox_team g
                     inner join ox_user man on man.id = g.manager_id
-                    inner join ox_group parent on parent.id = g.parent_id
+                    inner join ox_team parent on parent.id = g.parent_id
                     inner join ox_account a on a.id = g.account_id
                     where g.uuid = '".$content['data']['uuid']."'";
-        $group = $this->executeQueryTest($select);
-        $select = "SELECT * from ox_user_group where avatar_id =" . $group[0]['manager_id'] . " and group_id =" . $group[0]['id'];
-        $oxgroup = $this->executeQueryTest($select);
+        $team = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_team where avatar_id =" . $team[0]['manager_id'] . " and team_id =" . $team[0]['id'];
+        $oxteam = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['parentId'], $group[0]['parentId']);
-        $this->assertEquals($content['data']['accountId'], $group[0]['accountId']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
-        $this->assertEquals($content['data']['description'], $group[0]['description']);
-        $this->assertEquals($content['data']['logo'], $group[0]['logo']);
-        $this->assertEquals($content['data']['status'], $group[0]['status']);
-        $this->assertEquals($group[0]['manager_id'], 1);
-        $this->assertEquals($oxgroup[0]['avatar_id'], 1);
-        $this->assertEquals(6, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals($content['data']['parentId'], $team[0]['parentId']);
+        $this->assertEquals($content['data']['accountId'], $team[0]['accountId']);
+        $this->assertEquals($content['data']['managerId'], $team[0]['managerId']);
+        $this->assertEquals($content['data']['description'], $team[0]['description']);
+        $this->assertEquals($content['data']['logo'], $team[0]['logo']);
+        $this->assertEquals($content['data']['status'], $team[0]['status']);
+        $this->assertEquals($team[0]['manager_id'], 1);
+        $this->assertEquals($oxteam[0]['avatar_id'], 1);
+        $this->assertEquals(6, $this->getConnection()->getRowCount('ox_team'));
     }
 
-    public function testCreateWithExistingGroup()
+    public function testCreateWithExistingTeam()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Group', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'account_id' => 1, 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $data = ['name' => 'Test Team', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'account_id' => 1, 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/group', 'POST', $data);
+        $this->dispatch('/team', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Group already exists');
+        $this->assertEquals($content['message'], 'Team already exists');
     }
 
-    public function testCreateWithExistingGroupInactive()
+    public function testCreateWithExistingTeamInactive()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Group 4', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'account_id' => 1, 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $data = ['name' => 'Test Team 4', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'account_id' => 1, 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/group', 'POST', $data);
+        $this->dispatch('/team', 'POST', $data);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Group already exists would you like to reactivate?');
+        $this->assertEquals($content['message'], 'Team already exists would you like to reactivate?');
     }
 
-    public function testCreateWithExistingGroupInactiveWithReactivateFlag()
+    public function testCreateWithExistingTeamInactiveWithReactivateFlag()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Group 4', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'reactivate' => 1];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $data = ['name' => 'Test Team 4', 'parentId' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'reactivate' => 1];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupName' => 'Test Group 4', 'accountName' => 'Cleveland Black', "new_groupName" => "Test Group 4")), 'GROUP_UPDATED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group 4', 'accountName' => 'Cleveland Black', "username" => "admintest")), 'USERTOGROUP_ADDED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group 4', "usernames" => array("admintest"))), 'USERTOGROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_teamName' => 'Test Team 4', 'accountName' => 'Cleveland Black', "new_teamName" => "Test Team 4")), 'GROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team 4', 'accountName' => 'Cleveland Black', "username" => "admintest")), 'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team 4', "usernames" => array("admintest"))), 'USERTOGROUP_UPDATED')->once()->andReturn();
 
         }
-        $this->dispatch('/group', 'POST', $data);
+        $this->dispatch('/team', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
-        $select = "SELECT status from ox_group where name = 'Test Group 4'";
+        $this->assertMatchedRouteName('teams');
+        $select = "SELECT status from ox_team where name = 'Test Team 4'";
         $result = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(false, isset($content['data']['reactivate']));
@@ -245,93 +245,93 @@ class GroupControllerTest extends ControllerTest
     public function testCreateByAdminWithDifferentAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $data = ['name' => 'Teams 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'accountName' => 'Golden State Warriors')), 'GROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamname' => 'Teams 22', 'accountName' => 'Golden State Warriors')), 'GROUP_ADDED')->once()->andReturn();
         }
         $this->setJsonContent(json_encode($data));
         $accountId = 'b0971de7-0387-48ea-8f29-5d3704d96a46';
-        $this->dispatch("/account/$accountId/group", 'POST', $data);
+        $this->dispatch("/account/$accountId/team", 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $select = "SELECT g.*, parent.uuid as parentId, man.uuid as managerId, a.uuid as accountId 
-                    from ox_group g
+                    from ox_team g
                     inner join ox_user man on man.id = g.manager_id
-                    inner join ox_group parent on parent.id = g.parent_id
+                    inner join ox_team parent on parent.id = g.parent_id
                     inner join ox_account a on a.id = g.account_id
                     where g.uuid = '".$content['data']['uuid']."'";
-        $group = $this->executeQueryTest($select);
-        $select = "SELECT * from ox_user_group where avatar_id =" . $group[0]['manager_id'] . " and group_id =" . $group[0]['id'];
-        $oxgroup = $this->executeQueryTest($select);
+        $team = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_team where avatar_id =" . $team[0]['manager_id'] . " and team_id =" . $team[0]['id'];
+        $oxteam = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['parentId'], $group[0]['parentId']);
-        $this->assertEquals($accountId, $group[0]['accountId']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
-        $this->assertEquals($content['data']['description'], $group[0]['description']);
-        $this->assertEquals($content['data']['logo'], $group[0]['logo']);
-        $this->assertEquals($content['data']['status'], $group[0]['status']);
-        $this->assertEquals($group[0]['manager_id'], 1);
-        $this->assertEquals($oxgroup[0]['avatar_id'], 1);
-        $this->assertEquals(6, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals($content['data']['parentId'], $team[0]['parentId']);
+        $this->assertEquals($accountId, $team[0]['accountId']);
+        $this->assertEquals($content['data']['managerId'], $team[0]['managerId']);
+        $this->assertEquals($content['data']['description'], $team[0]['description']);
+        $this->assertEquals($content['data']['logo'], $team[0]['logo']);
+        $this->assertEquals($content['data']['status'], $team[0]['status']);
+        $this->assertEquals($team[0]['manager_id'], 1);
+        $this->assertEquals($oxteam[0]['avatar_id'], 1);
+        $this->assertEquals(6, $this->getConnection()->getRowCount('ox_team'));
     }
 
-    public function testCreateNewGroup()
+    public function testCreateNewTeam()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $data = ['name' => 'Teams 22', 'parentId' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data', 'logo' => 'grp1.png'];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'accountName' => 'Cleveland Black')), 'GROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamname' => 'Teams 22', 'accountName' => 'Cleveland Black')), 'GROUP_ADDED')->once()->andReturn();
         }
         $accountId = '53012471-2863-4949-afb1-e69b0891c98a';
-        $this->dispatch("/account/$accountId/group", 'POST', $data);
+        $this->dispatch("/account/$accountId/team", 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $select = "SELECT g.*, parent.uuid as parentId, man.uuid as managerId, a.uuid as accountId 
-                    from ox_group g
+                    from ox_team g
                     inner join ox_user man on man.id = g.manager_id
-                    inner join ox_group parent on parent.id = g.parent_id
+                    inner join ox_team parent on parent.id = g.parent_id
                     inner join ox_account a on a.id = g.account_id
                     where g.uuid = '".$content['data']['uuid']."'";
-        $group = $this->executeQueryTest($select);
-        $select = "SELECT * from ox_user_group where avatar_id =" . $group[0]['manager_id'] . " and group_id =" . $group[0]['id'];
-        $oxgroup = $this->executeQueryTest($select);
+        $team = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_team where avatar_id =" . $team[0]['manager_id'] . " and team_id =" . $team[0]['id'];
+        $oxteam = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['parentId'], $group[0]['parentId']);
-        $this->assertEquals($accountId, $group[0]['accountId']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
-        $this->assertEquals($content['data']['description'], $group[0]['description']);
-        $this->assertEquals($content['data']['logo'], $group[0]['logo']);
-        $this->assertEquals('Active', $group[0]['status']);
-        $this->assertEquals($group[0]['manager_id'], 1);
-        $this->assertEquals($oxgroup[0]['avatar_id'], 1);
-        $this->assertEquals(6, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals($content['data']['parentId'], $team[0]['parentId']);
+        $this->assertEquals($accountId, $team[0]['accountId']);
+        $this->assertEquals($content['data']['managerId'], $team[0]['managerId']);
+        $this->assertEquals($content['data']['description'], $team[0]['description']);
+        $this->assertEquals($content['data']['logo'], $team[0]['logo']);
+        $this->assertEquals('Active', $team[0]['status']);
+        $this->assertEquals($team[0]['manager_id'], 1);
+        $this->assertEquals($oxteam[0]['avatar_id'], 1);
+        $this->assertEquals(6, $this->getConnection()->getRowCount('ox_team'));
     }
 
 //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'description' => 'Description Test Data', 'status' => 'Active'];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $data = ['name' => 'Teams 22', 'description' => 'Description Test Data', 'status' => 'Active'];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group', 'POST', $data);
+        $this->dispatch('/team', 'POST', $data);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation error(s).');
@@ -341,16 +341,16 @@ class GroupControllerTest extends ControllerTest
     public function testCreateByEmployee()
     {
         $this->initAuthToken($this->employeeUser);
-        $data = ['name' => 'Groups 22', 'parent_id' => 1, 'account_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
+        $data = ['name' => 'Teams 22', 'parent_id' => 1, 'account_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
         ' => 'Description Test Data', 'logo' => 'grp1.png', 'status' => 'Active'];
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/group', 'POST', $data);
+        $this->dispatch('/team', 'POST', $data);
         $this->assertResponseStatusCode(401);
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
-        $this->assertMatchedRouteName('groups');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
@@ -358,160 +358,160 @@ class GroupControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'Test Create Group', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
+        $data = ['name' => 'Test Create Team', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'new_groupName' => 'Test Create Group')), 'GROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'new_teamName' => 'Test Create Team')), 'GROUP_UPDATED')->once()->andReturn();
         }
-        $groupId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
-        $this->dispatch("/group/$groupId", 'POST', $data);
+        $teamId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
+        $this->dispatch("/team/$teamId", 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $select = "SELECT g.*, parent.uuid as parentId, man.uuid as managerId, a.uuid as accountId 
-                    from ox_group g
+                    from ox_team g
                     left join ox_user man on man.id = g.manager_id
-                    left join ox_group parent on parent.id = g.parent_id
+                    left join ox_team parent on parent.id = g.parent_id
                     inner join ox_account a on a.id = g.account_id
-                    where g.uuid = '$groupId'";
-        $group = $this->executeQueryTest($select);
-        $select = "SELECT * from ox_user_group where avatar_id =" . $group[0]['manager_id'] . " and group_id =" . $group[0]['id'];
-        $oxgroup = $this->executeQueryTest($select);
+                    where g.uuid = '$teamId'";
+        $team = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_team where avatar_id =" . $team[0]['manager_id'] . " and team_id =" . $team[0]['id'];
+        $oxteam = $this->executeQueryTest($select);
         
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($group[0]['name'], $data['name']);
-        $this->assertEquals(null, $group[0]['parentId']);
-        $this->assertEquals(1, $group[0]['account_id']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
-        $this->assertEquals($content['data']['description'], $group[0]['description']);
-        $this->assertEquals('Active', $group[0]['status']);
-        $this->assertEquals($group[0]['manager_id'], 2);
-        $this->assertEquals($oxgroup[0]['avatar_id'], 2);
+        $this->assertEquals($team[0]['name'], $data['name']);
+        $this->assertEquals(null, $team[0]['parentId']);
+        $this->assertEquals(1, $team[0]['account_id']);
+        $this->assertEquals($content['data']['managerId'], $team[0]['managerId']);
+        $this->assertEquals($content['data']['description'], $team[0]['description']);
+        $this->assertEquals('Active', $team[0]['status']);
+        $this->assertEquals($team[0]['manager_id'], 2);
+        $this->assertEquals($oxteam[0]['avatar_id'], 2);
 
         
     }
 
     public function testUpdateWithAccountID()
     {
-        $data = ['name' => 'Test Create Group', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
+        $data = ['name' => 'Test Create Team', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'new_groupName' => 'Test Create Group')), 'GROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'new_teamName' => 'Test Create Team')), 'GROUP_UPDATED')->once()->andReturn();
         }
-        $groupId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
+        $teamId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
         $accountId = '53012471-2863-4949-afb1-e69b0891c98a';
-        $this->dispatch("/account/$accountId/group/$groupId", 'POST', $data);
+        $this->dispatch("/account/$accountId/team/$teamId", 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $select = "SELECT g.*, parent.uuid as parentId, man.uuid as managerId, a.uuid as accountId 
-                    from ox_group g
+                    from ox_team g
                     left join ox_user man on man.id = g.manager_id
-                    left join ox_group parent on parent.id = g.parent_id
+                    left join ox_team parent on parent.id = g.parent_id
                     inner join ox_account a on a.id = g.account_id
-                    where g.uuid = '$groupId'";
-        $group = $this->executeQueryTest($select);
-        $select = "SELECT * from ox_user_group where avatar_id =" . $group[0]['manager_id'] . " and group_id =" . $group[0]['id'];
-        $oxgroup = $this->executeQueryTest($select);
+                    where g.uuid = '$teamId'";
+        $team = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_team where avatar_id =" . $team[0]['manager_id'] . " and team_id =" . $team[0]['id'];
+        $oxteam = $this->executeQueryTest($select);
         
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($group[0]['name'], $data['name']);
-        $this->assertEquals(null, $group[0]['parentId']);
-        $this->assertEquals($accountId, $group[0]['accountId']);
-        $this->assertEquals(1, $group[0]['account_id']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
-        $this->assertEquals($content['data']['description'], $group[0]['description']);
-        $this->assertEquals('Active', $group[0]['status']);
-        $this->assertEquals($group[0]['manager_id'], 2);
-        $this->assertEquals($oxgroup[0]['avatar_id'], 2);
+        $this->assertEquals($team[0]['name'], $data['name']);
+        $this->assertEquals(null, $team[0]['parentId']);
+        $this->assertEquals($accountId, $team[0]['accountId']);
+        $this->assertEquals(1, $team[0]['account_id']);
+        $this->assertEquals($content['data']['managerId'], $team[0]['managerId']);
+        $this->assertEquals($content['data']['description'], $team[0]['description']);
+        $this->assertEquals('Active', $team[0]['status']);
+        $this->assertEquals($team[0]['manager_id'], 2);
+        $this->assertEquals($oxteam[0]['avatar_id'], 2);
     }
 
     public function testUpdateWithInvalidAccountAccountID()
     {
-        $data = ['name' => 'Test Create Group', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
+        $data = ['name' => 'Test Create Team', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Group does not belong to the account');
+        $this->assertEquals($content['message'], 'Team does not belong to the account');
     }
 
-    public function testUpdateWithInvalidGroupID()
+    public function testUpdateWithInvalidTeamID()
     {
-        $data = ['name' => 'Test Create Group', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
+        $data = ['name' => 'Test Create Team', 'managerId' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/group/2db82-4d5b-b60a-c648cf1e27de', 'POST', $data);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/team/2db82-4d5b-b60a-c648cf1e27de', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Updating non existent Group');
+        $this->assertEquals($content['message'], 'Updating non existent Team');
     }
 
     public function testUpdateByManagerWithDifferentAccountId()
     {
-        $data = ['name' => 'Test Create Group', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
+        $data = ['name' => 'Test Create Team', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
         $this->initAuthToken($this->managerUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', null);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', null);
         $this->assertResponseStatusCode(401);
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
-        $this->assertMatchedRouteName('groups');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You do not have permissions to edit the group');
+        $this->assertEquals($content['message'], 'You do not have permissions to edit the team');
     }
 
     public function testUpdateByManager()
     {
-        $data = ['name' => 'Test Create Group', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
+        $data = ['name' => 'Test Create Team', 'managerId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description' => 'Description Test Data'];
         $this->initAuthToken($this->managerUser);
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'new_groupName' => 'Test Create Group')), 'GROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'new_teamName' => 'Test Create Team')), 'GROUP_UPDATED')->once()->andReturn();
         }
-        $groupId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
-        $this->dispatch("/group/$groupId", 'POST', $data);
+        $teamId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
+        $this->dispatch("/team/$teamId", 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
-        $this->assertMatchedRouteName('groups');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
+        $this->assertMatchedRouteName('teams');
         $select = "SELECT g.*, parent.uuid as parentId, man.uuid as managerId, a.uuid as accountId 
-                    from ox_group g
+                    from ox_team g
                     left join ox_user man on man.id = g.manager_id
-                    left join ox_group parent on parent.id = g.parent_id
+                    left join ox_team parent on parent.id = g.parent_id
                     inner join ox_account a on a.id = g.account_id
-                    where g.uuid = '$groupId'";
-        $group = $this->executeQueryTest($select);
-        $select = "SELECT * from ox_user_group where avatar_id =" . $group[0]['manager_id'] . " and group_id =" . $group[0]['id'];
-        $oxgroup = $this->executeQueryTest($select);
+                    where g.uuid = '$teamId'";
+        $team = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_team where avatar_id =" . $team[0]['manager_id'] . " and team_id =" . $team[0]['id'];
+        $oxteam = $this->executeQueryTest($select);
         
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($group[0]['name'], $data['name']);
-        $this->assertEquals(null, $group[0]['parentId']);
-        $this->assertEquals(1, $group[0]['account_id']);
-        $this->assertEquals($content['data']['managerId'], $group[0]['managerId']);
-        $this->assertEquals($content['data']['description'], $group[0]['description']);
-        $this->assertEquals('Active', $group[0]['status']);
-        $this->assertEquals($group[0]['manager_id'], 1);
-        $this->assertEquals($oxgroup[0]['avatar_id'], 1);
+        $this->assertEquals($team[0]['name'], $data['name']);
+        $this->assertEquals(null, $team[0]['parentId']);
+        $this->assertEquals(1, $team[0]['account_id']);
+        $this->assertEquals($content['data']['managerId'], $team[0]['managerId']);
+        $this->assertEquals($content['data']['description'], $team[0]['description']);
+        $this->assertEquals('Active', $team[0]['status']);
+        $this->assertEquals($team[0]['manager_id'], 1);
+        $this->assertEquals($oxteam[0]['avatar_id'], 1);
     }
 
     public function testUpdateNotFound()
@@ -522,10 +522,10 @@ class GroupControllerTest extends ControllerTest
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/10000', 'POST', $data);
+        $this->dispatch('/team/10000', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
@@ -533,37 +533,37 @@ class GroupControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Please remove the child groups before deleting the parent group');
+        $this->assertEquals($content['message'], 'Please remove the child teams before deleting the parent team');
     }
 
     public function testDeleteWithInvalidAccount()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/group/153f3e9e-eb07-4ca4-be78-34f715bd50sd', 'DELETE');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/team/153f3e9e-eb07-4ca4-be78-34f715bd50sd', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Group does not belong to the account');
+        $this->assertEquals($content['message'], 'Team does not belong to the account');
     }
 
     public function testDeleteByManager()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
         $this->assertResponseStatusCode(401);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You do not have permissions to delete the group');
+        $this->assertEquals($content['message'], 'You do not have permissions to delete the team');
     }
 
     public function testDeleteByManagerWithPresentAccount()
@@ -573,10 +573,10 @@ class GroupControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::Any(), 'GROUP_DELETED')->once()->andReturn();
         }
-        $this->dispatch('/group/153f3e9e-eb07-4ca4-be78-34f715bd124', 'DELETE');
+        $this->dispatch('/team/153f3e9e-eb07-4ca4-be78-34f715bd124', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -584,12 +584,12 @@ class GroupControllerTest extends ControllerTest
     public function testDeleteByEmployee()
     {
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
         $this->assertResponseStatusCode(401);
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
-        $this->assertMatchedRouteName('groups');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
@@ -601,10 +601,10 @@ class GroupControllerTest extends ControllerTest
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/10000', 'DELETE');
+        $this->dispatch('/team/10000', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
+        $this->assertMatchedRouteName('teams');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
@@ -615,23 +615,23 @@ class GroupControllerTest extends ControllerTest
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'usernames' => array($this->managerUser, $this->employeeUser))), 'USERTOGROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'usernames' => array($this->managerUser, $this->employeeUser))), 'USERTOGROUP_UPDATED')->once()->andReturn();
         }
-        $groupId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
-        $this->dispatch("/group/$groupId/save", 'POST', $data);
+        $teamId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
+        $this->dispatch("/team/$teamId/save", 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
         $select = "SELECT u.uuid
-                    from ox_group g
-                    inner join ox_user_group ug on ug.group_id = g.id
+                    from ox_team g
+                    inner join ox_user_team ug on ug.team_id = g.id
                     inner join ox_user u on u.id = ug.avatar_id
-                    where g.uuid = '$groupId'";
-        $group = $this->executeQueryTest($select);
-        $this->assertEquals($group, $data['userIdList']);
+                    where g.uuid = '$teamId'";
+        $team = $this->executeQueryTest($select);
+        $this->assertEquals($team, $data['userIdList']);
     }
 
     public function testSaveUserWithAccount()
@@ -640,23 +640,23 @@ class GroupControllerTest extends ControllerTest
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'usernames' => array($this->managerUser, $this->employeeUser))), 'USERTOGROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'usernames' => array($this->managerUser, $this->employeeUser))), 'USERTOGROUP_UPDATED')->once()->andReturn();
         }
-        $groupId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
-        $this->dispatch("/account/53012471-2863-4949-afb1-e69b0891c98a/group/$groupId/save", 'POST', $data);
+        $teamId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
+        $this->dispatch("/account/53012471-2863-4949-afb1-e69b0891c98a/team/$teamId/save", 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $select = "SELECT u.uuid
-                    from ox_group g
-                    inner join ox_user_group ug on ug.group_id = g.id
+                    from ox_team g
+                    inner join ox_user_team ug on ug.team_id = g.id
                     inner join ox_user u on u.id = ug.avatar_id
-                    where g.uuid = '$groupId'";
-        $group = $this->executeQueryTest($select);
-        $this->assertEquals($group, $data['userIdList']);
+                    where g.uuid = '$teamId'";
+        $team = $this->executeQueryTest($select);
+        $this->assertEquals($team, $data['userIdList']);
     }
 
     public function testSaveUserWithOtherAccount()
@@ -665,27 +665,27 @@ class GroupControllerTest extends ControllerTest
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Group does not belong to the account');
+        $this->assertEquals($content['message'], 'Team does not belong to the account');
     }
 
-    public function testSaveUserWithInvalidGroupId()
+    public function testSaveUserWithInvalidTeamId()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->adminUser)), 'USERTOGROUP_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/group/2da3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/team/2da3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -696,12 +696,12 @@ class GroupControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->managerUser);
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('saveusers');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You do not have permissions to add users to group');
+        $this->assertEquals($content['message'], 'You do not have permissions to add users to team');
     }
 
     public function testSaveUserByManager()
@@ -710,12 +710,12 @@ class GroupControllerTest extends ControllerTest
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => 'admintest')), 'USERTOGROUP_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupName' => 'Test Group', 'usernames' => array($this->managerUser, $this->employeeUser))), 'USERTOGROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => 'admintest')), 'USERTOGROUP_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'accountName' => 'Cleveland Black', 'username' => $this->employeeUser)), 'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team', 'usernames' => array($this->managerUser, $this->employeeUser))), 'USERTOGROUP_UPDATED')->once()->andReturn();
         }
-        $groupId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
-        $this->dispatch("/group/$groupId/save", 'POST', $data);
+        $teamId = '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de';
+        $this->dispatch("/team/$teamId/save", 'POST', $data);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('saveusers');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -726,11 +726,11 @@ class GroupControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->employeeUser);
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST', $data);
         $this->assertResponseStatusCode(401);
-        $this->assertModuleName('Group');
-        $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('GroupController');
+        $this->assertModuleName('Team');
+        $this->assertControllerName(TeamController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TeamController');
         $this->assertMatchedRouteName('saveusers');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -743,7 +743,7 @@ class GroupControllerTest extends ControllerTest
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST');
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save', 'POST');
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -758,7 +758,7 @@ class GroupControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
         }
         $data = ['userIdList' => array(['uuid' => '4fd9ce37-758f-1c57cde45'], ['uuid' => '4fd9f04d-758f-11e9-b'])];
-        $this->dispatch('/group/1/save', 'POST', $data);
+        $this->dispatch('/team/1/save', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -768,7 +768,7 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -784,7 +784,7 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserListByManager()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -800,7 +800,7 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserListWithAccountid()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -813,10 +813,10 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 2);
     }
 
-    public function testGetUserListWithInvalidGroupId()
+    public function testGetUserListWithInvalidTeamId()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/group/2db1c5a3-8a820a-c648cf1e27de/users', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/team/2db1c5a3-8a820a-c648cf1e27de/users', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -827,7 +827,7 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserListWithInvalidAccountid()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -838,18 +838,18 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserListByManagerWithDifferentAccountId()
     {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"skip":1,"take":1}]', 'GET');
+        $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(401);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You do not have permissions to get the user list of group');
+        $this->assertEquals($content['message'], 'You do not have permissions to get the user list of team');
     }
 
     public function testGetUserListWithPagesize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"skip":1,"take":1}]
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"skip":1,"take":1}]
 ', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -864,7 +864,7 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserListWithPageNo()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"contains","value":"mi"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"contains","value":"mi"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]
 ', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -879,7 +879,7 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserListWithQueryFieldParameter()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"startswith","value":"Ma"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/team/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"filter":{"filters":[{"field":"name","operator":"startswith","value":"Ma"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -893,7 +893,7 @@ class GroupControllerTest extends ControllerTest
     public function testGetUserListNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/64/users', 'GET');
+        $this->dispatch('/team/64/users', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -902,45 +902,45 @@ class GroupControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 0);
     }
 
-    public function testGetExcludedGroupsList()
+    public function testGetExcludedTeamsList()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['exclude' => array('2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', '153f3e9e-eb07-4ca4-be78-34f715bd50db'), 'filter' => json_encode(array('0' => array('filter' => array('logic' => 'and', 'filters' => array(['field' => 'name', 'operator' => 'startswith', 'value' => 'Test'])), 'sort' => array(['field' => 'name', 'dir' => 'asc']), 'skip' => 0, 'take' => 2)))];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/groups/list', 'POST', $data);
+        $this->dispatch('/teams/list', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('groupsList');
+        $this->setDefaultAsserts('teamsList');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
-        $this->assertEquals($content['data'][0]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][0]['name'], 'Test Team 5');
     }
 
-    public function testGetExcludedGroupsListWithExcludedGroupFilter()
+    public function testGetExcludedTeamsListWithExcludedTeamFilter()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45', '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'), 'filter' => json_encode(array('0' => array('sort' => array(['field' => 'name', 'dir' => 'dsc']), 'skip' => 0, 'take' => 2)))];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/groups/list', 'POST', $data);
+        $this->dispatch('/teams/list', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('groupsList');
+        $this->setDefaultAsserts('teamsList');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['total'], 3);
     }
 
-    public function testGetExcludedGroupsListWithAccountId()
+    public function testGetExcludedTeamsListWithAccountId()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['exclude' => array('2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'), 'filter' => json_encode(array('0' => array('sort' => array(['field' => 'name', 'dir' => 'dsc']), 'skip' => 0, 'take' => 20)))];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/groups/list', 'POST', $data);
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams/list', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('groupsList');
+        $this->setDefaultAsserts('teamsList');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');
-        $this->assertEquals($content['data'][1]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][0]['name'], 'Test Team Once Again');
+        $this->assertEquals($content['data'][1]['name'], 'Test Team 5');
     }
 
 }
