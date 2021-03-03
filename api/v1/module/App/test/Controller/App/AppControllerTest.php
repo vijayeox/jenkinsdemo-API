@@ -456,7 +456,7 @@ class AppControllerTest extends ControllerTest
         }
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         $path = __DIR__ . '/../../sampleapp/';
         $data = ['path' => $path];
@@ -728,7 +728,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         if (enableExecUtils == 0) {
             $mockRestClient = $this->getMockRestClientForAppService();
@@ -822,7 +822,7 @@ class AppControllerTest extends ControllerTest
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         if (enableExecUtils == 0) {
             $mockRestClient = $this->getMockRestClientForAppService();
@@ -868,7 +868,7 @@ class AppControllerTest extends ControllerTest
 
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         if (enableExecUtils == 0) {
             $mockRestClient = $this->getMockRestClientForAppService();
@@ -919,7 +919,7 @@ class AppControllerTest extends ControllerTest
 
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         if (enableExecUtils == 0) {
             $mockRestClient = $this->getMockRestClientForAppService();
@@ -971,7 +971,7 @@ class AppControllerTest extends ControllerTest
         $data = ['path' => __DIR__ . '/../../sampleapp/'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         if (enableExecUtils == 0) {
             $mockRestClient = $this->getMockRestClientForAppService();
@@ -1515,7 +1515,7 @@ class AppControllerTest extends ControllerTest
         }
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
         }
         $path = __DIR__ . '/../../sampleapp/';
         $data = ['path' => $path];
