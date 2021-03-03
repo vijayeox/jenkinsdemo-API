@@ -56,6 +56,10 @@ ENV API_DB=${API_DB}
 ENV TEST_API_DB=${TEST_API_DB}
 ENV DB_HOST=${DB_HOST}
 #
+RUN mkdir -p /app/view
+RUN mkdir -p /app/camel
+RUN mkdir -p /app/workflow
+RUN mkdir -p /app/clients
 RUN mkdir -p /app/api/v1 && \
     mv /var/www /var/www2 && \
     ln -s /app/api/v1 /var/www
