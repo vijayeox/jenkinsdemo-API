@@ -53,7 +53,7 @@ class Module implements ConfigProviderInterface
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Team());
-                    return new TableGateway('ox_Team', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_team', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
