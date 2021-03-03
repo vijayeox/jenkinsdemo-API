@@ -924,7 +924,7 @@ class AccountControllerTest extends ControllerTest
     public function testGetAccountTeamsWithFilter()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"oup"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
+        $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/teams?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"eam"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
