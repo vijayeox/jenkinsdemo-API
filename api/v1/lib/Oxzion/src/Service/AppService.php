@@ -556,7 +556,7 @@ class AppService extends AbstractService
                         throw new ServiceException('Job Name/url/uuid/cron not specified', 'job.details.not.specified');                    
                     }
                     $jobName = $data['uuid'];
-                    $jobGroup = $data['name'];
+                    $jobTeam = $data['name'];
                     if(!isset($data['data'])){
                         $data['data'] = [];
                     }
@@ -566,19 +566,19 @@ class AppService extends AbstractService
                     $appId = $this->getIdFromUuid('ox_app', $appUuid);
                     $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $data['url'], "data" => $data['data']), "schedule" => array("cron" => $data['cron']));
                     $cron = $data['cron'];
-                    $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
-                    $this->processJobsForInstalledAccount($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
+                    $response = $this->jobService->scheduleNewJob($jobName, $jobTeam, $jobPayload, $cron, $appUuid);
+                    $this->processJobsForInstalledAccount($jobName, $jobTeam, $jobPayload, $cron, $appUuid);
                 }
                 catch (Exception $e) {
                     $this->logger->info("there is an exception: ");
                     $response = json_decode($e->getCode());
                     if($response == 404){
                         $this->logger->info("deleting from db ");
-                        $query = "DELETE from ox_job where name = :jobName and group_name = :groupName and app_id = :appId";
-                        $params = array('jobName' => $jobName, 'groupName' => $jobGroup, 'appId' => $appId);
+                        $query = "DELETE from ox_job where name = :jobName and group_name = :teamName and app_id = :appId";
+                        $params = array('jobName' => $jobName, 'teamName' => $jobTeam, 'appId' => $appId);
                         $result = $this->executeQueryWithBindParameters($query, $params);
                         $this->logger->info("executing schedule job - ");
-                        $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appUuid);
+                        $response = $this->jobService->scheduleNewJob($jobName, $jobTeam, $jobPayload, $cron, $appUuid);
                     }
                     else
                     {
@@ -607,7 +607,7 @@ class AppService extends AbstractService
             }
         }  
     }
-    private function processJobsForInstalledAccount($jobName, $jobGroup, $jobPayload, $cron,$appId){
+    private function processJobsForInstalledAccount($jobName, $jobTeam, $jobPayload, $cron,$appId){
         $this->logger->info("CROn---\n".print_r($cron,true));
         $appId = !is_numeric($appId) ? $this->getIdFromUuid('ox_app',$appId) : $appId;
         $select = "SELECT oxar.account_id from ox_app_registry oxar where oxar.app_id=:appId";
@@ -615,7 +615,7 @@ class AppService extends AbstractService
         $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
         $this->logger->info("DRF---".print_r($result,true));
         foreach ($result as $account) {
-            $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId,$account['account_id']);
+            $this->jobService->scheduleNewJob($jobName, $jobTeam, $jobPayload, $cron, $appId,$account['account_id']);
         }
     }
 

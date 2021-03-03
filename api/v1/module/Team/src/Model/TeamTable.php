@@ -1,11 +1,11 @@
 <?php
-namespace Group\Model;
+namespace Team\Model;
 
 use Oxzion\Db\ModelTable;
 use Oxzion\Model\Entity;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
-class GroupTable extends ModelTable
+class TeamTable extends ModelTable
 {
     protected $tableGateway;
     public function __construct(TableGatewayInterface $tableGateway)

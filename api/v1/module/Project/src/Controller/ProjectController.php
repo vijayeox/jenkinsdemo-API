@@ -109,7 +109,7 @@ class ProjectController extends AbstractApiController
      *               id : integer,
      *               name : string,
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Group.
+     * @return array Returns a JSON Response with Status Code and Created Team.
      */
     public function get($id)
     {

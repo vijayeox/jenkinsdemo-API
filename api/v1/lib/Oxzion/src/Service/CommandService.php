@@ -341,7 +341,7 @@ class CommandService extends AbstractService
         
         $jobUrl = $data['jobUrl'];
         $cron = $data['cron'];
-        $jobGroup = $data['jobName'];
+        $jobTeam = $data['jobName'];
         if(isset($data['fileId'])){
             $jobName = $data['fileId'];
         }else{
@@ -357,10 +357,10 @@ class CommandService extends AbstractService
         $this->logger->info("JOB DATA ------" . json_encode($data));
         $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
         $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
-        $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId);
+        $response = $this->jobService->scheduleNewJob($jobName, $jobTeam, $jobPayload, $cron, $appId, $accountId);
         if (isset($response) && isset($response['job_id'])) {
-            $jobData = array("jobId" => $response['job_id'], "jobGroup" => $response['group_name']);
-            $data[$jobGroup] = json_encode($jobData);
+            $jobData = array("jobId" => $response['job_id'], "jobTeam" => $response['group_name']);
+            $data[$jobTeam] = json_encode($jobData);
         }
         $this->logger->info("Schedule JOB DATA - " . print_r($data, true));
         $this->fileService->updateFile($data, $data['fileId']);
@@ -380,8 +380,8 @@ class CommandService extends AbstractService
             return $data;
         }
         $JobData = (is_array($data[$jobName]) ? $data[$jobName] : json_decode($data[$jobName], true));
-        if (!isset($JobData['jobId']) || !isset($JobData['jobGroup'])) {
-            $this->logger->warn("Job Id or Job Group Not Specified, so job not cancelled");
+        if (!isset($JobData['jobId']) || !isset($JobData['jobTeam'])) {
+            $this->logger->warn("Job Id or Job Team Not Specified, so job not cancelled");
             return $data;
         }
         $appId = isset($data['app_id']) ? $data['app_id'] : null;
@@ -389,9 +389,9 @@ class CommandService extends AbstractService
             throw new InvalidParameterException("App Id not provided");
         }
 
-        $groupName = $JobData['jobGroup'];
+        $teamName = $JobData['jobTeam'];
         $data[$jobName] = array();
-        $this->jobService->cancelJobId($JobData['jobId'], $appId, $groupName);
+        $this->jobService->cancelJobId($JobData['jobId'], $appId, $teamName);
         
         $this->logger->info("Cancel Job Data - " . print_r($data, true));
         return $data;

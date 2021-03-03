@@ -21,7 +21,7 @@ return [
     'User',
     'Role',
     'Project',
-    'Group',
+    'Team',
     'Analytics',
     'Account',
     'Attachment',

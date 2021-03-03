@@ -1,27 +1,27 @@
 <?php
-namespace Group\Controller;
+namespace Team\Controller;
 
 use Oxzion\Controller\AbstractApiController;
-use Group\Service\GroupService;
+use Team\Service\TeamService;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
 use Zend\InputFilter\Input;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Controller\AbstractApiControllerHelper;
 
-class GroupLogoController extends AbstractApiControllerHelper
+class TeamLogoController extends AbstractApiControllerHelper
 {
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
-    private $groupService;
+    private $teamService;
     /**
     * @ignore __construct
     */
-    public function __construct(GroupService $groupService, AdapterInterface $dbAdapter)
+    public function __construct(TeamService $teamService, AdapterInterface $dbAdapter)
     {
-        $this->setIdentifierName('groupId');
-        $this->groupService = $groupService;
+        $this->setIdentifierName('teamId');
+        $this->teamService = $teamService;
     }
 
     /**
@@ -36,7 +36,7 @@ class GroupLogoController extends AbstractApiControllerHelper
     {
         $orgId = $this->params()->fromRoute()['orgId'];
         $logo = "logo.png";
-        $file = $this->groupService->getGroupLogoPath($orgId, $id);
+        $file = $this->teamService->getTeamLogoPath($orgId, $id);
         $file = $file . $logo;
         if (!headers_sent()) {
             header('Content-Type: image/png');
@@ -50,7 +50,7 @@ class GroupLogoController extends AbstractApiControllerHelper
             return $this->response;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
-            return $this->getErrorResponse("Group Logo not found", 404);
+            return $this->getErrorResponse("Team Logo not found", 404);
         }
     }
 }

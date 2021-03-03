@@ -1090,7 +1090,7 @@
 							"addAnotherPosition": "bottom",
 							"defaultOpen": false,
 							"layoutFixed": false,
-							"enableRowGroups": false,
+							"enableRowTeams": false,
 							"hideLabel": true,
 							"tableView": false,
 							"defaultValue": [{

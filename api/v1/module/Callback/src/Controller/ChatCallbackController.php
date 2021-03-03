@@ -85,13 +85,13 @@ class ChatCallbackController extends AbstractApiControllerHelper
     public function createChannelAction()
     {
         $params = $this->extractPostData();
-        $params['groupname'] = isset($params['groupname']) ? $params['groupname'] : null;
+        $params['teamname'] = isset($params['teamname']) ? $params['teamname'] : null;
         $params['accountName'] = isset($params['accountName']) ? $params['accountName'] : null;
-        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['groupname']);
+        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['teamname']);
         $this->log->info(":Channel Name- " . $params['channelname']);
         $response = $this->chatService->createChannel($params['channelname'], $params['accountName']);
         if ($response) {
-            $this->log->info(ChatCallbackController::class . ":Project/Group Creation Successful");
+            $this->log->info(ChatCallbackController::class . ":Project/Team Creation Successful");
             return $this->getSuccessResponseWithData(json_decode($response['body'], true));
         }
         return $this->getErrorResponse("Creation of Channel Failed", 400);
@@ -100,12 +100,12 @@ class ChatCallbackController extends AbstractApiControllerHelper
     public function deleteChannelAction()
     {
         $params = $this->extractPostData();
-        $params['groupname'] = isset($params['groupname']) ? $params['groupname'] : null;
+        $params['teamname'] = isset($params['teamname']) ? $params['teamname'] : null;
         $params['accountName'] = isset($params['accountName']) ? $params['accountName'] : null;
-        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['groupname']);
+        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['teamname']);
         $response = $this->chatService->deleteChannel($params['channelname'], $params['accountName']);
         if ($response) {
-            $this->log->info(":Project/Group Deleted");
+            $this->log->info(":Project/Team Deleted");
             return $this->getSuccessResponseWithData(json_decode($response, true));
         }
         return $this->getErrorResponse("Channel Deletion Failed", 400);
@@ -114,14 +114,14 @@ class ChatCallbackController extends AbstractApiControllerHelper
     public function updateChannelAction()
     {
         $params = $this->extractPostData();
-        $params['old_groupname'] = isset($params['old_groupname']) ? $params['old_groupname'] : null;
-        $params['new_groupname'] = isset($params['new_groupname']) ? $params['new_groupname'] : null;
-        $params['old_channelname'] = isset($params['old_projectname']) ? ($params['old_projectname']) : ($params['old_groupname']);
+        $params['old_teamname'] = isset($params['old_teamname']) ? $params['old_teamname'] : null;
+        $params['new_teamname'] = isset($params['new_teamname']) ? $params['new_teamname'] : null;
+        $params['old_channelname'] = isset($params['old_projectname']) ? ($params['old_projectname']) : ($params['old_teamname']);
 
-        $params['new_channelname'] = isset($params['new_projectname']) ? ($params['new_projectname']) : ($params['new_groupname']);
+        $params['new_channelname'] = isset($params['new_projectname']) ? ($params['new_projectname']) : ($params['new_teamname']);
         $response = $this->chatService->updateChannel($params['old_channelname'], $params['new_channelname'], $params['accountName']);
         if ($response) {
-            $this->log->info(":Project/Group Updated Successful");
+            $this->log->info(":Project/Team Updated Successful");
             return $this->getSuccessResponseWithData(json_decode($response, true));
         }
         return $this->getErrorResponse("Update to Channel Failed", 404);
@@ -131,10 +131,10 @@ class ChatCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $params['username'] = isset($params['username']) ? $params['username'] : null;
-        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['groupname']);
+        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['teamname']);
         $response = $this->chatService->addUserToChannel($params['username'], $params['channelname'], $params['accountName']);
         if ($response) {
-            $this->log->info("User to Project/Group added successfully");
+            $this->log->info("User to Project/Team added successfully");
             return $this->getSuccessResponseWithData(json_decode($response['body'], true));
         }
         return $this->getErrorResponse("Add User to Channel Failed", 400);
@@ -144,10 +144,10 @@ class ChatCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $params['username'] = isset($params['username']) ? $params['username'] : null;
-        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['groupname']);
+        $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) : ($params['teamname']);
         $response = $this->chatService->removeUserFromChannel($params['username'], $params['channelname'], $params['accountName']);
         if ($response) {
-            $this->log->info("User from Project/Group removed successfully");
+            $this->log->info("User from Project/Team removed successfully");
             return $this->getSuccessResponseWithData(json_decode($response, true));
         }
         return $this->getErrorResponse("Removing User from Channel Failed", 400);

@@ -44,25 +44,25 @@ return [
                     ],
                 ],
             ],
-            'announcementToGroup' => [
+            'announcementToTeam' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/[account/:accountId/]announcement/:announcementId/save',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'POST',
-                        'action' => 'announcementToGroup'
+                        'action' => 'announcementToTeam'
                     ],
                 ],
             ],
-            'announcementGroups' => [
+            'announcementTeams' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[account/:accountId/]announcement/:announcementId/groups',
+                    'route' => '/[account/:accountId/]announcement/:announcementId/teams',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'GET',
-                        'action' => 'announcementGroups'
+                        'action' => 'announcementTeams'
                     ],
                 ],
             ],

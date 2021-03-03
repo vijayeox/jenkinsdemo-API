@@ -73,7 +73,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0d6flow" name="Approved" sourceRef="Task_1s7qzh3" targetRef="ExclusiveGateway_12lkytx">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${FormField_1c1vahk=="approve"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_1s7qzh3" name="CSR Review" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR group">
+    <bpmn:userTask id="Task_1s7qzh3" name="CSR Review" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateTeams="CSR team">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="FormField_1c1vahk" type="enum">
