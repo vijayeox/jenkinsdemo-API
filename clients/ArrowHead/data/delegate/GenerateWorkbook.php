@@ -56,6 +56,8 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         )
     );
 
+    const EXCELTEMPLATE = "DOC_and_UM_CarPort_Design.xlsx";
+
     public function __construct()
     {
         parent::__construct();
@@ -84,6 +86,25 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             }
             unset($data["genericData"]);
         }
+        $template['templateNameWithExt'] = self::EXCELTEMPLATE;
+        $template['templatePath'] = __DIR__."/../template";
+        $documentDestination = $fileDestination['absolutePath'].self::EXCELTEMPLATE;
+        $requiredData = $this->getNecessaryDataForMails($data);
+        $response = $this->documentBuilder->fillExcelTemplate(
+            $template['templateNameWithExt'],
+            $requiredData,
+            $documentDestination,
+            array("Sheet1")
+        );
+        array_push(
+            $generatedDocumentsList,
+            array(
+                "fullPath" => $documentDestination,
+                "file" => $fileDestination['relativePath'] . self::EXCELTEMPLATE,
+                "originalName" => self::EXCELTEMPLATE,
+                "type" => "excel/xlsx"
+            )
+        );
         foreach ($this->checkJSON($data['workbooksToBeGenerated']) as  $key => $templateSelected) {
             if ($templateSelected) {
                 $selectedTemplate = $this->carrierTemplateList[$key];
@@ -351,6 +372,47 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
             "m-d-Y",
             strtotime($date)
         );
+    }
+
+    private function addSymbolToAllElements(&$data,$symbol,$prepend = true) {
+        foreach ($data as $key => $value) {
+            if($prepend) {
+                $data[$key] = strval($symbol).strval($value);
+            } else {
+                $data[$key] = strval($value).strval($symbol);
+            }
+        }
+    }
+
+    private function getNecessaryDataForMails($data)
+    {
+        $requiredData['umim'] = $data['garageumUim'];
+        $requiredData['medicalExpense'] = $data['garageLiabilityMedicalExpense'];
+        $requiredData['compDeductible'] = 0;
+        $requiredData['collDeductible'] = 0;
+        $requiredData['driverName'] = $requiredData['umim1'] = $requiredData['medicaL'] = $requiredData['comP'] = $requiredData['colL'] = array();
+        if(isset($data['driverOtherCargrid'])) {
+            $requiredData['compDeductible'] = isset($data['driverOtherCargrid'][0]['compdeductible']) ? $data['driverOtherCargrid'][0]['compdeductible'] : 1000;
+            $requiredData['collDeductible'] = isset($data['driverOtherCargrid'][0]['colldeductible']) ? $data['driverOtherCargrid'][0]['colldeductible'] : 1000;
+            $requiredData['driverName'] = array_column($data['driverOtherCargrid'], 'nameofdrivertobecovered');
+            $requiredData['umim1'] = array_column($data['driverOtherCargrid'], 'driveumuim');
+            $this->addSymbolToAllElements($requiredData['umim1'],'$');
+            //Last letter of the following 3 variables is uppercased at the end to avoid conflict and incorrect data being added to excel
+            $requiredData['medicaL'] = array_column($data['driverOtherCargrid'], 'medicalexpenceautopremises');
+            $this->addSymbolToAllElements($requiredData['medicaL'],'$');
+            $requiredData['comP'] = array_column($data['driverOtherCargrid'], 'compdeductible');
+            $this->addSymbolToAllElements($requiredData['comP'],'$');
+            $requiredData['colL'] = array_column($data['driverOtherCargrid'], 'colldeductible');
+            $this->addSymbolToAllElements($requiredData['colL'],'$');
+        }
+        $requiredData['umbrellaCoverageName'] = array();
+        $requiredData['umbrellaCoveragePercentage'] = array();
+        if(isset($data['UmbrellaCoverageAdditional'])) {
+            $requiredData['umbrellaCoverageName'] = array_column($data['UmbrellaCoverageAdditional'], 'umbrellaCoverageAdditionalName');
+            $requiredData['umbrellaCoveragePercentage'] = array_column($data['UmbrellaCoverageAdditional'], 'ownershipPercentageUmbrella');
+            $this->addSymbolToAllElements($requiredData['umbrellaCoveragePercentage'],'%',false);
+        }
+        return $requiredData;
     }
 
     private function checkValue($data, $fieldConfig, $formData)
