@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ ! -e ./.env ]; then
+	echo "Please set .env file up"
+	exit
+fi
+
 IP=`hostname -I | awk '{ print $1 }'`
 sed -ri -e "s/^HOST=.*/HOST=$IP/" \
 	-ri -e "s/^DB_HOST=.*/DB_HOST=$IP/" \
@@ -6,10 +13,6 @@ sed -ri -e "s/^HOST=.*/HOST=$IP/" \
 docker-compose up -d --build
 
 getopts ":yn" yn
-if [ -z ${yn+x} ]; then
-    read -p "Do you wish to enter the container?(y/n)" yn
-fi
-
 while true; do
     case $yn in
         [Yy]* ) docker exec -it "${PWD##*/}_zf_1" bash; break;;
