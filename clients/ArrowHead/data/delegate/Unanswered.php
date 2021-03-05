@@ -322,13 +322,13 @@ class Unanswered extends AbstractDocumentAppDelegate
             $this->getUnansweredQuestionPrintReady($finalFieldList,$unansweredQuestions,$fieldList);
             $unansweredQuestionsArray = array('unansweredQuestions' => $unansweredQuestions, 'requiredUnansweredQuestions' => $requiredUnansweredQuestions );
             $generatedDocument = $this->documentBuilder->generateDocument('UnansweredQuestions',array('data' => json_encode($unansweredQuestionsArray)),$dest);
-            $data['unansweredQuestionsDocument'] = $this->baseUrl.$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Unanswered.pdf";
+            $data['unansweredQuestionsDocument'] = $this->baseUrl."/".$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Unanswered.pdf";
         }
 
         $this->cleanData($answeredQuestions);
         $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions);
         $generatedDocument = $this->documentBuilder->generateDocument('AnsweredQuestions',array('data' => json_encode($answeredQuestions)),$dest2);
-        $data['answeredQuestionsDocument'] = $this->baseUrl.$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Answered.pdf";
+        $data['answeredQuestionsDocument'] = $this->baseUrl."/".$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Answered.pdf";
         return $data;
     }
 }
