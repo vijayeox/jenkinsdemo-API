@@ -162,6 +162,8 @@ class EsignServiceTest extends AbstractServiceTest
             $data = ["name" => $signers['name'],
                      "message" => $signers['message'],
                      "action" => "send",
+                     'callback[url]' => $this->config['esign']['callbackUrl'],
+                     'callback.url' => $this->config['esign']['callbackUrl'],
                      "fields[0][name]" => $signers['signers'][0]['fields'][0]['name'],
                      "fields[0][height]" => $signers['signers'][0]['fields'][0]['height'],
                      "fields[0][width]" => $signers['signers'][0]['fields'][0]['width'],
@@ -184,7 +186,6 @@ class EsignServiceTest extends AbstractServiceTest
                                         "participants" => json_encode([$signers['signers'][0]['participant']]),
                                         "fields" => json_encode($fields),
                                         "action" => "send",
-                                        "callback" => "{}",
                                         "group" => UuidUtil::uuid(),
                                         "sender" => "0f3c3dd9-04fa-4e01-b6c2-e9c3340514c0",
                                         "created" => "2020-12-27T12:35:10.203Z"

@@ -1,11 +1,11 @@
 <?php
 
-namespace Group\Controller;
+namespace Team\Controller;
 
 use Exception;
-use Group\Model\Group;
-use Group\Model\GroupTable;
-use Group\Service\GroupService;
+use Team\Model\Team;
+use Team\Model\TeamTable;
+use Team\Service\TeamService;
 use Oxzion\AccessDeniedException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ServiceException;
@@ -13,70 +13,70 @@ use Oxzion\Service\AccountService;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 
-class GroupController extends AbstractApiController
+class TeamController extends AbstractApiController
 {
-    private $groupService;
+    private $teamService;
     private $accountService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(GroupTable $table, GroupService $groupService, AdapterInterface $dbAdapter, AccountService $accountService)
+    public function __construct(TeamTable $table, TeamService $teamService, AdapterInterface $dbAdapter, AccountService $accountService)
     {
-        parent::__construct($table, Group::class);
-        $this->setIdentifierName('groupId');
-        $this->groupService = $groupService;
+        parent::__construct($table, Team::class);
+        $this->setIdentifierName('teamId');
+        $this->teamService = $teamService;
         $this->accountService = $accountService;
         $this->log = $this->getLogger();
     }
 
     /**
      * ! DEPRECATED
-     * GET Group API The code is to get the list of all the groups for the user. I am putting this function here, but Im not sure whether this has to be here or in the User Module. We can move that later when it is required.
+     * GET Team API The code is to get the list of all the teams for the user. I am putting this function here, but Im not sure whether this has to be here or in the User Module. We can move that later when it is required.
      * @api
-     * @link /group/getGroupsforUser/:userId
+     * @link /team/getTeamsforUser/:userId
      * @method GET
-     * @param $id ID of Group
+     * @param $id ID of Team
      * @return array $data
-     * @return array Returns a JSON Response with Status Code and Created Group.
+     * @return array Returns a JSON Response with Status Code and Created Team.
      */
-    public function getGroupsforUserAction()
+    public function getTeamsforUserAction()
     {
         $params = $this->params()->fromRoute();
         $data = $this->params()->fromQuery();
         $userId = $params['userId'];
         try {
-            $groupList = $this->groupService->getGroupsforUser($userId, $data);
+            $teamList = $this->teamService->getTeamsforUser($userId, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         } 
-        return $this->getSuccessResponseWithData($groupList);
+        return $this->getSuccessResponseWithData($teamList);
     }
     /**
-     * Create Group API
+     * Create Team API
      * @api
-     * @link /group
+     * @link /team
      * @method POST
      * @param array $data Array of elements as shown
      * <code> {
      *               id : integer,
      *               name : string,
-     *               Fields from Group
+     *               Fields from Team
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Group.
+     * @return array Returns a JSON Response with Status Code and Created Team.
      */
     public function create($data)
     {
         $files = $this->params()->fromFiles('logo');
         $id = $this->params()->fromRoute();
         $id['accountId'] = isset($id['accountId']) ? $id['accountId'] : null;
-        $this->log->info(__CLASS__ . "-> Create Group - " . json_encode($data, true));
+        $this->log->info(__CLASS__ . "-> Create Team - " . json_encode($data, true));
         try {
-            if (!isset($id['groupId'])) {
-                $this->groupService->createGroup($data, $files, $id['accountId']);
+            if (!isset($id['teamId'])) {
+                $this->teamService->createTeam($data, $files, $id['accountId']);
             } else {
-                $this->groupService->updateGroup($id['groupId'], $data, $files, $id['accountId']);
+                $this->teamService->updateTeam($id['teamId'], $data, $files, $id['accountId']);
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -86,19 +86,19 @@ class GroupController extends AbstractApiController
     }
 
     /**
-     * Update Group API
+     * Update Team API
      * @api
-     * @link /group[/:groupId]
+     * @link /team[/:teamId]
      * @method PUT
-     * @param array $id ID of Group to update
+     * @param array $id ID of Team to update
      * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created Group.
+     * @return array Returns a JSON Response with Status Code and Created Team.
      */
     public function update($id, $data)
     {
-        $this->log->info(__CLASS__ . "-> Update Group - " . json_encode($data, true));
+        $this->log->info(__CLASS__ . "-> Update Team - " . json_encode($data, true));
         try {
-            $this->groupService->updateGroup($id, $data);
+            $this->teamService->updateTeam($id, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
@@ -107,19 +107,19 @@ class GroupController extends AbstractApiController
     }
 
     /**
-     * Delete Group API
+     * Delete Team API
      * @api
-     * @link /group[/:groupId]
+     * @link /team[/:teamId]
      * @method DELETE
-     * @param $id ID of Group to Delete
+     * @param $id ID of Team to Delete
      * @return array success|failure response
      */
     public function delete($id)
     {
         $params = $this->params()->fromRoute();
-        $this->log->info(__CLASS__ . "-> Delete Group - " . json_encode($params, true) . " for ID " .json_encode($id, true));
+        $this->log->info(__CLASS__ . "-> Delete Team - " . json_encode($params, true) . " for ID " .json_encode($id, true));
         try {
-            $response = $this->groupService->deleteGroup($params);
+            $response = $this->teamService->deleteTeam($params);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
@@ -128,11 +128,11 @@ class GroupController extends AbstractApiController
     }
 
     /**
-     * GET Group API
+     * GET Team API
      * @api
-     * @link /group[/:groupId]
+     * @link /team[/:teamId]
      * @method GET
-     * @param array $dataget of Group
+     * @param array $dataget of Team
      * @return array $data
      * <code> {
      *               id : integer,
@@ -140,13 +140,13 @@ class GroupController extends AbstractApiController
      *               logo : string,
      *               status : String(Active|Inactive),
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Group.
+     * @return array Returns a JSON Response with Status Code and Created Team.
      */
     public function get($id)
     {
         $params = $this->params()->fromRoute();
         try {
-            $result = $this->groupService->getGroupByUuid($id, $params);
+            $result = $this->teamService->getTeamByUuid($id, $params);
             if (count($result) == 0) {
                 return $this->getSuccessResponseWithData($result);
             }
@@ -154,7 +154,7 @@ class GroupController extends AbstractApiController
             if ($result) {
                 $baseUrl = $this->getBaseUrl();
                 $logo = $result['logo'];
-                $result['logo'] = $baseUrl . "/group/" . $account['uuid'] . "/logo/" . $result["uuid"];
+                $result['logo'] = $baseUrl . "/team/" . $account['uuid'] . "/logo/" . $result["uuid"];
             }
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -164,9 +164,9 @@ class GroupController extends AbstractApiController
     }
 
     /**
-     * GET List Group API
+     * GET List Team API
      * @api
-     * @link /group
+     * @link /team
      * @method GET
      * @return array Returns a JSON Response with Invalid Method/
      */
@@ -176,13 +176,13 @@ class GroupController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> Get List - " . json_encode($params, true));
         try {
-            $result = $this->groupService->getGroupList($filterParams, $params);
+            $result = $this->teamService->getTeamList($filterParams, $params);
             if ($result) {
                 for ($x = 0; $x < sizeof($result['data']); $x++) {
                     $baseUrl = $this->getBaseUrl();
                     $logo = $result['data'][$x]['logo'];
                     $account = $this->accountService->getAccount($result['data'][$x]['accountId']);
-                    $result['data'][$x]['logo'] = $baseUrl . "/group/" . $account['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
+                    $result['data'][$x]['logo'] = $baseUrl . "/team/" . $account['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
                 }
             }
         } catch (Exception $e) {
@@ -192,19 +192,19 @@ class GroupController extends AbstractApiController
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
-    public function groupsListAction()
+    public function teamsListAction()
     {
         $filterParams = $this->extractPostData();
         $params = $this->params()->fromRoute();
-        $this->log->info(__CLASS__ . "-> Group Listing - " . json_encode($params, true));
+        $this->log->info(__CLASS__ . "-> Team Listing - " . json_encode($params, true));
         try {
-            $result = $this->groupService->getGroupList($filterParams, $params);
+            $result = $this->teamService->getTeamList($filterParams, $params);
             if ($result) {
                 for ($x = 0; $x < sizeof($result['data']); $x++) {
                     $baseUrl = $this->getBaseUrl();
                     $logo = $result['data'][$x]['logo'];
                     $account = $this->accountService->getAccount($result['data'][$x]['accountId']);
-                    $result['data'][$x]['logo'] = $baseUrl . "/group/" . $account['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
+                    $result['data'][$x]['logo'] = $baseUrl . "/team/" . $account['uuid'] . "/logo/" . $result['data'][$x]["uuid"];
                 }
             }
         } catch (Exception $e) {
@@ -215,12 +215,12 @@ class GroupController extends AbstractApiController
     }
 
     /**
-     * Save users in a Group API
+     * Save users in a Team API
      * @api
-     * @link /group/:groupid/save
+     * @link /team/:teamid/save
      * @method Post
      * @param json object of userid
-     * @return array $dataget list of groups by User
+     * @return array $dataget list of teams by User
      * <code>status : "success|error",
      *       data : all user id's passed back in json format
      * </code>
@@ -229,9 +229,9 @@ class GroupController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $data = $this->extractPostData();
-        $this->log->info(__CLASS__ . "-> Save User to Groups - " . json_encode($params, true));
+        $this->log->info(__CLASS__ . "-> Save User to Teams - " . json_encode($params, true));
         try {
-            $count = $this->groupService->saveUser($params, $data);
+            $count = $this->teamService->saveUser($params, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
@@ -240,26 +240,38 @@ class GroupController extends AbstractApiController
     }
 
     /**
-     * GET all users in a particular Group API
+     * GET all users in a particular Team API
      * @api
-     * @link /group/:groupid/users
+     * @link /team/:teamid/users
      * @method GET
-     * @return array $dataget list of groups by User
+     * @return array $dataget list of teams by User
      * <code>status : "success|error",
-     *       data : all user id's in the group passed back in json format
+     *       data : all user id's in the team passed back in json format
      * </code>
      */
     public function getuserlistAction()
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $this->log->info(__CLASS__ . "-> Get user list for the group - " . json_encode($params, true));
+        $this->log->info(__CLASS__ . "-> Get user list for the team - " . json_encode($params, true));
         try {
-            $count = $this->groupService->getUserList($params, $filterParams);
+            $count = $this->teamService->getUserList($params, $filterParams);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         } 
         return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
+    }
+    public function getSubteamsAction()
+    {
+        $params = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . "-> \nGet Team - " . print_r($params, true) . "Parameters - " . print_r($params, true));
+        try {
+            $result = $this->teamService->getSubteams($params);
+            return $this->getSuccessResponseWithData($result);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        } 
     }
 }

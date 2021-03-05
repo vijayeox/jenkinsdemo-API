@@ -4,7 +4,7 @@ namespace App;
 
 use App\Service\MenuItemService;
 use App\Service\PageService;
-use Group\Service\GroupService;
+use Team\Service\TeamService;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\FieldTable;
 use Oxzion\Model\FileTable;
@@ -51,7 +51,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\MenuItemService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\MenuItemService($container->get('config'), $container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
+                    return new Service\MenuItemService($container->get('config'), $container->get(TeamService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
                 },
                 Model\MenuItemTable::class => function ($container) {
                     $tableGateway = $container->get(Model\MenuItemTableGateway::class);

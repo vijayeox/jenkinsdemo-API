@@ -116,7 +116,7 @@ workflow:
     entity: dummyEntity1
   - name: Group Liability
     uuid: 76dc0348-910c-4ae8-a05a-78ba47803208
-    bpmn_file: group_liability.bpmn
+    bpmn_file: team_liability.bpmn
     entity: dummyEntity1
   - name: Dive Store
     uuid: cb99e634-de00-468d-9230-d6f77d241c5b

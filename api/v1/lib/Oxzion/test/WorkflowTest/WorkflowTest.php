@@ -102,7 +102,7 @@ class WorkflowTest extends TestCase
         $delete = $processManager->remove($deploymentId);
         $this->assertEquals($delete, 1);
     }
-    public function testAssignGroupProcess()
+    public function testAssignTeamProcess()
     {
         $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
@@ -110,10 +110,10 @@ class WorkflowTest extends TestCase
         $activityManager = $workflowFactory->getActivity();
         if (enableCamunda==0) {
             $mockRestClient = Mockery::mock('RestClient');
-            $mockRestClient->expects('postMultiPart')->with("deployment/create", array("deployment-name"=>'TestProcess1'), array(__DIR__."/Dataset/testAssigntoGroup.bpmn"))->once()->andReturn('{"tenantId":null,"deployedProcessDefinitions":{"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381":{"id":"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381","key":"main","category":"http://camunda.org/schema/1.0/bpmn","description":null,"name":"Task Form","version":2,"resource":"ScriptTaskTest.bpmn","deploymentId":"2846989b-9e78-11e9-a32f-3efeb18f8381","diagram":null,"suspended":false,"tenantId":null,"versionTag":null,"historyTimeToLive":null}},"deployedCaseDefinitions":null,"deployedDecisionDefinitions":null,"deployedDecisionRequirementsDefinitions":null}');
+            $mockRestClient->expects('postMultiPart')->with("deployment/create", array("deployment-name"=>'TestProcess1'), array(__DIR__."/Dataset/testAssigntoTeam.bpmn"))->once()->andReturn('{"tenantId":null,"deployedProcessDefinitions":{"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381":{"id":"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381","key":"main","category":"http://camunda.org/schema/1.0/bpmn","description":null,"name":"Task Form","version":2,"resource":"ScriptTaskTest.bpmn","deploymentId":"2846989b-9e78-11e9-a32f-3efeb18f8381","diagram":null,"suspended":false,"tenantId":null,"versionTag":null,"historyTimeToLive":null}},"deployedCaseDefinitions":null,"deployedDecisionDefinitions":null,"deployedDecisionRequirementsDefinitions":null}');
             $processManager->setRestClient($mockRestClient);
         }
-        $data = $processManager->deploy('TestProcess1', array(__DIR__."/Dataset/testAssigntoGroup.bpmn"));
+        $data = $processManager->deploy('TestProcess1', array(__DIR__."/Dataset/testAssigntoTeam.bpmn"));
         $this->assertNotEquals(0, $data);
         $deploymentId = isset($data['id']) ? $data['id'] : null;
         if (enableCamunda==0) {
@@ -126,10 +126,10 @@ class WorkflowTest extends TestCase
         // print_r($processStart);exit;
         $this->assertNotEquals(0, $definitionId);
         if (enableCamunda==0) {
-            $mockRestClient->expects('post')->with('task', array('candidateGroup'=>1))->once()->andReturn(json_encode(array(array('id'=>12321))));
+            $mockRestClient->expects('post')->with('task', array('candidateTeam'=>1))->once()->andReturn(json_encode(array(array('id'=>12321))));
             $activityManager->setRestClient($mockRestClient);
         }
-        $activityList = $activityManager->getActivitiesByGroup(1);
+        $activityList = $activityManager->getActivitiesByTeam(1);
         $this->assertNotEquals(0, count($activityList));
         $activityId = end($activityList)['id'];
         if (enableCamunda==0) {

@@ -133,11 +133,11 @@ class ActivityImpl implements Activity
         }
     }
 
-    public function getActivitiesByGroup($groupId)
+    public function getActivitiesByTeam($teamId)
     {
         try {
             $this->logger->info("Entering the resolveActivity method in ActivityImpl File");
-            $response =  $this->restClient->post('task', array("candidateGroup"=>$groupId));
+            $response =  $this->restClient->post('task', array("candidateTeam"=>$teamId));
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {

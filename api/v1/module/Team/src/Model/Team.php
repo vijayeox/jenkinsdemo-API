@@ -1,9 +1,9 @@
 <?php
-namespace Group\Model;
+namespace Team\Model;
 
 use Oxzion\Model\Entity;
 
-class Group extends Entity
+class Team extends Entity
 {
     protected $data = array(
         'id' => null,

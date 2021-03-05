@@ -37,7 +37,7 @@ class UserControllerTest extends ControllerTest
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/User.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Project/test/Dataset/Project.yml");
-        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Group/test/Dataset/Group.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Team/test/Dataset/Team.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Role/test/Dataset/Role.yml");
         return $dataset;
     }
@@ -792,7 +792,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['message'],'Not allowed to delete the project manager');
     }
 
-    public function testDeleteGroupManager()
+    public function testDeleteTeamManager()
     {
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
@@ -804,7 +804,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'],'Not allowed to delete the group manager');
+        $this->assertEquals($content['message'],'Not allowed to delete the team manager');
     }
 
     

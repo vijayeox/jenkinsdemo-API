@@ -455,7 +455,7 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
          if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobGroup":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobTeam":"autoRenewalJob"}'));
         }
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appService->processJob($data);
@@ -476,8 +476,8 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
-            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
         }
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appService->processJob($data);
@@ -498,8 +498,8 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
-            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"autoRenewalJob"}'));
         }
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appService->processJob($data);
@@ -520,9 +520,9 @@ class AppServiceTest extends AbstractServiceTest
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1')),array('uuid' => '0c91b316-6f9b-11eb-9439-0242ac130002', 'name' => 'Job3', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '214','padi' => '2000', 'padiVerified' => '1'))));
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
-            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"JOB1"}'));
-            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"aca4a3e4-6f8d-11eb-9439-0242ac130002","JobGroup":"JOB2"}'));
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobGroup":"autoRenewalJob"}'));  $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05fb2-6f9e-11eb-9439-0242ac130002","JobGroup":"Job3"}'));
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"JOB1"}'));
+            $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"aca4a3e4-6f8d-11eb-9439-0242ac130002","JobTeam":"JOB2"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobTeam":"autoRenewalJob"}'));  $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05fb2-6f9e-11eb-9439-0242ac130002","JobTeam":"Job3"}'));
         }
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appService->processJob($data);

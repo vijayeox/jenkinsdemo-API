@@ -128,67 +128,67 @@ class TaskCallbackController extends AbstractApiControllerHelper
         return $this->getErrorResponse("Adding User To Task Failure ", 400);
     }
 
-    public function createGroupAction()
+    public function createTeamAction()
     {
         $params = $this->extractPostData();
-        $params['groupData'] = isset($params['groupname']) ? ($params['groupname']) : "No Group to ADD";
-        $this->log->info(TaskCallbackController::class . ":Group Data- " . $params['groupData']);
-        $response = $this->taskService->addGroupToTask($params['groupname']);
+        $params['teamData'] = isset($params['teamname']) ? ($params['teamname']) : "No Team to ADD";
+        $this->log->info(TaskCallbackController::class . ":Team Data- " . $params['teamData']);
+        $response = $this->taskService->addTeamToTask($params['teamname']);
         if ($response['success']) {
-            $this->log->info(TaskCallbackController::class . ":Added group to task");
+            $this->log->info(TaskCallbackController::class . ":Added team to task");
             return $this->getSuccessResponseWithData($response['result']);
         } else {
-            $this->log->info(TaskCallbackController::class . ":Addition of Group to task failed");
-            return $this->getErrorResponse("failed to add group", 400, $response['errors']);
+            $this->log->info(TaskCallbackController::class . ":Addition of Team to task failed");
+            return $this->getErrorResponse("failed to add team", 400, $response['errors']);
         }
-        return $this->getErrorResponse("Adding Group To Task Failure ", 400);
+        return $this->getErrorResponse("Adding Team To Task Failure ", 400);
     }
 
-    public function updateGroupAction()
+    public function updateTeamAction()
     {
         $params = $this->extractPostData();
-        $params['groupdata'] = isset($params['new_groupname']) ? ($params['new_groupname']) : "No Group to Update";
-        $this->log->info(TaskCallbackController::class . ":Group Data- " . $params['groupdata']);
-        $response = $this->taskService->updateGroupInTask($params['old_groupname'], $params['new_groupname']);
+        $params['teamdata'] = isset($params['new_teamname']) ? ($params['new_teamname']) : "No Team to Update";
+        $this->log->info(TaskCallbackController::class . ":Team Data- " . $params['teamdata']);
+        $response = $this->taskService->updateTeamInTask($params['old_teamname'], $params['new_teamname']);
         if ($response['success']) {
-            $this->log->info(TaskCallbackController::class . ":Group Updated Successfully");
+            $this->log->info(TaskCallbackController::class . ":Team Updated Successfully");
             return $this->getSuccessResponseWithData($response['result']);
         } else {
-            $this->log->info(TaskCallbackController::class . ":Updation of Group in task failed");
-            return $this->getErrorResponse("failed to update group", 400, $response['errors']);
+            $this->log->info(TaskCallbackController::class . ":Updation of Team in task failed");
+            return $this->getErrorResponse("failed to update team", 400, $response['errors']);
         }
-        return $this->getErrorResponse("Update Group Failed ", 400);
+        return $this->getErrorResponse("Update Team Failed ", 400);
     }
 
-    public function deleteGroupAction()
+    public function deleteTeamAction()
     {
         $params = $this->extractPostData();
-        $params['groupdata'] = isset($params['groupname']) ? ($params['groupname']) : "No Group to Delete";
-        $this->log->info(TaskCallbackController::class . ":Group Data- " . $params['groupdata']);
-        $response = $this->taskService->deleteGroupFromTask($params['groupname']);
+        $params['teamdata'] = isset($params['teamname']) ? ($params['teamname']) : "No Team to Delete";
+        $this->log->info(TaskCallbackController::class . ":Team Data- " . $params['teamdata']);
+        $response = $this->taskService->deleteTeamFromTask($params['teamname']);
         if ($response['success']) {
-            $this->log->info(TaskCallbackController::class . ":Group Deleted Successfully");
+            $this->log->info(TaskCallbackController::class . ":Team Deleted Successfully");
             return $this->getSuccessResponseWithData($response['result']);
         } else {
-            $this->log->info(TaskCallbackController::class . ":Deletion of Group in task failed");
-            return $this->getErrorResponse("failed to delete group", 400, $response['errors']);
+            $this->log->info(TaskCallbackController::class . ":Deletion of Team in task failed");
+            return $this->getErrorResponse("failed to delete team", 400, $response['errors']);
         }
-        return $this->getErrorResponse("Delete Group From Task Failure ", 400);
+        return $this->getErrorResponse("Delete Team From Task Failure ", 400);
     }
 
-    public function updateGroupUsersAction()
+    public function updateTeamUsersAction()
     {
         $params = $this->extractPostData();
         $params['userData'] = isset($params['users']) ? ($params['users']) : "No User to ADD";
-        $this->log->info(TaskCallbackController::class . ":Users to group Data- " . json_encode($params['userData']));
-        $response = $this->taskService->addUsersToGroup($params['groupname'], $params['users']);
+        $this->log->info(TaskCallbackController::class . ":Users to team Data- " . json_encode($params['userData']));
+        $response = $this->taskService->addUsersToTeam($params['teamname'], $params['users']);
         if ($response['success']) {
-            $this->log->info(TaskCallbackController::class . ":Added users to group");
+            $this->log->info(TaskCallbackController::class . ":Added users to team");
             return $this->getSuccessResponseWithData($response['result']);
         } else {
-            $this->log->info(TaskCallbackController::class . ":Addition of Users to group failed");
-            return $this->getErrorResponse("failed to add users to group", 400, $response['errors']);
+            $this->log->info(TaskCallbackController::class . ":Addition of Users to team failed");
+            return $this->getErrorResponse("failed to add users to team", 400, $response['errors']);
         }
-        return $this->getErrorResponse("Adding User To Group Failure ", 400);
+        return $this->getErrorResponse("Adding User To Team Failure ", 400);
     }
 }

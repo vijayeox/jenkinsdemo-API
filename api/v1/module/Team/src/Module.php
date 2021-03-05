@@ -1,6 +1,6 @@
 <?php
 
-namespace Group;
+namespace Team;
 
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Messaging\MessageProducer;
@@ -34,26 +34,26 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Service\GroupService::class => function ($container) {
+                Service\TeamService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $accoutService = $container->get(AccountService::class);
                     $userService = $container->get(UserService::class);
-                    return new Service\GroupService($container->get('config'), 
+                    return new Service\TeamService($container->get('config'), 
                                                     $dbAdapter, 
-                                                    $container->get(Model\GroupTable::class), 
+                                                    $container->get(Model\TeamTable::class), 
                                                     $accoutService, 
                                                     $container->get(MessageProducer::class),
                                                     $userService);
                 },
-                Model\GroupTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\GroupTableGateway::class);
-                    return new Model\GroupTable($tableGateway);
+                Model\TeamTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\TeamTableGateway::class);
+                    return new Model\TeamTable($tableGateway);
                 },
-                Model\GroupTableGateway::class => function ($container) {
+                Model\TeamTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Group());
-                    return new TableGateway('ox_group', $dbAdapter, null, $resultSetPrototype);
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Team());
+                    return new TableGateway('ox_team', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
@@ -63,17 +63,17 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Controller\GroupController::class => function ($container) {
-                    return new Controller\GroupController(
-                        $container->get(Model\GroupTable::class),
-                        $container->get(Service\GroupService::class),
+                Controller\TeamController::class => function ($container) {
+                    return new Controller\TeamController(
+                        $container->get(Model\TeamTable::class),
+                        $container->get(Service\TeamService::class),
                         $container->get(AdapterInterface::class),
                         $container->get(AccountService::class)
                     );
                 },
-                Controller\GroupLogoController::class => function ($container) {
-                    return new Controller\GroupLogoController(
-                        $container->get(Service\GroupService::class),
+                Controller\TeamLogoController::class => function ($container) {
+                    return new Controller\TeamLogoController(
+                        $container->get(Service\TeamService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

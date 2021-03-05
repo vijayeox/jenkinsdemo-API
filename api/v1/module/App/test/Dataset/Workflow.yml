@@ -399,17 +399,17 @@ ox_activity_instance:
     workflow_instance_id: 6
     status: "Completed"
     account_id: 1
-ox_group:
+ox_team:
   - id: 1
     uuid: "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4"
-    name: Test group
+    name: Test team
     account_id: 1
     manager_id: 1
     created_id: 1
     date_created: "2019-06-26 00:00:00"
-ox_user_group:
+ox_user_team:
   - id: 1
-    group_id: 1
+    team_id: 1
     avatar_id: 1
 ox_file_assignee:
   - id: 1

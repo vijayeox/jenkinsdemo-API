@@ -1,18 +1,18 @@
 <?php
 
-namespace Group;
+namespace Team;
 
 use Zend\Router\Http\Segment;
 
 return [
     'router' => [
         'routes' => [
-            'groups' => [
+            'teams' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[account/:accountId/]group[/:groupId]',
+                    'route' => '/[account/:accountId/]team[/:teamId]',
                     'defaults' => [
-                        'controller' => Controller\GroupController::class,
+                        'controller' => Controller\TeamController::class,
                         'access' => [
                             // SET ACCESS CONTROL
                             'put' => 'MANAGE_GROUP_WRITE',
@@ -22,16 +22,16 @@ return [
                     ],
                 ],
             ],
-            'groupsUser' => [
+            'teamsUser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/group/user/:userId',
+                    'route' => '/team/user/:userId',
                     'defaults' => [
-                        'controller' => Controller\GroupController::class,
+                        'controller' => Controller\TeamController::class,
                         'method' => 'GET',
-                        'action' => 'getGroupsforUser',
+                        'action' => 'getTeamsforUser',
                         'access' => [
-                            'getGroupsforUser' => 'MANAGE_GROUP_WRITE',
+                            'getTeamsforUser' => 'MANAGE_GROUP_WRITE',
                         ],
                     ],
                 ],
@@ -39,9 +39,9 @@ return [
             'getusers' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[account/:accountId/]group/:groupId/users',
+                    'route' => '/[account/:accountId/]team/:teamId/users',
                     'defaults' => [
-                        'controller' => Controller\GroupController::class,
+                        'controller' => Controller\TeamController::class,
                         'method' => 'GET',
                         'action' => 'getuserlist',
                         'access' => [
@@ -53,9 +53,9 @@ return [
             'saveusers' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[account/:accountId/]group/:groupId/save',
+                    'route' => '/[account/:accountId/]team/:teamId/save',
                     'defaults' => [
-                        'controller' => Controller\GroupController::class,
+                        'controller' => Controller\TeamController::class,
                         'method' => 'POST',
                         'action' => 'saveUser',
                         'access' => [
@@ -64,23 +64,37 @@ return [
                     ],
                 ],
             ],
-            'groupsList' => [
+            'teamsList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[account/:accountId/]groups/list',
+                    'route' => '/[account/:accountId/]teams/list',
                     'defaults' => [
-                        'controller' => Controller\GroupController::class,
+                        'controller' => Controller\TeamController::class,
                         'method' => 'POST',
-                        'action' => 'groupsList',
+                        'action' => 'teamsList',
                     ],
                 ],
             ],
-            'groupLogo' => [
+            'getsubteam' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/group/:accountId/logo/:groupId',
+                    'route' => '/team/:teamId/subteam',
                     'defaults' => [
-                        'controller' => Controller\GroupLogoController::class,
+                        'controller' => Controller\TeamController::class,
+                        'method' => 'GET',
+                        'action' => 'getSubteams',
+                        'access' => [
+                            'getSubteams' => 'MANAGE_GROUP_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'teamLogo' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/team/:accountId/logo/:teamId',
+                    'defaults' => [
+                        'controller' => Controller\TeamLogoController::class,
                     ],
                 ],
             ],

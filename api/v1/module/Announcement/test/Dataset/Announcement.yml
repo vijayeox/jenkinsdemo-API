@@ -101,12 +101,12 @@ ox_announcement:
     created_id: 1
     status: 1
     type: "HOMESCREEN"
-ox_announcement_group_mapper:
+ox_announcement_team_mapper:
   -
     id: 1
     announcement_id: 1
-    group_id: 1
+    team_id: 1
   -
     id: 2
     announcement_id: 2
-    group_id: 1
+    team_id: 1
