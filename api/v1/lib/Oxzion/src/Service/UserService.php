@@ -299,7 +299,7 @@ class UserService extends AbstractService
             }
             
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array(
+            $newUserMailParams = array_merge($data,array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
@@ -309,7 +309,19 @@ class UserService extends AbstractService
                 'uuid' => $data['uuid'],
                 'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
-            )), 'USER_ADDED');
+            ));
+            $this->messageProducer->sendTopic(json_encode($newUserMailParams), 'USER_ADDED');
+            // $this->messageProducer->sendTopic(json_encode(array(
+            //     'username' => $data['username'],
+            //     'firstname' => $data['firstname'],
+            //     'lastname' => $data['lastname'],
+            //     'email' => $data['email'],
+            //     'accountId' => $accountId,
+            //     'password' => $password,
+            //     'uuid' => $data['uuid'],
+            //     'resetCode' => $setPasswordCode,
+            //     'subject' => isset($data['subject']) ? $data['subject'] : null
+            // )), 'USER_ADDED');
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
