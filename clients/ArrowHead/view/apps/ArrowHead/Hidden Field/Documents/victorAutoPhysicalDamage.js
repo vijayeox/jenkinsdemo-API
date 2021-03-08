@@ -110,9 +110,18 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       return resultOccupancyType
         ? {
             ...locationItem,
-            checkAvgExposure: data.dol_12MonthAvg.filter(
-              (i) => i.locationNum == locationItem.locationNum
-            )[0].total,
+            ...data.dol_12MonthAvg[locationItem.locationNum - 1],
+            ...data.dol_Protection[locationItem.locationNum - 1].keyControls,
+            ...data.dol_Protection[locationItem.locationNum - 1]
+              .entranceQuestions,
+            floorNew:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_new,
+            floorUsed:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_used,
+            floorDemosFurnishedAutos:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_demosFurnishedAutos,
+            floorLoanersShopService:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_loanersShopService,
             indexValue: (indexValue += 1),
             PrimaryOEMList: resultPrimaryOEM,
             DOLOccupancy: resultOccupancyType,
