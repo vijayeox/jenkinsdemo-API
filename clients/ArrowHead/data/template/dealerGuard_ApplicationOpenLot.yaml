@@ -288,7 +288,7 @@
 -
    Source Worksheet: 'False Pretense Limit:'
    pageName: APPLICATION
-   key: falsePretenseNumber
+   key: dealerguardOpenLot*checkfalsePretenseNumber
    cell: 'Y22'
 -
    Source Worksheet: New - Comp
