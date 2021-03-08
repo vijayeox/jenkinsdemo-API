@@ -60,8 +60,8 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
     checkComputerizedKeyVault: data.dol_Protection.some(
       (item) => item.keyControls.computerizedKeyVault == true
     )
-      ? "Yes"
-      : "No",
+      ? "yes"
+      : "no",
     checkSecurityGuards: false,
     // Need to check condition. Occupancy type is at building Level but
     // dol_Protection[0]premisesLotProtection are at loc level
@@ -78,6 +78,10 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
     //     }
     //   }
     // ),
+    checkfalsePretenseNumber:
+      data.falsePretenseNumber > 100000
+        ? "Increased above the current maximum per vehicle value"
+        : data.falsePretenseNumber,
     checkserviceRepairSales: data.financialsYTDSalesTotal.service > 0,
     SOVGrid: data.locations
       .filter((i) => i.buildingNum == 1)
