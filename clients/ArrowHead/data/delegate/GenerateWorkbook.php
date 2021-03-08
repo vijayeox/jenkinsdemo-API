@@ -386,12 +386,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
 
     private function getNecessaryDataForMails($data)
     {
-        $requiredData['umim'] = $data['garageumUim'];
+        $requiredData['umim'] = isset($data['garageumUim']) ? $data['garageumUim'] : 0;
         $requiredData['medicalExpense'] = $data['garageLiabilityMedicalExpense'];
         $requiredData['compDeductible'] = 0;
         $requiredData['collDeductible'] = 0;
         $requiredData['driverName'] = $requiredData['umim1'] = $requiredData['medicaL'] = $requiredData['comP'] = $requiredData['colL'] = array();
         if(isset($data['driverOtherCargrid'])) {
+            $data['driverOtherCargrid'] = is_array($data['driverOtherCargrid']) ? $data['driverOtherCargrid'] : json_decode($data['driverOtherCargrid'],true);
             $requiredData['compDeductible'] = isset($data['driverOtherCargrid'][0]['compdeductible']) ? $data['driverOtherCargrid'][0]['compdeductible'] : 1000;
             $requiredData['collDeductible'] = isset($data['driverOtherCargrid'][0]['colldeductible']) ? $data['driverOtherCargrid'][0]['colldeductible'] : 1000;
             $requiredData['driverName'] = array_column($data['driverOtherCargrid'], 'nameofdrivertobecovered');
@@ -408,10 +409,12 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $requiredData['umbrellaCoverageName'] = array();
         $requiredData['umbrellaCoveragePercentage'] = array();
         if(isset($data['UmbrellaCoverageAdditional'])) {
+            $data['UmbrellaCoverageAdditional'] = is_array($data['UmbrellaCoverageAdditional']) ? $data['UmbrellaCoverageAdditional'] : json_decode($data['UmbrellaCoverageAdditional'],true);
             $requiredData['umbrellaCoverageName'] = array_column($data['UmbrellaCoverageAdditional'], 'umbrellaCoverageAdditionalName');
             $requiredData['umbrellaCoveragePercentage'] = array_column($data['UmbrellaCoverageAdditional'], 'ownershipPercentageUmbrella');
             $this->addSymbolToAllElements($requiredData['umbrellaCoveragePercentage'],'%',false);
         }
+        $this->logger->info("Required data for email- " . print_r($requiredData,true));
         return $requiredData;
     }
 
