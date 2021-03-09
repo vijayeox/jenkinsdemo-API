@@ -144,3 +144,8 @@ ox_widget_query:
     ox_widget_id: 128
     sequence: 1
     configuration: "Sample"  
+  -
+    ox_query_id: 124
+    ox_widget_id: 129
+    sequence: 1
+    configuration: "Sample"  

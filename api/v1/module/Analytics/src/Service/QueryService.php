@@ -275,7 +275,11 @@ class QueryService extends AbstractService
                 }
             }
         }
-        $app_name = $parameters['app_name'];
+        if (isset($parameters['app_name'])) {
+            $app_name = $parameters['app_name'];
+        } else {
+            $app_name = '';
+        }
         if (isset($parameters['entity_name'])) {
             $entity_name = $parameters['entity_name'];
         } else {

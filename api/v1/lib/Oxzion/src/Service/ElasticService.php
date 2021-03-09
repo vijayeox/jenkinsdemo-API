@@ -162,7 +162,7 @@ class ElasticService
 			$boolfilterquery['query']['bool'] = $tmpfilter;
 		}	
 		$boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
-		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:500000;
+		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
 		if(!empty($searchconfig['aggregates'])) {
 			if (!isset($searchconfig['select'])) {
 				$pagesize=0;
@@ -179,11 +179,11 @@ class ElasticService
 		} 
         
         $boolfilterquery['explain'] = true;
-        // if (!empty($searchconfig['append_account_id'])) {
-        //     if ($searchconfig['append_account_id']==1) {
-        //         $app_name = $app_name.'_'.$accountId;
-        //     }
-        // }
+        if (!empty($searchconfig['append_account_id'])) {
+            if ($searchconfig['append_account_id']==1) {
+                $app_name = $app_name.'_'.$accountId;
+            }
+        }
         $params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
         if(empty($searchconfig['aggregates'])) {
             if (isset($searchconfig['sort'])) {
@@ -372,7 +372,7 @@ class ElasticService
 
     protected function getFilters($searchconfig, $accountId)
     {
-        $mustquery['must'][] = ['term' => ['org_id' => $accountId]];
+        $mustquery['must'][] = ['term' => ['account_id' => $accountId]];
         if (!empty($searchconfig['aggregates'])) {
             $aggregates = $searchconfig['aggregates'];
             $mustquery['must'][] = array('exists' => array('field' => $aggregates[key($aggregates)]));

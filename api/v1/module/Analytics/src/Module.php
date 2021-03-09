@@ -40,7 +40,8 @@ class Module implements ConfigProviderInterface
                         array("ELASTIC" => $container->get(\Oxzion\Analytics\Elastic\AnalyticsEngineImpl::class),
                             "MYSQL" => $container->get(\Oxzion\Analytics\Relational\AnalyticsEngineMySQLImpl::class),
                             "POSTGRES" => $container->get(\Oxzion\Analytics\Relational\AnalyticsEnginePostgresImpl::class),
-                            "QUICKBOOKS" => $container->get(\Oxzion\Analytics\API\AnalyticsEngineQuickBooksImpl::class)));
+                            "QUICKBOOKS" => $container->get(\Oxzion\Analytics\API\AnalyticsEngineQuickBooksImpl::class),
+                            "API" => $container->get(\Oxzion\Analytics\API\AnalyticsEngineCustomAPIImpl::class)));
                     // return new \Oxzion\ServiceLogWrapper($service);
                 },
                 Model\DataSourceTable::class => function ($container) {

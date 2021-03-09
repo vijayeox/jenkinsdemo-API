@@ -4,19 +4,22 @@ ox_widget_target:
     target_id: 10
     widget_id: 120
     trigger_query_id: null
-    group_key: 'john'
+    group_key: 'owner_username_0'
+    group_value: 'john'
   -
     id: 2
     target_id: 11
     widget_id: 120
     trigger_query_id: null
-    group_key: 'jane'
+    group_key: 'owner_username_1'
+    group_value: 'jane'
   -
     id: 3
     target_id: 12
     widget_id: 120
     trigger_query_id: null
-    group_key: 'mark'
+    group_key: 'owner_username_2'
+    group_value: 'mark'
   -
     id: 4
     target_id: 12
