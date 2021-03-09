@@ -83,7 +83,7 @@ class CommandService extends AbstractService
             unset($data['command']);
             return $this->processCommand($data, $command, $request);
         } else if (isset($data['commands'])) {
-            $this->logger->info("Command Service - Commands");
+            $this->logger->info("Command Service - Comamnds");
             $commands = $data['commands'];
             $this->logger->info("COMMAND LIST ------" . print_r($commands, true));
             unset($data['commands']);
