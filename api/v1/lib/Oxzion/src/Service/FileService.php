@@ -426,6 +426,7 @@ class FileService extends AbstractService
                     $this->logger->info("FILE ID  ------" . json_encode($result));
                     if ($result[0]['data']) {
                         $result[0]['data'] = json_decode($result[0]['data'], true);
+                       
                     }
                     unset($result[0]['id']);
                     $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
