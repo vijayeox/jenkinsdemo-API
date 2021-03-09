@@ -1149,6 +1149,9 @@
    pageName: Property
    cell: W40
    type: DataGrid
+   returnValue: 
+      yes: 'Yes'
+      no: 'No'
 -
    key: buildings_equipmentBreakdown
    method: simpleDatagrid
