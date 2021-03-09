@@ -111,6 +111,18 @@ class Unanswered extends AbstractDocumentAppDelegate
                     }
                 }
             }
+            elseif($field['type'] == 'selectboxes') {
+                //Flatten select component
+                $finalFieldList[$label] = $this->getFieldLabel($field);
+                $template = json_decode($field['template'],true);
+                if(isset($template['values']) && !empty($template['values'])) {
+                    foreach ($template['values'] as $key => $value) {
+                        $finalFieldList[$value['value']] = $value['label'];
+                    }
+                }
+            }
+
+
             elseif($field['type'] == 'survey') {
                 // Flatten survey component
                 $finalFieldList[$label] = $this->getFieldLabel($field);
@@ -288,7 +300,6 @@ class Unanswered extends AbstractDocumentAppDelegate
         $unansweredQuestions = [];
         //For file data when it gets encoded and stored in the db
         $this->decodeFileData($fileData);
-
         $this->getAllUnansweredAndAnsweredQuestions($fileData,$unansweredQuestions, $answeredQuestions);
         //Data grids not filled to be added which can't be done for the children as the leaf nodes need to be removed
         foreach ($fileData as $key => $value) {
