@@ -190,9 +190,14 @@ class Unanswered extends AbstractDocumentAppDelegate
     }
 
     private function getAnsweredQuestionsPrintReady($finalFieldList,&$answeredQuestions) {
+        $counters = array();
         foreach ($answeredQuestions as $key => $value) {
             if(isset($finalFieldList[$key]) || is_numeric($key)){
                 $label = is_numeric($key) ? $key : $finalFieldList[$key];
+                if(isset($answeredQuestions[$label]) && !is_numeric($label)) {
+                    $counters[$label] = isset($counters[$label]) ? $counters[$label] + 1 : 1;
+                    $label = strval($label."-(".$counters[$label].")");
+                }
                 if(is_array($value)) {
                     $answeredQuestions[$label] = $value;
                     $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions[$label]);
@@ -261,7 +266,7 @@ class Unanswered extends AbstractDocumentAppDelegate
     {
         // $this->logger->info("Executing Unanswered Delegate with Data" . print_r($data,true));
         $unansweredQuestionArr = $unansweredQuestionFields = array();
-
+        $sequence = $data['sequence'];
         $uuid = UuidUtil::uuid();
         //Get temp location to save file
         $dest = $this->getTempLocation('Unanswered',$uuid);
@@ -280,6 +285,7 @@ class Unanswered extends AbstractDocumentAppDelegate
         //For file data when it gets encoded and stored in the db
         $this->decodeFileData($fileData);
         $this->getAllUnansweredAndAnsweredQuestions($fileData,$unansweredQuestions, $answeredQuestions);
+
         //Data grids not filled to be added which can't be done for the children as the leaf nodes need to be removed
         foreach ($fileData as $key => $value) {
             if(is_string($value)) {
@@ -289,6 +295,16 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
             }
         }
+
+        //Sequence outer keys
+        $temp = array();
+        foreach ($sequence as $key => $value) {
+            foreach ($fileData as $key1 => $value1) {
+                if($value == $key1)
+                    $temp[$value] = $value1;
+            }
+        }
+        $fileData = $temp;
 
         if(isset($data['unansweredQuestions'])) {
             $unansweredQuestionFields = array_column($data['unansweredQuestions'], 'api');
