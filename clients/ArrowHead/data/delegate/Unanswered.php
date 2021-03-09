@@ -21,36 +21,6 @@ class Unanswered extends AbstractDocumentAppDelegate
         parent::__construct();
     }
 
-    //results for array1 (when it is in more, it is in array1 and not in array2. same for less)
-    private function compare_multi_Arrays($array1, $array2){
-        $result = array("more"=>array(),"less"=>array(),"diff"=>array());
-        foreach($array1 as $k => $v) {
-          if(is_array($v) && isset($array2[$k]) && is_array($array2[$k])){
-            $sub_result = $this->compare_multi_Arrays($v, $array2[$k]);
-            //merge results
-            foreach(array_keys($sub_result) as $key){
-              if(!empty($sub_result[$key])){
-                $result[$key] = array_merge_recursive($result[$key],array($k => $sub_result[$key]));
-              }
-            }
-          }else{
-            if(isset($array2[$k])){
-              if($v !== $array2[$k]){
-                $result["diff"][$k] = array("from"=>$v,"to"=>$array2[$k]);
-              }
-            }else{
-              $result["more"][$k] = $v;
-            }
-          }
-        }
-        foreach($array2 as $k => $v) {
-            if(!isset($array1[$k])){
-                $result["less"][$k] = $v;
-            }
-        }
-        return $result;
-    }
-
     private function isJson($string) {
         $array = json_decode($string, true);
         if(is_array($array) && json_last_error() == JSON_ERROR_NONE){
@@ -121,7 +91,6 @@ class Unanswered extends AbstractDocumentAppDelegate
                     }
                 }
             }
-
 
             elseif($field['type'] == 'survey') {
                 // Flatten survey component
@@ -202,13 +171,20 @@ class Unanswered extends AbstractDocumentAppDelegate
         foreach ($unansweredQuestions as $key => $value) {
             if(is_array($value)) {
                 if(!is_numeric($key)) {
-                    $unansweredQuestions[$key]['label'] = isset($finalFieldList[$key]) ? $finalFieldList[$key] : $this->getLabel($fieldList,$key);
+                    $unansweredQuestions[$key]['label'] = isset($finalFieldList[$key]) ? $finalFieldList[$key] : null;
+                    if($unansweredQuestions[$key]['label'] == null) {
+                        unset($unansweredQuestions[$key]);
+                        continue;
+                    }
                 }
                 $this->getUnansweredQuestionPrintReady($finalFieldList,$unansweredQuestions[$key],$fieldList);
             } else {
                 if($key != "label") {
-                    $unansweredQuestions[$key] = isset($finalFieldList[$key]) ? $finalFieldList[$key] : $this->getLabel($fieldList,$key);
+                    $unansweredQuestions[$key] = isset($finalFieldList[$key]) ? $finalFieldList[$key] : null;
                 }
+            }
+            if(!$unansweredQuestions[$key]) {
+                unset($unansweredQuestions[$key]);
             }
         }
     }
@@ -275,6 +251,9 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
         if(isset($data['textFieldIgnore'])) {
             unset($data['textFieldIgnore']);
+        }
+        if(isset($data['managementSubmitApplication'])) {
+            unset($data['managementSubmitApplication']);
         }
     }
 
