@@ -19,7 +19,11 @@
           {/if}
           {call name=printList items=$v1}
         {else}
-            <li>Question :{$k1}<br>Answer : {$v1}</li>
+            {if is_numeric($k1)}
+              <li>{$v1}</li>
+            {else}
+              <li>Question :{$k1}<br>Answer : {$v1}</li>
+            {/if}
         {/if}
       {/foreach}
       </ol>
