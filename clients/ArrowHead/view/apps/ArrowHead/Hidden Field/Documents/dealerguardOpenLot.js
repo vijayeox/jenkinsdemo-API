@@ -1,5 +1,6 @@
 if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
   value = {
+    
     checkfalsePretenseNumber: data.falsePretenseNumber > 100000 ? "Increased above the current maximum per vehicle value" :data.falsePretenseNumber,
     ownershipDate:
       data.numYearsOfOwnership > 0
