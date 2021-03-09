@@ -231,7 +231,11 @@ class FileService extends AbstractService
         }
         if (isset($fileData['observer_team'])) {
             try {
-                $observers_teamList  = json_decode($fileData['observer_team'], true);
+                if(is_string($fileData['observer_team'])){
+                    $observers_teamList  = json_decode($fileData['observer_team'], true);
+                } else {
+                    $observers_teamList  = $fileData['observer_team'];
+                }
                 if (!is_null($observers_teamList)) {
                     foreach($observers_teamList as $observer){
                         $this->setTeamAssignee($fileId,$observer,0);
@@ -262,7 +266,11 @@ class FileService extends AbstractService
         }
         if (isset($fileData['observer_role'])) {
             try {
-                $observer_roleList  = json_decode($fileData['observer_role'], true);
+                if(is_string($fileData['observer_role'])){
+                    $observer_roleList  = json_decode($fileData['observer_role'], true);
+                } else {
+                    $observer_roleList  = $fileData['observer_role'];
+                }
                 if (!is_null($observer_roleList)) {
                     foreach($observer_roleList as $observer){
                         $this->setRoleAssignee($fileId,$observer,0);
@@ -351,7 +359,7 @@ class FileService extends AbstractService
         }
     }
     private function setTeamAssignee($fileId,$role,$assignee){
-        $teamId = $this->getIdFromUuid('ox_role', $role);
+        $teamId = $this->getIdFromUuid('ox_team', $role);
         if ($teamId) {
             $insert = "INSERT INTO `ox_file_assignee` (`file_id`,`team_id`,`assignee`) VALUES (:fileId,:teamId,:assignee)";
             $insertParams = array("fileId" => $fileId, "teamId" => $teamId, "assignee" => $assignee);
@@ -573,7 +581,7 @@ class FileService extends AbstractService
         $version = $file->getProperty('version');
         try {
             $this->beginTransaction();
-        	$this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
+            $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
             $file->assign($fileObject);
             $file->save();
             $result = $file->getGenerated();
@@ -1837,8 +1845,8 @@ class FileService extends AbstractService
         try {
             $fileArray = array();
             $data = array();
-        	$fileStorage = AuthContext::get(AuthConstants::ACCOUNT_UUID) . "/temp/";
-        	$data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
+            $fileStorage = AuthContext::get(AuthConstants::ACCOUNT_UUID) . "/temp/";
+            $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['uuid'] = UuidUtil::uuid();
             $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -1882,7 +1890,7 @@ class FileService extends AbstractService
                 $filter['uuid'] = $params['fileId'];
                 $fileRecord = $this->getDataByParams('ox_file', array("entity_id","data"), $filter, null)->toArray();
                 $fileArray['entity_id'] = $fileRecord[0]['entity_id'];
-          		$filterArray['entity_id'] = $fileRecord[0]['entity_id'];
+                $filterArray['entity_id'] = $fileRecord[0]['entity_id'];
                 $fieldName = $this->getDataByParams('ox_field', array("name"), $filterArray, null)->toArray();
                 if (count($fileRecord) > 0) {
                 $fileData = json_decode($fileRecord[0]['data'],true);
