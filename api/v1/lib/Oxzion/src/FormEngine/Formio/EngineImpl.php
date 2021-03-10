@@ -55,8 +55,9 @@ class EngineImpl implements Engine
                         isset($item['type']) == 'survey') && (isset($item['components']))){
                             $temp = $item;
                     }
+                    $itemlist[] = $item;
                     $itemlist = $this->searchNodes($itemlist, $item['components'],$temp);
-                } else {        
+                } else {
                     if (isset($item['type']) && $item['type']!='button') {
                         if((isset($item['type']) == 'datagrid' || isset($item['type']) == 'editgrid' || isset($item['type']) == 'survey') && (isset($item['components']))){
                             $this->logger->info("DATA GRID-----".json_encode($item));

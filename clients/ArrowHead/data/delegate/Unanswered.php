@@ -150,6 +150,14 @@ class Unanswered extends AbstractDocumentAppDelegate
                     unset($answeredQuestions[$key]);
                 }
             } else {
+                // Handle 1 and 0 showing up
+                if(is_bool($value)) {
+                    if($value) {
+                        $value = "yes";
+                    } else {
+                        $value = "no";
+                    }
+                }
                 $answeredQuestions[$key] = $value;
             }
         }
@@ -260,6 +268,137 @@ class Unanswered extends AbstractDocumentAppDelegate
         if(isset($data['managementSubmitApplication'])) {
             unset($data['managementSubmitApplication']);
         }
+        if(isset($data['textFieldIgnore'])) {
+            unset($data['textFieldIgnore']);
+        }
+    }
+
+    private function answeredQuestionsDataMassaging(&$answeredQuestions) {
+        //Coinsurance radio button
+        if(isset($answeredQuestions['buildings'])) {
+            foreach ($answeredQuestions['buildings'] as $key1 => $value1) {
+                if(isset($value1['coinsuranceform'])) {
+                    if($value1['coinsuranceform'] == 'yes') {
+                        $answeredQuestions['buildings'][$key1]['coinsuranceform'] = "Coinsurance";
+                    } else {
+                        $answeredQuestions['buildings'][$key1]['coinsuranceform'] = "Monthly Limit";
+                    }
+                }
+            }
+        }
+        //Remove location summary
+        if(isset($answeredQuestions['financialsYTDSales'])) {
+            foreach ($answeredQuestions['financialsYTDSales'] as $key => $value) {
+                if(isset($value['total_newAutos'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_newAutos']);
+                }
+                if(isset($value['total_usedAutos'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_usedAutos']);
+                }
+                if(isset($value['total_fAndI'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_fAndI']);
+                }
+                if(isset($value['total_rentalLeasing'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_rentalLeasing']);
+                }
+                if(isset($value['total_service'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_service']);
+                }
+                if(isset($value['total_bodyShop'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_bodyShop']);
+                }
+                if(isset($value['total_parts'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_parts']);
+                }
+                if(isset($value['total_total'])) {
+                    unset($answeredQuestions['financialsYTDSales'][$key]['total_total']);
+                }
+            }
+        }
+        if(isset($answeredQuestions['financialsYTDGrossProfits'])) {
+            foreach ($answeredQuestions['financialsYTDGrossProfits'] as $key => $value) {
+                if(isset($value['total_newAutos'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_newAutos']);
+                }
+                if(isset($value['total_usedAutos'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_usedAutos']);
+                }
+                if(isset($value['total_fAndI'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_fAndI']);
+                }
+                if(isset($value['total_rentalLeasing'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_rentalLeasing']);
+                }
+                if(isset($value['total_service'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_service']);
+                }
+                if(isset($value['total_bodyShop'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_bodyShop']);
+                }
+                if(isset($value['total_parts'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_parts']);
+                }
+                if(isset($value['total_total'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_total']);
+                }
+            }
+        }
+        if(isset($answeredQuestions['financialsYTDSalesAnnualized'])) {
+            foreach ($answeredQuestions['financialsYTDSalesAnnualized'] as $key => $value) {
+                if(isset($value['total_newAutos'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_newAutos']);
+                }
+                if(isset($value['total_usedAutos'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_usedAutos']);
+                }
+                if(isset($value['total_fAndI'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_fAndI']);
+                }
+                if(isset($value['total_rentalLeasing'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_rentalLeasing']);
+                }
+                if(isset($value['total_service'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_service']);
+                }
+                if(isset($value['total_bodyShop'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_bodyShop']);
+                }
+                if(isset($value['total_parts'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_parts']);
+                }
+                if(isset($value['total_total'])) {
+                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_total']);
+                }
+            }
+        }
+        if(isset($answeredQuestions['financialsYTDGrossProfitsAnnualized'])) {
+            foreach ($answeredQuestions['financialsYTDGrossProfitsAnnualized'] as $key => $value) {
+                if(isset($value['total_newAutos'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_newAutos']);
+                }
+                if(isset($value['total_usedAutos'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_usedAutos']);
+                }
+                if(isset($value['total_fAndI'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_fAndI']);
+                }
+                if(isset($value['total_rentalLeasing'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_rentalLeasing']);
+                }
+                if(isset($value['total_service'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_service']);
+                }
+                if(isset($value['total_bodyShop'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_bodyShop']);
+                }
+                if(isset($value['total_parts'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_parts']);
+                }
+                if(isset($value['total_total'])) {
+                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_total']);
+                }
+            }
+        }
     }
 
     public function execute(array $data, Persistence $persistenceService)
@@ -284,7 +423,20 @@ class Unanswered extends AbstractDocumentAppDelegate
         $unansweredQuestions = [];
         //For file data when it gets encoded and stored in the db
         $this->decodeFileData($fileData);
+
+        //Sequence outer keys
+        $temp = array();
+        foreach ($sequence as $key => $value) {
+            foreach ($fileData as $key1 => $value1) {
+                if($value == $key1) {
+                    $temp[$value] = $value1;
+                }
+            }
+        }
+        $fileData = $temp;
+
         $this->getAllUnansweredAndAnsweredQuestions($fileData,$unansweredQuestions, $answeredQuestions);
+        $this->answeredQuestionsDataMassaging($answeredQuestions);
 
         //Data grids not filled to be added which can't be done for the children as the leaf nodes need to be removed
         foreach ($fileData as $key => $value) {
@@ -295,16 +447,6 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
             }
         }
-
-        //Sequence outer keys
-        $temp = array();
-        foreach ($sequence as $key => $value) {
-            foreach ($fileData as $key1 => $value1) {
-                if($value == $key1)
-                    $temp[$value] = $value1;
-            }
-        }
-        $fileData = $temp;
 
         if(isset($data['unansweredQuestions'])) {
             $unansweredQuestionFields = array_column($data['unansweredQuestions'], 'api');
