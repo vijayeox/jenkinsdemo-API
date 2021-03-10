@@ -1,6 +1,5 @@
 if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
   value = {
-    checkfalsePretenseNumber: data.falsePretenseNumber > 100000 ? "Increased above the current maximum per vehicle value" :data.falsePretenseNumber,
     ownershipDate:
       data.numYearsOfOwnership > 0
         ? moment()
@@ -56,25 +55,14 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
     checkDailyKeyInventory: data.dol_Protection.some(
       (item) => item.keyControls.dailyKeyInventory == true
     )
-      ? "yes"
-      : "no",
+      ? "Yes"
+      : "No",
     checkComputerizedKeyVault: data.dol_Protection.some(
       (item) => item.keyControls.computerizedKeyVault == true
     )
       ? "yes"
       : "no",
-    checkSecurityGuards: data.buildings.some(
-        (locationItem) => {
-          if (
-            locationItem.occupancyType == "serviceRepair" &&
-            locationItem.dolsecguards == "yes"
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-    })
-   // checkSecurityGuards: false,
+    checkSecurityGuards: false,
     // Need to check condition. Occupancy type is at building Level but
     // dol_Protection[0]premisesLotProtection are at loc level
 
@@ -90,6 +78,10 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
     //     }
     //   }
     // ),
+    checkfalsePretenseNumber:
+      data.falsePretenseNumber > 100000
+        ? "Increased above the current maximum per vehicle value"
+        : data.falsePretenseNumber,
     checkserviceRepairSales: data.financialsYTDSalesTotal.service > 0,
     SOVGrid: data.locations
       .filter((i) => i.buildingNum == 1)
