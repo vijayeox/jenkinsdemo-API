@@ -2905,19 +2905,10 @@ class FileService extends AbstractService
         private function preProcessRygRule($rule){
         $ruleArray = array_merge([] , $rule);
         foreach ($ruleArray['filters'] as $key => $filterValue) {
-            switch ($filterValue['value']) {
-                case 'today':
-                    $filterValue['value'] = date('Y-m-d');                
-                    break;
-                case 'today+1':
-                    $filterValue['value'] =  date('Y-m-d', strtotime('tomorrow'));                    
-                    break;
-                case 'today-1':
-                    $filterValue['value'] =  date('Y-m-d', strtotime('yesterday'));                    
-                    break;    
-                default:
-                    $filterValue['value'] = $filterValue['value'];
-                    break;
+            if (strtolower(substr($filterValue['value'],0,5))=="date:") {
+                $filterValue['value'] = date("Y-m-d",strtotime(substr($filterValue['value'],5)));
+            } else {
+                $filterValue['value'] = $filterValue['value'];
             }
             $ruleArray['filters'][$key] = $filterValue;
         }
