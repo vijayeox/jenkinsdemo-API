@@ -667,6 +667,13 @@ ox_team:
     manager_id: 1
     created_id: 1
     date_created: "2019-06-26 00:00:00"
+  - id: 2 
+    uuid: "0712a5e1-265d-421b-8014-aebd3a4a6059"
+    name: New group
+    account_id: 1
+    manager_id: 2
+    created_id: 1
+    date_created: "2021-02-18 11:22:27"
 ox_user_team:
   - id: 1
     team_id: 1
@@ -1147,4 +1154,11 @@ ox_file_attachment:
     created_id: 1
     account_id: 1
     created_date: '2020-09-14 12:17:01'
+ox_role:
+  - id: 10
+    name: "TASKUSER"
+    uuid: "e116dab7-ab62-4292-a9f9-06d095a86fed"
+  - id: 11
+    name: "TASKUSER"
+    uuid: "d968f67c-174a-4416-8e06-df87f2c7ed68"
 
