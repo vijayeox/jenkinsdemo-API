@@ -298,6 +298,8 @@ class GenerateReport extends PolicyDocument {
            
             $totalendorsements = 0;
             $previous_policy_data = array();
+            $previous_additionalLocation = array();
+			
         
             if(isset($value['previous_policy_data'])){
                 $previous_policy_data = json_decode($value['previous_policy_data'],true);
@@ -429,8 +431,8 @@ class GenerateReport extends PolicyDocument {
                 }
                 
 		if(isset($previous_policy_data)){ 
-			$previous_policy = array();
-			if($totalendorsements > 0){
+            $previous_policy = array();
+            if($totalendorsements > 0){
 		
                         $previous_policy =  $previous_policy_data[$totalendorsements - 1];
                         $previous_additionalLocation = isset($previous_policy['previous_additionalLocations'])? $previous_policy['previous_additionalLocations'] : array();
