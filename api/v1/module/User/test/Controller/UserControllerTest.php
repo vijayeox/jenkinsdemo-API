@@ -172,7 +172,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+        $this->assertEquals($content['message'], 'user already exists and is inactive. Please contact the admin to activate');
     }
 
 
@@ -228,7 +228,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+        $this->assertEquals($content['message'], 'user already exists and is inactive. Please contact the admin to activate');
     } 
 
     public function testCreateforOtherAccount()
@@ -338,7 +338,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+        $this->assertEquals($content['message'], 'user already exists and is inactive. Please contact the admin to activate');
     }
 
 
@@ -355,7 +355,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+        $this->assertEquals($content['message'], 'user already exists and is inactive. Please contact the admin to activate');
     }
 
     public function testCreateExistingUsernameInactiveUserWithReactivateFlag()
@@ -400,7 +400,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+        $this->assertEquals($content['message'], 'user already exists and is inactive. Please contact the admin to activate');
     }
 
 

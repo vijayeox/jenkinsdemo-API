@@ -703,6 +703,15 @@ class Module
                                 $container->get('config'),
                                 $container->get(Service\QuickBooksService::class));
                 },
+                Service\AnalyticsCustomAPIService::class => function ($container) {
+                    return new Service\AnalyticsCustomAPIService();
+                },
+                Analytics\API\AnalyticsEngineCustomAPIImpl::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Analytics\API\AnalyticsEngineCustomAPIImpl($dbAdapter, 
+                                $container->get('config'),
+                                $container->get(Service\AnalyticsCustomAPIService::class));
+                },
                 Analytics\Elastic\AnalyticsEngineImpl::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Analytics\Elastic\AnalyticsEngineImpl($dbAdapter, 
