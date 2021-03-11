@@ -52,6 +52,11 @@ class Module implements ConfigProviderInterface
                         $container->get(ImsService::class)
                     );
                 },
+                Controller\InsuredController::class => function ($container) {
+                    return new Controller\InsuredController(
+                        $container->get(ImsService::class)
+                    );
+                },
 
             ],
         ];
