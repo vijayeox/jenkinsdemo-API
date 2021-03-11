@@ -400,7 +400,7 @@
    cell: D57
    returnBoolean: "Yes|No"
 -
-   key: dolareanyvehiparked
+   key: victorAutoPhysicalDamage*chkParkGarageOrRoof
    Source Worksheet: 'Are any vehicles parked in Parking Garages '
    pageName: Underwriting Survey
    cell: D58
