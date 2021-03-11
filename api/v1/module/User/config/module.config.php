@@ -47,6 +47,17 @@ return [
                     ],
                 ],
             ],
+            'switchAccount' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/switchaccount',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'switchAccount',
+                    ],
+                ],
+            ],
             'userInfoById' => [
                 'type' => Segment::class,
                 'options' => [

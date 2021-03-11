@@ -106,17 +106,14 @@ class UserService extends AbstractService
             $accountClause = " AND acct.id = :accountId";
             $params['accountId'] = $accountId;
         }
-        $select = "SELECT ou.id, ou.name, ou.uuid as userId, ou.account_id,acct.uuid as accountId, acct.organization_id, org.uuid as organizationId 
+        $select = "SELECT ou.id, ou.name, ou.uuid as userId, acct.id as account_id, acct.uuid as accountId, acct.organization_id, org.uuid as organizationId 
             from ox_user as ou 
             inner join ox_account_user au on au.user_id = ou.id 
             inner join ox_account as acct on au.account_id = acct.id 
             LEFT OUTER JOIN ox_organization as org on org.id = acct.organization_id 
             where ou.username = :userName $accountClause";
         $results = $this->executeQueryWithBindParameters($select, $params)->toArray();
-        if (!empty($results)) {
-            $results = $results[0];
-        }
-        return $results;
+        return (!empty($results)) ? $results[0] : $results;
     }
 
     public function getTeams($userName)
@@ -548,17 +545,13 @@ class UserService extends AbstractService
                 $accountId = $this->getIdFromUuid('ox_account', $accountId);
             }
         }
-        if (isset($data['account_id']) && $data['account_id']) {
-            if (!is_numeric($data['account_id']))
-                $data['account_id'] = $accountId = $this->getIdFromUuid('ox_account', $data['account_id']);
-        }
         $form = new User($this->table);
         if(is_numeric($id)){
             $form->loadById($id);
         }else{
             $form->loadByUuid($id);
         }
-        
+
         if (isset($accountId)) {
             $select = "SELECT account_id from ox_account_user where user_id = " . $form->id;
             $result = $this->executeQuerywithParams($select)->toArray();
@@ -566,8 +559,6 @@ class UserService extends AbstractService
             if (!in_array($accountId, $acctArray)) {
                 throw new ServiceException('User does not belong to the Account', 'user.not.found',OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
-            if (isset($data['account_id']) && $data['account_id'])
-                $this->updateAccountContext(['accountId' => $this->getUuidFromId('ox_account', $data['account_id'])]);
         }
         $userdata = array_merge($form->getProperties(), $data); //Merging the data from the db for the ID
         if (isset($userdata['date_of_birth'])) {
@@ -844,7 +835,7 @@ class UserService extends AbstractService
 
     public function getAccounts($userId)
     {
-        $select = "SELECT au.uuid as accountId, au.name 
+        $select = "SELECT au.id, uuid as accountId, au.name 
                     from ox_account au
                     INNER join ox_account_user oau on oau.account_id = au.id
                     where oau.user_id = :user_id AND au.status = 'Active'";
@@ -909,11 +900,11 @@ class UserService extends AbstractService
      * @return array with minumum information required to use for the User.
      * @return array Returns a JSON Response with Status Code and Created User.
      */
-    public function getUserWithMinimumDetails($id, $accountId=null)
+    public function getUserWithMinimumDetails($id, $accountId = null)
     {
         $accountId = $accountId != null ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_UUID);
         if(!is_numeric($id)){
-            $id = $this->getIdFromUuid('ox_user', $id);
+        $id = $this->getIdFromUuid('ox_user', $id);
         }
         $select = "SELECT ou.id,ou.password, ou.uuid, ou.username, 
                         per.firstname,per.lastname,ou.name,per.email,oxemp.designation,
@@ -922,7 +913,8 @@ class UserService extends AbstractService
                         oxemp.website, oxemp.about, per.gender, man.uuid as managerId,
                         oxemp.interest,ou.icon,ou.preferences 
                     from ox_user as ou 
-                    inner join ox_account au on au.id = ou.account_id
+                    inner join ox_account_user oau on oau.user_id = ou.id
+                    inner join ox_account au on au.id = oau.account_id
                     inner join ox_person as per on per.id = ou.person_id 
                     inner join ox_employee as oxemp on oxemp.person_id = per.id 
                     left join ox_address as oa on per.address_id = oa.id 
@@ -1002,7 +994,7 @@ class UserService extends AbstractService
         $where = "where avatar_id =" . $userid;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null)->toArray();
         if (empty($resultSet)) {
-            throw new EntityNotFoundException("User not in team");    
+            throw new EntityNotFoundException("User not in team");
         }
         $delete = $sql->delete('ox_user_team');
         $delete->where(['avatar_id' => $userid]);
@@ -1016,7 +1008,7 @@ class UserService extends AbstractService
         $where = "where user_id =" . $userid . " and project_id =" . $projectid;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null)->toArray();
         if (empty($resultSet)) {
-            throw new EntityNotFoundException("User not in project");    
+            throw new EntityNotFoundException("User not in project");
         }
         $delete = $sql->delete('ox_user_project');
         $delete->where(['user_id' => $userid, 'project_id' => $projectid]);

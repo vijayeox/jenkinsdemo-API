@@ -374,6 +374,10 @@ class UserController extends AbstractApiController
                         break;
                     case "acc":
                         $userInfo['accounts'] = $this->userService->getAccounts($id);
+                        $userInfo['accounts'] = array_map(function(&$account){
+                            unset($account['id']);
+                            return $account;
+                        }, $userInfo['accounts']);
                         break;
                 }
             }
@@ -464,6 +468,27 @@ class UserController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
+    public function switchAccountAction()
+    {
+        $data = $this->extractPostData();
+        try {
+            if (isset($data['accountId']) && $data['accountId'] && !is_numeric($data['accountId'])) {
+                $userAccounts = $this->userService->getAccounts(AuthContext::get(AuthConstants::USER_ID));
+                if (isset(array_column($userAccounts, null, 'accountId')[$data['accountId']])) {
+                    $accountId = array_column($userAccounts, null, 'accountId')[$data['accountId']]['id'];
+                    $data = ['username' => AuthContext::get(AuthConstants::USERNAME), 'accountId' => $accountId];
+                    $dataJwt = $this->getTokenPayload($data);
+                    $jwt = $this->generateJwtToken($dataJwt);
+                    return $this->getSuccessResponseWithData(['jwt' => $jwt], 200);
+                }
+            }
+            throw new Exception("Invalid Account selected", 404);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
+
     /**
      * GET User Access API
      * @api
@@ -544,7 +569,7 @@ class UserController extends AbstractApiController
             try {
                 $count = $this->userService->updatePolicyTerms();
             } catch (Exception $e) {
-                return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
+                return $this->getErrorResponse("Update Failure", 404, array("message" => $e->getMessage()));
             }
             return $this->getSuccessResponse();
         }else{

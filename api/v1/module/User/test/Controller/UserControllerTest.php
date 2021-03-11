@@ -1326,16 +1326,43 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']),1);
     }
     public function testUpdatePrivacyPolicyData()
-        {
-            $this->initAuthToken($this->adminUser);
-            $this->dispatch('/user/me/updatePolicyTerm', 'POST');
-            $this->assertResponseStatusCode(200);
-            $this->assertModuleName('User');
-            $this->assertControllerName(UserController::class);
-            $this->assertControllerClass('UserController');
-            $this->assertMatchedRouteName('update_PolicyTerm');
-            $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-            $content = (array)json_decode($this->getResponse()->getContent(), true);
-            $this->assertEquals($content['status'], 'success');
-        }
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/updatePolicyTerm', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('User');
+        $this->assertControllerName(UserController::class);
+        $this->assertControllerClass('UserController');
+        $this->assertMatchedRouteName('update_PolicyTerm');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+    
+    public function testUserAccountList()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/acc', 'GET');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertGreaterThanOrEqual(1, count($content['data']['accounts']));
+        $this->assertEquals($content['data']['accounts'][0]['accountId'], '53012471-2863-4949-afb1-e69b0891c98a');
+        $this->assertEquals($content['data']['accounts'][0]['name'], 'Cleveland Black');
+        $this->assertEquals($content['data']['accounts'][0]['id'], '1');
+    }
+
+    public function testSwitchAccount()
+    {
+        $data = ['accountId' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
+        $this->initAuthToken('rajesh');
+        $this->dispatch('/user/switchaccount', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('switchAccount');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(is_null($content['data']['jwt']), false);
+    }
+
 }
