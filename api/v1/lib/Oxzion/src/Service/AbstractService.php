@@ -66,7 +66,6 @@ abstract class AbstractService extends AbstractBaseService
     }
     protected function getIdFromUuid($table, $uuid, $filter = array())
     {
-        if (is_numeric($uuid)) { return $uuid; }
         $filter['uuid'] = $uuid;
         $columns = ['id'];
         $responseID = $this->executeQueryOnTable($table, $columns, $filter);
@@ -75,7 +74,6 @@ abstract class AbstractService extends AbstractBaseService
 
     protected function getUuidFromId($table, $id)
     {
-        if (!is_numeric($id)) { return $id; }
         $getID = $this->getSqlObject()->select();
         $getID->from($table)
             ->columns(array("uuid"))

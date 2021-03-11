@@ -343,7 +343,6 @@ class UserController extends AbstractApiController
                     unset($options[$pos]);
                 }
             } else {
-                $params['accountId'] = isset($params['accountId']) ? $params['accountId'] : null;
                 $userInfo = $this->userService->getUserWithMinimumDetails($id, $params['accountId']);
             }
             foreach ($options as $key => $value) {
@@ -374,10 +373,6 @@ class UserController extends AbstractApiController
                         break;
                     case "acc":
                         $userInfo['accounts'] = $this->userService->getAccounts($id);
-                        $userInfo['accounts'] = array_map(function(&$account){
-                            unset($account['id']);
-                            return $account;
-                        }, $userInfo['accounts']);
                         break;
                 }
             }
@@ -473,10 +468,11 @@ class UserController extends AbstractApiController
         $data = $this->extractPostData();
         try {
             if (isset($data['accountId']) && $data['accountId'] && !is_numeric($data['accountId'])) {
-                $userAccounts = $this->userService->getAccounts(AuthContext::get(AuthConstants::USER_ID));
-                if (isset(array_column($userAccounts, null, 'accountId')[$data['accountId']])) {
-                    $accountId = array_column($userAccounts, null, 'accountId')[$data['accountId']]['id'];
-                    $data = ['username' => AuthContext::get(AuthConstants::USERNAME), 'accountId' => $accountId];
+                if ($this->userService->hasAccount($data['accountId'])) {
+                    $data = [
+                        'username' => AuthContext::get(AuthConstants::USERNAME),
+                        'accountId' => $data['accountId']
+                    ];
                     $dataJwt = $this->getTokenPayload($data);
                     $jwt = $this->generateJwtToken($dataJwt);
                     return $this->getSuccessResponseWithData(['jwt' => $jwt], 200);

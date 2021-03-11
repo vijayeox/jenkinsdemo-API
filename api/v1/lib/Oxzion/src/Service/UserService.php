@@ -769,8 +769,7 @@ class UserService extends AbstractService
      */
     public function getUser($id, $getAllFields = false)
     {
-        $sql = $this->getSqlObject();
-        $id = is_numeric($id) ? $id: $this->getIdFromUuid('ox_user',$id);
+        $id = (is_numeric($id)) ? $id : $this->getIdFromUuid('ox_user', $id);
         $select = "SELECT ou.uuid,ou.username,per.firstname,per.lastname,ou.name,
                           per.email,au.uuid as accountId,ou.icon,oa.address1,oa.address2,oa.city,
                           oa.state, oa.country,oa.zip,per.date_of_birth,oxemp.designation,
@@ -835,7 +834,7 @@ class UserService extends AbstractService
 
     public function getAccounts($userId)
     {
-        $select = "SELECT au.id, uuid as accountId, au.name 
+        $select = "SELECT uuid as accountId, au.name 
                     from ox_account au
                     INNER join ox_account_user oau on oau.account_id = au.id
                     where oau.user_id = :user_id AND au.status = 'Active'";
@@ -843,6 +842,24 @@ class UserService extends AbstractService
         $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
         if (!empty($response)) { return $response; }
         return null;
+    }
+
+    public function hasAccount(&$accountId, $userId = null)
+    {
+        if (!is_numeric($accountId)) {
+            $accountId = $this->getIdFromUuid('ox_account', $accountId);
+        }
+        if ($userId === null) {
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+        } elseif (!is_numeric($userId)) {
+            $userId = $this->getIdFromUuid('ox_user', $userId);
+        }
+        $select = "SELECT count(id) as count 
+        from ox_account_user oau 
+        where oau.user_id = :user_id AND oau.account_id = :account_id";
+        $params = array("user_id" => $userId, 'account_id' => $accountId);
+        $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
+        return ($response[0]['count']) ? true : false;
     }
 
     public function getPrivileges($userId, $accountId = null)
@@ -902,10 +919,8 @@ class UserService extends AbstractService
      */
     public function getUserWithMinimumDetails($id, $accountId = null)
     {
-        $accountId = $accountId != null ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_UUID);
-        if(!is_numeric($id)){
-        $id = $this->getIdFromUuid('ox_user', $id);
-        }
+        $accountId = ($accountId != null) ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_UUID);
+        $id = (is_numeric($id)) ? $id : $this->getIdFromUuid('ox_user', $id);
         $select = "SELECT ou.id,ou.password, ou.uuid, ou.username, 
                         per.firstname,per.lastname,ou.name,per.email,oxemp.designation,
                         au.uuid as accountId, per.phone, per.date_of_birth, oxemp.date_of_join,
