@@ -264,6 +264,12 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     }
   });
 
+  if(data.dolanyvehparkonroof == 'yes' && data.dolareanyvehiparked == 'no') {
+    chkDolaVechilePark = 'No';  
+  }else if(data.dolanyvehparkonroof == 'no' && data.dolareanyvehiparked == 'yes'){
+    chkDolaVechilePark = 'Yes';
+  }
+
   value = {
     checkAutobody: checkBodyShop ? checkBodyShop : "",
     checkfloodloss: data.dolflodlossdescib
@@ -323,6 +329,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     checkkeycontrolskeysInCars: checkkeycontrolskeysInCars
       ? checkkeycontrolskeysInCars
       : "",
+    chkParkGarageOrRoof:chkDolaVechilePark,
   };
   console.log(value);
 }
