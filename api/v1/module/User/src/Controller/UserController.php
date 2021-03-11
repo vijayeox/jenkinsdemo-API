@@ -478,7 +478,7 @@ class UserController extends AbstractApiController
                     return $this->getSuccessResponseWithData(['jwt' => $jwt], 200);
                 }
             }
-            throw new Exception("Invalid Account selected", 404);
+            throw new \Oxzion\ValidationException("Invalid Account selected");
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
