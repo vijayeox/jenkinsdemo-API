@@ -78,7 +78,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       var resultOccupancyType = "";
       var resultPrimaryOEM = "";
       data.buildings
-        .filter((i) => i.locationNum == locationItem.locationNum)
+        .filter((i) => i.locationBuildingNum.split("-")[0] == locationItem.locationNum)
         .some((buildingItem) => {
           if (
             buildingItem.occupancyType == "autoSalesAndService" ||
@@ -114,6 +114,14 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             ...data.dol_Protection[locationItem.locationNum - 1].keyControls,
             ...data.dol_Protection[locationItem.locationNum - 1]
               .entranceQuestions,
+            new:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].new,
+            used:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].used,
+            demosFurnishedAutos:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].demosFurnishedAutos,
+            loanersShopService:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].loanersShopService,
             floorNew:
               data.dol_12MonthAvg[locationItem.locationNum - 1].floor_new,
             floorUsed:
