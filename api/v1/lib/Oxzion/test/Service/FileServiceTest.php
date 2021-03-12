@@ -1733,10 +1733,10 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(1,count($selectFileId));
         $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
-        $this->assertEquals(1,$sqlQuery2Result[0]['group_id']); //change to team id
+        $this->assertEquals(1,$sqlQuery2Result[0]['team_id']); //change to team id
     }
 
-    //Test for file assignment for group observers
+    //Test for file assignment for team observers
     public function testSetTeamAssigneesForSameObserversAndAssignees() {
         $data = [
             "assignedToName" => "First Team",
@@ -1769,12 +1769,12 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(2,count($sqlQuery2Result));
         $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
         $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
-        $this->assertEquals(1,$sqlQuery2Result[0]['group_id']);
-        $this->assertEquals(1,$sqlQuery2Result[1]['group_id']);
+        $this->assertEquals(1,$sqlQuery2Result[0]['team_id']);
+        $this->assertEquals(1,$sqlQuery2Result[1]['team_id']);
 
     }
 
-     //Test for file assignment for group observers
+     //Test for file assignment for team observers
      public function testSetTeamAssigneesForDifferentObserversAndAssignees() {
         $data = [
             "assignedToName" => "First Team",
@@ -2118,7 +2118,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $this->assertEquals(2,count($sqlQuery2Result));
         $this->assertEquals(100,$sqlQuery2Result[0]['user_id']);
-        $this->assertEquals(1,$sqlQuery2Result[1]['group_id']);
+        $this->assertEquals(1,$sqlQuery2Result[1]['team_id']);
     }
 
     // Test for Updating file assignment for Team Observers
@@ -2162,8 +2162,8 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery2Result = $this->runQuery($sqlQuery2);
         $this->assertEquals(3,count($sqlQuery2Result));
         $this->assertEquals(100,$sqlQuery2Result[0]['user_id']);
-        $this->assertEquals(1,$sqlQuery2Result[1]['group_id']);
-        $this->assertEquals(2,$sqlQuery2Result[2]['group_id']);
+        $this->assertEquals(1,$sqlQuery2Result[1]['team_id']);
+        $this->assertEquals(2,$sqlQuery2Result[2]['team_id']);
 
     }
 
