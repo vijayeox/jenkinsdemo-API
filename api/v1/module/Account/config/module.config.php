@@ -83,7 +83,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListofAccountTeams',
                         'access' => [
-                            'getListofAccountTeams' => ['MANAGE_GROUP_READ'],
+                            'getListofAccountTeams' => ['MANAGE_TEAM_READ'],
                         ],
                     ],
                 ],

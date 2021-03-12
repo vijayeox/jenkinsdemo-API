@@ -6,11 +6,11 @@ use Oxzion\Service\ImsService;
 use Zend\Db\Adapter\AdapterInterface;
 use Ims\Controller\AbstractController;
 
-class ProducerController extends AbstractController
+class InsuredController extends AbstractController
 {
     public function __construct(ImsService $imsService)
     {
-        parent::__construct($imsService, 'ProducerFunctions');
+        parent::__construct($imsService, 'InsuredFunctions');
     }
 
 }

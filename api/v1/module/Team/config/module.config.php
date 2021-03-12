@@ -15,9 +15,9 @@ return [
                         'controller' => Controller\TeamController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => 'MANAGE_GROUP_WRITE',
-                            'post' => 'MANAGE_GROUP_WRITE',
-                            'delete' => 'MANAGE_GROUP_WRITE'
+                            'put' => 'MANAGE_TEAM_WRITE',
+                            'post' => 'MANAGE_TEAM_WRITE',
+                            'delete' => 'MANAGE_TEAM_WRITE'
                         ],
                     ],
                 ],
@@ -31,7 +31,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getTeamsforUser',
                         'access' => [
-                            'getTeamsforUser' => 'MANAGE_GROUP_WRITE',
+                            'getTeamsforUser' => 'MANAGE_TEAM_WRITE',
                         ],
                     ],
                 ],
@@ -45,7 +45,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getuserlist',
                         'access' => [
-                            'getuserlist' => 'MANAGE_GROUP_WRITE',
+                            'getuserlist' => 'MANAGE_TEAM_WRITE',
                         ],
                     ],
                 ],
@@ -59,7 +59,7 @@ return [
                         'method' => 'POST',
                         'action' => 'saveUser',
                         'access' => [
-                            'saveUser' => 'MANAGE_GROUP_WRITE',
+                            'saveUser' => 'MANAGE_TEAM_WRITE',
                         ],
                     ],
                 ],
@@ -84,7 +84,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getSubteams',
                         'access' => [
-                            'getSubteams' => 'MANAGE_GROUP_WRITE',
+                            'getSubteams' => 'MANAGE_TEAM_WRITE',
                         ],
                     ],
                 ],

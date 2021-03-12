@@ -63,33 +63,23 @@ abstract class AbstractService extends AbstractBaseService
         $query->columns($columns)
               ->where($filter);
         return $this->executeQuery($query)->toArray();
-        
     }
     protected function getIdFromUuid($table, $uuid, $filter = array())
     {
         $filter['uuid'] = $uuid;
         $columns = ['id'];
         $responseID = $this->executeQueryOnTable($table, $columns, $filter);
-        if ($responseID) {
-            return $responseID[0]['id'];
-        } else {
-            return null;
-        }
+        return ($responseID) ? $responseID[0]['id'] : null;
     }
 
     protected function getUuidFromId($table, $id)
     {
-        $sql = $this->getSqlObject();
-        $getID = $sql->select();
+        $getID = $this->getSqlObject()->select();
         $getID->from($table)
             ->columns(array("uuid"))
             ->where(array('id' => $id));
         $responseID = $this->executeQuery($getID)->toArray();
-        if ($responseID) {
-            return $responseID[0]['uuid'];
-        } else {
-            return 0;
-        }
+        return ($responseID) ? $responseID[0]['uuid'] : null;
     }
 
     protected function ExpressionObject($expression)
@@ -205,7 +195,7 @@ abstract class AbstractService extends AbstractBaseService
      *
      * @return     array   The data by parameters.
      */
-    protected function getDataByParams($tableName, $fieldArray = array(), $where = array(), $joins = array(), $sortby = null, $groupby = array(), $limit = null, $offset = 0, $debug = false)
+    protected function getDataByParams($tableName, $fieldArray = array(), $where = array(), $joins = array(), $sortby = null, $groupby = array(), $limit = 0, $offset = 0, $debug = false)
     {
         $select = $this->sql->select($tableName);
         if ($fieldArray) {
@@ -244,7 +234,7 @@ abstract class AbstractService extends AbstractBaseService
             $select->order($sortby);
         }
         if ($groupby) {
-            $select->group($group);
+            $select->group($groupby);
         }
         if ($limit) {
             $select->limit($limit);

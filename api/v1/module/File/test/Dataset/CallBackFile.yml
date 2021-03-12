@@ -142,7 +142,7 @@ ox_app_entity:
     end_date_field: end_date
     status_field: status
     subscriber_field: observers
-    ryg_rule: '{"RED": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "Delayed"}, {"field": "status","operator": "neq","value": "In Progress"}, {"field": "end_date","operator": "lt","value": "today"}, {"field": "next_action_date","operator": "lt","value": "today"}],"YELLOW": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "In Progress"}, {"field": "end_date","operator": "eq","value": "today+1"}, {"field": "next_action_date","operator": "eq","value": "today+1"}, {"field": "end_date","operator": "eq","value": "today"}, {"field": "next_action_date","operator": "eq","value": "today"}]}}}'
+    ryg_rule: '{"RED": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "Delayed"}, {"field": "status","operator": "neq","value": "In Progress"}, {"field": "end_date","operator": "lt","value": "date:today"}, {"field": "next_action_date","operator": "lt","value": "date:today"}],"YELLOW": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "In Progress"}, {"field": "end_date","operator": "eq","value": "date:today+1"}, {"field": "next_action_date","operator": "eq","value": "date:today+1"}, {"field": "end_date","operator": "eq","value": "date:today"}, {"field": "next_action_date","operator": "eq","value": "date:today"}]}}}'
 ox_app_registry:
   - account_id: 1
     app_id: 99

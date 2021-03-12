@@ -79,7 +79,7 @@ ox_role_privilege:
   -
     id: 1000
     role_id: 5
-    privilege_name: 'MANAGE_GROUP'
+    privilege_name: 'MANAGE_TEAM'
     permission: 3
     account_id: 1
 
