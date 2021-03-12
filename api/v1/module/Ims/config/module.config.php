@@ -7,22 +7,18 @@ use Zend\Router\Http\Segment;
 return [
     'router' => [
         'routes' => [
-            'producer' => [
+            'insuredFunctionStructure' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/ims/producer',
+                    'route' => '/ims/insured/getFunctionStructure[/:operation]',
                     'defaults' => [
-                        'controller' => Controller\ProducerController::class,
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            'get' => [],
-                            'put' => [],
-                            'post' => []
-                        ],
+                        'controller' => Controller\InsuredController::class,
+                        'method' => 'GET',
+                        'action' => 'getFunctionStructure',
                     ],
                 ],
             ],
-            'getFunctionStructure' => [
+            'producerFunctionStructure' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/ims/producer/getFunctionStructure[/:operation]',
@@ -33,7 +29,25 @@ return [
                     ],
                 ],
             ],
-            
+            'insured' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ims/insured',
+                    'defaults' => [
+                        'controller' => Controller\InsuredController::class
+                    ],
+                ],
+            ],
+            'producer' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ims/producer',
+                    'defaults' => [
+                        'controller' => Controller\ProducerController::class
+                    ],
+                ],
+            ],
+
         ],
     ],
 ];

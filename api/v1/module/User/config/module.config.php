@@ -15,9 +15,9 @@ return [
                         'controller' => Controller\UserController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
-                            'post' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
-                            'delete' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_GROUP_WRITE'],
+                            'put' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_TEAM_WRITE'],
+                            'post' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_TEAM_WRITE'],
+                            'delete' => ['MANAGE_USER_WRITE', 'MANAGE_ACCOUNT_WRITE', 'MANAGE_TEAM_WRITE'],
                         ],
                     ],
                 ],
@@ -44,6 +44,17 @@ return [
                         'controller' => Controller\UserController::class,
                         'method' => 'PUT',
                         'action' => 'saveMe',
+                    ],
+                ],
+            ],
+            'switchAccount' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/switchaccount',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'switchAccount',
                     ],
                 ],
             ],
@@ -295,26 +306,26 @@ return [
                 ],
             ],
 
-            'get_PolicyTerm' => [
+            'get_loggedIn' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/me/getPolicyTerm',
+                    'route' => '/user/me/hasLoggedIn',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',
-                        'action' => 'getPolicyTerms',
+                        'action' => 'hasLoggedIns',
                     ],
                 ],
             ],
 
-            'update_PolicyTerm' => [
+            'update_loggedIn' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/me/updatePolicyTerm',
+                    'route' => '/user/me/updateLoggedIn',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'updatePolicyTerms',
+                        'action' => 'updateLoggedInStatus',
                     ],
                 ],
             ],

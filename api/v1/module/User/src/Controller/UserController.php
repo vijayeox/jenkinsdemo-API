@@ -343,7 +343,6 @@ class UserController extends AbstractApiController
                     unset($options[$pos]);
                 }
             } else {
-                $params['accountId'] = isset($params['accountId']) ? $params['accountId'] : null;
                 $userInfo = $this->userService->getUserWithMinimumDetails($id, $params['accountId']);
             }
             foreach ($options as $key => $value) {
@@ -464,6 +463,28 @@ class UserController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
+    public function switchAccountAction()
+    {
+        $data = $this->extractPostData();
+        try {
+            if (isset($data['accountId']) && $data['accountId'] && !is_numeric($data['accountId'])) {
+                if ($this->userService->hasAccount($data['accountId'])) {
+                    $data = [
+                        'username' => AuthContext::get(AuthConstants::USERNAME),
+                        'accountId' => $data['accountId']
+                    ];
+                    $dataJwt = $this->getTokenPayload($data);
+                    $jwt = $this->generateJwtToken($dataJwt);
+                    return $this->getSuccessResponseWithData(['jwt' => $jwt], 200);
+                }
+            }
+            throw new \Oxzion\ValidationException("Invalid Account selected");
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
+
     /**
      * GET User Access API
      * @api
@@ -528,21 +549,21 @@ class UserController extends AbstractApiController
         }
     }
 
-    public function getPolicyTermsAction()
+    public function hasLoggedInsAction()
     {
-        $result = $this->userService->getPolicyTerm();
-        if (!empty($result[0])) {
+        $result = $this->userService->hasLoggedIn();
+        if (!empty($result)) {
             return $this->getSuccessResponseWithData($result, 200);
         } else {
             return $this->getSuccessResponseWithData(array(), 200);
         }
     }
 
-     public function updatePolicyTermsAction()
+     public function updateLoggedInStatusAction()
     {
         if(AuthContext::get(AuthConstants::USER_ID)){
             try {
-                $count = $this->userService->updatePolicyTerms();
+                $count = $this->userService->updateLoggedInStatus();
             } catch (Exception $e) {
                 return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
             }
