@@ -445,7 +445,7 @@ class AppService extends AbstractService
             $this->userService->addAppRolesToUser($user['accountUserId'],$appId);
             $result = $this->createAppRegistry($appId, $accountId);
             $this->logger->info("PATH--- $path");
-            $this->setupAccountFiles($path, $accountId);
+            $this->setupAccountFiles($path, $accountId,$appId);
             // Assign AppRoles to Logged in User if Logged in Org and Installed Org are same
             if(AuthContext::get(AuthConstants::ACCOUNT_UUID) == $accountId){
                  $user = $this->getDataByParams('ox_account_user', array('id'), array('user_id' => AuthContext::get(AuthConstants::USER_ID), 'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)))->toArray();
@@ -975,9 +975,9 @@ private function checkWorkflowData(&$data,$appUuid)
         $this->setLinkAndRunBuild($path, $appId);
     }
 
-    private function setupAccountFiles($path, $accountId, $update = false){
+    private function setupAccountFiles($path, $accountId,$appId, $update = false){
         if ($accountId && $path) {
-            $link = $this->config['TEMPLATE_FOLDER'] . $accountId;
+            $link = $this->config['TEMPLATE_FOLDER'] . $accountId."/".$appId;
             $this->logger->info("linkkk---$link");
             $source = rtrim($path, "/") . "/data/template";
             if(!$update){
@@ -1573,7 +1573,7 @@ private function checkWorkflowData(&$data,$appUuid)
         $params = ['appId' => $appId];
         $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
         foreach ($result as $accountId) {
-            $this->setupAccountFiles($path, $accountId['accountId'],true);
+            $this->setupAccountFiles($path, $accountId['accountId'],$appId,true);
         }
     }
 }
