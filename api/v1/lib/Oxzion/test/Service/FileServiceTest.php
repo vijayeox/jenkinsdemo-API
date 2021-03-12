@@ -2247,4 +2247,37 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(10,$sqlQuery2Result[1]['role_id']);
         $this->assertEquals(10,$sqlQuery2Result[1]['role_id']);
     }
+
+    // Check delete option for user access
+    public function testDeleteFileUserAccessException() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][7]['uuid'];
+        $version = 1;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Delete operation cannot be performed');
+        $this->fileService->deleteFile($fileId, $version);
+       
+    } 
+    
+    // Check delete option for invalid version
+    public function testDeleteFileVersionMismatchException() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][0]['uuid'];
+        $version = 0;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Entity version sent by client does not match the version on server');
+        $this->fileService->deleteFile($fileId, $version);
+    }
+
+    // Check delete option for deleting a file
+    public function testDeleteFile() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][0]['uuid'];
+        $version = 1;
+        $this->fileService->deleteFile($fileId, $version);
+        $sqlQuery = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $result = $this->runQuery($sqlQuery);
+        $this->assertEquals(1,count($result));
+        $this->assertEquals(0,$result[0]['is_active']);
+    } 
 }

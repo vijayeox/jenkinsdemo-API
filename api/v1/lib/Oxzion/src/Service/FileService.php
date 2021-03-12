@@ -668,6 +668,16 @@ class FileService extends AbstractService
         $data = array('version' => $version, 'is_active' => 0);
         $file->assign($data);
         try {
+            $selectFile = "SELECT * FROM `ox_file` WHERE uuid=:uuid";
+            $selectParams = ["uuid" => $id];
+            $result = $this->executeQueryWithBindParameters($selectFile, $selectParams)->toArray();
+ 
+            if(!empty($result)) {
+                if ($result[0]['created_by'] != AuthContext::get(AuthConstants::USER_ID)) {
+                    $this->logger->info("Only user who created task can delete the record");
+                    throw new Exception("Delete operation cannot be performed");
+                } 
+            }
             $this->beginTransaction();
             $file->save();
             $fileInfo = $file->toArray();
