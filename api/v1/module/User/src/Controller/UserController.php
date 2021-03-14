@@ -549,7 +549,7 @@ class UserController extends AbstractApiController
         }
     }
 
-    public function hasLoggedInsAction()
+    public function hasLoggedInAction()
     {
         $result = $this->userService->hasLoggedIn();
         if (!empty($result)) {

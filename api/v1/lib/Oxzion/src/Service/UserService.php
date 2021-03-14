@@ -1448,21 +1448,23 @@ class UserService extends AbstractService
         return NULL;
     }
 
-    public function getPolicyTerm()
+    public function hasLoggedIn()
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-        ->columns(array('policy_terms'))
+        ->columns(array('has_logged_in','verification_pending'))
         ->where(array('id' => AuthContext::get(AuthConstants::USER_ID),'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeQuery($select)->toArray();
-        return array_column($result, 'policy_terms');
+        if(count($result)){
+            return $result[0];
+        }
     }
 
-    public function updatePolicyTerms()
+    public function updateLoggedInStatus()
     {
         $sql = $this->getSqlObject();
-        $updatedData['policy_terms'] = "1";
+        $updatedData['has_logged_in'] = "1";
         $update = $sql->update('ox_user')->set($updatedData)
         ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeUpdate($update);
