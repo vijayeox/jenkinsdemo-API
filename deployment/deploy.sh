@@ -601,7 +601,6 @@ arrowhead()
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=admintest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/ArrowHead'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
-        service php7.2-fpm reload
         echo -e "${GREEN}Building and Running package discover in bos${RESET}"
         cd /opt/oxzion/view/bos/
         npm run build
@@ -618,7 +617,8 @@ arrowhead()
         npm run build
         chown oxzion:oxzion -R /opt/oxzion/view
         systemctl start view
-        echo -e "${YELLOW}Started view service!${RESET}"
+        service php7.2-fpm restart
+        echo -e "${YELLOW}Started view service and restarted fpm!${RESET}"
     fi
 }
 #calling functions accordingly
