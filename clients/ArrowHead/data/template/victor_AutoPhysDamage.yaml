@@ -365,7 +365,7 @@
    note: If this question is filled out the system needs to map "Yes" to
       Sheet!Underwriting Survey D77
 -
-   key: dolkeycntrlsameallloc
+   key: victorAutoPhysicalDamage*dolkeycontrol
    Source Worksheet: Are key  controls the same for all locations?
    pageName: Underwriting Survey
    cell: D48
@@ -662,7 +662,7 @@
    cell: B2
 -
    pageName: Underwriting Survey
-   key: dolalllocdoesnotincld_none
+   key: victorAutoPhysicalDamage*dolalllocdoesnotincld_none
    method: checkInArray
    type: Checkbox
    cell: Check Box 211
@@ -673,40 +673,40 @@
    cell: Check Box 211
 -
    pageName: Underwriting Survey
-   key: dolalllocdoesnotincld_computerizedKeyVault
+   key: victorAutoPhysicalDamage*dolalllocdoesnotincld_computerizedKeyVault
    method: checkInArray
    type: Checkbox
    cell: Check Box 215
 -
    pageName: Underwriting Survey
-   key: victorAutoPhysicalDamage*checkkeycontrolscomputerizedKeyVault
+   key: victorAutoPhysicalDamage*checkkeycontrols_computerizedKeyVault
    type: Checkbox
    cell: Check Box 215
 -
    pageName: Underwriting Survey
-   key: dolalllocdoesnotincld_lockedKeyCabinet
+   key: victorAutoPhysicalDamage*dolalllocdoesnotincld_lockedKeyCabinet
    method: checkInArray
    type: Checkbox
    cell: Check Box 216
 -
    pageName: Underwriting Survey
-   key: dolalllocdoesnotincld_lockedNightlyInManagersOffice
+   key: victorAutoPhysicalDamage*dolalllocdoesnotincld_lockedNightlyInManagersOffice
    method: checkInArray
    type: Checkbox
    cell: Check Box 216
 -
    pageName: Underwriting Survey
-   key: victorAutoPhysicalDamage*checkkeycontrolslockingKeyCabinet
+   key: victorAutoPhysicalDamage*checkkeycontrols_lockingKeyCabinet
    type: Checkbox
    cell: Check Box 216
 -
    pageName: Underwriting Survey
-   key: victorAutoPhysicalDamage*checkkeycontrolslockedInManagersOffice
+   key: victorAutoPhysicalDamage*checkkeycontrols_lockedInManagersOffice
    type: Checkbox
    cell: Check Box 216
 -
    pageName: Underwriting Survey
-   key: dolalllocdoesnotincld_lockBoxes
+   key: victorAutoPhysicalDamage*dolalllocdoesnotincld_lockBoxes
    method: checkInArray
    type: Checkbox
    cell: Check Box 217
@@ -718,7 +718,7 @@
 -
 # check for issue
    pageName: Underwriting Survey
-   key: dolalllocdoesnotincld_keysInCars
+   key: victorAutoPhysicalDamage*dolalllocdoesnotincld_keysInCars
    method: checkInArray
    type: Checkbox
    cell: Check Box 218
@@ -730,133 +730,133 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: pleaseSelectForOther_newComp
+   key: victorAutoPhysicalDamage*requestedCoverage_newComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: pleaseSelectForOther_usedComp
+   key: victorAutoPhysicalDamage*requestedCoverage_usedComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: pleaseSelectForOther_demoFurnishedComp
+   key: victorAutoPhysicalDamage*requestedCoverage_demosComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: pleaseSelectForOther_serviceLoanersComp
+   key: victorAutoPhysicalDamage*requestedCoverage_serviceComp
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 257
+-
+   pageName: Underwriting Survey
+   Source Worksheet: Comprehensive.
+   key: victorAutoPhysicalDamage*requestedCoverage_otherOwnedComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: pleaseSelectForOther_otherOwnedComp
-   method: pulloutChild
-   type: Checkbox
-   cell: Check Box 257
--
-   pageName: Underwriting Survey
-   Source Worksheet: Comprehensive
-   key: pleaseSelectForOther_otherNonOwnedComp
+   key: victorAutoPhysicalDamage*requestedCoverage_otherNonOwnedComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: pleaseSelectForOther_newCollision
+   key: victorAutoPhysicalDamage*requestedCoverage_newCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: pleaseSelectForOther_usedCollision
+   key: victorAutoPhysicalDamage*requestedCoverage_usedCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: pleaseSelectForOther_demoFurnishedCollision
+   key: victorAutoPhysicalDamage*requestedCoverage_demosCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: pleaseSelectForOther_serviceLoanersCollision
+   key: victorAutoPhysicalDamage*requestedCoverage_serviceCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: pleaseSelectForOther_otherOwnedCollision
+   key: victorAutoPhysicalDamage*requestedCoverage_otherOwnedCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: pleaseSelectForOther_otherNonOwnedCollision
+   key: victorAutoPhysicalDamage*requestedCoverage_otherNonOwnedCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: pleaseSelectForOther_newFalsePretense
+   key: victorAutoPhysicalDamage*requestedCoverage_newFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: pleaseSelectForOther_usedFalsePretense
+   key: victorAutoPhysicalDamage*requestedCoverage_usedFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: pleaseSelectForOther_demoFurnishedFalsePretense
+   key: victorAutoPhysicalDamage*requestedCoverage_demosFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: pleaseSelectForOther_serviceLoanersFalsePretense
+   key: victorAutoPhysicalDamage*requestedCoverage_serviceFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: pleaseSelectForOther_otherOwnedFalsePretense
+   key: victorAutoPhysicalDamage*requestedCoverage_otherOwnedFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: pleaseSelectForOther_otherNonOwnedFalsePretense
+   key: victorAutoPhysicalDamage*requestedCoverage_otherNonOwnedFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: allLotProtectionIncludes_none
+   key: victorAutoPhysicalDamage*allLotProtection_none
    method: checkInArray
    type: Checkbox
    cell: Check Box 214
@@ -869,7 +869,7 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: allLotProtectionIncludes_fenced
+   key: victorAutoPhysicalDamage*allLotProtection_fenced
    method: checkInArray
    type: Checkbox
    cell: Check Box 219
@@ -882,7 +882,7 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: allLotProtectionIncludes_postAndChain
+   key: victorAutoPhysicalDamage*allLotProtection_postAndChain
    method: checkInArray
    type: Checkbox
    cell: Check Box 220
@@ -895,7 +895,7 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: allLotProtectionIncludes_securityLighting
+   key: victorAutoPhysicalDamage*allLotProtection_securityLighting
    method: checkInArray
    type: Checkbox
    cell: Check Box 221
@@ -908,7 +908,7 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: allLotProtectionIncludes_videoSurveillance
+   key: victorAutoPhysicalDamage*allLotProtection_videoSurveillance
    method: checkInArray
    type: Checkbox
    cell: Check Box 222
@@ -921,7 +921,7 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: allLotProtectionIncludes_nightWatchman
+   key: victorAutoPhysicalDamage*allLotProtection_nightWatchman
    method: checkInArray
    type: Checkbox
    cell: Check Box 223
@@ -934,6 +934,6 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
-   key: dollotprotection
+   key: victorAutoPhysicalDamage*dollotprotection
    cell: D55
    returnBoolean: 'Yes|No'
