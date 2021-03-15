@@ -201,7 +201,17 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
             }
             if(!$unansweredQuestions[$key]) {
-                unset($unansweredQuestions[$key]);
+                unset($unansweredQuestions[$key]); //remove node elements
+            }
+            if(array_key_exists($key, $unansweredQuestions)) {
+                //Remove empty arrays with only labels
+                $temp = $unansweredQuestions;
+                if(array_key_exists('label', $temp)) {
+                    unset($temp['label']);
+                    if(empty($temp)) {
+                        unset($unansweredQuestions[$key]);
+                    }
+                }
             }
         }
     }
@@ -248,170 +258,218 @@ class Unanswered extends AbstractDocumentAppDelegate
     }
 
     private function cleanData(&$data) {
-        if(isset($data['textField1'])) {
+        if(array_key_exists('textField1',$data)) {
             unset($data['textField1']);
         }
-        if(isset($data['validationMessage'])) {
+        if(array_key_exists('validationMessage',$data)) {
             unset($data['validationMessage']);
         }
-        if(isset($data['textField'])) {
+        if(array_key_exists('textField',$data)) {
             unset($data['textField']);
         }
-        if(isset($data['submissionTime'])) {
+        if(array_key_exists('submissionTime',$data)) {
             unset($data['submissionTime']);
         }
-        if(isset($data['workFlowId'])) {
+        if(array_key_exists('workFlowId',$data)) {
             unset($data['workFlowId']);
         }
-        if(isset($data['documentsToBeGenerated'])) {
+        if(array_key_exists('documentsToBeGenerated',$data)) {
             unset($data['documentsToBeGenerated']);
         }
-        if(isset($data['documentsSelectedCount'])) {
+        if(array_key_exists('documentsSelectedCount',$data)) {
             unset($data['documentsSelectedCount']);
         }
-        if(isset($data['umbrellaWarning'])) {
+        if(array_key_exists('umbrellaWarning',$data)) {
             unset($data['umbrellaWarning']);
         }
-        if(isset($data['tankIndex'])) {
+        if(array_key_exists('tankIndex',$data)) {
             unset($data['tankIndex']);
         }
-        if(isset($data['locationNum'])) {
+        if(array_key_exists('locationNum',$data)) {
             unset($data['locationNum']);
         }
-        if(isset($data['textFieldIgnore'])) {
+        if(array_key_exists('textFieldIgnore',$data)) {
             unset($data['textFieldIgnore']);
         }
-        if(isset($data['managementSubmitApplication'])) {
+        if(array_key_exists('managementSubmitApplication', $data)) {
             unset($data['managementSubmitApplication']);
         }
-        if(isset($data['textFieldIgnore'])) {
+        if(array_key_exists('textFieldIgnore',$data)) {
             unset($data['textFieldIgnore']);
         }
     }
 
-    private function answeredQuestionsDataMassaging(&$answeredQuestions) {
+    private function fileDataMassaging(&$fileData) {
         //Coinsurance radio button
-        if(isset($answeredQuestions['buildings'])) {
-            foreach ($answeredQuestions['buildings'] as $key1 => $value1) {
+        if(isset($fileData['buildings'])) {
+            foreach ($fileData['buildings'] as $key1 => $value1) {
                 if(isset($value1['coinsuranceform'])) {
                     if($value1['coinsuranceform'] == 'yes') {
-                        $answeredQuestions['buildings'][$key1]['coinsuranceform'] = "Coinsurance";
+                        $fileData['buildings'][$key1]['coinsuranceform'] = "Coinsurance";
                     } else {
-                        $answeredQuestions['buildings'][$key1]['coinsuranceform'] = "Monthly Limit";
+                        $fileData['buildings'][$key1]['coinsuranceform'] = "Monthly Limit";
                     }
                 }
             }
         }
-        //Remove location summary
-        if(isset($answeredQuestions['financialsYTDSales'])) {
-            foreach ($answeredQuestions['financialsYTDSales'] as $key => $value) {
+
+        //Remove location summary from financials
+        if(isset($fileData['financialsYTDSales'])) {
+            foreach ($fileData['financialsYTDSales'] as $key => $value) {
                 if(isset($value['total_newAutos'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_newAutos']);
+                    unset($fileData['financialsYTDSales'][$key]['total_newAutos']);
                 }
                 if(isset($value['total_usedAutos'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_usedAutos']);
+                    unset($fileData['financialsYTDSales'][$key]['total_usedAutos']);
                 }
                 if(isset($value['total_fAndI'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_fAndI']);
+                    unset($fileData['financialsYTDSales'][$key]['total_fAndI']);
                 }
                 if(isset($value['total_rentalLeasing'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_rentalLeasing']);
+                    unset($fileData['financialsYTDSales'][$key]['total_rentalLeasing']);
                 }
                 if(isset($value['total_service'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_service']);
+                    unset($fileData['financialsYTDSales'][$key]['total_service']);
                 }
                 if(isset($value['total_bodyShop'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_bodyShop']);
+                    unset($fileData['financialsYTDSales'][$key]['total_bodyShop']);
                 }
                 if(isset($value['total_parts'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_parts']);
+                    unset($fileData['financialsYTDSales'][$key]['total_parts']);
                 }
                 if(isset($value['total_total'])) {
-                    unset($answeredQuestions['financialsYTDSales'][$key]['total_total']);
+                    unset($fileData['financialsYTDSales'][$key]['total_total']);
                 }
             }
         }
-        if(isset($answeredQuestions['financialsYTDGrossProfits'])) {
-            foreach ($answeredQuestions['financialsYTDGrossProfits'] as $key => $value) {
+        if(isset($fileData['financialsYTDGrossProfits'])) {
+            foreach ($fileData['financialsYTDGrossProfits'] as $key => $value) {
                 if(isset($value['total_newAutos'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_newAutos']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_newAutos']);
                 }
                 if(isset($value['total_usedAutos'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_usedAutos']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_usedAutos']);
                 }
                 if(isset($value['total_fAndI'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_fAndI']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_fAndI']);
                 }
                 if(isset($value['total_rentalLeasing'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_rentalLeasing']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_rentalLeasing']);
                 }
                 if(isset($value['total_service'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_service']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_service']);
                 }
                 if(isset($value['total_bodyShop'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_bodyShop']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_bodyShop']);
                 }
                 if(isset($value['total_parts'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_parts']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_parts']);
                 }
                 if(isset($value['total_total'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfits'][$key]['total_total']);
+                    unset($fileData['financialsYTDGrossProfits'][$key]['total_total']);
                 }
             }
         }
-        if(isset($answeredQuestions['financialsYTDSalesAnnualized'])) {
-            foreach ($answeredQuestions['financialsYTDSalesAnnualized'] as $key => $value) {
+        if(isset($fileData['financialsYTDSalesAnnualized'])) {
+            foreach ($fileData['financialsYTDSalesAnnualized'] as $key => $value) {
                 if(isset($value['total_newAutos'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_newAutos']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_newAutos']);
                 }
                 if(isset($value['total_usedAutos'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_usedAutos']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_usedAutos']);
                 }
                 if(isset($value['total_fAndI'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_fAndI']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_fAndI']);
                 }
                 if(isset($value['total_rentalLeasing'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_rentalLeasing']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_rentalLeasing']);
                 }
                 if(isset($value['total_service'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_service']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_service']);
                 }
                 if(isset($value['total_bodyShop'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_bodyShop']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_bodyShop']);
                 }
                 if(isset($value['total_parts'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_parts']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_parts']);
                 }
                 if(isset($value['total_total'])) {
-                    unset($answeredQuestions['financialsYTDSalesAnnualized'][$key]['total_total']);
+                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_total']);
                 }
             }
         }
-        if(isset($answeredQuestions['financialsYTDGrossProfitsAnnualized'])) {
-            foreach ($answeredQuestions['financialsYTDGrossProfitsAnnualized'] as $key => $value) {
+        if(isset($fileData['financialsYTDGrossProfitsAnnualized'])) {
+            foreach ($fileData['financialsYTDGrossProfitsAnnualized'] as $key => $value) {
                 if(isset($value['total_newAutos'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_newAutos']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_newAutos']);
                 }
                 if(isset($value['total_usedAutos'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_usedAutos']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_usedAutos']);
                 }
                 if(isset($value['total_fAndI'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_fAndI']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_fAndI']);
                 }
                 if(isset($value['total_rentalLeasing'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_rentalLeasing']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_rentalLeasing']);
                 }
                 if(isset($value['total_service'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_service']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_service']);
                 }
                 if(isset($value['total_bodyShop'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_bodyShop']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_bodyShop']);
                 }
                 if(isset($value['total_parts'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_parts']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_parts']);
                 }
                 if(isset($value['total_total'])) {
-                    unset($answeredQuestions['financialsYTDGrossProfitsAnnualized'][$key]['total_total']);
+                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_total']);
+                }
+            }
+        }
+
+        //Unnecessary hidden fields in location schedule
+        if(isset($fileData['locations'])) {
+            foreach ($fileData['locations'] as $key => $value) {
+                if(array_key_exists('buildinginterest', $value)) {
+                    unset($fileData['locations'][$key]['buildinginterest']);
+                }
+                if(array_key_exists('d', $value)) {
+                    unset($fileData['locations'][$key]['d']);
+                }
+            }
+        }
+
+        if(isset($fileData['employeeList'])) {
+            foreach ($fileData['employeeList'] as $key => $value) {
+                if(array_key_exists('total_fTEmployeesFurnishedAnAuto', $value)) {
+                    unset($fileData['employeeList'][$key]['total_fTEmployeesFurnishedAnAuto']);
+                }
+                if(array_key_exists('total_pTEmployeesFurnishedAnAuto', $value)) {
+                    unset($fileData['employeeList'][$key]['total_pTEmployeesFurnishedAnAuto']);
+                }
+                if(array_key_exists('total_fTEmployeesWhoAreNotFurnished', $value)) {
+                    unset($fileData['employeeList'][$key]['total_fTEmployeesWhoAreNotFurnished']);
+                }
+                if(array_key_exists('total_pTEmployeesWhoAreNotFurnished', $value)) {
+                    unset($fileData['employeeList'][$key]['total_pTEmployeesWhoAreNotFurnished']);
+                }
+                if(array_key_exists('total_fTAllOtherEmployees', $value)) {
+                    unset($fileData['employeeList'][$key]['total_fTAllOtherEmployees']);
+                }
+                if(array_key_exists('total_pTAllOtherEmployees', $value)) {
+                    unset($fileData['employeeList'][$key]['total_pTAllOtherEmployees']);
+                }
+                if(array_key_exists('total_nonEmployeesUnderTheAge', $value)) {
+                    unset($fileData['employeeList'][$key]['total_nonEmployeesUnderTheAge']);
+                }
+                if(array_key_exists('total_nonEmployeesYearsOldorolder', $value)) {
+                    unset($fileData['employeeList'][$key]['total_nonEmployeesYearsOldorolder']);
+                }
+                if(array_key_exists('total_contractDriversNonEmployees', $value)) {
+                    unset($fileData['employeeList'][$key]['total_contractDriversNonEmployees']);
+                }
+                if(array_key_exists('total_total', $value)) {
+                    unset($fileData['employeeList'][$key]['total_total']);
                 }
             }
         }
@@ -451,8 +509,8 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
         $fileData = $temp;
 
+        $this->fileDataMassaging($fileData);
         $this->getAllUnansweredAndAnsweredQuestions($fileData,$unansweredQuestions, $answeredQuestions);
-        $this->answeredQuestionsDataMassaging($answeredQuestions);
 
         //Data grids not filled to be added which can't be done for the children as the leaf nodes need to be removed
         foreach ($fileData as $key => $value) {
