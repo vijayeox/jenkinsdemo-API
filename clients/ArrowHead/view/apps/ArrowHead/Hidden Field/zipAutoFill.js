@@ -54,3 +54,61 @@ if (data.zip.toString().length === 5) {
 } else {
   alert("Please enter a valid zipcode.");
 }
+
+if (data.locations[rowIndex].zip.toString().length === 5) {
+  Formio.fetch("https://api.npoint.io/2220d9339d3d11eb5795", {
+    method: "GET",
+  }).then(function (response) {
+    response.json().then(function (result) {
+      let gotState = 0;
+      const object = result;
+      const statecityData = Object.entries(object);
+      for (var i = 0; i < statecityData.length; i++) {
+        for (var j = 0; j < statecityData[i].length; j++) {
+          if (
+            typeof statecityData[i][j] === "object" &&
+            statecityData[i][j] !== null
+          ) {
+            if ("cities" in statecityData[i][j]) {
+              var citiesData = Object.entries(statecityData[i][j].cities);
+              if (typeof citiesData === "object" && citiesData !== null) {
+                for (k = 0; k < citiesData.length; k++) {
+                  var a = citiesData[k][1].indexOf(
+                    parseInt(data.locations[rowIndex].zip)
+                  );
+                  if (a > -1) {
+                    for (
+                      var stateLength = 0;
+                      stateLength < data.stateListJson.length;
+                      stateLength++
+                    ) {
+                      if (
+                        statecityData[i][j].name ===
+                        data.stateListJson[stateLength].name
+                      ) {
+                        form
+                          .getComponent(
+                            "locations[" + rowIndex + "][stateName]"
+                          )
+                          .setValue(data.stateListJson[stateLength]);
+                      }
+                    }
+                    gotState = 1;
+                    form
+                      .getComponent("locations[" + rowIndex + "][city]")
+                      .setValue(citiesData[k][0]);
+
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      if (gotState.toString() === "0") {
+        alert("Entered Zipcode is not Found.");
+      }
+    });
+  });
+}
