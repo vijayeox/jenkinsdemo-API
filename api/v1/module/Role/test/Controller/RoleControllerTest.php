@@ -182,7 +182,7 @@ class RoleControllerTest extends ControllerTest
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
-            if ($val['privilege_name'] == "MANAGE_GROUP") {
+            if ($val['privilege_name'] == "MANAGE_TEAM") {
                 $this->assertEquals($val['permission'], 3);
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
@@ -246,7 +246,7 @@ class RoleControllerTest extends ControllerTest
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
-            if ($val['privilege_name'] == "MANAGE_GROUP") {
+            if ($val['privilege_name'] == "MANAGE_TEAM") {
                 $this->assertEquals($val['permission'], 3);
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);

@@ -1516,11 +1516,11 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals($id, $queryResult[0]['file_id']);  
     }
 
-
     //Test for file assignment for a user
     public function testSetUserAssigneesForUser() {
+        $dataset = $this->dataset;
+        $entityId = $dataset['ox_app_entity'][0]['id'];
         $data = [
-        
             "assignedToName" => "Admin Test",
             "assignedto" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
             "assignedtoObj" => 
@@ -1530,21 +1530,26 @@ class FileServiceTest extends AbstractServiceTest
                 ],
             "attachments" => [],
             "description" => "",
-            "end_date" => "2021-03-05T03:59:35.000Z",
             "name" => "testnew",
-            "next_action_date" => "2021-03-04T03:59:35.000Z",
             "observers" => [],
-            "start_date" => "2021-03-02T03:59:35.000Z",
             "status" => "Assigned",
             "username" => "Admin Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
-            "entity_name" => "Task"
+            "entity_name" => "Task",
+            "entity_id" => $entityId,
+            "start_date" => "2021-03-04 20:01:02",
+            "end_date" => "2021-03-07 10:21:54",
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery = "SELECT id FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery);
+        $this->assertEquals(1,count($selectFileId));
+        $fileQuery = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $fileQueryResult = $this->runQuery($fileQuery);
+        $this->assertEquals(1,$fileQueryResult[0]['user_id']);
     }
 
     //Test for file assignment for a owner
@@ -1569,23 +1574,28 @@ class FileServiceTest extends AbstractServiceTest
             "username" => "Admin Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
-            "entity_name" => "Task"
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery);
+        $this->assertEquals(1,count($selectFileId));
+        $fileQuery = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $fileQueryResult = $this->runQuery($fileQuery);
+        $this->assertEquals($selectFileId[0]['created_by'],$fileQueryResult[0]['user_id']);
     }
 
-    // Test for file assignment for Manager
+    //Test for file assignment for Manager
     public function testSetUserAssigneesForManager() {
         $data = [
-        
-            "assignedToName" => "Admin Test",
+            "assignedToName" => "Manager Test",
             "assignedto" => "manager",
             "assignedtoObj" => 
                 [
-                    "name" => "Admin Test",
+                    "name" => "Manager Test",
                     "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
                 ],
             "attachments" => [],
@@ -1596,18 +1606,25 @@ class FileServiceTest extends AbstractServiceTest
             "observers" => [],
             "start_date" => "2021-03-02T03:59:35.000Z",
             "status" => "Assigned",
-            "username" => "Admin Test",
+            "username" => "Manager Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
-            "entity_name" => "Task"
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
+       
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(0,count($sqlQuery2Result));
     }
 
-    // Test for file assignment for observers data
+    //Test for file assignment for observers data
     public function testSetUserAssigneesForObservers() {
         $data = [
             "assignedToName" => "Admin Test",
@@ -1632,69 +1649,173 @@ class FileServiceTest extends AbstractServiceTest
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
             "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(3,count($sqlQuery2Result));
+        $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[2]['assignee']);
     }
 
-    //Test for group assignees for assigned_group
-    public function testSetGroupAssigneesForAssignedGroup() {
+    //Test for file assignment for observers data
+    public function testSetUserAssigneesForSameObserversAndAssignees() {
         $data = [
             "assignedToName" => "Admin Test",
-            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
-            "assignedtoObj" => [],
+            "assignedto" => "4fd9f04d-758f-11e9-b2d5-68ecc57cde45",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
             "attachments" => [],
             "description" => "",
             "end_date" => "2021-03-05T03:59:35.000Z",
             "name" => "testnew",
             "next_action_date" => "2021-03-04T03:59:35.000Z",
-            "observer_group" => [],
-            "start_date" => "2021-03-02T03:59:35.000Z",
-            "status" => "Assigned",
-            "username" => "Admin Test",
-            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
-            "app_id" => 19,
-            "entity_name" => "Task"
-        ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
-    }
-
-     //Test for file assignment for group observers
-    public function testSetGroupAssigneesForObservers() {
-        $data = [
-            "assignedToName" => "Admin Test",
-            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
-            "assignedtoObj" => [],
-            "attachments" => [],
-            "description" => "",
-            "end_date" => "2021-03-05T03:59:35.000Z",
-            "name" => "testnew",
-            "next_action_date" => "2021-03-04T03:59:35.000Z",
-            "observer_group"=>[
-                "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            "observers"=>[
+                "4fd9f04d-758f-11e9-b2d5-68ecc57cde45",
             ],
             "start_date" => "2021-03-02T03:59:35.000Z",
             "status" => "Assigned",
             "username" => "Admin Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
-            "entity_name" => "Task"
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
+    
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(2,count($sqlQuery2Result));
+        $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
+    }
+
+    //Test for team assignees for assigned_team
+    public function testSetTeamAssigneesForAssignedTeam() {
+        $data = [
+            "assignedToName" => "First Team",
+            "assigned_team" => "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_team" => [],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "First Team",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "0712a5e1-265d-421b-8014-aebd3a4a6059"
+        ];
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,$sqlQuery2Result[0]['team_id']); //change to team id
+    }
+
+    //Test for file assignment for team observers
+    public function testSetTeamAssigneesForSameObserversAndAssignees() {
+        $data = [
+            "assignedToName" => "First Team",
+            "assigned_team" => "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_team"=>[
+                "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4"
+            ],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "First Team",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
+        ];
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(2,count($sqlQuery2Result));
+        $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
+        $this->assertEquals(1,$sqlQuery2Result[0]['team_id']);
+        $this->assertEquals(1,$sqlQuery2Result[1]['team_id']);
+
+    }
+
+     //Test for file assignment for team observers
+     public function testSetTeamAssigneesForDifferentObserversAndAssignees() {
+        $data = [
+            "assignedToName" => "First Team",
+            "assigned_team" => "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_team"=>[
+                "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4",
+                "0712a5e1-265d-421b-8014-aebd3a4a6059"
+            ],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "First Team",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
+        ];
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(3,count($sqlQuery2Result));
+        $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[2]['assignee']);
+
     }
 
     //Test for file assignment for roles
     public function testSetRoleAssigneesForRoles() {
         $data = [
-            "assignedToName" => "Admin Test",
+            "assignedToName" => "TASKUSER",
             "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
             "assignedtoObj" => [],
             "attachments" => [],
@@ -1705,21 +1826,28 @@ class FileServiceTest extends AbstractServiceTest
             "observer_role"=> [],
             "start_date" => "2021-03-02T03:59:35.000Z",
             "status" => "Assigned",
-            "username" => "Admin Test",
+            "username" => "TASKUSER",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
-            "entity_name" => "Task"
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
+
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(10,$sqlQuery2Result[0]['role_id']);
     }
 
     //Test for file assignment for role observers
-    public function testSetRoleAssigneesForObservers() {
+    public function testSetRoleAssigneesForSameObserversAndAssignees() {
         $data = [
-            "assignedToName" => "Admin Test",
+            "assignedToName" => "TASKUSER",
             "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
             "assignedtoObj" => [],
             "attachments" => [],
@@ -1732,58 +1860,110 @@ class FileServiceTest extends AbstractServiceTest
             ],
             "start_date" => "2021-03-02T03:59:35.000Z",
             "status" => "Assigned",
-            "username" => "Admin Test",
+            "username" => "TASKUSER",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
-            "entity_name" => "Task"
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('createFile')->with($data)->once()->andReturn(true);
-        $content = $mockFileService->createFile($data);
-        $this->assertEquals(true, $content);
+
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(2,count($sqlQuery2Result));
+        $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
+        $this->assertEquals(10,$sqlQuery2Result[0]['role_id']);
+        $this->assertEquals(10,$sqlQuery2Result[1]['role_id']);
+    }
+
+     //Test for file assignment for role observers
+     public function testSetRoleAssigneesForDifferentObserversAndAssignees() {
+        $data = [
+            "assignedToName" => "TASKUSER",
+            "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
+            "assignedtoObj" => [],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-05T03:59:35.000Z",
+            "name" => "testnew",
+            "next_action_date" => "2021-03-04T03:59:35.000Z",
+            "observer_role"=>[
+                "e116dab7-ab62-4292-a9f9-06d095a86fed",
+                "d968f67c-174a-4416-8e06-df87f2c7ed68"
+            ],
+            "start_date" => "2021-03-02T03:59:35.000Z",
+            "status" => "Assigned",
+            "username" => "TASKUSER",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task",
+            "entity_id" => 1,
+            "uuid" => "182384ce-3fdc-4c4f-80d9-020c5fc19a5f"
+        ];
+
+        $result = $this->fileService->createFile($data);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$data['uuid']."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(3,count($sqlQuery2Result));
+        $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[2]['assignee']);
     }
 
     //Test for Updating file assignment for users 
     public function testSetUserAssigneesForUserUpdate() {
         $dataset = $this->dataset;
         $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
         $data = [
 
                 "assignedToName" => "Admin Test",
-                "assignedto" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                "assignedto" => "d9890624-8f42-4201-bbf9-675ec5dc8933",
                 "assignedtoObj" => 
                     [
                         "name" => "Admin Test",
                         "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
                     ],
                 "attachments" => [],
-            
                 "description" => "",
                 "end_date" => "2021-03-04 00:00:00",
                 "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
                 "name" => "cfggfkkk",
                 "next_action_date" => "2021-03-03 00:00:00",
                 "observers" => [],
-                "start_date" => "2021-03-01",
+                "start_date" => "2021-03-01 00:00:00",
                 "status" => "Assigned",
                 "username" => "Admin Test",
                 "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
                 "app_id" => 19,
                 "entity_name" => "Task",
-            
             ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
+    
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(50,$sqlQuery2Result[0]['user_id']);
     }
 
     //Test for Updating file assignment for a owner
     public function testSetUserAssigneesForOwnerUpdate() {
         $dataset = $this->dataset;
-        $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
         $data = [
-
             "assignedToName" => "Admin Test",
             "assignedto" => "owner",
             "assignedtoObj" => 
@@ -1792,7 +1972,6 @@ class FileServiceTest extends AbstractServiceTest
                     "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
                 ],
             "attachments" => [],
-        
             "description" => "",
             "end_date" => "2021-03-04 00:00:00",
             "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
@@ -1805,21 +1984,25 @@ class FileServiceTest extends AbstractServiceTest
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
             "entity_name" => "Task",
-        
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
+
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals($selectFileId[0]['created_by'],$sqlQuery2Result[0]['user_id']);
     }
 
     // Test for Updating file assignment for Manager
     public function testSetUserAssigneesForManagerUpdate() {
         $dataset = $this->dataset;
         $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
         $data = [
-
-            "assignedToName" => "Admin Test",
+            "assignedToName" => "Manager Test",
             "assignedto" => "Manager",
             "assignedtoObj" => 
                 [
@@ -1836,26 +2019,31 @@ class FileServiceTest extends AbstractServiceTest
             "observers" => [],
             "start_date" => "2021-03-01",
             "status" => "Assigned",
-            "username" => "Admin Test",
+            "username" => "Manager Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
             "entity_name" => "Task",
         
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(0,count($sqlQuery2Result));
     }
 
     // Test for Updating file assignment for User Observers
     public function testSetUserAssigneesForObserversUpdate() {
         $dataset = $this->dataset;
         $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
+       
         $data = [
-
             "assignedToName" => "Admin Test",
-            "assignedto" => "Manager",
+            "assignedto" => "d9890624-8f42-4201-bbf9-675ec5dc8400",
             "assignedtoObj" => 
                 [
                     "name" => "Admin Test",
@@ -1869,8 +2057,8 @@ class FileServiceTest extends AbstractServiceTest
             "name" => "cfggfkkk",
             "next_action_date" => "2021-03-03 00:00:00",
             "observers"=>[
-                "768d1fb9-de9c-46c3-8d5c-23e0e484ce2e",
-                "fbde2453-17eb-4d7f-909a-0fccc6d53e7a"
+                "d9890624-8f42-4201-bbf9-675ec5dc8933",
+                "d9890624-8f42-4201-bbf9-675ec5dc8990"
             ],
             "start_date" => "2021-03-01",
             "status" => "Assigned",
@@ -1878,22 +2066,70 @@ class FileServiceTest extends AbstractServiceTest
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
             "entity_name" => "Task"
-        
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
+
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(3,count($sqlQuery2Result));
+        $this->assertEquals(1,$sqlQuery2Result[0]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[1]['assignee']);
+        $this->assertEquals(0,$sqlQuery2Result[2]['assignee']);
     }
 
-    // Test for Updating file assignment for Groups
-    public function testSetGroupAssigneesForAssignedGroupUpdate() {
+    // Test for Updating file assignment for Teams
+    public function testSetTeamAssigneesForAssignedTeamUpdate() {
         $dataset = $this->dataset;
-        $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
         $data = [
 
-            "assignedToName" => "Admin Test",
-            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
+            "assignedToName" => "Team Test",
+            "assigned_team" => "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4",
+            "assignedtoObj" => 
+                [
+                    "name" => "Admin Test",
+                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
+                ],
+            "attachments" => [],
+            "description" => "",
+            "end_date" => "2021-03-04 00:00:00",
+            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
+            "name" => "cfggfkkk",
+            "next_action_date" => "2021-03-03 00:00:00",
+            "observer_team"=>[],
+            "start_date" => "2021-03-01",
+            "status" => "Assigned",
+            "username" => "Team Test",
+            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
+            "app_id" => 19,
+            "entity_name" => "Task"
+        ];
+
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(2,count($sqlQuery2Result));
+        $this->assertEquals(100,$sqlQuery2Result[0]['user_id']);
+        $this->assertEquals(1,$sqlQuery2Result[1]['team_id']);
+    }
+
+    // Test for Updating file assignment for Team Observers
+    public function testSetTeamAssigneesForObserversUpdate() {
+        $dataset = $this->dataset;
+        $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
+        $data = [
+
+            "assignedToName" => "Team Test",
+            "assigned_team" => "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4",
             "assignedtoObj" => 
                 [
                     "name" => "Admin Test",
@@ -1906,68 +2142,38 @@ class FileServiceTest extends AbstractServiceTest
             "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
             "name" => "cfggfkkk",
             "next_action_date" => "2021-03-03 00:00:00",
-            "observers"=>[
-                "768d1fb9-de9c-46c3-8d5c-23e0e484ce2e",
-                "fbde2453-17eb-4d7f-909a-0fccc6d53e7a"
-            ],
-            "start_date" => "2021-03-01",
-            "status" => "Assigned",
-            "username" => "Admin Test",
-            "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
-            "app_id" => 19,
-            "entity_name" => "Task"
-        
-        ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
-    }
-
-    // Test for Updating file assignment for Group Observers
-    public function testSetGroupAssigneesForObserversUpdate() {
-        $dataset = $this->dataset;
-        $id = $dataset['ox_file'][0]['id'];
-        $data = [
-
-            "assignedToName" => "Admin Test",
-            "assigned_group" => "0712a5e1-265d-421b-8014-aebd3a4a6059",
-            "assignedtoObj" => 
-                [
-                    "name" => "Admin Test",
-                    "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
-                ],
-            "attachments" => [],
-        
-            "description" => "",
-            "end_date" => "2021-03-04 00:00:00",
-            "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
-            "name" => "cfggfkkk",
-            "next_action_date" => "2021-03-03 00:00:00",
-            "observer_group"=>[
+            "observer_team"=>[
                 "0712a5e1-265d-421b-8014-aebd3a4a6059",
             ],
             "start_date" => "2021-03-01",
             "status" => "Assigned",
-            "username" => "Admin Test",
+            "username" => "Team Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
             "entity_name" => "Task"
-        
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
+
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(3,count($sqlQuery2Result));
+        $this->assertEquals(100,$sqlQuery2Result[0]['user_id']);
+        $this->assertEquals(1,$sqlQuery2Result[1]['team_id']);
+        $this->assertEquals(2,$sqlQuery2Result[2]['team_id']);
+
     }
 
     // Test for Updating file assignment for Roles
     public function testSetRoleAssigneesForRolesUpdate() {
         $dataset = $this->dataset;
-        $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
         $data = [
 
-            "assignedToName" => "Admin Test",
+            "assignedToName" => "Role Test",
             "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
             "assignedtoObj" => 
                 [
@@ -1975,7 +2181,6 @@ class FileServiceTest extends AbstractServiceTest
                     "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
                 ],
             "attachments" => [],
-        
             "description" => "",
             "end_date" => "2021-03-04 00:00:00",
             "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
@@ -1984,25 +2189,29 @@ class FileServiceTest extends AbstractServiceTest
             "observer_role"=>[],
             "start_date" => "2021-03-01",
             "status" => "Assigned",
-            "username" => "Admin Test",
+            "username" => "Role Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
             "entity_name" => "Task"
-        
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
+
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(2,count($sqlQuery2Result));
+        $this->assertEquals(10,$sqlQuery2Result[1]['role_id']);
     }
 
-    // Test for Updating file assignment for Roles group
+    // Test for Updating file assignment for Observer Roles
     public function testSetRoleAssigneesForObserversUpdate() {
         $dataset = $this->dataset;
-        $id = $dataset['ox_file'][0]['id'];
+        $fileId = $dataset['ox_file'][0]['uuid'];
         $data = [
-
-            "assignedToName" => "Admin Test",
+            "assignedToName" => "Role Test",
             "assigned_role" => "e116dab7-ab62-4292-a9f9-06d095a86fed",
             "assignedtoObj" => 
                 [
@@ -2010,7 +2219,6 @@ class FileServiceTest extends AbstractServiceTest
                     "uuid" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
                 ],
             "attachments" => [],
-        
             "description" => "",
             "end_date" => "2021-03-04 00:00:00",
             "fileId" => "271ca302-2ecc-4191-802f-4e18d6298a06",
@@ -2021,16 +2229,55 @@ class FileServiceTest extends AbstractServiceTest
             ],
             "start_date" => "2021-03-01",
             "status" => "Assigned",
-            "username" => "Admin Test",
+            "username" => "Role Test",
             "appId" => "454a1ec4-eeab-4dc2-8a3f-6a4255ffaee1",
             "app_id" => 19,
             "entity_name" => "Task"
-        
         ];
-        $mockFileService = Mockery::mock('FileService');
-        $mockFileService->shouldReceive('updateFile')->with($data, $id)->once()->andReturn(true);
-        $content = $mockFileService->updateFile($data, $id);
-        $this->assertEquals(true, $content);
+
+        $result = $this->fileService->updateFile($data, $fileId);
+        $this->assertEquals(1,$result);
+        $sqlQuery2 = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $selectFileId = $this->runQuery($sqlQuery2);
+        $this->assertEquals(1,count($selectFileId));
+        $sqlQuery2 = "SELECT * FROM ox_file_assignee where file_id = '".$selectFileId[0]['id']."'";
+        $sqlQuery2Result = $this->runQuery($sqlQuery2);
+        $this->assertEquals(3,count($sqlQuery2Result));
+        $this->assertEquals(100,$sqlQuery2Result[0]['user_id']);
+        $this->assertEquals(10,$sqlQuery2Result[1]['role_id']);
+        $this->assertEquals(10,$sqlQuery2Result[1]['role_id']);
     }
 
+    // Check delete option for user access
+    public function testDeleteFileUserAccessException() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][7]['uuid'];
+        $version = 1;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Delete operation cannot be performed');
+        $this->fileService->deleteFile($fileId, $version);
+       
+    } 
+    
+    // Check delete option for invalid version
+    public function testDeleteFileVersionMismatchException() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][0]['uuid'];
+        $version = 0;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Entity version sent by client does not match the version on server');
+        $this->fileService->deleteFile($fileId, $version);
+    }
+
+    // Check delete option for deleting a file
+    public function testDeleteFile() {
+        $dataset = $this->dataset;
+        $fileId = $dataset['ox_file'][0]['uuid'];
+        $version = 1;
+        $this->fileService->deleteFile($fileId, $version);
+        $sqlQuery = "SELECT * FROM ox_file where uuid = '".$fileId."'";
+        $result = $this->runQuery($sqlQuery);
+        $this->assertEquals(1,count($result));
+        $this->assertEquals(0,$result[0]['is_active']);
+    } 
 }

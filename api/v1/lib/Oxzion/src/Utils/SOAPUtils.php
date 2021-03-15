@@ -12,7 +12,7 @@ class SOAPUtils
 {
 	private $xml;
 	private $client;
-    private $options;
+	private $options;
 
 	public function __construct($wsdl, array $options = array()) {
 		$this->setWsdl($wsdl);
@@ -31,35 +31,35 @@ class SOAPUtils
 			$wsdl = file_get_contents($wsdl);
 		}
 		$this->xml = simplexml_load_string($wsdl);
-		// foreach ($this->xml->getDocNamespaces() as $prefix => $namespace)
-		// 	$xml->registerXPathNamespace($prefix, $namespace);
 	}
 	public function setHeader(string $namespace, string $name, array $data) {
-        $header = new SoapHeader($namespace, $name, $data);
-        $this->client->__setSoapHeaders($header);
+		$header = new SoapHeader($namespace, $name, $data);
+		$this->client->__setSoapHeaders($header);
 	}
 
-    public function makeCall(string $function, array $data) {
-        if ($errors = $this->getValidData($function, $data)) {
-            throw new ServiceException(json_encode($errors), 'validation.errors', OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
+	public function makeCall(string $function, array $data, bool $clean = true) {
+		if ($errors = $this->getValidData($function, $data)) {
+			throw new ServiceException(json_encode($errors), 'validation.errors', OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
 		}
 		try {
-		$response = $this->client->{$function}($data);
+			$response = $this->client->{$function}($data);
 		} catch (Exception $e) {
-            throw new ServiceException($e->getMessage(), 'soap.call.errors', OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR);
+			throw new ServiceException($e->getMessage(), 'soap.call.errors', OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR);
 		}
-        return $this->cleanResponse($response);
-    }
-    private function cleanResponse($response) {
-        if (is_object($response)) {
-            return json_decode(json_encode($response), true);
-        }
-        return $response;
-    }
+		if ($clean)
+		    return $this->cleanResponse($response);
+		return $response;
+	}
+	private function cleanResponse($response) {
+		if (is_object($response)) {
+			return json_decode(json_encode($response), true);
+		}
+		return $response;
+	}
 
-    public function isValidFunction(string $function) {
-        return in_array($function, $this->getFunctions());
-    }
+	public function isValidFunction(string $function) {
+		return in_array($function, $this->getFunctions());
+	}
 	public function getFunctions() {
 		$functions = array();
 		$functions = $this->client->__getFunctions();
@@ -70,57 +70,68 @@ class SOAPUtils
 		return array_keys($functions);
 	}
 
-    public function getValidData($functionStruct, array &$data, array $errors = []) {
-        if (is_string($functionStruct)) {
-            $functionStruct = $this->getFunctionStruct($functionStruct);
-        }
-        $data = array_intersect_key($data, $functionStruct);
-        foreach ($functionStruct as $key => $value) {
-            if ($value['required'] && !isset($data[$key])) {
-                $errors[$key] = 'Required Field';
-            } elseif (isset($data[$key]) && !$value['nillable'] && !$data[$key]) {
-                $errors[$key] = 'Value cannot be Nill';
+	public function getValidData($functionStruct, array &$data, array $errors = []) {
+		if (is_string($functionStruct)) {
+			$functionStruct = $this->getFunctionStruct($functionStruct);
+		}
+		$data = array_intersect_key($data, $functionStruct);
+		foreach ($functionStruct as $key => $value) {
+			if ($value['required'] && !isset($data[$key])) {
+				$errors[$key] = 'Required Field';
+			} elseif (isset($data[$key]) && !$value['nillable'] && !$data[$key]) {
+				$errors[$key] = 'Value cannot be Nill';
 			}
 			if (isset($data[$key]) && isset($value['type'])) {
-    			switch ($value['type']) {
+				switch ($value['type']) {
 					case 'string':
     					break;
 					case 'int':
-						if (!is_numeric($data[$key]))
-						    $errors[$key] = 'Integer value Expected';
+						if (!is_int($data[$key]))
+							if (preg_match('/^[-]?[\d]*$/m', $data[$key]))
+							    $data[$key] = (int) $data[$key];
+							else
+						        $errors[$key] = 'Integer value Expected';
+    					break;
+					case 'boolean':
+						if (!is_bool($data[$key])) {
+							if (preg_match('/^(true|false)$/m', strtolower($data[$key])))
+							    $data[$key] = (strtolower($data[$key]) == 'true') ? true : false;
+							else
+							    $errors[$key] = 'Boolean value Expected';
+						}
     					break;
 					case 'enumeration':
 						if (!in_array($data[$key], $value['enumeration']))
 						    $errors[$key] = 'Invalid value selected';
     					break;
 					case 'pattern':
-						if (!preg_match($value['pattern'], $data[$key]))
+						if (!preg_match('/'.$value['pattern'].'/m', $data[$key]))
 						    $errors[$key] = 'Incorrect format';
     					break;
 					default:
                         throw new ServiceException("Unable to validate ".json_encode($value)." = ".$data[$key], 'validation.errors', OxServiceException::ERR_CODE_NOT_FOUND);
     					break;
     			}
-    		}
-            if (isset($functionStruct[$key]['children']) && $data[$key]) {
-                $errors = array_merge($errors, $this->getValidData($functionStruct[$key]['children'], $data[$key], $errors));
-            }
-        }
-        return $errors;
-    }
+			}
+			if (isset($functionStruct[$key]['children']) && $data[$key]) {
+				$errors = array_merge($errors, $this->getValidData($functionStruct[$key]['children'], $data[$key], $errors));
+			}
+		}
+		return $errors;
+	}
 
 	public function getFunctionStruct(string $function) {
 
 		if (!$this->isValidFunction($function))
-	        throw new ServiceException("Requested function not found", 'function.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+		    throw new ServiceException("Requested function not found", 'function.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
 
 		$targetPath = '/wsdl:definitions/wsdl:types/'.$this->options['prefix'].':schema';
 		if ($this->xml->attributes()['targetNamespace'])
-			$targetPath .= '[@targetNamespace="'.$this->xml->attributes()['targetNamespace'].'"]';
+		    $targetPath .= '[@targetNamespace="'.$this->xml->attributes()['targetNamespace'].'"]';
 		$schemas = $this->xml->xpath($targetPath);
 
 		if (count($schemas) != 1) {
-	        throw new ServiceException("Schema not found", 'schema.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+			throw new ServiceException("Schema not found", 'schema.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
 		}
 
 		$parameters = array();
@@ -151,18 +162,18 @@ class SOAPUtils
 	private function processElementType($element) {
 		$type = explode(':', $element->attributes()['type']);
 		if ($type[1] && $type[0] === $this->options['prefix'])
-			return array('type' => $type[1]);
+		    return array('type' => $type[1]);
 		elseif (!$type[1])
-			return array('type' => $type[0]);
+		    return array('type' => $type[0]);
 
 		$elementTypes = array('simpleType', 'complexType');
 		$targetPath = '/wsdl:definitions/wsdl:types/'.$this->options['prefix'].':schema/'.$this->options['prefix'].':';
 		foreach ($elementTypes as $elementType) {
 			$elementTypeDom = $this->xml->xpath($targetPath.$elementType.'[@name="'.$type[1].'"]');
 			if (count($elementTypeDom) > 1)
-	            throw new ServiceException("More than one element found", 'schema.error', OxServiceException::ERR_CODE_CONFLICT);
+			    throw new ServiceException("More than one element found", 'schema.error', OxServiceException::ERR_CODE_CONFLICT);
 			elseif (count($elementTypeDom) == 0)
-				continue;
+			    continue;
 
 			$elementTypeDom = current($elementTypeDom);
 			switch ($elementType) {

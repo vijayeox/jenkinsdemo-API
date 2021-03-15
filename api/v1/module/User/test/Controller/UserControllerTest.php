@@ -273,12 +273,11 @@ class UserControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email Exists in other Account');
+        $this->assertEquals($content['message'], 'Username/Email Exists');
     }
 
     public function testCreateExistingUsername()
@@ -317,12 +316,11 @@ class UserControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/account/b0971de7-0387-48ea-8f29-5d3704d96a46/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(412);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email Exists in other Account');
+        $this->assertEquals($content['message'], 'Email Exists');
     }
 
     
@@ -1301,12 +1299,12 @@ class UserControllerTest extends ControllerTest
      public function testGetPrivacyPolicyWithData()
      {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/me/getPolicyTerm', 'GET');
+        $this->dispatch('/user/me/hasLoggedIn', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('User');
         $this->assertControllerName(UserController::class);
         $this->assertControllerClass('UserController');
-        $this->assertMatchedRouteName('get_policyterm');
+        $this->assertMatchedRouteName('get_loggedIn');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -1314,26 +1312,26 @@ class UserControllerTest extends ControllerTest
     public function testGetPrivacyPolicyWithoutdata()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/me/getPolicyTerm', 'GET');
+        $this->dispatch('/user/me/hasLoggedIn', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('User');
         $this->assertControllerName(UserController::class);
         $this->assertControllerClass('UserController');
-        $this->assertMatchedRouteName('get_policyterm');
+        $this->assertMatchedRouteName('get_loggedIn');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']),1);
+        $this->assertEquals(count($content['data']),2);
     }
     public function testUpdatePrivacyPolicyData()
         {
             $this->initAuthToken($this->adminUser);
-            $this->dispatch('/user/me/updatePolicyTerm', 'POST');
+            $this->dispatch('/user/me/updateLoggedIn', 'POST');
             $this->assertResponseStatusCode(200);
             $this->assertModuleName('User');
             $this->assertControllerName(UserController::class);
             $this->assertControllerClass('UserController');
-            $this->assertMatchedRouteName('update_PolicyTerm');
+            $this->assertMatchedRouteName('update_loggedIn');
             $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
             $content = (array)json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'success');

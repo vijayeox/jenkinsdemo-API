@@ -40,12 +40,17 @@ class OXCallbackController extends AbstractApiControllerHelper
         $bcc = " ";    
         if(isset($params['bcc'])){
             $bcc = $params['bcc'];
-        }    
+        }
+        if(isset($params['customTemplate'])){
+            $body = $this->templateService->getContent('newUser', $params);
+        } else {
+            $body = $this->templateService->getContent('newUser', $params);
+        }
         $this->messageProducer->sendQueue(json_encode(array(
             'to' => $params['email'],
             'bcc' => $bcc,
             'subject' => isset($params['subject']) ? $params['subject'] : 'Your Login Credentials.',
-            'body' => $this->templateService->getContent('newUser', $params),
+            'body' => $body,
         )), 'mail');
         return $this->getSuccessResponse();
     }
