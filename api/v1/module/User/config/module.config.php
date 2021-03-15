@@ -313,7 +313,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',
-                        'action' => 'hasLoggedIns',
+                        'action' => 'hasLoggedIn',
                     ],
                 ],
             ],
