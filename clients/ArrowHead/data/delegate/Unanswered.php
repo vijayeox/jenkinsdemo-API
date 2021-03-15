@@ -66,6 +66,9 @@ class Unanswered extends AbstractDocumentAppDelegate
 
     private function preProcessFields($fieldList) {
         $finalFieldList = [];
+        //Array to identify the drop down fields that require further mapping
+        //Example: 10000 -> $10000 or 0.85 -> 85%   
+        $dropDownMappings = [];
         foreach ($fieldList as $field) {
             $label = $field['name'];
             if( ($field['type'] == 'hidden') || ($field['type'] == 'file') || ($field['type'] == 'document') || ($field['type'] == 'button') || ($field['type'] == 'htmlelement') ) {
@@ -76,6 +79,7 @@ class Unanswered extends AbstractDocumentAppDelegate
                 $finalFieldList[$label] = $this->getFieldLabel($field);
                 $options = json_decode($field['options'],true);
                 if(isset($options['values']) && !empty($options['values'])) {
+                    $dropDownMappings[$label] = true;
                     foreach ($options['values'] as $key => $value) {
                         $finalFieldList[$value['value']] = $value['label'];
                     }
@@ -86,6 +90,7 @@ class Unanswered extends AbstractDocumentAppDelegate
                 $finalFieldList[$label] = $this->getFieldLabel($field);
                 $template = json_decode($field['template'],true);
                 if(isset($template['values']) && !empty($template['values'])) {
+                    $dropDownMappings[$label] = true;
                     foreach ($template['values'] as $key => $value) {
                         $finalFieldList[$value['value']] = $value['label'];
                     }
@@ -97,6 +102,7 @@ class Unanswered extends AbstractDocumentAppDelegate
                 $finalFieldList[$label] = $this->getFieldLabel($field);
                 $template = json_decode($field['template'],true);
                 if(isset($template['questions']) && !empty($template['questions'])) {
+                    $dropDownMappings[$label] = true;
                     foreach ($template['questions'] as $key => $value) {
                         $finalFieldList[$value['value']] = $value['label'];
                     }
@@ -112,7 +118,10 @@ class Unanswered extends AbstractDocumentAppDelegate
                 unset($finalFieldList[$key]);
             }
         }
-        return $finalFieldList;
+        return Array(
+            'finalFieldList' => $finalFieldList,
+            'dropDownMappings' => $dropDownMappings
+        );
     }
 
     private function getTempLocation($name,$uuid) {
@@ -197,7 +206,7 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
     }
 
-    private function getAnsweredQuestionsPrintReady($finalFieldList,&$answeredQuestions) {
+    private function getAnsweredQuestionsPrintReady($finalFieldList,&$answeredQuestions,$dropDownMappings) {
         $counters = array();
         foreach ($answeredQuestions as $key => $value) {
             if(isset($finalFieldList[$key]) || is_numeric($key)){
@@ -208,9 +217,16 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
                 if(is_array($value)) {
                     $answeredQuestions[$label] = $value;
-                    $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions[$label]);
+                    $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions[$label],$dropDownMappings);
                 } else {
-                    $answeredQuestions[$label] = $value;
+                    $value = is_numeric($value)?(string)$value:$value;
+                    if(isset($dropDownMappings[$key]) && isset($finalFieldList[$value])){
+                        $answeredQuestions[$label] = $finalFieldList[$value];
+                    }
+                    else{
+                        $answeredQuestions[$label] = $value;
+                    }
+                    
                 }
                 if($key != $label) {
                     unset($answeredQuestions[$key]);
@@ -414,8 +430,9 @@ class Unanswered extends AbstractDocumentAppDelegate
         //List of all field for dealer policy
         $fieldListArr = $this->getFields($data['appId'],array('entityName' => 'Dealer Policy'));
         $fieldList = isset($fieldListArr['data']) ? $fieldListArr['data'] : array();
-        $finalFieldList = $this->preProcessFields($fieldList);
-
+        $processedFields = $this->preProcessFields($fieldList);
+        $finalFieldList = $processedFields['finalFieldList'];
+        $dropDownMappings = $processedFields['dropDownMappings'];
         $fileDataRaw = $this->getFile($data['fileId']);
         $fileData = $fileDataRaw['data'];
 
@@ -423,7 +440,6 @@ class Unanswered extends AbstractDocumentAppDelegate
         $unansweredQuestions = [];
         //For file data when it gets encoded and stored in the db
         $this->decodeFileData($fileData);
-
         //Sequence outer keys
         $temp = array();
         foreach ($sequence as $key => $value) {
@@ -474,7 +490,7 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
 
         $this->cleanData($answeredQuestions);
-        $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions);
+        $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions,$dropDownMappings);
         $generatedDocument = $this->documentBuilder->generateDocument('AnsweredQuestions',array('data' => json_encode($answeredQuestions)),$dest2);
         $data['answeredQuestionsDocument'] = $this->baseUrl."/".$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Answered.pdf";
         return $data;
