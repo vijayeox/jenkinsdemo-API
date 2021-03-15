@@ -1,16 +1,16 @@
 version: '3.5'
 services:
     zf:
-        build: 
+        build:
             context: ./docker
             dockerfile: Dockerfile
-            args:
-                HOST: ${HOST}
-                DB_USERNAME: ${DB_USERNAME}
-                DB_PASSWORD: ${DB_PASSWORD}
-                DB_HOST: ${DB_HOST}
-                API_DB : ${API_DB}
-                TEST_API_DB : ${TEST_API_DB}
+        environment:
+            HOST: ${HOST}
+            DB_HOST: ${DB_HOST}
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
+            API_DB : ${API_DB}
+            TEST_API_DB : ${TEST_API_DB}
         ports:
             - "8080:80"
         volumes:

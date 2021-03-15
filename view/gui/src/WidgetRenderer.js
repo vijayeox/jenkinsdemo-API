@@ -249,6 +249,10 @@ class WidgetRenderer {
 
         let chart = null;
         if ('amCharts-map' === am4ChartType || am4geodata_worldLow === am4ChartType) {
+            if (WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration, hasDashboardFilters)) {
+                WidgetDrillDownHelper.setupAmchartsEventHandlers(series);
+                isDrillDownChart = true;
+            }
             chart = WidgetRenderer.renderAmMap(configuration, canvasElement, data);
             if (isDrillDownChart) {
                 canvasElement.insertAdjacentHTML('beforeend',
@@ -401,7 +405,23 @@ class WidgetRenderer {
         // Code is based on https://codepen.io/team/amcharts/pen/5ae84826c9e2ab4772c9ef85021835c7
         //-----------------------------------------------------------------------------------------
         let chart = am4core.create(canvasElement, am4maps.MapChart);
-        chart.geodata = am4geodata_usaAlbersLow;
+        let chartType = meta ? meta['type'] : null;
+        if (chartType) {
+            switch (chartType) {
+                case 'map':
+                    chart.geodata = am4geodata_usaAlbersLow;
+                    break;
+                case 'worldmaplow':
+                    chart.geodata = am4geodata_worldLow;
+                    break;
+                default:
+                    chart.geodata = am4geodata_usaAlbersLow;
+            }
+        } else {
+            console.error('Failed to detect chart type (specify chart type in oxzion-meta property of chart configuration JSON).', configuration);
+            throw ('Specify chart type in oxzion-meta property.');
+        }
+        //chart.geodata = am4geodata_usaAlbersLow;
         chart.projection = new am4maps.projections.Mercator();
         let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
 
@@ -415,9 +435,35 @@ class WidgetRenderer {
 
         // Make map load polygon data (state shapes and names) from GeoJSON
         polygonSeries.useGeodata = true;
+        var flag = 1
+        var processedData = [];
+        if (chartType) {
+            switch (chartType) {
+                case 'map':
+                    flag = 0;
+                    processedData = processData(data, configuration, flag );
+                    //let processedData = data
+                    polygonSeries.data = processedData.data;
+                    break;
+                case 'worldmaplow':
+                    flag = 1;
+                    processedData = processData(data, configuration, flag);
+                    polygonSeries.data = processedData.data;
+                    break;
+                default:
+                    flag = 0;
+                    processedData = processData(data, configuration, flag );
+                    //let processedData = data
+                    polygonSeries.data = processedData.data;
+                    break;
+            }
+        } else {
+            console.error('Failed to detect chart type (specify chart type in oxzion-meta property of chart configuration JSON).', configuration);
+            throw ('Specify chart type in oxzion-meta property.');
+        }
 
-        let processedData = processData(data, configuration);
-        polygonSeries.data = processedData['data'];
+        
+
 
         // Set up heat legend
         let heatLegend = chart.createChild(am4maps.HeatLegend);
@@ -425,10 +471,8 @@ class WidgetRenderer {
         heatLegend.align = "right";
         heatLegend.width = am4core.percent(25);
         heatLegend.marginRight = am4core.percent(4);
-        heatLegend.minValue = processedData['min'];
-        heatLegend.maxValue = processedData['max'];
-
-        let meta = configuration['oxzion-meta'];
+        heatLegend.minValue = processedData.min;
+        heatLegend.maxValue = processedData.max;
         let legend = null;
         if (meta) {
             legend = meta['legend'];
@@ -456,14 +500,24 @@ class WidgetRenderer {
             return "";
         });
 
-        // Configure series tooltip
-        let polygonTemplate = polygonSeries.mapPolygons.template;
-        polygonTemplate.nonScalingStroke = true;
-        polygonTemplate.strokeWidth = 0.5;
-        let tooltipText = meta['tooltipText'];
-        if (tooltipText) {
-            polygonTemplate.tooltipText = tooltipText;
-        }
+
+         // Configure series tooltip
+         let polygonTemplate = polygonSeries.mapPolygons.template;
+         polygonTemplate.nonScalingStroke = true;
+         polygonTemplate.strokeWidth = 0.5;
+         let tooltipText = meta['tooltipText'];
+         if (tooltipText) {
+             polygonTemplate.tooltipText = tooltipText;
+         }
+
+        // // Configure series tooltip
+        // polygonTemplate = polygonSeries.mapPolygons.template;
+        // polygonTemplate.nonScalingStroke = true;
+        // polygonTemplate.strokeWidth = 0.5;
+        //  tooltipText = meta['tooltipText'];
+        // if (tooltipText) {
+        //     polygonTemplate.tooltipText = tooltipText;
+        // }
 
         // Create hover state and set alternative fill color
         let hs = polygonTemplate.states.create("hover");
@@ -630,4 +684,6 @@ class WidgetRenderer {
 }
 
 export default WidgetRenderer;
+
+
 

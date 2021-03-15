@@ -523,4 +523,19 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($jsoncontent, '[{"owner_username":"john","actual_amount":500,"budget_amount":3000}]');
     }
 
+
+    public function testGetAPIData() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/66e44343-0000-44d8-9295-f2c3130bafbc?data=true', 'GET');
+    //    $this->assertResponseStatusCode(200);
+    //    $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($content['status'], 'success');
+        $jsoncontent = json_encode($content['data']['widget']['data']);
+        $this->assertEquals($jsoncontent, '[{"test1":1},{"test2":2}]');
+    }
+
+    
+
 }

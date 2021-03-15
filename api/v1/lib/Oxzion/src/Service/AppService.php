@@ -1424,7 +1424,7 @@ private function checkWorkflowData(&$data,$appUuid)
                     $routedata = array("appId" => $appId);
                     $result = $this->pageService->savePage($routedata, $page, $pageId);
                     $entityData['page_uuid'] = $page['uuid'];
-                    $entityData['page_id'] = $entity['page_id'] = $page['id'];
+                    $entity['page_id'] = $page['id'];
                     $result = $this->entityService->saveEntity($appId, $entity);
                 }
             }

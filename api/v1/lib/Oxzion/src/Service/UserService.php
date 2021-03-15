@@ -223,7 +223,7 @@ class UserService extends AbstractService
                 } else if ($result[0]['status'] == "Inactive") {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0;
                     if ($data['reactivate'] == 0) {
-                        throw new ServiceException("User already exists would you like to reactivate?", "user.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+                        throw new ServiceException("user already exists and is inactive. Please contact the admin to activate", "user.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                     }
                     $this->reactivateUserAccount($result[0]['id'], $data);
                     return $result[0]['uuid'];
@@ -296,7 +296,7 @@ class UserService extends AbstractService
             }
             
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array(
+            $newUserMailParams = array_merge($data,array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
@@ -306,7 +306,8 @@ class UserService extends AbstractService
                 'uuid' => $data['uuid'],
                 'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
-            )), 'USER_ADDED');
+            ));
+            $this->messageProducer->sendTopic(json_encode($newUserMailParams), 'USER_ADDED');
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
