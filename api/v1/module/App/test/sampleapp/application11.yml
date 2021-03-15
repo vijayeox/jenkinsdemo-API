@@ -103,7 +103,7 @@ workflow:
     bpmn_file: individual_liability.bpmn
   - name: Group Liability
     id: 76dc0348-910c-4ae8-a05a-78ba47803208
-    bpmn_file: group_liability.bpmn
+    bpmn_file: team_liability.bpmn
   - name: Dive Store
     id: cb99e634-de00-468d-9230-d6f77d241c5b
     bpmn_file: dive_store.bpmn

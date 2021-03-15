@@ -225,7 +225,7 @@ class UserController extends AbstractApiController
      * @api
      * @link /user/:userId/addusertoproject/:projectId'
      * @method POST
-     * @param $id and $groupid that adds a particular user to a project
+     * @param $id and $teamid that adds a particular user to a project
      * @return array success|failure response
      */
     public function addUserToProjectAction()
@@ -257,7 +257,7 @@ class UserController extends AbstractApiController
      * @api
      * @link /user/:userId/removeuserfromproject/:projectId'
      * @method POST
-     * @param $id and $groupid that removes a particular user to a project
+     * @param $id and $teamid that removes a particular user to a project
      * @return array success|failure response
      */
     public function removeUserFromProjectAction()

@@ -48,7 +48,7 @@ class ActivityInstanceService extends AbstractService
     {
         $selectQuery = "SELECT oxa.* from ox_file_assignee as oxa
                         join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id
-                        LEFT JOIN ox_user_group as oug on oxa.group_id = oug.group_id
+                        LEFT JOIN ox_user_team as oug on oxa.team_id = oug.team_id
                         LEFT JOIN ox_user_role as our on oxa.role_id = our.role_id
                         LEFT JOIN ox_account_user au on au.id = our.account_user_id
                         WHERE oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND
@@ -309,26 +309,26 @@ class ActivityInstanceService extends AbstractService
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
                         }
-                        $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_role` WHERE `name` = '" . $candidate['roleid'] . "';")->toArray();
-                        if ($groupQuery) {
+                        $teamQuery = $this->executeQuerywithParams("SELECT * FROM `ox_role` WHERE `name` = '" . $candidate['roleid'] . "';")->toArray();
+                        if ($teamQuery) {
                             $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`role_id`)
                             VALUES (:activityInstanceId,:roleId)";
-                            $insertParams = array("activityInstanceId" => $activityInstance['id'], "roleId" => $groupQuery[0]['id']);
+                            $insertParams = array("activityInstanceId" => $activityInstance['id'], "roleId" => $teamQuery[0]['id']);
                             $resultSet = $this->executeUpdateWithBindParameters($insert, $insertParams);
                             unset($resultSet);
                             unset($insert);
                         }
                     }
-                    if (isset($candidate['groupid'])) {
-                         $this->logger->info("Creation of Activity Instance group".print_r($candidate['groupid'],true));
+                    if (isset($candidate['teamid'])) {
+                         $this->logger->info("Creation of Activity Instance team".print_r($candidate['teamid'],true));
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
                         }
-                        $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_group` WHERE `name` = '" . $candidate['groupid'] . "';")->toArray();
-                        if ($groupQuery) {
-                            $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`group_id`)
-                            VALUES (:activityInstanceId,:groupId)";
-                            $insertParams = array("activityInstanceId" => $activityInstance['id'], "groupId" => $groupQuery[0]['id']);
+                        $teamQuery = $this->executeQuerywithParams("SELECT * FROM `ox_team` WHERE `name` = '" . $candidate['teamid'] . "';")->toArray();
+                        if ($teamQuery) {
+                            $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`team_id`)
+                            VALUES (:activityInstanceId,:teamId)";
+                            $insertParams = array("activityInstanceId" => $activityInstance['id'], "teamId" => $teamQuery[0]['id']);
                             $resultSet = $this->executeUpdateWithBindParameters($insert, $insertParams);
                             unset($resultSet);
                             unset($insert);

@@ -208,37 +208,37 @@ class FileService extends AbstractService
         $queryWhere = array("fileId" => $fileId);
         $result = $this->executeUpdateWithBindParameters($query, $queryWhere);
         $this->setUserAssignees($fileId, $file);
-        $this->setGroupAssignees($fileId, $file);
+        $this->setTeamAssignees($fileId, $file);
         $this->setRoleAssignees($fileId, $file);
     }
-    private function setGroupAssignees($fileId,$file){
+    private function setTeamAssignees($fileId,$file){
         $fileData = json_decode($file['data'], true);
-        if (isset($fileData['assigned_group'])) {
+        if (isset($fileData['assigned_team'])) {
             try {
-                $assignedList  = json_decode($fileData['assigned_group'], true);
+                $assignedList  = json_decode($fileData['assigned_team'], true);
                 if (is_null($assignedList)) {
-                    $this->setGroupAssignee($fileId,$fileData['assigned_group'],1);
+                    $this->setTeamAssignee($fileId,$fileData['assigned_team'],1);
                 } else {
                     if(isset($assignedList) && is_array($assignedList)){
                         foreach($assignedList as $assignee){
-                            $this->setGroupAssignee($fileId,$assignee,0);
+                            $this->setTeamAssignee($fileId,$assignee,0);
                         }
                     }
                 }
               } catch (Exception $e) {
-                $this->logger->info("Error Setting Group Assignee---".$e->getMessage());
+                $this->logger->info("Error Setting Team Assignee---".$e->getMessage());
               }
         }
-        if (isset($fileData['observer_group'])) {
+        if (isset($fileData['observer_team'])) {
             try {
-                $observers_groupList  = json_decode($fileData['observer_group'], true);
-                if (!is_null($observers_groupList)) {
-                    foreach($observers_groupList as $observer){
-                        $this->setGroupAssignee($fileId,$observer,0);
+                $observers_teamList  = json_decode($fileData['observer_team'], true);
+                if (!is_null($observers_teamList)) {
+                    foreach($observers_teamList as $observer){
+                        $this->setTeamAssignee($fileId,$observer,0);
                     }
                 }
             } catch (Exception $e){
-                $this->logger->info("Error Setting Group Assignee---".$e->getMessage());
+                $this->logger->info("Error Setting Team Assignee---".$e->getMessage());
             }
         }
     }
@@ -350,11 +350,11 @@ class FileService extends AbstractService
             $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
         }
     }
-    private function setGroupAssignee($fileId,$role,$assignee){
-        $groupId = $this->getIdFromUuid('ox_role', $role);
-        if ($groupId) {
-            $insert = "INSERT INTO `ox_file_assignee` (`file_id`,`group_id`,`assignee`) VALUES (:fileId,:groupId,:assignee)";
-            $insertParams = array("fileId" => $fileId, "groupId" => $groupId, "assignee" => $assignee);
+    private function setTeamAssignee($fileId,$role,$assignee){
+        $teamId = $this->getIdFromUuid('ox_role', $role);
+        if ($teamId) {
+            $insert = "INSERT INTO `ox_file_assignee` (`file_id`,`team_id`,`assignee`) VALUES (:fileId,:teamId,:assignee)";
+            $insertParams = array("fileId" => $fileId, "teamId" => $teamId, "assignee" => $assignee);
             $resultSet = $this->executeQuerywithBindParameters($insert, $insertParams);
         }
     }
@@ -1407,7 +1407,7 @@ class FileService extends AbstractService
         //TODO INCLUDING WORKFLOW INSTANCE SHOULD BE REMOVED. THIS SHOULD BE PURELY ON FILE TABLE
         $fromQuery .= " left join ox_workflow_instance as wi on (`of`.last_workflow_instance_id = wi.id) $workflowJoin";
         if (isset($params['workflowStatus'])) {
-            $fromQuery .= " left join (select max(id) as id, workflow_instance_id from ox_activity_instance  group by workflow_instance_id) lai on lai.workflow_instance_id = wi.id
+            $fromQuery .= " left join (select max(id) as id, workflow_instance_id from ox_activity_instance group by workflow_instance_id) lai on lai.workflow_instance_id = wi.id
                             left join ox_activity_instance ai on ai.id = lai.id ";
             if($whereQuery != ""){
                 $whereQuery .= " AND ";
@@ -2442,7 +2442,7 @@ class FileService extends AbstractService
         if(isset($appId)){
             $appFilter = "AND ox_app.uuid ='" . $appId . "'";
         }
-        $whereQuery = " WHERE ((ox_user_group.avatar_id = $userId  OR au.user_id = $userId)
+        $whereQuery = " WHERE ((ox_user_team.avatar_id = $userId  OR au.user_id = $userId)
                                 OR ox_file_assignee.user_id = $userId)
                                 $appFilter";
         $this->processFilterParams($filterFromQuery,$whereQuery,$sort,$pageSize,$offset,$field,$filterParams);
@@ -2454,8 +2454,8 @@ class FileService extends AbstractService
             INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
             INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
             INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id AND ox_activity_instance.status = 'In Progress'
-            LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.file_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.group_id ELSE oxi.group_id END as group_id FROM  ox_file_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_file_assignee WHERE activity_instance_id is not null GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_file_assignee ON ox_file_assignee.activity_instance_id = ox_activity_instance.id
-            LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
+            LEFT JOIN (SELECT oxi.id,oxi.activity_instance_id,oxi.file_id,oxi.user_id,ox2.assignee,CASE WHEN ox2.assignee = 1 THEN ox2.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox2.assignee = 1 THEN ox2.team_id ELSE oxi.team_id END as team_id FROM  ox_file_assignee as oxi INNER JOIN (SELECT activity_instance_id,max(assignee) as assignee,max(role_id) as role_id,max(team_id) as team_id From ox_file_assignee WHERE activity_instance_id is not null GROUP BY activity_instance_id) as ox2 on oxi.activity_instance_id = ox2.activity_instance_id AND oxi.assignee = ox2.assignee) as ox_file_assignee ON ox_file_assignee.activity_instance_id = ox_activity_instance.id
+            LEFT JOIN ox_user_team ON ox_file_assignee.team_id = ox_user_team.team_id
             LEFT JOIN ox_file as `oxf` ON `oxf`.id = ox_file_assignee.file_id
             LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id 
             LEFT JOIN ox_account_user au on au.id = ox_user_role.account_user_id
@@ -2465,8 +2465,8 @@ class FileService extends AbstractService
         $fileQuery = "FROM ox_file as `of` 
             INNER JOIN ox_app_entity on ox_app_entity.id = `of`.entity_id
             INNER JOIN ox_app on ox_app.id = ox_app_entity.app_id
-            LEFT JOIN (SELECT oxi.id,oxi.file_id,oxi.user_id,oxi.assignee,CASE WHEN ox3.assignee = 1 THEN ox3.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox3.assignee = 1 THEN ox3.group_id ELSE oxi.group_id END as group_id FROM ox_file_assignee as oxi INNER JOIN (SELECT file_id,max(assignee) as assignee,max(role_id) as role_id,max(group_id) as group_id From ox_file_assignee WHERE file_id is not null GROUP BY file_id) as ox3 on (oxi.file_id = ox3.file_id AND oxi.assignee = ox3.assignee)) as ox_file_assignee ON (ox_file_assignee.file_id = `of`.id)
-            LEFT JOIN ox_user_group ON ox_file_assignee.group_id = ox_user_group.group_id
+            LEFT JOIN (SELECT oxi.id,oxi.file_id,oxi.user_id,oxi.assignee,CASE WHEN ox3.assignee = 1 THEN ox3.role_id ELSE oxi.role_id END as role_id,CASE WHEN ox3.assignee = 1 THEN ox3.team_id ELSE oxi.team_id END as team_id FROM ox_file_assignee as oxi INNER JOIN (SELECT file_id,max(assignee) as assignee,max(role_id) as role_id,max(team_id) as team_id From ox_file_assignee WHERE file_id is not null GROUP BY file_id) as ox3 on (oxi.file_id = ox3.file_id AND oxi.assignee = ox3.assignee)) as ox_file_assignee ON (ox_file_assignee.file_id = `of`.id)
+            LEFT JOIN ox_user_team ON ox_file_assignee.team_id = ox_user_team.team_id
             LEFT JOIN ox_user_role ON ox_file_assignee.role_id = ox_user_role.role_id 
             LEFT JOIN ox_account_user au on au.id = ox_user_role.account_user_id
             inner join ox_user as oxuc on `of`.created_by = `oxuc`.id

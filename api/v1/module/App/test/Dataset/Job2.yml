@@ -5,4 +5,4 @@ ox_job:
     account_id: 1
     job_id: "168247b6-66f9-43e4-b66e-5413e642b7cb"
     group_name: autoRenewalJob
-    config: '[{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobGroup":"Job"}]'
+    config: '[{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"168247b6-66f9-43e4-b66e-5413e642b7cb","JobTeam":"Job"}]'

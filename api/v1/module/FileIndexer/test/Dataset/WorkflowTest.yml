@@ -25,11 +25,11 @@ ox_account:
     preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
     contactid: 2
     organization_id: 4
-ox_group:
+ox_team:
 -
     id: 1
     uuid : 2db1c5a3-8a82-4d5b-b60a-c648cf1e27de
-    name: 'Test Group'
+    name: 'Test Team'
     account_id: 1
     manager_id: 1
     description: 'Description Test Data'
@@ -42,7 +42,7 @@ ox_group:
 -
     id: 2
     uuid : 153f3e9e-eb07-4ca4-be78-34f715bd50db
-    name: 'Test Group Once Again'
+    name: 'Test Team Once Again'
     account_id: 1
     manager_id: 2
     parent_id : 1

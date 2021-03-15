@@ -184,6 +184,11 @@ class DataSourceService extends AbstractService
                     $analyticsObject = $this->analyticEngines[$type];
                     $analyticsObject->setConfig($dsConfig);
                     break;
+                case 'API':
+                    $dsConfig = $dsConfig['data'];
+                    $analyticsObject = $this->analyticEngines["API"];
+                    $analyticsObject->setConfig($dsConfig);
+                    break;
             }
         }
         catch(Exception $e){

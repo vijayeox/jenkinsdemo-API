@@ -31,7 +31,7 @@ use Oxzion\Service\RoleService;
 class UserService extends AbstractService
 {
     const ROLES = '_roles';
-    const GROUPS = '_groups';
+    const TEAMS = '_teams';
     const USER_FOLDER = "/users/";
     private $id;
 
@@ -119,20 +119,20 @@ class UserService extends AbstractService
         return $results;
     }
 
-    public function getGroups($userName)
+    public function getTeams($userName)
     {
-        $data = $this->getGroupsFromDb($userName);
+        $data = $this->getTeamsFromDb($userName);
         return $data;
     }
 
-    public function getGroupsFromDb($id)
+    public function getTeamsFromDb($id)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select()
-            ->from('ox_group')
+            ->from('ox_team')
             ->columns(array('id', 'name'))
-            ->join('ox_user_group', 'ox_user_group.group_id = ox_group.id', array())
-            ->where(array('ox_user_group.avatar_id' => $id));
+            ->join('ox_user_team', 'ox_user_team.team_id = ox_team.id', array())
+            ->where(array('ox_user_team.avatar_id' => $id));
         return $this->executeQuery($select)->toArray();
     }
 
@@ -226,7 +226,7 @@ class UserService extends AbstractService
                 } else if ($result[0]['status'] == "Inactive") {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0;
                     if ($data['reactivate'] == 0) {
-                        throw new ServiceException("User already exists would you like to reactivate?", "user.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+                        throw new ServiceException("user already exists and is inactive. Please contact the admin to activate", "user.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
                     }
                     $this->reactivateUserAccount($result[0]['id'], $data);
                     return $result[0]['uuid'];
@@ -299,7 +299,7 @@ class UserService extends AbstractService
             }
             
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array(
+            $newUserMailParams = array_merge($data,array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
@@ -309,7 +309,8 @@ class UserService extends AbstractService
                 'uuid' => $data['uuid'],
                 'resetCode' => $setPasswordCode,
                 'subject' => isset($data['subject']) ? $data['subject'] : null
-            )), 'USER_ADDED');
+            ));
+            $this->messageProducer->sendTopic(json_encode($newUserMailParams), 'USER_ADDED');
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
@@ -659,10 +660,10 @@ class UserService extends AbstractService
         if ($result1[0]['contactid'] == $form->id) {
             throw new ServiceException('Not allowed to delete Admin user', 'admin.user',OxServiceException::ERR_CODE_FORBIDDEN);
         }
-        $select = "SELECT count(id) from ox_group where manager_id = " . $form->id;
+        $select = "SELECT count(id) from ox_team where manager_id = " . $form->id;
         $result2 = $this->executeQuerywithParams($select)->toArray();
         if ($result2[0]['count(id)'] > 0) {
-            throw new ServiceException('Not allowed to delete the group manager', 'group.manager',OxServiceException::ERR_CODE_FORBIDDEN);
+            throw new ServiceException('Not allowed to delete the team manager', 'team.manager',OxServiceException::ERR_CODE_FORBIDDEN);
         }
         $select = "SELECT count(id) from ox_project where manager_id = " . $form->id;
         $result3 = $this->executeQuerywithParams($select)->toArray();
@@ -784,7 +785,7 @@ class UserService extends AbstractService
                           per.email,au.uuid as accountId,ou.icon,oa.address1,oa.address2,oa.city,
                           oa.state, oa.country,oa.zip,per.date_of_birth,oxemp.designation,
                           per.phone,per.gender,oxemp.website,oxemp.about,
-                          man.uuid as managerId,ou.timezone,oxemp.date_of_join,
+                          man.uuid as managerId,CONCAT(manpn.firstname, ' ', manpn.lastname) as manager_name,ou.timezone,oxemp.date_of_join,
                           oxemp.interest,ou.preferences,ou.password, ou.password_reset_expiry_date,
                           ou.password_reset_code 
                     from ox_user as ou 
@@ -793,6 +794,7 @@ class UserService extends AbstractService
                     left join ox_employee as oxemp on oxemp.person_id = per.id 
                     left join ox_address as oa on per.address_id = oa.id 
                     left join ox_employee as man on man.id = oxemp.manager_id
+                    left join ox_person as manpn on man.person_id = manpn.id
                     where ou.id =" . $id . " and ou.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (empty($response)) {
@@ -994,16 +996,16 @@ class UserService extends AbstractService
         $this->multiInsertOrUpdate('ox_user_project', $data, array());
     }
 
-    public function removeUserFromGroup($userid)
+    public function removeUserFromTeam($userid)
     {
         $sql = $this->getSqlObject();
-        $queryString = "select avatar_id from ox_user_group";
+        $queryString = "select avatar_id from ox_user_team";
         $where = "where avatar_id =" . $userid;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null)->toArray();
         if (empty($resultSet)) {
-            throw new EntityNotFoundException("User not in group");    
+            throw new EntityNotFoundException("User not in team");    
         }
-        $delete = $sql->delete('ox_user_group');
+        $delete = $sql->delete('ox_user_team');
         $delete->where(['avatar_id' => $userid]);
         $result = $this->executeUpdate($delete);
     }
