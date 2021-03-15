@@ -1173,7 +1173,7 @@ private function checkWorkflowData(&$data,$appUuid)
             $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 10;
             $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
-        $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
+        $where .= strlen($where) > 0 ? " AND ox_app.status!=1" : "WHERE ox_app.status!=1";
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
@@ -1181,7 +1181,7 @@ private function checkWorkflowData(&$data,$appUuid)
         if (0 == $count) {
             return;
         }
-        $query = "SELECT * FROM `ox_app` " . $where . " " . $sort . " " . $limit;
+        $query = "SELECT ox_app.*,oc.name as created_user,om.name as modified_user FROM `ox_app` inner join ox_user oc on oc.id=ox_app.created_by left join ox_user om on om.id=ox_app.modified_by " . $where . " " . $sort . " " . $limit;
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
         for ($x = 0; $x < sizeof($result); $x++) {
