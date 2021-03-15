@@ -981,6 +981,7 @@ private function checkWorkflowData(&$data,$appUuid)
             $this->logger->info("linkkk---$link");
             $source = rtrim($path, "/") . "/data/template";
             if(!$update){
+                FileUtils::chmod_r($link,0777);
                 FileUtils::copyDir($source,$link);
             }else{
                 FileUtils::copyOnlyNewFiles($source,$link);
