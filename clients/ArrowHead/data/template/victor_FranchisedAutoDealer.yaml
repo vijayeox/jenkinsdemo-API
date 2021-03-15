@@ -975,7 +975,7 @@
    cell: A41
    type: DataGrid
 -
-   key: locations_buildingNumber
+   key: locations_buildingNum
    method: simpleDatagrid
    pageName: Property
    cell: B40
