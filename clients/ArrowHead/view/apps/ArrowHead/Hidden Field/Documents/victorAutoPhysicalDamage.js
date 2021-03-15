@@ -25,6 +25,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var checkkeycontrolskeysInCars = "";
   var sumfurnishedAutoEmployee = 0;
   var checkBodyShop = "";
+  var requestedCoverage = {};
 
   if (NewFloorPlan > 0 && MixofInventoryNew > 0) {
     var row = NewFloorPlan / MixofInventoryNew;
@@ -78,7 +79,9 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       var resultOccupancyType = "";
       var resultPrimaryOEM = "";
       data.buildings
-        .filter((i) => i.locationBuildingNum.split("-")[0] == locationItem.locationNum)
+        .filter(
+          (i) => i.locationBuildingNum.split("-")[0] == locationItem.locationNum
+        )
         .some((buildingItem) => {
           if (
             buildingItem.occupancyType == "autoSalesAndService" ||
@@ -114,22 +117,24 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
             ...data.dol_Protection[locationItem.locationNum - 1].keyControls,
             ...data.dol_Protection[locationItem.locationNum - 1]
               .entranceQuestions,
-            new:
-              data.dol_12MonthAvg[locationItem.locationNum - 1].new,
-            used:
-              data.dol_12MonthAvg[locationItem.locationNum - 1].used,
+            new: data.dol_12MonthAvg[locationItem.locationNum - 1].new,
+            used: data.dol_12MonthAvg[locationItem.locationNum - 1].used,
             demosFurnishedAutos:
-              data.dol_12MonthAvg[locationItem.locationNum - 1].demosFurnishedAutos,
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .demosFurnishedAutos,
             loanersShopService:
-              data.dol_12MonthAvg[locationItem.locationNum - 1].loanersShopService,
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .loanersShopService,
             floorNew:
               data.dol_12MonthAvg[locationItem.locationNum - 1].floor_new,
             floorUsed:
               data.dol_12MonthAvg[locationItem.locationNum - 1].floor_used,
             floorDemosFurnishedAutos:
-              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_demosFurnishedAutos,
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .floor_demosFurnishedAutos,
             floorLoanersShopService:
-              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_loanersShopService,
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .floor_loanersShopService,
             indexValue: (indexValue += 1),
             PrimaryOEMList: resultPrimaryOEM,
             DOLOccupancy: resultOccupancyType,
@@ -165,6 +170,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       }
     }
     if (item.locationNum == 1) {
+      // check if we need to do something specific with loc 1 or just map it as others
       if (item.keyControls) {
         item.keyControls.none == true ? (checkkeycontrolsnone = "yes") : "";
         item.keyControls.lockbox == true
@@ -264,10 +270,28 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     }
   });
 
-  if(data.dolanyvehparkonroof == 'yes' && data.dolareanyvehiparked == 'no') {
-    chkDolaVechilePark = 'No';  
-  }else if(data.dolanyvehparkonroof == 'no' && data.dolareanyvehiparked == 'yes'){
-    chkDolaVechilePark = 'Yes';
+  if (data.dolanyvehparkonroof == "yes" && data.dolareanyvehiparked == "no") {
+    chkDolaVechilePark = "No";
+  } else if (
+    data.dolanyvehparkonroof == "no" &&
+    data.dolareanyvehiparked == "yes"
+  ) {
+    chkDolaVechilePark = "Yes";
+  }
+
+  for (key in data.requestedCoverage) {
+    var compKey = key + "comp";
+    var collisionKey = key + "collision";
+    var falsePretenseKey = key + "falsePretense";
+    if (data.requestedCoverage[key].comp == "") {
+      requestedCoverage[compKey] = "no";
+    }
+    if (data.requestedCoverage[key].collision == "") {
+      requestedCoverage[collisionKey] = "no";
+    }
+    if (data.requestedCoverage[key].falsePretense == "") {
+      requestedCoverage[falsePretenseKey] = "no";
+    }
   }
 
   value = {
@@ -329,7 +353,8 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     checkkeycontrolskeysInCars: checkkeycontrolskeysInCars
       ? checkkeycontrolskeysInCars
       : "",
-    chkParkGarageOrRoof:chkDolaVechilePark,
+    chkParkGarageOrRoof: chkDolaVechilePark,
+    requestedCoverage: requestedCoverage,
   };
   console.log(value);
 }

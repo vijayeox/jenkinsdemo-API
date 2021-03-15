@@ -28,7 +28,6 @@ s.onload = function (e) {
                 formData: data,
                 commands:
                   '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
-                  // ,{ "command": "delegate", "delegate": "Unanswered"}
                 exit: true,
                 notification: "Data saved successfully",
               },
@@ -65,7 +64,7 @@ s.onload = function (e) {
               .dispatchEvent(ev);
           };
         }
-        if(!document.getElementById('exportPdfButton')){
+        if (!document.getElementById("exportPdfButton")) {
           var buttonList = document.querySelector(
             "div.formio-form div ul.list-inline"
           );
@@ -79,12 +78,12 @@ s.onload = function (e) {
             "btn-secondary",
             "btn-wizard-nav-answer"
           );
-          answeredButton.setAttribute("id","exportPdfButton");
-          answeredButton.addEventListener("click",()=>{
+          answeredButton.setAttribute("id", "exportPdfButton");
+          answeredButton.addEventListener("click", () => {
             //Create PDF
             let pdfEvent = new CustomEvent("customButtonAction", {
               detail: {
-                downloadPdf:true,
+                downloadPdf: true,
                 timerVariable: appendCustomButtonTimer,
                 formData: data,
                 commands:
@@ -99,7 +98,7 @@ s.onload = function (e) {
                 "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
               )
               .dispatchEvent(pdfEvent);
-          })
+          });
           listElement.appendChild(answeredButton);
           buttonList.appendChild(listElement);
         }
