@@ -1205,10 +1205,16 @@
       'central' : 'C = Central'
       'both' : 'B = Both'
 -
-   key: franchisedAutoDealer*checkTotalbuildinglimit_result
+   key: buildings_buildingLimit
    method: simpleDatagrid
    pageName: Property
    cell: AD40
+   type: DataGrid
+-
+   key: franchisedAutoDealer*checkTotalbuildinglimit_result
+   method: simpleDatagrid
+   pageName: Property
+   cell: AF40
    type: DataGrid
 -
    key: buildings_signsnotattached
