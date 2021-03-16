@@ -55,6 +55,8 @@ if (data.zip.toString().length === 5) {
   alert("Please enter a valid zipcode.");
 }
 
+// Location Details Page 
+
 if (data.locations[rowIndex].zip.toString().length === 5) {
   Formio.fetch("https://api.npoint.io/2220d9339d3d11eb5795", {
     method: "GET",
@@ -87,15 +89,15 @@ if (data.locations[rowIndex].zip.toString().length === 5) {
                         data.stateListJson[stateLength].name
                       ) {
                         form
-                          .getComponent(
-                            "locations[" + rowIndex + "][stateName]"
-                          )
+                          .getComponent("locaedit3")
+                          .getComponent("stateName")
                           .setValue(data.stateListJson[stateLength]);
                       }
                     }
                     gotState = 1;
                     form
-                      .getComponent("locations[" + rowIndex + "][city]")
+                      .getComponent("locaedit3")
+                      .getComponent("city")
                       .setValue(citiesData[k][0]);
 
                     break;
