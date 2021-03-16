@@ -981,6 +981,9 @@ private function checkWorkflowData(&$data,$appUuid)
             $this->logger->info("linkkk---$link");
             $source = rtrim($path, "/") . "/data/template";
             if(!$update){
+                if(!file_exists($link)){
+                    FileUtils::createDirectory($link);
+                }
                 FileUtils::chmod_r($link,0777);
                 FileUtils::copyDir($source,$link);
             }else{
@@ -1164,7 +1167,8 @@ private function checkWorkflowData(&$data,$appUuid)
             if (isset($filterArray[0]['filter'])) {
                 $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
                 $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE " . FilterUtils::filterArray($filterList, $filterlogic);
+                $filter = FilterUtils::filterArray($filterList, $filterlogic,array('name'=>'ox_app.name','modified_user'=>'om.name','created_user'=>'oc.name'));
+                $where = " WHERE " . $filter;
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $filterArray[0]['sort'];

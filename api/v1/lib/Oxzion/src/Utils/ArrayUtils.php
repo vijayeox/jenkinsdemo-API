@@ -103,4 +103,14 @@ class ArrayUtils
         }
         return false;
     }
+    public static function moveKeyBefore($arr, $find, $move) {
+        if (!isset($arr[$find], $arr[$move])) {
+            return $arr;
+        }
+        $elem = [$move=>$arr[$move]];  // cache the element to be moved
+        $start = array_splice($arr, 0, array_search($find, array_keys($arr)));
+        unset($start[$move]);  // only important if $move is in $start
+        return $start + $elem + $arr;
+    }
+
 }
