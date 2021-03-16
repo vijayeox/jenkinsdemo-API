@@ -26,6 +26,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var sumfurnishedAutoEmployee = 0;
   var checkBodyShop = "";
   var requestedCoverage = {};
+  var chkDolaVechilePark = "";
 
   if (NewFloorPlan > 0 && MixofInventoryNew > 0) {
     var row = NewFloorPlan / MixofInventoryNew;
