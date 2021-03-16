@@ -64,62 +64,43 @@ s.onload = function (e) {
               .dispatchEvent(ev);
           };
         }
-        if(!document.getElementById('exportPdfButton')){
-          var currentPage = document.querySelector('.page-item.active').firstElementChild.textContent;
-          if(currentPage == 'Generate Workbooks'){
-            var generateWorkbookDiv = document.querySelector('.formio-component-generateWorkbooks');
-            var generateWorkbookButton = generateWorkbookDiv.querySelector('button');
-            generateWorkbookButton.style.cursor = "pointer";
-            var buttonList = document.createElement('ul');
-            var buttonListElement = document.createElement("li");
-            buttonListElement.style.marginRight = "0.5rem";
-            buttonListElement.appendChild(generateWorkbookButton);
-            buttonList.appendChild(buttonListElement);
-      
-            ['Answered PDF', 'Unanswered PDF'].map((item,index)=>{
+        if (!document.getElementById("exportPdfButton")) {
+          var buttonList = document.querySelector(
+            "div.formio-form div ul.list-inline"
+          );
+          var listElement = document.createElement("li");
+          listElement.classList.add("list-inline-item");
 
-              var listElement = document.createElement("li");
-    
-              var downloadPDFAction = index?'unansweredQuestionsDocument':'answeredQuestionsDocument';
-              var answeredButton = document.createElement("BUTTON");
-              answeredButton.innerHTML = item;
-              answeredButton.classList.add(
-                "btn",
-                "btn-primary",
-                "btn-md"
-              );
-              answeredButton.style.cursor = "pointer";
-              answeredButton.setAttribute("id","exportPdfButton");
-              answeredButton.addEventListener("click",()=>{
-                //Create PDF
-                let pdfEvent = new CustomEvent("customButtonAction", {
-                  detail: {
-                    downloadPdf:true,
-                    downloadPDFAction:downloadPDFAction,
-                    timerVariable: appendCustomButtonTimer,
-                    formData: data,
-                    commands:
-                      '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
-                    exit: false,
-                    notification: "PDF successfully created",
-                  },
-                  bubbles: false,
-                });
-                document
-                  .getElementById(
-                    "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
-                  )
-                  .dispatchEvent(pdfEvent);
-              })
-              listElement.appendChild(answeredButton);
-              listElement.style.marginRight = "0.5rem";
-              buttonList.appendChild(listElement);
-            })
-            generateWorkbookDiv.insertBefore(buttonList,generateWorkbookDiv.childNodes[0]);
-            buttonList.style.listStyle = "none";
-            buttonList.style.display = "flex";
-            buttonList.style.paddingLeft = "0";
-          }
+          var answeredButton = document.createElement("BUTTON");
+          answeredButton.innerHTML = "Export Form to PDF";
+          answeredButton.classList.add(
+            "btn",
+            "btn-secondary",
+            "btn-wizard-nav-answer"
+          );
+          answeredButton.setAttribute("id", "exportPdfButton");
+          answeredButton.addEventListener("click", () => {
+            //Create PDF
+            let pdfEvent = new CustomEvent("customButtonAction", {
+              detail: {
+                downloadPdf: true,
+                timerVariable: appendCustomButtonTimer,
+                formData: data,
+                commands:
+                  '[{ "command": "fileSave", "entity_name": "Dealer Policy" }]',
+                exit: false,
+                notification: "PDF successfully created",
+              },
+              bubbles: false,
+            });
+            document
+              .getElementById(
+                "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
+              )
+              .dispatchEvent(pdfEvent);
+          });
+          listElement.appendChild(answeredButton);
+          buttonList.appendChild(listElement);
         }
       } else {
         if (data.producername.length > 0 && data.namedInsured.length > 0) {
