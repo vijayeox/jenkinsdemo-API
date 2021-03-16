@@ -117,7 +117,9 @@ class AppControllerTest extends ControllerTest
         $appName = 'SampleApp';
         $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}".'/view/apps/'."eoxapps/";
         try {
-            FileUtils::deleteFile('index.scss',$appSourceDir);
+            if(file_exists($appSourceDir.'index.scss')){
+                FileUtils::deleteFile('index.scss',$appSourceDir);
+            }
             $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cssFile','GET');
             $content = (array)json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'error');
@@ -242,9 +244,10 @@ class AppControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"startswith","value":"a"},{"field":"category","operator":"contains","value":"utilities"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
@@ -432,9 +435,9 @@ class AppControllerTest extends ControllerTest
         try {
             $this->testDeployApp();
             $this->markTestSkipped('Skipping Test'); 
-            $template = $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/COINewFooter.html';
+            $template = $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641/COINewFooter.html';
             $this->assertEquals(file_exists($template), true);
-            $this->assertFileEquals($this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/COIfooter.html', $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/COINewFooter.html');
+            $this->assertFileEquals($this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641/COIfooter.html', $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641/COINewFooter.html');
         }finally{
             copy(__DIR__ . '/../../sampleapp/data/template/COINewFooter.html', __DIR__ . '/../../sampleapp/data/template/COIfooter.html');
             FileUtils::deleteFile('COINewFooter.html',__DIR__ . '/../../sampleapp/data/template/');
