@@ -473,6 +473,36 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
             }
         }
+
+        if(isset($fileData['dol_12MonthAvg'])) {
+            //Lack of default values
+            foreach ($fileData['dol_12MonthAvg'] as $key => $value) {
+                if(!array_key_exists('new', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['new'] = null;
+                }
+                if(!array_key_exists('used', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['used'] = null;
+                }
+                if(!array_key_exists('demosFurnishedAutos', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['demosFurnishedAutos'] = null;
+                }
+                if(!array_key_exists('loanersShopService', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['loanersShopService'] = null;
+                }
+                if(!array_key_exists('floor_new', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['floor_new'] = null;
+                }
+                if(!array_key_exists('floor_used', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['floor_used'] = null;
+                }
+                if(!array_key_exists('floor_demosFurnishedAutos', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['floor_demosFurnishedAutos'] = null;
+                }
+                if(!array_key_exists('floor_loanersShopService', $value)) {
+                    $fileData['dol_12MonthAvg'][$key]['floor_loanersShopService'] = null;
+                }
+            }
+        }
     }
 
     public function execute(array $data, Persistence $persistenceService)
