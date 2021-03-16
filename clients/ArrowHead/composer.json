@@ -1,5 +1,6 @@
 {
-    "require": {
-        "vlucas/phpdotenv": "^5.0"
-    }
+  "require": {
+    "vlucas/phpdotenv": "^5.0",
+    "smalot/pdfparser": "*"
+  }
 }
