@@ -17,6 +17,8 @@ use Mockery;
 use Zend\Db\ResultSet\ResultSet;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
+use PHPUnit\DbUnit\DataSet\ArrayDataSet;
+use Oxzion\Utils\ArrayUtils;
 
 class WorkflowInstanceServiceTest extends AbstractServiceTest
 {
@@ -47,14 +49,38 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/File.yml");
-        $dataset->addYamlFile(dirname(__FILE__) . "/../../../../module/User/test/Dataset/User.yml");
         switch($this->getName()){
             case "testStartWorkflowSetupIdentityField":
             case "testStartWorkflowSetupIdentityFieldAsPolicyHolder":
                 $dataset->addYamlFile(dirname(__FILE__) . "/Dataset/businessRole.yml");
                 break;
         }
-        return $dataset;
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../../module/User/test/Dataset/User.yml");
+        $customDataSet = array();
+        $oxRole = "";
+        $keys= array();
+        $tempSet = array();
+        foreach($dataset as $k => $value){
+            if(in_array($k,$keys)){
+                print_r($k);exit;
+            } else {
+                $keys[] = $k;
+            }
+        }
+        foreach($dataset as $k => $value){
+            $columns = $value->getTableMetaData()->getColumns();
+            $tblName = $value->getTableMetaData()->getTableName();
+            $rowCount = $value->getRowCount();
+            $tableValues = array();
+            for ($i = 0; $i < $rowCount; $i++) {
+                foreach ($columns as $columnName) {
+                    $tableValues[$i][$columnName] = $value->getValue($i, $columnName);
+                }
+            }
+            $customDataSet[$tblName] = $tableValues;
+        }
+        $finalDataSet = ArrayUtils::moveKeyBefore($customDataSet,'ox_role','ox_business_role');
+        return new ArrayDataSet($finalDataSet);
     }
 
 	private function performAsserts($params){

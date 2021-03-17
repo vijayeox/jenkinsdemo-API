@@ -205,8 +205,8 @@ class AccountService extends AbstractService
         $response['businessRole'] = array();
         foreach ($offerings as $offering) {
             $result = $this->setupBusinessRole($offering,$accountId,$appId);
-            if(isset($appId) && isset($result['account_business_role_id']) && count($result['account_business_role_id']) > 0){
-                $acctBusinessRoleId = $result['account_business_role_id'][0];
+            if(isset($appId) && isset($result['account_business_role_id'])){
+                $acctBusinessRoleId = $result['account_business_role_id'];
                 $this->setupAcctOffering($appId, $acctBusinessRoleId, $offering['entity']);
                 $response['businessRole'][] = $offering['businessRole'];
             }
@@ -257,9 +257,11 @@ class AccountService extends AbstractService
             $queryParams["param$key"] = $value;
         }
         $bRole .=")";
+        
         $query = "INSERT INTO ox_account_business_role (account_id, business_role_id)
                     SELECT ".$accountId.", id from ox_business_role 
                     WHERE app_id = :appId and name in $bRole";
+                    
         $this->logger->info("Executing query - $query with params - ".json_encode($queryParams));
         $this->executeUpdateWithBindParameters($query, $queryParams);
         $query = "SELECT id, business_role_id from ox_account_business_role where account_id = :accountId";
@@ -269,8 +271,8 @@ class AccountService extends AbstractService
         $response['business_role_id'] = array();
         $response['account_business_role_id'] = array();
         foreach ($result as $value) {
-            $response['business_role_id'][] = $value['business_role_id'];
-            $response['account_business_role_id'][] = $value['id'];
+            $response['business_role_id'] = $value['business_role_id'];
+            $response['account_business_role_id'] = $value['id'];
         }
         return $response;
     }
@@ -932,7 +934,7 @@ class AccountService extends AbstractService
             throw new EntityNotFoundException("Invalid Account");
         }
 
-        $pageSize = 20;
+        $pageSize = 1000;
         $offset = 0;
         $where = "";
         $sort = "oxr.name";

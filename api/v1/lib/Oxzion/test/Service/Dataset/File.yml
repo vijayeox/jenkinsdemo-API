@@ -1158,7 +1158,10 @@ ox_role:
   - id: 10
     name: "TASKUSER"
     uuid: "e116dab7-ab62-4292-a9f9-06d095a86fed"
+    description: 'Role to Manage Task'
+    business_role_id: null
   - id: 11
     name: "TASKUSER"
     uuid: "d968f67c-174a-4416-8e06-df87f2c7ed68"
-
+    description: 'Role to Manage Task'
+    business_role_id: null

@@ -82,11 +82,12 @@ class RoleService extends AbstractService
             }
 
             if (!isset($roleId) && isset($rolename)) {
-                $select = "SELECT id from ox_role where name = '" . $rolename . "' $clause";
+                $select = "SELECT id,uuid from ox_role where name = '" . $rolename . "' $clause";
                 $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
                 if (count($result) > 0) {
                     $roleId = $result[0]['id'];
                     $data['id'] = $roleId;
+                    $data['uuid'] = $result[0]['uuid'];
                 }
             }
 
@@ -100,7 +101,6 @@ class RoleService extends AbstractService
                 if (!isset($rolename)) {
                     throw new ServiceException("Role name cannot be empty", "role.name.empty");
                 }
-
                 $inputData['uuid'] = $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
                 $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] : 0;
                 $data['default'] = $data['default'] ? 1 :0;
@@ -222,7 +222,7 @@ class RoleService extends AbstractService
             $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
 
-        $pageSize = 20;
+        $pageSize = 10000;
         $offset = 0;
         $where = "";
         $sort = "name";
@@ -388,7 +388,11 @@ class RoleService extends AbstractService
 
     protected function updateDefaultRolePrivileges($role)
     {
-        $roleId = $this->getIdFromUuid('ox_role', $role['uuid']);
+        if(isset($role['uuid']) && UuidUtil::isValidUuid($role['uuid'])){
+            $roleId = $this->getIdFromUuid('ox_role', $role['uuid']);
+        } else {
+            $roleId = $role['id'];
+        }
         $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, account_id, app_id)
                     SELECT $roleId, rp.privilege_name,rp.permission," . $role['account_id'] .
             ",rp.app_id from ox_role_privilege rp 
@@ -406,6 +410,7 @@ class RoleService extends AbstractService
 
     public function createRolesByBusinessRole($accountId, $appId)
     {
+        
         try{
             $this->beginTransaction();
             $sqlQuery = "INSERT INTO ox_role(`name`,`description`,`account_id`,

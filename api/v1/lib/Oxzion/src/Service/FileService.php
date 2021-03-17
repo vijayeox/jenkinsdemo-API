@@ -2625,14 +2625,20 @@ class FileService extends AbstractService
         $filters = $rule['filters'];
         $result = $logic == "AND" ? true : false;
         foreach ($filters as $value) {
-            $field = $value['field'];
-            $operator = $value['operator'];
-            $expected =  isset($value['value']) ? $value['value'] : NULL;
-            $actual = isset($data[$field]) ? $data[$field]: NULL;
-            if($logic == "AND"){
-                $result = $this->processCondition($operator,$actual,$expected) && $result ;
-            }else{
-                $result = $this->processCondition($operator,$actual,$expected) || $result;
+            if(isset($value['field'])){
+                $field = $value['field'];
+                $operator = $value['operator'];
+                $expected =  isset($value['value']) ? $value['value'] : NULL;
+                $actual = isset($data[$field]) ? $data[$field]: NULL;
+                if($logic == "AND"){
+                    $result = $this->processCondition($operator,$actual,$expected) && $result ;
+                }else{
+                    $result = $this->processCondition($operator,$actual,$expected) || $result;
+                }
+            } else {
+                if(isset($value['filter']) && isset($value['filter']['filters'])){
+                    $result .= $this->verifyFieldRule($data,$value['filter']);
+                }
             }
         }
         return $result;
@@ -2915,15 +2921,16 @@ class FileService extends AbstractService
         private function preProcessRygRule($rule){
         $ruleArray = array_merge([] , $rule);
         foreach ($ruleArray['filters'] as $key => $filterValue) {
-            if (strtolower(substr($filterValue['value'],0,5))=="date:") {
+            if (isset($filterValue['value']) && strtolower(substr($filterValue['value'],0,5))=="date:") {
                 $filterValue['value'] = date("Y-m-d",strtotime(substr($filterValue['value'],5)));
             } else {
-                $filterValue['value'] = $filterValue['value'];
+                if(isset($filterValue['value'])){
+                    $filterValue['value'] = $filterValue['value'];
+                }
             }
             $ruleArray['filters'][$key] = $filterValue;
         }
         return $ruleArray;
-
     }
 
 

@@ -14,6 +14,8 @@ use Zend\Db\Adapter\Exception\InvalidQueryException;
 use \Exception;
 use Zend\Db\ResultSet\ResultSet;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\ArrayUtils;
+use PHPUnit\DbUnit\DataSet\ArrayDataSet;
 use Mockery;
 
 class FileServiceTest extends AbstractServiceTest
@@ -60,7 +62,31 @@ class FileServiceTest extends AbstractServiceTest
                 $dataset->addYamlFile(dirname(__FILE__) . "/Dataset/businessRole.yml");
                 break;
         }
-        return $dataset;
+        $customDataSet = array();
+        $oxRole = "";
+        $keys= array();
+        $tempSet = array();
+        foreach($dataset as $k => $value){
+            if(in_array($k,$keys)){
+                print_r($k);exit;
+            } else {
+                $keys[] = $k;
+            }
+        }
+        foreach($dataset as $k => $value){
+            $columns = $value->getTableMetaData()->getColumns();
+            $tblName = $value->getTableMetaData()->getTableName();
+            $rowCount = $value->getRowCount();
+            $tableValues = array();
+            for ($i = 0; $i < $rowCount; $i++) {
+                foreach ($columns as $columnName) {
+                    $tableValues[$i][$columnName] = $value->getValue($i, $columnName);
+                }
+            }
+            $customDataSet[$tblName] = $tableValues;
+        }
+        $finalDataSet = ArrayUtils::moveKeyBefore($customDataSet,'ox_role','ox_business_role');
+        return new ArrayDataSet($finalDataSet);
     }
 
     private function parseYaml(){

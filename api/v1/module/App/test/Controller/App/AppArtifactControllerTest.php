@@ -669,7 +669,7 @@ class AppArtifactControllerTest extends ControllerTest {
             'name' => 'New Application',
             'uuid' => '11111111-1111-1111-1111-111111111112'
         ]);
-        if (!mkdir($appSourceDir)) {
+        if (!file_exists($appSourceDir) && !mkdir($appSourceDir)) {
             throw new Exception("Failed to create app source dir ${appSourceDir}.");
         }
         $this->initAuthToken($this->adminUser);
