@@ -730,126 +730,126 @@
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: victorAutoPhysicalDamage*requestedCoverage_newComp
+   key: victorAutoPhysicalDamage*reqCoverage_newComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: victorAutoPhysicalDamage*requestedCoverage_usedComp
+   key: victorAutoPhysicalDamage*reqCoverage_usedComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: victorAutoPhysicalDamage*requestedCoverage_demosComp
+   key: victorAutoPhysicalDamage*reqCoverage_demosComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: victorAutoPhysicalDamage*requestedCoverage_serviceComp
+   key: victorAutoPhysicalDamage*reqCoverage_serviceComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive.
-   key: victorAutoPhysicalDamage*requestedCoverage_otherOwnedComp
+   key: victorAutoPhysicalDamage*reqCoverage_otherOwnedComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Comprehensive
-   key: victorAutoPhysicalDamage*requestedCoverage_otherNonOwnedComp
+   key: victorAutoPhysicalDamage*reqCoverage_otherNonOwnedComp
    method: pulloutChild
    type: Checkbox
    cell: Check Box 257
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: victorAutoPhysicalDamage*requestedCoverage_newCollision
+   key: victorAutoPhysicalDamage*reqCoverage_newCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: victorAutoPhysicalDamage*requestedCoverage_usedCollision
+   key: victorAutoPhysicalDamage*reqCoverage_usedCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: victorAutoPhysicalDamage*requestedCoverage_demosCollision
+   key: victorAutoPhysicalDamage*reqCoverage_demosCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: victorAutoPhysicalDamage*requestedCoverage_serviceCollision
+   key: victorAutoPhysicalDamage*reqCoverage_serviceCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: victorAutoPhysicalDamage*requestedCoverage_otherOwnedCollision
+   key: victorAutoPhysicalDamage*reqCoverage_otherOwnedCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: Collision
-   key: victorAutoPhysicalDamage*requestedCoverage_otherNonOwnedCollision
+   key: victorAutoPhysicalDamage*reqCoverage_otherNonOwnedCollision
    method: pulloutChild
    type: Checkbox
    cell: Check Box 241
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: victorAutoPhysicalDamage*requestedCoverage_newFalsePretense
+   key: victorAutoPhysicalDamage*reqCoverage_newFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: victorAutoPhysicalDamage*requestedCoverage_usedFalsePretense
+   key: victorAutoPhysicalDamage*reqCoverage_usedFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: victorAutoPhysicalDamage*requestedCoverage_demosFalsePretense
+   key: victorAutoPhysicalDamage*reqCoverage_demosFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: victorAutoPhysicalDamage*requestedCoverage_serviceFalsePretense
+   key: victorAutoPhysicalDamage*reqCoverage_serviceFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: victorAutoPhysicalDamage*requestedCoverage_otherOwnedFalsePretense
+   key: victorAutoPhysicalDamage*reqCoverage_otherOwnedFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
-   key: victorAutoPhysicalDamage*requestedCoverage_otherNonOwnedFalsePretense
+   key: victorAutoPhysicalDamage*reqCoverage_otherNonOwnedFalsePretense
    method: pulloutChild
    type: Checkbox
    cell: Check Box 244
