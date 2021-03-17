@@ -59,7 +59,323 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     }
   }
 
+  data.buildings.map((item) => {
+    if (
+      item.occupancyType == "autoSalesAndService" ||
+      item.occupancyType == "newCarShowroomAndSales" ||
+      item.occupancyType == "vehicleStorageParkingGarage" ||
+      item.occupancyType == "autoStorageLot"
+    ) {
+      var tempSecondaryOEMStore = item.secondaryOEM
+        ? item.secondaryOEM.length > 0
+          ? item.secondaryOEM
+          : []
+        : [];
+      primarySecondaryOEM2 = [
+        ...primarySecondaryOEM2,
+        item.primaryOEM,
+        ...tempSecondaryOEMStore,
+      ];
+    }
+  });
 
+  var DealershipStorageLocationsArray = data.locations
+    .map((locationItem) => {
+      var resultOccupancyType = "";
+      var resultPrimaryOEM = "";
+      data.buildings
+        .filter(
+          (i) => i.locationBuildingNum.split("-")[0] == locationItem.locationNum
+        )
+        .some((buildingItem) => {
+          if (
+            buildingItem.occupancyType == "autoSalesAndService" ||
+            buildingItem.occupancyType == "newCarShowroomAndSales"
+          ) {
+            resultOccupancyType = "Dealership";
+            return true;
+          } else if (
+            buildingItem.occupancyType == "vehicleStorageParkingGarage" ||
+            buildingItem.occupancyType == "autoStorageLot"
+          ) {
+            resultOccupancyType = "Storage";
+          } else {
+            resultOccupancyType =
+              resultOccupancyType == "" ? undefined : resultOccupancyType;
+          }
+        });
+      tempSecondaryOEM = [];
+      resultPrimaryOEM =
+        [
+          ...new Set(
+            data.buildings
+              .filter((i) => i.locationNum == locationItem.locationNum)
+              .map((i) => (i.primaryOEM ? " " + i.primaryOEM : false))
+              .filter((i) => i)
+          ),
+        ] + "";
+
+      return resultOccupancyType
+        ? {
+            ...locationItem,
+            ...data.dol_12MonthAvg[locationItem.locationNum - 1],
+            ...data.dol_Protection[locationItem.locationNum - 1].keyControls,
+            ...data.dol_Protection[locationItem.locationNum - 1]
+              .entranceQuestions,
+            new: data.dol_12MonthAvg[locationItem.locationNum - 1].new,
+            used: data.dol_12MonthAvg[locationItem.locationNum - 1].used,
+            demosFurnishedAutos:
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .demosFurnishedAutos,
+            loanersShopService:
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .loanersShopService,
+            floorNew:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_new,
+            floorUsed:
+              data.dol_12MonthAvg[locationItem.locationNum - 1].floor_used,
+            floorDemosFurnishedAutos:
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .floor_demosFurnishedAutos,
+            floorLoanersShopService:
+              data.dol_12MonthAvg[locationItem.locationNum - 1]
+                .floor_loanersShopService,
+            indexValue: (indexValue += 1),
+            PrimaryOEMList: resultPrimaryOEM,
+            DOLOccupancy: resultOccupancyType,
+          }
+        : false;
+    })
+    .filter((filterItem) => (filterItem ? filterItem : false));
+
+  data.dol_Protection.map((item) => {
+    if (item.locationNum > 1) {
+      if (item.keyControls) {
+        uniqueKeyControls += " Loc-" + item.locationNum + ": ";
+        item.keyControls.none == true ? (uniqueKeyControls += "None,") : "";
+        item.keyControls.lockbox == true
+          ? (uniqueKeyControls += "Lock Boxes,")
+          : "";
+        item.keyControls.computerizedKeyVault == true
+          ? (uniqueKeyControls += "Key Machine,")
+          : "";
+        item.keyControls.lockingKeyCabinet == true
+          ? (uniqueKeyControls += "Key Board,")
+          : "";
+        item.keyControls.dailyKeyInventory == true
+          ? (uniqueKeyControls += "Daily Key Inventory,")
+          : "";
+        item.keyControls.lockedInManagersOffice == true
+          ? (uniqueKeyControls += "Key Board,")
+          : "";
+        item.keyControls.keysInCars == true
+          ? (uniqueKeyControls += "Keys in Cars,")
+          : "";
+        uniqueKeyControls = uniqueKeyControls.slice(0, -1);
+      }
+    }
+    if (item.locationNum == 1) {
+      // check if we need to do something specific with loc 1 or just map it as others
+      if (item.keyControls) {
+        item.keyControls.none == true ? (checkkeycontrolsnone = "yes") : "";
+        item.keyControls.lockbox == true
+          ? (checkkeycontrolslockbox = "yes")
+          : "";
+        item.keyControls.computerizedKeyVault == true
+          ? (checkkeycontrolscomputerizedKeyVault = "yes")
+          : "";
+        item.keyControls.lockingKeyCabinet == true
+          ? (checkkeycontrolslockingKeyCabinet = "yes")
+          : "";
+        item.keyControls.dailyKeyInventory == true
+          ? (checkkeycontrolsdailyKeyInventory = "yes")
+          : "";
+        item.keyControls.lockedInManagersOffice == true
+          ? (checkkeycontrolslockedInManagersOffice = "yes")
+          : "";
+        item.keyControls.keysInCars == true
+          ? (checkkeycontrolskeysInCars = "yes")
+          : "";
+      }
+    }
+  });
+
+  data.dol_Protection.map((item) => {
+    if (item.locationNum > 1) {
+      uniqueLotProtection += " Loc-" + item.locationNum + ": ";
+      if (item.premisesLotProtection.securityGuards == "yes") {
+        uniqueLotProtection += "Night Watchman,";
+      }
+      if (item.premisesLotProtection.afterHoursLighting == "yes") {
+        uniqueLotProtection += "Security Lighting,";
+      }
+      if (item.entranceQuestions.postChain == "yes") {
+        uniqueLotProtection += "Post and Chains,";
+      }
+      if (
+        item.entranceQuestions.camerasMonitored == "yes" ||
+        item.entranceQuestions.camerasNotMonitored == "yes"
+      ) {
+        uniqueLotProtection += "Video Surveillance,";
+      }
+      if (item.entranceQuestions.fullyFencedPremises == "yes") {
+        uniqueLotProtection += "Fenced,";
+      }
+      if (
+        item.premisesLotProtection.securityGuards != "yes" &&
+        item.premisesLotProtection.afterHoursLighting != "yes" &&
+        item.entranceQuestions.postChain != "yes" &&
+        item.entranceQuestions.camerasMonitored != "yes" &&
+        item.entranceQuestions.camerasNotMonitored != "yes" &&
+        item.entranceQuestions.fullyFencedPremises != "yes"
+      ) {
+        uniqueLotProtection += "None,";
+      }
+      uniqueLotProtection = uniqueLotProtection.slice(0, -1);
+    }
+    if (item.locationNum == 1) {
+      if (item.premisesLotProtection.securityGuards == "yes") {
+        checklotprotectiondolsecguards = "yes";
+      }
+      if (item.premisesLotProtection.afterHoursLighting == "yes") {
+        checklotprotectiondolaftrhrslighting = "yes";
+      }
+      if (item.entranceQuestions.postChain == "yes") {
+        checklotprotectionpostChain = "yes";
+      }
+      if (
+        item.entranceQuestions.camerasMonitored == "yes" ||
+        item.entranceQuestions.camerasNotMonitored == "yes"
+      ) {
+        checklotprotectionsurveillance = "yes";
+      }
+      if (item.entranceQuestions.fullyFencedPremises == "yes") {
+        checklotprotectionfullyFencedPremises = "yes";
+      }
+      if (
+        item.premisesLotProtection.securityGuards != "yes" &&
+        item.premisesLotProtection.afterHoursLighting != "yes" &&
+        item.entranceQuestions.postChain != "yes" &&
+        item.entranceQuestions.camerasMonitored != "yes" &&
+        item.entranceQuestions.camerasNotMonitored != "yes" &&
+        item.entranceQuestions.fullyFencedPremises != "yes"
+      ) {
+        checklotprotectionnone = "yes";
+      }
+    }
+  });
+
+  data.buildings.some((locationItem) => {
+    if (locationItem.occupancyType == "bodyShop") {
+      checkBodyShop = "Yes";
+      return true;
+    } else {
+      checkBodyShop = "No";
+      return false;
+    }
+  });
+
+  if (data.dolanyvehparkonroof == "yes" && data.dolareanyvehiparked == "no") {
+    chkDolaVechilePark = "No";
+  } else if (
+    data.dolanyvehparkonroof == "no" &&
+    data.dolareanyvehiparked == "yes"
+  ) {
+    chkDolaVechilePark = "Yes";
+  }
+
+  var lotProtectionArray = data.dol_Protection.filter((item)=>{
+    var itemLotProtection = JSON.stringify(item['premisesLotProtection']);
+    var itemEntranceQuestions = JSON.stringify(item['entranceQuestions']);
+    return (
+      JSON.stringify(data.dol_Protection[0]['premisesLotProtection'])== itemLotProtection && 
+      JSON.stringify(data.dol_Protection[0]['entranceQuestions']) == itemEntranceQuestions
+    );
+  });
+
+  var keyControlArray =  data.dol_Protection.filter((item)=>{
+    var itemKeyControl = JSON.stringify(item['keyControls']);
+    return JSON.stringify(data.dol_Protection[0]['keyControls'])==itemKeyControl;
+  });
+  if(lotProtectionArray.length==data.dol_Protection.length){
+    dollotprotection = "yes"
+    if(data.dol_Protection[0]["premisesLotProtection"]['securityGuards']=='yes'){
+      allLotProtection.push("nightWatchman")
+    }
+    if(data.dol_Protection[0]["premisesLotProtection"]["afterHoursLighting"]=="yes"){
+      allLotProtection.push("securityLighting")
+    }      
+    if(
+      data.dol_Protection[0]["entranceQuestions"]['camerasMonitored']=="yes"||
+      data.dol_Protection[0]["entranceQuestions"]['camerasNotMonitored']=="yes"
+    )
+    {
+      allLotProtection.push("videoSurveillance")
+    }
+    if(data.dol_Protection[0]["entranceQuestions"]["fullyFencedPremises"] == "yes"){
+      allLotProtection.push("fenced");
+    }
+    if(data.dol_Protection[0]["entranceQuestions"]["postChain"]=="yes"){
+      allLotProtection.push("postAndChain");
+    }
+    if (
+      data.dol_Protection[0].premisesLotProtection.securityGuards != "yes" &&
+      data.dol_Protection[0].premisesLotProtection.afterHoursLighting != "yes" &&
+      data.dol_Protection[0].entranceQuestions.postChain != "yes" &&
+      data.dol_Protection[0].entranceQuestions.camerasMonitored != "yes" &&
+      data.dol_Protection[0].entranceQuestions.camerasNotMonitored != "yes" &&
+      data.dol_Protection[0].entranceQuestions.fullyFencedPremises != "yes"
+    ) {
+      allLotProtection.push('none');
+    }  
+  }
+  if(keyControlArray.length == data.dol_Protection.length){
+    dolkeycontrol = "yes";
+    if(data.dol_Protection[0]['keyControls']['computerizedKeyVault']==true)
+    {
+      dolalllocdoesnotincld.push("computerizedKeyVault")
+    }
+    if(data.dol_Protection[0]['keyControls']["dailyKeyInventory"]==true)
+    {
+      dolalllocdoesnotincld.push("dailyKeyInventory")
+    }
+    if(data.dol_Protection[0]['keyControls']["keysInCars"]==true)
+    {
+      dolalllocdoesnotincld.push("keysInCars")
+    }
+    if(data.dol_Protection[0]['keyControls']["lockbox"]==true)
+    {
+      dolalllocdoesnotincld.push("lockBoxes")
+    }
+    if(data.dol_Protection[0]['keyControls']["lockedInManagersOffice"]==true)
+    {
+      dolalllocdoesnotincld.push("lockedNightlyInManagersOffice")
+    }
+
+    if(data.dol_Protection[0]['keyControls']["lockingKeyCabinet"]==true)
+    {
+      dolalllocdoesnotincld.push("lockedKeyCabinet")
+    }
+    if(data.dol_Protection[0]['keyControls']["none"]== true)
+    {
+      dolalllocdoesnotincld.push("none")
+    }
+
+  }
+  for (key in data.requestedCoverage) {
+    var compKey = key + "comp";
+    var collisionKey = key + "collision";
+    var falsePretenseKey = key + "falsePretense";
+    if (data.requestedCoverage[key].comp == "") {
+      requestedCoverage[compKey] = "no";
+    }
+    if (data.requestedCoverage[key].collision == "") {
+      requestedCoverage[collisionKey] = "no";
+    }
+    if (data.requestedCoverage[key].falsePretense == "") {
+      requestedCoverage[falsePretenseKey] = "no";
+    }
+  }
 
   value = {
     checkAutobody: checkBodyShop ? checkBodyShop : "",
