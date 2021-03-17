@@ -285,7 +285,7 @@ class ElasticService
     {
 
         $grouparray = null;
-        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 65535; //Note this size is only for the terms
+        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 1000; //Note this size is only for the terms
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
             $grouptext = $searchconfig['group'][$i];
             if (substr($grouptext, 0, 7) == "period-") {
