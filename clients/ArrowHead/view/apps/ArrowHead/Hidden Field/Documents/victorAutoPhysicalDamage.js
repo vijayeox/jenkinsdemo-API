@@ -31,7 +31,6 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var dolalllocdoesnotincld = [];	
   var dollotprotection = "no";	
   var dolkeycontrol = "no";
-
   if (NewFloorPlan > 0 && MixofInventoryNew > 0) {
     var row = NewFloorPlan / MixofInventoryNew;
     if (row <= 0.05) {
@@ -363,17 +362,23 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
 
   }
   for (key in data.requestedCoverage) {
-    var compKey = key + "comp";
-    var collisionKey = key + "collision";
-    var falsePretenseKey = key + "falsePretense";
+    var compKey = key + "Comp";
+    var collisionKey = key + "Collision";
+    var falsePretenseKey = key + "FalsePretense";
     if (data.requestedCoverage[key].comp == "") {
       requestedCoverage[compKey] = "no";
+    }else{
+      requestedCoverage[compKey] = data.requestedCoverage[key].comp;
     }
     if (data.requestedCoverage[key].collision == "") {
       requestedCoverage[collisionKey] = "no";
+    }else{
+      requestedCoverage[collisionKey] = data.requestedCoverage[key].collision;
     }
     if (data.requestedCoverage[key].falsePretense == "") {
       requestedCoverage[falsePretenseKey] = "no";
+    }else{
+      requestedCoverage[falsePretenseKey] = data.requestedCoverage[key].falsePretense;
     }
   }
 
@@ -440,7 +445,7 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       ? checkkeycontrolskeysInCars
       : "",
     chkParkGarageOrRoof: chkDolaVechilePark,
-    requestedCoverage: requestedCoverage,
+    reqCoverage: requestedCoverage,
   };
   console.log(value);
 }
