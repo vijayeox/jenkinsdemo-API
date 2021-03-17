@@ -126,6 +126,5 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     chkParkGarageOrRoof: chkDolaVechilePark,
     requestedCoverage: requestedCoverage,
   };
-  console.log("===============");
   console.log(value);
 }
