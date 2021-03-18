@@ -27,9 +27,9 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var checkBodyShop = "";
   var requestedCoverage = {};
   var chkDolaVechilePark = "";
-  var allLotProtection = [];	
-  var dolalllocdoesnotincld = [];	
-  var dollotprotection = "no";	
+  var allLotProtection = [];
+  var dolalllocdoesnotincld = [];
+  var dollotprotection = "no";
   var dolkeycontrol = "no";
   if (NewFloorPlan > 0 && MixofInventoryNew > 0) {
     var row = NewFloorPlan / MixofInventoryNew;
@@ -283,83 +283,91 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     chkDolaVechilePark = "Yes";
   }
 
-  var lotProtectionArray = data.dol_Protection.filter((item)=>{
-    var itemLotProtection = JSON.stringify(item['premisesLotProtection']);
-    var itemEntranceQuestions = JSON.stringify(item['entranceQuestions']);
+  var lotProtectionArray = data.dol_Protection.filter((item) => {
+    var itemLotProtection = JSON.stringify(item["premisesLotProtection"]);
+    var itemEntranceQuestions = JSON.stringify(item["entranceQuestions"]);
     return (
-      JSON.stringify(data.dol_Protection[0]['premisesLotProtection'])== itemLotProtection && 
-      JSON.stringify(data.dol_Protection[0]['entranceQuestions']) == itemEntranceQuestions
+      JSON.stringify(data.dol_Protection[0]["premisesLotProtection"]) ==
+        itemLotProtection &&
+      JSON.stringify(data.dol_Protection[0]["entranceQuestions"]) ==
+        itemEntranceQuestions
     );
   });
 
-  var keyControlArray =  data.dol_Protection.filter((item)=>{
-    var itemKeyControl = JSON.stringify(item['keyControls']);
-    return JSON.stringify(data.dol_Protection[0]['keyControls'])==itemKeyControl;
+  var keyControlArray = data.dol_Protection.filter((item) => {
+    var itemKeyControl = JSON.stringify(item["keyControls"]);
+    return (
+      JSON.stringify(data.dol_Protection[0]["keyControls"]) == itemKeyControl
+    );
   });
-  if(lotProtectionArray.length==data.dol_Protection.length){
-    dollotprotection = "yes"
-    if(data.dol_Protection[0]["premisesLotProtection"]['securityGuards']=='yes'){
-      allLotProtection.push("nightWatchman")
+  if (lotProtectionArray.length == data.dol_Protection.length) {
+    dollotprotection = "yes";
+    if (
+      data.dol_Protection[0]["premisesLotProtection"]["securityGuards"] == "yes"
+    ) {
+      allLotProtection.push("nightWatchman");
     }
-    if(data.dol_Protection[0]["premisesLotProtection"]["afterHoursLighting"]=="yes"){
-      allLotProtection.push("securityLighting")
-    }      
-    if(
-      data.dol_Protection[0]["entranceQuestions"]['camerasMonitored']=="yes"||
-      data.dol_Protection[0]["entranceQuestions"]['camerasNotMonitored']=="yes"
-    )
-    {
-      allLotProtection.push("videoSurveillance")
+    if (
+      data.dol_Protection[0]["premisesLotProtection"]["afterHoursLighting"] ==
+      "yes"
+    ) {
+      allLotProtection.push("securityLighting");
     }
-    if(data.dol_Protection[0]["entranceQuestions"]["fullyFencedPremises"] == "yes"){
+    if (
+      data.dol_Protection[0]["entranceQuestions"]["camerasMonitored"] ==
+        "yes" ||
+      data.dol_Protection[0]["entranceQuestions"]["camerasNotMonitored"] ==
+        "yes"
+    ) {
+      allLotProtection.push("videoSurveillance");
+    }
+    if (
+      data.dol_Protection[0]["entranceQuestions"]["fullyFencedPremises"] ==
+      "yes"
+    ) {
       allLotProtection.push("fenced");
     }
-    if(data.dol_Protection[0]["entranceQuestions"]["postChain"]=="yes"){
+    if (data.dol_Protection[0]["entranceQuestions"]["postChain"] == "yes") {
       allLotProtection.push("postAndChain");
     }
     if (
       data.dol_Protection[0].premisesLotProtection.securityGuards != "yes" &&
-      data.dol_Protection[0].premisesLotProtection.afterHoursLighting != "yes" &&
+      data.dol_Protection[0].premisesLotProtection.afterHoursLighting !=
+        "yes" &&
       data.dol_Protection[0].entranceQuestions.postChain != "yes" &&
       data.dol_Protection[0].entranceQuestions.camerasMonitored != "yes" &&
       data.dol_Protection[0].entranceQuestions.camerasNotMonitored != "yes" &&
       data.dol_Protection[0].entranceQuestions.fullyFencedPremises != "yes"
     ) {
-      allLotProtection.push('none');
-    }  
+      allLotProtection.push("none");
+    }
   }
-  if(keyControlArray.length == data.dol_Protection.length){
+  if (keyControlArray.length == data.dol_Protection.length) {
     dolkeycontrol = "yes";
-    if(data.dol_Protection[0]['keyControls']['computerizedKeyVault']==true)
-    {
-      dolalllocdoesnotincld.push("computerizedKeyVault")
+    if (data.dol_Protection[0]["keyControls"]["computerizedKeyVault"] == true) {
+      dolalllocdoesnotincld.push("computerizedKeyVault");
     }
-    if(data.dol_Protection[0]['keyControls']["dailyKeyInventory"]==true)
-    {
-      dolalllocdoesnotincld.push("dailyKeyInventory")
+    if (data.dol_Protection[0]["keyControls"]["dailyKeyInventory"] == true) {
+      dolalllocdoesnotincld.push("dailyKeyInventory");
     }
-    if(data.dol_Protection[0]['keyControls']["keysInCars"]==true)
-    {
-      dolalllocdoesnotincld.push("keysInCars")
+    if (data.dol_Protection[0]["keyControls"]["keysInCars"] == true) {
+      dolalllocdoesnotincld.push("keysInCars");
     }
-    if(data.dol_Protection[0]['keyControls']["lockbox"]==true)
-    {
-      dolalllocdoesnotincld.push("lockBoxes")
+    if (data.dol_Protection[0]["keyControls"]["lockbox"] == true) {
+      dolalllocdoesnotincld.push("lockBoxes");
     }
-    if(data.dol_Protection[0]['keyControls']["lockedInManagersOffice"]==true)
-    {
-      dolalllocdoesnotincld.push("lockedNightlyInManagersOffice")
+    if (
+      data.dol_Protection[0]["keyControls"]["lockedInManagersOffice"] == true
+    ) {
+      dolalllocdoesnotincld.push("lockedNightlyInManagersOffice");
     }
 
-    if(data.dol_Protection[0]['keyControls']["lockingKeyCabinet"]==true)
-    {
-      dolalllocdoesnotincld.push("lockedKeyCabinet")
+    if (data.dol_Protection[0]["keyControls"]["lockingKeyCabinet"] == true) {
+      dolalllocdoesnotincld.push("lockedKeyCabinet");
     }
-    if(data.dol_Protection[0]['keyControls']["none"]== true)
-    {
-      dolalllocdoesnotincld.push("none")
+    if (data.dol_Protection[0]["keyControls"]["none"] == true) {
+      dolalllocdoesnotincld.push("none");
     }
-
   }
   for (key in data.requestedCoverage) {
     var compKey = key + "Comp";
@@ -367,18 +375,19 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     var falsePretenseKey = key + "FalsePretense";
     if (data.requestedCoverage[key].comp == "") {
       requestedCoverage[compKey] = "no";
-    }else{
+    } else {
       requestedCoverage[compKey] = data.requestedCoverage[key].comp;
     }
     if (data.requestedCoverage[key].collision == "") {
       requestedCoverage[collisionKey] = "no";
-    }else{
+    } else {
       requestedCoverage[collisionKey] = data.requestedCoverage[key].collision;
     }
     if (data.requestedCoverage[key].falsePretense == "") {
       requestedCoverage[falsePretenseKey] = "no";
-    }else{
-      requestedCoverage[falsePretenseKey] = data.requestedCoverage[key].falsePretense;
+    } else {
+      requestedCoverage[falsePretenseKey] =
+        data.requestedCoverage[key].falsePretense;
     }
   }
 
@@ -398,10 +407,10 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     sumNonEmployeesfurnished:
       data.employeeListTotal.nonEmployeesYearsOldorolder +
       data.employeeListTotal.nonEmployeesUnderTheAge,
-      allLotProtection:allLotProtection,
-      dolkeycontrol:dolkeycontrol,
-      dollotprotection:dollotprotection,
-      dolalllocdoesnotincld:dolalllocdoesnotincld,
+    allLotProtection: allLotProtection,
+    dolkeycontrol: dolkeycontrol,
+    dollotprotection: dollotprotection,
+    dolalllocdoesnotincld: dolalllocdoesnotincld,
     primarySecondaryOEM: [...new Set(primarySecondaryOEM2)] + "",
     checkMixofInventoryNew: checkMixofInventoryNew,
     uniqueLotProtection:
