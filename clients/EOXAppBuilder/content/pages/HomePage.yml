@@ -146,6 +146,5 @@ content:
                 -
                     title: 'Modified On'
                     field: date_modified
-                    cell: 'formatDateWithoutTimezone(data.date_modified)'
                     filter: date
                     filterFormat: YYYY-MM-DD
