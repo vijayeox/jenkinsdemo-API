@@ -503,6 +503,53 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
             }
         }
+
+        if(isset($fileData['dol_12MonthAvgTotal'])) {
+            if(!array_key_exists('acc_new', $value)) {
+                $fileData['dol_12MonthAvgTotal']['acc_new'] = null;
+            }
+            if(!array_key_exists('acc_used', $value)) {
+                $fileData['dol_12MonthAvgTotal']['acc_used'] = null;
+            }
+            if(!array_key_exists('acc_demosFurnishedAutos', $value)) {
+                $fileData['dol_12MonthAvgTotal']['acc_demosFurnishedAutos'] = null;
+            }
+            if(!array_key_exists('acc_loanersShopService', $value)) {
+                $fileData['dol_12MonthAvgTotal']['acc_loanersShopService'] = null;
+            }
+        }
+
+        if(isset($fileData['dol_inventory'])) {
+            foreach ($fileData['dol_inventory'] as $key => $value) {
+                if(!array_key_exists('maxInventory', $value)) {
+                    $fileData['dol_inventory'][$key]['maxInventory'] = null;
+                }
+                if(!array_key_exists('maxUnits', $value)) {
+                    $fileData['dol_inventory'][$key]['maxUnits'] = null;
+                }
+                if(!array_key_exists('maxIndoor', $value)) {
+                    $fileData['dol_inventory'][$key]['maxIndoor'] = null;
+                }
+                if(!array_key_exists('floor_maxInventory', $value)) {
+                    $fileData['dol_inventory'][$key]['floor_maxInventory'] = null;
+                }
+                if(!array_key_exists('floor_maxUnits', $value)) {
+                    $fileData['dol_inventory'][$key]['floor_maxUnits'] = null;
+                }
+                if(!array_key_exists('floor_maxIndoor', $value)) {
+                    $fileData['dol_inventory'][$key]['floor_maxIndoor'] = null;
+                }
+                if(!array_key_exists('standardOpenLot', $value)) {
+                    $fileData['dol_inventory'][$key]['standardOpenLot'] = null;
+                }
+                if(!array_key_exists('nonStandardOpenLot', $value)) {
+                    $fileData['dol_inventory'][$key]['nonStandardOpenLot'] = null;
+                }
+                if(!array_key_exists('inBuilding', $value)) {
+                    $fileData['dol_inventory'][$key]['inBuilding'] = null;
+                }
+            }
+        }
     }
 
     public function execute(array $data, Persistence $persistenceService)

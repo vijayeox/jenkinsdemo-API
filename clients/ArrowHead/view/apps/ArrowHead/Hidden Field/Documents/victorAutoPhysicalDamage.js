@@ -1,7 +1,7 @@
 if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   var MixofInventoryNew =
-    data.dol_12MonthAvgTotal.new + data.dol_12MonthAvgTotal.used;
-  var NewFloorPlan = data.dol_12MonthAvgTotal.new;
+    data.dol_12MonthAvgTotal.acc_new + data.dol_12MonthAvgTotal.acc_used;
+  var NewFloorPlan = data.dol_12MonthAvgTotal.acc_new;
 
   var sumNonEmployeesfurnished = 0;
   var indexValue = 0;
