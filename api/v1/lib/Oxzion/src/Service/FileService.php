@@ -2637,7 +2637,7 @@ class FileService extends AbstractService
                 }
             } else {
                 if(isset($value['filter']) && isset($value['filter']['filters'])){
-                    $result .= $this->verifyFieldRule($data,$value['filter']);
+                    $result .= "(".$this->verifyFieldRule($data,$value['filter']).")";
                 }
             }
         }
