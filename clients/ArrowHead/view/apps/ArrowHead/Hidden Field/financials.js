@@ -109,7 +109,7 @@ financeFieldList.map((field) => {
   form.getComponent(field.key).setValue(cloneItem);
   form.getComponent(field.key + "Total").setValue(accountTotal);
 
-  if (field.key == "financialsYTDSalesAnnualized") {
+  if (field.key == "financialsYTDGrossProfitsAnnualized") {
     var minimumRecBL = cloneItem.map((item, index) => {
       if (data.buildings[index].coinsuranceform == "yes") {
         var buildingCoinsurance = parseFloat(
