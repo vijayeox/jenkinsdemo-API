@@ -266,6 +266,12 @@ class UserService extends AbstractService
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
             $orgid = $this->getUuidFromId('ox_organization', $data['orgid']); //Template Service
+            if(isset($data['role'])) {
+                $role = array_column($data['role'], 'uuid');
+                foreach ($role as $key => $value) {
+                    $role[$key] = $this->getRoleFromUuid($value);
+                }
+            }
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
@@ -275,7 +281,8 @@ class UserService extends AbstractService
                 'password' => $password,
                 'uuid' => $data['uuid'],
                 'resetCode' => $setPasswordCode,
-                'subject' => isset($data['subject']) ? $data['subject'] : null
+                'subject' => isset($data['subject']) ? $data['subject'] : null,
+                'role' => isset($role) ? $role : null,
             )), 'USER_ADDED');
             $this->addUserToOrg($form->id, $form->orgid);
             if (isset($data['role'])) {
@@ -1383,6 +1390,17 @@ class UserService extends AbstractService
             return $result[0];
         }else{
             return 0;
+        }
+    }
+
+    private function getRoleFromUuid($uuid) {
+        $select = "SELECT name from ox_role as oxr WHERE oxr.uuid = :uuid";
+        $selectParams = array("uuid" => $uuid);
+        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+        if(count($result) > 0){
+            return $result[0]['name'];
+        }else{
+            return null;
         }
     }
 }
