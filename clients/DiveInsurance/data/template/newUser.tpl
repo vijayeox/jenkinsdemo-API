@@ -4,7 +4,7 @@
 </div>
 <div style='line-height: 24px'>Dear {$lastname}, {$firstname}{if isset($initial)}, {$initial}{/if}, </br/>
 	<p>We have created a new ID for you,</p> <br/>Details are below: <br/>
-	Username: {$username} <br/>
+	PADI Number: {$username} <br/>
 	<br/>                
     <a href = "{$passwordResetUrl}" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>Click here to set your password</u></a>
 </div>
