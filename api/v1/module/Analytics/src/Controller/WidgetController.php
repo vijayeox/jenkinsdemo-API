@@ -152,7 +152,6 @@ class WidgetController extends AbstractApiController
                         }
                     }
                 }
-
             }
             $result = $this->widgetService->getWidgetList($params);
             if ($result == 0) {
