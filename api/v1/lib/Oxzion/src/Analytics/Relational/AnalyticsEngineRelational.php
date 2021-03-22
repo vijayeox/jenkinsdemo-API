@@ -7,6 +7,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Utils\AnalyticsUtils;
 use Zend\DB;
+use Zend\Db\Metadata\Source\Factory;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
@@ -289,7 +290,39 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 			}        
                
 		 }
-    }
+	}
+	
+	public function getFields($table) {
+		$metadata = \Zend\Db\Metadata\Source\Factory::createSourceFromAdapter($this->dbAdapter);
+		$table = $metadata->getTable($table);
+		$columns = $table->getColumns();
+		foreach ($columns as $column) {
+			$data[]=$column->getName();
+		}
+		return $data;
+	}
+
+	public function getDataEntities() {
+		$metadata = \Zend\Db\Metadata\Source\Factory::createSourceFromAdapter($this->dbAdapter);
+		// get the table names
+		$tableNames = $metadata->getTableNames();
+		return $tableNames;
+	}
+
+	public function getValues($index,$field) {
+		$sql    = new Sql($this->dbAdapter);
+		$select = $sql->select();
+		$select->quantifier('DISTINCT');
+//		print_r($para['select']);exit;
+		$select->columns(array($field));
+		$select->from($index);
+		$statement = $sql->prepareStatementForSqlObject($select);
+		$result = $statement->execute();
+		$resultSet = new ResultSet();
+		$data = $resultSet->initialize($result)->toArray();
+		$values = array_column($data,$field);
+		return $values;
+	}
 
 }
 ?>
