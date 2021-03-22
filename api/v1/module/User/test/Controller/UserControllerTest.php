@@ -612,7 +612,6 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
-        
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
@@ -620,7 +619,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'Admin Test');
         $this->assertEquals($content['data']['country'], 'Germany');
         $this->assertEquals($content['data']['accountId'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $query = "SELECT m.uuid from ox_user u 
+        $query = "SELECT u.uuid from ox_user u 
                     inner join ox_employee e on e.person_id = u.person_id
                     inner join ox_employee m on m.id = e.manager_id";
         $result = $this->executeQueryTest($query);
