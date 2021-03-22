@@ -1328,7 +1328,7 @@ class UserService extends AbstractService
         }
         $userData = $userData[0];
         $userData['preferences'] = json_decode($userData['preferences'], true);
-        if(isset($userData['managerId']) && $userData['managerId'] != 0 ){
+	    if(isset($userData['managerId']) &&  ($userData['managerId'] !== 0 ) ){
             $result = $this->getUserWithMinimumDetails($userData['managerId'], $params['accountId']);
             $userData['manager_name'] = $result['firstname']." ".$result['lastname'];
         } else {
