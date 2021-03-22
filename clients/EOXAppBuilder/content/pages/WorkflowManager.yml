@@ -23,7 +23,7 @@ content:
                         updateOnly: true   
                 operations:
                     title: "Create New Workflow"
-                    icon: 'fa fa-cloud-upload'
+                    icon: 'fa fa-gavel'
                     actions:
                         -
                             name: Import Workflow

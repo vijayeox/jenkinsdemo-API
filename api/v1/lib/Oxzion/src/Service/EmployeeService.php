@@ -66,7 +66,15 @@ class EmployeeService extends AbstractService
         $this->logger->info("Employee data--------\n".print_r($data,true));
 
         if (isset($data['managerId'])) {
-            $data['manager_id'] = $this->getIdFromUuid('ox_user', $data['managerId']);
+            $queryString = "SELECT e.id from ox_employee e
+                            inner join ox_user u on u.person_id = e.person_id
+                            where u.uuid = :userId";
+            $params = ['userId' => $data['managerId']];
+            $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+            if(count($resultSet) > 0){
+                $employeeId = $resultSet[0]['id'];
+                $data['manager_id'] = $employeeId;
+            }
         }
         $emp = $this->getDataByParams('ox_employee', array('id', 'uuid'), array('person_id' => $data['person_id']))->toArray();
         if (count($emp) == 0) {         
