@@ -275,13 +275,24 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   });
 
   if (data.dolanyvehparkonroof == "yes" && data.dolareanyvehiparked == "no") {
-    chkDolaVechilePark = "No";
+    chkDolaVechilePark = "yes";
   } else if (
     data.dolanyvehparkonroof == "no" &&
     data.dolareanyvehiparked == "yes"
   ) {
-    chkDolaVechilePark = "Yes";
+    chkDolaVechilePark = "yes";
+  }else if (
+    data.dolanyvehparkonroof == "no" &&
+    data.dolareanyvehiparked == "no"
+  ) {
+    chkDolaVechilePark = "no";
+  }else if (
+    data.dolanyvehparkonroof == "yes" &&
+    data.dolareanyvehiparked == "yes"
+  ) {
+    chkDolaVechilePark = "yes";
   }
+
 
   var lotProtectionArray = data.dol_Protection.filter((item) => {
     var itemLotProtection = JSON.stringify(item["premisesLotProtection"]);

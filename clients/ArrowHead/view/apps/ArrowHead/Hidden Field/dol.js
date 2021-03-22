@@ -1,5 +1,4 @@
 // Calculate Button
-
 var DOLFieldList = [
   {
     key: "dol_12MonthAvg",
@@ -26,12 +25,12 @@ DOLFieldList.map((field) => {
       lineTotal.floor_total += location["floor_" + i]
         ? location["floor_" + i]
         : 0;
-      accountTotal[i] =
-        (accountTotal[i] ? accountTotal[i] : 0) +
+      accountTotal['acc_'+i] =
+        (accountTotal['acc_'+i] ? accountTotal['acc_'+i] : 0) +
         (location["total_" + i] ? location["total_" + i] : 0);
     });
-    accountTotal.total =
-      (accountTotal.total ? accountTotal.total : 0) +
+    accountTotal.acc_total =
+      (accountTotal.acc_total ? accountTotal.acc_total : 0) +
       (lineTotal.total - lineTotal.floor_total);
     return {
       ...location,
@@ -42,7 +41,6 @@ DOLFieldList.map((field) => {
   form.getComponent(field.key + "Total").setValue(accountTotal);
   form.getComponent(field.key).setValue(cloneItem);
 });
-
 // Same As Loc 1
 
 var cloneItem = [...data.dol_Protection];
