@@ -483,7 +483,9 @@ class CommandService extends AbstractService
             $errors['subject'] = 'required';
         }
         if (isset($params['attachments'])) {
-            $attachments = $params['attachments'];
+            foreach ($params['attachments'] as $key => $file) {
+                $attachments[] = $file['fullPath'];
+            }
         }
         if (count($errors) > (int) 0) {
             $validationException = new ValidationException();
