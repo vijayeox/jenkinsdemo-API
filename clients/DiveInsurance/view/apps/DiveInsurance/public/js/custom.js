@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     Swal.fire({
                         title: "Login Failed",
-                        html: '<div style="font-size: 17px">The Username and/or password is incorrect!  <br /> Please try again.</div>',
+                        html: '<div style="font-size: 17px">The PADI Number and/or password is incorrect!  <br /> Please try again.</div>',
                         icon: "error",
                         confirmButtonText: "Forgot Password ?",
                         showCancelButton: true,
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // position: "top-end",
                 icon: "warning",
                 title: "Please enter your " +
-                    (username ? "" : "username") +
+                    (username ? "" : "PADI Number") +
                     (!username && !password ? " and " : "") +
                     (password ? "" : "password") +
                     ".",
@@ -108,14 +108,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function forgotPassword() {
         Swal.fire({
-            title: "Please enter your Username / PADI Number",
+            title: "Please enter your PADI Number",
             input: "text",
             inputAttributes: {
                 autocapitalize: "off",
             },
             inputValidator: (value) => {
                 if (!value) {
-                    return "Please enter your Username / PADI Number!";
+                    return "Please enter your PADI Number!";
                 }
             },
             confirmButtonText: "Confirm",
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     })
                     .catch((error) => {
                         Swal.showValidationMessage(
-                            `Request failed: Username / PADI Number not found.`
+                            `Request failed: PADI Number not found.`
                         );
                     });
             },
