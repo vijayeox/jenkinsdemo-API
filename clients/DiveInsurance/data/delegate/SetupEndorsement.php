@@ -132,7 +132,14 @@ class SetupEndorsement extends AbstractAppDelegate
             $endorsementCoverages = $this->coverageSelection($data,$policy,$data['careerCoverage'],$persistenceService,$premiumRateCardDetails,$privileges);
             $data['endorsementCoverage'] = $endorsementCoverages;
         }
-      
+
+        $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+        $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+        while ($coverageLevels->next()) {
+            $coverage = $coverageLevels->current();
+            $data['endorsementoverrideCoverage'][$coverage['coverage_level']] = $coverage['coverage_name'];
+        }
+
         $this->getExcessLiabilityRates($data,$premiumRateCardDetails,$policy,$privileges,$persistenceService);
 
         $this->getCylinderRates($data,$premiumRateCardDetails,$policy,$privileges,$persistenceService);
