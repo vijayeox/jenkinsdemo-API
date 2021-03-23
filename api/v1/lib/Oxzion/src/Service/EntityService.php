@@ -143,10 +143,12 @@ public function deleteEntity($appUuid, $id)
             $params = array("entityId" => $entityId);
             $result = $this->executeUpdateWithBindParameters($delete, $params);
             foreach ($identifiers as $value) {
-                $insert = "INSERT INTO ox_entity_identifier(`entity_id`,`identifier`) 
-                            VALUES (:entityId,:identifier)";
-                $params["identifier"] = $value['identifier'];
-                $result = $this->executeUpdateWithBindParameters($insert, $params);
+                if(isset($value['identifier']) && is_string($value['identifier'])){
+                    $insert = "INSERT INTO ox_entity_identifier(`entity_id`,`identifier`) 
+                    VALUES (:entityId,:identifier)";
+                    $params["identifier"] = $value['identifier'];
+                    $result = $this->executeUpdateWithBindParameters($insert, $params);
+                }
             }
             $this->commit();
         }
