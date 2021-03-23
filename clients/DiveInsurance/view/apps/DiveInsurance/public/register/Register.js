@@ -53,11 +53,11 @@ export default class Register extends React.Component {
                           required
                           id="username_field"
                           name="username"
-                          title="Please enter your Username / PADI Number"
+                          title="Please enter your PADI Number"
                           autoComplete="off"
-                          placeholder="Username / PADI Number"
+                          placeholder="PADI Number"
                         />
-                        <label htmlFor="username_field">Username / PADI Number:</label>
+                        <label htmlFor="username_field">PADI Number:</label>
                       </div>
                       <div className="floating-label">
                         <input
