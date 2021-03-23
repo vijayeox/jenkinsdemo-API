@@ -94,5 +94,18 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI
     }
     return $parameters;
   }
+
+
+  public function getFields($table) {
+    return ['date_period'];
+	}
+
+	public function getDataEntities() {
+		return ['QUICKBOOKS'];
+	}
+
+	public function getValues($index,$field) {
+		return [];
+	}
 }
 ?>

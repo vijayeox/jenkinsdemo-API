@@ -30,12 +30,13 @@ content:
                                     url: 'app/{{app_uuid}}/artifact/delete/form/{{name}}.json'
                                     disableAppId: true
                         icon: 'fas fa-trash-alt' 
-                        updateOnly: true   
+                        updateOnly: true
                 operations:
                     title: "Create New Form"
                     actions:
                         -
                             name: Build Form
+                            icon: 'fa fa-gavel'
                             rule: 'true'
                             details:
                                 -

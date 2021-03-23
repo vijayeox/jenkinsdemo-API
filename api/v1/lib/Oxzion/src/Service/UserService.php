@@ -714,13 +714,14 @@ class UserService extends AbstractService
                             per.email, au.uuid as accountId, ou.icon, per.date_of_birth,
                             oxemp.designation,per.phone,oa.address1,oa.address2,oa.city,
                             oa.state,oa.country,oa.zip,per.gender,oxemp.website,
-                            oxemp.about, man.uuid as managerId, 
-                            ou.timezone, oxemp.date_of_join, oxemp.interest, ou.preferences";
+                            oxemp.about, manager_user.uuid as managerId, 
+                            ou.timezone,oxemp.id as employee_id, oxemp.date_of_join, oxemp.interest, ou.preferences";
         $from = " FROM `ox_user` as ou 
                   inner join ox_account au on au.id = ou.account_id
                   join ox_person per on per.id = ou.person_id 
                   inner join ox_employee oxemp on oxemp.person_id = per.id 
                   LEFT JOIN ox_employee man on man.id = oxemp.manager_id
+                  LEFT JOIN ox_user manager_user on manager_user.person_id = man.person_id
                   left join ox_address as oa on per.address_id = oa.id ";
         $cntQuery = "SELECT count(ou.id) as count " . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
@@ -775,7 +776,7 @@ class UserService extends AbstractService
                           per.email,au.uuid as accountId,ou.icon,oa.address1,oa.address2,oa.city,
                           oa.state, oa.country,oa.zip,per.date_of_birth,oxemp.designation,
                           per.phone,per.gender,oxemp.website,oxemp.about,
-                          man.uuid as managerId,CONCAT(manpn.firstname, ' ', manpn.lastname) as manager_name,ou.timezone,oxemp.date_of_join,
+                          manager_user.uuid as managerId,manager_user.name as manager_name,ou.timezone,oxemp.date_of_join,
                           oxemp.interest,ou.preferences,ou.password, ou.password_reset_expiry_date,
                           ou.password_reset_code 
                     from ox_user as ou 
@@ -784,7 +785,7 @@ class UserService extends AbstractService
                     left join ox_employee as oxemp on oxemp.person_id = per.id 
                     left join ox_address as oa on per.address_id = oa.id 
                     left join ox_employee as man on man.id = oxemp.manager_id
-                    left join ox_person as manpn on man.person_id = manpn.id
+                    left join ox_user as manager_user on manager_user.person_id = man.person_id
                     where ou.id =" . $id . " and ou.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
         if (empty($response)) {
@@ -926,7 +927,7 @@ class UserService extends AbstractService
                         per.firstname,per.lastname,ou.name,per.email,oxemp.designation,
                         au.uuid as accountId, per.phone, per.date_of_birth, oxemp.date_of_join,
                         oa.address1, oa.address2, oa.city, oa.state, oa.country, oa.zip, 
-                        oxemp.website, oxemp.about, per.gender, man.uuid as managerId,
+                        oxemp.website, oxemp.about, per.gender, manager_user.uuid as managerId,
                         oxemp.interest,ou.icon,ou.preferences 
                     from ox_user as ou 
                     inner join ox_account_user oau on oau.user_id = ou.id
@@ -935,6 +936,7 @@ class UserService extends AbstractService
                     inner join ox_employee as oxemp on oxemp.person_id = per.id 
                     left join ox_address as oa on per.address_id = oa.id 
                     left join ox_employee man on man.id = oxemp.manager_id
+                    left join ox_user manager_user on manager_user.person_id = man.person_id
                     where au.uuid = :accountId AND ou.id = :userId AND ou.status = 'Active'";
         $params = ['accountId' => $accountId, 'userId' => $id];
         $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
@@ -1321,21 +1323,21 @@ class UserService extends AbstractService
         LEFT JOIN ox_address as addr ON usrp.address_id = addr.id
     WHERE
         user.uuid = :userId AND acc.uuid = :accountId";
-    $queryParams = ['userId' => $params['userId'], 'accountId' => $params['accountId']];
+        $queryParams = ['userId' => $params['userId'], 'accountId' => $params['accountId']];
         $userData = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
         if (empty($userData)) {
             return array('data' => array(), 'role' => array());
         }
-        $userData = $userData[0];
-        $userData['preferences'] = json_decode($userData['preferences'], true);
-        if(isset($userData['managerId']) && $userData['managerId'] != 0 ){
-            $result = $this->getUserWithMinimumDetails($userData['managerId'], $params['accountId']);
-            $userData['manager_name'] = $result['firstname']." ".$result['lastname'];
+        $responseUserData = $userData[0];
+        $responseUserData['preferences'] = json_decode($responseUserData['preferences'], true);
+	    if(isset($responseUserData['managerId']) &&  ($responseUserData['managerId'] !== 0 ) ){
+            $result = $this->getUserWithMinimumDetails($responseUserData['managerId'], $params['accountId']);
+            $responseUserData['manager_name'] = $result['firstname']." ".$result['lastname'];
         } else {
-            $userData['manager_name'] = "";
+            $responseUserData['manager_name'] = "";
         }
-        $userData['role'] = $this->getRolesofUser($params['accountId'], $params['userId']);
-        return $userData;
+        $responseUserData['role'] = $this->getRolesofUser($params['accountId'], $params['userId']);
+        return $responseUserData;
     }
 
     public function checkUserExists($data){

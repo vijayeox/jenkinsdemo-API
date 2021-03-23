@@ -198,9 +198,9 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 11);
+        $this->assertEquals(count($content['data']), 13);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['total'], 11);
+        $this->assertEquals($content['total'], 13);
     }
 
     public function testGet()
@@ -265,7 +265,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data'][1]['name'], 'Analytics');
-        $this->assertEquals($content['total'], 11);
+        $this->assertEquals($content['total'], 13);
     }
 
     public function testGetAppListWithPageSize2()
@@ -279,7 +279,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'AppBuilder');
         $this->assertEquals($content['data'][1]['name'], 'CRM');
-        $this->assertEquals($content['total'], 11);
+        $this->assertEquals($content['total'], 13);
     }
 
     public function testCreateWithUserGeneratedUuid() {

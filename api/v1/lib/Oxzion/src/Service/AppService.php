@@ -1161,13 +1161,13 @@ private function checkWorkflowData(&$data,$appUuid)
         $where = "";
         $sort = "name";
 
-        $cntQuery = "SELECT count(id) FROM `ox_app`";
+        $cntQuery = "SELECT count(ox_app.id) as count FROM `ox_app` inner join ox_user oc on oc.id=ox_app.created_by left join ox_user om on om.id=ox_app.modified_by ";
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
             if (isset($filterArray[0]['filter'])) {
                 $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
                 $filterList = $filterArray[0]['filter']['filters'];
-                $filter = FilterUtils::filterArray($filterList, $filterlogic,array('name'=>'ox_app.name','modified_user'=>'om.name','created_user'=>'oc.name'));
+                $filter = FilterUtils::filterArray($filterList, $filterlogic,array('name'=>'ox_app.name','date_modified'=>'ox_app.date_modified','modified_user'=>'om.name','created_user'=>'oc.name'));
                 $where = " WHERE " . $filter;
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
@@ -1181,7 +1181,7 @@ private function checkWorkflowData(&$data,$appUuid)
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
-        $count = $resultSet->toArray()[0]['count(id)'];
+        $count = $resultSet->toArray()[0]['count'];
         if (0 == $count) {
             return;
         }

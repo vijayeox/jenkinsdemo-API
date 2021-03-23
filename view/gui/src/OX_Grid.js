@@ -312,11 +312,11 @@ export default class OX_Grid extends React.Component {
       });
       Object.keys(this.state.actions).map(function (key, index) {
         var action = this.state.actions;
-        var string = ParameterHandler.replaceParams(this.appId, action[key].rule, dataItem);
+        var paramsRule = ParameterHandler.replaceParams(this.appId, action[key].rule, dataItem);
         var _moment = moment;
         var profile = this.userprofile;
-        string = string.replace(/moment/g, '_moment');
-        var showButton = eval(string);
+        paramsRule = paramsRule.replace(/moment/g, '_moment');
+        var showButton = eval(paramsRule);
         var buttonStyles = action[key].icon
           ? {
             width: "auto"
@@ -544,11 +544,17 @@ export default class OX_Grid extends React.Component {
       result ? operationsList.push(i) : null;
     });
     if (operationsList.length > 1) {
+      const itemRender = (props) => {
+        return (
+          <div style={{ padding: '5px' }} text={props.item.name}><i style={{ marginRight: '5px' }} className={props.item.icon + " manageIcons"}></i>{props.item.name}</div>
+        );
+      };
       return (
         <DropDownButton
           text={config.title ? config.title : "Options"}
           textField="name"
           className="gridOperationDropdown"
+          itemRender={itemRender}
           iconClass={config.icon ? config.icon : null}
           onItemClick={(e) => {
             this.updatePageContent(e.item);
