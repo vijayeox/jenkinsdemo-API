@@ -296,8 +296,9 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		$metadata = \Zend\Db\Metadata\Source\Factory::createSourceFromAdapter($this->dbAdapter);
 		$table = $metadata->getTable($table);
 		$columns = $table->getColumns();
+		$data=array();
 		foreach ($columns as $column) {
-			$data[]=$column->getName();
+			$data[$column->getName()]=["type"=>$column->getDataType(),"maxlength"=>$column->getCharacterMaximumLength()];
 		}
 		return $data;
 	}
@@ -305,7 +306,7 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 	public function getDataEntities() {
 		$metadata = \Zend\Db\Metadata\Source\Factory::createSourceFromAdapter($this->dbAdapter);
 		// get the table names
-		$tableNames = $metadata->getTableNames();
+		$tableNames = $metadata->getViewNames();
 		return $tableNames;
 	}
 
@@ -313,7 +314,6 @@ abstract class AnalyticsEngineRelational extends AnalyticsAbstract {
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
 		$select->quantifier('DISTINCT');
-//		print_r($para['select']);exit;
 		$select->columns(array($field));
 		$select->from($index);
 		$statement = $sql->prepareStatementForSqlObject($select);
