@@ -162,7 +162,7 @@ class ElasticService
             $boolfilterquery['query']['bool'] = $tmpfilter;
         }
         $boolfilterquery['_source'] = (isset($searchconfig['select'])) ? $searchconfig['select'] : array('*');
-        $pagesize = isset($searchconfig['pagesize']) ? $searchconfig['pagesize'] : 500000; //500000 is the limit
+        $pagesize = isset($searchconfig['pagesize']) ? $searchconfig['pagesize'] : 10000; //500000 is the limit
         if (!empty($searchconfig['aggregates'])) {
             if (!isset($searchconfig['select'])) {
                 $pagesize = 0;
@@ -284,7 +284,7 @@ class ElasticService
     protected function getGroups($searchconfig, &$boolfilterquery, $aggs)
     {
         $grouparray = null;
-        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 65535; //65535 is the limit Note this size is only for the terms
+        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 10000; //65535 is the limit Note this size is only for the terms
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
             $grouptext = $searchconfig['group'][$i];
             if (substr($grouptext, 0, 7) == "period-") {
