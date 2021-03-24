@@ -167,11 +167,13 @@ public function deleteEntity($appUuid, $id)
             $result = $this->executeUpdateWithBindParameters($delete, $params);
             $params['appId'] = $appId;
             foreach ($data as $value) {
-                $insert = "INSERT INTO ox_entity_participant_role(`entity_id`,`business_role_id`) 
-                            (SELECT :entityId, br.id from ox_business_role br
-                            INNER JOIN ox_app a on a.id = br.app_id 
-                            where a.uuid = :appId and br.name = :bRole)";
-                $params["bRole"] = $value['businessRole'];
+                if(isset($value['businessRole']) && is_string($value['businessRole'])){
+                    $insert = "INSERT INTO ox_entity_participant_role(`entity_id`,`business_role_id`) 
+                                (SELECT :entityId, br.id from ox_business_role br
+                                INNER JOIN ox_app a on a.id = br.app_id 
+                                where a.uuid = :appId and br.name = :bRole)";
+                    $params["bRole"] = $value['businessRole'];
+                }
                 $result = $this->executeUpdateWithBindParameters($insert, $params);
             }
             $this->commit();
@@ -215,7 +217,7 @@ public function deleteEntity($appUuid, $id)
         }
         $entityId = $this->getIdFromUuid('ox_app_entity', $id);
         $where .= "ox_app_entity.id=?";
-        $query = "SELECT ox_app_page.uuid,ox_app_entity.enable_comments,ox_app_entity.enable_documents,ox_app_entity.enable_view,ox_app_entity.enable_auditlog from ox_app_entity 
+        $query = "SELECT ox_app_page.uuid,ox_app.name as app_name,ox_app_entity.enable_comments,ox_app_entity.enable_documents,ox_app_entity.enable_view,ox_app_entity.enable_auditlog,ox_app_entity.name from ox_app_entity 
                     right join ox_app on ox_app.id=ox_app_entity.app_id 
                     right join ox_app_page on ox_app_page.id=ox_app_entity.page_id 
                     where $where";
