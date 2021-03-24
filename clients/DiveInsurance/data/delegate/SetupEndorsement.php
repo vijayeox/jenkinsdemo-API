@@ -133,13 +133,6 @@ class SetupEndorsement extends AbstractAppDelegate
             $data['endorsementCoverage'] = $endorsementCoverages;
         }
 
-        $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
-        $coverageLevels = $persistenceService->selectQuery($coverageSelect);
-        while ($coverageLevels->next()) {
-            $coverage = $coverageLevels->current();
-            $data['endorsementoverrideCoverage'][$coverage['coverage_level']] = $coverage['coverage_name'];
-        }
-
         $this->getExcessLiabilityRates($data,$premiumRateCardDetails,$policy,$privileges,$persistenceService);
 
         $this->getCylinderRates($data,$premiumRateCardDetails,$policy,$privileges,$persistenceService);
@@ -288,9 +281,16 @@ class SetupEndorsement extends AbstractAppDelegate
                         $policy['previous_careerCoverageLabel'] = $rate['coverage'];
                         $premiumRateCardDetails[$rate['key']] = 0;
                         $data['careerCoveragePrice'] = 0;
-                    } 
-                    $endorsementCoverages[$rate['key']] = $rate['coverage'];
+                    }
+                    $endorsementCoverages[0][] = array('label' => $rate['coverage'], 'value' => $rate['key']);
                 }
+            }
+
+            $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+            while ($coverageLevels->next()) {
+                $coverage = $coverageLevels->current();
+                $endorsementCoverages[1][] = array('label' => $coverage['coverage_name'], 'value' => $coverage['coverage_level']);
             }
             return $endorsementCoverages;
     }
