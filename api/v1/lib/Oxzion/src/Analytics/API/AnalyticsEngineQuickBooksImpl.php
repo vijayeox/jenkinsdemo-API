@@ -97,7 +97,7 @@ class AnalyticsEngineQuickBooksImpl extends AnalyticsEngineAPI
 
 
   public function getFields($table) {
-    return ['date_period'];
+    return ['date_period'=>["type"=>"date"]];
 	}
 
 	public function getDataEntities() {
