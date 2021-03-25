@@ -438,10 +438,12 @@ class TeamService extends AbstractService
         }
         $id = $this->getIdFromUuid('ox_team',$params['teamId']);
         // Done Twice  - one for admin and one for PPM App
-        $queryString = "SELECT oxg.name,oxg.description,oxg.uuid,oxg.date_created,sub.uuid as parentId,sub.uuid as parent_id 
+        $queryString = "SELECT oxg.name,oxg.description,oxg.uuid,oxg.date_created,sub.uuid as parentId, a.uuid as accountId,sub.uuid as parent_id , u.uuid as managerId 
                         from ox_team as oxg 
+                        inner join ox_account a on a.id = oxg.account_id 
                         INNER JOIN ox_team as sub on sub.id = oxg.parent_id 
-                        where oxg.parent_id = $id";
+                        left join ox_user u on oxg.manager_id = u.id
+                        where oxg.parent_id = $id and oxg.status='Active'";
         $resultSet = $this->executeQuerywithParams($queryString);
         return $resultSet->toArray();
     }
