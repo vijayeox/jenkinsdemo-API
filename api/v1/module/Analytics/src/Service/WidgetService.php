@@ -292,7 +292,7 @@ class WidgetService extends AbstractService
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');
         $filter = null;
-        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot','skip','top','filter_grid'];
+        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot','skip','top','filter_grid','orderby'];
         if (!empty($firstRow['exclude_overrides'])) {
             if (strtolower($firstRow['exclude_overrides'] == 'all')) {
                 unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
