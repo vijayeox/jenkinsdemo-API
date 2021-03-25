@@ -49,6 +49,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 			$finalResult['meta'] = $query;
 			$finalResult['meta']['type'] = $result['type'];
 			$finalResult['meta']['query'] = $result['query'];
+			if (isset($result['total_count'])) {
+				$finalResult['total_count'] = $result['total_count'];
+			}
 			if ($result['type']=='group') {
 				$finalResult['data'] = $this->flattenResult($result['data'],$query);
 			} else {
@@ -168,6 +171,9 @@ class AnalyticsEngineImpl extends AnalyticsAbstract {
 		$returnarray = array('inline_filter'=>$inline_filter,'filter' => $filter, 'group' => $group, 'aggregates' => $aggregates, 'frequency'=>$frequency);
 		if (isset($parameters['pagesize'])) {
 			$returnarray['pagesize'] = $parameters['pagesize'];
+		}
+		if (isset($parameters['start'])) {
+			$returnarray['start'] = $parameters['start'];
 		}
 		if (isset($parameters['excludes'])) {
 			$returnarray['excludes'] = $parameters['excludes'];

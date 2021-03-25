@@ -292,7 +292,7 @@ class WidgetService extends AbstractService
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');
         $filter = null;
-        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot'];
+        $overRidesAllowed = ['group', 'sort', 'field', 'date-period', 'date-range', 'filter', 'expression', 'round', 'pivot','skip','top','filter_grid'];
         if (!empty($firstRow['exclude_overrides'])) {
             if (strtolower($firstRow['exclude_overrides'] == 'all')) {
                 unset($overRidesAllowed[array_search('filter', $overRidesAllowed)]);
@@ -307,7 +307,16 @@ class WidgetService extends AbstractService
                     $overRides[$overRidesKey] = $params[$overRidesKey];
                 }
             }
+            if ($firstRow['renderer']=='jsGrid') {
+                $config = json_decode($firstRow['configuration'],1);
+                if (isset($config['pageSize'])) {
+                    $overRides['pagesize']=$config['pageSize'];
+                }
+            }
             $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
+            if ($this->queryService->getTotalCount()) {
+                $response['widget']['total_count']=$this->queryService->getTotalCount();
+            }
             // print_r($overRides);exit;
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];
