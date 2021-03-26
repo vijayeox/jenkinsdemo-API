@@ -132,7 +132,7 @@ class ProjectService extends AbstractService
                         $inputData['uuid'] = $result[0]['uuid'];
                         return;
                     } else {
-                        throw new ServiceException("Project already exists would you like to reactivate?", "project.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+                        throw new ServiceException("Project already exists would you like to reactivate?", "project.already.exists", OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
                     }
                 }
             }
