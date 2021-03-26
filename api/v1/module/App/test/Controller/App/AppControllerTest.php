@@ -1060,7 +1060,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT * from ox_role 
                     WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
         $role = $this->executeQueryTest($query);
-        $this->assertEquals(6, count($role));
+        $this->assertEquals(7, count($role));
         $this->assertEquals($yaml['role'][0]['name'], $role[1]['name']);
         $this->assertEquals(null, $role[1]['account_id']);
         $this->assertEquals($businessRole[0]['id'], $role[1]['business_role_id']);
@@ -1075,7 +1075,7 @@ class AppControllerTest extends ControllerTest
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
 
-        $this->assertEquals(4, count($rolePrivilege));
+        $this->assertEquals(6, count($rolePrivilege));
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[0]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[0]['permission']);
         $this->assertEquals($role[1]['id'], $rolePrivilege[0]['role_id']);
