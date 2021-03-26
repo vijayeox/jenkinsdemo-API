@@ -22,6 +22,7 @@ class BatchReport extends PolicyDocument
     public function execute(array $data, Persistence $persistenceService) 
     { 
         $this->logger->info("Executing Batch Report Generation with data- ".json_encode($data));
+        ini_set('max_execution_time', 300);
         $params = array();
         if(isset($data['reportStartDate'])){
             $params['gtCreatedDate'] =  $data['reportStartDate'];

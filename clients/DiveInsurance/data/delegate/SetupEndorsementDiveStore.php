@@ -173,6 +173,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 $policy['previous_city'] = $data['city'];
                 $policy['previous_state'] = $data['state'];
                 $policy['previous_zip'] = $data['zip'];
+                $policy['previous_sameasmailingaddress'] = $data['sameasmailingaddress'];
                 if($data['sameasmailingaddress'] === "false" || $data['sameasmailingaddress'] === false) {
                     $policy['previous_physical_country'] =$data['physical_country'];
                     $policy['previous_mailaddress1'] =$data['mailaddress1'];
@@ -202,6 +203,8 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 }
                 $data['previous_policy_data'] = isset($data['previous_policy_data']) ? $data['previous_policy_data'] : array();
                 if ($data['groupProfessionalLiabilitySelect'] == 'yes') {
+                    $policy['previous_groupCoverageAmount'] = isset($data['groupCoverageAmount']) ? $data['groupCoverageAmount'] : 0;
+                    $policy['previous_groupExcessLiabilityAmount'] = isset($data['groupExcessLiabilityAmount']) ? $data['groupExcessLiabilityAmount'] : 0;
                     $policy['previous_groupCoverage'] = isset($data['groupCoverage']) ? $data['groupCoverage'] : 0;
                     $policy['previous_groupTaxAmount'] = isset($data['groupTaxAmount']) ? $data['groupTaxAmount'] : 0;
                     $policy['previous_groupPadiFeeAmount'] = isset($data['groupPadiFeeAmount']) ? $data['groupPadiFeeAmount'] : 0;
@@ -210,6 +213,8 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                     $policy['previous_groupProfessionalLiability'] = isset($data['groupProfessionalLiability']) ? $data['groupProfessionalLiability'] : 0;
                     $policy['previous_groupTotalAmount'] = isset($data['groupTotalAmount']) ? $data['groupTotalAmount'] : 0;
                 } else {
+                    $policy['previous_groupCoverageAmount'] = 0;
+                    $policy['previous_groupExcessLiabilityAmount'] = 0;
                     $policy['previous_groupCoverage'] = 0;
                     $policy['previous_groupTaxAmount'] = 0;
                     $policy['previous_groupPadiFeeAmount'] = 0;
@@ -300,6 +305,7 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 $policy['previous_dsglestmonthretailreceipt'] = isset($data['dsglestmonthretailreceipt']) ? $data['dsglestmonthretailreceipt'] : 0;
                 $policy['previous_totalAddPremium'] = isset($data['totalAddPremium']) ? $data['totalAddPremium'] : 0;
                 $policy['previous_ContentsFP'] = isset($data['ContentsFP']) ? $data['ContentsFP'] : 0;
+                $policy['previous_excludedOperation'] = isset($data['excludedOperation']) ? $data['excludedOperation'] : "";
                 if (isset($data['additionalLocations']) && $data['additionalLocationsSelect'] == "yes") {
                     foreach ($data['additionalLocations'] as $key => $value) {
                         $additionalLocations = $data['additionalLocations'][$key];
@@ -351,6 +357,12 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
         $endorsementGroupLiability = array();
         $endorsementExcessLiabilityCoverage = array();
         $endorsementLiabilityCoverageOption = array();
+        $unsetOptions = $this->unsetOptions;
+        for ($i = 0; $i < sizeof($unsetOptions); $i++) {
+            if (isset($data[$unsetOptions[$i]])) {
+                unset($data[$unsetOptions[$i]]);
+            }
+        }
         if (isset($policy['previous_excessLiabilityCoverage'])) {
             $selectCoverage = "select rc.* from premium_rate_card rc WHERE product = '" . $data['product'] . "' and is_upgrade = 0 and coverage_category='EXCESS_LIABILITY' and start_date <= '" . $data['update_date'] . "' AND end_date >= '" . $data['update_date'] . "' order by CAST(rc.previous_key as UNSIGNED) DESC";
             $resultCoverage = $persistenceService->selectQuery($selectCoverage);
@@ -389,6 +401,15 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
                 $data[$rate['key']] = $rate['premium'];
             }
         }
+        $selectGroupExcessLiability = "select rc.* from premium_rate_card rc WHERE product = '" . $data['product'] . "' and coverage_category='GROUP_EXCESS_LIABILITY' and start_date <= '" . $data['update_date'] . "' AND end_date >= '" . $data['update_date'] . "'";
+        $this->logger->info("Executing Endorsement Rate Card Coverage - Group Excess" . $selectGroupExcessLiability);
+        $resultGroupExcessLiability = $persistenceService->selectQuery($selectGroupExcessLiability);
+        while ($resultGroupExcessLiability->next()) {
+            $rate = $resultGroupExcessLiability->current();
+            if (isset($rate['key'])) {
+                $data[$rate['key']] = $rate['premium'];
+            }
+        }
         foreach ($policy as $key => $value) {
             if ($key != 'update_date') {
                 $data[$key] = $value;
@@ -398,25 +419,20 @@ class SetupEndorsementDiveStore extends AbstractAppDelegate
         $data['endorsementLiabilityCoverageOption'] = $endorsementLiabilityCoverageOption;
         $data['initial_combinedSingleLimit'] = $data['previous_policy_data'][0]['previous_combinedSingleLimit'];
         $data['initial_annualAggregate'] = $data['previous_policy_data'][0]['previous_annualAggregate'];
-        $unsetOptions = $this->unsetOptions;
-        for ($i = 0; $i < sizeof($unsetOptions); $i++) {
-            if (isset($data[$unsetOptions[$i]])) {
-                unset($data[$unsetOptions[$i]]);
-            }
-        }
         if (isset($data['groupPL'])) {
             if ($data['groupPL'] != "") {
                 foreach ($data['groupPL'] as $key => $value) {
                     if (!isset($value['effectiveDate'])) {
                         $data['groupPL'][$key]['effectiveDate'] = isset($value['start_date']) ? $value['start_date'] : $data['update_date'];
                     } else if ($value['effectiveDate'] == "") {
-                        $value['start_date'] = $data['groupPL'][$key]['start_date'] = ($value['start_date'] == 'Invalid Date') ? $data['start_date'] : $value['start_date'];
+                        $value['start_date'] = $data['groupPL'][$key]['start_date'] = ($value['start_date'] == 'Invalid Date' || $value['start_date'] == 'Invalid date') ? $data['start_date'] : $value['start_date'];
                         $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                         $data['groupPL'][$key]['existingEffectiveDate'] = date_format(date_create($value['start_date']), 'm-d-Y');
                         $data['groupPL'][$key]['newMembereffectiveDate'] = date_format(date_create($value['start_date']), 'm-d-Y');
                     } else if (isset($value['padi']) && $value['padi'] == "") {
                         $data['groupPL'][$key]['effectiveDate'] = $data['update_date'];
                     } else {
+                        $value['start_date'] = $data['groupPL'][$key]['start_date'] = ($value['start_date'] == 'Invalid Date' || $value['start_date'] == 'Invalid date') ? $data['start_date'] : $value['start_date'];
                         $data['groupPL'][$key]['effectiveDate'] = $value['start_date'];
                         $data['groupPL'][$key]['existingEffectiveDate'] = date_format(date_create($value['start_date']), 'm-d-Y');
                         $data['groupPL'][$key]['newMembereffectiveDate'] = date_format(date_create($value['start_date']), 'm-d-Y');

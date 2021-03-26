@@ -47,6 +47,9 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
             }
         }
     }
+    .formLoader {
+        width: 95%;
+    }
     
     .pagination>.active>a,
     .pagination>.active>a:focus,
@@ -115,7 +118,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
             top: 27px;
             width: max-content;
             text-align: center;
-            left: -280px;
+            left: -310px;
             p {
                 padding: 3px;
                 font-weight: bolder;

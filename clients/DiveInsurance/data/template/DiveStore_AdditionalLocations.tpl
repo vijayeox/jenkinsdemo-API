@@ -161,9 +161,9 @@
                     <tr>
                         <td class = "info">NON-Diving Pool Use:</td>
                         {if isset($additionalLocationDataItem.ALnonDivingPoolAmount) && (int)$additionalLocationDataItem.ALnonDivingPoolAmount > 0}
-                                      <td>$1,000,000</td>
+                                      <td class = "info">$1,000,000</td>
                                   {else}
-                                      <td>Excluded</td>
+                                      <td class = "info">Excluded</td>
                                   {/if}
                     </tr>
                     <tr>
@@ -171,9 +171,17 @@
                             <p class="info">(Claims made form)</p>
                         </td>
                         {if isset($travelAgentEoPL) && ($travelAgentEoPL === "true" || $travelAgentEoPL == true || $travelAgentEoPL == 1)}
-                                <td>$1,000,000</td>
+                                <td class = "info">$1,000,000</td>
                         {else}
-                                <td>Not Included</td>
+                                <td class = "info">Not Included</td>
+                        {/if}
+                    </tr>
+                    <tr>
+                        <td class = "info">Lake,quarry and pond:</td>
+                        {if $additionalLocationDataItem.ALlakequarrypondContactVicenciaBuckleyforsupplementalformPL == "true"}
+                        <td class = "info">Included</td>
+                        {else}
+                        <td class = "info">Not Included</td>
                         {/if}
                     </tr>
                 </tbody>
