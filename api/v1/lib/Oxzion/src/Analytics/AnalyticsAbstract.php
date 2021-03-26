@@ -44,9 +44,9 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         if (isset($parameters['orderby'])) {
             $sortpara = explode(" ",$parameters['orderby']);
             if (isset($sortpara[1])){
-                $parameters['sort']=[$sortpara[0]=>$sortpara[1]];
+                $parameters['sort']=[$sortpara[0].'.keyword'=>$sortpara[1]];
             } else {
-                $parameters['sort']=[$parameters['orderby']=>'asc'];
+                $parameters['sort']=[$parameters['orderby'].'.keyword'=>'asc'];
             }
         }
         $finalResult = $this->getData($app_name,$entity_name,$parameters);
