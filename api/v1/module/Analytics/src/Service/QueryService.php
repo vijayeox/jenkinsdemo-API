@@ -17,6 +17,7 @@ class QueryService extends AbstractService
 
     private $table;
     private $datasourceService;
+    private $total_count;
     static $queryFields = array('uuid' => 'q.uuid', 'name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'account_id' => 'q.account_id');
 
     public function __construct($config, $dbAdapter, QueryTable $table, $datasourceService)
@@ -24,6 +25,10 @@ class QueryService extends AbstractService
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->datasourceService = $datasourceService;
+    }
+
+    public function getTotalCount() {
+        return $this->total_count;
     }
 
     public function createQuery($data)
@@ -366,6 +371,9 @@ class QueryService extends AbstractService
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -" . $value);
             $queryData = $this->executeAnalyticsQuery($value, $overRides); 
+            if (isset($queryData['total_count'])) {
+                $this->total_count = $queryData['total_count'];
+            }
             $this->logger->info("Executing AnalyticsQuery returned -" . print_r($queryData, true));
             if ($queryData == null || $queryData == 0) {
                 throw new InvalidInputException("uuid entered is incorrect - $value", 1);

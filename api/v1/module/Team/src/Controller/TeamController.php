@@ -265,9 +265,10 @@ class TeamController extends AbstractApiController
     public function getSubteamsAction()
     {
         $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery(); // empty method call
         $this->log->info(__CLASS__ . "-> \nGet Team - " . print_r($params, true) . "Parameters - " . print_r($params, true));
         try {
-            $result = $this->teamService->getSubteams($params);
+            $result = $this->teamService->getSubteams($params,$filterParams);
             return $this->getSuccessResponseWithData($result);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);

@@ -25,6 +25,30 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
     }
 
     public function runQuery($app_name,$entity_name,$parameters){
+        if (isset($parameters['top'])) {
+            $parameters['pagesize']=$parameters['top'];
+        }
+        if (isset($parameters['skip'])) {
+            $parameters['start']=$parameters['skip'];
+        }
+        if (isset($parameters['filter_grid'])) {
+            $filtergrid = $parameters['filter_grid'];
+            $str = "/contains\((.*?),'(.*?)'\)/";
+            preg_match($str, $filtergrid, $matches);
+            if (is_numeric($matches[2])) {
+                $parameters['inline_filter'][]=[$matches[1],'==',$matches[2]];
+            } else {
+                $parameters['inline_filter'][]=[$matches[1],'LIKE',$matches[2]];
+            }
+        }
+        if (isset($parameters['orderby'])) {
+            $sortpara = explode(" ",$parameters['orderby']);
+            if (isset($sortpara[1])){
+                $parameters['sort']=[$sortpara[0].'.keyword'=>$sortpara[1]];
+            } else {
+                $parameters['sort']=[$parameters['orderby'].'.keyword'=>'asc'];
+            }
+        }
         $finalResult = $this->getData($app_name,$entity_name,$parameters);
         if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
             $finalResult['data'] = $this->postProcess($finalResult['data'],$parameters);

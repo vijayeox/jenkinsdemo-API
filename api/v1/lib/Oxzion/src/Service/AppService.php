@@ -506,7 +506,7 @@ class AppService extends AbstractService
         $accountId = ($accountId == 0) ? NULL : $accountId;
         $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'account_id' => $accountId))->toArray();
         if(count($roleResult) > 0){
-            $this->deleteInfo('ox_role_privilege',$appId,$accountId);
+            $this->deleteData($roleResult,'ox_role_privilege','role_id','role_id');
             $this->deleteData($roleResult,'ox_user_role','role_id','role_id');
             $this->deleteData($roleResult,'ox_role','id','role_id');
         }
@@ -524,15 +524,15 @@ class AppService extends AbstractService
     }
 
     private function deleteInfo($tableName,$appId,$accountId=null){
+        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+        $deleteParams['appId'] = $appId;
         if($accountId){
             $where = "WHERE app_id=:appId and account_id=:accountId";
             $deleteParams['accountId'] = $accountId;
         }else{
             $where = "WHERE app_id=:appId";
         }
-        $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
         $deleteQuery = "DELETE FROM $tableName $where";
-        $deleteParams['appId'] = $appId;
         $this->logger->info("STATEMENT delq $deleteQuery".print_r($deleteParams,true));
         $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams); 
     }
@@ -1058,9 +1058,12 @@ private function checkWorkflowData(&$data,$appUuid)
                         $role['business_role_id'] = $temp[0]['id'];
                     }
                 }else if (isset($role['businessRole']['name']) && !empty($role['businessRole']['name'])) {
-                    continue;
+                    $temp = $this->businessRoleService->getBusinessRoleByName($appId, $role['businessRole']['name']);
+                    if(count($temp) > 0){
+                        $role['business_role_id'] = $temp[0]['id'];
+                    }
                 }
-                $role['app_id'] = $this->getIdFromUuid('ox_app',$appId);
+                $role['app_id'] = $params['app_id'] =  $this->getIdFromUuid('ox_app',$appId);
                 if($templateRole){
                     $role['uuid'] = isset($role['uuid']) ? $role['uuid'] : UuidUtil::uuid();
                     $result = $this->roleService->saveTemplateRole($role, $role['uuid']);
