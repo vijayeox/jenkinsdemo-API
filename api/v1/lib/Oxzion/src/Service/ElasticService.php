@@ -162,7 +162,7 @@ class ElasticService
             $boolfilterquery['query']['bool'] = $tmpfilter;
         }
         $boolfilterquery['_source'] = (isset($searchconfig['select'])) ? $searchconfig['select'] : array('*');
-        $pagesize = isset($searchconfig['pagesize']) ? $searchconfig['pagesize'] : 500000; //500000 is the limit
+        $pagesize = isset($searchconfig['pagesize']) ? $searchconfig['pagesize'] : 10000; //500000 is the limit
         if (!empty($searchconfig['aggregates'])) {
             if (!isset($searchconfig['select'])) {
                 $pagesize = 0;
@@ -202,10 +202,12 @@ class ElasticService
             $results['type'] = 'value';
         } else {
             $results = array();
+            $results['total_count']=$result_obj['data']['hits']['total']['value'];
             foreach ($result_obj['data']['hits']['hits'] as $key => $value) {
                 $results['data'][$key] = $value['_source'];
                 //    $results['data'][$key]['id'] = $value['_source']['_id'];
             }
+            
             $results['type'] = 'list';
         }
         $results['query'] = $result_obj['query'];
@@ -266,7 +268,10 @@ class ElasticService
                     $subQuery['bool']['must_not'][] = ["term" => [$column => $value]];
                 } elseif ($condition == "NOT LIKE" || $condition == "not like") {
                     $subQuery['bool']['must_not'][] = ["match_phrase" => [$column => $value]];
-                } else {
+                } elseif (strtoupper($condition == "LIKE")) {
+                    $subQuery['bool']['must'][] = ["match" => [$column => ".*".$value.".*"]];
+                } 
+                else {
                     if (strtolower(substr($value, 0, 5)) == "date:") {
                         $value = date("Y-m-d", strtotime(substr($value, 5)));
                         $subQuery['range'] = array($column => array($symMapping[$condition] => $value, "format" => "yyyy-MM-dd"));
@@ -284,7 +289,7 @@ class ElasticService
     protected function getGroups($searchconfig, &$boolfilterquery, $aggs)
     {
         $grouparray = null;
-        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 65535; //65535 is the limit Note this size is only for the terms
+        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 10000; //65535 is the limit Note this size is only for the terms
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
             $grouptext = $searchconfig['group'][$i];
             if (substr($grouptext, 0, 7) == "period-") {
@@ -368,6 +373,7 @@ class ElasticService
 
     protected function getFilters($searchconfig, $accountId)
     {
+        $mustquery = null;
         $mustquery['must'][] = ['term' => ['account_id' => $accountId]];
         if (!empty($searchconfig['aggregates'])) {
             $aggregates = $searchconfig['aggregates'];
@@ -435,6 +441,7 @@ class ElasticService
         if ($this->core) {
             $q['index'] = $this->core . '_' . $q['index'];
         }
+        $q['track_total_hits']=true;
         $this->logger->debug('Elastic query:');
         $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
         $this->elasticQuery = json_encode($q);
