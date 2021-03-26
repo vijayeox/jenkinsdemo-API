@@ -92,7 +92,7 @@ class RoleService extends AbstractService
             }
 
             $businessRoleId = isset($data['business_role_id'])? $data['business_role_id']: 'NULL';
-            if (isset($roleId)) {
+            if (isset($roleId) && $roleId != null) {
                 $update = "UPDATE `ox_role` SET `name`= '" . $data['name'] . "', business_role_id = $businessRoleId, `description`= '" . 
                             $data['description'] . "', `default_role`= '" . $data['default'] . "' WHERE `id` = '" . $roleId . "' AND name not in ('ADMIN', 'MANAGER', 'EMPLOYEE') $clause";
                 $result1 = $this->executeUpdateWithBindParameters($update, $params);

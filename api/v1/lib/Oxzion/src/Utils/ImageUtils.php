@@ -20,7 +20,8 @@ class ImageUtils
                     break;
                 case 'png':
                 case 'PNG':
-                    $image = imagecreatefrompng($file);
+                    $image = copy($file,$targetFile);
+                    return;
                 break;
             }
             if($image){
