@@ -134,14 +134,23 @@ class Ratecard extends AbstractAppDelegate
                 }
             }
         }
-        $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
-        $coverageLevels = $persistenceService->selectQuery($coverageSelect);
-        while ($coverageLevels->next()) {
-            $coverage = $coverageLevels->current();
-            $coverageOptions[1][] = array('label' => $coverage['coverage_name'], 'value' => $coverage['coverage_level']);
+        if (sizeof($coverageOptions[0]) <= 0) {
+            $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+            while ($coverageLevels->next()) {
+                $coverage = $coverageLevels->current();
+                $coverageOptions[1][] = array('label' => $coverage['coverage_name'], 'value' => $coverage['coverage_level']);
+            }
         }
-        if(empty($coverageOptions[0])){
-            $coverageOptions[0] = $coverageOptions[1];
+        if(sizeof($coverageOptions[0]) <= 0){
+            $coverageOptions[0][] = $coverageOptions[1];
+        }else{
+            $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
+            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+            while ($coverageLevels->next()) {
+                $coverage = $coverageLevels->current();
+                $coverageOptions[1][] = array('label' => $coverage['coverage_name'], 'value' => $coverage['coverage_level']);
+            }
         }
         unset($data['careerCoverageOptions']);
         $data['careerCoverageOptions'] = $coverageOptions;
