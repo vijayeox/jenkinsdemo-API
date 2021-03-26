@@ -33,12 +33,18 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         }
         if (isset($parameters['filter_grid'])) {
             $filtergrid = $parameters['filter_grid'];
-            $str = "/contains\((.*?),'(.*?)'\)/";
+            $str = "/(.*?)\((.*?),'(.*?)'\)/";
             preg_match($str, $filtergrid, $matches);
-            if (is_numeric($matches[2])) {
-                $parameters['inline_filter'][]=[$matches[1],'==',$matches[2]];
+            if (!$matches) {
+                $substr = explode(' ',$filtergrid,3);
+                if (count($substr)>2) {
+                    $field= $substr[0];
+                    $operator = $substr[1];
+                    $value = $substr[2];
+                    $parameters['inline_filter'][]=[$field,$operator,$value];
+                }
             } else {
-                $parameters['inline_filter'][]=[$matches[1],'LIKE',$matches[2]];
+                $parameters['inline_filter'][]=[$matches[2],'LIKE',$matches[3]];
             }
         }
 
