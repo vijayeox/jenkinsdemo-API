@@ -9,7 +9,7 @@
 
                 <p>If you have recently submitted an application, and have confirmation it was received by us, it is currently being processed and you may disregard this email.</p></br>
 
-                <p>Thank you for your support of the PADI-Endorsed Professional Liability Insurance Program.</p>
+                <p>Thank you for your support of the PADI-Endorsed Emergency First Response Insurance Program.</p>
 			 <br/>
 
             </div>

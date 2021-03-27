@@ -11,7 +11,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="csrInitiatesIpl" />
-          <camunda:property name="fields" value="padi,additionalInsured, country, tecRecEndorsment, section2Agreement,careerCoverage, initiatedByCsr, approved, scubaFit, cylinder,excessLiability, padiNotFoundCsrReview, efrToIPLUpgrade, paymentOptions,userGrandTotal, isRenewalFlow, start_date, CSRReviewRequired, RejectedPolicy,   policyStatus, efrToIPLUpgrade,AdditionalInsuredOption" />
+          <camunda:property name="fields" value="padi,additionalInsured, country, tecRecEndorsment, section2Agreement,careerCoverage, initiatedByCsr, approved, scubaFit, cylinder,excessLiability, padiNotFoundCsrReview, efrToIPLUpgrade, paymentOptions,userGrandTotal, isRenewalFlow, start_date, CSRReviewRequired, RejectedPolicy,   policyStatus, efrToIPLUpgrade,AdditionalInsuredOption,transaction_status" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_161msdp</bpmn:outgoing>
@@ -180,10 +180,10 @@ if ((initiatedByCsr == true || initiatedByCsr == "true") &amp;&amp; (approved ==
       <bpmn:outgoing>SequenceFlow_022khxp</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0xu2tpx" sourceRef="ExclusiveGateway_1a80v3g" targetRef="Task_0giy3fm">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==true || transaction_status == "Action Not Permitted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1maipgq" name="Bypass CSR Approval" sourceRef="ExclusiveGateway_1a80v3g" targetRef="ExclusiveGateway_06iy274">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==false and RejectedPolicy != true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==false and RejectedPolicy != true and transaction_status != "Action Not Permitted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_199pho8" name="Rejected/Onhold" sourceRef="Task_1s7qzh3" targetRef="Task_1g3m6bq">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == "rejected" or approved== "onHold"}</bpmn:conditionExpression>
@@ -223,7 +223,9 @@ if(status == "onHold"){
 
 execution.setVariable('policyStatus', 'Pending Approval')
 
-execution.setVariable('csrPolicyPeriod', start_date)</camunda:script>
+execution.setVariable('csrPolicyPeriod', start_date)
+
+</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">fileSave</camunda:inputParameter>

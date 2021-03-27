@@ -56,7 +56,7 @@ class FollowUpTest extends DelegateTest
     public function testSendEmailToPolicyHolders()
     {
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
-        $data = array("0" => array("firstname" => "Neha",
+        $data = array("data" => array("0" => array("firstname" => "Neha",
             "policy_period" => "1year",
             "card_expiry_date" => "10/24",
             "city" => "Bangalore",
@@ -82,20 +82,24 @@ class FollowUpTest extends DelegateTest
             "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925",
             "email" => "bharat@gmail.com",
             "subject" => "Policy Renewal Remainder",
-            "product" => "Individual Professional Liability"),
-        );
+            "product" => "Individual Professional Liability",
+            "workflowInstanceId" => "1123")),
+            "orgId" => "53012471-2863-4949-afb1-e69b0891c98a",
+            "padi" => "12345",
+            "workflowId" => "53012471-2863-4949-afb1-e69b0891c98a"
+    );
 
         $appId = $this->data['UUID'];
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'FollowUp', $data);
-        $this->assertEquals($content, array(0));
+        $this->assertEquals($content[0], true);
     }
 
     public function testSendEmailToMultiplePolicyHolders()
     {
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
-        $data = array (
+        $data = array("data" => array (
             "0" => array("firstname" => "Neha",
             "policy_period" => "1year",
             "card_expiry_date" => "10/24",
@@ -122,7 +126,7 @@ class FollowUpTest extends DelegateTest
             "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925",
             "email" => "bharat@gmail.com",
             "subject" => "Policy Renewal Remainder",
-            "product" => "Individual Professional Liability"),
+            "product" => "Individual Professional Liability", "workflowInstanceId" => "1124"),
 
             "1" => array("firstname" => "Neha",
             "policy_period" => "1year",
@@ -150,13 +154,16 @@ class FollowUpTest extends DelegateTest
             "workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925",
             "email" => "bharat@gmail.com",
             "subject" => "Policy Renewal Remainder",
-            "product" => "Individual Professional Liability"),
-        );
+            "product" => "Individual Professional Liability",
+            "workflowInstanceId" => "1123"),
+        ),"orgId" => "53012471-2863-4949-afb1-e69b0891c98a",
+        "padi" => "12345",
+        "workflowId" => "53012471-2863-4949-afb1-e69b0891c98a");
 
         $appId = $this->data['UUID'];
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'FollowUp', $data);
-        $this->assertEquals($content[0], null);
+        $this->assertNotEquals($content[0], null);
     }
 }

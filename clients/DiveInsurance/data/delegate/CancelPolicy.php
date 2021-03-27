@@ -86,7 +86,9 @@ class CancelPolicy extends PolicyDocument
         $data['groupCarrierName'] = "";
         $data['coverageTitle'] = "";
         $data['multiplePolicy'] = "no";
+        $data['dbaName'] = isset($data['dba']) ? (($data['dba'] != "") ? "DBA: ".$data['dba'] : "") : "";
         if ($data['product'] == "Dive Store") {
+            $data['cancellationName'] = $data['business_name'];
             $data['carrierName'] = "Liability Policy issued by " . $data['liability_carrier'];
             $data['policyId'] = "Liability Policy #:" . $data['liability_policy_id'];
             $data['coverageTitle'] = "GENERAL LIABILITY";
@@ -103,14 +105,17 @@ class CancelPolicy extends PolicyDocument
                 $data['coverageTitle'] = $data['coverageTitle'].",GROUP PROFESSIONAL LIABILITY";
             }
         } else if ($data['product'] == "Group Professional Liability") {
+            $data['cancellationName'] = $data['business_name'];
             $data['carrierName'] = "Policy issued by " . $data['group_carrier'];
             $data['policyId'] = "Policy #:" . $data['group_policy_id'];
             $data['coverageTitle'] = "GROUP PROFESSIONAL LIABILITY";
         } else if($data['product'] == "Individual Professional Liability"){
+            $data['cancellationName'] = $data['firstname']."  ".$data['lastname'];
             $data['carrierName'] = "Policy issued by " . $data['carrier'];
             $data['policyId'] = "Policy #:" . $data['policy_id'];
             $data['coverageTitle'] = "INDIVIDUAL PROFESSIONAL LIABILITY";
         }else if($data['product'] == "Emergency First Response"){
+            $data['cancellationName'] = $data['firstname']."  ".$data['lastname'];
             $data['carrierName'] = "Policy issued by " . $data['carrier'];
             $data['policyId'] = "Policy #:" . $data['policy_id'];
             $data['coverageTitle'] = "EMERGENCY FIRST RESPONSE";

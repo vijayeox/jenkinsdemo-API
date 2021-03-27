@@ -105,7 +105,7 @@ class AppService extends AbstractService
         FROM ox_app AS ap
         LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id 
         LEFT JOIN ox_account a on a.id = ar.account_id
-        WHERE ar.account_id=:accountId AND ap.status!=:status AND ap.name <> \'' . AppService::EOX_RESERVED_APP_NAME . '\'';
+        WHERE ar.account_id=:accountId AND ap.status <> :status AND ap.name <> \'' . AppService::EOX_RESERVED_APP_NAME . '\'';
         $queryParams = [
             'accountId' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'status' => App::DELETED
@@ -123,7 +123,7 @@ class AppService extends AbstractService
         FROM ox_app AS ap
         LEFT JOIN ox_app_registry AS ar ON ap.id = ar.app_id AND ar.account_id=:accountId
         LEFT JOIN ox_account a on a.id = ar.account_id
-        WHERE ap.status!=:statusDeleted AND ap.uuid=:uuid';
+        WHERE ap.status <> :statusDeleted AND ap.uuid=:uuid';
         $queryParams = [
             'accountId' => AuthContext::get(AuthConstants::ACCOUNT_ID),
             'statusDeleted' => App::DELETED, 
@@ -131,8 +131,7 @@ class AppService extends AbstractService
         ];
         $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
         if (is_null($resultSet) || empty($resultSet)) {
-            throw new EntityNotFoundException('Entity not found.', 
-                ['entity' => 'Active registered app for the logged-in user\'s account', 'uuid' => $uuid]);
+            throw new EntityNotFoundException('Entity not found.', ['entity' => 'Active registered app for the logged-in user\'s account', 'uuid' => $uuid]);
         }
         $appData = $resultSet[0];
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);

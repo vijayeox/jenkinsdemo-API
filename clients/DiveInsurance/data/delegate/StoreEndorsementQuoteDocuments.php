@@ -81,7 +81,10 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
                 'rosterPdf' => 'Roster.pdf',
                 'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
                 'groupExclusions' => 'Group_Exclusions.pdf',
-                'businessIncomeWorksheet' => 'DS_Business_Income_Worksheet.pdf'
+                'businessIncomeWorksheet' => 'DS_Business_Income_Worksheet.pdf',
+                'psTemplate' => 'Endorsement_Proposal_DCPS',
+                'psHeader' => 'Endorsement_DCPS_header.html',
+                'psFooter' => 'DiveStore_DCPS_footer.html',
             ),
             'Group Professional Liability'
             => array(
@@ -116,7 +119,13 @@ class StoreEndorsementQuoteDocuments extends PolicyDocument
                 'rosterFooter' => 'Roster_footer.html',
                 'rosterPdf' => 'Roster.pdf',
                 'travelAgentEO' => 'Travel_Agents_PL_Endorsement.pdf',
-                'groupExclusions' => 'Group_Exclusions.pdf'
+                'groupExclusions' => 'Group_Exclusions.pdf',
+                'psTemplate' => 'Group_Endorsement_Proposal_DCPS',
+                'psHeader' => 'Group_DCPS_header.html',
+                'psFooter' => 'DiveStore_DCPS_footer.html',
+                'gtemplate' => 'Group_PL_COI_DS_Endorsement',
+                'gheader' => 'Group_EndoHeader.html',
+                'gfooter' => 'Group_footer.html'
             )
         );
     }

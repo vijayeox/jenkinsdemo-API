@@ -365,7 +365,7 @@ class TeamService extends AbstractService
             if ($accountId != $obj->account_id) {
                 throw new ServiceException("Team does not belong to the account", "team.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
-            $select = "SELECT count(id) from ox_team where parent_id = " . $obj->id;
+            $select = "SELECT count(id) from ox_team where status<> 'Inactive' and parent_id = " . $obj->id;
             $result = $this->executeQuerywithParams($select)->toArray();
             if ($result[0]['count(id)'] > 0) {
                 throw new ServiceException("Please remove the child teams before deleting the parent team", "delete.parent.team", OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
