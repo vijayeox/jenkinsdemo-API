@@ -8,7 +8,6 @@ use Resource\Controller\ResourceController;
 
 class ResourceControllerTest extends ControllerTest
 {
-    
     protected $table;
     public function setUp(): void
     {

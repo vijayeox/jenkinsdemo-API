@@ -25,7 +25,7 @@ class WorkflowControllerTest extends ControllerTest
     }
 
     public function testGetList()
-    {   
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow', 'GET');
         $this->assertResponseStatusCode(200);

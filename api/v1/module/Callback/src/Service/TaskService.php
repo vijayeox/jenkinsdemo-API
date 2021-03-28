@@ -123,5 +123,4 @@ class TaskService extends AbstractService
             $this->logger->info(TaskService::class . "Failed to create new entity" . $e);
         }
     }
-
 }

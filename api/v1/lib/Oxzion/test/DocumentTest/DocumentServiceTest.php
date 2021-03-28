@@ -38,8 +38,8 @@ class DocumentServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgid']);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['TEMPLATE_FOLDER'].$data['orgid'];
-        if(!is_link($tempFolder)){
-             FileUtils::createDirectory($tempFolder."/");
+        if (!is_link($tempFolder)) {
+            FileUtils::createDirectory($tempFolder."/");
         }
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);
@@ -60,7 +60,4 @@ class DocumentServiceTest extends ServiceTest
         FileUtils::rmDir($tempFolder);
         // TO DO DIGITAL SIGNATURE
     }
-
-
-
 }

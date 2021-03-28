@@ -148,5 +148,4 @@ class ImsService extends AbstractService
     {
         return $this->makeCall('AddProducer', $data);
     }
-
 }

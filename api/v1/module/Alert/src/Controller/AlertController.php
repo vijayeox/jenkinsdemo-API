@@ -45,7 +45,6 @@ class AlertController extends AbstractApiController
      */
     public function create($data)
     {
-
         $this->log->info(__CLASS__ . "-> \n Create Alert - " . json_encode($data, true));
         try {
             $count = $this->alertService->createAlert($data);

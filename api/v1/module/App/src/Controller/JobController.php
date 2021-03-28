@@ -47,7 +47,7 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -73,7 +73,7 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -99,7 +99,7 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -129,7 +129,7 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -152,7 +152,7 @@ class JobController extends AbstractApiController
         try {
             $this->jobService->cancelJobId($jobId, $appId);
             return $this->getSuccessResponse();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

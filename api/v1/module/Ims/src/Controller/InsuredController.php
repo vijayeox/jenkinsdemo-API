@@ -12,5 +12,4 @@ class InsuredController extends AbstractController
     {
         parent::__construct($imsService, 'InsuredFunctions');
     }
-
 }

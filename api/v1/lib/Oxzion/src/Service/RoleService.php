@@ -29,7 +29,7 @@ class RoleService extends AbstractService
     public function saveRole($params, &$data, $roleId = null)
     {
         if (isset($params['accountId'])) {
-            if (!AuthContext::get(AuthConstants::REGISTRATION) && (!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') && 
+            if (!AuthContext::get(AuthConstants::REGISTRATION) && (!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') && (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
                 ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))))) {
                 throw new AccessDeniedException("You do not have permissions create/update role");
             } else {
@@ -41,11 +41,13 @@ class RoleService extends AbstractService
         $this->saveRoleInternal($data, $roleId, $accountId);
     }
 
-    public function saveTemplateRole(&$data, $roleId = null){
+    public function saveTemplateRole(&$data, $roleId = null)
+    {
         $this->saveRoleInternal($data, $roleId);
     }
 
-    private function saveRoleInternal(&$inputData, $roleId, $accountId = NULL){
+    private function saveRoleInternal(&$inputData, $roleId, $accountId = null)
+    {
         $data = $inputData;
         if (isset($roleId)) {
             $obj = $this->table->getByUuid($roleId, array());
@@ -68,11 +70,11 @@ class RoleService extends AbstractService
             $this->beginTransaction();
             $clause = "";
             $params = [];
-            if($accountId){
+            if ($accountId) {
                 $clause .= " AND account_id =" . $accountId;
                 $params["accountId"] = $accountId;
             }
-            if(isset($data['app_id'])){
+            if (isset($data['app_id'])) {
                 $clause .= " AND app_id =" . $data['app_id'];
             }
             
@@ -93,7 +95,7 @@ class RoleService extends AbstractService
 
             $businessRoleId = isset($data['business_role_id'])? $data['business_role_id']: 'NULL';
             if (isset($roleId) && $roleId != null) {
-                $update = "UPDATE `ox_role` SET `name`= '" . $data['name'] . "', business_role_id = $businessRoleId, `description`= '" . 
+                $update = "UPDATE `ox_role` SET `name`= '" . $data['name'] . "', business_role_id = $businessRoleId, `description`= '" .
                             $data['description'] . "', `default_role`= '" . $data['default'] . "' WHERE `id` = '" . $roleId . "' AND name not in ('ADMIN', 'MANAGER', 'EMPLOYEE') $clause";
                 $result1 = $this->executeUpdateWithBindParameters($update, $params);
                 $count = $result1->getAffectedRows();
@@ -110,9 +112,8 @@ class RoleService extends AbstractService
                 $count = $result1->getAffectedRows();
                 if ($count > 0) {
                     $roleId = $result1->getGeneratedValue();
-                }else{
+                } else {
                     throw new ServiceException("Could not save Role", 'role.save.failed');
-                    
                 }
             }
             if (isset($data['privileges'])) {
@@ -120,7 +121,7 @@ class RoleService extends AbstractService
                 $appId = isset($data['app_id']) ? $data['app_id'] : null;
                 $this->updateRolePrivileges($roleId, $data['privileges'], $accountId, $appId);
             }
-            $this->commit(); 
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
@@ -186,7 +187,7 @@ class RoleService extends AbstractService
                 throw new ServiceException("Role does not belong to the account", "role.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
         }
-        if($obj->default_role == 1){
+        if ($obj->default_role == 1) {
             throw new ServiceException("System Roles cannot be deleted", "role.cannot.delete", OxServiceException::ERR_CODE_NOT_FOUND);
         }
 
@@ -210,7 +211,6 @@ class RoleService extends AbstractService
 
     public function getRoles($filterParams = null, $params)
     {
-
         if (isset($params['accountId'])) {
             if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
                 ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
@@ -249,7 +249,7 @@ class RoleService extends AbstractService
         
         if (isset($params['app_id'])) {
             $where .= " AND app_id=". $params['app_id'];
-        }else{
+        } else {
             $where .= " AND app_id IS NULL";
         }
 
@@ -276,8 +276,8 @@ class RoleService extends AbstractService
             $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
         $roleId = $this->getIdFromUuid('ox_role', $params['roleId']);
-        if(!$roleId){
-            throw new ServiceException("Invalid Role", 'invalid.role',OxServiceException::ERR_CODE_NOT_FOUND);
+        if (!$roleId) {
+            throw new ServiceException("Invalid Role", 'invalid.role', OxServiceException::ERR_CODE_NOT_FOUND);
         }
         $query = "SELECT * FROM ox_role 
                     WHERE ox_role.id =" . $roleId . " AND ox_role.account_id=" . $accountId;
@@ -328,44 +328,44 @@ class RoleService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getRolesByAccountId($accountid, array $businessRoleId = NULL)
+    public function getRolesByAccountId($accountid, array $businessRoleId = null)
     {
-        if(!$businessRoleId || ($businessRoleId && count($businessRoleId) == 1)){
+        if (!$businessRoleId || ($businessRoleId && count($businessRoleId) == 1)) {
             return $this->getDataByParams('ox_role', array(), array('account_id' => $accountid, "business_role_id" => $businessRoleId ? $businessRoleId[0] : $businessRoleId))->toArray();
         }
 
         $bRole = "";
         $queryParams = $accountid ? ["accountId" => $accountid] : [];
         foreach ($businessRoleId as $key => $value) {
-            if($bRole != ""){
+            if ($bRole != "") {
                 $bRole .= ", ";
-            }else{
+            } else {
                 $bRole ="(";
             }
             $bRole.=":param$key";
             $queryParams["param$key"] = $value;
-        }   
+        }
         $bRole .= ")";
         $acctClause = $accountid ? " and account_id = :accountId" : "";
         $query = "select * from ox_role where business_role_id in $bRole $acctClause";
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         return $result;
-    
     }
 
-    public function getRolesByAppId($appId, $accountId = NULL){
+    public function getRolesByAppId($appId, $accountId = null)
+    {
         $acctClause = "rp.account_id";
         $params = ["appId" => $appId];
-        if($accountId){
+        if ($accountId) {
             $acctClause .= " = :accountId";
             $params['accountId'] = $accountId;
-        }else{
+        } else {
             $acctClause .= " IS NULL";
         }
         $query = "SELECT distinct r.* from ox_role r 
                   inner join ox_role_privilege rp on rp.role_id = r.id
                   where rp.app_id = :appId and $acctClause";
-        $this->logger->info("Excecuting Query $query with params--".print_r($params,true));
+        $this->logger->info("Excecuting Query $query with params--".print_r($params, true));
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
         return $result;
     }
@@ -388,7 +388,7 @@ class RoleService extends AbstractService
 
     protected function updateDefaultRolePrivileges($role)
     {
-        if(isset($role['uuid']) && UuidUtil::isValidUuid($role['uuid'])){
+        if (isset($role['uuid']) && UuidUtil::isValidUuid($role['uuid'])) {
             $roleId = $this->getIdFromUuid('ox_role', $role['uuid']);
         } else {
             $roleId = $role['id'];
@@ -398,20 +398,18 @@ class RoleService extends AbstractService
             ",rp.app_id from ox_role_privilege rp 
                         left join ox_role r on rp.role_id = r.id
                     where r.name = '" . $role['name'] . "' and r.account_id is NULL";
-        if(isset($role['business_role_id'])){
+        if (isset($role['business_role_id'])) {
             $query .= " AND r.business_role_id = ".$role['business_role_id'];
         }
         $count = $this->runGenericQuery($query);
         if (!$count) {
             throw new ServiceException("Failed to update role privileges", "failed.update.default.privileges");
-        } 
-    
+        }
     }
 
     public function createRolesByBusinessRole($accountId, $appId)
     {
-        
-        try{
+        try {
             $this->beginTransaction();
             $sqlQuery = "INSERT INTO ox_role(`name`,`description`,`account_id`,
                     `is_system_role`,`uuid`,`default_role`,`business_role_id`,`app_id`) 
@@ -420,9 +418,9 @@ class RoleService extends AbstractService
                     inner join ox_account_business_role obr on obr.business_role_id = oxr.business_role_id
                     inner join ox_business_role br on  br.id = obr.business_role_id
                     where obr.account_id = :accountId and br.app_id = :appId)";
-            $params = ["accountId" => is_numeric($accountId) ? $accountId : $this->getIdFromUuid('ox_account',$accountId), "appId" => $appId];
-            $this->logger->info("ROLE QUERY--$sqlQuery with params---".print_r($params,true));
-            $this->executeUpdateWithBindParameters($sqlQuery,$params);
+            $params = ["accountId" => is_numeric($accountId) ? $accountId : $this->getIdFromUuid('ox_account', $accountId), "appId" => $appId];
+            $this->logger->info("ROLE QUERY--$sqlQuery with params---".print_r($params, true));
+            $this->executeUpdateWithBindParameters($sqlQuery, $params);
             $sqlQuery = "INSERT INTO ox_role_privilege (`role_id`,`privilege_name`,
                         `permission`,`account_id`,`app_id`)
                         (SELECT acr.id,oxrp.privilege_name,oxrp.permission,acr.account_id,oxrp.app_id
@@ -432,13 +430,12 @@ class RoleService extends AbstractService
                         inner join ox_account_business_role obr on obr.business_role_id = oxr.business_role_id
                         inner join ox_business_role br on  br.id = obr.business_role_id
                         WHERE obr.account_id = :accountId and br.app_id = :appId)";
-            $this->logger->info("ROLE Privilege QUERY--$sqlQuery with params---".print_r($params,true));
-            $this->executeUpdateWithBindParameters($sqlQuery,$params);
+            $this->logger->info("ROLE Privilege QUERY--$sqlQuery with params---".print_r($params, true));
+            $this->executeUpdateWithBindParameters($sqlQuery, $params);
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
-        }       
-
+        }
     }
 }

@@ -69,14 +69,15 @@ class IndexerImpl implements Indexer
         }
     }
 
-    public function bulkArray($appID,$body) {
+    public function bulkArray($appID, $body)
+    {
         $core = null;
         if (isset($this->config['elasticsearch']['core'])) {
             $core = $this->config['elasticsearch']['core'];
         }
         $elasticService = new ElasticService($this->config);
         $index = $appID;
-        if (substr($index,-6)!="_index") {
+        if (substr($index, -6)!="_index") {
             $index = $index."_index";
         }
         $index = ($core) ? $core.'_'.$index:$index;
@@ -107,7 +108,5 @@ class IndexerImpl implements Indexer
             $i++;
         }
         return ;
-
     }
-
 }

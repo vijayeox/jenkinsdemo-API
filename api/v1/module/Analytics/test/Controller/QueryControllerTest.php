@@ -27,7 +27,6 @@ class QueryControllerTest extends ControllerTest
         }
         $this->elasticService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ElasticService::class);
         $this->client = $this->elasticService->getElasticClient();
-
     }
 
     public function getDataSet()
@@ -122,7 +121,7 @@ class QueryControllerTest extends ControllerTest
     }
 
     public function testUpdate()
-     {
+    {
         $data = ['name' => "querytest", 'datasource_id' => '7700c623-1361-4c85-8203-e255ac995c4a', 'version' => 1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -338,7 +337,6 @@ class QueryControllerTest extends ControllerTest
                 ->with($input)
                 ->andReturn($output);
             $this->elasticService->setElasticClient($clientMock);
-
         }
         $this->initAuthToken($this->adminUser);
         $data = ['uuids' => array('8f1d2819-c5ff-4426-bc40-f7a20704a738', '5f1d2819-c5ff-4426-bc40-f7a20704a748')];
@@ -442,5 +440,4 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         //      $this->assertEquals($content['data']['errors'], 'Non-aggregate query type cannot be followed by a aggregate query type');
     }
-
 }

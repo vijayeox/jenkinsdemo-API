@@ -157,45 +157,45 @@ class ChatCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $this->log->info("Save Bot Params- " . json_encode($params));
-        try{
+        try {
             $params['botName'] = isset($params['appName']) ? $params['appName'] : null;
             $response = $this->chatService->saveBot($params);
             if ($response) {
                 $this->log->info(ChatCallbackController::class . ":Bot User Created / Updated");
                 $response = is_array($response) ? $response['body'] : $response;
                 return $this->getSuccessResponseWithData(json_decode($response, true));
-            }else{
+            } else {
                 return $this->getErrorResponse("Bot Name is missing", 400);
             }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
-        }        
+        }
     }
 
     public function disableBotAction()
     {
         $params = $this->extractPostData();
         $this->log->info("Disable Bot Params- " . json_encode($params));
-        try{
+        try {
             $botName = isset($params['appName']) ? $params['appName'] : null;
             $response = $this->chatService->disableBot($botName);
             if ($response) {
                 return $this->getSuccessResponseWithData(json_decode($response['body'], true));
-            }else{
+            } else {
                 return $this->getErrorResponse("No Bot with the specified name was found", 400);
             }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
-        }        
+        }
     }
 
     public function appBotNotificationAction()
     {
         $params = $this->extractPostData();
         $this->log->info("appBotNotification Params- " . json_encode($params));
-        try{
+        try {
             $this->chatService->appBotNotification($params);
             return $this->getSuccessResponse();
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -208,7 +208,7 @@ class ChatCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $this->log->info("postFileComment Params- " . json_encode($params));
-        try{
+        try {
             $this->chatService->postFileComment($params);
             return $this->getSuccessResponse();
         } catch (Exception $e) {

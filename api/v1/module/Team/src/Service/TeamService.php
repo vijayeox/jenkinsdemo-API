@@ -129,7 +129,7 @@ class TeamService extends AbstractService
             if (count($result) > 0) {
                 if ($data['name'] == $result[0]['name'] && $result[0]['status'] == 'Active') {
                     throw new ServiceException("Team already exists", "team.exists", OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
-                } else if ($result[0]['status'] == 'Inactive') {
+                } elseif ($result[0]['status'] == 'Inactive') {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : null;
                     if ($data['reactivate'] == 1) {
                         $data['status'] = 'Active';
@@ -318,7 +318,7 @@ class TeamService extends AbstractService
         if ($result) {
             $data['manager_id'] = $result[0]["id"];
         }
-        if(isset($data['parentId'])){
+        if (isset($data['parentId'])) {
             $data['parent_id'] = $this->getIdFromUuid('ox_team', $data['parentId']);
             $data['parent_id'] = $data['parent_id'] == 0 ? null : $data['parent_id'];
         }
@@ -430,7 +430,7 @@ class TeamService extends AbstractService
         }
         return array('data' => $resultSet->toArray(), 'total' => $count);
     }
-    public function getSubteams($params,$filterParams = array())
+    public function getSubteams($params, $filterParams = array())
     {
         if (!isset($params['teamId'])) {
             throw new ServiceException("Team not provided", "team.required", OxServiceException::ERR_CODE_NOT_FOUND);
@@ -447,7 +447,7 @@ class TeamService extends AbstractService
         $where = "";
         $sort = "name";
         $fieldMap = ['name' => 'oxg.name', 'description' => 'oxg.description'];
-        $id = $this->getIdFromUuid('ox_team',$params['teamId']);
+        $id = $this->getIdFromUuid('ox_team', $params['teamId']);
         if (isset($filterParams['filter'])) {
             $filterArray = json_decode($filterParams['filter'], true);
             if (isset($filterArray[0]['filter'])) {

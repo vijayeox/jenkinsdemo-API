@@ -24,15 +24,17 @@ class AuthControllerTest extends ControllerTest
         return $dataset;
     }
 
-    protected function getDbAdapter(){
-        if(!$this->dbAdapter){
-            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);    
+    protected function getDbAdapter()
+    {
+        if (!$this->dbAdapter) {
+            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         }
         
         return $this->dbAdapter;
     }
 
-    private function runQuery($query) {
+    private function runQuery($query)
+    {
         $adapter = $this->getDbAdapter();
         $statement = $adapter->query($query);
         $result = $statement->execute();
@@ -442,7 +444,8 @@ class AuthControllerTest extends ControllerTest
         $this->assertArrayHasKey('username', $content['data']);
         $this->performAssertions($data);
     }
-    private function performAssertions($data){
+    private function performAssertions($data)
+    {
         $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.account_id FROM ox_user u inner join ox_person up on up.id = u.person_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
         $accountId = $newQueryResult[0]['account_id'];
@@ -458,17 +461,17 @@ class AuthControllerTest extends ControllerTest
                     where u.id = ".$newQueryResult[0]['id']." AND role_id = ".$roleResult[0]['id'];
         $urResult = $this->runQuery($sqlQuery);
 
-        $this->assertEquals($data['data']['firstname'],$newQueryResult[0]['firstname']);
-        $this->assertEquals($data['data']['lastname'],$newQueryResult[0]['lastname']);
-        $this->assertEquals($data['data']['email'],$newQueryResult[0]['email']);
-        if($data['data']['type'] == 'INDIVIDUAL'){
+        $this->assertEquals($data['data']['firstname'], $newQueryResult[0]['firstname']);
+        $this->assertEquals($data['data']['lastname'], $newQueryResult[0]['lastname']);
+        $this->assertEquals($data['data']['email'], $newQueryResult[0]['email']);
+        if ($data['data']['type'] == 'INDIVIDUAL') {
             $this->assertEquals($data['data']['firstname']." ".$data['data']['lastname'], $acctResult[0]['name']);
-        }else{
+        } else {
             $this->assertEquals($data['data']['name'], $acctResult[0]['name']);
         }
         $this->assertEquals($data['data']['type'], $acctResult[0]['type']);
         $this->assertEquals($newQueryResult[0]['id'], $acctResult[0]['contactid']);
-        if(isset($data['data']['identifier_field'])){
+        if (isset($data['data']['identifier_field'])) {
             $sqlQuery = "SELECT * FROM ox_wf_user_identifier where identifier_name = '".$data['data']['identifier_field']."' AND identifier = '".$data['data'][$data['data']['identifier_field']]."'";
             $identifierResult = $this->runQuery($sqlQuery);
             $this->assertEquals(1, count($identifierResult));
@@ -476,11 +479,11 @@ class AuthControllerTest extends ControllerTest
             $this->assertEquals($acctResult[0]['id'], $identifierResult[0]['account_id']);
             $this->assertEquals($newQueryResult[0]['id'], $identifierResult[0]['user_id']);
         }
-        if(isset($data['data']['businessRole'])){
+        if (isset($data['data']['businessRole'])) {
             $this->assertEquals($data['data']['businessRole'], $bussRoleResult[0]['name']);
             $this->assertEquals("Admin", $roleResult[0]['name']);
             $this->assertEquals(1, count($urResult));
-        }else{
+        } else {
             $this->assertEquals(3, count($roleResult));
             $this->assertEquals(1, count($urResult));
         }

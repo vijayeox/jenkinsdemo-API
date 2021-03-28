@@ -23,77 +23,77 @@ class PageContentService extends AbstractService
     }
 
     public function getPageContent($appUuid, $pageUuid)
-    { 
+    {
         $select = "SELECT * FROM ox_app_page 
         left join ox_app on ox_app_page.app_id = ox_app.id
          where ox_app_page.uuid =? and ox_app.uuid =?";
         $selectQuery = array($pageUuid,$appUuid);
-        $selectResult = $this->executeQueryWithBindParameters($select,$selectQuery)->toArray();
-        if(count($selectResult)>0){
+        $selectResult = $this->executeQueryWithBindParameters($select, $selectQuery)->toArray();
+        if (count($selectResult)>0) {
             $queryString = " SELECT ox_app_page.name, ox_page_content.type,ox_form.uuid as form_id, ox_form.name as formName, ox_page_content.content
             FROM ox_page_content 
             LEFT JOIN ox_app_page on ox_app_page.id = ox_page_content.page_id
             LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id
              WHERE ox_app_page.uuid =? ORDER BY ox_page_content.sequence ";
             $queryStringParams = array($pageUuid);
-            $selectResult = $this->executeQueryWithBindParameters($queryString,$queryStringParams)->toArray();
+            $selectResult = $this->executeQueryWithBindParameters($queryString, $queryStringParams)->toArray();
             if (count($selectResult)==0) {
                 return 0;
             }
-        }else{
+        } else {
             return 0;
         }
 
-        $result = array();       
-        foreach($selectResult as $resultArray){
-            if(isset($resultArray['formName'])){
+        $result = array();
+        foreach ($selectResult as $resultArray) {
+            if (isset($resultArray['formName'])) {
                 $filePath = $this->formsFolder.$appUuid."/".$resultArray['formName'].$this->fileExt;
-                if(file_exists($filePath)){
+                if (file_exists($filePath)) {
                     $resultArray['content'] = file_get_contents($filePath);
                 }
             }
-            if(isset($resultArray['content'])){
+            if (isset($resultArray['content'])) {
                 $content = json_decode($resultArray['content']);
-                if($content){
+                if ($content) {
                     $resultArray['content'] = $content;
                 }
             }
             $result[] = $resultArray;
         }
-        $content = array('content' => $result); 
-        return array_merge($selectResult[0],$content);
+        $content = array('content' => $result);
+        return array_merge($selectResult[0], $content);
     }
 
     public function savePageContent($pageId, &$data)
-    { 
+    {
         $this->beginTransaction();
         $counter=0;
-        try{
+        try {
             $select = "DELETE from ox_page_content where page_id =?";
             $deleteQuery = array($pageId);
-            $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
-            foreach($data as $key => $value){
-                if(isset($value['form_id']) && (empty($value['form_id']) || $value['form_id'] == '')){
+            $result = $this->executeQuerywithBindParameters($select, $deleteQuery);
+            foreach ($data as $key => $value) {
+                if (isset($value['form_id']) && (empty($value['form_id']) || $value['form_id'] == '')) {
                     unset($value['form_id']);
                 }
-                if($value['type'] == 'List' || $value['type'] == 'Search'){
-                    if(isset($value['content'])){
+                if ($value['type'] == 'List' || $value['type'] == 'Search') {
+                    if (isset($value['content'])) {
                         $value['content'] = json_encode($value['content']);
                     } else {
                         $value['content'] = null;
                     }
                 }
-                if($value['type'] == 'Form' && ((isset($value['form_id']) && $value['form_id'] != '') || isset($value['template_file']))){
+                if ($value['type'] == 'Form' && ((isset($value['form_id']) && $value['form_id'] != '') || isset($value['template_file']))) {
                     if (isset($value['template_file'])) {
-                        $value['template_file'] = pathinfo($value['template_file'],PATHINFO_FILENAME);
-                        $resultSet = $this->getDataByParams('ox_form', array("id"),['name' => $value['template_file']] , null)->toArray();
+                        $value['template_file'] = pathinfo($value['template_file'], PATHINFO_FILENAME);
+                        $resultSet = $this->getDataByParams('ox_form', array("id"), ['name' => $value['template_file']], null)->toArray();
                         $data['form_id'] = $value['form_id'] = $resultSet[0]['id'];
-                    }else{                     
-                        $value['form_id'] = $this->getIdFromUuid('ox_form', $value['form_id']);  
+                    } else {
+                        $value['form_id'] = $this->getIdFromUuid('ox_form', $value['form_id']);
                     }
                 }
-                if($value['type'] == 'DashboardManager'){
-                    if(isset($value['dashboard_uuid'])){
+                if ($value['type'] == 'DashboardManager') {
+                    if (isset($value['dashboard_uuid'])) {
                         $value['content'] = json_encode(array('uuid'=>$value['dashboard_uuid']));
                     } else {
                         $value['content'] = null;
@@ -109,11 +109,10 @@ class PageContentService extends AbstractService
                 $value['sequence'] = $key+1;
                 $counter+=$this->savePageContentInternal($value);
             }
-            $this->commit(); 
-        }
-        catch(Exception $e){
+            $this->commit();
+        } catch (Exception $e) {
             $this->rollback();
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $counter;
@@ -144,10 +143,10 @@ class PageContentService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-                $this->rollback();
-                $this->logger->error($e->getMessage(), $e);
-                throw $e;
-            }
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
         return $count;
     }
 
@@ -208,10 +207,10 @@ class PageContentService extends AbstractService
     }
     public function getContent($id)
     {
-        try{
+        try {
             $queryString = "SELECT * FROM ox_page_content WHERE id =?";
             $selectQuery = array($id);
-            $resultSet= $this->executeQuerywithBindParameters($queryString,$selectQuery)->toArray();
+            $resultSet= $this->executeQuerywithBindParameters($queryString, $selectQuery)->toArray();
             // $resultSet = new ResultSet();
             // $resultSet->initialize($result);
             // $resultSet = $resultSet->toArray();
@@ -220,15 +219,15 @@ class PageContentService extends AbstractService
             } else {
                 return array();
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
 
     private function savePageContentInternal($data)
-    {   
-        try{
+    {
+        try {
             $data['content'] = $this->checkListContent($data);
             $page = new PageContent();
             $page->exchangeArray($data);
@@ -243,23 +242,24 @@ class PageContentService extends AbstractService
                 $data['id'] = $id;
             }
             return $count;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
 
-    private function checkListContent($data){
-        if(isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])){
+    private function checkListContent($data)
+    {
+        if (isset($data['gridContent']) && !empty($data['gridContent']) && !is_string($data['gridContent'])) {
             return json_encode($data['gridContent']);
         }
-        if(isset($data['gridContent']) && !empty($data['gridContent']) && is_string($data['gridContent'])){
+        if (isset($data['gridContent']) && !empty($data['gridContent']) && is_string($data['gridContent'])) {
             return $data['gridContent'];
         }
-        if(isset($data['content']) && !empty($data['content']) && !is_string($data['content'])){
+        if (isset($data['content']) && !empty($data['content']) && !is_string($data['content'])) {
             return json_encode($data['content']);
         }
-        if(isset($data['content']) && is_string($data['content'])){
+        if (isset($data['content']) && is_string($data['content'])) {
             return $data['content'];
         }
     }

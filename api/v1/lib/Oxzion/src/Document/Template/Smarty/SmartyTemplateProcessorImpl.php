@@ -12,7 +12,7 @@ use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Document\Template\TemplateParser;
 use Oxzion\Service\TemplateService;
 
-class SmartyTemplateProcessorImpl implements TemplateParser  
+class SmartyTemplateProcessorImpl implements TemplateParser
 {
     private $client;
     private $templateExt = ".tpl";
@@ -23,7 +23,8 @@ class SmartyTemplateProcessorImpl implements TemplateParser
      * @param array $params - cacheDir, configsDir, templateDir, compileDir
      * @return none
      */
-    public function init($params){
+    public function init($params)
+    {
         $this->client = new Smarty();
         $this->client->setCacheDir($params['cacheDir']);
         $this->client->setConfigDir($params['configsDir']);
@@ -40,7 +41,8 @@ class SmartyTemplateProcessorImpl implements TemplateParser
      * @param array $options N/A
      * @return the generated content of the template
      */
-    public function getContent($template, $data = array(), $options = array()){
+    public function getContent($template, $data = array(), $options = array())
+    {
         $this->client->setTemplateDir($template['templatePath']);
         $template = $template['templateNameWithExt'];
         $this->client->assign($data);

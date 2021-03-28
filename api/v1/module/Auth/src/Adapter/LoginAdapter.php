@@ -14,7 +14,6 @@ use Zend\Db\Sql;
 use Zend\Db\Sql\Expression as SqlExpr;
 use Zend\Db\Sql\Predicate\Operator as SqlOp;
 
-
 class LoginAdapter extends CredentialTreatmentAdapter
 {
     public function __construct(
@@ -48,11 +47,10 @@ class LoginAdapter extends CredentialTreatmentAdapter
         $dbSelect = clone $this->getDbSelect();
         $dbSelect->from($this->tableName)
             ->columns(['*', $credentialExpression])
-            ->join('ox_account','ox_account.id = ox_user.account_id')
+            ->join('ox_account', 'ox_account.id = ox_user.account_id')
             ->where(new SqlOp($this->identityColumn, '=', $this->identity))
-            ->where(new SqlOP('ox_account.status','=','Active'))
-            ->where(new SqlOP('ox_user.status','=','Active'));
+            ->where(new SqlOP('ox_account.status', '=', 'Active'))
+            ->where(new SqlOP('ox_user.status', '=', 'Active'));
         return $dbSelect;
     }
- 
 }

@@ -70,5 +70,4 @@ class Module implements ConfigProviderInterface
     {
         return ErrorHandler::getJsonModelError($e);
     }
-
 }

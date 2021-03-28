@@ -149,7 +149,7 @@ class TeamControllerTest extends ControllerTest
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_team'));
     }
 
-// Testing to see if the Create Team function is working as intended if all the value passed are correct.
+    // Testing to see if the Create Team function is working as intended if all the value passed are correct.
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
@@ -228,7 +228,6 @@ class TeamControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_teamName' => 'Test Team 4', 'accountName' => 'Cleveland Black', "new_teamName" => "Test Team 4")), 'GROUP_UPDATED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team 4', 'accountName' => 'Cleveland Black', "username" => "admintest")), 'USERTOGROUP_ADDED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('teamName' => 'Test Team 4', "usernames" => array("admintest"))), 'USERTOGROUP_UPDATED')->once()->andReturn();
-
         }
         $this->dispatch('/team', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -318,7 +317,7 @@ class TeamControllerTest extends ControllerTest
         $this->assertEquals(6, $this->getConnection()->getRowCount('ox_team'));
     }
 
-//Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
+    //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
@@ -390,8 +389,6 @@ class TeamControllerTest extends ControllerTest
         $this->assertEquals('Active', $team[0]['status']);
         $this->assertEquals($team[0]['manager_id'], 2);
         $this->assertEquals($oxteam[0]['avatar_id'], 2);
-
-        
     }
 
     public function testUpdateWithAccountID()
@@ -942,5 +939,4 @@ class TeamControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Test Team Once Again');
         $this->assertEquals($content['data'][1]['name'], 'Test Team 5');
     }
-
 }

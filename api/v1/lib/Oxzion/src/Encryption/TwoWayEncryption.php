@@ -16,7 +16,7 @@ class TwoWayEncryption
 
     public static function decrypt($crypted_token)
     {
-        if(strpos($crypted_token, "::") !== false){
+        if (strpos($crypted_token, "::") !== false) {
             list($crypted_token, $enc_iv) = explode("::", $crypted_token);
             ;
             $cipher_method = 'AES-128-CTR';

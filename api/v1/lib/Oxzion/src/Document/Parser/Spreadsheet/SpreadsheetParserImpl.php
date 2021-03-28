@@ -13,10 +13,11 @@ class SpreadsheetParserImpl implements SpreadsheetParser
     private $sheetNames;
     private $sheetInfos;
     private $defaultFilter;
-    public function init($file){
+    public function init($file)
+    {
         $ext = FileUtils::getFileExtension($file);
         $type = "";
-        switch(strtolower($ext)) {
+        switch (strtolower($ext)) {
             case 'xlsx':
                 $type = 'Xlsx';
                 break;
@@ -34,10 +35,10 @@ class SpreadsheetParserImpl implements SpreadsheetParser
                 break;
         }
 
-        if($type == ""){
+        if ($type == "") {
             throw new Exception("Unrecognized file format");
         }
-        if(!FileUtils::fileExists($file)){
+        if (!FileUtils::fileExists($file)) {
             throw new Exception("File $file not found");
         }
         
@@ -50,18 +51,21 @@ class SpreadsheetParserImpl implements SpreadsheetParser
         $this->defaultFilter = new DefaultReadFilter();
     }
 
-    public function getSheetNames(){
-        if(!$this->sheetNames){
-            $this->sheetNames = $this->reader->listWorksheetNames($this->file);    
+    public function getSheetNames()
+    {
+        if (!$this->sheetNames) {
+            $this->sheetNames = $this->reader->listWorksheetNames($this->file);
         }
         return $this->sheetNames;
     }
-    public function getSheetCount(){
+    public function getSheetCount()
+    {
         $sheets = $this->getSheetNames();
         return count($sheets);
     }
-    public function getWorksheetInfo($sheetName = ""){
-        if(!isset($this->sheetInfos[$sheetName])){
+    public function getWorksheetInfo($sheetName = "")
+    {
+        if (!isset($this->sheetInfos[$sheetName])) {
             $worksheetData = $this->reader->listWorksheetInfo($this->file);
             foreach ($worksheetData as $worksheet) {
                 $this->sheetInfos[$worksheet['worksheetName']] = $worksheet;
@@ -75,35 +79,36 @@ class SpreadsheetParserImpl implements SpreadsheetParser
     *
     *   worksheet(string/array) - worksheet name or array of names to parse. Default is first work sheet
     *   rowMapper (RowMapper) - Optional to map row data to a custom data structure
-    *   filter (SpreadsheetFilter) - Optional to filter out columns or rows. 
+    *   filter (SpreadsheetFilter) - Optional to filter out columns or rows.
     *
     */
-    public function parseDocument(array $parserOptions = array()){
-        if(isset($parserOptions['worksheet'])){
+    public function parseDocument(array $parserOptions = array())
+    {
+        if (isset($parserOptions['worksheet'])) {
             $worksheet = $parserOptions['worksheet'];
-            if(is_string($worksheet)){
+            if (is_string($worksheet)) {
                 $worksheet = array($worksheet);
             }
-        }else{
+        } else {
             $worksheet = array($this->getSheetNames()[0]);
         }
         $rowMapper = null;
-        if(isset($parserOptions['rowMapper'])){
+        if (isset($parserOptions['rowMapper'])) {
             $obj = $parserOptions['rowMapper'];
             if (is_a($obj, RowMapper::class)) {
                 $rowMapper = $obj;
-            }else{
+            } else {
                 throw new Exception("RowMapper should be of type \Oxzion\Document\Parser\Spreadsheet\RowMapper");
             }
         }
-        if(isset($parserOptions['filter'])){
+        if (isset($parserOptions['filter'])) {
             $obj = $parserOptions['filter'];
             if (is_a($obj, SpreadsheetFilter::class)) {
                 $this->reader->setReadFilter($obj);
-            }else{
+            } else {
                 throw new Exception("Filter should be of type \Oxzion\Document\Parser\Spreadsheet\SpreadsheetFilter");
             }
-        }else{
+        } else {
             $this->reader->setReadFilter($this->defaultFilter);
         }
         $data = array();
@@ -112,19 +117,18 @@ class SpreadsheetParserImpl implements SpreadsheetParser
             $spreadsheet = $this->reader->load($this->file);
             $worksheetData = $spreadsheet->getActiveSheet();
             
-            if($rowMapper){
+            if ($rowMapper) {
                 $list = $worksheetData->toArray();
                 foreach ($list as $index => $rowData) {
                     $rowMapper->mapRow($rowData);
                 }
                 $data[$sheetName] = $rowMapper->getData();
                 $rowMapper->resetData();
-            }else{
+            } else {
                 $data[$sheetName] = $worksheetData->toArray();
             }
         }
 
         return $data;
     }
-
 }

@@ -72,7 +72,7 @@ class AddressService extends AbstractService
                     where acct.uuid = :accountId";
         $params = array("accountId"=> $accountId);
         $this->logger->info("Executing Query $select with params - ".print_r($params, true));
-        $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
         return count($result) > 0 ? $result[0] : array() ;
     }
 }

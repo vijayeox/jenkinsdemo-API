@@ -36,7 +36,7 @@ class ResourceService extends AbstractService
         $select = $sql->select();
         $select->from('ox_attachment')
             ->columns(array("path"))
-            ->where(array('uuid' => $id));  
+            ->where(array('uuid' => $id));
         $result = $this->executeQuery($select)->toArray();
         return $result[0]['path'];
     }

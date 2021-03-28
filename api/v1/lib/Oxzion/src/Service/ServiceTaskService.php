@@ -16,7 +16,7 @@ class ServiceTaskService extends AbstractService
 {
     private $commandService;
     private $workflowInstanceService;
-	public function __construct($config, $dbAdapter,ServiceTaskInstanceTable $table, CommandService $commandService, WorkflowInstanceService $workflowInstanceService)
+    public function __construct($config, $dbAdapter, ServiceTaskInstanceTable $table, CommandService $commandService, WorkflowInstanceService $workflowInstanceService)
     {
         parent::__construct($config, $dbAdapter);
         $this->commandService = $commandService;
@@ -24,40 +24,41 @@ class ServiceTaskService extends AbstractService
         $this->table = $table;
     }
 
-	public function executeServiceTask($data,$request){
+    public function executeServiceTask($data, $request)
+    {
         $this->logger->info("inside execute service task");
         $variables = isset($data['variables']) ? $data['variables'] : $data;
-		$this->commandService->updateAccountContext($variables);
+        $this->commandService->updateAccountContext($variables);
         $response = $this->commandService->runCommand($variables, $request);
-        if(isset($data['processInstanceId'])){
-            if(isset($response['data']) ) {
-                if(isset($response['data']['data'])){
+        if (isset($data['processInstanceId'])) {
+            if (isset($response['data'])) {
+                if (isset($response['data']['data'])) {
                     $response['data']['data'] = $this->workflowInstanceService->pruneFields($response['data']['data'], $data['processInstanceId']);
-                }else{
+                } else {
                     $response['data'] = $this->workflowInstanceService->pruneFields($response['data'], $data['processInstanceId']);
                 }
-            }else{
+            } else {
                 $response = $this->workflowInstanceService->pruneFields($response, $data['processInstanceId']);
             }
         }
-        $serviceTaskInstance = $this->createServiceTaskInstance($data,$response);
+        $serviceTaskInstance = $this->createServiceTaskInstance($data, $response);
         return $response;
-	}
-	private function createServiceTaskInstance(&$data,$completionData)
+    }
+    private function createServiceTaskInstance(&$data, $completionData)
     {
-    	$taskInfo = array();
+        $taskInfo = array();
         $serviceTaskInstance = new ServiceTaskInstance();
-        if(isset($data['processInstanceId'])){
-        	$select = "SELECT ox_file.id as file_id,ox_workflow_instance.id as workflow_instance_id from ox_file
+        if (isset($data['processInstanceId'])) {
+            $select = "SELECT ox_file.id as file_id,ox_workflow_instance.id as workflow_instance_id from ox_file
             inner join ox_workflow_instance on ox_workflow_instance.file_id = ox_file.id
             where ox_workflow_instance.process_instance_id=:workflowInstanceId";
             $whereQuery = array("workflowInstanceId" => $data['processInstanceId']);
             $result = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
-            if(count($result) > 0){
-            	$taskInfo = array_merge($taskInfo,$result[0]);
+            if (count($result) > 0) {
+                $taskInfo = array_merge($taskInfo, $result[0]);
             }
         }
-        if(!isset($data['activityInstanceId'])){
+        if (!isset($data['activityInstanceId'])) {
             return 0;
         }
         $taskInfo['name'] = $data['activityName'];
@@ -89,6 +90,4 @@ class ServiceTaskService extends AbstractService
         }
         return $count;
     }
-
 }
-?>

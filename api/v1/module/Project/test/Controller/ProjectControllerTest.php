@@ -287,7 +287,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
     }
 
@@ -325,7 +325,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['accountId'], $accountId);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
     }
 
@@ -380,8 +380,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['accountId'], $accountId);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
-
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testCreateWithDifferentAccountID()
@@ -412,7 +411,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['account_id'], 2);
         $this->assertEquals($project[0]['accountId'], $accountId);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testCreateWithOutNameFailure()
@@ -516,7 +515,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testUpdateWithManagerID()
@@ -549,8 +548,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 3);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
-
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testUpdateByManager()
@@ -582,7 +580,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testUpdateByManagerofDifferentAccount()
@@ -680,7 +678,6 @@ class ProjectControllerTest extends ControllerTest
                     where p.uuid = '$projectId'";
         $project = $this->executeQueryTest($select);
         $this->assertEquals($project[0]['isdeleted'], 1);
-        
     }
     //TODO write tests for sub project scenarios - create, update, delete and get APIS
 
@@ -1153,10 +1150,7 @@ class ProjectControllerTest extends ControllerTest
         $select = "SELECT user_id FROM ox_user_project WHERE project_id = '".$subprojectId."' AND user_id = '".$subprojectParentManagerId."'";
         $subprojectParentManagerData = $this->executeQueryTest($select);
 
-        $this->assertEquals($subprojectManagerData[0]['user_id'],$subprojectManagerId);
-        $this->assertEquals($subprojectParentManagerData[0]['user_id'],$subprojectParentManagerId);
-
+        $this->assertEquals($subprojectManagerData[0]['user_id'], $subprojectManagerId);
+        $this->assertEquals($subprojectParentManagerData[0]['user_id'], $subprojectParentManagerId);
     }
-    
-
 }

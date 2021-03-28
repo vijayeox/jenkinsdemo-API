@@ -1,19 +1,21 @@
 <?php
 namespace Oxzion\AppDelegate;
-use Logger;
 
+use Logger;
 
 abstract class TemplateAppDelegate extends AbstractAppDelegate
 {
-	use UserContextTrait;
-	protected $logger;
-	protected $destination;
+    use UserContextTrait;
+    protected $logger;
+    protected $destination;
 
-	public function __construct(){
-		$this->logger = Logger::getLogger(__CLASS__);
-	}
+    public function __construct()
+    {
+        $this->logger = Logger::getLogger(__CLASS__);
+    }
 
-    public function setTemplatePath($destination){
-    	$this->destination = $destination;
+    public function setTemplatePath($destination)
+    {
+        $this->destination = $destination;
     }
 }

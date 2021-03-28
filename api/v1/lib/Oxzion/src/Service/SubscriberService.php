@@ -42,11 +42,11 @@ class SubscriberService extends AbstractService
         $data['commentId'] = !isset($data['commentId']) ? UuidUtil::uuid() : $data['commentId'];
         $obj = $data;
         $obj['user_id'] = $this->getIdFromUuid('ox_user', $data['user_id']);
-        if(!$obj['user_id']){
+        if (!$obj['user_id']) {
             return -1;
         }
         $obj['file_id'] = $this->getIdFromUuid('ox_file', $fileId);
-        if(!$obj['file_id']){
+        if (!$obj['file_id']) {
             return 0;
         }
         $obj['uuid'] = $data['commentId'];
@@ -73,15 +73,15 @@ class SubscriberService extends AbstractService
         return $data;
     }
 
-    public function updateSubscriber($data,$fileId)
+    public function updateSubscriber($data, $fileId)
     {
         try {
             $this->beginTransaction();
             $fId = $this->getIdFromUuid("ox_file", $fileId);
-            $userList = is_array($data['subscribers']) ? "'" . implode ( "','", $data['subscribers'] ) . "'" : trim($data['subscribers'],"[]");
+            $userList = is_array($data['subscribers']) ? "'" . implode("','", $data['subscribers']) . "'" : trim($data['subscribers'], "[]");
             $deleteQuery = "DELETE FROM ox_subscriber WHERE file_id=:fileId AND user_id not in(SELECT id FROM ox_user where uuid in($userList))";
             $queryParams = ["fileId" => $fId];
-            $this->logger->info("Subscriber Delete Query-- $deleteQuery with params".print_r($queryParams,true));
+            $this->logger->info("Subscriber Delete Query-- $deleteQuery with params".print_r($queryParams, true));
             $resultSet = $this->executeUpdateWithBindParameters($deleteQuery, $queryParams);
 
             $insertQuery = "INSERT INTO ox_subscriber (`user_id`,`account_id`,`file_id`,
@@ -93,7 +93,7 @@ class SubscriberService extends AbstractService
                             AND s.user_id is NULL)";
             $insertParams = array("accountId" => $data['account_id'] ? $data['account_id'] :            AuthContext::get(AuthConstants::ACCOUNT_ID) ,
                             "fileId" => $fId , "createdBy" => AuthContext::get(AuthConstants::USER_ID));
-            $this->logger->info("Subscriber Insert Query-- $insertQuery with params".print_r($insertParams,true));
+            $this->logger->info("Subscriber Insert Query-- $insertQuery with params".print_r($insertParams, true));
             $result = $this->executeUpdateWithBindParameters($insertQuery, $insertParams);
             $this->commit();
         } catch (Exception $e) {
@@ -102,9 +102,10 @@ class SubscriberService extends AbstractService
         }
     }
 
-    public function getSubscriber($id, $fileId){
+    public function getSubscriber($id, $fileId)
+    {
         $result = $this->getSubscribersInternal($fileId, $id);
-        if(count($result) > 0){
+        if (count($result) > 0) {
             return $result[0];
         }
 
@@ -115,11 +116,12 @@ class SubscriberService extends AbstractService
         return $this->getSubscribersInternal($fileId);
     }
 
-    private function getSubscribersInternal($fileId, $id = null, $userId = null){
+    private function getSubscribersInternal($fileId, $id = null, $userId = null)
+    {
         $idClause = "";
         $userFilter = "";
-        $params = array("fileId"=>$fileId); 
-        if($id){
+        $params = array("fileId"=>$fileId);
+        if ($id) {
             $idClause = "AND s.uuid = :subscriberId";
             $params['subscriberId'] = $id;
         }
@@ -138,9 +140,8 @@ class SubscriberService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getUserSubscriber($fileId,$id = null,$userId)
+    public function getUserSubscriber($fileId, $id = null, $userId)
     {
-        return $this->getSubscribersInternal($fileId,$id,$userId);
+        return $this->getSubscribersInternal($fileId, $id, $userId);
     }
-
 }

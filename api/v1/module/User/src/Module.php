@@ -66,10 +66,10 @@ class Module implements ConfigProviderInterface
                 },
                  Controller\ProfilePictureDownloadController::class => function ($container) {
                      return new Controller\ProfilePictureDownloadController(
-                        $container->get(ProfilePictureService::class),
-                        $container->get(AdapterInterface::class),
-                        $container->get(UserService::class)
-                    );
+                         $container->get(ProfilePictureService::class),
+                         $container->get(AdapterInterface::class),
+                         $container->get(UserService::class)
+                     );
                  },
                 Controller\UserSessionController::class => function ($container) {
                     return new Controller\UserSessionController(
@@ -77,7 +77,7 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
-                Controller\ForgotPasswordController::class => function($container) {
+                Controller\ForgotPasswordController::class => function ($container) {
                     return new Controller\ForgotPasswordController(
                         $container->get(UserService::class)
                     );

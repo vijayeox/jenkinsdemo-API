@@ -887,7 +887,7 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['data']['display_name'], $data['appName']);
     }
 
-     public function testCreateBotNotFound()
+    public function testCreateBotNotFound()
     {
         $data = ['description' => 'A BOT for testing'];
         $this->initAuthToken($this->adminUser);
@@ -906,7 +906,7 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Bot Name is missing');
     }
 
-     public function testSaveBotUpdation()
+    public function testSaveBotUpdation()
     {
         $data = ['appName' => 'testbotuser', 'displayName' => 'Test BOT User' , 'delete_at' => 0];
         $this->initAuthToken($this->adminUser);
@@ -983,7 +983,7 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertNotEquals($content['data']['delete_at'], 0);
     }
 
-        public function testDisableBotNotFound()
+    public function testDisableBotNotFound()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['appName' => 'testbotusernew'];
@@ -1001,5 +1001,4 @@ class ChatCallbackControllerTest extends ControllerTest
     }
 
     //APP BOT NOTIFICATION TESTS
-
 }

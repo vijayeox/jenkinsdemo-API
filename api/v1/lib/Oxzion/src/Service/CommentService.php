@@ -53,9 +53,9 @@ class CommentService extends AbstractService
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
-        if(isset($data['parent'])){
+        if (isset($data['parent'])) {
             $ret = $this->getParentId($data, $fileId);
-            if(!$ret){
+            if (!$ret) {
                 return 0;
             }
         }
@@ -81,14 +81,15 @@ class CommentService extends AbstractService
         return $count;
     }
 
-    private function getParentId(&$data, $fileId){
+    private function getParentId(&$data, $fileId)
+    {
         $fId = $this->getIdFromUuid("ox_file", $fileId);
         $obj = $this->getIdFromUuid('ox_comment', $data['parent'], array("file_id" => $fId, "account_id" => AuthContext::get(AuthConstants::ACCOUNT_ID)));
-        if(!$obj){
+        if (!$obj) {
             return 0;
         }
         $data['parent'] = $obj;
-        return 1;    
+        return 1;
     }
     public function updateComment($id, $fileId, $data)
     {
@@ -97,9 +98,9 @@ class CommentService extends AbstractService
         if (!$obj) {
             return 0;
         }
-        if(isset($data['parent'])){
+        if (isset($data['parent'])) {
             $ret = $this->getParentId($data, $fileId);
-            if(!$ret){
+            if (!$ret) {
                 return 0;
             }
         }
@@ -154,9 +155,10 @@ class CommentService extends AbstractService
         return $count;
     }
 
-    public function getComment($id, $fileId){
+    public function getComment($id, $fileId)
+    {
         $result = $this->getCommentsInternal($fileId, $id);
-        if(count($result) > 0){
+        if (count($result) > 0) {
             return $result[0];
         }
 
@@ -167,10 +169,11 @@ class CommentService extends AbstractService
         return $this->getCommentsInternal($fileId);
     }
 
-    private function getCommentsInternal($fileId, $id = null){
+    private function getCommentsInternal($fileId, $id = null)
+    {
         $fileClause = "";
         $queryParams = array("accountId"=>AuthContext::get(AuthConstants::ACCOUNT_ID),"fileId"=>$fileId);
-        if($id){
+        if ($id) {
             $fileClause = "AND ox_comment.uuid = :commentId";
             $queryParams['commentId'] = $id;
         }

@@ -89,8 +89,8 @@ class EntityControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(isset($content['data']['id']), FALSE);
-        $this->assertEquals(isset($content['data']['uuid']), TRUE);
+        $this->assertEquals(isset($content['data']['id']), false);
+        $this->assertEquals(isset($content['data']['uuid']), true);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['description'], $data['description']);
         $query = "SELECT * from ox_app_entity where uuid = '".$content['data']['uuid']."'";

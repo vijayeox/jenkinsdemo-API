@@ -47,11 +47,10 @@ class EntityController extends AbstractApiController
             $this->entityService->saveEntity($appUuid, $data);
             unset($data['id']);
             return $this->getSuccessResponseWithData($data, 201);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
-        
     }
 
     /**
@@ -69,7 +68,7 @@ class EntityController extends AbstractApiController
             $appUuid = $this->params()->fromRoute()['appId'];
             $result = $this->entityService->getEntitys($appUuid);
             return $this->getSuccessResponseWithData($result);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -95,7 +94,7 @@ class EntityController extends AbstractApiController
         try {
             $this->entityService->saveEntity($appUuid, $data, false);
             return $this->getSuccessResponseWithData($data, 200);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -115,7 +114,7 @@ class EntityController extends AbstractApiController
         $this->log->info(__CLASS__ . "-> \n Delete Entity - " . print_r($id, true) . "AppUUID - " . $appUuid);
         try {
             $response = $this->entityService->deleteEntity($appUuid, $id);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -134,9 +133,9 @@ class EntityController extends AbstractApiController
     public function get($entityId)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        try{
+        try {
             $result = $this->entityService->getEntity($entityId, $appUuid);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -196,9 +195,9 @@ class EntityController extends AbstractApiController
     {
         $appUuid = $this->params()->fromRoute()['appId'];
         $entityId = $this->params()->fromRoute()['entityId'];
-        try{
+        try {
             $result = $this->entityService->getEntityPage($entityId, $appUuid);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

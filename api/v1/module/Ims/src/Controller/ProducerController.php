@@ -12,5 +12,4 @@ class ProducerController extends AbstractController
     {
         parent::__construct($imsService, 'ProducerFunctions');
     }
-
 }

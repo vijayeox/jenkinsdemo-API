@@ -68,7 +68,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

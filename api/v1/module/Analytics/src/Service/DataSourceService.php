@@ -16,7 +16,6 @@ use function GuzzleHttp\json_decode;
 
 class DataSourceService extends AbstractService
 {
-
     private $table;
     private $analyticEngines;
 
@@ -36,8 +35,7 @@ class DataSourceService extends AbstractService
             $this->beginTransaction();
             $dataSource->save();
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -53,28 +51,26 @@ class DataSourceService extends AbstractService
             $this->beginTransaction();
             $dataSource->save();
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
         return $dataSource->getGenerated();
     }
 
-    public function deleteDataSource($uuid,$version)
+    public function deleteDataSource($uuid, $version)
     {
         $dataSource = new DataSource($this->table);
         $dataSource->loadByUuid($uuid);
         $dataSource->assign([
-            'version' => $version, 
+            'version' => $version,
             'isdeleted' => 1
         ]);
         try {
             $this->beginTransaction();
             $dataSource->save();
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -98,10 +94,9 @@ class DataSourceService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
-        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+        if (isset($params['show_deleted']) && $params['show_deleted']==true) {
             $where .= empty($where) ? "WHERE account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID) : " AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID);
-        }
-        else{
+        } else {
             $where .= empty($where) ? "WHERE isdeleted <> 1 AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID) : " AND isdeleted <> 1 AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
         $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
@@ -111,16 +106,15 @@ class DataSourceService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
-        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+        if (isset($params['show_deleted']) && $params['show_deleted']==true) {
             $query ="SELECT name,type,configuration,version,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,account_id,isdeleted,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
-        }
-        else{
+        } else {
             $query ="SELECT name,type,configuration,version,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,account_id,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
         foreach ($result as $key => $value) {
-            if(isset($result[$key]['configuration']) && (!empty($result[$key]['configuration']))){
+            if (isset($result[$key]['configuration']) && (!empty($result[$key]['configuration']))) {
                 $result[$key]['configuration'] = json_decode($result[$key]['configuration']);
                 unset($result[$key]['id']);
             }
@@ -129,24 +123,26 @@ class DataSourceService extends AbstractService
                  'total' => $count);
     }
 
-    public function getDataStructureDetails($uuid,$params) {
+    public function getDataStructureDetails($uuid, $params)
+    {
         $analyticObject = $this->getAnalyticsEngine($uuid);
         try {
-                $type =(isset($params['type'])) ? $params['type']:'dataentity'; 
-                if ($type=="fields") {
-                     $data=$analyticObject->getFields($params['index']);    
-                } elseif ($type=="values") {
-                    $data=$analyticObject->getValues($params['index'],$params['field']);    
-                } else{
-                    $data=$analyticObject->getDataEntities();    
-                }
-        } catch(Exception $e){
-            throw new Exception("This Operation is not supported for the DataSource",1);
+            $type =(isset($params['type'])) ? $params['type']:'dataentity';
+            if ($type=="fields") {
+                $data=$analyticObject->getFields($params['index']);
+            } elseif ($type=="values") {
+                $data=$analyticObject->getValues($params['index'], $params['field']);
+            } else {
+                $data=$analyticObject->getDataEntities();
+            }
+        } catch (Exception $e) {
+            throw new Exception("This Operation is not supported for the DataSource", 1);
         }
         return $data;
     }
 
-    public function getAnalyticsEngine($uuid) {
+    public function getAnalyticsEngine($uuid)
+    {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_datasource')
@@ -157,10 +153,10 @@ class DataSourceService extends AbstractService
             throw new Exception("Error Processing Request", 1);
         }
         $type = $response[0]['type'];
-        $dsConfig = json_decode($response[0]['configuration'],1);
+        $dsConfig = json_decode($response[0]['configuration'], 1);
         $type = strtoupper($type);
-        try{
-            switch($type) {
+        try {
+            switch ($type) {
                 case 'ELASTIC':
                 case 'ELASTICSEARCH':
                     $elasticConfig['elasticsearch'] = $dsConfig['data'];
@@ -190,8 +186,7 @@ class DataSourceService extends AbstractService
                     $analyticsObject->setConfig($dsConfig);
                     break;
             }
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
         return $analyticsObject;

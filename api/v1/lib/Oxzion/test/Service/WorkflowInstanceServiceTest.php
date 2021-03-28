@@ -49,7 +49,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/File.yml");
-        switch($this->getName()){
+        switch ($this->getName()) {
             case "testStartWorkflowSetupIdentityField":
             case "testStartWorkflowSetupIdentityFieldAsPolicyHolder":
                 $dataset->addYamlFile(dirname(__FILE__) . "/Dataset/businessRole.yml");
@@ -60,14 +60,15 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $oxRole = "";
         $keys= array();
         $tempSet = array();
-        foreach($dataset as $k => $value){
-            if(in_array($k,$keys)){
-                print_r($k);exit;
+        foreach ($dataset as $k => $value) {
+            if (in_array($k, $keys)) {
+                print_r($k);
+                exit;
             } else {
                 $keys[] = $k;
             }
         }
-        foreach($dataset as $k => $value){
+        foreach ($dataset as $k => $value) {
             $columns = $value->getTableMetaData()->getColumns();
             $tblName = $value->getTableMetaData()->getTableName();
             $rowCount = $value->getRowCount();
@@ -79,15 +80,16 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             }
             $customDataSet[$tblName] = $tableValues;
         }
-        $finalDataSet = ArrayUtils::moveKeyBefore($customDataSet,'ox_role','ox_business_role');
+        $finalDataSet = ArrayUtils::moveKeyBefore($customDataSet, 'ox_role', 'ox_business_role');
         return new ArrayDataSet($finalDataSet);
     }
 
-	private function performAsserts($params){
+    private function performAsserts($params)
+    {
         $accountId = 1;
-        if(isset($params['accountId'])){
+        if (isset($params['accountId'])) {
             $sqlQuery = "SELECT id from ox_account where uuid = '".$params['accountId']."'";
-            $queryResult = $this->runQuery($sqlQuery);    
+            $queryResult = $this->runQuery($sqlQuery);
             $accountId = $queryResult[0]['id'];
         }
         $sqlQuery = "SELECT * FROM ox_workflow_instance where process_instance_id = '".$this->processId."'";
@@ -99,7 +101,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->assertEquals($accountId, $queryResult[0]['account_id']);
         $this->assertEquals(99, $queryResult[0]['app_id']);
         $this->assertEquals('In Progress', $queryResult[0]['status']);
-        switch($this->getName()){
+        switch ($this->getName()) {
             case "testStartWorkflowWithCreatedBy":
                 $this->assertEquals(51, $queryResult[0]['created_by']);
                 break;
@@ -107,7 +109,7 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
                 $this->assertEquals(AuthContext::get(AuthConstants::USER_ID), $queryResult[0]['created_by']);
                 break;
         }
-        $startData = json_decode($fileResult[0]['data'],true);
+        $startData = json_decode($fileResult[0]['data'], true);
         if (isset($startData['entity_id'])) {
             $this->assertEquals(1, $startData['entity_id']);
             unset($startData['entity_id']);
@@ -123,10 +125,10 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         }
         $fileResult[0]['data'] = json_encode($startData);
         // $this->assertEquals($fileResult[0]['data'], $queryResult[0]['start_data']);
-        $this->assertEquals(1, $queryResult[0]['entity_id']);        
+        $this->assertEquals(1, $queryResult[0]['entity_id']);
         $data = json_decode($fileResult[0]['data'], true);
         foreach ($params as $key => $value) {
-            switch($key){
+            switch ($key) {
                 case 'workflowId':
                 case 'app_id':
                 case 'entity_id':
@@ -143,7 +145,8 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         }
     }
 
-    private function setupMockProcessEngine(){
+    private function setupMockProcessEngine()
+    {
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
@@ -152,7 +155,8 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         }
     }
 
-    private function runQuery($query) {
+    private function runQuery($query)
+    {
         $statement = $this->adapter->query($query);
         $result = $statement->execute();
         $resultSet = new ResultSet();
@@ -160,7 +164,8 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         return $result;
     }
 
-    public function testStartWorkflowSetupIdentityField() {
+    public function testStartWorkflowSetupIdentityField()
+    {
         $params = array('app_id' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4' ,'identifier_field' =>'id_field','id_field' => '2020', 'email' => 'brian@gmail.com', 'address1' => 'addr1', 'type' => 'INDIVIDUAL', "businessRole" => "Policy Holder",
           'address2' => "", 'city' => 'city', 'state' => 'state', 'country' => 'country', 'zip' => 2323 , 'firstname' => 'brian', 'lastname' => 'test');
         $processId = '8ddf83c0-4971-4bac-9bf7-49264db1172e';
@@ -171,10 +176,10 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->performAsserts($params);
 
         $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.account_id FROM ox_user u inner join ox_person up on up.id = u.person_id order by u.id DESC LIMIT 1';
-        $newQueryResult = $this->runQuery($sqlQuery);                
-        $this->assertEquals('brian',$newQueryResult[0]['firstname']);
-        $this->assertEquals('test',$newQueryResult[0]['lastname']);
-        $this->assertEquals('brian@gmail.com',$newQueryResult[0]['email']);
+        $newQueryResult = $this->runQuery($sqlQuery);
+        $this->assertEquals('brian', $newQueryResult[0]['firstname']);
+        $this->assertEquals('test', $newQueryResult[0]['lastname']);
+        $this->assertEquals('brian@gmail.com', $newQueryResult[0]['email']);
 
         $accountId = $newQueryResult[0]['account_id'];
         $sqlQuery = 'SELECT * FROM ox_account where id = '.$accountId;
@@ -218,48 +223,49 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->assertEquals(date('Y-m-d'), date_create($result[0]['date_created'])->format('Y-m-d'));
     }
 
-    public function testStartWorkflowWithWrongAppId() {
+    public function testStartWorkflowWithWrongAppId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'app_id' => '8ab30b2d-d1da-427a-8e40-bc954b2b0f87');
         $this->setupMockProcessEngine();
         try {
             $result = $this->workflowInstanceService->startWorkflow($params);
+        } catch (EntityNotFoundException $e) {
+            $this->assertEquals('No workflow found for workflow '.$params['workflowId'], $e->getMessage());
         }
-        catch(EntityNotFoundException $e) {
-            $this->assertEquals('No workflow found for workflow '.$params['workflowId'],$e->getMessage());
-        }
-        $this->assertEquals($result,1);
+        $this->assertEquals($result, 1);
     }
 
-    public function testStartWorkflowWithCorrectAppId() {
+    public function testStartWorkflowWithCorrectAppId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'app_id' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4');
         $processId = '8ddf83c0-4971-4bac-9bf7-49264db1172e';
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
-
     }
 
-    public function testStartWorkflowWithoutWorkflowId() {
+    public function testStartWorkflowWithoutWorkflowId()
+    {
         $params = array('field1' => 1, 'field2' => 2);
-        try{
+        try {
             $result = $this->workflowInstanceService->startWorkflow($params);
-        }
-        catch(EntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             $this->assertEquals('No workflow or workflow instance id provided', $e->getMessage());
         }
     }
 
-    public function testStartWorkflowWithInvalidWorkflowId() {
+    public function testStartWorkflowWithInvalidWorkflowId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => 'b3d97877-9e1f-484a-907d-fb798179e43a');
-        try{
+        try {
             $result = $this->workflowInstanceService->startWorkflow($params);
-        }
-        catch(EntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             $this->assertEquals('No workflow found for workflow '.$params['workflowId'], $e->getMessage());
         }
     }
 
-    public function testStartWorkflowWithWorkflowId() {
+    public function testStartWorkflowWithWorkflowId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         $processId = '8ddf83c0-4971-4bac-9bf7-49264db1172e';
         $this->setupMockProcessEngine();
@@ -267,15 +273,16 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowWithAccountId(){
+    public function testStartWorkflowWithAccountId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'accountId' => 'b0971de7-0387-48ea-8f29-5d3704d96a46');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
-
     }
 
-    public function testStartWorkflowWithoutAccountId(){
+    public function testStartWorkflowWithoutAccountId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         $processId = '8ddf83c0-4971-4bac-9bf7-49264db1172e';
         if (enableCamunda == 0) {
@@ -286,73 +293,81 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
         }
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
-
     }
 
-    public function testStartWorkflowWithCreatedBy(){
+    public function testStartWorkflowWithCreatedBy()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'created_by' => 'd9890624-8f42-4201-bbf9-675ec5dc8400');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowWithoutCreatedBy(){
+    public function testStartWorkflowWithoutCreatedBy()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowWithEntityId(){
+    public function testStartWorkflowWithEntityId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'entity_id' => 2);
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowWithoutEntityId(){
+    public function testStartWorkflowWithoutEntityId()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowCleanData() {
+    public function testStartWorkflowCleanData()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'uuid' => '31447b1d-c49a-4545-9b26-8d6873a0c5b9');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowWithParentWorkflowInstance() {
+    public function testStartWorkflowWithParentWorkflowInstance()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'parentWorkflowInstanceId' => 'd321b276-9e1c-4bdf-8238-7340f9599383');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
     }
 
-    public function testStartWorkflowUpdateWorkflowInstanceScenario(){
+    public function testStartWorkflowUpdateWorkflowInstanceScenario()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         $this->setupMockProcessEngine();
         $result = $this->workflowInstanceService->startWorkflow($params);
         $this->performAsserts($params);
     }
 
-    public function testStartWorkFlowWithTimeoutError() {
+    public function testStartWorkFlowWithTimeoutError()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'workflowId' => '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4');
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
             $req = new Request('GET', '/');
             $prev = new \Exception();
-            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error',$req,$prev,['foo' => 'bar']));
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error', $req, $prev, ['foo' => 'bar']));
             $workflowService->setProcessEngine($mockProcessEngine);
         }
         $this->expectException(ConnectException::class);
         $result = $this->workflowInstanceService->startWorkflow($params);
     }
 
-    public function testStartWorkFlowWithTimeoutWithNoParentWorkflow() {
+    public function testStartWorkFlowWithTimeoutWithNoParentWorkflow()
+    {
         // CHECK TIMEOUT ON NEW WORKFLOW WITH NO PARENT
         $this->getTransactionManager()->setForceRollback(true); //Ensures rollback is not used
         $query = "SELECT 'ox_file' AS table_name, COUNT(*) as count FROM ox_file where ox_file.is_active=1
@@ -365,18 +380,19 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
             $req = new Request('GET', '/');
             $prev = new \Exception();
-            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error',$req,$prev,['foo' => 'bar']));
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error', $req, $prev, ['foo' => 'bar']));
             $workflowService->setProcessEngine($mockProcessEngine);
         }
-        try{
+        try {
             $result = $this->workflowInstanceService->startWorkflow($params);
-        } catch(ConnectException $e) {
+        } catch (ConnectException $e) {
             $queryResultAfterExecution = $this->runQuery($query);
             $this->assertEquals([], array_diff_key($queryResult, $queryResultAfterExecution));
         }
     }
 
-    public function testStartWorkFlowWithTimeoutUsingParentWorkflow() {
+    public function testStartWorkFlowWithTimeoutUsingParentWorkflow()
+    {
         // CHECK TIMEOUT ON NEW WORKFLOW WITH NO PARENT
         $this->getTransactionManager()->setForceRollback(true);
         $query = "SELECT 'ox_file' AS table_name, COUNT(*) as count FROM ox_file where ox_file.is_active=1
@@ -391,22 +407,23 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
             $req = new Request('GET', '/');
             $prev = new \Exception();
-            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error',$req,$prev,['foo' => 'bar']));
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andThrow(new ConnectException('error', $req, $prev, ['foo' => 'bar']));
             $workflowService->setProcessEngine($mockProcessEngine);
         }
-        try{
+        try {
             $result = $this->workflowInstanceService->startWorkflow($params);
-        } catch(ConnectException $e) {
+        } catch (ConnectException $e) {
             $queryResultAfterExecution = $this->runQuery($query);
             $this->assertEquals([], array_diff_key($queryResult, $queryResultAfterExecution));
             $fileDataQuery = "Select data from ox_file where last_workflow_instance_id = 1";
             $fileDataQueryResult = $this->runQuery($fileDataQuery);
-            $this->assertEquals('COMPLETION',$fileDataQueryResult[0]['data']);
+            $this->assertEquals('COMPLETION', $fileDataQueryResult[0]['data']);
         }
     }
 
 
-    public function testSubmitActivityWithTimeoutError() {
+    public function testSubmitActivityWithTimeoutError()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'fileId' => 'f13d0c68-98c9-11e9-adc5-308d99c91478' ,'activityInstanceId' => '346622fd-0124-11ea-a8a0-22e8105c0766','workflowInstanceId' => '3f20b5c5-0124-11ea-a8a0-22e8105c0778');
         if (enableCamunda == 0) {
             $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
@@ -416,14 +433,15 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $mockActivityEngine->expects('completeActivity')->withAnyArgs()->once()->andThrow($prev);
             $workflowService->setActivityEngine($mockActivityEngine);
         }
-        try{
+        try {
             $result = $this->workflowInstanceService->submitActivity($params);
-        } catch(Exception $e) {
-            $this->assertEquals('Unable to execute workflow'.$params['workflowInstanceId'],$e->getMessage());   
+        } catch (Exception $e) {
+            $this->assertEquals('Unable to execute workflow'.$params['workflowInstanceId'], $e->getMessage());
         }
     }
 
-    public function testSubmitActivityTimeoutError() {
+    public function testSubmitActivityTimeoutError()
+    {
         $params = array('field1' => 1, 'field2' => 2, 'fileId' => 'f13d0c68-98c9-11e9-adc5-308d99c91478' ,'activityInstanceId' => '346622fd-0124-11ea-a8a0-22e8105c0766');
         if (enableCamunda == 0) {
             $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
@@ -432,13 +450,12 @@ class WorkflowInstanceServiceTest extends AbstractServiceTest
             $mockActivityEngine->expects('completeActivity')->withAnyArgs()->once()->andThrow(new Exception($prev));
             $workflowService->setActivityEngine($mockActivityEngine);
         }
-        try{
+        try {
             $result = $this->workflowInstanceService->submitActivity($params);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $fileDataQuery = "Select status from ox_activity_instance where activity_instance_id = '".$params['activityInstanceId']."'";
             $fileDataQueryResult = $this->runQuery($fileDataQuery);
-            $this->assertEquals('In Progress',$fileDataQueryResult[0]['status']);   
+            $this->assertEquals('In Progress', $fileDataQueryResult[0]['status']);
         }
     }
-
 }

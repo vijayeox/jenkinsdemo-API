@@ -9,32 +9,38 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Exception;
 use AppTest\AppTestSetUpTearDownHelper;
 
-class AppArtifactControllerTest extends ControllerTest {
-    private $setUpTearDownHelper = NULL;
-    private $config = NULL;
+class AppArtifactControllerTest extends ControllerTest
+{
+    private $setUpTearDownHelper = null;
+    private $config = null;
 
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->loadConfig();
         $this->config = $this->getApplicationConfig();
         $this->setUpTearDownHelper = new AppTestSetUpTearDownHelper($this->config);
     }
 
-    public function setUp(): void {
+    public function setUp(): void
+    {
         parent::setUp();
         $this->setUpTearDownHelper->cleanAll();
     }
 
-    public function tearDown(): void {
+    public function tearDown(): void
+    {
         parent::tearDown();
         $this->setUpTearDownHelper->cleanAll();
     }
 
-    public function getDataSet() {
+    public function getDataSet()
+    {
         return new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
     }
 
-    protected function runDefaultAsserts() {
+    protected function runDefaultAsserts()
+    {
         $this->assertModuleName('App');
         $this->assertControllerClass('AppArtifactController');
         $this->assertControllerName('App\Controller\AppArtifactController');
@@ -43,12 +49,14 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertTrue(preg_match($contentTypeRegex, $contentTypeHeader) ? true : false);
     }
 
-    private function setupAppSourceDir($ymlData) {
+    private function setupAppSourceDir($ymlData)
+    {
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         return $appService->setupOrUpdateApplicationDirectoryStructure($ymlData);
     }
 
-    private function createTemporaryFile($sourceFilePath) {
+    private function createTemporaryFile($sourceFilePath)
+    {
         $tempDir = sys_get_temp_dir();
         $tempFilePath = tempnam($tempDir, '');
         if (!copy($sourceFilePath, $tempFilePath)) {
@@ -57,15 +65,16 @@ class AppArtifactControllerTest extends ControllerTest {
         return $tempFilePath;
     }
 
-    public function testArtifactAddForm() {
+    public function testArtifactAddForm()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data and application source directory.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -73,7 +82,7 @@ class AppArtifactControllerTest extends ControllerTest {
         $fileName = 'AddFormTest.json';
         if (PHP_OS == 'Linux') {
             $fileSize = 74665;
-        }else{
+        } else {
             $fileSize = 76653;
         }
         $filePath = __DIR__ . '/../../Dataset/' . $fileName;
@@ -98,7 +107,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertTrue(filesize($artifactFile) == 74665 || filesize($artifactFile) == 76653);
     }
 
-    public function testArtifactAddFormWrongUuid() {
+    public function testArtifactAddFormWrongUuid()
+    {
         $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/add/form", 'POST');
@@ -110,15 +120,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($uuid, $content['data']['uuid']);
     }
 
-    public function testArtifactAddFormWithoutAppSourceDir() {
+    public function testArtifactAddFormWithoutAppSourceDir()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -126,8 +137,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data['app']);
         try {
             FileUtils::rmDir($appSourceDir);
+        } catch (Exception $ignored) {
         }
-        catch(Exception $ignored) {}
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/add/form", 'POST');
         $this->runDefaultAsserts();
@@ -138,54 +149,55 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appSourceDir, $content['data']['directory']);
     }
 
-   /* COMMENTING THIS FOR NOW AS THE ADD FORM LOGIC ALLOWS DUPLICATES
-    public function testArtifactAddFormWithDuplicateFileName() {
-        $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
-        //Setup data and application source directory.
-        $data = [
-            'app' => [
-                'name' => 'Test Application',
-                'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
-                'logo' => 'app.png'
-            ]
-        ];
-        $this->setupAppSourceDir($data);
-        $fileName = 'AddFormTest.json';
-        $fileSize = 74665;
-        $filePath = __DIR__ . '/../../Dataset/' . $fileName;
-        $_FILES = [
-            'artifactFile' => [
-                'name' => $fileName,
-                'type' => 'application/json',
-                'tmp_name' => $this->createTemporaryFile($filePath),
-                'error' => UPLOAD_ERR_OK,
-                'size' => $fileSize
-            ]
-        ];
-        //Ensure file already exists in the destination directory.
-        $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data['app']);
-        $artifactFile = $appSourceDir . '/content/forms/' . $fileName;
-        if (!copy($filePath, $artifactFile)) {
-            throw new Exception("Failed to copy file ${filePath} to ${artifactFile}.");
-        }
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch("/app/${uuid}/artifact/add/form", 'POST');
-        $this->runDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals('error', $content['status']);
-    } */
+    /* COMMENTING THIS FOR NOW AS THE ADD FORM LOGIC ALLOWS DUPLICATES
+     public function testArtifactAddFormWithDuplicateFileName() {
+         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+         //Setup data and application source directory.
+         $data = [
+             'app' => [
+                 'name' => 'Test Application',
+                 'uuid' => $uuid,
+                 'type' => 2,
+                 'category' => 'TestCategory',
+                 'logo' => 'app.png'
+             ]
+         ];
+         $this->setupAppSourceDir($data);
+         $fileName = 'AddFormTest.json';
+         $fileSize = 74665;
+         $filePath = __DIR__ . '/../../Dataset/' . $fileName;
+         $_FILES = [
+             'artifactFile' => [
+                 'name' => $fileName,
+                 'type' => 'application/json',
+                 'tmp_name' => $this->createTemporaryFile($filePath),
+                 'error' => UPLOAD_ERR_OK,
+                 'size' => $fileSize
+             ]
+         ];
+         //Ensure file already exists in the destination directory.
+         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data['app']);
+         $artifactFile = $appSourceDir . '/content/forms/' . $fileName;
+         if (!copy($filePath, $artifactFile)) {
+             throw new Exception("Failed to copy file ${filePath} to ${artifactFile}.");
+         }
+         $this->initAuthToken($this->adminUser);
+         $this->dispatch("/app/${uuid}/artifact/add/form", 'POST');
+         $this->runDefaultAsserts();
+         $content = json_decode($this->getResponse()->getContent(), true);
+         $this->assertEquals('error', $content['status']);
+     } */
 
-    public function testArtifactAddWorkflow() {
+    public function testArtifactAddWorkflow()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data and application source directory.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -193,7 +205,7 @@ class AppArtifactControllerTest extends ControllerTest {
         $fileName = 'AddWorkflowTest.bpmn';
         if (PHP_OS == 'Linux') {
             $fileSize = 546495;
-        }else{
+        } else {
             $fileSize = 546674;
         }
         $filePath = __DIR__ . '/../../Dataset/' . $fileName;
@@ -218,7 +230,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertTrue(filesize($artifactFile) == 546493 || filesize($artifactFile) == 546674 || filesize($artifactFile) <= 546672);
     }
 
-    public function testArtifactAddWorkflowWrongUuid() {
+    public function testArtifactAddWorkflowWrongUuid()
+    {
         $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/add/workflow", 'POST');
@@ -230,15 +243,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($uuid, $content['data']['uuid']);
     }
 
-    public function testArtifactAddWorkflowWithoutAppSourceDir() {
+    public function testArtifactAddWorkflowWithoutAppSourceDir()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -246,8 +260,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data['app']);
         try {
             FileUtils::rmDir($appSourceDir);
+        } catch (Exception $ignored) {
         }
-        catch(Exception $ignored) {}
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/add/workflow", 'POST');
         $this->runDefaultAsserts();
@@ -265,8 +279,8 @@ class AppArtifactControllerTest extends ControllerTest {
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -295,15 +309,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals('error', $content['status']);
     } */
 
-    public function testArtifactDeleteForm() {
+    public function testArtifactDeleteForm()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data and application source directory.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -325,7 +340,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertFalse(file_exists($targetPath));
     }
 
-    public function testArtifactDeleteFormWrongUuid() {
+    public function testArtifactDeleteFormWrongUuid()
+    {
         $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/delete/form/AnyFileName.json", 'DELETE');
@@ -337,15 +353,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($uuid, $content['data']['uuid']);
     }
 
-    public function testArtifactDeleteFormWithoutAppSourceDir() {
+    public function testArtifactDeleteFormWithoutAppSourceDir()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -353,8 +370,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data['app']);
         try {
             FileUtils::rmDir($appSourceDir);
+        } catch (Exception $ignored) {
         }
-        catch(Exception $ignored) {}
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/delete/form/AnyFileName.json", 'DELETE');
         $this->runDefaultAsserts();
@@ -365,15 +382,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appSourceDir, $content['data']['directory']);
     }
 
-    public function testArtifactDeleteFormFileNotFound() {
+    public function testArtifactDeleteFormFileNotFound()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data and application source directory.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -395,15 +413,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($artifactFile, $content['data']['file']);
     }
 
-    public function testArtifactDeleteWorkflow() {
+    public function testArtifactDeleteWorkflow()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data and application source directory.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -425,7 +444,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertFalse(file_exists($targetPath));
     }
 
-    public function testArtifactDeleteWorkflowWrongUuid() {
+    public function testArtifactDeleteWorkflowWrongUuid()
+    {
         $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/delete/workflow/AnyFileName.bpmn", 'DELETE');
@@ -437,15 +457,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($uuid, $content['data']['uuid']);
     }
 
-    public function testArtifactDeleteWorkflowWithoutAppSourceDir() {
+    public function testArtifactDeleteWorkflowWithoutAppSourceDir()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -453,8 +474,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $data['app']);
         try {
             FileUtils::rmDir($appSourceDir);
+        } catch (Exception $ignored) {
         }
-        catch(Exception $ignored) {}
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/artifact/delete/workflow/AnyFileName.bpmn", 'DELETE');
         $this->runDefaultAsserts();
@@ -465,15 +486,16 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appSourceDir, $content['data']['directory']);
     }
 
-    public function testArtifactDeleteWorkflowFileNotFound() {
+    public function testArtifactDeleteWorkflowFileNotFound()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data and application source directory.
         $data = [
             'app' => [
                 'name' => 'Test Application',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'TestCategory', 
+                'type' => 2,
+                'category' => 'TestCategory',
                 'logo' => 'app.png'
             ]
         ];
@@ -495,7 +517,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($artifactFile, $content['data']['file']);
     }
 
-    public function testUploadArchive() {
+    public function testUploadArchive()
+    {
         $uuid = 'cdccd58f-b8af-4b41-a64b-c02dae6f77d6';
 
         //Ensure application does not exist in database.
@@ -529,7 +552,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals('Test Application', $newRecord['name']);
     }
 
-    public function testUploadArchiveWithoutApplicationDescriptor() {
+    public function testUploadArchiveWithoutApplicationDescriptor()
+    {
         //Take applicatio snapshot before running the test.
         $query = "SELECT id, uuid FROM ox_app ORDER BY id";
         $appRecordSetBeforeTest = $this->executeQueryTest($query);
@@ -559,7 +583,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appRecordSetBeforeTest, $appRecordSetBeforeTest);
     }
 
-    public function testUploadArchiveWithInvalidApplicationDescriptor() {
+    public function testUploadArchiveWithInvalidApplicationDescriptor()
+    {
         //Take applicatio snapshot before running the test.
         $query = "SELECT id, uuid FROM ox_app ORDER BY id";
         $appRecordSetBeforeTest = $this->executeQueryTest($query);
@@ -589,7 +614,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appRecordSetBeforeTest, $appRecordSetBeforeTest);
     }
 
-    public function testUploadArchiveWithInvalidArchive() {
+    public function testUploadArchiveWithInvalidArchive()
+    {
         //Take applicatio snapshot before running the test.
         $query = "SELECT id, uuid FROM ox_app ORDER BY id";
         $appRecordSetBeforeTest = $this->executeQueryTest($query);
@@ -619,7 +645,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appRecordSetBeforeTest, $appRecordSetBeforeTest);
     }
 
-    public function testUploadArchiveWithDuplicateApplicationInDatabase() {
+    public function testUploadArchiveWithDuplicateApplicationInDatabase()
+    {
         //Take application snapshot before running the test.
         $query = "SELECT id, uuid FROM ox_app ORDER BY id";
         $appRecordSetBeforeTest = $this->executeQueryTest($query);
@@ -648,7 +675,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appRecordSetBeforeTest, $appRecordSetBeforeTest);
     }
 
-    public function testUploadArchiveWithDuplicateApplicationInFileSystem() {
+    public function testUploadArchiveWithDuplicateApplicationInFileSystem()
+    {
         //Take application snapshot before running the test.
         $query = "SELECT id, uuid FROM ox_app ORDER BY id";
         $appRecordSetBeforeTest = $this->executeQueryTest($query);
@@ -685,7 +713,8 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->assertEquals($appRecordSetBeforeTest, $appRecordSetBeforeTest);
     }
 
-    public function testDownloadAppArchive() {
+    public function testDownloadAppArchive()
+    {
         $uuid = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         //Setup data and application source directory.
         //IMPORTANT - $data contains only necessary fields.
@@ -700,16 +729,21 @@ class AppArtifactControllerTest extends ControllerTest {
         $this->dispatch("/app/${uuid}/archive/download", 'GET');
         $response = $this->getResponse();
         $headers = $response->getHeaders();
-        $this->assertEquals('application/zip', 
-            $headers->get('content-type')->getFieldValue());
-        $this->assertEquals('attachment; filename=SampleApp-OxzionAppArchive.zip', 
-            $headers->get('content-disposition')->getFieldValue());
+        $this->assertEquals(
+            'application/zip',
+            $headers->get('content-type')->getFieldValue()
+        );
+        $this->assertEquals(
+            'attachment; filename=SampleApp-OxzionAppArchive.zip',
+            $headers->get('content-disposition')->getFieldValue()
+        );
         $bodyContent = $response->getBody();
         $signature = substr($bodyContent, 0, 4);
         $this->assertEquals("\x50\x4B\x03\x04", $signature); //PK zip signature.
     }
 
-    public function testDownloadAppArchiveWithWrongUuid() {
+    public function testDownloadAppArchiveWithWrongUuid()
+    {
         $uuid = '11111111-1111-1111-1111-111111111112';
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/${uuid}/archive/download", 'GET');

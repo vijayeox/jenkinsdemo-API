@@ -75,7 +75,7 @@ class ActivityInstanceService extends AbstractService
         ox_activity_instance.activity_instance_id=:activityInstanceId;";
     
         $activityParams = array("accountId" => AuthContext::get(AuthConstants::ACCOUNT_ID), "appId" => $this->getIdFromUuid('ox_app', $data['appId']), "activityInstanceId" => $data['activityInstanceId']);
-        $this->logger->info("EXECUTING GET ACTIVITY INSTANCE QUERY $activityQuery WITH ".print_r($activityParams,true));
+        $this->logger->info("EXECUTING GET ACTIVITY INSTANCE QUERY $activityQuery WITH ".print_r($activityParams, true));
         $activityInstance = $this->executeQueryWithBindParameters($activityQuery, $activityParams)->toArray();
         if (count($activityInstance) == 0) {
             throw new EntityNotFoundException("No Form found for the activity");
@@ -89,11 +89,11 @@ class ActivityInstanceService extends AbstractService
         $activityform = $activityInstance[0];
         $data = json_decode($activityform['data'], true);
         foreach ($data as $key => $value) {
-            if(is_string($value)){
-                $tempValue = json_decode($value,true);
-                if(isset($tempValue)){
+            if (is_string($value)) {
+                $tempValue = json_decode($value, true);
+                if (isset($tempValue)) {
                     $data[$key] = $tempValue;
-                }else if($value === "false"){
+                } elseif ($value === "false") {
                     $data[$key] = 0;
                 }
             }
@@ -102,7 +102,6 @@ class ActivityInstanceService extends AbstractService
         unset($activityform['uuid']);
         $activityform['data'] = json_encode($data);
         return $activityform;
-    
     }
     public function createActivityInstance(&$data)
     {
@@ -148,7 +147,7 @@ class ActivityInstanceService extends AbstractService
 
         if (isset($activityInstance) && is_array($activityInstance) && !empty($activityInstance)) {
             $taskId = str_replace($activityInstance[0]["task_id"] . ":", "", $activityInstance[0]['activity_instance_id']);
-            //print "taskId - $taskId";
+        //print "taskId - $taskId";
         } else {
             throw new EntityNotFoundException("No Activity to claim");
         }
@@ -170,7 +169,7 @@ class ActivityInstanceService extends AbstractService
                                 where id = :id;";
                 $updateParams = array("assignee" => 1, "userId" => AuthContext::get(AuthConstants::USER_ID), "id" => $activityInstanceAssignee[0]['id']);
                 $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
-                if(isset($cacheCheck) && !empty($cacheCheck[0])) {
+                if (isset($cacheCheck) && !empty($cacheCheck[0])) {
                     $id = $cacheCheck[0]['id'];
                     $updateQuery = "UPDATE ox_user_cache SET user_id = :userId WHERE id = :id";
                     $updateParams = array("id" => $id,"userId" => AuthContext::get(AuthConstants::USER_ID));
@@ -223,7 +222,7 @@ class ActivityInstanceService extends AbstractService
             $updateQuery = "UPDATE ox_file_assignee SET assignee = :assignee WHERE activity_instance_id = (SELECT id from ox_activity_instance WHERE activity_instance_id = :activityInstanceId)";
             $updateParams = array("assignee" => 0, "activityInstanceId" => $data['activityInstanceId']);
             $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
-            if(isset($cacheCheck) && !empty($cacheCheck[0])) {
+            if (isset($cacheCheck) && !empty($cacheCheck[0])) {
                 $id = $cacheCheck[0]['id'];
                 $updateQuery = "UPDATE ox_user_cache SET user_id = NULL WHERE id = :id";
                 $updateParams = array("id" => $id);
@@ -236,7 +235,8 @@ class ActivityInstanceService extends AbstractService
         }
     }
 
-    private function getUnAssignedUserCache($activityInstanceId){
+    private function getUnAssignedUserCache($activityInstanceId)
+    {
         $checkForCacheQuery = "SELECT uc.id from ox_user_cache uc
                                 inner join ox_activity_instance ai on uc.activity_instance_id = ai.id
                                 where ai.activity_instance_id=:activityInstanceId 
@@ -247,20 +247,20 @@ class ActivityInstanceService extends AbstractService
     }
 
 
-    public function reclaimActivityInstance($data){
-        try{
+    public function reclaimActivityInstance($data)
+    {
+        try {
             $this->unclaimActivityInstance($data);
             $this->claimActivityInstance($data);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
-
     }
 
 
     public function createActivityInstanceEntry(&$data, $commandService)
     {
-        $this->logger->info("CREATE ACTIVITY INSTANCE - - ".print_r($data,true));
+        $this->logger->info("CREATE ACTIVITY INSTANCE - - ".print_r($data, true));
         if (!isset($data['processInstanceId'])) {
             throw new InvalidParameterException("Workflow Instance Id not provided");
         }
@@ -305,7 +305,7 @@ class ActivityInstanceService extends AbstractService
                 foreach ($data['candidates'] as $candidate) {
                     $assignee = 0;
                     if (isset($candidate['roleid'])) {
-                        $this->logger->info("Creation of Activity Instance role".print_r($candidate['roleid'],true));
+                        $this->logger->info("Creation of Activity Instance role".print_r($candidate['roleid'], true));
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
                         }
@@ -320,7 +320,7 @@ class ActivityInstanceService extends AbstractService
                         }
                     }
                     if (isset($candidate['teamid'])) {
-                         $this->logger->info("Creation of Activity Instance team".print_r($candidate['teamid'],true));
+                        $this->logger->info("Creation of Activity Instance team".print_r($candidate['teamid'], true));
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
                         }
@@ -335,7 +335,7 @@ class ActivityInstanceService extends AbstractService
                         }
                     }
                     if (isset($candidate['userid'])) {
-                        $this->logger->info("Creation of Activity Instance user".print_r($candidate['userid'],true));
+                        $this->logger->info("Creation of Activity Instance user".print_r($candidate['userid'], true));
                         $userId = null;
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
@@ -359,11 +359,11 @@ class ActivityInstanceService extends AbstractService
                             }
                         }
                         if (isset($userId)) {
-                            $this->logger->info("Creation of Activity Instance userID".print_r($userId,true));
-                            $this->setUserAssignee($activityInstance['id'],$userId,$assignee);
+                            $this->logger->info("Creation of Activity Instance userID".print_r($userId, true));
+                            $this->setUserAssignee($activityInstance['id'], $userId, $assignee);
                         }
                     }
-                    if(isset($candidate['participant'])){
+                    if (isset($candidate['participant'])) {
                         if ($candidate['type'] == 'assignee') {
                             $assignee = 1;
                         }
@@ -372,9 +372,9 @@ class ActivityInstanceService extends AbstractService
                         $select = "SELECT user_id from ox_wf_user_identifier WHERE identifier_name = :identifierField AND identifier = :identifier";
                         $params = array("identifierField" => $identifierField,"identifier" => $identifier);
                         $resultSet = $this->executeQueryWithBindParameters($select, $params)->toArray();
-                        if(count($resultSet) > 0){
+                        if (count($resultSet) > 0) {
                             $userId = $resultSet[0]['user_id'];
-                            $this->setUserAssignee($activityInstance['id'],$userId,$assignee);
+                            $this->setUserAssignee($activityInstance['id'], $userId, $assignee);
                         }
                         unset($resultSet);
                         unset($select);
@@ -403,7 +403,8 @@ class ActivityInstanceService extends AbstractService
     }
 
 
-    private function setUserAssignee($activityInstanceId,$userId,$assignee){
+    private function setUserAssignee($activityInstanceId, $userId, $assignee)
+    {
         $insert = "INSERT INTO `ox_file_assignee` (`activity_instance_id`,`user_id`,`assignee`)
                             VALUES (:activityInstanceId,:userId,:assignee)";
         $insertParams = array("activityInstanceId" => $activityInstanceId, "userId" => $userId, "assignee" => $assignee);
@@ -478,7 +479,7 @@ class ActivityInstanceService extends AbstractService
                   WHERE ox_activity_instance.activity_instance_id=? and ox_activity_instance.account_id=? and ox_workflow_instance.process_instance_id=?";
         $queryParams = array($activityInstanceId, AuthContext::get(AuthConstants::ACCOUNT_ID), $workflowInstanceId);
         $this->logger->info("query " .$query);
-        $this->logger->info("query params" . print_r($queryParams,true));
+        $this->logger->info("query params" . print_r($queryParams, true));
         $activityInstance = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         $this->logger->info("getActivityInstance -> activityInstance - " . print_r($activityInstance, true));
 
@@ -490,18 +491,19 @@ class ActivityInstanceService extends AbstractService
     }
 
 
-    public function getActivityChangeLog($activityInstanceId,$labelMapping=null){
+    public function getActivityChangeLog($activityInstanceId, $labelMapping=null)
+    {
         $selectQuery = "SELECT oai.start_data, oai.completion_data ,owi.file_id 
                         from ox_activity_instance oai 
                         inner join ox_workflow_instance owi on oai.workflow_instance_id = owi.id 
                         where oai.activity_instance_id = :activityInstanceId ";
         $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
         $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
-        if(count($result) > 0){
-            $recordSet = $this->fileService->getWorkflowInstanceByFileId($this->getUuidFromId('ox_file',$result[0]['file_id']));
-            $startData = json_decode($result[0]['start_data'],true);
-            $completionData = json_decode($result[0]['completion_data'],true);
-            $resultData = $this->fileService->getChangeLog($recordSet[0]['entity_id'],$startData,$completionData,$labelMapping);
+        if (count($result) > 0) {
+            $recordSet = $this->fileService->getWorkflowInstanceByFileId($this->getUuidFromId('ox_file', $result[0]['file_id']));
+            $startData = json_decode($result[0]['start_data'], true);
+            $completionData = json_decode($result[0]['completion_data'], true);
+            $resultData = $this->fileService->getChangeLog($recordSet[0]['entity_id'], $startData, $completionData, $labelMapping);
             return $resultData;
         } else {
             return $result;
@@ -509,27 +511,29 @@ class ActivityInstanceService extends AbstractService
     }
 
     // USED IN DELEGATE
-    public function getFileDataByActivityInstanceId($activityInstanceId){
+    public function getFileDataByActivityInstanceId($activityInstanceId)
+    {
         $selectQuery = "SELECT of.data from ox_file of
                         INNER JOIN ox_workflow_instance owi on owi.file_id = of.id
                         INNER JOIN ox_activity_instance oai on oai.workflow_instance_id = owi.id where oai.activity_instance_id = :activityInstanceId ";
         $selectQueryParams = array('activityInstanceId' => $activityInstanceId);
         $result = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
-        if(isset($result[0])){
+        if (isset($result[0])) {
             return $result[0];
         } else {
             return;
         }
     }
 
-    public function removeActivityInstanceRecords($workflowDepId){
-        try{
+    public function removeActivityInstanceRecords($workflowDepId)
+    {
+        try {
             $this->beginTransaction();
             $update = "UPDATE ox_activity_instance SET isdeleted=:deleted WHERE workflow_instance_id IN(SELECT id from ox_workflow_instance where workflow_deployment_id=:workflowDepId)";
             $updateParams = array('deleted' => 1, 'workflowDepId' => $workflowDepId);
-            $this->executeUpdateWithBindParameters($update,$updateParams);
+            $this->executeUpdateWithBindParameters($update, $updateParams);
             $this->commit();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;

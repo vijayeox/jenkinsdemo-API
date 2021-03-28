@@ -13,13 +13,14 @@ use Ramsey\Uuid\Uuid;
 
 class UuidUtil
 {
-    Const UUID_PATTERN = '[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}';
+    const UUID_PATTERN = '[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}';
     public static function uuid()
     {
         return Uuid::uuid4()->toString();
     }
 
-    public static function isValidUuid($uuid) {
+    public static function isValidUuid($uuid)
+    {
         if (!is_string($uuid) || (preg_match('/^'.self::UUID_PATTERN.'$/', $uuid) !== 1)) {
             return false;
         }

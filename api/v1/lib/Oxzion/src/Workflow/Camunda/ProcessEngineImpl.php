@@ -51,9 +51,9 @@ class ProcessEngineImpl implements ProcessEngine
             } else {
                 return 0;
             }
-        } catch (Exception $e) { 
+        } catch (Exception $e) {
             $this->logger->info("Process impl");
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

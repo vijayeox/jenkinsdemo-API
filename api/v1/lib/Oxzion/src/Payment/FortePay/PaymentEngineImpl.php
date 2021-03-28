@@ -5,11 +5,13 @@ use Oxzion\Payment\PaymentEngine;
 use Logger;
 use Oxzion\ServiceException;
 use Exception;
+
 class PaymentEngineImpl implements PaymentEngine
 {
     protected $logger;
 
-    public function __construct($paymentConfig){
+    public function __construct($paymentConfig)
+    {
         $this->logger = Logger::getLogger(__CLASS__);
         $this->paymentConfig = $paymentConfig;
         $this->paymentConfigInfo = json_decode($this->paymentConfig['payment_config']);
@@ -26,7 +28,7 @@ class PaymentEngineImpl implements PaymentEngine
         try {
             //validate expected input
             $this->validateParameters($data);
-            //unset config 
+            //unset config
             unset($data['config']);
             $total_amount = $data['amount'];
             $method = $data['method'];
@@ -36,35 +38,36 @@ class PaymentEngineImpl implements PaymentEngine
             date_default_timezone_set("America/Chicago");
             $unixtime = strtotime(gmdate('Y-m-d H:i:s'));
             $millitime = microtime(true) * 1000;
-            $utc = number_format(($millitime * 10000) + 621355968000000000 , 0, '.', '');
+            $utc = number_format(($millitime * 10000) + 621355968000000000, 0, '.', '');
             $returnArray = array();
-            if(isset($data['customer_token']) && isset($data['paymethod_token']) && $data['method']  == 'schedule') {
+            if (isset($data['customer_token']) && isset($data['paymethod_token']) && $data['method']  == 'schedule') {
                 $signaturedata = "$this->api_access_id|$method|$version|$total_amount|$utc|$order_number|{$data['customer_token']}|{$data['paymethod_token']}";
                 $returnArray = array_merge($returnArray, array("customer_token" => $data['customer_token'],"paymethod_token" => $data['paymethod_token']));
             } else {
                 $signaturedata = "$this->api_access_id|$method|$version|$total_amount|$utc|$order_number||";
             }
-            $signature = hash_hmac($hash_method,$signaturedata,$this->api_secure_key);
-            $returnArray = array_merge($returnArray,array("api_access_id" => $this->api_access_id,"amount" => $total_amount, "version" => $version,
+            $signature = hash_hmac($hash_method, $signaturedata, $this->api_secure_key);
+            $returnArray = array_merge($returnArray, array("api_access_id" => $this->api_access_id,"amount" => $total_amount, "version" => $version,
             "method" => $method, "location_id" => $this->location_id, "utc_time" => $utc, "hash_method" => $hash_method,
             "signature" => $signature, "order_number" => $order_number, "js_url" => $this->js_url));
             $this->logger->info("Exit ");
-        } catch(Exception $e){
+        } catch (Exception $e) {
             throw new ServiceException($e->getMessage(), "could.not.register.to.forte");
-        } 
+        }
         return $returnArray;
     }
-    public function handleTransaction(&$data){
+    public function handleTransaction(&$data)
+    {
         $this->logger->info("Entered ");
         $return = array();
-        if(!isset($data['event'])) {
+        if (!isset($data['event'])) {
             $this->logger->info("Exit, event field is missing");
             throw new ServiceException("event field is required", "event.required");
         }
         $return['transaction_status'] = $data['event'];
         $return['data'] = json_encode($data);
-        if($data['event'] == "success" || $data['event'] == "failure"){
-            $return['transaction_id'] = $data['trace_number']; 
+        if ($data['event'] == "success" || $data['event'] == "failure") {
+            $return['transaction_id'] = $data['trace_number'];
         } else {
             $return['data'] = json_encode($data);
         }
@@ -72,9 +75,10 @@ class PaymentEngineImpl implements PaymentEngine
         return $return;
     }
     
-    private function validateParameters($data) {
+    private function validateParameters($data)
+    {
         $this->logger->info("Entered ");
-        if(!(isset($data['amount'], $data['method'] ,$data['order_number']))) {
+        if (!(isset($data['amount'], $data['method'] ,$data['order_number']))) {
             $messsage = "";
             $messsage .= isset($data['amount']) ? '':'amount, ';
             $messsage .= isset($data['method']) ? '' : 'method, ';

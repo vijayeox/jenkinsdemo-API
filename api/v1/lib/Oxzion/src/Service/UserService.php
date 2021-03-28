@@ -46,14 +46,14 @@ class UserService extends AbstractService
     private $addressService;
     private $personService;
     private $empService;
-    static $userField = array('uuid' => 'ou.uuid', 'username' => 'ou.username', 'firstname' => 'usrp.firstname', 'lastname' => 'usrp.lastname', 'name' => 'ou.name', 'email' => 'usrp.email', 'account_id' => 'ou.account_id', 'date_of_birth' => 'usrp.date_of_birth', 'designation' => 'oxemp.designation', 'phone' => 'usrp.phone', 'address1' => 'oa.address1', 'address2' => 'oa.address2', 'city' => 'oa.city', 'state' => 'oa.state', 'country' => 'oa.country', 'zip' => 'oa.zip', 'id' => 'ou.id', 'gender' => 'usrp.gender', 'website' => 'oxemp.website', 'about' => 'oxemp.about', 'managerid' => 'oxemp.managerid', 'timezone' => 'ou.timezone', 'date_of_join' => 'oxemp.date_of_join', 'interest' => 'oxemp.interest', 'preferences' => 'ou.preferences');
+    public static $userField = array('uuid' => 'ou.uuid', 'username' => 'ou.username', 'firstname' => 'usrp.firstname', 'lastname' => 'usrp.lastname', 'name' => 'ou.name', 'email' => 'usrp.email', 'account_id' => 'ou.account_id', 'date_of_birth' => 'usrp.date_of_birth', 'designation' => 'oxemp.designation', 'phone' => 'usrp.phone', 'address1' => 'oa.address1', 'address2' => 'oa.address2', 'city' => 'oa.city', 'state' => 'oa.state', 'country' => 'oa.country', 'zip' => 'oa.zip', 'id' => 'ou.id', 'gender' => 'usrp.gender', 'website' => 'oxemp.website', 'about' => 'oxemp.about', 'managerid' => 'oxemp.managerid', 'timezone' => 'ou.timezone', 'date_of_join' => 'oxemp.date_of_join', 'interest' => 'oxemp.interest', 'preferences' => 'ou.preferences');
 
     public function setMessageProducer($messageProducer)
     {
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService, MessageProducer $messageProducer,RoleService $roleService,PersonService $personService, EmployeeService $empService)
+    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService, MessageProducer $messageProducer, RoleService $roleService, PersonService $personService, EmployeeService $empService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -102,7 +102,7 @@ class UserService extends AbstractService
     {
         $accountClause = "";
         $params = ['userName' => $userName];
-        if($accountId){
+        if ($accountId) {
             $accountClause = " AND acct.id = :accountId";
             $params['accountId'] = $accountId;
         }
@@ -164,9 +164,9 @@ class UserService extends AbstractService
             if (isset($params['accountId']) && $params['accountId'] != '') {
                 if (!SecurityManager::isGranted('MANAGE_INSTALL_APP_WRITE') &&
                     !AuthContext::get(AuthConstants::REGISTRATION) &&
-                     (!SecurityManager::isGranted('MANAGE_USER_WRITE') && 
+                     (!SecurityManager::isGranted('MANAGE_USER_WRITE') &&
                         (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') &&
-                         $params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID)) )) {
+                         $params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID)))) {
                     throw new AccessDeniedException("You do not have permissions to create user");
                 } else {
                     $data['account_id'] = $this->getIdFromUuid('ox_account', $params['accountId']);
@@ -218,9 +218,9 @@ class UserService extends AbstractService
                 $countval = 0;
                 if ($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active') {
                     throw new ServiceException("Username/Email Exists", "duplicate.username", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
-                } else if ($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active') {
+                } elseif ($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active') {
                     throw new ServiceException("Email Exists", "duplicate.email", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
-                } else if ($result[0]['status'] == "Inactive") {
+                } elseif ($result[0]['status'] == "Inactive") {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0;
                     if ($data['reactivate'] == 0) {
                         throw new ServiceException("user already exists and is inactive. Please contact the admin to activate", "user.already.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
@@ -232,11 +232,11 @@ class UserService extends AbstractService
                 throw new InsertFailedException("Username or Email Exists in other Account", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         }
-        try{
-            $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
+        try {
+            $accountId = $this->getUuidFromId('ox_account', $data['account_id']);
             if (!isset($data['address1']) || empty($data['address1'])) {
-                $addressData = $this->addressService->getOrganizationAddress( $accountId);
-                $this->unsetAddressData($addressData,$data);
+                $addressData = $this->addressService->getOrganizationAddress($accountId);
+                $this->unsetAddressData($addressData, $data);
                 $data = array_merge($data, $addressData);
             }
             $this->beginTransaction();
@@ -247,12 +247,12 @@ class UserService extends AbstractService
             $setPasswordCode = UuidUtil::uuid();
             $data['password_reset_code'] = $setPasswordCode;
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
-            if(isset($data['date_of_birth'])){
+            if (isset($data['date_of_birth'])) {
                 $data['date_of_birth'] = date_format(date_create($data['date_of_birth']), "Y-m-d");
             }
             $this->empService->addEmployeeRecord($data);
             if (isset($data['preferences'])) {
-                if(is_string($data['preferences'])){
+                if (is_string($data['preferences'])) {
                     $preferences = json_decode($data['preferences'], true);
                 } else {
                     $preferences = $data['preferences'];
@@ -271,18 +271,18 @@ class UserService extends AbstractService
             $form = new User($this->table);
             $form->assign($data);
             $form->save();
-            $accountId = $this->getUuidFromId('ox_account', $data['account_id']); 
+            $accountId = $this->getUuidFromId('ox_account', $data['account_id']);
             $accountUserId = $this->addUserToAccount($form->id, $form->account_id);
             if (isset($data['role']) && is_array($data['role'])) {
                 $skipRoleByUuid = 1;
                 foreach ($data['role'] as $roleItem) {
-                    if(is_string($roleItem)){
+                    if (is_string($roleItem)) {
                         $roleQuery = "select ox_role.id,ox_role.name,oa.id as appId from ox_role left join ox_app as oa on ox_role.app_id=oa.id where ox_role.account_id=:accountId and ox_role.name =:roleName";
-                        $this->logger->info("Executing Query $roleQuery with params--".print_r(array('accountId'=>$data['account_id'],'roleName'=>$roleItem),true));
-                        $role = $this->executeQueryWithBindParameters($roleQuery,array('accountId'=>$data['account_id'],'roleName'=>$roleItem))->toArray();
-                        if(!empty($role) && $role[0]){
-                            if(isset($role[0]['appId']) && $role[0]['appId'] != null){
-                                $this->addUserRole($accountUserId, $roleItem,$role[0]['appId']);
+                        $this->logger->info("Executing Query $roleQuery with params--".print_r(array('accountId'=>$data['account_id'],'roleName'=>$roleItem), true));
+                        $role = $this->executeQueryWithBindParameters($roleQuery, array('accountId'=>$data['account_id'],'roleName'=>$roleItem))->toArray();
+                        if (!empty($role) && $role[0]) {
+                            if (isset($role[0]['appId']) && $role[0]['appId'] != null) {
+                                $this->addUserRole($accountUserId, $roleItem, $role[0]['appId']);
                             } else {
                                 $this->addUserRole($accountUserId, $roleItem);
                             }
@@ -290,13 +290,13 @@ class UserService extends AbstractService
                         $skipRoleByUuid = 0;
                     }
                 }
-                if($skipRoleByUuid){
+                if ($skipRoleByUuid) {
                     $this->addRoleToUser($accountUserId, $data['role'], $form->account_id);
                 }
             }
             
             $this->commit();
-            $newUserMailParams = array_merge($data,array(
+            $newUserMailParams = array_merge($data, array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
@@ -314,7 +314,8 @@ class UserService extends AbstractService
         }
     }
 
-    private function reactivateUserAccount($userId, $data){
+    private function reactivateUserAccount($userId, $data)
+    {
         $data['status'] = 'Active';
         $params = ['userId' => $userId,
                     'accountId' => $data['account_id']];
@@ -323,11 +324,11 @@ class UserService extends AbstractService
                     where user_id = :userId
                     and account_id = :accountId";
         $accountUsers = $this->executeQueryWithBindParameters($select, $params)->toArray();
-        try{
+        try {
             $this->beginTransaction();
-            if (empty($accountUsers) ) {
+            if (empty($accountUsers)) {
                 $accountUserId = $this->addUserToAccount($userId, $data['account_id']);
-            }else{
+            } else {
                 $accountUserId = $accountUsers[0]['id'];
             }
             $accountUuid = $this->getUuidFromId('ox_account', $data['account_id']);
@@ -337,12 +338,10 @@ class UserService extends AbstractService
                 $this->addRoleToUser($accountUserId, $data['role'], $accountId);
             }
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
-            
         }
-        
     }
     private function updateUserProjects($userId, $project, $accountId)
     {
@@ -360,7 +359,7 @@ class UserService extends AbstractService
                     inner join ox_account acct on acct.id = oxp.account_id
                     LEFT OUTER JOIN ox_user_project as oxup on oxp.id = oxup.project_id 
                                                             and oxup.user_id = :userId 
-                    where oxp.uuid in ('" . implode("','", $projectSingleArray) . 
+                    where oxp.uuid in ('" . implode("','", $projectSingleArray) .
                     "') and acct.uuid = :accountId and oxup.user_id is null";
         $this->executeUpdateWithBindParameters($query, $params);
     }
@@ -423,7 +422,7 @@ class UserService extends AbstractService
             "gender" => " ",
             "password" => BosUtils::randomPassword(),
         );
-        if($account['type'] == Account::BUSINESS){
+        if ($account['type'] == Account::BUSINESS) {
             $data["designation"] = "Admin";
             $data["date_of_join"] = date('Y-m-d');
         }
@@ -438,7 +437,7 @@ class UserService extends AbstractService
             $queryParams = ['userId' => $data['uuid'], 'accountId' => $account['id']];
             $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
             $response = $this->addUserRole($resultSet[0]['id'], 'ADMIN');
-            if($response == 2){
+            if ($response == 2) {
                 //Did not find admin role so add Add all roles of account
                 $roles = $this->getDataByParams('ox_role', array('name'), array('account_id' => $account['id']))->toArray();
                 foreach ($roles as $key => $value) {
@@ -460,12 +459,13 @@ class UserService extends AbstractService
         return $data['uuid'];
     }
 
-    public function addAppRolesToUser($accountUserId,$appId){
+    public function addAppRolesToUser($accountUserId, $appId)
+    {
         if (isset($appId)) {
-            $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app',$appId);
+            $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app', $appId);
             $result = $this->roleService->getRolesByAppId($appId);
             foreach ($result as $role) {
-                $this->addUserRole($accountUserId,$role['name'],$appId);
+                $this->addUserRole($accountUserId, $role['name'], $appId);
             }
         }
     }
@@ -473,33 +473,33 @@ class UserService extends AbstractService
     private function addUserRole($accountUserId, $roleName, $appId = null)
     {
         if (!is_numeric($accountUserId)) {
-            throw new ServiceException('Invalid Parameter passed', 'invalid.parameter',OxServiceException::ERR_CODE_PRECONDITION_FAILED);            
+            throw new ServiceException('Invalid Parameter passed', 'invalid.parameter', OxServiceException::ERR_CODE_PRECONDITION_FAILED);
         }
-        $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('id' => $accountUserId))->toArray();        
-        if ($user){
+        $user = $this->getDataByParams('ox_account_user', array('id', 'account_id'), array('id' => $accountUserId))->toArray();
+        if ($user) {
             $params = ['accountId' => $user[0]['account_id'],'roleName'=> $roleName];
             if (isset($appId)) {
                 $appClause = " And app_id=:appId";
                 $params['appId'] = $appId;
-            }else{
+            } else {
                 $appClause = " And app_id IS NULL";
             }
             $select = "select id,name from ox_role where account_id=:accountId and name =:roleName $appClause";
-            $this->logger->info("Executing Query $select with params--".print_r($params,true));
-            $role = $this->executeQueryWithBindParameters($select,$params)->toArray();
+            $this->logger->info("Executing Query $select with params--".print_r($params, true));
+            $role = $this->executeQueryWithBindParameters($select, $params)->toArray();
             if (!empty($role)) {
                 if (!$this->getDataByParams('ox_user_role', array(), array('account_user_id' => $user[0]['id'], 'role_id' => $role[0]['id']))->toArray()) {
                     $data = array(array(
                         'account_user_id' => $user[0]['id'],
                         'role_id' => $role[0]['id'],
                     ));
-                    $this->logger->info("Executing Data---".print_r($data,true));
+                    $this->logger->info("Executing Data---".print_r($data, true));
                     $result = $this->multiInsertOrUpdate('ox_user_role', $data);
                     if ($result->getAffectedRows() == 0) {
                         return $result;
                     }
                     return 1;
-                } 
+                }
             } else {
                 return 2;
             }
@@ -547,9 +547,9 @@ class UserService extends AbstractService
             }
         }
         $form = new User($this->table);
-        if(is_numeric($id)){
+        if (is_numeric($id)) {
             $form->loadById($id);
-        }else{
+        } else {
             $form->loadByUuid($id);
         }
 
@@ -558,7 +558,7 @@ class UserService extends AbstractService
             $result = $this->executeQuerywithParams($select)->toArray();
             $acctArray = array_map('current', $result);
             if (!in_array($accountId, $acctArray)) {
-                throw new ServiceException('User does not belong to the Account', 'user.not.found',OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+                throw new ServiceException('User does not belong to the Account', 'user.not.found', OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         }
         $userdata = array_merge($form->getProperties(), $data); //Merging the data from the db for the ID
@@ -567,14 +567,14 @@ class UserService extends AbstractService
         }
         try {
             $this->beginTransaction();
-            $this->logger->info("USER-DATA--------\n".print_r($userdata,true));
-             if (!isset($userdata['address1']) || empty($userdata['address1'])) {
+            $this->logger->info("USER-DATA--------\n".print_r($userdata, true));
+            if (!isset($userdata['address1']) || empty($userdata['address1'])) {
                 $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
-                $addressData = $this->addressService->getOrganizationAddress( $accountId);
-                $this->unsetAddressData($addressData,$userdata);
+                $addressData = $this->addressService->getOrganizationAddress($accountId);
+                $this->unsetAddressData($addressData, $userdata);
                 $userdata = array_merge($userdata, $addressData);
             }
-            $this->personService->updatePerson($userdata['person_id'],$userdata);
+            $this->personService->updatePerson($userdata['person_id'], $userdata);
             $userdata['name'] = $userdata['firstname'] . " " . $userdata['lastname'];
             $userdata['uuid'] = $form->uuid;
             
@@ -613,7 +613,7 @@ class UserService extends AbstractService
     {
         $select = "SELECT oxo.id,oxo.name from ox_account oxo where oxo.id =:id";
         $params = array("id" => $id);
-        $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
         if (empty($response)) {
             throw new EntityNotFoundException("Invalid Account");
         }
@@ -644,22 +644,22 @@ class UserService extends AbstractService
         $result = $this->executeQuerywithParams($select)->toArray();
         $acctArray = array_map('current', $result);
         if (!in_array($accountId, $acctArray)) {
-            throw new ServiceException('User does not belong to the account', 'user.not.found',OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+            throw new ServiceException('User does not belong to the account', 'user.not.found', OxServiceException::ERR_CODE_PRECONDITION_FAILED);
         }
         $select = "SELECT contactid from ox_account where id = " . $accountId;
         $result1 = $this->executeQuerywithParams($select)->toArray();
         if ($result1[0]['contactid'] == $form->id) {
-            throw new ServiceException('Not allowed to delete Admin user', 'admin.user',OxServiceException::ERR_CODE_FORBIDDEN);
+            throw new ServiceException('Not allowed to delete Admin user', 'admin.user', OxServiceException::ERR_CODE_FORBIDDEN);
         }
         $select = "SELECT count(id) from ox_team where manager_id = " . $form->id;
         $result2 = $this->executeQuerywithParams($select)->toArray();
         if ($result2[0]['count(id)'] > 0) {
-            throw new ServiceException('Not allowed to delete the team manager', 'team.manager',OxServiceException::ERR_CODE_FORBIDDEN);
+            throw new ServiceException('Not allowed to delete the team manager', 'team.manager', OxServiceException::ERR_CODE_FORBIDDEN);
         }
         $select = "SELECT count(id) from ox_project where manager_id = " . $form->id;
         $result3 = $this->executeQuerywithParams($select)->toArray();
         if ($result3[0]['count(id)'] > 0) {
-            throw new ServiceException('Not allowed to delete the project manager', 'project.manager',OxServiceException::ERR_CODE_FORBIDDEN);
+            throw new ServiceException('Not allowed to delete the project manager', 'project.manager', OxServiceException::ERR_CODE_FORBIDDEN);
         }
         $account = $this->getAccount($form->account_id);
         $originalArray = array();
@@ -667,11 +667,11 @@ class UserService extends AbstractService
         $originalArray['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $originalArray['date_modified'] = date('Y-m-d H:i:s');
         $form->assign($originalArray);
-        try{
+        try {
             $this->beginTransaction();
             $form->save();
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -798,7 +798,7 @@ class UserService extends AbstractService
             unset($result['password_reset_code']);
         }
         $activeAccount = $this->getActiveAccount(AuthContext::get(AuthConstants::ACCOUNT_ID));
-        if($activeAccount){
+        if ($activeAccount) {
             $result['active_account'] = $activeAccount;
             $result['accountId'] = $activeAccount['accountId'];
             $result['id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
@@ -806,7 +806,6 @@ class UserService extends AbstractService
         $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
         return $result;
-        
     }
 
     public function getUserByUuid($uuid)
@@ -816,7 +815,7 @@ class UserService extends AbstractService
         if (!empty($result)) {
             return $result[0]['id'];
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -826,7 +825,7 @@ class UserService extends AbstractService
                     from ox_account au
                     where au.id =:id";
         $params = array("id" => $accountId);
-        $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
+        $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
         if (!empty($response)) {
             return $response[0];
         }
@@ -842,7 +841,9 @@ class UserService extends AbstractService
                     where oau.user_id = :user_id AND au.status = 'Active'";
         $params = array("user_id" => $userId);
         $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
-        if (!empty($response)) { return $response; }
+        if (!empty($response)) {
+            return $response;
+        }
         return null;
     }
 
@@ -940,7 +941,7 @@ class UserService extends AbstractService
                     where au.uuid = :accountId AND ou.id = :userId AND ou.status = 'Active'";
         $params = ['accountId' => $accountId, 'userId' => $id];
         $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
-        if (empty($response) ) {
+        if (empty($response)) {
             throw new EntityNotFoundException("User not found for userId - $id");
         }
         $result = $response[0];
@@ -1038,7 +1039,7 @@ class UserService extends AbstractService
         return $userName = AuthContext::get(AuthConstants::USERNAME);
     }
 
-// check this
+    // check this
     /**
      * @param $searchVal
      * @return array
@@ -1095,13 +1096,13 @@ class UserService extends AbstractService
         $user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))->toArray();
         if (empty($user)) {
             throw new EntityNotFoundException("User you are trying to add is invalid");
-        }   
+        }
         $account = $this->getDataByParams('ox_account', array('id', 'name'), array('id' => $accountId, 'status' => 'Active'))->toArray();
-        if (empty($account) ) {
+        if (empty($account)) {
             throw new EntityNotFoundException("Trying to add user to an invalid Account");
         }
         $accountUsers = $this->getDataByParams('ox_account_user', array(), array('user_id' => $userId, 'account_id' => $accountId))->toArray();
-        if (!empty($accountUsers) ) {
+        if (!empty($accountUsers)) {
             throw new InsertFailedException("User already part of the account");
         }
         $params = array(
@@ -1112,11 +1113,11 @@ class UserService extends AbstractService
         $query = "INSERT into ox_account_user (`user_id`, `account_id`, `default`) 
                   VALUES (:userId, :accountId, :default)";
         $result = $this->executeUpdateWithBindParameters($query, $params);
-        $accountUserId = $result->getGeneratedValue(); 
+        $accountUserId = $result->getGeneratedValue();
         $message = json_encode(array('accountName' => $account[0]['name'], 'status' => 'Active', 'username' => $user[0]["username"]));
-        $this->logger->info("USERTOACCOUNT_ADDED-----\n",print_r($message,true));
+        $this->logger->info("USERTOACCOUNT_ADDED-----\n", print_r($message, true));
         $this->messageProducer->sendTopic($message, 'USERTOACCOUNT_ADDED');
-        return $accountUserId;        
+        return $accountUserId;
     }
 
     public function getUserAppsAndPrivileges()
@@ -1167,7 +1168,7 @@ class UserService extends AbstractService
                         LEFT JOIN `ox_app_registry` ar on oa.id = ar.app_id and ar.account_id = :accountId
                         WHERE account_id IS NULL";
         $params = ['userId' => $userId, 'accountId' => $accountId];
-        $this->logger->info("Query - $query with params - ".print_r($params, true) );
+        $this->logger->info("Query - $query with params - ".print_r($params, true));
         $result = $this->executeQueryWithBindParameters($query, $params);
         $result = $result->toArray();
         $arr = array();
@@ -1203,7 +1204,7 @@ class UserService extends AbstractService
         $resetPasswordCode = UuidUtil::uuid();
         $userDetails = $this->getUserBaseProfile($username);
         $userRecord = $userDetails['firstname']."_".$userDetails['username']."@eoxvantage.";
-        if(($userDetails['email'] == $userRecord."com") || ($userDetails['email'] == $userRecord."in")){
+        if (($userDetails['email'] == $userRecord."com") || ($userDetails['email'] == $userRecord."in")) {
             throw new ValidationException("Invalid Email");
         }
         if ($username === $userDetails['username']) {
@@ -1221,9 +1222,9 @@ class UserService extends AbstractService
             $this->updateUser($userDetails['uuid'], $userDetails);
             $subject = $userReset['firstname'] . ', Your login details for EOX vantage!';
             $bcc = " ";
-            if(isset($this->config['emailConfig'])){
+            if (isset($this->config['emailConfig'])) {
                 $emailConfig = $this->config['emailConfig'];
-                if(isset($emailConfig['resetPassword'])){
+                if (isset($emailConfig['resetPassword'])) {
                     $subject = isset($emailConfig['resetPassword']['subject']) ? $userReset['firstname'].', '.$emailConfig['resetPassword']['subject'] : $subject;
                 }
             }
@@ -1234,10 +1235,9 @@ class UserService extends AbstractService
             )), 'mail');
             $userReset['email']= $this->hideEmailAddress($userReset['email']);
             return $userReset;
-        
-        } 
+        }
 
-        throw new ServiceException("Password reset failed", 'password.reset.failed',OxServiceException::ERR_CODE_UNPROCESSABLE_ENTITY);
+        throw new ServiceException("Password reset failed", 'password.reset.failed', OxServiceException::ERR_CODE_UNPROCESSABLE_ENTITY);
     }
 
     public function getOrganizationByUserId($id = null)
@@ -1330,7 +1330,7 @@ class UserService extends AbstractService
         }
         $responseUserData = $userData[0];
         $responseUserData['preferences'] = json_decode($responseUserData['preferences'], true);
-	    if(isset($responseUserData['managerId']) &&  ($responseUserData['managerId'] !== 0 ) ){
+        if (isset($responseUserData['managerId']) &&  ($responseUserData['managerId'] !== 0)) {
             $result = $this->getUserWithMinimumDetails($responseUserData['managerId'], $params['accountId']);
             $responseUserData['manager_name'] = $result['firstname']." ".$result['lastname'];
         } else {
@@ -1340,7 +1340,8 @@ class UserService extends AbstractService
         return $responseUserData;
     }
 
-    public function checkUserExists($data){
+    public function checkUserExists($data)
+    {
         $from = "FROM ox_user as u 
                  INNER join ox_person per on per.id = u.person_id ";
         $where = "WHERE (username=:username OR email=:email)";
@@ -1359,7 +1360,6 @@ class UserService extends AbstractService
             $queryParams = array_merge($queryParams, array("appId" => $appId,
                 "identifier" => $data[$data['identifier_field']],
                 "identifierName" => $data['identifier_field']));
-            
         }
         if (isset($data['date_of_birth'])) {
             $data['date_of_birth'] = date_format(date_create($data['date_of_birth']), "Y-m-d");
@@ -1367,8 +1367,8 @@ class UserService extends AbstractService
         $query = "SELECT u.id,u.uuid,u.username,per.email $from $where";
         $this->logger->info("Check user query $query with Params" . json_encode($queryParams));
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        if(!empty($result)){
-            if ($data['username'] == $result[0]['username'] && 
+        if (!empty($result)) {
+            if ($data['username'] == $result[0]['username'] &&
                     $data['email'] == $result[0]['email']) {
                 $data['username'] = $result[0]['username'];
                 $data['id'] = $result[0]['id'];
@@ -1388,7 +1388,7 @@ class UserService extends AbstractService
             $appId = $this->getIdFromUuid('ox_app', $appUUid);
             if (!isset($accountId)) {
                 $accountId = $params['accountId'];
-            } else if ($accountId == 0) {
+            } elseif ($accountId == 0) {
                 throw new EntityNotFoundException("Account does not exist");
             }
             $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
@@ -1421,14 +1421,12 @@ class UserService extends AbstractService
             }
         } catch (Exception $e) {
             throw $e;
-
         }
     }
 
     private function hideEmailAddress($email)
     {
-        if(filter_var($email, FILTER_VALIDATE_EMAIL))
-        {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             list($first, $last) = explode('@', $email);
             $first = str_replace(substr($first, '3'), str_repeat('*', strlen($first)-3), $first);
             $last = explode('.', $last);
@@ -1438,17 +1436,18 @@ class UserService extends AbstractService
         }
     }
 
-    public function getUserDetailsByIdentifier($identifier,$identifierName){
+    public function getUserDetailsByIdentifier($identifier, $identifierName)
+    {
         $select = "SELECT ou.* from ox_user as ou 
                     join ox_wf_user_identifier as owi on ou.id = owi.user_id 
                     WHERE owi.identifier = :identifier AND owi.identifier_name = :identifierName";
         $selectParams = array("identifier" => $identifier, "identifierName" => $identifierName);
         $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
-        if(!empty($result)){
+        if (!empty($result)) {
             return $result[0];
         }
 
-        return NULL;
+        return null;
     }
 
     public function hasLoggedIn()
@@ -1459,7 +1458,7 @@ class UserService extends AbstractService
         ->columns(array('has_logged_in','verification_pending'))
         ->where(array('id' => AuthContext::get(AuthConstants::USER_ID),'account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeQuery($select)->toArray();
-        if(count($result)){
+        if (count($result)) {
             return $result[0];
         }
     }
@@ -1472,12 +1471,13 @@ class UserService extends AbstractService
         ->where(array('ox_user.id' => AuthContext::get(AuthConstants::USER_ID),'ox_user.account_id' => AuthContext::get(AuthConstants::ACCOUNT_ID)));
         $result = $this->executeUpdate($update);
     }
-    private function unsetAddressData(&$addressData,$userdata){
+    private function unsetAddressData(&$addressData, $userdata)
+    {
         unset($addressData['id']);
-        if (isset($userdata['country'])) {            
+        if (isset($userdata['country'])) {
             unset($addressData['country']);
         }
-        if(isset($userdata['state'])){
+        if (isset($userdata['state'])) {
             unset($addressData['state']);
         }
     }

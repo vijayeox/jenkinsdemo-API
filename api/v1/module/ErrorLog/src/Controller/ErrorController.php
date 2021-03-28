@@ -73,7 +73,8 @@ class ErrorController extends AbstractApiControllerHelper
     public function create($data)
     {
         try {
-            print_r($data);exit;
+            print_r($data);
+            exit;
             $data = $this->errorService->saveError($data);
             if ($data == 0) {
                 return $this->getFailureResponse("Failed to create a new entity", $data);
@@ -85,11 +86,13 @@ class ErrorController extends AbstractApiControllerHelper
         return $this->getSuccessResponseWithData($data, 201);
     }
 
-    public function update($id, $data) {
-    	return $this->getInvalidMethod();
+    public function update($id, $data)
+    {
+        return $this->getInvalidMethod();
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         return $this->getInvalidMethod();
     }
     /**
@@ -113,11 +116,12 @@ class ErrorController extends AbstractApiControllerHelper
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
         $result = $this->errorService->getErrorList($filterParams);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
-    public function retryAction() {
+    public function retryAction()
+    {
         $errorId = $this->params()->fromRoute()['errorId'];
         $result = $this->errorService->retryError($errorId);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }
