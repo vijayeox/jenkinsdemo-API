@@ -67,7 +67,7 @@ class AppDelegateService extends AbstractService
     }
 
     public function setAppDelegateService(){
-        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService,$this->esignService);
+        $appDelegateService = new AppDelegateService($this->config,$this->dbAdapter,$this->documentBuilder,$this->templateService,$this->messageProducer,$this->fileService,$this->workflowInstanceService,$this->activityInstanceService,$this->userService,$this->commentService,$this->esignService,$this->fieldService);
         return $appDelegateService;
     }
 
@@ -105,40 +105,41 @@ class AppDelegateService extends AbstractService
                 if (method_exists($obj, "setFieldService")) {
                     $obj->setFieldService($this->fieldService);
                 }
-	            if (method_exists($obj, "setTemplateService")) {
-	                $obj->setTemplateService($this->templateService);
-	            }
-	            if (method_exists($obj, "setMessageProducer")) {
-	                $obj->setMessageProducer($this->messageProducer);
-	            }
-	            if (method_exists($obj, "setWorkflowInstanceService")) {
-	                $obj->setWorkflowInstanceService($this->workflowInstanceService);
-	            }
-	            if (method_exists($obj, "setActivityInstanceService")) {
-	                $obj->setActivityInstanceService($this->activityInstanceService);
-	            }
-	            if (method_exists($obj, "setAppId")) {
-	                $obj->setAppId($appId);
-	            }
-	            if (method_exists($obj, "setUserContext")) {
-	                $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
-	                    AuthContext::get(AuthConstants::NAME),
-	                    AuthContext::get(AuthConstants::ORG_UUID),
-	                    AuthContext::get(AuthConstants::PRIVILEGES));
-	            }
-	            if (method_exists($obj, "setUserService")) {
-	                $obj->setUserService($this->userService);
-	            }
-	            if (method_exists($obj, "setCommentService")) {
-	                $obj->setCommentService($this->commentService);
-	            }
+               
+                if (method_exists($obj, "setTemplateService")) {
+                    $obj->setTemplateService($this->templateService);
+                }
+                if (method_exists($obj, "setMessageProducer")) {
+                    $obj->setMessageProducer($this->messageProducer);
+                }
+                if (method_exists($obj, "setWorkflowInstanceService")) {
+                    $obj->setWorkflowInstanceService($this->workflowInstanceService);
+                }
+                if (method_exists($obj, "setActivityInstanceService")) {
+                    $obj->setActivityInstanceService($this->activityInstanceService);
+                }
+                if (method_exists($obj, "setAppId")) {
+                    $obj->setAppId($appId);
+                }
+                if (method_exists($obj, "setUserContext")) {
+                    $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
+                        AuthContext::get(AuthConstants::NAME),
+                        AuthContext::get(AuthConstants::ORG_UUID),
+                        AuthContext::get(AuthConstants::PRIVILEGES));
+                }
+                if (method_exists($obj, "setUserService")) {
+                    $obj->setUserService($this->userService);
+                }
+                if (method_exists($obj, "setCommentService")) {
+                    $obj->setCommentService($this->commentService);
+                }
 	            if (method_exists($obj, "setEsignService")) {
 	                $obj->setEsignService($this->esignService);
 	            }
-	            if (method_exists($obj, "setAppDelegateService")) {
-	                $obj->setAppDelegateService($this->setAppDelegateService());
-	            }
-	            $persistenceService = $this->getPersistence($appId);
+                if (method_exists($obj, "setAppDelegateService")) {
+                    $obj->setAppDelegateService($this->setAppDelegateService());
+                }
+                $persistenceService = $this->getPersistence($appId);
 
 	            $output = $obj->execute($dataArray, $persistenceService);
 	            if (!$output) {

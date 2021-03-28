@@ -8,7 +8,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="emergencyFirstResponseProfessionalLiability" />
-          <camunda:property name="fields" value="initiatedByCsr,CSRReviewRequired,approved,policyStatus,padi" />
+          <camunda:property name="fields" value="initiatedByCsr,CSRReviewRequired,approved,policyStatus,padi,transaction_status" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1x0ryqk</bpmn:outgoing>
@@ -96,7 +96,7 @@ if(initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "")
       <bpmn:outgoing>SequenceFlow_09u0dmt</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_18cy0sx" sourceRef="ExclusiveGateway_0v1sn4o" targetRef="Task_1g1eti7">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == ""}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "" || transaction_status == "Action Not Permitted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_003e5rf" sourceRef="ExclusiveGateway_0v1sn4o" targetRef="Task_0zkrs53">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${initiatedByCsr == true &amp;&amp; (approved == "rejected" || approved == "onHold")}</bpmn:conditionExpression>
@@ -113,7 +113,7 @@ if(initiatedByCsr == false || initiatedByCsr == "false" || initiatedByCsr == "")
       <bpmn:outgoing>SequenceFlow_0to5509</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_09u0dmt" sourceRef="ExclusiveGateway_0v1sn4o" targetRef="ServiceTask_0nx5fx7">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(initiatedByCsr == true||initiatedByCsr == "true") &amp;&amp; approved == "approved"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(initiatedByCsr == true||initiatedByCsr == "true") &amp;&amp; approved == "approved"  &amp;&amp; transaction_status != "Action Not Permitted"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0syw9bl">
       <bpmn:incoming>SequenceFlow_1k98pjg</bpmn:incoming>

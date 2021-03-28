@@ -11,7 +11,19 @@
 					{assign var=list value=$upgradeGroupLiability|json_decode:true}
 					{foreach from=$list item=$upgradeData}
 					    		<p class = "grp_endoUpgrade">
-					    			Effective {$upgradeData.update_date} : The Liability Limit are ${$upgradeData.combinedSingleLimit|number_format} per occurance and ${$upgradeData.annualAggregate|number_format} Annual Aggregate.
+					    			Effective {$upgradeData.update_date} : The Liability Limit are 
+					    			{if isset($upgradeData.combinedSingleLimit)}
+					    				${$upgradeData.combinedSingleLimit|number_format} 
+					    			{else}
+					    				$1,000,000
+					    			{/if}
+					    				per occurance and
+					    			{if isset($upgradeData.annualAggregate)}
+					    				${$upgradeData.annualAggregate|number_format} 
+					    			{else}
+					    				$2,000,000
+					    			{/if}
+					    				Annual Aggregate.
 					    		</p>
 				    {/foreach}
 				{/if}

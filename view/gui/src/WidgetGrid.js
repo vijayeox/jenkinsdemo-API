@@ -7,6 +7,14 @@ import { IntlService } from '@progress/kendo-react-intl'
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import WidgetDrillDownHelper from './WidgetDrillDownHelper';
 
+const loadingPanel = (
+    <div className="k-loading-mask">
+      <span className="k-loading-text">Loading</span>
+      <div className="k-loading-image"></div>
+      <div className="k-loading-color"></div>
+    </div>
+  );
+
 export default class WidgetGrid extends React.Component {
     constructor(props) {
         super(props);
@@ -112,17 +120,19 @@ export default class WidgetGrid extends React.Component {
         this.prepareData(true);
     }
 
-    gridPageChanged = (e) => {
-        let pagination = {
-            skip: e.page.skip,
-            take: e.page.take
-        }
-        this.setState({
-            pagination: pagination
-        }, () => {
-            this.prepareData(false);
-        });
-    }
+    // gridPageChanged = (e) => {
+    //     console.log("page event clicked");
+    //     // call the api to get the data for the next page by passing the new page 
+    //     let pagination = {
+    //         skip: e.page.skip,
+    //         take: e.page.take
+    //     }
+    //     this.setState({
+    //         pagination: pagination
+    //     }, () => {
+    //         this.prepareData(false);
+    //     });
+    // }
 
     gridFilterChanged = (e) => {
         if (e.filter == null) {
@@ -186,11 +196,9 @@ export default class WidgetGrid extends React.Component {
                 return true
             else
                 return false
-        }
-        else {
+        } else {
             return false
         }
-
     }
 
     cellRender(tdElement, cellProps, thiz) {
@@ -213,7 +221,6 @@ export default class WidgetGrid extends React.Component {
                             formattedSum = kendo_service.toString(sum, column.format)
                         }
                         element = <td>{formattedSum}</td>
-
                     }
                 })
                 if (element != null) {
@@ -236,7 +243,6 @@ export default class WidgetGrid extends React.Component {
                 formattedSum = kendo_service.toString(total, configuration.format)
             }
             return (
-
                 <td colSpan={props.colSpan} style={configuration.style}>
                     {configuration.value}{formattedSum}
                 </td>
@@ -248,14 +254,12 @@ export default class WidgetGrid extends React.Component {
     render() {
         let thiz = this;
         let hasBackButton = this.hasBackButton()
-
         function getColumns() {
             let columns = []
             for (const config of thiz.columnConfig) {
                 if (config['footerAggregate']) {
                     columns.push(<GridColumn key={config['field']} {...config} footerCell={(props) => thiz.Aggregate(props, config['footerAggregate'])} />);
-                }
-                else {
+                } else {
                     columns.push(<GridColumn key={config['field']} {...config} />);
                 }
             }
@@ -294,6 +298,7 @@ export default class WidgetGrid extends React.Component {
 
         return (
             <>
+            {this.state.displayedData.length === 0 && loadingPanel}
                 {this.isDrillDownTable &&
                     <div className="oxzion-widget-drilldown-table-icon" style={hasBackButton ? { right: "5%" } : { right: "7px" }} title="Drilldown Table">
                         <i className="fas fa-angle-double-down fa-lg"></i>

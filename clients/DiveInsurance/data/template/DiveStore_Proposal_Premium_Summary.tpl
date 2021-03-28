@@ -16,7 +16,7 @@
                 <p>${$propertyProRataPremium|number_format:2}</p>
                 <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format:2}</p>
                 <p>${$AddILocPremium|number_format:2}</p>
-                <p>${$padiFee|number_format:2}</p>
+                <p>${$padiFeePL|number_format:2}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
@@ -32,7 +32,7 @@
         <div class="clearfix"></div>
         <div class="total_main">
             <div class="value_main">
-                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFee)|number_format:2}</p>
+                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFeePL)|number_format:2}</p>
             </div>
             <div class="sub_main">
                 <p>Total Store Premium:</p>
@@ -70,16 +70,16 @@
             </div>
         </div>
         
-        {if isset($additionalPremium)}
+        {if isset($totalAddPremium)}
         <div class="main" style="margin-top: 0px;">
             <p class="hrtag sub_line" style="margin-top: 0px;margin-bottom: 2%;"></p>
             <div class="value_main">
-                <p>{if isset($additionalPremium)}
-                     {if (int)$additionalPremium < 0 }  
-                     {math equation = '(x * (-1))' x = $additionalPremium assign='addPremium'}
+                <p>{if isset($totalAddPremium)}
+                     {if (int)$totalAddPremium < 0 }  
+                     {math equation = '(x * (-1))' x = $totalAddPremium assign='addPremium'}
                         - ${$addPremium|number_format:2}
                      {else}
-                        ${$additionalPremium|number_format:2}
+                        ${$totalAddPremium|number_format:2}
                      {/if}
                      {else} 0.00 
                  {/if}</p>

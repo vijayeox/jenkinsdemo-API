@@ -312,7 +312,18 @@ class WidgetService extends AbstractService
                 if (isset($config['pageSize'])) {
                     $overRides['pagesize']=$config['pageSize'];
                 }
+                if (isset($config['column'])) {
+                    $columns = array();
+                    foreach($config['column'] as $column) {
+                        if (isset($column['type'])) {
+                            $columns[$column['field']]=$column['type'];
+                        } else
+                            $columns[$column['field']]='string';
+                    }
+                    $overRides['columns'] = $columns;
+                }
             }
+        
             $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
             if ($this->queryService->getTotalCount()) {
                 $response['widget']['total_count']=$this->queryService->getTotalCount();
