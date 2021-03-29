@@ -34,25 +34,35 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         }
         if (isset($parameters['filter_grid'])) {
             $filtergrid = $parameters['filter_grid'];
-            $str = "/contains\((.*?),'(.*?)'\)/";
+            $str = "/(.*?)\((.*?),'(.*?)'\)/";
             preg_match($str, $filtergrid, $matches);
-            if (is_numeric($matches[2])) {
-                $parameters['inline_filter'][]=[$matches[1],'==',$matches[2]];
+            if (!$matches) {
+                $substr = explode(' ',$filtergrid,3);
+                if (count($substr)>2) {
+                    $field= $substr[0];
+                    $operator = $substr[1];
+                    $value = $substr[2];
+                    $parameters['inline_filter'][]=[$field,$operator,$value];
+                }
             } else {
-                $parameters['inline_filter'][]=[$matches[1],'LIKE',$matches[2]];
+                $parameters['inline_filter'][]=[$matches[2],'LIKE',$matches[3]];
             }
         }
+
         if (isset($parameters['orderby'])) {
-            $sortpara = explode(" ", $parameters['orderby']);
-            if (isset($sortpara[1])) {
-                $parameters['sort']=[$sortpara[0].'.keyword'=>$sortpara[1]];
-            } else {
-                $parameters['sort']=[$parameters['orderby'].'.keyword'=>'asc'];
+            $sortpara = explode(" ",$parameters['orderby']);
+            if (isset($parameters['columns'][$sortpara[0]])) {
+                $keyword = ($parameters['columns'][$sortpara[0]]=='numeric') ? '' : '.keyword';
             }
-        }
-        $finalResult = $this->getData($app_name, $entity_name, $parameters);
-        if (isset($parameters['expression']) ||  isset($parameters['round'])) {
-            $finalResult['data'] = $this->postProcess($finalResult['data'], $parameters);
+            if (isset($sortpara[1])){
+                $parameters['sort']=[$sortpara[0].$keyword=>$sortpara[1]];
+            } else {
+                $parameters['sort']=[$parameters['orderby'].$keyword=>'asc'];
+            }
+        } 
+        $finalResult = $this->getData($app_name,$entity_name,$parameters);
+        if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
+            $finalResult['data'] = $this->postProcess($finalResult['data'],$parameters);
         }
         if (isset($parameters['target'])) {
             $finalResult['target'] = $parameters['target'];

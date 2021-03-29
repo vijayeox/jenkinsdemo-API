@@ -220,7 +220,7 @@ class ElasticService
     protected function createFilter($filter, $type = '')
     {
         $subQuery = null;
-        $symMapping = ['>' => 'gt', '>=' => 'gte', '<' => 'lt', '<=' => 'lte'];
+        $symMapping = ['>' => 'gt', '>=' => 'gte', '<' => 'lt', '<=' => 'lte','gt'=>'gt','lt'=>'lt'];
         $boolMapping = ['OR' => 'should', 'AND' => 'must'];
         if (!isset($filter[1]) && is_array($filter)) {
             $filter = $filter[0];
@@ -248,7 +248,7 @@ class ElasticService
         } else {
             if (!in_array($column, $this->filterFields) && !($type == 'inline' && in_array($column, $this->excludes))) {
                 $value = AnalyticsUtils::checkSessionValue($value);
-                if ($condition == "==") {
+                if ($condition == "==" || $condition == "eq") {
                     if (!is_array($value)) {
                         if (strtolower(substr($value, 0, 5)) == "date:") {
                             $value = date("Y-m-d", strtotime(substr($value, 5)));
@@ -261,7 +261,7 @@ class ElasticService
                     } else {
                         $subQuery['terms'] = array($column => array_values($value));
                     }
-                } elseif ($condition == "<>" || $condition == "!=") {
+                } elseif ($condition == "<>" || $condition == "!=" || $condition == "ne") {
                     $subQuery['bool']['must_not'][] = ["term" => [$column => $value]];
                 } elseif ($condition == "NOT LIKE" || $condition == "not like") {
                     $subQuery['bool']['must_not'][] = ["match_phrase" => [$column => $value]];

@@ -16,9 +16,6 @@
         <ignore>*/Model/*</ignore>
         <ignore>*/src/Module.php</ignore>
     </files>
-    <plugins>
-        <plugin path="Core" />
-    </plugins>
     <transformations>
         <template name="responsive-twig" />
         <template name="checkstyle"/>
