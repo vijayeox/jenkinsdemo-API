@@ -310,7 +310,50 @@ class Unanswered extends AbstractDocumentAppDelegate
                         $fileData['buildings'][$key1]['coinsuranceform'] = "Monthly Limit";
                     }
                 }
+                if(array_key_exists('description', $value1) && ($value1['description'] == null || $value1['description'] == '')) {
+                    unset($fileData['buildings'][$key1]['description']);
+                }
+                if(array_key_exists('classcode', $value1) && ($value1['classcode'] == null || $value1['classcode'] == '')) {
+                    unset($fileData['buildings'][$key1]['classcode']);
+                }
+                if(array_key_exists('ratingbasis', $value1) && ($value1['classcode'] == null || $value1['classcode'] == '')) {
+                    unset($fileData['buildings'][$key1]['ratingbasis']);
+                }
             }
+        }
+
+        if(!array_key_exists('packageTargetPremium', $fileData)) {
+            $fileData['packageTargetPremium'] = null;
+        }
+        if(!array_key_exists('dolTargetPremium', $fileData)) {
+            $fileData['dolTargetPremium'] = null;
+        }
+        if(!array_key_exists('numYearsOfOwnership', $fileData)) {
+            $fileData['numYearsOfOwnership'] = null;
+        }
+        if(!array_key_exists('numberOfOwners', $fileData)) {
+            $fileData['numberOfOwners'] = null;
+        }
+        if(!array_key_exists('numberofemployeeshandling', $fileData)) {
+            $fileData['numberofemployeeshandling'] = null;
+        }
+        if(!array_key_exists('totalemployees', $fileData)) {
+            $fileData['totalemployees'] = null;
+        }
+        if(!array_key_exists('totalassetvalue', $fileData)) {
+            $fileData['totalassetvalue'] = null;
+        }
+        if(!array_key_exists('planparticipants', $fileData)) {
+            $fileData['planparticipants'] = null;
+        }
+        if(!array_key_exists('numberofTrusteesHandlingPlanAsset', $fileData)) {
+            $fileData['numberofTrusteesHandlingPlanAsset'] = null;
+        }
+        if(!array_key_exists('annualsales', $fileData)) {
+            $fileData['annualsales'] = null;
+        }
+        if(!array_key_exists('garageumUim', $fileData)) {
+            $fileData['garageumUim'] = null;
         }
 
         //Remove location summary from financials
@@ -575,6 +618,7 @@ class Unanswered extends AbstractDocumentAppDelegate
         $unansweredQuestions = [];
         //For file data when it gets encoded and stored in the db
         $this->decodeFileData($fileData);
+        $this->fileDataMassaging($fileData);
         //Sequence outer keys
         $temp = array();
         foreach ($sequence as $key => $value) {
@@ -586,7 +630,6 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
         $fileData = $temp;
 
-        $this->fileDataMassaging($fileData);
         $this->getAllUnansweredAndAnsweredQuestions($fileData,$unansweredQuestions, $answeredQuestions);
 
         //Data grids not filled to be added which can't be done for the children as the leaf nodes need to be removed
