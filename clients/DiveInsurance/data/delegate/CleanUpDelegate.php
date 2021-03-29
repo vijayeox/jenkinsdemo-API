@@ -64,6 +64,10 @@ class CleanUpDelegate extends AbstractAppDelegate
     		if(isset($data['business_website'])){
     			unset($data['business_website']);	
     		}
+            if(isset($data['CSRReviewRequired']) && empty($data['approved'])){
+                $data['approved'] = "onHold";
+                $data['emptyapprove'] = true;
+            }
     }
 
     private function cleanUpDiveStoreData(&$data){
