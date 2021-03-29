@@ -63,22 +63,21 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
     )
       ? "yes"
       : "no",
-    checkSecurityGuards: false,
+    //checkSecurityGuards: false,
     // Need to check condition. Occupancy type is at building Level but
     // dol_Protection[0]premisesLotProtection are at loc level
-
-    // data.genericData.locationScheduleGridData.some(
-    //   (locationItem) => {
-    //     if (
-    //       locationItem.occupancyType == "autoSalesAndService" &&
-    //       locationItem.dolsecguards == "yes"
-    //     ) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   }
-    // ),
+    checkSecurityGuards: data.locations.some(
+       (locationItem) => {
+         if (
+           locationItem.occupancyType == "autoSalesAndService" &&
+           data.dol_Protection[locationItem.locationNum-1].premisesLotProtection.securityGuards == "yes"
+         ) {
+           return true;
+         } else {
+           return false;
+         }
+       }
+     ),
     checkfalsePretenseNumber:
       data.falsePretenseNumber > 100000
         ? "Increased above the current maximum per vehicle value"
