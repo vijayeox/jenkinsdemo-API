@@ -281,18 +281,17 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     data.dolareanyvehiparked == "yes"
   ) {
     chkDolaVechilePark = "yes";
-  }else if (
+  } else if (
     data.dolanyvehparkonroof == "no" &&
     data.dolareanyvehiparked == "no"
   ) {
     chkDolaVechilePark = "no";
-  }else if (
+  } else if (
     data.dolanyvehparkonroof == "yes" &&
     data.dolareanyvehiparked == "yes"
   ) {
     chkDolaVechilePark = "yes";
   }
-
 
   var lotProtectionArray = data.dol_Protection.filter((item) => {
     var itemLotProtection = JSON.stringify(item["premisesLotProtection"]);
@@ -380,49 +379,49 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       dolalllocdoesnotincld.push("none");
     }
   }
-  let compSelected = '';
-  let nonesel =0;
+  let compSelected = "";
+  let nonesel = 0;
   for (key in data.requestedCoverage) {
     var compKey = key + "Comp";
     var collisionKey = key + "Collision";
     var falsePretenseKey = key + "FalsePretense";
     var noneKey = key + "none";
-    if (data.requestedCoverage[key].comp == "") {      
+    if (data.requestedCoverage[key].comp == "") {
       requestedCoverage[key] = "";
     } else {
-      nonesel = nonesel+1;
-      if(data.requestedCoverage[key].comp =='yes') {
-        compSelected = 'yes';
+      nonesel = nonesel + 1;
+      if (data.requestedCoverage[key].comp == "yes") {
+        compSelected = "yes";
       }
     }
-    if (data.requestedCoverage[key].collision == "") {     
+    if (data.requestedCoverage[key].collision == "") {
       requestedCoverage[key] = "";
     } else {
-      nonesel = nonesel+1;
+      nonesel = nonesel + 1;
     }
-    if (data.requestedCoverage[key].falsePretense == "") {      
+    if (data.requestedCoverage[key].falsePretense == "") {
       requestedCoverage[key] = "";
     } else {
-      nonesel = nonesel+1;      
+      nonesel = nonesel + 1;
     }
   }
-  if(nonesel == 0) {
-    requestedCoverage["noneselected"] = 'yes';
-  }else{
+  if (nonesel == 0) {
+    requestedCoverage["noneselected"] = "yes";
+  } else {
     for (key in data.requestedCoverage) {
-      var compKey = key + 'Comp'; 
-      var collisionKey = key + 'Collision';
-      var falsePretenseKey = key + 'FalsePretense';
-      var noneKey = key + 'None';
-      if(compSelected == 'yes' ) {
-        requestedCoverage[compKey] = 'yes';
-        requestedCoverage[collisionKey] = 'yes';
-        requestedCoverage[falsePretenseKey] = 'yes';
-      }else{
-        requestedCoverage[compKey] = 'no';
-        requestedCoverage[collisionKey] = 'no';
-        requestedCoverage[falsePretenseKey] = 'no';
-      }    
+      var compKey = key + "Comp";
+      var collisionKey = key + "Collision";
+      var falsePretenseKey = key + "FalsePretense";
+      var noneKey = key + "None";
+      if (compSelected == "yes") {
+        requestedCoverage[compKey] = "yes";
+        requestedCoverage[collisionKey] = "yes";
+        requestedCoverage[falsePretenseKey] = "yes";
+      } else {
+        requestedCoverage[compKey] = "no";
+        requestedCoverage[collisionKey] = "no";
+        requestedCoverage[falsePretenseKey] = "no";
+      }
     }
   }
   value = {
