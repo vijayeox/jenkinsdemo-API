@@ -38,7 +38,8 @@ class FormServiceTest extends AbstractServiceTest
         return $dataset;
     }
 
-    private function runQuery($query) {
+    private function runQuery($query)
+    {
         $statement = $this->adapter->query($query);
         $result = $statement->execute();
         $resultSet = new ResultSet();
@@ -46,55 +47,56 @@ class FormServiceTest extends AbstractServiceTest
         return $result;
     }
 
-    public function testCreateForm() {
-        
+    public function testCreateForm()
+    {
         $this->performCreateTest();
-
     }
-    private function performCreateTest($fieldReference = null){
+    private function performCreateTest($fieldReference = null)
+    {
         $data = ['name' => 'Form creation', 'app_id' => 100, 'entity_id' => 1, 'template' =>file_get_contents(dirname(__FILE__)."/Dataset/Form.json")];
         $appUuid = '0e4f00d4-86e2-11ea-bc55-0242ac130003';
         $result = 0;
-        $result = $this->formService->createForm($appUuid,$data, $fieldReference);
+        $result = $this->formService->createForm($appUuid, $data, $fieldReference);
         $this->assertEquals(1, $result);
         $sqlQuery = "SELECT * FROM ox_form";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(1,count($sqlQueryResult));
+        $this->assertEquals(1, count($sqlQueryResult));
         $sqlQuery = "SELECT name,data_type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(39,count($sqlQueryResult));
+        $this->assertEquals(39, count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where parent_id IN (SELECT id from ox_field where type='datagrid')";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(9,count($sqlQueryResult));
+        $this->assertEquals(9, count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where parent_id IN (SELECT id from ox_field where type='editgrid')";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(3,count($sqlQueryResult));
+        $this->assertEquals(3, count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where type='survey'";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(1,count($sqlQueryResult));
+        $this->assertEquals(1, count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where type='editgrid'";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(1,count($sqlQueryResult));
+        $this->assertEquals(1, count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where type='datagrid'";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(1,count($sqlQueryResult));
+        $this->assertEquals(1, count($sqlQueryResult));
         $sqlQuery = "SELECT distinct type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(24,count($sqlQueryResult));
+        $this->assertEquals(24, count($sqlQueryResult));
         $sqlQuery = "SELECT distinct data_type FROM ox_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(10,count($sqlQueryResult));
+        $this->assertEquals(10, count($sqlQueryResult));
         $sqlQuery = "SELECT name,data_type FROM ox_field where required = 1";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(15,count($sqlQueryResult));
+        $this->assertEquals(15, count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_field where type = 'select'";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(5,count($sqlQueryResult));
+        $this->assertEquals(5, count($sqlQueryResult));
         $sqlQuery = "SELECT * FROM ox_form_field";
         $sqlQueryResult = $this->runQuery($sqlQuery);
-        $this->assertEquals(39,count($sqlQueryResult));
+        $this->assertEquals(39, count($sqlQueryResult));
     }
-    public function testCreateFormWithValidation() {
+    public function testCreateFormWithValidation()
+    {
         $parser = new SpreadsheetParserImpl();
         $parser->init(__DIR__."/Dataset/FieldValidationSample.xlsx");
         $sheetNames = $parser->getSheetNames();
@@ -105,12 +107,11 @@ class FormServiceTest extends AbstractServiceTest
                                                        'filter' => $filter));
         
         $fieldReference = $fieldReference[$sheetNames[0]];
-        try{
+        try {
             $this->performCreateTest($fieldReference);
-        }catch(ValidationException $e){
+        } catch (ValidationException $e) {
             print_r($e->getErrors());
-            $this->assertEquals(0,1);       
+            $this->assertEquals(0, 1);
         }
     }
-
 }

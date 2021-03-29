@@ -20,7 +20,6 @@ use Oxzion\Utils\UuidUtil;
 use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Service\ActivityInstanceService;
 
-
 class WorkflowService extends AbstractService
 {
     private $id;
@@ -39,9 +38,9 @@ class WorkflowService extends AbstractService
     protected $processEngine;
     protected $activityEngine;
     protected $activityService;
-    static $field = array('workflow_name' => 'ox_workflow.name');
+    public static $field = array('workflow_name' => 'ox_workflow.name');
 
-    public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService, WorkflowDeploymentTable $workflowDeploymentTable,ActivityInstanceService $activityInstanceService)
+    public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService, WorkflowDeploymentTable $workflowDeploymentTable, ActivityInstanceService $activityInstanceService)
     {
         parent::__construct($config, $dbAdapter);
         $this->baseFolder = $this->config['UPLOAD_FOLDER'];
@@ -115,7 +114,7 @@ class WorkflowService extends AbstractService
             $startFormId = null;
             $workFlowList = array();
             $workFlowFormIds = array();
-            $fields = NULL;
+            $fields = null;
             if (isset($processes)) {
                 //CAUTION: Current deployment expects only one process in a file
                 foreach ($processes as $process) {
@@ -442,7 +441,8 @@ class WorkflowService extends AbstractService
         return $data;
     }
 
-    public function deleteWorkflowLinkedToApp($appId){
+    public function deleteWorkflowLinkedToApp($appId)
+    {
         $workflowRes = $this->getWorkflows($appId);
         if (count($workflowRes) > 0) {
             foreach ($workflowRes['data'] as $key => $value) {
@@ -450,35 +450,35 @@ class WorkflowService extends AbstractService
                 $this->activityService->deleteActivitiesLinkedToApp($appId);
                 $this->activityInstanceService->removeActivityInstanceRecords($value['id']);
                 $this->fileService->deleteFilesLinkedToApp($appId);
-                $this->deleteWorkflow($appId,$value['uuid']);
+                $this->deleteWorkflow($appId, $value['uuid']);
                 $this->deleteWorkflowDeployement($value['id']);
             }
         }
     }
     
-    private function deleteWorkflowDeployement($workflowId){
-        try{
+    private function deleteWorkflowDeployement($workflowId)
+    {
+        try {
             $this->beginTransaction();
             $update = "UPDATE ox_workflow_deployment SET isdeleted =:deleted where workflow_id=:workflowId and latest=:latest";
             $updateParams = array('deleted' => 1, 'workflowId' => $workflowId, 'latest' => 1);
-            $result = $this->executeUpdateWithBindParameters($update,$updateParams);
+            $result = $this->executeUpdateWithBindParameters($update, $updateParams);
             $this->commit();
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
     }
 
-    private function deleteWorkflowInstance($workflowDepId){
-        try{
+    private function deleteWorkflowInstance($workflowDepId)
+    {
+        try {
             $this->beginTransaction();
             $update = "UPDATE ox_workflow_instance SET isdeleted =:deleted where workflow_deployment_id=:workflowDepId";
             $updateParams = array('deleted' => 1, 'workflowDepId' => $workflowDepId);
-            $this->executeUpdateWithBindParameters($update,$updateParams);
+            $this->executeUpdateWithBindParameters($update, $updateParams);
             $this->commit();
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }

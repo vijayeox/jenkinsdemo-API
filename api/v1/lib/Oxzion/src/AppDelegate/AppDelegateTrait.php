@@ -10,18 +10,22 @@ trait AppDelegateTrait
     private $appDelegateService;
     private $appId;
     
-    public function __construct(){
+    public function __construct()
+    {
         $this->logger = Logger::getLogger(__CLASS__);
     }
-    public function setAppDelegateService($appDelegateService){
+    public function setAppDelegateService($appDelegateService)
+    {
         $this->appDelegateService = $appDelegateService;
     }
 
-    public function getAppDelegateService() {
+    public function getAppDelegateService()
+    {
         return $this->appDelegateService;
     }
 
-    protected function executeDelegate($delegateName,$data){
-        return $this->appDelegateService->execute($this->appId,$delegateName,$data);
+    protected function executeDelegate($delegateName, $data)
+    {
+        return $this->appDelegateService->execute($this->appId, $delegateName, $data);
     }
 }

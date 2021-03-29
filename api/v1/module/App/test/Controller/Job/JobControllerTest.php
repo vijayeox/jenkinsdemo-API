@@ -228,7 +228,5 @@ class JobControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertNotEmpty($job);
         $this->assertResponseStatusCode(200);
-        
     }
-
 }

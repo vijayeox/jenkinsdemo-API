@@ -19,8 +19,8 @@ use Oxzion\DuplicateEntityException;
 use Oxzion\EntityNotFoundException;
 use Oxzion\InvalidApplicationArchiveException;
 
-/* 
- * This service is for managing application artifact files like form definition 
+/*
+ * This service is for managing application artifact files like form definition
  * files and workflow definition files.
  */
 class AppArtifactService extends AbstractService
@@ -29,21 +29,23 @@ class AppArtifactService extends AbstractService
     private $appService;
     private $contentFolder = DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
 
-    public function __construct($config, $dbAdapter, AppTable $table, AppService $appService) {
+    public function __construct($config, $dbAdapter, AppTable $table, AppService $appService)
+    {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->appService = $appService;
     }
 
-    public function saveArtifact($appUuid, $artifactType) {
+    public function saveArtifact($appUuid, $artifactType)
+    {
         $appSourceDir = $this->getAppSourceDirPath($appUuid);
         $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
-        switch($artifactType) {
+        switch ($artifactType) {
             case 'workflow':
-                return $this->uploadContents($appSourceDir,'workflows',$descriptorPath,$artifactType);
+                return $this->uploadContents($appSourceDir, 'workflows', $descriptorPath, $artifactType);
             break;
             case 'form':
-                return $this->uploadContents($appSourceDir,'forms',$descriptorPath,$artifactType);
+                return $this->uploadContents($appSourceDir, 'forms', $descriptorPath, $artifactType);
             break;
             case 'app_icon':
             case 'app_icon_white':
@@ -53,30 +55,31 @@ class AppArtifactService extends AbstractService
                     'uuid' => $appUuid,
                     'name' => $app->getProperty('name')
                 ];
-                if(is_dir($appSourceDir . '/view/apps/'.$appData['name']."/")){
+                if (is_dir($appSourceDir . '/view/apps/'.$appData['name']."/")) {
                     $targetDir = $appSourceDir . '/view/apps/'.$appData['name']."/";
                 } else {
                     $targetDir = $appSourceDir . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'apps'. DIRECTORY_SEPARATOR.'eoxapps'. DIRECTORY_SEPARATOR;
                 }
-                return $this->uploadAppIcon($targetDir,$artifactType);
+                return $this->uploadAppIcon($targetDir, $artifactType);
             break;
             default:
                 throw new Exception("Unexpected artifact type ${artifactType}.");
         }
     }
-    private function uploadContents($appSourceDir,$contentType,$descriptorPath,$artifactType){
+    private function uploadContents($appSourceDir, $contentType, $descriptorPath, $artifactType)
+    {
         $targetDir = $appSourceDir . $this->contentFolder . $contentType . DIRECTORY_SEPARATOR;
         //Check whether any of the uploaded file(s) already exist(s) on the server.
-        foreach($_FILES as $key => $fileData) {
+        foreach ($_FILES as $key => $fileData) {
             if (UPLOAD_ERR_OK != $fileData['error']) {
                 throw new Exception('File upload failed.');
             }
             if (file_exists($targetDir . $fileData['name'])) {
-                FileUtils::deleteFile($fileData['name'],$targetDir);
+                FileUtils::deleteFile($fileData['name'], $targetDir);
             }
         }
         //Move/copy the files to destination.
-        foreach($_FILES as $key => $fileData) {
+        foreach ($_FILES as $key => $fileData) {
             $filePath = $targetDir . $fileData['name'];
             if (!rename($fileData['tmp_name'], $filePath)) {
                 throw new Exception('Failed to move file ' . $fileData['tmp_name'] . ' to destination.');
@@ -85,36 +88,38 @@ class AppArtifactService extends AbstractService
             // returning here cause $_FILES will always be of length 1
             return [
                 "originalName" => $fileData['name'],
-                "size" => filesize($filePath) 
+                "size" => filesize($filePath)
             ];
         }
     }
-    private function uploadAppIcon($targetDir,$iconType){
-        if(isset($_FILES) && isset($_FILES['file'])){
+    private function uploadAppIcon($targetDir, $iconType)
+    {
+        if (isset($_FILES) && isset($_FILES['file'])) {
             if (isset($_FILES['error']) && UPLOAD_ERR_OK != $_FILES['error']) {
                 throw new Exception('File upload failed.');
             }
-            if($iconType == 'app_icon'){
+            if ($iconType == 'app_icon') {
                 $filePath = $targetDir .'icon.png';
-            } else if($iconType == 'app_icon_white'){
+            } elseif ($iconType == 'app_icon_white') {
                 $filePath = $targetDir .'icon_white.png';
             }
             move_uploaded_file($_FILES['file']['tmp_name'], $targetDir.$_FILES['file']['name']);
-            $fileCreated = ImageUtils::createPNGImage($targetDir.$_FILES['file']['name'],$filePath);
+            $fileCreated = ImageUtils::createPNGImage($targetDir.$_FILES['file']['name'], $filePath);
             return [
                 "originalName" => $_FILES['file']['name'],
-                "size" => filesize($filePath) 
+                "size" => filesize($filePath)
             ];
         } else {
             throw new Exception('File upload failed.');
         }
     }
 
-    public function deleteArtifact($appUuid, $artifactType, $artifactName) {
+    public function deleteArtifact($appUuid, $artifactType, $artifactName)
+    {
         $appSourceDir = $this->getAppSourceDirPath($appUuid);
         $descriptorPath = $appSourceDir . DIRECTORY_SEPARATOR . "application.yml";
         $filePath = $appSourceDir . $this->contentFolder;
-        switch($artifactType) {
+        switch ($artifactType) {
             case 'workflow':
                 $filePath = $filePath . 'workflows';
             break;
@@ -134,7 +139,8 @@ class AppArtifactService extends AbstractService
         $this->updateAppDescriptor("delete", $descriptorPath, $artifactType, $artifactName);
     }
 
-    public function uploadAppArchive() {
+    public function uploadAppArchive()
+    {
         $fileData = array_shift($_FILES);
         if (!isset($fileData)) {
             throw new Exception('File not uploaded!');
@@ -146,8 +152,7 @@ class AppArtifactService extends AbstractService
         //Extract application.yml to a unique temporary directory.
         try {
             ZipUtils::unzip($fileData['tmp_name'], $tempDir, ['application.yml']);
-        }
-        catch (ZipException $e) {
+        } catch (ZipException $e) {
             throw new InvalidApplicationArchiveException('Invalid application archive.', null, $e);
         }
 
@@ -159,23 +164,25 @@ class AppArtifactService extends AbstractService
         $app = new App($this->table);
         try {
             $app->loadByUuid($appUuid);
-            throw new DuplicateEntityException('Application with this UUID already exists on the server.', 
-                ['app' => $appUuid]);
-        }
-        catch (EntityNotFoundException $ignored) {
+            throw new DuplicateEntityException(
+                'Application with this UUID already exists on the server.',
+                ['app' => $appUuid]
+            );
+        } catch (EntityNotFoundException $ignored) {
             //Entity does not exist. Continue.
         }
 
         //Using application.yml data extract input zip archive to app source directory.
         try {
             $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $yamlData['app']);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new InvalidApplicationArchiveException('Invalid application archive.', null, $e);
         }
         if (file_exists($appSourceDir)) {
-            throw new DuplicateEntityException('Application with this UUID already exists on the server.', 
-                ['app' => $appUuid]);
+            throw new DuplicateEntityException(
+                'Application with this UUID already exists on the server.',
+                ['app' => $appUuid]
+            );
         }
 
         //Create $appSourceDir and extract uploaded zip archive into it.
@@ -184,8 +191,7 @@ class AppArtifactService extends AbstractService
         }
         try {
             ZipUtils::unzip($fileData['tmp_name'], $appSourceDir);
-        }
-        catch (ZipException $e) {
+        } catch (ZipException $e) {
             throw new InvalidApplicationArchiveException('Invalid application archive.', null, $e);
         }
 
@@ -198,17 +204,19 @@ class AppArtifactService extends AbstractService
         //Ensure application UUID does not change - even by mistake!
         if ($yamlData['app']['uuid'] !== $updatedYamlData['app']['uuid']) {
             throw new Exception(
-                'Application UUID in descriptor YAML does not match UUID returned by createApp service.');
+                'Application UUID in descriptor YAML does not match UUID returned by createApp service.'
+            );
         }
 
         return $updatedYamlData;
     }
 
-    public function createAppArchive($appUuid) {
+    public function createAppArchive($appUuid)
+    {
         $app = new App($this->table);
         $app->loadByUuid($appUuid);
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $app->getProperties());
-        if(!is_dir($appSourceDir)){
+        if (!is_dir($appSourceDir)) {
             throw new InvalidApplicationArchiveException('Application source directory does not exist.', null);
         }
         $tempFileName = FileUtils::createTempFileName();
@@ -220,7 +228,8 @@ class AppArtifactService extends AbstractService
         ];
     }
 
-    public function getArtifacts($appUuid, $artifactType) {
+    public function getArtifacts($appUuid, $artifactType)
+    {
         $app = new App($this->table);
         $app->loadByUuid($appUuid);
         $appData = [
@@ -230,10 +239,12 @@ class AppArtifactService extends AbstractService
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
         if (!file_exists($appSourceDir)) {
             throw new FileNotFoundException(
-                "Application source directory is not found.", ['directory' => $appSourceDir]);
+                "Application source directory is not found.",
+                ['directory' => $appSourceDir]
+            );
         }
         $contentDir = $appSourceDir . $this->contentFolder;
-        switch($artifactType) {
+        switch ($artifactType) {
             case 'workflow':
                 $targetDir = $contentDir . 'workflows';
             break;
@@ -264,7 +275,7 @@ class AppArtifactService extends AbstractService
 
     private function updateAppDescriptor($action, $descriptorPath, $artifactType, $file)
     {
-        if($artifactType != 'form' && $artifactType != 'workflow'){
+        if ($artifactType != 'form' && $artifactType != 'workflow') {
             return;
         }
         if (!(file_exists($descriptorPath))) {
@@ -282,7 +293,7 @@ class AppArtifactService extends AbstractService
                 $filePath => $file,
                 "uuid" => UuidUtil::uuid()
             ));
-        } else if ($action == 'delete') {
+        } elseif ($action == 'delete') {
             if (!isset($yaml[$artifactType])) {
                 $yaml[$artifactType] = [];
             }
@@ -297,7 +308,8 @@ class AppArtifactService extends AbstractService
         file_put_contents($descriptorPath, $new_yaml);
     }
 
-    private function getAppSourceDirPath($appUuid){
+    private function getAppSourceDirPath($appUuid)
+    {
         $app = new App($this->table);
         $app->loadByUuid($appUuid);
         $appData = [
@@ -306,8 +318,10 @@ class AppArtifactService extends AbstractService
         ];
         $appSourceDir = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $appData);
         if (!file_exists($appSourceDir)) {
-            throw new FileNotFoundException("Application source directory is not found.",
-            ['directory' => $appSourceDir]);
+            throw new FileNotFoundException(
+                "Application source directory is not found.",
+                ['directory' => $appSourceDir]
+            );
         }
         return $appSourceDir;
     }

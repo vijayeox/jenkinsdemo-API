@@ -36,8 +36,8 @@ class TemplateServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
-        if(!is_link($tempFolder)){
-             FileUtils::createDirectory($tempFolder."/");
+        if (!is_link($tempFolder)) {
+            FileUtils::createDirectory($tempFolder."/");
         }
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);
@@ -57,8 +57,8 @@ class TemplateServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
-        if(!is_link($tempFolder)){
-             FileUtils::createDirectory($tempFolder."/");
+        if (!is_link($tempFolder)) {
+            FileUtils::createDirectory($tempFolder."/");
         }
         $tempFile = $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/";
         FileUtils::createDirectory($tempFile);
@@ -77,8 +77,8 @@ class TemplateServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
-        if(!is_link($tempFolder)){
-             FileUtils::createDirectory($tempFolder."/");
+        if (!is_link($tempFolder)) {
+            FileUtils::createDirectory($tempFolder."/");
         }
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);

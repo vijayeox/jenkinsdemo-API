@@ -1,5 +1,6 @@
 <?php
 namespace Oxzion\Utils;
+
 use Oxzion\Utils\StringUtils;
 use DirectoryIterator;
 
@@ -7,7 +8,8 @@ use Exception;
 
 class FileUtils
 {
-    public static function getFileExtension($file){
+    public static function getFileExtension($file)
+    {
         return pathinfo($file, PATHINFO_EXTENSION);
     }
 
@@ -86,17 +88,21 @@ class FileUtils
         copy($src, $destDirectory.$destFile);
     }
 
-    public static function copyDir($src, $dest) {
-        if (!file_exists($dest)) self::createDirectory($dest);
-        if(is_dir($src)){
+    public static function copyDir($src, $dest)
+    {
+        if (!file_exists($dest)) {
+            self::createDirectory($dest);
+        }
+        if (is_dir($src)) {
             foreach (scandir($src) as $file) {
-                if ($file == '.' || $file == '..') continue;
+                if ($file == '.' || $file == '..') {
+                    continue;
+                }
                 $srcCheck = self::joinPath($src);
                 $destCheck = self::joinPath($dest);
-                if (is_dir($srcCheck.$file)){
+                if (is_dir($srcCheck.$file)) {
                     self::copyDir($srcCheck.$file, $destCheck.$file);
-                }
-                else {
+                } else {
                     copy($srcCheck.$file, $destCheck.$file);
                 }
             }
@@ -105,7 +111,7 @@ class FileUtils
 
     public static function renameFile($source, $destination)
     {
-        $result = self::copyDir($source,$destination);
+        $result = self::copyDir($source, $destination);
         if (is_dir($source)) {
             self::rmDir($source);
         }
@@ -114,7 +120,7 @@ class FileUtils
 
     public static function rmDir($fsObj)
     {
-        if(is_link($fsObj)){
+        if (is_link($fsObj)) {
             if (!unlink($fsObj)) {
                 throw new Exception("Failed to delete symlink ${fsObj}:" . print_r(error_get_last(), true));
             }
@@ -126,18 +132,18 @@ class FileUtils
             }
             return;
         }
-        if(is_dir($fsObj)){
+        if (is_dir($fsObj)) {
             if (DIRECTORY_SEPARATOR != $fsObj[strlen($fsObj)-1]) {
                 $fsObj = $fsObj . DIRECTORY_SEPARATOR;
             }
-            $dirList = scandir( $fsObj );
-            foreach( $dirList as $item ) {
+            $dirList = scandir($fsObj);
+            foreach ($dirList as $item) {
                 if (('.' == $item) || ('..' == $item)) {
                     continue;
                 }
-                self::rmDir( $fsObj . $item );
+                self::rmDir($fsObj . $item);
             }
-            if (!rmdir( $fsObj )) {
+            if (!rmdir($fsObj)) {
                 throw new Exception("Failed to delete directory ${fsObj}:" . print_r(error_get_last(), true));
             }
             return;
@@ -166,14 +172,14 @@ class FileUtils
 
     public static function deleteFile($fileName, $directory)
     {
-        if($directory == null){
+        if ($directory == null) {
             if (!unlink($fileName)) {
-                throw new Exception("Could not Delete File: ${fileName}." . 
+                throw new Exception("Could not Delete File: ${fileName}." .
                     print_r(error_get_last(), true));
             }
         } else {
             if (!unlink($directory.$fileName)) {
-                throw new Exception("Could not Delete File: ${fileName} under directory ${directory}." . 
+                throw new Exception("Could not Delete File: ${fileName} under directory ${directory}." .
                     print_r(error_get_last(), true));
             }
         }
@@ -187,17 +193,16 @@ class FileUtils
     public static function symlink($target, $link)
     {
         if (!symlink($target, $link)) {
-            throw new Exception("Failed to create symlink ${link} -> ${target}." . 
+            throw new Exception("Failed to create symlink ${link} -> ${target}." .
                 'Error:' . print_r(error_get_last(), true));
         }
     }
 
     public static function unlink($link)
     {
-        if(is_link($link))
-        {
+        if (is_link($link)) {
             if (!unlink($link)) {
-                throw new Exception("Failed to unlink ${link}." . 
+                throw new Exception("Failed to unlink ${link}." .
                 'Error:' . print_r(error_get_last(), true));
             }
         }
@@ -225,26 +230,29 @@ class FileUtils
         return $image;
     }
 
-    public static function getUniqueFile($baseLocation,$file){
+    public static function getUniqueFile($baseLocation, $file)
+    {
         $baseLocation = self::joinPath($baseLocation);
         $counter = 0;
-        while(true){
+        while (true) {
             $file = ($counter == 0) ? $file : $file.$counter;
-            if(!file_exists($baseLocation.$file)){
+            if (!file_exists($baseLocation.$file)) {
                 return $file;
             }
             $counter++;
         }
     }
 
-    public static function joinPath($baseLocation){        
-        if(!(StringUtils::endsWith($baseLocation,'/'))){
+    public static function joinPath($baseLocation)
+    {
+        if (!(StringUtils::endsWith($baseLocation, '/'))) {
             $baseLocation .= "/";
         }
         return $baseLocation;
     }
 
-    public static function createTempDir($dirNameLength = 10) {
+    public static function createTempDir($dirNameLength = 10)
+    {
         $tempDir = sys_get_temp_dir();
         for ($i=0; $i<100; $i++) {
             $dirName = StringUtils::randomString($dirNameLength);
@@ -256,10 +264,11 @@ class FileUtils
                 return $targetDir;
             }
         }
-		throw new Exception('Failed to create unique temporary directory in 100 attempts!.');
+        throw new Exception('Failed to create unique temporary directory in 100 attempts!.');
     }
 
-    public static function createTempFileName($fileNameLength = 10) {
+    public static function createTempFileName($fileNameLength = 10)
+    {
         $tempDir = sys_get_temp_dir();
         for ($i=0; $i<100; $i++) {
             $fileName = StringUtils::randomString($fileNameLength);
@@ -271,15 +280,16 @@ class FileUtils
         throw new Exception('Failed to create unique temporary file name in 100 attempts!.');
     }
 
-    public static function chmod_r($path,int $permission = 0777) {
+    public static function chmod_r($path, int $permission = 0777)
+    {
         $dir = new DirectoryIterator($path);
         foreach ($dir as $item) {
-            if(is_dir($item->getPathname())){
+            if (is_dir($item->getPathname())) {
                 if ($item->isDir() && !$item->isDot()) {
-                    self::chmod_r($item->getPathname(),$permission);
+                    self::chmod_r($item->getPathname(), $permission);
                 } else {
-                    if(!$item->isDot()){
-                        if(!chmod($item->getPathname(), $permission)){
+                    if (!$item->isDot()) {
+                        if (!chmod($item->getPathname(), $permission)) {
                             throw new Exception('Failed to Change Permission!.');
                         }
                     }
@@ -288,11 +298,13 @@ class FileUtils
         }
     }
 
-    public static function getFileName($path){
+    public static function getFileName($path)
+    {
         return basename($path);
     }
 
-    public static function downloadFile($sourceFile, $destinationFile){
+    public static function downloadFile($sourceFile, $destinationFile)
+    {
         $fsource = fopen($sourceFile, 'rb');
         if (!$fsource) {
             throw new Exception('Failed to open the file');
@@ -312,12 +324,14 @@ class FileUtils
         fclose($fsource);
     }
 
-    public static function copyOnlyNewFiles($src, $dest){
-        if (!file_exists($dest)) self::createDirectory($dest);
+    public static function copyOnlyNewFiles($src, $dest)
+    {
+        if (!file_exists($dest)) {
+            self::createDirectory($dest);
+        }
         $output = [];
-        if(!exec("rsync --ignore-existing $src $dest", $output)){
-            throw new Exception("Failed to Copy New Files - ".print_r($output,true));
-            
+        if (!exec("rsync --ignore-existing $src $dest", $output)) {
+            throw new Exception("Failed to Copy New Files - ".print_r($output, true));
         }
     }
 }

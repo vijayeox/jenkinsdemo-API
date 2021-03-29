@@ -43,7 +43,6 @@ class PrivilegeController extends AbstractApiController
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
-        
     }
 
     /**
@@ -75,7 +74,5 @@ class PrivilegeController extends AbstractApiController
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
-        
     }
-
 }

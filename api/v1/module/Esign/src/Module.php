@@ -34,7 +34,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 EsignService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new EsignService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\Esign\EsignDocumentTable::class), $container->get(\Oxzion\Model\Esign\EsignDocumentSignerTable::class),$container->get(\Oxzion\Messaging\MessageProducer::class));
+                    return new EsignService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\Esign\EsignDocumentTable::class), $container->get(\Oxzion\Model\Esign\EsignDocumentSignerTable::class), $container->get(\Oxzion\Messaging\MessageProducer::class));
                 },
                 \Oxzion\Model\Esign\EsignDocumentTable::class => function ($container) {
                     $tableGateway = $container->get(\Oxzion\Model\Esign\EsignDocumentGateway::class);
@@ -66,13 +66,15 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\EsignController::class => function ($container) {
                     return new Controller\EsignController(
-                        $container->get(EsignService::class)                    );
+                        $container->get(EsignService::class)
+                    );
                 },
                 Controller\EsignCallbackController::class => function ($container) {
                     return new Controller\EsignCallbackController(
                         $container->get(EsignService::class),
-                        $container->get('config'));
-                },                
+                        $container->get('config')
+                    );
+                },
             ],
         ];
     }

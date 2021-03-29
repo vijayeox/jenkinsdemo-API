@@ -11,6 +11,7 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Utils\FileUtils;
+
 class DocumentControllerTest extends ControllerTest
 {
     public function setUp() : void
@@ -24,8 +25,8 @@ class DocumentControllerTest extends ControllerTest
         $this->docFile = $config['APP_DOCUMENT_FOLDER'].$this->data['UUID'];
         $docLocation = __DIR__."/../../Dataset/Files";
 
-        if(FileUtils::fileExists($this->docFile)){
-                FileUtils::rmDir($this->docFile);
+        if (FileUtils::fileExists($this->docFile)) {
+            FileUtils::rmDir($this->docFile);
         }
         FileUtils::symlink($docLocation, $this->docFile);
     }
@@ -52,7 +53,8 @@ class DocumentControllerTest extends ControllerTest
     }
 
 
-    public function testgetDocument(){
+    public function testgetDocument()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/document/certificate.pdf?docPath=1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/certificate.pdf", 'GET');
         $this->assertResponseStatusCode(200);
@@ -61,9 +63,10 @@ class DocumentControllerTest extends ControllerTest
         $this->assertControllerClass('DocumentController');
         $this->assertMatchedRouteName('getFileDocuments');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-    }  
+    }
 
-     public function testDocumentNotFound(){
+    public function testDocumentNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch("/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/document/cerficate.pdf?docPath=1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/ceficate.pdf", 'GET');
         $this->assertResponseStatusCode(404);
@@ -75,5 +78,5 @@ class DocumentControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'File Not Found');
-    }  
+    }
 }

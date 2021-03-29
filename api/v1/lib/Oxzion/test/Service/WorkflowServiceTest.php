@@ -17,7 +17,8 @@ use Zend\Db\ResultSet\ResultSet;
 use Oxzion\Workflow\WorkflowFactory;
 use Oxzion\Utils\RestClient;
 
-class WorkflowServiceTest extends AbstractServiceTest{
+class WorkflowServiceTest extends AbstractServiceTest
+{
     public $adapter = null;
 
     protected function setUp(): void
@@ -39,7 +40,8 @@ class WorkflowServiceTest extends AbstractServiceTest{
         return $dataset;
     }
 
-    private function runQuery($query) {
+    private function runQuery($query)
+    {
         $statement = $this->adapter->query($query);
         $result = $statement->execute();
         $resultSet = new ResultSet();
@@ -47,7 +49,8 @@ class WorkflowServiceTest extends AbstractServiceTest{
         return $result;
     }
 
-    public function testDeploy(){
+    public function testDeploy()
+    {
         $file = __DIR__."/../WorkflowTest/Dataset/testwithparams.bpmn";
         $entityId = 1;
         $appId = "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4";

@@ -7,15 +7,15 @@ use Oxzion\Model\Entity;
 class Comment extends Entity
 {
     protected $data = array(
-        'id'=>NULL ,
-        'account_id' => NULL,
+        'id'=>null ,
+        'account_id' => null,
         'parent' => null,
-        'uuid' => NULL,
-        'text' => NULL,
-        'file_id' => NULL,
-        'created_by' => NULL,
+        'uuid' => null,
+        'text' => null,
+        'file_id' => null,
+        'created_by' => null,
         'modified_by' => null,
-        'date_created' => NULL,
+        'date_created' => null,
         'date_modified' => null,
         'isdeleted' => 0,
     );

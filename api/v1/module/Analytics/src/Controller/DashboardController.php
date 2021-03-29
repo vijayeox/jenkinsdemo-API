@@ -8,7 +8,6 @@ use Oxzion\Controller\AbstractApiController;
 
 class DashboardController extends AbstractApiController
 {
-
     private $dashboardService;
 
     /**

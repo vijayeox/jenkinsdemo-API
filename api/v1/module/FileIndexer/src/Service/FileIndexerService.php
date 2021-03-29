@@ -15,9 +15,9 @@ class FileIndexerService extends AbstractService
     protected $restClient;
     protected $messageProducer;
 
-    public function __construct($config,AdapterInterface $dbAdapter,MessageProducer $messageProducer)
+    public function __construct($config, AdapterInterface $dbAdapter, MessageProducer $messageProducer)
     {
-        parent::__construct($config,$dbAdapter);
+        parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
     }
     public function setRestClient($restClient)
@@ -32,8 +32,7 @@ class FileIndexerService extends AbstractService
 
     public function getRelevantDetails($fileId)
     {
-        if(isset($fileId))
-        {
+        if (isset($fileId)) {
             $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
             file.data as file_data, file.uuid as file_uuid, file.is_active, file.account_id,
             CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
@@ -45,10 +44,12 @@ class FileIndexerService extends AbstractService
             $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
             $this->logger->info("Executing Query - $select");
             $body=$this->executeQuerywithParams($select)->toArray();
-            if(isset($body[0]))
+            if (isset($body[0])) {
                 $databody = $this->flattenAndModify($body[0]);
-            if(isset($databody['app_name']))
+            }
+            if (isset($databody['app_name'])) {
                 $app_name = $databody['app_name'];
+            }
             if (isset($app_name)&&isset($databody) && count($databody) > 0) {
                 $this->messageProducer->sendQueue(json_encode(array('index'=>  $app_name.'_index','body' => $databody,'id' => $fileId, 'operation' => 'Index', 'type' => '_doc')), 'elastic');
                 return $databody;
@@ -57,8 +58,9 @@ class FileIndexerService extends AbstractService
         return null;
     }
 
-    public function processBatchIndex($data) {
-        try{
+    public function processBatchIndex($data)
+    {
+        try {
             $this->messageProducer->sendTopic(json_encode($data), 'PROCESS_BATCH_INDEX');
         } catch (Exception $e) {
             $this->logger->error('Exception occured in async batch index :');
@@ -85,10 +87,10 @@ class FileIndexerService extends AbstractService
         //Need to store file data seperately as its a json string and perform actions on the same
         $data = $indexedData = null;
 
-        if($result) {
+        if ($result) {
             $app_name = $result[0]['app_name'];
             $indexedData = $this->getAllFieldsWithCorrespondingValues($result[0]);
-            $this->logger->info("\nINDEXED DATA :".print_r($indexedData,true));
+            $this->logger->info("\nINDEXED DATA :".print_r($indexedData, true));
             //Sending it to the elastic queue
             $this->messageProducer->sendQueue(json_encode(array('index'=>  $app_name.'_index','body' => $indexedData,'id' => $indexedData['id'], 'operation' => 'Index', 'type' => '_doc')), 'elastic');
             return $indexedData;
@@ -103,7 +105,7 @@ class FileIndexerService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_app')
-        ->columns(array('name'))->join('ox_form','ox_form.app_id = ox_app.id',array(),'inner')->join('ox_file','ox_file.form_id = ox_form.id',array(),'inner')
+        ->columns(array('name'))->join('ox_form', 'ox_form.app_id = ox_app.id', array(), 'inner')->join('ox_file', 'ox_file.form_id = ox_form.id', array(), 'inner')
         ->where(array('ox_file.id' => $fileId));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
@@ -117,21 +119,23 @@ class FileIndexerService extends AbstractService
         return null;
     }
 
-    public function batchIndexer($appUuid,$startdate = null,$enddate = null)
+    public function batchIndexer($appUuid, $startdate = null, $enddate = null)
     {
         $batchSize = $this->config['batch_size'];
-        if(!isset($appUuid))
+        if (!isset($appUuid)) {
             throw new Exception("Incorrect App Id Specified", 1);
-        $appID = $this->getIdFromUuid('ox_app',$appUuid);
+        }
+        $appID = $this->getIdFromUuid('ox_app', $appUuid);
         $select = "SELECT id from ox_file ";
-        if(isset($startdate) && !isset($enddate))
+        if (isset($startdate) && !isset($enddate)) {
             $where ="WHERE date_created > '$startdate'";
-        elseif(isset($startdate) && isset($enddate))
+        } elseif (isset($startdate) && isset($enddate)) {
             $where ="WHERE date_created > '$startdate' && date_created < '$enddate'";
-        elseif(!isset($startdate) && isset($enddate))
+        } elseif (!isset($startdate) && isset($enddate)) {
             $where ="WHERE date_created < '$enddate'";
-        else
+        } else {
             return 0;
+        }
         $query = $select.$where;
         try {
             $resultSet = $this->executeQuerywithParams($query)->toArray();
@@ -158,7 +162,7 @@ class FileIndexerService extends AbstractService
                     foreach ($bodys as $key => $value) {
                         $bodys[$key] = $this->getAllFieldsWithCorrespondingValues($value);
                     }
-                    $indexIdList = array_column($bodys,'id');
+                    $indexIdList = array_column($bodys, 'id');
 
                     //Delete list
                     $select = 'SELECT file.id from ox_file as file
@@ -168,7 +172,7 @@ class FileIndexerService extends AbstractService
                     $list = $this->executeQuerywithParams($select)->toArray();
                     $deleteIdList = array_column($list, 'id');
 
-                    if(isset($bodys[0]['app_name'])){
+                    if (isset($bodys[0]['app_name'])) {
                         $app_name = $bodys[0]['app_name'];
                     }
                     if (isset($app_name)&&isset($bodys)) {
@@ -177,15 +181,13 @@ class FileIndexerService extends AbstractService
                 }
                 return $bodys;
             }
-        }
-        catch (ZendDbException $e) {
+        } catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error($e);
             $this->logger->error('Query and params:');
             $this->logger->error($query);
             $this->logger->error($queryParams);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -193,20 +195,18 @@ class FileIndexerService extends AbstractService
     public function flattenAndModify($data)
     {
         $databody = array();
-        if(!empty($data)){
-            if(isset($data['file_data'])){
-                $file_data = json_decode($data['file_data'],true);
-                $databody = array_merge($data,$file_data);
+        if (!empty($data)) {
+            if (isset($data['file_data'])) {
+                $file_data = json_decode($data['file_data'], true);
+                $databody = array_merge($data, $file_data);
             }
             unset($databody['file_data']);
         }
         foreach ($databody as $key => $value) {
-            if(is_string($value))
-            {
+            if (is_string($value)) {
                 $result = json_decode($value);
                 if (json_last_error() === JSON_ERROR_NONE) {
-                    if(is_array($result))
-                    {
+                    if (is_array($result)) {
                         $databody[$key] = $result;
                     }
                 }
@@ -215,10 +215,11 @@ class FileIndexerService extends AbstractService
         return $databody;
     }
 
-    public function getAllFieldsWithCorrespondingValues($result){
+    public function getAllFieldsWithCorrespondingValues($result)
+    {
         $entityId = $result['entity_id'];
         $app_name = $result['app_name'];
-        $data = json_decode($result['file_data'],true);
+        $data = json_decode($result['file_data'], true);
 
         //get all fields for a particular entity
         $selectFields = "Select name from ox_field where entity_id = :entity_id AND parent_id IS NULL AND data_type NOT IN ('file')";
@@ -228,24 +229,22 @@ class FileIndexerService extends AbstractService
         $toBeIndexedArray = array();
         //storing the values for each field from the file data
         foreach ($fieldArray as $key => $value) {
-            if(array_key_exists($value, $data))
-            {
+            if (array_key_exists($value, $data)) {
                 //remove old data with no type - before data types was introduced
-                if(is_array($data[$value])){
-                    $toBeIndexedArray[$value] = NULL;
+                if (is_array($data[$value])) {
+                    $toBeIndexedArray[$value] = null;
                     unset($data[$value]);
                     continue;
                 }
-               $toBeIndexedArray[$value] = $data[$value];
+                $toBeIndexedArray[$value] = $data[$value];
             } else {
-                $toBeIndexedArray[$value] = NULL;
+                $toBeIndexedArray[$value] = null;
             }
         }
         unset($result['file_data']);
 
         //flattening the result
-        $indexedData = array_merge($result,$toBeIndexedArray);
+        $indexedData = array_merge($result, $toBeIndexedArray);
         return $indexedData;
     }
-
 }

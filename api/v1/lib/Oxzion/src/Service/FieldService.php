@@ -28,7 +28,7 @@ class FieldService extends AbstractService
         }
         $data['app_id'] = $appId;
         $data['data_type'] = isset($data['data_type']) ? trim($data['data_type']) : "";
-        if(isset($data['data_type']) && !isset($data['type'])){
+        if (isset($data['data_type']) && !isset($data['type'])) {
             $data['type'] = $this->getFieldTypeByDataType($data['data_type']);
         }
         if (!isset($data['id']) || $data['id'] == 0) {
@@ -71,7 +71,7 @@ class FieldService extends AbstractService
         $data['id'] = $this->getIdFromUuid('ox_field', $id);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-        if(isset($data['data_type']) && !isset($data['type'])){
+        if (isset($data['data_type']) && !isset($data['type'])) {
             $data['type'] = $this->getFieldTypeByDataType($data['data_type']);
         }
         $file = $obj->toArray();
@@ -131,18 +131,18 @@ class FieldService extends AbstractService
         try {
             if (isset($appId)) {
                 $filterArray['app_id'] = $this->getIdFromUuid('ox_app', $appId);
-            } 
+            }
             if (isset($filterArray['entityName'])) {
                 $queryString = "Select ox_app_entity.id from ox_app_entity
                 where ox_app_entity.name = :entityName";
                 $queryParams = array('entityName' => $filterArray['entityName']);
                 $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
-                if(count($resultSet) > 0) {
+                if (count($resultSet) > 0) {
                     $filterArray['entity_id'] = $resultSet[0]['id'];
                 }
                 unset($filterArray['entityName']);
             }
-            $resultSet = $this->getDataByParams('ox_field', array("*"), $filterArray, null, null, null ,null,null,false);
+            $resultSet = $this->getDataByParams('ox_field', array("*"), $filterArray, null, null, null, null, null, false);
             $response = array();
             $response['data'] = $resultSet->toArray();
             return $response;
@@ -191,7 +191,8 @@ class FieldService extends AbstractService
         }
     }
 
-    private function getFieldTypeByDataType($dataType){
+    private function getFieldTypeByDataType($dataType)
+    {
         switch ($dataType) {
             case 'document':
                 $type = 'document';
@@ -203,5 +204,4 @@ class FieldService extends AbstractService
         }
         return $type;
     }
-
 }

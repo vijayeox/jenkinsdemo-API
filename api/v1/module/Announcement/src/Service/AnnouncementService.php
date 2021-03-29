@@ -67,22 +67,21 @@ class AnnouncementService extends AbstractService
             } else {
                 $data['account_id'] = $this->getIdFromUuid('ox_account', $params['accountId']);
             }
-        } else{
-                $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
+        } else {
+            $data['account_id'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
 
-        if(isset($data['type'])) {
-            if(!($data['type'] == 'ANNOUNCEMENT' || $data['type'] == 'HOMESCREEN')){
+        if (isset($data['type'])) {
+            if (!($data['type'] == 'ANNOUNCEMENT' || $data['type'] == 'HOMESCREEN')) {
                 throw new ServiceException("Announcement Type must be ANNOUNCEMENT or HOMESCREEN", 'invalid.type.given', OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         }
 
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : null;
-            if(isset($data['account_id'])){
+            if (isset($data['account_id'])) {
                 $select = "SELECT uuid,name,status,end_date from ox_announcement where name = '" . $data['name'] . "' and account_id = " . $data['account_id'] . " and end_date >= curdate()";
-            }
-            else{
+            } else {
                 $select = "SELECT uuid,name,status,end_date from ox_announcement where name = '" . $data['name'] . "' and end_date >= curdate()";
             }
             $result = $this->executeQuerywithParams($select)->toArray();
@@ -145,9 +144,8 @@ class AnnouncementService extends AbstractService
             } else {
                 $accountId = $this->getIdFromUuid('ox_account', $accountId);
             }
-        }
-        else{
-            if(!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE')){
+        } else {
+            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE')) {
                 $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
             }
         }
@@ -161,8 +159,8 @@ class AnnouncementService extends AbstractService
                 throw new ServiceException("Announcement does not belong to the account", "announcement.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
         }
-        if(isset($data['type'])) {
-            if(!($data['type'] == 'ANNOUNCEMENT' || $data['type'] == 'HOMESCREEN')){
+        if (isset($data['type'])) {
+            if (!($data['type'] == 'ANNOUNCEMENT' || $data['type'] == 'HOMESCREEN')) {
                 throw new ServiceException("Announcement Type must be ANNOUNCEMENT or HOMESCREEN", 'invalid.type.given', OxServiceException::ERR_CODE_NOT_FOUND);
             }
         }
@@ -180,7 +178,6 @@ class AnnouncementService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        
     }
 
     /**
@@ -237,7 +234,7 @@ class AnnouncementService extends AbstractService
      */
     public function insertAnnouncementForTeam($announcementId, $teams)
     {
-        if(!$teams || empty($teams)){
+        if (!$teams || empty($teams)) {
             return;
         }
         try {
@@ -257,8 +254,6 @@ class AnnouncementService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        
-        
     }
 
     protected function getAnnouncementIdBYUuid($uuid)
@@ -286,7 +281,7 @@ class AnnouncementService extends AbstractService
                 $params['accountId'] = $this->getIdFromUuid('ox_account', $params['accountId']);
             }
         } else {
-                $params['accountId'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
+            $params['accountId'] = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
         $obj = $this->table->getByUuid($uuid, array());
         try {
@@ -433,8 +428,8 @@ class AnnouncementService extends AbstractService
         } else {
             $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
-        if(isset($params['type'])) {
-            if(!($params['type'] == 'ANNOUNCEMENT' || $params['type'] == 'HOMESCREEN')){
+        if (isset($params['type'])) {
+            if (!($params['type'] == 'ANNOUNCEMENT' || $params['type'] == 'HOMESCREEN')) {
                 throw new ServiceException("Announcement Type must be ANNOUNCEMENT or HOMESCREEN", 'invalid.type.given', OxServiceException::ERR_CODE_PRECONDITION_FAILED);
             }
         } else {
@@ -459,31 +454,23 @@ class AnnouncementService extends AbstractService
             $pageSize = $filterArray[0]['take'];
             $offset = $filterArray[0]['skip'];
         }
-        if($params['type'] == 'ANNOUNCEMENT')
-        {
-            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE')){
+        if ($params['type'] == 'ANNOUNCEMENT') {
+            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE')) {
                 $where .= strlen($where) > 0 ? " AND " : "WHERE ";
                 $where .= "account_id =" . $accountId . " AND start_date <= curdate() AND 
                             end_date >= curdate() AND ann.type ='ANNOUNCEMENT'";
-                
-            }
-            else{
+            } else {
                 $where .= strlen($where) > 0 ? " AND " : "WHERE ";
                 $where .= "start_date <= curdate() AND end_date >= curdate() AND 
                             ann.type ='ANNOUNCEMENT' AND account_id IN (".$accountId.",null)";
-
             }
-        }
-        else {
-            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE')){
+        } else {
+            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE')) {
                 $where .= strlen($where) > 0 ? " AND " : "WHERE ";
                 $where .= "account_id =" . $accountId . " AND start_date <= curdate() AND end_date >= curdate() AND ann.type ='HOMESCREEN'";
-                
-            }
-            else {
+            } else {
                 $where .= strlen($where) > 0 ? " AND " : "WHERE ";
                 $where .= "start_date <= curdate() AND end_date >= curdate() AND ann.type ='HOMESCREEN' AND account_id IN (".$accountId.",null)" ;
-
             }
         }
         $sort = " ORDER BY " . $sort;
@@ -565,7 +552,7 @@ class AnnouncementService extends AbstractService
             if ($params['accountId'] != $obj->account_id) {
                 throw new ServiceException("Announcement does not belong to the account", "announcement.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
-        }else {
+        } else {
             throw new ServiceException("Account does not exist", "account.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
         }
         $announcementId = $obj->id;
@@ -578,12 +565,13 @@ class AnnouncementService extends AbstractService
         $resultInsert = $this->runGenericQuery($query);
     }
 
-    public function getHomescreenAnnouncementList($filterParams,$params) {
+    public function getHomescreenAnnouncementList($filterParams, $params)
+    {
         $accountId = null;
-        if(isset($params['subdomain'])) {
+        if (isset($params['subdomain'])) {
             $query = "SELECT id from ox_account where subdomain ='".$params['subdomain']."'";
             $resultSet = $this->executeQuerywithParams($query)->toArray();
-            if(empty($resultSet)) {
+            if (empty($resultSet)) {
                 $accountId = null;
             } else {
                 $accountId = $resultSet[0]['id'];

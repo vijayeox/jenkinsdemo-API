@@ -43,7 +43,8 @@ class Migration extends AbstractService
         $this->initDB();
     }
 
-    public static function createAdapter($config, $database){
+    public static function createAdapter($config, $database)
+    {
         $dbConfig = $config['db'];
         $dbConfig['dsn'] = 'mysql:dbname=' . $database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = $database;
@@ -52,11 +53,13 @@ class Migration extends AbstractService
     }
 
     //this method is used only for phpunit tests. Not required to be called otherwise
-    public function getAdapter(){
+    public function getAdapter()
+    {
         return $this->dbAdapter;
     }
 
-    public function getDatabase(){
+    public function getDatabase()
+    {
         return $this->database;
     }
 
@@ -66,7 +69,7 @@ class Migration extends AbstractService
      */
     private function initDB()
     {
-        $adapter = $this->mysqlAdapter;        
+        $adapter = $this->mysqlAdapter;
         try {
             $adapter->getDriver()->getConnection()->beginTransaction();
             $checkVersion = $this->checkDB(); //Code to check if the App Version is already installed.
@@ -89,7 +92,6 @@ class Migration extends AbstractService
             $adapter->getDriver()->getConnection()->rollback();
             throw $e;
         }
-
     }
 
     /**

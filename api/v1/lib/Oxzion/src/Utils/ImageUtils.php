@@ -6,7 +6,7 @@ class ImageUtils
     public static function createPNGImage($file, $targetFile)
     {
         $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-        if($file){
+        if ($file) {
             switch ($extension) {
                 case 'jpg':
                 case 'jpeg':
@@ -20,11 +20,11 @@ class ImageUtils
                     break;
                 case 'png':
                 case 'PNG':
-                    $image = copy($file,$targetFile);
+                    $image = copy($file, $targetFile);
                     return;
                 break;
             }
-            if($image){
+            if ($image) {
                 return imagepng($image, $targetFile);
             } else {
                 return null;

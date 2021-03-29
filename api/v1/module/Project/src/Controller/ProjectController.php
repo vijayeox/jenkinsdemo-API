@@ -58,8 +58,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -94,8 +93,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -121,8 +119,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -143,8 +140,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -178,8 +174,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -212,8 +207,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -238,8 +232,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -262,8 +255,7 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     public function getSubprojectsAction()
@@ -276,7 +268,6 @@ class ProjectController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 }

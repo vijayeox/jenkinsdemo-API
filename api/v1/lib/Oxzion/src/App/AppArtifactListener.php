@@ -2,9 +2,8 @@
 
 namespace Oxzion\App;
 
-interface AppArtifactListener {
+interface AppArtifactListener
+{
     public function directoryNameCreated(string $directoryPath);
     public function databaseNameCreated(string $databaseName);
 }
-
-?>

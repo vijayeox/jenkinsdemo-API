@@ -91,7 +91,7 @@ class ActivityInstanceControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->assertEquals('error', $content['status']);
-        $this->assertEquals('Process Instance Id not set', $content['message']);   
+        $this->assertEquals('Process Instance Id not set', $content['message']);
     }
     
     public function testCompleteinstance()

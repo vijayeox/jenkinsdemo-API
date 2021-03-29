@@ -36,12 +36,12 @@ class OXCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $params['baseurl'] = $this->config['applicationUrl'];
-        $params['passwordResetUrl'] = $this->config['applicationUrl'] . "/?resetpassword=" . $params['resetCode'];   
-        $bcc = " ";    
-        if(isset($params['bcc'])){
+        $params['passwordResetUrl'] = $this->config['applicationUrl'] . "/?resetpassword=" . $params['resetCode'];
+        $bcc = " ";
+        if (isset($params['bcc'])) {
             $bcc = $params['bcc'];
         }
-        if(isset($params['customTemplate'])){
+        if (isset($params['customTemplate'])) {
             $body = $this->templateService->getContent('newUser', $params);
         } else {
             $body = $this->templateService->getContent('newUser', $params);

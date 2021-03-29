@@ -23,28 +23,29 @@ class CommandController extends AbstractApiControllerHelper
         $this->commandService = $commandService;
         $this->log = $this->getLogger();
     }
-    public function executeCommandsAction(){
+    public function executeCommandsAction()
+    {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $params = array_merge($params,$this->params()->fromQuery());
+        $params = array_merge($params, $this->params()->fromQuery());
         $appUuid = $this->params()->fromRoute()['appId'];
         unset($params['method']);
         unset($params['controller']);
         unset($params['action']);
         unset($params['access']);
         try {
-            if(isset($params['commands'])){
+            if (isset($params['commands'])) {
                 $allowed = false;
                 foreach ($params['commands'] as $key => $command) {
-                    if($command['command'] == 'verify_user'){
+                    if ($command['command'] == 'verify_user') {
                         $allowed = true;
-                    } else if($command['command']=='delegate'){
+                    } elseif ($command['command']=='delegate') {
                         $allowed = true;
                     } else {
                         $allowed = false;
                     }
                 }
-                if($allowed){
-                    $response = $this->commandService->runCommand($params,$this->getRequest());
+                if ($allowed) {
+                    $response = $this->commandService->runCommand($params, $this->getRequest());
                     if ($response && is_array($response)) {
                         $this->log->info(":Pipleline Service Executed - " . print_r($response, true));
                         return $this->getSuccessResponseWithData($response, 200);
@@ -53,7 +54,7 @@ class CommandController extends AbstractApiControllerHelper
                     }
                 } else {
                     $this->log->info("Commands Access not Allowed -" . $params['commands']);
-                    return $this->getErrorResponse("Command Access Restricted", 401,null); 
+                    return $this->getErrorResponse("Command Access Restricted", 401, null);
                 }
             }
         } catch (ValidationException $e) {

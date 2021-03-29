@@ -10,37 +10,40 @@ use Oxzion\App\AppArtifactNamingStrategy;
 
 /*
  * Supports the following:
- * 
+ *
  * Upload form definition file (form.json).
  * Delete form definition file.
  * Upload workflow definition file (workflow.bpmn).
  * Delete workflow definition file.
  * Upload application archive (application.zip).
  * Download application archive.
- * 
+ *
  */
-class AppArtifactController extends AbstractApiController {
-    private $appArtifactService = NULL;
+class AppArtifactController extends AbstractApiController
+{
+    private $appArtifactService = null;
 
-    public function __construct(AppArtifactService $appArtifactService) {
+    public function __construct(AppArtifactService $appArtifactService)
+    {
         $this->appArtifactService = $appArtifactService;
         $this->log = $this->getLogger();
     }
 
-    public function addArtifactAction() {
+    public function addArtifactAction()
+    {
         $routeParams = $this->params()->fromRoute();
         $appUuid = $routeParams['appUuid'];
         $artifactType = $routeParams['artifactType'];
         try {
             return $this->getSuccessResponseWithData($this->appArtifactService->saveArtifact($appUuid, $artifactType));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-    public function deleteArtifactAction() {
+    public function deleteArtifactAction()
+    {
         $routeParams = $this->params()->fromRoute();
         $appUuid = $routeParams['appUuid'];
         $artifactType = $routeParams['artifactType'];
@@ -48,14 +51,14 @@ class AppArtifactController extends AbstractApiController {
         try {
             $this->appArtifactService->deleteArtifact($appUuid, $artifactType, $artifactName);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-    public function downloadAppArchiveAction() {
+    public function downloadAppArchiveAction()
+    {
         $routeParams = $this->params()->fromRoute();
         $appUuid = $routeParams['appUuid'];
         try {
@@ -68,39 +71,37 @@ class AppArtifactController extends AbstractApiController {
             $downloadFileName = $normalizedAppName . '-OxzionAppArchive.zip';
             $headers = new \Zend\Http\Headers();
             $headers->addHeaderLine('Content-Type', 'application/zip')
-                    ->addHeaderLine('Content-Disposition', 'attachment; filename=' . $downloadFileName )
+                    ->addHeaderLine('Content-Disposition', 'attachment; filename=' . $downloadFileName)
                     ->addHeaderLine('Access-Control-Expose-Headers: Content-Disposition')
                     ->addHeaderLine('Content-Length', filesize($zipFilePath));
             $response->setHeaders($headers);
             return $response;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-    public function uploadAppArchiveAction() {
+    public function uploadAppArchiveAction()
+    {
         try {
             $returnData = $this->appArtifactService->uploadAppArchive();
             return $this->getSuccessResponseWithData($returnData, 200);
-        }
-        catch (ZipException $e) {
+        } catch (ZipException $e) {
             return $this->getErrorResponse('Invalid application archive.');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
-    public function getArtifactsAction() {
+    public function getArtifactsAction()
+    {
         $routeParams = $this->params()->fromRoute();
         $appUuid = $routeParams['appUuid'];
         $artifactType = $routeParams['artifactType'];
         try {
             return $this->getSuccessResponseWithData($this->appArtifactService->getArtifacts($appUuid, $artifactType));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

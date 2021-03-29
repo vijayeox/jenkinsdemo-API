@@ -5,26 +5,27 @@ namespace Oxzion\Analytics;
 use Oxzion\Service\TemplateService;
 use Logger;
 
-
 abstract class AnalyticsAbstract implements AnalyticsEngine
 {
-
     protected $logger;
-    protected $config; //This config is config for connection not the app config. 
+    protected $config; //This config is config for connection not the app config.
     protected $appConfig;
     protected $appDBAdapter;
 
-    public function __construct($appDBAdapter,$appConfig) {
+    public function __construct($appDBAdapter, $appConfig)
+    {
         $this->appDBAdapter = $appDBAdapter;
         $this->appConfig = $appConfig;
         $this->logger = Logger::getLogger(get_class($this));
     }
 
-    public function setConfig($config){
+    public function setConfig($config)
+    {
         $this->config=$config;
     }
 
-    public function runQuery($app_name,$entity_name,$parameters){
+    public function runQuery($app_name, $entity_name, $parameters)
+    {
         if (isset($parameters['top'])) {
             $parameters['pagesize']=$parameters['top'];
         }
@@ -67,10 +68,10 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
             $finalResult['target'] = $parameters['target'];
         }
         if (!empty($parameters['pivot'])) {
-            $finalResult['data'] = $this->pivot($finalResult['data'],$parameters);
+            $finalResult['data'] = $this->pivot($finalResult['data'], $parameters);
         }
         if (isset($parameters['template'])) {
-            $finalResult['data'] = $this->applyTemplate($finalResult,$parameters);
+            $finalResult['data'] = $this->applyTemplate($finalResult, $parameters);
         }
         if (!empty($parameters['debug'])) {
             $finalResult['targetquery'] = $this->getQuery();
@@ -78,8 +79,9 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         return $finalResult;
     }
 
-    public function pivot($data,$parameters) {
-        $groupArray=explode(',',$parameters['group']);
+    public function pivot($data, $parameters)
+    {
+        $groupArray=explode(',', $parameters['group']);
         if (!isset($groupArray[0]) || !isset($groupArray[1])) {
             throw new \Exception('Please check query. Two Groups and Field should Exist');
         }
@@ -95,23 +97,20 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         }
         foreach ($data as $row) {
             $tmpArray[$row[$group1]][$row[$group2]] = $row[$valueColumn];
-            if (!isset($columnKeys[$row[$group2]]))
-            {
-                $columnKeys[$row[$group2]] = null; 
+            if (!isset($columnKeys[$row[$group2]])) {
+                $columnKeys[$row[$group2]] = null;
             }
         }
         foreach ($tmpArray as $key=>$groupArray) {
             $array1 = $groupArray+$columnKeys;
-            $pivotResult[] = array_merge([$group1=>$key],$array1);
+            $pivotResult[] = array_merge([$group1=>$key], $array1);
         }
         return $pivotResult;
-
     }
 
 
     public function postProcess($resultData, $parameters)
     {
-
         $expression = "";
         $round = null;
 
@@ -144,13 +143,13 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
     }
 
 
-    public function applyTemplate($resultData,$parameters) {
+    public function applyTemplate($resultData, $parameters)
+    {
         $templateName = $parameters['template'];
-        $templateEngine = new TemplateService($this->appConfig,$this->appDBAdapter);
+        $templateEngine = new TemplateService($this->appConfig, $this->appDBAdapter);
         $templateEngine->init();
-        $result = $templateEngine->getContent($templateName,$resultData);
+        $result = $templateEngine->getContent($templateName, $resultData);
         $result = str_replace(array("\r\n","\r","\n","\t"), '', $result);
         return $result;
     }
-
 }

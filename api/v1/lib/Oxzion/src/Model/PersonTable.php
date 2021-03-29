@@ -12,5 +12,4 @@ class PersonTable extends ModelTable
         parent::__construct($tableGateway);
         $this->tableGateway = $tableGateway;
     }
-
 }

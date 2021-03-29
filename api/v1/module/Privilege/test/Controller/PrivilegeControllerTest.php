@@ -78,7 +78,7 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertEquals(count($content['data']['masterPrivilege']), 36);
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ACCOUNT');
         $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_ALERT');
-        $this->assertEquals(empty($content['data']['rolePrivilege']), TRUE);
+        $this->assertEquals(empty($content['data']['rolePrivilege']), true);
     }
 
     public function testGetMasterPrivilegeOtherOrg()

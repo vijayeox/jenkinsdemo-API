@@ -11,7 +11,6 @@ use Zend\Db\Sql\Expression;
 
 abstract class AbstractService extends AbstractBaseService
 {
-
     protected function __construct($config, $dbAdapter)
     {
         parent::__construct($config, $dbAdapter);
@@ -22,20 +21,22 @@ abstract class AbstractService extends AbstractBaseService
         return $this->config["apiUrl"];
     }
 
-    protected function getAccountIdForOrgId($orgId){
+    protected function getAccountIdForOrgId($orgId)
+    {
         $query = "SELECT a.id, a.uuid from ox_account a 
                     inner join ox_organization o on o.id = a.organization_id
                     where o.uuid = :orgId";
         $params = ['orgId' => $orgId];
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-        if(count($result) > 0){
+        if (count($result) > 0) {
             return $result[0];
-        }else{
+        } else {
             return null;
         }
     }
 
-    protected function getOrgIdForAccountId($accountId){
+    protected function getOrgIdForAccountId($accountId)
+    {
         $where = "a.uuid = :accountId";
         if (is_numeric($accountId)) {
             $where = "a.id =:accountId";
@@ -44,20 +45,21 @@ abstract class AbstractService extends AbstractBaseService
                     left outer join ox_organization o on o.id = a.organization_id
                     where $where";
         $params = ['accountId' => $accountId];
-        $this->logger->info("Excutng query $query with---".print_r($params,true));
+        $this->logger->info("Excutng query $query with---".print_r($params, true));
         $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-        if(count($result) > 0){
+        if (count($result) > 0) {
             return $result[0];
-        }else{
+        } else {
             return null;
         }
     }
 
-    protected function executeQueryOnTable($table, $columns, $filter, $join = null){
+    protected function executeQueryOnTable($table, $columns, $filter, $join = null)
+    {
         $sql = $this->getSqlObject();
         $query = $sql->select();
         $query->from($table);
-        if($join){
+        if ($join) {
             $query->join($join['table'], $join['condition']);
         }
         $query->columns($columns)
@@ -313,29 +315,29 @@ abstract class AbstractService extends AbstractBaseService
 
     public function updateAccountContext($data)
     {
-        $this->logger->info("Received Data--".print_r($data,true));
+        $this->logger->info("Received Data--".print_r($data, true));
         try {
             if (isset($data['orgId']) || isset($data['accountId'])) {
-                if(isset($data['orgId'])){
+                if (isset($data['orgId'])) {
                     $accountIds = $this->getAccountIdForOrgId($data['orgId']);
                     $orgIds = ['uuid' => $data['orgId']];
                     $orgIds['id'] = $this->getIdFromUuid('ox_organization', $data['orgId']);
-                }else {
+                } else {
                     $orgIds = $this->getOrgIdForAccountId($data['accountId']);
                     $accountIds = ['uuid' => $data['accountId']];
                     $accountIds['id'] = $this->getIdFromUuid('ox_account', $data['accountId']);
                 }
-                $this->logger->info("AccountIdsss--".print_r($accountIds,true));
+                $this->logger->info("AccountIdsss--".print_r($accountIds, true));
                 AuthContext::put(AuthConstants::ACCOUNT_ID, $accountIds['id']);
                 AuthContext::put(AuthConstants::ACCOUNT_UUID, $accountIds['uuid']);
                 AuthContext::put(AuthConstants::ORG_UUID, $orgIds['uuid']);
                 AuthContext::put(AuthConstants::ORG_ID, $orgIds['id']);
                 $userId = AuthContext::get(AuthConstants::USER_ID);
                 $userUuid = AuthContext::get(AuthConstants::USER_UUID);
-                if(isset($data['userId'])){
+                if (isset($data['userId'])) {
                     $userUuid = $data['userId'];
                     $userId = $this->getIdFromUuid('ox_user', $userUuid);
-                }else if(!$userId){
+                } elseif (!$userId) {
                     $select = "SELECT ou.id,ou.uuid from ox_user as ou join ox_account as account on account.contactid = ou.id where account.id = :accountId";
                     $params = array("accountId" => $accountIds['id']);
                     $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
@@ -347,7 +349,7 @@ abstract class AbstractService extends AbstractBaseService
                 if (isset($userId)) {
                     AuthContext::put(AuthConstants::USER_ID, $userId);
                     AuthContext::put(AuthConstants::USER_UUID, $userUuid);
-                    $userInfo = $this->getDataByParams('ox_user', array('username') , ["id" => $userId])->toArray();
+                    $userInfo = $this->getDataByParams('ox_user', array('username'), ["id" => $userId])->toArray();
                     AuthContext::put(AuthConstants::USERNAME, $userInfo[0]['username']);
                 }
             }
@@ -367,10 +369,11 @@ abstract class AbstractService extends AbstractBaseService
         return $returnArray;
     }
 
-    public function setSessionProperties($properties){
-        foreach($properties as $key => $value){
-            if(is_string($value['value'])){
-                $value['value'] = "'".$value['value']."'";    
+    public function setSessionProperties($properties)
+    {
+        foreach ($properties as $key => $value) {
+            if (is_string($value['value'])) {
+                $value['value'] = "'".$value['value']."'";
             }
             $query = "SET SESSION ".$value['name']." = ".$value['value'];
             $this->executeQuerywithParams($query);

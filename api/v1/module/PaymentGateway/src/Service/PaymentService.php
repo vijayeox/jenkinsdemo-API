@@ -171,7 +171,9 @@ class PaymentService extends AbstractService
             curl_setopt($ch, CURLOPT_POST, true); // set POST method
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             // Set up the post fields. If you want to add custom fields, you would add them in Converge, and add the field name in the curlopt_postfields string
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
+            curl_setopt(
+                $ch,
+                CURLOPT_POSTFIELDS,
                 "ssl_merchant_id=$paymentConfigInfo->merchant_id" .
                 "&ssl_user_id=$paymentConfigInfo->user_id" .
                 "&ssl_pin=$paymentConfigInfo->pincode" .

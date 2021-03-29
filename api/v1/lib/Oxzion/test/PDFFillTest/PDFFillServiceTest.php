@@ -10,8 +10,7 @@ class PDFServiceTest extends ServiceTest
     public function setUp() : void
     {
         $this->loadConfig();
-         parent::setUp();
-
+        parent::setUp();
     }
 
     public function testFillPDF()
@@ -21,15 +20,10 @@ class PDFServiceTest extends ServiceTest
         $destination = $destFolder."w2filledpdf.pdf";
         $data= ['ein'=>'123456789','address'=>'1000 East St,  Cleveland, OH - 44123','firstname'=>'John','lastname'=>'Doe'];
         $generatePdf = new DocumentGeneratorImpl();
-        $output = $generatePdf->fillPDFForm($pdfform,$data,$destination);
+        $output = $generatePdf->fillPDFForm($pdfform, $data, $destination);
         $this->assertEquals($output, 1);
         $this->assertTrue(file_exists($destination));
         $this->assertTrue(filesize($destination)>0);
         FileUtils::deleteFile("w2filledpdf.pdf", $destFolder);
-
     }
-
-
-
-
 }

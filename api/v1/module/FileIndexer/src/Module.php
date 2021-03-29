@@ -34,7 +34,7 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Service\FileIndexerService::class => function ($container) {
-                    return new Service\FileIndexerService($container->get('config'),$container->get(AdapterInterface::class),$container->get(MessageProducer::class));
+                    return new Service\FileIndexerService($container->get('config'), $container->get(AdapterInterface::class), $container->get(MessageProducer::class));
                 },
             ],
         ];

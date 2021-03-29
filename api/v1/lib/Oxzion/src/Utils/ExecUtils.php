@@ -10,8 +10,9 @@ namespace Oxzion\Utils;
 
 class ExecUtils
 {
-    public static function execCommand($command){
-    	exec($command." 2>&1", $output, $return);
-    	return $output;
+    public static function execCommand($command)
+    {
+        exec($command." 2>&1", $output, $return);
+        return $output;
     }
 }

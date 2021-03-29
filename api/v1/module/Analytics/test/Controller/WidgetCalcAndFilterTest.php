@@ -108,7 +108,6 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000},{"owner_username":"john","industry":"Software","budget_amount":2000},{"owner_username":"mark","industry":"Insurance","budget_amount":6000},{"owner_username":"jane","industry":"Insurance","budget_amount":5000}]');
-
     }
 
     public function testGetWithCombinedData()
@@ -125,7 +124,6 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         //   echo $jsoncontent;
         $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","actual_amount":500,"budget_amount":1000},{"owner_username":"john","industry":"Software","actual_amount":2300,"budget_amount":2000},{"owner_username":"mark","industry":"Insurance","actual_amount":5600,"budget_amount":6000},{"owner_username":"jane","industry":"Insurance","actual_amount":5000,"budget_amount":5000}]');
-
     }
 
     public function testGetWithExpressionData()
@@ -141,7 +139,6 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000,"actual_amount":500,"calcfield1":14285.71,"calcfield2":14285.714285714286,"calcfield3":0.02857142857142857,"calcfield4":0.029},{"owner_username":"john","industry":"Software","budget_amount":2000,"actual_amount":2300,"calcfield1":-17142.86,"calcfield2":-17142.85714285714,"calcfield3":0.05714285714285714,"calcfield4":0.057},{"owner_username":"mark","industry":"Insurance","budget_amount":6000,"actual_amount":5600,"calcfield1":68571.43,"calcfield2":68571.42857142857,"calcfield3":0.17142857142857143,"calcfield4":0.171},{"owner_username":"jane","industry":"Insurance","budget_amount":5000,"actual_amount":5000,"calcfield1":0,"calcfield2":0,"calcfield3":0.14285714285714285,"calcfield4":0.143}]');
-
     }
 
     public function testGetWithCombinedSingleData()
@@ -205,7 +202,6 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($jsoncontent, '[{"owner_username":"john","industry":"Insurance","budget_amount":1000},{"owner_username":"john","industry":"Software","budget_amount":2000}]');
-
     }
 
     public function testGetWithComplexFilterParametersData()
@@ -480,7 +476,6 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $this->assertEquals($content['data']['widget']['data'], '13400');
         $jsoncontent = json_encode($content['data']['widget']['targets']);
         $this->assertEquals($jsoncontent, '{"red_limit":"10000","yellow_limit":"25000","green_limit":"35000","color":"yellow"}');
-
     }
 
     public function testWithPivot()
@@ -544,5 +539,4 @@ class WidgetCalcAndFilterTest extends ControllerTest
         $jsoncontent = json_encode($content['data']['widget']['data']);
         $this->assertEquals($jsoncontent, '[{"test1":1},{"test2":2}]');
     }
-
 }

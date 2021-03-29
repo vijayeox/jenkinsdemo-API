@@ -19,9 +19,10 @@ use Oxzion\ValidationException;
 
 class AppServiceTest extends AbstractServiceTest
 {
-    private $setUpTearDownHelper = NULL;
+    private $setUpTearDownHelper = null;
 
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->loadConfig();
         $config = $this->getApplicationConfig();
@@ -46,9 +47,9 @@ class AppServiceTest extends AbstractServiceTest
         if ($this->getName() == 'testRemoveDeployedApp') {
             return new YamlDataSet(dirname(__FILE__) . "/Dataset/DeployedApp.yml");
         }
-        $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/AppServiceTest.yml");     
-        switch($this->getName()) {
-            case 'testProcessJobCrud': 
+        $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/AppServiceTest.yml");
+        switch ($this->getName()) {
+            case 'testProcessJobCrud':
                 $dataset->addYamlFile(dirname(__FILE__)."/Dataset/JobData.yml");
             break;
         }
@@ -71,7 +72,8 @@ class AppServiceTest extends AbstractServiceTest
         return $mockRestClient;
     }
 
-    public function testGetAppsOfAccountWithApps() {
+    public function testGetAppsOfAccountWithApps()
+    {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
@@ -79,20 +81,21 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertEquals(10, count($apps));
     }
 
-    public function testGetAppsOfAccountWithoutApps() {
+    public function testGetAppsOfAccountWithoutApps()
+    {
         AuthContext::put(AuthConstants::USER_ID, '5');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '2');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $apps = $appService->getApps();
             $this->fail('Expected EntityNotFoundException.');
-        }
-        catch(EntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             $this->assertNotNull($e);
         }
     }
 
-    public function testGetAppWithValidUuid() {
+    public function testGetAppWithValidUuid()
+    {
         AuthContext::put(AuthConstants::USER_ID, 6);
         AuthContext::put(AuthConstants::ACCOUNT_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
@@ -110,7 +113,8 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertEquals('DummyApp', $appData['name']);
     }
 
-    public function testCreateAppPreBuilt() {
+    public function testCreateAppPreBuilt()
+    {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
@@ -150,7 +154,8 @@ class AppServiceTest extends AbstractServiceTest
         }
     }
 
-    public function testCreateAppMyApp() {
+    public function testCreateAppMyApp()
+    {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
@@ -194,7 +199,7 @@ class AppServiceTest extends AbstractServiceTest
         }
         $yamlFileData = Yaml::parse(file_get_contents($applicationYamlFilePath));
         $this->assertEquals($data['app']['name'], $yamlFileData['app']['name']);
-        $this->assertEquals($data['app']['description'], $yamlFileData['app']['description']); 
+        $this->assertEquals($data['app']['description'], $yamlFileData['app']['description']);
         $this->assertEquals($data['app']['category'], $yamlFileData['app']['category']);
         $this->assertEquals($data['app']['type'], $yamlFileData['app']['type']);
         $this->assertEquals(0, $yamlFileData['app']['isdefault']);
@@ -204,15 +209,15 @@ class AppServiceTest extends AbstractServiceTest
         FileUtils::rmDir($sourceAppDirectory);
     }
 
-    public function testGetAppWithInvalidUuid() {
+    public function testGetAppWithInvalidUuid()
+    {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $app = $appService->getApp('11111111-1111-1111-1111-111111111111');
             $this->fail('Expected EntityNotFoundException for application not found in the database.');
-        }
-        catch (\Oxzion\EntityNotFoundException $e) {
+        } catch (\Oxzion\EntityNotFoundException $e) {
             $this->assertNotNull($e);
         }
     }
@@ -290,14 +295,14 @@ class AppServiceTest extends AbstractServiceTest
         $content = $appService->processEntity($data);
         $sqlQuery = "SELECT * FROM ox_app_entity WHERE app_id = 299";
         $result = $this->executeQueryTest($sqlQuery);
-        $this->assertEquals($result[0]['name'],$data['entity'][0]['name'] );
-        $this->assertEquals($result[0]['ryg_rule'],$data['entity'][0]['ryg_rule']);
+        $this->assertEquals($result[0]['name'], $data['entity'][0]['name']);
+        $this->assertEquals($result[0]['ryg_rule'], $data['entity'][0]['ryg_rule']);
     }
 
     public function testProcessForm()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'form' => array(array('name' => 'PADI Verification', 'uuid' => 'd2ed4200-9131-4671-b0e0-de3e27c3f610', 'description' => 'Page for CSR to verify PADI details', 'template_file' => 'dummypage.json','entity' => 'Padi')));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'form' => array(array('name' => 'PADI Verification', 'uuid' => 'd2ed4200-9131-4671-b0e0-de3e27c3f610', 'description' => 'Page for CSR to verify PADI details', 'template_file' => 'dummypage.json','entity' => 'Padi')));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->processForm($data, $path);
@@ -314,7 +319,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessFormWithNoFormInData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->processForm($data, $path);
@@ -331,13 +336,13 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessFormWithNoEntity()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'form' => array(array('name' => 'PADI Verification', 'uuid' => 'd2ed4200-9131-4671-b0e0-de3e27c3f610', 'description' => 'Page for CSR to verify PADI details', 'template_file' => 'dummypage.json','entity' => '')));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'form' => array(array('name' => 'PADI Verification', 'uuid' => 'd2ed4200-9131-4671-b0e0-de3e27c3f610', 'description' => 'Page for CSR to verify PADI details', 'template_file' => 'dummypage.json','entity' => '')));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
-        try{
+        try {
             $appService->processForm($data, $path);
             $this->fail('Expected ValidationException.');
-        }catch(ValidationException $e) {
+        } catch (ValidationException $e) {
             $this->assertNotNull($e);
         }
     }
@@ -345,7 +350,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessWorkflow()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'workflow' =>array(array('name' => 'Dive Boat Reinstate Policy', 'entity' => 'Dive Boat', 'uuid' => '2d94a2f0-c64c-48e0-a4f0-f85f626f0626', 'bpmn_file' => 'Cancel Policy/ReinstatePolicyDB.bpmn')));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'workflow' =>array(array('name' => 'Dive Boat Reinstate Policy', 'entity' => 'Dive Boat', 'uuid' => '2d94a2f0-c64c-48e0-a4f0-f85f626f0626', 'bpmn_file' => 'Cancel Policy/ReinstatePolicyDB.bpmn')));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         if (enableCamundaForDeployApp == 0) {
@@ -367,7 +372,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessWorkflowWithoutWorkflowInYmlData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->processWorkflow($data, $path);
@@ -418,7 +423,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessPage()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'pages' => array(array('page_name' => 'dummyPage.yml', 'uuid' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c')));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'pages' => array(array('page_name' => 'dummyPage.yml', 'uuid' => 'b9714cfd-2ae5-4f13-83eb-7d925c3b660c')));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->processPage($data, $path);
@@ -435,7 +440,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testProcessPageWithNoPageInData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->processPage($data, $path);
@@ -453,7 +458,7 @@ class AppServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::ACCOUNT_ID, '300');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'job' =>array(array('uuid' => '129dfbe2-151d-49c8-81e9-a4b7582df65e', 'name' => 'autoRenewalJob', 'url' => '/workflow/f0efea9e-7863-4368-a9b2-baa1a1603067', 'cron' => '0 4 12 18 * ? 2020', 'data' => array('EFR2M' => '204','padi' => '2165', 'padiVerified' => '1'))));
-         if (enableCamel == 0) {
+        if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobTeam":"autoRenewalJob"}'));
         }
@@ -467,7 +472,7 @@ class AppServiceTest extends AbstractServiceTest
         $resultSet = new ResultSet();
         $result = $resultSet->initialize($result)->toArray();
         $this->assertEquals(count($result), 2);
-        $this->assertEquals($result[0]['job_id'], NULL);
+        $this->assertEquals($result[0]['job_id'], null);
     }
 
     public function testProcessJobWithInstallation()
@@ -522,7 +527,8 @@ class AppServiceTest extends AbstractServiceTest
             $mockRestClient = $this->getMockRestClientForScheduleService();
             $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobTeam":"JOB1"}'));
             $mockRestClient->expects('postWithHeader')->with("canceljob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"aca4a3e4-6f8d-11eb-9439-0242ac130002","JobTeam":"JOB2"}'));
-            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobTeam":"autoRenewalJob"}'));  $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05fb2-6f9e-11eb-9439-0242ac130002","JobTeam":"Job3"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05c42-6f9e-11eb-9439-0242ac130002","JobTeam":"autoRenewalJob"}'));
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"b1a05fb2-6f9e-11eb-9439-0242ac130002","JobTeam":"Job3"}'));
         }
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appService->processJob($data);
@@ -538,22 +544,22 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertEquals(count($result), 4);
         $this->assertEquals($result[0]['name'], $data['job'][0]['uuid']);
         $this->assertEquals($result[0]['group_name'], $data['job'][0]['name']);
-        $this->assertEquals($result[0]['job_id'],NULL);
+        $this->assertEquals($result[0]['job_id'], null);
         $this->assertEquals($result[1]['name'], $data['job'][0]['uuid']);
         $this->assertEquals($result[1]['group_name'], $data['job'][0]['name']);
-        $this->assertEquals($result[1]['job_id'],'b1a05c42-6f9e-11eb-9439-0242ac130002');
+        $this->assertEquals($result[1]['job_id'], 'b1a05c42-6f9e-11eb-9439-0242ac130002');
         $this->assertEquals($result[2]['name'], $data['job'][1]['uuid']);
         $this->assertEquals($result[2]['group_name'], $data['job'][1]['name']);
-        $this->assertEquals($result[2]['job_id'],NULL);
+        $this->assertEquals($result[2]['job_id'], null);
         $this->assertEquals($result[3]['name'], $data['job'][1]['uuid']);
         $this->assertEquals($result[3]['group_name'], $data['job'][1]['name']);
-        $this->assertEquals($result[3]['job_id'],'b1a05fb2-6f9e-11eb-9439-0242ac130002');
+        $this->assertEquals($result[3]['job_id'], 'b1a05fb2-6f9e-11eb-9439-0242ac130002');
     }
 
     public function testProcessJobWithoutJobInYmlData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->processJob($data, $path);
@@ -570,7 +576,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateRole()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        AuthContext::put(AuthConstants::ACCOUNT_UUID, 'a77ea120-b028-479b-8c6e-60476b6a4456');        
+        AuthContext::put(AuthConstants::ACCOUNT_UUID, 'a77ea120-b028-479b-8c6e-60476b6a4456');
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'), 'role' => array(array('name' => 'Policy Holder', 'default' => '1', 'privileges' => array(array('privilege_name' => 'MANAGE_MY_POLICY', 'permission' => '3')),'uuid' => '703d3a09-b7f3-49e9-9c79-74d5cae7f6e7')));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
@@ -592,7 +598,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateRoleWithNoRoleInData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createRole($data);
@@ -611,7 +617,7 @@ class AppServiceTest extends AbstractServiceTest
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         AuthContext::put(AuthConstants::ACCOUNT_UUID, '53012471-2863-4949-afb1-e69b0891c98a');
-        AuthContext::put(AuthConstants::PRIVILEGES, ['MANAGE_ACCOUNT_WRITE' => TRUE]);
+        AuthContext::put(AuthConstants::PRIVILEGES, ['MANAGE_ACCOUNT_WRITE' => true]);
         $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'), 'org' => array('name' => 'V&B', 'uuid' => 'e1033dc0-126b-40ba-89e0-d3061bdeda42','email' => 'vb07@gmail.com','address1' => '6 bCenterpoint','address2' => 'Dr.','city' => 'La Palma','state' => 'CA','zip' => '90623','country' => 'United States','contact' => array('username' => 'vb07.gmail.com','firstname' => 'Admin','lastname' => 'User','email' => 'vb07@gmail.com'),'preferences' => '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'));
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->setupOrg($data);
@@ -628,7 +634,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateOrgWithNoOrgInData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->setupOrg($data);
@@ -644,7 +650,7 @@ class AppServiceTest extends AbstractServiceTest
 
     public function testPerformMigration()
     {
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'SampleApp2', 'description' => 'test db for app service test'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'SampleApp2', 'description' => 'test db for app service test'));
         $path = __DIR__ . '/../sampleapp';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->performMigration($data, $path);
@@ -673,7 +679,7 @@ class AppServiceTest extends AbstractServiceTest
     public function testCreateAppPrivilegesWithoutPrivilegeInYmlData()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->createAppPrivileges($data);
@@ -695,8 +701,8 @@ class AppServiceTest extends AbstractServiceTest
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $config = $this->getApplicationConfig();
         $eoxapp = $config['DATA_FOLDER'] . 'eoxapps';
-        if(!is_dir($path . 'view/apps/eoxapps')){
-            FileUtils::copyDir($eoxapp,$path);
+        if (!is_dir($path . 'view/apps/eoxapps')) {
+            FileUtils::copyDir($eoxapp, $path);
         }
         $content = $appService->setupAppView($data, $path);
         $appname = $path . 'view/apps/DummyApp' ;
@@ -713,7 +719,7 @@ class AppServiceTest extends AbstractServiceTest
             $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
         }
         AuthContext::put(AuthConstants::USER_ID, '1');
-        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'));        
+        $data = array('app' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4459', 'name' => 'DummyApp'), 'org' => array('uuid' => 'a77ea120-b028-479b-8c6e-60476b6a4456'));
         $path = __DIR__ . '/../../../../module/App/test/sampleapp/';
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $content = $appService->processSymlinks($data, $path);
@@ -724,10 +730,10 @@ class AppServiceTest extends AbstractServiceTest
         $formfolder = $config['FORM_FOLDER']. 'a77ea120-b028-479b-8c6e-60476b6a4459' ;
         $result2 = file_exists($formfolder);
         $this->assertEquals($result2, 1);
-        if (is_link($delegatefolder)){
+        if (is_link($delegatefolder)) {
             unlink($delegatefolder);
         };
-        if (is_link($formfolder)){
+        if (is_link($formfolder)) {
             unlink($formfolder);
         };
         $result = file_exists($delegatefolder);
@@ -736,7 +742,8 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertEquals($result2, 0);
     }
 
-    public function testDeleteApp() {
+    public function testDeleteApp()
+    {
         AuthContext::put(AuthConstants::USER_ID, 6);
         AuthContext::put(AuthConstants::ACCOUNT_ID, 300);
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
@@ -748,20 +755,21 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertNotEquals($uuid, $result[0]['uuid']);
     }
 
-    public function testDeleteAppWithInvalidUuid() {
+    public function testDeleteAppWithInvalidUuid()
+    {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         try {
             $appService->deleteApp('11111111-1111-1111-1111-111111111111', 0);
             $this->fail('Expected EntityNotFoundException.');
-        }
-        catch(EntityNotFoundException $e) {
+        } catch (EntityNotFoundException $e) {
             $this->assertNotNull($e);
         }
     }
 
-    public function testRemoveDeployedApp(){
+    public function testRemoveDeployedApp()
+    {
         AuthContext::put(AuthConstants::USER_ID, '1');
         $uuid = '35443300-1826-11eb-adc1-0242ac120002';
         $id = 99;
@@ -880,12 +888,9 @@ class AppServiceTest extends AbstractServiceTest
             $this->assertEquals(App::DELETED, $result[0]['status']);
             $this->assertEquals($result[0]['id']."_SampleApp", $result[0]['name']);
             $this->assertNotEquals($result[0]['uuid'], $uuid);
-
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             $this->assertNotNull($e);
         }
-
-
     }
     
     public function testSetupAppViewNewAppName()
@@ -896,8 +901,8 @@ class AppServiceTest extends AbstractServiceTest
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $config = $this->getApplicationConfig();
         $eoxapp = $config['DATA_FOLDER'] . 'eoxapps';
-        if(!is_dir($path . 'view/apps/eoxapps')){
-            FileUtils::copyDir($eoxapp,$path);
+        if (!is_dir($path . 'view/apps/eoxapps')) {
+            FileUtils::copyDir($eoxapp, $path);
             FileUtils::renameFile($path.$eoxapp, $path.$data['app']['oldAppName']);
         }
         $content = $appService->setupAppView($data, $path);
@@ -907,4 +912,3 @@ class AppServiceTest extends AbstractServiceTest
         FileUtils::rmDir($appnameNew);
     }
 }
-

@@ -22,6 +22,5 @@ class UserCache extends Entity
 
     public function validate()
     {
-        
     }
 }

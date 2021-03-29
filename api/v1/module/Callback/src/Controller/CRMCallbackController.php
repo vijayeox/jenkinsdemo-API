@@ -27,7 +27,7 @@ class CRMCallbackController extends AbstractApiControllerHelper
             if ($response) {
                 return $this->getSuccessResponseWithData($response['body'], 201);
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -43,13 +43,13 @@ class CRMCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $this->log->info(__CLASS__ . "-> Add Campaign to CRM - " . json_encode($params, true));
-        try{
+        try {
             $response = $this->crmService->addContact($params);
             if ($response) {
                 return $this->getSuccessResponseWithData($response['body'], 201);
             }
             return $this->getErrorResponse("Contact Creation Failed", 404);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

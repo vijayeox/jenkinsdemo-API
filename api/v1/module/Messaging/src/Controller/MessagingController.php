@@ -52,6 +52,5 @@ class MessagingController extends AbstractApiControllerHelper
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
         }
-
     }
 }

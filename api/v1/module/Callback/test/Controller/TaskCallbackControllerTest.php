@@ -86,7 +86,7 @@ class TaskCallbackControllerTest extends ControllerTest
         $data = ['uuid' => 'faaf6453-d5a8-4061-9ac7-a83b8eefe20e', 'new_projectname' => 'Project Data', 'description' => 'New Demo Project'];
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForTaskService();
-            $mockRestClient->expects('updateWithHeader')->with("projects/" . $data['uuid'], array("name" => "Project Data", "description" => "New Demo Project", 'parent_identifier' => NULL))->once()->andReturn(array("body" => json_encode(array("status" => "success", "data" => array("name" => "Project Data", "description" => "New Demo Project", 'manager_login' => null), "message" => "Project Updated Successfully"))));
+            $mockRestClient->expects('updateWithHeader')->with("projects/" . $data['uuid'], array("name" => "Project Data", "description" => "New Demo Project", 'parent_identifier' => null))->once()->andReturn(array("body" => json_encode(array("status" => "success", "data" => array("name" => "Project Data", "description" => "New Demo Project", 'manager_login' => null), "message" => "Project Updated Successfully"))));
         }
         $this->dispatch('/callback/task/updateproject', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -104,7 +104,7 @@ class TaskCallbackControllerTest extends ControllerTest
         if (enableCamel == 0) {
             $mockRestClient = $this->getMockRestClientForTaskService();
             $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-            $mockRestClient->expects('updateWithHeader')->with("projects/" . $data['uuid'], array("name" => "Project Data", "description" => "New Demo Project", 'parent_identifier' => NULL))->once()->andThrow($exception);
+            $mockRestClient->expects('updateWithHeader')->with("projects/" . $data['uuid'], array("name" => "Project Data", "description" => "New Demo Project", 'parent_identifier' => null))->once()->andThrow($exception);
         }
         $this->dispatch('/callback/task/updateproject', 'POST', $data);
         $this->assertResponseStatusCode(400);

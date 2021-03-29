@@ -22,19 +22,18 @@ class EsignController extends AbstractApiController
     /**
      * GET sttus API
      * @api
-     * @link 
+     * @link
      * @method GET
-     * @return get status 
+     * @return get status
      */
     public function getStatusAction()
     {
-    	$docId = $this->params()->fromRoute()['docId'];
+        $docId = $this->params()->fromRoute()['docId'];
         try {
             $result = $this->esignService->getDocumentStatus($docId);
             $this->log->info("result status is ".$result);
             return $this->getSuccessResponseWithData(['status' => $result]);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error("error occured -".$e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

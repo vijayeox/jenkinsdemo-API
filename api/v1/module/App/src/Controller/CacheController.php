@@ -69,26 +69,26 @@ class CacheController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($data, 201);
     }
 
     public function cacheAction()
     {
         $appId = $this->params()->fromRoute()['appId'];
-        if(isset($this->params()->fromRoute()['cacheId'])){
-          $cacheId = $this->params()->fromRoute()['cacheId'];
+        if (isset($this->params()->fromRoute()['cacheId'])) {
+            $cacheId = $this->params()->fromRoute()['cacheId'];
         } else {
-          $cacheId = null;
+            $cacheId = null;
         }
         $this->log->info(__CLASS__ . "-> \n Get Cache - " . print_r($appId, true));
-        try{
+        try {
             $result = $this->userCacheService->getCache($cacheId, $appId, AuthContext::get(AuthConstants::USER_ID));
             return $this->getSuccessResponseWithData($result);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     public function cacheDeleteAction()
@@ -100,7 +100,6 @@ class CacheController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 }

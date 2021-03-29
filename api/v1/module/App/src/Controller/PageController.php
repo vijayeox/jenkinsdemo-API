@@ -102,10 +102,10 @@ class PageController extends AbstractApiController
     public function delete($id)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        try{
-        $response = $this->pageService->deletePage($appUuid, $id);
-        } catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
+        try {
+            $response = $this->pageService->deletePage($appUuid, $id);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponse();
     }
