@@ -380,28 +380,51 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
       dolalllocdoesnotincld.push("none");
     }
   }
+  let compSelected = '';
+  let nonesel =0;
   for (key in data.requestedCoverage) {
     var compKey = key + "Comp";
     var collisionKey = key + "Collision";
     var falsePretenseKey = key + "FalsePretense";
-    if (data.requestedCoverage[key].comp == "") {
-      requestedCoverage[compKey] = "no";
+    var noneKey = key + "none";
+    if (data.requestedCoverage[key].comp == "") {      
+      requestedCoverage[key] = "";
     } else {
-      requestedCoverage[compKey] = data.requestedCoverage[key].comp;
+      nonesel = nonesel+1;
+      if(data.requestedCoverage[key].comp =='yes') {
+        compSelected = 'yes';
+      }
     }
-    if (data.requestedCoverage[key].collision == "") {
-      requestedCoverage[collisionKey] = "no";
+    if (data.requestedCoverage[key].collision == "") {     
+      requestedCoverage[key] = "";
     } else {
-      requestedCoverage[collisionKey] = data.requestedCoverage[key].collision;
+      nonesel = nonesel+1;
     }
-    if (data.requestedCoverage[key].falsePretense == "") {
-      requestedCoverage[falsePretenseKey] = "no";
+    if (data.requestedCoverage[key].falsePretense == "") {      
+      requestedCoverage[key] = "";
     } else {
-      requestedCoverage[falsePretenseKey] =
-        data.requestedCoverage[key].falsePretense;
+      nonesel = nonesel+1;      
     }
   }
-
+  if(nonesel == 0) {
+    requestedCoverage["noneselected"] = 'yes';
+  }else{
+    for (key in data.requestedCoverage) {
+      var compKey = key + 'Comp'; 
+      var collisionKey = key + 'Collision';
+      var falsePretenseKey = key + 'FalsePretense';
+      var noneKey = key + 'None';
+      if(compSelected == 'yes' ) {
+        requestedCoverage[compKey] = 'yes';
+        requestedCoverage[collisionKey] = 'yes';
+        requestedCoverage[falsePretenseKey] = 'yes';
+      }else{
+        requestedCoverage[compKey] = 'no';
+        requestedCoverage[collisionKey] = 'no';
+        requestedCoverage[falsePretenseKey] = 'no';
+      }    
+    }
+  }
   value = {
     checkAutobody: checkBodyShop ? checkBodyShop : "",
     checkfloodloss: data.dolflodlossdescib
