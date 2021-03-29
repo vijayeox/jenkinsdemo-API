@@ -3,7 +3,8 @@ namespace Oxzion\Document\Parser\Form;
 
 use Oxzion\Document\Parser\Spreadsheet\BaseRowMapper;
 
-class FormRowMapper extends BaseRowMapper{
+class FormRowMapper extends BaseRowMapper
+{
     private $prevParentField = "";
     private $prevField = "";
     const COLUMNS = array("NAME",
@@ -24,55 +25,55 @@ class FormRowMapper extends BaseRowMapper{
                           "ERROR_MSG",
                           "MASK");
     /**
-    *   This method needs to be overridden by the custom implementations 
+    *   This method needs to be overridden by the custom implementations
     */
-    public function mapRow($rowData){
+    public function mapRow($rowData)
+    {
         $rowData = $this->convertToNamedArray($rowData);
         $name = $rowData['NAME'];
-        if((!isset($name) || empty($name))){
-            if($this->prevField == ""){
+        if ((!isset($name) || empty($name))) {
+            if ($this->prevField == "") {
                 return;
-            }else{
+            } else {
                 $name = $this->prevField;
             }
         }
         $fields = null;
         $parent = null;
         $parentField = $rowData['PARENT'];
-        if(empty($parentField) && $this->prevParentField != "" && $name == $this->prevField){
+        if (empty($parentField) && $this->prevParentField != "" && $name == $this->prevField) {
             $parentField = $this->prevParentField;
         }
-        if(!empty($parentField)){
+        if (!empty($parentField)) {
             $parent = $this->mappedData[$parentField];
-            if(isset($parent['FIELDS'])){
+            if (isset($parent['FIELDS'])) {
                 $fields = $parent['FIELDS'];
-            }else{
+            } else {
                 $fields = array();
             }
-            
         }
-        $this->prevParentField = $parentField;    
-        $rowData['REQUIRED'] = $rowData['REQUIRED'] == 'Yes' ? TRUE : FALSE;    
-        if($this->prevField != $name ){
+        $this->prevParentField = $parentField;
+        $rowData['REQUIRED'] = $rowData['REQUIRED'] == 'Yes' ? true : false;
+        if ($this->prevField != $name) {
             $data = $rowData;
-            $this->prevField = $name; 
-        }else{
-            if($parentField != ""){
+            $this->prevField = $name;
+        } else {
+            if ($parentField != "") {
                 $data = isset($fields[$name]) ? $fields[$name] : $rowData;
-            }else{
-                $data = $this->mappedData[$name];    
+            } else {
+                $data = $this->mappedData[$name];
             }
         }
 
         $item = $rowData['ITEM_NAME'];
-        if(isset($item)){
-            if(!isset($data['ITEMS'])){
+        if (isset($item)) {
+            if (!isset($data['ITEMS'])) {
                 $itemList = array();
-            }else{
+            } else {
                 $itemList = $data['ITEMS'];
             }
             $itemDetails = $rowData;
-            if(isset($rowData['ITEM_LABEL'])){
+            if (isset($rowData['ITEM_LABEL'])) {
                 $itemDetails["LABEL"] = $rowData['ITEM_LABEL'];
             }
             unset($itemDetails["ITEM_NAME"]);
@@ -86,22 +87,22 @@ class FormRowMapper extends BaseRowMapper{
         }
         unset($data['ITEM_NAME']);
         unset($data['ITEM_LABEL']);
-        if($parentField != ""){
+        if ($parentField != "") {
             $fields[$name] = $data;
             $parent['FIELDS'] = $fields;
             $this->mappedData[$parentField] = $parent;
-        }else{
+        } else {
             $this->mappedData[$name] = $data;
         }
     }
 
-    private function convertToNamedArray($rowData){
+    private function convertToNamedArray($rowData)
+    {
         $result = array();
         foreach (FormRowMapper::COLUMNS as $key => $column) {
-            $result[$column] = isset($rowData[$key]) ? (trim($rowData[$key]) != "" ? $rowData[$key] : NULL ) : NULL;
+            $result[$column] = isset($rowData[$key]) ? (trim($rowData[$key]) != "" ? $rowData[$key] : null) : null;
         }
 
         return $result;
     }
-    
 }

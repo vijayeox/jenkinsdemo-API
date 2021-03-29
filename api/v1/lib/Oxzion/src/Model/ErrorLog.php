@@ -17,6 +17,5 @@ class ErrorLog extends Entity
     );
     public function validate()
     {
-        
     }
 }

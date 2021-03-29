@@ -50,5 +50,4 @@ class AbstractController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($response, 201);
     }
-
 }

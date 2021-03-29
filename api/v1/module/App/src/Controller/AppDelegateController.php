@@ -47,11 +47,11 @@ class AppDelegateController extends AbstractApiControllerHelper
             $this->appDelegateService->updateAccountContext($data);
             $response = $this->appDelegateService->execute($appId, $delegate, $data);
             $this->log->info(__CLASS__ . "-> \n End of Delegate");
-            return $this->getSuccessResponseWithData($response, 200);  
+            return $this->getSuccessResponseWithData($response, 200);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     /**
@@ -74,7 +74,6 @@ class AppDelegateController extends AbstractApiControllerHelper
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 }

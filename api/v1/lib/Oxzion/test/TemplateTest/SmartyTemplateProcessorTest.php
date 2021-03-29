@@ -7,14 +7,15 @@ use Oxzion\Document\Template\Smarty\SmartyTemplateProcessorImpl;
 
 class SmartyTemplateProcessorTest extends TestCase
 {
-
     private $file;
     private $parser;
-    public function setUp() : void{
+    public function setUp() : void
+    {
         $this->parser = new SmartyTemplateProcessorImpl();
     }
 
-    public function testInit(){
+    public function testInit()
+    {
         $params['templateDir'] = __DIR__."/Data/";
         $params['cacheDir'] = __DIR__."/Data/";
         $params['configsDir'] = __DIR__."/Data/";
@@ -23,7 +24,8 @@ class SmartyTemplateProcessorTest extends TestCase
         $this->assertEquals(true, true);
     }
 
-    public function testGetContent(){
+    public function testGetContent()
+    {
         $data = ['username' => 'John','orgid'=>3];
         $params['templateDir'] = __DIR__."/template/";
         $params['cacheDir'] = __DIR__."/template/";

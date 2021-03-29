@@ -212,7 +212,8 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $result = $statement->execute();
         return $result;
     }
-    protected function executeUpdateQuery($query){
+    protected function executeUpdateQuery($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $sql = new Sql($dbAdapter);
         $statement = $this->sql->prepareStatementForSqlObject($query);

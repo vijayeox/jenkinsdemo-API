@@ -33,11 +33,12 @@ class IncidentManagerImpl implements IncidentManager
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
-    public function getIncident($id){
+    public function getIncident($id)
+    {
         $query = 'incident/'.$id;
         try {
             $this->logger->info("Entering the get Incident method in IncidentManagerImpl File\n");
@@ -45,9 +46,8 @@ class IncidentManagerImpl implements IncidentManager
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
 }
-?>

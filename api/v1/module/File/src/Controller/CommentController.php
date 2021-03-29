@@ -153,7 +153,7 @@ class CommentController extends AbstractApiController
     */
     public function getList()
     {
-        $filterParams = $this->params()->fromRoute(); 
+        $filterParams = $this->params()->fromRoute();
         $result = $this->commentService->getComments($filterParams['fileId']);
         return $this->getSuccessResponseWithData($result);
     }

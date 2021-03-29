@@ -87,8 +87,13 @@ class WidgetService extends AbstractService
                     $this->logger->error('Query and parameters are:');
                     $this->logger->error($query);
                     $this->logger->error($queryParams);
-                    throw new InsertFailedException('Database insert failed.', null,
-                        InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, null);
+                    throw new InsertFailedException(
+                        'Database insert failed.',
+                        null,
+                        InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR,
+                        InsertFailedException::ERR_TYPE_ERROR,
+                        null
+                    );
                 }
                 $sequence++;
             }
@@ -169,9 +174,10 @@ class WidgetService extends AbstractService
                 $result = $this->executeQueryWithBindParameters($query, $queryParams);
                 if (1 != $result->count()) {
                     $this->rollback();
-                    throw new InsertFailedException('ox_widget_query insert failed.',
-                        ['table' => 'ox_widget_query', 'query' => $query, 'queryParams' => $queryParams]);
-
+                    throw new InsertFailedException(
+                        'ox_widget_query insert failed.',
+                        ['table' => 'ox_widget_query', 'query' => $query, 'queryParams' => $queryParams]
+                    );
                 }
                 $sequence++;
             }
@@ -308,7 +314,7 @@ class WidgetService extends AbstractService
                 }
             }
             if ($firstRow['renderer']=='jsGrid') {
-                $config = json_decode($firstRow['configuration'],1);
+                $config = json_decode($firstRow['configuration'], 1);
                 if (isset($config['pageSize'])) {
                     $overRides['pagesize']=$config['pageSize'];
                 }
@@ -424,14 +430,12 @@ class WidgetService extends AbstractService
                 $color = TargetService::checkRYG($data, $resultSet[0]['type'], $resultSet[0]['red_limit'], $resultSet[0]['yellow_limit'], $resultSet[0]['green_limit']);
                 return ['red_limit' => $resultSet[0]['red_limit'], 'yellow_limit' => $resultSet[0]['yellow_limit'], 'green_limit' => $resultSet[0]['green_limit'], 'color' => $color];
             }
-
         } catch (Exception $e) {
             if ($isaggregate) {
                 return $data;
             } else {
                 return null;
             }
-
         }
     }
 
@@ -523,8 +527,10 @@ class WidgetService extends AbstractService
             $this->logger->info("Executing query - $query with params - " . json_encode($queryParams));
             $resultGet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultGet) == 0) {
-                throw new EntityNotFoundException("Wiget id ${widgetUuid} either does not exist OR user has no read permission to the entity.",
-                    ['entity' => 'ox_widget', 'uuid' => $widgetUuid]);
+                throw new EntityNotFoundException(
+                    "Wiget id ${widgetUuid} either does not exist OR user has no read permission to the entity.",
+                    ['entity' => 'ox_widget', 'uuid' => $widgetUuid]
+                );
             }
             $firstRow = $resultGet[0];
         } catch (ZendDbException $e) {

@@ -8,7 +8,6 @@ use Oxzion\Controller\AbstractApiController;
 
 class TargetController extends AbstractApiController
 {
-
     private $targetService;
 
     /**

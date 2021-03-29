@@ -7,27 +7,28 @@ use Oxzion\Model\Entity;
 class Employee extends Entity
 {
     protected static $MODEL = array(
-        'id' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
-        'uuid' =>               ['type' => Type::UUID,      'readonly' => FALSE, 'required' => FALSE],
-        'org_id' =>             ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'designation' =>        ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'website' =>            ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'about' =>              ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'interest' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'hobbies' =>            ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'manager_id' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'selfcontribute' =>     ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'contribute_percent' => ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'eid' =>                ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
-        'date_modified' =>      ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
-        'created_by' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
-        'person_id' =>          ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'date_of_join' =>       ['type' => Type::DATE,      'readonly' => FALSE, 'required' => TRUE],
+        'id' =>                 ['type' => Type::INTEGER,   'readonly' => true , 'required' => false],
+        'uuid' =>               ['type' => Type::UUID,      'readonly' => false, 'required' => false],
+        'org_id' =>             ['type' => Type::INTEGER,   'readonly' => false, 'required' => true],
+        'designation' =>        ['type' => Type::STRING,    'readonly' => false, 'required' => true],
+        'website' =>            ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'about' =>              ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'interest' =>           ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'hobbies' =>            ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'manager_id' =>         ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'selfcontribute' =>     ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'contribute_percent' => ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'eid' =>                ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'date_created' =>       ['type' => Type::TIMESTAMP, 'readonly' => true,  'required' => false],
+        'date_modified' =>      ['type' => Type::TIMESTAMP, 'readonly' => true,  'required' => false],
+        'created_by' =>         ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'modified_by' =>        ['type' => Type::INTEGER,   'readonly' => true,  'required' => false],
+        'person_id' =>          ['type' => Type::INTEGER,   'readonly' => false, 'required' => true],
+        'date_of_join' =>       ['type' => Type::DATE,      'readonly' => false, 'required' => true],
     );
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 }

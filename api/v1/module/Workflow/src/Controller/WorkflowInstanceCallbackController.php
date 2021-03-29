@@ -36,7 +36,7 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
                 if (isset($params['processInstanceId'])) {
                     try {
                         $response = $this->workflowInstanceService->completeWorkflow($params);
-                    }catch (Exception $e) {
+                    } catch (Exception $e) {
                         $this->log->error($e->getMessage(), $e);
                         return $this->exceptionToResponse($e);
                     }
@@ -48,15 +48,16 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
         }
     }
 
-    public function initiateWorkflowAction(){
+    public function initiateWorkflowAction()
+    {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
             $response = $this->workflowInstanceService->initiateWorkflow($params);
-            if(!$response){
-                return $this->getErrorResponse("Workflow Start errors", 404,null);
+            if (!$response) {
+                return $this->getErrorResponse("Workflow Start errors", 404, null);
             }
             return $this->getSuccessResponse();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

@@ -14,7 +14,7 @@ use Exception;
 class ActivityService extends AbstractService
 {
     private $formService;
-    public function __construct($config, $dbAdapter, ActivityTable $table,FormService $formService)
+    public function __construct($config, $dbAdapter, ActivityTable $table, FormService $formService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -24,8 +24,8 @@ class ActivityService extends AbstractService
     public function createActivity($appUuid, &$data)
     {
         $activity = new Activity();
-        if(isset($data['template'])){
-            $formId = $this->formService->createForm($appUuid,$data);
+        if (isset($data['template'])) {
+            $formId = $this->formService->createForm($appUuid, $data);
             $formId = $data['id'];
             unset($data['id']);
         } else {
@@ -47,7 +47,7 @@ class ActivityService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            if(isset($formId)){
+            if (isset($formId)) {
                 $insert = "INSERT INTO `ox_activity_form` (`activity_id`,`form_id`) VALUES (".$id.",".$formId.")";
                 $resultSet = $this->runGenericQuery($insert);
             }
@@ -121,12 +121,11 @@ class ActivityService extends AbstractService
                 return 0;
             }
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
-        }        
+        }
         return $count;
     }
 
@@ -155,8 +154,9 @@ class ActivityService extends AbstractService
         return $response[0];
     }
 
-    public function deleteActivitiesLinkedToApp($appId){
-        $appId = $this->getIdFromUuid('ox_app',$appId);
+    public function deleteActivitiesLinkedToApp($appId)
+    {
+        $appId = $this->getIdFromUuid('ox_app', $appId);
         $activityRes = $this->getActivitys($appId);
         if (count($activityRes) > 0) {
             foreach ($activityRes['data'] as $key => $value) {

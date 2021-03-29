@@ -39,12 +39,15 @@ class ZipUtils
      * @param ZipArchive instance $zipFile
      * @param int $stripPathLength Number of text to be exclusived from the file path.
      */
-    private static function directoryToZip($directory, &$za, $stripPathLength) {
+    private static function directoryToZip($directory, &$za, $stripPathLength)
+    {
         $handle = opendir($directory);
-        if (FALSE === $handle) {
+        if (false === $handle) {
             $za->close(); //Ignore any errors while closing.
-            throw new ZipException('Failed to open directory to be added to zip archive.', 
-                ['directory' => $directory]);
+            throw new ZipException(
+                'Failed to open directory to be added to zip archive.',
+                ['directory' => $directory]
+            );
         }
         while (false !== ($file = readdir($handle))) {
             if (('.' === $file) || ('..' === $file)) {
@@ -52,7 +55,7 @@ class ZipUtils
             }
             $filePath = $directory . DIRECTORY_SEPARATOR . $file;
             $exclusions=array('dist','node_modules');
-            if(!in_array($file,$exclusions)){
+            if (!in_array($file, $exclusions)) {
                 // Remove prefix from file path before adding to zip.
                 $localPath = substr($filePath, $stripPathLength);
                 if (is_file($filePath)) {
@@ -71,13 +74,12 @@ class ZipUtils
                     self::directoryToZip($filePath, $za, $stripPathLength);
                     continue;
                 }
-
             }
         }
         closedir($handle);
     }
 
-	/**
+    /**
      * Zip a directory (include itself).
      * Usage:
      *   ZipUtil::zipDir('/path/to/sourceDir', '/path/to/out.zip');
@@ -85,9 +87,10 @@ class ZipUtils
      * @param string $sourcePath Path of directory to be zipped.
      * @param string $outZipPath Path of output zip file.
      */
-    public static function zipDir($sourcePath, $outZipPath, $retainTopLevelDirectoryName = false) {
+    public static function zipDir($sourcePath, $outZipPath, $retainTopLevelDirectoryName = false)
+    {
         $za = new ZipArchive();
-        if (TRUE !== $za->open($outZipPath, ZipArchive::CREATE)) {
+        if (true !== $za->open($outZipPath, ZipArchive::CREATE)) {
             throw new ZipException('Failed to open zip archive.', ['file' => $outZipPath]);
         }
         $stripPathLength = 0;
@@ -99,8 +102,7 @@ class ZipUtils
                 throw new ZipException('Failed to add top level directory to zip archive.', ['directory' => $dirName]);
             }
             $stripPathLength = strlen($parentPath . DIRECTORY_SEPARATOR);
-        }
-        else {
+        } else {
             $stripPathLength = strlen($sourcePath . DIRECTORY_SEPARATOR);
         }
         self::directoryToZip($sourcePath, $za, $stripPathLength);
@@ -112,20 +114,22 @@ class ZipUtils
      * End - based on https://www.php.net/manual/en/class.ziparchive.php
      */
 
-    public static function unzip($zipFile, $directory, $entries = null) {
+    public static function unzip($zipFile, $directory, $entries = null)
+    {
         $za = new ZipArchive();
         //if (TRUE !== $za->open($zipFile, ZipArchive::RDONLY)) {
-        if (TRUE !== $za->open($zipFile)) {
+        if (true !== $za->open($zipFile)) {
             throw new ZipException('Failed to open zip archive.', ['file' => $zipFile]);
         }
         if (isset($entries)) {
             if (!$za->extractTo($directory, $entries)) {
                 $za->close(); //Ignore any errors while closing.
-                throw new ZipException('Failed to extract zip archive.', 
-                    ['file' => $zipFile, 'entries' => $entries]);
+                throw new ZipException(
+                    'Failed to extract zip archive.',
+                    ['file' => $zipFile, 'entries' => $entries]
+                );
             }
-        }
-        else {
+        } else {
             if (!$za->extractTo($directory)) {
                 $za->close(); //Ignore any errors while closing.
                 throw new ZipException('Failed to extract zip archive.', ['file' => $zipFile]);

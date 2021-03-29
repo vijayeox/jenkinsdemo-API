@@ -17,7 +17,7 @@ class OrganizationService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter,AddressService $addressService, OrganizationTable $table)
+    public function __construct($config, $dbAdapter, AddressService $addressService, OrganizationTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -50,9 +50,10 @@ class OrganizationService extends AbstractService
         }
     }
 
-    private function getParentId($orgData){
+    private function getParentId($orgData)
+    {
         $id = null;
-        if(isset($orgData['parentId']) && !empty($orgData['parentId'])){
+        if (isset($orgData['parentId']) && !empty($orgData['parentId'])) {
             $id =  $this->getIdFromUuid('ox_organization', $orgData['parentId']);
         }
         return $id;
@@ -66,7 +67,7 @@ class OrganizationService extends AbstractService
         $data['date_modified'] = date('Y-m-d H:i:s');
         if (isset($data['address_id'])) {
             $this->addressService->updateAddress($data['address_id'], $data);
-        }else{
+        } else {
             $addressid = $this->addressService->addAddress($data);
             $data['address_id'] = $addressid;
         }
@@ -84,27 +85,30 @@ class OrganizationService extends AbstractService
         }
     }
 
-    private function processOrgHeirarchy($id, $newParentId, $oldParentId){
-        if($oldParentId == $newParentId ) {
+    private function processOrgHeirarchy($id, $newParentId, $oldParentId)
+    {
+        if ($oldParentId == $newParentId) {
             return;
         }
         $this->removeOrgHeirarchy($id);
         $this->addOrgHeirarchy($id, $newParentId);
     }
 
-    private function removeOrgHeirarchy($id){
+    private function removeOrgHeirarchy($id)
+    {
         $query = "DELETE from ox_org_heirarchy where child_id = :childId";
         $params = ['childId' => $id];
         $this->executeUpdateWithBindParameters($query, $params);
     }
 
-    private function addOrgHeirarchy($id, $parentId){
+    private function addOrgHeirarchy($id, $parentId)
+    {
         $mainOrgId = $id;
         $params = ['parentId' => $parentId];
-        if($parentId){
+        if ($parentId) {
             $query = "SELECT main_org_id from ox_org_heirarchy where parent_id = :parentId OR child_id = :parentId";
             $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-            if(!empty($result)){
+            if (!empty($result)) {
                 $mainOrgId = $result[0]['main_org_id'];
             }
         }

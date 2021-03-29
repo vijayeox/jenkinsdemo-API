@@ -5,7 +5,8 @@ use Oxzion\Payment\PaymentEngine;
 
 class PaymentEngineImpl implements PaymentEngine
 {
-    public function __construct($paymentConfig){
+    public function __construct($paymentConfig)
+    {
         $this->paymentConfig = $paymentConfig;
     }
     public function initiatePaymentProcess(&$data)
@@ -16,12 +17,14 @@ class PaymentEngineImpl implements PaymentEngine
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_HTTPHEADER , array(
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Accept: */*",
             "Content-Type: application/x-www-form-urlencoded",
             "cache-control: no-cache"
         ));
-        curl_setopt($ch, CURLOPT_POSTFIELDS,
+        curl_setopt(
+            $ch,
+            CURLOPT_POSTFIELDS,
             "ssl_merchant_id=$paymentConfigInfo->merchant_id".
             "&ssl_user_id=$paymentConfigInfo->user_id".
             "&ssl_pin=$paymentConfigInfo->pincode".
@@ -39,22 +42,23 @@ class PaymentEngineImpl implements PaymentEngine
         $result = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($httpcode == 200){
+        if ($httpcode == 200) {
             return $result;
         }
         return false;
     }
-    public function handleTransaction(&$data){
-        if(isset($data['ssl_token_response'])){
+    public function handleTransaction(&$data)
+    {
+        if (isset($data['ssl_token_response'])) {
             $return['transaction_id'] = $data['ssl_txn_id'];
-            $return['transaction_status'] = $data['ssl_token_response']; 
+            $return['transaction_status'] = $data['ssl_token_response'];
             $return['data'] = json_encode($data);
         } else {
-            if(isset($data['errorCode'])){
+            if (isset($data['errorCode'])) {
                 $return['transaction_id'] = null;
-                $return['transaction_status'] = $data['errorName']; 
+                $return['transaction_status'] = $data['errorName'];
                 $return['data'] = json_encode($data);
-            }  
+            }
         }
         return $return;
     }

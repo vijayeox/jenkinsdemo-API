@@ -28,10 +28,10 @@ abstract class DelegateTest extends ServiceTest
         return static::$connection;
     }
 
-     protected function doMigration($data,$migrationFolder)
-     {
+    protected function doMigration($data, $migrationFolder)
+    {
         $this->appUuid = $data['UUID'];
-        $this->appName = $data['appName']; 
+        $this->appName = $data['appName'];
         $this->description = $data['description'];
         $config = $this->getApplicationConfig();
         $this->migrationObject = new Migration($config, $this->appName, $this->appUuid, $this->description);
@@ -42,7 +42,5 @@ abstract class DelegateTest extends ServiceTest
         $this->persistence->setAdapter($adapter);
         $this->database = $this->migrationObject->getDatabase();
         $testCase = $this->migrationObject->migrate($migrationFolder);
-        
-     }
-    
+    }
 }

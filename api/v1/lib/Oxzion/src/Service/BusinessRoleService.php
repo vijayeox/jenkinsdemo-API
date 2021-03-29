@@ -20,18 +20,19 @@ class BusinessRoleService extends AbstractService
         $this->table = $table;
     }
 
-    public function saveBusinessRole($appId, &$businessRole){
+    public function saveBusinessRole($appId, &$businessRole)
+    {
         $count = 0;
         $data = $businessRole;
         $data['app_id'] = $this->getIdFromUuid('ox_app', $appId);
         $bRole = new BusinessRole($this->table);
-        if(isset($data['uuid'])){
-            try{
+        if (isset($data['uuid'])) {
+            try {
                 $bRole->loadByUuid($data['uuid']);
-                if(!isset($data['version'])){
+                if (!isset($data['version'])) {
                     $data['version'] = $bRole->getProperty('version');
                 }
-            }catch(EntityNotFoundException $e){
+            } catch (EntityNotFoundException $e) {
                 unset($data['uuid']);
             }
         }
@@ -50,13 +51,15 @@ class BusinessRoleService extends AbstractService
         $businessRole['version'] = $data['version'];
     }
 
-    public function getBusinessRole($id){
+    public function getBusinessRole($id)
+    {
         $businessRole = new BusinessRole($this->table);
         $businessRole->loadByUuid($id);
         return $businessRole->toArray();
     }
 
-    public function getBusinessRoleByName($appId, $name){
+    public function getBusinessRoleByName($appId, $name)
+    {
         $query = "select br.* from ox_business_role br 
                     inner join ox_app a on a.id = br.app_id 
                     where a.uuid = :appId and br.name = :name";
@@ -68,7 +71,7 @@ class BusinessRoleService extends AbstractService
     public function deleteBusinessRoleBasedOnAppId($appId)
     {
         $result = $this->getDataByParams('ox_business_role', array(), array('app_id' => $appId))->toArray();
-        if (count($result) > 0 ) {
+        if (count($result) > 0) {
             $deleteQuery = "DELETE oxof, oxbr, br FROM ox_account_offering oxof 
                             right outer join ox_org_business_role oxbr on oxbr.id = oxof.org_business_role_id 
                             right outer join ox_business_role br on br.id = oxbr.business_role_id 
@@ -77,6 +80,6 @@ class BusinessRoleService extends AbstractService
                             WHERE a.uuid=:appId";
             $deleteParams = array('appId' => $appId);
             $deleteResult = $this->executeUpdateWithBindParameters($deleteQuery, $deleteParams);
-        }        
+        }
     }
 }

@@ -44,7 +44,7 @@ class ImportService extends AbstractService
             foreach ($files as $file) {
                 $fileSaved = $this->saveFile($file);
                 if ($type == 'elastic') {
-                    $count = $this->importToElastic($fileSaved, $data,$bulksize);
+                    $count = $this->importToElastic($fileSaved, $data, $bulksize);
                 }
                 unlink($fileSaved);
                 $result[] = ['file' => $file['name'], 'recordsSent' => $count, 'message' => 'Records Sent to ActiveMQ for Indexing'];
@@ -75,9 +75,9 @@ class ImportService extends AbstractService
         $index = (substr($index, -6) != "_index") ? $index . '_index' : $index;
         $file = fopen($fileName, "r");
         $header = fgetcsv($file);
-        foreach($header as $key=>$headercol) {
-            $colarray = explode(":",$headercol);
-            if (isset($colarray['1'])) {                
+        foreach ($header as $key=>$headercol) {
+            $colarray = explode(":", $headercol);
+            if (isset($colarray['1'])) {
                 $header[$key] = $colarray[0];
                 $type[$colarray[0]]=$colarray[1];
             }
@@ -97,16 +97,16 @@ class ImportService extends AbstractService
                         switch ($type[$col]) {
                             case "numeric":
                             case "number":
-                                $body[$col] = (float) $data[$idx];    
+                                $body[$col] = (float) $data[$idx];
                                 break;
                             case "text":
-                                $body[$col] = (string) $data[$idx];    
+                                $body[$col] = (string) $data[$idx];
                                 break;
                             case "date":
-                                $body[$col] = date("Y/m/d",strtotime($data[$idx])); 
+                                $body[$col] = date("Y/m/d", strtotime($data[$idx]));
                                 break;
-                            default:                               
-                                $body[$col] = $data[$idx]; 
+                            default:
+                                $body[$col] = $data[$idx];
                           }
                     } else {
                         if (is_numeric($data[$idx])) {
@@ -122,7 +122,6 @@ class ImportService extends AbstractService
                 // $finalArray[] = $body;
                 // Every 1000 documents stop and send the bulk request
                 if ($i % $bulksize == 0) {
-                   
                     try {
                         $json_string = json_encode(array('index' => $index, 'body' => $params, 'operation' => 'Bulk', 'type' => '_doc'));
                         if (empty($json_string)) {
@@ -132,7 +131,7 @@ class ImportService extends AbstractService
                     } catch (JsonException $e) {
                         throw new Exception('Could not convert to JSON the data - Builk data from '. ($i-$bulksize). ' to '.$i);
                     }
-                  //  echo $json_string;
+                    //  echo $json_string;
                     // erase the old bulk request
                     $params = [];
 
@@ -155,9 +154,7 @@ class ImportService extends AbstractService
             }
         } catch (Exception $e) {
             throw $e;
-
         }
         return $i;
     }
-
 }

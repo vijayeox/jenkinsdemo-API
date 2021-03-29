@@ -18,9 +18,10 @@ class CommentControllerTest extends ControllerTest
         parent::setUp();
     }
 
-    public function tearDown() : void{
+    public function tearDown() : void
+    {
         parent::tearDown();
-    } 
+    }
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Comment.yml");

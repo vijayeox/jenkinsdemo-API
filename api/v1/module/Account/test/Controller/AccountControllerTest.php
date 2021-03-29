@@ -63,7 +63,6 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['data'][2]['parentId'], '915d207e-ac75-11ea-bb37-0242ac130002');
         $this->assertEquals($content['data'][2]['parentName'], $content['data'][3]['name']);
         $this->assertEquals($content['total'], 4);
-        
     }
 
     public function testGetUserOrgList()
@@ -144,7 +143,8 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    private function performBaseCreateTest($data, $mainOrgId = null){
+    private function performBaseCreateTest($data, $mainOrgId = null)
+    {
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -192,7 +192,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($account[0]['address1'], $data['address1']);
         $this->assertEquals($account[0]['type'], 'BUSINESS');
         $this->assertEquals($appResult[0]['app_id'], 1);
-        if(isset($data['parentId'])){
+        if (isset($data['parentId'])) {
             $this->assertEquals(!empty($account[0]['parent_id']), true);
             $query = "SELECT oh.* from ox_org_heirarchy oh
                     inner join ox_organization org on org.id = oh.main_org_id
@@ -201,9 +201,8 @@ class AccountControllerTest extends ControllerTest
             $this->assertEquals(1, count($orgHeirarchy));
             $this->assertEquals($orgHeirarchy[0]['main_org_id'], $mainOrgId);
             $this->assertEquals($account[0]['parent_id'], $orgHeirarchy[0]['parent_id']);
-        }else{
+        } else {
             $this->assertEquals($account[0]['parent_id'], null);
-        
         }
     }
 
@@ -286,14 +285,14 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals(count($accountResult), 1);
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
-        $this->assertEquals($usrResult[0]['employeeId'], NULL);
+        $this->assertEquals($usrResult[0]['employeeId'], null);
         $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 35);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 12);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 10);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $accountName);
         $this->assertEquals(isset($usrResult[0]['address_id']), true);
-        $this->assertEquals($account[0]['organization_id'], NULL);
+        $this->assertEquals($account[0]['organization_id'], null);
         $this->assertEquals($account[0]['name'], $accountName);
         $this->assertEquals($appResult[0]['app_id'], 1);
     }
@@ -1001,7 +1000,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['data'], array());
         $this->assertEquals($content['total'], 0);
     }
-//Project
+    //Project
 
     public function testGetAccountProjects()
     {
@@ -1102,7 +1101,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['data'], array());
         $this->assertEquals($content['total'], 0);
     }
-// Announcements
+    // Announcements
 
     public function testGetAccountAnnouncements()
     {
@@ -1198,7 +1197,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($content['data'], array());
         $this->assertEquals($content['total'], 0);
     }
-// Roles
+    // Roles
 
     public function testGetAccountRoles()
     {

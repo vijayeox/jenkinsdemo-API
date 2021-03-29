@@ -5,7 +5,8 @@ namespace Oxzion\Model;
 use Oxzion\Type;
 use Oxzion\Model\Entity;
 
-class App extends Entity {
+class App extends Entity
+{
     //status for the apps
     const DELETED = 1;
     const IN_DRAFT = 2;
@@ -17,24 +18,25 @@ class App extends Entity {
     const MY_APP = 2;
 
     protected static $MODEL = [
-        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
-        'name' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'uuid' =>           ['type' => Type::UUID,      'readonly' => FALSE,  'required' => FALSE],
-        'description' =>    ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'type' =>           ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'isdefault' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE, 'required' => TRUE, 'value' => FALSE],
-        'logo' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE, 'value' => 'default_app.png'],
-        'category' =>       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
-        'date_modified' =>  ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
-        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
-        'modified_by' =>    ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE],
-        'status' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE, 'value' => 0],
-        'start_options' =>  ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'app_properties' =>      ['type' => Type::STRING,   'readonly' => FALSE, 'required' => FALSE]
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => true , 'required' => false],
+        'name' =>           ['type' => Type::STRING,    'readonly' => false, 'required' => true],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => false,  'required' => false],
+        'description' =>    ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'type' =>           ['type' => Type::INTEGER,   'readonly' => false, 'required' => true],
+        'isdefault' =>      ['type' => Type::BOOLEAN,   'readonly' => false, 'required' => true, 'value' => false],
+        'logo' =>           ['type' => Type::STRING,    'readonly' => false, 'required' => false, 'value' => 'default_app.png'],
+        'category' =>       ['type' => Type::STRING,    'readonly' => false, 'required' => true],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => true,  'required' => false],
+        'date_modified' =>  ['type' => Type::TIMESTAMP, 'readonly' => true,  'required' => false],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => true,  'required' => false],
+        'modified_by' =>    ['type' => Type::INTEGER,   'readonly' => true,  'required' => false],
+        'status' =>         ['type' => Type::INTEGER,   'readonly' => false, 'required' => true, 'value' => 0],
+        'start_options' =>  ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'app_properties' =>      ['type' => Type::STRING,   'readonly' => false, 'required' => false]
     ];
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 }

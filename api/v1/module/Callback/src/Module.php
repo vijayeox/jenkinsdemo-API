@@ -52,7 +52,7 @@ class Module implements ConfigProviderInterface
                 },
                 \Contact\Service\ContactService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Contact\Service\ContactService($container->get('config'), $dbAdapter, $container->get(\Contact\Model\ContactTable::class),$container->get(AddressService::class));
+                    return new \Contact\Service\ContactService($container->get('config'), $dbAdapter, $container->get(\Contact\Model\ContactTable::class), $container->get(AddressService::class));
                 },
                 \Contact\Model\ContactTable::class => function ($container) {
                     $tableGateway = $container->get(\Contact\Model\ContactTableGateway::class);

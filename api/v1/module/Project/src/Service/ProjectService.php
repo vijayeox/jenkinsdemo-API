@@ -63,7 +63,7 @@ class ProjectService extends AbstractService
                 $offset = $filterArray[0]['skip'];
             }
             $where .= strlen($where) > 0 ? " AND " : "WHERE ";
-            $where .= "isdeleted!=1 AND p.account_id =" . $accountId; 
+            $where .= "isdeleted!=1 AND p.account_id =" . $accountId;
 
             $sort = " ORDER BY p." . $sort;
             $limit = " LIMIT " . $pageSize . " offset " . $offset;
@@ -124,7 +124,7 @@ class ProjectService extends AbstractService
             if (count($result)>0 && $result[0]['count(id)'] > 0) {
                 if ($data['name'] == $result[0]['name'] && $result[0]['isdeleted'] == 0) {
                     throw new ServiceException("Project already exists", "project.exists", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
-                } else if ($result[0]['isdeleted'] == 1) {
+                } elseif ($result[0]['isdeleted'] == 1) {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : null;
                     if ($data['reactivate'] == 1) {
                         $data['isdeleted'] = 0;
@@ -139,14 +139,13 @@ class ProjectService extends AbstractService
             $sql = $this->getSqlObject();
             $form = new Project();
             $parent_uuid = null;
-            if(isset($data['parentId']))
-            {
+            if (isset($data['parentId'])) {
                 $parentId = $this->getIdFromUuid('ox_project', $data['parentId']);
                 $parent_uuid = $data['parentId'];
                 $data['parent_id'] = $parentId;
                 $result = $this->getProjectByUuid($parent_uuid, $params);
                 $data['parent_manager_id'] = $result['manager_id'];
-                if($parentId == 0){
+                if ($parentId == 0) {
                     throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
                 }
             }
@@ -179,13 +178,12 @@ class ProjectService extends AbstractService
 
             //If the subproject and parent projects have different managers
             //Two users need to be inserted into ox_user_projects
-            if(isset($projectData['manager_id']) && isset($data['parent_manager_id']) && $projectData['manager_id'] != $data['parent_manager_id']){
+            if (isset($projectData['manager_id']) && isset($data['parent_manager_id']) && $projectData['manager_id'] != $data['parent_manager_id']) {
                 $insert = $sql->insert('ox_user_project');
-	            $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $id);
-	            $insert->values($insert_data);
-                $result = $this->executeUpdate($insert);      
-                      
-	        }
+                $insert_data = array('user_id' => $data['parent_manager_id'], 'project_id' => $id);
+                $insert->values($insert_data);
+                $result = $this->executeUpdate($insert);
+            }
             $this->commit();
             if (isset($projectData['name'])) {
                 $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'projectname' => $projectData['name'], 'description' => $projectData['description'], 'uuid' => $projectData['uuid'], 'parent_identifier' => $parent_uuid, 'manager_login' => $projectData['manager_login'])), 'PROJECT_ADDED');
@@ -213,11 +211,11 @@ class ProjectService extends AbstractService
         if (isset($data['parent_id'])) {
             $projParentId = $data['parent_id'];
         }
-        if (isset($projParentId)){
+        if (isset($projParentId)) {
             $parentId = $this->getIdFromUuid('ox_project', $projParentId);
             $parent_uuid = $projParentId;
             $data['parent_id'] = $parentId;
-            if($parentId == 0){
+            if ($parentId == 0) {
                 throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
             }
         }
@@ -267,7 +265,6 @@ class ProjectService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        
     }
 
     public function deleteProject($params)
@@ -283,12 +280,13 @@ class ProjectService extends AbstractService
         }
         $form = new Project();
         $data = $obj->toArray();
-        if (!isset($data['parent_id']) || empty($data['parent_id'])){
+        if (!isset($data['parent_id']) || empty($data['parent_id'])) {
             $select = "SELECT id from ox_project where parent_id = '" . $data['id'] . "' and isdeleted <> 1";
             $result = $this->executeQueryWithParams($select)->toArray();
-            if($result){
-                if(!(isset($params['force_flag']) && ($params['force_flag'] == true || $params['force_flag'] == "true")))
+            if ($result) {
+                if (!(isset($params['force_flag']) && ($params['force_flag'] == true || $params['force_flag'] == "true"))) {
                     throw new ServiceException("Project has subprojects", "project.has.subprojects", OxServiceException::ERR_CODE_PRECONDITION_FAILED);
+                }
             }
         }
         $data['uuid'] = $params['projectUuid'];
@@ -379,7 +377,7 @@ class ProjectService extends AbstractService
             $offset = $filterArray[0]['skip'];
         }
         $where .= strlen($where) > 0 ? " AND " : "WHERE ";
-        $where .= "ox_project.uuid = '" . $params['projectUuid'] . "' AND ox_project.isdeleted!=1 AND ox_project.account_id = " . $accountId; 
+        $where .= "ox_project.uuid = '" . $params['projectUuid'] . "' AND ox_project.isdeleted!=1 AND ox_project.account_id = " . $accountId;
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . " ".$where);
@@ -415,7 +413,7 @@ class ProjectService extends AbstractService
             if ($params['account_id'] != $obj->account_id) {
                 throw new ServiceException("Project does not belong to the account", "project.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
-        }else{
+        } else {
             throw new ServiceException("Invalid account", "invalid.account", OxServiceException::ERR_CODE_NOT_FOUND);
         }
         if (!isset($data['userIdList']) || empty($data['userIdList'])) {
@@ -462,14 +460,11 @@ class ProjectService extends AbstractService
         foreach ($deletedUser as $key => $value) {
             $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'projectname' => $obj->name, 'username' => $value['username'])), 'USERTOPROJECT_DELETED');
             $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'], 'projectUuid' => $obj->uuid)), 'DELETION_USERFROMPROJECT');
-
         }
         foreach ($insertedUser as $key => $value) {
             $this->messageProducer->sendTopic(json_encode(array('accountName' => $account['name'], 'projectname' => $obj->name, 'username' => $value['username'])), 'USERTOPROJECT_ADDED');
             $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'], 'firstname' => $value['firstname'], 'lastname' => $value['lastname'], 'email' => $value['email'], 'timezone' => $value['timezone'], 'projectUuid' => $obj->uuid)), 'ADDITION_USERTOPROJECT');
         }
-        
-        
     }
 
     private function checkProjectAccount($params, $errorMessage)
@@ -491,9 +486,8 @@ class ProjectService extends AbstractService
     {
         if (!isset($params['projectId'])) {
             throw new ServiceException("Project not provided", "project.required", OxServiceException::ERR_CODE_NOT_FOUND);
-            
         }
-        $id = $this->getIdFromUuid('ox_project',$params['projectId']);
+        $id = $this->getIdFromUuid('ox_project', $params['projectId']);
         // Done Twice  - one for admin and one for PPM App
         $queryString = "SELECT oxp.name,oxp.description,oxp.uuid,oxp.date_created,
                         ou.uuid as managerId,sub.uuid as parentId,ou.uuid as manager_id,sub.uuid as parent_id 
@@ -505,12 +499,12 @@ class ProjectService extends AbstractService
         return $resultSet->toArray();
     }
 
-/**
- * Delete user from project API
- * ! Deprecated method, not in use at the moment
- * @param $id ID of Project and $data which contains the user info to Delete
- * ? Should we completely remove this method from here, there is another method which does similar functionality
- */
+    /**
+     * Delete user from project API
+     * ! Deprecated method, not in use at the moment
+     * @param $id ID of Project and $data which contains the user info to Delete
+     * ? Should we completely remove this method from here, there is another method which does similar functionality
+     */
 
     // public function deleteUser($project_id, $data)
     // {

@@ -79,8 +79,11 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageContentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageContentService($container->get('config'),
-                        $dbAdapter, $container->get(Model\PageContentTable::class));
+                    return new Service\PageContentService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\PageContentTable::class)
+                    );
                 },
                 Model\PageContentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageContentTableGateway::class);
@@ -94,8 +97,8 @@ class Module implements ConfigProviderInterface
                 },
                 Service\AppArtifactService::class => function ($container) {
                     return new Service\AppArtifactService(
-                        $container->get('config'), 
-                        $container->get(AdapterInterface::class), 
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
                         $container->get(\Oxzion\Model\AppTable::class),
                         $container->get(\Oxzion\Service\AppService::class)
                     );

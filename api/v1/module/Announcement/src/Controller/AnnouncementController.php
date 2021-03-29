@@ -62,8 +62,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
     /**
      * GET List Announcement API
@@ -95,8 +94,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -133,7 +131,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
     /**
      * Delete Announcement API
@@ -153,8 +151,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
     /**
      * GET Announcement API
@@ -189,8 +186,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
     /**
      * GET List of All Announcement API
@@ -209,8 +205,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     public function announcementToTeamAction()
@@ -223,8 +218,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     public function announcementTeamsAction()
@@ -237,7 +231,6 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 }

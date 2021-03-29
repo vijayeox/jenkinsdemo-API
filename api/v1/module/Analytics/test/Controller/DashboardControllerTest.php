@@ -7,7 +7,6 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
 class DashboardControllerTest extends ControllerTest
 {
-
     public function setUp(): void
     {
         $this->loadConfig();

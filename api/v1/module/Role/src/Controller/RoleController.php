@@ -62,7 +62,7 @@ class RoleController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     /**
@@ -83,8 +83,7 @@ class RoleController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
     /**
      * Update Role API
@@ -105,8 +104,7 @@ class RoleController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -126,8 +124,7 @@ class RoleController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -148,8 +145,7 @@ class RoleController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -170,7 +166,6 @@ class RoleController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 }

@@ -14,7 +14,8 @@ class DocumentGeneratorImpl implements DocumentGenerator
 {
     private $logger;
     
-    public function __construct(){
+    public function __construct()
+    {
         $this->logger = Logger::getLogger(__CLASS__);
     }
     
@@ -30,13 +31,13 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
        
         // set default header data
-        if(!empty($options)){
-             $pdf->SetHeaderData($options['pdf_header_logo'], $options['pdf_header_logo_width'], $options['initial_title'], $options['second_title'], $options['header_text_color'], $options['header_line_color']);
+        if (!empty($options)) {
+            $pdf->SetHeaderData($options['pdf_header_logo'], $options['pdf_header_logo_width'], $options['initial_title'], $options['second_title'], $options['header_text_color'], $options['header_line_color']);
         
-           $pdf->setFooterData($options['footer_text_color'], $options['footer_line_color']);
-        }else{
+            $pdf->setFooterData($options['footer_text_color'], $options['footer_line_color']);
+        } else {
             $pdf->setPrintHeader(false);
-            $pdf->setPrintFooter(false);    
+            $pdf->setPrintFooter(false);
         }
        
         // set margins
@@ -56,8 +57,8 @@ class DocumentGeneratorImpl implements DocumentGenerator
         // This method has several options, check the source code documentation for more information.
         $pdf->AddPage();
         
-         $pdf->writeHTMLCell(0, 0, '', '', $htmlContent, 0, 1, 0, true, '', true);
-        // $pdf->writeHTML($htmlContent); 
+        $pdf->writeHTMLCell(0, 0, '', '', $htmlContent, 0, 1, 0, true, '', true);
+        // $pdf->writeHTML($htmlContent);
         // TO DO DIGITAL SIGNATURE CERTIFICATE
         // Refer https://tcpdf.org/examples/example_052/
         /* if($signatureCerticate){
@@ -90,74 +91,71 @@ class DocumentGeneratorImpl implements DocumentGenerator
 
         $path = $pdf->output($destination, 'F');
         return $destination;
-
-        
     }
 
-    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null,$footer = null,$data = null,$append = null,$prepend = null,$generateOptions = null){
-        
+    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null, $footer = null, $data = null, $append = null, $prepend = null, $generateOptions = null)
+    {
         $appendOptions = "";
         $prependOptions = "";
         $finalpdf = array();
         $dest = $destination;
         $myProjectDirectory = __DIR__."/../../../..";
-        if(isset($data)){
-            foreach($data as $key => $value){
-                $docData = json_decode($value,true);
-                if(is_array($docData)){
+        if (isset($data)) {
+            foreach ($data as $key => $value) {
+                $docData = json_decode($value, true);
+                if (is_array($docData)) {
                     unset($data[$key]);
-                }    
+                }
             }
         }
         $snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
-        $snappy->setOption("load-error-handling",'ignore');
-        $snappy->setOption("load-media-error-handling",'ignore');
-        if(isset($generateOptions['disable_smart_shrinking'])){
-            $snappy->setOption("disable-smart-shrinking",true);
-
+        $snappy->setOption("load-error-handling", 'ignore');
+        $snappy->setOption("load-media-error-handling", 'ignore');
+        if (isset($generateOptions['disable_smart_shrinking'])) {
+            $snappy->setOption("disable-smart-shrinking", true);
         }
-        $snappy->setOption("header-html",$header);
-        $snappy->setOption("footer-html",$footer);
-        $snappy->setOption('replace',$data);
+        $snappy->setOption("header-html", $header);
+        $snappy->setOption("footer-html", $footer);
+        $snappy->setOption('replace', $data);
 
-        if(isset($append) && !empty($append) || isset($prepend) && !empty($prepend)){
+        if (isset($append) && !empty($append) || isset($prepend) && !empty($prepend)) {
             $dest = sys_get_temp_dir().'/COI.pdf';
-            if(file_exists($dest)){
-                FileUtils::deleteFile('/COI.pdf',sys_get_temp_dir());
+            if (file_exists($dest)) {
+                FileUtils::deleteFile('/COI.pdf', sys_get_temp_dir());
             }
         }
-        $snappy->generateFromHtml($htmlContent,$dest);
+        $snappy->generateFromHtml($htmlContent, $dest);
 
-        if(isset($prepend) && count($prepend) > 0){
-            foreach($prepend as $key => $value) {
+        if (isset($prepend) && count($prepend) > 0) {
+            foreach ($prepend as $key => $value) {
                 $prependOptions = $value;
             }
-            array_push($finalpdf,$prependOptions);
+            array_push($finalpdf, $prependOptions);
         }
         
 
-        array_push($finalpdf,$dest);
+        array_push($finalpdf, $dest);
 
        
-        if(isset($append) && count($append) > 0){
-            foreach($append as $key => $value) {
+        if (isset($append) && count($append) > 0) {
+            foreach ($append as $key => $value) {
                 $appendOptions = $value;
             }
-            array_push($finalpdf,$appendOptions);
+            array_push($finalpdf, $appendOptions);
         }
 
-        $destination = $this->mergeDocuments($finalpdf,$destination);
+        $destination = $this->mergeDocuments($finalpdf, $destination);
         return $destination;
     }
     // public function generateDocumentFromFile($filePath,$destination){
         
     // }
 
-    public function mergeDocuments($sourceArray,$destination){
-
+    public function mergeDocuments($sourceArray, $destination)
+    {
         $pdf = new Fpdi();
 
-        foreach ($sourceArray AS $file) {
+        foreach ($sourceArray as $file) {
             // get the page count
             $pageCount = $pdf->setSourceFile($file);
             // iterate through all pages
@@ -194,11 +192,10 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $result = $pdf->fillForm($data)
             ->needAppearances()
             ->saveAs($destination);
-        if(!$result){
+        if (!$result) {
             throw new Exception($pdf->getError());
         }
         return $result;
-                
     }
 
    

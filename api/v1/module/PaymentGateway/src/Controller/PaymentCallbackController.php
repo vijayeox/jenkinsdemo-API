@@ -12,7 +12,6 @@ use PaymentGateway\Model\PaymentTable;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
 
-
 class PaymentCallbackController extends AbstractAPIControllerHelper
 {
 
@@ -47,9 +46,5 @@ class PaymentCallbackController extends AbstractAPIControllerHelper
         // }
         $this->log->info("Exit webhookcallback with data ".print_r($data, true));
         return $this->getSuccessResponseWithData($data, 200);
-
     }
-    
-
 }
-    

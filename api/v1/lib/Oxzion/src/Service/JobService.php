@@ -18,11 +18,9 @@ use Oxzion\Utils\RestClient;
 
 class JobService extends AbstractService
 {
-
     public function setRestClient($restClient)
     {
         $this->restClient = $restClient;
-
     }
 
     public function __construct($config, $dbAdapter, MessageProducer $messageProducer, JobTable $table)
@@ -38,33 +36,33 @@ class JobService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    // job name is file ID 
+    // job name is file ID
     // send appId in the parameter as Uuid
     public function scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId = null)
     {
         $this->logger->info('EXECUTING SCHEDULE NEW JOB');
-        if((!isset($jobName)) || (!isset($jobGroup)) || (!isset($jobPayload)) || (!isset($cron))){
+        if ((!isset($jobName)) || (!isset($jobGroup)) || (!isset($jobPayload)) || (!isset($cron))) {
             $this->logger->info("Job Name/Group/Payload/Cron Not Specified");
             throw new EntityNotFoundException("JobName or JobGroup or JobPayload or Cron Expression Not Specified");
         }
-        if(!isset($appId)){
+        if (!isset($appId)) {
             $this->logger->info("App Id not specified");
             throw new ServiceException("appId not specified", "appid.not.specified");
         }
         $appNewId = $this->getIdFromUuid('ox_app', $appId);
-        if($appNewId != 0){
+        if ($appNewId != 0) {
             $appId = $appNewId;
         }
         $query = "SELECT * from ox_job where name = :name and app_id = :appId";
         $params = array('name' => $jobName, 'appId' => $appId);
-        if ($accountId) {            
+        if ($accountId) {
             $accountId = !is_numeric($accountId) ? $this->getIdFromUuid('ox_account', $accountId) : $accountId;
             $query .= " AND account_id =:accountId";
             $params['accountId'] = $accountId;
         }
-        $result = $this->executeQuerywithBindParameters($query, $params)->toArray(); 
-        if($accountId && !empty($result)){
-            $config = !is_array($result[0]['config']) ? json_decode($result[0]['config'],true) : $result[0]['config'];
+        $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
+        if ($accountId && !empty($result)) {
+            $config = !is_array($result[0]['config']) ? json_decode($result[0]['config'], true) : $result[0]['config'];
             $jobPayload['cron'] = $config['schedule']['cron'];
             $this->cancelJobInternal($result[0]['job_id'], $jobGroup);
             unset($result);
@@ -74,22 +72,22 @@ class JobService extends AbstractService
         $jobData['app_id'] = $appId;
         $jobData['group_name'] = $jobGroup;
         $jobData['config'] = json_encode($jobPayload);
-        if($accountId){
+        if ($accountId) {
             $url = 'setupjob';
             $responseReturn = $this->restClient->postWithHeader($url, $jobPayload);
 
             if (!isset($responseReturn['body'])) {
-                throw new ServiceException("Schedule Job Error", 'schedule.job.exception');            
+                throw new ServiceException("Schedule Job Error", 'schedule.job.exception');
             }
             $response = json_decode($responseReturn['body'], true);
-            if($response['Success'] != true){
+            if ($response['Success'] != true) {
                 throw new ServiceException("Schedule Job not successful", 'schedule.job.not.successful');
             }
             $jobData['job_id'] = $response['JobId']; // make nullable
         }
         $this->logger->info("adding job details to ox_job table with the following details");
         $form = new Job($this->table);
-        if(isset($result) && !$accountId && !empty($result)){
+        if (isset($result) && !$accountId && !empty($result)) {
             $form->loadById($result[0]['id']);
         }
         $form->assign($jobData);
@@ -100,8 +98,7 @@ class JobService extends AbstractService
             $id = $form->getGenerated(true);
             $jobData['id'] = $id['id'];
             $this->commit();
-        } 
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -112,69 +109,69 @@ class JobService extends AbstractService
     public function cancelJob($jobName, $jobGroup, $appId, $accountId = null)
     {
         $this->logger->info("EXECUTING CANCEL JOB WITH JOB NAME AND GROUP AS PARAMETERS");
-        if(!isset($jobName) && !isset($jobName)){
+        if (!isset($jobName) && !isset($jobName)) {
             $this->logger->info('Job Name/Group not specified');
             return;
         }
         $appNewId = $this->getIdFromUuid('ox_app', $appId);
-        if($appNewId != 0){
+        if ($appNewId != 0) {
             $appId = $appNewId;
         }
         $query = 'SELECT * from ox_job where name = :jobName and group_name = :jobGroup and app_id = :appId';
         $params = array('jobName' => $jobName, 'jobGroup' => $jobGroup, 'appId' => $appId);
-        if($accountId){
+        if ($accountId) {
             $accountId = !is_numeric($accountId) ? $this->getIdFromUuid('ox_account', $accountId) : $accountId;
             $query .= " AND account_id =:accountId ";
             $params['accountId'] = $accountId;
-        }else{
+        } else {
             $query .= " AND account_id IS NULL ";
         }
         $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
-        if(!isset($result) || empty($result)){
+        if (!isset($result) || empty($result)) {
             $this->logger->info("Job Id does not exist or not found.");
-            throw new ServiceException('No record found', 'no.record.found', OxServiceException::ERR_CODE_NOT_FOUND);            
+            throw new ServiceException('No record found', 'no.record.found', OxServiceException::ERR_CODE_NOT_FOUND);
         }
         $this->logger->info("The job id from ox_job is : " . print_r($result, true));
         $jobId = $result[0]['job_id'];
         $this->cancelJobInternal($jobId, $jobGroup);
     }
 
-    public function cancelAppJobs($appId){
+    public function cancelAppJobs($appId)
+    {
         $this->logger->info("In Cancel App Jobs");
-        try{
+        try {
             $jobList = $this->getJobsList($appId);
             foreach ($jobList as $key => $value) {
                 $this->cancelJob($value['name'], $value['group_name'], $appId);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->logger->info("cancel App Jobs failed".$e->getMessage());
             throw $e;
         }
-        
     }
 
     public function cancelJobId($jobId, $appId, $groupName =null)
     {
-        $this->logger->info("EXECUTING CANCEL JOB WITH JOB ID AS PARAMETER");        
-        if(!isset($jobId) || !isset($appId)){
+        $this->logger->info("EXECUTING CANCEL JOB WITH JOB ID AS PARAMETER");
+        if (!isset($jobId) || !isset($appId)) {
             $this->logger->info('Job Id or App Id not specified');
             throw new ServiceException("Job Id / App Id not specified", 'jobid.or.appid.not.specified', OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
         }
         $appNewId = $this->getIdFromUuid('ox_app', $appId);
-        if($appNewId != 0){
+        if ($appNewId != 0) {
             $appId = $appNewId;
         }
-        $this->logger->info("appId is : ".print_r($appId,true));
-        if(isset($jobId)){
+        $this->logger->info("appId is : ".print_r($appId, true));
+        if (isset($jobId)) {
             $query = 'SELECT * from ox_job where job_id = :jobId and app_id = :appId';
             $params = array('jobId' => $jobId, 'appId' => $appId);
             $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
-            if(empty($result)){
+            if (empty($result)) {
                 //as no job is found we just return
                 return;
             }
         }
-        if(!isset($groupName)){
+        if (!isset($groupName)) {
             $query = 'SELECT group_name from ox_job where job_id = :jobId and app_id = :appId';
             $params = array('jobId' => $jobId, 'appId' => $appId);
             $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
@@ -183,13 +180,14 @@ class JobService extends AbstractService
         $this->cancelJobInternal($jobId, $groupName);
     }
 
-    private function cancelJobInternal($jobId, $groupName){
-        $url = 'canceljob';            
+    private function cancelJobInternal($jobId, $groupName)
+    {
+        $url = 'canceljob';
         $jobPayload = array('jobid' => $jobId, 'jobgroup' => $groupName);
         $response = $this->restClient->postWithHeader($url, $jobPayload);
         $this->logger->info("Response - " . print_r($response, true));
         if (!isset($response) && !isset($response['body'])) {
-            throw new ServiceException("Schedule Job Error", 'schedule.job.exception');            
+            throw new ServiceException("Schedule Job Error", 'schedule.job.exception');
         }
     
         $count = 0;
@@ -201,25 +199,24 @@ class JobService extends AbstractService
             $count = 1;
             $this->logger->info("job successfully deleted......");
             if ($count == 0) {
-                throw new ServiceException("Deletion of job table record was not successful", 'delete.jobtable.record.not.successful');                
+                throw new ServiceException("Deletion of job table record was not successful", 'delete.jobtable.record.not.successful');
             }
             $this->commit();
-        } 
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
-        }    
+        }
     }
 
     public function getJobDetails($jobId, $appId)
-    {        
+    {
         $appId = $this->getIdFromUuid('ox_app', $appId);
         $this->logger->info("EXECUTING GET JOB ID DETAILS ");
         $query = "SELECT * from ox_job where job_id = :jobId and app_id = :appId";
         $params = array('jobId' => $jobId, 'appId' => $appId);
         $this->logger->info("Job Service - GetJobDetails query - $query");
-        $result = $this->executeQuerywithBindParameters($query, $params)->toArray();  
-        if(empty($result)){
+        $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
+        if (empty($result)) {
             throw new ServiceException("No records found", "no.records.found", OxServiceException::ERR_CODE_NOT_FOUND);
         }
         $this->logger->info("The result is - ", print_r($result, true));
@@ -229,10 +226,10 @@ class JobService extends AbstractService
     public function getJobsList($appId)
     {
         $this->logger->info("EXECUTING GET JOB DETAILS FOR JOB ID");
-        try{
+        try {
             $appId = $this->getIdFromUuid('ox_app', $appId);
-            if(!isset($appId)){
-                throw new ServiceException("app id not specified",'appid.not.specified');            
+            if (!isset($appId)) {
+                throw new ServiceException("app id not specified", 'appid.not.specified');
             }
             $this->logger->info("EXECUTING GET JOBS LIST");
             $query = 'SELECT * from ox_job where app_id = :appId';
@@ -240,8 +237,7 @@ class JobService extends AbstractService
             $result = $this->executeQuerywithBindParameters($query, $params)->toArray();
             $this->logger->info("The result is - ", print_r($result, true));
             return $result;
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }

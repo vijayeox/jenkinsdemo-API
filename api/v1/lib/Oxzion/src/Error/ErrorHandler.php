@@ -46,7 +46,7 @@ class ErrorHandler
         }
         $response = $e->getResponse();
         $exception = $e->getParam('exception');
-        $exceptionJson = array();        
+        $exceptionJson = array();
         $errorJson = array(
             'message'   => 'An error occurred during execution; please try again later.',
         );

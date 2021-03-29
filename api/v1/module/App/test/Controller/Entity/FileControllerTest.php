@@ -49,7 +49,7 @@ class FileControllerTest extends ControllerTest
         $this->assertMatchedRouteName('followups');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'] , 3);
+        $this->assertEquals($content['total'], 3);
     }
 
     public function testGet()
@@ -84,12 +84,11 @@ class FileControllerTest extends ControllerTest
         $fileId = $content['data']['uuid'];
 
         $selctQuery = "SELECT oxf.id, oxf.data,oxf.version as fileVersion from ox_file oxf where oxf.uuid='$fileId'";
-        $selectResult = $this->executeQueryTest($selctQuery); 
+        $selectResult = $this->executeQueryTest($selctQuery);
         unset($data['entity_id']);
         $this->assertEquals(count($selectResult), 1);
         $this->assertEquals($selectResult[0]['fileVersion'], 1);
         $this->assertEquals(json_decode($selectResult[0]['data'], true), $data);
-
     }
 
     public function testCreateAccess()
@@ -121,11 +120,10 @@ class FileControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['field1'], $data['field1']);
-         // Performed ox_file_attribute table data verification
+        // Performed ox_file_attribute table data verification
         $selctQuery = "SELECT * from ox_file oxf where oxf.uuid='d13d0c68-98c9-11e9-adc5-308d99c9145b'";
         $selectResult = $this->executeQueryTest($selctQuery);
         $this->assertEquals($content['data']['version'], $selectResult[0]['version']);
-
     }
     
     public function testUpdateRestricted()
@@ -158,7 +156,7 @@ class FileControllerTest extends ControllerTest
         $selct = "SELECT oxf.is_active,oxf.version as fileVersion from ox_file oxf where oxf.uuid='d13d0c68-98c9-11e9-adc5-308d99c9145c'";
         $result = $this->executeQueryTest($selct);
         $this->assertEquals($result[0]['is_active'], 0);
-        $this->assertEquals($result[0]['fileVersion'], $selectResult[0]['version']+1 );
+        $this->assertEquals($result[0]['fileVersion'], $selectResult[0]['version']+1);
     }
 
     public function testDeleteWithWrongVersion()
@@ -226,7 +224,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['workflowStatus'], 'In Progress');
-        $this->assertEquals($content['total'] , 2);
+        $this->assertEquals($content['total'], 2);
     }
     public function testGetListOfFilesWithInvalidUserId()
     {
@@ -459,7 +457,6 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals('f13d0c68-98c9-11e9-adc5-308d99c91478', $content['data'][0]['uuid']);
         $this->assertEquals('Completed', $content['data'][1]['workflowStatus']);
         $this->assertEquals('d13d0c68-98c9-11e9-adc5-308d99c91478', $content['data'][1]['uuid']);
-        
     }
 
     public function testGetListOfFilesWithStatusUsingMultipleFilters()

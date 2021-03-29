@@ -17,7 +17,7 @@ use Oxzion\Auth\AuthContext;
 
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
-//TODO: Remove $table variable - it is not used anywhere! Also, controllers should not directly talk to database. (RaviH).
+    //TODO: Remove $table variable - it is not used anywhere! Also, controllers should not directly talk to database. (RaviH).
     protected $table;
     protected $log;
     protected $logClass;
@@ -73,7 +73,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                     $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
                     if ($tokenPayload->data && isset($tokenPayload->data->username)) {
                         $params = [AuthConstants::USERNAME => $tokenPayload->data->username];
-                        if(isset($tokenPayload->data->accountId)){
+                        if (isset($tokenPayload->data->accountId)) {
                             $params[AuthConstants::ACCOUNT_ID] = $tokenPayload->data->accountId;
                         }
                         $userdetail = $authSuccessListener->loadUserDetails($params);
@@ -81,7 +81,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                     if ($tokenPayload->data && isset($tokenPayload->data->apikey)) {
                         $userdetail = $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
                     }
-                    if(is_array($userdetail) && !count($userdetail)){
+                    if (is_array($userdetail) && !count($userdetail)) {
                         return $this->getErrorResponse("invalid username.", 401);
                     }
                     return;

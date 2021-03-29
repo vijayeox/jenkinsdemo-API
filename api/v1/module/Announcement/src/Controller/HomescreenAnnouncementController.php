@@ -53,5 +53,4 @@ class HomescreenAnnouncementController extends AbstractApiControllerHelper
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
-
 }

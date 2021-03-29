@@ -7,18 +7,19 @@ use Oxzion\Type;
 class BusinessRole extends Entity
 {
     protected static $MODEL = [
-        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE, 'required' => FALSE],
-        'name' =>           ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'app_id' =>         ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'uuid' =>           ['type' => Type::UUID,      'readonly' => TRUE, 'required' => FALSE],
-        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE, 'required' => FALSE],
-        'modified_by' =>    ['type' => Type::INTEGER,   'readonly' => TRUE, 'required' => FALSE],
-        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'date_modified' =>  ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'version' =>        ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE]
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => true, 'required' => false],
+        'name' =>           ['type' => Type::STRING,    'readonly' => false, 'required' => true],
+        'app_id' =>         ['type' => Type::INTEGER,   'readonly' => false, 'required' => true],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => true, 'required' => false],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => true, 'required' => false],
+        'modified_by' =>    ['type' => Type::INTEGER,   'readonly' => true, 'required' => false],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => true, 'required' => false],
+        'date_modified' =>  ['type' => Type::TIMESTAMP, 'readonly' => true, 'required' => false],
+        'version' =>        ['type' => Type::INTEGER,   'readonly' => false, 'required' => false]
     ];
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 }

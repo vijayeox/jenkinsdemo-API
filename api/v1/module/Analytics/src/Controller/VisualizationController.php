@@ -10,7 +10,6 @@ use Oxzion\VersionMismatchException;
 
 class VisualizationController extends AbstractApiController
 {
-
     private $visualizationService;
 
     /**
@@ -40,8 +39,7 @@ class VisualizationController extends AbstractApiController
         try {
             $this->visualizationService->createVisualization($data);
             return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -61,8 +59,7 @@ class VisualizationController extends AbstractApiController
         try {
             $this->visualizationService->updateVisualization($uuid, $data);
             return $this->getSuccessResponseWithData($data, 200);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -74,8 +71,7 @@ class VisualizationController extends AbstractApiController
         try {
             $this->visualizationService->deleteVisualization($uuid, $params['version']);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

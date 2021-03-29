@@ -29,7 +29,7 @@ class MigrationTest extends ServiceTest
         );
         if ($this->getName() == 'testInitDBWithOutAppName') {
             unset($this->data['appName']);
-        }else{
+        } else {
             $config = $this->getApplicationConfig();
 
             $this->migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID'], $this->data['description']);
@@ -38,12 +38,11 @@ class MigrationTest extends ServiceTest
             $tm = TransactionManager::getInstance($this->adapter);
             $tm->setRollbackOnly(true);
         }
-
     }
 
     public function tearDown(): void
     {
-        if($this->getName() != 'testInitDBWithOutAppName'){
+        if ($this->getName() != 'testInitDBWithOutAppName') {
             $tm = TransactionManager::getInstance($this->adapter);
             $tm->rollback();
         }
@@ -98,5 +97,4 @@ class MigrationTest extends ServiceTest
         $this->assertEquals($tableFieldName[0]['version_number'], "1.0");
         $this->assertEquals($tableFieldName[1]['version_number'], "1.1");
     }
-
 }

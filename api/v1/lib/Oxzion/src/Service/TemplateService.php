@@ -67,11 +67,11 @@ class TemplateService extends AbstractService
     public function getContent($templateName, $data = array(), $options = array())
     {
         $this->logger->info("Template Name:".$templateName);
-        $this->logger->info("Data context".print_r($data,true));
+        $this->logger->info("Data context".print_r($data, true));
 
         $template = $this->getTemplateDir($templateName, $data, $options);
-        $this->logger->info("Template Directory:".print_r($template['templatePath'],true));
-        $this->logger->info("Template Directory:".print_r($template['templateNameWithExt'],true));
+        $this->logger->info("Template Directory:".print_r($template['templatePath'], true));
+        $this->logger->info("Template Directory:".print_r($template['templateNameWithExt'], true));
         if (!$template) {
             throw new Exception("Template not found!");
         }
@@ -79,21 +79,21 @@ class TemplateService extends AbstractService
         if (isset($options['templateType']) && $options['templateType'] == static::EXCEL_TEMPLATE) {
             $client = $this->excelClient;
             unset($options['templateType']);
-        }
-        else{
+        } else {
             $client = $this->client;
         }
-        try{
+        try {
             $content = $client->getContent($template, $data, $options);
-            $this->logger->info("TEMPLATE CONTENT".print_r($content,true));
-        }catch(Exception $e){
+            $this->logger->info("TEMPLATE CONTENT".print_r($content, true));
+        } catch (Exception $e) {
             print("Error - ".$e->getMessage()."\n");
             throw $e;
         }
         return $content;
     }
 
-    private function getTemplateDir($templateName, $params = array(), $options = null){
+    private function getTemplateDir($templateName, $params = array(), $options = null)
+    {
         $this->logger->info("in getTemplateDir");
         if (isset($options['templateType']) && $options['templateType'] == static::EXCEL_TEMPLATE) {
             $template['templateNameWithExt'] = $templateName;
@@ -102,7 +102,7 @@ class TemplateService extends AbstractService
         }
         $template['templatePath'] = $this->getTemplatePath($template['templateNameWithExt'], $params);
         return $template;
-    } 
+    }
 
     public function getTemplatePath($template, $params = array())
     {

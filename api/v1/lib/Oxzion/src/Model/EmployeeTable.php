@@ -12,5 +12,4 @@ class EmployeeTable extends ModelTable
         parent::__construct($tableGateway);
         $this->tableGateway = $tableGateway;
     }
-
 }

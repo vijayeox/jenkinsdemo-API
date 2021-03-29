@@ -25,7 +25,7 @@ class EmployeeServiceTest extends AbstractServiceTest
     {
         $this->loadConfig();
         parent::setUp();
-        $this->EmplyService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\EmployeeService::class); 
+        $this->EmplyService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\EmployeeService::class);
         $this->adapter = $this->getDbAdapter();
         $this->adapter->getDriver()->getConnection()->setResource(static::$pdo);
     }
@@ -36,7 +36,8 @@ class EmployeeServiceTest extends AbstractServiceTest
         return $dataset;
     }
 
-    private function runQuery($query) {
+    private function runQuery($query)
+    {
         $statement = $this->adapter->query($query);
         $result = $statement->execute();
         $resultSet = new ResultSet();
@@ -48,25 +49,25 @@ class EmployeeServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
-        $data = ['firstname' => 'Individual', 
-        'lastname' => 'Admin', 
-        'username' => 'testuser', 
-        'email' => 'admintestindividual@eoxvantage.in', 
-        'date_of_birth' => '2020-11-02', 
-        'gender' => 'Male', 
-        'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f', 
-        'role' => Array(['0' => Array(['uuid' => 'f5359981-fca4-11ea-8921-485f997ffb6f'])]),
-        'address1' => '23811 Chagrin Blvd, Ste 244', 
-        'city' => 'Beachwood', 
-        'state' => 'OH', 
-        'zip' => '44122', 
-        'country' => 'US', 
-        'account_id' => '1', 
-        'address2' => '', 
-        'person_id' => '152', 
-        'name' => 'test test', 
-        'date_created' => '2020-11-05 10:07:39', 
-        'password_reset_code' => 'c347a277-e724-42ea-9b2a-c80dc62f7d7e', 
+        $data = ['firstname' => 'Individual',
+        'lastname' => 'Admin',
+        'username' => 'testuser',
+        'email' => 'admintestindividual@eoxvantage.in',
+        'date_of_birth' => '2020-11-02',
+        'gender' => 'Male',
+        'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f',
+        'role' => array(['0' => array(['uuid' => 'f5359981-fca4-11ea-8921-485f997ffb6f'])]),
+        'address1' => '23811 Chagrin Blvd, Ste 244',
+        'city' => 'Beachwood',
+        'state' => 'OH',
+        'zip' => '44122',
+        'country' => 'US',
+        'account_id' => '1',
+        'address2' => '',
+        'person_id' => '152',
+        'name' => 'test test',
+        'date_created' => '2020-11-05 10:07:39',
+        'password_reset_code' => 'c347a277-e724-42ea-9b2a-c80dc62f7d7e',
         'created_by' => ''
     ];
         $this->EmplyService->addEmployeeRecord($data);
@@ -82,27 +83,27 @@ class EmployeeServiceTest extends AbstractServiceTest
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
         AuthContext::put(AuthConstants::ACCOUNT_ID, '1');
-        $data = ['firstname' => 'Admintest', 
-        'lastname' => 'test', 
-        'username' => 'testuser', 
-        'email' => 'admintestindividual@eoxvantage.in', 
-        'date_of_birth' => '2020-11-02', 
-        'gender' => 'Male', 
-        'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f', 
-        'role' => Array(['0' => Array(['uuid' => 'f5359981-fca4-11ea-8921-485f997ffb6f'])]),
-        'address1' => '23811 Chagrin Blvd, Ste 244', 
-        'city' => 'Beachwood', 
-        'state' => 'OH', 
-        'zip' => '44122', 
-        'country' => 'US', 
-        'account_id' => '1', 
-        'address2' => '', 
+        $data = ['firstname' => 'Admintest',
+        'lastname' => 'test',
+        'username' => 'testuser',
+        'email' => 'admintestindividual@eoxvantage.in',
+        'date_of_birth' => '2020-11-02',
+        'gender' => 'Male',
+        'managerId' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f',
+        'role' => array(['0' => array(['uuid' => 'f5359981-fca4-11ea-8921-485f997ffb6f'])]),
+        'address1' => '23811 Chagrin Blvd, Ste 244',
+        'city' => 'Beachwood',
+        'state' => 'OH',
+        'zip' => '44122',
+        'country' => 'US',
+        'account_id' => '1',
+        'address2' => '',
         'designation' => 'Dev',
-        'person_id' => '152', 
+        'person_id' => '152',
         'name' => 'test test',
         'date_of_join' => '2020-11-23',
-        'date_created' => '2020-11-05 10:07:39', 
-        'password_reset_code' => 'c347a277-e724-42ea-9b2a-c80dc62f7d7e', 
+        'date_created' => '2020-11-05 10:07:39',
+        'password_reset_code' => 'c347a277-e724-42ea-9b2a-c80dc62f7d7e',
         'created_by' => ''];
         $this->EmplyService->addEmployeeRecord($data);
         $person_id = $data['person_id'];
@@ -138,9 +139,8 @@ class EmployeeServiceTest extends AbstractServiceTest
             'designation' => 'Dev',
             'gender' => 'Male',
             'managerid' => '84c6dc08-1cc9-11eb-bbfa-485f997ffb6f',
-            'role' => Array(['0' => Array(['uuid' => 'f5359981-fca4-11ea-8921-485f997ffb6f'])]),
-            'project' => Array
-            (
+            'role' => array(['0' => array(['uuid' => 'f5359981-fca4-11ea-8921-485f997ffb6f'])]),
+            'project' => array(
             ),
 
             'date_of_join' => '2020-11-23',
@@ -160,5 +160,4 @@ class EmployeeServiceTest extends AbstractServiceTest
         $this->assertEquals($data['designation'], $rows[0]['designation']);
         $this->assertEquals($data['date_of_join'], $rows[0]['date_of_join']);
     }
-    
 }

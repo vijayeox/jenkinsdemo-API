@@ -62,8 +62,8 @@ class MenuItemController extends AbstractApiController
     {
         $appUuid = $this->params()->fromRoute()['appId'];
         $result = $this->menuItemService->getMenuItems($appUuid);
-        if($result == 0){ 
-            return $this->getErrorResponse("No Menus Found for the specified App", 404);  
+        if ($result == 0) {
+            return $this->getErrorResponse("No Menus Found for the specified App", 404);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -80,11 +80,11 @@ class MenuItemController extends AbstractApiController
     {
         try {
             $count = $this->menuItemService->updateMenuItem($menuId, $data);
-        } catch (ValidationException $e) { 
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) { 
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $menuId", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
@@ -100,8 +100,8 @@ class MenuItemController extends AbstractApiController
     public function delete($menuId)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $response = $this->menuItemService->deleteMenuItem($appUuid,$menuId);
-        if ($response == 0) { 
+        $response = $this->menuItemService->deleteMenuItem($appUuid, $menuId);
+        if ($response == 0) {
             return $this->getErrorResponse("MenuItem not found", 404, ['id' => $menuId]);
         }
         return $this->getSuccessResponse();
