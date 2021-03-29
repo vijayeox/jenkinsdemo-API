@@ -386,22 +386,15 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     var collisionKey = key + "Collision";
     var falsePretenseKey = key + "FalsePretense";
     var noneKey = key + "none";
-    if (data.requestedCoverage[key].comp == "") {
-      requestedCoverage[key] = "";
-    } else {
+    if (data.requestedCoverage[key].comp != "") {    
       nonesel = nonesel + 1;
       if (data.requestedCoverage[key].comp == "yes") {
-        compSelected = "yes";
-      }
+        compSelected = "yes";     
     }
-    if (data.requestedCoverage[key].collision == "") {
-      requestedCoverage[key] = "";
-    } else {
+    if (data.requestedCoverage[key].collision != "") {
       nonesel = nonesel + 1;
     }
-    if (data.requestedCoverage[key].falsePretense == "") {
-      requestedCoverage[key] = "";
-    } else {
+    if (data.requestedCoverage[key].falsePretense != "") {
       nonesel = nonesel + 1;
     }
   }
