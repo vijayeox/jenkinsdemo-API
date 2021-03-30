@@ -266,7 +266,7 @@ class ElasticService
                 } elseif ($condition == "NOT LIKE" || $condition == "not like") {
                     $subQuery['bool']['must_not'][] = ["match_phrase" => [$column => $value]];
                 } elseif (strtoupper($condition == "LIKE")) {
-                    $subQuery['bool']['must'][] = ["match" => [$column => ".*".$value.".*"]];
+                    $subQuery["match_phrase_prefix"] = [$column => $value];
                 } else {
                     if (strtolower(substr($value, 0, 5)) == "date:") {
                         $value = date("Y-m-d", strtotime(substr($value, 5)));
@@ -441,6 +441,7 @@ class ElasticService
         $this->logger->debug('Elastic query:');
         $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
         $this->elasticQuery = json_encode($q);
+        print_r($this->elasticQuery);
         $data['query'] = json_encode($q);
         $data["data"] = $this->client->search($q);
         $this->logger->debug('Data from elastic:');
