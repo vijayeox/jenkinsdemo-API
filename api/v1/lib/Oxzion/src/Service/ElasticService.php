@@ -266,7 +266,7 @@ class ElasticService
                 } elseif ($condition == "NOT LIKE" || $condition == "not like") {
                     $subQuery['bool']['must_not'][] = ["match_phrase" => [$column => $value]];
                 } elseif (strtoupper($condition == "LIKE")) {
-                    $subQuery['bool']['must'][] = ["match" => [$column => ".*".$value.".*"]];
+                    $subQuery["match_phrase_prefix"] = [$column => $value];
                 } else {
                     if (strtolower(substr($value, 0, 5)) == "date:") {
                         $value = date("Y-m-d", strtotime(substr($value, 5)));
