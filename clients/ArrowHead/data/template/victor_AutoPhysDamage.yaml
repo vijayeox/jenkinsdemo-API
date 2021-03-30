@@ -852,7 +852,14 @@
    key: victorAutoPhysicalDamage*reqCoverage_otherNonOwnedFalsePretense
    method: pulloutChild
    type: Checkbox
-   cell: Check Box 244
+   cell: Check Box 244'
+-
+   pageName: Underwriting Survey
+   Source Worksheet: False pretense
+   key: victorAutoPhysicalDamage*reqCoverage_noneselected
+   method: pulloutChild
+   type: Checkbox
+   cell: Check Box 234
 -
    pageName: Underwriting Survey
    Source Worksheet: garagekeeper Underwriting Lot Protection
