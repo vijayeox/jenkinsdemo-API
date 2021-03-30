@@ -11,10 +11,8 @@ use PHPUnit\Framework\TestResult;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-
 class VisualizationControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
@@ -109,7 +107,8 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testGet() {
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817', 'GET');
         $this->assertResponseStatusCode(200);
@@ -120,7 +119,8 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'Bar');
     }
 
-    public function testGetNotFound() {
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/visualization/100', 'GET');
         $this->assertResponseStatusCode(404);
@@ -141,7 +141,7 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][3]['name'], 'Bar');
         $this->assertEquals($content['data']['data'][4]['name'], 'Aggregate');
         $this->assertEquals($content['data']['data'][4]['uuid'], '101b3d1e-175b-43d8-ac38-485e80e6b2f3');
-        $this->assertEquals($content['data']['total'],5);
+        $this->assertEquals($content['data']['total'], 5);
     }
 
     public function testGetListWithDeleted()
@@ -158,7 +158,7 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][3]['isdeleted'], 0);
         $this->assertEquals($content['data']['data'][4]['name'], 'Aggregate');
         $this->assertEquals($content['data']['data'][4]['uuid'], '101b3d1e-175b-43d8-ac38-485e80e6b2f3');
-        $this->assertEquals($content['data']['total'],5);
+        $this->assertEquals($content['data']['total'], 5);
     }
 
     public function testGetListWithSort()
@@ -174,10 +174,10 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][0]['name'], 'Aggregate');
         $this->assertEquals($content['data']['data'][1]['name'], 'Aggregate value');
         $this->assertEquals($content['data']['data'][1]['uuid'], '153f4f96-9b6c-47db-95b2-104af23e7522');
-        $this->assertEquals($content['data']['total'],5);
+        $this->assertEquals($content['data']['total'], 5);
     }
 
-     public function testGetListSortWithPageSize()
+    public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/visualization?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":10}]', 'GET');
@@ -189,7 +189,7 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][1]['name'], 'Bar');
         $this->assertEquals($content['data']['data'][1]['is_owner'], 'true');
-        $this->assertEquals($content['data']['total'],5);
+        $this->assertEquals($content['data']['total'], 5);
     }
 
     public function testGetListwithQueryParameters()
@@ -203,10 +203,10 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 1);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['name'], 'Bar');
-        $this->assertEquals($content['data']['total'],1);
+        $this->assertEquals($content['data']['total'], 1);
     }
 
-        public function testDelete()
+    public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817?version=1', 'DELETE');

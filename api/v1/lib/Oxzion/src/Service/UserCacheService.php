@@ -34,15 +34,15 @@ class UserCacheService extends AbstractService
 
     public function storeUserCache($appUuId, &$params)
     {
-        $this->logger->info("STORE USER CACHE DATA ---".print_r($params,true));
+        $this->logger->info("STORE USER CACHE DATA ---".print_r($params, true));
         if ($app = $this->getIdFromUuid('ox_app', $appUuId)) {
             $appId = $app;
         } else {
             $appId = $appUuId;
         }
         $workflowId = $formId = $activityInstanceId = $workflowInstanceId = null;
-        if(isset($params['formId'])) {
-            $formId = $this->getIdFromUuid('ox_form',$params['formId']);
+        if (isset($params['formId'])) {
+            $formId = $this->getIdFromUuid('ox_form', $params['formId']);
             // print_r($formId);exit;
         }
         if (isset($params['activityInstanceId'])) {
@@ -61,7 +61,7 @@ class UserCacheService extends AbstractService
         $workflowId = (isset($params['workflow_uuid']) && !empty($params['workflow_uuid']))?$params['workflow_uuid']:null;
         $workflowId = (isset($params['workflowId']) && !empty($params['workflowId']))?$params['workflowId']:$workflowId;
         $this->logger->info("STORE USER CACHE -- workflowId : $workflowId");
-        if($workflowId) {
+        if ($workflowId) {
             $select = "select ox_form.id, ox_workflow.id as workflow_id
             from ox_form
             left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
@@ -73,12 +73,12 @@ class UserCacheService extends AbstractService
             $formId = $response[0]['id'];
             $workflowId = $response[0]['workflow_id'];
         }
-        if(!isset($formId)){
+        if (!isset($formId)) {
             $this->logger->warn("Cache not stored as Form was not found");
             return $params;
         }
 
-        if(isset($params['workflowInstanceId'])) {
+        if (isset($params['workflowInstanceId'])) {
             $select = "select ox_workflow_instance.id
             from ox_workflow_instance
             where ox_workflow_instance.process_instance_id =:workflowInstanceId";
@@ -102,26 +102,26 @@ class UserCacheService extends AbstractService
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
         $form->exchangeArray($data);
-        $this->logger->info("STORE USER CACHE -- Data : ".print_r($data,true));
+        $this->logger->info("STORE USER CACHE -- Data : ".print_r($data, true));
         $form->validate();
         $count = 0;
         try {
             $this->beginTransaction();
             $count = $this->table->save($form);
             if ($count != 0) {
-                if(!isset($data['id'])) {
+                if (!isset($data['id'])) {
                     $id = $this->table->getLastInsertValue();
                     $params['cacheId'] = $id;
                 } else {
                     $id = $data['id'];
                 }
-            }else{
+            } else {
                 throw new ServiceException("Failed to save cache", 'cache.save.failed');
             }
-            if(is_string($data['content'])){
-              $content = json_decode($data['content'],true);
+            if (is_string($data['content'])) {
+                $content = json_decode($data['content'], true);
             } else {
-              $content = $params['content'];
+                $content = $params['content'];
             }
             $content['cacheId'] = $id;
             $params['cacheId'] = $id;
@@ -234,6 +234,5 @@ class UserCacheService extends AbstractService
         } else {
             return array('content' => $response[0]['content']);
         }
-    
     }
 }

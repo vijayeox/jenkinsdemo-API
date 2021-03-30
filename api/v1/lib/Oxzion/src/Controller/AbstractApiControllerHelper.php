@@ -22,7 +22,6 @@ use Oxzion\FileContentException;
 
 abstract class AbstractApiControllerHelper extends AbstractRestfulController
 {
-
     private $config;
     protected function getBaseUrl()
     {
@@ -221,29 +220,27 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
         return $this->config;
     }
 
-    protected function exceptionToResponse(Exception $e) {
-	$errorType = OxServiceException::ERR_TYPE_ERROR;
-    $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR;
-	$context = NULL;
-        $message = NULL;
+    protected function exceptionToResponse(Exception $e)
+    {
+        $errorType = OxServiceException::ERR_TYPE_ERROR;
+        $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR;
+        $context = null;
+        $message = null;
         if ($e instanceof ValidationException) {
             $errorType = OxServiceException::ERR_TYPE_ERROR;
             $errorCode = OxServiceException::ERR_CODE_NOT_ACCEPTABLE; //Input data is not acceptable.
             $message = 'Validation error(s).';
             $context = ['errors' => $e->getErrors()];
-        }
-        else if ($e instanceof VersionMismatchException) {
+        } elseif ($e instanceof VersionMismatchException) {
             $errorType = OxServiceException::ERR_TYPE_ERROR;
             $errorCode = OxServiceException::ERR_CODE_PRECONDITION_FAILED; //Version mismatch is precondition failure.
             $message = 'Entity version sent by client does not match the version on server.';
-        }
-        else if ($e instanceof OxServiceException) {
+        } elseif ($e instanceof OxServiceException) {
             $errorType = $e->getErrorType();
             $errorCode = $e->getErrorCode();
             $message = $e->getMessage();
             $context = $e->getContextData();
-        } 
-        else {
+        } else {
             $errorType = OxServiceException::ERR_TYPE_ERROR;
             $errorCode = OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR; //Unexpected error is always HTTP 500.
             $message = 'Unexpected error.';
@@ -264,19 +261,19 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
         return new JsonModel($returnObj);
     }
 
-    protected function getVersionFromQueryOrPost($throwIfNotFound = true) {
+    protected function getVersionFromQueryOrPost($throwIfNotFound = true)
+    {
         $params = $this->params()->fromQuery();
         if (!empty($params) && array_key_exists('version', $params)) {
             return $params['version'];
         }
         $params = $this->params()->fromPost();
-	if (!empty($params) && array_key_exists('version', $params)) {
+        if (!empty($params) && array_key_exists('version', $params)) {
             return $params['version'];
         }
         if ($throwIfNotFound) {
             throw new VersionRequiredException('Version is required.');
         }
-        return NULL;
+        return null;
     }
 }
-

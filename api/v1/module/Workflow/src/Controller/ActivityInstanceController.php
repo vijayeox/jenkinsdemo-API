@@ -23,8 +23,11 @@ class ActivityInstanceController extends AbstractApiControllerHelper
     /**
     * @ignore __construct
     */
-    public function __construct(ActivityInstanceService $activityInstanceService,
-        WorkflowInstanceService $workflowInstanceService,CommandService $commandService)
+    public function __construct(
+        ActivityInstanceService $activityInstanceService,
+        WorkflowInstanceService $workflowInstanceService,
+        CommandService $commandService
+    )
     {
         $this->activityInstanceService = $activityInstanceService;
         $this->workflowInstanceService = $workflowInstanceService;
@@ -47,34 +50,35 @@ class ActivityInstanceController extends AbstractApiControllerHelper
             $this->createActivityInstanceEntry($data);
             $this->log->info("Add Activity Instance Successful");
             return $this->getSuccessResponseWithData($data);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-    private function createActivityInstanceEntry(&$data){
+    private function createActivityInstanceEntry(&$data)
+    {
         $this->log->info("CREATE ACTIVITY INSTANCE ENTRY - Activity INstance");
-        try{
-            $this->activityInstanceService->createActivityInstanceEntry($data,$this->commandService);
+        try {
+            $this->activityInstanceService->createActivityInstanceEntry($data, $this->commandService);
             $this->log->info(ActivityInstanceController::class.":Add Activity Instance Successful");
-        }catch(EntityNotFoundException $e){
+        } catch (EntityNotFoundException $e) {
             $this->log->info("Entity Not FOund Instance");
-            if(isset($data['processVariables'])){
+            if (isset($data['processVariables'])) {
                 $variables = $data['processVariables'];
-                if(isset($variables['workflow_id']) || isset($variables['workflowId'])){
+                if (isset($variables['workflow_id']) || isset($variables['workflowId'])) {
                     $workflowId = isset($variables['workflow_id'])?$variables['workflow_id']:$variables['workflowId'];
                 } else {
                     throw new InvalidParameterException("Workflow Id not set");
                 }
-                $workflowInstance = $this->workflowInstanceService->setupWorkflowInstance($workflowId,$data['processInstanceId'],$variables);
-                if($workflowInstance){
+                $workflowInstance = $this->workflowInstanceService->setupWorkflowInstance($workflowId, $data['processInstanceId'], $variables);
+                if ($workflowInstance) {
                     return $this->createActivityInstanceEntry($data);
                 }
             }
         }
     }
-     /**
+    /**
     }
     * Complete Activity Instance API
     * @api
@@ -90,7 +94,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
         try {
             $this->activityInstanceService->completeActivityInstance($data);
             return $this->getSuccessResponseWithData($data);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

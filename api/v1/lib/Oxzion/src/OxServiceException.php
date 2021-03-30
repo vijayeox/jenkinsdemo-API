@@ -5,7 +5,8 @@ namespace Oxzion;
 use Throwable;
 use Exception;
 
-abstract class OxServiceException extends Exception {
+abstract class OxServiceException extends Exception
+{
     public const ERR_TYPE_ERROR     = 'error';
     public const ERR_TYPE_FAILURE   = 'failure';
 
@@ -23,29 +24,37 @@ abstract class OxServiceException extends Exception {
     protected $errorType;
     protected $contextData;
 
-	public function __construct($message, $contextData, 
-        int $errorCode = self::ERR_CODE_INTERNAL_SERVER_ERROR, 
-        string $errorType=self::ERR_TYPE_ERROR, 
-        Throwable $rootCause = NULL) {
-            parent::__construct($message, 0, $rootCause);
-            $this->contextData = $contextData;
-            $this->errorCode = empty($errorCode) ? self::ERR_CODE_INTERNAL_SERVER_ERROR : $errorCode;
-            $this->errorType = empty($errorType) ? self::ERR_TYPE_ERROR : $errorType;
+    public function __construct(
+        $message,
+        $contextData,
+        int $errorCode = self::ERR_CODE_INTERNAL_SERVER_ERROR,
+        string $errorType=self::ERR_TYPE_ERROR,
+        Throwable $rootCause = null
+    )
+    {
+        parent::__construct($message, 0, $rootCause);
+        $this->contextData = $contextData;
+        $this->errorCode = empty($errorCode) ? self::ERR_CODE_INTERNAL_SERVER_ERROR : $errorCode;
+        $this->errorType = empty($errorType) ? self::ERR_TYPE_ERROR : $errorType;
     }
 
-    public function getContextData() {
+    public function getContextData()
+    {
         return $this->contextData;
     }
 
-    public function getErrorCode() {
+    public function getErrorCode()
+    {
         return $this->errorCode;
     }
 
-    public function getErrorType() {
+    public function getErrorType()
+    {
         return $this->errorType;
     }
 
-    public function getDisplayMessage() {
+    public function getDisplayMessage()
+    {
         $contextInformation = '';
         if (!empty($this->contextData)) {
             $contextInformation = '|Context:' . json_encode($this->contextData);

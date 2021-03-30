@@ -9,16 +9,19 @@ trait CommentTrait
     protected $logger;
     private $commentService;
     
-    public function __construct(){
+    public function __construct()
+    {
         $this->logger = Logger::getLogger(__CLASS__);
     }
     
-    public function setCommentService(CommentService $commentService){
+    public function setCommentService(CommentService $commentService)
+    {
         $this->logger->info("SET COMMENT SERVICE");
         $this->commentService = $commentService;
     }
 
-    protected function createComment($data,$fileId){
-      return $this->commentService->createComment($data,$fileId);
+    protected function createComment($data, $fileId)
+    {
+        return $this->commentService->createComment($data, $fileId);
     }
 }

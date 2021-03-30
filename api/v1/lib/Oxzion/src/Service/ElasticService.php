@@ -69,7 +69,6 @@ class ElasticService
 
     public function create($indexName, $fieldList, $settings)
     {
-
         $typemapper = ['int' => 'integer', 'text' => 'text'];
 
         if (isset($settings['shrads'])) {
@@ -126,9 +125,8 @@ class ElasticService
         $result_obj = $result['data'];
         if (isset($body['aggs']) && isset($result_obj['aggregations']['groupdata']['buckets'])) {
             $results = array('data' => $result_obj['aggregations']['groupdata']['buckets']);
-        } else if (isset($result_obj['aggregations'])) {
+        } elseif (isset($result_obj['aggregations'])) {
             $results = array('data' => $result_obj['aggregations']['value']['value']);
-
         } else {
             $results = array('data' => $result_obj['hits']['total']);
         }
@@ -197,7 +195,7 @@ class ElasticService
         if ($searchconfig['group'] && !isset($searchconfig['select'])) {
             $results = array('data' => $result_obj['data']['aggregations']['groupdata']['buckets']);
             $results['type'] = 'group';
-        } else if (isset($result_obj['data']['aggregations'])) {
+        } elseif (isset($result_obj['data']['aggregations'])) {
             $results = array('data' => $result_obj['data']['aggregations']['value']['value']);
             $results['type'] = 'value';
         } else {
@@ -222,7 +220,7 @@ class ElasticService
     protected function createFilter($filter, $type = '')
     {
         $subQuery = null;
-        $symMapping = ['>' => 'gt', '>=' => 'gte', '<' => 'lt', '<=' => 'lte'];
+        $symMapping = ['>' => 'gt', '>=' => 'gte', '<' => 'lt', '<=' => 'lte','gt'=>'gt','lt'=>'lt'];
         $boolMapping = ['OR' => 'should', 'AND' => 'must'];
         if (!isset($filter[1]) && is_array($filter)) {
             $filter = $filter[0];
@@ -247,11 +245,10 @@ class ElasticService
             if ($tempQuery2) {
                 $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery2;
             }
-
         } else {
             if (!in_array($column, $this->filterFields) && !($type == 'inline' && in_array($column, $this->excludes))) {
                 $value = AnalyticsUtils::checkSessionValue($value);
-                if ($condition == "==") {
+                if ($condition == "==" || $condition == "eq") {
                     if (!is_array($value)) {
                         if (strtolower(substr($value, 0, 5)) == "date:") {
                             $value = date("Y-m-d", strtotime(substr($value, 5)));
@@ -264,21 +261,19 @@ class ElasticService
                     } else {
                         $subQuery['terms'] = array($column => array_values($value));
                     }
-                } elseif ($condition == "<>" || $condition == "!=") {
+                } elseif ($condition == "<>" || $condition == "!=" || $condition == "ne") {
                     $subQuery['bool']['must_not'][] = ["term" => [$column => $value]];
                 } elseif ($condition == "NOT LIKE" || $condition == "not like") {
                     $subQuery['bool']['must_not'][] = ["match_phrase" => [$column => $value]];
                 } elseif (strtoupper($condition == "LIKE")) {
-                    $subQuery['bool']['must'][] = ["match" => [$column => ".*".$value.".*"]];
-                } 
-                else {
+                    $subQuery["match_phrase_prefix"] = [$column => $value];
+                } else {
                     if (strtolower(substr($value, 0, 5)) == "date:") {
                         $value = date("Y-m-d", strtotime(substr($value, 5)));
                         $subQuery['range'] = array($column => array($symMapping[$condition] => $value, "format" => "yyyy-MM-dd"));
                     } else {
                         $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
                     }
-
                 }
                 $this->filterTmpFields[] = $column;
             }
@@ -365,7 +360,9 @@ class ElasticService
         $aggs = null;
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
-        } else if (key($aggregates) == "count") {$aggs = array('value' => array('value_count' => array('field' => '_id')));} else {
+        } elseif (key($aggregates) == "count") {
+            $aggs = array('value' => array('value_count' => array('field' => '_id')));
+        } else {
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
         }
         return $aggs;
@@ -398,7 +395,6 @@ class ElasticService
 
         // }
         return $mustquery;
-
     }
 
     protected function getFiltersByEntity($entity)
@@ -519,5 +515,4 @@ class ElasticService
     {
         return $this->client->cat()->indices(["index" => "*_index"]);
     }
-
 }

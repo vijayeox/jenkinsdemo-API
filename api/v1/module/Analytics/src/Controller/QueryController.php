@@ -11,7 +11,6 @@ use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class QueryController extends AbstractApiController
 {
-
     private $queryService;
 
     /**
@@ -45,8 +44,7 @@ class QueryController extends AbstractApiController
         try {
             $this->queryService->createQuery($data);
             return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -66,8 +64,7 @@ class QueryController extends AbstractApiController
         try {
             $this->queryService->updateQuery($uuid, $data);
             return $this->getSuccessResponseWithData($data, 200);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -80,8 +77,7 @@ class QueryController extends AbstractApiController
         try {
             $this->queryService->deleteQuery($uuid, $version);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

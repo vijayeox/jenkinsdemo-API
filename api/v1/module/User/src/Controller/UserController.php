@@ -71,7 +71,7 @@ class UserController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($data, 201);
         /*
     PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
@@ -151,10 +151,10 @@ class UserController extends AbstractApiController
     public function getList()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        try{
+        try {
             $result = $this->userService->getUsers($filterParams, $this->getBaseUrl());
             return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -244,10 +244,10 @@ class UserController extends AbstractApiController
     {
         $filterParams = array_merge($this->extractPostData(), $this->params()->fromQuery());
         $params = $this->params()->fromRoute();
-        try{
+        try {
             $result = $this->userService->getUsers($filterParams, $this->getBaseUrl(), $params);
             return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -378,7 +378,7 @@ class UserController extends AbstractApiController
             }
             if ($userInfo) {
                 $baseUrl = $this->getBaseUrl();
-                if(!isset($userInfo['icon'])){
+                if (!isset($userInfo['icon'])) {
                     $userInfo['icon'] = $baseUrl . "/user/profile/" . $userInfo["uuid"];
                 }
             }
@@ -396,7 +396,7 @@ class UserController extends AbstractApiController
     {
         $data = $this->extractPostData();
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        try{
+        try {
             $userDetail = $this->userService->getUser($userId, true);
             $oldPassword = md5(sha1($data['old_password']));
             $newPassword = md5(sha1($data['new_password']));
@@ -405,18 +405,17 @@ class UserController extends AbstractApiController
                 $formData = array('password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
                 $result = $this->update($userDetail['uuid'], $formData);
                 return $this->getSuccessResponse("Password changed successfully!");
-                
-            } else if (($oldPassword != $userDetail['password'])) {
+            } elseif (($oldPassword != $userDetail['password'])) {
                 $response = ['id' => $userId];
                 return $this->getErrorResponse("Old password is not valid.", 404, $response);
-            } else if (($newPassword != $confirmPassword)) {
+            } elseif (($newPassword != $confirmPassword)) {
                 $response = ['id' => $userId];
                 return $this->getErrorResponse("Confirm password missmatch.", 404, $response);
             } else {
                 $response = ['id' => $userId];
                 return $this->getErrorResponse("Failed to Update Password.", 404, $response);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -494,10 +493,10 @@ class UserController extends AbstractApiController
      */
     public function getUserAppsAndPrivilegesAction()
     {
-        try{
+        try {
             $responseData = $this->userService->getUserAppsAndPrivileges();
             return $this->getSuccessResponseWithData($responseData, 200);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -528,10 +527,10 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $id = $params['userId'];
-        try{
+        try {
             $result = $this->projectService->getProjectsOfUserById($id);
             return $this->getSuccessResponseWithData($result);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -540,10 +539,10 @@ class UserController extends AbstractApiController
     public function getUserDetailListAction()
     {
         $params = $this->params()->fromRoute();
-        try{
+        try {
             $result = $this->userService->getUserProfile($params);
             return $this->getSuccessResponseWithData($result, 200);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -559,17 +558,17 @@ class UserController extends AbstractApiController
         }
     }
 
-     public function updateLoggedInStatusAction()
+    public function updateLoggedInStatusAction()
     {
-        if(AuthContext::get(AuthConstants::USER_ID)){
+        if (AuthContext::get(AuthConstants::USER_ID)) {
             try {
                 $count = $this->userService->updateLoggedInStatus();
             } catch (Exception $e) {
                 return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
             }
             return $this->getSuccessResponse();
-        }else{
-            return $this->getErrorResponse("Invalid Username", 401); 
+        } else {
+            return $this->getErrorResponse("Invalid Username", 401);
         }
     }
 }

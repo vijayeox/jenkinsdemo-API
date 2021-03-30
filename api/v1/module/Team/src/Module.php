@@ -38,12 +38,14 @@ class Module implements ConfigProviderInterface
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $accoutService = $container->get(AccountService::class);
                     $userService = $container->get(UserService::class);
-                    return new Service\TeamService($container->get('config'), 
-                                                    $dbAdapter, 
-                                                    $container->get(Model\TeamTable::class), 
-                                                    $accoutService, 
-                                                    $container->get(MessageProducer::class),
-                                                    $userService);
+                    return new Service\TeamService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\TeamTable::class),
+                        $accoutService,
+                        $container->get(MessageProducer::class),
+                        $userService
+                    );
                 },
                 Model\TeamTable::class => function ($container) {
                     $tableGateway = $container->get(Model\TeamTableGateway::class);

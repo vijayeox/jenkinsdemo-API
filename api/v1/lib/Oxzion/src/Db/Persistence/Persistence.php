@@ -40,23 +40,27 @@ class Persistence extends AbstractService
     //     throw new Exception("Unsupported method");
     // }
 
-    public function create(&$data, $commit = true){
+    public function create(&$data, $commit = true)
+    {
         //This api is not allowed to be executed as it does not implement the security required for application specific persistence
-        throw new Exception("Unsupported method");   
+        throw new Exception("Unsupported method");
     }
 
-    public function multiInsertOrUpdate($tableName, array $data, array $excludedColumns = array()){
+    public function multiInsertOrUpdate($tableName, array $data, array $excludedColumns = array())
+    {
         //This api is not allowed to be executed as it does not implement the security required for application specific persistence
-        throw new Exception("Unsupported method");      
+        throw new Exception("Unsupported method");
     }
-    public function runGenericQuery($query){
+    public function runGenericQuery($query)
+    {
         //This api is not allowed to be executed as it does not implement the security required for application specific persistence
-        throw new Exception("Unsupported method");         
+        throw new Exception("Unsupported method");
     }
 
-    public function updateAccountContext($data){
+    public function updateAccountContext($data)
+    {
         //This api is not allowed to be executed as it does not implement the security required for application specific persistence
-        throw new Exception("Unsupported method");            
+        throw new Exception("Unsupported method");
     }
     /**
      * @param $sqlQuery
@@ -81,9 +85,9 @@ class Persistence extends AbstractService
                                 array(
                                     "expr_type" => "colref",
                                     "base_expr" => "`ox_app_account_id`",
-                                    "no_quotes" => array (
+                                    "no_quotes" => array(
                                         "delim" => "",
-                                        "parts" => array (
+                                        "parts" => array(
                                             "0" => "ox_app_account_id"
                                         )
                                     )
@@ -97,19 +101,19 @@ class Persistence extends AbstractService
             if (!empty($parsedArray['SELECT'])) {
                 $SelectArrayKeys = array_keys($parsedArray['SELECT']);
                 $lastElementInSelectList = end($SelectArrayKeys);
-                $parsedArray['SELECT'][$lastElementInSelectList]['delim'] = ","; 
-                $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID) ? AuthContext::get(AuthConstants::ACCOUNT_ID) : NULL;
+                $parsedArray['SELECT'][$lastElementInSelectList]['delim'] = ",";
+                $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID) ? AuthContext::get(AuthConstants::ACCOUNT_ID) : null;
                 $selectExpressionOperator = array(
                     "expr_type" => "const",
                     "base_expr" => $accountId,
                     "sub_tree" => "",
                     "delim" => "");
                 array_push($parsedArray['SELECT'], $selectExpressionOperator);
-                $parsedArray = $this->processParsedArrayForAccountId($parsedArray,'FROM');
+                $parsedArray = $this->processParsedArrayForAccountId($parsedArray, 'FROM');
             }
             if (!empty($parsedArray['WHERE'])) {
                 $tableArrayList = $this->getTableList($parsedArray['FROM']);
-                $parsedArray = $this->processParsedArrayForAccountId($parsedArray,'WHERE',$tableArrayList);
+                $parsedArray = $this->processParsedArrayForAccountId($parsedArray, 'WHERE', $tableArrayList);
             }
             if (!empty($parsedArray['VALUES'])) {
                 foreach ($parsedArray['VALUES'] as $key => $insertArray) {
@@ -145,7 +149,7 @@ class Persistence extends AbstractService
         $adapter=$this->dbAdapter;
 
         try {
-           $parsedArray = $this->processParsedArrayForAccountId($parsedArray,'UPDATE');
+            $parsedArray = $this->processParsedArrayForAccountId($parsedArray, 'UPDATE');
         } catch (Exception $e) {
             return 0;
         }
@@ -165,7 +169,7 @@ class Persistence extends AbstractService
         $parsedArray = $parsedData->parsed;
         $adapter=$this->dbAdapter;
         try {
-            $parsedArray = $this->processParsedArrayForAccountId($parsedArray,'FROM');
+            $parsedArray = $this->processParsedArrayForAccountId($parsedArray, 'FROM');
         } catch (Exception $e) {
             return 0;
         }
@@ -191,7 +195,7 @@ class Persistence extends AbstractService
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
                     if ($updateArray['expr_type'] === 'table') {
                         $tableName = $updateArray['table'];
-                        $parsedArray = $this->additionOfAccountIdColumn($parsedArray,$tableName);
+                        $parsedArray = $this->additionOfAccountIdColumn($parsedArray, $tableName);
                     }
                 }
             }
@@ -207,8 +211,9 @@ class Persistence extends AbstractService
         if (!empty($data['ref_clause'])) {
             $expAndOperator = array("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
             array_push($parsedArray[$queryStatement][$key]['ref_clause'], $expAndOperator);
-            if (count($tableArrayList) > 2)
+            if (count($tableArrayList) > 2) {
                 $tableArrayList = array(current($tableArrayList), end($tableArrayList));
+            }
             $arrayKeys = array_keys($tableArrayList);
             $lastElementInTableList = end($arrayKeys);
             foreach ($tableArrayList as $fromkey => $tableList) {
@@ -240,10 +245,10 @@ class Persistence extends AbstractService
         return $statement3->execute();
     }
 
-    private function additionOfAccountIdColumn($parsedArray,$tableName,$tableAliasName = null)
+    private function additionOfAccountIdColumn($parsedArray, $tableName, $tableAliasName = null)
     {
         $adapter = $this->dbAdapter;
-        if(!$tableAliasName){
+        if (!$tableAliasName) {
             $tableAliasName = $tableName;
         }
         $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
@@ -253,25 +258,25 @@ class Persistence extends AbstractService
             $columnList = explode(",", $resultTableName['column_list']);
             if (in_array('ox_app_account_id', $columnList)) {
                 $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
-                if($accountId){
+                if ($accountId) {
                     $exp_const = array("expr_type" => "const", "base_expr" => $accountId, "sub_tree" => "");
                     $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
                     $exp_colref = array("expr_type" => "colref", "base_expr" => $tableAliasName . " . ox_app_account_id", "sub_tree" => "", "no_quotes" =>
                         array( "delim" => "", "parts" => array("0" => "ox_app_account_id") )
                     );
                 }
-                if(!isset($parsedArray['WHERE'])){
+                if (!isset($parsedArray['WHERE'])) {
                     $parsedArray['WHERE'] = array();
                     $expAndOperator = array("expr_type" => "operator", "base_expr" => " (", "sub_tree" => "");
-                }else{
+                } else {
                     $expAndOperator = array("expr_type" => "operator", "base_expr" => "and (", "sub_tree" => "");
                 }
 
-                if($accountId){
+                if ($accountId) {
                     array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
                     $expOrOperator = array("expr_type" => "operator", "base_expr" => "OR", "sub_tree" => "");
                     array_push($parsedArray['WHERE'], $expOrOperator);
-                }else{
+                } else {
                     array_push($parsedArray['WHERE'], $expAndOperator);
                 }
                 $exp_const = array("expr_type" => "const", "base_expr" => " 0 )", "sub_tree" => "");
@@ -288,7 +293,7 @@ class Persistence extends AbstractService
     public function runQueryForStoredProcedure($query, $storedProcedureName)
     {
         $checkString = $this->checkForStoredProcedure($storedProcedureName);
-        if($checkString == 1){
+        if ($checkString == 1) {
             return $this->executeQuery($query);
         }
         return 0;
@@ -306,7 +311,8 @@ class Persistence extends AbstractService
         return 0;
     }
 
-    protected function executeQuery($query) {
+    protected function executeQuery($query)
+    {
         $adapter = $this->getAdapter();
         $driver = $adapter->getDriver();
         $platform = $adapter->getPlatform();
@@ -317,42 +323,43 @@ class Persistence extends AbstractService
         return $statementContainer->execute();
     }
 
-    private function processParsedArrayForAccountId($parsedArray,$operator,$tableArrayList = array()){
+    private function processParsedArrayForAccountId($parsedArray, $operator, $tableArrayList = array())
+    {
         if (!empty($parsedArray)) {
-            if(isset($parsedArray[$operator])) {
+            if (isset($parsedArray[$operator])) {
                 $data = $parsedArray[$operator];
-            }else{
+            } else {
                 $data =array();
-            }  
-            if(empty($tableArrayList)){
+            }
+            if (empty($tableArrayList)) {
                 $processed = 0;
 
                 foreach ($data as $key => $updateArray) {
                     $tableAliasName = null;
                     if ($updateArray['expr_type'] === 'table') {
-                        if ($updateArray['alias']) {    
+                        if ($updateArray['alias']) {
                             $tableAliasName = $updateArray['alias']['name'];
                         }
                         $tableName = $updateArray['table'];
                         $tableArrayList[] = $tableAliasName  ? $tableAliasName : $tableName;
-                        $parsedArray = $this->additionOfAccountIdColumn($parsedArray,$tableName,$tableAliasName);
-                    }else if ($updateArray['expr_type'] === 'subquery') {
-                        $parsedArray[$operator][$key]['sub_tree'] = $this->processParsedArrayForAccountId($updateArray['sub_tree'],'FROM');
+                        $parsedArray = $this->additionOfAccountIdColumn($parsedArray, $tableName, $tableAliasName);
+                    } elseif ($updateArray['expr_type'] === 'subquery') {
+                        $parsedArray[$operator][$key]['sub_tree'] = $this->processParsedArrayForAccountId($updateArray['sub_tree'], 'FROM');
                         continue;
-
-                    }else if(count($tableArrayList) > 0 && $processed == 1){
+                    } elseif (count($tableArrayList) > 0 && $processed == 1) {
                         $processed = 1;
-                        $parsedArray = $this->additionOfAccountIdColumn($parsedArray,$tableArrayList[0]);
+                        $parsedArray = $this->additionOfAccountIdColumn($parsedArray, $tableArrayList[0]);
                     }
 
                     $parsedArray = $this->getReferenceClause($parsedArray, $key, $updateArray, $tableArrayList, $operator);
-                }  
+                }
             }
         }
         return $parsedArray;
     }
 
-    private function getTableList($parsedArray){
+    private function getTableList($parsedArray)
+    {
         $tableArrayList = array();
         foreach ($parsedArray as $key => $updateArray) {
             if ($updateArray['expr_type'] === 'table') {

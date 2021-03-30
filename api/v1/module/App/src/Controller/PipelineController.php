@@ -24,15 +24,16 @@ class PipelineController extends AbstractApiController
         $this->commandService = $commandService;
         $this->log = $this->getLogger();
     }
-    public function executePipelineAction(){
+    public function executePipelineAction()
+    {
         $this->log->info("PIPELINE CONTROLLER");
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $params = array_merge($params,$this->params()->fromQuery());
+        $params = array_merge($params, $this->params()->fromQuery());
         $appUuid = $this->params()->fromRoute()['appId'];
         $params['appId'] = $appUuid;
-        if(isset($params['commands'])){
-            if(is_string($params['commands'])){
-                if($commands = json_decode($params['commands'],true)){
+        if (isset($params['commands'])) {
+            if (is_string($params['commands'])) {
+                if ($commands = json_decode($params['commands'], true)) {
                     $params['commands'] = $commands;
                 }
             }
@@ -42,7 +43,7 @@ class PipelineController extends AbstractApiController
         unset($params['action']);
         unset($params['access']);
         try {
-            $response = $this->commandService->runCommand($params,$this->getRequest());
+            $response = $this->commandService->runCommand($params, $this->getRequest());
             if ($response && is_array($response)) {
                 $this->log->info(":Pipleline Service Executed - " . print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);
@@ -55,21 +56,22 @@ class PipelineController extends AbstractApiController
                 return $this->getErrorResponse("Task has already been claimed by someone else", 409);
             }
             return $this->getErrorResponse($e->getMessage(), 409);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-    public function executeBatchPipelineAction(){
+    public function executeBatchPipelineAction()
+    {
         $this->log->info("BATCH PIPELINE CONTROLLER");
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $params = array_merge($params,$this->params()->fromQuery());
+        $params = array_merge($params, $this->params()->fromQuery());
         $appUuid = $this->params()->fromRoute()['appId'];
         $params['appId'] = $appUuid;
-        if(isset($params['commands'])){
-            if(is_string($params['commands'])){
-                if($commands = json_decode($params['commands'],true)){
+        if (isset($params['commands'])) {
+            if (is_string($params['commands'])) {
+                if ($commands = json_decode($params['commands'], true)) {
                     $params['commands'] = $commands;
                 }
             }
@@ -79,7 +81,7 @@ class PipelineController extends AbstractApiController
         unset($params['action']);
         unset($params['access']);
         try {
-            $this->commandService->batchProcess($params,$this->getRequest());
+            $this->commandService->batchProcess($params, $this->getRequest());
             return $this->getSuccessResponse();
         } catch (Exception $e) {
             $this->log->error(":Error -" . $e->getMessage(), $e);

@@ -12,5 +12,4 @@ class EntityTable extends ModelTable
     {
         parent::__construct($tableGateway);
     }
-
 }

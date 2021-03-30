@@ -12,7 +12,7 @@ class TransactionManager
     public static function getInstance($dbAdapter)
     {
         $params = "";
-        if(isset($dbAdapter->getDriver()->getConnection()->getConnectionParameters()['database'])){
+        if (isset($dbAdapter->getDriver()->getConnection()->getConnectionParameters()['database'])) {
             $params = $dbAdapter->getDriver()->getConnection()->getConnectionParameters()['database'];
         }
 
@@ -31,11 +31,13 @@ class TransactionManager
         $this->transactionCount = 0;
     }
 
-    public function setForceRollback($forceRollback) {
+    public function setForceRollback($forceRollback)
+    {
         $this->forceRollback = $forceRollback;
     }
 
-    public function getForceRollback() {
+    public function getForceRollback()
+    {
         return $this->forceRollback;
     }
 
@@ -70,7 +72,7 @@ class TransactionManager
 
     public function rollback($forceRollback = false)
     {
-        if($this->rollbackOnly && !$forceRollback && $this->forceRollback){
+        if ($this->rollbackOnly && !$forceRollback && $this->forceRollback) {
             $this->transactionCount--;
             return;
         }

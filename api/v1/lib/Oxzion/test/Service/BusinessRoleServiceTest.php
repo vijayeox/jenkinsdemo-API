@@ -17,7 +17,6 @@ class BusinessRoleServiceTest extends AbstractServiceTest
         $this->businessRoleService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\BusinessRoleService::class);
         AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         AuthContext::put(AuthConstants::USER_ID, 1);
-        
     }
 
     public function getDataSet()
@@ -26,7 +25,8 @@ class BusinessRoleServiceTest extends AbstractServiceTest
         return $dataset;
     }
 
-    private function parseYaml(){
+    private function parseYaml()
+    {
         $dataset = Yaml::parseFile(dirname(__FILE__)."/Dataset/Form.yml");
         return $dataset;
     }
@@ -100,7 +100,8 @@ class BusinessRoleServiceTest extends AbstractServiceTest
         $this->assertEquals($dataset['ox_business_role'][0]['version'] + 1, $queryResult[0]['version']);
     }
 
-    public function testGetBusinessRole(){
+    public function testGetBusinessRole()
+    {
         $dataset = $this->parseYaml();
         $roleId = $dataset['ox_business_role'][0]['uuid'];
         $data = $this->businessRoleService->getBusinessRole($roleId);
@@ -111,10 +112,11 @@ class BusinessRoleServiceTest extends AbstractServiceTest
         $this->assertEquals($dataset['ox_business_role'][0]['date_created'], $data['date_created']);
         $this->assertEquals(null, $data['date_modified']);
         $this->assertEquals($dataset['ox_business_role'][0]['name'], $data['name']);
-        $this->assertEquals($dataset['ox_business_role'][0]['version'], $data['version']);   
+        $this->assertEquals($dataset['ox_business_role'][0]['version'], $data['version']);
     }
 
-    public function testGetBusinessRoleByName(){
+    public function testGetBusinessRoleByName()
+    {
         $dataset = $this->parseYaml();
         $roleName = $dataset['ox_business_role'][0]['name'];
         $appId = $dataset['ox_app'][0]['uuid'];
@@ -128,6 +130,6 @@ class BusinessRoleServiceTest extends AbstractServiceTest
         $this->assertEquals($dataset['ox_business_role'][0]['date_created'], $data['date_created']);
         $this->assertEquals(null, $data['date_modified']);
         $this->assertEquals($dataset['ox_business_role'][0]['name'], $data['name']);
-        $this->assertEquals($dataset['ox_business_role'][0]['version'], $data['version']);   
+        $this->assertEquals($dataset['ox_business_role'][0]['version'], $data['version']);
     }
 }

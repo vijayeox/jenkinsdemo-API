@@ -164,12 +164,16 @@ abstract class Entity implements Countable
         try {
             $result = eval("use \Oxzion\InvalidPropertyValueException;\r\n" . $code);
             if (isset($result)) {
-                throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
-                    ['property' => $property, 'value' => $value, 'error' => $result]);
+                throw new InvalidPropertyValueException(
+                    "Invalid value '${value}' for property '${property}'.",
+                    ['property' => $property, 'value' => $value, 'error' => $result]
+                );
             }
         } catch (ParseError $e) {
-            throw new InvalidPropertyValueException("Validator code parse error for property '${property}'.",
-                ['property' => $property, 'error' => 'Validator code parse error:' . $e->getMessage()]);
+            throw new InvalidPropertyValueException(
+                "Validator code parse error for property '${property}'.",
+                ['property' => $property, 'error' => 'Validator code parse error:' . $e->getMessage()]
+            );
         }
     }
 
@@ -187,12 +191,16 @@ abstract class Entity implements Countable
         try {
             $convertedValue = Type::convert($value, $propDef['type']);
         } catch (InvalidInputException $e) {
-            throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
-                ['property' => $property, 'value' => $value, 'error' => 'type']);
+            throw new InvalidPropertyValueException(
+                "Invalid value '${value}' for property '${property}'.",
+                ['property' => $property, 'value' => $value, 'error' => 'type']
+            );
         }
         if ($this->isRequired($property) && $this->isEmpty($convertedValue)) {
-            throw new InvalidPropertyValueException("Invalid value '${value}' for property '${property}'.",
-                ['property' => $property, 'value' => $value, 'error' => 'required']);
+            throw new InvalidPropertyValueException(
+                "Invalid value '${value}' for property '${property}'.",
+                ['property' => $property, 'value' => $value, 'error' => 'required']
+            );
         }
         return $convertedValue;
     }
@@ -297,8 +305,10 @@ abstract class Entity implements Countable
     {
         $obj = $this->table->getByUuid($uuid);
         if (is_null($obj) || (0 == count($obj))) {
-            throw new EntityNotFoundException('Entity not found.',
-                ['entity' => $this->table->getTableGateway()->getTable(), 'uuid' => $uuid]);
+            throw new EntityNotFoundException(
+                'Entity not found.',
+                ['entity' => $this->table->getTableGateway()->getTable(), 'uuid' => $uuid]
+            );
         }
         $this->assignInternal($obj->toArray(), false);
         return $this;
@@ -435,9 +445,11 @@ abstract class Entity implements Countable
         $convertedValue = $this->validateAndConvert($key, $value);
         if (isset($existingValue)) {
             if (!$force && ($existingValue != $convertedValue)) {
-                throw new DataCorruptedException('Data corrupted.',
+                throw new DataCorruptedException(
+                    'Data corrupted.',
                     ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key,
-                        'existingValue' => $existingValue, 'newValue' => $value]);
+                        'existingValue' => $existingValue, 'newValue' => $value]
+                );
             }
         }
         $this->data[$key] = $convertedValue;

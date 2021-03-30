@@ -38,11 +38,11 @@ class FileCallbackController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         try {
             $fileId = isset($data['id']) ? $data['id'] : null;
-            if(!$fileId){
+            if (!$fileId) {
                 throw new EntityNotFoundException("Invalid File Id");
             }
             $this->fileService->updateFileAttributes($fileId);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -50,18 +50,20 @@ class FileCallbackController extends AbstractApiControllerHelper
         return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function updateRygForFileAction(){
+    public function updateRygForFileAction()
+    {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
             $this->fileService->bulkUpdateFileRygStatus($params);
-        }  catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
-        return $this->getSuccessResponse('Success',200);
+        return $this->getSuccessResponse('Success', 200);
     }
     
-    public function documentFinalized($data){
-        FileUtils::storeFile($data['file'],$this->config['APP_ESIGN_FOLDER'].$data['refId']);
+    public function documentFinalized($data)
+    {
+        FileUtils::storeFile($data['file'], $this->config['APP_ESIGN_FOLDER'].$data['refId']);
     }
 }

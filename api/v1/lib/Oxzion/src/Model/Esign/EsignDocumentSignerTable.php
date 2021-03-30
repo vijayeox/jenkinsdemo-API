@@ -11,5 +11,4 @@ class EsignDocumentSignerTable extends ModelTable
     {
         parent::__construct($tableGateway);
     }
-
 }

@@ -73,7 +73,7 @@ class TaskCallbackController extends AbstractApiControllerHelper
         try {
             $params['projectdata'] = isset($params['new_projectname']) ? ($params['new_projectname']) : "No Project to Update";
             if (isset($params['manager_login'])) {
-                $response = $this->taskService->updateProjectInTask($params['new_projectname'], $params['description'], $params['uuid'], $params['parent_identifier'] ,$params['manager_login']);
+                $response = $this->taskService->updateProjectInTask($params['new_projectname'], $params['description'], $params['uuid'], $params['parent_identifier'], $params['manager_login']);
             } else {
                 $response = $this->taskService->updateProjectInTask($params['new_projectname'], $params['description'], $params['uuid'], $params['parent_identifier']);
             }

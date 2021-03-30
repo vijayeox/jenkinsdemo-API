@@ -129,7 +129,7 @@ class TeamService extends AbstractService
             if (count($result) > 0) {
                 if ($data['name'] == $result[0]['name'] && $result[0]['status'] == 'Active') {
                     throw new ServiceException("Team already exists", "team.exists", OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
-                } else if ($result[0]['status'] == 'Inactive') {
+                } elseif ($result[0]['status'] == 'Inactive') {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : null;
                     if ($data['reactivate'] == 1) {
                         $data['status'] = 'Active';
@@ -318,7 +318,7 @@ class TeamService extends AbstractService
         if ($result) {
             $data['manager_id'] = $result[0]["id"];
         }
-        if(isset($data['parentId'])){
+        if (isset($data['parentId'])) {
             $data['parent_id'] = $this->getIdFromUuid('ox_team', $data['parentId']);
             $data['parent_id'] = $data['parent_id'] == 0 ? null : $data['parent_id'];
         }
@@ -365,7 +365,7 @@ class TeamService extends AbstractService
             if ($accountId != $obj->account_id) {
                 throw new ServiceException("Team does not belong to the account", "team.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
-            $select = "SELECT count(id) from ox_team where parent_id = " . $obj->id;
+            $select = "SELECT count(id) from ox_team where status<> 'Inactive' and parent_id = " . $obj->id;
             $result = $this->executeQuerywithParams($select)->toArray();
             if ($result[0]['count(id)'] > 0) {
                 throw new ServiceException("Please remove the child teams before deleting the parent team", "delete.parent.team", OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
@@ -430,18 +430,49 @@ class TeamService extends AbstractService
         }
         return array('data' => $resultSet->toArray(), 'total' => $count);
     }
-    public function getSubteams($params)
+    public function getSubteams($params, $filterParams = array())
     {
         if (!isset($params['teamId'])) {
             throw new ServiceException("Team not provided", "team.required", OxServiceException::ERR_CODE_NOT_FOUND);
-            
         }
-        $id = $this->getIdFromUuid('ox_team',$params['teamId']);
+        if (isset($params['accountId'])) {
+            if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') && ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the teams list");
+            } else {
+                $accountId = $this->getIdFromUuid('ox_account', $params['accountId']);
+            }
+        } else {
+            $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+        }
+        $where = "";
+        $sort = "name";
+        $fieldMap = ['name' => 'oxg.name', 'description' => 'oxg.description'];
+        $id = $this->getIdFromUuid('ox_team', $params['teamId']);
+        if (isset($filterParams['filter'])) {
+            $filterArray = json_decode($filterParams['filter'], true);
+            if (isset($filterArray[0]['filter'])) {
+                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
+                $filterList = $filterArray[0]['filter']['filters'];
+                $where = " WHERE " . FilterUtils::filterArray($filterList, $filterlogic, $fieldMap);
+            }
+            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+                $sort = $filterArray[0]['sort'];
+                $sort = FilterUtils::sortArray($sort);
+            }
+        }
+        if (isset($filterParams['exclude'])) {
+            $where .= strlen($where) > 0 ? " AND g.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') " : " WHERE oxg.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') ";
+        }
+        $where .= strlen($where) > 0 ? " AND " : " WHERE ";
+        $where .= " oxg.parent_id = $id AND oxg.status = 'Active' AND oxg.account_id = " . $accountId;
+        $sort = " ORDER BY " . $sort;
         // Done Twice  - one for admin and one for PPM App
-        $queryString = "SELECT oxg.name,oxg.description,oxg.uuid,oxg.date_created,sub.uuid as parentId,sub.uuid as parent_id 
+        $queryString = "SELECT oxg.name,oxg.description,oxg.uuid,oxg.date_created,sub.uuid as parentId, a.uuid as accountId,sub.uuid as parent_id , u.uuid as managerId 
                         from ox_team as oxg 
+                        inner join ox_account a on a.id = oxg.account_id 
                         INNER JOIN ox_team as sub on sub.id = oxg.parent_id 
-                        where oxg.parent_id = $id";
+                        left join ox_user u on oxg.manager_id = u.id".
+                        $where . " " . $sort;
         $resultSet = $this->executeQuerywithParams($queryString);
         return $resultSet->toArray();
     }

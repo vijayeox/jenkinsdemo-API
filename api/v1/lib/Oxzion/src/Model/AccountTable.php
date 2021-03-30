@@ -11,5 +11,4 @@ class AccountTable extends ModelTable
     {
         parent::__construct($tableGateway);
     }
-
 }

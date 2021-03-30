@@ -53,7 +53,8 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'][4]['name'], 'Announcement 2');
     }
 
-    public function testGetListWithType(){
+    public function testGetListWithType()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/ANNOUNCEMENT', 'GET');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -64,10 +65,11 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'][2]['name'], 'Announcement 3');
         $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
-        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');        
+        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
     }
 
-    public function testGetListWithIncorrectType(){
+    public function testGetListWithIncorrectType()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/something', 'GET');
         $this->assertResponseStatusCode(412);
@@ -76,7 +78,8 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Announcement Type must be ANNOUNCEMENT or HOMESCREEN');
     }
 
-    public function testGetListWithDifferentType() {
+    public function testGetListWithDifferentType()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
         $this->assertResponseStatusCode(200);
@@ -105,21 +108,23 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'][5]['name'], 'Announcement 1');
     }
 
-    public function testGetListWithExpirationStartDate() {
+    public function testGetListWithExpirationStartDate()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
         $this->assertResponseStatusCode(200);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertNotContains('Announcement 8',array_column($content['data'],'name'));
+        $this->assertNotContains('Announcement 8', array_column($content['data'], 'name'));
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testGetListWithExpirationEndDate() {
+    public function testGetListWithExpirationEndDate()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/announcement/a/HOMESCREEN', 'GET');
         $this->assertResponseStatusCode(200);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertNotContains('Announcement 9',array_column($content['data'],'name'));
+        $this->assertNotContains('Announcement 9', array_column($content['data'], 'name'));
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -347,7 +352,8 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Announcement already exists');
     }
 
-    public function testCreateExistingAnnouncementWithoutAccount() {
+    public function testCreateExistingAnnouncementWithoutAccount()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Announcement 1', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day")), 'media' => 'test-oxzionlogo.png'];
         $this->setJsonContent(json_encode($data));
@@ -356,7 +362,7 @@ class AnnouncementControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Announcement already exists');   
+        $this->assertEquals($content['message'], 'Announcement already exists');
     }
 
     public function testCreateExpiredAnnouncement()
@@ -763,5 +769,4 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['teams']), 1);
         $this->assertEquals(count($announcementTeam), 0);
     }
-
 }

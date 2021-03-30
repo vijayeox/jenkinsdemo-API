@@ -103,36 +103,7 @@ class PadiVerification extends AbstractAppDelegate
                         $returnArray['padiVerified'] = true;
                         $returnArray['businessPadiVerified'] = false;
                         $returnArray['padiNotFound'] = false;
-                        if($response[0]['rating']=='EFR' && $data['product']=='Individual Professional Liability'){
-                            $returnArray['padiVerified'] = false;
-                            $returnArray['businessPadiVerified'] = false;
-                            $returnArray['padiNotApplicable'] = true;
-                            $returnArray['padiNotFound'] = false;
-                        } else if($response[0]['rating']=='PM' && $data['product']=='Individual Professional Liability'){
-                            $returnArray['padiVerified'] = false;
-                            $returnArray['businessPadiVerified'] = false;
-                            $returnArray['padiNotApplicable'] = true;
-                            $returnArray['padiNotFound'] = false;
-                        } else {
-                            $ratingApplicable = implode('","',array_column($response, 'rating'));
-                            $returnArray['rating'] = $ratingApplicable;
-                            $coverageSelect = 'Select DISTINCT coverage_level,coverage_name FROM coverage_options WHERE padi_rating  in ("'.$ratingApplicable.'") and category IS NULL';
-                            $this->logger->info("coverage select".$coverageSelect);
-                            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
-                            if($result->count() > 0){
-                                while ($coverageLevels->next()) {
-                                    $coverage = $coverageLevels->current();
-                                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
-                                }
-                            } else {
-                                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options and category IS NULL";
-                                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
-                                while ($coverageLevels->next()) {
-                                    $coverage = $coverageLevels->current();
-                                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
-                                }
-                            }
-                        }
+                        $this->validateRating($returnArray,$coverageOptions,$response,$result,$persistenceService);
                     } else {
                         $returnArray['padiVerified'] = false;
                         $returnArray['businessPadiVerified'] = true;
@@ -205,7 +176,6 @@ class PadiVerification extends AbstractAppDelegate
             unset($returnArray['member_number']);
             unset($privileges);
             $data = $returnArray;
-            // return $returnArray;
         } else {
             $returnArray = array();
             $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options WHERE category IS NULL";
@@ -239,5 +209,36 @@ class PadiVerification extends AbstractAppDelegate
             }
         }
         return $data;
+    }
+
+    private function validateRating(&$returnArray,&$coverageOptions,$response,$result,$persistenceService){
+        $rating = array("EFR","PM");
+        $responseRating = array();
+        foreach($response as $key => $value){
+            array_push($responseRating,$value['rating']);
+        }
+        $diff = array_diff($responseRating,$rating);
+        if(sizeof($diff) > 0){
+            $ratingApplicable = implode('","',array_column($response, 'rating'));
+            $returnArray['rating'] = $ratingApplicable;
+            $coverageSelect = 'Select DISTINCT coverage_level,coverage_name FROM coverage_options WHERE padi_rating  in ("'.$ratingApplicable.'") and category IS NULL';
+            $this->logger->info("coverage select".$coverageSelect);
+            $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+            if($result->count() > 0){
+                while ($coverageLevels->next()) {
+                    $coverage = $coverageLevels->current();
+                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                }
+            } else {
+                $coverageSelect = "Select DISTINCT coverage_name,coverage_level FROM coverage_options and category IS NULL";
+                $coverageLevels = $persistenceService->selectQuery($coverageSelect);
+                while ($coverageLevels->next()) {
+                    $coverage = $coverageLevels->current();
+                    $coverageOptions[] = array('label'=>$coverage['coverage_name'],'value'=>$coverage['coverage_level']);
+                }
+            }
+        }else{
+            $returnArray['padiNotApplicable'] = true;
+        }
     }
 }

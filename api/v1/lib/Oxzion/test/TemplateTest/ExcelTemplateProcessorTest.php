@@ -7,21 +7,23 @@ use Oxzion\Document\Template\Excel\ExcelTemplateProcessorImpl;
 
 class ExcelTemplateProcessorTest extends TestCase
 {
-
     private $file;
     private $parser;
-    public function setUp() : void{
+    public function setUp() : void
+    {
         // $this->file = __DIR__."/Data/Test.xlsx";
         $this->parser = new ExcelTemplateProcessorImpl();
     }
 
-    public function testInit(){
+    public function testInit()
+    {
         $params['templateDir'] = __DIR__."/Data";
         $this->parser->init($params);
         $this->assertEquals(true, true);
     }
 
-    public function testGetContent(){
+    public function testGetContent()
+    {
         if (file_exists(__DIR__.'/Data/outputtemplate.xlsx')) {
             unlink(__DIR__.'/Data/outputtemplate.xlsx');
         }
@@ -46,10 +48,11 @@ class ExcelTemplateProcessorTest extends TestCase
         if (file_exists(__DIR__.'/Data/outputtemplate.xlsx')) {
             $this->assertEquals(true, true);
             unlink(__DIR__.'/Data/outputtemplate.xlsx');
-        }   
+        }
     }
 
-    public function testGetContentWithoutSheetNameSpecified(){
+    public function testGetContentWithoutSheetNameSpecified()
+    {
         if (file_exists(__DIR__.'/Data/outputtemplate.xlsx')) {
             unlink(__DIR__.'/Data/outputtemplate.xlsx');
         }
@@ -68,7 +71,7 @@ class ExcelTemplateProcessorTest extends TestCase
                 ['Mar', 2000]
             ]
         ];
-       $options['fileLocation'] = __DIR__.'/Data/outputtemplate.xlsx';
+        $options['fileLocation'] = __DIR__.'/Data/outputtemplate.xlsx';
         $result = $this->parser->getContent($template, $data, $options);
         if (file_exists(__DIR__.'/Data/outputtemplate.xlsx')) {
             $this->assertEquals(true, true);
@@ -76,7 +79,8 @@ class ExcelTemplateProcessorTest extends TestCase
         }
     }
 
-    public function testGetContentWithoutFileLocationSpecified(){
+    public function testGetContentWithoutFileLocationSpecified()
+    {
         if (file_exists(__DIR__.'/Data/outputtemplate.xlsx')) {
             unlink(__DIR__.'/Data/outputtemplate.xlsx');
         }

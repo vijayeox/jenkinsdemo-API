@@ -1,6 +1,7 @@
 <?php
 
 namespace Oxzion\Utils;
+
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Logger;
@@ -10,12 +11,12 @@ class ArtifactUtils
     public static $logger;
     public static function getTemplatePath($config, $template, $params = array())
     {
-        $templateDir = $config['TEMPLATE_FOLDER']; 
+        $templateDir = $config['TEMPLATE_FOLDER'];
         $accountId = isset($params['accountId']) ? $params['accountId'] : (isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID));
         self::$logger->info("accountId - $accountId");
         if (isset($accountId)) {
             $path = $accountId."/".$template;
-            if(isset($params['appId'])){
+            if (isset($params['appId'])) {
                 $path = $accountId."/".$params['appId']."/".$template;
             }
         } else {
@@ -23,31 +24,32 @@ class ArtifactUtils
         }
         self::$logger->info("Path - $path, template directory - $templateDir,template - $template");
         if (is_file($templateDir.$path)) {
-            if(isset($params['appId'])){
+            if (isset($params['appId'])) {
                 $path = $templateDir."/".$params['appId'];
             }
             return $templateDir.$accountId;
-        }else if (is_file($templateDir.$template)) {
+        } elseif (is_file($templateDir.$template)) {
             return $templateDir;
         }
         return false;
     }
 
-    public static function getDocumentFilePath($templateDir,$fileUuid,$params = array())
-    { 
-        $accountId = isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID);        
+    public static function getDocumentFilePath($templateDir, $fileUuid, $params = array())
+    {
+        $accountId = isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID);
         if (isset($accountId)) {
             $path = $accountId."/".$fileUuid."/";
-        }else{
+        } else {
             $path = $fileUuid."/";
         }
-        if(!is_file($templateDir.$path)){
+        if (!is_file($templateDir.$path)) {
             FileUtils::createDirectory($templateDir.$path);
         }
         return array('absolutePath' => $templateDir.$path, 'relativePath' => $path);
     }
 
-    public static function getMimeType($fileName){
+    public static function getMimeType($fileName)
+    {
         $pathInfo = pathinfo($fileName);
         $fileExtension = $pathInfo['extension'];
         switch ($fileExtension) {
@@ -90,7 +92,6 @@ class ArtifactUtils
                 break;
         }
         return $mimeType;
-
     }
 }
 

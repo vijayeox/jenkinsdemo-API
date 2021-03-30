@@ -25,9 +25,10 @@ class RetryController extends AbstractApiController
         $this->errorService = $errorService;
     }
 
-    public function retryAction() {
+    public function retryAction()
+    {
         $errorId = $this->params()->fromRoute()['errorId'];
-        $result = $this->errorService->retryError($errorId,$this->getRequest());
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        $result = $this->errorService->retryError($errorId, $this->getRequest());
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }

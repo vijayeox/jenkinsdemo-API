@@ -105,7 +105,7 @@ class AuthController extends AbstractApiControllerHelper
                 if (is_array($tokenPayload) || is_object($tokenPayload)) {
                     $uname = isset($tokenPayload->data->username) ? $tokenPayload->data->username : $tokenPayload['username'];
                     $accountId = isset($tokenPayload->data->accountId) ? $tokenPayload->data->accountId : (isset($tokenPayload['accountId']) ?  $tokenPayload['accountId'] : null);
-                    if(!$accountId){
+                    if (!$accountId) {
                         return $this->getErrorResponse("Invalid JWT Token", 404);
                     }
                     $userDetail = $this->userService->getUserDetailsbyUserName($uname);
@@ -137,11 +137,11 @@ class AuthController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         if (isset($data['data'])) {
             $data = $data['data'];
-        } 
+        }
         try {
-            if(isset($data['commands'])){
-                if(is_string($data['commands'])){
-                    if($commands = json_decode($data['commands'],true)){
+            if (isset($data['commands'])) {
+                if (is_string($data['commands'])) {
+                    if ($commands = json_decode($data['commands'], true)) {
                         $data['commands'] = $commands;
                     }
                 }
@@ -157,8 +157,8 @@ class AuthController extends AbstractApiControllerHelper
             $this->log->error("Error" . $e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
-        if($result == 1){
-            return $this->getErrorResponse("Error processing registration", 500);   
+        if ($result == 1) {
+            return $this->getErrorResponse("Error processing registration", 500);
         }
         if (isset($result['auto_login'])) {
             $result = $this->getJwt($result['user']['username'], $this->userService->getUserAccount($result['user']['username']), 1);
@@ -239,14 +239,12 @@ class AuthController extends AbstractApiControllerHelper
                 $res = $this->userService->getUserBaseProfile($username);
                 $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
                 return $this->getSuccessResponseWithData(['username' => $res["name"], 'profileUrl' => $profilePicUrl]);
-                
             } else {
                 return $this->getErrorResponse("Invalid Request", 404);
             }
-        } catch(EntityNotFoundException $e){
+        } catch (EntityNotFoundException $e) {
             return $this->getErrorResponse("Invalid User", 404);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Something went wrong", 404);
         }

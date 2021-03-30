@@ -63,16 +63,16 @@ class DocumentController extends AbstractApiControllerHelper
     public function get($id)
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $params = array_merge($params ,$this->params()->fromQuery());
+        $params = array_merge($params, $this->params()->fromQuery());
 
-        if(isset($params['docPath'])){
+        if (isset($params['docPath'])) {
             $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['docPath'];
-        }else{
-           $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/" . $params['fileId'] . "/" . $params['document'];
+        } else {
+            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/" . $params['fileId'] . "/" . $params['document'];
 
-           if (isset($params['folder1'])) {
-            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/" . $params['fileId'] . "/" . $params['folder1'] . "/" . $params['document'];
-           } 
+            if (isset($params['folder1'])) {
+                $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/" . $params['fileId'] . "/" . $params['folder1'] . "/" . $params['document'];
+            }
         }
 
         $ext = pathinfo($attachment_location, PATHINFO_EXTENSION);
@@ -81,9 +81,9 @@ class DocumentController extends AbstractApiControllerHelper
         if (file_exists($attachment_location)) {
             if (!headers_sent()) {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                header("Cache-Control: public"); // needed for internet explorer            
+                header("Cache-Control: public"); // needed for internet explorer
                 $mimeType = ArtifactUtils::getMimeType($params['document']);
-                header("Content-Type:".$mimeType );  
+                header("Content-Type:".$mimeType);
                 header("Content-Transfer-Encoding: Binary");
                 header("Content-Length:" . filesize($attachment_location));
                 header("Access-Control-Expose-Headers:Content-Disposition");
@@ -123,9 +123,9 @@ class DocumentController extends AbstractApiControllerHelper
         if (file_exists($attachment_location)) {
             if (!headers_sent()) {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                header("Cache-Control: public"); // needed for internet explorer            
+                header("Cache-Control: public"); // needed for internet explorer
                 $mimeType = ArtifactUtils::getMimeType($params['documentName']);
-                header("Content-Type:".$mimeType );  
+                header("Content-Type:".$mimeType);
                 header("Content-Transfer-Encoding: Binary");
                 header("Content-Length:" . filesize($attachment_location));
                 header("Content-Disposition: ". $dispositionType ."; filename=" . $params['documentName']);

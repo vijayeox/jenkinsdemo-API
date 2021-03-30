@@ -33,7 +33,7 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Service\ImportService::class => function ($container) {
-                    return new Service\ImportService($container->get('config'),  $container->get(\Oxzion\Search\Indexer::class), $container->get(\Oxzion\Messaging\MessageProducer::class));
+                    return new Service\ImportService($container->get('config'), $container->get(\Oxzion\Search\Indexer::class), $container->get(\Oxzion\Messaging\MessageProducer::class));
                 },
             ],
         ];

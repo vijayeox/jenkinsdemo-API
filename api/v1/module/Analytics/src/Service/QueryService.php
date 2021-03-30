@@ -14,11 +14,10 @@ use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class QueryService extends AbstractService
 {
-
     private $table;
     private $datasourceService;
     private $total_count;
-    static $queryFields = array('uuid' => 'q.uuid', 'name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'account_id' => 'q.account_id');
+    public static $queryFields = array('uuid' => 'q.uuid', 'name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'account_id' => 'q.account_id');
 
     public function __construct($config, $dbAdapter, QueryTable $table, $datasourceService)
     {
@@ -27,7 +26,8 @@ class QueryService extends AbstractService
         $this->datasourceService = $datasourceService;
     }
 
-    public function getTotalCount() {
+    public function getTotalCount()
+    {
         return $this->total_count;
     }
 
@@ -170,7 +170,6 @@ class QueryService extends AbstractService
         } else {
             return 0;
         }
-
     }
 
     public function executeAnalyticsQuery($uuid, $overRides = null)
@@ -226,7 +225,7 @@ class QueryService extends AbstractService
             throw $validationException;
         }
         if (isset($params['debug'])) {
-            $configtemp = json_decode($configuration,1);
+            $configtemp = json_decode($configuration, 1);
             $configtemp['debug']=$params['debug'];
             $configuration = json_encode($configtemp);
         }
@@ -370,7 +369,7 @@ class QueryService extends AbstractService
         $index = 1;
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -" . $value);
-            $queryData = $this->executeAnalyticsQuery($value, $overRides); 
+            $queryData = $this->executeAnalyticsQuery($value, $overRides);
             if (isset($queryData['total_count'])) {
                 $this->total_count = $queryData['total_count'];
             }
@@ -391,7 +390,6 @@ class QueryService extends AbstractService
                     } else {
                         throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
                     }
-
                 } else {
                     if (!empty($queryData['meta']['aggregates'])) {
                         throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);

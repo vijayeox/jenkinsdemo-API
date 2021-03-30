@@ -3,7 +3,8 @@ namespace Oxzion;
 
 class AccessDeniedException extends OxServiceException
 {
-    public function __construct($message){
-        parent::__construct($message, NULL, OxServiceException::ERR_CODE_UNAUTHORIZED);
+    public function __construct($message)
+    {
+        parent::__construct($message, null, OxServiceException::ERR_CODE_UNAUTHORIZED);
     }
 }

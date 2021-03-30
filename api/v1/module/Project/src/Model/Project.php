@@ -7,17 +7,17 @@ use Oxzion\Model\Entity;
 class Project extends Entity
 {
     protected $data = array(
-        'id' => NULL,
-        'uuid' => NULL,
-        'name' => NULL,
-        'account_id' => NULL,
-        'manager_id' => NULL,
-        'description' => NULL,
-        'created_by' => NULL,
-        'modified_by' => NULL,
-        'date_created' => NULL,
-        'date_modified' => NULL,
-        'isdeleted' => NULL,
+        'id' => null,
+        'uuid' => null,
+        'name' => null,
+        'account_id' => null,
+        'manager_id' => null,
+        'description' => null,
+        'created_by' => null,
+        'modified_by' => null,
+        'date_created' => null,
+        'date_modified' => null,
+        'isdeleted' => null,
         'parent_id' => null
     );
 

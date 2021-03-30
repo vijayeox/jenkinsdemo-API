@@ -109,15 +109,17 @@ class ServiceTest extends TestCase
         $_REQUEST = [];
     }
 
-    protected function getDbAdapter(){
-        if(!$this->dbAdapter){
-            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);    
+    protected function getDbAdapter()
+    {
+        if (!$this->dbAdapter) {
+            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         }
         
         return $this->dbAdapter;
     }
 
-    protected function setDbAdapter($dbAdapter){
+    protected function setDbAdapter($dbAdapter)
+    {
         $this->dbAdapter = $dbAdapter;
     }
     /**
@@ -223,7 +225,6 @@ class ServiceTest extends TestCase
         $this->application->getServiceManager()->get('SendResponseListener')->detach($events);
 
         return $this->application;
-    
     }
 
 
@@ -387,10 +388,11 @@ class ServiceTest extends TestCase
         $this->assertEquals($module, $match);
     }
 
-    protected function initAuthContext($username){
-         $userService = $this->getApplicationServiceLocator()->get(UserService::class);
-         $authSuccessListener = new AuthSuccessListener($userService);
-         $authSuccessListener->loadUserDetails(array(AuthConstants::USERNAME => $username));
+    protected function initAuthContext($username)
+    {
+        $userService = $this->getApplicationServiceLocator()->get(UserService::class);
+        $authSuccessListener = new AuthSuccessListener($userService);
+        $authSuccessListener->loadUserDetails(array(AuthConstants::USERNAME => $username));
     }
 
     protected function executeQueryTest($query)

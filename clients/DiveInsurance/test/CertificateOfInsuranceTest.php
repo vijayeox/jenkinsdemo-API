@@ -17,7 +17,7 @@ class CertificateOfInsuranceTest extends ServiceTest
     public function setUp() : void
     {
         $this->loadConfig();
-        // parent::setUp();
+        parent::setUp();
         $config = $this->getApplicationConfig();
         $this->adapter = new Adapter($config['db']);
         $tm = TransactionManager::getInstance($this->adapter);
@@ -53,13 +53,14 @@ class CertificateOfInsuranceTest extends ServiceTest
             'previous_careerCoverage'=>'Instructor',
             'upgradeCareerCoverageVal'=>'Instructor',
             'policy_id' => 'PPK1992899',
-            'single_limit' => '1,000,000',
-            'annual_aggregate' => '2,000,000',
+            'single_limit' => '1000000',
+            'annual_aggregate' => '2000000',
+            'cylinderPriceVal' => 'Not Covered',
             'equipment_liability' => 'Not Included',
             'cylinder_coverage' => 'Not Covered',
             'update' => 1,
             'careerCoverageVal'=>'Instructor',
-            'update_date' => '08/06/2019',
+            'update_date' => '08-06-2020',
             'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a',
             'license_number' => '56342',
             'carrier' => 'Tokio Marine Specialty Insurance Company',
@@ -67,16 +68,27 @@ class CertificateOfInsuranceTest extends ServiceTest
             'address3' => 'Bangalore',
             'address4' => 'Karanataka',
             'padi' => '12345',
-            'start_date' => '06/30/2019',
-            'end_date' => '6/30/2020',
+            'start_date' => '06-30-2020',
+            'end_date' => '6-30-2021',
             'careerCoverage' => 'instructor',
             'scubaFit' => 'scubaFitInstructorDeclined',
             'cylinder'=> 'cylinderInspectorOrInstructorDeclined',
             'equipment'=> 'equipmentLiabilityCoverageDeclined',
             'endrosement_status' => 'Instructor',
+            'tecRecEndorsment' => "tectRecDelined",
             'endorsement_options'=>'{"modify_personalInformation"=>true,
                                      "modify_coverage"=> false,
-                                     "modify_additionalInsured"=> false}'
+                                     "modify_additionalInsured"=> false}',
+            'surplusLineYear'=> 2021,
+            'previous_policy_data' => '[{"update_date":"2020-06-30","previous_careerCoverageLabel":"Dive Master",
+                "prevSingleLimit":"1000000","prevAnnualAggregate":"2000000",
+                "previous_equipment":"equipmentLiabilityCoverageDeclined",
+                "previous_cylinder":"cylinderInspectorOrInstructorDeclined",
+                "previous_cylinderLabel":"Declined",
+                "previous_scubaFit":"scubaFitInstructorDeclined",
+                "previous_scubaFitLabel":"Scuba Fit",
+                "previous_tecRecEndorsment":"tectRecDelined",
+                "previous_tecRecEndorsment":"TecRec Declined"}]'
         ];
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();
@@ -122,13 +134,14 @@ class CertificateOfInsuranceTest extends ServiceTest
             'member_no' => '34567',
             'physical_address' => 'APO,AE',
             'policy_id' => 'PPK1992899',
-            'single_limit' => '1,000,000',
+            'single_limit' => '1000000',
+            'cylinderPriceVal' => 'Not Covered',
             'careerCoverageVal'=>'Instructor',
-            'annual_aggregate' => '2,000,000',
+            'annual_aggregate' => '2000000',
             'equipment_liability' => 'Not Included',
             'cylinder_coverage' => 'Not Covered',
             'update' => 1,
-            'update_date' => '08/06/2019',
+            'update_date' => '08-06-2020',
             'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a',
             'license_number' => '56342',
             'carrier' => 'Tokio Marine Specialty Insurance Company',
@@ -136,16 +149,24 @@ class CertificateOfInsuranceTest extends ServiceTest
             'address3' => 'Bangalore',
             'address4' => 'Karanataka',
             'padi' => '12345',
-            'start_date' => '06/30/2019',
-            'end_date' => '6/30/2020',
+            'start_date' => '06-30-2020',
+            'end_date' => '6-30-2021',
             'careerCoverage' => 'instructor',
             'scubaFit' => 'scubaFitInstructorDeclined',
             'cylinder'=> 'cylinderInspectorOrInstructorDeclined',
             'equipment'=> 'equipmentLiabilityCoverageDeclined',
             'endrosement_status' => 'Instructor',
-            'endorsement_options'=>'{"modify_personalInformation"=>true,
-                                     "modify_coverage"=> false,
-                                     "modify_additionalInsured"=> false}'
+            'tecRecEndorsment' => "tectRecDelined",
+            'surplusLineYear'=> 2021,
+            'previous_policy_data' => '[{"update_date":"2020-06-30","previous_careerCoverageLabel":"Dive Master",
+                "prevSingleLimit":"1000000","prevAnnualAggregate":"2000000",
+                "previous_equipment":"equipmentLiabilityCoverageDeclined",
+                "previous_cylinder":"cylinderInspectorOrInstructorDeclined",
+                "previous_cylinderLabel":"Declined",
+                "previous_scubaFit":"scubaFitInstructorDeclined",
+                "previous_scubaFitLabel":"Scuba Fit",
+                "previous_tecRecEndorsment":"tectRecDelined",
+                "previous_tecRecEndorsment":"TecRec Declined"}]'
         ];
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();

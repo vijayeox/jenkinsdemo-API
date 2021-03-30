@@ -520,19 +520,18 @@ class ContactService extends AbstractService
         }
         
         return $error_list;
-        
     }
 
     private function persistContacts($contact, &$error_list)
     {
-        try{
+        try {
             $this->beginTransaction();
             $insert = $this->multiInsertOrUpdate('ox_contact', $contact);
             $this->commit();
             if ($insert->getAffectedRows() == 0) {
                 array_push($error_list, $contact);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }

@@ -8,11 +8,13 @@ use Oxzion\MultipleRowException;
 
 class EsignDocumentTable extends ModelTable
 {
-    public function __construct(TableGatewayInterface $tableGateway) {
+    public function __construct(TableGatewayInterface $tableGateway)
+    {
         parent::__construct($tableGateway);
     }
 
-    public function getByDocId($docId){
+    public function getByDocId($docId)
+    {
         $this->init();
 
         $filter["doc_id"] = $docId;
@@ -21,8 +23,10 @@ class EsignDocumentTable extends ModelTable
             return null;
         }
         if (count($rowset) > 1) {
-            throw new MultipleRowException('Multiple rows found when queried by docId.',
-                ['table' => $this->tableGateway->getTable(), 'doc_id' => $docId]);
+            throw new MultipleRowException(
+                'Multiple rows found when queried by docId.',
+                ['table' => $this->tableGateway->getTable(), 'doc_id' => $docId]
+            );
         }
         $row = $rowset->current();
         return $row;

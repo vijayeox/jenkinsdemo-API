@@ -38,9 +38,9 @@ class SubscriberController extends AbstractApiController
     public function get($id)
     {
         $params = $this->params()->fromRoute();
-        try{
+        try {
             $response = $this->subscriberService->getSubscriber($id, $params['fileId']);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 500);
         }

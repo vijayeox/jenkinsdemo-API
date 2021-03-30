@@ -19,11 +19,11 @@ class AuthSuccessListener
             AuthContext::put($key, $value);
             if ($key == AuthConstants::USERNAME) {
                 $accountId = null;
-                if(isset($params[AuthConstants::ACCOUNT_ID])){
+                if (isset($params[AuthConstants::ACCOUNT_ID])) {
                     $accountId = $params[AuthConstants::ACCOUNT_ID];
                 }
                 $result = $this->userService->getUserContextDetails($value, $accountId);
-                if(isset($result) && count($result)==0){
+                if (isset($result) && count($result)==0) {
                     return [];
                 }
                 AuthContext::put(AuthConstants::NAME, $result['name']);

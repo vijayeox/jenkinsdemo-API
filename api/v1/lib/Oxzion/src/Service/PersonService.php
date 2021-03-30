@@ -18,7 +18,7 @@ class PersonService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter,AddressService $addressService, PersonTable $table)
+    public function __construct($config, $dbAdapter, AddressService $addressService, PersonTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -60,7 +60,7 @@ class PersonService extends AbstractService
         $person->loadById($id);
         unset($data['id']);
         unset($data['uuid']);
-        $this->logger->info("Person DATA--------\n".print_r($data,true));
+        $this->logger->info("Person DATA--------\n".print_r($data, true));
         $personData = $data;
         $personData['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $personData['date_modified'] = date('Y-m-d H:i:s');
@@ -68,13 +68,12 @@ class PersonService extends AbstractService
             $this->beginTransaction();
             if (isset($personData['address_id'])) {
                 $this->addressService->updateAddress($personData['address_id'], $personData);
-            }else{
-                if(!empty($personData['address1']) || !empty($personData['city']) || 
+            } else {
+                if (!empty($personData['address1']) || !empty($personData['city']) ||
                             !empty($personData['state']) || !empty($personData['country']) || !empty($personData['zip'])) {
                     $addressid = $this->addressService->addAddress($personData);
                     $personData['address_id'] = $addressid;
                 }
-
             }
             $person->assign($personData);
             $person->save();
@@ -88,5 +87,4 @@ class PersonService extends AbstractService
             throw $e;
         }
     }
-
 }

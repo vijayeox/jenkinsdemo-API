@@ -26,9 +26,9 @@ class ErrorLogController extends AbstractApiController
     public function create($data)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        if(isset($data['error_type']) || isset($data['type'])){
+        if (isset($data['error_type']) || isset($data['type'])) {
             try {
-                $count = $this->errorLogService->saveError(isset($data['error_type'])?$data['error_type']:$data['type'],isset($data['error_trace'])?$data['error_trace']:null,isset($data['payload'])?$data['payload']:null,isset($data['params'])?$data['params']:null,$appUuid);
+                $count = $this->errorLogService->saveError(isset($data['error_type'])?$data['error_type']:$data['type'], isset($data['error_trace'])?$data['error_trace']:null, isset($data['payload'])?$data['payload']:null, isset($data['params'])?$data['params']:null, $appUuid);
             } catch (ValidationException $e) {
                 $response = ['data' => $data, 'errors' => $e->getErrors()];
                 return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -45,7 +45,7 @@ class ErrorLogController extends AbstractApiController
     {
         $appUuid = $this->params()->fromRoute()['appId'];
         $filterParams = $this->params()->fromQuery();
-        $result = $this->errorLogService->getErrorList($filterParams,$appUuid);
+        $result = $this->errorLogService->getErrorList($filterParams, $appUuid);
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
     public function update($id, $data)
@@ -60,10 +60,11 @@ class ErrorLogController extends AbstractApiController
     {
         return $this->getInvalidMethod();
     }
-    public function retryAction() {
+    public function retryAction()
+    {
         $errorId = $this->params()->fromRoute()['errorId'];
         $appUuid = $this->params()->fromRoute()['appId'];
-        $result = $this->errorLogService->retryError($errorId,$this->getRequest(),$appUuid);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        $result = $this->errorLogService->retryError($errorId, $this->getRequest(), $appUuid);
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }

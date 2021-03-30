@@ -6,54 +6,62 @@ use \Exception;
 use Oxzion\Document\Parser\Form\FormRowMapper;
 use Oxzion\Document\Parser\Spreadsheet\SpreadsheetParserImpl;
 
-class SpreadsheetParserTest extends TestCase{
-
+class SpreadsheetParserTest extends TestCase
+{
     private $file;
     private $parser;
-    public function setUp() : void{
+    public function setUp() : void
+    {
         $this->file = __DIR__."/Data/Test.xlsx";
         $this->parser = new SpreadsheetParserImpl();
     }
 
-    public function testInvalidFileExt(){
+    public function testInvalidFileExt()
+    {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Unrecognized file format");
         $file = __DIR__."/Data/invalidextFile.sdf";
         $this->parser->init($file);
     }
 
-    public function testNonExistentFile(){
+    public function testNonExistentFile()
+    {
         $this->expectException(Exception::class);
         $file = __DIR__."/Data/NonExistentFile.xlsx";
         $this->expectExceptionMessage("File $file not found");
         $this->parser->init($file);
     }
 
-    public function testInitXlsFile(){
+    public function testInitXlsFile()
+    {
         $file = __DIR__."/Data/document.xls";
         $this->parser->init($file);
         $this->assertEquals(true, true);
     }
 
-    public function testInitXmlFile(){
+    public function testInitXmlFile()
+    {
         $file = __DIR__."/Data/document.xml";
         $this->parser->init($file);
         $this->assertEquals(true, true);
     }
 
-    public function testInitOdsFile(){
+    public function testInitOdsFile()
+    {
         $file = __DIR__."/Data/document.ods";
         $this->parser->init($file);
         $this->assertEquals(true, true);
     }
     
-    public function testInitCsvFile(){
+    public function testInitCsvFile()
+    {
         $file = __DIR__."/Data/document.csv";
         $this->parser->init($file);
         $this->assertEquals(true, true);
     }
 
-    public function testLoadWithInvalidFilterClass(){
+    public function testLoadWithInvalidFilterClass()
+    {
         $this->parser->init($this->file);
         $filter = new BaseRowMapper();
         $this->expectException(Exception::class);
@@ -61,7 +69,8 @@ class SpreadsheetParserTest extends TestCase{
         $data = $this->parser->parseDocument(array('filter' => $filter));
     }
 
-    public function testLoadWithInvalidRowMapperClass(){
+    public function testLoadWithInvalidRowMapperClass()
+    {
         $this->parser->init($this->file);
         $rowMapper = new SpreadsheetFilter();
         $this->expectException(Exception::class);
@@ -69,7 +78,8 @@ class SpreadsheetParserTest extends TestCase{
         $data = $this->parser->parseDocument(array('rowMapper' => $rowMapper));
     }
 
-    public function testSpreadsheetMetadata(){
+    public function testSpreadsheetMetadata()
+    {
         $this->parser->init($this->file);
         $sheetNames = $this->parser->getSheetNames();
         $this->assertEquals(3, count($sheetNames));
@@ -88,7 +98,7 @@ class SpreadsheetParserTest extends TestCase{
         $this->assertEquals(3, $info['totalColumns']);
         $info = $worksheetInfo[$sheetNames[2]];
         $this->assertEquals(0, $info['totalRows']);
-        $this->assertEquals(0, $info['totalColumns']);   
+        $this->assertEquals(0, $info['totalColumns']);
     }
     public function testParseSpreadsheet()
     {
@@ -113,7 +123,7 @@ class SpreadsheetParserTest extends TestCase{
         $this->assertEquals(8, count($data[$sheetNames[0]][8]));
         $this->assertEquals(8, count($data[$sheetNames[0]][9]));
         $this->assertEquals(8, count($data[$sheetNames[0]][10]));
-        $row = Array('','Sl.No.', 'Name', 'Address', 'City', 'State', 'zip', 'Country');
+        $row = array('','Sl.No.', 'Name', 'Address', 'City', 'State', 'zip', 'Country');
         $this->assertEquals(1, $data[$sheetNames[0]][0] == $row);
         $row = array(null,1,"name1","address1","Bengaluru","Karnataka",560078,"India");
         $this->assertEquals(1, $data[$sheetNames[0]][1] == $row);
@@ -172,7 +182,6 @@ class SpreadsheetParserTest extends TestCase{
         $this->assertEquals(1, $data[$sheetNames[1]][9] == $row);
         $row = array(null,10,"name10","Painting");
         $this->assertEquals(1, $data[$sheetNames[1]][10] == $row);
-        
     }
 
     public function testParseSpreadsheetWithFilter()
@@ -191,7 +200,7 @@ class SpreadsheetParserTest extends TestCase{
         $this->assertEquals(8, count($data[$sheetNames[0]][2]));
         $this->assertEquals(8, count($data[$sheetNames[0]][3]));
         $this->assertEquals(8, count($data[$sheetNames[0]][4]));
-        $row = Array(null,null, 'Name', 'Address', 'City', 'State', 'zip', 'Country');
+        $row = array(null,null, 'Name', 'Address', 'City', 'State', 'zip', 'Country');
         $this->assertEquals(1, $data[$sheetNames[0]][0] == $row);
         $row = array(null, null,"name1","address1","Bengaluru","Karnataka",560078,"India");
         $this->assertEquals(1, $data[$sheetNames[0]][1] == $row);
@@ -217,7 +226,7 @@ class SpreadsheetParserTest extends TestCase{
         $this->assertEquals(8, count($data[$sheetNames[0]][2]));
         $this->assertEquals(8, count($data[$sheetNames[0]][3]));
         $this->assertEquals(8, count($data[$sheetNames[0]][4]));
-        $row = Array('','Sl.No.', 'Name', 'Address', 'City', 'State', 'zip', 'Country');
+        $row = array('','Sl.No.', 'Name', 'Address', 'City', 'State', 'zip', 'Country');
         $this->assertEquals(1, $data[$sheetNames[0]][0] == $row);
         $row = array(null,1,"name1","address1","Bengaluru","Karnataka",560078,"India");
         $this->assertEquals(1, $data[$sheetNames[0]][1] == $row);
@@ -257,20 +266,19 @@ class SpreadsheetParserTest extends TestCase{
         $this->assertEquals(4, count($data[$sheetNames[0]]['programmingStack']['ITEMS']));
         $this->assertEquals(3, count($data[$sheetNames[0]]['programmingLanguages']['FIELDS']));
         $this->assertEquals(2, count($data[$sheetNames[0]]['programmingLanguages']['FIELDS']['proficiency']['ITEMS']));
-        $this->assertEquals(3, count($data[$sheetNames[0]]['dayAsDate']['ITEMS'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['day'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['month'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['year'])); 
-        $this->assertEquals(3, count($data[$sheetNames[0]]['monthYear']['ITEMS'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['day'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['month'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['year'])); 
-        $this->assertEquals(3, count($data[$sheetNames[0]]['year']['ITEMS'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['day'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['month'])); 
-        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['year'])); 
-        $this->assertEquals(2, count($data[$sheetNames[0]]['boat_usage_survey']['ITEMS']));       
-        $this->assertEquals(2, count($data[$sheetNames[0]]['boat_usage_survey']['FIELDS']));       
+        $this->assertEquals(3, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['day']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['month']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['dayAsDate']['ITEMS']['year']));
+        $this->assertEquals(3, count($data[$sheetNames[0]]['monthYear']['ITEMS']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['day']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['month']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['monthYear']['ITEMS']['year']));
+        $this->assertEquals(3, count($data[$sheetNames[0]]['year']['ITEMS']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['day']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['month']));
+        $this->assertEquals(11, count($data[$sheetNames[0]]['year']['ITEMS']['year']));
+        $this->assertEquals(2, count($data[$sheetNames[0]]['boat_usage_survey']['ITEMS']));
+        $this->assertEquals(2, count($data[$sheetNames[0]]['boat_usage_survey']['FIELDS']));
     }
-
 }

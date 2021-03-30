@@ -50,7 +50,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($teamList);
     }
     /**
@@ -81,7 +81,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($data, 201);
     }
 
@@ -102,7 +102,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($data, 200);
     }
 
@@ -123,7 +123,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponse();
     }
 
@@ -159,7 +159,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($result);
     }
 
@@ -188,7 +188,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
@@ -210,7 +210,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
@@ -235,7 +235,7 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($data, 200);
     }
 
@@ -259,19 +259,20 @@ class TeamController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
     public function getSubteamsAction()
     {
         $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery(); // empty method call
         $this->log->info(__CLASS__ . "-> \nGet Team - " . print_r($params, true) . "Parameters - " . print_r($params, true));
         try {
-            $result = $this->teamService->getSubteams($params);
+            $result = $this->teamService->getSubteams($params, $filterParams);
             return $this->getSuccessResponseWithData($result);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 }
