@@ -441,7 +441,6 @@ class ElasticService
         $this->logger->debug('Elastic query:');
         $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
         $this->elasticQuery = json_encode($q);
-        print_r($this->elasticQuery);
         $data['query'] = json_encode($q);
         $data["data"] = $this->client->search($q);
         $this->logger->debug('Data from elastic:');
