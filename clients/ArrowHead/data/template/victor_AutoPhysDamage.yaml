@@ -852,7 +852,7 @@
    key: victorAutoPhysicalDamage*reqCoverage_otherNonOwnedFalsePretense
    method: pulloutChild
    type: Checkbox
-   cell: Check Box 244'
+   cell: Check Box 244
 -
    pageName: Underwriting Survey
    Source Worksheet: False pretense
