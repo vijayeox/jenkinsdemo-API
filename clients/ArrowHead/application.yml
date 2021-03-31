@@ -101,6 +101,12 @@ menu:
         page_uuid: 65aa32d1-113e-430f-bfb5-83e085f51948
         uuid: aa8e1d75-a4a8-40cd-8317-4ed1790af71c
         privilege: MANAGE_POLICY_APPLICATION_WRITE
+    -
+        name: 'Admin Page'
+        icon: 'far fa-cog'
+        page_uuid: ba445843-d5c2-473f-91cf-7aeda959a8af
+        uuid: 87037788-f3aa-4260-9be6-ef33d1a7c4cc
+        privilege: MANAGE_POLICY_APPLICATION_WRITE
 entity:
     -
         name: 'Dealer Policy'
@@ -229,6 +235,9 @@ pages:
                     type: Form
                     form_id: 1d9c6d64-469d-4401-9b64-d7f47316c157
                     downloadPdf: true
+    -
+        page_name: AdminPage.yml
+        uuid: ba445843-d5c2-473f-91cf-7aeda959a8af
 form:
     -
         name: 'DealerWorkbook Form'
