@@ -183,7 +183,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 35);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 36);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 12);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 10);
         $this->assertEquals($content['status'], 'success');
@@ -286,7 +286,7 @@ class AccountControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['employeeId'], null);
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 35);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 36);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 12);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 10);
         $this->assertEquals($content['status'], 'success');

@@ -273,6 +273,9 @@ class UserService extends AbstractService
             $form->save();
             $accountId = $this->getUuidFromId('ox_account', $data['account_id']);
             $accountUserId = $this->addUserToAccount($form->id, $form->account_id);
+            if(isset($data['project'])){
+                $this->addUserToProject($form->uuid,$data['project']);
+            }
             if (isset($data['role']) && is_array($data['role'])) {
                 $skipRoleByUuid = 1;
                 foreach ($data['role'] as $roleItem) {
@@ -568,12 +571,12 @@ class UserService extends AbstractService
         try {
             $this->beginTransaction();
             $this->logger->info("USER-DATA--------\n".print_r($userdata, true));
-            if (!isset($userdata['address1']) || empty($userdata['address1'])) {
-                $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
-                $addressData = $this->addressService->getOrganizationAddress($accountId);
-                $this->unsetAddressData($addressData, $userdata);
-                $userdata = array_merge($userdata, $addressData);
-            }
+            // if (!isset($userdata['address1']) || empty($userdata['address1'])) {
+            //     $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
+            //     $addressData = $this->addressService->getOrganizationAddress($accountId);
+            //     $this->unsetAddressData($addressData, $userdata);
+            //     $userdata = array_merge($userdata, $addressData);
+            // }
             $this->personService->updatePerson($userdata['person_id'], $userdata);
             $userdata['name'] = $userdata['firstname'] . " " . $userdata['lastname'];
             $userdata['uuid'] = $form->uuid;
@@ -977,7 +980,7 @@ class UserService extends AbstractService
         throw new EntityNotFoundException("User not found with username or email for $username");
     }
 
-    public function addUserToProject($userId, $projectId)
+    private function addUserToProject($userId, $projectList)
     {
         $sql = $this->getSqlObject();
         $queryString = "SELECT id from ox_user
@@ -987,23 +990,14 @@ class UserService extends AbstractService
         if (empty($resultSet)) {
             throw new EntityNotFoundException("Invalid User");
         }
-        $ids = ['user_id' => $resultSet[0]['id']];
-        $query = "SELECT id from ox_project
-                    where uuid= :projectId";
-        $params = ['projectId' => $projectId];
-        $resultSet = $this->executeQueryWithBindParameters($query, $params)->toArray();
-        if (empty($resultSet)) {
-            throw new EntityNotFoundException("Invalid Project");
+        $userId = $resultSet[0]['id'];
+        $oxUserProject = array();
+        foreach ($projectList as $key => $value) {
+            $oxUserProject[$key]['user_id'] = $userId;
+            $oxUserProject[$key]['project_id'] = $this->getIdFromUuid('ox_project',$value['uuid']);
         }
-        $ids['project_id'] = $resultSet[0]['id'];
-        $query = "SELECT * from ox_user_project
-                    where user_id = :user_id and project_id = :project_id";
-        $endresult = $this->executeQueryWithBindParameters($query, $ids)->toArray();
-        if (!empty($endresult) != 0) {
-            throw new ServiceException("User already assigned to project", "already.assigned.to.project", OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
-        }
-        $data = array($ids);
-        $this->multiInsertOrUpdate('ox_user_project', $data, array());
+
+        $this->multiInsertOrUpdate('ox_user_project', $oxUserProject, array());
     }
 
     public function removeUserFromTeam($userid)
