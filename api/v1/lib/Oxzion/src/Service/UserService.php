@@ -568,12 +568,12 @@ class UserService extends AbstractService
         try {
             $this->beginTransaction();
             $this->logger->info("USER-DATA--------\n".print_r($userdata, true));
-            if (!isset($userdata['address1']) || empty($userdata['address1'])) {
-                $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
-                $addressData = $this->addressService->getOrganizationAddress($accountId);
-                $this->unsetAddressData($addressData, $userdata);
-                $userdata = array_merge($userdata, $addressData);
-            }
+            // if (!isset($userdata['address1']) || empty($userdata['address1'])) {
+            //     $accountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
+            //     $addressData = $this->addressService->getOrganizationAddress($accountId);
+            //     $this->unsetAddressData($addressData, $userdata);
+            //     $userdata = array_merge($userdata, $addressData);
+            // }
             $this->personService->updatePerson($userdata['person_id'], $userdata);
             $userdata['name'] = $userdata['firstname'] . " " . $userdata['lastname'];
             $userdata['uuid'] = $form->uuid;
