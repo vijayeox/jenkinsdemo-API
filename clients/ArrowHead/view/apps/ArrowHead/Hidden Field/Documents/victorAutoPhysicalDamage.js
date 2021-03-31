@@ -354,31 +354,30 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
   }
   if (keyControlArray.length == data.dol_Protection.length) {
     dolkeycontrol = "yes";
-    if (data.dol_Protection[0]["keyControls"]["computerizedKeyVault"] == true) {
-      dolalllocdoesnotincld.push("computerizedKeyVault");
-    }
-    if (data.dol_Protection[0]["keyControls"]["dailyKeyInventory"] == true) {
-      dolalllocdoesnotincld.push("dailyKeyInventory");
-    }
-    if (data.dol_Protection[0]["keyControls"]["keysInCars"] == true) {
-      dolalllocdoesnotincld.push("keysInCars");
-    }
-    if (data.dol_Protection[0]["keyControls"]["lockbox"] == true) {
-      dolalllocdoesnotincld.push("lockBoxes");
-    }
-    if (
-      data.dol_Protection[0]["keyControls"]["lockedInManagersOffice"] == true
-    ) {
-      dolalllocdoesnotincld.push("lockedNightlyInManagersOffice");
-    }
-
-    if (data.dol_Protection[0]["keyControls"]["lockingKeyCabinet"] == true) {
-      dolalllocdoesnotincld.push("lockedKeyCabinet");
-    }
-    if (data.dol_Protection[0]["keyControls"]["none"] == true) {
-      dolalllocdoesnotincld.push("none");
-    }
   }
+  if (data.dol_Protection[0]["keyControls"]["computerizedKeyVault"] == true) {
+    dolalllocdoesnotincld.push("computerizedKeyVault");
+  }
+  if (data.dol_Protection[0]["keyControls"]["dailyKeyInventory"] == true) {
+    dolalllocdoesnotincld.push("dailyKeyInventory");
+  }
+  if (data.dol_Protection[0]["keyControls"]["keysInCars"] == true) {
+    dolalllocdoesnotincld.push("keysInCars");
+  }
+  if (data.dol_Protection[0]["keyControls"]["lockbox"] == true) {
+    dolalllocdoesnotincld.push("lockBoxes");
+  }
+  if (data.dol_Protection[0]["keyControls"]["lockedInManagersOffice"] == true) {
+    dolalllocdoesnotincld.push("lockedNightlyInManagersOffice");
+  }
+
+  if (data.dol_Protection[0]["keyControls"]["lockingKeyCabinet"] == true) {
+    dolalllocdoesnotincld.push("lockedKeyCabinet");
+  }
+  if (data.dol_Protection[0]["keyControls"]["none"] == true) {
+    dolalllocdoesnotincld.push("none");
+  }
+
   let compSelected = "";
   let nonesel = 0;
   for (key in data.requestedCoverage) {
@@ -386,10 +385,11 @@ if (data.workbooksToBeGenerated.victor_AutoPhysDamage == true) {
     var collisionKey = key + "Collision";
     var falsePretenseKey = key + "FalsePretense";
     var noneKey = key + "none";
-    if (data.requestedCoverage[key].comp != "") {    
+    if (data.requestedCoverage[key].comp != "") {
       nonesel = nonesel + 1;
       if (data.requestedCoverage[key].comp == "yes") {
-        compSelected = "yes";     
+        compSelected = "yes";
+      }
     }
     if (data.requestedCoverage[key].collision != "") {
       nonesel = nonesel + 1;
