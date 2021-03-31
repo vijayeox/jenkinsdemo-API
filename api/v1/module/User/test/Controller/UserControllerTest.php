@@ -911,28 +911,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-
-    public function testAddUserToProject()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45/addusertoproject/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'POST');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('addusertoproject');
-        $this->assertEquals($content['status'], 'success');
-    }
-
-    public function testAddUserToProjectWithExistingProject()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/addusertoproject/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'POST');
-        $this->assertResponseStatusCode(406);
-        $this->setDefaultAsserts('addusertoproject');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'User already assigned to project');
-    }
-
     public function testUserLoginToken()
     {
         $this->initAuthToken($this->adminUser);
@@ -942,8 +920,6 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('userToken');
         $this->assertEquals($content['status'], 'success');
     }
-
-
 
     public function testUserSearch()
     {
