@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #This script is used to deploy build.zip to respective folders
 # exit when any command fails
@@ -321,6 +320,7 @@ view()
         unlink /opt/oxzion/view/vfs
         find -L /opt/oxzion/view/apps/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/apps/  \;
         find -L /opt/oxzion/view/themes/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp/view/themes/  \;
+        find -L /opt/oxzion/view/gui/src/externals/ -maxdepth 1 -xtype l -exec cp -P "{}" /home/ubuntu/oxzion3.0/temp2/view/gui/src/externals/  \;
         rsync -rl --delete view/ /opt/oxzion/view/
         ln -nfs /var/lib/oxzion/vfs /opt/oxzion/view/vfs
         chown www-data:www-data -R /opt/oxzion/view/vfs
