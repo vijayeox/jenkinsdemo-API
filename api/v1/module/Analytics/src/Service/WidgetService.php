@@ -294,6 +294,8 @@ class WidgetService extends AbstractService
             $this->logger->error($query);
             $this->logger->error($queryParams);
             return 0;
+        } catch (Exception $e) {
+            throw $e;
         }
         $data = array();
         $uuidList = array_column($resultSet, 'query_uuid');

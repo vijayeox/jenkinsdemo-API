@@ -109,8 +109,9 @@ class WidgetController extends AbstractApiController
                 return $this->getErrorResponse("Widget not found", 404, ['uuid' => $uuid]);
             }
         } catch (Exception $e) {
+            $response = ['data' => $uuid];
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+            return $this->getErrorResponse($e->getMessage(), 500, $response);
         }
         return $this->getSuccessResponseWithData($result);
     }

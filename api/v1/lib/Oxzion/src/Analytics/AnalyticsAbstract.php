@@ -34,25 +34,13 @@ abstract class AnalyticsAbstract implements AnalyticsEngine
         }
         if (isset($parameters['filter_grid'])) {
             $filtergrid = $parameters['filter_grid'];
-            $str = "/(.*?)\((.*?),'(.*?)'\)/";
-            preg_match($str, $filtergrid, $matches);
-            if (!$matches) {
-                $substr = explode(' ',$filtergrid,3);
-                if (count($substr)>2) {
-                    $field= $substr[0];
-                    $operator = $substr[1];
-                    $value = $substr[2];
-                    $parameters['inline_filter'][]=[$field,$operator,$value];
-                }
-            } else {
-                $parameters['inline_filter'][]=[$matches[2],'LIKE',$matches[3]];
-            }
+            $parameters['inline_filter'][]=json_decode($filtergrid);
         }
 
         if (isset($parameters['orderby'])) {
             $sortpara = explode(" ",$parameters['orderby']);
             if (isset($parameters['columns'][$sortpara[0]])) {
-                $keyword = ($parameters['columns'][$sortpara[0]]=='numeric') ? '' : '.keyword';
+                $keyword = ($parameters['columns'][$sortpara[0]]=='numeric' || $parameters['columns'][$sortpara[0]]=='number') ? '' : '.keyword';
             }
             if (isset($sortpara[1])){
                 $parameters['sort']=[$sortpara[0].$keyword=>$sortpara[1]];
