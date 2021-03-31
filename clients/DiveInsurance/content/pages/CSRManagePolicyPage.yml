@@ -53,7 +53,7 @@ content:
             actions:
                 -
                     name: Policy Regeneration
-                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{status}}'' != ''In Progress'')'
+                    rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && row.endorsement_options == undefined && (''{{status}}'' != ''In Progress'')'
                     details:
                         -
                             type: Form
