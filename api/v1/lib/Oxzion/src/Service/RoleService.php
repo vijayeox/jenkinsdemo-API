@@ -76,8 +76,9 @@ class RoleService extends AbstractService
             }
             if (isset($data['app_id'])) {
                 $clause .= " AND app_id =" . $data['app_id'];
+            }else{
+                $clause .= " AND app_id IS NULL";
             }
-            
             if ($data['default'] == 1 && $clause != "") {
                 $queryString = "UPDATE ox_role set default_role = 0 where id != 0 $clause";
                 $result = $this->executeQueryWithBindParameters($queryString, $params);
