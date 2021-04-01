@@ -164,18 +164,20 @@ data.buildingLevelFieldList.map((field) => {
 
 data.locationLevelFieldList.map((field) => {
   var cloneItem = [...data[field.key]];
-  var locationIndex = cloneItem.findIndex(
-    (item) => item.locationNum == rowInfo.locationNum
-  );
-  cloneItem.splice(locationIndex, 1);
-  cloneItem = cloneItem.map((item, index) => {
-    return locationIndex <= index
-      ? { ...item, locationNum: item.locationNum - 1 }
-      : item;
-  });
-  result[0].formObject
-    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)
-    : null;
+  if (currentBuildingsSize == 0) {
+    var locationIndex = cloneItem.findIndex(
+      (item) => item.locationNum == rowInfo.locationNum
+    );
+    cloneItem.splice(locationIndex, 1);
+    cloneItem = cloneItem.map((item, index) => {
+      return locationIndex <= index
+        ? { ...item, locationNum: item.locationNum - 1 }
+        : item;
+    });
+    result[0].formObject
+      ? result[0].formObject.getComponent(field.key).setValue(cloneItem)
+      : null;
+  }
 });
 result[0].formObject.getComponent("storageTankLocation").setValue("");
 if (currentBuildingsSize === 0) {
