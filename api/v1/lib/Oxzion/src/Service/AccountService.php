@@ -937,7 +937,7 @@ class AccountService extends AbstractService
         $where = "";
         $sort = "oxr.name";
 
-        $select = "SELECT oxr.uuid,oxr.name,oxr.description,oxr.is_system_role,oxo.uuid as accountId,oxa.type";
+        $select = "SELECT oxr.uuid,oxa.name as appName, oxr.name,oxr.description,oxr.is_system_role,oxo.uuid as accountId,oxa.type";
         $from = "FROM `ox_role` as oxr
                     LEFT JOIN ox_account as oxo on oxr.account_id = oxo.id
                     LEFT JOIN ox_app as oxa on oxa.id = oxr.app_id";
