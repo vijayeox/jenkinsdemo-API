@@ -347,7 +347,7 @@ class ProjectControllerTest extends ControllerTest
         $data = ['name' => 'New Project 1', 'description' => 'Project Description', 'managerId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/project', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Project already exists would you like to reactivate?');
