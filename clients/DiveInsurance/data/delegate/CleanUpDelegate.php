@@ -80,11 +80,12 @@ class CleanUpDelegate extends AbstractAppDelegate
         if(isset($data['paymentOptions'])){
             $data['paymentOptions'] = "";
 		}
-		if($data['policyStatus'] != "In Force"){
-			if(isset($data['endorsement_options']) && isset($data['endoAdditionalLocation'])){
-				$data['additionalLocations'] = $data['endoAdditionalLocation'];
-				unset($data['endoAdditionalLocation']);
-			}
+		
+		if(isset($data['endorsement_options']) && isset($data['endoAdditionalLocation'])){
+            if($data['policyStatus'] != "In Force"){
+    			$data['additionalLocations'] = $data['endoAdditionalLocation'];
+    			unset($data['endoAdditionalLocation']);
+            }
 		}
     }
  }
