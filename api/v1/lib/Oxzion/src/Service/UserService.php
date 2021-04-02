@@ -350,7 +350,7 @@ class UserService extends AbstractService
     {
         $projectSingleArray = array_map('current', $project);
         $params = ['userId' => $userId,
-                    'accountId' => $accountId];
+                    'accountId' => !is_numeric($accountId) ? $accountId : $this->getUuidFromId('ox_account', $accountId)];
         $delete = "DELETE oxup FROM ox_user_project as oxup
                     inner join ox_project as oxp on oxup.project_id = oxp.id 
                     inner join ox_account acct on acct.id = oxp.account_id
