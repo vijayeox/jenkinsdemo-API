@@ -367,24 +367,9 @@ content:
                                 appId: '{{appId}}'
                                 workflow_id: cb99e634-de00-468d-9230-d6f77d241c5b
                                 workflowInstanceId: '{{workflowInstanceId}}'
-                                cancellationStatus: 'approved'
-                                reasonforCsrCancellation: '{"value": "Change Of Ownership"}'
                                 commands:
                                     -
                                         command: file
-                                    -
-                                        command: delegate
-                                        delegate: CancelPolicy
-                                    -
-                                        command: cancelJob
-                                        jobName: autoRenewalJob
-                                    -
-                                        command: fileSave
-                                    -
-                                        command: delegate
-                                        delegate: DispatchCancelPolicyNotification
-                                    -
-                                        command: fileSave
                                     -
                                         command: delegate
                                         delegate: StoreOwnershipTransfer
