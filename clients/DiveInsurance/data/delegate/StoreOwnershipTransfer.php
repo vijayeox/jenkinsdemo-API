@@ -21,12 +21,20 @@ class StoreOwnershipTransfer extends PolicyDocument
             unset($data['data']);
             $data = array_merge($fileData,$data);
         }
-
+        $data['old_data'] = json_encode($data);
         $data['assocId'] = $data['fileId'];
+    
         unset($data['fileId']);
         unset($data['workflowInstanceId']);
-
-        //$data['iterations'] = isset($data['iterations']) ? $data['iterations'] + 1 : 1;
+        if(isset($data['quoteDocuments'])){
+            unset($data['quoteDocuments']);
+        }
+        if(isset($data['csrApprovalAttachments'])){
+            unset($data['csrApprovalAttachments']);
+        }
+        if(isset($data['proposalCount'])){
+            unset($data['proposalCount']);
+        }
         if(isset($data['iterations'])){
             if(isset($data['transfer']) && ($data['transfer'] === true || $data['transfer'] === 'true')) {
                 $data['iterations'] = $data['iterations'] + 1;
