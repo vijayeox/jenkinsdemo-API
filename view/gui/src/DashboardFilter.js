@@ -31,7 +31,7 @@ const FilterFields = function (props) {
 
     const filtersOptions = {
         "dateoperator": [{ "Between": "gte&&lte" }, { "Less Than": "<" }, { "Greater Than": ">" }, { "This Month": "monthly" }, { "This Year": "yearly" }, { "MTD": "mtd" }, { "YTD": "ytd" }, { "Today": "today" }],
-        "textoperator": [{ "Contains": "==" }, { "Does Not Contain": "NOT LIKE" }],
+        "textoperator": [{ "Contains": "LIKE" }, { "Does Not Contain": "NOT LIKE" }],
         "numericoperator": [{ "Less Than": "<" }, { "Greater Than": ">" }, { "Equals": "==" }, { "Not Equals": "!=" }],
         "selectoperator": [{ "Equals": "==" }, { "Not Equals": "NOT LIKE" }]
     };
@@ -130,6 +130,7 @@ const FilterFields = function (props) {
             }
         }
     }
+
     async function changeDataSource(e, Index, type) {
         setFilterIndexOption([])
         // setIsLoading(true)
@@ -172,7 +173,7 @@ const FilterFields = function (props) {
     return (
         <Form.Row>
             {visibility &&
-                <div className="dashboard-filter-field field-width-200">
+                <div className="dashboard-filter-field --200">
                     <Form.Group className="dashboard-filter-field">
                         <Form.Label>Filter DataSource</Form.Label>
                         <Select
@@ -359,7 +360,11 @@ const FilterFields = function (props) {
                                 selected={filters[index]["value"] || ""}
                                 name="value"
                                 id="value"
-                                onChange={(e) => onUpdate(e, index, "value")}
+                                onChange={(e) => {
+                                    onUpdate(e, index, "value");
+                                    var x = document.getElementById("select_notif" + index); 
+                                    x.className = "toastHide"
+                                }}
                                 value={filterValueOption ? filterValueOption.filter(option => option.value == filters[index]["value"]) : ""}
                                 options={filterValueOption}
                                 styles={customStyles}
@@ -387,6 +392,9 @@ const FilterFields = function (props) {
                         <Button className="filter_remove_button" style={{
                             cursor: "pointer", float: "left", verticalAlign: "middle", position: "relative",
                         }} onClick={(e) => removeField(index, fieldType)}><i className="fa fa-minus" aria-hidden="true"></i></Button>
+                    }
+                    {
+                        dataType === "select" ? <div className = "select_notif" id={"select_notif" + index}>You have not selected / changed any option</div> : ""
                     }
                 </Form.Group>
             </div>
@@ -450,7 +458,7 @@ class DashboardFilter extends React.Component {
     }
 
     componentDidMount(props) {
-        // this.getDataSourceOptions()
+        this.getDataSourceOptions()
         this.displayDefaultFilters()
     }
 
@@ -506,7 +514,6 @@ class DashboardFilter extends React.Component {
 
         }
         this.setState({ filters: filters })
-
     }
 
     handleChange(e) {
