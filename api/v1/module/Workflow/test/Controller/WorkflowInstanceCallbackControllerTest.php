@@ -52,8 +52,8 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
     {
         $data = ['processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0790'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflowinstance/complete', 'POST',$data);
-        $this->assertResponseStatusCode(200); 
+        $this->dispatch('/callback/workflowinstance/complete', 'POST', $data);
+        $this->assertResponseStatusCode(200);
         $this->assertMatchedRouteName('completeWorkflowInstance');
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -66,7 +66,7 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
     {
         $data = ['processInstanceId'=>5];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflowinstance/complete', 'POST',$data);
+        $this->dispatch('/callback/workflowinstance/complete', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertMatchedRouteName('completeWorkflowInstance');
         $this->setDefaultAsserts();
@@ -78,7 +78,7 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
     {
         $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","variables" => array("firstname" => "Neha","policy_period" => "1year","card_expiry_date" => "10/24","city" => "Bangalore","accountId" => "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" => "1","fileId"=>"d13d0c68-98c9-11e9-adc5-308d99c9146d","uuid"=>"d13d0c68-98c9-11e9-adc5-308d99c9146d","card_no" => "1234","state" => "karnataka","app_id" => "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" => "560030","coverage" => "100000","product" => "Individual Professional Liability","address2" => "dhgdhdh","address1" => "hjfjhfjfjfhfg","expiry_date" => "2020-06-30","form_id" =>"0","entity_id" => "1","created_by"=> "1","expiry_year" => "2019","orgId" => "53012471-2863-4949-afb1-e69b0891c98a","lastname" => "Rai","isexcessliability" => "1","workflow_instance_id" => "5","credit_card_type" => "credit","workflowId" => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4","email" => 'bharat@gmail.com'),"parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflowinstance/start', 'POST',$data);
+        $this->dispatch('/callback/workflowinstance/start', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertMatchedRouteName('initiateWorkflow');
@@ -89,27 +89,26 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
         $this->assertEquals(1, count($result));
         $this->assertEquals($data['processInstanceId'], $result[0]['process_instance_id']);
         $this->assertEquals(14, $result[0]['file_id']);
-        
     }
 
     public function testinitiateWorkflowInvalidData()
     {
         $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflowinstance/start', 'POST',$data);
+        $this->dispatch('/callback/workflowinstance/start', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->assertMatchedRouteName('initiateWorkflow');
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals(StringUtils::startsWith($content['message'], 'Invalid Data'), TRUE);
+        $this->assertEquals(StringUtils::startsWith($content['message'], 'Invalid Data'), true);
     }
 
     public function testcompleteWorkflowInstanceWithoutProcessInstanceId()
     {
         $data = ['name'=>'Test Workflow'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflowinstance/complete', 'POST',$data);
+        $this->dispatch('/callback/workflowinstance/complete', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertMatchedRouteName('completeWorkflowInstance');
         $this->setDefaultAsserts();

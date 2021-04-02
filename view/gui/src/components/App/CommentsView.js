@@ -5,6 +5,7 @@ import { MentionsInput, Mention } from "react-mentions";
 import Swal from "sweetalert2";
 import { Button } from "@progress/kendo-react-buttons";
 import moment from "moment";
+import emojisData from "./Emoji.json";
 
 class CommentsView extends React.Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class CommentsView extends React.Component {
     this.currentUserId = this.profile.uuid;
     var fileId = this.props.url ? this.props.url : null;
     fileId = this.props.fileId ? this.props.fileId : fileId;
-    console.log(fileId);
     this.state = {
       fileData: this.props.fileData,
       entityConfig: null,
@@ -29,7 +29,8 @@ class CommentsView extends React.Component {
       mentionData: [],
       value: "",
       fileId: fileId,
-      userList: []
+      userList: [],
+      emojis: []
     };
   }
 
@@ -41,11 +42,12 @@ class CommentsView extends React.Component {
         this.setState({ entityId:fileData.data.entity_id,fileData: file });
         this.getEntityPage().then(entityPage => {
           this.setState({entityConfig: entityPage.data});
-          this.generateViewButton();
+          this.generateViewButton(entityPage.data.enable_auditlog);
           this.fetchCommentData();
         });
       }
     });
+    this.setState({emojis: emojisData})
   }
 
   async getComments() {
@@ -82,13 +84,19 @@ class CommentsView extends React.Component {
       this.loader.destroy();
     });
   }
-  generateViewButton(){
+  generateViewButton(enableAuditLog){
     let gridToolbarContent = [];
     let filePage = [{type: "EntityViewer",fileId: this.state.fileId}];
     let pageContent = {pageContent: filePage,title: "View",icon: "fa fa-eye",fileId:this.state.fileId};
-    let editPageContent = {pageContent: [{type: "Form",form_id:this.state.entityConfig.form_uuid,name:this.state.entityConfig.form_name,fileId:this.state.fileId}],title: "Edit",icon: "far fa-pencil"}
     gridToolbarContent.push(<Button title={"View"} className={"toolBarButton"} primary={true} onClick={(e) => this.updatePageContent(pageContent)} ><i className={"fa fa-eye"}></i></Button>);
-    gridToolbarContent.push(<Button title={"Edit"} className={"toolBarButton"} primary={true} onClick={(e) => this.updatePageContent(editPageContent)} ><i className={"fa fa-pencil"}></i></Button>);
+    if(this.state.entityConfig && !this.state.entityConfig.has_workflow){
+      filePage = [{type: "Form",form_id:this.state.entityConfig.form_uuid,name:this.state.entityConfig.form_name,fileId:this.state.fileId}];
+      let pageContent = {pageContent: filePage,title: "Edit",icon: "far fa-pencil"}
+      gridToolbarContent.push(<Button title={"Edit"} className={"toolBarButton"} primary={true} onClick={(e) => this.updatePageContent(pageContent)} ><i className={"fa fa-pencil"}></i></Button>);
+    }
+    if(enableAuditLog){
+      gridToolbarContent.push(<Button title={"Audit Log"} className={"toolBarButton"} primary={true} onClick={(e) => this.callAuditLog()} ><i className={"fa fa-history"}></i></Button>);
+    }
     let ev = new CustomEvent("addcustomActions", { detail: { customActions: gridToolbarContent }, bubbles: true });
     document.getElementById(this.appId+"_breadcrumbParent").dispatchEvent(ev);
   }
@@ -102,6 +110,80 @@ class CommentsView extends React.Component {
       this.setState({ userList: tempUsers }, callback(tempUsers) );
     });
   };
+
+  queryEmojis = (query, callback) => {
+    if (query.length < 2) return
+    
+    const emojiObject = this.state.emojis
+    const matches = emojiObject.emojis.filter((emoji) => {
+        return emoji.shortname.toLowerCase().indexOf(query.toLowerCase()) > -1
+      })
+    return matches.map((emoji) => ({
+        id: emoji.emoji,
+        name: emoji.shortname }))
+  };
+
+  bubbleEmoticonCheck(input){
+    const emojiObject = this.state.emojis
+    var regex = /\:(.*?)\:/g
+    var matched = input.match(regex)
+    var emoticon
+    if(matched)
+    {
+      for(var i = 0; i < matched.length; i++) {
+        const match = emojiObject.emojis.filter((emoji) => {
+          return emoji.shortname.toLowerCase().startsWith(matched[i].toLowerCase())
+        }).slice(0, 1) 
+        if(Object.keys(match).length !== 0) {
+          emoticon = match.map(mapped => mapped.emoji)
+          input = input.replace(matched[i],emoticon)
+        }
+      }
+    }
+    return input
+  }
+
+  emojiCheck() {
+    var regex = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff]|[\u200D])/g
+    var input = this.state.value
+    var matched = input.match(regex)
+    if(matched) {
+      for(var i = 0; i < matched.length; i++) {
+        var j = this.emojiUnicode(matched[i])
+        input = input.replace(matched[i],j)
+      }
+      this.state.value = input
+    }
+  }
+
+  emojiUnicode(emoji) {
+    if (emoji.length >= 1) {
+      const pairs = []
+      for (var i = 0; i < emoji.length; i++) {
+        if (emoji.charCodeAt(i) >= 0xd800 && emoji.charCodeAt(i) <= 0xdbff) {
+          if (emoji.charCodeAt(i + 1) >= 0xdc00 && emoji.charCodeAt(i + 1) <= 0xdfff) {
+            pairs.push(
+            (emoji.charCodeAt(i) - 0xd800) * 0x400
+            + (emoji.charCodeAt(i + 1) - 0xdc00) + 0x10000
+            );
+          }
+        } 
+        else if (emoji.charCodeAt(i) < 0xd800 || emoji.charCodeAt(i) > 0xdfff) {
+          pairs.push(emoji.charCodeAt(i))
+        }
+      }
+      emoji = ''
+      for (var i=0; i < pairs.length; i++) {
+        if(pairs[i]=='8205') {
+          emoji += '&zwj;'
+        }
+        else {
+          emoji += '&#'+ pairs[i] +';'
+        }
+      }
+      return emoji   
+    }
+  }
 
   uuidv4() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function ( c ) {
@@ -203,12 +285,12 @@ class CommentsView extends React.Component {
   render() {
     var that = this;
     if (this.state.dataReady) {
-      // console.log(dataReady);
       return (
         <div className="commentsPage">
             <div id="chat-container">
               <div id="chat-message-list" key={this.state.fileId}>
                 {this.state.commentsList.slice(0).reverse().map((commentItem) => {
+                  commentItem.text = this.bubbleEmoticonCheck(commentItem.text);
                   var image = this.core.config("wrapper.url") + "user/profile/" + commentItem.user_id
                   if(commentItem.user_id == that.currentUserId){
                   return (
@@ -223,7 +305,6 @@ class CommentsView extends React.Component {
                                                 .tz(this.userTimezone)
                                                 .format(this.userDateFormat + " - HH:mm:ss")}</div>
                       </div>
-
                       <div className="msg-text" dangerouslySetInnerHTML={{__html : commentItem.text}}>
                       </div>
                     </div>
@@ -261,9 +342,10 @@ class CommentsView extends React.Component {
                 placeholder="Type a comment here..."
                 className="mentions"
                 style={defaultStyle}
+                allowSpaceInQuery = {true}
               >
                 <Mention
-                  trigger="@"
+                  trigger= {RegExp('(?:^|\\s)(@*([^@]*))$')}
                   markup="@[__display__](user:__name__)"
                   displayTransform={(id, username) => `@${username}`}
                   renderSuggestion={(suggestion,search, highlightedDisplay, index, focused) => (
@@ -272,6 +354,17 @@ class CommentsView extends React.Component {
                     </div>
                   )}
                   data={this.getUserData}
+                  className="mentions__mention"
+                  style={{ backgroundColor: "#cee4e5" }}
+                />
+                <Mention
+                  trigger=":"
+                  renderSuggestion={(suggestion,search, highlightedDisplay, index, focused) => (
+                    <div className={`user ${focused ? 'focused' : ''}`}>
+                      {suggestion.id} {suggestion.name}
+                    </div>
+                  )}
+                  data={this.queryEmojis}
                   className="mentions__mention"
                   style={{ backgroundColor: "#cee4e5" }}
                 />
@@ -285,6 +378,7 @@ class CommentsView extends React.Component {
                   className="commentsSaveButton"
                   disabled={this.state.value.length == 0 ? true : false}
                   onClick={() => {
+                    this.emojiCheck();
                     this.saveComment();
                   }}
                 >

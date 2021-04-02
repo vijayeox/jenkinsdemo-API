@@ -3,8 +3,6 @@ import { Formio } from "formiojs";
 
 import { getComponent, flattenComponents, eachComponent } from "formiojs/utils/formUtils";
 import SliderComponent from "./Form/SliderComponent";
-import Notification from "../../Notification";
-import JavascriptLoader from '../javascriptLoader';
 import scrollIntoView from "scroll-into-view-if-needed";
 import ConvergePayCheckoutComponent from "./Form/Payment/ConvergePayCheckoutComponent";
 import DocumentComponent from "./Form/DocumentComponent";
@@ -33,12 +31,14 @@ class BaseFormRenderer extends React.Component {
     constructor(props) {
         super(props)
         this.core = this.props.core;
+        this.notif = this.props.notif;
         this.state = {
             form: null,
             showLoader: false,
             stylePath: null,
             formId: this.props.formId,
             fileId: this.props.fileId,
+            notif: React.createRef(),
             appId: this.props.appId,
             content: this.props.content,
             currentForm: null,
@@ -47,7 +47,6 @@ class BaseFormRenderer extends React.Component {
         //set the base url from config file
         axios.defaults.baseURL="http://localhost:8080"
         var formID = this.props.formId ? this.props.formId : "123";
-        this.notif = React.createRef();
         this.hasCore = this.props.core ? true : false
         this.helper=null
         if (this.props.cacheId) {
@@ -160,44 +159,24 @@ class BaseFormRenderer extends React.Component {
             },
             beforeCancel: () => that.cancelFormSubmission(),
             beforeSubmit: async (submission, next) => {
-                var submitErrors = [];
-                if (that.state.currentForm.isValid(submission.data, true) == false) {
-                    that.state.currentForm.checkValidity(submission.data, true, submission.data);
-                    that.state.currentForm.errors.forEach((error) => {
-                        submitErrors.push(error.message);
-                    });
-                    if (submitErrors.length > 0) {
-                        next([]);
-                    } else {
-                        if (this.props.customSaveForm && typeof this.props.customSaveForm == 'function') {
-                            this.props.customSaveForm(that.cleanData(submission.data));
-                            next(null);
-                        }
-                        var response = await that.saveForm(null, that.cleanData(submission.data)).then(function (response) {
-                            if (response.status == 'success') {
+                    if (that.state.currentForm.checkValidity(submission.data, true, submission.data)) {
+                            if (this.props.customSaveForm && typeof this.props.customSaveForm == 'function') {
+                                this.props.customSaveForm(that.cleanData(submission.data));
                                 next(null);
                             } else {
-                                next([response.errors[0].message]);
+                                var response = await that.saveForm(null, that.cleanData(submission.data)).then(function (response) {
+                                    if (response.status == 'success') {
+                                        next(null);
+                                    } else {
+                                        next([ response.message ? response.message : response.errors[0].message]);
+                                    }
+                                });
                             }
-                        });
+                    } else {
+                        that.state.currentForm.triggerChange();
+                        next([]);
                     }
-                } else {
-                    if (this.props.customSaveForm && typeof this.props.customSaveForm == 'function') {
-                        this.props.customSaveForm(that.cleanData(submission.data));
-                        next(null);
-                    }
-                    var response = await that.saveForm(null, that.cleanData(submission.data)).then(function (response) {
-                        if (response.status == 'success') {
-                            next(null);
-                        } else {
-                            if (that.props.route) {
-                                next([response.message]);
-                            }
-                            next([response.errors[0].message]);
-                        }
-                    });
                 }
-            }
         }
         return hook
 
@@ -540,10 +519,10 @@ class BaseFormRenderer extends React.Component {
                     });
                     return response;
                 } else {
-                    if (response.errors) {
-                        await that.storeError(data, response.errors, "pipeline");
+                    if (response.status == 'error') {
+                        await that.storeError(data, response, "pipeline");
                         that.showFormLoader(false, 0);
-                        that.notif.current.notify("Error", response.errors[0].message, "danger");
+                        that.notif.current.notify("Error", response.message, "danger");
                         return response;
                     } else {
                         await that.storeCache(data);
@@ -602,6 +581,9 @@ class BaseFormRenderer extends React.Component {
                     var cache = await that.deleteCacheData().then(response2 => {
                         that.showFormLoader(false, 0);
                         if (response2.status == "success") {
+                            if(that.notif && that.notif.current){
+                                that.notif.current.notify("Success", that.checkCustomSaveMessage(), "success");
+                            }
                             that.stepDownPage();
                         }
                     });
@@ -638,6 +620,9 @@ class BaseFormRenderer extends React.Component {
                     var cache = await that.deleteCacheData().then(response2 => {
                         that.showFormLoader(false, 0);
                         if (response2.status == "success") {
+                            if(that.notif && that.notif.current){
+                                that.notif.current.notify("Success", that.checkCustomSaveMessage(), "success");
+                            }
                             that.stepDownPage();
                         }
                     });
@@ -944,7 +929,6 @@ class BaseFormRenderer extends React.Component {
             if (properties["payment_confirmation_page"]) {
                 var elements = document.getElementsByClassName("btn-wizard-nav-submit");
                 this.getPayment(form.submission.data).then(response => {
-                    var responseArray = [];
                     if (response.data) {
                         this.formSendEvent("paymentDetails", { cancelable: true, detail: response.data[0] });
                     }
@@ -1037,9 +1021,11 @@ class BaseFormRenderer extends React.Component {
         if(this.hasCore){
             if (method == "put") {
                 return await this.helper.request("v1", "/" + api + "/" + item, body, "filepost");
-                } else if (method == "post") {
+            } else if (method == "post") {
                 return await this.helper.request("v1", "/" + api, body, "post");
-                }
+            }else if(method.toUpperCase() == 'GET'){
+                return await this.helper.request("v1", "/" + api, {}, "get");
+            }
         }else{
 
         }
@@ -1367,11 +1353,12 @@ class BaseFormRenderer extends React.Component {
                                     var postParams = JSON.parse(properties["api"]);
                                     var data = that.cleanData(changed);
                                     delete data.orgId;
-                                    that.PushDataPOST(postParams['api']['url'], postParams['api']['method'], null, data).then(response => {
+                                    let router = ParameterHandler.replaceParams(data.app.uuid, postParams['api']['url'], {'data':data});
+                                    that.PushDataPOST(router, postParams['api']['method'], null, data).then(response => {
                                         if (response.status == "success") {
                                             if (response.data) {
                                                 try {
-                                                    var formData = that.formatFormData(response.data);
+                                                    var formData = that.formatFormData(merge(data,response.data));
                                                     form.setSubmission({ data: formData }).then(response2 => {
                                                         that.showFormLoader(false, 0);
                                                     });
@@ -1406,6 +1393,9 @@ class BaseFormRenderer extends React.Component {
             });
         }
         return formCreated
+    }
+    checkCustomSaveMessage(){
+        return (this.state.content["properties"] && this.state.content["properties"]["customSaveMessage"])?this.state.content["properties"]["customSaveMessage"]:"Record saved successfully";
     }
     customButtonAction = (e) => {
         e.stopPropagation();
@@ -1462,6 +1452,9 @@ class BaseFormRenderer extends React.Component {
               );
               if (actionDetails.exit == true || actionDetails.exit == "true") {
                 clearInterval(actionDetails.timerVariable);
+                if(that.notif && that.notif.current){
+                    that.notif.current.notify("Success", this.checkCustomSaveMessage(), "success");
+                }
                 this.stepDownPage();
               } else if(actionDetails.postSubmitCallback == true || actionDetails.postSubmitCallback == "true") {
                 this.props.postSubmitCallback();
@@ -1482,8 +1475,7 @@ class BaseFormRenderer extends React.Component {
         return (
             <div>
                 {this.state.stylePath?<link rel="stylesheet" type="text/css" href={this.state.stylePath} />:null}
-                <Notification ref={this.notif} />
-                <div id={this.loaderDivID}></div>
+                <div id={this.loaderDivID} className="formLoader"></div>
                 <div id={this.formErrorDivId} style={{ display: "none" }}>
                     <h3>{this.state.formErrorMessage}</h3>
                 </div>

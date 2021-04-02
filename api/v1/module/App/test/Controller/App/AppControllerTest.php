@@ -15,10 +15,11 @@ use AppTest\AppTestSetUpTearDownHelper;
 
 class AppControllerTest extends ControllerTest
 {
-    private $setUpTearDownHelper = NULL;
-    private $config = NULL;
+    private $setUpTearDownHelper = null;
+    private $config = null;
 
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->loadConfig();
         $this->config = $this->getApplicationConfig();
@@ -28,19 +29,25 @@ class AppControllerTest extends ControllerTest
     public function setUp(): void
     {
         parent::setUp();
+        if ($this->getName() == 'testCopyOnlyNewTemplatesOnDeploy') {
+            $this->cleanFile();
+        }
         $this->setUpTearDownHelper->cleanAll();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
+        if ($this->getName() == 'testCopyOnlyNewTemplatesOnDeploy') {
+            $this->cleanFile();
+        }
         $this->setUpTearDownHelper->cleanAll();
     }
 
     public function getDataSet()
     {
         //These tests don't need data set.
-        switch($this->getName()) {
+        switch ($this->getName()) {
             case 'testCreateWithUserGeneratedUuid':
             case 'testCreateWithServerGeneratedUuid':
             case 'testCreateWithoutRequiredData':
@@ -50,7 +57,7 @@ class AppControllerTest extends ControllerTest
         }
 
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../../Dataset/Workflow.yml");
-        switch($this->getName()) {
+        switch ($this->getName()) {
             case 'testDeployAppWithWrongUuidAndDuplicateNameInDatabase':
             case 'testDeployAppWithWrongUuidAndUniqueNameInDatabase':
             case 'testDeployAppWithWrongNameInDatabase':
@@ -88,6 +95,13 @@ class AppControllerTest extends ControllerTest
         return $mockRestClient;
     }
 
+    private function cleanFile()
+    {
+        if (file_exists(__DIR__ . '/../../sampleapp/data/template/COINewFooter.htm')) {
+            copy(__DIR__ . '/../../sampleapp/data/template/COINewFooter.html', __DIR__ . '/../../sampleapp/data/template/COIfooter.html');
+            FileUtils::deleteFile('COINewFooter.html', __DIR__ . '/../../sampleapp/data/template/');
+        }
+    }
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('App');
@@ -99,6 +113,54 @@ class AppControllerTest extends ControllerTest
     }
 
 
+    public function testGetCssFileNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+        $appName = 'SampleApp';
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}".'/view/apps/'."eoxapps/";
+        try {
+            if (file_exists($appSourceDir.'index.scss')) {
+                FileUtils::deleteFile('index.scss', $appSourceDir);
+            }
+            $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cssFile', 'GET');
+            $content = (array)json_decode($this->getResponse()->getContent(), true);
+            $this->assertEquals($content['status'], 'error');
+            $this->assertEquals($content['message'], 'Css File not Found');
+        } catch (Exception $e) {
+            throw $e;
+        } finally {
+            if (file_exists($appSourceDir)) {
+                FileUtils::rmDir($appSourceDir);
+            }
+        }
+    }
+
+    public function testGetCssFile()
+    {
+        $this->initAuthToken($this->adminUser);
+        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
+        $appName = 'SampleApp';
+        $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}".'/view/apps/'."${appName}";
+        try {
+            if (file_exists($appSourceDir)) {
+                FileUtils::rmDir($appSourceDir);
+                mkdir($appSourceDir);
+            }
+            $eoxSampleApp = dirname(__FILE__) . '/../../Dataset/SampleApp';
+            FileUtils::copyDir($eoxSampleApp, $appSourceDir);
+            $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cssFile', 'GET');
+            $content = (array)json_decode($this->getResponse()->getContent(), true);
+            $this->assertEquals($content['status'], 'success');
+            $this->assertNotEmpty($content['data']['cssContent']);
+        } catch (Exception $e) {
+            throw $e;
+        } finally {
+            if (file_exists($appSourceDir)) {
+                FileUtils::rmDir($appSourceDir);
+            }
+        }
+    }
 
     public function testGetListOfUserAssignments()
     {
@@ -140,9 +202,9 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 10);
+        $this->assertEquals(count($content['data']), 13);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['total'], 10);
+        $this->assertEquals($content['total'], 13);
     }
 
     public function testGet()
@@ -177,7 +239,7 @@ class AppControllerTest extends ControllerTest
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppController');
         $this->assertMatchedRouteName('applist');
-        $content = json_decode($this->getResponse()->getContent(), true);        
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEquals($content['data'], array());
     }
@@ -186,9 +248,10 @@ class AppControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"startswith","value":"a"},{"field":"category","operator":"contains","value":"utilities"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
@@ -206,7 +269,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data'][1]['name'], 'Analytics');
-        $this->assertEquals($content['total'], 10);
+        $this->assertEquals($content['total'], 13);
     }
 
     public function testGetAppListWithPageSize2()
@@ -220,10 +283,11 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'AppBuilder');
         $this->assertEquals($content['data'][1]['name'], 'CRM');
-        $this->assertEquals($content['total'], 10);
+        $this->assertEquals($content['total'], 13);
     }
 
-    public function testCreateWithUserGeneratedUuid() {
+    public function testCreateWithUserGeneratedUuid()
+    {
         $this->initAuthToken($this->adminUser);
         $uuid = '11111111-1111-1111-1111-111111111111';
         $query = "SELECT id, uuid, name FROM ox_app WHERE uuid='${uuid}'";
@@ -277,8 +341,8 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = [
             'app' => [
-                'name' => 'App1', 
-                'type' => 2, 
+                'name' => 'App1',
+                'type' => 2,
                 'category' => 'EXAMPLE_CATEGORY'
             ]
         ];
@@ -347,9 +411,9 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->employeeUser);
         $data = [
             'app' => [
-                'name' => 'AccessPermissionCheckApp', 
-                'type' => 2, 
-                'category' => 'EXAMPLE_CATEGORY', 
+                'name' => 'AccessPermissionCheckApp',
+                'type' => 2,
+                'category' => 'EXAMPLE_CATEGORY',
                 'logo' => 'app.png'
             ]
         ];
@@ -366,6 +430,23 @@ class AppControllerTest extends ControllerTest
         //Take new shapshot of ox_app and ensure no deletions and additions have happened.
         $newRecordSet = $this->executeQueryTest($query);
         $this->assertEquals($existingRecordSet, $newRecordSet);
+    }
+
+    public function testCopyOnlyNewTemplatesOnDeploy()
+    {
+        $this->testDeployApp();
+        copy(__DIR__ . '/../../sampleapp/data/template/COIfooter.html', __DIR__ . '/../../sampleapp/data/template/COINewFooter.html');
+        copy(__DIR__ . '/../../sampleapp/sampleTemplate.html', __DIR__ . '/../../sampleapp/data/template/COIfooter.html');
+        try {
+            $this->testDeployApp();
+            $this->markTestSkipped('Skipping Test');
+            $template = $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641/COINewFooter.html';
+            $this->assertEquals(file_exists($template), true);
+            $this->assertFileEquals($this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641/COIfooter.html', $this->config['TEMPLATE_FOLDER'] . 'faffaf17-00b1-4a92-9ae6-7d04545457fe/6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641/COINewFooter.html');
+        } finally {
+            copy(__DIR__ . '/../../sampleapp/data/template/COINewFooter.html', __DIR__ . '/../../sampleapp/data/template/COIfooter.html');
+            FileUtils::deleteFile('COINewFooter.html', __DIR__ . '/../../sampleapp/data/template/');
+        }
     }
 
     public function testDeployApp()
@@ -465,7 +546,8 @@ class AppControllerTest extends ControllerTest
         }
     }
 
-    public function testDeployAppWithFieldValidation(){
+    public function testDeployAppWithFieldValidation()
+    {
         $this->setUpTearDownHelper->setupAppDescriptor('application12.yml');
         $this->initAuthToken($this->adminUser);
         if (enableExecUtils == 0) {
@@ -568,8 +650,7 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         try {
             FileUtils::rmDir($appname);
-        } catch (Exception $e){
-            
+        } catch (Exception $e) {
         }
         $this->unlinkFolders($YmlappUuid, $appname);
     }
@@ -598,7 +679,8 @@ class AppControllerTest extends ControllerTest
         $query = 'SELECT name, uuid FROM ox_app WHERE id=(SELECT max(id) from ox_app)';
         $latestAppData = $this->executeQueryTest($query)[0];
     }
-    private function setupAppFolder($path){
+    private function setupAppFolder($path)
+    {
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appData = $appService->loadAppDescriptor($path);
         $path = $appService->setupOrUpdateApplicationDirectoryStructure($appData);
@@ -643,8 +725,7 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         try {
             FileUtils::rmDir($appname);
-        } catch (Exception $e){
-            
+        } catch (Exception $e) {
         }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
@@ -667,7 +748,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $this->assertEquals(isset($yaml['app']['uuid']), true);
         $appName = $yaml['app']['name'];
@@ -688,8 +769,7 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         try {
             FileUtils::rmDir($appname);
-        } catch (Exception $e){
-            
+        } catch (Exception $e) {
         }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
@@ -760,7 +840,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -779,8 +859,7 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         try {
             FileUtils::rmDir($appname);
-        } catch (Exception $e){
-            
+        } catch (Exception $e) {
         }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
@@ -807,7 +886,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -830,8 +909,7 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         try {
             FileUtils::rmDir($appname);
-        } catch (Exception $e){
-            
+        } catch (Exception $e) {
         }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
@@ -857,7 +935,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
-        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -880,8 +958,7 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         try {
             FileUtils::rmDir($appname);
-        } catch (Exception $e){
-            
+        } catch (Exception $e) {
         }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
@@ -909,7 +986,7 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -918,8 +995,7 @@ class AppControllerTest extends ControllerTest
         $appname = $path . 'view/apps/' . $yaml['app']['name'];
         try {
             FileUtils::rmDir($appname);
-        } catch (Exception $e){
-            
+        } catch (Exception $e) {
         }
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org']['uuid']);
     }
@@ -952,7 +1028,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->setDefaultAsserts();
         $filename = "application.yml";
-        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config,$content['data']['app'])."/";
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $content['data']['app'])."/";
         $yaml = Yaml::parse(file_get_contents($path . $filename));
         $appName = $yaml['app']['name'];
         $YmlappUuid = $yaml['app']['uuid'];
@@ -984,7 +1060,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT * from ox_role 
                     WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
         $role = $this->executeQueryTest($query);
-        $this->assertEquals(6, count($role));
+        $this->assertEquals(7, count($role));
         $this->assertEquals($yaml['role'][0]['name'], $role[1]['name']);
         $this->assertEquals(null, $role[1]['account_id']);
         $this->assertEquals($businessRole[0]['id'], $role[1]['business_role_id']);
@@ -999,7 +1075,7 @@ class AppControllerTest extends ControllerTest
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
 
-        $this->assertEquals(4, count($rolePrivilege));
+        $this->assertEquals(6, count($rolePrivilege));
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[0]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[0]['permission']);
         $this->assertEquals($role[1]['id'], $rolePrivilege[0]['role_id']);
@@ -1085,7 +1161,6 @@ class AppControllerTest extends ControllerTest
                 }
             }
         }
-        
     }
 
     public function testDeployApplication()
@@ -1102,31 +1177,28 @@ class AppControllerTest extends ControllerTest
             $eoxSampleApp = dirname(__FILE__) . '/../../Dataset/SampleApp';
             FileUtils::copyDir($eoxSampleApp, $appSourceDir);
             $this->testDeployApp();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw $e;
-        }
-        finally {
+        } finally {
             try {
                 if (file_exists($appSourceDir)) {
                     FileUtils::rmDir($appSourceDir);
                 }
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 print($e);
             }
             try {
                 if (file_exists($appDestDir)) {
                     FileUtils::rmDir($appDestDir);
                 }
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 print($e);
             }
         }
     }
 
-    public function testDeployApplicationWithoutAppInDatabase() {
+    public function testDeployApplicationWithoutAppInDatabase()
+    {
         $this->initAuthToken($this->adminUser);
         $notExistingAppUuid = '11111111-1111-1111-1111-111111111111';
         $this->dispatch("/app/${notExistingAppUuid}/deploy", 'POST');
@@ -1139,7 +1211,8 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($notExistingAppUuid, $data['uuid']);
     }
 
-    public function testDeployApplicationWithoutSourceAppDir() {
+    public function testDeployApplicationWithoutSourceAppDir()
+    {
         $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
         $appName = 'SampleApp';
         $appSourceDir = $this->config['EOX_APP_SOURCE_DIR'] . "${sampleAppUuidFromWorkflowYml}";
@@ -1156,10 +1229,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Application source directory not found.');
     }
 
-//-----------------------------------------------------------------------------------------------
-//IMPORTANT: This test is not implemented because it needs intrusive changes (deleting/moving) 
-//to the template application.
-//-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------
+    //IMPORTANT: This test is not implemented because it needs intrusive changes (deleting/moving)
+    //to the template application.
+    //-----------------------------------------------------------------------------------------------
 //    public function testDeployApplicationWithoutTemplateApp() {
 //        $sampleAppUuidFromWorkflowYml = '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4';
 //        $this->initAuthToken($this->adminUser);
@@ -1170,7 +1243,8 @@ class AppControllerTest extends ControllerTest
 //        $this->assertEquals($content['message'], 'Template application not found.');
 //    }
 
-    private function setupAppSourceDir($ymlData) {
+    private function setupAppSourceDir($ymlData)
+    {
         $appService = $this->getApplicationServiceLocator()->get(AppService::class);
         $appService->setupOrUpdateApplicationDirectoryStructure($ymlData);
     }
@@ -1187,8 +1261,8 @@ class AppControllerTest extends ControllerTest
             'app' => [
                 'name' => 'Admin App',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'Admin', 
+                'type' => 2,
+                'category' => 'Admin',
                 'logo' => 'app.png'
             ]
         ];
@@ -1233,10 +1307,10 @@ class AppControllerTest extends ControllerTest
         //Setup data and invoke the test.
         $data = [
             'app' => [
-                'name' => 'Admin App', 
+                'name' => 'Admin App',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'EXAMPLE_CATEGORY', 
+                'type' => 2,
+                'category' => 'EXAMPLE_CATEGORY',
                 'logo' => 'app.png'
             ]
         ];
@@ -1253,7 +1327,8 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($recordSetBeforeUpdate, $recordSetAfterUpdate);
     }
 
-    public function testUpdateWithoutExistingAppSrcDir() {
+    public function testUpdateWithoutExistingAppSrcDir()
+    {
         $uuid = '11111111-1111-1111-1111-111111111111';
         $query = "SELECT id, name FROM ox_app";
         //Take snapshot of database record.
@@ -1261,10 +1336,10 @@ class AppControllerTest extends ControllerTest
         //Setup data and invoke the test.
         $data = [
             'app' => [
-                'name' => 'Admin App', 
+                'name' => 'Admin App',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'EXAMPLE_CATEGORY', 
+                'type' => 2,
+                'category' => 'EXAMPLE_CATEGORY',
                 'logo' => 'app.png'
             ]
         ];
@@ -1297,10 +1372,10 @@ class AppControllerTest extends ControllerTest
         //Setup data and invoke the test.
         $data = [
             'app' => [
-                'name' => 'Admin App', 
+                'name' => 'Admin App',
                 'uuid' => $uuid,
-                'type' => 2, 
-                'category' => 'EXAMPLE_CATEGORY', 
+                'type' => 2,
+                'category' => 'EXAMPLE_CATEGORY',
                 'logo' => 'app.png'
             ]
         ];
@@ -1334,10 +1409,10 @@ class AppControllerTest extends ControllerTest
         //Setup data and invoke the test.
         $data = [
             'app' => [
-                'name' => 'Admin App', 
+                'name' => 'Admin App',
                 'uuid' => $uuid1,
-                'type' => 2, 
-                'category' => 'EXAMPLE_CATEGORY', 
+                'type' => 2,
+                'category' => 'EXAMPLE_CATEGORY',
                 'logo' => 'app.png'
             ]
         ];
@@ -1358,20 +1433,20 @@ class AppControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $entityRecordSetBeforeDeletion = $this->executeQueryTest("SELECT id, name FROM ox_app WHERE uuid='1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4'");
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', NULL);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $entityRecordSetAfterDeletion = $this->executeQueryTest("SELECT name,uuid FROM ox_app WHERE id=99");
-        $this->assertEquals($entityRecordSetAfterDeletion[0]['name'],$entityRecordSetBeforeDeletion[0]['id'].'_'.$entityRecordSetBeforeDeletion[0]['name'] );
-        $this->assertNotEquals($entityRecordSetAfterDeletion[0]['uuid'],'1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4' );
+        $this->assertEquals($entityRecordSetAfterDeletion[0]['name'], $entityRecordSetBeforeDeletion[0]['id'].'_'.$entityRecordSetBeforeDeletion[0]['name']);
+        $this->assertNotEquals($entityRecordSetAfterDeletion[0]['uuid'], '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4');
     }
 
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/11111111-1111-1111-1111-111111111111', 'DELETE', NULL);
+        $this->dispatch('/app/11111111-1111-1111-1111-111111111111', 'DELETE', null);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -1409,7 +1484,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
-     public function testGetListOfAssignmentsWithFilterAndSort()
+    public function testGetListOfAssignmentsWithFilterAndSort()
     {
         $this->initAuthToken($this->adminUser);
         $product = 'Individual Professional Liability';
@@ -1426,4 +1501,103 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
     // NEED TO ADD INSTALL/UNINSTALL TESTS -SADHITHA
+
+    public function testDeployAppOnSaveAppCss()
+    {
+        $this->setUpTearDownHelper->setupAppDescriptor('application16.yml');
+        $this->initAuthToken($this->adminUser);
+        if (enableCamundaForDeployApp == 0) {
+            $mockProcessManager = $this->getMockProcessManager();
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+        }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
+        $path = __DIR__ . '/../../sampleapp/';
+        $data = ['path' => $path];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $filename = "application.yml";
+        $yaml = Yaml::parse(file_get_contents($path . $filename));
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
+        $query = "SELECT name from ox_app where name = '" . $appName . "'";
+        $appname = $this->executeQueryTest($query);
+        $query = "SELECT uuid from ox_app where name = '" . $appName . "'";
+        $appUuid = $this->executeQueryTest($query);
+        $appUuidCount = count($appUuid[0]);
+        $appUuid = $appUuid[0]['uuid'];
+        $query = "SELECT id from ox_app where uuid = '" . $appUuid . "'";
+        $appId = $this->executeQueryTest($query);
+        $appId = $appId[0]['id'];
+        $query = "SELECT count(name),status,uuid,id from ox_account where name = '" . $yaml['org']['name'] . "' GROUP BY name,status,uuid,id";
+        $account = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count from ox_app_registry where app_id = '" . $appId . "'";
+        $appRegistryResult = $this->executeQueryTest($query);
+        $query = "SELECT count(name) as count FROM ox_privilege WHERE app_id = '" . $appId . "'";
+        $privilege = $this->executeQueryTest($query);
+        $query = "SELECT count(privilege_name) as count from ox_role_privilege WHERE app_id = '" . $appId . "'";
+        $rolePrivilege = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count from ox_role WHERE account_id = '" . $account[0]['id'] . "'";
+        $role = $this->executeQueryTest($query);
+        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY2' and app_id = '" . $appId . "'";
+        $roleprivilege1 = $this->executeQueryTest($query);
+        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY' and app_id = '" . $appId . "'";
+        $roleprivilege2 = $this->executeQueryTest($query);
+        $query = "SELECT * FROM ox_role_privilege rp
+                    inner join ox_role r on r.id = rp.role_id
+                    WHERE privilege_name = 'MANAGE_POLICY_APPROVAL'";//" and app_id = '" . $appId . "'";
+        $roleprivilege3 = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count FROM ox_form WHERE app_id = " . $appId . " and name = 'sampleFormForTests'";
+        $form = $this->executeQueryTest($query);
+        $query = "SELECT count(id) as count FROM ox_app_menu WHERE app_id = " . $appId;
+        $menu = $this->executeQueryTest($query);
+        $this->assertEquals($menu[0]['count'], 6);
+        $this->assertEquals($form[0]['count'], 1);
+        $this->assertEquals($roleprivilege1[0]['count'], 2);
+        $this->assertEquals($roleprivilege2[0]['count'], 2);
+        $this->assertEquals(count($roleprivilege3), 2);
+        $this->assertEquals($role[0]['count'], 5);
+        $this->assertEquals($privilege[0]['count'], 3);
+        $this->assertEquals($rolePrivilege[0]['count'], 6);
+        $this->assertEquals($account[0]['uuid'], $yaml['org']['uuid']);
+        $this->assertEquals($appname[0]['name'], $appName);
+        $this->assertEquals($appUuid, $YmlappUuid);
+        $this->assertEquals($appUuidCount, 1);
+        $this->assertEquals($appRegistryResult[0]['count'], 1);
+        $this->assertEquals($content['status'], 'success');
+        $template = $this->config['TEMPLATE_FOLDER'] . $account[0]['uuid'];
+        $delegate = $this->config['DELEGATE_FOLDER'] . $appUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
+        $apps = $this->config['APPS_FOLDER'];
+        $fGet = file_get_contents($apps.$appName.'/index.scss');
+        $this->assertEquals($fGet, $yaml['cssContent']);
+        if (enableExecUtils != 0) {
+            if (file_exists($apps) && is_dir($apps)) {
+                if (is_link($apps . "/$appName")) {
+                    $dist = "/dist/";
+                    $nodemodules = "/node_modules/";
+                    $this->assertEquals(file_exists($apps . "/$appName" . $dist), true);
+                    $this->assertEquals(file_exists($apps . "/$appName" . $nodemodules), true);
+                }
+            }
+        }
+        $query = "SELECT * from ox_workflow where app_id = " . $appId;
+        $workflow = $this->executeQueryTest($query);
+        if (enableCamundaForDeployApp == 1) {
+            $this->assertEquals(count($workflow), 3);
+            foreach ($workflow as $wf) {
+                $this->assertNotEmpty($wf['process_id']);
+            }
+        }
+    }
 }

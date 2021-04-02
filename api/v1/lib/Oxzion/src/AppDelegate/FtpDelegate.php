@@ -5,7 +5,6 @@ use Oxzion\Service\FtpService;
 
 abstract class FtpDelegate extends AbstractAppDelegate
 {
-
     private $ftpService;
 
     protected function __construct(array $config)

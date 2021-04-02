@@ -28,9 +28,9 @@ class AppDelegateServiceTest extends ServiceTest
         $this->persistence = new Persistence($config, $this->data['UUID'], $this->data['appName']);
         $path = __DIR__.'/../../../../data/delegate/'.$this->data['UUID'];
         if (!is_link($path)) {
-            symlink(__DIR__.'/../delegate/',$path);
-        }   
-        parent::setUp();           
+            symlink(__DIR__.'/../delegate/', $path);
+        }
+        parent::setUp();
     }
 
     public function tearDown() : void

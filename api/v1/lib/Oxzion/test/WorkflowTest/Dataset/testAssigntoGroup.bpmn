@@ -15,7 +15,7 @@
     <bpmn:startEvent id="StartEvent_1r3v8z4" name="Task Created">
       <bpmn:outgoing>SequenceFlow_0dehd8h</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="UserTask_0z0syrz" name="Check Priority" camunda:candidateGroups="1">
+    <bpmn:userTask id="UserTask_0z0syrz" name="Check Priority" camunda:candidateTeams="1">
       <bpmn:incoming>SequenceFlow_0dehd8h</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_013sjo5</bpmn:outgoing>
     </bpmn:userTask>

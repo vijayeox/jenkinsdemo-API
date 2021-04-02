@@ -266,7 +266,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testCreateChannel()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['accountName' => 'teams-1', 'groupname' => 'Channel Private-1', 'status' => 'Active'];
+        $data = ['accountName' => 'teams-1', 'teamname' => 'Channel Private-1', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $mockRestClient->expects('get')->with("api/v4/teams/name/teams1", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => "teams1", "display_name" => 'teams1', "id" => 121)));
@@ -284,7 +284,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testCreateChannelForNewAccount()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['accountName' => 'New Org-1', 'groupname' => 'New Channel-Test', 'status' => 'Active'];
+        $data = ['accountName' => 'New Org-1', 'teamname' => 'New Channel-Test', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -305,7 +305,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testCreateChannelNetworkIssue()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['accountName' => 'Orgo organization', 'groupname' => 'New Channel-Test', 'status' => 'Active'];
+        $data = ['accountName' => 'Orgo organization', 'teamname' => 'New Channel-Test', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -346,7 +346,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testCreateChannelTeamNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['groupname' => 'Private Channel 1', 'status' => 'Active'];
+        $data = ['teamname' => 'Private Channel 1', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/chat/createchannel', 'POST', $data);
         $this->assertResponseStatusCode(400);
@@ -357,7 +357,7 @@ class ChatCallbackControllerTest extends ControllerTest
 
     public function testUpdateChannel()
     {
-        $data = ['new_groupname' => 'New Channel Private 1', 'old_groupname' => 'Channel private-1', 'accountName' => 'teams 1', 'status' => 'Active'];
+        $data = ['new_teamname' => 'New Channel Private 1', 'old_teamname' => 'Channel private-1', 'accountName' => 'teams 1', 'status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if (enableMattermost == 0) {
@@ -376,7 +376,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testUpdateChannelNewNameNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['old_groupname' => 'Channel Private 1', 'accountName' => 'Teams 1', 'status' => 'Active'];
+        $data = ['old_teamname' => 'Channel Private 1', 'accountName' => 'Teams 1', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
@@ -395,7 +395,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testUpdateChannelNameNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['new_groupname' => 'Oh myh god', 'accountName' => 'Testing Team', 'status' => 'Active'];
+        $data = ['new_teamname' => 'Oh myh god', 'accountName' => 'Testing Team', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/chat/updatechannel', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -407,7 +407,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannel()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'groupname' => 'New Channel Private 1', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'teamname' => 'New Channel Private 1', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $mockRestClient->expects('get')->with("api/v4/teams/name/teams1", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => "teams1", "display_name" => 'teams1', "id" => 121)));
@@ -428,7 +428,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannelCreateChannel()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'groupname' => 'Private1 Private', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'teamname' => 'Private1 Private', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -452,7 +452,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannelNetworkIssue()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'groupname' => 'Channel Chan', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'teamname' => 'Channel Chan', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -476,7 +476,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannelCreateTeam()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'Boscos Team', 'groupname' => 'Private1 Private', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'Boscos Team', 'teamname' => 'Private1 Private', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -501,7 +501,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannelTeamNotFoundBeczNetworkIssue()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'PES Team', 'groupname' => 'Private1 Private', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'PES Team', 'teamname' => 'Private1 Private', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -524,7 +524,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannelCreateUser()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'Girly', 'accountName' => 'Teams 1', 'groupname' => 'Private1 Private', 'status' => 'Active'];
+        $data = ['username' => 'Girly', 'accountName' => 'Teams 1', 'teamname' => 'Private1 Private', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -548,7 +548,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannelUserNotCreatedBeczNetworkIssue()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'Boyish', 'accountName' => 'Teams 1', 'groupname' => 'Private1 Private', 'status' => 'Active'];
+        $data = ['username' => 'Boyish', 'accountName' => 'Teams 1', 'teamname' => 'Private1 Private', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -574,7 +574,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testAddUserToChannelDataNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['accountName' => 'Raks Team', 'groupname' => 'Channel Crrate Private', 'status' => 'Active'];
+        $data = ['accountName' => 'Raks Team', 'teamname' => 'Channel Crrate Private', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
         $this->assertResponseStatusCode(400);
@@ -586,7 +586,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testRemoveUserFromChannel()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'groupname' => 'New Channel Private 1', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'teamname' => 'New Channel Private 1', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $mockRestClient->expects('get')->with("api/v4/teams/name/teams1", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => "teams1", "display_name" => 'teams1', "id" => 121)));
@@ -607,7 +607,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testRemoveUserFromChannelUserNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['accountName' => 'Raks Team', 'groupname' => 'Channel Crrate Private', 'status' => 'Active'];
+        $data = ['accountName' => 'Raks Team', 'teamname' => 'Channel Crrate Private', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/chat/removeuserfromchannel', 'POST', $data);
         $this->assertResponseStatusCode(400);
@@ -619,7 +619,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testRemoveUserFromChannelUserNotInChannel()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'groupname' => 'Private1 Private', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'teamname' => 'Private1 Private', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
@@ -640,7 +640,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testRemoveUserFromChannelNotCreatedIssue()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'groupname' => 'Payyannur', 'status' => 'Active'];
+        $data = ['username' => $this->managerUser, 'accountName' => 'Teams 1', 'teamname' => 'Payyannur', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
@@ -664,7 +664,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testDeleteChannel()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['accountName' => 'teams-1', 'groupname' => 'New Channel Private 1', 'status' => 'Active'];
+        $data = ['accountName' => 'teams-1', 'teamname' => 'New Channel Private 1', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $mockRestClient->expects('get')->with("api/v4/teams/name/teams1", array(), Mockery::any())->once()->andReturn(json_encode(array('name' => "teams1", "display_name" => 'teams1', "id" => 121)));
@@ -695,7 +695,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testDeleteChannelTeamNameNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['groupname' => 'off-topic', 'status' => 'Active'];
+        $data = ['teamname' => 'off-topic', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/chat/deletechannel', 'POST', $data);
         $this->assertResponseStatusCode(400);
@@ -707,7 +707,7 @@ class ChatCallbackControllerTest extends ControllerTest
     public function testDeleteChannelNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['accountName' => 'Teams 1', 'groupname' => 'Privatecs 3', 'status' => 'Active'];
+        $data = ['accountName' => 'Teams 1', 'teamname' => 'Privatecs 3', 'status' => 'Active'];
         if (enableMattermost == 0) {
             $mockRestClient = $this->getMockRestClientForChatService();
             $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
@@ -887,7 +887,7 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['data']['display_name'], $data['appName']);
     }
 
-     public function testCreateBotNotFound()
+    public function testCreateBotNotFound()
     {
         $data = ['description' => 'A BOT for testing'];
         $this->initAuthToken($this->adminUser);
@@ -906,7 +906,7 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Bot Name is missing');
     }
 
-     public function testSaveBotUpdation()
+    public function testSaveBotUpdation()
     {
         $data = ['appName' => 'testbotuser', 'displayName' => 'Test BOT User' , 'delete_at' => 0];
         $this->initAuthToken($this->adminUser);
@@ -983,7 +983,7 @@ class ChatCallbackControllerTest extends ControllerTest
         $this->assertNotEquals($content['data']['delete_at'], 0);
     }
 
-        public function testDisableBotNotFound()
+    public function testDisableBotNotFound()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['appName' => 'testbotusernew'];
@@ -1001,5 +1001,4 @@ class ChatCallbackControllerTest extends ControllerTest
     }
 
     //APP BOT NOTIFICATION TESTS
-
 }

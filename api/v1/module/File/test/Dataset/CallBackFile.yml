@@ -142,7 +142,7 @@ ox_app_entity:
     end_date_field: end_date
     status_field: status
     subscriber_field: observers
-    ryg_rule: '{"RED": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "Delayed"}, {"field": "status","operator": "neq","value": "In Progress"}, {"field": "end_date","operator": "lt","value": "today"}, {"field": "next_action_date","operator": "lt","value": "today"}],"YELLOW": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "In Progress"}, {"field": "end_date","operator": "eq","value": "today+1"}, {"field": "next_action_date","operator": "eq","value": "today+1"}, {"field": "end_date","operator": "eq","value": "today"}, {"field": "next_action_date","operator": "eq","value": "today"}]}}}'
+    ryg_rule: '{"RED": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "Delayed"}, {"field": "status","operator": "neq","value": "In Progress"}, {"field": "end_date","operator": "lt","value": "date:today"}, {"field": "next_action_date","operator": "lt","value": "date:today"}],"YELLOW": {"logic": "or","filters": [{"field": "status","operator": "eq","value": "In Progress"}, {"field": "end_date","operator": "eq","value": "date:today+1"}, {"field": "next_action_date","operator": "eq","value": "date:today+1"}, {"field": "end_date","operator": "eq","value": "date:today"}, {"field": "next_action_date","operator": "eq","value": "date:today"}]}}}'
 ox_app_registry:
   - account_id: 1
     app_id: 99
@@ -561,17 +561,17 @@ ox_activity_instance:
     workflow_instance_id: 3
     status: "Completed"
     account_id: 1
-ox_group:
+ox_team:
   - id: 1
     uuid: "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4"
-    name: Test group
+    name: Test team
     account_id: 1
     manager_id: 1
     created_id: 1
     date_created: "2019-06-26 00:00:00"
-ox_user_group:
+ox_user_team:
   - id: 1
-    group_id: 1
+    team_id: 1
     avatar_id: 1
 ox_file_assignee:
   - id: 1

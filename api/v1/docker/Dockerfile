@@ -10,6 +10,10 @@ RUN apt-get update \
  && apt-get install -y libfreetype6-dev \
                        libjpeg62-turbo-dev \
                        libpng-dev \
+ && rm /etc/apt/preferences.d/no-debian-php \
+ && apt-get update -y \
+ && apt-get -y install libxml2-dev php-soap \
+ && docker-php-ext-install soap \
  && docker-php-ext-configure gd \
         --with-freetype-dir=/usr/include/ \
         --with-jpeg-dir=/usr/include/ \
@@ -37,21 +41,11 @@ RUN rm -rf /var/lib/apt/lists/* && curl -sL https://deb.nodesource.com/setup_8.x
 RUN apt-get clean
 ADD http://www.phpdoc.org/phpDocumentor.phar /usr/local/bin/phpdoc
 RUN chmod 755 /usr/local/bin/phpdoc
-#
 
-ARG DB_HOST
-ARG DB_USERNAME
-ARG DB_PASSWORD
-ARG API_DB
-ARG TEST_API_DB
-ARG HOST
-ENV HOST=${HOST}
-ENV DB_USERNAME=${DB_USERNAME}
-ENV DB_PASSWORD=${DB_PASSWORD}
-ENV API_DB=${API_DB}
-ENV TEST_API_DB=${TEST_API_DB}
-ENV DB_HOST=${DB_HOST}
-#
+RUN mkdir -p /app/view
+RUN mkdir -p /app/camel
+RUN mkdir -p /app/workflow
+RUN mkdir -p /app/clients
 RUN mkdir -p /app/api/v1 && \
     mv /var/www /var/www2 && \
     ln -s /app/api/v1 /var/www

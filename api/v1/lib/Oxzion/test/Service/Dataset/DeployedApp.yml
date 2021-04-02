@@ -236,7 +236,7 @@ ox_role:
     default_role: 0  
 ox_role_privilege:
 -
-    id: 230
+    id: 235
     role_id: 30
     privilege_name: "MANAGE_POLICY_APPROVAL"
     permission: 3
@@ -716,17 +716,17 @@ ox_activity_instance:
     status: "Completed"
     account_id: 1
     isdeleted: 0
-ox_group:
+ox_team:
   - id: 1
     uuid: "d8b8bdc6-1826-11eb-adc1-0242ac120002"
-    name: Test group
+    name: Test team
     account_id: 1
     manager_id: 1
     created_id: 1
     date_created: "2019-06-26 00:00:00"
-ox_user_group:
+ox_user_team:
   - id: 1
-    group_id: 1
+    team_id: 1
     avatar_id: 1
 ox_file_assignee:
   - id: 1

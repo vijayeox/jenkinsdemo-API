@@ -13,7 +13,7 @@ class RestClient
     public function __construct($baseUrl, $params=array())
     {
         $config = ['verify' => false,'timeout'  => 400.0];
-        if(isset($baseUrl)) {
+        if (isset($baseUrl)) {
             $config['base_uri'] = $baseUrl;
         }
         $this->client = new Client(array_merge($config, $params));
@@ -30,10 +30,10 @@ class RestClient
         }
         $response = $this->client->request('GET', $url, $payload);
         $var = $response->getBody()->getContents();
-        if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
+        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             return $var;
         }
-        throw new HttpException($var,$response->getStatusCode());
+        throw new HttpException($var, $response->getStatusCode());
     }
 
     public function delete($url, $params = array(), $headers = null)
@@ -47,10 +47,10 @@ class RestClient
         }
         $response = $this->client->request('DELETE', $url, $payload);
         $var = $response->getBody()->getContents();
-        if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
+        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             return $var;
         }
-        throw new HttpException($var,$response->getStatusCode());
+        throw new HttpException($var, $response->getStatusCode());
     }
 
     public function postMultiPart($url, $formParams = array(), $fileParams = array(), array $headers = null)
@@ -74,10 +74,10 @@ class RestClient
         $params = ['headers' => $headerList, 'body' => new MultipartStream($multipart_form, $boundary)];
         $response = $this->client->post($url, $params);
         $var = $response->getBody()->getContents();
-        if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
+        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             return $var;
         }
-        throw new HttpException($var,$response->getStatusCode());
+        throw new HttpException($var, $response->getStatusCode());
     }
 
     public function post($url, $formParams = array())
@@ -88,10 +88,10 @@ class RestClient
             $response = $this->client->request('POST', $url, ['headers' => ['Content-Type' => 'application/json']]);
         }
         $var = $response->getBody()->getContents();
-        if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
+        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             return $var;
         }
-        throw new HttpException($var,$response->getStatusCode());
+        throw new HttpException($var, $response->getStatusCode());
     }
 
     public function postWithHeader($url, $formParams = array(), $headers = array())
@@ -123,13 +123,13 @@ class RestClient
         }
         $response = $this->client->request('PUT', $url, $payload);
         $var = $response->getBody()->getContents();
-        if($response->getStatusCode() >= 200 && $response->getStatusCode() < 300 ){
+        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             return $var;
         }
-        throw new HttpException($var,$response->getStatusCode());
+        throw new HttpException($var, $response->getStatusCode());
     }
 
-    public function postWithHeaderAsBody($url, string $formParams , $headers = array())
+    public function postWithHeaderAsBody($url, string $formParams, $headers = array())
     {
         $response = $this->client->request('POST', $url, ['headers' => $headers, 'body' => $formParams]);
         return array('body' => $response->getBody()->getContents(), 'headers' => $response->getHeaders(),'status' =>$response->getStatusCode());

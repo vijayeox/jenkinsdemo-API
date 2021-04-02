@@ -29,7 +29,7 @@ class ActivityInstanceControllerTest extends ControllerTest
     public function testaddactivityinstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'3f6622fd-0124-11ea-a8a0-22e8105c0779','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'admintest','type'=>'assignee')),'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>"Task_1s7qzh3",'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'3f6622fd-0124-11ea-a8a0-22e8105c0779','activityId'=>1 , 'candidates' => array(array('teamid'=>'HR Team','type'=>'candidate'),array('userid'=>'admintest','type'=>'assignee')),'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>"Task_1s7qzh3",'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activityinstance', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -54,27 +54,27 @@ class ActivityInstanceControllerTest extends ControllerTest
         $this->assertEquals(1, $tableFieldName1[0]['activity_instance_id']);
         $this->assertEquals(1, $tableFieldName1[0]['user_id']);
         $this->assertEquals(1, $tableFieldName1[0]['assignee']);
-        $this->assertEquals(null, $tableFieldName1[0]['group_id']);
+        $this->assertEquals(null, $tableFieldName1[0]['team_id']);
         $this->assertEquals(null, $tableFieldName1[0]['role_id']);
         $this->assertEquals(3, $tableFieldName1[1]['activity_instance_id']);
         $this->assertEquals(1, $tableFieldName1[1]['user_id']);
         $this->assertEquals(1, $tableFieldName1[1]['assignee']);
-        $this->assertEquals(null, $tableFieldName1[1]['group_id']);
+        $this->assertEquals(null, $tableFieldName1[1]['team_id']);
         $this->assertEquals(null, $tableFieldName1[1]['role_id']);
         $this->assertEquals($tableFieldName1[2]['activity_instance_id'], $tableFieldName1[3]['activity_instance_id']);
         $this->assertEquals(null, $tableFieldName1[2]['user_id']);
         $this->assertEquals(0, $tableFieldName1[2]['assignee']);
-        $this->assertEquals(1, $tableFieldName1[2]['group_id']);
+        $this->assertEquals(1, $tableFieldName1[2]['team_id']);
         $this->assertEquals(null, $tableFieldName1[2]['role_id']);
         $this->assertEquals(1, $tableFieldName1[3]['user_id']);
         $this->assertEquals(1, $tableFieldName1[3]['assignee']);
-        $this->assertEquals(null, $tableFieldName1[3]['group_id']);
+        $this->assertEquals(null, $tableFieldName1[3]['team_id']);
         $this->assertEquals(null, $tableFieldName1[3]['role_id']);
     }
     public function testaddactivityinstanceWithoutProcessId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64','activityId'=>1 , 'assignee' => 'admintest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64','activityId'=>1 , 'assignee' => 'admintest', 'team_name' => 'HR Team','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activityinstance', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -85,19 +85,19 @@ class ActivityInstanceControllerTest extends ControllerTest
     public function testCompleteinstanceWithNoProcessInstanceId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 , 'assignee' => 'admintest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 , 'assignee' => 'admintest', 'team_name' => 'HR Team','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'accountId'=>$this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflowinstance/complete', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->assertEquals('error', $content['status']);
-        $this->assertEquals('Process Instance Id not set', $content['message']);   
+        $this->assertEquals('Process Instance Id not set', $content['message']);
     }
     
     public function testCompleteinstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 ,'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778', 'assignee' => 'admintest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'completed','taskId'=>1];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 ,'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778', 'assignee' => 'admintest', 'team_name' => 'HR Team','name'=>'Recruitment Request Created', 'status' => 'completed','taskId'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflowinstance/complete', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);

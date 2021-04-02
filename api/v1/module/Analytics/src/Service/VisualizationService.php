@@ -13,7 +13,6 @@ use Exception;
 
 class VisualizationService extends AbstractService
 {
-
     private $table;
 
     public function __construct($config, $dbAdapter, VisualizationTable $table)
@@ -31,8 +30,7 @@ class VisualizationService extends AbstractService
             $this->beginTransaction();
             $visualization->save();
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -48,28 +46,26 @@ class VisualizationService extends AbstractService
             $this->beginTransaction();
             $visualization->save();
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
         return $visualization->getGenerated();
     }
 
-    public function deleteVisualization($uuid,$version)
+    public function deleteVisualization($uuid, $version)
     {
         $visualization = new Visualization($this->table);
         $visualization->loadByUuid($uuid);
         $visualization->assign([
-            'version' => $version, 
+            'version' => $version,
             'isdeleted' => 1
         ]);
         try {
             $this->beginTransaction();
             $visualization->save();
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -93,10 +89,9 @@ class VisualizationService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
-        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+        if (isset($params['show_deleted']) && $params['show_deleted']==true) {
             $where .= empty($where) ? "WHERE account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID) : " AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID);
-        }
-        else{
+        } else {
             $where .= empty($where) ? "WHERE isdeleted <>1 AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID) : " AND isdeleted <>1 AND account_id =".AuthContext::get(AuthConstants::ACCOUNT_ID);
         }
         $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
@@ -106,10 +101,9 @@ class VisualizationService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
-        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+        if (isset($params['show_deleted']) && $params['show_deleted']==true) {
             $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,account_id,isdeleted,renderer,type FROM `ox_visualization`".$where." ".$sort." ".$limit;
-        }
-        else{
+        } else {
             $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,account_id,renderer,type FROM `ox_visualization`".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);

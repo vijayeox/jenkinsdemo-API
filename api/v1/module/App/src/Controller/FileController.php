@@ -104,8 +104,8 @@ class FileController extends AbstractApiController
         $params = $this->params()->fromQuery();
         if (isset($params['version'])) {
             try {
-                $response = $this->fileService->deleteFile($id,$params['version']);
-            }catch (VersionMismatchException $e) {
+                $response = $this->fileService->deleteFile($id, $params['version']);
+            } catch (VersionMismatchException $e) {
                 return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
             }
             return $this->getSuccessResponse("File has been deleted!");
@@ -137,7 +137,7 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
-        if(file_exists($file)){
+        if (file_exists($file)) {
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');
                 header("Content-Transfer-Encoding: Binary");
@@ -157,24 +157,22 @@ class FileController extends AbstractApiController
         }
     }
 
-    public function getFileDataAction(){
+    public function getFileDataAction()
+    {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        try{
+        try {
             $result = $this->fileService->getFileByWorkflowInstanceId($params['workflowInstanceId']);
-            if($result == 0){
+            if ($result == 0) {
                 return $this->getErrorResponse("File not found", 404, ['id' => $params['workflowInstanceId']]);
             }
             return $this->getSuccessResponseWithData($result, 200);
-
-        }catch(Exception $e){
-            return $this->getErrorResponse($e->getMessage(),404);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
-
     }
 
-     public function sendReminderAction($data)
+    public function sendReminderAction($data)
     {
-
     }
     /**
     * GET List Entitys API
@@ -185,14 +183,15 @@ class FileController extends AbstractApiController
     */
     public function getFileListAction()
     {
-        $appUuid = isset($this->params()->fromRoute()['appId']) ? $this->params()->fromRoute()['appId'] : NULL ;
+        $appUuid = isset($this->params()->fromRoute()['appId']) ? $this->params()->fromRoute()['appId'] : null ;
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
-        if(isset($params['createdBy']) && $params['createdBy'] === 'me'){
-            $params['createdBy'] = AuthContext::get(AuthConstants::USER_UUID);;
+        if (isset($params['createdBy']) && $params['createdBy'] === 'me') {
+            $params['createdBy'] = AuthContext::get(AuthConstants::USER_UUID);
+            ;
         }
         try {
-            $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
+            $result = $this->fileService->getFileList($appUuid, $params, $filterParams);
         } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
             $this->log->error($e->getMessage(), $e);
@@ -221,22 +220,22 @@ class FileController extends AbstractApiController
         $appUuid = $this->params()->fromRoute()['appId'];
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $commandList = $this->params()->fromRoute()['commands'];
-        $commandsArray = explode("+",$commandList);
+        $commandsArray = explode("+", $commandList);
         $filterParams = $this->params()->fromQuery();
         try {
-        foreach ($commandsArray as $command) {
-            switch ($command) {
+            foreach ($commandsArray as $command) {
+                switch ($command) {
                 case 'myfiles':
                         $params['status'] = 'Completed';
-                        $result['myfiles'] = $this->fileService->getFileList($appUuid,$params,$filterParams);
+                        $result['myfiles'] = $this->fileService->getFileList($appUuid, $params, $filterParams);
                     break;
                 case 'assignments':
-                        $result['assignments'] = $this->fileService->getAssignments($appUuid,$filterParams);
+                        $result['assignments'] = $this->fileService->getAssignments($appUuid, $filterParams);
                     break;
                 default:
                     break;
             }
-        }
+            }
         } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -276,5 +275,23 @@ class FileController extends AbstractApiController
             return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
         return $this->getSuccessResponseWithData($result, 200);
+    }
+    public function auditAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            if ($params['fileId']) {
+                $result = $this->fileService->getAuditLog($params['fileId']);
+            } else {
+                return $this->getErrorResponse("Validation Errors", 404, "FileNotFound");
+            }
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 }

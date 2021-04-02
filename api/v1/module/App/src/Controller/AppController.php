@@ -22,7 +22,7 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, FileService $fileService,AppDelegateService $appDelegateService)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, FileService $fileService, AppDelegateService $appDelegateService)
     {
         parent::__construct($table, App::class);
         $this->setIdentifierName('appId');
@@ -68,8 +68,7 @@ class AppController extends AbstractApiController
         try {
             $returnData = $this->appService->createApp($data);
             return $this->getSuccessResponseWithData($returnData, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -106,8 +105,7 @@ class AppController extends AbstractApiController
         try {
             $response = $this->appService->getAppList($filterParams);
             return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -144,8 +142,7 @@ class AppController extends AbstractApiController
         try {
             $returnData = $this->appService->updateApp($uuid, $data);
             return $this->getSuccessResponseWithData($returnData, 200);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -165,14 +162,13 @@ class AppController extends AbstractApiController
         try {
             $this->appService->deleteApp($uuid);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-        /**
+    /**
      * Remove App API
      * @api
      * @link /app/:appId/removeapp
@@ -181,14 +177,13 @@ class AppController extends AbstractApiController
      * @return array success|failure response
      */
     public function removeappAction()
-    {   
+    {
         $uuid = $this->params()->fromRoute()['appId'];
         $this->log->info(__CLASS__ . "-> Remove Deployed App for ID ${uuid}.");
         try {
             $this->appService->removeDeployedApp($uuid);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -224,8 +219,7 @@ class AppController extends AbstractApiController
         try {
             $response = $this->appService->getApp($uuid);
             return $this->getSuccessResponseWithData($response);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -244,8 +238,7 @@ class AppController extends AbstractApiController
         try {
             $result = $this->appService->getApps();
             return $this->getSuccessResponseWithData($result);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -261,14 +254,14 @@ class AppController extends AbstractApiController
      * @return array of Apps
      */
 
-        public function appSetupToOrgAction()
+    public function appSetupToOrgAction()
     {
         $params = $this->extractPostData();
         $data = array_merge($params, $this->params()->fromRoute());
         $serviceType = $data['serviceType'];
         $this->log->info(__CLASS__ . "-> \n Create App Registry- " . print_r($data, true) . "Parameters - " . print_r($params, true));
         try {
-            $count = $this->appService->installAppToOrg($data['appId'],$data['accountId'],$serviceType);
+            $count = $this->appService->installAppToOrg($data['appId'], $data['accountId'], $serviceType);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
@@ -288,16 +281,14 @@ class AppController extends AbstractApiController
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
-        $appId = isset($params['appId']) ? $params['appId'] : NULL;
+        $appId = isset($params['appId']) ? $params['appId'] : null;
         try {
             $assignments = $this->fileService->getAssignments($appId, $filterParams);
             return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
-        }
-        catch (AccessDeniedException $e) {
+        } catch (AccessDeniedException $e) {
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(), 403, $response);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -309,11 +300,11 @@ class AppController extends AbstractApiController
      * @link /app/appdeployyml
      * @method GET
      * @param  $path - Enter the path of the Application to deploy.
-     * @param  $parameters(optional) - Enter the parameters option in a CSV 
-     * format to deploy and these options can be specified in any order. 
+     * @param  $parameters(optional) - Enter the parameters option in a CSV
+     * format to deploy and these options can be specified in any order.
      * It is recommended that if you are deploying for the first time,
-     * then specify the 'initialize' option first and then specify other options. 
-     * Parameters options are : 
+     * then specify the 'initialize' option first and then specify other options.
+     * Parameters options are :
      * initialize, entity, workflow, form, menu, page, job
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
@@ -331,16 +322,14 @@ class AppController extends AbstractApiController
         try {
             $path = $params['path'];
             $path .= substr($path, -1) == '/' ? '' : '/';
-            if(isset($params['parameters']) && !empty($params['parameters'])){
-                $params = $this->processDeploymentParams($params);                   
-            }
-            else{
+            if (isset($params['parameters']) && !empty($params['parameters'])) {
+                $params = $this->processDeploymentParams($params);
+            } else {
                 $params = null;
             }
             $appData = $this->appService->deployApp($path, $params);
             return $this->getSuccessResponseWithData($appData);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -348,7 +337,7 @@ class AppController extends AbstractApiController
 
     /**
      * Deploy App API for AppBuilder. AppBuilder creates the application in <EOX_APP_SOURCE_DIR> on
-     * the server and assigns a UUID for the application in OX_APP table in database. This action 
+     * the server and assigns a UUID for the application in OX_APP table in database. This action
      * uses the UUID of the application for deployment.
      *
      * @api
@@ -369,16 +358,14 @@ class AppController extends AbstractApiController
         }
 
         try {
-            if(isset($params['parameters']) && !empty($params['parameters'])){
+            if (isset($params['parameters']) && !empty($params['parameters'])) {
                 $params = $this->processDeploymentParams($params);
-            }
-            else{
+            } else {
                 $params = null;
             }
             $appData = $this->appService->deployApplication($routeParams['appId'], $params);
             return $this->getSuccessResponseWithData($appData);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -400,24 +387,44 @@ class AppController extends AbstractApiController
                 return $this->getErrorResponse("Error while executing the delegate", 400);
             }
             return $this->getSuccessResponseWithData($response, 200);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
-    private function processDeploymentParams($params){
+    private function processDeploymentParams($params)
+    {
         $params['parameters'] = strtolower($params['parameters']);
         $params['parameters'] = preg_replace("/[^a-zA-Z\,]/", "", $params['parameters']);
-        $params['parameters'] = rtrim($params['parameters'],",");
-        $params['parameters'] = ltrim($params['parameters'],",");
-        if(strpos($params['parameters'], ',') !== false){
-            $params = explode(",",$params['parameters']);
-        }else{
+        $params['parameters'] = rtrim($params['parameters'], ",");
+        $params['parameters'] = ltrim($params['parameters'], ",");
+        if (strpos($params['parameters'], ',') !== false) {
+            $params = explode(",", $params['parameters']);
+        } else {
             $params = array($params['parameters']);
-        }   
+        }
         return $params;
     }
-}
 
+    /**
+     * GET CSS File API
+     * @api
+     * @link /app/:appId/cssFile
+     * @method GET
+     * @return array Css file content
+     */
+    public function getCssFileAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            $result = $this->appService->getApp($params['appId'], true);
+            $fileContent = file_get_contents($result.'/index.scss');
+            $data['cssContent'] = $fileContent;
+            return $this->getSuccessResponseWithData($data);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse("Css File not Found", 404);
+        }
+    }
+}

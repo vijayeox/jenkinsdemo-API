@@ -18,7 +18,6 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\TableGateway\TableGateway;
 
-
 abstract class ModelTable
 {
     protected $tableGateway;
@@ -69,8 +68,10 @@ abstract class ModelTable
             return null;
         }
         if (count($rowset) > 1) {
-            throw new MultipleRowException('Multiple rows found when queried by UUID.',
-                ['table' => $this->tableGateway->getTable(), 'uuid' => $uuid]);
+            throw new MultipleRowException(
+                'Multiple rows found when queried by UUID.',
+                ['table' => $this->tableGateway->getTable(), 'uuid' => $uuid]
+            );
         }
         $row = $rowset->current();
         return $row;
@@ -182,15 +183,21 @@ abstract class ModelTable
             $result = $statement->execute();
             //count cannot be > 1 when selected on id column. Therefore we don't check for count > 1.
             if (0 == $result->count()) {
-                throw new EntityNotFoundException('Entity not found.',
-                    ['entity' => $this->tableGateway->getTable(), 'id' => $data[Entity::COLUMN_ID]]);
+                throw new EntityNotFoundException(
+                    'Entity not found.',
+                    ['entity' => $this->tableGateway->getTable(), 'id' => $data[Entity::COLUMN_ID]]
+                );
             }
             $row = $result->current();
             $dbVersion = $row[Entity::COLUMN_VERSION];
         } catch (Exception $e) {
-            throw new UpdateFailedException('Database update failed.',
+            throw new UpdateFailedException(
+                'Database update failed.',
                 ['table' => $this->tableGateway->getTable(), 'data' => $data],
-                UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
+                UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR,
+                UpdateFailedException::ERR_TYPE_ERROR,
+                $e
+            );
         }
         if ($dbVersion != $version) {
             throw new VersionMismatchException($dbVersion);
@@ -200,7 +207,7 @@ abstract class ModelTable
 
     public function internalSave2(array &$data)
     {
-        // print_r($data);exit; 
+        // print_r($data);exit;
         $this->init();
         $id = null;
         if (array_key_exists(Entity::COLUMN_ID, $data) && isset($data[Entity::COLUMN_ID])) {
@@ -222,18 +229,28 @@ abstract class ModelTable
             try {
                 $rows = $this->tableGateway->insert($data);
             } catch (Exception $e) {
-                if(strpos($e->getMessage(),'Duplicate')){
-                    throw new InsertFailedException('Duplicate Record.',
+                if (strpos($e->getMessage(), 'Duplicate')) {
+                    throw new InsertFailedException(
+                        'Duplicate Record.',
+                        ['table' => $this->tableGateway->getTable(), 'data' => $data],
+                        InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR,
+                        InsertFailedException::ERR_TYPE_ERROR,
+                        $e
+                    );
+                }
+                throw new InsertFailedException(
+                    $e->getMessage(),
                     ['table' => $this->tableGateway->getTable(), 'data' => $data],
-                    InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
-                }                   
-                throw new InsertFailedException($e->getMessage(),
-                    ['table' => $this->tableGateway->getTable(), 'data' => $data],
-                    InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, InsertFailedException::ERR_TYPE_ERROR, $e);
+                    InsertFailedException::ERR_CODE_INTERNAL_SERVER_ERROR,
+                    InsertFailedException::ERR_TYPE_ERROR,
+                    $e
+                );
             }
             if (!isset($rows) || (1 != $rows)) {
-                throw new InsertFailedException('Database insert failed.',
-                    ['table' => $this->tableGateway->getTable(), 'data' => $data]);
+                throw new InsertFailedException(
+                    'Database insert failed.',
+                    ['table' => $this->tableGateway->getTable(), 'data' => $data]
+                );
             }
             $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
             $data[Entity::COLUMN_ID] = $this->lastInsertValue;
@@ -249,9 +266,13 @@ abstract class ModelTable
             try {
                 $rows = $this->tableGateway->update($data, $whereCondition);
             } catch (Exception $e) {
-                throw new UpdateFailedException('Database update failed.',
+                throw new UpdateFailedException(
+                    'Database update failed.',
                     ['table' => $this->tableGateway->getTable(), 'data' => $data],
-                    UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR, UpdateFailedException::ERR_TYPE_ERROR, $e);
+                    UpdateFailedException::ERR_CODE_INTERNAL_SERVER_ERROR,
+                    UpdateFailedException::ERR_TYPE_ERROR,
+                    $e
+                );
             }
 
             return $data;

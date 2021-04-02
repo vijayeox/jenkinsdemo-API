@@ -26,10 +26,8 @@
 /clients/BridgeMed/view/themes/BridgeMedTheme/dist/
 /clients/BridgeMed/view/themes/BridgeMedTheme/node_modules/
 /integrations/workflow/ProcessEngine/.project
-/integrations/workflow/ProcessEngine/.project
 /integrations/workflow/IdentityService/.classpath
 /integrations/workflow/IdentityService/.settings/org.eclipse.buildship.core.prefs
-/integrations/workflow/ProcessEngine/bin/
 /integrations/workflow/ProcessEngine/bin/
 /setup/mysql/*
 /view/view_built
@@ -37,3 +35,4 @@
 /clients/DiveInsurance/view/apps/DiveInsurance/node_modules/
 /clients/EOXAppBuilder/view/apps/EOXAppBuilder/dist/
 /clients/EOXAppBuilder/view/apps/EOXAppBuilder/node_modules/
+*.DS_Store

@@ -47,13 +47,14 @@ class WorkflowInstanceController extends AbstractApiController
         return $this->getSuccessResponseWithData($params, 200);
     }
 
-    public function completeWorkflowAction() {
+    public function completeWorkflowAction()
+    {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $this->log->info(print_r($params, true));
-        try{
-            $response = $this->workflowInstanceService->getWorkflowCompletedData($params,$filterParams);
+        try {
+            $response = $this->workflowInstanceService->getWorkflowCompletedData($params, $filterParams);
             return $this->getSuccessResponseWithData($response);
-        }catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $params, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         } catch (InvalidParameterException $e) {
@@ -62,7 +63,7 @@ class WorkflowInstanceController extends AbstractApiController
         } catch (EntityNotFoundException $e) {
             $response = ['data' => $params, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Entity Not Found", 404, $response);
-        }catch (ServiceException $e) {
+        } catch (ServiceException $e) {
             $this->log->error($e->getMessage(), $e);
             $response = ['data' => $params, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Errors", 412, $response);
@@ -80,7 +81,7 @@ class WorkflowInstanceController extends AbstractApiController
         try {
             $count = $this->workflowInstanceService->submitActivity($params);
             $this->log->info(WorkflowInstanceController::class . "SubmitActivity Response  - " . print_r($count, true));
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -95,13 +96,13 @@ class WorkflowInstanceController extends AbstractApiController
             $this->activityInstanceService->claimActivityInstance($data);
             $this->log->info("Claim Activity Instance Successful");
             return $this->getSuccessResponse();
-        }catch (WorkflowException $e) {
+        } catch (WorkflowException $e) {
             $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
             if ($e->getReason() == 'TaskAlreadyClaimedException') {
                 return $this->getErrorResponse("Task is already claimed", 409);
             }
             return $this->exceptionToResponse($e);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -115,7 +116,7 @@ class WorkflowInstanceController extends AbstractApiController
             $this->activityInstanceService->unclaimActivityInstance($data);
             $this->log->info("Unclaim Activity Instance Successful");
             return $this->getSuccessResponse();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -129,7 +130,7 @@ class WorkflowInstanceController extends AbstractApiController
             $this->activityInstanceService->reclaimActivityInstance($data);
             $this->log->info("Reclaim Activity Instance Successful");
             return $this->getSuccessResponse();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -169,32 +170,34 @@ class WorkflowInstanceController extends AbstractApiController
         return $this->getSuccessResponseWithData($result, 200);
     }
 
-    public function getActivityLogAction(){
+    public function getActivityLogAction()
+    {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        try{
+        try {
             $result = $this->workflowInstanceService->getActivityLog($params['fileId'], $params['appId'], $filterParams);
             if ($result == 0) {
                 return $this->getErrorResponse("No Activity found for the specified file", 404, ['id' => $fileId]);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
         }
-        return $this->getSuccessResponseWithData($result,200);
+        return $this->getSuccessResponseWithData($result, 200);
     }
 
-    public function getFieldDiffAction(){
+    public function getFieldDiffAction()
+    {
         $params = $this->params()->fromRoute();
-        try{
+        try {
             $result = $this->activityInstanceService->getActivityChangeLog($params['activityInstanceId']);
             if (count($result) == 0) {
                 return $this->getErrorResponse("No Activity found for the specified ID", 404, ['id' => $params['activityInstanceId']]);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
         }
-        return $this->getSuccessResponseWithData($result,200);
+        return $this->getSuccessResponseWithData($result, 200);
     }
 }

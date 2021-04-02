@@ -210,10 +210,10 @@ export default class DialogContainer extends React.Component {
           date_of_join: new Moment(this.state.userInEdit.date_of_join).format(
             "YYYY-MM-DD"
           ),
-          address1: "",
-          city: "",
+          address1: this.state.userInEdit.address1,
+          city: this.state.userInEdit.city,
           state: this.state.userInEdit.state,
-          zip: "",
+          zip: this.state.userInEdit.zip,
           country: this.state.userInEdit.country
         }
       ).then((response) => {
@@ -246,10 +246,10 @@ export default class DialogContainer extends React.Component {
         date_of_join: new Moment(this.state.userInEdit.date_of_join).format(
           "YYYY-MM-DD"
         ),
-        address1: "",
-        city: "",
+        address1: this.state.userInEdit.address1,
+        city: this.state.userInEdit.city,
         state: this.state.userInEdit.state,
-        zip: "",
+        zip: this.state.userInEdit.zip,
         country: this.state.userInEdit.country
       }).then((response) => {
         this.loader.destroy();
@@ -453,10 +453,10 @@ export default class DialogContainer extends React.Component {
                           type="radio"
                           id="mRadio"
                           name="gender"
-                          value="Male"
+                          value="male"
                           className="k-radio"
                           onChange={(e) => this.valueChange("gender", e)}
-                          checked={this.state.userInEdit.gender == "Male"}
+                          checked={this.state.userInEdit.gender == "male"}
                           disabled={this.props.diableField ? true : false}
                           required
                         />
@@ -472,10 +472,10 @@ export default class DialogContainer extends React.Component {
                           type="radio"
                           id="fRadio"
                           name="gender"
-                          value="Female"
+                          value="female"
                           className="k-radio pl-2"
                           onChange={(e) => this.valueChange("gender", e)}
-                          checked={this.state.userInEdit.gender == "Female"}
+                          checked={this.state.userInEdit.gender == "female"}
                           disabled={this.props.diableField ? true : false}
                           required
                         />

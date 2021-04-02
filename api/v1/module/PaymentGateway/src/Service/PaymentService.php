@@ -34,7 +34,7 @@ class PaymentService extends AbstractService
      *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *        media_type : string,
      *        media_location : string,
-     *        groups : [{'id' : integer}.....multiple*],
+     *        teams : [{'id' : integer}.....multiple*],
      * </code>
      * @return integer 0|$id of Payment Created
      */
@@ -101,7 +101,7 @@ class PaymentService extends AbstractService
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      * }
      * </code>
      * @return array Returns the Created Payment.
@@ -171,7 +171,9 @@ class PaymentService extends AbstractService
             curl_setopt($ch, CURLOPT_POST, true); // set POST method
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             // Set up the post fields. If you want to add custom fields, you would add them in Converge, and add the field name in the curlopt_postfields string
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
+            curl_setopt(
+                $ch,
+                CURLOPT_POSTFIELDS,
                 "ssl_merchant_id=$paymentConfigInfo->merchant_id" .
                 "&ssl_user_id=$paymentConfigInfo->user_id" .
                 "&ssl_pin=$paymentConfigInfo->pincode" .

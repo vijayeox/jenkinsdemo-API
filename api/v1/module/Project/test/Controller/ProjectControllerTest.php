@@ -287,7 +287,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
     }
 
@@ -325,7 +325,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['accountId'], $accountId);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
     }
 
@@ -347,7 +347,7 @@ class ProjectControllerTest extends ControllerTest
         $data = ['name' => 'New Project 1', 'description' => 'Project Description', 'managerId' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $this->dispatch('/account/53012471-2863-4949-afb1-e69b0891c98a/project', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(412);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Project already exists would you like to reactivate?');
@@ -380,8 +380,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['accountId'], $accountId);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
-
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testCreateWithDifferentAccountID()
@@ -412,7 +411,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['account_id'], 2);
         $this->assertEquals($project[0]['accountId'], $accountId);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testCreateWithOutNameFailure()
@@ -516,7 +515,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testUpdateWithManagerID()
@@ -549,8 +548,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 3);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
-
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testUpdateByManager()
@@ -582,7 +580,7 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($project[0]['account_id'], 1);
         $this->assertEquals($project[0]['isdeleted'], 0);
-        $this->assertEquals($project[0]['parent_id'], NULL);
+        $this->assertEquals($project[0]['parent_id'], null);
     }
 
     public function testUpdateByManagerofDifferentAccount()
@@ -680,7 +678,6 @@ class ProjectControllerTest extends ControllerTest
                     where p.uuid = '$projectId'";
         $project = $this->executeQueryTest($select);
         $this->assertEquals($project[0]['isdeleted'], 1);
-        
     }
     //TODO write tests for sub project scenarios - create, update, delete and get APIS
 
@@ -1103,4 +1100,57 @@ class ProjectControllerTest extends ControllerTest
     }
 
     //TODO Subproject Tests
+    public function testCreateSubprojectWithNewManager()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Test Project 4', 'description' => 'Child of Test Project 1', 'managerId' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45','parentId'=>'886d7eff-6bae-4892-baf8-6fefc56cbf0b'];
+        
+        //Check if the projects defined in Dataset\\Project.yml have been inserted correctly
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
+
+        //Create Subproject
+        $this->dispatch('/project', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'success');
+
+        $subprojectUuid= $content['data']['uuid'];
+
+        //Get the newly created row
+        $select = "SELECT op.*,ou.uuid as manager_uuid  FROM ox_project as op INNER JOIN ox_user as ou on op.manager_id=ou.id WHERE op.uuid = '".$subprojectUuid."'";
+        $subprojectData = $this->executeQueryTest($select);
+
+        //Get the data from the row
+        $subprojectId = $subprojectData[0]['id'];
+        $subprojectParentId = $subprojectData[0]['parent_id'];
+        $subprojectManagerUuid = $subprojectData[0]['manager_uuid'];
+        $subprojectManagerId = $subprojectData[0]['manager_id'];
+        $subprojectName = $subprojectData[0]['name'];
+        $subprojectDescription = $subprojectData[0]['description'];
+
+        //Get the row corresponding to the parent project
+        $select = "SELECT op.*, ou.uuid as parent_manager_uuid FROM ox_project as op INNER JOIN ox_user as ou on op.manager_id=ou.id WHERE op.id = '".$subprojectParentId."'";
+        $parentProjectData = $this->executeQueryTest($select);
+
+        $subprojectParentManagerUuId = $parentProjectData[0]['parent_manager_uuid'];
+        $subprojectParentManagerId = $parentProjectData[0]['manager_id'];
+        $subprojectParentUuid = $parentProjectData[0]['uuid'];
+
+        $this->assertEquals($subprojectManagerUuid, $data['managerId']);
+        $this->assertEquals($subprojectName, $data['name']);
+        $this->assertEquals($subprojectDescription, $data['description']);
+        $this->assertEquals($subprojectParentUuid, $data['parentId']);
+    
+        //Get the users corresponding to the project
+
+        $select = "SELECT user_id FROM ox_user_project WHERE project_id = '".$subprojectId."' AND user_id = '".$subprojectManagerId."'";
+        $subprojectManagerData = $this->executeQueryTest($select);
+
+        $select = "SELECT user_id FROM ox_user_project WHERE project_id = '".$subprojectId."' AND user_id = '".$subprojectParentManagerId."'";
+        $subprojectParentManagerData = $this->executeQueryTest($select);
+
+        $this->assertEquals($subprojectManagerData[0]['user_id'], $subprojectManagerId);
+        $this->assertEquals($subprojectParentManagerData[0]['user_id'], $subprojectParentManagerId);
+    }
 }

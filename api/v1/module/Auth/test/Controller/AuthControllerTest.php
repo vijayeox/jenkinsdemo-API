@@ -24,15 +24,17 @@ class AuthControllerTest extends ControllerTest
         return $dataset;
     }
 
-    protected function getDbAdapter(){
-        if(!$this->dbAdapter){
-            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);    
+    protected function getDbAdapter()
+    {
+        if (!$this->dbAdapter) {
+            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         }
         
         return $this->dbAdapter;
     }
 
-    private function runQuery($query) {
+    private function runQuery($query)
+    {
         $adapter = $this->getDbAdapter();
         $statement = $adapter->query($query);
         $result = $statement->execute();
@@ -407,7 +409,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testRegisterBusinessAccount()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"BUSINESS","business_role":"Policy Holder","name" : "Big Org", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"BUSINESS","business_role":"Policy Holder","name" : "Big Org", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"register_account\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"support@eoxvantage.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $data = json_decode($data, true);
         $this->dispatch('/register', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -426,7 +428,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testRegisterIndividualAccount()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder","identifier_field":"padi","padi":"12345", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder","identifier_field":"padi","padi":"12345", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"register_account\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"support@eoxvantage.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $data = json_decode($data, true);
         $this->dispatch('/register', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -442,7 +444,8 @@ class AuthControllerTest extends ControllerTest
         $this->assertArrayHasKey('username', $content['data']);
         $this->performAssertions($data);
     }
-    private function performAssertions($data){
+    private function performAssertions($data)
+    {
         $sqlQuery = 'SELECT u.id, up.firstname, up.lastname, up.email, u.account_id FROM ox_user u inner join ox_person up on up.id = u.person_id order by u.id DESC LIMIT 1';
         $newQueryResult = $this->runQuery($sqlQuery);
         $accountId = $newQueryResult[0]['account_id'];
@@ -458,17 +461,17 @@ class AuthControllerTest extends ControllerTest
                     where u.id = ".$newQueryResult[0]['id']." AND role_id = ".$roleResult[0]['id'];
         $urResult = $this->runQuery($sqlQuery);
 
-        $this->assertEquals($data['data']['firstname'],$newQueryResult[0]['firstname']);
-        $this->assertEquals($data['data']['lastname'],$newQueryResult[0]['lastname']);
-        $this->assertEquals($data['data']['email'],$newQueryResult[0]['email']);
-        if($data['data']['type'] == 'INDIVIDUAL'){
+        $this->assertEquals($data['data']['firstname'], $newQueryResult[0]['firstname']);
+        $this->assertEquals($data['data']['lastname'], $newQueryResult[0]['lastname']);
+        $this->assertEquals($data['data']['email'], $newQueryResult[0]['email']);
+        if ($data['data']['type'] == 'INDIVIDUAL') {
             $this->assertEquals($data['data']['firstname']." ".$data['data']['lastname'], $acctResult[0]['name']);
-        }else{
+        } else {
             $this->assertEquals($data['data']['name'], $acctResult[0]['name']);
         }
         $this->assertEquals($data['data']['type'], $acctResult[0]['type']);
         $this->assertEquals($newQueryResult[0]['id'], $acctResult[0]['contactid']);
-        if(isset($data['data']['identifier_field'])){
+        if (isset($data['data']['identifier_field'])) {
             $sqlQuery = "SELECT * FROM ox_wf_user_identifier where identifier_name = '".$data['data']['identifier_field']."' AND identifier = '".$data['data'][$data['data']['identifier_field']]."'";
             $identifierResult = $this->runQuery($sqlQuery);
             $this->assertEquals(1, count($identifierResult));
@@ -476,11 +479,11 @@ class AuthControllerTest extends ControllerTest
             $this->assertEquals($acctResult[0]['id'], $identifierResult[0]['account_id']);
             $this->assertEquals($newQueryResult[0]['id'], $identifierResult[0]['user_id']);
         }
-        if(isset($data['data']['businessRole'])){
+        if (isset($data['data']['businessRole'])) {
             $this->assertEquals($data['data']['businessRole'], $bussRoleResult[0]['name']);
             $this->assertEquals("Admin", $roleResult[0]['name']);
             $this->assertEquals(1, count($urResult));
-        }else{
+        } else {
             $this->assertEquals(3, count($roleResult));
             $this->assertEquals(1, count($urResult));
         }
@@ -493,7 +496,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterWithoutType()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","businessRole":"Policy Holder", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","businessRole":"Policy Holder", "city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"register_account\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"support@eoxvantage.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
@@ -508,7 +511,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testRegisterWithoutBusinessRole()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"register_account\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"support@eoxvantage.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $data = json_decode($data, true);
         $this->dispatch('/register', 'POST', $data);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -527,7 +530,7 @@ class AuthControllerTest extends ControllerTest
 
     public function testRegisterWithoutCredentialsCommand()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","type":"INDIVIDUAL","business_role":"Policy Holder","city":"Bangalore","zip":"560075","commands":"[\"register_account\",\"store_cache_data\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"support@eoxvantage.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -541,7 +544,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterWithoutCacheCommand()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","type":"INDIVIDUAL","business_role":"Policy Holder","commands":"[\"create_user\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "12345", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","type":"INDIVIDUAL","business_role":"Policy Holder","commands":"[\"register_account\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"support@eoxvantage.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -582,9 +585,9 @@ class AuthControllerTest extends ControllerTest
         $this->assertArrayNotHasKey('data', $content);
     }
     
-    public function testRegisterUserExists()
+    public function testRegisterAccountUserExists()
     {
-        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "123456", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","type":"INDIVIDUAL","business_role":"Policy Holder","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatg@myvamla.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
+        $data = '{"data":{"app_id":"debf3d35-a0ee-49d3-a8ac-8e480be9dac7", "identifier_field": "padi", "padi": "123456", "firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","type":"INDIVIDUAL","business_role":"Policy Holder","commands":"[\"register_account\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatg@myvamla.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data, true));
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);

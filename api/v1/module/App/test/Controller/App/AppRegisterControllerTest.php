@@ -81,5 +81,4 @@ class AppRegisterContollerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-
 }

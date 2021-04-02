@@ -330,10 +330,8 @@ export default class Packages {
    * Autostarts tagged packages
    */
   _autostart() {
-    let userDetails = this.core.make('oxzion/profile').get();
-    let appList = userDetails.key.blackListedApps;
-    this.metadata
-      .filter(pkg => pkg.autostart === true && !(pkg.name in appList))
+    this.getPackages()
+      .filter(pkg => pkg.autostart === true)
       .forEach((pkg) => {
         // OXZION START CHANGE
         let params = {};
@@ -411,12 +409,15 @@ export default class Packages {
     filter = filter || (() => true);
 
     const user = this.core.getUser();
-    const metadata = this.metadata.map(m => ({...m}));
     const details = this.core.make("oxzion/profile").get();
+    let metadata = this.core.make("oxzion/profile").getMetadata();
+    if (!metadata) {
+      metadata = this.metadata;
+    }
 
     const filterBlacklist = iter => details.key.blackListedApps instanceof Object
-      ? !details.key.blackListedApps[iter.name]
-      : true;
+    ? !details.key.blackListedApps[iter.name]
+    : true;
 
     return metadata
       .filter(filterBlacklist)

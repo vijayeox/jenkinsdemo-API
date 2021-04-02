@@ -85,7 +85,7 @@ class DispatchPolicyTest extends DelegateTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/Dataset/File.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/Dataset/FileData.yml");
         return $dataset;
     }
 
@@ -395,6 +395,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $data['padi'] = '124';
         $data['amount'] = 200;
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','blanket_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
@@ -403,8 +404,9 @@ class DispatchPolicyTest extends DelegateTest
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'DispatchExpiredNotification', $data);
         $this->assertEquals($content, array());
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content, array());
     }
-
 
     public function testDispatchQuoteDocument()
     {
@@ -419,8 +421,12 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgId'] = '53012471-2863-4949-afb1-e69b0891c98a';
         $data['activityInstanceId'] = '512311-2863-4949-afb1-e69b0891c98a';
         $data['workflowInstanceId'] = '212311-2863-4949-afb1-e69b0891c98a';
+        $data['business_padi'] = "DIVE";
+        $data['approverName'] = "CSR";
+        $data['approverDesignation'] = "CSR";
+        $data['approverEmailId'] = "CSR@gmail.com";
         $data['vessel_name'] = 'HUB';
-        $data['fileId'] = 'd1968945-9191-4a66-a86d-ee73e703234';
+        $data['fileId'] = 'd1968945-9191-4a66-a86d-ee73e703e1b5';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
@@ -443,8 +449,12 @@ class DispatchPolicyTest extends DelegateTest
         $data['workflowInstanceId'] = '212311-2863-4949-afb1-e69b0891c98a';
         $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf', 'coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
+        $data['business_padi'] = "DIVE";
+        $data['approverName'] = "CSR";
+        $data['approverDesignation'] = "CSR";
+        $data['approverEmailId'] = "CSR@gmail.com";
         $data['orgId'] = '53012471-2863-4949-afb1-e69b0891c98a';
-        $data['fileId'] = 'd1968945-9191-4a66-a86d-ee73e703234';
+        $data['fileId'] = 'd1968945-9191-4a66-a86d-ee73e703e1b5';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();

@@ -3,11 +3,12 @@ namespace Resource;
 
 use Oxzion\Test\ControllerTest;
 use Oxzion\Utils\FileUtils;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use PHPUnit\DbUnit\DataSet\ArrayDataSet;
 use Resource\Controller\ResourceController;
 
 class ResourceControllerTest extends ControllerTest
 {
+    protected $table;
     public function setUp(): void
     {
         $this->loadConfig();
@@ -16,7 +17,17 @@ class ResourceControllerTest extends ControllerTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Attachment.yml");
+        $config = $this->getApplicationConfig();
+        $dataset = new ArrayDataSet(array('ox_attachment'=>array(array(
+            'id' => 1,
+            'uuid' => 'test',
+            'path' => $config['UPLOAD_FOLDER'] .'account/1/announcements/oxzionlogo.png',
+            'extension' => 'png',
+            'file_name' => 'oxzionlogo.png',
+            'type' => 'ANNOUNCEMENT',
+            'created_id' => 1,
+            'account_id' => 1
+        ))));
         return $dataset;
     }
 

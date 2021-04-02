@@ -15,7 +15,6 @@ use Zend\Db\Sql\Expression;
 
 class TargetService extends AbstractService
 {
-
     private $table;
     private $queryService;
     public function __construct($config, $dbAdapter, TargetTable $table, QueryService $queryService, WidgetService $widgetService)
@@ -175,9 +174,9 @@ class TargetService extends AbstractService
         // if ($type == 0) {
         if ($value < $red) {
             $result = "red";
-        } else if ($value >= $red && $value < $yellow) {
+        } elseif ($value >= $red && $value < $yellow) {
             $result = "yellow";
-        } else if ($value >= $yellow && $value < $green) {
+        } elseif ($value >= $yellow && $value < $green) {
             $result = "green";
         } else {
             $result = "black";

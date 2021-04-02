@@ -1,12 +1,3 @@
-// import "../../public/css/formstyles.scss";
-import Notification from "../../Notification";
-import {
-    getComponent,
-    flattenComponents,
-    eachComponent,
-} from "formiojs/utils/formUtils";
-import React from "react";
-import merge from "deepmerge";
 import $ from "jquery";
 
 import BaseFormRenderer from './BaseFormRenderer'
@@ -14,7 +5,7 @@ class FormRender extends BaseFormRenderer {
   constructor(props) {
     super(props);
     this.core = this.props.core;
-    var userprofile = this.core.make("oxzion/profile").get();
+    var userprofile = this.props.userprofile?this.props.userprofile: this.core.make("oxzion/profile").get();
     this.privileges = userprofile.key.privileges;
     this.userprofile = userprofile.key;
     this.loader = this.core.make("oxzion/splash");
@@ -410,11 +401,6 @@ class FormRender extends BaseFormRenderer {
     }).catch(e => {
       this.handleError(e);
     });
-  }
-
-
-  render() {
-    return super.render();
   }
 }
 export default FormRender;

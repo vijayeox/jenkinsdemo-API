@@ -74,16 +74,16 @@ return [
                     ],
                 ],
             ],
-            'getListofAccountGroups' => [
+            'getListofAccountTeams' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/account/:accountId/groups',
+                    'route' => '/account/:accountId/teams',
                     'defaults' => [
                         'controller' => Controller\AccountController::class,
                         'method' => 'GET',
-                        'action' => 'getListofAccountGroups',
+                        'action' => 'getListofAccountTeams',
                         'access' => [
-                            'getListofAccountGroups' => ['MANAGE_GROUP_READ'],
+                            'getListofAccountTeams' => ['MANAGE_TEAM_READ'],
                         ],
                     ],
                 ],
@@ -126,6 +126,20 @@ return [
                         'action' => 'getListofAccountRoles',
                         'access' => [
                             'getListofAccountRoles' => ['MANAGE_ROLE_READ'],
+                        ],
+                    ],
+                ],
+            ],
+            'getOwner' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/account/subordinate[/:managerId]',
+                    'defaults' => [
+                        'controller' => Controller\AccountController::class,
+                        'method' => 'GET',
+                        'action' => 'getSubordinates',
+                        'access' => [
+                            'getSubordinates' => ['MANAGE_ACCOUNT_READ'],
                         ],
                     ],
                 ],

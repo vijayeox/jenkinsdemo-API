@@ -26,6 +26,9 @@ class AnalyticsUtils
                         case "userid":
                             $value = AuthContext::get(AuthConstants::USER_ID);
                             break;
+                        case "useruuid":
+                            $value = AuthContext::get(AuthConstants::USER_UUID);
+                            break;
                     }
                 }
             }

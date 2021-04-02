@@ -73,30 +73,30 @@ class TaskService extends AbstractService
         return 0;
     }
 
-    public function addGroupToTask($groupname)
+    public function addTeamToTask($teamname)
     {
         try {
-            $response = $this->restClient->post('groups', array('name' => $groupname));
+            $response = $this->restClient->post('teams', array('name' => $teamname));
             return json_decode($response, true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->info(TaskService::class . "Failed to create new entity" . $e);
         }
     }
 
-    public function updateGroupInTask($groupname, $new_groupname)
+    public function updateTeamInTask($teamname, $new_teamname)
     {
         try {
-            $response = $this->restClient->put('groups', array('name' => $groupname, 'newname' => $new_groupname));
+            $response = $this->restClient->put('teams', array('name' => $teamname, 'newname' => $new_teamname));
             return json_decode($response, true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->info(TaskService::class . "Failed to create new entity" . $e);
         }
     }
 
-    public function deleteGroupFromTask($groupname)
+    public function deleteTeamFromTask($teamname)
     {
         try {
-            $response = $this->restClient->delete('groups', array('name' => $groupname));
+            $response = $this->restClient->delete('teams', array('name' => $teamname));
             return json_decode($response, true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->info(TaskService::class . "Failed to create new entity" . $e);
@@ -114,14 +114,13 @@ class TaskService extends AbstractService
         }
     }
 
-    public function addUsersToGroup($groupname, $usernames)
+    public function addUsersToTeam($teamname, $usernames)
     {
         try {
-            $response = $this->restClient->put('group_members', array('name' => $groupname, 'usernames' => $usernames));
+            $response = $this->restClient->put('team_members', array('name' => $teamname, 'usernames' => $usernames));
             return json_decode($response, true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->info(TaskService::class . "Failed to create new entity" . $e);
         }
     }
-
 }

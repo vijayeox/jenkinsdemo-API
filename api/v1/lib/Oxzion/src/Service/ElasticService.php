@@ -3,14 +3,9 @@ namespace Oxzion\Service;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Logger;
-use Oxzion\Analytics\AnalyticsAbstract;
-use Oxzion\Utils;
-use Oxzion\Utils\AnalyticsUtils;
-
 use function GuzzleHttp\json_encode;
+use Logger;
+use Oxzion\Utils\AnalyticsUtils;
 
 ini_set("memory_limit", -1);
 
@@ -34,42 +29,47 @@ class ElasticService
         $this->logger = Logger::getLogger(get_class($this));
     }
 
-    public function setConfig($config){
+    public function setConfig($config)
+    {
         $this->config = $config;
         $clientsettings = array();
         $clientsettings['host'] = $config['elasticsearch']['serveraddress'];
         $clientsettings['user'] = $config['elasticsearch']['user'];
         $clientsettings['pass'] = $config['elasticsearch']['password'];
-    //    $clientsettings['type'] = $config['elasticsearch']['type'];
+        //    $clientsettings['type'] = $config['elasticsearch']['type'];
         $clientsettings['port'] = $config['elasticsearch']['port'];
         $clientsettings['scheme'] = $config['elasticsearch']['scheme'];
         $this->core = $config['elasticsearch']['core'];
-        $this->logger->info("core to be used - ".$this->core);
+        $this->logger->info("core to be used - " . $this->core);
         $this->type = $config['elasticsearch']['type'];
-        $clientbuilder = ClientBuilder::create(); 
-        if(!$this->client || !isset($_ENV['ENV']) || $_ENV['ENV'] != 'test'){
+        $clientbuilder = ClientBuilder::create();
+        if (!$this->client || !isset($_ENV['ENV']) || $_ENV['ENV'] != 'test') {
             $this->client = $clientbuilder->setHosts(array($clientsettings))->build();
         }
     }
-    public function setElasticClient($client){
+    public function setElasticClient($client)
+    {
         $this->client = $client;
     }
 
-    public function getElasticClient(){
+    public function getElasticClient()
+    {
         return $this->client;
     }
 
-    public function getElasticQuery() {
+    public function getElasticQuery()
+    {
         return $this->elasticQuery;
     }
 
-    public function setNoCore() {
+    public function setNoCore()
+    {
         $this->core = null;
     }
 
-    public function create($indexName,$fieldList,$settings) {
-
-        $typemapper = ['int'=>'integer','text'=>'text'];
+    public function create($indexName, $fieldList, $settings)
+    {
+        $typemapper = ['int' => 'integer', 'text' => 'text'];
 
         if (isset($settings['shrads'])) {
             $shrads = $settings['shrads'];
@@ -82,26 +82,25 @@ class ElasticService
             $replicas = 1;
         }
 
-
-       foreach ($fieldList as $field) {
-           $type =  (isset($typemapper[$field['type']])) ? $typemapper[$field['type']]:$field['type'];
-           $fieldProperties[$field['name']]=['type'=>$type];
-       }
-       $client = ClientBuilder::create()->build();
-       $params = [
+        foreach ($fieldList as $field) {
+            $type = (isset($typemapper[$field['type']])) ? $typemapper[$field['type']] : $field['type'];
+            $fieldProperties[$field['name']] = ['type' => $type];
+        }
+        $client = ClientBuilder::create()->build();
+        $params = [
             'index' => $indexName,
             'body' => [
                 'settings' => [
                     'number_of_shards' => $shrads,
-                    'number_of_replicas' => $replicas
+                    'number_of_replicas' => $replicas,
                 ],
                 'mappings' => [
                     '_source' => [
-                        'enabled' => true
+                        'enabled' => true,
                     ],
-                    'properties' => $fieldProperties
-                ]
-            ]
+                    'properties' => $fieldProperties,
+                ],
+            ],
         ];
 
         // Create the index with mappings and settings now
@@ -126,9 +125,8 @@ class ElasticService
         $result_obj = $result['data'];
         if (isset($body['aggs']) && isset($result_obj['aggregations']['groupdata']['buckets'])) {
             $results = array('data' => $result_obj['aggregations']['groupdata']['buckets']);
-        } else if (isset($result_obj['aggregations'])) {
+        } elseif (isset($result_obj['aggregations'])) {
             $results = array('data' => $result_obj['aggregations']['value']['value']);
-
         } else {
             $results = array('data' => $result_obj['hits']['total']);
         }
@@ -157,35 +155,35 @@ class ElasticService
     {
         $boolfilter = array();
         $tmpfilter = $this->getFilters($searchconfig, $accountId);
-        
-		if ($tmpfilter) {
-			$boolfilterquery['query']['bool'] = $tmpfilter;
-		}	
-		$boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
-		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
-		if(!empty($searchconfig['aggregates'])) {
-			if (!isset($searchconfig['select'])) {
-				$pagesize=0;
-			}
-			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery);	
-			if($searchconfig['group'] && !empty($searchconfig['group'])) {
-				$this->getGroups($searchconfig,$boolfilterquery,$aggs);
-			} else {
-				if($aggs){
-					$pagesize=0;
-					$boolfilterquery['aggs']=$aggs;
-				} 
-			}
-		} 
-        
-        $boolfilterquery['explain'] = true;
-        if (!empty($searchconfig['append_account_id'])) {
-            if ($searchconfig['append_account_id']==1) {
-                $app_name = $app_name.'_'.$accountId;
+
+        if ($tmpfilter) {
+            $boolfilterquery['query']['bool'] = $tmpfilter;
+        }
+        $boolfilterquery['_source'] = (isset($searchconfig['select'])) ? $searchconfig['select'] : array('*');
+        $pagesize = isset($searchconfig['pagesize']) ? $searchconfig['pagesize'] : 10000; //500000 is the limit
+        if (!empty($searchconfig['aggregates'])) {
+            if (!isset($searchconfig['select'])) {
+                $pagesize = 0;
+            }
+            $aggs = $this->getAggregate($searchconfig['aggregates'], $boolfilterquery);
+            if ($searchconfig['group'] && !empty($searchconfig['group'])) {
+                $this->getGroups($searchconfig, $boolfilterquery, $aggs);
+            } else {
+                if ($aggs) {
+                    $pagesize = 0;
+                    $boolfilterquery['aggs'] = $aggs;
+                }
             }
         }
-        $params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
-        if(empty($searchconfig['aggregates'])) {
+
+        $boolfilterquery['explain'] = true;
+        if (!empty($searchconfig['append_account_id'])) {
+            if ($searchconfig['append_account_id'] == 1) {
+                $app_name = $app_name . '_' . $accountId;
+            }
+        }
+        $params = array('index' => $app_name . '_index', 'body' => $boolfilterquery, "_source" => $boolfilterquery['_source'], 'from' => (!empty($searchconfig['start'])) ? $searchconfig['start'] : 0, "size" => $pagesize);
+        if (empty($searchconfig['aggregates'])) {
             if (isset($searchconfig['sort'])) {
                 if (is_array($searchconfig['sort'])) {
                     $params['body']['sort'] = $searchconfig['sort'];
@@ -195,33 +193,35 @@ class ElasticService
 
         $result_obj = $this->search($params);
         if ($searchconfig['group'] && !isset($searchconfig['select'])) {
-			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
-			$results['type']='group';
-		} else if (isset($result_obj['data']['aggregations'])){
-			$results = array('data'=>$result_obj['data']['aggregations']['value']['value']);
-			$results['type']='value';
-		}  else {
-			$results = array();
-			foreach($result_obj['data']['hits']['hits'] as $key=>$value){
-				$results['data'][$key] = $value['_source'];
-			//	$results['data'][$key]['id'] = $value['_source']['_id'];
-			}
-			$results['type']='list';
+            $results = array('data' => $result_obj['data']['aggregations']['groupdata']['buckets']);
+            $results['type'] = 'group';
+        } elseif (isset($result_obj['data']['aggregations'])) {
+            $results = array('data' => $result_obj['data']['aggregations']['value']['value']);
+            $results['type'] = 'value';
+        } else {
+            $results = array();
+            $results['total_count']=$result_obj['data']['hits']['total']['value'];
+            foreach ($result_obj['data']['hits']['hits'] as $key => $value) {
+                $results['data'][$key] = $value['_source'];
+                //    $results['data'][$key]['id'] = $value['_source']['_id'];
+            }
+            
+            $results['type'] = 'list';
         }
-        $results['query']=$result_obj['query'];
-		return $results;
+        $results['query'] = $result_obj['query'];
+        return $results;
     }
-    
+
 //    {"OR",{"==",["department","DEP1"},{"==",["department","DEP2"}}
-//    {"==", ["department", "DEP1" ]},
-//    {">=", ["sale_date", "2019-10-01"]},
- //   {"<=", ["sale_date", "2019-10-31"]},
+    //    {"==", ["department", "DEP1" ]},
+    //    {">=", ["sale_date", "2019-10-01"]},
+    //   {"<=", ["sale_date", "2019-10-31"]},
 
-
-    protected function createFilter($filter,$type='') {
+    protected function createFilter($filter, $type = '')
+    {
         $subQuery = null;
-        $symMapping = ['>'=>'gt','>='=>'gte','<'=>'lt','<='=>'lte'];
-        $boolMapping = ['OR'=>'should','AND'=>'must'];
+        $symMapping = ['>' => 'gt', '>=' => 'gte', '<' => 'lt', '<=' => 'lte','gt'=>'gt','lt'=>'lt'];
+        $boolMapping = ['OR' => 'should', 'AND' => 'must'];
         if (!isset($filter[1]) && is_array($filter)) {
             $filter = $filter[0];
         }
@@ -236,56 +236,57 @@ class ElasticService
         if (isset($filter[3])) {
             $type = $filter[3];
         }
-        if (strtoupper($condition)=='OR' OR strtoupper($condition)=='AND') {
-                 $tempQuery1 = $this->createFilter($column,$type);
-                 $tempQuery2 = $this->createFilter($value,$type);
-                 if ($tempQuery1) {
-                    $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery1;
-                 }
-                 if ($tempQuery2) {
-                    $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery2;
-                 }
-                 
+        if (strtoupper($condition) == 'OR' or strtoupper($condition) == 'AND') {
+            $tempQuery1 = $this->createFilter($column, $type);
+            $tempQuery2 = $this->createFilter($value, $type);
+            if ($tempQuery1) {
+                $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery1;
+            }
+            if ($tempQuery2) {
+                $subQuery['bool'][$boolMapping[$condition]][] = $tempQuery2;
+            }
         } else {
-            if (!in_array($column,$this->filterFields) && !($type=='inline' && in_array($column,$this->excludes))) {
+            if (!in_array($column, $this->filterFields) && !($type == 'inline' && in_array($column, $this->excludes))) {
                 $value = AnalyticsUtils::checkSessionValue($value);
-                if ($condition=="=="){                
+                if ($condition == "==" || $condition == "eq") {
                     if (!is_array($value)) {
-                        if (strtolower(substr($value,0,5))=="date:") {
-                            $value = date("Y-m-d",strtotime(substr($value,5)));
-                            $subQuery['range'] = array($column => array('gte' => $value,'lte'=>$value,"format" => "yyyy-MM-dd"));
+                        if (strtolower(substr($value, 0, 5)) == "date:") {
+                            $value = date("Y-m-d", strtotime(substr($value, 5)));
+                            $subQuery['range'] = array($column => array('gte' => $value, 'lte' => $value, "format" => "yyyy-MM-dd"));
                         } elseif (!is_numeric($value)) {
-                                $subQuery['match'] = array($column.".keyword" => array('query' => $value, 'operator' => 'and'));
+                            $subQuery['match'] = array($column . ".keyword" => array('query' => $value, 'operator' => 'and'));
                         } else {
-                                $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                            $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
                         }
                     } else {
                         $subQuery['terms'] = array($column => array_values($value));
-                    }    
-                } elseif ($condition=="<>" || $condition=="!=") {
-                        $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
-                } elseif ($condition=="NOT LIKE" || $condition=="not like") {
-                        $subQuery['bool']['must_not'][] =  ["match_phrase"=>[ $column=>$value ]];
-                }  else {
-                        if (strtolower(substr($value,0,5))=="date:") {
-                            $value = date("Y-m-d",strtotime(substr($value,5)));
-                            $subQuery['range'] = array($column => array($symMapping[$condition] => $value,"format" => "yyyy-MM-dd"));
-                        } else {
-                            $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
-                        }
-                        
+                    }
+                } elseif ($condition == "<>" || $condition == "!=" || $condition == "ne") {
+                    $subQuery['bool']['must_not'][] = ["term" => [$column => $value]];
+                } elseif ($condition == "NOT LIKE" || $condition == "not like") {
+                    $subQuery['bool']['must_not'][] = ["match_phrase" => [$column => $value]];
+                } elseif (strtoupper($condition == "STARTSWITH")) {
+                    $subQuery["match_phrase_prefix"] = [$column => $value];
+                } elseif (strtoupper($condition == "LIKE")) {
+                    $subQuery["wildcard"] = [$column => "*".$value."*"];
+                } else {
+                    if (strtolower(substr($value, 0, 5)) == "date:") {
+                        $value = date("Y-m-d", strtotime(substr($value, 5)));
+                        $subQuery['range'] = array($column => array($symMapping[$condition] => $value, "format" => "yyyy-MM-dd"));
+                    } else {
+                        $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
+                    }
                 }
                 $this->filterTmpFields[] = $column;
             }
-         }
+        }
         return $subQuery;
     }
 
     protected function getGroups($searchconfig, &$boolfilterquery, $aggs)
     {
-
         $grouparray = null;
-        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 1000; //Note this size is only for the terms
+        $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 10000; //65535 is the limit Note this size is only for the terms
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
             $grouptext = $searchconfig['group'][$i];
             if (substr($grouptext, 0, 7) == "period-") {
@@ -299,12 +300,12 @@ class ElasticService
                 }
                 $grouparraytmp = array('date_histogram' => array('field' => $searchconfig['frequency'], 'interval' => $interval, 'format' => $format));
             } else {
-                if ($size!=0) {
+                if ($size != 0) {
                     $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword', 'size' => $size));
                 } else {
                     $grouparraytmp = array('terms' => array('field' => $grouptext . '.keyword'));
                 }
-                
+
                 $boolfilterquery['_source'][] = $grouptext;
             }
 
@@ -317,17 +318,17 @@ class ElasticService
                             $grouparraytmp['terms']['order'] = array("value" => $searchconfig['sort']);
                         } else {
                             $grouparraytmp['terms']['order'] = array("_count" => $searchconfig['sort']);
-                        }    
+                        }
                     } else {
                         $searchkey = key($searchconfig['sort']);
                         $searchdir = $searchconfig['sort'][key($searchconfig['sort'])];
                         if ($searchkey == 'count' || $searchkey == 'term') {
-                            $searchkey = '_'.$searchkey;
+                            $searchkey = '_' . $searchkey;
                         }
-                        if ($searchkey!='_count' && $searchkey!='_term' && $searchkey!='value') {
+                        if ($searchkey != '_count' && $searchkey != '_term' && $searchkey != 'value') {
                             $searchkey = '_term';
                         }
-                        $grouparraytmp['terms']['order'] = [$searchkey=>$searchdir];
+                        $grouparraytmp['terms']['order'] = [$searchkey => $searchdir];
                     }
                 }
                 if ($aggs) {
@@ -361,17 +362,17 @@ class ElasticService
         $aggs = null;
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
-        } else if (key($aggregates) == "count") { $aggs = array('value' => array('value_count' => array('field' => '_id')));}
-        else {
+        } elseif (key($aggregates) == "count") {
+            $aggs = array('value' => array('value_count' => array('field' => '_id')));
+        } else {
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
         }
         return $aggs;
     }
 
-
-
     protected function getFilters($searchconfig, $accountId)
     {
+        $mustquery = null;
         $mustquery['must'][] = ['term' => ['account_id' => $accountId]];
         if (!empty($searchconfig['aggregates'])) {
             $aggregates = $searchconfig['aggregates'];
@@ -380,13 +381,13 @@ class ElasticService
         $this->filterFields = array();
         if (!empty($searchconfig['filter'])) {
             foreach ($searchconfig['filter'] as $filter) {
-           //     echo 'filter:';print_r($filter); echo '--';
+                //     echo 'filter:';print_r($filter); echo '--';
                 $this->filterTmpFields = array();
                 $filterArry = $this->createFilter($filter);
                 if ($filterArry) {
                     $mustquery['must'][] = $filterArry;
                 }
-                $this->filterFields=array_merge($this->filterFields,$this->filterTmpFields);
+                $this->filterFields = array_merge($this->filterFields, $this->filterTmpFields);
             }
         }
         // if ($searchconfig['range']) {
@@ -396,7 +397,6 @@ class ElasticService
 
         // }
         return $mustquery;
-
     }
 
     protected function getFiltersByEntity($entity)
@@ -436,9 +436,10 @@ class ElasticService
 
     public function search($q)
     {
-        if  ($this->core) {
-            $q['index'] = $this->core.'_'.$q['index'];
+        if ($this->core) {
+            $q['index'] = $this->core . '_' . $q['index'];
         }
+        $q['track_total_hits']=true;
         $this->logger->debug('Elastic query:');
         $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
         $this->elasticQuery = json_encode($q);
@@ -449,16 +450,17 @@ class ElasticService
         return $data;
     }
 
-    public function bulk($body) {
+    public function bulk($body)
+    {
         $responses = $this->client->bulk($body);
     }
 
     public function index($index, $id, $body)
     {
-        if (substr($index,-6)!="_index") {
-            $index = $index."_index";
+        if (substr($index, -6) != "_index") {
+            $index = $index . "_index";
         }
-        $index = ($this->core) ? $this->core.'_'.$index:$index;
+        $index = ($this->core) ? $this->core . '_' . $index : $index;
         $params['index'] = $index;
         $params['id'] = $id;
         $params['body'] = $body;
@@ -467,50 +469,52 @@ class ElasticService
 
     public function delete($index, $id)
     {
-        if (substr($index,-6)!="_index") {
-            $index = $index."_index";
+        if (substr($index, -6) != "_index") {
+            $index = $index . "_index";
         }
-        $index = ($this->core) ? $this->core.'_'.$index:$index;
+        $index = ($this->core) ? $this->core . '_' . $index : $index;
         if ($id == 'all') {
             return $this->client->indices()->delete(['index' => $index]);
         } else {
             return $this->client->delete(['index' => $index, 'type' => $this->type, 'id' => $id]);
         }
-	}
-	
-	public function getBoostFields($entity){
-		switch ($entity) {
-			case 'files':
-				return array('id^6','name^4','desc_raw^0.1','assignedto^2','createdby^2');
-				break;
-			case 'formcomments':
-				return array('id^6','comment^4','title^4');
-				break;
-			case 'messages':
-				return array('id^6','subject^4','message^2');
-				break;
-			case 'ole':
-				return array('id^4','ole^6','group^3');
-				break;
-			case 'user':
-				return array('id^6','firstname^2','lastname^2','name^4','about^0.1', 'email^1', 'country^1', 'designation^1', 'company_name^1', 'address_1^1', 'address_2^1');
-				break;
-			case 'attachments':
-				return array('id^6','attachment.content^4','filename^2');
-				break;
-			default:
-				return ;
-				break;
-		}
     }
 
-    public function getMappings($index) {
+    public function getBoostFields($entity)
+    {
+        switch ($entity) {
+            case 'files':
+                return array('id^6', 'name^4', 'desc_raw^0.1', 'assignedto^2', 'createdby^2');
+                break;
+            case 'formcomments':
+                return array('id^6', 'comment^4', 'title^4');
+                break;
+            case 'messages':
+                return array('id^6', 'subject^4', 'message^2');
+                break;
+            case 'ole':
+                return array('id^4', 'ole^6', 'group^3');
+                break;
+            case 'user':
+                return array('id^6', 'firstname^2', 'lastname^2', 'name^4', 'about^0.1', 'email^1', 'country^1', 'designation^1', 'company_name^1', 'address_1^1', 'address_2^1');
+                break;
+            case 'attachments':
+                return array('id^6', 'attachment.content^4', 'filename^2');
+                break;
+            default:
+                return;
+                break;
+        }
+    }
+
+    public function getMappings($index)
+    {
         $params = ['index' => $index];
         return $this->client->indices()->getMapping($params);
     }
-    
-    public function getIndexes() {
-        return  $this->client->cat()->indices(["index"=>"*_index"]);
-    }
 
+    public function getIndexes()
+    {
+        return $this->client->cat()->indices(["index" => "*_index"]);
+    }
 }

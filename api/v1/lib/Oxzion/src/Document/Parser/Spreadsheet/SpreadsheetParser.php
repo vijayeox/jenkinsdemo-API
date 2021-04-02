@@ -8,5 +8,4 @@ interface SpreadsheetParser extends DocumentParser
     public function getSheetNames();
     public function getSheetCount();
     public function getWorksheetInfo($sheetName);
-
 }

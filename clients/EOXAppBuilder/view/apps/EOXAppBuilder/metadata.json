@@ -10,7 +10,7 @@
     "defaultAppforOrgs": true,
     "hidden": true,
     "server": "server.js",
-    "formio_endpoint": "https:\/\/onboarding-qeimxlbzmdfpljg.form.io",
+    "formio_endpoint": "https:\/\/onboarding-eoxvantage.form.io",
     "title": {
         "en_EN": "AppBuilder"
     },

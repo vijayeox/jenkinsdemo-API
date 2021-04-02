@@ -6,7 +6,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Transaction\TransactionManager;
 use Logger;
 
-abstract class AbstractBaseService 
+abstract class AbstractBaseService
 {
     protected $sql;
     protected $dbAdapter;
@@ -19,10 +19,11 @@ abstract class AbstractBaseService
         
         $this->logger = Logger::getLogger(get_class($this));
         $this->config = $config;
-    }  
+    }
 
     //this method is used only for phpunit tests. Not required to be called otherwise
-    public function setAdapter($adapter){
+    public function setAdapter($adapter)
+    {
         $this->dbAdapter = $adapter;
         if ($adapter) {
             $this->sql = new Sql($this->dbAdapter);
@@ -56,7 +57,4 @@ abstract class AbstractBaseService
     {
         return $this->dbAdapter;
     }
-
 }
-
-?>

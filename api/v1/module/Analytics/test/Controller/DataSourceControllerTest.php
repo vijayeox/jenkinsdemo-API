@@ -11,10 +11,8 @@ use PHPUnit\Framework\TestResult;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-
 class DataSourceControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
@@ -39,7 +37,7 @@ class DataSourceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => "Orocrm", 'type' => 'MySql', 'configuration' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -50,14 +48,14 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['type'], $data['type']);
         $this->assertEquals($content['data']['configuration'], $data['configuration']);
-        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_datasource'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_datasource'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['type' => 'MySql', 'configuration' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
         $this->assertResponseStatusCode(406);
@@ -146,7 +144,8 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Entity not found.');
     }
 
-    public function testGet() {
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a', 'GET');
         $this->assertResponseStatusCode(200);
@@ -157,7 +156,8 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'mattermost');
     }
 
-    public function testGetNotFound() {
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/datasource/100', 'GET');
         $this->assertResponseStatusCode(404);
@@ -173,12 +173,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals(count($content['data']), 4);
         $this->assertEquals($content['data'][1]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
         $this->assertEquals($content['data'][1]['name'], 'mattermost');
         $this->assertEquals($content['data'][2]['type'], 'Elastic');
         $this->assertEquals($content['data'][2]['name'], 'reporting engine');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testGetListWithDeleted()
@@ -189,13 +189,13 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals(count($content['data']), 4);
         $this->assertEquals($content['data'][1]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
         $this->assertEquals($content['data'][1]['name'], 'mattermost');
         $this->assertEquals($content['data'][1]['isdeleted'], 0);
         $this->assertEquals($content['data'][2]['type'], 'Elastic');
         $this->assertEquals($content['data'][2]['name'], 'reporting engine');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testGetListWithSort()
@@ -206,12 +206,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 3);
-        $this->assertEquals($content['data'][0]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
-        $this->assertEquals($content['data'][0]['name'], 'reporting engine');
-        $this->assertEquals($content['data'][1]['type'], 'MySql');
-        $this->assertEquals($content['data'][1]['name'], 'mattermost');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals(count($content['data']), 4);
+        $this->assertEquals($content['data'][0]['uuid'], 'aa1bebce-df33-4266-bbd6-d8da5571b10a');
+        $this->assertEquals($content['data'][0]['name'], 'api engine');
+        $this->assertEquals($content['data'][1]['type'], 'Elastic');
+        $this->assertEquals($content['data'][1]['name'], 'reporting engine');
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testGetListSortWithPageSize()
@@ -222,11 +222,11 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals(count($content['data']), 3);
         $this->assertEquals($content['data'][1]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
         $this->assertEquals($content['data'][1]['name'], 'reporting engine');
         $this->assertEquals($content['data'][1]['type'], 'Elastic');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testGetListwithQueryParameters()
@@ -240,6 +240,6 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
         $this->assertEquals($content['data'][0]['name'], 'mattermost');
-        $this->assertEquals($content['total'],1);
+        $this->assertEquals($content['total'], 1);
     }
 }

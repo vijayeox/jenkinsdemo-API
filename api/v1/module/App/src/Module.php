@@ -4,7 +4,7 @@ namespace App;
 
 use App\Service\MenuItemService;
 use App\Service\PageService;
-use Group\Service\GroupService;
+use Team\Service\TeamService;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\FieldTable;
 use Oxzion\Model\FileTable;
@@ -51,7 +51,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\MenuItemService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\MenuItemService($container->get('config'), $container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
+                    return new Service\MenuItemService($container->get('config'), $container->get(TeamService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
                 },
                 Model\MenuItemTable::class => function ($container) {
                     $tableGateway = $container->get(Model\MenuItemTableGateway::class);
@@ -79,8 +79,11 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageContentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageContentService($container->get('config'),
-                        $dbAdapter, $container->get(Model\PageContentTable::class));
+                    return new Service\PageContentService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\PageContentTable::class)
+                    );
                 },
                 Model\PageContentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageContentTableGateway::class);
@@ -94,8 +97,8 @@ class Module implements ConfigProviderInterface
                 },
                 Service\AppArtifactService::class => function ($container) {
                     return new Service\AppArtifactService(
-                        $container->get('config'), 
-                        $container->get(AdapterInterface::class), 
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
                         $container->get(\Oxzion\Model\AppTable::class),
                         $container->get(\Oxzion\Service\AppService::class)
                     );

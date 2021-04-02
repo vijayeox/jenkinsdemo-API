@@ -13,14 +13,13 @@ use Zend\Db\ResultSet\ResultSet;
 use Oxzion\EntityNotFoundException;
 use Oxzion\Model\Esign\EsignDocument;
 use Oxzion\Model\Esign\EsignDocumentSigner;
-use Oxzion\ValidationException; 
+use Oxzion\ValidationException;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\ServiceException;
 
 class EsignServiceTest extends AbstractServiceTest
 {
-
     private $adapter = null;
     private $esignService;
 
@@ -28,17 +27,18 @@ class EsignServiceTest extends AbstractServiceTest
     {
         $this->loadConfig();
         parent::setUp();
-        $this->esignService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\EsignService::class); 
+        $this->esignService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\EsignService::class);
         $this->adapter = $this->getDbAdapter();
         $this->adapter->getDriver()->getConnection()->setResource(static::$pdo);
         $this->config = $this->getApplicationConfig();
-        $this->folderToClean = NULL;
+        $this->folderToClean = null;
         $this->authToken = "eyJraWQiOiJDQ08wNUYzQnp6NE03Mjh2eGxVYVVoWk9GdWsycFJ0dFVcL3Y0dVwvS29tdHc9IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiI2bDNscGdzYnJoYTEzdThyZGc5dDVocTNhdSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiaHR0cHM6XC9cL2xhYi1hcGkuaW5zdXJlc2lnbi5pb1wvZG9jdW1lbnRzLnByZXBhcmUgaHR0cHM6XC9cL2xhYi1hcGkuaW5zdXJlc2lnbi5pb1wvZG9jdW1lbnRzLnNlbmQiLCJhdXRoX3RpbWUiOjE2MDkwNzE2MjQsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX01ZRVJPSFRUQyIsImV4cCI6MTYwOTA3NTIyNCwiaWF0IjoxNjA5MDcxNjI0LCJ2ZXJzaW9uIjoyLCJqdGkiOiIyYmRjOWFjYi03MzY4LTQ0Y2UtYjE0ZS1iOWVhN2EyNmQ3YmMiLCJjbGllbnRfaWQiOiI2bDNscGdzYnJoYTEzdThyZGc5dDVocTNhdSJ9.IOj_01z-erKoOuyz_Iuj_9MwpgBOWN6nK9Gi2jUfBpO7j0nN8gfl0Pb_J2UI7Prx19DwyeABY-W2v8uwE5B6Lu5HKZh9lvHsoybOvHOn4ftUIHXpAPKtkGYXrUb4s0voTJfUjOI5GFHte8kS-bj6p118hT-bztbTE7hby_V_PLvjmFNT5I8J9f11QWebMbzqCVHCaaB6JHk90iCTlECT8150YkCymr4i8Dxnj8Qhzgxg1kd8c442ZrFatjHWwnHMceC5uSg1gPA70gVEYI2Env2K2mKjOObcVW_WxpiA4-bPQnbjNd601ns_B2_9aS68rO_HsMW9xNBzaF7ST53hoQ";
     }
 
-    public function tearDown() : void {
+    public function tearDown() : void
+    {
         parent::tearDown();
-        if($this->folderToClean){
+        if ($this->folderToClean) {
             FileUtils::rmDir($this->folderToClean);
         }
     }
@@ -63,32 +63,35 @@ class EsignServiceTest extends AbstractServiceTest
         return $mockRestClient;
     }
 
-    private function getTestFile(){
+    private function getTestFile()
+    {
         $targetFolder = sys_get_temp_dir(). DIRECTORY_SEPARATOR. "EsignServiceTest";
         FileUtils::createDirectory($targetFolder);
         $file = $targetFolder.DIRECTORY_SEPARATOR."temp.txt";
         
         return $file;
     }
-    private function saveToFile(string $data){
+    private function saveToFile(string $data)
+    {
         $testFile = $this->getTestFile();
         file_put_contents($testFile, $data);
-        
-        
     }
 
-    private function readFromFile(){
+    private function readFromFile()
+    {
         $testFile = $this->getTestFile();
         $data = file_get_contents($testFile);
         return $data;
     }
-    private function mockAuthTokenCall(){
+    private function mockAuthTokenCall()
+    {
         $mockRestClient = $this->getMockRestClient();
         $this->mockAuthToken($mockRestClient);
         return $mockRestClient;
     }
 
-    private function mockAuthToken($mockRestClient){
+    private function mockAuthToken($mockRestClient)
+    {
         $clientid = $this->config['esign']['clientid'];
         $clientsecret = $this->config['esign']['clientsecret'];
         $senderemail = $this->config['esign']['email'];
@@ -100,17 +103,18 @@ class EsignServiceTest extends AbstractServiceTest
         $mockRestClient->expects('postWithHeaderAsBody')->with($this->config['esign']['url'], $post, $headers)->once()->andReturn(array("body" => '{"access_token": "'.$this->authToken.'","expires_in":3600,"token_type":"Bearer"}'));
     }
 
-    public function testgetAuthToken(){
+    public function testgetAuthToken()
+    {
         if (enableEsign == 0) {
             $mockRestClient = $this->mockAuthTokenCall();
         }
         
         $authToken = $this->esignService->getAuthToken();
-        $this->assertEquals(isset($authToken),true);
+        $this->assertEquals(isset($authToken), true);
     }
 
-    public function testSetupDocumentWithDocument(){
-
+    public function testSetupDocumentWithDocument()
+    {
         AuthContext::put(AuthConstants::USER_ID, 1);
         AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         $fileName = "mockpdf_with_field.pdf";
@@ -134,11 +138,11 @@ class EsignServiceTest extends AbstractServiceTest
             $headers = ['Authorization'=> 'Bearer '. $this->authToken];
             $putheader = array( "Authorization"=>" Bearer ". $this->authToken,
             "content-type"=>" application/json");
-             $putData = array(
+            $putData = array(
                     "callbackUrl" => $this->config['esign']['callbackUrl']
                     );
             $mockRestClient->expects('put')->with($this->config['esign']['docurl']."integrations/VANTAGE", $putData, $putheader)->once()->andReturn();
-            $returnSub = array('lastEvaluatedKey' => '', 
+            $returnSub = array('lastEvaluatedKey' => '',
                                 'data' => array(
                                     array(
                                         'id'            => '940720aa-a691-4809-b9d3-0121b2f2b502',
@@ -149,10 +153,10 @@ class EsignServiceTest extends AbstractServiceTest
                                 )
                             );
             $this->mockAuthToken($mockRestClient);
-            $mockRestClient->expects('get')->with($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions",array(), $headers)->once()->andReturn(json_encode($returnSub));
+            $mockRestClient->expects('get')->with($this->config['esign']['docurl']."integrations/VANTAGE/subscriptions", array(), $headers)->once()->andReturn(json_encode($returnSub));
             $this->mockAuthToken($mockRestClient);
             $url = $this->config['esign']['docurl']."integrations/VANTAGE/subscriptions/".$returnSub['data'][0]['id'];
-            $mockRestClient->expects('delete')->with($url,array(), $headers)->once()->andReturn();
+            $mockRestClient->expects('delete')->with($url, array(), $headers)->once()->andReturn();
             $this->mockAuthToken($mockRestClient);
             $url = $this->config['esign']['docurl']."subscriptions";
             $postData = array( "eventType" => "FINALIZED" );
@@ -162,6 +166,8 @@ class EsignServiceTest extends AbstractServiceTest
             $data = ["name" => $signers['name'],
                      "message" => $signers['message'],
                      "action" => "send",
+                     'callback[url]' => $this->config['esign']['callbackUrl'],
+                     'callback.url' => $this->config['esign']['callbackUrl'],
                      "fields[0][name]" => $signers['signers'][0]['fields'][0]['name'],
                      "fields[0][height]" => $signers['signers'][0]['fields'][0]['height'],
                      "fields[0][width]" => $signers['signers'][0]['fields'][0]['width'],
@@ -169,14 +175,14 @@ class EsignServiceTest extends AbstractServiceTest
                      "fields[0][x]" => $signers['signers'][0]['fields'][0]['x'],
                      "fields[0][y]" => $signers['signers'][0]['fields'][0]['y'],
                      "fields[0][type]" => 'SIGNATURE',
-                     "fields[0][required]" => TRUE,
+                     "fields[0][required]" => true,
                      "fields[0][assignedTo]" => json_encode(["name" => $signers['signers'][0]['participant']['name'], "email" => $signers['signers'][0]['participant']['email']]),
-                     "participants[0][name]" => $signers['signers'][0]['participant']['name'], 
+                     "participants[0][name]" => $signers['signers'][0]['participant']['name'],
                      "participants[0][email]" => $signers['signers'][0]['participant']['email']
                     ];
             $fields = $signers['signers'][0]['fields'];
             $fields['type'] = 'SIGNATURE';
-            $fields['required'] = TRUE;
+            $fields['required'] = true;
             $fields['assignedTo'] = json_encode($signers['signers'][0]['participant']);
             $returnData = ["data" => [ "id" => UuidUtil::uuid(),
                                         "name" => $data['name'],
@@ -184,7 +190,6 @@ class EsignServiceTest extends AbstractServiceTest
                                         "participants" => json_encode([$signers['signers'][0]['participant']]),
                                         "fields" => json_encode($fields),
                                         "action" => "send",
-                                        "callback" => "{}",
                                         "group" => UuidUtil::uuid(),
                                         "sender" => "0f3c3dd9-04fa-4e01-b6c2-e9c3340514c0",
                                         "created" => "2020-12-27T12:35:10.203Z"
@@ -192,8 +197,7 @@ class EsignServiceTest extends AbstractServiceTest
                             ];
             $fileData = array(FileUtils::getFileName($documentUrl) => $documentUrl );
             $this->mockAuthToken($mockRestClient);
-            $mockRestClient->expects('postMultiPart')->with($this->config['esign']['docurl']."documents", $data, $fileData, $headers)->once()->andReturn(json_encode($returnData));            
-
+            $mockRestClient->expects('postMultiPart')->with($this->config['esign']['docurl']."documents", $data, $fileData, $headers)->once()->andReturn(json_encode($returnData));
         }
         
         $refId = '20';
@@ -201,9 +205,9 @@ class EsignServiceTest extends AbstractServiceTest
         $docId = $this->esignService->setupDocument($refId, $documentUrl, $signers);
         $this->saveToFile($docId);
         if (enableEsign == 0) {
-            $this->assertEquals($returnData['data']['id'], $docId);    
+            $this->assertEquals($returnData['data']['id'], $docId);
         }
-        $this->assertEquals(isset($docId),true);
+        $this->assertEquals(isset($docId), true);
         $query = "SELECT * from ox_esign_document where doc_id = '".$docId."'";
         $result = $this->executeQueryTest($query);
         $destination = $this->config['APP_ESIGN_FOLDER'];
@@ -219,12 +223,11 @@ class EsignServiceTest extends AbstractServiceTest
         $this->assertEquals(1, count($result));
         $this->assertEquals(EsignDocumentSigner::IN_PROGRESS, $result[0]['status']);
         $this->assertEquals($signers['signers'][0]['participant']['email'], $result[0]['email']);
-        $this->assertEquals($signers['signers'][0], json_decode($result[0]['details'], true) );
-        
+        $this->assertEquals($signers['signers'][0], json_decode($result[0]['details'], true));
     }
 
-    public function testSetupDocumentWithoutDocument(){
-
+    public function testSetupDocumentWithoutDocument()
+    {
         AuthContext::put(AuthConstants::USER_ID, 1);
         AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         $signers = array(
@@ -248,8 +251,8 @@ class EsignServiceTest extends AbstractServiceTest
         $this->esignService->setupDocument($refId, $documentUrl, $signers);
     }
 
-    public function testSetupDocumentWithoutSigners(){
-
+    public function testSetupDocumentWithoutSigners()
+    {
         AuthContext::put(AuthConstants::USER_ID, 1);
         AuthContext::put(AuthConstants::ACCOUNT_ID, 1);
         $fileName = "mockpdf_with_field.pdf";
@@ -261,7 +264,8 @@ class EsignServiceTest extends AbstractServiceTest
         $this->esignService->setupDocument($refId, $documentUrl, $signers);
     }
      
-    public function testGetStatus(){
+    public function testGetStatus()
+    {
         $docId = $this->readFromFile();
         if (enableEsign == 0) {
             $mockRestClient = $this->mockAuthTokenCall();
@@ -270,11 +274,12 @@ class EsignServiceTest extends AbstractServiceTest
             $mockRestClient->expects('get')->with($this->config['esign']['docurl']."documents/$docId", [], $headers)->once()->andReturn(json_encode($returnData));
         }
         $status = $this->esignService->getDocumentStatus($docId);
-        $this->assertEquals(isset($status),true);
+        $this->assertEquals(isset($status), true);
         $this->assertEquals('READY_FOR_SIGNATURE', $status);
     }
 
-    public function testGetSigningLink(){
+    public function testGetSigningLink()
+    {
         $docId = $this->readFromFile();
         if (enableEsign == 0) {
             $mockRestClient = $this->mockAuthTokenCall();
@@ -283,13 +288,14 @@ class EsignServiceTest extends AbstractServiceTest
             $mockRestClient->expects('get')->with($this->config['esign']['docurl']."documents/$docId/signinglink", [], $headers)->once()->andReturn(json_encode($returnData));
         }
         $data = $this->esignService->getDocumentSigningLink($docId);
-        $this->assertEquals(isset($data),true);
-        if(enableEsign == 0){
+        $this->assertEquals(isset($data), true);
+        if (enableEsign == 0) {
             $this->assertEquals($returnData['signingLink'], $data);
         }
     }
 
-    public function testSignEvent(){
+    public function testSignEvent()
+    {
         $docId = $this->readFromFile();
         $query = "UPDATE ox_esign_document SET doc_id ='$docId' WHERE id=1 ";
         $result = $this->executeUpdate($query);
@@ -304,20 +310,18 @@ class EsignServiceTest extends AbstractServiceTest
             $headers = ['Authorization'=> 'Bearer '. $this->authToken];
             $returnData = ["downloadUrl"=> __DIR__."/Files/mockpdf_with_field.pdf"];
             $mockRestClient->expects('get')->with($this->config['esign']['docurl'].'documents/'.$docId.'/pdf', [], $headers)->once()->andReturn(json_encode($returnData));
-            
         }
         $mockMessageProducer = $this->getMockMessageProducer();
         $payload = json_encode(['file'   => $destination,
                                       'refId' => $docTable[0]['ref_id']]);
-        $mockMessageProducer->expects('sendTopic')->with($payload,'DOCUMENT_SIGNED')->once()->andReturn();
-        $data = $this->esignService->signEvent($docId,'FINALIZED');
+        $mockMessageProducer->expects('sendTopic')->with($payload, 'DOCUMENT_SIGNED')->once()->andReturn();
+        $data = $this->esignService->signEvent($docId, 'FINALIZED');
         $docTable = $this->executeQueryTest($query);
 
         $query = "SELECT * from ox_esign_document_signer where esign_document_id =1 ";
         $signerTable = $this->executeQueryTest($query);
-        $this->assertEquals($docTable[0]['status'],EsignDocument::COMPLETED);
-        $this->assertEquals($signerTable[0]['status'],EsignDocument::COMPLETED);
-        $this->assertEquals(true,FileUtils::fileExists($destination));
-
+        $this->assertEquals($docTable[0]['status'], EsignDocument::COMPLETED);
+        $this->assertEquals($signerTable[0]['status'], EsignDocument::COMPLETED);
+        $this->assertEquals(true, FileUtils::fileExists($destination));
     }
 }

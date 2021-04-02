@@ -45,7 +45,7 @@ class AnnouncementController extends AbstractApiController
      *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *        media_type : string,
      *        media_location : string,
-     *        groups : [{'id' : integer}.....multiple*],
+     *        teams : [{'id' : integer}.....multiple*],
      * </code>
      * @return array Returns a JSON Response with Status Code and Created Announcement.</br>
      * <code> status : "success|error",
@@ -62,8 +62,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
     /**
      * GET List Announcement API
@@ -81,7 +80,7 @@ class AnnouncementController extends AbstractApiController
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      * }
      * </code>
      */
@@ -95,8 +94,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -117,7 +115,7 @@ class AnnouncementController extends AbstractApiController
      *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
      *  string media_type,
      *  string media_location,
-     *  groups : [{'id' : integer}.....multiple]
+     *  teams : [{'id' : integer}.....multiple]
      * }
      * </code>
      * @return array Returns a JSON Response with Status Code and Created Announcement.
@@ -133,7 +131,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
     /**
      * Delete Announcement API
@@ -153,8 +151,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
     /**
      * GET Announcement API
@@ -189,8 +186,7 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
     /**
      * GET List of All Announcement API
@@ -209,35 +205,32 @@ class AnnouncementController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
-    public function announcementToGroupAction()
+    public function announcementToTeamAction()
     {
         $params = $this->params()->fromRoute();
         $data = $this->extractPostData();
         try {
-            $count = $this->announcementService->saveGroup($params, $data);
+            $count = $this->announcementService->saveTeam($params, $data);
             return $this->getSuccessResponseWithData($data, 200);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
-    public function announcementGroupsAction()
+    public function announcementTeamsAction()
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->announcementService->getAnnouncementGroupList($params, $filterParams);
+            $count = $this->announcementService->getAnnouncementTeamList($params, $filterParams);
             return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 }

@@ -52,7 +52,7 @@ class UserSessionController extends AbstractApiController
      */
     public function updateSessionAction()
     {
-        if(AuthContext::get(AuthConstants::USER_ID)){
+        if (AuthContext::get(AuthConstants::USER_ID)) {
             $data=$this->extractPostData();
             try {
                 $count = $this->sessionService->updateSessionData($data);
@@ -64,8 +64,8 @@ class UserSessionController extends AbstractApiController
             } else {
                 return $this->getSuccessResponseWithData(array(), 200);
             }
-        }else{
-            return $this->getErrorResponse("invalid username.", 401); 
+        } else {
+            return $this->getErrorResponse("invalid username.", 401);
         }
     }
 }

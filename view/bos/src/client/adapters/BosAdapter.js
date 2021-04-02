@@ -1,5 +1,4 @@
 import { ServiceProvider } from "@osjs/common";
-import LocalStorageAdapter from "./localStorageAdapter.js";
 
 export class BosAdapter extends ServiceProvider {
   constructor(core, options = {}) {
@@ -26,7 +25,6 @@ export class BosAdapter extends ServiceProvider {
           }, {});
         var appName = queryObj.app;
         var userDetails = this.core.make("oxzion/profile").get();
-        var appList = userDetails.key.blackListedApps;
         if (!(appName in userDetails.key.blackListedApps)) {
           this.core
             .request(this.core.config("packages.manifest"), {}, "json")

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM, { render } from 'react-dom';
 var numeral = require('numeral');
 import WidgetGrid from './WidgetGrid';
+import WidgetGridNew from './WidgetGridNew';
 import Parser from 'html-react-parser';
 import WidgetDrillDownHelper from './WidgetDrillDownHelper';
 import * as am4core from '../amcharts/core';
@@ -18,25 +19,24 @@ am4core.options.commercialLicense = true;
 
 class WidgetRenderer {
     // static render(element, widget, props,hasDashboardFilters,dashboardMode) {
-
-    static render(renderpropertiesObject) {
+    static render(renderpropertiesObject, widgetUUId, filterParams, core) {
         let { element, widget, props, hasDashboardFilters, dashboardEditMode } = { ...renderpropertiesObject }
         // am4core.options.queue = true //reduces load on the browser
         let widgetTagName = element.tagName.toUpperCase();
+        let widgetReturnParams = {}
         switch (widget.renderer) {
             case 'JsAggregate':
                 if ((widgetTagName !== 'SPAN') && (widgetTagName !== 'DIV')) {
                     throw (`Unexpected inline aggregate value widget tag "${widgetTagName}"`);
                 }
-                return WidgetRenderer.renderAggregateValue(element, widget.configuration, props, widget.data, hasDashboardFilters, dashboardEditMode, widget);
+                widgetReturnParams = WidgetRenderer.renderAggregateValue(element, widget.configuration, props, widget.data, hasDashboardFilters, dashboardEditMode, widget);
                 break;
-
             case 'amCharts':
                 if ((widgetTagName !== 'FIGURE') && (widgetTagName !== 'DIV')) {
                     throw (`Unexpected chart widget tag "${widgetTagName}"`);
                 }
                 try {
-                    return WidgetRenderer.renderAmCharts(element, widget.configuration, props, widget.data, hasDashboardFilters);
+                    widgetReturnParams = WidgetRenderer.renderAmCharts(element, widget.configuration, props, widget.data, hasDashboardFilters);
                 }
                 catch (e) {
                     console.error(e);
@@ -49,24 +49,39 @@ class WidgetRenderer {
                     throw (`Unexpected table widget tag "${widgetTagName}"`);
                 }
                 try {
-                    return WidgetRenderer.renderTable(element, widget.configuration, widget.data, hasDashboardFilters);
+                    widgetReturnParams = WidgetRenderer.renderTable(element, widget.configuration, widget.data, hasDashboardFilters, "WidgetGrid");
+                    break;
                 }
                 catch (e) {
                     console.error(e);
                     return null;
                 }
-                break;
+
+            case 'jsGrid':
+                if ((widgetTagName !== 'FIGURE') && (widgetTagName !== 'DIV')) {
+                    throw (`Unexpected table widget tag "${widgetTagName}"`);
+                }
+                try {
+                    widgetReturnParams = WidgetRenderer.renderTable(element, widget.configuration, widget.data, hasDashboardFilters, "WidgetGridNew", widget.uuid, filterParams, core, widget['total_count']);
+                    break;
+                }
+                catch (e) {
+                    console.error(e);
+                    return null;
+                }
 
             case 'HTML':
                 if ((widgetTagName !== 'SPAN') && (widgetTagName !== 'DIV')) {
                     throw (`Unexpected inline aggregate value widget tag "${widgetTagName}"`);
                 }
-                return WidgetRenderer.renderhtml(element, widget.configuration, props, widget.data);
+                widgetReturnParams = WidgetRenderer.renderhtml(element, widget.configuration, props, widget.data);
                 break;
+            // add a case for jsGrid for the server grid loading
 
             default:
                 throw (`Unexpected widget renderer "${widget.renderer}"`);
         }
+        return widgetReturnParams;
     }
 
     static renderAggregateValue(element, configuration, props, data, hasDashboardFilters, dashboardEditMode, widget) {
@@ -251,6 +266,10 @@ class WidgetRenderer {
 
         let chart = null;
         if ('amCharts-map' === am4ChartType || am4geodata_worldLow === am4ChartType) {
+            if (WidgetDrillDownHelper.setupDrillDownContextStack(element, configuration, hasDashboardFilters)) {
+                WidgetDrillDownHelper.setupAmchartsEventHandlers(series);
+                isDrillDownChart = true;
+            }
             chart = WidgetRenderer.renderAmMap(configuration, canvasElement, data);
             if (isDrillDownChart) {
                 canvasElement.insertAdjacentHTML('beforeend',
@@ -347,6 +366,7 @@ class WidgetRenderer {
     }
 
     static renderAmMap(configuration, canvasElement, data) {
+        let meta = configuration['oxzion-meta'];
         function findWidgetElement(element) {
             if ('MapPolygon' !== element.className) {
                 throw 'Unexpected element type.';
@@ -430,7 +450,7 @@ class WidgetRenderer {
         heatLegend.minValue = processedData['min'];
         heatLegend.maxValue = processedData['max'];
 
-        let meta = configuration['oxzion-meta'];
+        // let meta = configuration['oxzion-meta'];
         let legend = null;
         if (meta) {
             legend = meta['legend'];
@@ -578,7 +598,7 @@ class WidgetRenderer {
         }
     }
 
-    static renderTable(element, configuration, data, hasDashboardFilters) {
+    static renderTable(element, configuration, data, hasDashboardFilters, widgetGridType, widgetUUId = null, filterParams = null, core, total_count = null) {
         let elementTagName = element.tagName.toUpperCase();
         let canvasElement = null;
         let isDrillDownTable = false;
@@ -627,7 +647,12 @@ class WidgetRenderer {
                 buttonElement.remove();
             }
         }
-        ReactDOM.render(<WidgetGrid configuration={configuration} data={data} isDrillDownTable={isDrillDownTable} canvasElement={canvasElement} />, canvasElement);
+
+        if (widgetGridType == "WidgetGridNew") {
+            ReactDOM.render(<WidgetGridNew configuration={configuration} data={data} isDrillDownTable={isDrillDownTable} canvasElement={canvasElement} uuid={widgetUUId} filterParams={filterParams} core={core} totalcount={total_count} />, canvasElement);
+        } else if (widgetGridType == "WidgetGrid") {
+            ReactDOM.render(<WidgetGrid configuration={configuration} data={data} isDrillDownTable={isDrillDownTable} canvasElement={canvasElement} />, canvasElement);
+        }
     }
 }
 

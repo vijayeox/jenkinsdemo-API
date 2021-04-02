@@ -5,21 +5,23 @@ namespace Analytics\Model;
 use Oxzion\Type;
 use Oxzion\Model\Entity;
 
-class DataSource extends Entity {
+class DataSource extends Entity
+{
     protected static $MODEL = [
-        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE ,    'required' => FALSE],
-        'uuid' =>           ['type' => Type::UUID,      'readonly' => TRUE,     'required' => FALSE],
-        'name' =>           ['type' => Type::STRING,    'readonly' => FALSE,    'required' => TRUE],
-        'type' =>           ['type' => Type::STRING,    'readonly' => FALSE,    'required' => TRUE],
-        'configuration' =>  ['type' => Type::STRING,    'readonly' => FALSE,    'required' => TRUE],
-        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE,     'required' => FALSE],
-        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE,     'required' => FALSE],
-        'account_id' =>         ['type' => Type::INTEGER,   'readonly' => TRUE,     'required' => FALSE],
-        'isdeleted' =>      ['type' => Type::BOOLEAN,   'readonly' => FALSE,    'required' => FALSE, 'value' => FALSE],
-        'version' =>        ['type' => Type::INTEGER,   'readonly' => FALSE,    'required' => FALSE]
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => true ,    'required' => false],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => true,     'required' => false],
+        'name' =>           ['type' => Type::STRING,    'readonly' => false,    'required' => true],
+        'type' =>           ['type' => Type::STRING,    'readonly' => false,    'required' => true],
+        'configuration' =>  ['type' => Type::STRING,    'readonly' => false,    'required' => true],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => true,     'required' => false],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => true,     'required' => false],
+        'account_id' =>     ['type' => Type::INTEGER,   'readonly' => false,    'required' => false],
+        'isdeleted' =>      ['type' => Type::BOOLEAN,   'readonly' => false,    'required' => false, 'value' => false],
+        'version' =>        ['type' => Type::INTEGER,   'readonly' => false,    'required' => false]
     ];
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 }

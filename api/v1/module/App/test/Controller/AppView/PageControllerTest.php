@@ -157,6 +157,6 @@ class PageControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'],'Page Not Found'); 
+        $this->assertEquals($content['message'], 'Page Not Found');
     }
 }

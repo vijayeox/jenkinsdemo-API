@@ -17,14 +17,14 @@ use Oxzion\Auth\AuthContext;
 
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
-//TODO: Remove $table variable - it is not used anywhere! Also, controllers should not directly talk to database. (RaviH).
+    //TODO: Remove $table variable - it is not used anywhere! Also, controllers should not directly talk to database. (RaviH).
     protected $table;
     protected $log;
     protected $logClass;
     protected $modelClass;
     protected $parentId;
     protected $username;
-    
+
     public function __construct($table = null, $modelClass = null, $parentId = null)
     {
         $this->table = $table;
@@ -62,43 +62,38 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
 
     public function checkAuthorization($event)
     {
-        $request = $event->getRequest();
-        $response = $event->getResponse();
         $config = $event->getApplication()->getServiceManager()->get('Config');
+        $request = $event->getRequest();
         $jwtToken = $this->findJwtToken($request);
         if ($jwtToken) {
             try {
                 $token = $jwtToken;
                 $tokenPayload = $this->decodeJwtToken($token);
                 if (is_object($tokenPayload)) {
+                    $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
                     if ($tokenPayload->data && isset($tokenPayload->data->username)) {
-                        $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
                         $params = [AuthConstants::USERNAME => $tokenPayload->data->username];
-                        if(isset($tokenPayload->data->accountId)){
+                        if (isset($tokenPayload->data->accountId)) {
                             $params[AuthConstants::ACCOUNT_ID] = $tokenPayload->data->accountId;
                         }
                         $userdetail = $authSuccessListener->loadUserDetails($params);
-                        if(is_array($userdetail) && count($userdetail)==0){
-                            return $this->getErrorResponse("invalid username.", 401);            
-                        }
-                        return;
                     }
                     if ($tokenPayload->data && isset($tokenPayload->data->apikey)) {
-                        $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
                         $userdetail = $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
-                        if(is_array($userdetail) && count($userdetail)==0){
-                            return $this->getErrorResponse("invalid username.", 401);            
-                        }
-                        return;
                     }
-                } 
+                    if (is_array($userdetail) && !count($userdetail)) {
+                        return $this->getErrorResponse("invalid username.", 401);
+                    }
+                    return;
+                }
                 $jsonModel = $this->getErrorResponse("Token Invalid.", 400);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->getErrorResponse("Token Invalid. Please login again.", 401);
             }
         } else {
             $jsonModel = $this->getErrorResponse($config['authRequiredText'], 401);
         }
+        $response = $event->getResponse();
         $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
         $response->setContent($jsonModel->serialize());
         return $response;
@@ -158,7 +153,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
             $id = $this->table->getLastInsertValue();
             $form->id = $id;
             return $this->getSuccessResponseWithData($form->toArray(), 201);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->getFailureResponse("Failed to create a new entity", $e->getMessage());
         }
     }

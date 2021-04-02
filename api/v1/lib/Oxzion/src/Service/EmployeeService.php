@@ -38,7 +38,7 @@ class EmployeeService extends AbstractService
         $EmpData['created_by'] = AuthContext::get(AuthConstants::USER_ID) ? AuthContext::get(AuthConstants::USER_ID) : 1;
         $EmpData['date_created'] = date('Y-m-d H:i:s');
         $account = $this->getDataByParams('ox_account', array('organization_id', 'type'), array('id' => $EmpData['account_id']))->toArray();
-        if($account[0]['type'] != Account::BUSINESS){
+        if ($account[0]['type'] != Account::BUSINESS) {
             return 0;
         }
         $EmpData['org_id'] = $account[0]['organization_id'];
@@ -63,13 +63,21 @@ class EmployeeService extends AbstractService
 
     public function updateEmployeeDetails($data)
     {
-        $this->logger->info("Employee data--------\n".print_r($data,true));
+        $this->logger->info("Employee data--------\n".print_r($data, true));
 
         if (isset($data['managerId'])) {
-            $data['manager_id'] = $this->getIdFromUuid('ox_user', $data['managerId']);
+            $queryString = "SELECT e.id from ox_employee e
+                            inner join ox_user u on u.person_id = e.person_id
+                            where u.uuid = :userId";
+            $params = ['userId' => $data['managerId']];
+            $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+            if (count($resultSet) > 0) {
+                $employeeId = $resultSet[0]['id'];
+                $data['manager_id'] = $employeeId;
+            }
         }
         $emp = $this->getDataByParams('ox_employee', array('id', 'uuid'), array('person_id' => $data['person_id']))->toArray();
-        if (count($emp) == 0) {         
+        if (count($emp) == 0) {
             return;
         }
         $id = $emp[0]['id'];
@@ -78,20 +86,19 @@ class EmployeeService extends AbstractService
         unset($data['id']);
         unset($data['uuid']);
         $EmpData = $data;
-        $filter = NULL;
-        if(isset($data['accountId'])){
+        $filter = null;
+        if (isset($data['accountId'])) {
             $filter = ['uuid' => $data['accountId']];
-            
-        }else if(isset($data['account_id'])){
+        } elseif (isset($data['account_id'])) {
             $filter = ['id' => $data['account_id']];
         }
-        if($filter){
+        if ($filter) {
             $tempData = $this->getDataByParams('ox_account', ['organization_id'], $filter)->toArray();
-            if(!empty($tempData)){
+            if (!empty($tempData)) {
                 $EmpData['org_id'] = $tempData[0]['organization_id'];
             }
         }
-        if(!isset($EmpData['org_id'])){
+        if (!isset($EmpData['org_id'])) {
             $ex = new ValidationException(['organization' => 'Organization not selected for employee']);
             throw $ex;
         }
@@ -108,7 +115,8 @@ class EmployeeService extends AbstractService
         }
     }
 
-    private function getEmployeeAndManagerIdForUsers($userId, $managerId){
+    private function getEmployeeAndManagerIdForUsers($userId, $managerId)
+    {
         $queryString = "SELECT e.id from ox_employee e
                             inner join ox_user u on u.person_id = e.person_id
                             where u.uuid = :userId";
@@ -140,7 +148,7 @@ class EmployeeService extends AbstractService
         $query = "SELECT * from ox_employee_manager where employee_id = :employee_id
                     AND manager_id = :manager_id";
         $result = $this->executeQueryWithBindParameters($query, $ids)->toArray();
-        if(!empty($result)){
+        if (!empty($result)) {
             throw new ServiceException("Employee already assigned to the manager", "already.assigned.to.manager", OxServiceException::ERR_CODE_NOT_ACCEPTABLE);
         }
         $sql = $this->getSqlObject();

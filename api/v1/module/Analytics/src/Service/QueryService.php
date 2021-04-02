@@ -14,16 +14,21 @@ use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class QueryService extends AbstractService
 {
-
     private $table;
     private $datasourceService;
-    static $queryFields = array('uuid' => 'q.uuid', 'name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'account_id' => 'q.account_id');
+    private $total_count;
+    public static $queryFields = array('uuid' => 'q.uuid', 'name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'account_id' => 'q.account_id');
 
     public function __construct($config, $dbAdapter, QueryTable $table, $datasourceService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->datasourceService = $datasourceService;
+    }
+
+    public function getTotalCount()
+    {
+        return $this->total_count;
     }
 
     public function createQuery($data)
@@ -165,7 +170,6 @@ class QueryService extends AbstractService
         } else {
             return 0;
         }
-
     }
 
     public function executeAnalyticsQuery($uuid, $overRides = null)
@@ -221,7 +225,7 @@ class QueryService extends AbstractService
             throw $validationException;
         }
         if (isset($params['debug'])) {
-            $configtemp = json_decode($configuration,1);
+            $configtemp = json_decode($configuration, 1);
             $configtemp['debug']=$params['debug'];
             $configuration = json_encode($configtemp);
         }
@@ -275,7 +279,11 @@ class QueryService extends AbstractService
                 }
             }
         }
-        $app_name = $parameters['app_name'];
+        if (isset($parameters['app_name'])) {
+            $app_name = $parameters['app_name'];
+        } else {
+            $app_name = '';
+        }
         if (isset($parameters['entity_name'])) {
             $entity_name = $parameters['entity_name'];
         } else {
@@ -361,7 +369,10 @@ class QueryService extends AbstractService
         $index = 1;
         foreach ($uuidList as $key => $value) {
             $this->logger->info("Executing AnalyticsQuery with input -" . $value);
-            $queryData = $this->executeAnalyticsQuery($value, $overRides); 
+            $queryData = $this->executeAnalyticsQuery($value, $overRides);
+            if (isset($queryData['total_count'])) {
+                $this->total_count = $queryData['total_count'];
+            }
             $this->logger->info("Executing AnalyticsQuery returned -" . print_r($queryData, true));
             if ($queryData == null || $queryData == 0) {
                 throw new InvalidInputException("uuid entered is incorrect - $value", 1);
@@ -379,7 +390,6 @@ class QueryService extends AbstractService
                     } else {
                         throw new InvalidInputException("Aggregate query type cannot be followed by a non-aggregate query type", 1);
                     }
-
                 } else {
                     if (!empty($queryData['meta']['aggregates'])) {
                         throw new InvalidInputException("Non-aggregate query type cannot be followed by a aggregate query type", 1);

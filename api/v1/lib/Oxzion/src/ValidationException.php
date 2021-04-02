@@ -5,7 +5,8 @@ class ValidationException extends \Exception
 {
     private $errors = array();
 
-    public function __construct($errors = NULL) {
+    public function __construct($errors = null)
+    {
         if (isset($errors) && !is_null($errors)) {
             $this->errors = $errors;
         }

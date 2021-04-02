@@ -37,7 +37,8 @@ class GenerateReport extends PolicyDocument {
 
     public function execute(array $data, Persistence $persistenceService) 
     { 
-        $this->logger->info("Executing Quaterly Report Generation with data- ".json_encode($data));
+        $this->logger->info("Executing Report Generation with data- ".json_encode($data));
+        ini_set('max_execution_time', 300);
         $params = array();
         $filterParams = array();
         $finalData = array();
@@ -65,17 +66,15 @@ class GenerateReport extends PolicyDocument {
             $filterParams = array(array("filter" => array("logic" => "AND", "filters" => $filter)));
         }
         $files = $this->getWorkflowCompletedData($params,$filterParams); 
-        $this->logger->info("The data returned from getWorkflowCompletedData is  ".print_r($files,true));
-        
         if(empty($files['data'])){
             $data['jobStatus'] = 'No Records Found';
             $this->saveFile($data,$data['uuid']);      
             return $data;
-        }
-        $result = $this->newDataArray($files,$data['productType']); 
-        $this->logger->info("The data returned from newDataArray is  ".print_r($result,true));
+        } 
+    
+	$result = $this->newDataArray($files,$data['productType']); 
+ 
         $excelData = $this->excelDataMassage($result['data']);
-        $this->logger->info("Quarterly Report".print_r($excelData,true));
         $files['data'] = $result['data'];
         $files['total'] = sizeof($finalData);
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
@@ -89,11 +88,12 @@ class GenerateReport extends PolicyDocument {
         );
         if(!empty($result['data'])){
             $data['documents']['GenerateReport'] = $dest['relativePath'].$selectedTemplate['template'];
-            if(isset($data['jobStatus']) && ($data['jobStatus'] == 'In Progress')){
+            if(isset($data['jobStatus']) && strcmp($data['jobStatus'],'We are processing your request.Please wait for 5 mins.') == 0){
                 $data['jobStatus'] = 'Completed';
             }  
         }
         $this->saveFile($data,$data['uuid']);
+        $this->logger->info("Completed Report Generation");
         return $data;
     }
     
@@ -263,6 +263,13 @@ class GenerateReport extends PolicyDocument {
         $this->getRequiredParams($previousVal, $requiredParams);
         foreach ($previousVal as $key => $value) {
             $previousVal[$key]['padi'] = strval($value['padi']);
+            if(!isset($value['cancel'])){
+                $previousVal[$key]['cancel'] = 'false';
+            }
+            if(!isset($value['cancel_date'])){
+                $previousVal[$key]['cancel_date'] = '';
+            }
+            
         }
         $val = is_string($data) ? json_decode($data, true) :  $data;
         $this->getRequiredParams($val, $requiredParams);
@@ -286,12 +293,14 @@ class GenerateReport extends PolicyDocument {
         }
     }
     private function newDataArray($data,$product){
-      
-        $this->logger->info('Generate report data to be formatted: '.print_r($data, true));
         $i = 0;
         foreach ($data['data'] as $key => $value) {
+           
             $totalendorsements = 0;
             $previous_policy_data = array();
+            $previous_additionalLocation = array();
+			
+        
             if(isset($value['previous_policy_data'])){
                 $previous_policy_data = json_decode($value['previous_policy_data'],true);
                 $totalendorsements = count(array_filter($previous_policy_data, 'array_filter'));
@@ -312,21 +321,23 @@ class GenerateReport extends PolicyDocument {
                 $response[$i]['country'] = $value['country'];
                 $response[$i]['certificate_type'] = $value['workflow_name'] == "Individual Liability Endorsement" ? 'Endorsement' : 'Primary Coverage';
                 $response[$i]['renewal_new'] = isset($value['isRenewalFlow']) && $value['isRenewalFlow']  == "false"? "New" : "Renewal" ;
-                $response[$i]['program'] = ($value['workflow_name'] == "Individual Liability Endorsement") ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage']);
+                $response[$i]['program'] = ($value['workflow_name'] == "Individual Liability Endorsement") ? ((sizeof($previous_policy_data) > 0) ? $this->checkStatus($previous_policy_data[0]['previous_careerCoverage']) : $this->checkStatus($value['careerCoverage'])) : $this->checkStatus($value['careerCoverage']);
                 $response[$i]['start_date'] = $this->formatDate($value['start_date']);
                 $response[$i]['end_date'] = $this->formatDate($value['end_date']);
                 $response[$i]['premium'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : "0");
-                $response[$i]['equipment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['equipmentPrice']) && $value['equipmentPrice'] != "" || $value['equipmentPrice'] != null ? $value['equipmentPrice'] : "0");
-                $response[$i]['excess'] = (($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" :($value['workflow_name'] == "Individual Liability Endorsement" ? ($previous_policy_data[0]['previous_excessLiability'] == $value['excessLiability']? "0" : $value['excessLiabilityPrice']): (is_null($value['excessLiabilityPrice']) ?  "0" : $value['excessLiabilityPrice'])));
+                $response[$i]['equipment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['equipmentPrice']) ?  (($value['equipmentPrice'] != "" || $value['equipmentPrice'] != null) ? $value['equipmentPrice'] : "0") : "0");
+                $response[$i]['excess'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ?  0 : ($value['workflow_name'] == "Individual Liability Endorsement"  ? ((sizeof($previous_policy_data) > 0) ?  ($previous_policy_data[0]['previous_excessLiability'] == $value['excessLiability'] ? "0" : $value['excessLiabilityPrice']) :  "0"): (is_null($value['excessLiabilityPrice']) ?  "0" : $value['excessLiabilityPrice']));
+                $value['careerCoveragePrice'] = isset($value['careerCoveragePrice']) ? $value['careerCoveragePrice'] : 0;
                 $response[$i]['scuba_fit'] = isset($value['scubaFitPrice']) ? $value['scubaFitPrice'] : "0";
                 $response[$i]['upgrade'] = ($value['workflow_name'] == "Individual Liability Endorsement" && ($value['careerCoveragePrice'] != "" || $value['careerCoveragePrice'] != 0 || $value['careerCoveragePrice'] != null)) ? $this->checkStatus($value['careerCoverage']) : "";
                 $response[$i]['cylinder'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy") ? "0" : (isset($value['cylinderPrice']) ? $value['cylinderPrice'] : "0" );
                 $response[$i]['total'] = (((float) $response[$i]['premium']) + ((float)$response[$i]['equipment']) + ((float) $response[$i]['excess']) + ((float)$response[$i]['scuba_fit']) + ((float)$response[$i]['cylinder']));
-                $response[$i]['cancel_date'] = $value['workflow_name'] == "IPL Cancel Policy" ? $this->formatDate($value['modifiedDate']) : "";
+                $response[$i]['cancel_date'] = $value['workflow_name'] == "IPL Cancel Policy" ? $this->formatDate($value['modifiedDate']) : ""; //cancel date
                 $response[$i]['cancelled'] =  $value['workflow_name'] == "IPL Cancel Policy" ? "True" : "False";
                 $response[$i]['reinstated'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? "True" : "False";
-                $response[$i]['reinstated_date'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? $this->formatDate($value['modifiedDate']) : "";
+                $response[$i]['reinstated_date'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? $this->formatDate($value['modifiedDate']) : ""; //reinstated date is always the cancellation date
                 $response[$i]['auto_renewal'] = $value['workflow_name'] == "Individual Liability Endorsement" ? "No" : ($value['automatic_renewal']? "Yes" : "No");
+                $value['premiumFinanceSelect'] = isset($value['premiumFinanceSelect']) ? $value['premiumFinanceSelect'] : "no";
                 $response[$i]['installment'] = $value['workflow_name'] == "Individual Liability Endorsement" ? "No" : ($value['premiumFinanceSelect'] == "no" ? "No" : "Yes");
                 $response[$i]['downPayment'] = ($value['workflow_name'] == "Individual Liability Reinstate Policy" || $value['workflow_name'] == "Individual Liability Endorsement") ? "0" : (isset($value['downPayment']) ? $value['downPayment'] : "0");
                 $response[$i]['totalPaid'] = $value['workflow_name'] == "Individual Liability Reinstate Policy" ? "0" : ($value['workflow_name'] == "Individual Liability Endorsement" ? $response[$i]['total'] : ($value['premiumFinanceSelect'] == "no"?  $response[$i]['total'] : $value['downPayment']));
@@ -336,19 +347,16 @@ class GenerateReport extends PolicyDocument {
             if($product == 'groupProfessionalLiability' && isset($value['groupPL'])){
 
                 $this->logger->info('group PL members need to be formatted to a new array');
-                $groupPLArray = array('padi', 'firstname', 'lastname', 'status','start_date');
+                $groupPLArray = array('padi', 'firstname', 'lastname', 'status','start_date','cancel','cancel_date');
                 if(isset($value['groupPL'])){
                     $groupData = is_string($value['groupPL']) ? json_decode($value['groupPL'], true) : $value['groupPL'];
                 } else {
                     $groupData = array();
                 }
-                $this->logger->info('group data is: '.print_r($groupData, true));
-                $this->logger->info('value data is: '.print_r($value, true));
                 $total = count($groupData);
+                $totalendorsement = 0;
                 $groupPL = array();
                 $groupLength = 0;
-
-                $totalendorsement = 0;
                 if(isset($value['previous_policy_data'])) {
                    $previous_policy_data = json_decode($value['previous_policy_data'],true);
                    $totalendorsement = sizeof($previous_policy_data);
@@ -356,9 +364,10 @@ class GenerateReport extends PolicyDocument {
                     if(isset($previous_policy_data[$totalendorsement - 1]['previous_groupPL']) && !empty($previous_policy_data[$totalendorsement - 1]['previous_groupPL'])){
                         $previous_groupPL = $previous_policy_data[$totalendorsement - 1]['previous_groupPL'];
                         $groupPL = $this->groupDataDiff($groupLength, $value['groupPL'], $previous_groupPL, $groupPLArray);
+                        
                         $k=0;
                         foreach ($previous_groupPL as $key2 => $value2){
-                            foreach ($groupData as $key1 => $value1) { 
+                            foreach ($groupPL as $key1 => $value1) { 
                                 if($value2['padi'] == $value1['padi']) {
                                     if($value2['status'] != $value1['status']){
                                         $previous_careerCoverage[$k] = $value2;
@@ -378,7 +387,6 @@ class GenerateReport extends PolicyDocument {
                 foreach ($groupPL as $key2 => $value2) { 
                     $padi = strval($value2['padi']);
                     if(isset($previous_careerCoverage)) {
-                        print_r($value2['padi']);
                         $key = array_search($padi, array_column($previous_careerCoverage, 'padi'));
 
                     }
@@ -405,7 +413,7 @@ class GenerateReport extends PolicyDocument {
                     $response[$i][$j]['upgrade'] = $response[$i][$j]['certificate_type'] == 'Endorsement' && isset($previous_careerCoverage[$key]['status']) && $previous_careerCoverage[$key]['status'] != $value2['status'] && $previous_careerCoverage[$key]['status'] != "" && !is_null($previous_careerCoverage[$key]['status']) ? $this->checkStatus($value2['status']) : ''; //change
                     $response[$i][$j]['premium'] = $key2 == 0 ? ((isset($previous_policy['previous_groupCoverage']) &&  $value['workflow_name'] == "Dive Store Endorsement")? ((float)$value['groupCoverage'] - (float)($previous_policy['previous_groupCoverage'])) : (isset($value['groupCoverage'])? $value['groupCoverage']: "0")) : "0";
                     $response[$i][$j]['excess_premium'] = $key2 == 0 ? isset($value['groupExcessLiability']) ? $value['groupExcessLiability'] : "0" : "0";
-                    $response[$i][$j]['cancel_date'] = isset($value['cancel_date']) ? $this->formatDate($value['cancel_date']) : "" ;
+                    $response[$i][$j]['cancel_date'] = (isset($value2['cancel']) && $value2['cancel'] == true && $value2['cancel_date'] != "")? $this->formatDate($value2['cancel_date']) : "" ;
                     $response[$i][$j]['total'] =$key2 == 0 ? ((int) $response[$i][$j]['premium'])+ ((int)$response[$i][$j]['excess_premium']) : "0";
                     $responseData['data'] = $response;
                     $j+= 1;
@@ -413,18 +421,27 @@ class GenerateReport extends PolicyDocument {
                 $i += 1; 
             
             }
-            if(($product == "diveStoreProperty" || $product == "diveStore") && ($value['workflow_name'] !== "DS Cancel Policy")){
+            
+            if($product == "diveStoreProperty" || $product == "diveStore"){
                 $this->logger->info('Additional Locations need to be formatted to a new array');
                 if((isset($value['additionalLocationsSelect'])) && $value['additionalLocationsSelect'] == "yes"){
                     $additionalLocationData = is_string($value['additionalLocations']) ? json_decode($value['additionalLocations'], true) : $value['additionalLocations'];
                 } else {
                     $additionalLocationData = array();
                 }
-                if(isset($previous_policy_data)){ 
-                    $previous_policy =  $previous_policy_data[$totalendorsements - 1];
-                    $previous_additionalLocation = isset($previous_policy['previous_additionalLocations'])? $previous_policy['previous_additionalLocations'] : array();
+                
+		if(isset($previous_policy_data)){ 
+            $previous_policy = array();
+            if($totalendorsements > 0){
+		
+                        $previous_policy =  $previous_policy_data[$totalendorsements - 1];
+                        $previous_additionalLocation = isset($previous_policy['previous_additionalLocations'])? $previous_policy['previous_additionalLocations'] : array();
+                    }
                 }
-                $total = count($additionalLocationData);
+                
+		$total = count($additionalLocationData);
+	
+		if((int)$value['totalAmount'] > 0){
                 $this->logger->info('Primary location');
                 $responsePrimary[$i]['certificate_no'] = $value['certificate_no'];
                 $responsePrimary[$i]['business_padi'] = $value['business_padi'];
@@ -442,43 +459,60 @@ class GenerateReport extends PolicyDocument {
                 $responsePrimary[$i]['start_date'] = $this->formatDate($value['start_date']);
                 $responsePrimary[$i]['end_date'] = $this->formatDate($value['end_date']);
                 $responsePrimary[$i]['certificate_type'] =   $value['workflow_name'] == "Dive Store Endorsement" ? 'Endorsement' : 'Primary Coverage';
+                $responsePrimary[$i]['cancelled'] =  $value['workflow_name'] == "DS Cancel Policy" ? 'true' : 'false';
+                $responsePrimary[$i]['cancel_date'] =  $value['workflow_name'] == "DS Cancel Policy" ?   $this->formatDate($value['cancelDate']): '';
+                $responsePrimary[$i]['reinstated'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? 'true' : 'false';
+                $responsePrimary[$i]['reinstated_date'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? (isset($value['reinstateDate'])? $this->formatDate($value['reinstateDate']) : $this->formatDate($value['modifiedDate'] )) : '';
+                
                 if($product == "diveStoreProperty"){
-                    $responsePrimary[$i]['propertyDeductables'] = $value['propertyDeductibles'] == "propertyDeductibles1000"? "$1,000" : $value['propertyDeductibles'] == "propertyDeductibles2500"? "$2,500" : $value['propertyDeductibles'] == "propertyDeductibles5000"? "$5,000" : "$1,000" ;
-                    $responsePrimary[$i]['catSelection'] = $value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT";
-                    $responsePrimary[$i]['Addl_Cnts_Limit'] = (isset($previous_policy['previous_dspropTotal']) ? ((float)$value['dspropTotal']) - (float)$previous_policy['previous_dspropTotal'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['dspropTotal']) ? "0" : $value['dspropTotal'] ));
-                    $responsePrimary[$i]['Addl_Contents_Premium'] = isset($previous_policy['previous_ContentsFP']) ? ((float)$value['ContentsFP'] - (float)$previous_policy['previous_ContentsFP']) :  (isset( $value['endoContentsFP']) ? $value['endoContentsFP'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['ContentsFP']) ? "0" : $value['ContentsFP']));
-                    $responsePrimary[$i]['Loss_of_Business_Income_Limit'] = isset($previous_policy['previous_lossOfBusIncome']) ? ((float)$value['lossOfBusIncome'] - (float)$previous_policy['previous_lossOfBusIncome']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['lossOfBusIncome']) ? "0" : $value['lossOfBusIncome']);
-                    $responsePrimary[$i]['Additional_Loss_of_Income_Premium'] = isset($previous_policy['previous_LossofBusIncomeFP']) ? ((float)$value['LossofBusIncomeFP'] - (float)$previous_policy['previous_LossofBusIncomeFP']) : (isset($value['endoLossofBusIncomeFP']) ?  $value['endoLossofBusIncomeFP'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['LossofBusIncomeFP']) ? "0" : $value['LossofBusIncomeFP']));
-                    $responsePrimary[$i]['buildingType'] = $value['dspropbuildingconstr'];
-                    $responsePrimary[$i]['Building_Limit'] = isset($previous_policy['previous_dspropreplacementvalue']) ? ((float)$value['dspropreplacementvalue'] - (float)$previous_policy['previous_dspropreplacementvalue']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['dspropreplacementvalue']) ? "0" : $value['dspropreplacementvalue']);
-                    $responsePrimary[$i]['Building_Premium'] = isset($previous_policy['previous_BuildingLimitFP']) ? ((float)$value['BuildingLimitFP'] - (float)$previous_policy['previous_BuildingLimitFP']) : isset($value['endoBuildingLimitFP']) ? $value['endoBuildingLimitFP']: (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : (is_null($value['BuildingLimitFP']) ? "0" : $value['BuildingLimitFP']));
-                    $responsePrimary[$i]['Total'] =  ((float)$responsePrimary[$i]['Building_Premium'] + (float)$responsePrimary[$i]['Additional_Loss_of_Income_Premium'] + (float)$responsePrimary[$i]['Addl_Contents_Premium']);
-                    $responsePrimary[$i]['ProRated_Contents_Premium'] = $value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value['endoContentsFP'])) ? round((float)($value['endoContentsFP']) * (float)($value['proRataPercentage'])) : "0.00") : round((float)($value['ContentsFP']) * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['ProRated_Building_Premium'] = $value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value['endoBuildingLimitFP'])) ? round((float)($value['endoBuildingLimitFP']) * (float)($value['proRataPercentage'])) : "0.00") : round((float)($value['BuildingLimitFP']) * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['ProRated_Loss_of_Income_Premium'] = $value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value['endoLossofBusIncomeFP'])) ? round((float)($value['endoLossofBusIncomeFP']) * (float)($value['proRataPercentage'])) : "0.00") : round((float)($value['LossofBusIncomeFP']) * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['propertyProRataPremium']  = $value['propertyProRataPremium'];
+                    $propertyDeductible = ($value['propertyDeductibles'] == "propertyDeductibles1000") ? "$1,000" : (($value['propertyDeductibles'] == "propertyDeductibles2500") ? "$2,500" : (($value['propertyDeductibles'] == "propertyDeductibles5000")? "$5,000" : "$1,000"));
+                    $responsePrimary[$i]['propertyDeductables'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($previous_policy['previous_propertyDeductibles']) ? (($previous_policy['previous_propertyDeductibles'] == $value['propertyDeductibles']) ?  0 : $propertyDeductible) : 0 ): $propertyDeductible);   
+                    $responsePrimary[$i]['catSelection'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? "" : ($value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT");
+                    $responsePrimary[$i]['Addl_Cnts_Limit'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ((isset($previous_policy['previous_dspropTotal']) ? ((float)$value['dspropTotal']) - (float)$previous_policy['previous_dspropTotal'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['dspropTotal']) ? "0" : $value['dspropTotal'] )));
+                    $responsePrimary[$i]['Addl_Contents_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_ContentsFP']) ? ((float)$value['ContentsFP'] - (float)$previous_policy['previous_ContentsFP']) :  (isset( $value['endoContentsFP']) ? $value['endoContentsFP'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['ContentsFP']) ? "0" : $value['ContentsFP'])));
+                    $responsePrimary[$i]['Loss_of_Business_Income_Limit'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_lossOfBusIncome']) ? ((float)$value['lossOfBusIncome'] - (float)$previous_policy['previous_lossOfBusIncome']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['lossOfBusIncome']) ? "0" : $value['lossOfBusIncome']));
+                    $responsePrimary[$i]['Additional_Loss_of_Income_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_LossofBusIncomeFP']) ? ((float)$value['LossofBusIncomeFP'] - (float)$previous_policy['previous_LossofBusIncomeFP']) : (isset($value['endoLossofBusIncomeFP']) ?  $value['endoLossofBusIncomeFP'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['LossofBusIncomeFP']) ? "0" : $value['LossofBusIncomeFP'])));
+                    $responsePrimary[$i]['buildingType'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? "" : $value['dspropbuildingconstr'];
+                    $responsePrimary[$i]['Building_Limit'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_dspropreplacementvalue']) ? ((float)$value['dspropreplacementvalue'] - (float)$previous_policy['previous_dspropreplacementvalue']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['dspropreplacementvalue']) ? "0" : $value['dspropreplacementvalue']));
+                    $responsePrimary[$i]['Building_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_BuildingLimitFP']) ? ((float)$value['BuildingLimitFP'] - (float)$previous_policy['previous_BuildingLimitFP']) : isset($value['endoBuildingLimitFP']) ? $value['endoBuildingLimitFP']: (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : (is_null($value['BuildingLimitFP']) ? "0" : $value['BuildingLimitFP'])));
+                    $responsePrimary[$i]['Total'] =  ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (((float)$responsePrimary[$i]['Building_Premium'] + (float)$responsePrimary[$i]['Additional_Loss_of_Income_Premium'] + (float)$responsePrimary[$i]['Addl_Contents_Premium']));
+                    $responsePrimary[$i]['ProRated_Contents_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value['endoContentsFP'])) ? round((float)($value['endoContentsFP'])) : "0.00") : round((float)($value['ContentsFP']) * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['ProRated_Building_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value['endoBuildingLimitFP'])) ? round((float)($value['endoBuildingLimitFP'])) : "0.00") : round((float)($value['BuildingLimitFP']) * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['ProRated_Loss_of_Income_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value['endoLossofBusIncomeFP'])) ? round((float)($value['endoLossofBusIncomeFP'])) : "0.00") : round((float)($value['LossofBusIncomeFP']) * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['propertyProRataPremium']  = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (($responsePrimary[$i]['Total'] > 0) ? $value['propertyProRataPremium'] : 0);
                 }
                 if($product == "diveStore"){ 
-                    $responsePrimary[$i]['basepremium'] = isset($previous_policy['previous_CoverageFP']) ? ((float)$value['CoverageFP'] - (float)$previous_policy['previous_CoverageFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" :  (is_null($value['CoverageFP']) ? "0" : $value['CoverageFP']) );
-                    $responsePrimary[$i]['nonDivingPool'] = isset($previous_policy['previous_nonDivingPoolAmount']) ? ((float)($value['nonDivingPoolAmount']) - (float)$previous_policy['previous_nonDivingPoolAmount']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['nonDivingPoolAmount']) ? "0" : $value['nonDivingPoolAmount']);
-                    $responsePrimary[$i]['ExcessLiability']  = isset($previous_policy['previous_ExcessLiabilityFP']) ? ((float)($value['ExcessLiabilityFP']) - (float)$previous_policy['previous_ExcessLiabilityFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['ExcessLiabilityFP']) ? "0" : $value['ExcessLiabilityFP']);
-                    $responsePrimary[$i]['TravelAgent'] = isset($previous_policy['previous_TravelAgentEOFP']) ? ((float)$value['TravelAgentEOFP'] - (float)$previous_policy['previous_TravelAgentEOFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['TravelAgentEOFP']) ? "0" : $value['TravelAgentEOFP'] ); 
-                    $responsePrimary[$i]['medicalExpense'] = isset($previous_policy['previous_MedicalExpenseFP']) ?  ((float)$value['MedicalExpenseFP'] - (float)$previous_policy['previous_MedicalExpenseFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['MedicalExpenseFP']) ? "0" : $value['MedicalExpenseFP'] );
+                    $responsePrimary[$i]['basepremium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_CoverageFP']) ? ((float)$value['CoverageFP'] - (float)$previous_policy['previous_CoverageFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" :  (is_null($value['CoverageFP']) ? "0" : $value['CoverageFP']) ));
+                    $responsePrimary[$i]['nonDivingPool'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_nonDivingPoolAmount']) ? ((float)($value['nonDivingPoolAmount']) - (float)$previous_policy['previous_nonDivingPoolAmount']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['nonDivingPoolAmount']) ? "0" : $value['nonDivingPoolAmount']));
+                    $responsePrimary[$i]['ExcessLiability']  = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_ExcessLiabilityFP']) ? ((float)($value['ExcessLiabilityFP']) - (float)$previous_policy['previous_ExcessLiabilityFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['ExcessLiabilityFP']) ? "0" : $value['ExcessLiabilityFP']));
+                    $responsePrimary[$i]['TravelAgent'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_TravelAgentEOFP']) ? ((float)$value['TravelAgentEOFP'] - (float)$previous_policy['previous_TravelAgentEOFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['TravelAgentEOFP']) ? "0" : $value['TravelAgentEOFP'] )); 
+                    $responsePrimary[$i]['medicalExpense'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_MedicalExpenseFP']) ?  ((float)$value['MedicalExpenseFP'] - (float)$previous_policy['previous_MedicalExpenseFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['MedicalExpenseFP']) ? "0" : $value['MedicalExpenseFP'] ));
                     $responsePrimary[$i]['lakeQuarry'] = "0";
-                    $responsePrimary[$i]['nonOwnedAuto'] = isset($previous_policy['previous_Non-OwnedAutoFP']) ? ((float)$value['Non-OwnedAutoFP'] - (float)$previous_policy['previous_Non-OwnedAutoFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['Non-OwnedAutoFP']) ? "0" : $value['Non-OwnedAutoFP']);
-                    $responsePrimary[$i]['ProRata_basepremium'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endorsementLiabilityCoverage']) ? round((float)$value['endorsementLiabilityCoverage'] * (float)($value['proRataPercentage'])) : "0.00") : round((float)$value['CoverageFP'] * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['ProRata_nonDivingPool'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endononDivingPoolAmount']) ? round((float)$value['endononDivingPoolAmount'] * (float)($value['proRataPercentage'])) : "0.00") : round((float)$value['nonDivingPoolAmount'] * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['ProRata_ExcessLiability'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoExcessLiabilityFP']) ? round((float)$value['endoExcessLiabilityFP'] * (float)($value['proRataPercentage'])) : "0.00") : round((float)$value['ExcessLiabilityFP'] * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['ProRata_TravelAgent'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoTravelAgentEOFP']) ? round((float)$value['endoTravelAgentEOFP'] * (float)($value['proRataPercentage'])) : "0.00") : round((float)$value['TravelAgentEOFP'] * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['ProRata_medicalExpense'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoMedicalExpenseFp']) ? round((float)$value['endoMedicalExpenseFp'] * (float)($value['proRataPercentage'])) : "0.00") : round((float)$value['MedicalExpenseFP'] * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['ProRata_nonOwnedAuto'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoNon-OwnedAutoFP']) ? round((float)$value['endoNon-OwnedAutoFP'] * (float)($value['proRataPercentage'])) : "0.00") : round((float)$value['Non-OwnedAutoFP'] * (float)($value['proRataPercentage']));
-                    $responsePrimary[$i]['liabilityProRataPremium'] = $value['liabilityProRataPremium'];
+                    $responsePrimary[$i]['nonOwnedAuto'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_policy['previous_Non-OwnedAutoFP']) ? ((float)$value['Non-OwnedAutoFP'] - (float)$previous_policy['previous_Non-OwnedAutoFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value['Non-OwnedAutoFP']) ? "0" : $value['Non-OwnedAutoFP']));
+                    $responsePrimary[$i]['ProRata_basepremium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endorsementLiabilityCoverage']) ? round((float)$value['endorsementLiabilityCoverage']) : "0.00") : round((float)$value['CoverageFP'] * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['ProRata_nonDivingPool'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endononDivingPoolAmount']) ? round((float)$value['endononDivingPoolAmount']) : "0.00") : round((float)$value['nonDivingPoolAmount'] * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['ProRata_ExcessLiability'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoExcessLiabilityFP']) ? round((float)$value['endoExcessLiabilityFP']) : "0.00") : round((float)$value['ExcessLiabilityFP'] * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['ProRata_TravelAgent'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoTravelAgentEOFP']) ? round((float)$value['endoTravelAgentEOFP']) : "0.00") : round((float)$value['TravelAgentEOFP'] * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['ProRata_medicalExpense'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoMedicalExpenseFp']) ? round((float)$value['endoMedicalExpenseFp']) : "0.00") : round((float)$value['MedicalExpenseFP'] * (float)($value['proRataPercentage'])));
+                    $responsePrimary[$i]['ProRata_nonOwnedAuto'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value['endoNon-OwnedAutoFP']) ? round((float)$value['endoNon-OwnedAutoFP']) : "0.00") : round((float)$value['Non-OwnedAutoFP'] * (float)($value['proRataPercentage'])));
+                    
+                    $totalval = (int)$responsePrimary[$i]['ProRata_basepremium'] + 
+                                (int)$responsePrimary[$i]['ProRata_nonDivingPool'] + 
+                                (int)$responsePrimary[$i]['ProRata_ExcessLiability'] + 
+                                (int)$responsePrimary[$i]['ProRata_TravelAgent'] + 
+                                (int)$responsePrimary[$i]['ProRata_medicalExpense'] +
+                                (int)$responsePrimary[$i]['ProRata_nonOwnedAuto'];
+                    $responsePrimary[$i]['liabilityProRataPremium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (($totalval == 0) ? 0 : $value['liabilityProRataPremium']);
                 
                 }
+                
                 $responseData['data'] = $responsePrimary;
-                if((isset($value['additionalLocationsSelect'])) && $value['additionalLocationsSelect'] == "yes"){
-                    $j=0;
-                    foreach ($additionalLocationData as $key2 => $value2) { 
+                if((isset($value['additionalLocationsSelect'])) && $value['additionalLocationsSelect'] == "yes"  ){ //&& ($value['workflow_name'] !== "DS Cancel Policy")
+			
+				$j=0;
+
+			foreach ($additionalLocationData as $key2 => $value2) { 
+				
                     if(isset($previous_additionalLocation)){
                             $key = array_search($value2['name'], array_column($previous_additionalLocation, 'name'));
                     }
@@ -498,55 +532,61 @@ class GenerateReport extends PolicyDocument {
                         $response[$i][$j]['start_date'] = $this->formatDate($value['start_date']);
                         $response[$i][$j]['end_date'] = $this->formatDate($value['end_date']);
                         $response[$i][$j]['certificate_type'] =  $value['workflow_name'] == "Dive Store Endorsement" ? 'Endorsement' : 'Primary Coverage';
+                        $response[$i][$j]['cancelled'] =  $value['workflow_name'] == "DS Cancel Policy" ? 'true' : 'false';
+                        $response[$i][$j]['cancel_date'] =  $value['workflow_name'] == "DS Cancel Policy" ?   $this->formatDate($value['cancelDate']): '';
+                        $response[$i][$j]['reinstated'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? 'true' : 'false';
+                        $response[$i][$j]['reinstated_date'] =  $value['workflow_name'] == "Dive Store Reinstate Policy" ? (isset($value['reinstateDate'])? $this->formatDate($value['reinstateDate']) : $this->formatDate($value['modifiedDate'] )) : '';
                         if($product == "diveStoreProperty") { 
-                            $response[$i][$j]['propertyDeductables'] = $value['propertyDeductibles'] == "propertyDeductibles1000"? "$1,000" : $value['propertyDeductibles'] == "propertyDeductibles2500"? "$2,500" : $value['propertyDeductibles'] == "propertyDeductibles5000"? "$5,000" : "$1,000" ;
-                            $response[$i][$j]['catSelection'] = $value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT";
-                            $response[$i][$j]['Addl_Cnts_Limit'] = isset($previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal']) ? ((float)$value2['additionalLocationPropertyTotal']) - (float)$previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['additionalLocationPropertyTotal']) ? "0" : $value2['additionalLocationPropertyTotal'] );
-                            $response[$i][$j]['Addl_Contents_Premium'] = isset($previous_additionalLocation[$key]['previous_ALContentsFP']) ? ((float)$value2['ALContentsFP'] - (float)$previous_additionalLocation[$key]['previous_ALContentsFP']) : (isset( $value2['endoALContentsFP']) ? $value2['endoALContentsFP'] :  (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALContentsFP']) ? "0" : $value2['ALContentsFP']));
-                            $response[$i][$j]['Loss_of_Business_Income_Limit'] = isset($previous_additionalLocation[$key]['previous_ALLossofBusIncome']) ? ((float)$value2['ALLossofBusIncome'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncome']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALLossofBusIncome']) ? "0" : $value2['ALLossofBusIncome']);
-                            $response[$i][$j]['Additional_Loss_of_Income_Premium'] = isset($previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) ? ((float)$value2['ALLossofBusIncomeFP'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) : (isset($value2['endoALLossofBusIncomeFP']) ?  $value2['endoALLossofBusIncomeFP'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALLossofBusIncomeFP']) ? "0" : $value2['ALLossofBusIncomeFP']));
-                            $response[$i][$j]['buildingType'] = $value2['buildingConstruction'];
-                            $response[$i][$j]['Building_Limit'] = isset($previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) ? ((float)$value2['ALBuildingReplacementValue'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALBuildingReplacementValue']) ? "0" : $value2['ALBuildingReplacementValue']);
-                            $response[$i][$j]['Building_Premium'] = isset($previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) ? ((float)$value2['ALBuildingLimitFP'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) : isset($value2['endoALBuildingLimitFP']) ? $value2['endoALBuildingLimitFP']: (($value['workflow_name'] == "Dive Store Endorsement") ? "0" :(is_null($value2['ALBuildingLimitFP']) ? "0" : $value2['ALBuildingLimitFP']));
-                            $response[$i][$j]['Total'] =  ((float)$response[$i][$j]['Building_Premium'] + (float)$response[$i][$j]['Additional_Loss_of_Income_Premium'] + (float)$response[$i][$j]['Addl_Contents_Premium']);
-                            $response[$i][$j]['ProRated_Contents_Premium'] = $value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value2['endoALContentsFP'])) ? round((float)($value2['endoALContentsFP']) * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)($value2['ALContentsFP']) * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['ProRated_Building_Premium'] = $value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value2['endoALBuildingLimitFP'])) ? round((float)($value2['endoALBuildingLimitFP']) * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)($value2['ALBuildingLimitFP']) * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['ProRated_Loss_of_Income_Premium'] = $value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value2['endoALLossofBusIncomeFP'])) ? round((float)($value2['endoALLossofBusIncomeFP']) * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)($value2['ALLossofBusIncomeFP']) * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['propertyProRataPremium']  = (float)$response[$i][$j]['ProRated_Contents_Premium'] + (float)$response[$i][$j]['ProRated_Building_Premium'] + (float)$response[$i][$j]['ProRated_Loss_of_Income_Premium'];
-                        
+                            $response[$i][$j]['propertyDeductables'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($responsePrimary[$i]['propertyDeductables']);
+                            $response[$i][$j]['catSelection'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? "" : ($value['propertyCoverageOption'] == "cat"? "CAT" : "NON CAT");
+                            $response[$i][$j]['Addl_Cnts_Limit'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal']) ? ((float)$value2['additionalLocationPropertyTotal']) - (float)$previous_additionalLocation[$key]['previous_additionalLocationPropertyTotal'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['additionalLocationPropertyTotal']) ? "0" : $value2['additionalLocationPropertyTotal'] ));
+                            $response[$i][$j]['Addl_Contents_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALContentsFP']) ? ((float)$value2['ALContentsFP'] - (float)$previous_additionalLocation[$key]['previous_ALContentsFP']) : (isset( $value2['endoALContentsFP']) ? $value2['endoALContentsFP'] :  (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALContentsFP']) ? "0" : $value2['ALContentsFP'])));
+                            $response[$i][$j]['Loss_of_Business_Income_Limit'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALLossofBusIncome']) ? ((float)$value2['ALLossofBusIncome'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncome']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALLossofBusIncome']) ? "0" : $value2['ALLossofBusIncome']));
+                            $response[$i][$j]['Additional_Loss_of_Income_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) ? ((float)$value2['ALLossofBusIncomeFP'] - (float)$previous_additionalLocation[$key]['previous_ALLossofBusIncomeFP']) : (isset($value2['endoALLossofBusIncomeFP']) ?  $value2['endoALLossofBusIncomeFP'] : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALLossofBusIncomeFP']) ? "0" : $value2['ALLossofBusIncomeFP'])));
+                            $response[$i][$j]['buildingType'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? "" : ($value2['buildingConstruction']);
+                            $response[$i][$j]['Building_Limit'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) ? ((float)$value2['ALBuildingReplacementValue'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingReplacementValue']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALBuildingReplacementValue']) ? "0" : $value2['ALBuildingReplacementValue']));
+                            $response[$i][$j]['Building_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) ? ((float)$value2['ALBuildingLimitFP'] - (float)$previous_additionalLocation[$key]['previous_ALBuildingLimitFP']) : isset($value2['endoALBuildingLimitFP']) ? $value2['endoALBuildingLimitFP']: (($value['workflow_name'] == "Dive Store Endorsement") ? "0" :(is_null($value2['ALBuildingLimitFP']) ? "0" : $value2['ALBuildingLimitFP'])));
+                            $response[$i][$j]['Total'] =  ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (((float)$response[$i][$j]['Building_Premium'] + (float)$response[$i][$j]['Additional_Loss_of_Income_Premium'] + (float)$response[$i][$j]['Addl_Contents_Premium']));
+                            $response[$i][$j]['ProRated_Contents_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value2['endoALContentsFP'])) ? round((float)($value2['endoALContentsFP']) * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)($value2['ALContentsFP']) * (float)($value2['ALProRataPremiumPercentage'])));
+                            $response[$i][$j]['ProRated_Building_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value2['endoALBuildingLimitFP'])) ? round((float)($value2['endoALBuildingLimitFP']) * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)($value2['ALBuildingLimitFP']) * (float)($value2['ALProRataPremiumPercentage'])));
+                            $response[$i][$j]['ProRated_Loss_of_Income_Premium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? ((isset($value2['endoALLossofBusIncomeFP'])) ? round((float)($value2['endoALLossofBusIncomeFP']) * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)($value2['ALLossofBusIncomeFP']) * (float)($value2['ALProRataPremiumPercentage'])));
+                            $response[$i][$j]['propertyProRataPremium']  = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ((float)$response[$i][$j]['ProRated_Contents_Premium'] + (float)$response[$i][$j]['ProRated_Building_Premium'] + (float)$response[$i][$j]['ProRated_Loss_of_Income_Premium']);
                         }
                         if($product == "diveStore"){
-                            $response[$i][$j]['basepremium'] = isset($previous_additionalLocation[$key]['previous_ALCoverageFP']) ? ((float)$value2['ALCoverageFP'] - (float)$previous_additionalLocation[$key]['previous_ALCoverageFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALCoverageFP']) ? "0" : $value2['ALCoverageFP'] );
-                            $response[$i][$j]['nonDivingPool'] = isset($previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) ? ((float)($value2['ALnonDivingPoolAmount']) - (float)$previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALnonDivingPoolAmount']) ? "0" : $value2['ALnonDivingPoolAmount']);
-                            $response[$i][$j]['ExcessLiability']  = isset($previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) ? ((float)($value2['ALExcessLiabilityFP']) - (float)$previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALExcessLiabilityFP']) ? "0" : $value2['ALExcessLiabilityFP']);
-                            $response[$i][$j]['TravelAgent'] = isset($previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) ? ((float)$value2['ALTravelAgentEOFP'] - (float)$previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALTravelAgentEOFP']) ? "0" : $value2['ALTravelAgentEOFP']) ; 
-                            $response[$i][$j]['medicalExpense'] = isset($previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) ?  ((float)$value2['ALMedicalExpenseFP'] - (float)$previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : isset($value2['ALMedicalExpenseFP']) ? "0" : $value2['ALMedicalExpenseFP']) ;
-                            $response[$i][$j]['lakeQuarry'] = isset($previous_additionalLocation[$key]['previous_ALlakeQuarry']) ? ((float)$value2['ALlakeQuarry'] - (float)$previous_additionalLocation[$key]['previous_ALlakeQuarry']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALlakeQuarry'])? "0" : $value2['ALlakeQuarry'] );
-                            $response[$i][$j]['nonOwnedAuto'] = isset($previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) ? ((float)$value2['ALNonOwnedAutoFP'] - (float)$previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALNonOwnedAutoFP'])? "0" : $value2['ALNonOwnedAutoFP']);
-                            $response[$i][$j]['ProRata_basepremium'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALCoverageFP']) ? round((float)$value2['ALCoverageFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALCoverageFP'] * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['ProRata_nonDivingPool'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALnonDivingPoolAmount']) ? round((float)$value2['ALnonDivingPoolAmount'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALnonDivingPoolAmount'] * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['ProRata_ExcessLiability'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALExcessLiabilityFP']) ? round((float)$value2['ALExcessLiabilityFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALExcessLiabilityFP'] * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['ProRata_TravelAgent'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALTravelAgentEOFP']) ? round((float)$value2['ALTravelAgentEOFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALTravelAgentEOFP'] * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['ProRata_medicalExpense'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALMedicalExpenseFP']) ? round((float)$value2['ALMedicalExpenseFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALMedicalExpenseFP'] * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['ProRata_nonOwnedAuto'] = $value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALNonOwnedAutoFP']) ? round((float)$value2['ALNonOwnedAutoFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['Non-ALNonOwnedAutoFP'] * (float)($value2['ALProRataPremiumPercentage']));
-                            $response[$i][$j]['liabilityProRataPremium'] = (float)$response[$i][$j]['ProRata_basepremium'] + (float)$response[$i][$j]['ProRata_nonDivingPool'] + (float)$response[$i][$j]['ProRata_ExcessLiability'] + (float)$response[$i][$j]['ProRata_TravelAgent'] + (float)$response[$i][$j]['ProRata_medicalExpense'] + (float)$response[$i][$j]['ProRata_nonOwnedAuto'];
+                            $response[$i][$j]['basepremium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALCoverageFP']) ? ((float)$value2['ALCoverageFP'] - (float)$previous_additionalLocation[$key]['previous_ALCoverageFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALCoverageFP']) ? "0" : $value2['ALCoverageFP'] ));
+                            $response[$i][$j]['nonDivingPool'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) ? ((float)($value2['ALnonDivingPoolAmount']) - (float)$previous_additionalLocation[$key]['previous_ALnonDivingPoolAmount']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALnonDivingPoolAmount']) ? "0" : $value2['ALnonDivingPoolAmount']));
+                            $response[$i][$j]['ExcessLiability']  = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) ? ((float)($value2['ALExcessLiabilityFP']) - (float)$previous_additionalLocation[$key]['previous_ALExcessLiabilityFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALExcessLiabilityFP']) ? "0" : $value2['ALExcessLiabilityFP']));
+                            $response[$i][$j]['TravelAgent'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) ? ((float)$value2['ALTravelAgentEOFP'] - (float)$previous_additionalLocation[$key]['previous_ALTravelAgentEOFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALTravelAgentEOFP']) ? "0" : $value2['ALTravelAgentEOFP'])) ; 
+                            $response[$i][$j]['medicalExpense'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) ?  ((float)$value2['ALMedicalExpenseFP'] - (float)$previous_additionalLocation[$key]['previous_ALMedicalExpenseFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : isset($value2['ALMedicalExpenseFP']) ? "0" : $value2['ALMedicalExpenseFP']));
+                            $response[$i][$j]['lakeQuarry'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALlakeQuarry']) ? ((float)$value2['ALlakeQuarry'] - (float)$previous_additionalLocation[$key]['previous_ALlakeQuarry']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALlakeQuarry'])? "0" : $value2['ALlakeQuarry'] ));
+                            $response[$i][$j]['nonOwnedAuto'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : (isset($previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) ? ((float)$value2['ALNonOwnedAutoFP'] - (float)$previous_additionalLocation[$key]['previous_ALNonOwnedAutoFP']) : (($value['workflow_name'] == "Dive Store Endorsement") ? "0" : is_null($value2['ALNonOwnedAutoFP'])? "0" : $value2['ALNonOwnedAutoFP']));
+                            $response[$i][$j]['ProRata_basepremium'] = ((int)$response[$i][$j]['basepremium'] == 0) ? 0 : (($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALCoverageFP']) ? round((float)$value2['ALCoverageFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALCoverageFP'] * (float)($value2['ALProRataPremiumPercentage']))));
+                            $response[$i][$j]['ProRata_nonDivingPool'] = ((int)$response[$i][$j]['nonDivingPool'] == 0) ? 0 : (($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALnonDivingPoolAmount']) ? round((float)$value2['ALnonDivingPoolAmount'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALnonDivingPoolAmount'] * (float)($value2['ALProRataPremiumPercentage']))));
+                            $response[$i][$j]['ProRata_ExcessLiability'] = ((int)$response[$i][$j]['ExcessLiability'] == 0) ? 0 : (($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALExcessLiabilityFP']) ? round((float)$value2['ALExcessLiabilityFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALExcessLiabilityFP'] * (float)($value2['ALProRataPremiumPercentage']))));
+                            $response[$i][$j]['ProRata_TravelAgent'] = ((int)$response[$i][$j]['TravelAgent'] == 0) ? 0 : (($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALTravelAgentEOFP']) ? round((float)$value2['ALTravelAgentEOFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALTravelAgentEOFP'] * (float)($value2['ALProRataPremiumPercentage']))));
+                            $response[$i][$j]['ProRata_medicalExpense'] = ((int)$response[$i][$j]['medicalExpense'] == 0) ? 0 : (($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALMedicalExpenseFP']) ? round((float)$value2['ALMedicalExpenseFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALMedicalExpenseFP'] * (float)($value2['ALProRataPremiumPercentage']))));
+                            $response[$i][$j]['ProRata_nonOwnedAuto'] = ((int)$response[$i][$j]['nonOwnedAuto'] == 0) ? 0 : (($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ($value['workflow_name'] == "Dive Store Endorsement" ? (isset($value2['ALNonOwnedAutoFP']) ? round((float)$value2['ALNonOwnedAutoFP'] * (float)($value2['ALProRataPremiumPercentage'])) : "0.00") : round((float)$value2['ALNonOwnedAutoFP'] * (float)($value2['ALProRataPremiumPercentage']))));
+                            $response[$i][$j]['liabilityProRataPremium'] = ($value['workflow_name'] == "DS Cancel Policy" || $value['workflow_name'] == "Dive Store Reinstate Policy") ? 0 : ((float)$response[$i][$j]['ProRata_basepremium'] + (float)$response[$i][$j]['ProRata_nonDivingPool'] + (float)$response[$i][$j]['ProRata_ExcessLiability'] + (float)$response[$i][$j]['ProRata_TravelAgent'] + (float)$response[$i][$j]['ProRata_medicalExpense'] + (float)$response[$i][$j]['ProRata_nonOwnedAuto'] + (float)$response[$i][$j]['lakeQuarry']);
                         }
-                        $responseAl['data'] = $response;
+			            $responseAl['data'] = $response;
                         $j+= 1;
                     }
-                }
-                $i += 1; 
-            }
-            if(isset($responseAl['data'])){
-                $responseData['data'] = array_merge($responseData['data'],$responseAl['data']);
-            }
-            $responseData['total'] = $i;
+		        }
+		    }
+            $i += 1; 
         }
-        if(empty($responseData['data'])){
-            $responseData['total'] = -1;
-            $responseData['data'] = '';
-        }
-        $this->logger->info('the response data is : '.print_r($responseData, true));
+	}
+	
+	if(isset($responseAl['data'])){
+        $responseData['data'] = array_merge($responseData['data'],$responseAl['data']);
+    }       
+	
+    if(empty($responseData['data'])){
+        $responseData['total'] = -1;
+        $responseData['data'] = '';
+	}else{
+		$responseData['total'] = sizeof($responseData['data']);
+	}
         return $responseData;
     }
 }

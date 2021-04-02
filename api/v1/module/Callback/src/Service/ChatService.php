@@ -386,20 +386,22 @@ class ChatService extends AbstractService
                 return;
             }
             $displayName = isset($botParams['displayName']) ? $botParams['displayName'] : $botName;
-            $userDetails = $this->getUserByUsername($botName,false);
-            $this->logger->info("USER DETILS--".print_r($userDetails,true));
-            if (isset($userDetails) && count($userDetails) > 0) {
-                if ($userDetails['delete_at'] == 0) {
-                    //Update bot
-                    $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
-                    if (isset($botParams['profileImage']) && !empty($botParams['profileImage'])) {
-                        $this->updateProfileImage($botName,$botParams['profileImage']);
+            $userDetails = $this->getUserByUsername($botName, false);
+            $this->logger->info("USER DETILS--".print_r($userDetails, true));
+            if (isset($userDetails) && $userDetails != 404) {
+                if (count($userDetails) > 0) {
+                    if ($userDetails['delete_at'] == 0) {
+                        //Update bot
+                        $response = $this->restClient->put('api/v4/bots/' . $userDetails['id'], array('display_name' => $displayName), $headers);
+                        if (isset($botParams['profileImage']) && !empty($botParams['profileImage'])) {
+                            $this->updateProfileImage($botName, $botParams['profileImage']);
+                        }
+                    } else {
+                        //Enable bot
+                        $response = $this->enableBot($botName);
                     }
-                }else{
-                    //Enable bot
-                    $response = $this->enableBot($botName);
                 }
-            }else{
+            } else {
                 //Create bot
                 $response = $this->restClient->postWithHeader('api/v4/bots', array('username' => $botName, 'display_name' => $displayName, 'description' => 'BOT for '.$botName), $headers);
             }
@@ -410,21 +412,22 @@ class ChatService extends AbstractService
         }
     }
 
-    private function updateProfileImage($botName, $img){
-       try {
+    private function updateProfileImage($botName, $img)
+    {
+        try {
             $headers = $this->getAuthHeader();
             $botName = $this->sanitizeName($botName);
             if (empty($botName)) {
                 $this->logger->info("Bot Name is missing");
                 return;
             }
-            $userDetails = $this->getUserByUsername($botName,false);
-            $response = $this->restClient->postMultiPart('api/v4/users/' . $userDetails['id'].'/image', array(),array("image" => $img),$headers);
+            $userDetails = $this->getUserByUsername($botName, false);
+            $response = $this->restClient->postMultiPart('api/v4/users/' . $userDetails['id'].'/image', array(), array("image" => $img), $headers);
             return $response;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
-        } 
+        }
     }
 
     public function disableBot($botName)
@@ -437,15 +440,14 @@ class ChatService extends AbstractService
                 $this->logger->info("Bot Name is missing");
                 return;
             }
-            $botDetails = $this->getUserByUsername($botName,false);
+            $botDetails = $this->getUserByUsername($botName, false);
             if (isset($botDetails) && count($botDetails) > 0) {
                 $response = $this->restClient->postWithHeader('api/v4/bots/' . $botDetails['id'].'/disable', array(), $headers);
                 return $response;
-            }  else{
+            } else {
                 $this->logger->info("No Bot with the specified name was found");
-                return 0;                
+                return 0;
             }
-
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -462,38 +464,38 @@ class ChatService extends AbstractService
                 $this->logger->info("Bot Name is missing");
                 return;
             }
-            $botDetails = $this->getUserByUsername($botName,false);
+            $botDetails = $this->getUserByUsername($botName, false);
             if (isset($botDetails) && count($botDetails) > 0) {
                 $response = $this->restClient->postWithHeader('api/v4/bots/' . $botDetails['id'].'/enable', array(), $headers);
                 return $response;
-            }            
+            }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
 
-    public function appBotNotification($params){
-        $this->logger->info("appBotNotification--".print_r($params,true));
-        try{
+    public function appBotNotification($params)
+    {
+        $this->logger->info("appBotNotification--".print_r($params, true));
+        try {
             $headers = $this->getAuthHeader();
             $appDetails = $this->fileService->getAppDetailsBasedOnFileId($params['fileId']);
-            $appProperties = json_decode($appDetails['app_properties'],true);
-            $fileDetails = $this->fileService->getFile($params['fileId'], false,$appDetails['account_id']);
-            $title = $fileDetails['title'];            
-            $this->logger->info("APP Title--".print_r($title,true));
+            $appProperties = json_decode($appDetails['app_properties'], true);
+            $fileDetails = $this->fileService->getFile($params['fileId'], false, $appDetails['account_id']);
+            $title = $fileDetails['title'];
+            $this->logger->info("APP Title--".print_r($title, true));
             $url = "<a eoxapplication=" .'"'.$appDetails['appName']. '"'. " "."file-id=" .'"'.$params['fileId'] . '"'. "></a>";
-            $this->logger->info("APP URL--".print_r($url,true));
+            $this->logger->info("APP URL--".print_r($url, true));
             $subscribers =  $this->subscriberService->getSubscribers($params['fileId']);
             $subscribersToList = array_column($subscribers, 'username');
             $subscribersList = implode(',', $subscribersToList);
-            $this->logger->info("appBotUrl---".print_r($this->appBotUrl,true));
+            $this->logger->info("appBotUrl---".print_r($this->appBotUrl, true));
             $botName = $this->sanitizeName($appDetails['appName']);
-            $payLoad = array('botName' => $botName, 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title,"-"), 'url' => $url);
-            $this->logger->info("Payload---".print_r($payLoad,true));
+            $payLoad = array('botName' => $botName, 'message' => $params['message'],'from' => $params['from'],'toList' => $subscribersList, 'identifier' =>$params['fileId'] , 'title' => rtrim($title, "-"), 'url' => $url);
+            $this->logger->info("Payload---".print_r($payLoad, true));
             $response = $this->restClient->postWithHeader($this->appBotUrl. 'appbot', $payLoad, $headers);
-            $this->logger->info("App Bot response---".print_r($response,true));
-
+            $this->logger->info("App Bot response---".print_r($response, true));
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -501,27 +503,28 @@ class ChatService extends AbstractService
     }
     // partipnts based on fileId
 
-    public function postFileComment($data){
-        try{
-            $this->logger->info("postFileComment---".print_r($data,true));
+    public function postFileComment($data)
+    {
+        try {
+            $this->logger->info("postFileComment---".print_r($data, true));
             $userInfo = $this->getUser($data['senderId']);
-            $this->logger->info("Userinfo---".print_r($userInfo,true));
+            $this->logger->info("Userinfo---".print_r($userInfo, true));
             $userDetails = $this->userService->getUserContextDetails($userInfo['username']);
-            $this->logger->info("userDetails---".print_r($userDetails,true));
-            $subscribers =  $this->subscriberService->getUserSubscriber($data['FileId'],null,$userDetails['id']);
-            $this->logger->info("subscribers---".print_r($subscribers,true));
+            $this->logger->info("userDetails---".print_r($userDetails, true));
+            $subscribers =  $this->subscriberService->getUserSubscriber($data['FileId'], null, $userDetails['id']);
+            $this->logger->info("subscribers---".print_r($subscribers, true));
             // TODO CHECK IF COMMENT SENDER HAVING ACCESS TO THE FILE - Subscriber or one of the partcipants
             $context = ['accountId' => isset($subscribers[0]['account_id']) ? $subscribers[0]['account_id']: $userDetails['accountId'], 'userId' => $userDetails['userId']];
-            $this->logger->info("Contexttt---".print_r($context,true));
+            $this->logger->info("Contexttt---".print_r($context, true));
             $this->updateAccountContext($context);
-            $this->commentService->createComment($data,$data['FileId']);
-
-        }catch(Exception $e){
+            $this->commentService->createComment($data, $data['FileId']);
+        } catch (Exception $e) {
             throw $e;
         }
     }
 
-    private function getUser($userId){
+    private function getUser($userId)
+    {
         try {
             $headers = $this->getAuthHeader();
             $userData = $this->restClient->get('api/v4/users/' . $userId, array(), $headers);
@@ -530,5 +533,4 @@ class ChatService extends AbstractService
             return $e->getCode();
         }
     }
-
 }

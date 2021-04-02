@@ -27,27 +27,27 @@ class JobController extends AbstractApiController
      * @api
      * @link /app/appId/schedule
      * @method POST
-     * @param Job Name, Job Group, Job Payload(job->url, data, schedule ->cron), CRON, App Id, Account Id(optional)
+     * @param Job Name, Job Team, Job Payload(job->url, data, schedule ->cron), CRON, App Id, Account Id(optional)
      * @return array Returns a JSON Response with Created Job details(ID).
      */
     public function scheduleJobAction()
     {
         $params = $this->extractPostData();
         $jobName = $params['jobName'];
-        $jobGroup = $params['jobGroup'];
+        $jobTeam = $params['jobTeam'];
         $jobPayload = $params['jobPayload'];
         $cron = $params['cron'];
         $accountId = isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $appId = $this->params()->fromRoute()['appId'];
         try {
-            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId);
+            $response = $this->jobService->scheduleNewJob($jobName, $jobTeam, $jobPayload, $cron, $appId, $accountId);
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -73,7 +73,7 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -99,36 +99,37 @@ class JobController extends AbstractApiController
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
     }
 
     /**
-     * Delete Job based on Name and Group API
+     * Delete Job based on Name and Team API
      * @api
      * @link /app/appId/
      * @method DELETE
-     * @param $jobName, $jobGroup Name and Group of Job to delete
+     * @param $jobName, $jobTeam Name and Team of Job to delete
      * @return array success|failure response
      */
     public function cancelJobAction()
     {
         $params = $this->extractPostData();
         $jobName = $params['jobName'];
-        $jobGroup = $params['jobGroup'];
+        $jobTeam = $params['jobTeam'];
         $data['app_id'] = $this->params()->fromRoute()['appId'];
         $appId = isset($data['app_id']) ? $data['app_id'] : null;
+        $accountId = isset($params['accountId']) ? $params['accountId'] : null;
         try {
-            $response = $this->jobService->cancelJob($jobName, $jobGroup, $appId);
+            $response = $this->jobService->cancelJob($jobName, $jobTeam, $appId, $accountId);
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);
             } else {
                 return $this->getSuccessResponse();
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -151,7 +152,7 @@ class JobController extends AbstractApiController
         try {
             $this->jobService->cancelJobId($jobId, $appId);
             return $this->getSuccessResponse();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

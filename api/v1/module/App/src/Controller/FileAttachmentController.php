@@ -60,24 +60,22 @@ class FileAttachmentController extends AbstractApiController
     
     public function addAttachmentAction()
     {
-        $params = $this->params()->fromPost();
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
             $files = isset($_FILES['file']) ? $_FILES['file'] : $this->params()->fromFiles('files');
             if (!$files) {
                 return $this->getErrorResponse("No file Found", 404, $params);
             }
-            $fileInfo = $this->fileService->addAttachment($params,$files);
+            $fileInfo = $this->fileService->addAttachment($params, $files);
             return $this->getSuccessResponseWithData($fileInfo, 201);
         } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch (ServiceException $e){
+        } catch (ServiceException $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 500);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
         }
         if (!isset($_FILES['file'])) {
@@ -86,36 +84,34 @@ class FileAttachmentController extends AbstractApiController
         return $this->getErrorResponse("File Not attached", 400, $files);
     }
 
-    public function removeAttachmentAction() {
+    public function removeAttachmentAction()
+    {
         $params = $this->params()->fromRoute();
         try {
             $this->fileService->deleteAttachment($params);
             return $this->getSuccessResponse("Attachment has been successfully deleted", 201);
-        }
-        catch (ServiceException $e) {
+        } catch (ServiceException $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Unexpected error has occured", 500);
         }
         return $this->getErrorResponse("File Not found", 404);
     }
 
-    public function renameAttachmentAction() {
+    public function renameAttachmentAction()
+    {
         $params = $this->params()->fromRoute();
         $body = $this->extractPostData();
-        $data = array_merge($params,$body);
+        $data = array_merge($params, $body);
         try {
             $this->fileService->renameAttachment($data);
             return $this->getSuccessResponse("Attachment has been successfully renamed", 201);
-        }
-        catch (ServiceException $e){
+        } catch (ServiceException $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 500);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Unexpected error has occured", 400);
         }

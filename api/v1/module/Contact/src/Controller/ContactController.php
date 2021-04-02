@@ -57,8 +57,7 @@ class ContactController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
-        
+        }
     }
 
     /**
@@ -78,7 +77,7 @@ class ContactController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($data, 200);
     }
 
@@ -92,13 +91,13 @@ class ContactController extends AbstractApiController
      */
     public function delete($id)
     {
-        try{
+        try {
             $this->contactService->deleteContact($id);
             return $this->getSuccessResponse();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     public function get($id)
@@ -127,7 +126,7 @@ class ContactController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponseWithData($result);
     }
 
@@ -158,31 +157,30 @@ class ContactController extends AbstractApiController
      */
     public function getList()
     {
-        try{
+        try {
             $result = $this->contactService->getContacts();
             return $this->getSuccessResponseWithData($result);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     public function getContactsAction()
     {
         $data = $this->params()->fromQuery();
         $this->log->info(__CLASS__ . "-> Get Contacts - " . json_encode($data, true));
-        try{
+        try {
             if (isset($data['filter'])) {
                 $result = $this->contactService->getContacts($data['column'], $data['filter']);
             } else {
                 $result = $this->contactService->getContacts($data['column']);
-
             }
             return $this->getSuccessResponseWithData($result);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     public function contactImportAction()
@@ -200,13 +198,13 @@ class ContactController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponse("Imported Successfully", 200);
     }
 
     public function convertToCsv($data, $filename)
     {
-        if(empty($data)){
+        if (empty($data)) {
             return "";
         }
         FileUtils::createDirectory('/tmp/oxzion');
@@ -223,7 +221,7 @@ class ContactController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } finally{
+        } finally {
             fclose($fp);
         }
     }
@@ -231,7 +229,7 @@ class ContactController extends AbstractApiController
     public function contactExportAction()
     {
         $id = $this->extractPostData();
-        try{
+        try {
             if (isset($id)) {
                 $result = $this->contactService->exportContactCSV($id);
             } else {
@@ -242,10 +240,10 @@ class ContactController extends AbstractApiController
                 $response = $this->convertToCsv($result['data'], $filename . '.csv');
                 return $this->getSuccessStringResponse("Exported CSV Data", 200, $response);
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     public function contactsDeleteAction()
@@ -256,7 +254,7 @@ class ContactController extends AbstractApiController
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
         return $this->getSuccessResponse();
     }
 }

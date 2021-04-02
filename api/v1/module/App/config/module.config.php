@@ -448,6 +448,21 @@ return [
                     ],
                 ],
             ],
+            'getauditlog' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/audit',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'audit',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
             'gettempdocument' => [
                 'type' => Segment::class,
                 'options' => [
@@ -917,6 +932,20 @@ return [
                         'access' => [
                             // SET ACCESS CONTROL
                         ],
+                    ],
+                ],
+            ],
+            'getCssFile' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cssFile',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'method' => 'GET',
+                        'action' => 'getCssFile',
                     ],
                 ],
             ],

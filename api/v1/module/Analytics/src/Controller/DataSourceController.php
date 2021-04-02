@@ -10,7 +10,6 @@ use Oxzion\VersionMismatchException;
 
 class DataSourceController extends AbstractApiController
 {
-
     private $dataSourceService;
 
     /**
@@ -42,8 +41,7 @@ class DataSourceController extends AbstractApiController
         try {
             $this->dataSourceService->createDataSource($data);
             return $this->getSuccessResponseWithData($data, 201);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -63,11 +61,10 @@ class DataSourceController extends AbstractApiController
         try {
             $this->dataSourceService->updateDataSource($uuid, $data);
             return $this->getSuccessResponseWithData($data, 200);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        }        
+        }
     }
 
     public function delete($uuid)
@@ -76,8 +73,7 @@ class DataSourceController extends AbstractApiController
         try {
             $this->dataSourceService->deleteDataSource($uuid, $params['version']);
             return $this->getSuccessResponse();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -159,7 +155,7 @@ class DataSourceController extends AbstractApiController
         $routeParams = $this->params()->fromRoute();
         $uuid = $routeParams['datasourceUuid'];
         $params = $this->params()->fromQuery();
-        $result = $this->dataSourceService->getDataStructureDetails($uuid,  $params);
+        $result = $this->dataSourceService->getDataStructureDetails($uuid, $params);
         return $this->getSuccessResponseWithData($result);
     }
 }

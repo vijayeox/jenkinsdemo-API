@@ -11,10 +11,8 @@ use PHPUnit\Framework\TestResult;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-
 class TargetControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
@@ -45,7 +43,7 @@ class TargetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('target');        
+        $this->assertMatchedRouteName('target');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['version'], 1);
@@ -68,19 +66,19 @@ class TargetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['version'], 2);
     }
 
-     public function testUpdateWithWrongVersion()
-     {
-         $data = ['period_type' => "daily", 'version' => 3];
-         $this->initAuthToken($this->adminUser);
-         $this->setJsonContent(json_encode($data));
-         $this->dispatch('/analytics/target/44f22a46-3434-48df-96b9-c58520005817', 'PUT', null);
-         $this->assertResponseStatusCode(412);
-         $this->setDefaultAsserts();
-         $this->assertMatchedRouteName('target');
-         $content = (array)json_decode($this->getResponse()->getContent(), true);
-         $this->assertEquals($content['status'], 'error');
-         $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
-     }
+    public function testUpdateWithWrongVersion()
+    {
+        $data = ['period_type' => "daily", 'version' => 3];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/target/44f22a46-3434-48df-96b9-c58520005817', 'PUT', null);
+        $this->assertResponseStatusCode(412);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('target');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Entity version sent by client does not match the version on server.');
+    }
 
     public function testUpdateNotFound()
     {
@@ -95,7 +93,8 @@ class TargetControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testGet() {
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/target/44f22a46-3434-48df-96b9-c58520005817', 'GET');
         $this->assertResponseStatusCode(200);
@@ -106,7 +105,8 @@ class TargetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['period_type'], 'monthly');
     }
 
-    public function testGetNotFound() {
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/target/100', 'GET');
         $this->assertResponseStatusCode(404);
@@ -129,7 +129,7 @@ class TargetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-3434-48df-8888-c58520005817');
         $this->assertEquals($content['data']['data'][1]['period_type'], 'daily');
         $this->assertEquals($content['data']['data'][1]['red_limit'], '10000');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals($content['data']['total'], 3);
     }
 
 
@@ -149,10 +149,10 @@ class TargetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-3434-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][1]['period_type'], 'monthly');
         $this->assertEquals($content['data']['data'][1]['red_limit'], '1000');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals($content['data']['total'], 3);
     }
 
-     public function testGetListSortWithPageSize()
+    public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/target?filter=[{"sort":[{"field":"period_type","dir":"asc"}],"skip":1,"take":10}]', 'GET');
@@ -164,7 +164,7 @@ class TargetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-3434-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['period_type'], 'monthly');
         $this->assertEquals($content['data']['data'][0]['red_limit'], '1000');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals($content['data']['total'], 3);
     }
 
 

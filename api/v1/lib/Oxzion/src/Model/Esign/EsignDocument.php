@@ -12,24 +12,26 @@ class EsignDocument extends Entity
     const COMPLETED = 'COMPLETED';
 
     protected static $MODEL = [
-        'id' =>             ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
-        'ref_id' =>         ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'uuid' =>           ['type' => Type::UUID,      'readonly' => FALSE,  'required' => FALSE],
-        'doc_id' =>         ['type' => Type::STRING,     'readonly' => FALSE,  'required' => FALSE],
-        'status' =>    ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE, 'value' => self::IN_PROGRESS],
-        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => TRUE,  'required' => FALSE],
-        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => TRUE,  'required' => FALSE]
+        'id' =>             ['type' => Type::INTEGER,   'readonly' => true , 'required' => false],
+        'ref_id' =>         ['type' => Type::STRING,    'readonly' => false, 'required' => true],
+        'uuid' =>           ['type' => Type::UUID,      'readonly' => false, 'required' => false],
+        'doc_id' =>         ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'docPath' =>        ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'status' =>         ['type' => Type::STRING,    'readonly' => false, 'required' => true, 'value' => self::IN_PROGRESS],
+        'date_created' =>   ['type' => Type::TIMESTAMP, 'readonly' => true,  'required' => false],
+        'created_by' =>     ['type' => Type::INTEGER,   'readonly' => true,  'required' => false]
     ];
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 
-    public function loadByDocId($docId){
+    public function loadByDocId($docId)
+    {
         $obj = $this->table->getByDocId($docId);
         if (is_null($obj) || (0 == count($obj))) {
-            throw new EntityNotFoundException('Entity not found.',
-                ['entity' => $this->table->getTableGateway()->getTable(), 'doc_id' => $docId]);
+            throw new EntityNotFoundException('Entity not found.', ['entity' => $this->table->getTableGateway()->getTable(), 'doc_id' => $docId]);
         }
         $this->assignInternal($obj->toArray(), false);
         return $this;

@@ -33,13 +33,13 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
-        switch($this->getName()){
+        switch ($this->getName()) {
             case 'testSubmitTaskWithDefinedFields':
                 $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Activity.yml");
-            	break;
+                break;
             case 'testGetListActivityLogByFileIdWithOutWorkflow':
-            	$dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/FileWithoutWorkflow.yml");
-            	break;
+                $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/FileWithoutWorkflow.yml");
+                break;
         }
         return $dataset;
     }
@@ -79,8 +79,8 @@ class WorkflowInstanceControllerTest extends ControllerTest
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('startProcess')->withArgs(function($arg1, $arg2){
-                $result = $arg1 == 'Process_1dx3jli:931b7c8b-fef7-11e9-89d4-0294414e067f'; 
+            $mockProcessEngine->expects('startProcess')->withArgs(function ($arg1, $arg2) {
+                $result = $arg1 == 'Process_1dx3jli:931b7c8b-fef7-11e9-89d4-0294414e067f';
                 $result = $result && count($arg2) == 11;
                 $result = $result && isset($arg2['fileId']);
                 $result = $result && isset($arg2['workflow_instance_id']);
@@ -105,10 +105,10 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testCreateWithPredefinedFields()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'workflow3', 
-                 'app_id' => '9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4', 
-                 'padi_number' => 22333, 
-                 'firstname' => 'Mohan', 
+        $data = ['name' => 'workflow3',
+                 'app_id' => '9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4',
+                 'padi_number' => 22333,
+                 'firstname' => 'Mohan',
                  'fax' => "34343434343"];
         $fileCount = $this->getConnection()->getRowCount('ox_file');
         $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
@@ -120,8 +120,8 @@ class WorkflowInstanceControllerTest extends ControllerTest
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('startProcess')->withArgs(function($arg1, $arg2){
-                $result = $arg1 == 'Process_1dx3w3e:ef1b7c8b-fef7-11e9-89d4-0294414e0633'; 
+            $mockProcessEngine->expects('startProcess')->withArgs(function ($arg1, $arg2) {
+                $result = $arg1 == 'Process_1dx3w3e:ef1b7c8b-fef7-11e9-89d4-0294414e0633';
                 $result = $result && count($arg2) == 7;
                 $result = $result && $arg2['app_id'] == '9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4';
                 $result = $result && $arg2['padi_number'] == 22333;
@@ -321,7 +321,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'A Process is already underway for this file');
     }
 
-// Code commented
+    // Code commented
     //     public function testUpdate(){
     //         $this->initAuthToken($this->adminUser);
     //         $data = ['name' => 'Sample2','app_id' => 1];
@@ -491,7 +491,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testcompleteActivityInstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0723', 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => "3f20b5c5-0124-11ea-a8a0-22e8105c0998", 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => "Task_1s7qzh3", 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'accountid' => $this->testAccountUuid)];
+        $data = ['activityInstanceId' => '3f6622fd-0124-11ea-a8a0-22e8105c0723', 'candidates' => array(array('teamid' => 'HR Team', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => "3f20b5c5-0124-11ea-a8a0-22e8105c0998", 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => "Task_1s7qzh3", 'processVariables' => array('workflowId' => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", 'accountid' => $this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activitycomplete', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -507,10 +507,9 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testcompleteActivityInstanceFail()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' => 'csasdassd', 'activityId' => 1, 'candidates' => array(array('groupid' => 'HR Group', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => 1, 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => 1, 'processVariables' => array('workflowId' => 1, 'accountid' => $this->testAccountUuid)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' => 'csasdassd', 'activityId' => 1, 'candidates' => array(array('teamid' => 'HR Team', 'type' => 'candidate'), array('userid' => 'admintest', 'type' => 'assignee')), 'processInstanceId' => 1, 'name' => 'Recruitment Request Created', 'status' => 'Active', 'taskId' => 1, 'processVariables' => array('workflowId' => 1, 'accountid' => $this->testAccountUuid)];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/callback/workflow/activitycomplete'
-            , 'POST', $data);
+        $this->dispatch('/callback/workflow/activitycomplete', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(ActivityInstanceController::class); // as specified in router's controller name alias
@@ -529,7 +528,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('completeActivity')->withArgs(function($arg1, $arg2){
+            $mockProcessEngine->expects('completeActivity')->withArgs(function ($arg1, $arg2) {
                 $result = $arg1 == '3f6622fd-0124-11ea-a8a0-22e8105c0723';
                 $result = $result && count($arg2) == 101;
                 return $result;
@@ -551,7 +550,6 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_array($content['data']), true);
-           
     }
 
     public function testSubmitTaskWithDefinedFields()
@@ -562,8 +560,8 @@ class WorkflowInstanceControllerTest extends ControllerTest
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('completeActivity')->withArgs(function($arg1, $arg2){
-                $result = $arg1 == 'e36622fd-0124-11ea-a8a0-22e8105c07af'; 
+            $mockProcessEngine->expects('completeActivity')->withArgs(function ($arg1, $arg2) {
+                $result = $arg1 == 'e36622fd-0124-11ea-a8a0-22e8105c07af';
                 $result = $result && count($arg2) == 8;
                 $result = $result && $arg2['app_id'] == '9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4';
                 $result = $result && $arg2['padi_number'] == 2141;
@@ -574,7 +572,6 @@ class WorkflowInstanceControllerTest extends ControllerTest
                 $result = $result && $arg2['workflow_instance_id'] == 6;
                 $result = $result && $arg2['workflowInstanceId'] == 'de20b5c5-0124-11ea-a8a0-22e8105c07fe';
                 return $result;
-
             })->once()->andReturnUsing(function () {
                 $activityService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);
                 $data['processInstanceId'] = "de20b5c5-0124-11ea-a8a0-22e8105c07fe";

@@ -237,6 +237,12 @@
 					<b>{include file = "{$smarty.current_dir}/SurplusLines/Group/{$surplusLineYear}/WY.tpl"}</b>
 				</p></center>
 			{/if}
+			<hr class = "spacing1"></hr>
+			{if isset($groupExcludedOperation) && $groupExcludedOperation != ""}
+			<p style="margin-bottom: 5px;font-size: 15px;"><b>EXCLUDED OPERATION:</b></p>
+	        		<p style="margin-top:1%;margin-left: 2%;text-align: justify;font-size: 13px;">{$groupExcludedOperation}</p>
+	        <hr></hr>
+	    	{/if}
 	</div>
 	</div>
 </body>

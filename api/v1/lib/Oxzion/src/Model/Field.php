@@ -14,7 +14,7 @@ class Field extends Entity
         'entity_id'=>null,
         'data_type'=>null,
         'type' => null,
-        'parent_id' => null, 
+        'parent_id' => null,
         'options'=>null,
         'template'=>null,
         'constraints'=>null,

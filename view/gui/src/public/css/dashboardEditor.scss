@@ -75,7 +75,7 @@
 }
 
 .react-datepicker-wrapper {
-  padding-right: 10px !important;
+  padding-right: 0px !important;
 }
 
 .dashboard-filter-field {
@@ -227,6 +227,8 @@
   box-shadow: 2px 5px#c6b5b5;
   padding: 1em;
   border: 0.5px solid grey;
+  width: max-content;
+  min-width: 99%;
 }
 
 .dashboard-rollup-button {
@@ -234,14 +236,15 @@
   cursor: pointer;
   right: 1%;
   position: absolute;
-}
+} 
 
 .dashboard-filter-description {
   position: absolute;
   left: 0;
   top: 0;
-  height: 15px;
+  height: 30px;
   width: 100%;
+  font-size: 16px !important;
 }
 
 .dashboard-preview-tab {
@@ -315,6 +318,7 @@
   vertical-align: middle;
   margin-top: 25px;
   position: relative;
+  margin-left: 10px;
 }
 
 .errorMsg {
@@ -344,4 +348,23 @@
 
 .field-width-200 {
   width:200px !important;
+}
+.disabled {
+  
+}
+
+.select_notif {
+  padding: 10px;
+  background: yellow;
+  color: black;
+  margin-top: 25px;
+  float: left;
+}
+
+.toastHide {
+  visibility: hidden;
+}
+.full-width{
+  widows: 100%;
+  overflow: hidden;
 }

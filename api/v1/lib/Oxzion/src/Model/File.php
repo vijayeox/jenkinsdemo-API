@@ -1,6 +1,7 @@
 <?php
 
 namespace Oxzion\Model;
+
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 use Oxzion\Type;
@@ -12,28 +13,29 @@ class File extends Entity
     const GREEN = "GREEN";
 
     protected static $MODEL = [
-        'id' =>                         ['type' => Type::INTEGER,   'readonly' => TRUE , 'required' => FALSE],
-        'account_id' =>                 ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'uuid' =>                       ['type' => Type::UUID,      'readonly' => TRUE, 'required' => FALSE],
-        'data' =>                       ['type' => Type::STRING,    'readonly' => FALSE, 'required' => TRUE],
-        'form_id' =>                    ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'created_by' =>                 ['type' => Type::INTEGER,   'readonly' => TRUE, 'required' => FALSE],
-        'modified_by' =>                ['type' => Type::INTEGER,   'readonly' => TRUE, 'required' => FALSE],
-        'date_created' =>               ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'date_modified' =>              ['type' => Type::TIMESTAMP, 'readonly' => TRUE, 'required' => FALSE],
-        'entity_id' =>                  ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => TRUE],
-        'assoc_id' =>                   ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'is_active' =>                  ['type' => Type::BOOLEAN,   'value' => 1, 'readonly' => FALSE, 'required' => FALSE],
-        'last_workflow_instance_id' =>  ['type' => Type::INTEGER,   'readonly' => FALSE, 'required' => FALSE],
-        'start_date' =>                 ['type' => Type::TIMESTAMP, 'readonly' => FALSE, 'required' => FALSE],
-        'end_date' =>                   ['type' => Type::TIMESTAMP, 'readonly' => FALSE, 'required' => FALSE],
-        'status' =>                     ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE],
-        'version' =>                    ['type' => Type::INTEGER,   'value' => 1, 'readonly' => FALSE, 'required' => FALSE],
-        'rygStatus' =>                  ['type' => Type::STRING,    'value' => 'GREEN', 'readonly' => FALSE, 'required' => FALSE],
-        'fileTitle' =>                  ['type' => Type::STRING,    'readonly' => FALSE, 'required' => FALSE]
+        'id' =>                         ['type' => Type::INTEGER,   'readonly' => true , 'required' => false],
+        'account_id' =>                 ['type' => Type::INTEGER,   'readonly' => false, 'required' => true],
+        'uuid' =>                       ['type' => Type::UUID,      'readonly' => true, 'required' => false],
+        'data' =>                       ['type' => Type::STRING,    'readonly' => false, 'required' => true],
+        'form_id' =>                    ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'created_by' =>                 ['type' => Type::INTEGER,   'readonly' => true, 'required' => false],
+        'modified_by' =>                ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'date_created' =>               ['type' => Type::TIMESTAMP, 'readonly' => true, 'required' => false],
+        'date_modified' =>              ['type' => Type::TIMESTAMP, 'readonly' => false, 'required' => false],
+        'entity_id' =>                  ['type' => Type::INTEGER,   'readonly' => false, 'required' => true],
+        'assoc_id' =>                   ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'is_active' =>                  ['type' => Type::BOOLEAN,   'value' => 1, 'readonly' => false, 'required' => false],
+        'last_workflow_instance_id' =>  ['type' => Type::INTEGER,   'readonly' => false, 'required' => false],
+        'start_date' =>                 ['type' => Type::DATE, 'readonly' => false, 'required' => false],
+        'end_date' =>                   ['type' => Type::DATE, 'readonly' => false, 'required' => false],
+        'status' =>                     ['type' => Type::STRING,    'readonly' => false, 'required' => false],
+        'version' =>                    ['type' => Type::INTEGER,   'value' => 1, 'readonly' => false, 'required' => false],
+        'rygStatus' =>                  ['type' => Type::STRING,    'value' => 'GREEN', 'readonly' => false, 'required' => false],
+        'fileTitle' =>                  ['type' => Type::STRING,    'readonly' => false, 'required' => false]
     ];
 
-    public function &getModel() {
+    public function &getModel()
+    {
         return self::$MODEL;
     }
 }

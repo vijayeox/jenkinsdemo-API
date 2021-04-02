@@ -30,14 +30,14 @@ class ActivityImpl implements Activity
     }
 
     public function getActivity($activityId)
-    { 
+    {
         try {
             $this->logger->info("Entering the getActivity method in ActivityImpl File");
             $response =  $this->restClient->get("task/".$activityId);
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -51,7 +51,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             return array();
         }
     }
@@ -59,11 +59,11 @@ class ActivityImpl implements Activity
     public function claimActivity($activityId, $userId)
     {
         $query = 'task/'.$activityId.'/claim';
-        try { 
+        try {
             $this->logger->info("Entering the claimActivity method in ActivityImpl File");
             $response =  $this->restClient->post($query, array('userId'=>$userId));
-            $result = json_decode($response, true);            
-        } catch (Exception $e) { 
+            $result = json_decode($response, true);
+        } catch (Exception $e) {
             $error = json_decode($e->getResponse()->getBody()->getContents(), true);
             throw new WorkflowException($error['message'], $error['type']);
         }
@@ -78,9 +78,9 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
-       }
+        }
     }
     public function completeActivity($activityId, $parameterArray=array())
     {
@@ -95,7 +95,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -108,13 +108,13 @@ class ActivityImpl implements Activity
             $params[$key]['value'] = $value;
         }
         try {
-            $this->logger->info("submitTaskForm parameter array -".print_r($params,true));
+            $this->logger->info("submitTaskForm parameter array -".print_r($params, true));
             $response =  $this->restClient->post($query, array('variables'=>$params));
             $result = json_decode($response, true);
             $this->logger->info("submitTaskForm method result - $result ");
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -128,20 +128,20 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
 
-    public function getActivitiesByGroup($groupId)
+    public function getActivitiesByTeam($teamId)
     {
         try {
             $this->logger->info("Entering the resolveActivity method in ActivityImpl File");
-            $response =  $this->restClient->post('task', array("candidateGroup"=>$groupId));
+            $response =  $this->restClient->post('task', array("candidateTeam"=>$teamId));
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(),$e);
+            $this->logger->error($e->getMessage(), $e);
             return array();
         }
     }

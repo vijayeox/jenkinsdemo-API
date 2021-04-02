@@ -115,7 +115,7 @@ content:
                 actions:
                     -
                         name: Build Application
-                        icon: 'fa fa-pencil-alt'
+                        icon: 'fa fa-gavel'
                         rule: 'true'
                         details:
                             -
@@ -139,4 +139,12 @@ content:
                 -       
                     title: Category  
                     field: category 
-                    cell: '<td>{item.category ? item.category.charAt(0).toUpperCase() + item.category.slice(1) : "Other"}</td>'   
+                    cell: '<td>{item.category ? item.category.charAt(0).toUpperCase() + item.category.slice(1) : "Other"}</td>'
+                -
+                    title: 'Modified By'
+                    field: modified_user
+                -
+                    title: 'Modified On'
+                    field: date_modified
+                    filter: date
+                    filterFormat: YYYY-MM-DD

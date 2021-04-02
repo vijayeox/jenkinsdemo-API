@@ -21,6 +21,7 @@ class PocketCard extends PolicyDocument
     public function execute(array $data, Persistence $persistenceService) 
     {
         $this->logger->info("Executing Pocket Card Generation with data- ".json_encode($data));
+        ini_set('max_execution_time', 300);
         if(isset($data['boatStoreNumber']) && !empty($data['boatStoreNumber'])){
             $data['padiNumber'] = $data['boatStoreNumber'];
         }

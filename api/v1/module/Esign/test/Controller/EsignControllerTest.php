@@ -6,16 +6,18 @@ use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Oxzion\Service\EsignService;
 use Mockery;
 
-class EsignControllerTest extends ControllerTest {
-	public function setUp() : void
+class EsignControllerTest extends ControllerTest
+{
+    public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
     }
 
-    public function tearDown() : void{
+    public function tearDown() : void
+    {
         parent::tearDown();
-    } 
+    }
 
     public function getDataSet()
     {
@@ -29,7 +31,7 @@ class EsignControllerTest extends ControllerTest {
         $mockEsignService = Mockery::mock('\Oxzion\Service\EsignService');
         $mockEsignService->expects('getDocumentStatus')->with($docId)->once()->andReturn("READY_FOR_SIGNATURE");
         $this->setService(EsignService::class, $mockEsignService);
-        $this->dispatch('/status/'.$docId, 'GET');
+        $this->dispatch('/esign/status/'.$docId, 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Esign');
@@ -40,5 +42,4 @@ class EsignControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['status'], 'READY_FOR_SIGNATURE');
     }
-
 }

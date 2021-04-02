@@ -80,6 +80,11 @@ return [
         "password" => "CFnEWs0g",
         "callbackUrl" => 'https://qa3.eoxvantage.com/esign/event'
     ],
+    'ims' => [
+        'apiUrl' => 'https://ws2.mgasystems.com/ims_demo/',
+        "userName" => "vantage.agora",
+        "tripleDESEncryptedPassword" => "9srGG5hflGT0aDrgsxs3GQ=="
+    ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'ENTITY_FOLDER'=>__DIR__.'/../../data/entity/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',

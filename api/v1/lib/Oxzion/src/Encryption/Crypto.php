@@ -40,12 +40,13 @@ class Crypto
             $secret=self::$secret;
         }
         $dat = $this->base_64_decode($data);
-        $decrypted = $this->encrypt_decrypt("decrypt",$dat,$secret);
+        $decrypted = $this->encrypt_decrypt("decrypt", $dat, $secret);
         $dec = Decoder::decode($decrypted);
         return($dec);
     }
 
-    private function encrypt_decrypt($action, $string,$secret) {
+    private function encrypt_decrypt($action, $string, $secret)
+    {
         $output = false;
         $encrypt_method = "AES-256-CBC";
         $secret_iv = $secret."-iv";
@@ -54,10 +55,10 @@ class Crypto
         
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
-        if ( $action == 'encrypt' ) {
+        if ($action == 'encrypt') {
             $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
             $output = base64_encode($output);
-        } else if( $action == 'decrypt' ) {
+        } elseif ($action == 'decrypt') {
             $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
         }
         return $output;
@@ -70,7 +71,7 @@ class Crypto
             $secret=self::$secret;
         };
         $dataencoded = Encoder::encode($data);
-        $encrypeddata = $this->encrypt_decrypt("encrypt",$dataencoded,$secret);
+        $encrypeddata = $this->encrypt_decrypt("encrypt", $dataencoded, $secret);
         $dat = $this->base_64_encode($encrypeddata);
         return $dat;
     }

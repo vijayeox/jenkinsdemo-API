@@ -46,7 +46,7 @@
     "elasticsearch/elasticsearch": "~7.0",
     "guzzlehttp/guzzle": "~6.0",
     "greenlion/php-sql-parser": "^4.1.2",
-    "nelexa/zip": "dev-master",
+    "nelexa/zip": "3.3.3",
     "stomp-php/stomp-php": "4.*",
     "johnkary/phpunit-speedtrap":"3.1.0",
     "ext-dom": "*",
@@ -86,7 +86,7 @@
       "Announcement\\": "module/Announcement/src/",
       "Alert\\": "module/Alert/src/",
       "User\\": "module/User/src/",
-      "Group\\": "module/Group/src/",
+      "Team\\": "module/Team/src/",
       "Analytics\\": "module/Analytics/src/",
       "Account\\": "module/Account/src/",
       "Auth\\": "module/Auth/src/",
@@ -107,7 +107,8 @@
       "PaymentGateway\\":"module/PaymentGateway/src/",
       "ErrorLog\\":"module/ErrorLog/src/",
       "Esign\\":"module/Esign/src/",
-      "Import\\":"module/Import/src/"
+      "Import\\":"module/Import/src/",
+      "Ims\\":"module/Ims/src/"
     }
   },
   "autoload-dev": {
@@ -119,7 +120,7 @@
       "ResourceTest\\": "module/Resource/test/",
       "FileTest\\": "module/File/test/",
       "UserTest\\": "module/User/test/",
-      "GroupTest\\": "module/Group/test/",
+      "TeamTest\\": "module/Team/test/",
       "AnalyticsTest\\": "module/Analytics/test/",
       "FileIndexerTest\\": "module/FileIndexer/test/",
       "RoleTest\\": "module/Role/test/",

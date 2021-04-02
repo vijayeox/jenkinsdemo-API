@@ -40,7 +40,6 @@ class FilterUtils
         $offset = 0;
         $sort = null;
         $where = "";
-
         if (!empty($params)) {
             if (!empty($params['filter'])) {
                 $filterArray = json_decode($params['filter'], true);
@@ -48,11 +47,9 @@ class FilterUtils
                     if (isset($filterArray[0]['take'])) {
                         $pageSize = ($filterArray[0]['take'] == 0) ? null : $filterArray[0]['take'];
                     }
-
                     if (isset($filterArray[0]['skip'])) {
                         $offset = $filterArray[0]['skip'];
                     }
-
                     if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                         $sort = FilterUtils::sortArray($filterArray[0]['sort'], $fieldMap);
                     }
@@ -71,8 +68,9 @@ class FilterUtils
     {
         $where = "";
         for ($x = 0; $x < sizeof($filterList); $x++) {
-            if(!isset($filterList[$x]['operator'])){
-                print_r($filterList);exit;
+            if (!isset($filterList[$x]['operator'])) {
+                print_r($filterList);
+                exit;
                 continue;
             }
             $operator = $filterList[$x]['operator'];
@@ -145,8 +143,8 @@ class FilterUtils
             $operatorp1 = '';
             $operatorp2 = '';
             if ($operator == 'startswith') {
-                $operatorp2 = '%';
-                $operation = ' like ';
+                $operatorp2 = 'like';
+                $operation = ' % ';
             } elseif ($operator == 'endswith') {
                 $operatorp1 = '%';
                 $operation = ' like ';
@@ -210,7 +208,6 @@ class FilterUtils
             $value['field'] = isset($fieldMap[$value['field']]) ? $fieldMap[$value['field']] : $value['field'];
             $sSort .= strlen($sSort) == 0 ? $value['field'] . " " . $value['dir'] : " ," . $value['field'] . " " . $value['dir'];
         }
-
         return $sSort;
     }
 }

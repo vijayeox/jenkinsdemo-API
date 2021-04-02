@@ -39,7 +39,7 @@ role:
                 name: MANAGE_TRANSPORTATION
                 permission: 15
             permission: 15
-        default: true
+        default: false
         privileges:
             -
                 privilege_name: MANAGE_TRANSPORTATION

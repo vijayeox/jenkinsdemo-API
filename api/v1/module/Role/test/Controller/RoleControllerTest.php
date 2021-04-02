@@ -165,7 +165,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(31, count($content['data']));
+        $this->assertEquals(36, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if ($val['privilege_name'] == "MANAGE_ANNOUNCEMENT") {
                 $this->assertEquals($val['permission'], 3);
@@ -182,7 +182,7 @@ class RoleControllerTest extends ControllerTest
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
-            if ($val['privilege_name'] == "MANAGE_GROUP") {
+            if ($val['privilege_name'] == "MANAGE_TEAM") {
                 $this->assertEquals($val['permission'], 3);
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
@@ -229,7 +229,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(31, count($content['data']));
+        $this->assertEquals(36, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if ($val['privilege_name'] == "MANAGE_ANNOUNCEMENT") {
                 $this->assertEquals($val['permission'], 3);
@@ -246,7 +246,7 @@ class RoleControllerTest extends ControllerTest
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
-            if ($val['privilege_name'] == "MANAGE_GROUP") {
+            if ($val['privilege_name'] == "MANAGE_TEAM") {
                 $this->assertEquals($val['permission'], 3);
                 $this->assertEquals($val['account_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
@@ -319,7 +319,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(31, count($content['data']['privileges']));
+        $this->assertEquals(36, count($content['data']['privileges']));
     }
 
     public function testGetWithAccountId()
@@ -334,7 +334,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(31, count($content['data']['privileges']));
+        $this->assertEquals(36, count($content['data']['privileges']));
     }
 
     public function testGetWithDifferentAccountId()
@@ -466,7 +466,7 @@ class RoleControllerTest extends ControllerTest
 
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(count($result), 33);
+        $this->assertEquals(count($result), 38);
     }
 
     public function testUpdatePrivilegePermissionWithAccountID()
@@ -487,7 +487,7 @@ class RoleControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(count($result), 33);
+        $this->assertEquals(count($result), 38);
     }
 
     public function testAddNewPrivilege()

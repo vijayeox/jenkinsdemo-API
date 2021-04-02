@@ -35,7 +35,7 @@ class Stack
     public function last($n=1)
     {
         $key = $this->count - $n;
-    		
-        return array_key_exists($key,$this->stack) ? $this->stack[$key] : null;
+            
+        return array_key_exists($key, $this->stack) ? $this->stack[$key] : null;
     }
 }
