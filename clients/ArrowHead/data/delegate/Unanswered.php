@@ -257,50 +257,30 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
     }
 
-    private function cleanData(&$data) {
-        if(array_key_exists('textField1',$data)) {
-            unset($data['textField1']);
+    private function appendMissingKey($keyList, &$masterList, $conditional = false) {
+        if($conditional) {
+            foreach ($keyList as $key) {
+                if(!array_key_exists($key, $masterList)){
+                    $masterList[$key] = null;
+                }
+            }
+        } else {
+            foreach ($keyList as $key) {
+                $masterList[$key] = null;
+            }
         }
-        if(array_key_exists('validationMessage',$data)) {
-            unset($data['validationMessage']);
-        }
-        if(array_key_exists('textField',$data)) {
-            unset($data['textField']);
-        }
-        if(array_key_exists('submissionTime',$data)) {
-            unset($data['submissionTime']);
-        }
-        if(array_key_exists('workFlowId',$data)) {
-            unset($data['workFlowId']);
-        }
-        if(array_key_exists('documentsToBeGenerated',$data)) {
-            unset($data['documentsToBeGenerated']);
-        }
-        if(array_key_exists('documentsSelectedCount',$data)) {
-            unset($data['documentsSelectedCount']);
-        }
-        if(array_key_exists('umbrellaWarning',$data)) {
-            unset($data['umbrellaWarning']);
-        }
-        if(array_key_exists('tankIndex',$data)) {
-            unset($data['tankIndex']);
-        }
-        if(array_key_exists('locationNum',$data)) {
-            unset($data['locationNum']);
-        }
-        if(array_key_exists('textFieldIgnore',$data)) {
-            unset($data['textFieldIgnore']);
-        }
-        if(array_key_exists('managementSubmitApplication', $data)) {
-            unset($data['managementSubmitApplication']);
-        }
-        if(array_key_exists('textFieldIgnore',$data)) {
-            unset($data['textFieldIgnore']);
+    }
+
+    private function removeKeyValueIfExists($keyList, &$masterList) {
+        foreach ($keyList as $key) {
+            if(array_key_exists($key, $masterList)) {
+                unset($masterList[$key]);
+            }
         }
     }
 
     private function fileDataMassaging(&$fileData) {
-        //Coinsurance radio button
+        //Coinsurance radio button custom logic
         if(isset($fileData['buildings'])) {
             foreach ($fileData['buildings'] as $key1 => $value1) {
                 if(isset($value1['coinsuranceform'])) {
@@ -322,276 +302,84 @@ class Unanswered extends AbstractDocumentAppDelegate
             }
         }
 
-        if(!array_key_exists('packageTargetPremium', $fileData)) {
-            $fileData['packageTargetPremium'] = null;
-        }
-        if(!array_key_exists('dolTargetPremium', $fileData)) {
-            $fileData['dolTargetPremium'] = null;
-        }
-        if(!array_key_exists('numYearsOfOwnership', $fileData)) {
-            $fileData['numYearsOfOwnership'] = null;
-        }
-        if(!array_key_exists('numberOfOwners', $fileData)) {
-            $fileData['numberOfOwners'] = null;
-        }
-        if(!array_key_exists('numberofemployeeshandling', $fileData)) {
-            $fileData['numberofemployeeshandling'] = null;
-        }
-        if(!array_key_exists('totalemployees', $fileData)) {
-            $fileData['totalemployees'] = null;
-        }
-        if(!array_key_exists('totalassetvalue', $fileData)) {
-            $fileData['totalassetvalue'] = null;
-        }
-        if(!array_key_exists('planparticipants', $fileData)) {
-            $fileData['planparticipants'] = null;
-        }
-        if(!array_key_exists('numberofTrusteesHandlingPlanAsset', $fileData)) {
-            $fileData['numberofTrusteesHandlingPlanAsset'] = null;
-        }
-        if(!array_key_exists('annualsales', $fileData)) {
-            $fileData['annualsales'] = null;
-        }
-        if(!array_key_exists('garageumUim', $fileData)) {
-            $fileData['garageumUim'] = null;
-        }
+        /*
+            Add keys to file data in case its not being passed back.
+            Failsafe.
+            Usually incases where default value is removed to avoid UI errors
+        */
+        $keyListCleanData = array('textField1','validationMessage','textField','submissionTime','workFlowId','documentsToBeGenerated','umbrellaWarning','locationNum','textFieldIgnore','managementSubmitApplication');
+        $this->removeKeyValueIfExists($keyListCleanData, $fileData);
+        $keyList = array('packageTargetPremium','dolTargetPremium','numYearsOfOwnership','numberOfOwners','numberofemployeeshandling','totalemployees','totalassetvalue','planparticipants','numberofTrusteesHandlingPlanAsset','annualsales','garageumUim','employeeone','employeetwo','employeethree');
+        $this->appendMissingKey($keyList,$fileData);
 
         //Remove location summary from financials
+        $keyListFinancials = array('total_newAutos','total_usedAutos','total_fAndI','total_rentalLeasing','total_service','total_bodyShop','total_parts','total_total');
         if(isset($fileData['financialsYTDSales'])) {
-            foreach ($fileData['financialsYTDSales'] as $key => $value) {
-                if(isset($value['total_newAutos'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_newAutos']);
-                }
-                if(isset($value['total_usedAutos'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_usedAutos']);
-                }
-                if(isset($value['total_fAndI'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_fAndI']);
-                }
-                if(isset($value['total_rentalLeasing'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_rentalLeasing']);
-                }
-                if(isset($value['total_service'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_service']);
-                }
-                if(isset($value['total_bodyShop'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_bodyShop']);
-                }
-                if(isset($value['total_parts'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_parts']);
-                }
-                if(isset($value['total_total'])) {
-                    unset($fileData['financialsYTDSales'][$key]['total_total']);
-                }
+            foreach($fileData['financialsYTDSales'] as $key => $value) {
+                $this->removeKeyValueIfExists($keyListFinancials,$fileData['financialsYTDSales'][$key]);
             }
         }
         if(isset($fileData['financialsYTDGrossProfits'])) {
-            foreach ($fileData['financialsYTDGrossProfits'] as $key => $value) {
-                if(isset($value['total_newAutos'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_newAutos']);
-                }
-                if(isset($value['total_usedAutos'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_usedAutos']);
-                }
-                if(isset($value['total_fAndI'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_fAndI']);
-                }
-                if(isset($value['total_rentalLeasing'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_rentalLeasing']);
-                }
-                if(isset($value['total_service'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_service']);
-                }
-                if(isset($value['total_bodyShop'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_bodyShop']);
-                }
-                if(isset($value['total_parts'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_parts']);
-                }
-                if(isset($value['total_total'])) {
-                    unset($fileData['financialsYTDGrossProfits'][$key]['total_total']);
-                }
+            foreach($fileData['financialsYTDGrossProfits'] as $key => $value) {
+                $this->removeKeyValueIfExists($keyListFinancials,$fileData['financialsYTDGrossProfits'][$key]);
             }
         }
         if(isset($fileData['financialsYTDSalesAnnualized'])) {
-            foreach ($fileData['financialsYTDSalesAnnualized'] as $key => $value) {
-                if(isset($value['total_newAutos'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_newAutos']);
-                }
-                if(isset($value['total_usedAutos'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_usedAutos']);
-                }
-                if(isset($value['total_fAndI'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_fAndI']);
-                }
-                if(isset($value['total_rentalLeasing'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_rentalLeasing']);
-                }
-                if(isset($value['total_service'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_service']);
-                }
-                if(isset($value['total_bodyShop'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_bodyShop']);
-                }
-                if(isset($value['total_parts'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_parts']);
-                }
-                if(isset($value['total_total'])) {
-                    unset($fileData['financialsYTDSalesAnnualized'][$key]['total_total']);
-                }
+            foreach($fileData['financialsYTDSalesAnnualized'] as $key => $value) {
+                $this->removeKeyValueIfExists($keyListFinancials,$fileData['financialsYTDSalesAnnualized'][$key]);
             }
         }
         if(isset($fileData['financialsYTDGrossProfitsAnnualized'])) {
-            foreach ($fileData['financialsYTDGrossProfitsAnnualized'] as $key => $value) {
-                if(isset($value['total_newAutos'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_newAutos']);
-                }
-                if(isset($value['total_usedAutos'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_usedAutos']);
-                }
-                if(isset($value['total_fAndI'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_fAndI']);
-                }
-                if(isset($value['total_rentalLeasing'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_rentalLeasing']);
-                }
-                if(isset($value['total_service'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_service']);
-                }
-                if(isset($value['total_bodyShop'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_bodyShop']);
-                }
-                if(isset($value['total_parts'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_parts']);
-                }
-                if(isset($value['total_total'])) {
-                    unset($fileData['financialsYTDGrossProfitsAnnualized'][$key]['total_total']);
-                }
+            foreach($fileData['financialsYTDGrossProfitsAnnualized'] as $key => $value) {
+                $this->removeKeyValueIfExists($keyListFinancials,$fileData['financialsYTDGrossProfitsAnnualized'][$key]);
             }
         }
 
         //Unnecessary hidden fields in location schedule
+        $keyListLocation = array('buildinginterest','d');
         if(isset($fileData['locations'])) {
             foreach ($fileData['locations'] as $key => $value) {
-                if(array_key_exists('buildinginterest', $value)) {
-                    unset($fileData['locations'][$key]['buildinginterest']);
-                }
-                if(array_key_exists('d', $value)) {
-                    unset($fileData['locations'][$key]['d']);
-                }
+                $this->removeKeyValueIfExists($keyListLocation,$fileData['locations'][$key]);
             }
         }
 
+        $keyListEmployee = array('total_fTEmployeesFurnishedAnAuto','total_pTEmployeesFurnishedAnAuto','total_fTEmployeesWhoAreNotFurnished','total_pTEmployeesWhoAreNotFurnished','total_fTAllOtherEmployees','total_pTAllOtherEmployees','total_nonEmployeesUnderTheAge','total_nonEmployeesYearsOldorolder','total_contractDriversNonEmployees','total_total');
         if(isset($fileData['employeeList'])) {
             foreach ($fileData['employeeList'] as $key => $value) {
-                if(array_key_exists('total_fTEmployeesFurnishedAnAuto', $value)) {
-                    unset($fileData['employeeList'][$key]['total_fTEmployeesFurnishedAnAuto']);
-                }
-                if(array_key_exists('total_pTEmployeesFurnishedAnAuto', $value)) {
-                    unset($fileData['employeeList'][$key]['total_pTEmployeesFurnishedAnAuto']);
-                }
-                if(array_key_exists('total_fTEmployeesWhoAreNotFurnished', $value)) {
-                    unset($fileData['employeeList'][$key]['total_fTEmployeesWhoAreNotFurnished']);
-                }
-                if(array_key_exists('total_pTEmployeesWhoAreNotFurnished', $value)) {
-                    unset($fileData['employeeList'][$key]['total_pTEmployeesWhoAreNotFurnished']);
-                }
-                if(array_key_exists('total_fTAllOtherEmployees', $value)) {
-                    unset($fileData['employeeList'][$key]['total_fTAllOtherEmployees']);
-                }
-                if(array_key_exists('total_pTAllOtherEmployees', $value)) {
-                    unset($fileData['employeeList'][$key]['total_pTAllOtherEmployees']);
-                }
-                if(array_key_exists('total_nonEmployeesUnderTheAge', $value)) {
-                    unset($fileData['employeeList'][$key]['total_nonEmployeesUnderTheAge']);
-                }
-                if(array_key_exists('total_nonEmployeesYearsOldorolder', $value)) {
-                    unset($fileData['employeeList'][$key]['total_nonEmployeesYearsOldorolder']);
-                }
-                if(array_key_exists('total_contractDriversNonEmployees', $value)) {
-                    unset($fileData['employeeList'][$key]['total_contractDriversNonEmployees']);
-                }
-                if(array_key_exists('total_total', $value)) {
-                    unset($fileData['employeeList'][$key]['total_total']);
-                }
+                $this->removeKeyValueIfExists($keyListEmployee,$fileData['employeeList'][$key]);
             }
         }
 
+        $keyListStorageTank = array('tankIndex','locationNum');
+        if(isset($fileData['storageTanks'])) {
+            foreach ($fileData['storageTanks'] as $key => $value) {
+                $this->removeKeyValueIfExists($keyListStorageTank,$fileData['storageTanks'][$key]);
+            }
+        }
+
+        $keyListDOL12MonthAvg = array('new','used','demosFurnishedAutos','loanersShopService','floor_new','floor_used','floor_demosFurnishedAutos','floor_loanersShopService');
         if(isset($fileData['dol_12MonthAvg'])) {
             //Lack of default values
             foreach ($fileData['dol_12MonthAvg'] as $key => $value) {
-                if(!array_key_exists('new', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['new'] = null;
-                }
-                if(!array_key_exists('used', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['used'] = null;
-                }
-                if(!array_key_exists('demosFurnishedAutos', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['demosFurnishedAutos'] = null;
-                }
-                if(!array_key_exists('loanersShopService', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['loanersShopService'] = null;
-                }
-                if(!array_key_exists('floor_new', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['floor_new'] = null;
-                }
-                if(!array_key_exists('floor_used', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['floor_used'] = null;
-                }
-                if(!array_key_exists('floor_demosFurnishedAutos', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['floor_demosFurnishedAutos'] = null;
-                }
-                if(!array_key_exists('floor_loanersShopService', $value)) {
-                    $fileData['dol_12MonthAvg'][$key]['floor_loanersShopService'] = null;
-                }
+                $this->appendMissingKey($keyListDOL12MonthAvg,$fileData['dol_12MonthAvg'][$key],true);
             }
         }
 
+        $keyListDOL12MonthAvgTotal = array('acc_new','acc_used','acc_demosFurnishedAutos','acc_loanersShopService');
         if(isset($fileData['dol_12MonthAvgTotal'])) {
-            if(!array_key_exists('acc_new', $value)) {
-                $fileData['dol_12MonthAvgTotal']['acc_new'] = null;
-            }
-            if(!array_key_exists('acc_used', $value)) {
-                $fileData['dol_12MonthAvgTotal']['acc_used'] = null;
-            }
-            if(!array_key_exists('acc_demosFurnishedAutos', $value)) {
-                $fileData['dol_12MonthAvgTotal']['acc_demosFurnishedAutos'] = null;
-            }
-            if(!array_key_exists('acc_loanersShopService', $value)) {
-                $fileData['dol_12MonthAvgTotal']['acc_loanersShopService'] = null;
-            }
+            $this->appendMissingKey($keyListDOL12MonthAvgTotal,$fileData['dol_12MonthAvgTotal'],true);
         }
 
+        $keyListDOLInventory = array('maxInventory','maxUnits','maxIndoor','floor_maxInventory','floor_maxUnits','floor_maxIndoor','standardOpenLot','nonStandardOpenLot','inBuilding');
         if(isset($fileData['dol_inventory'])) {
             foreach ($fileData['dol_inventory'] as $key => $value) {
-                if(!array_key_exists('maxInventory', $value)) {
-                    $fileData['dol_inventory'][$key]['maxInventory'] = null;
-                }
-                if(!array_key_exists('maxUnits', $value)) {
-                    $fileData['dol_inventory'][$key]['maxUnits'] = null;
-                }
-                if(!array_key_exists('maxIndoor', $value)) {
-                    $fileData['dol_inventory'][$key]['maxIndoor'] = null;
-                }
-                if(!array_key_exists('floor_maxInventory', $value)) {
-                    $fileData['dol_inventory'][$key]['floor_maxInventory'] = null;
-                }
-                if(!array_key_exists('floor_maxUnits', $value)) {
-                    $fileData['dol_inventory'][$key]['floor_maxUnits'] = null;
-                }
-                if(!array_key_exists('floor_maxIndoor', $value)) {
-                    $fileData['dol_inventory'][$key]['floor_maxIndoor'] = null;
-                }
-                if(!array_key_exists('standardOpenLot', $value)) {
-                    $fileData['dol_inventory'][$key]['standardOpenLot'] = null;
-                }
-                if(!array_key_exists('nonStandardOpenLot', $value)) {
-                    $fileData['dol_inventory'][$key]['nonStandardOpenLot'] = null;
-                }
-                if(!array_key_exists('inBuilding', $value)) {
-                    $fileData['dol_inventory'][$key]['inBuilding'] = null;
-                }
+                $this->appendMissingKey($keyListDOLInventory,$fileData['dol_inventory'],true);
             }
+        }
+
+        $keyListPollutionLiabilityUnderwritingSurvey = array('applicantHasAnyUndergroundStorageTanks','applicantHasAnyAboveGroundTanks','haveAnyOfTheTanksFailedAnInspection','federalStateReport','withinTheLastFive5YearsHasTheApplicantBeenTheSubjectOfThirdPartyLiabilityClaims','areThereAnyAbandonedTanksOnSite');
+        if(isset($fileData['pollutionLiabilityUnderwritingSurvey'])) {
+            $this->appendMissingKey($keyListPollutionLiabilityUnderwritingSurvey,$fileData['pollutionLiabilityUnderwritingSurvey'],true);
         }
     }
 
@@ -660,14 +448,12 @@ class Unanswered extends AbstractDocumentAppDelegate
             }
 
             $this->removeRequiredFromUnanswered($unansweredQuestions,$requiredUnansweredQuestions);
-            $this->cleanData($unansweredQuestions);
             $this->getUnansweredQuestionPrintReady($finalFieldList,$unansweredQuestions,$fieldList);
             $unansweredQuestionsArray = array('unansweredQuestions' => $unansweredQuestions, 'requiredUnansweredQuestions' => $requiredUnansweredQuestions );
             $generatedDocument = $this->documentBuilder->generateDocument('UnansweredQuestions',array('data' => json_encode($unansweredQuestionsArray)),$dest);
             $data['unansweredQuestionsDocument'] = $this->baseUrl."/".$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Unanswered.pdf";
         }
 
-        $this->cleanData($answeredQuestions);
         $this->getAnsweredQuestionsPrintReady($finalFieldList,$answeredQuestions,$dropDownMappings);
         $generatedDocument = $this->documentBuilder->generateDocument('AnsweredQuestions',array('data' => json_encode($answeredQuestions)),$dest2);
         $data['answeredQuestionsDocument'] = $this->baseUrl."/".$data['appId']."/data/".AuthContext::get(AuthConstants::ORG_UUID)."/temp/".$uuid."/Answered.pdf";
