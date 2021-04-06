@@ -1408,6 +1408,7 @@ class AppService extends AbstractService
             $sequence = 0;
             foreach ($yamlData['entity'] as &$entityData) {
                 $entity = $entityData;
+                $entity['generic_attachment_config'] = json_encode(array("attachmentField" => isset($entity['chatAttachmentField']) ? $entity['chatAttachmentField'] : ""));
                 $entity['assoc_id'] = $assoc_id;
                 $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
                 if (!$entityRec) {

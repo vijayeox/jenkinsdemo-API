@@ -1874,9 +1874,10 @@ class FileService extends AbstractService
                                         'rowNumber' => $rowNumber);
         }
     }
-    public function addAttachment($params, $file)
+    public function addAttachment($params,$file, $subFolder = null)
     {
         try {
+            $this->logger->info("P---files--".print_r($file,true));
             $fileArray = array();
             $data = array();
             $fileStorage = AuthContext::get(AuthConstants::ACCOUNT_UUID) . "/temp/";
@@ -1896,29 +1897,40 @@ class FileService extends AbstractService
             }
             if (!isset($params['fileId'])) {
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
+                if(isset($subFolder)){
+                    $folderPath .= $subFolder . '/';
+                }
                 $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
                 $data['path'] = $path;
-                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? $params['appId']:"")."/data/".$fileStorage.$data['uuid']."/".$data['name'];
-            } else {
+                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? "/".$params['appId']:"")."/data/".$fileStorage.$data['uuid']."/".$data['name'];
+            }else{
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/';
-                $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? $params['appId']:"")."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+                if(isset($subFolder)){
+                    $folderPath .= $subFolder . '/';
+                }
+                $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] .(isset($subFolder)? "/".$subFolder:""). '/'.$file['name'];
+                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? "/".$params['appId']:"")."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name']; // Check nd remove column
                 $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
             }
+            // -- trim upto filedocx for path nd save
             //Check for similar file
             $attachmentFilter['url'] = $data['url'];
             $attachmentRecord = $this->getDataByParams('ox_file_attachment', array("url","name"), $attachmentFilter, null)->toArray();
             if (count($attachmentRecord) > 0) {
                 throw new ServiceException("Another file with a similar name exists for this record.\n Please attach a file with a different name", "attachment.filename.invalid");
             }
+            $this->logger->info("Attachmnet data---".print_r($data,true));
             $form->exchangeArray($data);
             $form->validate();
             $count = $this->attachmentTable->save($form);
             $id = $this->attachmentTable->getLastInsertValue();
             $data['id'] = $id;
             $file['name'] = $data['name'];
+            $this->logger->info("Attachmnet files---".print_r($file,true));
             $fileStored = FileUtils::storeFile($file, $folderPath);
             $data['size'] = filesize($data['path']);
+            $this->logger->info("Attachmnet params---".print_r($params,true));
+            $this->logger->info("Attachmnet paramsff---".print_r($data,true));
             if (isset($params['fileId'])) {
                 $filterArray['text'] = $params['fieldLabel'];
                 $filter['uuid'] = $params['fileId'];
