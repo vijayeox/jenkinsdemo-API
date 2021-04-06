@@ -62,10 +62,7 @@ class CacheController extends AbstractApiController
         $appUuid = $this->params()->fromRoute()['appId'];
         $this->log->info(__CLASS__ . "-> \n Store Cache - " . print_r($data, true));
         try {
-            $count = $this->userCacheService->storeUserCache($appUuid, $data);
-            if ($count == 0) {
-                return $this->getErrorResponse("Failed to store cache", 404, $data);
-            }
+            $this->userCacheService->storeUserCache($appUuid, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);

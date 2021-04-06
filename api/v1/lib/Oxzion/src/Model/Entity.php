@@ -177,7 +177,7 @@ abstract class Entity implements Countable
         }
     }
 
-    private function validateAndConvert($property, $value)
+    private function validateAndConvert($property, $value, $skipValidation = false)
     {
         $model = &$this->getModel();
         if (!isset($model)) {
@@ -187,7 +187,9 @@ abstract class Entity implements Countable
         if (!isset($propDef)) {
             return $value; //Any value is valid when the property definition is not set for a property.
         }
-        $this->runDynamicValidationIfExists($property, $value, $propDef);
+        if (!$skipValidation) {
+            $this->runDynamicValidationIfExists($property, $value, $propDef);
+        }
         try {
             $convertedValue = Type::convert($value, $propDef['type']);
         } catch (InvalidInputException $e) {
@@ -196,7 +198,7 @@ abstract class Entity implements Countable
                 ['property' => $property, 'value' => $value, 'error' => 'type']
             );
         }
-        if ($this->isRequired($property) && $this->isEmpty($convertedValue)) {
+        if (!$skipValidation && $this->isRequired($property) && $this->isEmpty($convertedValue)) {
             throw new InvalidPropertyValueException(
                 "Invalid value '${value}' for property '${property}'.",
                 ['property' => $property, 'value' => $value, 'error' => 'required']
@@ -275,7 +277,7 @@ abstract class Entity implements Countable
      * IMPORTANT: This method MUST BE PRIVATE to avoid problems with callers
      * setting properties without needed checks.
      */
-    private function assignInternal($input, $skipReadOnly = true)
+    private function assignInternal($input, $skipReadOnly = true, $skipValidation = false)
     {
         $errors = array();
         foreach ($input as $property => $value) {
@@ -288,7 +290,7 @@ abstract class Entity implements Countable
                 continue;
             }
             try {
-                $this->data[$property] = $this->validateAndConvert($property, $value);
+                $this->data[$property] = $this->validateAndConvert($property, $value, $skipValidation);
             } catch (InvalidPropertyValueException $e) {
                 $errors[$property] = ['value' => $value, 'error' => $e->getContextData()['error']];
             }
@@ -310,7 +312,7 @@ abstract class Entity implements Countable
                 ['entity' => $this->table->getTableGateway()->getTable(), 'uuid' => $uuid]
             );
         }
-        $this->assignInternal($obj->toArray(), false);
+        $this->assignInternal($obj->toArray(), false, true);
         return $this;
     }
 

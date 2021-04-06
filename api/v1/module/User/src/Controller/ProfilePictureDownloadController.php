@@ -17,6 +17,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
     */
     private $profilepictureService;
     private $userService;
+    private $log;
     /**
     * @ignore __construct
     */
@@ -25,6 +26,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
         $this->setIdentifierName('profileId');
         $this->profilepictureService = $profilepictureService;
         $this->userService = $userService;
+        $this->log = $this->getLogger();
     }
 
     /**
@@ -38,6 +40,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
     public function get($id)
     {
         $file = $this->profilepictureService->getProfilePicturePath($id);
+        $this->log->info("Profile Picture path---".$file);
         if (FileUtils::fileExists($file) != 1) {
             $file = $this->profilepictureService->getProfilePicturePath(null);
         }
@@ -52,7 +55,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
             $this->response->setStatusCode(200);
             return $this->response;
         } catch (Exception $e) {
-            $this->log-error($e->getMessage(), $e);
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Profile picture not found", 404);
         }
     }
