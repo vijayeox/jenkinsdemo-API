@@ -3281,7 +3281,7 @@
                                     "type": "columns",
                                     "input": false,
                                     "tableView": false,
-                                    "id": "ex9kqsx",
+                                    "id": "ex9kqsx0",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -3652,7 +3652,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "e21c8n",
+                                    "id": "e21c8n0",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -3728,7 +3728,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "eg2rky4",
+                                    "id": "eg2rky40",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -3819,7 +3819,7 @@
                                     "input": true,
                                     "lockKey": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "eihny7c",
+                                    "id": "eihny7c0",
                                     "prefix": "",
                                     "customClass": "",
                                     "suffix": "",
@@ -3893,7 +3893,7 @@
                                     "input": true,
                                     "hideOnChildrenHidden": false,
                                     "lockKey": true,
-                                    "id": "erh4jdl",
+                                    "id": "erh4jdl0",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -4298,7 +4298,7 @@
                                     "type": "columns",
                                     "input": false,
                                     "tableView": false,
-                                    "id": "er95aog",
+                                    "id": "er95aog0",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -4364,7 +4364,7 @@
                                     "type": "hidden",
                                     "input": true,
                                     "tableView": false,
-                                    "id": "egwf5gn",
+                                    "id": "egwf5gn0",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -6952,7 +6952,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "e1j86tw",
+                                    "id": "e1j86tw0",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -7026,7 +7026,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "e4ml988",
+                                    "id": "e4ml9880",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -7117,7 +7117,7 @@
                                     "rows": 2,
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "et1r2r",
+                                    "id": "et1r2r0",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -8016,16 +8016,26 @@
                 },
                 {
                     "label": "Location Schedule",
+                    "labelPosition": "top",
+                    "description": "",
+                    "tooltip": "",
                     "disableAddingRemovingRows": true,
+                    "conditionalAddButton": "",
                     "reorder": false,
+                    "addAnother": "",
                     "addAnotherPosition": "bottom",
                     "defaultOpen": false,
                     "layoutFixed": false,
                     "enableRowGroups": false,
                     "initEmpty": false,
                     "customClass": "locationsDataGrid",
+                    "tabindex": "",
+                    "hidden": false,
                     "hideLabel": true,
+                    "autofocus": false,
+                    "disabled": false,
                     "tableView": false,
+                    "modalEdit": false,
                     "defaultValue": [
                         {
                             "locationBuildingNum": "1-1",
@@ -8045,9 +8055,41 @@
                             "clickIfTheLocationAddressSameAsMailingAddress": false
                         }
                     ],
+                    "persistent": true,
+                    "protected": false,
+                    "dbIndex": false,
+                    "encrypted": false,
+                    "redrawOn": "",
                     "clearOnHide": false,
+                    "customDefaultValue": "",
+                    "calculateValue": "",
+                    "calculateServer": false,
+                    "allowCalculateOverride": false,
                     "validateOn": "blur",
+                    "validate": {
+                        "required": false,
+                        "minLength": "",
+                        "maxLength": "",
+                        "customMessage": "",
+                        "custom": "",
+                        "customPrivate": false,
+                        "json": "",
+                        "strictDateValidation": false,
+                        "multiple": false,
+                        "unique": false
+                    },
+                    "unique": false,
+                    "errorLabel": "",
                     "key": "locations",
+                    "tags": [],
+                    "properties": {},
+                    "conditional": {
+                        "show": null,
+                        "when": null,
+                        "eq": "",
+                        "json": ""
+                    },
+                    "customConditional": "",
                     "logic": [
                         {
                             "name": "Add New Location",
@@ -8059,7 +8101,7 @@
                                 {
                                     "name": "Push Location",
                                     "type": "value",
-                                    "value": "var getLocationNumber = (data) => {\n  if (data.locations && data.locations.length > 0) {\n    var lastItem = data.locations[data.locations.length - 1];\n    var lastLocation = parseInt(lastItem.locationNum);\n    return lastLocation ? lastLocation + 1 : 1;\n  } else {\n    return 1;\n  }\n};\n\nvar locationsClone = [...data.locations];\nvar newLocationNumber = getLocationNumber(data);\nvar rowValue = {\n  ...component.defaultValue[0],\n  locationNum: newLocationNumber,\n  locationBuildingNum: newLocationNumber + \"-1\",\n};\nlocationsClone.push(rowValue);\nvalue = locationsClone;\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  cloneItem.push({\n    locationBuildingNum: newLocationNumber + \"-1\",\n    locationNum: newLocationNumber,\n    buildingNum: 1,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  cloneItem.push({\n    locationNum: newLocationNumber,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});"
+                                    "value": "var getLocationNumber = (data) => {\n  if (data.locations && data.locations.length > 0) {\n    var lastItem = data.locations[data.locations.length - 1];\n    var lastLocation = parseInt(lastItem.locationNum);\n    return lastLocation ? lastLocation + 1 : 1;\n  } else {\n    return 1;\n  }\n};\n\nvar locationsClone = _.merge([], data.locations);\nvar newLocationNumber = getLocationNumber(data);\nvar rowValue = {\n  ...component.defaultValue[0],\n  locationNum: newLocationNumber,\n  locationBuildingNum: newLocationNumber + \"-1\",\n};\nlocationsClone.push(rowValue);\nvalue = locationsClone;\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  cloneItem.push({\n    locationBuildingNum: newLocationNumber + \"-1\",\n    locationNum: newLocationNumber,\n    buildingNum: 1,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  cloneItem.push({\n    locationNum: newLocationNumber,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});"
                                 }
                             ]
                         },
@@ -8073,7 +8115,7 @@
                                 {
                                     "name": "Push Building",
                                     "type": "value",
-                                    "value": "console.log(\"Add building\");\nvar getLocationIndex = (data, rowInfo, rowIndex) => {\n  if (data.locations && data.locations.length > 0) {\n    var buildingList = data.locations.filter(\n      (item) => item.locationNum == rowInfo.locationNum\n    );\n    var lastBuilding = buildingList[buildingList.length - 1].buildingNum;\n    return rowIndex + lastBuilding;\n  } else {\n    return 1;\n  }\n};\n\nif (result.length > 0) {\n  var rowInfo = result[0].row;\n  var rowIndex = result[0].rowIndex;\n\n  var locationsClone = [...data.locations];\n  var locationIndex = getLocationIndex(data, rowInfo, rowIndex);\n\n  var rowValue = {\n    ...component.defaultValue[0],\n    locationNum: rowInfo.locationNum,\n    buildingNum: locationIndex - rowIndex + 1,\n    locationBuildingNum:\n      rowInfo.locationNum + \"-\" + (locationIndex - rowIndex + 1),\n  };\n  locationsClone.splice(locationIndex, 0, rowValue);\n  value = locationsClone;\n\n  data.buildingLevelFieldList.map((field) => {\n    var cloneItem = [...data[field.key]];\n    cloneItem.splice(locationIndex, 0, {\n      locationBuildingNum: rowValue.locationBuildingNum,\n            locationNum: rowValue.locationNum,\n      buildingNum: rowValue.buildingNum,\n    });\n    result[0].formObject\n      ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n      : null;\n  });\n}"
+                                    "value": "console.log(\"Add building\");\nvar getLocationIndex = (data, rowInfo, rowIndex) => {\n  if (data.locations && data.locations.length > 0) {\n    var buildingList = data.locations.filter(\n      (item) => item.locationNum == rowInfo.locationNum\n    );\n    var lastBuilding = buildingList[buildingList.length - 1].buildingNum;\n    return rowIndex + lastBuilding;\n  } else {\n    return 1;\n  }\n};\n\nif (result.length > 0) {\n  var rowInfo = result[0].row;\n  var rowIndex = result[0].rowIndex;\n\n  var locationsClone = _.merge([], data.locations);\n  var locationIndex = getLocationIndex(data, rowInfo, rowIndex);\n\n  var rowValue = {\n    ...component.defaultValue[0],\n    locationNum: rowInfo.locationNum,\n    buildingNum: locationIndex - rowIndex + 1,\n    locationBuildingNum:\n      rowInfo.locationNum + \"-\" + (locationIndex - rowIndex + 1),\n  };\n  locationsClone.splice(locationIndex, 0, rowValue);\n  value = locationsClone;\n\n  data.buildingLevelFieldList.map((field) => {\n    var cloneItem = _.merge([], data[field.key]);\n    cloneItem.splice(locationIndex, 0, {\n      locationBuildingNum: rowValue.locationBuildingNum,\n      locationNum: rowValue.locationNum,\n      buildingNum: rowValue.buildingNum,\n    });\n    result[0].formObject\n      ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n      : null;\n  });\n}"
                                 }
                             ]
                         },
@@ -8087,11 +8129,20 @@
                                 {
                                     "name": "Remove Building",
                                     "type": "value",
-                                    "value": "\nconsole.log(111);\n\nvar rowInfo = result[0].row;\nvar rowIndex = result[0].rowIndex;\nvar tanksTodelete = [];\nvar tankstoUpdate = [];\nvar locationsClone = [...data.locations];\nvar storangeClone = [...data.storageTanks];\n\nlocationsClone.splice(rowIndex, 1);\ncurrentBuildingsSize = locationsClone.filter(\n  (i) => i.locationNum == rowInfo.locationNum\n).length;\nvar deleteTankForLocation = (tankstoUpdate) => {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum > tankstoUpdate) {\n      storangeClone[i].locationNum = storangeClone[i].locationNum - 1;\n      let splitData = storangeClone[i].LocTankIndex.split(\"-\");\n      storangeClone[i].LocTankIndex =\n        storangeClone[i].locationNum + \"-\" + splitData[1];\n    }\n  }\n  result[0].formObject.getComponent(\"storageTanks\").setValue(storangeClone);\n};\nvalue = locationsClone.map((loc, index) => {\n  if (\n    loc.locationNum == rowInfo.locationNum &&\n    loc.buildingNum > rowInfo.buildingNum\n  ) {\n    if (rowInfo.buildingNum == 1) {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n        address: rowInfo.address,\n        city: rowInfo.city,\n        state: rowInfo.state,\n        county: rowInfo.county,\n        stateName: rowInfo.stateName,\n        zip: rowInfo.zip,\n      };\n    } else {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n      };\n    }\n  } else if (\n    loc.locationNum > rowInfo.locationNum &&\n    currentBuildingsSize == 0\n  ) {\n    return {\n      ...loc,\n      locationNum: loc.locationNum - 1,\n      locationBuildingNum: loc.locationNum - 1 + \"-\" + loc.buildingNum,\n    };\n  } else {\n    return loc;\n  }\n});\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  cloneItem.splice(rowIndex, 1);\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  if (currentBuildingsSize === 0) {\n  var locationIndex = cloneItem.findIndex(\n    (item) => item.locationNum == rowInfo.locationNum\n  );\n  cloneItem.splice(locationIndex, 1);\n  cloneItem = cloneItem.map((item, index) => {\n    return locationIndex <= index\n      ? { ...item, locationNum: item.locationNum - 1 }\n      : item;\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n  }\n});\nresult[0].formObject.getComponent(\"storageTankLocation\").setValue(\"\");\nif (currentBuildingsSize === 0) {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum == rowInfo.locationNum) {\n      tanksTodelete.push(i);\n    }\n  }\n  storangeClone.splice(tanksTodelete[0], tanksTodelete.length);\n  deleteTankForLocation(rowInfo.locationNum);\n}\n"
+                                    "value": "console.log(111);\n\nvar rowInfo = result[0].row;\nvar rowIndex = result[0].rowIndex;\nvar tanksTodelete = [];\nvar tankstoUpdate = [];\nvar locationsClone = _.merge([], data.locations);\nvar storangeClone = _.merge([], data.storageTanks);\n\nlocationsClone.splice(rowIndex, 1);\ncurrentBuildingsSize = locationsClone.filter(\n  (i) => i.locationNum == rowInfo.locationNum\n).length;\nvar deleteTankForLocation = (tankstoUpdate) => {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum > tankstoUpdate) {\n      storangeClone[i].locationNum = storangeClone[i].locationNum - 1;\n      let splitData = storangeClone[i].LocTankIndex.split(\"-\");\n      storangeClone[i].LocTankIndex =\n        storangeClone[i].locationNum + \"-\" + splitData[1];\n    }\n  }\n  result[0].formObject.getComponent(\"storageTanks\").setValue(storangeClone);\n};\nvalue = locationsClone.map((loc, index) => {\n  if (\n    loc.locationNum == rowInfo.locationNum &&\n    loc.buildingNum > rowInfo.buildingNum\n  ) {\n    if (rowInfo.buildingNum == 1) {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n        address: rowInfo.address,\n        city: rowInfo.city,\n        state: rowInfo.state,\n        county: rowInfo.county,\n        stateName: rowInfo.stateName,\n        zipCode: rowInfo.zipCode,\n      };\n    } else {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n      };\n    }\n  } else if (\n    loc.locationNum > rowInfo.locationNum &&\n    currentBuildingsSize == 0\n  ) {\n    return {\n      ...loc,\n      locationNum: loc.locationNum - 1,\n      locationBuildingNum: loc.locationNum - 1 + \"-\" + loc.buildingNum,\n    };\n  } else {\n    return loc;\n  }\n});\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  cloneItem.splice(rowIndex, 1);\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  if (currentBuildingsSize == 0) {\n    var locationIndex = cloneItem.findIndex(\n      (item) => item.locationNum == rowInfo.locationNum\n    );\n    cloneItem.splice(locationIndex, 1);\n    cloneItem = cloneItem.map((item, index) => {\n      return locationIndex <= index\n        ? { ...item, locationNum: item.locationNum - 1 }\n        : item;\n    });\n    result[0].formObject\n      ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n      : null;\n  }\n});\nresult[0].formObject.getComponent(\"storageTankLocation\").setValue(\"\");\nif (currentBuildingsSize === 0) {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum == rowInfo.locationNum) {\n      tanksTodelete.push(i);\n    }\n  }\n  storangeClone.splice(tanksTodelete[0], tanksTodelete.length);\n  deleteTankForLocation(rowInfo.locationNum);\n}"
                                 }
                             ]
                         }
                     ],
+                    "attributes": {},
+                    "overlay": {
+                        "style": "",
+                        "page": "",
+                        "left": "",
+                        "top": "",
+                        "width": "",
+                        "height": ""
+                    },
                     "type": "datagrid",
                     "input": true,
                     "components": [
@@ -8177,7 +8228,7 @@
                                                             "inputFormat": "plain",
                                                             "inputMask": "",
                                                             "spellcheck": true,
-                                                            "id": "esl0ers"
+                                                            "id": "eds2odk"
                                                         },
                                                         {
                                                             "label": "location Num",
@@ -8244,7 +8295,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "inputType": "hidden",
-                                                            "id": "e6pu4i"
+                                                            "id": "eqyniyb"
                                                         },
                                                         {
                                                             "label": "Building Num",
@@ -8311,7 +8362,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "inputType": "hidden",
-                                                            "id": "egg4m9i"
+                                                            "id": "ejbunt2"
                                                         }
                                                     ],
                                                     "width": 1,
@@ -8484,7 +8535,7 @@
                                                             },
                                                             "customOptions": {},
                                                             "useExactSearch": false,
-                                                            "id": "eq6ohs7"
+                                                            "id": "ee50kxd"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -8566,7 +8617,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "tag": "p",
-                                                            "id": "egfe5jl"
+                                                            "id": "ec96lxuj"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -8694,7 +8745,7 @@
                                                                                     "block": false,
                                                                                     "disableOnInvalid": false,
                                                                                     "dataGridLabel": true,
-                                                                                    "id": "ez9t03b"
+                                                                                    "id": "e3gx0oe"
                                                                                 },
                                                                                 {
                                                                                     "label": "Click if the Location Address isn't the same as Mailing Address",
@@ -8771,7 +8822,7 @@
                                                                                     "block": false,
                                                                                     "disableOnInvalid": false,
                                                                                     "dataGridLabel": true,
-                                                                                    "id": "eqthg2w"
+                                                                                    "id": "ee84zuo"
                                                                                 }
                                                                             ],
                                                                             "width": 6,
@@ -8878,7 +8929,7 @@
                                                                                     "dataGridLabel": true,
                                                                                     "value": "",
                                                                                     "name": "",
-                                                                                    "id": "eesxfp9"
+                                                                                    "id": "eb6wyig"
                                                                                 }
                                                                             ],
                                                                             "width": 6,
@@ -8951,7 +9002,7 @@
                                                                     "tree": false,
                                                                     "autoAdjust": false,
                                                                     "hideOnChildrenHidden": false,
-                                                                    "id": "espyfan"
+                                                                    "id": "e69203o"
                                                                 },
                                                                 {
                                                                     "label": "Columns",
@@ -9060,7 +9111,7 @@
                                                                                     "inputFormat": "plain",
                                                                                     "inputMask": "",
                                                                                     "spellcheck": true,
-                                                                                    "id": "e05nlr6o"
+                                                                                    "id": "es2l5p"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9073,69 +9124,20 @@
                                                                             "components": [
                                                                                 {
                                                                                     "label": "Zip Code",
-                                                                                    "labelPosition": "top",
-                                                                                    "placeholder": "",
-                                                                                    "description": "",
-                                                                                    "tooltip": "",
-                                                                                    "prefix": "",
-                                                                                    "suffix": "",
-                                                                                    "widget": {
-                                                                                        "type": "input"
-                                                                                    },
-                                                                                    "inputMask": "",
-                                                                                    "allowMultipleMasks": false,
-                                                                                    "customClass": "",
-                                                                                    "tabindex": "",
-                                                                                    "autocomplete": "",
-                                                                                    "hidden": false,
-                                                                                    "hideLabel": false,
-                                                                                    "showWordCount": false,
-                                                                                    "showCharCount": false,
-                                                                                    "mask": false,
-                                                                                    "autofocus": false,
                                                                                     "spellcheck": false,
-                                                                                    "disabled": false,
                                                                                     "tableView": false,
-                                                                                    "modalEdit": false,
-                                                                                    "multiple": false,
-                                                                                    "persistent": true,
-                                                                                    "inputFormat": "plain",
-                                                                                    "protected": false,
-                                                                                    "dbIndex": false,
-                                                                                    "case": "",
-                                                                                    "encrypted": false,
-                                                                                    "redrawOn": "",
-                                                                                    "clearOnHide": true,
-                                                                                    "customDefaultValue": "",
-                                                                                    "calculateValue": "",
-                                                                                    "calculateServer": false,
-                                                                                    "allowCalculateOverride": false,
-                                                                                    "validateOn": "change",
                                                                                     "validate": {
                                                                                         "required": true,
-                                                                                        "pattern": "",
-                                                                                        "customMessage": "",
                                                                                         "custom": "valid = (row.zip.toString().length === 5) ? true : 'ZIP code must be of 5 digit';",
                                                                                         "customPrivate": false,
-                                                                                        "json": "",
-                                                                                        "minLength": "",
                                                                                         "strictDateValidation": false,
                                                                                         "multiple": false,
                                                                                         "unique": false,
-                                                                                        "maxLength": ""
+                                                                                        "minLength": "",
+                                                                                        "maxLength": "",
+                                                                                        "pattern": ""
                                                                                     },
-                                                                                    "unique": false,
-                                                                                    "errorLabel": "",
                                                                                     "key": "zip",
-                                                                                    "tags": [],
-                                                                                    "properties": {},
-                                                                                    "conditional": {
-                                                                                        "show": null,
-                                                                                        "when": null,
-                                                                                        "eq": "",
-                                                                                        "json": ""
-                                                                                    },
-                                                                                    "customConditional": "",
                                                                                     "logic": [
                                                                                         {
                                                                                             "name": "check enabled",
@@ -9165,22 +9167,63 @@
                                                                                     "attributes": {
                                                                                         "autocomplete": "hide"
                                                                                     },
+                                                                                    "type": "textfield",
+                                                                                    "input": true,
+                                                                                    "lockKey": true,
+                                                                                    "hideOnChildrenHidden": false,
+                                                                                    "placeholder": "",
+                                                                                    "prefix": "",
+                                                                                    "customClass": "",
+                                                                                    "suffix": "",
+                                                                                    "multiple": false,
+                                                                                    "defaultValue": null,
+                                                                                    "protected": false,
+                                                                                    "unique": false,
+                                                                                    "persistent": true,
+                                                                                    "hidden": false,
+                                                                                    "clearOnHide": true,
+                                                                                    "refreshOn": "",
+                                                                                    "redrawOn": "",
+                                                                                    "modalEdit": false,
+                                                                                    "labelPosition": "top",
+                                                                                    "description": "",
+                                                                                    "errorLabel": "",
+                                                                                    "tooltip": "",
+                                                                                    "hideLabel": false,
+                                                                                    "tabindex": "",
+                                                                                    "disabled": false,
+                                                                                    "autofocus": false,
+                                                                                    "dbIndex": false,
+                                                                                    "customDefaultValue": "",
+                                                                                    "calculateValue": "",
+                                                                                    "calculateServer": false,
+                                                                                    "widget": {
+                                                                                        "type": "input"
+                                                                                    },
+                                                                                    "validateOn": "change",
+                                                                                    "conditional": {
+                                                                                        "show": null,
+                                                                                        "when": null,
+                                                                                        "eq": ""
+                                                                                    },
                                                                                     "overlay": {
                                                                                         "style": "",
-                                                                                        "page": "",
                                                                                         "left": "",
                                                                                         "top": "",
                                                                                         "width": "",
                                                                                         "height": ""
                                                                                     },
-                                                                                    "type": "textfield",
-                                                                                    "input": true,
-                                                                                    "lockKey": true,
-                                                                                    "hideOnChildrenHidden": false,
-                                                                                    "refreshOn": "",
+                                                                                    "allowCalculateOverride": false,
+                                                                                    "encrypted": false,
+                                                                                    "showCharCount": false,
+                                                                                    "showWordCount": false,
+                                                                                    "properties": {},
+                                                                                    "allowMultipleMasks": false,
+                                                                                    "mask": false,
                                                                                     "inputType": "text",
-                                                                                    "id": "eherczp",
-                                                                                    "defaultValue": ""
+                                                                                    "inputFormat": "plain",
+                                                                                    "inputMask": "",
+                                                                                    "id": "e8z0ng"
                                                                                 },
                                                                                 {
                                                                                     "label": "AutoFill City & State",
@@ -9256,7 +9299,7 @@
                                                                                     "disableOnInvalid": false,
                                                                                     "theme": "primary",
                                                                                     "dataGridLabel": true,
-                                                                                    "id": "eaao4xf"
+                                                                                    "id": "ekz1q3n"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9369,7 +9412,7 @@
                                                                                     "inputFormat": "plain",
                                                                                     "inputMask": "",
                                                                                     "spellcheck": true,
-                                                                                    "id": "ebn3i8"
+                                                                                    "id": "een6rj"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9510,7 +9553,7 @@
                                                                                     },
                                                                                     "customOptions": {},
                                                                                     "useExactSearch": false,
-                                                                                    "id": "e35t3cc"
+                                                                                    "id": "eco4ucm"
                                                                                 },
                                                                                 {
                                                                                     "label": "state hidden field",
@@ -9577,7 +9620,7 @@
                                                                                     "properties": {},
                                                                                     "allowMultipleMasks": false,
                                                                                     "inputType": "hidden",
-                                                                                    "id": "e0aunsa"
+                                                                                    "id": "ema3stc"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9688,7 +9731,7 @@
                                                                                     "inputFormat": "plain",
                                                                                     "inputMask": "",
                                                                                     "spellcheck": true,
-                                                                                    "id": "ebfmgll"
+                                                                                    "id": "ed7plxk"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9760,7 +9803,7 @@
                                                                     "tree": false,
                                                                     "autoAdjust": false,
                                                                     "hideOnChildrenHidden": false,
-                                                                    "id": "eyn97mi"
+                                                                    "id": "e3jfoj"
                                                                 }
                                                             ],
                                                             "placeholder": "",
@@ -9817,7 +9860,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "tree": false,
-                                                            "id": "ei8sv15"
+                                                            "id": "eflwgur"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -9903,7 +9946,7 @@
                                                             "disableOnInvalid": false,
                                                             "theme": "primary",
                                                             "dataGridLabel": true,
-                                                            "id": "eb7pckd"
+                                                            "id": "emdege"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -9990,7 +10033,7 @@
                                                             "block": false,
                                                             "disableOnInvalid": false,
                                                             "dataGridLabel": true,
-                                                            "id": "em6m9qn"
+                                                            "id": "e5jvthi"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -10062,7 +10105,7 @@
                                             "allowMultipleMasks": false,
                                             "tree": false,
                                             "autoAdjust": false,
-                                            "id": "elpnxek"
+                                            "id": "esk6iql"
                                         }
                                     ],
                                     "width": 12,
@@ -10085,7 +10128,7 @@
                             "type": "columns",
                             "input": false,
                             "tableView": false,
-                            "id": "eahxtu",
+                            "id": "eicjj9h",
                             "placeholder": "",
                             "prefix": "",
                             "customClass": "",
@@ -10149,54 +10192,13 @@
                     "prefix": "",
                     "suffix": "",
                     "multiple": false,
-                    "protected": false,
-                    "unique": false,
-                    "persistent": true,
-                    "hidden": false,
                     "refreshOn": "",
-                    "redrawOn": "",
-                    "modalEdit": false,
-                    "labelPosition": "top",
-                    "description": "",
-                    "errorLabel": "",
-                    "tooltip": "",
-                    "tabindex": "",
-                    "disabled": false,
-                    "autofocus": false,
-                    "dbIndex": false,
-                    "customDefaultValue": "",
-                    "calculateValue": "",
-                    "calculateServer": false,
                     "widget": null,
-                    "attributes": {},
-                    "validate": {
-                        "required": false,
-                        "custom": "",
-                        "customPrivate": false,
-                        "strictDateValidation": false,
-                        "multiple": false,
-                        "unique": false
-                    },
-                    "conditional": {
-                        "show": null,
-                        "when": null,
-                        "eq": ""
-                    },
-                    "overlay": {
-                        "style": "",
-                        "left": "",
-                        "top": "",
-                        "width": "",
-                        "height": ""
-                    },
-                    "allowCalculateOverride": false,
-                    "encrypted": false,
                     "showCharCount": false,
                     "showWordCount": false,
-                    "properties": {},
                     "allowMultipleMasks": false,
                     "tree": true,
-                    "id": "ebdivpd"
+                    "id": "ezaaier"
                 },
                 {
                     "label": "Columns",
@@ -42154,7 +42156,7 @@
         }
     ],
     "revisions": "current",
-    "_vid": 657,
+    "_vid": 658,
     "title": "Dealer Workbook Phase 2",
     "display": "wizard",
     "access": [
@@ -42179,6 +42181,6 @@
     "path": "dealerworkbookphase2",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-10-27T12:25:54.065Z",
-    "modified": "2021-04-07T07:50:52.390Z",
+    "modified": "2021-04-07T10:27:08.308Z",
     "machineName": "onboarding-eoxvantage:dealerWorkbookPhase2"
 }
