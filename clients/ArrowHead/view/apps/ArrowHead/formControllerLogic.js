@@ -8,7 +8,7 @@ s.onload = function (e) {
   var appendCustomButtonTimer = setInterval(() => {
     if (
       document.getElementById(
-        "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
+        "formio_loader_dea1187f-62d7-4e4b-963f-7bc5a8f589c8"
       )
     ) {
       if (
@@ -35,7 +35,7 @@ s.onload = function (e) {
             });
             document
               .getElementById(
-                "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
+                "formio_loader_dea1187f-62d7-4e4b-963f-7bc5a8f589c8"
               )
               .dispatchEvent(ev);
           };
@@ -59,7 +59,7 @@ s.onload = function (e) {
             });
             document
               .getElementById(
-                "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
+                "formio_loader_dea1187f-62d7-4e4b-963f-7bc5a8f589c8"
               )
               .dispatchEvent(ev);
           };
@@ -107,7 +107,7 @@ s.onload = function (e) {
                 });
                 document
                   .getElementById(
-                    "formio_loader_1d9c6d64-469d-4401-9b64-d7f47316c157"
+                    "formio_loader_dea1187f-62d7-4e4b-963f-7bc5a8f589c8"
                   )
                   .dispatchEvent(pdfEvent);
               })
