@@ -2,6 +2,15 @@ name: 'Manage Workbooks'
 description: 'Shows a list of all policies'
 content:
     -
+        type: Document
+        content:
+            jsx: '<h5 className="producerCode">
+                  Producer Code: {producerCode}
+                </h5>'
+            params:
+                producerCode: 'data.producerCode'
+            url: 'delegate/GetProducerCode?userId={{1}}'
+    -
         type: List
         content:
             route: 'file/search/entity/Dealer Policy'
