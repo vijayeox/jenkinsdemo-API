@@ -30,12 +30,25 @@ content:
                     details:
                         -
                             type: Form
-                            form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b
+                            form_id: 1d9c6d64-469d-4401-9b64-d7f47316c157
                             fileId: '{{uuid}}'
+                            downloadPdf: true  
                     icon: 'far fa-pencil-alt'
                 -
+                    name: Comments
+                    rule: 'true'
+                    details:
+                        -
+                            type: Document
+                            content: '<h5>Producer Name: {data.producername} | Insured Name: {data.namedInsured}</h5>'
+                            useRowData: true
+                        -
+                            type: Comment
+                            content: '{{uuid}}'
+                    icon: 'far fa-comment'
+                -
                     name: Claims
-                    rule: 'row.status == "Generated" && profile.privileges.MANAGE_CLAIMS_READ== true'
+                    rule: 'row.giValidation && profile.privileges.MANAGE_CLAIMS_READ== true'
                     details:
                         -
                             params:
@@ -70,18 +83,19 @@ content:
                     name: 'Please Wait'
                     rule: '(row.status == "Processing" && row.submissionTime) ? moment().isBefore(moment(row.submissionTime).add(3,"m")) : false'
                     icon: 'fad fa-circle-notch fa-spin'
-                # -
-                #     name: Delete
-                #     rule: "profile.privileges.MANAGE_POLICY_APPLICATION_DELETE == true"
-                #     confirmationMessage: "Are you sure you want to delete the record? &#13;&#10; This cannot be undone."
-                #     updateOnly: true      
-                #     details:
-                #         -
-                #             type: Update
-                #             method: "DELETE"
-                #             params:
-                #                 url: file/{{uuid}}
-                #     icon: 'far fa-trash-alt'
+                -
+                    name: Delete
+                    rule: 'profile.privileges.MANAGE_POLICY_APPLICATION_DELETE == true'
+                    confirmationMessage: "Please confirm if you want to delete the workbook. This cannot be undone."
+                    updateOnly : true
+                    details:
+                        -
+                            type: Update
+                            method: 'DELETE'
+                            params:
+                                url: 'file/{{uuid}}'
+                                successNotification: "Workbook and its related claims have been deleted"
+                    icon: 'far fa-trash-alt'
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:
                 title: "Create Workbook"
@@ -92,7 +106,8 @@ content:
                         details:
                             -
                                 type: Form
-                                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b      
+                                form_id: 280dbc6d-638e-4fba-9095-8430c226ec7b    
+                                downloadPdf: true  
             columnConfig:
                 -
                     title: Insured

@@ -1,0 +1,29 @@
+production:
+  adapter: <%= ENV['DB_ADAPTER'] ||= 'postgresql' %>
+  host: localhost
+  port: 5432
+  database: tasktracker
+  encoding: unicode
+  username: taskuser
+  password: Taskpasswd321!
+  reconnect: true
+
+development:
+  adapter: postgresql
+  host: localhost
+  port: 5432
+  database: tasktracker
+  encoding: unicode
+  username: taskuser
+  password: Taskpasswd321!
+  reconnect: true
+
+test:
+  adapter: postgresql
+  host: localhost
+  port: 5432
+  database: tasktracker
+  encoding: unicode
+  username: taskuser
+  password: Taskpasswd321!
+  reconnect: true

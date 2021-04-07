@@ -62,12 +62,18 @@ class DispatchMail extends MailDelegate
             }
         }
 
+        $mailTemplateFlag = 0;
         if ($attachmentsAvailable) {
             FileUtils::fileExists($mailDocumentsDir . ".zip") ?
                 FileUtils::deleteFile("mailDocuments.zip", $fileDocs) : null;
             ZipUtils::zipDir($mailDocumentsDir, $mailDocumentsDir . ".zip");
-            array_push($emailAttachments,  $mailDocumentsDir . ".zip");
-            FileUtils::rmDir($mailDocumentsDir);
+            $size = FileUtils::fileExists($mailDocumentsDir . ".zip") ? filesize($mailDocumentsDir . ".zip") : 0;
+            if($size > 1000000) {
+                $mailTemplateFlag = 1;
+                FileUtils::rmDir($mailDocumentsDir);
+            } else {
+                array_push($emailAttachments,  $mailDocumentsDir . ".zip");
+            }
         }
 
 
@@ -78,8 +84,19 @@ class DispatchMail extends MailDelegate
         $this->logger->info("Arrowhead Policy Mail " . print_r($mailOptions, true));
         $data['orgUuid'] = "34bf01ab-79ca-42df-8284-965d8dbf290e";
         // $data['orgUuid'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
-        $response = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
-        $this->logger->info("Mail has " . ($response ? "been sent." : "not been sent."));
+        $response = array();
+        $responseMail1 = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
+        $response['Mail1'] = $responseMail1;
+        $this->logger->info("Mail 1 has " . ($responseMail1 ? "been sent." : "not been sent."));
+
+        if($mailTemplateFlag == 1) {
+            $mailOptions['subject'] = "Attachment failed for new business – " . $data['namedInsured'] . " - " . $this->formatDate($data['effectiveDate']) . " - " . $data['producername'];
+            $mailOptions['attachments'] = [];
+            $data['mailTemplateFlag'] = $mailTemplateFlag;
+            $responseMail2 = $this->sendMail($data, "finalSubmissionMail", $mailOptions);
+            $response['Mail2'] = $responseMail2;
+            $this->logger->info("Mail 2 has " . ($responseMail2 ? "been sent." : "not been sent."));
+        }
         return $response;
     }
 

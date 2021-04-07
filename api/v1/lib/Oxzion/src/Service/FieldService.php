@@ -134,6 +134,16 @@ class FieldService extends AbstractService
             if (isset($appId)) {
                 $filterArray['app_id'] = $this->getIdFromUuid('ox_app', $appId);
             }
+            if (isset($filterArray['entityName'])) {
+                $queryString = "Select ox_app_entity.id from ox_app_entity
+                where ox_app_entity.name = :entityName";
+                $queryParams = array('entityName' => $filterArray['entityName']);
+                $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+                if(count($resultSet) > 0) {
+                    $filterArray['entity_id'] = $resultSet[0]['id'];
+                }
+                unset($filterArray['entityName']);
+            }
             $resultSet = $this->getDataByParams('ox_field', array("*"), $filterArray, null);
             $response = array();
             $response['data'] = $resultSet->toArray();
