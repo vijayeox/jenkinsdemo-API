@@ -281,6 +281,9 @@ class Unanswered extends AbstractDocumentAppDelegate
 
     private function fileDataMassaging(&$fileData) {
         //Coinsurance radio button custom logic
+        if(isset($fileData['locations'])) {
+            $count = count($fileData['locations']);
+        }
         if(isset($fileData['buildings'])) {
             foreach ($fileData['buildings'] as $key1 => $value1) {
                 if(isset($value1['coinsuranceform'])) {
@@ -302,6 +305,12 @@ class Unanswered extends AbstractDocumentAppDelegate
             }
         }
 
+        if(isset($fileData['epaDetails'])) {
+            $keyListEPA = array('epaNumber','pollutionname');
+            foreach ($fileData['epaDetails'] as $key => $value) {
+                $this->appendMissingKey($keyListEPA,$fileData['epaDetails'][$key],true);
+            }
+        }
         /*
             Add keys to file data in case its not being passed back.
             Failsafe.
@@ -309,19 +318,23 @@ class Unanswered extends AbstractDocumentAppDelegate
         */
         $keyListCleanData = array('textField1','validationMessage','textField','submissionTime','workFlowId','documentsToBeGenerated','umbrellaWarning','locationNum','textFieldIgnore','managementSubmitApplication');
         $this->removeKeyValueIfExists($keyListCleanData, $fileData);
-        $keyList = array('packageTargetPremium','dolTargetPremium','numYearsOfOwnership','numberOfOwners','numberofemployeeshandling','totalemployees','totalassetvalue','planparticipants','numberofTrusteesHandlingPlanAsset','annualsales','garageumUim','employeeone','employeetwo','employeethree');
+
+        $keyList = array('packageTargetPremium','dolTargetPremium','numYearsOfOwnership','numberOfOwners','numberofemployeeshandling','totalemployees','totalassetvalue','planparticipants','numberofTrusteesHandlingPlanAsset','annualsales','garageumUim','employeetwo','employeethree');
         $this->appendMissingKey($keyList,$fileData);
 
         //Remove location summary from financials
         $keyListFinancials = array('total_newAutos','total_usedAutos','total_fAndI','total_rentalLeasing','total_service','total_bodyShop','total_parts','total_total');
+        $keyListMissingFinancials = array('newAutos','usedAutos','fAndI','rentalLeasing','service','bodyShop','parts');
         if(isset($fileData['financialsYTDSales'])) {
             foreach($fileData['financialsYTDSales'] as $key => $value) {
                 $this->removeKeyValueIfExists($keyListFinancials,$fileData['financialsYTDSales'][$key]);
+                $this->appendMissingKey($keyListMissingFinancials,$fileData['financialsYTDSales'][$key],true);
             }
         }
         if(isset($fileData['financialsYTDGrossProfits'])) {
             foreach($fileData['financialsYTDGrossProfits'] as $key => $value) {
                 $this->removeKeyValueIfExists($keyListFinancials,$fileData['financialsYTDGrossProfits'][$key]);
+                $this->appendMissingKey($keyListMissingFinancials,$fileData['financialsYTDGrossProfits'][$key],true);
             }
         }
         if(isset($fileData['financialsYTDSalesAnnualized'])) {
@@ -344,10 +357,17 @@ class Unanswered extends AbstractDocumentAppDelegate
         }
 
         $keyListEmployee = array('total_fTEmployeesFurnishedAnAuto','total_pTEmployeesFurnishedAnAuto','total_fTEmployeesWhoAreNotFurnished','total_pTEmployeesWhoAreNotFurnished','total_fTAllOtherEmployees','total_pTAllOtherEmployees','total_nonEmployeesUnderTheAge','total_nonEmployeesYearsOldorolder','total_contractDriversNonEmployees','total_total');
+        $keyListMissingEmployee = array('fTEmployeesFurnishedAnAuto','pTEmployeesFurnishedAnAuto','fTEmployeesWhoAreNotFurnished','pTEmployeesWhoAreNotFurnished','fTAllOtherEmployees','pTAllOtherEmployees','nonEmployeesUnderTheAge','nonEmployeesYearsOldorolder','contractDriversNonEmployees');
         if(isset($fileData['employeeList'])) {
             foreach ($fileData['employeeList'] as $key => $value) {
                 $this->removeKeyValueIfExists($keyListEmployee,$fileData['employeeList'][$key]);
+                $this->appendMissingKey($keyListMissingEmployee,$fileData['employeeList'][$key],true);
             }
+        }
+
+        $keyListUnderWriteSurvey = array('isThereADifferentEmployeeHandlingEachAspectOfInventoryOrderingReceivingAuditing','areBankCreditCardStatementsReconciledMonthlyBySomeoneWithNoAccessToCashCreditCardReceiptsDisbursements','areTwo2EmployeesRequiredToSignOffOnAllPurchaseOrders','areMonthlyAccountsReceivableStatementsReviewedByManagementAndMailedToCustomersBySomeoneOtherThanThePersonResponsible');
+        if(isset($fileData['underwritesurvey'])) {
+            $this->appendMissingKey($keyListUnderWriteSurvey,$fileData['underwritesurvey'],true);
         }
 
         $keyListStorageTank = array('tankIndex','locationNum');
@@ -380,6 +400,11 @@ class Unanswered extends AbstractDocumentAppDelegate
         $keyListPollutionLiabilityUnderwritingSurvey = array('applicantHasAnyUndergroundStorageTanks','applicantHasAnyAboveGroundTanks','haveAnyOfTheTanksFailedAnInspection','federalStateReport','withinTheLastFive5YearsHasTheApplicantBeenTheSubjectOfThirdPartyLiabilityClaims','areThereAnyAbandonedTanksOnSite');
         if(isset($fileData['pollutionLiabilityUnderwritingSurvey'])) {
             $this->appendMissingKey($keyListPollutionLiabilityUnderwritingSurvey,$fileData['pollutionLiabilityUnderwritingSurvey'],true);
+        }
+
+        $keyListWebsiteContent = array('noWebsite','streamingVideoOrMusicContent','blogMessageBoardsCustomerReviews','informationCreatedByTheApplicant','contentUnderLicenseFromAThirdParty');
+        if(isset($fileData['websitecontent'])) {
+            $this->appendMissingKey($keyListWebsiteContent,$fileData['websitecontent'],true);
         }
     }
 
