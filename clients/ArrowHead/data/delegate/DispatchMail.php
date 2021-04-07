@@ -68,7 +68,7 @@ class DispatchMail extends MailDelegate
                 FileUtils::deleteFile("mailDocuments.zip", $fileDocs) : null;
             ZipUtils::zipDir($mailDocumentsDir, $mailDocumentsDir . ".zip");
             $size = FileUtils::fileExists($mailDocumentsDir . ".zip") ? filesize($mailDocumentsDir . ".zip") : 0;
-            if($size > 1000000) {
+            if($size > 10000000) {
                 $mailTemplateFlag = 1;
                 FileUtils::rmDir($mailDocumentsDir);
             } else {
