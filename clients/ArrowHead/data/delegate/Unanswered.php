@@ -281,10 +281,13 @@ class Unanswered extends AbstractDocumentAppDelegate
 
     private function fileDataMassaging(&$fileData) {
         //Coinsurance radio button custom logic
-        if(isset($fileData['locations'])) {
-            $count = count($fileData['locations']);
-        }
         if(isset($fileData['buildings'])) {
+            if(isset($fileData['locations'])) {
+                $count = count($fileData['locations']);
+                if($fileData['locations'][$count - 1]['occupancyType'] == null || $fileData['locations'][$count - 1]['occupancyType'] == '') {
+                    unset($fileData['buildings'][$count - 1]);
+                }
+            }
             foreach ($fileData['buildings'] as $key1 => $value1) {
                 if(isset($value1['coinsuranceform'])) {
                     if($value1['coinsuranceform'] == 'yes') {
@@ -304,7 +307,7 @@ class Unanswered extends AbstractDocumentAppDelegate
                 }
             }
         }
-
+        print_r($fileData);exit;
         if(isset($fileData['epaDetails'])) {
             $keyListEPA = array('epaNumber','pollutionname');
             foreach ($fileData['epaDetails'] as $key => $value) {
