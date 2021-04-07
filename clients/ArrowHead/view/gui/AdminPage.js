@@ -24,7 +24,7 @@ class AdminPage extends React.Component {
   componentDidMount() {
     this.loader.show();
     this.getUserData().then((userListResponse) => {
-      this.setState({ userList: userListResponse.data.data });
+      this.setState({ userList: userListResponse.data });
       this.loader.destroy();
     });
   }
@@ -49,7 +49,7 @@ class AdminPage extends React.Component {
     );
     if (editedProducerCode.status == "success") {
       this.getUserData().then((userListResponse) => {
-        this.setState({ userList: userListResponse.data.data });
+        this.setState({ userList: userListResponse.data });
         this.loader.destroy();
       });
     } else {
