@@ -283,6 +283,16 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     display: none;
   }
 
+  .producerCode {
+    text-align: right;
+    color: #212529;
+    padding: 8px;
+    padding-right:10px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: small;
+    border:2px black solid;
+  }
   .totalClaimsAmount {
     text-align: center;
     color: #212529;
