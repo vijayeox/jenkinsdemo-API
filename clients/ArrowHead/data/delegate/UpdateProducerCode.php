@@ -24,7 +24,7 @@ class UpdateProducerCode extends AbstractDocumentAppDelegate
             }
             $updateQuery = "UPDATE `user` SET `producer_code` = '".$data['producer_code']."' WHERE `uuid` = '".$data['uuid']."';";
             $result = $persistenceService->updateQuery($updateQuery);
-            return true;
+            return [];
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
             $persistenceService->rollback();

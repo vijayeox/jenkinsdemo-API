@@ -6,11 +6,11 @@ class AdminPage extends React.Component {
     this.columnConfig = [
       { title: "Firstname", field: "firstname", editable: false },
       { title: "Lastname", field: "lastname", editable: false },
-      { title: "ProducerCode", field: "producer_code", editable: true },
+      { title: "Producer Code", field: "producer_code", editable: true },
     ];
     this.OxzionGUIComponents = this.props.components;
     this.state = {
-      userList: {},
+      userList: [],
       windowVisible: false,
     };
     this.core = this.props.args;
@@ -41,30 +41,16 @@ class AdminPage extends React.Component {
 
   async inlineUpdate(item) {
     this.loader.show();
-    let delegateParams = {
-      id: item.id,
-      firstname: item.firstname,
-      lastname: item.lastname,
-      producer_code: item.producer_code,
-      uuid: item.uuid,
-    };
     let editedProducerCode = await this.helper.request(
       "v1",
-      "/app/" + this.props.appId + "/command/delegate/UpdateProducerCode",
-      delegateParams,
+      "/app/" + this.props.appId + "/delegate/UpdateProducerCode",
+      item,
       "post"
     );
     if (editedProducerCode.status == "success") {
-      var indexUser = this.state.userList.findIndex(
-        (itemData) => itemData.id == delegateParams.id
-      );
-      var newArray = Object.assign([], this.state.userList);
-      newArray[indexUser].producer_code = editedProducerCode.data.producer_code;
-      this.setState((state, props) => {
-        return { windowVisible: 1 };
-      });
-      this.setState((state, props) => {
-        return { userList: newArray };
+      this.getUserData().then((userListResponse) => {
+        this.setState({ userList: userListResponse.data });
+        this.loader.destroy();
       });
     } else {
       this.notif.current.notify(
@@ -74,33 +60,31 @@ class AdminPage extends React.Component {
           : editedProducerCode.message,
         "danger"
       );
+      this.loader.destroy();
     }
-    this.loader.destroy();
   }
   render() {
     var columnConfig = this.columnConfig;
     return (
       <div className="customAdminPage">
         <div className="col-md-12 adminPageGrid">
-          {this.state.userList && this.state.userList.length > 0 && (
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <this.OxzionGUIComponents.OX_Grid
-                ref={this.parentGrid}
-                appId={this.props.appId}
-                osjsCore={this.props.core}
-                data={this.state.userList}
-                expandable={true}
-                resizable={true}
-                columnConfig={columnConfig}
-                inlineEdit={true}
-                filterable={true}
-                onDataStateChange={this.windowVisible}
-                inlineActions={{
-                  update: (dataItem) => this.inlineUpdate(dataItem),
-                }}
-              />
-            </React.Suspense>
-          )}
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <this.OxzionGUIComponents.OX_Grid
+              ref={this.parentGrid}
+              appId={this.props.appId}
+              osjsCore={this.props.core}
+              data={this.state.userList}
+              expandable={true}
+              resizable={true}
+              columnConfig={columnConfig}
+              inlineEdit={true}
+              filterable={true}
+              onDataStateChange={this.windowVisible}
+              inlineActions={{
+                update: (dataItem) => this.inlineUpdate(dataItem),
+              }}
+            />
+          </React.Suspense>
         </div>
         <React.Suspense fallback={<div>Loading...</div>}>
           <this.OxzionGUIComponents.Notification ref={this.notif} />
