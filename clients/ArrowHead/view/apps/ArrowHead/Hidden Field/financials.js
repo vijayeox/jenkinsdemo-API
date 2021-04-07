@@ -120,7 +120,7 @@ financeFieldList.map((field) => {
             (data.includeCarSalesInBI == "no"
               ? item.total - item.usedAutos - item.newAutos
               : item.total) * buildingCoinsurance
-          );
+          ).toFixed(0);
         }
       } else if (data.buildings[index].coinsuranceform == "no") {
         var buildingMonthlyLimitation = parseFloat(
@@ -133,7 +133,7 @@ financeFieldList.map((field) => {
               : item.total) /
               12) *
             buildingMonthlyLimitation
-          );
+          ).toFixed(0);
         }
       } else {
         return 0;
