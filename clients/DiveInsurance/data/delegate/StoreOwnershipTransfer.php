@@ -126,7 +126,8 @@ class StoreOwnershipTransfer extends PolicyDocument
             'previous_travelAgentEOReceiptsPL',
             'previous_travelAgentEoPL',
             'previous_travelEnO',
-            'previous_zip'
+            'previous_zip',
+            'email'
         );
     }
 
