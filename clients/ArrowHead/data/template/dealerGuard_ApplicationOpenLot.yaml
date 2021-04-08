@@ -294,37 +294,37 @@
    Source Worksheet: New - Comp
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverage_new_comp
+   key: requestedCoverage_new1_comp
    cell: F15
 -
    Source Worksheet: New - Coll
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverage_new_collision
+   key: requestedCoverage_new1_collision
    cell: F15
 -
    Source Worksheet: New - False Pretense
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverage_new_falsePretense
+   key: requestedCoverage_new1_falsePretense
    cell: T15
 -
    Source Worksheet: 'Used - Comp '
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverage_used_comp
+   key: requestedCoverage_used1_comp
    cell: F16
 -
    Source Worksheet: 'Used - Coll'
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverage_used_collision
+   key: requestedCoverage_used1_collision
    cell: F16
 -
    Source Worksheet: Used - False Pretense
    pageName: APPLICATION
    method : "checkbox_X"
-   key: requestedCoverage_used_falsePretense
+   key: requestedCoverage_used1_falsePretense
    cell: T16
 -
    Source Worksheet: Demo Furnished - Comp

@@ -138,7 +138,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "ehro0md"
+                                            "id": "ewasn8a"
                                         }
                                     ],
                                     "offset": 0,
@@ -265,7 +265,7 @@
                                             "timezone": "",
                                             "datepickerMode": "day",
                                             "customOptions": {},
-                                            "id": "emnlt73"
+                                            "id": "es16gqu"
                                         }
                                     ],
                                     "offset": 0,
@@ -337,7 +337,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "e25qhp"
+                            "id": "e1waimc"
                         },
                         {
                             "label": "Columns",
@@ -409,7 +409,7 @@
                                             "properties": {},
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "ev7recp"
+                                            "id": "ee3qu6f"
                                         }
                                     ],
                                     "size": "md",
@@ -485,7 +485,7 @@
                                             "properties": {},
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "eiqqcj"
+                                            "id": "e7lzr2e"
                                         }
                                     ],
                                     "size": "md",
@@ -563,7 +563,7 @@
                                             "showWordCount": false,
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "eu0i4yd"
+                                            "id": "ecexu8r"
                                         }
                                     ],
                                     "width": 4,
@@ -641,7 +641,7 @@
                                             "showWordCount": false,
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "eybnxzc"
+                                            "id": "eqejcmf"
                                         }
                                     ],
                                     "size": "md",
@@ -654,10 +654,31 @@
                                     "components": [
                                         {
                                             "label": "Dealerguard Open Lot",
-                                            "calculateValue": "if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {\n  value = {    \n    checkfalsePretenseNumber: data.falsePretenseNumber > 100000 ? \"Increased above the current maximum per vehicle value\" :data.falsePretenseNumber,\n    ownershipDate:\n      data.numYearsOfOwnership > 0\n        ? moment()\n            .subtract(data.numYearsOfOwnership, \"years\")\n            .format(\"MM-DD-YYYY\")\n        : moment().format(\"MM-DD-YYYY\"),\n    checkemployees:\n      (data.employeeListTotal.fTEmployeesFurnishedAnAuto > 0\n        ? data.employeeListTotal.fTEmployeesFurnishedAnAuto\n        : 0) +\n      (data.employeeListTotal.pTEmployeesFurnishedAnAuto > 0\n        ? data.employeeListTotal.pTEmployeesFurnishedAnAuto\n        : 0),\n    checknonemployees:\n      (data.employeeListTotal.nonEmployeesUnderTheAge > 0\n        ? data.employeeListTotal.nonEmployeesUnderTheAge\n        : 0) +\n      (data.employeeListTotal.nonEmployeesYearsOldorolder > 0\n        ? data.employeeListTotal.nonEmployeesYearsOldorolder\n        : 0),\n    checkVehicleInventoryTaken:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"biWeekly\" ||\n      data.dolvehicleinevtorytaken == \"monthly\" ||\n      data.dolvehicleinevtorytaken == \"daily\" ||\n      data.dolvehicleinevtorytaken == \"quarterly\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenWeekly:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"daily\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenBiweekly:\n      data.dolvehicleinevtorytaken == \"biWeekly\" ? \"true\" : \"false\",\n    checkVehicleInventoryTakenMonthly:\n      data.dolvehicleinevtorytaken == \"monthly\" ||\n      data.dolvehicleinevtorytaken == \"quarterly\"\n        ? \"true\"\n        : \"false\",\n    checkcustomerserviceloanerrentalprogram:\n      data.customerserviceloanerrentalprogram == \"no\"\n        ? \"false\"\n        : data.loanerrentalcontractused == \"yes\"\n        ? \"true\"\n        : \"false\",\n    checkDOLTotalNoOfDemos: data.doltotalnoofdemos > 0 ? \"true\" : \"false\",\n    checkGenFullName: data.insurancecontactdataGrid[0].genfullName,\n    checkGenEmail: data.insurancecontactdataGrid[0].genemail,\n    checkLockbox: data.dol_Protection.some(\n      (item) => item.keyControls.lockbox == true\n    ),\n    checkDailyKeyInventory: data.dol_Protection.some(\n      (item) => item.keyControls.dailyKeyInventory == true\n    )\n      ? \"Yes\"\n      : \"No\",\n    checkComputerizedKeyVault: data.dol_Protection.some(\n      (item) => item.keyControls.computerizedKeyVault == true\n    )\n      ? \"yes\"\n      : \"no\",\n    checkSecurityGuards: data.locations.some(\n       (locationItem) => {\n         if (\n           locationItem.occupancyType == \"autoSalesAndService\" &&\n           data.dol_Protection[locationItem.locationNum-1].premisesLotProtection.securityGuards == \"yes\"\n         ) {\n           return true;\n         } else {\n           return false;\n         }\n       }\n     ),\n    checkfalsePretenseNumber:\n      data.falsePretenseNumber > 100000\n        ? \"Increased above the current maximum per vehicle value\"\n        : data.falsePretenseNumber,\n    checkserviceRepairSales: data.financialsYTDSalesTotal.service > 0,\n    SOVGrid: data.locations\n      .filter((i) => i.buildingNum == 1)\n      .map((locationItem) => {\n        var DOL12MonthItem = data.dol_12MonthAvg[locationItem.locationNum - 1];\n        var DOLInventoryItem = data.dol_inventory[locationItem.locationNum - 1];\n\n        if (DOL12MonthItem.total_total > 0) {\n          var individualResult = [];\n\n          var buildingList = data.buildings.filter(\n            (i) => i.locationNum == locationItem.locationNum\n          );\n          var franchiseResult = [];\n          if (\n            buildingList.some(\n              (i) =>\n                i.occupancyType === \"autoSalesAndService\" ||\n                i.occupancyType === \"newCarShowroomAndSales\"\n            )\n          ) {\n            franchiseResult.includes(buildingList[0].primaryOEM)\n              ? null\n              : franchiseResult.push(buildingList[0].primaryOEM);\n            buildingList[0].secondaryOEM.map((item) => {\n              item.length > 0 && !franchiseResult.includes(item)\n                ? franchiseResult.push(item)\n                : null;\n            });\n\n            var finalFranchiseItem = \"\";\n            franchiseResult.length > 0\n              ? franchiseResult.map((i, index) => {\n                  if (franchiseResult.length == index + 1) {\n                    finalFranchiseItem += i;\n                  } else {\n                    finalFranchiseItem += i + \" , \";\n                  }\n                })\n              : null;\n\n            individualResult.push(finalFranchiseItem);\n          } else {\n            individualResult.push(\"\");\n          }\n\n          individualResult.push(locationItem.address);\n          individualResult.push(locationItem.city);\n          individualResult.push(locationItem.state);\n          individualResult.push(locationItem.zip);\n          individualResult.push(\n            DOL12MonthItem.total_new > 0 ? DOL12MonthItem.total_new : 0\n          );\n          individualResult.push(\n            DOL12MonthItem.total_used > 0 ? DOL12MonthItem.total_used : 0\n          );\n          individualResult.push(\n            (DOL12MonthItem.total_loanersShopService > 0\n              ? DOL12MonthItem.total_loanersShopService\n              : 0) +\n              (DOL12MonthItem.total_demosFurnishedAutos > 0\n                ? DOL12MonthItem.total_demosFurnishedAutos\n                : 0)\n          );\n          individualResult.push(\"\");\n          individualResult.push(\n            DOLInventoryItem.total_maxInventory > 0\n              ? DOLInventoryItem.total_maxInventory\n              : 0\n          );\n          individualResult.push(\n            DOLInventoryItem.total_maxUnits > 0\n              ? DOLInventoryItem.total_maxUnits\n              : 0\n          );\n          individualResult.push(\n            DOLInventoryItem.total_maxIndoor > 0\n              ? DOLInventoryItem.total_maxIndoor\n              : 0\n          );\n\n          return individualResult;\n        } else {\n          return \"invalid\";\n        }\n      })\n      .filter((i) => i !== \"invalid\"),\n  };\n  console.log(value);\n}\n",
+                                            "customClass": "",
+                                            "modalEdit": false,
+                                            "defaultValue": null,
+                                            "persistent": true,
+                                            "protected": false,
+                                            "dbIndex": false,
+                                            "encrypted": false,
+                                            "redrawOn": "",
+                                            "customDefaultValue": "",
+                                            "calculateValue": "if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {\n  value = {\n    checkfalsePretenseNumber:\n      data.falsePretenseNumber > 100000\n        ? \"Increased above the current maximum per vehicle value\"\n        : data.falsePretenseNumber,\n    ownershipDate:\n      data.numYearsOfOwnership > 0\n        ? moment()\n            .subtract(data.numYearsOfOwnership, \"years\")\n            .format(\"MM-DD-YYYY\")\n        : moment().format(\"MM-DD-YYYY\"),\n    checkemployees:\n      (data.employeeListTotal.fTEmployeesFurnishedAnAuto > 0\n        ? data.employeeListTotal.fTEmployeesFurnishedAnAuto\n        : 0) +\n      (data.employeeListTotal.pTEmployeesFurnishedAnAuto > 0\n        ? data.employeeListTotal.pTEmployeesFurnishedAnAuto\n        : 0),\n    checknonemployees:\n      (data.employeeListTotal.nonEmployeesUnderTheAge > 0\n        ? data.employeeListTotal.nonEmployeesUnderTheAge\n        : 0) +\n      (data.employeeListTotal.nonEmployeesYearsOldorolder > 0\n        ? data.employeeListTotal.nonEmployeesYearsOldorolder\n        : 0),\n    checkVehicleInventoryTaken:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"biWeekly\" ||\n      data.dolvehicleinevtorytaken == \"monthly\" ||\n      data.dolvehicleinevtorytaken == \"daily\" ||\n      data.dolvehicleinevtorytaken == \"quarterly\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenWeekly:\n      data.dolvehicleinevtorytaken == \"weekly\" ||\n      data.dolvehicleinevtorytaken == \"daily\"\n        ? \"true\"\n        : \"false\",\n    checkVehicleInventoryTakenBiweekly:\n      data.dolvehicleinevtorytaken == \"biWeekly\" ? \"true\" : \"false\",\n    checkVehicleInventoryTakenMonthly:\n      data.dolvehicleinevtorytaken == \"monthly\" ||\n      data.dolvehicleinevtorytaken == \"quarterly\"\n        ? \"true\"\n        : \"false\",\n    checkcustomerserviceloanerrentalprogram:\n      data.customerserviceloanerrentalprogram == \"no\"\n        ? \"false\"\n        : data.loanerrentalcontractused == \"yes\"\n        ? \"true\"\n        : \"false\",\n    checkDOLTotalNoOfDemos: data.doltotalnoofdemos > 0 ? \"true\" : \"false\",\n    checkGenFullName: data.insurancecontactdataGrid[0].genfullName,\n    checkGenEmail: data.insurancecontactdataGrid[0].genemail,\n    checkLockbox: data.dol_Protection.some(\n      (item) => item.keyControls.lockbox == true\n    ),\n    checkDailyKeyInventory: data.dol_Protection.some(\n      (item) => item.keyControls.dailyKeyInventory == true\n    )\n      ? \"Yes\"\n      : \"No\",\n    checkComputerizedKeyVault: data.dol_Protection.some(\n      (item) => item.keyControls.computerizedKeyVault == true\n    )\n      ? \"yes\"\n      : \"no\",\n    //checkSecurityGuards: false,\n    // Need to check condition. Occupancy type is at building Level but\n    // dol_Protection[0]premisesLotProtection are at loc level\n    checkSecurityGuards: data.locations.some((locationItem) => {\n      if (\n        locationItem.occupancyType == \"autoSalesAndService\" &&\n        data.dol_Protection[locationItem.locationNum - 1].premisesLotProtection\n          .securityGuards == \"yes\"\n      ) {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n    checkfalsePretenseNumber:\n      data.falsePretenseNumber > 100000\n        ? \"Increased above the current maximum per vehicle value\"\n        : data.falsePretenseNumber,\n    checkserviceRepairSales: data.financialsYTDSalesTotal.service > 0,\n    SOVGrid: data.locations\n      .filter((i) => i.buildingNum == 1)\n      .map((locationItem) => {\n        var DOL12MonthItem = data.dol_12MonthAvg[locationItem.locationNum - 1];\n        var DOLInventoryItem = data.dol_inventory[locationItem.locationNum - 1];\n\n        if (DOL12MonthItem.total_total > 0) {\n          var individualResult = [];\n\n          var buildingList = data.buildings.filter(\n            (i) => i.locationNum == locationItem.locationNum\n          );\n          var franchiseResult = [];\n          if (\n            buildingList.some(\n              (i) =>\n                i.occupancyType === \"autoSalesAndService\" ||\n                i.occupancyType === \"newCarShowroomAndSales\"\n            )\n          ) {\n            buildingList.map((i) => {\n              franchiseResult.includes(i.primaryOEM)\n                ? null\n                : franchiseResult.push(i.primaryOEM);\n              i.secondaryOEM\n                ? i.secondaryOEM.map((item) => {\n                    item.length > 0 && !franchiseResult.includes(item)\n                      ? franchiseResult.push(item)\n                      : null;\n                  })\n                : null;\n            });\n\n            var finalFranchiseItem = \"\";\n            franchiseResult.length > 0\n              ? franchiseResult.map((i, index) => {\n                  if (franchiseResult.length == index + 1) {\n                    finalFranchiseItem += i;\n                  } else {\n                    finalFranchiseItem += i + \" , \";\n                  }\n                })\n              : null;\n\n            individualResult.push(finalFranchiseItem);\n          } else {\n            individualResult.push(\"\");\n          }\n\n          individualResult.push(locationItem.address);\n          individualResult.push(locationItem.city);\n          individualResult.push(locationItem.state);\n          individualResult.push(locationItem.zip);\n          individualResult.push(\n            DOL12MonthItem.total_new > 0 ? DOL12MonthItem.total_new : 0\n          );\n          individualResult.push(\n            DOL12MonthItem.total_used > 0 ? DOL12MonthItem.total_used : 0\n          );\n          individualResult.push(\n            (DOL12MonthItem.total_loanersShopService > 0\n              ? DOL12MonthItem.total_loanersShopService\n              : 0) +\n              (DOL12MonthItem.total_demosFurnishedAutos > 0\n                ? DOL12MonthItem.total_demosFurnishedAutos\n                : 0)\n          );\n          individualResult.push(\"\");\n          individualResult.push(\n            DOLInventoryItem.total_maxInventory > 0\n              ? DOLInventoryItem.total_maxInventory\n              : 0\n          );\n          individualResult.push(\n            DOLInventoryItem.total_maxUnits > 0\n              ? DOLInventoryItem.total_maxUnits\n              : 0\n          );\n          individualResult.push(\n            DOLInventoryItem.total_maxIndoor > 0\n              ? DOLInventoryItem.total_maxIndoor\n              : 0\n          );\n\n          return individualResult;\n        } else {\n          return \"invalid\";\n        }\n      })\n      .filter((i) => i !== \"invalid\"),\n  };\n  console.log(value);\n}\n",
+                                            "calculateServer": false,
                                             "key": "dealerguardOpenLot",
+                                            "tags": [],
                                             "properties": {
                                                 "data_type": "json"
+                                            },
+                                            "logic": [],
+                                            "attributes": {},
+                                            "overlay": {
+                                                "style": "",
+                                                "page": "",
+                                                "left": "",
+                                                "top": "",
+                                                "width": "",
+                                                "height": ""
                                             },
                                             "type": "hidden",
                                             "input": true,
@@ -665,18 +686,12 @@
                                             "hideOnChildrenHidden": false,
                                             "placeholder": "",
                                             "prefix": "",
-                                            "customClass": "",
                                             "suffix": "",
                                             "multiple": false,
-                                            "defaultValue": null,
-                                            "protected": false,
                                             "unique": false,
-                                            "persistent": true,
                                             "hidden": false,
                                             "clearOnHide": true,
                                             "refreshOn": "",
-                                            "redrawOn": "",
-                                            "modalEdit": false,
                                             "labelPosition": "top",
                                             "description": "",
                                             "errorLabel": "",
@@ -685,13 +700,9 @@
                                             "tabindex": "",
                                             "disabled": false,
                                             "autofocus": false,
-                                            "dbIndex": false,
-                                            "customDefaultValue": "",
-                                            "calculateServer": false,
                                             "widget": {
                                                 "type": "input"
                                             },
-                                            "attributes": {},
                                             "validateOn": "change",
                                             "validate": {
                                                 "required": false,
@@ -706,20 +717,12 @@
                                                 "when": null,
                                                 "eq": ""
                                             },
-                                            "overlay": {
-                                                "style": "",
-                                                "left": "",
-                                                "top": "",
-                                                "width": "",
-                                                "height": ""
-                                            },
                                             "allowCalculateOverride": false,
-                                            "encrypted": false,
                                             "showCharCount": false,
                                             "showWordCount": false,
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "e2qfoep"
+                                            "id": "e2ss1vp"
                                         }
                                     ],
                                     "size": "md",
@@ -732,11 +735,31 @@
                                     "components": [
                                         {
                                             "label": "Franchised Auto Dealer",
+                                            "customClass": "",
+                                            "modalEdit": false,
+                                            "defaultValue": null,
+                                            "persistent": true,
+                                            "protected": false,
+                                            "dbIndex": false,
+                                            "encrypted": false,
                                             "redrawOn": "workbooksToBeGenerated",
-                                            "calculateValue": "if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {\n  var falsePretenseLimit = 0;\n  var checklistCompaniesRepresented = [];\n  var checkblanketcoverage = [];\n\n  data.locations.map((i) => {\n    data.locations.filter(\n      (j) => j.buildingNum == 2 && i.locationNum == j.locationNum\n    ).length > 0\n      ? checkblanketcoverage.push({ result: \"Premise Only\" })\n      : checkblanketcoverage.push({ result: \"No\" });\n  });\n\n  locationSpecificData = data.buildings.filter(\n    (building) => building.buildingNum == \"1\"\n  );\n\n  checklistCompaniesRepresented = data.companiesRepresentedList.map(\n    (item) => item.listcompaniesrepresented\n  );\n\n  if (data.falsePretenseNumber <= 0) {\n    falsePretenseLimit = \"None\";\n  } else if (data.falsePretenseNumber <= 25000) {\n    falsePretenseLimit = 25000;\n  } else if (data.falsePretenseNumber <= 50000) {\n    falsePretenseLimit = 50000;\n  } else if (data.falsePretenseNumber <= 75000) {\n    falsePretenseLimit = 75000;\n  } else if (data.falsePretenseNumber <= 100000) {\n    falsePretenseLimit = 100000;\n  } else if (data.falsePretenseNumber <= 150000) {\n    falsePretenseLimit = 150000;\n  } else if (data.falsePretenseNumber <= 200000) {\n    falsePretenseLimit = 200000;\n  } else {\n    falsePretenseLimit = 250000;\n  }\n\n  value = {\n    checkblanketcoverage: checkblanketcoverage ? checkblanketcoverage : [],\n    checkcompaniesrepresented: checklistCompaniesRepresented + \"\",\n    checktotalLocationSalesRevenue: data.financialsYTDSalesTotal.total,\n    checkfalsePretenseLimit: falsePretenseLimit,\n    locationBuildingIndex: data.locations\n      .map((i, index) => (index == 0 ? false : { result: i.locationNum }))\n      .filter((i) => i),\n    checkbuildingCoinsurance: data.locations.map((item) => {\n      return item.occupancyType == \"vacantLand\"\n        ? { result: \"\" }\n        : { result: \"Agreed Amount\" };\n    }),\n    checkpropertyCoverageDeductible: data.locations.map((item) => {\n      return item.occupancyType == \"vacantLand\"\n        ? { result: \"\" }\n        : {\n            result: data.propertyCoverageDeductible\n              ? data.propertyCoverageDeductible\n              : \"\",\n          };\n    }),\n    checkbuildingValuation: data.locations.map((i) => {\n      return { result: \"Replacement Cost\" };\n    }),\n    CityStateZip: data.city + \",\" + data.state.name + \",\" + data.zip,\n    InsuranceContactNameandPhone: data.insurancecontactdataGrid\n      ? data.insurancecontactdataGrid[0].genfirstname +\n        \" \" +\n        data.insurancecontactdataGrid[0].genlastname +\n        \",\" +\n        data.insurancecontactdataGrid[0].genphone\n      : \"\",\n    checkSecurityGuards: data.dol_Protection.some((locationItem) => {\n      if (locationItem.premisesLotProtection.securityGuards == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkdolaftrhrslighting: data.dol_Protection.some((locationItem) => {\n      if (locationItem.premisesLotProtection.afterHoursLighting == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkSurveillanceCamera: data.dol_Protection.some((locationItem) => {\n      if (locationItem.entranceQuestions.camerasMonitored == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkNotMonitoredSurveillanceCamera: data.dol_Protection.some(\n      (locationItem) => {\n        if (locationItem.entranceQuestions.camerasNotMonitored == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n\n    checkdolpostnchain: data.dol_Protection.some((locationItem) => {\n      if (locationItem.entranceQuestions.postChain == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkdolflyfencdpremises: data.dol_Protection.some((locationItem) => {\n      if (locationItem.entranceQuestions.fullyFencedPremises == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checknumberofservicebays: data.buildings.some((locationItem) => {\n      if (locationItem.numberofservicebays == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    garageLiabilityGrid: data.employeeList\n      .filter((i) => i.lastBuilding)\n      .map((i) => {\n        return [\n          i.total_fTEmployeesFurnishedAnAuto > 0\n            ? i.total_fTEmployeesFurnishedAnAuto\n            : 0,\n          i.total_pTEmployeesFurnishedAnAuto > 0\n            ? i.total_pTEmployeesFurnishedAnAuto\n            : 0,\n          i.total_fTEmployeesWhoAreNotFurnished > 0\n            ? i.total_fTEmployeesWhoAreNotFurnished\n            : 0,\n          i.total_pTEmployeesWhoAreNotFurnished > 0\n            ? i.total_pTEmployeesWhoAreNotFurnished\n            : 0,\n          i.total_fTAllOtherEmployees > 0 ? i.total_fTAllOtherEmployees : 0,\n          i.total_pTAllOtherEmployees > 0 ? i.total_pTAllOtherEmployees : 0,\n\n          i.total_nonEmployeesUnderTheAge > 0\n            ? i.total_nonEmployeesUnderTheAge\n            : 0,\n          i.total_nonEmployeesYearsOldorolder > 0\n            ? i.total_nonEmployeesYearsOldorolder\n            : 0,\n          i.total_contractDriversNonEmployees > 0\n            ? i.total_contractDriversNonEmployees\n            : 0,\n        ];\n      }),\n\n    checkEmployeetoolsOnPremises: data.buildings.map((item) => {\n      return {\n        result:\n          (item.businesselectronicequipment > 0\n            ? item.businesselectronicequipment\n            : 0) +\n          (item.employeetools > 0 ? item.employeetools : 0) +\n          (item.lightpoles > 0 ? item.lightpoles : 0) +\n          (item.signsLessThan > 0 ? item.signsLessThan : 0) +\n          (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +\n          (item.valulablePapers > 0 ? item.valulablePapers : 0) +\n          (item.accountsreceivable > 0 ? item.accountsreceivable : 0) +\n          (item.awaningsscanopies > 0 ? item.awaningsscanopies : 0),\n      };\n    }),\n    checkTotalbuildinglimit: data.buildings.map((item) => {\n      return {\n        result:\n          (item.signsLessThan > 0 ? item.signsLessThan : 0) +\n          (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +\n          (item.buildingLimit > 0 ? item.buildingLimit : 0),\n      };\n    }),\n    checkOrdinanceAndUtility: data.buildings.map((item) => {\n      return {\n        result:\n          (item.utilityservices > 0\n            ? \"Utility Services Time Element: \" + item.utilityservices\n            : \"\") +\n          (item.utilityservices > 0 && item.ordinancelawcoverage > 0\n            ? \", \"\n            : \"\") +\n          (item.ordinancelawcoverage > 0\n            ? \"Ordinance Law: \" + item.ordinancelawcoverage\n            : \"\"),\n      };\n    }),\n    checkrepairpercentlabor:\n      data.repairpercentlabor == 95 || data.repairpercentlabor == 85\n        ? 90\n        : data.repairpercentlabor,\n    checkwhodeliversvehiclesonemployee:\n      data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\n    checkwhodeliversvehiclesonindependentContractor:\n      data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\",\n  };\n}\n",
+                                            "customDefaultValue": "",
+                                            "calculateValue": "if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {\n  var falsePretenseLimit = 0;\n  var checklistCompaniesRepresented = [];\n  var checkblanketcoverage = [];\n\n  data.locations.map((i) => {\n    data.locations.filter(\n      (j) => j.buildingNum == 2 && i.locationNum == j.locationNum\n    ).length > 0\n      ? checkblanketcoverage.push({ result: \"Premise Only\" })\n      : checkblanketcoverage.push({ result: \"No\" });\n  });\n\n  checklistCompaniesRepresented = data.companiesRepresentedList.map(\n    (item) => item.listcompaniesrepresented\n  );\n\n  if (data.falsePretenseNumber <= 0) {\n    falsePretenseLimit = \"None\";\n  } else if (data.falsePretenseNumber <= 25000) {\n    falsePretenseLimit = 25000;\n  } else if (data.falsePretenseNumber <= 50000) {\n    falsePretenseLimit = 50000;\n  } else if (data.falsePretenseNumber <= 75000) {\n    falsePretenseLimit = 75000;\n  } else if (data.falsePretenseNumber <= 100000) {\n    falsePretenseLimit = 100000;\n  } else if (data.falsePretenseNumber <= 150000) {\n    falsePretenseLimit = 150000;\n  } else if (data.falsePretenseNumber <= 200000) {\n    falsePretenseLimit = 200000;\n  } else {\n    falsePretenseLimit = 250000;\n  }\n\n  value = {\n    checkblanketcoverage: checkblanketcoverage ? checkblanketcoverage : [],\n    checkcompaniesrepresented: checklistCompaniesRepresented + \"\",\n    checktotalLocationSalesRevenue: data.financialsYTDSalesTotal.total,\n    checkfalsePretenseLimit: falsePretenseLimit,\n    locationSpecificData: data.buildings.filter(\n      (building) => building.buildingNum == \"1\"\n    ),\n    locationBuildingIndex: data.locations\n      .map((i, index) => (index == 0 ? false : { result: i.locationNum }))\n      .filter((i) => i),\n    checkbuildingCoinsurance: data.locations.map((item) => {\n      return item.occupancyType == \"vacantLand\"\n        ? { result: \"\" }\n        : { result: \"Agreed Amount\" };\n    }),\n    checkpropertyCoverageDeductible: data.locations.map((item) => {\n      return item.occupancyType == \"vacantLand\"\n        ? { result: \"\" }\n        : {\n            result: data.propertyCoverageDeductible\n              ? data.propertyCoverageDeductible\n              : \"\",\n          };\n    }),\n    checkbuildingValuation: data.locations.map((i) => {\n      return { result: \"Replacement Cost\" };\n    }),\n    CityStateZip: data.city + \",\" + data.state.name + \",\" + data.zip,\n    InsuranceContactNameandPhone: data.insurancecontactdataGrid\n      ? data.insurancecontactdataGrid[0].genfirstname +\n        \" \" +\n        data.insurancecontactdataGrid[0].genlastname +\n        \",\" +\n        data.insurancecontactdataGrid[0].genphone\n      : \"\",\n    checkSecurityGuards: data.dol_Protection.some((locationItem) => {\n      if (locationItem.premisesLotProtection.securityGuards == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkdolaftrhrslighting: data.dol_Protection.some((locationItem) => {\n      if (locationItem.premisesLotProtection.afterHoursLighting == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkSurveillanceCamera: data.dol_Protection.some((locationItem) => {\n      if (locationItem.entranceQuestions.camerasMonitored == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkNotMonitoredSurveillanceCamera: data.dol_Protection.some(\n      (locationItem) => {\n        if (locationItem.entranceQuestions.camerasNotMonitored == \"yes\") {\n          return true;\n        } else {\n          return false;\n        }\n      }\n    ),\n\n    checkdolpostnchain: data.dol_Protection.some((locationItem) => {\n      if (locationItem.entranceQuestions.postChain == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checkdolflyfencdpremises: data.dol_Protection.some((locationItem) => {\n      if (locationItem.entranceQuestions.fullyFencedPremises == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    checknumberofservicebays: data.buildings.some((locationItem) => {\n      if (locationItem.numberofservicebays == \"yes\") {\n        return true;\n      } else {\n        return false;\n      }\n    }),\n\n    garageLiabilityGrid: data.employeeList\n      .filter((i) => i.lastBuilding)\n      .map((i) => {\n        return [\n          i.total_fTEmployeesFurnishedAnAuto > 0\n            ? i.total_fTEmployeesFurnishedAnAuto\n            : 0,\n          i.total_pTEmployeesFurnishedAnAuto > 0\n            ? i.total_pTEmployeesFurnishedAnAuto\n            : 0,\n          i.total_fTEmployeesWhoAreNotFurnished > 0\n            ? i.total_fTEmployeesWhoAreNotFurnished\n            : 0,\n          i.total_pTEmployeesWhoAreNotFurnished > 0\n            ? i.total_pTEmployeesWhoAreNotFurnished\n            : 0,\n          i.total_fTAllOtherEmployees > 0 ? i.total_fTAllOtherEmployees : 0,\n          i.total_pTAllOtherEmployees > 0 ? i.total_pTAllOtherEmployees : 0,\n\n          i.total_nonEmployeesUnderTheAge > 0\n            ? i.total_nonEmployeesUnderTheAge\n            : 0,\n          i.total_nonEmployeesYearsOldorolder > 0\n            ? i.total_nonEmployeesYearsOldorolder\n            : 0,\n          i.total_contractDriversNonEmployees > 0\n            ? i.total_contractDriversNonEmployees\n            : 0,\n        ];\n      }),\n\n    checkEmployeetoolsOnPremises: data.buildings.map((item) => {\n      return {\n        result:\n          (item.businesselectronicequipment > 0\n            ? item.businesselectronicequipment\n            : 0) +\n          (item.employeetools > 0 ? item.employeetools : 0) +\n          (item.lightpoles > 0 ? item.lightpoles : 0) +\n          (item.signsLessThan > 0 ? item.signsLessThan : 0) +\n          (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +\n          (item.valulablePapers > 0 ? item.valulablePapers : 0) +\n          (item.accountsreceivable > 0 ? item.accountsreceivable : 0) +\n          (item.awaningsscanopies > 0 ? item.awaningsscanopies : 0),\n      };\n    }),\n    checkTotalbuildinglimit: data.buildings.map((item) => {\n      return {\n        result:\n          (item.signsLessThan > 0 ? item.signsLessThan : 0) +\n          (item.signsGreaterThan > 0 ? item.signsGreaterThan : 0) +\n          (item.buildingLimit > 0 ? item.buildingLimit : 0),\n      };\n    }),\n    checkOrdinanceAndUtility: data.buildings.map((item) => {\n      return {\n        result:\n          (item.utilityservices > 0\n            ? \"Utility Services Time Element: \" + item.utilityservices\n            : \"\") +\n          (item.utilityservices > 0 && item.ordinancelawcoverage > 0\n            ? \", \"\n            : \"\") +\n          (item.ordinancelawcoverage > 0\n            ? \"Ordinance Law: \" + item.ordinancelawcoverage\n            : \"\"),\n      };\n    }),\n    checkrepairpercentlabor:\n      data.repairpercentlabor == 95 || data.repairpercentlabor == 85\n        ? 90\n        : data.repairpercentlabor,\n    checkwhodeliversvehiclesonemployee:\n      data.whodeliversvehicleson == \"employee\" ? \"true\" : \"false\",\n    checkwhodeliversvehiclesonindependentContractor:\n      data.whodeliversvehicleson == \"independentContractor\" ? \"true\" : \"false\",\n  };\n}\n",
+                                            "calculateServer": false,
                                             "key": "franchisedAutoDealer",
+                                            "tags": [],
                                             "properties": {
                                                 "data_type": "json"
+                                            },
+                                            "logic": [],
+                                            "attributes": {},
+                                            "overlay": {
+                                                "style": "",
+                                                "page": "",
+                                                "left": "",
+                                                "top": "",
+                                                "width": "",
+                                                "height": ""
                                             },
                                             "type": "hidden",
                                             "input": true,
@@ -744,17 +767,12 @@
                                             "hideOnChildrenHidden": false,
                                             "placeholder": "",
                                             "prefix": "",
-                                            "customClass": "",
                                             "suffix": "",
                                             "multiple": false,
-                                            "defaultValue": null,
-                                            "protected": false,
                                             "unique": false,
-                                            "persistent": true,
                                             "hidden": false,
                                             "clearOnHide": true,
                                             "refreshOn": "",
-                                            "modalEdit": false,
                                             "labelPosition": "top",
                                             "description": "",
                                             "errorLabel": "",
@@ -763,13 +781,9 @@
                                             "tabindex": "",
                                             "disabled": false,
                                             "autofocus": false,
-                                            "dbIndex": false,
-                                            "customDefaultValue": "",
-                                            "calculateServer": false,
                                             "widget": {
                                                 "type": "input"
                                             },
-                                            "attributes": {},
                                             "validateOn": "change",
                                             "validate": {
                                                 "required": false,
@@ -784,20 +798,12 @@
                                                 "when": null,
                                                 "eq": ""
                                             },
-                                            "overlay": {
-                                                "style": "",
-                                                "left": "",
-                                                "top": "",
-                                                "width": "",
-                                                "height": ""
-                                            },
                                             "allowCalculateOverride": false,
-                                            "encrypted": false,
                                             "showCharCount": false,
                                             "showWordCount": false,
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "edqow9c"
+                                            "id": "e5t8a4"
                                         }
                                     ],
                                     "size": "md",
@@ -875,7 +881,7 @@
                                             "showWordCount": false,
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "e8lm77c"
+                                            "id": "evzk12"
                                         }
                                     ],
                                     "size": "md",
@@ -953,7 +959,7 @@
                                             "showWordCount": false,
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "euabd0p"
+                                            "id": "eb3r2zq"
                                         }
                                     ],
                                     "size": "md",
@@ -1029,7 +1035,7 @@
                                             "properties": {},
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "e8lnqed"
+                                            "id": "e6yjv6"
                                         }
                                     ],
                                     "size": "md",
@@ -1105,7 +1111,7 @@
                                             "properties": {},
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "e7k50h"
+                                            "id": "e3sqkw4"
                                         }
                                     ],
                                     "size": "md",
@@ -1181,7 +1187,7 @@
                                             "properties": {},
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "ejquqm7"
+                                            "id": "ei42etd"
                                         }
                                     ],
                                     "size": "md",
@@ -1253,7 +1259,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "eul3baq"
+                            "id": "epwzhlu"
                         }
                     ],
                     "input": false,
@@ -1314,7 +1320,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "e1rc2hg"
+                    "id": "eblhpn8"
                 },
                 {
                     "title": "Applicant Information",
@@ -1411,7 +1417,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "e9z4jb"
+                                            "id": "ev6llhs"
                                         }
                                     ],
                                     "offset": 0,
@@ -1535,7 +1541,7 @@
                                             },
                                             "customOptions": {},
                                             "useExactSearch": false,
-                                            "id": "eq3uqxc"
+                                            "id": "eo9i59"
                                         }
                                     ],
                                     "offset": 0,
@@ -1618,7 +1624,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "eympxew"
+                                            "id": "euloqud"
                                         }
                                     ],
                                     "offset": 0,
@@ -1703,7 +1709,7 @@
                                             "inputType": "tel",
                                             "inputFormat": "plain",
                                             "spellcheck": true,
-                                            "id": "ekxu7af"
+                                            "id": "erb3e1"
                                         }
                                     ],
                                     "size": "md",
@@ -1843,7 +1849,7 @@
                                             },
                                             "customOptions": {},
                                             "useExactSearch": false,
-                                            "id": "ep1ngmm"
+                                            "id": "eppnl5r"
                                         }
                                     ],
                                     "size": "md",
@@ -1915,7 +1921,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "e4y1qtn"
+                            "id": "ewnp4if"
                         },
                         {
                             "label": "Applicant Info",
@@ -1997,7 +2003,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "e8lyno"
+                                            "id": "e48r5xl"
                                         }
                                     ],
                                     "size": "md",
@@ -2083,7 +2089,7 @@
                                             "showWordCount": false,
                                             "properties": {},
                                             "allowMultipleMasks": false,
-                                            "id": "eupjk0p"
+                                            "id": "er7wzfw"
                                         },
                                         {
                                             "label": "AutoFill City and State",
@@ -2159,7 +2165,7 @@
                                             "disableOnInvalid": false,
                                             "theme": "primary",
                                             "dataGridLabel": true,
-                                            "id": "efq40tl"
+                                            "id": "ev3zux"
                                         }
                                     ],
                                     "offset": 0,
@@ -2245,7 +2251,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "epa40d9"
+                                            "id": "e3pvzkq"
                                         }
                                     ],
                                     "width": 2,
@@ -2360,7 +2366,7 @@
                                             },
                                             "customOptions": {},
                                             "useExactSearch": false,
-                                            "id": "ejfwfgj"
+                                            "id": "ew9ggq8"
                                         },
                                         {
                                             "label": "State JSON",
@@ -2427,7 +2433,7 @@
                                             "properties": {},
                                             "allowMultipleMasks": false,
                                             "inputType": "hidden",
-                                            "id": "elbvztm"
+                                            "id": "e7xdfc6f"
                                         }
                                     ],
                                     "offset": 0,
@@ -2514,7 +2520,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "eb960h7"
+                                            "id": "e8skfd"
                                         }
                                     ],
                                     "width": 2,
@@ -2586,7 +2592,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "ecgtaw"
+                            "id": "eijj6y"
                         },
                         {
                             "label": "Columns",
@@ -2669,7 +2675,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "(999) 999-9999",
                                             "spellcheck": true,
-                                            "id": "ea3v7r7"
+                                            "id": "encwd78"
                                         }
                                     ],
                                     "offset": 0,
@@ -2756,7 +2762,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "(999) 999-9999",
                                             "spellcheck": true,
-                                            "id": "e2s0owh"
+                                            "id": "ekxqq09"
                                         }
                                     ],
                                     "width": 3,
@@ -2845,7 +2851,7 @@
                                             "kickbox": {
                                                 "enabled": false
                                             },
-                                            "id": "e3t7zfr"
+                                            "id": "et81jvf"
                                         }
                                     ],
                                     "width": 3,
@@ -2928,7 +2934,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "efujoq"
+                                            "id": "ebt2wzf"
                                         }
                                     ],
                                     "size": "md",
@@ -3000,7 +3006,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "ebjmfcm"
+                            "id": "eukqhpe"
                         },
                         {
                             "label": "Dealership Personnel And Additional Owners",
@@ -3111,7 +3117,7 @@
                                                     "inputFormat": "plain",
                                                     "inputMask": "",
                                                     "spellcheck": true,
-                                                    "id": "ehde9us"
+                                                    "id": "euej2c"
                                                 }
                                             ],
                                             "width": 4,
@@ -3199,7 +3205,7 @@
                                                     "showWordCount": false,
                                                     "properties": {},
                                                     "allowMultipleMasks": false,
-                                                    "id": "ekyatv"
+                                                    "id": "e66hbza"
                                                 },
                                                 {
                                                     "label": "Ownership personnel",
@@ -3266,7 +3272,7 @@
                                                     "properties": {},
                                                     "allowMultipleMasks": false,
                                                     "inputType": "hidden",
-                                                    "id": "euha0v9"
+                                                    "id": "e7u0v8"
                                                 }
                                             ],
                                             "width": 2,
@@ -3281,7 +3287,7 @@
                                     "type": "columns",
                                     "input": false,
                                     "tableView": false,
-                                    "id": "ex9kqsx0",
+                                    "id": "e0xfv2m",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -3388,7 +3394,7 @@
                             "allowMultipleMasks": false,
                             "tree": true,
                             "disableAddingRemovingRows": false,
-                            "id": "emc8xl"
+                            "id": "e3x2oat"
                         },
                         {
                             "label": "dd",
@@ -3469,7 +3475,7 @@
                                     "inputType": "text",
                                     "inputFormat": "plain",
                                     "inputMask": "",
-                                    "id": "ep64vqe"
+                                    "id": "edu3454"
                                 }
                             ],
                             "placeholder": "",
@@ -3527,7 +3533,7 @@
                             "properties": {},
                             "allowMultipleMasks": false,
                             "tree": false,
-                            "id": "en0tvq3"
+                            "id": "e681s87"
                         }
                     ],
                     "input": false,
@@ -3588,7 +3594,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "epkcxk"
+                    "id": "eygnshg"
                 },
                 {
                     "title": "Insurance Contact",
@@ -3652,7 +3658,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "e21c8n0",
+                                    "id": "e0kiri4",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -3728,7 +3734,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "eg2rky40",
+                                    "id": "eq5lrzh",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -3819,7 +3825,7 @@
                                     "input": true,
                                     "lockKey": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "eihny7c0",
+                                    "id": "ex9v8l",
                                     "prefix": "",
                                     "customClass": "",
                                     "suffix": "",
@@ -3893,7 +3899,7 @@
                                     "input": true,
                                     "hideOnChildrenHidden": false,
                                     "lockKey": true,
-                                    "id": "erh4jdl0",
+                                    "id": "evvnqw",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -4034,7 +4040,7 @@
                                                     "allowMultipleMasks": false,
                                                     "inputType": "radio",
                                                     "fieldSet": false,
-                                                    "id": "epy3sc"
+                                                    "id": "ei1awnq"
                                                 },
                                                 {
                                                     "label": "MVR's & Policy Docs",
@@ -4114,7 +4120,7 @@
                                                     "allowMultipleMasks": false,
                                                     "inputType": "radio",
                                                     "fieldSet": false,
-                                                    "id": "ek7gidl"
+                                                    "id": "e82cg9g"
                                                 }
                                             ],
                                             "width": 6,
@@ -4203,7 +4209,7 @@
                                                     "allowMultipleMasks": false,
                                                     "inputType": "radio",
                                                     "fieldSet": false,
-                                                    "id": "ev9t2lq8"
+                                                    "id": "ee5ee6"
                                                 },
                                                 {
                                                     "label": "HR Representative",
@@ -4283,7 +4289,7 @@
                                                     "allowMultipleMasks": false,
                                                     "inputType": "radio",
                                                     "fieldSet": false,
-                                                    "id": "e9p3wwi"
+                                                    "id": "epolyss"
                                                 }
                                             ],
                                             "width": 6,
@@ -4298,7 +4304,7 @@
                                     "type": "columns",
                                     "input": false,
                                     "tableView": false,
-                                    "id": "er95aog0",
+                                    "id": "eiguv3v",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -4364,7 +4370,7 @@
                                     "type": "hidden",
                                     "input": true,
                                     "tableView": false,
-                                    "id": "egwf5gn0",
+                                    "id": "etcvp4",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -4471,7 +4477,7 @@
                             "allowMultipleMasks": false,
                             "tree": true,
                             "disableAddingRemovingRows": false,
-                            "id": "evgbf0p"
+                            "id": "e3rrfte"
                         },
                         {
                             "label": "Text Field",
@@ -4545,7 +4551,7 @@
                             "inputFormat": "plain",
                             "inputMask": "",
                             "spellcheck": true,
-                            "id": "eoj01jm"
+                            "id": "enbonx"
                         }
                     ],
                     "placeholder": "",
@@ -4605,7 +4611,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "epm6siq"
+                    "id": "el7bc3"
                 },
                 {
                     "title": "Policy Information",
@@ -4743,7 +4749,7 @@
                                                 "arrowkeys": true
                                             },
                                             "customOptions": {},
-                                            "id": "eglpw08"
+                                            "id": "e9hifm"
                                         }
                                     ],
                                     "offset": 0,
@@ -4867,7 +4873,7 @@
                                             "timezone": "",
                                             "datepickerMode": "day",
                                             "customOptions": {},
-                                            "id": "euhengo"
+                                            "id": "e3328o"
                                         }
                                     ],
                                     "offset": 0,
@@ -4952,7 +4958,7 @@
                                             "showWordCount": false,
                                             "properties": {},
                                             "allowMultipleMasks": false,
-                                            "id": "e1141np"
+                                            "id": "esfjaol"
                                         }
                                     ],
                                     "size": "md",
@@ -5037,7 +5043,7 @@
                                             "showWordCount": false,
                                             "properties": {},
                                             "allowMultipleMasks": false,
-                                            "id": "eh32kec"
+                                            "id": "ehw8rs7"
                                         }
                                     ],
                                     "size": "md",
@@ -5109,7 +5115,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "eo32vd"
+                            "id": "ebzc4bdi"
                         }
                     ],
                     "input": false,
@@ -5170,7 +5176,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "eniuhwp"
+                    "id": "eyuqae8"
                 },
                 {
                     "title": "New Business Checklist",
@@ -5298,7 +5304,7 @@
                                             "allowMultipleMasks": false,
                                             "fieldSet": false,
                                             "inline": false,
-                                            "id": "e1g7jwc"
+                                            "id": "ewonofl"
                                         }
                                     ],
                                     "width": 6,
@@ -5388,7 +5394,7 @@
                                             "imageSize": "200",
                                             "fileMinSize": "0KB",
                                             "uploadOnly": false,
-                                            "id": "epc3jlf"
+                                            "id": "epiokage"
                                         }
                                     ],
                                     "width": 6,
@@ -5460,7 +5466,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "egj4ucf"
+                            "id": "erjt7fb"
                         }
                     ],
                     "placeholder": "",
@@ -5520,7 +5526,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "ej5x7z"
+                    "id": "enmv6v"
                 },
                 {
                     "title": "General Questions",
@@ -5620,7 +5626,7 @@
                                             "allowMultipleMasks": false,
                                             "inputType": "radio",
                                             "fieldSet": false,
-                                            "id": "egtlqc"
+                                            "id": "eoy3agaj"
                                         }
                                     ],
                                     "size": "md",
@@ -5739,7 +5745,7 @@
                                             },
                                             "customOptions": {},
                                             "useExactSearch": false,
-                                            "id": "e5kyl09"
+                                            "id": "egs8fts"
                                         }
                                     ],
                                     "width": 4,
@@ -5825,7 +5831,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "edyq9bt"
+                                            "id": "ebej0d8"
                                         },
                                         {
                                             "label": "Number of years in business under current ownership",
@@ -5904,7 +5910,7 @@
                                             "showWordCount": false,
                                             "properties": {},
                                             "allowMultipleMasks": false,
-                                            "id": "e8mcqq"
+                                            "id": "ezdx19a"
                                         }
                                     ],
                                     "width": 4,
@@ -5976,7 +5982,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "eg1v3hl"
+                            "id": "erwv4v"
                         },
                         {
                             "label": "Columns",
@@ -6062,7 +6068,7 @@
                                             "allowMultipleMasks": false,
                                             "inputType": "radio",
                                             "fieldSet": false,
-                                            "id": "eaxr6f"
+                                            "id": "ea83ja"
                                         },
                                         {
                                             "label": "If YES, please explain",
@@ -6138,7 +6144,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "e871w2c"
+                                            "id": "evmgtuq"
                                         }
                                     ],
                                     "size": "md",
@@ -6228,7 +6234,7 @@
                                             "allowMultipleMasks": false,
                                             "inputType": "radio",
                                             "fieldSet": false,
-                                            "id": "ewh2ziq"
+                                            "id": "ecet5h9"
                                         },
                                         {
                                             "label": "If YES, please explain",
@@ -6304,7 +6310,7 @@
                                             "inputFormat": "plain",
                                             "inputMask": "",
                                             "spellcheck": true,
-                                            "id": "e3dj5j"
+                                            "id": "elyn68k"
                                         }
                                     ],
                                     "width": 6,
@@ -6376,7 +6382,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "ehu141a"
+                            "id": "etfuq4n"
                         }
                     ],
                     "input": false,
@@ -6437,7 +6443,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "e0fxvjc"
+                    "id": "eeyepb"
                 },
                 {
                     "title": "Loss Review/Accident Investigation",
@@ -6537,7 +6543,7 @@
                                             "allowMultipleMasks": false,
                                             "inputType": "radio",
                                             "fieldSet": false,
-                                            "id": "eidomy"
+                                            "id": "erqnorc"
                                         }
                                     ],
                                     "size": "md",
@@ -6627,7 +6633,7 @@
                                             "allowMultipleMasks": false,
                                             "inputType": "radio",
                                             "fieldSet": false,
-                                            "id": "eh7useq"
+                                            "id": "efktupo"
                                         }
                                     ],
                                     "width": 4,
@@ -6774,7 +6780,7 @@
                                             },
                                             "customOptions": {},
                                             "useExactSearch": false,
-                                            "id": "ef5k1no"
+                                            "id": "e22r5ub"
                                         }
                                     ],
                                     "width": 4,
@@ -6846,7 +6852,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "eckus9h"
+                            "id": "e2vwjl"
                         }
                     ],
                     "input": false,
@@ -6907,7 +6913,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "ekl2fjj"
+                    "id": "ed3ezco"
                 },
                 {
                     "title": "Named Insured Schedule",
@@ -6952,7 +6958,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "e1j86tw0",
+                                    "id": "eu39sos",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -7026,7 +7032,7 @@
                                     "type": "textfield",
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "e4ml9880",
+                                    "id": "ehdnlrr",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -7117,7 +7123,7 @@
                                     "rows": 2,
                                     "input": true,
                                     "hideOnChildrenHidden": false,
-                                    "id": "et1r2r0",
+                                    "id": "ek36kfn",
                                     "placeholder": "",
                                     "prefix": "",
                                     "customClass": "",
@@ -7230,7 +7236,7 @@
                             "allowMultipleMasks": false,
                             "tree": true,
                             "disableAddingRemovingRows": false,
-                            "id": "edju1a"
+                            "id": "eo5n9cc"
                         }
                     ],
                     "placeholder": "",
@@ -7290,7 +7296,7 @@
                     "allowMultipleMasks": false,
                     "tree": false,
                     "breadcrumb": "default",
-                    "id": "ewi3vpk"
+                    "id": "ev5pymc"
                 },
                 {
                     "label": "Columns",
@@ -7362,7 +7368,7 @@
                                     "properties": {},
                                     "allowMultipleMasks": false,
                                     "inputType": "hidden",
-                                    "id": "e29mj"
+                                    "id": "e5p54iv"
                                 }
                             ],
                             "width": 4,
@@ -7445,7 +7451,7 @@
                                     "showWordCount": false,
                                     "properties": {},
                                     "allowMultipleMasks": false,
-                                    "id": "edkzrwe"
+                                    "id": "eeajzm"
                                 }
                             ],
                             "width": 4,
@@ -7525,7 +7531,7 @@
                     "tree": false,
                     "autoAdjust": false,
                     "hideOnChildrenHidden": false,
-                    "id": "ehtyjq"
+                    "id": "eqjp8i"
                 }
             ],
             "input": false,
@@ -7586,7 +7592,7 @@
             "allowMultipleMasks": false,
             "tree": false,
             "breadcrumb": "default",
-            "id": "eze2lgl"
+            "id": "ekmsisi"
         },
         {
             "title": "Location Entry",
@@ -7690,7 +7696,7 @@
                                             "showWordCount": false,
                                             "properties": {},
                                             "allowMultipleMasks": false,
-                                            "id": "eiewkk"
+                                            "id": "et1sk1u"
                                         }
                                     ],
                                     "width": 1,
@@ -7774,7 +7780,7 @@
                                             "showWordCount": false,
                                             "properties": {},
                                             "allowMultipleMasks": false,
-                                            "id": "e45qhfo"
+                                            "id": "ebxc1cu"
                                         }
                                     ],
                                     "size": "md",
@@ -7858,7 +7864,7 @@
                                             "showWordCount": false,
                                             "properties": {},
                                             "allowMultipleMasks": false,
-                                            "id": "ejefn4"
+                                            "id": "ekm9deh"
                                         }
                                     ],
                                     "size": "md",
@@ -7954,7 +7960,7 @@
                             "tree": false,
                             "autoAdjust": false,
                             "hideOnChildrenHidden": false,
-                            "id": "e9piwd"
+                            "id": "ejrz34"
                         }
                     ],
                     "placeholder": "",
@@ -8012,30 +8018,20 @@
                     "properties": {},
                     "allowMultipleMasks": false,
                     "tree": false,
-                    "id": "e0wiju"
+                    "id": "e029ta7"
                 },
                 {
                     "label": "Location Schedule",
-                    "labelPosition": "top",
-                    "description": "",
-                    "tooltip": "",
                     "disableAddingRemovingRows": true,
-                    "conditionalAddButton": "",
                     "reorder": false,
-                    "addAnother": "",
                     "addAnotherPosition": "bottom",
                     "defaultOpen": false,
                     "layoutFixed": false,
                     "enableRowGroups": false,
                     "initEmpty": false,
                     "customClass": "locationsDataGrid",
-                    "tabindex": "",
-                    "hidden": false,
                     "hideLabel": true,
-                    "autofocus": false,
-                    "disabled": false,
                     "tableView": false,
-                    "modalEdit": false,
                     "defaultValue": [
                         {
                             "locationBuildingNum": "1-1",
@@ -8055,41 +8051,9 @@
                             "clickIfTheLocationAddressSameAsMailingAddress": false
                         }
                     ],
-                    "persistent": true,
-                    "protected": false,
-                    "dbIndex": false,
-                    "encrypted": false,
-                    "redrawOn": "",
                     "clearOnHide": false,
-                    "customDefaultValue": "",
-                    "calculateValue": "",
-                    "calculateServer": false,
-                    "allowCalculateOverride": false,
                     "validateOn": "blur",
-                    "validate": {
-                        "required": false,
-                        "minLength": "",
-                        "maxLength": "",
-                        "customMessage": "",
-                        "custom": "",
-                        "customPrivate": false,
-                        "json": "",
-                        "strictDateValidation": false,
-                        "multiple": false,
-                        "unique": false
-                    },
-                    "unique": false,
-                    "errorLabel": "",
                     "key": "locations",
-                    "tags": [],
-                    "properties": {},
-                    "conditional": {
-                        "show": null,
-                        "when": null,
-                        "eq": "",
-                        "json": ""
-                    },
-                    "customConditional": "",
                     "logic": [
                         {
                             "name": "Add New Location",
@@ -8101,7 +8065,7 @@
                                 {
                                     "name": "Push Location",
                                     "type": "value",
-                                    "value": "var getLocationNumber = (data) => {\n  if (data.locations && data.locations.length > 0) {\n    var lastItem = data.locations[data.locations.length - 1];\n    var lastLocation = parseInt(lastItem.locationNum);\n    return lastLocation ? lastLocation + 1 : 1;\n  } else {\n    return 1;\n  }\n};\n\nvar locationsClone = _.merge([], data.locations);\nvar newLocationNumber = getLocationNumber(data);\nvar rowValue = {\n  ...component.defaultValue[0],\n  locationNum: newLocationNumber,\n  locationBuildingNum: newLocationNumber + \"-1\",\n};\nlocationsClone.push(rowValue);\nvalue = locationsClone;\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  cloneItem.push({\n    locationBuildingNum: newLocationNumber + \"-1\",\n    locationNum: newLocationNumber,\n    buildingNum: 1,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  cloneItem.push({\n    locationNum: newLocationNumber,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});"
+                                    "value": "var getLocationNumber = (data) => {\n  if (data.locations && data.locations.length > 0) {\n    var lastItem = data.locations[data.locations.length - 1];\n    var lastLocation = parseInt(lastItem.locationNum);\n    return lastLocation ? lastLocation + 1 : 1;\n  } else {\n    return 1;\n  }\n};\n\nvar locationsClone = [...data.locations];\nvar newLocationNumber = getLocationNumber(data);\nvar rowValue = {\n  ...component.defaultValue[0],\n  locationNum: newLocationNumber,\n  locationBuildingNum: newLocationNumber + \"-1\",\n};\nlocationsClone.push(rowValue);\nvalue = locationsClone;\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  cloneItem.push({\n    locationBuildingNum: newLocationNumber + \"-1\",\n    locationNum: newLocationNumber,\n    buildingNum: 1,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  cloneItem.push({\n    locationNum: newLocationNumber,\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});"
                                 }
                             ]
                         },
@@ -8115,7 +8079,7 @@
                                 {
                                     "name": "Push Building",
                                     "type": "value",
-                                    "value": "console.log(\"Add building\");\nvar getLocationIndex = (data, rowInfo, rowIndex) => {\n  if (data.locations && data.locations.length > 0) {\n    var buildingList = data.locations.filter(\n      (item) => item.locationNum == rowInfo.locationNum\n    );\n    var lastBuilding = buildingList[buildingList.length - 1].buildingNum;\n    return rowIndex + lastBuilding;\n  } else {\n    return 1;\n  }\n};\n\nif (result.length > 0) {\n  var rowInfo = result[0].row;\n  var rowIndex = result[0].rowIndex;\n\n  var locationsClone = _.merge([], data.locations);\n  var locationIndex = getLocationIndex(data, rowInfo, rowIndex);\n\n  var rowValue = {\n    ...component.defaultValue[0],\n    locationNum: rowInfo.locationNum,\n    buildingNum: locationIndex - rowIndex + 1,\n    locationBuildingNum:\n      rowInfo.locationNum + \"-\" + (locationIndex - rowIndex + 1),\n  };\n  locationsClone.splice(locationIndex, 0, rowValue);\n  value = locationsClone;\n\n  data.buildingLevelFieldList.map((field) => {\n    var cloneItem = _.merge([], data[field.key]);\n    cloneItem.splice(locationIndex, 0, {\n      locationBuildingNum: rowValue.locationBuildingNum,\n      locationNum: rowValue.locationNum,\n      buildingNum: rowValue.buildingNum,\n    });\n    result[0].formObject\n      ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n      : null;\n  });\n}"
+                                    "value": "console.log(\"Add building\");\nvar getLocationIndex = (data, rowInfo, rowIndex) => {\n  if (data.locations && data.locations.length > 0) {\n    var buildingList = data.locations.filter(\n      (item) => item.locationNum == rowInfo.locationNum\n    );\n    var lastBuilding = buildingList[buildingList.length - 1].buildingNum;\n    return rowIndex + lastBuilding;\n  } else {\n    return 1;\n  }\n};\n\nif (result.length > 0) {\n  var rowInfo = result[0].row;\n  var rowIndex = result[0].rowIndex;\n\n  var locationsClone = [...data.locations];\n  var locationIndex = getLocationIndex(data, rowInfo, rowIndex);\n\n  var rowValue = {\n    ...component.defaultValue[0],\n    locationNum: rowInfo.locationNum,\n    buildingNum: locationIndex - rowIndex + 1,\n    locationBuildingNum:\n      rowInfo.locationNum + \"-\" + (locationIndex - rowIndex + 1),\n  };\n  locationsClone.splice(locationIndex, 0, rowValue);\n  value = locationsClone;\n\n  data.buildingLevelFieldList.map((field) => {\n    var cloneItem = [...data[field.key]];\n    cloneItem.splice(locationIndex, 0, {\n      locationBuildingNum: rowValue.locationBuildingNum,\n            locationNum: rowValue.locationNum,\n      buildingNum: rowValue.buildingNum,\n    });\n    result[0].formObject\n      ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n      : null;\n  });\n}"
                                 }
                             ]
                         },
@@ -8129,20 +8093,11 @@
                                 {
                                     "name": "Remove Building",
                                     "type": "value",
-                                    "value": "console.log(111);\n\nvar rowInfo = result[0].row;\nvar rowIndex = result[0].rowIndex;\nvar tanksTodelete = [];\nvar tankstoUpdate = [];\nvar locationsClone = _.merge([], data.locations);\nvar storangeClone = _.merge([], data.storageTanks);\n\nlocationsClone.splice(rowIndex, 1);\ncurrentBuildingsSize = locationsClone.filter(\n  (i) => i.locationNum == rowInfo.locationNum\n).length;\nvar deleteTankForLocation = (tankstoUpdate) => {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum > tankstoUpdate) {\n      storangeClone[i].locationNum = storangeClone[i].locationNum - 1;\n      let splitData = storangeClone[i].LocTankIndex.split(\"-\");\n      storangeClone[i].LocTankIndex =\n        storangeClone[i].locationNum + \"-\" + splitData[1];\n    }\n  }\n  result[0].formObject.getComponent(\"storageTanks\").setValue(storangeClone);\n};\nvalue = locationsClone.map((loc, index) => {\n  if (\n    loc.locationNum == rowInfo.locationNum &&\n    loc.buildingNum > rowInfo.buildingNum\n  ) {\n    if (rowInfo.buildingNum == 1) {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n        address: rowInfo.address,\n        city: rowInfo.city,\n        state: rowInfo.state,\n        county: rowInfo.county,\n        stateName: rowInfo.stateName,\n        zipCode: rowInfo.zipCode,\n      };\n    } else {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n      };\n    }\n  } else if (\n    loc.locationNum > rowInfo.locationNum &&\n    currentBuildingsSize == 0\n  ) {\n    return {\n      ...loc,\n      locationNum: loc.locationNum - 1,\n      locationBuildingNum: loc.locationNum - 1 + \"-\" + loc.buildingNum,\n    };\n  } else {\n    return loc;\n  }\n});\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  cloneItem.splice(rowIndex, 1);\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = _.merge([], data[field.key]);\n  if (currentBuildingsSize == 0) {\n    var locationIndex = cloneItem.findIndex(\n      (item) => item.locationNum == rowInfo.locationNum\n    );\n    cloneItem.splice(locationIndex, 1);\n    cloneItem = cloneItem.map((item, index) => {\n      return locationIndex <= index\n        ? { ...item, locationNum: item.locationNum - 1 }\n        : item;\n    });\n    result[0].formObject\n      ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n      : null;\n  }\n});\nresult[0].formObject.getComponent(\"storageTankLocation\").setValue(\"\");\nif (currentBuildingsSize === 0) {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum == rowInfo.locationNum) {\n      tanksTodelete.push(i);\n    }\n  }\n  storangeClone.splice(tanksTodelete[0], tanksTodelete.length);\n  deleteTankForLocation(rowInfo.locationNum);\n}"
+                                    "value": "\nconsole.log(111);\n\nvar rowInfo = result[0].row;\nvar rowIndex = result[0].rowIndex;\nvar tanksTodelete = [];\nvar tankstoUpdate = [];\nvar locationsClone = [...data.locations];\nvar storangeClone = [...data.storageTanks];\n\nlocationsClone.splice(rowIndex, 1);\ncurrentBuildingsSize = locationsClone.filter(\n  (i) => i.locationNum == rowInfo.locationNum\n).length;\nvar deleteTankForLocation = (tankstoUpdate) => {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum > tankstoUpdate) {\n      storangeClone[i].locationNum = storangeClone[i].locationNum - 1;\n      let splitData = storangeClone[i].LocTankIndex.split(\"-\");\n      storangeClone[i].LocTankIndex =\n        storangeClone[i].locationNum + \"-\" + splitData[1];\n    }\n  }\n  result[0].formObject.getComponent(\"storageTanks\").setValue(storangeClone);\n};\nvalue = locationsClone.map((loc, index) => {\n  if (\n    loc.locationNum == rowInfo.locationNum &&\n    loc.buildingNum > rowInfo.buildingNum\n  ) {\n    if (rowInfo.buildingNum == 1) {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n        address: rowInfo.address,\n        city: rowInfo.city,\n        state: rowInfo.state,\n        county: rowInfo.county,\n        stateName: rowInfo.stateName,\n        zip: rowInfo.zip,\n      };\n    } else {\n      return {\n        ...loc,\n        buildingNum: loc.buildingNum - 1,\n        locationBuildingNum: loc.locationNum + \"-\" + (loc.buildingNum - 1),\n      };\n    }\n  } else if (\n    loc.locationNum > rowInfo.locationNum &&\n    currentBuildingsSize == 0\n  ) {\n    return {\n      ...loc,\n      locationNum: loc.locationNum - 1,\n      locationBuildingNum: loc.locationNum - 1 + \"-\" + loc.buildingNum,\n    };\n  } else {\n    return loc;\n  }\n});\n\ndata.buildingLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  cloneItem.splice(rowIndex, 1);\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n});\n\ndata.locationLevelFieldList.map((field) => {\n  var cloneItem = [...data[field.key]];\n  if (currentBuildingsSize === 0) {\n  var locationIndex = cloneItem.findIndex(\n    (item) => item.locationNum == rowInfo.locationNum\n  );\n  cloneItem.splice(locationIndex, 1);\n  cloneItem = cloneItem.map((item, index) => {\n    return locationIndex <= index\n      ? { ...item, locationNum: item.locationNum - 1 }\n      : item;\n  });\n  result[0].formObject\n    ? result[0].formObject.getComponent(field.key).setValue(cloneItem)\n    : null;\n  }\n});\nresult[0].formObject.getComponent(\"storageTankLocation\").setValue(\"\");\nif (currentBuildingsSize === 0) {\n  for (i = 0; i < storangeClone.length; i++) {\n    if (storangeClone[i].locationNum == rowInfo.locationNum) {\n      tanksTodelete.push(i);\n    }\n  }\n  storangeClone.splice(tanksTodelete[0], tanksTodelete.length);\n  deleteTankForLocation(rowInfo.locationNum);\n}\n"
                                 }
                             ]
                         }
                     ],
-                    "attributes": {},
-                    "overlay": {
-                        "style": "",
-                        "page": "",
-                        "left": "",
-                        "top": "",
-                        "width": "",
-                        "height": ""
-                    },
                     "type": "datagrid",
                     "input": true,
                     "components": [
@@ -8228,7 +8183,7 @@
                                                             "inputFormat": "plain",
                                                             "inputMask": "",
                                                             "spellcheck": true,
-                                                            "id": "eds2odk"
+                                                            "id": "e4x97g7"
                                                         },
                                                         {
                                                             "label": "location Num",
@@ -8295,7 +8250,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "inputType": "hidden",
-                                                            "id": "eqyniyb"
+                                                            "id": "e5yy13u"
                                                         },
                                                         {
                                                             "label": "Building Num",
@@ -8362,7 +8317,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "inputType": "hidden",
-                                                            "id": "ejbunt2"
+                                                            "id": "exr3zr9"
                                                         }
                                                     ],
                                                     "width": 1,
@@ -8535,7 +8490,7 @@
                                                             },
                                                             "customOptions": {},
                                                             "useExactSearch": false,
-                                                            "id": "ee50kxd"
+                                                            "id": "e203ng"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -8617,7 +8572,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "tag": "p",
-                                                            "id": "ec96lxuj"
+                                                            "id": "eh9jc4"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -8633,33 +8588,6 @@
                                                             "customClass": "editPopup",
                                                             "modalEdit": true,
                                                             "key": "locaedit3",
-                                                            "customConditional": "show = (row.buildingNum) == 1;",
-                                                            "logic": [
-                                                                {
-                                                                    "name": "Check Building",
-                                                                    "trigger": {
-                                                                        "type": "javascript",
-                                                                        "javascript": "result = (row.buildingNum) != 1;"
-                                                                    },
-                                                                    "actions": [
-                                                                        {
-                                                                            "name": "Disable",
-                                                                            "type": "property",
-                                                                            "property": {
-                                                                                "label": "Disabled",
-                                                                                "value": "disabled",
-                                                                                "type": "boolean"
-                                                                            },
-                                                                            "state": true
-                                                                        },
-                                                                        {
-                                                                            "name": "Hide Popup",
-                                                                            "type": "mergeComponentSchema",
-                                                                            "schemaDefinition": "schema = {modalEdit : false}"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
                                                             "type": "well",
                                                             "input": false,
                                                             "tableView": false,
@@ -8745,7 +8673,7 @@
                                                                                     "block": false,
                                                                                     "disableOnInvalid": false,
                                                                                     "dataGridLabel": true,
-                                                                                    "id": "e3gx0oe"
+                                                                                    "id": "emxd54"
                                                                                 },
                                                                                 {
                                                                                     "label": "Click if the Location Address isn't the same as Mailing Address",
@@ -8822,7 +8750,7 @@
                                                                                     "block": false,
                                                                                     "disableOnInvalid": false,
                                                                                     "dataGridLabel": true,
-                                                                                    "id": "ee84zuo"
+                                                                                    "id": "exbqqc"
                                                                                 }
                                                                             ],
                                                                             "width": 6,
@@ -8929,7 +8857,7 @@
                                                                                     "dataGridLabel": true,
                                                                                     "value": "",
                                                                                     "name": "",
-                                                                                    "id": "eb6wyig"
+                                                                                    "id": "e3212do"
                                                                                 }
                                                                             ],
                                                                             "width": 6,
@@ -9002,7 +8930,7 @@
                                                                     "tree": false,
                                                                     "autoAdjust": false,
                                                                     "hideOnChildrenHidden": false,
-                                                                    "id": "e69203o"
+                                                                    "id": "e8h6gp"
                                                                 },
                                                                 {
                                                                     "label": "Columns",
@@ -9111,7 +9039,7 @@
                                                                                     "inputFormat": "plain",
                                                                                     "inputMask": "",
                                                                                     "spellcheck": true,
-                                                                                    "id": "es2l5p"
+                                                                                    "id": "e98wvi"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9128,7 +9056,7 @@
                                                                                     "tableView": false,
                                                                                     "validate": {
                                                                                         "required": true,
-                                                                                        "custom": "valid = (row.zip.toString().length === 5) ? true : 'ZIP code must be of 5 digit';",
+                                                                                        "custom": "if (row.zip && row.zip != \"\") {\n  if (row[\"zip\"].length <= 12) {\n    valid = row[\"zip\"].match(/^[0-9\\s-]*$/)\n      ? true\n      : \"Please enter a valid Zip Code\";\n  } else {\n    valid =\n      row.zip.length > 12\n        ? \"Please enter a valid Zip Code\"\n        : true;\n  }\n}",
                                                                                         "customPrivate": false,
                                                                                         "strictDateValidation": false,
                                                                                         "multiple": false,
@@ -9223,7 +9151,7 @@
                                                                                     "inputType": "text",
                                                                                     "inputFormat": "plain",
                                                                                     "inputMask": "",
-                                                                                    "id": "e8z0ng"
+                                                                                    "id": "e37j22rc"
                                                                                 },
                                                                                 {
                                                                                     "label": "AutoFill City & State",
@@ -9299,7 +9227,7 @@
                                                                                     "disableOnInvalid": false,
                                                                                     "theme": "primary",
                                                                                     "dataGridLabel": true,
-                                                                                    "id": "ekz1q3n"
+                                                                                    "id": "edveutd"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9412,7 +9340,7 @@
                                                                                     "inputFormat": "plain",
                                                                                     "inputMask": "",
                                                                                     "spellcheck": true,
-                                                                                    "id": "een6rj"
+                                                                                    "id": "e8rvd2"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9553,7 +9481,7 @@
                                                                                     },
                                                                                     "customOptions": {},
                                                                                     "useExactSearch": false,
-                                                                                    "id": "eco4ucm"
+                                                                                    "id": "ev48sq"
                                                                                 },
                                                                                 {
                                                                                     "label": "state hidden field",
@@ -9620,7 +9548,7 @@
                                                                                     "properties": {},
                                                                                     "allowMultipleMasks": false,
                                                                                     "inputType": "hidden",
-                                                                                    "id": "ema3stc"
+                                                                                    "id": "ee1s8m"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9731,7 +9659,7 @@
                                                                                     "inputFormat": "plain",
                                                                                     "inputMask": "",
                                                                                     "spellcheck": true,
-                                                                                    "id": "ed7plxk"
+                                                                                    "id": "eaou1nu"
                                                                                 }
                                                                             ],
                                                                             "size": "md",
@@ -9803,7 +9731,7 @@
                                                                     "tree": false,
                                                                     "autoAdjust": false,
                                                                     "hideOnChildrenHidden": false,
-                                                                    "id": "e3jfoj"
+                                                                    "id": "ei1fi3b"
                                                                 }
                                                             ],
                                                             "placeholder": "",
@@ -9860,7 +9788,7 @@
                                                             "properties": {},
                                                             "allowMultipleMasks": false,
                                                             "tree": false,
-                                                            "id": "eflwgur"
+                                                            "id": "e0bfvn"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -9946,7 +9874,7 @@
                                                             "disableOnInvalid": false,
                                                             "theme": "primary",
                                                             "dataGridLabel": true,
-                                                            "id": "emdege"
+                                                            "id": "enejl4t"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -10033,7 +9961,7 @@
                                                             "block": false,
                                                             "disableOnInvalid": false,
                                                             "dataGridLabel": true,
-                                                            "id": "e5jvthi"
+                                                            "id": "e9zg25s"
                                                         }
                                                     ],
                                                     "size": "md",
@@ -10105,7 +10033,7 @@
                                             "allowMultipleMasks": false,
                                             "tree": false,
                                             "autoAdjust": false,
-                                            "id": "esk6iql"
+                                            "id": "ejow3vh"
                                         }
                                     ],
                                     "width": 12,
@@ -10128,7 +10056,7 @@
                             "type": "columns",
                             "input": false,
                             "tableView": false,
-                            "id": "eicjj9h",
+                            "id": "e29voq",
                             "placeholder": "",
                             "prefix": "",
                             "customClass": "",
@@ -10192,13 +10120,54 @@
                     "prefix": "",
                     "suffix": "",
                     "multiple": false,
+                    "protected": false,
+                    "unique": false,
+                    "persistent": true,
+                    "hidden": false,
                     "refreshOn": "",
+                    "redrawOn": "",
+                    "modalEdit": false,
+                    "labelPosition": "top",
+                    "description": "",
+                    "errorLabel": "",
+                    "tooltip": "",
+                    "tabindex": "",
+                    "disabled": false,
+                    "autofocus": false,
+                    "dbIndex": false,
+                    "customDefaultValue": "",
+                    "calculateValue": "",
+                    "calculateServer": false,
                     "widget": null,
+                    "attributes": {},
+                    "validate": {
+                        "required": false,
+                        "custom": "",
+                        "customPrivate": false,
+                        "strictDateValidation": false,
+                        "multiple": false,
+                        "unique": false
+                    },
+                    "conditional": {
+                        "show": null,
+                        "when": null,
+                        "eq": ""
+                    },
+                    "overlay": {
+                        "style": "",
+                        "left": "",
+                        "top": "",
+                        "width": "",
+                        "height": ""
+                    },
+                    "allowCalculateOverride": false,
+                    "encrypted": false,
                     "showCharCount": false,
                     "showWordCount": false,
+                    "properties": {},
                     "allowMultipleMasks": false,
                     "tree": true,
-                    "id": "ezaaier"
+                    "id": "emygjzd"
                 },
                 {
                     "label": "Columns",
@@ -10279,7 +10248,7 @@
                                     "disableOnInvalid": false,
                                     "theme": "primary",
                                     "dataGridLabel": true,
-                                    "id": "e8i6hgi"
+                                    "id": "e2pu5np"
                                 }
                             ],
                             "width": 3,
@@ -10375,7 +10344,7 @@
                     "tree": false,
                     "autoAdjust": false,
                     "hideOnChildrenHidden": false,
-                    "id": "e0f2t3s"
+                    "id": "e01a14b"
                 }
             ],
             "placeholder": "",
@@ -10435,7 +10404,7 @@
             "allowMultipleMasks": false,
             "tree": false,
             "breadcrumb": "default",
-            "id": "eadpdss"
+            "id": "e85y62q"
         },
         {
             "title": "Building Details",
@@ -42156,7 +42125,7 @@
         }
     ],
     "revisions": "current",
-    "_vid": 658,
+    "_vid": 668,
     "title": "Dealer Workbook Phase 2",
     "display": "wizard",
     "access": [
@@ -42181,6 +42150,6 @@
     "path": "dealerworkbookphase2",
     "project": "5d70a2198e9aff60caf3c170",
     "created": "2020-10-27T12:25:54.065Z",
-    "modified": "2021-04-07T10:27:08.308Z",
+    "modified": "2021-04-08T12:10:39.811Z",
     "machineName": "onboarding-eoxvantage:dealerWorkbookPhase2"
 }
