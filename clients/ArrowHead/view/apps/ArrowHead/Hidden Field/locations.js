@@ -12,7 +12,7 @@ var getLocationNumber = (data) => {
   }
 };
 
-var locationsClone = [...data.locations];
+var locationsClone = _.merge([], data.locations);
 var newLocationNumber = getLocationNumber(data);
 var rowValue = {
   ...component.defaultValue[0],
@@ -23,7 +23,7 @@ locationsClone.push(rowValue);
 value = locationsClone;
 
 data.buildingLevelFieldList.map((field) => {
-  var cloneItem = [...data[field.key]];
+  var cloneItem = _.merge([], data[field.key]);
   cloneItem.push({
     locationBuildingNum: newLocationNumber + "-1",
     locationNum: newLocationNumber,
@@ -35,7 +35,7 @@ data.buildingLevelFieldList.map((field) => {
 });
 
 data.locationLevelFieldList.map((field) => {
-  var cloneItem = [...data[field.key]];
+  var cloneItem = _.merge([], data[field.key]);
   cloneItem.push({
     locationNum: newLocationNumber,
   });
@@ -64,7 +64,7 @@ if (result.length > 0) {
   var rowInfo = result[0].row;
   var rowIndex = result[0].rowIndex;
 
-  var locationsClone = [...data.locations];
+  var locationsClone = _.merge([], data.locations);
   var locationIndex = getLocationIndex(data, rowInfo, rowIndex);
 
   var rowValue = {
@@ -78,7 +78,7 @@ if (result.length > 0) {
   value = locationsClone;
 
   data.buildingLevelFieldList.map((field) => {
-    var cloneItem = [...data[field.key]];
+    var cloneItem = _.merge([], data[field.key]);
     cloneItem.splice(locationIndex, 0, {
       locationBuildingNum: rowValue.locationBuildingNum,
       locationNum: rowValue.locationNum,
@@ -98,8 +98,8 @@ var rowInfo = result[0].row;
 var rowIndex = result[0].rowIndex;
 var tanksTodelete = [];
 var tankstoUpdate = [];
-var locationsClone = [...data.locations];
-var storangeClone = [...data.storageTanks];
+var locationsClone = _.merge([], data.locations);
+var storangeClone = _.merge([], data.storageTanks);
 
 locationsClone.splice(rowIndex, 1);
 currentBuildingsSize = locationsClone.filter(
@@ -155,7 +155,7 @@ value = locationsClone.map((loc, index) => {
 });
 
 data.buildingLevelFieldList.map((field) => {
-  var cloneItem = [...data[field.key]];
+  var cloneItem = _.merge([], data[field.key]);
   cloneItem.splice(rowIndex, 1);
   result[0].formObject
     ? result[0].formObject.getComponent(field.key).setValue(cloneItem)
@@ -163,7 +163,7 @@ data.buildingLevelFieldList.map((field) => {
 });
 
 data.locationLevelFieldList.map((field) => {
-  var cloneItem = [...data[field.key]];
+  var cloneItem = _.merge([], data[field.key]);
   if (currentBuildingsSize == 0) {
     var locationIndex = cloneItem.findIndex(
       (item) => item.locationNum == rowInfo.locationNum
