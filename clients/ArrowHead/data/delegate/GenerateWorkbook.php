@@ -68,7 +68,6 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $this->logger->info("Executing GenerateWorkbook with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
         // Add logs for created by id and producer name who triggered submission
         $fieldTypeMappingPDF = include(__DIR__ . "/fieldMappingPDF.php");
-
         $fileId = isset($data['fileId']) ? $data['fileId'] : $data['uuid'];
         $orgId = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileId, array('orgUuid' => $orgId));
@@ -89,7 +88,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         $template['templateNameWithExt'] = self::EXCELTEMPLATE;
         $template['templatePath'] = __DIR__."/../template";
         $documentDestination = $fileDestination['absolutePath'].self::EXCELTEMPLATE;
-        $requiredData = $this->getNecessaryDataForMails($data);
+        $requiredData = $this->getNecessaryDataForMails($data,$persistenceService);
         $response = $this->documentBuilder->fillExcelTemplate(
             $template['templateNameWithExt'],
             $requiredData,
@@ -384,8 +383,13 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
         }
     }
 
-    private function getNecessaryDataForMails($data)
+    private function getNecessaryDataForMails($data,$persistenceService)
     {
+        $name = $data['producername'];
+        $parts = explode(" ", $name);
+        $selectQuery = "SELECT * FROM user WHERE firstname='".$parts[0]."' AND lastname='".$parts[1]."'";
+        $producerCode = $persistenceService->selectQuery($selectQuery)->current() ? $persistenceService->selectQuery($selectQuery)->current()['producer_code'] : null;
+        $requiredData['producerCode'] = $producerCode;
         $requiredData['umim'] = isset($data['garageumUim']) ? $data['garageumUim'] : 0;
         $requiredData['medicalExpense'] = $data['garageLiabilityMedicalExpense'];
         $requiredData['compDeductible'] = 0;
