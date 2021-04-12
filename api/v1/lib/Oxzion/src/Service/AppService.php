@@ -1183,24 +1183,9 @@ class AppService extends AbstractService
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
             if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['filters'][1]['logic']) ? $filterArray[0]['filter']['filters'][1]['logic'] : "AND";
-                $filterdefaultParams = $filterArray[0]['filter']['filters'];
-                $defaultFilterList[] = $filterdefaultParams[0];
-                array_shift($filterdefaultParams);
-                if ($filterdefaultParams) {
-                    foreach ($filterdefaultParams as $filterindex=>$filterValues) {
-                        foreach ($filterValues as $key=>$value) {
-                            if ($key == 'filters') {
-                                $filterList = array_merge($value, $defaultFilterList);
-                            } else {
-                                $filterList = $filterArray[0]['filter']['filters'];
-                            }
-                        }
-                    }
-                } else {
-                    $filterList = $filterArray[0]['filter']['filters'];
-                }
-                $filter = FilterUtils::filterArray($filterList, $filterlogic, array('name'=>'ox_app.name','date_modified'=>'DATE(ox_app.date_modified)','modified_user'=>'om.name','created_user'=>'oc.name'));
+                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
+                $filterList = $filterArray[0]['filter']['filters'];
+                $filter = FilterUtils::filterArray($filterList, $filterlogic, array('name'=>'ox_app.name','date_modified'=>'ox_app.date_modified','modified_user'=>'om.name','created_user'=>'oc.name'));
                 $where = " WHERE " . $filter;
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
@@ -1423,7 +1408,6 @@ class AppService extends AbstractService
             $sequence = 0;
             foreach ($yamlData['entity'] as &$entityData) {
                 $entity = $entityData;
-                $entity['generic_attachment_config'] = json_encode(array("attachmentField" => isset($entity['chatAttachmentField']) ? $entity['chatAttachmentField'] : ""));
                 $entity['assoc_id'] = $assoc_id;
                 $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
                 if (!$entityRec) {
@@ -1598,10 +1582,21 @@ class AppService extends AbstractService
         if (is_link($link)) {
             FileUtils::unlink($link);
         }
-        $command_one = "cd " . $this->config['APPS_FOLDER'] . "../bos/";
-        $command_two = "npm run package:discover";
-        $output = ExecUtils::execCommand($command_one . " && " . $command_two);
-        $this->logger->info("PAckage Discover .. \n" . print_r($output, true));
+        $request = array();
+            array_push($request,[
+                "path" => $this->config['APPS_FOLDER'] . "../bos/",
+                "type" => "bos"
+            ]);
+            $restClient = $this->restClient;
+            $output = json_decode($restClient->post(
+                ($this->config['applicationUrl'] . "/installer"),
+                ["folders" => $request]
+            ), true);
+            if ($output["status"] != "Success") {
+                $this->logger->info("\n Package Discover Failed " . $output);
+                throw new ServiceException('Failed to complete package discover for the application.', 'E_APP_PACKAGE_DISCOVER_FAIL', 0);
+            }
+            $this->logger->info("\n Finished package discover " . print_r($output, true));
     }
 
     private function processInstalledTemplates($appId, $path)
