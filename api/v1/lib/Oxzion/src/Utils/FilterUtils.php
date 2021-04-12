@@ -69,8 +69,6 @@ class FilterUtils
         $where = "";
         for ($x = 0; $x < sizeof($filterList); $x++) {
             if (!isset($filterList[$x]['operator'])) {
-                print_r($filterList);
-                exit;
                 continue;
             }
             $operator = $filterList[$x]['operator'];

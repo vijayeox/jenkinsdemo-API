@@ -236,7 +236,7 @@ ox_role:
     default_role: 0  
 ox_role_privilege:
 -
-    id: 235
+    id: 238
     role_id: 30
     privilege_name: "MANAGE_POLICY_APPROVAL"
     permission: 3

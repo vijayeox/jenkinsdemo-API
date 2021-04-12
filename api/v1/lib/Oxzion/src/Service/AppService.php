@@ -1183,9 +1183,24 @@ class AppService extends AbstractService
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
             if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
-                $filterList = $filterArray[0]['filter']['filters'];
-                $filter = FilterUtils::filterArray($filterList, $filterlogic, array('name'=>'ox_app.name','date_modified'=>'ox_app.date_modified','modified_user'=>'om.name','created_user'=>'oc.name'));
+                $filterlogic = isset($filterArray[0]['filter']['filters'][1]['logic']) ? $filterArray[0]['filter']['filters'][1]['logic'] : "AND";
+                $filterdefaultParams = $filterArray[0]['filter']['filters'];
+                $defaultFilterList[] = $filterdefaultParams[0];
+                array_shift($filterdefaultParams);
+                if ($filterdefaultParams) {
+                    foreach ($filterdefaultParams as $filterindex=>$filterValues) {
+                        foreach ($filterValues as $key=>$value) {
+                            if ($key == 'filters') {
+                                $filterList = array_merge($value, $defaultFilterList);
+                            } else {
+                                $filterList = $filterArray[0]['filter']['filters'];
+                            }
+                        }
+                    }
+                } else {
+                    $filterList = $filterArray[0]['filter']['filters'];
+                }
+                $filter = FilterUtils::filterArray($filterList, $filterlogic, array('name'=>'ox_app.name','date_modified'=>'DATE(ox_app.date_modified)','modified_user'=>'om.name','created_user'=>'oc.name'));
                 $where = " WHERE " . $filter;
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
@@ -1408,6 +1423,7 @@ class AppService extends AbstractService
             $sequence = 0;
             foreach ($yamlData['entity'] as &$entityData) {
                 $entity = $entityData;
+                $entity['generic_attachment_config'] = json_encode(array("attachmentField" => isset($entity['chatAttachmentField']) ? $entity['chatAttachmentField'] : ""));
                 $entity['assoc_id'] = $assoc_id;
                 $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
                 if (!$entityRec) {

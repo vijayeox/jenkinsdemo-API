@@ -3570,7 +3570,7 @@
 											"eq": "",
 											"json": ""
 										},
-										"customConditional": "show = false;",
+										"customConditional": "show = true;",
 										"logic": [{
 											"name": "If File Comments enabled",
 											"trigger": {
