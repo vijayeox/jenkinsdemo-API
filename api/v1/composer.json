@@ -108,7 +108,8 @@
       "ErrorLog\\":"module/ErrorLog/src/",
       "Esign\\":"module/Esign/src/",
       "Import\\":"module/Import/src/",
-      "Ims\\":"module/Ims/src/"
+      "Ims\\":"module/Ims/src/",
+      "Kra\\":"module/Kra/src/"
     }
   },
   "autoload-dev": {
