@@ -21,7 +21,7 @@
         </testsuite>
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Kra Fixtures">
             <directory>./module/Kra/test</directory>
         </testsuite>
