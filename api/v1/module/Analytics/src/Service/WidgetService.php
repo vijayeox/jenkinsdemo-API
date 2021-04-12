@@ -330,15 +330,13 @@ class WidgetService extends AbstractService
                     }
                     $overRides['columns'] = $columns;
                 }
-                if (isset($config['sort'])) {
-                    $overRides['orderby'] = $config['sort'][0]['field'].' '.$config['sort'][0]['dir'];
-                }
             }
         
             $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
             if ($this->queryService->getTotalCount()) {
                 $response['widget']['total_count']=$this->queryService->getTotalCount();
             }
+            // print_r($overRides);exit;
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];
                 if (!is_array($expressions)) {
