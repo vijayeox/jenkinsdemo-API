@@ -1582,10 +1582,21 @@ class AppService extends AbstractService
         if (is_link($link)) {
             FileUtils::unlink($link);
         }
-        $command_one = "cd " . $this->config['APPS_FOLDER'] . "../bos/";
-        $command_two = "npm run package:discover";
-        $output = ExecUtils::execCommand($command_one . " && " . $command_two);
-        $this->logger->info("PAckage Discover .. \n" . print_r($output, true));
+        $request = array();
+            array_push($request,[
+                "path" => $this->config['APPS_FOLDER'] . "../bos/",
+                "type" => "bos"
+            ]);
+            $restClient = $this->restClient;
+            $output = json_decode($restClient->post(
+                ($this->config['applicationUrl'] . "/installer"),
+                ["folders" => $request]
+            ), true);
+            if ($output["status"] != "Success") {
+                $this->logger->info("\n Package Discover Failed " . $output);
+                throw new ServiceException('Failed to complete package discover for the application.', 'E_APP_PACKAGE_DISCOVER_FAIL', 0);
+            }
+            $this->logger->info("\n Finished package discover " . print_r($output, true));
     }
 
     private function processInstalledTemplates($appId, $path)
