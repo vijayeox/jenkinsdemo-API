@@ -1720,14 +1720,13 @@ class FileService extends AbstractService
         return $result;
     }
 
-    public function getChangeLog($entityId, $startData, $completionData, $labelMapping=null)
+    public function getChangeLog($fileId,$entityId, $startData, $completionData, $labelMapping=null)
     {
         $fieldSelect = "SELECT ox_field.name,ox_field.template,ox_field.type,ox_field.text,ox_field.data_type,COALESCE(parent.name,'') as parentName,COALESCE(parent.text,'') as parentText,parent.data_type as parentDataType FROM ox_field 
                     left join ox_field as parent on ox_field.parent_id = parent.id WHERE ox_field.entity_id=:entityId AND ox_field.type NOT IN ('hidden','file','document','documentviewer') ORDER BY parentName, ox_field.name ASC";
 
         $fieldParams = array('entityId' => $entityId);
         $resultSet = $this->executeQueryWithBindParameters($fieldSelect, $fieldParams)->toArray();
-
         $resultData = array();
         $gridResult = array();
         foreach ($resultSet as $key => $value) {
@@ -1749,7 +1748,7 @@ class FileService extends AbstractService
                     $gridResult[$value['parentName']] = array("initial" => $initialParentData, "submission" => $submissionparentData, 'fields' => array($value));
                 }
             } else {
-                $this->buildChangeLog($startData, $completionData, $value, $labelMapping, $resultData);
+                $this->buildChangeLog($fileId,$startData, $completionData, $value, $labelMapping, $resultData);
             }
         }
         if (count($gridResult) > 0) {
@@ -1762,21 +1761,40 @@ class FileService extends AbstractService
                         $initialRowData = isset($initialDataset[$i]) ? $initialDataset[$i] : array();
                         $submissionRowData = isset($submissionDataset[$i]) ? $submissionDataset[$i] : array();
                         foreach ($data['fields'] as $key => $field) {
-                            $this->buildChangeLog($initialRowData, $submissionRowData, $field, $labelMapping, $resultData, $i+1);
+                            $this->buildChangeLog($fieldId,$initialRowData, $submissionRowData, $field, $labelMapping, $resultData, $i+1);
                         }
                     }
                 }
             }
         }
+
+        //Remove duplicate entries from result as a result of UUID conversions
         return $resultData;
     }
 
-    public function getFieldValue($startDataTemp, $value, $labelMapping=null)
+    public function getFieldValue($startDataTemp, $value, $labelMapping=null,$fileSubscribers)
     {
+
         if (!isset($startDataTemp[$value['name']])) {
             return "";
         }
         $initialData = $startDataTemp[$value['name']];
+
+        if(is_string($initialData)){
+            $initialData = strip_tags($initialData);
+        }
+
+        if(UuidUtil::isValidUuid($initialData))
+        {
+            if(array_key_exists($initialData,$fileSubscribers)){
+                $initialData = $fileSubscribers[$initialData];
+            }
+            else {
+                return "";
+            }
+        }
+        
+
         if ($value['data_type'] == 'text') {
             //handle string data being sent
             if (is_string($initialData)) {
@@ -1789,18 +1807,38 @@ class FileService extends AbstractService
                 //Add Handler for default Labels
                 if (isset($fieldValue['label'])) {
                     $initialData = $fieldValue['label'];
-                } else {
+                } 
+
+
+                // else if(isset($fieldValue['username'])){
+                //     $initialData = $fieldValue['username'];
+                // }
+                else {
                     // Add for single values array
-                    if (isset($fieldValue[0]) && count($fieldValue) == 1) {
-                        $initialData = $fieldValue[0];
-                    } else {
+                    // if (isset($fieldValue[0]) && count($fieldValue) == 1) {
+                    //     $initialData = $fieldValue[0];
+                    // } else {
                         //Case multiple values allowed
-                        if (count($fieldValue) > 1) {
-                            foreach ($fieldValue as $k => $v) {
-                                $initialData .= $v;
+                    if (count($fieldValue) >= 1) {
+                        $initialData ="";
+                        foreach ($fieldValue as $k => $v) {
+                            if(UuidUtil::isValidUuid($v)){
+                                if(array_key_exists($v,$fileSubscribers)){
+                                    $initialData .= $fileSubscribers[$v] . ', ';
+                                }
                             }
+                            else{
+                                $initialData .= $v . ', ';
+                            }
+                            
+                            
                         }
+                        $initialData = substr($initialData,0,strlen($initialData)-2);
                     }
+                    else {
+                        $initialData = "";
+                    }
+                    // }
                 }
             }
         } elseif ($value['data_type'] == 'boolean') {
@@ -1857,10 +1895,19 @@ class FileService extends AbstractService
         return $initialData;
     }
 
-    private function buildChangeLog($startData, $completionData, $value, $labelMapping, &$resultData, $rowNumber="")
+    private function buildChangeLog($fileId,$startData, $completionData, $value, $labelMapping, &$resultData, $rowNumber="")
     {
-        $initialData =  $this->getFieldValue($startData, $value, $labelMapping);
-        $submissionData = $this->getFieldValue($completionData, $value, $labelMapping);
+        $subscribers = $this->subscriberService->getSubscribers($fileId);
+        $fileSubscribersMapping = [];
+        if(count($subscribers) != 0) 
+        {
+            foreach($subscribers as $subscriber)
+            {
+                $fileSubscribersMapping[$subscriber['user_id']] = $subscriber['firstname'] . ' ' . $subscriber['lastname'];
+            }
+        }
+        $initialData =  $this->getFieldValue($startData, $value, $labelMapping,$fileSubscribersMapping);
+        $submissionData = $this->getFieldValue($completionData, $value, $labelMapping,$fileSubscribersMapping);
         if ((isset($initialData) && ($initialData != '[]') && (!empty($initialData))) ||
                 (isset($submissionData) && ($submissionData != '[]') && (!empty($submissionData)))) {
             $resultData[] = array('name' => $value['name'],
@@ -1874,9 +1921,10 @@ class FileService extends AbstractService
                                         'rowNumber' => $rowNumber);
         }
     }
-    public function addAttachment($params, $file)
+    public function addAttachment($params,$file, $subFolder = null)
     {
         try {
+            $this->logger->info("P---files--".print_r($file,true));
             $fileArray = array();
             $data = array();
             $fileStorage = AuthContext::get(AuthConstants::ACCOUNT_UUID) . "/temp/";
@@ -1896,29 +1944,40 @@ class FileService extends AbstractService
             }
             if (!isset($params['fileId'])) {
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].$fileStorage.$data['uuid']."/";
+                if(isset($subFolder)){
+                    $folderPath .= $subFolder . '/';
+                }
                 $path = realpath($folderPath . $data['name']) ? realpath($folderPath.$data['name']) : FileUtils::truepath($folderPath.$data['name']);
                 $data['path'] = $path;
-                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? $params['appId']:"")."/data/".$fileStorage.$data['uuid']."/".$data['name'];
-            } else {
+                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? "/".$params['appId']:"")."/data/".$fileStorage.$data['uuid']."/".$data['name'];
+            }else{
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/';
-                $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
-                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? $params['appId']:"")."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name'];
+                if(isset($subFolder)){
+                    $folderPath .= $subFolder . '/';
+                }
+                $data['file'] = AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] .(isset($subFolder)? "/".$subFolder:""). '/'.$file['name'];
+                $data['url'] = $this->config['baseUrl'].(isset($params['appId'])? "/".$params['appId']:"")."/".AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $params['fileId'] . '/'.$file['name']; // Check nd remove column
                 $data['path'] = FileUtils::truepath($folderPath.'/'.$file['name']);
             }
+            // -- trim upto filedocx for path nd save
             //Check for similar file
             $attachmentFilter['url'] = $data['url'];
             $attachmentRecord = $this->getDataByParams('ox_file_attachment', array("url","name"), $attachmentFilter, null)->toArray();
             if (count($attachmentRecord) > 0) {
                 throw new ServiceException("Another file with a similar name exists for this record.\n Please attach a file with a different name", "attachment.filename.invalid");
             }
+            $this->logger->info("Attachmnet data---".print_r($data,true));
             $form->exchangeArray($data);
             $form->validate();
             $count = $this->attachmentTable->save($form);
             $id = $this->attachmentTable->getLastInsertValue();
             $data['id'] = $id;
             $file['name'] = $data['name'];
+            $this->logger->info("Attachmnet files---".print_r($file,true));
             $fileStored = FileUtils::storeFile($file, $folderPath);
             $data['size'] = filesize($data['path']);
+            $this->logger->info("Attachmnet params---".print_r($params,true));
+            $this->logger->info("Attachmnet paramsff---".print_r($data,true));
             if (isset($params['fileId'])) {
                 $filterArray['text'] = $params['fieldLabel'];
                 $filter['uuid'] = $params['fileId'];
@@ -2395,6 +2454,8 @@ class FileService extends AbstractService
         }
     }
 
+
+
     public function getFileVersionChangeLog($fileId, $version)
     {
         try {
@@ -2412,7 +2473,6 @@ class FileService extends AbstractService
             $selectQuery = " SELECT ofal.entity_id,ofal.data,ofal.created_by,ofal.modified_by,ofal.date_modified,ofal.date_created FROM ox_file_audit_log ofal WHERE (ofal.id = :fileId or ofal.uuid = :uuid) and ofal.version =:version";
             $paramsQuery = array('fileId' => $fileId,'uuid' => $fileId,'version'=>$previousFileVersion);
             $resultQuery = $this->executeQuerywithBindParameters($selectQuery, $paramsQuery)->toArray();
-
             if (count($resultSet) > 0) {
                 $entityId = $resultSet[0]['entity_id'];
                 $completionData = json_decode($resultSet[0]['data'], true);
@@ -2423,7 +2483,7 @@ class FileService extends AbstractService
                 $startData = json_decode($resultSet[0]['data'], true);
             }
             // print_r("expression---\n");  print_r($completionData);
-            $resultData = $this->getChangeLog($entityId, $startData, $completionData);
+            $resultData = $this->getChangeLog($fileId,$entityId, $startData, $completionData);
             return $resultData;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
