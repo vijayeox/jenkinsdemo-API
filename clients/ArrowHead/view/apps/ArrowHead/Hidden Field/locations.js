@@ -131,7 +131,7 @@ value = locationsClone.map((loc, index) => {
         state: rowInfo.state,
         county: rowInfo.county,
         stateName: rowInfo.stateName,
-        zipCode: rowInfo.zipCode,
+        zip: rowInfo.zip,
       };
     } else {
       return {
