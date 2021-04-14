@@ -386,8 +386,7 @@ class GenerateWorkbook extends AbstractDocumentAppDelegate
     private function getNecessaryDataForMails($data,$persistenceService)
     {
         $name = $data['producername'];
-        $parts = explode(" ", $name);
-        $selectQuery = "SELECT * FROM user WHERE firstname='".$parts[0]."' AND lastname='".$parts[1]."'";
+        $selectQuery = "SELECT * FROM user WHERE name='".$name."'";
         $producerCode = $persistenceService->selectQuery($selectQuery)->current() ? $persistenceService->selectQuery($selectQuery)->current()['producer_code'] : null;
         $requiredData['producerCode'] = $producerCode;
         $requiredData['umim'] = isset($data['garageumUim']) ? $data['garageumUim'] : 0;

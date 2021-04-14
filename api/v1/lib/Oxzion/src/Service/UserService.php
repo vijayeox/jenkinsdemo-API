@@ -276,6 +276,7 @@ class UserService extends AbstractService
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
+                'name' => $data['name'],
                 'email' => $data['email'],
                 'orgId' => $orgid,
                 'password' => $password,
