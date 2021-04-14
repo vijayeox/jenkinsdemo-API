@@ -310,11 +310,6 @@ class WidgetService extends AbstractService
         }
 
         if (isset($params['data'])) {
-            foreach ($overRidesAllowed as $overRidesKey) {
-                if (isset($params[$overRidesKey])) {
-                    $overRides[$overRidesKey] = $params[$overRidesKey];
-                }
-            }
             if ($firstRow['renderer']=='jsGrid') {
                 $config = json_decode($firstRow['configuration'], 1);
                 if (isset($config['pageSize'])) {
@@ -332,6 +327,11 @@ class WidgetService extends AbstractService
                 }
                 if (isset($config['sort'])) {
                     $overRides['orderby'] = $config['sort'][0]['field'].' '.$config['sort'][0]['dir'];
+                }
+            }
+            foreach ($overRidesAllowed as $overRidesKey) {
+                if (isset($params[$overRidesKey])) {
+                    $overRides[$overRidesKey] = $params[$overRidesKey];
                 }
             }
         

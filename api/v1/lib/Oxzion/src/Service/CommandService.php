@@ -474,7 +474,7 @@ class CommandService extends AbstractService
         }
         $errors = array();
         if (isset($params['to'])) {
-            $recepients = $params['to'];
+            $recipients = $params['to'];
         } else {
             $errors['to'] = 'required';
         }
@@ -494,7 +494,7 @@ class CommandService extends AbstractService
             throw $validationException;
         }
         $payload = json_encode(array(
-            'to' => $recepients,
+            'to' => $recipients,
             'subject' => $subject,
             'body' => $body,
             'attachments' => isset($attachments) ? $attachments : null,

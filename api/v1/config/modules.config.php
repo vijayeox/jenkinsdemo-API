@@ -40,5 +40,6 @@ return [
     'ErrorLog',
     'Esign',
     'Import',
-    'Ims'
+    'Ims',
+    'Kra'
 ];

@@ -252,7 +252,7 @@ ox_widget:
   -
     id: 130
     uuid: '66e44343-9876-44d8-9295-f2c3130bafbc'
-    visualization_id: 12
+    visualization_id: 13
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
@@ -272,9 +272,9 @@ ox_widget:
             "title": "Org"
           },
           {
-            "field": "carrier",
+            "field": "owner_username",
             "type": "text",
-            "title": "Deactivate Users",
+            "title": "Users",
             "className": "text-right",
             "format": "{0:n}",
             "footerAggregate": {
@@ -286,9 +286,9 @@ ox_widget:
             }
           },
           {
-            "field": "id",
+            "field": "budget_amount",
             "type": "numeric",
-            "title": "Never Logged In",
+            "title": "Budget_amount",
             "className": "text-right",
             "format": "{0:n}",
             "footerAggregate": {
@@ -311,7 +311,7 @@ ox_widget:
           ]
         },
         "sort": [{
-          "field": "total_users",
+          "field": "owner_username",
           "dir": "desc"
         }]
       }'

@@ -173,6 +173,13 @@ class AnnouncementService extends AbstractService
         try {
             $this->beginTransaction();
             $this->table->save($form);
+
+            $sql = $this->getSqlObject();
+        $update = $sql->update('ox_user_announcement_mapper');
+        $update->set(['view' => 0]);
+        $update->where(['announcement_id' => $this->getIdFromUuid('ox_announcement', $uuid)]);
+       
+        $this->executeUpdate($update);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -196,6 +203,15 @@ class AnnouncementService extends AbstractService
         }
         $result['insert'] = $this->insertAnnouncementForTeam($announcementId, $teams);
     }
+
+    public function markAsRead($announcementId)
+    {
+        $sql = $this->getSqlObject();
+        $update = $sql->update('ox_user_announcement_mapper');
+        $update->set(['view' => 1]);
+        $update->where(['announcement_id' => $this->getIdFromUuid('ox_announcement', $announcementId), 'user_id' => AuthContext::get(AuthConstants::USER_ID)]);
+        $this->executeUpdate($update);
+    } 
 
     /**
      * @ignore deleteTeamsByAnnouncement
@@ -305,6 +321,13 @@ class AnnouncementService extends AbstractService
                 if ($result->getAffectedRows() == 0 && $obj->type == 'ANNOUNCEMENT') {
                     throw new ServiceException("Failed to delete", "failed.announcement.delete");
                 }
+                $sql = $this->getSqlObject();
+                $delete = $sql->delete('ox_user_announcement_mapper');
+                $delete->where(['announcement_id' => $obj->id]);
+                $result = $this->executeUpdate($delete);
+                if ($result->getAffectedRows() == 0 && $obj->type == 'ANNOUNCEMENT') {
+                    throw new ServiceException("Failed to delete", "failed.announcement.delete");
+                }                
             }
             $this->commit();
         } catch (Exception $e) {
@@ -479,8 +502,9 @@ class AnnouncementService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery ." ".$where);
         $count = $resultSet->toArray()[0]['count(id)'];
         $query = "SELECT ann.uuid, ann.name, a.uuid as accountId, ann.status, ann.description, 
-                        ann.link, ann.start_date, ann.end_date, ann.media_type, ann.media, ann.type 
+                        ann.link, ann.start_date, ann.end_date, ann.media_type, ann.media, ann.type , uam.view
                     FROM `ox_announcement` ann
+                    LEFT OUTER JOIN ox_user_announcement_mapper uam on uam.announcement_id = ann.id AND uam.user_id = ".AuthContext::get(AuthConstants::USER_ID)."
                     LEFT OUTER JOIN ox_account a on a.id = ann.account_id " . $where . " " . $sort . " " . $limit;
         $this->logger->info("Executing query - $query");
         $resultSet = $this->executeQuerywithParams($query)->toArray();
@@ -504,7 +528,7 @@ class AnnouncementService extends AbstractService
         $where = "";
         $sort = "ox_team.name";
         $query = "SELECT ox_team.uuid,ox_team.name";
-        $from = " FROM ox_team left join ox_announcement_team_mapper on ox_team.id = ox_announcement_team_mapper.team_id left join ox_announcement on ox_announcement.id = ox_announcement_team_mapper.announcement_id";
+        $from = " FROM ox_team left  join ox_announcement_team_mapper on ox_team.id = ox_announcement_team_mapper.team_id left  join ox_announcement on ox_announcement.id = ox_announcement_team_mapper.announcement_id";
         $cntQuery = "SELECT count(ox_team.id)" . $from;
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
@@ -526,6 +550,8 @@ class AnnouncementService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
         $count = $resultSet->toArray()[0]['count(ox_team.id)'];
         $query = $query . " " . $from . " " . $where . " " . $sort . " " . $limit;
+        $this->logger->info('executing query -  '.$query );
+
         $resultSet = $this->executeQuerywithParams($query);
         return array('data' => $resultSet->toArray(),
             'total' => $count);
@@ -557,12 +583,38 @@ class AnnouncementService extends AbstractService
         }
         $announcementId = $obj->id;
         $accountId = $params['accountId'];
-        $teamSingleArray = array_map('current', $data['teams']);
+        $teamSingleArray = array_column($data['teams'], 'uuid');
         $delete = "DELETE oag FROM ox_announcement_team_mapper as oag
-                    inner join ox_team as og on oag.team_id = og.id where og.uuid not in ('" . implode("','", $teamSingleArray) . "') and oag.announcement_id = " . $announcementId . " and og.account_id =" . $accountId . " and og.status = 'Active'";
+                    inner join ox_team as og on oag.team_id = og.id 
+                    where og.uuid not in ('" . implode("','", $teamSingleArray) . "') 
+                    and oag.announcement_id = " . $announcementId . " 
+                    and og.account_id =" . $accountId . " and og.status = 'Active'";
         $result = $this->executeQuerywithParams($delete);
-        $query = "INSERT into ox_announcement_team_mapper(announcement_id,team_id) SELECT " . $announcementId . ",og.id from ox_team as og LEFT OUTER JOIN ox_announcement_team_mapper as oag on og.id = oag.team_id and oag.announcement_id = " . $announcementId . " where og.uuid in ('" . implode("','", $teamSingleArray) . "') and og.account_id = " . $accountId . " and og.status = 'Active' and oag.announcement_id is null";
+        
+        $query = "INSERT into ox_announcement_team_mapper(announcement_id,team_id) 
+                 SELECT " . $announcementId . ",og.id from ox_team as og 
+                 LEFT OUTER JOIN ox_announcement_team_mapper as oag on og.id = oag.team_id 
+                 and oag.announcement_id = " . $announcementId . " where og.uuid in ('" . implode("','", $teamSingleArray) . "') and og.account_id = " . $accountId . " and og.status = 'Active' and oag.announcement_id is null";
+        $this->logger->info('executing insert query -  '.$query );
         $resultInsert = $this->runGenericQuery($query);
+ 
+        $delete = "DELETE oua FROM ox_user_announcement_mapper as oua
+                    left outer join ox_announcement_team_mapper as oat on oat.announcement_id = oua.announcement_id
+                    left outer join ox_user_team as ot on oat.team_id= ot.team_id and ot.avatar_id=oua.user_id
+                    where ot.avatar_id is null and oua.announcement_id = " . $announcementId;
+        
+        $result = $this->executeQuerywithParams($delete);
+
+        $query = "INSERT into ox_user_announcement_mapper(announcement_id, user_id) 
+        SELECT " . $announcementId . ", ou.id from ox_user as ou 
+        LEFT JOIN ox_user_team as ut on ut.avatar_id = ou.id 
+        LEFT JOIN ox_team as ot on ot.id = ut.team_id 
+        LEFT JOIN ox_announcement_team_mapper as oat on oat.team_id = ot.id
+        LEFT JOIN ox_announcement as oa on oa.id = oat.announcement_id
+        LEFT OUTER JOIN ox_user_announcement_mapper as oua on oua.announcement_id = oat.announcement_id and oua.user_id = ou.id
+        where oua.user_id is null and oa.id = " . $announcementId;
+        $resultInsert = $this->runGenericQuery($query);
+
     }
 
     public function getHomescreenAnnouncementList($filterParams, $params)
@@ -611,4 +663,5 @@ class AnnouncementService extends AbstractService
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         return array('data' => $resultSet, 'total' => $count);
     }
+
 }

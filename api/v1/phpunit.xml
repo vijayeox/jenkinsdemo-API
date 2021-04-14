@@ -22,6 +22,9 @@
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
         </testsuite>
+        <testsuite name="Kra Fixtures">
+            <directory>./module/Kra/test</directory>
+        </testsuite>
         <testsuite name="App Fixtures">
             <directory>./module/App/test/Controller/App/AppArtifactControllerTest.php</directory>
             <directory>./module/App/test/Controller/App/AppControllerTest.php</directory>
