@@ -1,6 +1,9 @@
 if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
-  value = {    
-    checkfalsePretenseNumber: data.falsePretenseNumber > 100000 ? "Increased above the current maximum per vehicle value" :data.falsePretenseNumber,
+  value = {
+    checkfalsePretenseNumber:
+      data.falsePretenseNumber > 100000
+        ? "Increased above the current maximum per vehicle value"
+        : data.falsePretenseNumber,
     ownershipDate:
       data.numYearsOfOwnership > 0
         ? moment()
@@ -66,18 +69,17 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
     //checkSecurityGuards: false,
     // Need to check condition. Occupancy type is at building Level but
     // dol_Protection[0]premisesLotProtection are at loc level
-    checkSecurityGuards: data.locations.some(
-       (locationItem) => {
-         if (
-           locationItem.occupancyType == "autoSalesAndService" &&
-           data.dol_Protection[locationItem.locationNum-1].premisesLotProtection.securityGuards == "yes"
-         ) {
-           return true;
-         } else {
-           return false;
-         }
-       }
-     ),
+    checkSecurityGuards: data.locations.some((locationItem) => {
+      if (
+        locationItem.occupancyType == "autoSalesAndService" &&
+        data.dol_Protection[locationItem.locationNum - 1].premisesLotProtection
+          .securityGuards == "yes"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }),
     checkfalsePretenseNumber:
       data.falsePretenseNumber > 100000
         ? "Increased above the current maximum per vehicle value"
@@ -103,12 +105,16 @@ if (data.workbooksToBeGenerated.dealerGuard_ApplicationOpenLot == true) {
                 i.occupancyType === "newCarShowroomAndSales"
             )
           ) {
-            franchiseResult.includes(buildingList[0].primaryOEM)
-              ? null
-              : franchiseResult.push(buildingList[0].primaryOEM);
-            buildingList[0].secondaryOEM.map((item) => {
-              item.length > 0 && !franchiseResult.includes(item)
-                ? franchiseResult.push(item)
+            buildingList.map((i) => {
+              franchiseResult.includes(i.primaryOEM)
+                ? null
+                : franchiseResult.push(i.primaryOEM);
+              i.secondaryOEM
+                ? i.secondaryOEM.map((item) => {
+                    item.length > 0 && !franchiseResult.includes(item)
+                      ? franchiseResult.push(item)
+                      : null;
+                  })
                 : null;
             });
 
