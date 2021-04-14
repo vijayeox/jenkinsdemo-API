@@ -11,10 +11,6 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
       : checkblanketcoverage.push({ result: "No" });
   });
 
-  locationSpecificData = data.buildings.filter(
-    (building) => building.buildingNum == "1"
-  );
-
   checklistCompaniesRepresented = data.companiesRepresentedList.map(
     (item) => item.listcompaniesrepresented
   );
@@ -42,6 +38,9 @@ if (data.workbooksToBeGenerated.victor_FranchisedAutoDealer == true) {
     checkcompaniesrepresented: checklistCompaniesRepresented + "",
     checktotalLocationSalesRevenue: data.financialsYTDSalesTotal.total,
     checkfalsePretenseLimit: falsePretenseLimit,
+    locationSpecificData: data.buildings.filter(
+      (building) => building.buildingNum == "1"
+    ),
     locationBuildingIndex: data.locations
       .map((i, index) => (index == 0 ? false : { result: i.locationNum }))
       .filter((i) => i),
