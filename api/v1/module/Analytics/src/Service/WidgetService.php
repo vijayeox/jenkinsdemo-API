@@ -310,11 +310,6 @@ class WidgetService extends AbstractService
         }
 
         if (isset($params['data'])) {
-            foreach ($overRidesAllowed as $overRidesKey) {
-                if (isset($params[$overRidesKey])) {
-                    $overRides[$overRidesKey] = $params[$overRidesKey];
-                }
-            }
             if ($firstRow['renderer']=='jsGrid') {
                 $config = json_decode($firstRow['configuration'], 1);
                 if (isset($config['pageSize'])) {
@@ -330,13 +325,20 @@ class WidgetService extends AbstractService
                     }
                     $overRides['columns'] = $columns;
                 }
+                if (isset($config['sort'])) {
+                    $overRides['orderby'] = $config['sort'][0]['field'].' '.$config['sort'][0]['dir'];
+                }
+            }
+            foreach ($overRidesAllowed as $overRidesKey) {
+                if (isset($params[$overRidesKey])) {
+                    $overRides[$overRidesKey] = $params[$overRidesKey];
+                }
             }
         
             $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
             if ($this->queryService->getTotalCount()) {
                 $response['widget']['total_count']=$this->queryService->getTotalCount();
             }
-            // print_r($overRides);exit;
             if (isset($response['widget']['expression']['expression'])) {
                 $expressions = $response['widget']['expression']['expression'];
                 if (!is_array($expressions)) {
