@@ -1847,7 +1847,19 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $this->logger->info("ARRAY DIFF OF Loss Payees :" . print_r($temp['newlossPayees'], true));
                 $diff = array_diff(array_map('serialize', $previous_lossPayees), array_map('serialize', $lossPayees));
-                $removedlossPayees = array_map('unserialize', $diff);
+                $difflossPayees = array_map('unserialize', $diff);
+                $i = 0;
+                $removedlossPayees = array();
+                foreach($difflossPayees as $key => $value){
+                    if(isset($value['existingLossPayee'])) {
+                        $found = in_array($value['existingLossPayee'] , array_column($newlossPayees , 'existingLossPayee'));
+                        if(!$found){
+                            $removedlossPayees[$i] = $value;
+                        }
+                    }
+                    
+                    $i+=1;
+                }
                 $this->logger->info("ARRAY DIFF OF Removed Loss Payees :" . print_r($removedlossPayees, true));
                 if (sizeof($removedlossPayees) > 0) {
                     $temp['removedlossPayees'] = json_encode($removedlossPayees);
@@ -1893,7 +1905,19 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
                 $this->logger->info("ARRAY DIFF OF Loss Payees :" . print_r($temp['newadditionalNamedInsured'], true));
                 $diff = array_diff(array_map('serialize', $policy['previous_additionalNamedInsured']), array_map('serialize', $data['additionalNamedInsured']));
-                $removedadditionalNamedInsured = array_map('unserialize', $diff);
+                $diffadditionalNamedInsured = array_map('unserialize', $diff);
+                $i = 0;
+                $removedadditionalNamedInsured = array();
+                foreach($diffadditionalNamedInsured as $key => $value){
+                    if(isset($value['existingNamedInsured'])) {
+                        $found = in_array($value['existingNamedInsured'] , array_column($newadditionalNamedInsured , 'existingNamedInsured'));
+                        if(!$found){
+                            $removedadditionalNamedInsured[$i] = $value;
+                        }
+                    }
+                    
+                    $i+=1;
+                }
                 $this->logger->info("ARRAY DIFF OF Removed Loss Payees :" . print_r($removedadditionalNamedInsured, true));
                 if (sizeof($removedadditionalNamedInsured) > 0) {
                     $temp['removedadditionalNamedInsured'] = json_encode($removedadditionalNamedInsured);
