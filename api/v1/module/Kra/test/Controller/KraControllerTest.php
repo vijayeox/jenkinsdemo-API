@@ -144,7 +144,7 @@ class KraControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Kras 22', 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'userId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'status' => 'Active','query_id'=>11];
+        $data = ['name' => 'Kras 22', 'accountId' => '53012471-2863-4949-afb1-e69b0891c98a', 'userId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'status' => 'Active','queryId'=> '8f1d2819-c5ff-4426-bc40-f7a20704a738'];
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_kra'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/kra', 'POST', $data);
@@ -205,7 +205,7 @@ class KraControllerTest extends ControllerTest
     public function testCreateByAdminWithDifferentAccountId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Kras 22', 'userId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'status' => 'Active','query_id'=>11];
+        $data = ['name' => 'Kras 22', 'userId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'status' => 'Active','queryId'=> '8f1d2819-c5ff-4426-bc40-f7a20704a738'];
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_kra'));
         $this->setJsonContent(json_encode($data));
         $accountId = 'b0971de7-0387-48ea-8f29-5d3704d96a46';
@@ -222,7 +222,7 @@ class KraControllerTest extends ControllerTest
     public function testCreateNewKra()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Kras 22', 'userId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",'query_id'=>11];
+        $data = ['name' => 'Kras 22', 'userId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",'queryId'=> '8f1d2819-c5ff-4426-bc40-f7a20704a738'];
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_kra'));
         $this->setJsonContent(json_encode($data));
         $accountId = '53012471-2863-4949-afb1-e69b0891c98a';
@@ -266,6 +266,21 @@ class KraControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
+    }
+
+    public function testCreateByInvalidTeam()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Kras 22', 'account_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'userId' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'teamId' => '10766504-bf40-4824-a16a-fbc7df45b944'];
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_kra'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/kra', 'POST', $data);
+        $this->assertResponseStatusCode(406);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('kras');
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Validation error(s).');
     }
 
     public function testUpdate()
