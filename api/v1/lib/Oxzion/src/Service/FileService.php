@@ -470,15 +470,15 @@ class FileService extends AbstractService
                             created_by, date_modified, modified_by)
                           (SELECT fa.file_id, fa.field_id, fa.account_id, fa.field_value_text, 
                             fa.field_value_date, fa.field_value_numeric, fa.field_value_boolean, fa.field_value_type,
-                            fa.date_created, fa.created_by, fa.date_modified, fa.modified_by from ox_file_attribute fa 
+                            fa.date_created, fa.created_by, fa.date_modified, fa.modified_by from ox_file_attribute fa
                             inner join ox_field f on fa.field_id = f.id
-                            left outer join ox_indexed_file_attribute ifa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id 
+                            left outer join ox_indexed_file_attribute ifa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id
                             where fa.file_id = :fileId and f.index = 1 and ifa.id is null)";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
-                $query = "update ox_file_document ifa 
+                $query = "update ox_file_document ifa
                             inner join ox_file_attribute fa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id and (ifa.sequence = fa.sequence or (fa.sequence is null and ifa.sequence is null))
-                            inner join ox_field f on f.id = fa.field_id 
+                            inner join ox_field f on f.id = fa.field_id
                             set ifa.field_value = fa.field_value, ifa.modified_by = fa.modified_by, ifa.date_modified = fa.date_modified
                             where fa.file_id = :fileId and f.type IN('document','file')";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
@@ -488,7 +488,7 @@ class FileService extends AbstractService
                           (SELECT fa.file_id, fa.field_id, fa.account_id, fa.field_value, fa.sequence, 
                             fa.date_created, fa.created_by, fa.date_modified, fa.modified_by from ox_file_attribute fa 
                             inner join ox_field f on f.id = fa.field_id
-                            left outer join ox_file_document ifa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id and (ifa.sequence = fa.sequence or (fa.sequence is null and ifa.sequence is null)) 
+                            left outer join ox_file_document ifa on ifa.file_id = fa.file_id and ifa.field_id = fa.field_id and (ifa.sequence = fa.sequence or (fa.sequence is null and ifa.sequence is null))
                             where fa.file_id = :fileId and f.type IN ('document','file')and ifa.id is null)";
                 $this->logger->info("Executing query $query with params - ". json_encode($queryWhere));
                 $this->executeUpdateWithBindParameters($query, $queryWhere);
@@ -836,7 +836,7 @@ class FileService extends AbstractService
         }
 
         $i = 0;
-            
+
         $childFields = array();
         if (!empty($fields)) {
             foreach ($fields as $field) {
@@ -917,7 +917,7 @@ class FileService extends AbstractService
             } else {
                 $fileFields = &$keyValueFields;
             }
-            
+
             $this->collateChildFields($childFields, $fileFields, $allFields);
         }
         $this->logger->debug("Key Values - " . json_encode($keyValueFields));

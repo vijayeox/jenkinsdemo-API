@@ -303,6 +303,7 @@ class UserService extends AbstractService
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'lastname' => $data['lastname'],
+                'name' => $data['name'],
                 'email' => $data['email'],
                 'accountId' => $accountId,
                 'password' => $password,
@@ -1473,6 +1474,17 @@ class UserService extends AbstractService
         }
         if (isset($userdata['state'])) {
             unset($addressData['state']);
+        }
+    }
+
+    private function getRoleFromUuid($uuid) {
+        $select = "SELECT name from ox_role as oxr WHERE oxr.uuid = :uuid";
+        $selectParams = array("uuid" => $uuid);
+        $result = $this->executeQuerywithBindParameters($select, $selectParams)->toArray();
+        if(count($result) > 0){
+            return $result[0]['name'];
+        }else{
+            return null;
         }
     }
 }
