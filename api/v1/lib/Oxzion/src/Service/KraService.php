@@ -134,6 +134,7 @@ class KraService extends AbstractService
             $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
+            $data['status'] = 'Active';
             $data['userId'] = isset($data['userId']) ? $data['userId'] : null;
             $select = "SELECT id from ox_user where uuid = '" . $data['userId'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
@@ -205,7 +206,7 @@ class KraService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        $fieldMap = ['name' => 'g.name'];
+        $fieldMap = ['name' => 'g.name','date_created'=>'g.date_created'];
         try {
             $cntQuery = "SELECT count(g.id) as count FROM `ox_kra` g";
             if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
@@ -218,10 +219,18 @@ class KraService extends AbstractService
                     }
                     if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                         $sort = $filterArray[0]['sort'];
-                        $sort = FilterUtils::sortArray($sort);
+                        $sort = FilterUtils::sortArray($sort,$fieldMap);
                     }
-                    $pageSize = $filterArray[0]['take'];
-                    $offset = $filterArray[0]['skip'];
+                    if(isset($filterArray[0]['take'])){
+                        $pageSize = $filterArray[0]['take'];
+                    } else {
+                        $pageSize = 20;
+                    }
+                    if(isset($filterArray[0]['skip'])){
+                        $offset = $filterArray[0]['skip'];
+                    } else {
+                        $offset = 0;
+                    }
                 }
                 if (isset($filterParams['exclude'])) {
                     $where .= strlen($where) > 0 ? " AND g.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') " : " WHERE g.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') ";
@@ -231,13 +240,16 @@ class KraService extends AbstractService
             $where .= " g.status = 'Active' AND g.account_id = " . $accountId;
             $sort = " ORDER BY " . $sort;
             $limit = " LIMIT " . $pageSize . " offset " . $offset;
-            $resultSet = $this->executeQuerywithParams($cntQuery . $where);
-            $count = $resultSet->toArray()[0]['count'];
-            $query = "SELECT g.uuid,g.name,a.uuid as accountId
-                        FROM `ox_kra` g
+            $countQuery = $this->executeQuerywithParams($cntQuery . $where);
+            $count = $countQuery->toArray()[0]['count'];
+            $query = "SELECT g.uuid,g.name,a.uuid as accountId,q.uuid as queryId,user.uuid as userId,team.uuid as teamId,t.uuid as targetId FROM `ox_kra` g
+                        inner join ox_query q on q.id = g.query_id
+                        inner join ox_target t on t.id = g.target_id
+                        left join ox_team team on team.id = g.team_id
+                        left join ox_user user on user.id = g.user_id
                         inner join ox_account a on a.id = g.account_id " . $where . " " . $sort . " " . $limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            $resultSet = $resultSet->toArray();
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+            return array('data' => $resultSet, 'total' => $count);
         } catch (Exception $e) {
             throw $e;
         }
@@ -302,7 +314,6 @@ class KraService extends AbstractService
             if ($accountId != $obj->account_id) {
                 throw new ServiceException("Kra does not belong to the account", "kra.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
-            $account = $this->accountService->getAccount($obj->account_id);
             $originalArray = $obj->toArray();
             $form = new Kra();
             $originalArray['status'] = 'Inactive';

@@ -1395,6 +1395,20 @@ class FileService extends AbstractService
     {
         $this->logger->info("Inside File List API - with params - " . json_encode($params));
         $accountId = isset($params['accountId']) ? $this->getIdFromUuid('ox_account', $params['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
+        $snooze = false;
+        if(isset($filterParams['snooze']))
+        {
+            $snooze = $filterParams['snooze'];
+            if($snooze == '0' || strtolower($snooze) == 'false')
+            {
+                $snooze = false;
+            }
+            elseif($snooze == '1' || strtolower($snooze) == 'true')
+            {
+                $snooze = true;
+            }
+
+        }
         $appFilter = "";
         $appIdClause = "";
         $queryParams = array();
@@ -1460,6 +1474,7 @@ class FileService extends AbstractService
         $offset = " OFFSET 0";
         $this->processFilterParams($fromQuery, $whereQuery, $sort, $pageSize, $offset, $field, $filterParams);
         $this->getFileFilterClause($whereQuery, $where);
+        $where .= $snooze==false?" AND COALESCE(is_snoozed,0) !=1 ":" AND COALESCE(is_snoozed,0) !=0 ";
         try {
             $select = "SELECT DISTINCT SQL_CALC_FOUND_ROWS of.data,of.start_date,of.end_date,of.status, of.id as myId, of.account_id,of.rygStatus as rygStatus,of.uuid,of.version as version,  wi.status as workflowStatus, wi.process_instance_id as workflowInstanceId,of.date_created,of.date_modified,ou.name as created_by,en.name as entity_name,en.uuid as entity_id,oa.name as appName $field $fromQuery $where $sort $pageSize $offset";
             $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
@@ -1720,7 +1735,7 @@ class FileService extends AbstractService
         return $result;
     }
 
-    public function getChangeLog($fileId,$entityId, $startData, $completionData, $labelMapping=null)
+    public function getChangeLog($entityId, $startData, $completionData, $labelMapping=null,$fileId=null)
     {
         $fieldSelect = "SELECT ox_field.name,ox_field.template,ox_field.type,ox_field.text,ox_field.data_type,COALESCE(parent.name,'') as parentName,COALESCE(parent.text,'') as parentText,parent.data_type as parentDataType FROM ox_field 
                     left join ox_field as parent on ox_field.parent_id = parent.id WHERE ox_field.entity_id=:entityId AND ox_field.type NOT IN ('hidden','file','document','documentviewer') ORDER BY parentName, ox_field.name ASC";
@@ -1748,7 +1763,7 @@ class FileService extends AbstractService
                     $gridResult[$value['parentName']] = array("initial" => $initialParentData, "submission" => $submissionparentData, 'fields' => array($value));
                 }
             } else {
-                $this->buildChangeLog($fileId,$startData, $completionData, $value, $labelMapping, $resultData);
+                $this->buildChangeLog($startData, $completionData, $value, $labelMapping, $resultData,$fileId=$fileId);
             }
         }
         if (count($gridResult) > 0) {
@@ -1761,7 +1776,7 @@ class FileService extends AbstractService
                         $initialRowData = isset($initialDataset[$i]) ? $initialDataset[$i] : array();
                         $submissionRowData = isset($submissionDataset[$i]) ? $submissionDataset[$i] : array();
                         foreach ($data['fields'] as $key => $field) {
-                            $this->buildChangeLog($fieldId,$initialRowData, $submissionRowData, $field, $labelMapping, $resultData, $i+1);
+                            $this->buildChangeLog($initialRowData, $submissionRowData, $field, $labelMapping, $resultData, $i+1,$fileId=$fileId);
                         }
                     }
                 }
@@ -1772,7 +1787,7 @@ class FileService extends AbstractService
         return $resultData;
     }
 
-    public function getFieldValue($startDataTemp, $value, $labelMapping=null,$fileSubscribers)
+    public function getFieldValue($startDataTemp, $value, $labelMapping=null,$fileSubscribers=[])
     {
 
         if (!isset($startDataTemp[$value['name']])) {
@@ -1895,17 +1910,21 @@ class FileService extends AbstractService
         return $initialData;
     }
 
-    private function buildChangeLog($fileId,$startData, $completionData, $value, $labelMapping, &$resultData, $rowNumber="")
+    private function buildChangeLog($startData, $completionData, $value, $labelMapping, &$resultData, $rowNumber="",$fileId=null)
     {
-        $subscribers = $this->subscriberService->getSubscribers($fileId);
         $fileSubscribersMapping = [];
-        if(count($subscribers) != 0) 
+        if($fileId)
         {
-            foreach($subscribers as $subscriber)
+            $subscribers = $this->subscriberService->getSubscribers($fileId);
+            if(count($subscribers) != 0) 
             {
-                $fileSubscribersMapping[$subscriber['user_id']] = $subscriber['firstname'] . ' ' . $subscriber['lastname'];
+                foreach($subscribers as $subscriber)
+                {
+                    $fileSubscribersMapping[$subscriber['user_id']] = $subscriber['firstname'] . ' ' . $subscriber['lastname'];
+                }
             }
         }
+
         $initialData =  $this->getFieldValue($startData, $value, $labelMapping,$fileSubscribersMapping);
         $submissionData = $this->getFieldValue($completionData, $value, $labelMapping,$fileSubscribersMapping);
         if ((isset($initialData) && ($initialData != '[]') && (!empty($initialData))) ||
@@ -1921,6 +1940,7 @@ class FileService extends AbstractService
                                         'rowNumber' => $rowNumber);
         }
     }
+    
     public function addAttachment($params,$file, $subFolder = null)
     {
         try {
@@ -2483,7 +2503,7 @@ class FileService extends AbstractService
                 $startData = json_decode($resultSet[0]['data'], true);
             }
             // print_r("expression---\n");  print_r($completionData);
-            $resultData = $this->getChangeLog($fileId,$entityId, $startData, $completionData);
+            $resultData = $this->getChangeLog($entityId, $startData, $completionData,$fileId=$fileId);
             return $resultData;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
@@ -2607,7 +2627,7 @@ class FileService extends AbstractService
         } else {
             $whereQuery = "WHERE ";
         }
-        $whereQuery .= 'of.is_active = 1';
+        $whereQuery .= 'of.is_active = 1  AND COALESCE(of.is_snoozed,0) !=1 ';
         $pageSize = "LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
         $fieldList2 = "distinct ox_app.name as appName,`of`.id,NULL as workflow_name, `of`.uuid,`of`.data,`of`.start_date,`of`.end_date,`of`.status as fileStatus,oxuc.name as created_by,`of`.rygStatus,
@@ -3033,5 +3053,37 @@ class FileService extends AbstractService
             $ruleArray['filters'][$key] = $filterValue;
         }
         return $ruleArray;
+    }
+
+    public function snoozeFile($params)
+    {
+
+        if(!isset($params['snooze'])){
+            throw new ServiceException("Invalid parameters specified",'params.snooze');
+        }
+
+        $isSnoozed = $params['snooze'];
+        $fileId = $params['fileId'];
+
+        if($isSnoozed !="1"){
+            $isSnoozed = "0";
+        }
+
+        $select = "SELECT oxf.uuid,oxf.account_id FROM ox_file oxf WHERE oxf.uuid =:fileId";       
+        $params = ['fileId' => $fileId];
+        $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
+        if(count($result)>0){
+
+            $updateFile = "UPDATE ox_file SET is_snoozed=:is_snoozed where uuid=:fileId";
+            $params['is_snoozed'] = (int) $isSnoozed;
+            $this->executeUpdateWithBindParameters($updateFile, $params);
+            return $isSnoozed;
+
+        }
+        else{
+            throw new EntityNotFoundException("File Id not found -- " . $fileId);
+        }
+
+
     }
 }
