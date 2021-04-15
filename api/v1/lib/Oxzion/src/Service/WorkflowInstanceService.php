@@ -469,6 +469,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->commit();
             }catch(Exception $e){
                 $this->logger->info("Rollback Activity Instance");
+                $this->rollback();
                 $this->rollbackActivityInstance($workflowInstance[0]['id'],$activityInstance['id']);
                 throw $e;
             }
