@@ -18,7 +18,7 @@
                 ],
                 'appenders' => [
                     'default' => [
-                        'class' => 'LoggerAppenderDailyFile',
+                        'class' => 'Oxzion\Log4PHP\Appender\LoggerAppenderRollingFile',
                         'layout' => [
                             'class' => 'LoggerLayoutPattern',
                             'params' => [
@@ -28,7 +28,7 @@
                         'params' => [
                             'file' => __DIR__."/../../logs/application-%s.log",
                             'append' => true,
-                            'datePattern' => 'Y-m-d'
+                            'maxFileSize' => '250MB'
                          ]
                     // ],
                     // 'request' => [
