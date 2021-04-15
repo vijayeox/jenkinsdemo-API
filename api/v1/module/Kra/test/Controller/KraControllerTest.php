@@ -396,6 +396,7 @@ class KraControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('krasList');
         $this->assertEquals($content['status'], 'success');
+        // print_r($content);exit;
         $this->assertEquals(2, count($content['data']));
         $this->assertEquals($content['data'][0]['name'], 'Test Kra 4');
     }
@@ -424,6 +425,5 @@ class KraControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], 'Test Kra Once Again');
-        $this->assertEquals($content['data'][1]['name'], 'Test Kra 5');
     }
 }

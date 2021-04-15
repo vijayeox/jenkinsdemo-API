@@ -208,7 +208,10 @@ class KraService extends AbstractService
         $sort = "name";
         $fieldMap = ['name' => 'g.name','date_created'=>'g.date_created'];
         try {
-            $cntQuery = "SELECT count(g.id) as count FROM `ox_kra` g";
+            $cntQuery = "SELECT count(g.id) as count FROM `ox_kra` g inner join ox_query q on q.id = g.query_id
+                        inner join ox_target t on t.id = g.target_id inner join ox_account a on a.id = g.account_id
+                        left join ox_team team on team.id = g.team_id
+                        left join ox_user user on user.id = g.user_id ";
             if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
                 if (isset($filterParams['filter'])) {
                     $filterArray = json_decode($filterParams['filter'], true);
@@ -245,9 +248,9 @@ class KraService extends AbstractService
             $query = "SELECT g.uuid,g.name,a.uuid as accountId,q.uuid as queryId,user.uuid as userId,team.uuid as teamId,t.uuid as targetId FROM `ox_kra` g
                         inner join ox_query q on q.id = g.query_id
                         inner join ox_target t on t.id = g.target_id
+                        inner join ox_account a on a.id = g.account_id
                         left join ox_team team on team.id = g.team_id
-                        left join ox_user user on user.id = g.user_id
-                        inner join ox_account a on a.id = g.account_id " . $where . " " . $sort . " " . $limit;
+                        left join ox_user user on user.id = g.user_id " . $where . " " . $sort . " " . $limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
             return array('data' => $resultSet, 'total' => $count);
         } catch (Exception $e) {
