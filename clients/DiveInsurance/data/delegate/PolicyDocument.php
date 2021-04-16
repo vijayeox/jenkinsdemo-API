@@ -2327,63 +2327,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     protected function sortArrayByParam(&$data, $sortKey, $arrayType = null)
     {
         $groupData = is_string($data) ? json_decode($data, true) : $data;
-        $padiList = array();
-        $groupPL = array();
-        $nonPadiMemberList = array();
-        $padiMemberList = array();
-        $arrayType = isset($arrayType) ? $arrayType : "";
-        foreach ($groupData as $key => $row) {
-            if (isset($row[$sortKey])) {
-                if ($arrayType == 'additionalInsured') {
-                    $businessRelation = ($row['businessRelation'] == 'other') ? $row['businessRelationOther'] : $row['businessRelation'];
-                    $name = strtoupper($row[$sortKey]);
-                    $padiList[$key] = array('name' => $name, 'businessRelation' => $businessRelation);
-                } else {
-                    $padiList[$key] = ($sortKey == 'name') ? strtoupper($row[$sortKey]) : $row[$sortKey];
-                }
-                if ($sortKey == 'name' && $arrayType == 'additionalInsured') {
-                    $groupData[$key]['name'] = $padiList[$key]['name'];
-                } elseif ($sortKey == 'name' && $arrayType != 'additionalInsured') {
-                    $groupData[$key]['name'] = $padiList[$key];
-                } elseif ($sortKey == 'padi') {
-                    if (StringUtils::startsWith($padiList[$key], '0')) {
-                        array_push($nonPadiMemberList, $padiList[$key]);
-                    } else {
-                        array_push($padiMemberList, $padiList[$key]);
-                    }
+        $sort = array();
+        foreach($groupData as $k=>$v) {
+            if ($arrayType == 'additionalInsured') {
+                if ($v['businessRelation'] == 'other' && empty($v['businessRelationOther'])) {
+                    $groupData[$k]['businessRelationOther'] = $v['businessRelation'];
                 }
             }
+            $sort[$sortKey][$k] = $v[$sortKey];
         }
-        if ($sortKey == 'padi') {
-            $padiList = array();
-            asort($nonPadiMemberList);
-            asort($padiMemberList);
-            foreach ($nonPadiMemberList as $key => $value) {
-                array_push($padiList, $value);
-            }
-            foreach ($padiMemberList as $key => $value) {
-                array_push($padiList, $value);
-            }
-        } else {
-            asort($padiList);
-        }
-
-        foreach ($padiList as $key => $value) {
-            foreach ($groupData as $key1 => $value1) {
-                if (isset($groupData[$key1]) && isset($groupData[$key1][$sortKey])) {
-                    if ($arrayType == 'additionalInsured') {
-                        if ($padiList[$key]['name'] == $groupData[$key1][$sortKey] && ($padiList[$key]['businessRelation'] == $groupData[$key1]['businessRelation'] ||  ($padiList[$key]['businessRelation'] == $groupData[$key1]['businessRelationOther'] && $groupData[$key1]['businessRelation'] == 'other'))) {
-                            array_push($groupPL, $groupData[$key1]);
-                        }
-                    } else {
-                        if ($padiList[$key] == $groupData[$key1][$sortKey]) {
-                            array_push($groupPL, $groupData[$key1]);
-                        }
-                    }
-                }
-            }
-        }
-        $data = json_encode($groupPL);
+        array_multisort($sort[$sortKey], SORT_ASC, $groupData);
+        $data = json_encode($groupData);
     }
 
     private function generateRosterCertificate($temp, $dest, $options)

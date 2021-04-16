@@ -139,7 +139,6 @@ class StoreOwnershipTransfer extends PolicyDocument
             unset($data['data']);
             $data = array_merge($fileData,$data);
         }
-        $data['old_data'] = json_encode($data);
         $data['assocId'] = $data['fileId'];
     
         foreach($this->unsetVar as $key=>$value){
