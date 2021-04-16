@@ -11,6 +11,7 @@ use Oxzion\ValidationException;
 use Oxzion\Workflow\Camunda\WorkflowException;
 use Oxzion\EntityNotFoundException;
 use Zend\Http\Request as HttpRequest;
+use Exception;
 
 class PipelineController extends AbstractApiController
 {
@@ -50,14 +51,27 @@ class PipelineController extends AbstractApiController
                 return $this->getSuccessResponse();
             }
         } catch (WorkflowException $e) {
+            print("hhdhf");
             $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
             if ($e->getReason() == 'TaskAlreadyClaimedException') {
                 return $this->getErrorResponse("Task has already been claimed by someone else", 409);
             }
             return $this->getErrorResponse($e->getMessage(), 409);
-        }catch (Exception $e) {
+        } catch (ValidationException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (InvalidParameterException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Invalid Parameter", 406, $response);
+        } catch (EntityNotFoundException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Entity Not Found", 404, $response);
+        }catch (ServiceException $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->exceptionToResponse($e);
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 412, $response);
+        } catch (Exception $e) {
+             return $this->getErrorResponse("Please try again.If the problem persist,please contact support.", 500);
         }
     }
 
