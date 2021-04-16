@@ -24,8 +24,12 @@ class ArtifactUtils
         }
         self::$logger->info("Path - $path, template directory - $templateDir,template - $template");
         if (is_file($templateDir.$path)) {
-            if (isset($params['appId'])) {
+            if (isset($params['appId']) && isset($accountId)) {
                 $path = $templateDir.$accountId."/".$params['appId'];
+                return $path;
+            }
+            elseif(isset($params['appId']) && !isset($accountId)){
+                $path = $templateDir."/".$params['appId'];
                 return $path;
             }
             else
