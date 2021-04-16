@@ -146,7 +146,6 @@ class StoreOwnershipTransfer extends PolicyDocument
                 unset($data[$value]);
             }
         }
-        $data['changeOfOwnership'] = "yes";
         if(isset($data['iterations'])){
             if(isset($data['transfer']) && ($data['transfer'] === true || $data['transfer'] === 'true')) {
                 $data['iterations'] = $data['iterations'] + 1;
