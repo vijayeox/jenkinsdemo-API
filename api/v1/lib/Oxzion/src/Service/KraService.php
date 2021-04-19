@@ -54,7 +54,7 @@ class KraService extends AbstractService
                 inner join ox_query oq on oq.id = kra.query_id
                 inner join ox_target ot on ot.id = kra.target_id
                 inner join ox_datasource od on od.id = oq.datasource_id";
-            $where = "where kra.user_id = (SELECT id from ox_user where uuid = '" . $userId . "') AND kra.account_id = " . $accountId;
+            $where = "where kra.user_id = (SELECT id from ox_user where uuid = '" . $userId . "') AND kra.status = 'Active' AND kra.account_id = " . $accountId;
             $order = "order by kra.name";
             $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
             $kraDataArray = array();
@@ -117,7 +117,7 @@ class KraService extends AbstractService
                 inner join ox_query oq on oq.id = kra.query_id
                 inner join ox_target ot on ot.id = kra.target_id
                 inner join ox_datasource od on od.id = oq.datasource_id";
-            $where = "where kra.business_role_id = (SELECT id from ox_business_role where uuid = '" . $businessRole . "') AND kra.account_id = " . $accountId;
+            $where = "where kra.business_role_id = (SELECT id from ox_business_role where uuid = '" . $businessRole . "') AND kra.status = 'Active' AND kra.account_id = " . $accountId;
             $order = "order by kra.name";
             $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
             $kraDataArray = array();
