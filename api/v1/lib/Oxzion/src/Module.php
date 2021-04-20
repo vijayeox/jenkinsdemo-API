@@ -674,12 +674,14 @@ class Module
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $accoutService = $container->get(Service\AccountService::class);
                     $userService = $container->get(Service\UserService::class);
+                    $queryService = $container->get(\Analytics\Service\QueryService::class);
                     return new Service\KraService(
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\KraTable::class),
                         $accoutService,
-                        $userService
+                        $userService,
+                        $queryService
                     );
                 },
                 Service\CommandService::class => function ($container) {
