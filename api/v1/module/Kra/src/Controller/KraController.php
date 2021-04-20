@@ -53,6 +53,19 @@ class KraController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($kraList);
     }
+
+    public function getKrasforBusinessRoleAction() {
+        $params = $this->params()->fromRoute();
+        $data = $this->params()->fromQuery();
+        $businessRole = $params['businessRole'];
+        try {
+            $kraList = $this->kraService->getKrasforBusinessRole($businessRole, $data);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+        return $this->getSuccessResponseWithData($kraList);
+    }
     /**
      * Create Kra API
      * @api
