@@ -1091,7 +1091,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($role[5]['id'], $rolePrivilege[2]['role_id']);
         $this->assertEquals(null, $rolePrivilege[2]['account_id']);
         $this->assertEquals($appId, $rolePrivilege[2]['app_id']);
-        
         $this->assertEquals($yaml['role'][1]['privileges'][1]['privilege_name'], $rolePrivilege[3]['privilege_name']);
         $this->assertEquals($yaml['role'][1]['privileges'][1]['permission'], $rolePrivilege[3]['permission']);
         $this->assertEquals($role[5]['id'], $rolePrivilege[3]['role_id']);
@@ -1118,8 +1117,8 @@ class AppControllerTest extends ControllerTest
             $this->assertEquals(null, $value['date_modified']);
             $this->assertEquals(0, $value['override_data']);
         }
-        $query = "SELECT ei.* from ox_entity_identifier ei 
-                    inner join ox_app_entity e on e.id = ei.entity_id 
+        $query = "SELECT ei.* from ox_entity_identifier ei
+                    inner join ox_app_entity e on e.id = ei.entity_id
                     where e.app_id = $appId order by e.name";
         $entityIdentifier = $this->executeQueryTest($query);
         $this->assertEquals(2, count($entityIdentifier));
@@ -1127,8 +1126,8 @@ class AppControllerTest extends ControllerTest
             $this->assertEquals($entity[$key]['id'], $value['entity_id']);
             $this->assertEquals($yaml['entity'][$key]['identifiers'][0]['identifier'], $value['identifier']);
         }
-        $query = "SELECT ei.* from ox_entity_participant_role ei 
-                    inner join ox_app_entity e on e.id = ei.entity_id 
+        $query = "SELECT ei.* from ox_entity_participant_role ei
+                    inner join ox_app_entity e on e.id = ei.entity_id
                      order by e.name";
         $participantRoles = $this->executeQueryTest($query);
         $this->assertEquals(2, count($participantRoles));
@@ -1136,7 +1135,7 @@ class AppControllerTest extends ControllerTest
             $this->assertEquals($entity[$key]['id'], $value['entity_id']);
             $this->assertEquals($businessRole[1]['id'], $value['business_role_id']);
         }
-        $query = "SELECT * from ox_account_offering oo 
+        $query = "SELECT * from ox_account_offering oo
                     inner join ox_app_entity ae on ae.id = oo.entity_id order by ae.name";
         $acctOffering = $this->executeQueryTest($query);
         $this->assertEquals(2, count($acctOffering));
