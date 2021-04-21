@@ -907,8 +907,9 @@ class AppServiceTest extends AbstractServiceTest
         }
 
         if (enableExecUtils == 0) {
-            $mockRestClient = Mockery::mock('alias:\Oxzion\Utils\RestClient');
+            $mockRestClient = Mockery::mock('Oxzion\Utils\RestClient');
             $mockRestClient->expects('post')->withAnyArgs()->once()->andReturn(json_encode(array('status'=>'success')));
+            $appService->setRestClient($mockRestClient);
         }
         $content = $appService->setupAppView($data, $path);
         $appnameNew = $path . 'view/apps/DummyAppNew' ;
