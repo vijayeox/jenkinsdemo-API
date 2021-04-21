@@ -248,7 +248,7 @@ class AppControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"startswith","value":"a"},{"field":"category","operator":"contains","value":"utilities"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
-        
+
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -1057,7 +1057,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(2, count($businessRole));
         $this->assertEquals($yaml['businessRole'][0]['name'], $businessRole[0]['name']);
         $this->assertEquals($yaml['businessRole'][1]['name'], $businessRole[1]['name']);
-        $query = "SELECT * from ox_role 
+        $query = "SELECT * from ox_role
                     WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
         $role = $this->executeQueryTest($query);
         $this->assertEquals(7, count($role));
@@ -1070,8 +1070,8 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($yaml['role'][1]['name'], $role[5]['name']);
         $this->assertEquals(null, $role[5]['account_id']);
         $this->assertEquals($businessRole[1]['id'], $role[5]['business_role_id']);
-        
-        $query = "SELECT rp.*,r.name from ox_role_privilege rp 
+
+        $query = "SELECT rp.*,r.name from ox_role_privilege rp
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
 
@@ -1101,7 +1101,7 @@ class AppControllerTest extends ControllerTest
         $accountBusinessRole = $this->executeQueryTest($query);
         $this->assertEquals(1, count($accountBusinessRole));
         $this->assertEquals($businessRole[0]['id'], $accountBusinessRole[0]['business_role_id']);
-        
+
         $query = "select * from ox_app_entity where app_id = $appId order by name";
         $entity = $this->executeQueryTest($query);
         $this->assertEquals(2, count($entity));
@@ -1437,7 +1437,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $entityRecordSetAfterDeletion = $this->executeQueryTest("SELECT name,uuid FROM ox_app WHERE id=99");
+        $entityRecordSetAfterDeletion = $this->executeQueryTest("SELECT name,uuid FROM ox_app WHERE id=199");
         $this->assertEquals($entityRecordSetAfterDeletion[0]['name'], $entityRecordSetBeforeDeletion[0]['id'].'_'.$entityRecordSetBeforeDeletion[0]['name']);
         $this->assertNotEquals($entityRecordSetAfterDeletion[0]['uuid'], '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4');
     }
