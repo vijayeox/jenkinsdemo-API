@@ -710,7 +710,7 @@ class AppServiceTest extends AbstractServiceTest
         $this->assertEquals($result, 1);
         FileUtils::rmDir($appname);
     }
-    
+
     public function testProcessSymlinks()
     {
         if (enableExecUtils == 0) {
@@ -809,12 +809,12 @@ class AppServiceTest extends AbstractServiceTest
             $this->assertEquals(2, count($beforeEntityDelete));
             $this->assertEquals(0, $beforeEntityDelete[0]['isdeleted']);
 
-            $beforeDelete = $this->executeQueryTest("SELECT oei.* FROM ox_entity_identifier oei 
+            $beforeDelete = $this->executeQueryTest("SELECT oei.* FROM ox_entity_identifier oei
             right outer join ox_app_entity oxe on oei.entity_id = oxe.id
-            inner join ox_app oxa on oxa.id = oxe.app_id 
+            inner join ox_app oxa on oxa.id = oxe.app_id
             where oxa.uuid ='${uuid}'");
             $this->assertEquals(2, count($beforeDelete));
-            
+
             $beforeDelete1 = $this->executeQueryTest("SELECT * from ox_account_offering");
 
             $beforeRolePriDe = $this->executeQueryTest("SELECT * FROM ox_role_privilege join ox_app on ox_app.id = ox_role_privilege.app_id WHERE ox_app.uuid='${uuid}'");
@@ -892,7 +892,7 @@ class AppServiceTest extends AbstractServiceTest
             $this->assertNotNull($e);
         }
     }
-    
+
     public function testSetupAppViewNewAppName()
     {
         AuthContext::put(AuthConstants::USER_ID, '1');
