@@ -39,7 +39,7 @@ class ExcelTemplateProcessorImpl extends PhpExcelTemplator implements TemplatePa
         $templateFile = $template['templatePath'] . '/' . $template['templateNameWithExt'];
         $spreadsheet = PhpExcelTemplator::getSpreadsheet($templateFile);
         if (!isset($options['sheets'])) {
-            $options['sheets'] = array($spreadsheet->getSheetNames());
+            $options['sheets'] = $spreadsheet->getSheetNames();
         }
         foreach ($options['sheets'] as $sheetName) {
             $sheet = $spreadsheet->getSheetByName($sheetName);
