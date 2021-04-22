@@ -714,12 +714,11 @@ class UserService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        $select = "SELECT ou.uuid, ou.username, per.firstname, per.lastname, ou.name,
-                            per.email, au.uuid as accountId, ou.icon, per.date_of_birth,
-                            oxemp.designation,per.phone,oa.address1,oa.address2,oa.city,
-                            oa.state,oa.country,oa.zip,per.gender,oxemp.website,
-                            oxemp.about, manager_user.uuid as managerId, 
-                            ou.timezone,oxemp.id as employee_id, oxemp.date_of_join, oxemp.interest, ou.preferences";
+        $select = "SELECT ou.uuid, ou.username, ou.name, ou.icon, ou.timezone, ou.preferences,
+        	au.uuid as accountId, per.firstname, per.lastname, per.email, per.date_of_birth, per.phone, per.gender,
+        	oxemp.designation, oxemp.website, oxemp.about, oxemp.id as employee_id, oxemp.date_of_join, oxemp.interest,
+        	oa.address1, oa.address2, oa.city, oa.state, oa.country, oa.zip,
+        	manager_user.uuid as managerId";
         $from = " FROM `ox_user` as ou 
                   inner join ox_account au on au.id = ou.account_id
                   join ox_person per on per.id = ou.person_id 
@@ -744,11 +743,11 @@ class UserService extends AbstractService
                 $offset = $filterArray[0]['skip'];
             }
             if (isset($filterParams['exclude'])) {
-                $where .= strlen($where) > 0 ? " AND ou.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') " : " WHERE ou.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') ";
+                $where .= (strlen($where) > 0 ? " AND " : " WHERE "). "ou.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') ";
             }
         }
 
-        $where .= strlen($where) > 0 ? " AND ou.status = 'Active' AND ou.account_id = " . $accountId : " WHERE ou.status = 'Active' AND ou.account_id = " . $accountId;
+        $where .= (strlen($where) > 0 ? " AND " : " WHERE ") . "ou.status = 'Active' AND ou.account_id = " . $accountId;
         $sort = " ORDER BY " . $sort;
         $limit = " LIMIT " . $pageSize . " offset " . $offset;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
@@ -1137,31 +1136,31 @@ class UserService extends AbstractService
     {
         $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $query = "SELECT uuid, name 
-                   from (
-                        SELECT DISTINCT app.uuid, app.name , 
-                            count(NULLIF(urp.privilege_name,NULL)) as app_count 
-                        from (
-                            SELECT DISTINCT ap.uuid, ap.name, op.name as privilege_name, ar.account_id 
-                            from ox_app as ap
-                            INNER JOIN ox_app_registry as ar ON ap.id = ar.app_id 
-                            INNER JOIN ox_privilege as op ON ar.app_id = op.app_id 
-                            where ar.account_id = :accountId) app 
-                        LEFT JOIN (
-                            SELECT DISTINCT orp.privilege_name 
-                            from ox_role_privilege as orp 
-                            INNER JOIN ox_user_role as ou on orp.role_id = ou.role_id 
-                            INNER JOIN ox_account_user au on au.id = ou.account_user_id 
-                                                         AND au.account_id = orp.account_id 
-                            WHERE au.user_id = :userId 
-                                and orp.account_id = :accountId ) urp ON app.privilege_name = urp.privilege_name 
-                        GROUP BY app.uuid,app.name) a 
-                        WHERE a.app_count = 0 
-                        union 
-                        SELECT oa.uuid, oa.name 
-                        FROM ox_app oa 
-                        LEFT JOIN `ox_app_registry` ar on oa.id = ar.app_id and ar.account_id = :accountId
-                        WHERE account_id IS NULL";
+        $query = "SELECT uuid, name
+                    FROM (
+                        SELECT DISTINCT app.uuid, app.name, COUNT( NULLIF(urp.privilege_name, NULL) ) AS app_count
+                        FROM (
+                            SELECT DISTINCT ap.uuid, ap.name, op.name AS privilege_name, ar.account_id
+                            FROM ox_app AS ap
+                            INNER JOIN ox_app_registry AS ar ON ap.id = ar.app_id
+                            INNER JOIN ox_privilege AS op ON ar.app_id = op.app_id
+                            WHERE ar.account_id = :accountId
+                        ) app
+                        LEFT JOIN(
+                            SELECT DISTINCT orp.privilege_name
+                            FROM ox_role_privilege AS orp
+                            INNER JOIN ox_user_role AS ou ON orp.role_id = ou.role_id
+                            INNER JOIN ox_account_user au ON au.id = ou.account_user_id AND au.account_id = orp.account_id
+                            WHERE au.user_id = :userId AND orp.account_id = :accountId
+                        ) urp ON app.privilege_name = urp.privilege_name
+                        GROUP BY app.uuid, app.name
+                    ) a
+                    WHERE a.app_count = 0
+                UNION
+                    SELECT oa.uuid, oa.name
+                    FROM ox_app oa
+                    LEFT JOIN `ox_app_registry` ar ON oa.id = ar.app_id AND ar.account_id = :accountId
+                    WHERE account_id IS NULL";
         $params = ['userId' => $userId, 'accountId' => $accountId];
         $this->logger->info("Query - $query with params - ".print_r($params, true));
         $result = $this->executeQueryWithBindParameters($query, $params);
@@ -1324,12 +1323,15 @@ class UserService extends AbstractService
             return array('data' => array(), 'role' => array());
         }
         $responseUserData = $userData[0];
+        $responseUserData['manager_name'] = "";
         $responseUserData['preferences'] = json_decode($responseUserData['preferences'], true);
         if (isset($responseUserData['managerId']) &&  ($responseUserData['managerId'] !== 0)) {
-            $result = $this->getUserWithMinimumDetails($responseUserData['managerId'], $params['accountId']);
-            $responseUserData['manager_name'] = $result['firstname']." ".$result['lastname'];
-        } else {
-            $responseUserData['manager_name'] = "";
+            try {
+                $result = $this->getUserWithMinimumDetails($responseUserData['managerId'], $params['accountId']);
+                $responseUserData['manager_name'] = $result['firstname']." ".$result['lastname'];
+            } catch (Exception $e) {
+                unset($responseUserData['managerId']);
+            }
         }
         $responseUserData['role'] = $this->getRolesofUser($params['accountId'], $params['userId']);
         return $responseUserData;
