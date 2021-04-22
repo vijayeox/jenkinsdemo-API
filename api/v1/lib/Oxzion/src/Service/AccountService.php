@@ -605,55 +605,46 @@ class AccountService extends AbstractService
             $userSingleArray = array_unique(array_map('current', $userArray));
             $querystring = "SELECT u.username FROM ox_account_user as ouo
             inner join ox_user as u on u.id = ouo.user_id
-            inner join ox_account as account on ouo.account_id = account.id and account.id =" . $accountId . "
+            inner join ox_account as account on ouo.account_id = account.id
             where ouo.account_id =" . $accountId . " and ouo.user_id not in (" . implode(',', $userSingleArray) . ") and ouo.user_id != account.contactid";
             $deletedUser = $this->executeQuerywithParams($querystring)->toArray();
             $query = "SELECT ou.username from ox_user as ou 
-                        LEFT OUTER JOIN ox_account_user as our on our.user_id = ou.id 
-                                    AND our.account_id = ou.account_id and our.account_id =" . $accountId . "
-            WHERE ou.id in (" . implode(',', $userSingleArray) . ") AND our.account_id is Null and ou.id not in (select user_id from  ox_account_user where user_id in (" . implode(',', $userSingleArray) . ") and account_id =" . $accountId . ")";
+            LEFT OUTER JOIN ox_account_user as our on our.user_id = ou.id and our.account_id =" . $accountId . "
+            WHERE ou.id in (" . implode(',', $userSingleArray) . ") AND our.account_id is Null";
             $insertedUser = $this->executeQuerywithParams($query)->toArray();
             $this->beginTransaction();
             try {
                 $query = "UPDATE ox_user as ou
-                inner join ox_account as account on account.id = ou.account_id
-                and ou.id != account.contactid
-                SET ou.account_id = NULL WHERE ou.id not in (" . implode(',', $userSingleArray) . ") AND ou.account_id = $accountId";
-                $resultSet = $this->executeQuerywithParams($query);
-                $select = "SELECT u.id FROM ox_account_user as ouo
-                inner join ox_user as u on u.id = ouo.user_id
-                inner join ox_account as account on ouo.account_id = account.id and account.id =" . $accountId . "
+                inner join ox_account as account on account.id = ou.account_id and ou.id != account.contactid
+                SET ou.account_id = NULL
+                WHERE ou.id not in (" . implode(',', $userSingleArray) . ") AND ou.account_id = $accountId";
+                $this->executeQuerywithParams($query);
+                $subQuery = "
+                inner join ox_account as account on ouo.account_id = account.id
                 where ouo.account_id =" . $accountId . " and ouo.user_id not in (" . implode(',', $userSingleArray) . ") and ouo.user_id != account.contactid";
-                $accountUserId = $this->executeQuerywithParams($select)->toArray();
-                $subQuery = "inner join ox_user as u on u.id = ouo.user_id
-                inner join ox_account as account on ouo.account_id = account.id and account.id =" . $accountId . "
-                where ouo.account_id =" . $accountId . " and ouo.user_id not in (" . implode(',', $userSingleArray) . ") and ouo.user_id != account.contactid";
-                $query = "DELETE ur FROM ox_user_role ur INNER JOIN ox_account_user as ouo on ur.account_user_id = ouo.id $subQuery";
-                $resultSet = $this->executeQuerywithParams($query);
+                $query = "DELETE ur FROM ox_user_role ur
+                INNER JOIN ox_account_user as ouo on ur.account_user_id = ouo.id $subQuery";
+                $this->executeQuerywithParams($query);
                 $query = "DELETE ouo FROM ox_account_user as ouo $subQuery";
-                $resultSet = $this->executeQuerywithParams($query);
+                $this->executeQuerywithParams($query);
                 $insert = "INSERT INTO ox_account_user (user_id,account_id,`default`)
                 SELECT ou.id," . $accountId . ",case when (ou.account_id is NULL)
                 then 1
                 end
-                from ox_user as ou 
-                LEFT OUTER JOIN ox_account_user as our on our.user_id = ou.id AND our.account_id = ou.account_id and our.account_id =" . $accountId . "
-                WHERE ou.id in (" . implode(',', $userSingleArray) . ") AND our.account_id is Null AND ou.id not in (select user_id from  ox_account_user where user_id in (" . implode(',', $userSingleArray) . ") and account_id =" . $accountId . ")";
-                $resultSet = $this->executeQuerywithParams($insert);
+                from ox_user as ou
+                LEFT OUTER JOIN ox_account_user as our on our.user_id = ou.id and our.account_id =" . $accountId . "
+                WHERE ou.id in (" . implode(',', $userSingleArray) . ") and our.account_id is null";
+                $this->executeQuerywithParams($insert);
                 //handle user_role update using default role
                 $insert = "INSERT INTO ox_user_role (account_user_id, role_id)
-                SELECT our.id, r.id
-                from ox_role as r 
-                INNER JOIN (SELECT au.id, au.account_id FROM ox_account_user au inner join ox_user ou on ou.id = au.user_id where au.account_id = $accountId and ou.username in ('".implode("','", array_unique(array_map('current', $insertedUser)))."') ) as our on our.account_id = r.account_id
+                SELECT our.id, r.id from ox_role as r
+                INNER JOIN (SELECT au.id, au.account_id FROM ox_account_user au
+                inner join ox_user ou on ou.id = au.user_id
+                where au.account_id = $accountId and ou.username in ('".implode("','", array_unique(array_map('current', $insertedUser)))."')) as our on our.account_id = r.account_id
                 WHERE r.account_id =" . $accountId . " AND r.default_role = 1";
-                $resultSet = $this->executeQuerywithParams($insert);
+                $this->executeQuerywithParams($insert);
                 $update = "UPDATE ox_user SET account_id = $accountId WHERE id in (" . implode(',', $userSingleArray) . ") AND account_id is NULL";
-                $resultSet = $this->executeQuerywithParams($update);
-                if (count($accountUserId) > 0) {
-                    $accountUserIdArray = array_unique(array_map('current', $accountUserId));
-                    $update = "UPDATE ox_user SET account_id = NULL WHERE id in (" . implode(',', $accountUserIdArray) . ")";
-                    $resultSet = $this->executeQuerywithParams($update);
-                }
+                $this->executeQuerywithParams($update);
                 $this->commit();
             } catch (Exception $e) {
                 $this->rollback();
