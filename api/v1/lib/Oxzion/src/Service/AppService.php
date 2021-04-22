@@ -1165,8 +1165,6 @@ class AppService extends AbstractService
         if (isset($yamlData['privilege'])) {
             $appUuid = $yamlData['app']['uuid'];
             $privilegedata = $yamlData['privilege'];
-            $privilegearray = array_unique(array_column($privilegedata, 'name'));
-            $list = "'" . implode("', '", $privilegearray) . "'";
             $appId = $this->getIdFromUuid('ox_app', $appUuid);
             $this->privilegeService->saveAppPrivileges($appId, $privilegedata);
         }

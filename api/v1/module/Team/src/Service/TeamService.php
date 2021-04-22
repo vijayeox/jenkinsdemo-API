@@ -207,14 +207,8 @@ class TeamService extends AbstractService
         if (isset($file)) {
             $image = FileUtils::convetImageTypetoPNG($file);
             if ($image) {
-                if (FileUtils::fileExists($destFile)) {
-                    imagepng($image, $destFile . '/logo.png');
-                    $image = null;
-                } else {
-                    mkdir($destFile);
-                    imagepng($image, $destFile . '/logo.png');
-                    $image = null;
-                }
+                imagepng($image, $this->getTeamLogoPath($accountId, $id, true) . '/logo.png');
+                $image = null;
             }
         }
     }
