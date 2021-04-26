@@ -448,8 +448,10 @@ class AppService extends AbstractService
         try {
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
-            $bRoleResult = $this->accountService->setupBusinessOfferings($yamlData['org'], $accountId, $appId);
-            $this->createRole($yamlData, false, $accountId, $bRoleResult);
+            if (isset($yamlData['org'])) {
+                $bRoleResult = $this->accountService->setupBusinessOfferings($yamlData['org'], $accountId, $appId);
+                $this->createRole($yamlData, false, $accountId, $bRoleResult);
+            }
             $user = $this->accountService->getContactUserForAccount($accountId);
             $this->userService->addAppRolesToUser($user['accountUserId'], $appId);
             $result = $this->createAppRegistry($appId, $accountId);
@@ -513,21 +515,25 @@ class AppService extends AbstractService
     private function removeRoleData($appId, $accountId = null)
     {
         $appId = $this->getIdFromUuid('ox_app', $appId);
-        $accountId = $this->getIdFromUuid('ox_account', $accountId);
+        $accountId = ($accountId) ? $this->getIdFromUuid('ox_account', $accountId) : 0;
         $accountId = ($accountId == 0) ? null : $accountId;
-        $roleResult = $this->getDataByParams('ox_role_privilege', array(), array('app_id' => $appId,'account_id' => $accountId))->toArray();
-        if (count($roleResult) > 0) {
-            $this->deleteData($roleResult, 'ox_role_privilege', 'role_id', 'role_id');
-            $this->deleteData($roleResult, 'ox_user_role', 'role_id', 'role_id');
-            $this->deleteData($roleResult, 'ox_role', 'id', 'role_id');
+        $deleteParams = ['app_id' => $appId];
+        if ($accountId) {
+            $deleteParams['account_id'] = $accountId;
         }
-        $result = $this->getDataByParams('ox_app_registry', array(), array('app_id' => $appId,'account_id' => $accountId))->toArray();
+        $roleResult = $this->getDataByParams('ox_role', array(), $deleteParams)->toArray();
+        if (count($roleResult) > 0) {
+            $this->deleteData($roleResult, 'ox_role_privilege', 'role_id', 'id');
+            $this->deleteData($roleResult, 'ox_user_role', 'role_id', 'id');
+            $this->deleteData($roleResult, 'ox_role', 'id', 'id');
+        }
+        $result = $this->getDataByParams('ox_app_registry', array(), $deleteParams)->toArray();
         if (count($result) > 0) {
-            $this->deleteInfo('ox_app_registry', $appId, $accountId);
+            $this->deleteInfo('ox_app_registry', $deleteParams['app_id'], $deleteParams['account_id']);
         }
     }
 
-    private function deleteData($result, $tableName, $columnName, $uniqueColumn)
+    private function deleteData(array $result, string $tableName, string $columnName, string $uniqueColumn)
     {
         $appSingleArray = array_unique(array_column($result, $uniqueColumn));
         $deleteQuery = "DELETE FROM $tableName where $columnName in ('" . implode("','", $appSingleArray) . "')";
@@ -535,15 +541,14 @@ class AppService extends AbstractService
         $deleteResult = $this->executeQuerywithParams($deleteQuery);
     }
 
-    private function deleteInfo($tableName, $appId, $accountId=null)
+    private function deleteInfo(string $tableName, $appId, int $accountId = null)
     {
         $appId = is_numeric($appId) ? $appId : $this->getIdFromUuid('ox_app', $appId);
-        $deleteParams['appId'] = $appId;
+        $deleteParams = ['appId' => $appId];
+        $where = "WHERE app_id=:appId";
         if ($accountId) {
-            $where = "WHERE app_id=:appId and account_id=:accountId";
+            $where .= " and account_id=:accountId";
             $deleteParams['accountId'] = $accountId;
-        } else {
-            $where = "WHERE app_id=:appId";
         }
         $deleteQuery = "DELETE FROM $tableName $where";
         $this->logger->info("STATEMENT delq $deleteQuery".print_r($deleteParams, true));
@@ -796,7 +801,7 @@ class AppService extends AbstractService
         $jsonData['name'] = $yamlData['app']['name'];
         $jsonData['appId'] = $yamlData['app']['uuid'];
         $jsonData['category'] = isset($yamlData['app']['category']) ? $yamlData['app']['category'] : null ;
-        $displayName = $jsonData['title']['en_EN'] = ($yamlData['app']['name'] == 'EOXAppBuilder') ? 'AppBuilder' : isset($yamlData['app']['title']) ? $yamlData['app']['title']: $yamlData['app']['name'];
+        $displayName = $jsonData['title']['en_EN'] = ($yamlData['app']['name'] == 'EOXAppBuilder') ? 'AppBuilder' : (isset($yamlData['app']['title']) ? $yamlData['app']['title']: $yamlData['app']['name']);
         if (isset($yamlData['app']['description'])) {
             $jsonData['description']['en_EN'] = $yamlData['app']['description'];
         }
@@ -1579,7 +1584,6 @@ class AppService extends AbstractService
             $this->removeRoleData($appId);
             $result = $this->getDataByParams('ox_privilege', array(), array('app_id' => $this->getIdFromUuid('ox_app', $appId)))->toArray();
             if (count($result) > 0) {
-                $this->removeRoleData($appId);
                 $this->deleteInfo('ox_privilege', $this->getIdFromUuid('ox_app', $appId));
             }
             $this->deleteApp($appId);
@@ -1597,20 +1601,20 @@ class AppService extends AbstractService
             FileUtils::unlink($link);
         }
         $request = array();
-            array_push($request,[
-                "path" => $this->config['APPS_FOLDER'] . "../bos/",
-                "type" => "bos"
-            ]);
-            $restClient = $this->restClient;
-            $output = json_decode($restClient->post(
-                ($this->config['applicationUrl'] . "/installer"),
-                ["folders" => $request]
-            ), true);
-            if ($output["status"] != "Success") {
-                $this->logger->info("\n Package Discover Failed " . $output);
-                throw new ServiceException('Failed to complete package discover for the application.', 'E_APP_PACKAGE_DISCOVER_FAIL', 0);
-            }
-            $this->logger->info("\n Finished package discover " . print_r($output, true));
+        array_push($request,[
+            "path" => $this->config['APPS_FOLDER'] . "../bos/",
+            "type" => "bos"
+        ]);
+        $restClient = $this->restClient;
+        $output = json_decode($restClient->post(
+            ($this->config['applicationUrl'] . "/installer"),
+            ["folders" => $request]
+        ), true);
+        if ($output["status"] != "Success") {
+            $this->logger->info("\n Package Discover Failed " . $output);
+            throw new ServiceException('Failed to complete package discover for the application.', 'E_APP_PACKAGE_DISCOVER_FAIL', 0);
+        }
+        $this->logger->info("\n Finished package discover " . print_r($output, true));
     }
 
     private function processInstalledTemplates($appId, $path)
