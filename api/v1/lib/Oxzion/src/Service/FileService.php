@@ -2094,11 +2094,11 @@ class FileService extends AbstractService
                 $path = isset($attachmentRecord[0]['path']) ? str_replace($attachmentName, $newName, $attachmentRecord[0]['path']) : null;
                 $update = $this->getSqlObject()
                     ->update('ox_file_attachment')
-                    ->set(['name' => $newName,'originalName' => $newName, 'url' => $url, 'path' => $path])
+                    ->set(['name' => $newName,'originalName' => $attachmentName, 'url' => $url, 'path' => $path])
                     ->where(['id' => $attachmentRecord[0]['id']]);
                 $result = $this->executeQuery($update);
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $data['fileId'].'/';
-                if (is_file($folderPath.$newName) && file_exists($folderPath.$attachmentName)) {
+                if (is_file($folderPath.$attachmentName) && file_exists($folderPath.$attachmentName)) {
                     rename($folderPath.$attachmentName, $folderPath.$newName);
                 } elseif (is_dir($folderPath.$attachmentName)) {
                     FileUtils::renameFile($folderPath.$attachmentName, $folderPath.$newName);
