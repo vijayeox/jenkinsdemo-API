@@ -1396,18 +1396,23 @@ class FileService extends AbstractService
         $this->logger->info("Inside File List API - with params - " . json_encode($params));
         $accountId = isset($params['accountId']) ? $this->getIdFromUuid('ox_account', $params['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $snooze = false;
-        if(isset($filterParams['snooze']))
-        {
-            $snooze = $filterParams['snooze'];
-            if($snooze == '0' || strtolower($snooze) == 'false')
-            {
-                $snooze = false;
-            }
-            elseif($snooze == '1' || strtolower($snooze) == 'true')
-            {
-                $snooze = true;
-            }
 
+        if(isset($filterParams['filter']))
+        {
+            $filtersCopy = is_string($filterParams['filter'])? json_decode($filterParams['filter'],true):$filterParams['filter'];
+            if(isset($filtersCopy[0]['snooze']))
+            {
+                $snooze = $filtersCopy[0]['snooze'];
+                if($snooze == '0' || strtolower($snooze) == 'false')
+                {
+                    $snooze = false;
+                }
+                elseif($snooze == '1' || strtolower($snooze) == 'true')
+                {
+                    $snooze = true;
+                }
+    
+            }
         }
         $appFilter = "";
         $appIdClause = "";
