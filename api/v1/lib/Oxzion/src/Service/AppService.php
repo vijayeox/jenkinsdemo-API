@@ -420,9 +420,28 @@ class AppService extends AbstractService
     {
         if (isset($yamlData['org'])) {
             $appId = $yamlData['app']['uuid'];
-            $data = $this->processOrg($yamlData['org'], $appId);
-            $orgId = $yamlData['org']['uuid'];
-            $this->installApp($orgId, $yamlData, $path);
+            $orgType = $this->checkSingleOrMultipleOrg($yamlData['org']);
+            if($orgType === 'Single') {
+                $data = $this->processOrg($yamlData['org'], $appId);
+                $orgId = $yamlData['org']['uuid'];
+                $this->installApp($orgId, $yamlData, $path);
+            } elseif($orgType === 'Multiple') {
+                foreach ($yamlData['org'] as $org) {
+                    $data = $this->processOrg($org, $appId);
+                    $orgId = $org['uuid'];
+                    $this->installApp($orgId, $yamlData, $path);
+                }
+            } else {
+                throw new ServiceException('Failed Installing Organisation','org.install.failed');
+            }
+        }
+    }
+
+    private function checkSingleOrMultipleOrg($org) {
+        if(array_key_exists(0,$org)) {
+            return 'Multiple';
+        } else {
+            return 'Single';
         }
     }
 
@@ -449,8 +468,16 @@ class AppService extends AbstractService
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
             if (isset($yamlData['org'])) {
-                $bRoleResult = $this->accountService->setupBusinessOfferings($yamlData['org'], $accountId, $appId);
-                $this->createRole($yamlData, false, $accountId, $bRoleResult);
+                $orgType = $this->checkSingleOrMultipleOrg($yamlData['org']);
+                if($orgType === 'Single') {
+                    $bRoleResult = $this->accountService->setupBusinessOfferings($yamlData['org'], $accountId, $appId);
+                    $this->createRole($yamlData, false, $accountId, $bRoleResult);
+                } else {
+                    foreach($yamlData['org'] as $org) {
+                        $bRoleResult = $this->accountService->setupBusinessOfferings($org, $accountId, $appId);
+                        $this->createRole($yamlData, false, $accountId, $bRoleResult);
+                    }
+                }                
             }
             $user = $this->accountService->getContactUserForAccount($accountId);
             $this->userService->addAppRolesToUser($user['accountUserId'], $appId);
@@ -1534,8 +1561,19 @@ class AppService extends AbstractService
         if (isset($descriptorData["job"]) && empty($descriptorData['job'][0]['name'])) {
             unset($descriptorData["job"]);
         }
-        if (isset($descriptorData["org"]) && empty($descriptorData['org']['name'])) {
-            unset($descriptorData["org"]);
+        if (isset($descriptorData["org"])) {
+            //Handle single and multiple org definitions
+            if(array_key_exists(0,$descriptorData["org"])){
+                foreach ($descriptorData["org"] as $key => $value) {
+                    if(empty($descriptorData["org"][$key]["name"])){
+                        unset($descriptorData["org"][$key]);
+                    }
+                }
+            } else {
+                if(empty($descriptorData["org"]["name"])) {
+                    unset($descriptorData["org"]);
+                }
+            }
         }
         if (isset($descriptorData["workflow"]) && empty($descriptorData['workflow'][0]['name'])) {
             unset($descriptorData["workflow"]);
