@@ -239,9 +239,16 @@ class AccountService extends AbstractService
         if (!isset($appId) || !isset($params['businessRole'])) {
             return;
         }
-        $query = "delete from ox_account_business_role where account_id = :accountId";
+        //Remove foreign key constaint on business role
+        $query = "delete ox_account_offering from ox_account_offering 
+        inner join ox_account_business_role on ox_account_offering.account_business_role_id = ox_account_business_role.id 
+        where ox_account_business_role.account_id = :accountId";
         $queryParams = ["accountId" => $accountId];
         $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
+        //Remove business role
+        $query2 = "delete from ox_account_business_role where account_id = :accountId";
+        $resultSet = $this->executeUpdateWithBindParameters($query, $queryParams);
+
         if (is_string($params['businessRole'])) {
             $businessRole = json_decode($params['businessRole'], true);
             $businessRole = [$params['businessRole']];

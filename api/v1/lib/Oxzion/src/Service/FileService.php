@@ -1396,18 +1396,23 @@ class FileService extends AbstractService
         $this->logger->info("Inside File List API - with params - " . json_encode($params));
         $accountId = isset($params['accountId']) ? $this->getIdFromUuid('ox_account', $params['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $snooze = false;
-        if(isset($filterParams['snooze']))
-        {
-            $snooze = $filterParams['snooze'];
-            if($snooze == '0' || strtolower($snooze) == 'false')
-            {
-                $snooze = false;
-            }
-            elseif($snooze == '1' || strtolower($snooze) == 'true')
-            {
-                $snooze = true;
-            }
 
+        if(isset($filterParams['filter']))
+        {
+            $filtersCopy = is_string($filterParams['filter'])? json_decode($filterParams['filter'],true):$filterParams['filter'];
+            if(isset($filtersCopy[0]['snooze']))
+            {
+                $snooze = $filtersCopy[0]['snooze'];
+                if($snooze == '0' || strtolower($snooze) == 'false')
+                {
+                    $snooze = false;
+                }
+                elseif($snooze == '1' || strtolower($snooze) == 'true')
+                {
+                    $snooze = true;
+                }
+    
+            }
         }
         $appFilter = "";
         $appIdClause = "";
@@ -2094,11 +2099,11 @@ class FileService extends AbstractService
                 $path = isset($attachmentRecord[0]['path']) ? str_replace($attachmentName, $newName, $attachmentRecord[0]['path']) : null;
                 $update = $this->getSqlObject()
                     ->update('ox_file_attachment')
-                    ->set(['name' => $newName,'originalName' => $newName, 'url' => $url, 'path' => $path])
+                    ->set(['name' => $newName,'originalName' => $attachmentName, 'url' => $url, 'path' => $path])
                     ->where(['id' => $attachmentRecord[0]['id']]);
                 $result = $this->executeQuery($update);
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $data['fileId'].'/';
-                if (is_file($folderPath.$newName) && file_exists($folderPath.$attachmentName)) {
+                if (is_file($folderPath.$attachmentName) && file_exists($folderPath.$attachmentName)) {
                     rename($folderPath.$attachmentName, $folderPath.$newName);
                 } elseif (is_dir($folderPath.$attachmentName)) {
                     FileUtils::renameFile($folderPath.$attachmentName, $folderPath.$newName);
