@@ -99,9 +99,11 @@ content:
             toolbarTemplate: '<h5>List of workbooks</h5>'
             operations:
                 title: "Create Workbook"
+                icon: 'fa fa-plus'
                 actions:
                     -
                         name: Create New Workbook
+                        icon: 'fa fa-plus'
                         rule: "profile.privileges.MANAGE_POLICY_APPLICATION_CREATE ==true"
                         details:
                             -

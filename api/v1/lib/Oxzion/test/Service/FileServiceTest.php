@@ -126,6 +126,25 @@ class FileServiceTest extends AbstractServiceTest
         return $result;
     }
 
+    public function testGetFileListWithSnoozeParameter()
+    {
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $filterParams  = array(
+            'filter' => array(
+                [
+                    'snooze'=>'1'
+                ]
+            )   
+        );
+        $params = [];
+        $result = $this->fileService->getFileList($appUuid, $params, $filterParams);
+        // $this->assertEquals("959640f3-8260-4a94-823e-f61ea8aff79c", $result['data'][0]['uuid']);
+        // $this->assertEquals($params['entityName'], $result['data'][0]['entity_name']);
+        $this->assertEquals(2, $result['total']);
+    }
+
 
     public function testGetFollowUps()
     {
@@ -2370,4 +2389,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(1, count($result));
         $this->assertEquals(0, $result[0]['is_active']);
     }
+
+
+        
 }

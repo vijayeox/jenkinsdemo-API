@@ -124,6 +124,7 @@ content:
                 actions:
                     -
                         name: Add New Claim
+                        icon: 'fa fa-plus'
                         rule: "true"
                         details:
                             -
