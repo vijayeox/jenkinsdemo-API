@@ -905,6 +905,14 @@ class AppServiceTest extends AbstractServiceTest
             FileUtils::copyDir($eoxapp, $path);
             FileUtils::renameFile($path.$eoxapp, $path.$data['app']['oldAppName']);
         }
+
+        if (enableExecUtils == 0) {
+            $mockRestClient = Mockery::mock('\Oxzion\Utils\RestClient');
+            $mockRestClient->expects('post')->withAnyArgs()->once()->andReturn(json_encode(array('status'=>'Success')));
+            $appService->setRestClient($mockRestClient);
+            $mockBosUtils = Mockery::mock('alias\Oxzion\Utils\ExecUtils');
+            $mockBosUtils->expects('execCommand')->withAnyArgs()->times(2)->andReturn();
+        }
         $content = $appService->setupAppView($data, $path);
         $appnameNew = $path . 'view/apps/DummyAppNew' ;
         $result = is_dir($appnameNew);

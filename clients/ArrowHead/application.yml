@@ -6,6 +6,13 @@ app:
     type: 2
     autostart: true
     version: 24
+    title: ArrowHead
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
+    isdefault: false
+    logo: default_app.png
+    status: 4
+    start_options: null
+checkOrg: false
 org:
     name: ArrowHead
     uuid: 34bf01ab-79ca-42df-8284-965d8dbf290e

@@ -245,9 +245,30 @@ class CommandService extends AbstractService
                 $this->logger->info("Activity Instance Form");
                 return $this->getActivityInstanceForm($data);
                 break;
+
+            case 'snooze':
+                $this->logger->info("Snooze File");
+                return $this->snoozeFile($data);
             default:
                 break;
         };
+    }
+
+    private function snoozeFile($data)
+    {
+        if(isset($data['fileId']) && isset($data['snoozePipeline']))
+        {   
+            $result = $this->fileService->snoozeFile([
+                'fileId'=>$data['fileId'],
+                'snooze' => $data['snoozePipeline']
+            ]);
+            unset($data['snoozePipeline']);
+            return $data;
+        }
+        else{
+            throw new EntityNotFoundException("fileId or snoozePipeline not specified");
+        }
+
     }
 
     private function registerAccount($data)
@@ -382,21 +403,37 @@ class CommandService extends AbstractService
             return $data;
         }
         $JobData = (is_array($data[$jobName]) ? $data[$jobName] : json_decode($data[$jobName], true));
-        if (!isset($JobData['jobId']) || !isset($JobData['jobTeam'])) {
-            $this->logger->warn("Job Id or Job Team Not Specified, so job not cancelled");
+
+        if((isset($JobData['jobId']) && isset($JobData['jobTeam'])) || (isset($JobData['jobName'])&& isset($JobData['jobTeam'])))
+        {
+
+            $appId = isset($data['appId']) ? $data['appId'] : null;
+            if (!$appId) {
+                throw new InvalidParameterException("App Id not provided");
+            }
+    
+            $teamName = $JobData['jobTeam'];
+            $data[$jobName] = array();
+
+            if(isset($JobData['jobId']))
+            {
+                $this->jobService->cancelJobId($JobData['jobId'], $appId, $teamName);
+            }
+            else if(isset($JobData['jobName']))
+            {
+                $accountId = isset($data['account_id']) ? $data['account_id'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
+                $this->jobService->cancelJob($JobData['jobName'],$teamName,$appId,$accountId);
+            }
+            
+            $this->logger->info("Cancel Job Data - " . print_r($data, true));
             return $data;
         }
-        $appId = isset($data['app_id']) ? $data['app_id'] : null;
-        if (!$appId) {
-            throw new InvalidParameterException("App Id not provided");
+        else
+        {
+            $this->logger->warn("Invalid set of parameters specified, so job not cancelled");
+            return $data;
         }
 
-        $teamName = $JobData['jobTeam'];
-        $data[$jobName] = array();
-        $this->jobService->cancelJobId($JobData['jobId'], $appId, $teamName);
-        
-        $this->logger->info("Cancel Job Data - " . print_r($data, true));
-        return $data;
     }
 
     protected function fileSave(&$data)
