@@ -66,7 +66,11 @@ class DocumentController extends AbstractApiControllerHelper
         $params = array_merge($params, $this->params()->fromQuery());
 
         if (isset($params['docPath'])) {
-            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['docPath'];
+            if(strpos($params['docPath'], $this->config['APP_DOCUMENT_FOLDER']) !== false){
+                $attachment_location = $params['docPath'];
+            } else {
+                $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['docPath'];
+            }
         } else {
             $attachment_location = $this->config['APP_DOCUMENT_FOLDER'] . $params['accountId'] . "/" . $params['fileId'] . "/" . $params['document'];
 
