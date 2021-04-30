@@ -183,7 +183,8 @@ class AppService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        return $data;
+        $appData = array('app'=>$data['app']);
+        return $appData;
     }
 
     //Creates the source directory for the application.

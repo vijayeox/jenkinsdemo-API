@@ -2103,7 +2103,7 @@ class FileService extends AbstractService
                     ->where(['id' => $attachmentRecord[0]['id']]);
                 $result = $this->executeQuery($update);
                 $folderPath = $this->config['APP_DOCUMENT_FOLDER'].AuthContext::get(AuthConstants::ACCOUNT_UUID) . '/' . $data['fileId'].'/';
-                if (is_file($folderPath.$newName) && file_exists($folderPath.$attachmentName)) {
+                if (is_file($folderPath.$attachmentName) && file_exists($folderPath.$attachmentName)) {
                     rename($folderPath.$attachmentName, $folderPath.$newName);
                 } elseif (is_dir($folderPath.$attachmentName)) {
                     FileUtils::renameFile($folderPath.$attachmentName, $folderPath.$newName);
