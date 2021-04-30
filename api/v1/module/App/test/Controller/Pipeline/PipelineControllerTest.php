@@ -37,6 +37,8 @@ class PipelineControllerTest extends ControllerTest
         return $mockRestClient;
     }
 
+
+
     public function testPipelineMailExecution()
     {
         $this->initAuthToken($this->adminUser);
@@ -128,7 +130,7 @@ class PipelineControllerTest extends ControllerTest
         $this->assertEquals(true, isset($content['data'][$data['jobName']]));
         $jobData = json_decode($content['data'][$data['jobName']], true);
         $this->assertEquals(123456, $jobData['jobId']);
-        $this->assertEquals($data['jobName'], $jobData['jobTeam']);
+        $this->assertEquals($data['jobName'], $jobData['jobGroup']);
     }
 
     public function testPipelineScheduleWithoutRequiredFields()
@@ -323,4 +325,22 @@ class PipelineControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['appId'], "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4");
     }
+    
+    public function testPipelineSnooze()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ["command" => "snooze","snoozePipeline"=>"1", "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b"];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $data);
+        $query = "Select * from ox_file where uuid = 'd13d0c68-98c9-11e9-adc5-308d99c9145b'";
+        $result = $this->executeQueryTest($query);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($result[0]["is_snoozed"],1);
+        
+    }
+
+
+
 }
