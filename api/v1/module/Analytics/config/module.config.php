@@ -203,6 +203,22 @@ return [
                     ],
                 ],
             ],
+            'template' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/analytics/template[/:templateName]',
+                    'defaults' => [
+                        'controller' => Controller\TemplateController::class,
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            // 'put' => 'MANAGE_TEMPLATE_WRITE',
+                            // 'post' => 'MANAGE_TEMPLATE_WRITE',
+                            // 'delete' => 'MANAGE_TEMPLATE_WRITE',
+                            // 'get' => 'MANAGE_TEMPLATE_READ',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [
