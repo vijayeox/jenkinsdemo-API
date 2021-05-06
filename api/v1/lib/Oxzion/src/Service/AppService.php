@@ -427,10 +427,13 @@ class AppService extends AbstractService
                 $orgId = $yamlData['org']['uuid'];
                 $this->installApp($orgId, $yamlData, $path);
             } elseif($orgType === 'Multiple') {
+                $ymlDataCopy = $yamlData;
                 foreach ($yamlData['org'] as $org) {
+                    unset($ymlDataCopy['org']);
+                    $ymlDataCopy['org'] = $org;
                     $data = $this->processOrg($org, $appId);
                     $orgId = $org['uuid'];
-                    $this->installApp($orgId, $yamlData, $path);
+                    $this->installApp($orgId, $ymlDataCopy, $path);
                 }
             } else {
                 throw new ServiceException('Failed Installing Organisation','org.install.failed');
@@ -469,16 +472,8 @@ class AppService extends AbstractService
             $this->beginTransaction();
             $appId = $yamlData['app']['uuid'];
             if (isset($yamlData['org'])) {
-                $orgType = $this->checkSingleOrMultipleOrg($yamlData['org']);
-                if($orgType === 'Single') {
-                    $bRoleResult = $this->accountService->setupBusinessOfferings($yamlData['org'], $accountId, $appId);
-                    $this->createRole($yamlData, false, $accountId, $bRoleResult);
-                } else {
-                    foreach($yamlData['org'] as $org) {
-                        $bRoleResult = $this->accountService->setupBusinessOfferings($org, $accountId, $appId);
-                        $this->createRole($yamlData, false, $accountId, $bRoleResult);
-                    }
-                }                
+                $bRoleResult = $this->accountService->setupBusinessOfferings($yamlData['org'], $accountId, $appId);
+                $this->createRole($yamlData, false, $accountId, $bRoleResult);         
             }
             $user = $this->accountService->getContactUserForAccount($accountId);
             $this->userService->addAppRolesToUser($user['accountUserId'], $appId);
