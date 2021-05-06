@@ -13,6 +13,7 @@ use Oxzion\Utils\EvalMath;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ValidationException;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
+use Oxzion\Service\TemplateService;
 
 class WidgetService extends AbstractService
 {
@@ -334,8 +335,21 @@ class WidgetService extends AbstractService
                     $overRides[$overRidesKey] = $params[$overRidesKey];
                 }
             }
-        
-            $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
+            $donotcombine =0;
+            $template = null;
+            if (strtoupper(($firstRow['renderer']))=='HTML') {
+                $config = json_decode($firstRow['configuration'], 1);
+                if (isset($config['template'])) {
+                    if (!empty($config['donotcombine'])) {
+                        $donotcombine = 1;
+                        $data = $this->queryService->runMultipleQueriesWithoutCombine($uuidList, $overRides);
+                    } 
+                    $template =  $config['template'];
+                }
+            }
+            if (!$donotcombine) {
+                $data = $this->queryService->runMultipleQueries($uuidList, $overRides);
+            }
             if ($this->queryService->getTotalCount()) {
                 $response['widget']['total_count']=$this->queryService->getTotalCount();
             }
@@ -362,8 +376,20 @@ class WidgetService extends AbstractService
                 }
             }
             $response['widget']['data'] = $data;
+            if ($template) {
+               $response['widget']['data'] =  $this->applyTemplate($response['widget'],$template);
+            }
         }
         return $response;
+    }
+
+    public function applyTemplate($resultData, $templateName)
+    {
+        $templateEngine = new TemplateService($this->config, $this->dbAdapter);
+        $templateEngine->init();
+        $result = $templateEngine->getContent($templateName, $resultData);
+        $result = str_replace(array("\r\n","\r","\n","\t"), '', $result);
+        return $result;
     }
 
     public function getWidgetTableData($uuid)

@@ -21,7 +21,8 @@ class TemplateService extends AbstractService
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         try {
             $templateFolderPath = $this->config['TEMPLATE_FOLDER'];
-            $UploadTemplatepath = realpath($templateFolderPath . "/OITemplate/");
+            $UploadTemplatepath = FileUtils::truepath($templateFolderPath . "/OITemplate");
+            // print_r($UploadTemplatepath);exit;
             // if (file_exists($UploadTemplatepath . "/" . $data['name'] . ".tpl")) {
             //     return 0;
             // }
