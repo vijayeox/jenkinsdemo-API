@@ -59,7 +59,6 @@ class TemplateService extends AbstractService
             $templateFolderPath = $this->config['TEMPLATE_FOLDER'];
             $UploadTemplatepath = realpath($templateFolderPath . "/OITemplate/");
             $fileContent = file_get_contents($UploadTemplatepath . "/" . $name);
-            print_r($fileContent);exit;
         } catch (Exception $e) {
             throw $e;
         }
