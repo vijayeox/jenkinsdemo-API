@@ -421,7 +421,7 @@ class QueryService extends AbstractService
             $this->logger->info("Executing AnalyticsQuery with input -" . $value);
             $queryData = $this->executeAnalyticsQuery($value, $overRides);
             $this->logger->info("Executing AnalyticsQuery returned -" . print_r($queryData, true));
-            $data[]=$queryData;
+            $data[]=$queryData['data'];
         }
         return $data;
     }
