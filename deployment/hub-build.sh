@@ -255,9 +255,7 @@ arrowhead()
     echo -e "${YELLOW}Copying clients Arrowhead Completed.${RESET}"
 
 }
-
-
-arrowhead()
+hubdrive()
 {
     cd ${OXHOME}
     echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
@@ -267,14 +265,6 @@ arrowhead()
     echo -e "${YELLOW}Copying clients hubdrive Completed.${RESET}"
 
 }
-
-
-
-
-
-
-
-
 axon()
 {
     cd ${OXHOME}
