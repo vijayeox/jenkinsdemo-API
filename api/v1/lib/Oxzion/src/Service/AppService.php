@@ -15,6 +15,8 @@ use Oxzion\Service\FieldService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\BusinessRoleService;
+use Oxzion\Service\AppRegistryService;
+use Oxzion\Service\UserService;
 use Oxzion\Utils\ExecUtils;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
@@ -33,7 +35,6 @@ use Oxzion\InvalidParameterException;
 use Oxzion\App\AppArtifactNamingStrategy;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
-use Oxzion\Service\UserService;
 use Oxzion\Messaging\MessageProducer;
 
 class AppService extends AbstractService
@@ -55,6 +56,7 @@ class AppService extends AbstractService
     private $roleService;
     private $userService;
     private $businessRoleService;
+    private $appRegistryService;
     private $messageProducer;
 
     public function setMessageProducer($messageProducer)
@@ -65,7 +67,7 @@ class AppService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $accountService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, UserService $userService, BusinessRoleService $businessRoleService, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, JobService $jobService, $accountService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService, UserService $userService, BusinessRoleService $businessRoleService, AppRegistryService $appRegistryService, MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -80,6 +82,7 @@ class AppService extends AbstractService
         $this->pageService = $pageService;
         $this->jobService = $jobService;
         $this->businessRoleService = $businessRoleService;
+        $this->appRegistryService = $appRegistryService;
         $this->userService = $userService;
         $this->messageProducer = $messageProducer;
         $this->restClient = new RestClient(null);
@@ -477,7 +480,7 @@ class AppService extends AbstractService
             }
             $user = $this->accountService->getContactUserForAccount($accountId);
             $this->userService->addAppRolesToUser($user['accountUserId'], $appId);
-            $result = $this->createAppRegistry($appId, $accountId);
+            $result = $this->appRegistryService->createAppRegistry($appId, $accountId);
             $this->logger->info("PATH--- $path");
             $this->setupAccountFiles($path, $accountId, $appId);
             // Assign AppRoles to Logged in User if Logged in Org and Installed Org are same
@@ -1339,34 +1342,6 @@ class AppService extends AbstractService
         return $this->formService->createForm($formData);
     }
 
-    public function createAppRegistry($appId, $accountId)
-    {
-        $sql = $this->getSqlObject();
-        //Code to check if the app is already registered for the account
-        $queryString = "select count(ar.id) as count
-        from ox_app_registry as ar
-        inner join ox_app ap on ap.id = ar.app_id
-        inner join ox_account acct on acct.id = ar.account_id
-        where ap.uuid = :appId and acct.uuid = :accountId";
-        $params = array("appId" => is_array($appId) ? $appId['value'] : $appId, "accountId" => $accountId);
-        $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-        if ($resultSet[0]['count'] == 0) {
-            try {
-                $this->beginTransaction();
-                $insert = "INSERT into ox_app_registry (app_id, account_id, start_options)
-                select ap.id, acct.id, ap.start_options from ox_app as ap, ox_account as acct where ap.uuid = :appId and acct.uuid = :accountId";
-                $params = array("appId" => $appId, "accountId" => $accountId);
-                $result = $this->executeUpdateWithBindParameters($insert, $params);
-                $this->commit();
-                return $result->getAffectedRows();
-            } catch (Exception $e) {
-                $this->rollback();
-                throw $e;
-            }
-        }
-        return 0;
-    }
-
     public function registerApps($data)
     {
         $apps = json_decode($data['applist'], true);
@@ -1439,7 +1414,7 @@ class AppService extends AbstractService
         $this->logger->debug("Adding App to registry");
         $data['accountId'] = isset($data['accountId']) ? $data['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID);
         $app = $this->table->getByName($data['app_name']);
-        return $this->createAppRegistry($app->uuid, $data['accountId']);
+        return $this->appRegistryService->createAppRegistry($app->uuid, $data['accountId']);
     }
 
     public function processEntity(&$yamlData, $assoc_id = null)

@@ -58,6 +58,7 @@ class Module
                         $container->get(\App\Service\PageService::class),
                         $container->get(\Oxzion\Service\UserService::class),
                         $container->get(\Oxzion\Service\BusinessRoleService::class),
+                        $container->get(\Oxzion\Service\AppRegistryService::class),
                         $container->get(Messaging\MessageProducer::class)
                     );
                 },
@@ -311,6 +312,7 @@ class Module
                         $container->get(Service\PrivilegeService::class),
                         $container->get(Service\OrganizationService::class),
                         $container->get(Service\EntityService::class),
+                        $container->get(Service\AppRegistryService::class),
                         $container->get(Messaging\MessageProducer::class)
                     );
                 },
@@ -503,6 +505,11 @@ class Module
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Service\AppRegistryService::class => function ($container) {
+                    $config = $container->get('config');
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\AppRegistryService($config, $dbAdapter);
+                },
                 AppDelegate\AppDelegateService::class => function ($container) {
                     return new AppDelegate\AppDelegateService(
                         $container->get('config'),
@@ -615,7 +622,7 @@ class Module
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Service\AccountService::class),
-                        $container->get(Service\AppService::class)
+                        $container->get(Service\AppRegistryService::class)
                     );
                 },
                 Service\WorkflowInstanceService::class => function ($container) {
