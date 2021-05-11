@@ -1,0 +1,884 @@
+app:
+    name: HubDrive
+    uuid: a4b1f073-fc20-477f-a804-1aa206938c42
+    description: Compliance
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
+    status: 4
+    isdefault: false
+    logo: default_app.png
+    start_options: null
+    title: Compliance
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
+org:
+    -
+        name: HUB
+        uuid: 5060e4d5-006a-4054-85c0-bbf78579412d
+        email: admin@hub.com
+        address1: '6 bCenterpoint'
+        address2: Dr.
+        city: 'La Palma'
+        state: CA
+        zip: 90623
+        country: 'United States of America'
+        contact:
+            username: HubAdmin
+            firstname: Admin
+            lastname: User
+            email: admin@hub.com
+        preferences: '{}'
+    -
+        name: OnTrac
+        uuid: 6b88905a-fa7b-47a4-af18-a5eed6ade5c5
+        email: admin@OnTrac.com
+        address1: Addr1
+        address2: Addr2
+        city: City
+        state: CA
+        zip: 90623
+        country: 'United States of America'
+        contact:
+            username: OnTracAdmin
+            firstname: Admin
+            lastname: User
+            email: admin@OnTrac.com
+        businessOffering:
+            -
+                businessRole: 'Ontrac Contract Carrier'
+                entity:
+                    - 'On Trac Compliance'
+        preferences: '{}'
+businessRole:
+    -
+        name: 'Insurance Carrier'
+        uuid: 19d8f4c3-e79d-425b-9e23-e1fc3808cfdd
+    -
+        name: 'Ontrac Contract Carrier'
+        uuid: f55f36c4-00d8-48f3-851d-793274658b37
+    -
+        name: 'IGGI Contract Carrier'
+        uuid: dc2d3c31-5e06-42f5-b62e-a99a164b50e3
+    -
+        name: 'Ontrac Independant Contractor'
+        uuid: f915fe2a-790e-4940-a576-5b1001febdd3
+    -
+        name: 'IGGI Independant Contractor'
+        uuid: 33957c12-cd64-4742-b9ce-d7de8ef844cf
+    -
+        name: Driver
+        uuid: eee9f35d-acef-4b38-81b5-f48be17acc7a
+privilege:
+    -
+        name: MANAGE_COMPLIANCE
+        permission: 3
+    -
+        name: MANAGE_HUB_EXECUTIVE
+        permission: 3
+    -
+        name: MANAGE_HUB_UNDERWRITING
+        permission: 3
+    -
+        name: MANAGE_HUB_ACCOUNT_MANAGER
+        permission: 3
+    -
+        name: MANAGE_HUB_AGENCY
+        permission: 3
+    -
+        name: MANAGE_HUB_VERIFIERS
+        permission: 3
+    -
+        name: MANAGE_ONTRAC_EXECUTIVE
+        permission: 3
+    -
+        name: MANAGE_ONTRAC_COMPLIANCE
+        permission: 3
+    -
+        name: MANAGE_ONTRAC_IC
+        permission: 3
+    -
+        name: MANAGE_ONTRAC_EMPLOYEE
+        permission: 3
+role:
+    -
+        name: 'Hub Executive'
+        privileges:
+            -
+                privilege_name: MANAGE_HUB_EXECUTIVE
+                permission: 5
+        uuid: caddaf9f-64eb-4e57-8176-3647a59ecbc4
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Hub Safety Director'
+        privileges:
+            -
+                privilege_name: MANAGE_COMPLIANCE
+                permission: 5
+        uuid: 18ed4d29-7188-482e-b544-67797c319935
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Hub Underwriting'
+        privileges:
+            -
+                privilege_name: MANAGE_HUB_UNDERWRITING
+                permission: 5
+        uuid: 8cd179eb-3787-43a3-8446-73aca036284a
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Hub Account Manager'
+        privileges:
+            -
+                privilege_name: MANAGE_HUB_ACCOUNT_MANAGER
+                permission: 5
+        uuid: 99eaa419-0622-438b-b1b5-e21186394681
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Hub Compliance Manager'
+        privileges:
+            -
+                privilege_name: MANAGE_COMPLIANCE
+                permission: 5
+        uuid: 2d0ef663-af0e-4f1c-a107-6f39605309b3
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Hub Verifiers'
+        privileges:
+            -
+                privilege_name: MANAGE_HUB_VERIFIERS
+                permission: 5
+        uuid: b3dd84d1-ff31-403d-9e97-cdc02272df97
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'OnTrac Executives'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_ONTRAC_EXECUTIVE
+                permission: 3
+        uuid: efcbf9d6-b867-4810-a88d-8c5d01c11067
+        businessRole:
+            name: 'Ontrac Contract Carrier'
+    -
+        name: 'OnTrac Compliance Manager'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_ONTRAC_COMPLIANCE
+                permission: 3
+        uuid: 7d73ada4-8e1c-436d-8c27-17503ac7e254
+        businessRole:
+            name: 'Ontrac Contract Carrier'
+    -
+        name: 'OnTrac Safety Director'
+        privileges:
+            -
+                privilege_name: MANAGE_ONTRAC_COMPLIANCE
+                permission: 3
+            -
+                privilege_name: MANAGE_INSTALL_APP
+                permission: 3
+            -
+                privilege_name: MANAGE_ACCOUNT
+                permission: 3
+        uuid: 907cbcb3-51e8-4c36-8699-72821b3bab5f
+        businessRole:
+            name: 'Ontrac Contract Carrier'
+    -
+        name: 'OnTrac Independent Contractor'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_ONTRAC_IC
+                permission: 3
+        uuid: 6880de61-40bd-4439-89a9-849a08b24696
+        businessRole:
+            name: 'Ontrac Contract Carrier'
+    -
+        name: 'OnTrac Employee'
+        privileges:
+            -
+                privilege_name: MANAGE_ONTRAC_EMPLOYEE
+                permission: 3
+        uuid: 14936671-5cba-4994-97cc-2c86c49a4a1e
+        businessRole:
+            name: 'Ontrac Contract Carrier'
+entity:
+    -
+        name: 'Independent Contractor'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Driver Application'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'HUB Incident Response Guide'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'On Trac Compliance'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        field:
+            -
+                name: attachments
+                text: Attachment
+                data_type: document
+        participantRole:
+            -
+                businessRole: 'Ontrac Contract Carrier'
+            -
+                businessRole: 'Insurance Carrier'
+            -
+                businessRole: 'Ontrac Independant Contractor'
+            -
+                businessRole: Driver
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+        page_uuid: 5a466ac9-e137-48ac-b999-c7e8a42be57e
+    -
+        name: 'Certificate Of Violations'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Hired Non Owned'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Common Violations'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Telematics Policy And Procedure'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'FMCSR Commercial Vehicle'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'CDL Drug And Alcohol Clearinghouse Checklist'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'FMCSA Drug And Alcohol Clearing hous'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'DOT Drug And Alcohol Clearing house'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'clearing House Facts'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'How To Survive A Dot Audit'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Independent Contractor Pages'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+pages:
+    -
+        uuid: 7074d8e0-a3a2-4d4c-8215-779ac4709f75
+        name: Dashboard
+        description: 'Shows dashboard'
+        content:
+            -
+                type: Dashboard
+                content:
+                    uuid: c0670ab4-8538-4f60-94ef-fde6a530775e
+                    toolbarTemplate: '<h5>List</h5>'
+                    operations:
+                        title: 'Insured App form'
+                        actions:
+                            -
+                                name: 'Insured Application form'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: 385dea4d-64d6-487e-ac23-359c5265f791
+    -
+        name: 'View Compliances'
+        uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
+        description: 'Shows a list of Compliances'
+        content:
+            -
+                type: List
+                content:
+                    route: file
+                    filterable: true
+                    defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: ''
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: ''
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            rule: 'row.status == "Pending Review" || row.status == "Review"'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                    operations:
+                        title: 'Create Compliance'
+                        icon: 'fa fa-plus'
+                        actions:
+                            -
+                                name: 'Create New Compliance'
+                                icon: 'fa fa-plus'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
+                    columnConfig:
+                        -
+                            title: Name
+                            field: name
+                        -
+                            title: Status
+                            field: status
+                        -
+                            title: 'Policy Start Date'
+                            field: start_date
+                            cell: '<td>{formatDate(item.start_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+                        -
+                            title: 'End Date'
+                            field: endDate
+                            cell: '<td>{formatDate(item.endDate)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+menu:
+    -
+        name: Compliance
+        icon: 'fas fa-list'
+        page_uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
+        uuid: 00a0c261-4283-4eb3-85db-753692c27172
+        privilege: MANAGE_ONTRAC_COMPLIANCE
+workflow:
+    -
+        name: 'Independent Contractor Registration Form'
+        uuid: 08950e2d-ff19-46ed-b9b2-68ae635d9d67
+        bpmn_file: 'Independent Contractor/NewIndependentContractorRegistration.bpmn'
+        entity: 'Independent Contractor'
+    -
+        name: 'HUB Incident Response Guide'
+        uuid: b3745ced-9dfc-437d-967d-936bdffdcd6a
+        bpmn_file: ICPages/hubIncidentReport.bpmn
+        entity: 'HUB Incident Response Guide'
+form:
+    -
+        name: 'Compliance CheckList Form'
+        uuid: e26bd719-f47f-455b-9be4-9b26c18a0b78
+        description: Compliance
+        template_file: hubComplianceChecklist.json
+        entity: 'On Trac Compliance'
+    -
+        name: 'Driver Employement Application Form'
+        uuid: 6c7d8cff-a5ec-4921-b182-75253f734712
+        description: 'Driver Employement Application form'
+        template_file: driverEmployementApplication.json
+        entity: 'Driver Employement Application'
+    -
+        name: 'COI Checklist Form'
+        uuid: f7d6c928-e45c-4978-b321-2e612c67e756
+        description: 'COI Checklist form'
+        template_file: coiChecklistForm.json
+        entity: 'Driver Checklist'
+    -
+        name: 'Certificate Of Violations'
+        uuid: 72ba695b-73e4-439f-8a78-20e8a8628a50
+        description: 'Certificate Of Violations'
+        template_file: certificateOfViolations.json
+        entity: 'Independent Contractor Pages'
+    -
+        name: 'Hired Non Owned'
+        uuid: 7648dafe-cf9b-4d6d-bad2-4a1f3d4fc16c
+        description: 'Hired Non Owned'
+        template_file: hiredNonOwned.json
+        entity: 'Hired Non Owned'
+    -
+        name: 'Common Violations'
+        uuid: a286dfbd-5ce2-446f-a3ca-8d8d6a90408a
+        description: 'Common Violations'
+        template_file: commonViolations.json
+        entity: 'Common Violations'
+    -
+        name: 'Telematics Policy And Procedure'
+        uuid: b2224391-2017-42de-a4d5-f4d7b8719afe
+        description: 'CTelematics Policy And Procedure'
+        template_file: telematicsPolicyAndProcedure.json
+        entity: 'Telematics Policy And Procedure'
+    -
+        name: 'FMCSR Commercial Vehicle'
+        uuid: 3a9c32a8-cc02-49b0-91bd-61d91b04d27b
+        description: 'FMCSR Commercial Vehicle'
+        template_file: fmcsrCommercialVehicle.json
+        entity: 'FMCSR Commercial Vehicle'
+    -
+        name: 'CDL Drug And Alcohol Clearinghouse Checklist'
+        uuid: 011c261c-4223-4aaa-bc99-002b037184fd
+        description: 'CDL Drug And Alcohol Clearinghouse Checklist'
+        template_file: cdlDrugAndAlcoholClearinghouseChecklist.json
+        entity: 'CDL Drug And Alcohol Clearinghouse Checklist'
+    -
+        name: 'FMCSA Drug And Alcohol Clearing Hous'
+        uuid: 12b378fb-fdd3-49f2-99f0-1c688923bd2c
+        description: 'FMCSA Drug And Alcohol Clearing Hous'
+        template_file: fmcsaDrugAndAlcoholClearinghouse.json
+        entity: 'FMCSA Drug And Alcohol Clearing hous'
+    -
+        name: 'DOT Drug And Alcohol Clearing house'
+        uuid: df8954cb-d4d3-4856-8d55-37e87e71829f
+        description: 'DOT Drug And Alcohol Clearing house'
+        template_file: dotDrugAlcoholClearinghouse.json
+        entity: 'DOT Drug And Alcohol Clearing house'
+    -
+        name: 'clearing House Facts'
+        uuid: cffb5747-8f44-4038-baf8-c5488b7ec94d
+        description: 'clearing House Facts'
+        template_file: clearinghouseFacts.json
+        entity: 'clearing House Facts'
+    -
+        name: 'How To Survive A Dot Audit'
+        uuid: 9ccee23a-e134-47aa-9736-0c022a29a0a8
+        description: 'How To Survive A Dot Audit'
+        template_file: howToSurviveADotAudit.json
+        entity: 'How To Survive A Dot Audit'
