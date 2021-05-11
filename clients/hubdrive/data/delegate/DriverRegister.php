@@ -19,38 +19,40 @@ class DriverRegister extends AbstractAppDelegate
     {
         $this->logger->info("Executing Driver Registration with data- " . print_r($data, true));
         // Add logs for created by id and producer name who triggered submission
-        if(isset($data['dataGrid']) && !is_array($data['dataGrid'])){
-            $data['dataGrid'] = json_decode($data['dataGrid'],true);
+        if(!isset($data['isDriverRegisterationOver']) || ($data['isDriverRegisterationOver'] === false || $data['isDriverRegisterationOver'] === 'false')) {
+            if(isset($data['dataGrid']) && !is_array($data['dataGrid'])){
+                $data['dataGrid'] = json_decode($data['dataGrid'],true);
+            }
+            foreach ($data['dataGrid'] as $driver) {
+                $dataForDriver = array();
+                if (!isset($dataForDriver['uuid'])) {
+                    $dataForDriver['uuid'] = UuidUtil::uuid();
+                }
+                $dataForDriver['name'] = $driver['nameDriverUnit']." ".$driver['driverLastName'];
+                $dataForDriver['email'] = $driver['driverEmail'];
+                $dataForDriver['firstname'] = $driver['nameDriverUnit'];
+                $dataForDriver['lastname'] = $driver['driverLastName'];
+                $dataForDriver['address1'] = $driver['street1DriverUnitInfo'];
+                $dataForDriver['city'] = $driver['city1DriverUnitInfo'];
+                $dataForDriver['state'] = $driver['stateDriverUnitInfo']['abbreviation'];
+                $dataForDriver['zip'] = $driver['zipCode1DriverUnitInfo'];
+                $dataForDriver['country'] = 'United States of America';
+                if (!isset($dataForDriver['contact'])) {
+                    $dataForDriver['contact'] = array();
+                    $dataForDriver['contact']['username'] = str_replace('@', '.', $driver['driverEmail']);
+                    $dataForDriver['contact']['firstname'] = $driver['nameDriverUnit'];
+                    $dataForDriver['contact']['lastname'] = $driver['driverLastName'];
+                    $dataForDriver['contact']['email'] = $driver['driverEmail'];
+                }
+                if (!isset($dataForDriver['preferences'])) {
+                    $dataForDriver['preferences'] = '{}';
+                }
+                $dataForDriver['app_id'] = self::APPID;
+                $dataForDriver['type'] = 'INDIVIDUAL';
+                $this->registerAccount($dataForDriver);
+            }
         }
-        foreach ($data['dataGrid'] as $driver) {
-            $dataForDriver = array();
-            if (!isset($dataForDriver['uuid'])) {
-                $dataForDriver['uuid'] = UuidUtil::uuid();
-            }
-            $dataForDriver['name'] = $driver['nameDriverUnit']." ".$driver['driverLastName'];
-            $dataForDriver['email'] = $driver['driverEmail'];
-            $dataForDriver['firstname'] = $driver['nameDriverUnit'];
-            $dataForDriver['lastname'] = $driver['driverLastName'];
-            $dataForDriver['address1'] = $driver['street1DriverUnitInfo'];
-            $dataForDriver['city'] = $driver['city1DriverUnitInfo'];
-            $dataForDriver['state'] = $driver['stateDriverUnitInfo']['abbreviation'];
-            $dataForDriver['zip'] = $driver['zipCode1DriverUnitInfo'];
-            $dataForDriver['country'] = 'United States of America';
-            if (!isset($dataForDriver['contact'])) {
-                $dataForDriver['contact'] = array();
-                $dataForDriver['contact']['username'] = str_replace('@', '.', $driver['driverEmail']);
-                $dataForDriver['contact']['firstname'] = $driver['nameDriverUnit'];
-                $dataForDriver['contact']['lastname'] = $driver['driverLastName'];
-                $dataForDriver['contact']['email'] = $driver['driverEmail'];
-            }
-            if (!isset($dataForDriver['preferences'])) {
-                $dataForDriver['preferences'] = '{}';
-            }
-            $dataForDriver['app_id'] = self::APPID;
-            $dataForDriver['type'] = 'INDIVIDUAL';
-            $this->registerAccount($dataForDriver);
-        }
+        $data['isDriverRegisterationOver'] = true;
         return $data;
     }
-
 }
