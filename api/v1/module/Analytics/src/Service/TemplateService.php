@@ -62,7 +62,7 @@ class TemplateService extends AbstractService
         } catch (Exception $e) {
             throw $e;
         }
-        return $fileContent;
+        return array('data' => $fileContent);
     }
 
     public function getTemplateList($params = null)

@@ -102,8 +102,10 @@ class TemplateController extends AbstractApiController
      */
     public function get($templateName)
     {
+        $result = 0;
         $result = $this->templateService->getTemplate($templateName);
-        if ($result == 0) {
+        // print_r($result);exit;
+        if ($result === 0) {
             return $this->getErrorResponse("Template not found", 404, ['templateName' => $templateName]);
         }
         return $this->getSuccessResponseWithData($result);
