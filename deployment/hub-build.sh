@@ -51,6 +51,7 @@ buildhelp()
     echo -e "26. hiig                  -${YELLOW}For packaging hiig app.${RESET}"
     echo -e "27. arrowhead             -${YELLOW}For packaging ArrowHead app.${RESET}"
     echo -e "28. appbuilder            -${YELLOW}For packaging EOXAppBuilder app.${RESET}"
+    echo -e "29. hubdrive             -${YELLOW}For packaging hubdrive app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -254,6 +255,26 @@ arrowhead()
     echo -e "${YELLOW}Copying clients Arrowhead Completed.${RESET}"
 
 }
+
+
+arrowhead()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients hubdrive to build folder.${RESET}"
+    rsync -rl clients/hubdrive/ ./build/clients/hubdrive/
+    echo -e "${YELLOW}Copying clients hubdrive Completed.${RESET}"
+
+}
+
+
+
+
+
+
+
+
 axon()
 {
     cd ${OXHOME}
@@ -456,6 +477,14 @@ do
                 arrowhead
                 package
                 break;;
+        hubdrive)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                hubdrive
+                package
+                break;;
+             
+                
 	appbuilder)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
