@@ -36,6 +36,20 @@ return [
                     ],
                 ],
             ],
+            'krasBusinessRole' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/kra/brole/:businessRole',
+                    'defaults' => [
+                        'controller' => Controller\KraController::class,
+                        'method' => 'GET',
+                        'action' => 'getKrasforBusinessRole',
+                        'access' => [
+                            'getKrasforBusinessRole' => 'MANAGE_KRA_WRITE',
+                        ],
+                    ],
+                ],
+            ],
             'krasList' => [
                 'type' => Segment::class,
                 'options' => [

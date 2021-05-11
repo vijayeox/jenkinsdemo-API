@@ -126,6 +126,25 @@ class FileServiceTest extends AbstractServiceTest
         return $result;
     }
 
+    public function testGetFileListWithSnoozeParameter()
+    {
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $dataset = $this->dataset;
+        $appUuid = $dataset['ox_app'][0]['uuid'];
+        $filterParams  = array(
+            'filter' => array(
+                [
+                    'snooze'=>'1'
+                ]
+            )   
+        );
+        $params = [];
+        $result = $this->fileService->getFileList($appUuid, $params, $filterParams);
+        // $this->assertEquals("959640f3-8260-4a94-823e-f61ea8aff79c", $result['data'][0]['uuid']);
+        // $this->assertEquals($params['entityName'], $result['data'][0]['entity_name']);
+        $this->assertEquals(2, $result['total']);
+    }
+
 
     public function testGetFollowUps()
     {
@@ -716,7 +735,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(12, $initialCount);
+        $this->assertEquals(14, $initialCount);
         $data = array('field1' => 1, 'field2' => 2, 'entity_id' => 1 ,'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->performFileAssertions($result, $data);
@@ -1068,7 +1087,7 @@ class FileServiceTest extends AbstractServiceTest
         $sqlQuery = 'SELECT count(id) as count FROM ox_file';
         $queryResult = $this->runQuery($sqlQuery);
         $initialCount = $queryResult[0]['count'];
-        $this->assertEquals(12, $initialCount);
+        $this->assertEquals(14, $initialCount);
         $data = array('datagrid' => array(0 => array('firstname' => 'Sagar','lastname' => 'lastname','padi' =>1700, 'id_document' => array(array("name" => "SampleAttachment.txt", "extension" => "txt", "uuid" => "a9cd8b0c-3218-4fd4-b323-e3b6ce8c7d25", "path" => __DIR__."/Dataset/SampleAttachment.txt" ))), 1 => array('firstname' => 'mark','lastname' => 'hamil', 'padi' => 322,'id_document' => array(array("file" => "SampleAttachment.txt", "path" => __DIR__."/Dataset" )))), 'entity_id' => $entityId, 'app_id' => $appUuid);
         $result = $this->fileService->createFile($data);
         $this->assertEquals(1, $result);
@@ -2370,4 +2389,7 @@ class FileServiceTest extends AbstractServiceTest
         $this->assertEquals(1, count($result));
         $this->assertEquals(0, $result[0]['is_active']);
     }
+
+
+        
 }

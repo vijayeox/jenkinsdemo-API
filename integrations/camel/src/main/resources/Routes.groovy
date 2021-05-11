@@ -36,7 +36,8 @@ routes {
 
         ['from':'activemq:topic:ADD_CALENDAR_EVENT', 'to':["${callback.URL}/callback/calendar/addevent"]],
         ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser",
-                                                    "${callback.URL}/callback/chat/adduser"]],
+                                                    "${callback.URL}/callback/chat/adduser",
+                                                    "${callback.URL}/app/da8f0152-b8d3-43bf-8090-40103bb98d5e/delegate/UserMigration"]],
         ['from':'activemq:queue:FILE_ADDED', 'to':["${callback.URL}/callback/file/update",
                                                     "${callback.URL}/fileindexer/file"]],
         ['from':'activemq:queue:FILE_UPDATED', 'to':["${callback.URL}/callback/file/update",

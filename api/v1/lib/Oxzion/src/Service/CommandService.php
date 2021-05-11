@@ -245,9 +245,30 @@ class CommandService extends AbstractService
                 $this->logger->info("Activity Instance Form");
                 return $this->getActivityInstanceForm($data);
                 break;
+
+            case 'snooze':
+                $this->logger->info("Snooze File");
+                return $this->snoozeFile($data);
             default:
                 break;
         };
+    }
+
+    private function snoozeFile($data)
+    {
+        if(isset($data['fileId']) && isset($data['snoozePipeline']))
+        {   
+            $result = $this->fileService->snoozeFile([
+                'fileId'=>$data['fileId'],
+                'snooze' => $data['snoozePipeline']
+            ]);
+            unset($data['snoozePipeline']);
+            return $data;
+        }
+        else{
+            throw new EntityNotFoundException("fileId or snoozePipeline not specified");
+        }
+
     }
 
     private function registerAccount($data)
@@ -343,7 +364,7 @@ class CommandService extends AbstractService
         
         $jobUrl = $data['jobUrl'];
         $cron = $data['cron'];
-        $jobTeam = $data['jobName'];
+        $jobGroup = $data['jobName'];
         if (isset($data['fileId'])) {
             $jobName = $data['fileId'];
         } else {
@@ -359,10 +380,10 @@ class CommandService extends AbstractService
         $this->logger->info("JOB DATA ------" . json_encode($data));
         $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
         $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
-        $response = $this->jobService->scheduleNewJob($jobName, $jobTeam, $jobPayload, $cron, $appId, $accountId);
+        $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $accountId);
         if (isset($response) && isset($response['job_id'])) {
-            $jobData = array("jobId" => $response['job_id'], "jobTeam" => $response['group_name']);
-            $data[$jobTeam] = json_encode($jobData);
+            $jobData = array("jobId" => $response['job_id'], "jobGroup" => $response['group_name']);
+            $data[$jobGroup] = json_encode($jobData);
         }
         $this->logger->info("Schedule JOB DATA - " . print_r($data, true));
         $this->fileService->updateFile($data, $data['fileId']);
@@ -382,21 +403,37 @@ class CommandService extends AbstractService
             return $data;
         }
         $JobData = (is_array($data[$jobName]) ? $data[$jobName] : json_decode($data[$jobName], true));
-        if (!isset($JobData['jobId']) || !isset($JobData['jobTeam'])) {
-            $this->logger->warn("Job Id or Job Team Not Specified, so job not cancelled");
+
+        if((isset($JobData['jobId']) && isset($JobData['jobGroup'])) || (isset($JobData['jobName'])&& isset($JobData['jobGroup'])))
+        {
+
+            $appId = isset($data['appId']) ? $data['appId'] : null;
+            if (!$appId) {
+                throw new InvalidParameterException("App Id not provided");
+            }
+    
+            $groupName = $JobData['jobGroup'];
+            $data[$jobName] = array();
+
+            if(isset($JobData['jobId']))
+            {
+                $this->jobService->cancelJobId($JobData['jobId'], $appId, $groupName);
+            }
+            else if(isset($JobData['jobName']))
+            {
+                $accountId = isset($data['account_id']) ? $data['account_id'] : AuthContext::get(AuthConstants::ACCOUNT_ID);
+                $this->jobService->cancelJob($JobData['jobName'],$groupName,$appId,$accountId);
+            }
+            
+            $this->logger->info("Cancel Job Data - " . print_r($data, true));
             return $data;
         }
-        $appId = isset($data['app_id']) ? $data['app_id'] : null;
-        if (!$appId) {
-            throw new InvalidParameterException("App Id not provided");
+        else
+        {
+            $this->logger->warn("Invalid set of parameters specified, so job not cancelled");
+            return $data;
         }
 
-        $teamName = $JobData['jobTeam'];
-        $data[$jobName] = array();
-        $this->jobService->cancelJobId($JobData['jobId'], $appId, $teamName);
-        
-        $this->logger->info("Cancel Job Data - " . print_r($data, true));
-        return $data;
     }
 
     protected function fileSave(&$data)
@@ -484,9 +521,7 @@ class CommandService extends AbstractService
             $errors['subject'] = 'required';
         }
         if (isset($params['attachments'])) {
-            foreach ($params['attachments'] as $key => $file) {
-                $attachments[] = $file['fullPath'];
-            }
+            $attachments = $params['attachments'];
         }
         if (count($errors) > (int) 0) {
             $validationException = new ValidationException();

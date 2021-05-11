@@ -39,8 +39,7 @@ final class Version20210405103117 extends AbstractMigration
       ON DELETE CASCADE
       ON UPDATE NO ACTION)
       ENGINE = InnoDB
-      DEFAULT CHARACTER SET = latin1;
-      ");
+      DEFAULT CHARACTER SET = latin1;");
   }
 
   public function down(Schema $schema) : void

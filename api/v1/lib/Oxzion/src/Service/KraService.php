@@ -12,6 +12,7 @@ use Oxzion\ServiceException;
 use Oxzion\OxServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\AccountService;
+use Analytics\Service\QueryService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
@@ -21,15 +22,17 @@ class KraService extends AbstractService
     private $table;
     private $accountService;
     private $userService;
+    private $queryService;
 
     public static $fieldName = array('name' => 'ox_user.name', 'id' => 'ox_user.id');
 
-    public function __construct($config, $dbAdapter, KraTable $table, $accountService, $userService)
+    public function __construct($config, $dbAdapter, KraTable $table, $accountService, $userService, $queryService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->accountService = $accountService;
         $this->userService = $userService;
+        $this->queryService = $queryService;
     }
 
     public function getKrasforUser($userId, $data)
@@ -44,14 +47,90 @@ class KraService extends AbstractService
             } else {
                 $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
             }
-            $queryString = "select usr_kra.id, usr_kra.avatar_id, usr_kra.kra_id, kra.name, kra.user_id from ox_user_kra as usr_kra left join ox_kra as kra on usr_kra.kra_id = kra.id";
-            $where = "where avatar_id = (SELECT id from ox_user where uuid = '" . $userId . "') AND ox_kra.account_id = " . $accountId;
+            $queryString = "SELECT kra.*,
+                ot.`type` as target_type, ot.period_type as target_period_type, ot.red_limit, ot.green_limit, ot.yellow_limit,
+                oq.configuration as query_config, od.uuid as datasource_id
+                from ox_kra as kra
+                inner join ox_query oq on oq.id = kra.query_id
+                inner join ox_target ot on ot.id = kra.target_id
+                inner join ox_datasource od on od.id = oq.datasource_id";
+            $where = "where kra.user_id = (SELECT id from ox_user where uuid = '" . $userId . "') AND kra.status = 'Active' AND kra.account_id = " . $accountId;
             $order = "order by kra.name";
             $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            $kraDataArray = array();
+            if($resultSet){
+                $kraDataArray = $resultSet->toArray();
+                $this->evaluateKra($kraDataArray);
+            } else {
+                throw new ServiceException("KRA does not exist", "kra.doesnt.exist", OxServiceException::ERR_CODE_NOT_FOUND);
+            }
         } catch (Exception $e) {
             throw $e;
         }
-        return $resultSet->toArray();
+        return $kraDataArray;
+    }
+
+    private function evaluateKra(&$kraDataArray) {
+        foreach ($kraDataArray as $key => $value) {
+            //Get Query Result or achieved result
+            $params = array('datasource_id' => $value['datasource_id'], 'configuration' => $value['query_config']);
+            $queryResult = $this->queryService->previewQuery($params);
+            $achievedResult = $queryResult['data'];
+
+            if($achievedResult <= $value['red_limit']) {
+                $kraDataArray[$key]['limit_achieved'] = 'red';
+            } elseif($achievedResult > $value['red_limit'] && $achievedResult <= $value['yellow_limit']) {
+                $kraDataArray[$key]['limit_achieved'] = 'yellow';
+            } else {
+                $kraDataArray[$key]['limit_achieved'] = 'green';
+            }
+
+            $kraDataArray[$key]['goal_achieved'] = $achievedResult;
+
+            //Clean output data
+            unset($kraDataArray[$key]['id']);
+            unset($kraDataArray[$key]['query_config']);
+            unset($kraDataArray[$key]['datasource_id']);
+            $kraDataArray[$key]['account_id'] = $this->getUuidFromId('ox_account',$value['account_id']);
+            $kraDataArray[$key]['user_id'] = $kraDataArray[$key]['user_id'] ? $this->getUuidFromId('ox_user',$value['user_id']) : NULL;
+            $kraDataArray[$key]['business_role_id'] = $kraDataArray[$key]['business_role_id'] ? $this->getUuidFromId('ox_business_role',$value['business_role_id']) : NULL;
+            $kraDataArray[$key]['team_id'] = $kraDataArray[$key]['team_id'] ? $this->getUuidFromId('ox_team',$value['team_id']) : NULL;
+        }
+    }
+
+    public function getKrasforBusinessRole($businessRole, $data)
+    {
+        try {
+            if (isset($params['accountId'])) {
+                if (!SecurityManager::isGranted('MANAGE_ACCOUNT_WRITE') && ($params['accountId'] != AuthContext::get(AuthConstants::ACCOUNT_UUID))) {
+                    throw new AccessDeniedException("You do not have permissions to get the kra list");
+                } else {
+                    $accountId = $this->getIdFromUuid('ox_account', $params['accountId']);
+                }
+            } else {
+                $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+            }
+            $queryString = "SELECT kra.*,
+                ot.`type` as target_type, ot.period_type as target_period_type, ot.red_limit, ot.green_limit, ot.yellow_limit,
+                oq.configuration as query_config, od.uuid as datasource_id
+                from ox_kra as kra
+                inner join ox_query oq on oq.id = kra.query_id
+                inner join ox_target ot on ot.id = kra.target_id
+                inner join ox_datasource od on od.id = oq.datasource_id";
+            $where = "where kra.business_role_id = (SELECT id from ox_business_role where uuid = '" . $businessRole . "') AND kra.status = 'Active' AND kra.account_id = " . $accountId;
+            $order = "order by kra.name";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            $kraDataArray = array();
+            if($resultSet){
+                $kraDataArray = $resultSet->toArray();
+                $this->evaluateKra($kraDataArray);
+            } else {
+                throw new ServiceException("KRA does not exist", "kra.doesnt.exist", OxServiceException::ERR_CODE_NOT_FOUND);
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return $kraDataArray;
     }
     /**
      * GET Kra Service
@@ -134,32 +213,12 @@ class KraService extends AbstractService
             $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
-            $data['userId'] = isset($data['userId']) ? $data['userId'] : null;
-            $select = "SELECT id from ox_user where uuid = '" . $data['userId'] . "'";
-            $result = $this->executeQueryWithParams($select)->toArray();
-            if ($result) {
-                $data['user_id'] = $result[0]["id"];
-            }
-            $data['teamId'] = isset($data['teamId']) ? $data['teamId'] : null;
-            $select = "SELECT id from ox_team where uuid = '" . $data['teamId'] . "'";
-            $result = $this->executeQueryWithParams($select)->toArray();
-            if ($result) {
-                $data['team_id'] = $result[0]["id"];
-            }
-            $data['targetId'] = isset($data['targetId']) ? $data['targetId'] : null;
-            $select = "SELECT id from ox_target where uuid = '" . $data['targetId'] . "'";
-            $result = $this->executeQueryWithParams($select)->toArray();
-            if ($result) {
-                $data['target_id'] = $result[0]["id"];
-            }
-            $data['queryId'] = isset($data['queryId']) ? $data['queryId'] : null;
-            $select = "SELECT id from ox_query where uuid = '" . $data['queryId'] . "'";
-            $result = $this->executeQueryWithParams($select)->toArray();
-            if ($result) {
-                $data['query_id'] = $result[0]["id"];
-            }
+            $data['status'] = 'Active';
+            $data['user_id'] = isset($data['userId']) ? $this->getIdFromUuid('ox_user', $data['userId']) : null;
+            $data['team_id'] = isset($data['teamId']) ? $this->getIdFromUuid('ox_team', $data['teamId']) : null;
+            $data['target_id'] = isset($data['targetId']) ? $this->getIdFromUuid('ox_target', $data['targetId']) : null;
+            $data['query_id'] = isset($data['queryId']) ? $this->getIdFromUuid('ox_query', $data['queryId']) : null;
             $account = $this->accountService->getAccount($data['account_id']);
-            $sql = $this->getSqlObject();
             $form->exchangeArray($data);
             $form->validate();
             $this->beginTransaction();
@@ -205,9 +264,12 @@ class KraService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        $fieldMap = ['name' => 'g.name'];
+        $fieldMap = ['name' => 'g.name','date_created'=>'g.date_created'];
         try {
-            $cntQuery = "SELECT count(g.id) as count FROM `ox_kra` g";
+            $cntQuery = "SELECT count(g.id) as count FROM `ox_kra` g inner join ox_query q on q.id = g.query_id
+                        inner join ox_target t on t.id = g.target_id inner join ox_account a on a.id = g.account_id
+                        left join ox_team team on team.id = g.team_id
+                        left join ox_user user on user.id = g.user_id ";
             if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
                 if (isset($filterParams['filter'])) {
                     $filterArray = json_decode($filterParams['filter'], true);
@@ -218,10 +280,18 @@ class KraService extends AbstractService
                     }
                     if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                         $sort = $filterArray[0]['sort'];
-                        $sort = FilterUtils::sortArray($sort);
+                        $sort = FilterUtils::sortArray($sort,$fieldMap);
                     }
-                    $pageSize = $filterArray[0]['take'];
-                    $offset = $filterArray[0]['skip'];
+                    if(isset($filterArray[0]['take'])){
+                        $pageSize = $filterArray[0]['take'];
+                    } else {
+                        $pageSize = 20;
+                    }
+                    if(isset($filterArray[0]['skip'])){
+                        $offset = $filterArray[0]['skip'];
+                    } else {
+                        $offset = 0;
+                    }
                 }
                 if (isset($filterParams['exclude'])) {
                     $where .= strlen($where) > 0 ? " AND g.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') " : " WHERE g.uuid NOT in ('" . implode("','", $filterParams['exclude']) . "') ";
@@ -231,13 +301,16 @@ class KraService extends AbstractService
             $where .= " g.status = 'Active' AND g.account_id = " . $accountId;
             $sort = " ORDER BY " . $sort;
             $limit = " LIMIT " . $pageSize . " offset " . $offset;
-            $resultSet = $this->executeQuerywithParams($cntQuery . $where);
-            $count = $resultSet->toArray()[0]['count'];
-            $query = "SELECT g.uuid,g.name,a.uuid as accountId
-                        FROM `ox_kra` g
-                        inner join ox_account a on a.id = g.account_id " . $where . " " . $sort . " " . $limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            $resultSet = $resultSet->toArray();
+            $countQuery = $this->executeQuerywithParams($cntQuery . $where);
+            $count = $countQuery->toArray()[0]['count'];
+            $query = "SELECT g.uuid,g.name,a.uuid as accountId,q.uuid as queryId,user.uuid as userId,team.uuid as teamId,t.uuid as targetId FROM `ox_kra` g
+                        inner join ox_query q on q.id = g.query_id
+                        inner join ox_target t on t.id = g.target_id
+                        inner join ox_account a on a.id = g.account_id
+                        left join ox_team team on team.id = g.team_id
+                        left join ox_user user on user.id = g.user_id " . $where . " " . $sort . " " . $limit;
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+            return array('data' => $resultSet, 'total' => $count);
         } catch (Exception $e) {
             throw $e;
         }
@@ -302,7 +375,6 @@ class KraService extends AbstractService
             if ($accountId != $obj->account_id) {
                 throw new ServiceException("Kra does not belong to the account", "kra.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
             }
-            $account = $this->accountService->getAccount($obj->account_id);
             $originalArray = $obj->toArray();
             $form = new Kra();
             $originalArray['status'] = 'Inactive';

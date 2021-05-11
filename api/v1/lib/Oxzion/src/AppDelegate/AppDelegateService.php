@@ -99,6 +99,7 @@ class AppDelegateService extends AbstractService
                     }
                     $this->logger->info("Document template location - $destination");
                     $obj->setDocumentPath($destination);
+                    $obj->setBaseUrl($this->config['internalBaseUrl']);
                 } elseif (is_a($obj, CommunicationDelegate::class)) {
                     $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];

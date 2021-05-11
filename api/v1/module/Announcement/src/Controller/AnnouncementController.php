@@ -215,7 +215,7 @@ class AnnouncementController extends AbstractApiController
         try {
            // echo "< pre >  "; print_r([$data, $params]); exit();
             $count = $this->announcementService->saveTeam($params, $data);
-            return $this->getSuccessResponseWithData($data , 200);
+            return $this->getSuccessResponseWithData($data, 200);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
@@ -227,11 +227,11 @@ class AnnouncementController extends AbstractApiController
         $data = $this->extractPostData();
         try {
             $this->announcementService->markAsRead($data['announcementId']);
-            return $this->getSuccessResponseWithData($data , 200);
+            return $this->getSuccessResponseWithData($data, 200);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
-        } 
+        }
     }
 
     public function announcementTeamsAction()
