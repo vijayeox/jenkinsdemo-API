@@ -45,7 +45,7 @@ org:
             email: admin@OnTrac.com
         businessOffering:
             -
-                businessRole: 'Ontrac Contract Carrier'
+                businessRole: 'Contract Carrier'
                 entity:
                     - 'On Trac Compliance'
         preferences: '{}'
@@ -54,17 +54,11 @@ businessRole:
         name: 'Insurance Carrier'
         uuid: 19d8f4c3-e79d-425b-9e23-e1fc3808cfdd
     -
-        name: 'Ontrac Contract Carrier'
+        name: 'Contract Carrier'
         uuid: f55f36c4-00d8-48f3-851d-793274658b37
     -
-        name: 'IGGI Contract Carrier'
-        uuid: dc2d3c31-5e06-42f5-b62e-a99a164b50e3
-    -
-        name: 'Ontrac Independant Contractor'
+        name: 'Independent Contractor'
         uuid: f915fe2a-790e-4940-a576-5b1001febdd3
-    -
-        name: 'IGGI Independant Contractor'
-        uuid: 33957c12-cd64-4742-b9ce-d7de8ef844cf
     -
         name: Driver
         uuid: eee9f35d-acef-4b38-81b5-f48be17acc7a
@@ -73,141 +67,138 @@ privilege:
         name: MANAGE_COMPLIANCE
         permission: 3
     -
-        name: MANAGE_HUB_EXECUTIVE
+        name: MANAGE_UNDERWRITING
         permission: 3
     -
-        name: MANAGE_HUB_UNDERWRITING
+        name: MANAGE_ACCOUNT_MANAGER
         permission: 3
     -
-        name: MANAGE_HUB_ACCOUNT_MANAGER
+        name: MANAGE_AGENCY
         permission: 3
     -
-        name: MANAGE_HUB_AGENCY
+        name: MANAGE_VERIFIERS
         permission: 3
     -
-        name: MANAGE_HUB_VERIFIERS
+        name: MANAGE_EXECUTIVE
         permission: 3
     -
-        name: MANAGE_ONTRAC_EXECUTIVE
+        name: MANAGE_IC
         permission: 3
     -
-        name: MANAGE_ONTRAC_COMPLIANCE
-        permission: 3
-    -
-        name: MANAGE_ONTRAC_IC
-        permission: 3
-    -
-        name: MANAGE_ONTRAC_EMPLOYEE
+        name: MANAGE_EMPLOYEE
         permission: 3
 role:
     -
-        name: 'Hub Executive'
+        name: 'Manage Executive'
         privileges:
             -
-                privilege_name: MANAGE_HUB_EXECUTIVE
-                permission: 5
+                privilege_name: MANAGE_EXECUTIVE
+                permission: 3
         uuid: caddaf9f-64eb-4e57-8176-3647a59ecbc4
         businessRole:
             name: 'Insurance Carrier'
     -
-        name: 'Hub Safety Director'
+        name: 'Safety Director'
         privileges:
             -
                 privilege_name: MANAGE_COMPLIANCE
-                permission: 5
+                permission: 3
         uuid: 18ed4d29-7188-482e-b544-67797c319935
         businessRole:
             name: 'Insurance Carrier'
     -
-        name: 'Hub Underwriting'
+        name: 'Manage Underwriting'
         privileges:
             -
-                privilege_name: MANAGE_HUB_UNDERWRITING
-                permission: 5
+                privilege_name: MANAGE_UNDERWRITING
+                permission: 3
         uuid: 8cd179eb-3787-43a3-8446-73aca036284a
         businessRole:
             name: 'Insurance Carrier'
     -
-        name: 'Hub Account Manager'
+        name: 'Account Manager'
         privileges:
             -
-                privilege_name: MANAGE_HUB_ACCOUNT_MANAGER
-                permission: 5
+                privilege_name: MANAGE_ACCOUNT_MANAGER
+                permission: 3
         uuid: 99eaa419-0622-438b-b1b5-e21186394681
         businessRole:
             name: 'Insurance Carrier'
     -
-        name: 'Hub Compliance Manager'
+        name: 'Compliance Manager'
         privileges:
             -
                 privilege_name: MANAGE_COMPLIANCE
-                permission: 5
+                permission: 3
         uuid: 2d0ef663-af0e-4f1c-a107-6f39605309b3
         businessRole:
             name: 'Insurance Carrier'
     -
-        name: 'Hub Verifiers'
+        name: 'Manage Verifiers'
         privileges:
             -
-                privilege_name: MANAGE_HUB_VERIFIERS
-                permission: 5
+                privilege_name: MANAGE_VERIFIERS
+                permission: 3
         uuid: b3dd84d1-ff31-403d-9e97-cdc02272df97
         businessRole:
             name: 'Insurance Carrier'
     -
-        name: 'OnTrac Executives'
+        name: 'Manage Executives'
         default: true
         privileges:
             -
-                privilege_name: MANAGE_ONTRAC_EXECUTIVE
+                privilege_name: MANAGE_EXECUTIVE
                 permission: 3
         uuid: efcbf9d6-b867-4810-a88d-8c5d01c11067
         businessRole:
-            name: 'Ontrac Contract Carrier'
+            name: 'Contract Carrier'
     -
-        name: 'OnTrac Compliance Manager'
+        name: 'Compliance Manager'
         default: true
         privileges:
             -
-                privilege_name: MANAGE_ONTRAC_COMPLIANCE
+                privilege_name: MANAGE_COMPLIANCE
                 permission: 3
         uuid: 7d73ada4-8e1c-436d-8c27-17503ac7e254
         businessRole:
-            name: 'Ontrac Contract Carrier'
+            name: 'Contract Carrier'
     -
-        name: 'OnTrac Safety Director'
+        name: 'Safety Director'
         privileges:
             -
-                privilege_name: MANAGE_ONTRAC_COMPLIANCE
-                permission: 3
-            -
-                privilege_name: MANAGE_INSTALL_APP
-                permission: 3
-            -
-                privilege_name: MANAGE_ACCOUNT
+                privilege_name: MANAGE_COMPLIANCE
                 permission: 3
         uuid: 907cbcb3-51e8-4c36-8699-72821b3bab5f
         businessRole:
-            name: 'Ontrac Contract Carrier'
+            name: 'Contract Carrier'
     -
-        name: 'OnTrac Independent Contractor'
+        name: 'Manage Independent Contractor'
         default: true
         privileges:
             -
-                privilege_name: MANAGE_ONTRAC_IC
+                privilege_name: MANAGE_IC
                 permission: 3
         uuid: 6880de61-40bd-4439-89a9-849a08b24696
         businessRole:
-            name: 'Ontrac Contract Carrier'
+            name: 'Contract Carrier'
     -
-        name: 'OnTrac Employee'
+        name: 'Manage Employee'
         privileges:
             -
-                privilege_name: MANAGE_ONTRAC_EMPLOYEE
+                privilege_name: MANAGE_EMPLOYEE
                 permission: 3
         uuid: 14936671-5cba-4994-97cc-2c86c49a4a1e
         businessRole:
-            name: 'Ontrac Contract Carrier'
+            name: 'Contract Carrier'
+    -
+        name: 'Manage Drivers'
+        privileges:
+            -
+                privilege_name: MANAGE_EMPLOYEE
+                permission: 3
+        uuid: d3ef9902-3bf8-4d70-8c79-129e6bc4e45c
+        businessRole:
+            name: 'Independent Contractor'
 entity:
     -
         name: 'Independent Contractor'
@@ -307,15 +298,17 @@ entity:
                 name: attachments
                 text: Attachment
                 data_type: document
+            -
+                name: iCEmail
+                text: Email
+                data_type: text
+                index: true
+        identifiers:
+            -
+                identifier: iCEmail
         participantRole:
             -
-                businessRole: 'Ontrac Contract Carrier'
-            -
-                businessRole: 'Insurance Carrier'
-            -
-                businessRole: 'Ontrac Independant Contractor'
-            -
-                businessRole: Driver
+                businessRole: 'Independent Contractor'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
@@ -791,18 +784,6 @@ menu:
         icon: 'fas fa-list'
         page_uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
         uuid: 00a0c261-4283-4eb3-85db-753692c27172
-        privilege: MANAGE_ONTRAC_COMPLIANCE
-workflow:
-    -
-        name: 'Independent Contractor Registration Form'
-        uuid: 08950e2d-ff19-46ed-b9b2-68ae635d9d67
-        bpmn_file: 'Independent Contractor/NewIndependentContractorRegistration.bpmn'
-        entity: 'Independent Contractor'
-    -
-        name: 'HUB Incident Response Guide'
-        uuid: b3745ced-9dfc-437d-967d-936bdffdcd6a
-        bpmn_file: ICPages/hubIncidentReport.bpmn
-        entity: 'HUB Incident Response Guide'
 form:
     -
         name: 'Compliance CheckList Form'

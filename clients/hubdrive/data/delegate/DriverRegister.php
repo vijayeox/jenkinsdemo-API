@@ -3,6 +3,7 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\AccountTrait;
+use Oxzion\DelegateException;
 use Oxzion\Utils\UuidUtil;
 
 class DriverRegister extends AbstractAppDelegate
@@ -49,7 +50,10 @@ class DriverRegister extends AbstractAppDelegate
                 }
                 $dataForDriver['app_id'] = self::APPID;
                 $dataForDriver['type'] = 'INDIVIDUAL';
-                $this->registerAccount($dataForDriver);
+                $exceptionOnFailure = $this->registerAccount($dataForDriver);
+                if ($exceptionOnFailure == 1) {
+                    throw new DelegateException("Username/Email Used","record.exists");
+                }
             }
         }
         $data['isDriverRegisterationOver'] = true;

@@ -3661,7 +3661,7 @@
 	"submissionAccess": [],
 	"controller": "",
 	"properties": {
-		"submission_commands": "[{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"CheckCompliance\"},{\"command\":\"fileSave\",\"entity_name\":\"On Trac Compliance\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"OnTracPDFGeneration\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"ComplianceMail\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"ICRegister\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"DriverRegister\"}]",
+		"submission_commands": "[{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"CheckCompliance\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"ICRegister\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"DriverRegister\"},{\"command\":\"fileSave\",\"entity_name\":\"On Trac Compliance\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"OnTracPDFGeneration\"},{\"command\":\"delegate\",\"entity_name\":\"On Trac Compliance\",\"delegate\":\"ComplianceMail\"}]",
 		"showPrevious": "true",
 		"showCancel": "true"
 	},

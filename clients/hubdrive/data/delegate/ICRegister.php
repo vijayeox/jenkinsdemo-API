@@ -50,6 +50,7 @@ class ICRegister extends AbstractAppDelegate
             $dataForIC['app_id'] = self::APPID;
             $dataForIC['type'] = 'BUSINESS';
             $dataForIC['identifier_field'] = $data['identifier_field'];
+            $dataForIC['businessRole'] = 'Independent Contractor';
             $this->registerAccount($dataForIC);
         }
         $data['isICRegisterationOver'] = true;
