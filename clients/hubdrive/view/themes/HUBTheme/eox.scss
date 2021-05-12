@@ -252,3 +252,18 @@ input[type="text"].osjs-search-input {
   top: 45px;
   right: 32px;
 }
+
+//formio
+.page-item.active .page-link {
+  background-color: $secondary;
+  border-color: $secondary;
+}
+
+.page-item {
+  &.active .page-link {
+    z-index: 3;
+    color: $white;
+    background-color: $secondary!important;
+    border-color: $secondary!important;
+  }
+}

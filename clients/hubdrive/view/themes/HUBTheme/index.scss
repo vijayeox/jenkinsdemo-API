@@ -135,11 +135,21 @@ html {
   }
 }
 
-.osjs-panel-item[data-name="menu"] .logo-here img {
-  // background: url(./src/images/main-icon.png) left top no-repeat;
-  content: url(./src/images/main-icon.png);
-  width: 150px;
-  height: auto;
+.osjs-panel-item[data-name="menu"] {
+  .logo-here {
+    width: inherit;
+    height: inherit;
+    img {
+    // background: url(./src/images/main-icon.png) left top no-repeat;
+    content: url(./src/images/main-icon.png);
+    width: inherit;
+    height: inherit;
+    }
+  }
+} 
+
+.osjs-panel-item[data-name=menu]>div {
+  padding: 0.2em;
 }
 
 .osjs-gui-menu-separator::after {
