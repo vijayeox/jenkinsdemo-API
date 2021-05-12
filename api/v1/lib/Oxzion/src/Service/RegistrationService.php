@@ -25,8 +25,5 @@ class RegistrationService extends AbstractService
     public function registerAccount(&$data)
     {
         $this->accountService->registerAccount($data);
-        if (isset($data['app_id'])) {
-            $this->appRegistryService->createAppRegistry($data['app_id'], $data['accountId']);
-        }
     }
 }
