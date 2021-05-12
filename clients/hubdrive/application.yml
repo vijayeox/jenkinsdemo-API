@@ -328,7 +328,7 @@ entity:
                     -
                         type: HTMLViewer
                         page_id: ''
-                        htmlContent: ''
+                        htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
                         externalDataSource: ''
                         formSource: ''
                         form_name: {  }
@@ -336,7 +336,7 @@ entity:
                         urlPostParams: ''
                         dashboard_uuid: ''
                         url: ''
-                        content: ''
+                        content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
                         useRowData: false
             metadata: {  }
         page_uuid: 5a466ac9-e137-48ac-b999-c7e8a42be57e
