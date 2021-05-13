@@ -778,7 +778,7 @@ pages:
                         -
                             title: 'Policy Effective Date'
                             field: effectiveDate
-                            cell: '<td>{formatDate(item.start_date)}</td>'
+                            cell: '<td>{formatDate(item.effectiveDate)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
 menu:
