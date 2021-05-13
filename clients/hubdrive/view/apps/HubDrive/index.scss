@@ -1,3 +1,15 @@
+ .osjs-window[data-id=HubDrive_Window] {
+
+   // Changing the Icon cursor from Pointer to Auto
+   .osjs-window-icon>div {
+     cursor: auto !important;
+   }
+ }
+
+ .osjs-system-context-menu {
+   display: none;
+ }
+ 
 // ---SweetAlert2 Fixes (Start)---
 
 body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
