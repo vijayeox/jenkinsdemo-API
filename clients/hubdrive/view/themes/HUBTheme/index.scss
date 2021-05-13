@@ -392,3 +392,35 @@ padding: 10px!important;
 .osjs-panel-item[data-name=menu]:hover{
   background-color: #9189ad5c!important;
 }
+
+#floater {
+  position: fixed;
+  background-color: #f8f9fa;
+  bottom: 15px;
+  right: 30px;
+  pointer-events: none;
+  img {
+    height: 40px;
+    width: auto;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+  .helpText {
+    position: absolute;
+    display: flex;
+    top: 28px;
+    width: max-content;
+    text-align: center;
+    left: -200px;
+    p {
+      border-radius: 30px;
+      pointer-events: all;
+      background-color: #f0f8ff94;
+      padding: 3px;
+      font-size: 15px;
+      a {
+        padding-left: 5px;
+      }
+    }
+  }
+}
