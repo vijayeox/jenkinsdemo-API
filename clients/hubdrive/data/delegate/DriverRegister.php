@@ -51,9 +51,9 @@ class DriverRegister extends AbstractAppDelegate
                 $dataForDriver['app_id'] = self::APPID;
                 $dataForDriver['type'] = 'INDIVIDUAL';
                 $exceptionOnFailure = $this->registerAccount($dataForDriver);
-                if ($exceptionOnFailure == 1) {
-                    throw new DelegateException("Username/Email Used","record.exists");
-                }
+                // if ($exceptionOnFailure == 1) {
+                //     throw new DelegateException("Username/Email Used","record.exists");
+                // }
             }
         }
         $data['isDriverRegisterationOver'] = true;
