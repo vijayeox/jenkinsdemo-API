@@ -327,33 +327,6 @@ input[type="text"].osjs-search-input {
 
 .formio-form {
   .btn {
-    &.btn-primary {
-      &.btn-wizard-nav-next, // Next Button
-      &.formio-button-add-row, // Add Row Button
-      &.btn-wizard-nav-submit {
-        // Submit Button
-        color: #ffffff;
-        background-color: #0678d5;
-        border: 4px solid #0678d5;
-        border-radius: 40px;
-        font: normal 500 1rem Gotham;
-        outline: #0678d5 none 0px;
-        padding: 8px 34px 6px;
-
-        &:hover,
-        &:focus {
-          color: #ffffff;
-          background-color: #3ebd3e;
-          text-decoration: none;
-          border: 4px solid #3ebd3e;
-          border-radius: 40px;
-          font: normal 500 16px Gotham;
-          outline: #3ebd3e none 0px;
-          padding: 8px 34px 6px;
-        }
-      }
-    }
-
     &.btn-secondary,
     &.btn-primary {
       &.btn-wizard-nav-cancel, // Cancel Button
@@ -378,6 +351,33 @@ input[type="text"].osjs-search-input {
           font: normal 500 16px Gotham;
           outline: #3ebd3e none 0px;
           padding: 8px 26px 6px;
+        }
+      }
+    }
+
+    &.btn-primary {
+      &.btn-wizard-nav-next, // Next Button
+      &.formio-button-add-row, // Add Row Button
+      &.btn-wizard-nav-submit {
+        // Submit Button
+        color: #ffffff;
+        background-color: #0678d5;
+        border: 4px solid #0678d5;
+        border-radius: 40px;
+        font: normal 500 1rem Gotham;
+        outline: #0678d5 none 0px;
+        padding: 8px 34px 6px;
+
+        &:hover,
+        &:focus {
+          color: #ffffff;
+          background-color: #3ebd3e;
+          text-decoration: none;
+          border: 4px solid #3ebd3e;
+          border-radius: 40px;
+          font: normal 500 16px Gotham;
+          outline: #3ebd3e none 0px;
+          padding: 8px 34px 6px;
         }
       }
     }
