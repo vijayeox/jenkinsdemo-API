@@ -32,7 +32,7 @@ $base-margin: 1em;
 
 @font-face {
     font-family: 'Gotham';
-    src: url(../font/Gotham/Gotham-Light.otf);
+    src: url(./font/Gotham/Gotham-Light.otf) format('opentype');
 }
 
 $font-family: 'Gotham',
