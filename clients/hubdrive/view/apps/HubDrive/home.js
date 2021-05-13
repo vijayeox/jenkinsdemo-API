@@ -129,15 +129,15 @@ class Home extends React.Component {
           />
         ) : null}
         <div id="floater">
-          <img src="./apps/HUB/img/poweredby.png"></img>
+          <img src="./apps/HubDrive/img/poweredby.png"></img>
           <div className="helpText">
             <p>
               Support Email:
               <a
                 target="_blank"
-                href="mailto:HUB-support@eoxvantage.com?subject=HUB AutoDealer App - Help Desk&body=Hi, %0APlease help me with the following query with the new Auto Dealer Application%0A%0A"
+                href="mailto:support@eoxvantage.com?subject=HUB AutoDealer App - Help Desk&body=Hi, %0APlease help me with the following query with the new Auto Dealer Application%0A%0A"
               >
-                HUB-support@eoxvantage.com
+                support@eoxvantage.com
               </a>
             </p>
           </div>
