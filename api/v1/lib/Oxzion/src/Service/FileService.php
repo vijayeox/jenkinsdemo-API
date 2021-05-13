@@ -403,11 +403,14 @@ class FileService extends AbstractService
                         FROM ox_wf_user_identifier ui inner join ox_entity_identifier ei on ei.identifier = ui.identifier_name
                         inner join ox_entity_participant_role ep on ep.entity_id = ei.entity_id
                         inner join ox_app_entity ae on ae.id = ep.entity_id and ui.app_id = ae.app_id
+                        inner join ox_account_business_role oxabr on oxabr.account_id = ui.account_id AND oxabr.business_role_id = ep.business_role_id 
                         where ep.entity_id = :entityId and ui.identifier_name = :identifierField 
                         and ui.identifier = :identifier)";
             $queryParams['identifierField'] = $identifierField;
             $queryParams['identifier'] = $identifier;
-            $this->executeUpdateWithBindParameters($query, $queryParams);
+            $this->logger->info("UPDATES qUERY $query-----".print_r($queryParams,true));
+            $res = $this->executeUpdateWithBindParameters($query, $queryParams);
+            $this->logger->info("INSERTED ROWS-----".print_r($res->getAffectedRows(),true));
         }
     }
 
@@ -739,11 +742,11 @@ class FileService extends AbstractService
             if (count($result) > 0) {
                 $this->logger->info("FILE ID  ------" . json_encode($result));
                 if ($result[0]['data']) {
-                    $result[0]['data'] = json_decode($result[0]['data'], true);
-                }
-                unset($result[0]['id']);
-                $this->logger->info("FILE DATA SUCCESS ------" . print_r($result[0], true));
-                return $result[0];
+                        $result[0]['data'] = json_decode($result[0]['data'], true);
+                    }
+                    unset($result[0]['id']);
+                    $this->logger->info("FILE DATA SUCCESS ------" . print_r($result[0], true));
+                    return $result[0];
             }
             return 0;
         } catch (Exception $e) {
@@ -2953,6 +2956,7 @@ class FileService extends AbstractService
                     if (isset($val['filter']['filters'])) {
                         $subQuery = "";
                         $subFromQuery = "";
+                        // Add Index to Fileattribute - Include nested filter testcase
                         foreach ($val['filter']['filters'] as $subFilter) {
                             $filterOperator = $this->processFilters($subFilter);
                             $fileFiltersVal = $this->processFileFilters($subFilter, $filterOperator, $subFilterLogic, $whereQuery);
