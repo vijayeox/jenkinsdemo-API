@@ -788,17 +788,6 @@ menu:
         page_uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
         uuid: 00a0c261-4283-4eb3-85db-753692c27172
         privilege: MANAGE_COMPLIANCE
-workflow:
-    -
-        name: 'Independent Contractor Registration Form'
-        uuid: 08950e2d-ff19-46ed-b9b2-68ae635d9d67
-        bpmn_file: 'Independent Contractor/NewIndependentContractorRegistration.bpmn'
-        entity: 'Independent Contractor'
-    -
-        name: 'HUB Incident Response Guide'
-        uuid: b3745ced-9dfc-437d-967d-936bdffdcd6a
-        bpmn_file: ICPages/hubIncidentReport.bpmn
-        entity: 'HUB Incident Response Guide'
 form:
     -
         name: 'Compliance CheckList Form'
