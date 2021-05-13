@@ -17,9 +17,9 @@
 .osjs-window-header {
   background-color: $primary;
   color: $white;
-  min-height: 2.75em!important;
+  min-height: 2.75em !important;
 
-  .osjs-window-button{
+  .osjs-window-button {
     //   min-width: 2.75em!important;
   }
 }
@@ -263,7 +263,37 @@ input[type="text"].osjs-search-input {
   &.active .page-link {
     z-index: 3;
     color: $white;
-    background-color: $secondary!important;
-    border-color: $secondary!important;
+    background-color: $secondary !important;
+    border-color: $secondary !important;
+  }
+}
+
+.Navigation {
+  // Page Breadcrumb Name/Title
+  .activeBreadcrumb a {
+    color: $secondary !important;
+    &:hover,
+    &focus {
+      color: $royal-blue !important;
+      text-decoration: underline !important;
+    }
+  }
+
+  // View and Attachment Tab
+  .tab-link-active {
+    color: $shocking-blue !important;
+    box-shadow: inset 0 -2px 0 $shocking-blue !important;
+  }
+
+  // Chart Send Button
+  .commentsPage .commentsSaveButton {
+    background-color: $secondary;
+    opacity: 1;
+    cursor: pointer;
+    &:hover,
+    &focus {
+      background-color: $hopeful-green;
+      opacity: 1;
+    }
   }
 }
