@@ -375,18 +375,16 @@
                     >
                         <tr>
                         <td>
-                            <p>Hi there,</p>
+                            <p>Hello,</p>
+                            <p>The attached certificate of insurance for Auto Liability and Cargo Liability is 
                             {if $status == 'Compliant'}
-                            <p>
-                                You are compliant.
-                            </p>
+                                Compliant 
                             {else}
-                            <p>
-                                You are not compliant.
-                            </p>
+                                Non-Compliant 
                             {/if}
-                            <br />
-                            Thank you
+                            and meets the insurance requirements.</p>
+                            <p>Thank you</p>
+                            <p>(Attached PDF should be there)</p>
                             <br />
                             <br />
                         </td>
