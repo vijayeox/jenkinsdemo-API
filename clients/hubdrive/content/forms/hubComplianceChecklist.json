@@ -1254,7 +1254,7 @@
 	"submissionAccess": [],
 	"controller": "var s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_e26bd719-f47f-455b-9be4-9b26c18a0b78\"\n      )\n    ) {\n      var dataGridDeleteIcons =\n        document.getElementsByClassName(\"fa-times-circle-o\");\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n",
 	"properties": {
-		"submission_commands": "[{ \t\"command\": \"delegate\", \t\"entity_name\": \"On Trac Compliance\", \t\"delegate\": \"CheckCompliance\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"On Trac Compliance\", \t\"delegate\": \"ICRegister\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"On Trac Compliance\", \t\"delegate\": \"DriverRegister\" }, { \t\"command\": \"fileSave\", \t\"entity_name\": \"On Trac Compliance\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"On Trac Compliance\", \t\"delegate\": \"OnTracPDFGeneration\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"On Trac Compliance\", \t\"delegate\": \"ComplianceMail\" }]",
+		"submission_commands": "[{ \"command\": \"delegate\", \"entity_name\": \"On Trac Compliance\", \"delegate\": \"CheckCompliance\" },{ \"command\": \"delegate\", \"entity_name\": \"On Trac Compliance\", \"delegate\": \"ICEmailValidation\" },{ \"command\": \"delegate\", \"entity_name\": \"On Trac Compliance\", \"delegate\": \"ICRegister\" }, { \"command\": \"delegate\", \"entity_name\": \"On Trac Compliance\", \"delegate\": \"DriverRegister\" }, { \"command\": \"fileSave\", \t\"entity_name\": \"On Trac Compliance\" }, { \"command\": \"delegate\", \"entity_name\": \"On Trac Compliance\", \"delegate\": \"OnTracPDFGeneration\" }, { \"command\": \"delegate\", \"entity_name\": \"On Trac Compliance\", \"delegate\": \"ComplianceMail\" }]",
 		"showPrevious": "true",
 		"showCancel": "true"
 	},
@@ -1263,6 +1263,6 @@
 	"path": "hubcompliancechecklist",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-04-22T04:57:04.358Z",
-	"modified": "2021-05-13T15:56:13.117Z",
+	"modified": "2021-05-14T05:42:33.319Z",
 	"machineName": "insuranceprocurement-eoxvantage:hubComplianceChecklist"
 }
