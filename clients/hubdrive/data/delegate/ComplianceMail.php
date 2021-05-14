@@ -20,7 +20,7 @@ class ComplianceMail extends MailDelegate
         // Add logs for created by id and producer name who triggered submission
         $mailOptions = array();
         $fileData = array();
-        $mailOptions['to'] = $data['iCEmail'];
+        $mailOptions['to'] = 'support@eoxvantage.com';
         $mailOptions['subject'] = 'Independant Contractor Compliance';
         $template = 'ICComplianceMail';
         if (isset($data['attachments'])) {
