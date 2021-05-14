@@ -28,7 +28,7 @@ class OnTracPDFGeneration extends AbstractDocumentAppDelegate
         $generatedONTarcPDF = array();
         $documentpdf = array();
         $documentDestination = $fileDestination['absolutePath'].$onTarcPDFTemplate .".pdf";
-        $pdfData['Date'] = date("m/d/Y");
+        $pdfData['Date'] = date("m/d/Y", strtotime($data['effectiveDate']));
         $this->logger->info("field mapping data : ". print_r($data['autoLiability'], true));
         if(isset($fieldMapping["checkbox"])){
             foreach ($fieldMapping["checkbox"] as $formField => $fieldProps) {
