@@ -35,6 +35,7 @@ class ICEmailValidation extends AbstractAppDelegate
         {
             throw new DelegateException("Username/Email Used","record.exists");
         }
+        return $data;
     } 
 
 
