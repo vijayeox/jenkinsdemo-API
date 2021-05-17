@@ -1012,8 +1012,8 @@
 						"defaultValue": "",
 						"defaultDate": "",
 						"customOptions": {},
-						"persistent": false,
-						"protected": true,
+						"persistent": true,
+						"protected": false,
 						"dbIndex": false,
 						"encrypted": false,
 						"redrawOn": "",
@@ -1086,7 +1086,7 @@
 						"showWordCount": false,
 						"allowMultipleMasks": false,
 						"datepickerMode": "day",
-						"id": "e2qlzaj"
+						"id": "e0vh4u5"
 					}],
 					"size": "md",
 					"width": 3,
@@ -4253,7 +4253,7 @@
 		"id": "eowvkd8"
 	}],
 	"revisions": "current",
-	"_vid": 97,
+	"_vid": 99,
 	"title": "HUB Compliance Checklist",
 	"display": "wizard",
 	"access": [{
@@ -4272,6 +4272,6 @@
 	"path": "hubcompliancechecklist",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-04-22T04:57:04.358Z",
-	"modified": "2021-05-17T05:50:28.694Z",
+	"modified": "2021-05-17T11:40:12.391Z",
 	"machineName": "insuranceprocurement-eoxvantage:hubComplianceChecklist"
 }
