@@ -384,7 +384,6 @@
                             {/if}
                             and meets the insurance requirements.</p>
                             <p>Thank you</p>
-                            <p>(Attached PDF should be there)</p>
                             <br />
                             <br />
                         </td>
