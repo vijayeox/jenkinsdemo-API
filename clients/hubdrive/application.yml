@@ -1,7 +1,7 @@
 app:
     name: HubDrive
     uuid: a4b1f073-fc20-477f-a804-1aa206938c42
-    description: Compliance
+    description: HubDriveOnline
     category: EXAMPLE_CATEGORY
     type: 2
     autostart: true
@@ -9,7 +9,7 @@ app:
     isdefault: false
     logo: default_app.png
     start_options: null
-    title: Compliance
+    title: HubDriveOnline
     app_properties: '{"chat_notification":"","appIdentifiers":""}'
 org:
     -
