@@ -151,77 +151,6 @@
 			"inputType": "hidden",
 			"id": "exhe1pj"
 		}, {
-			"label": "effectiveDate",
-			"customClass": "",
-			"modalEdit": false,
-			"defaultValue": null,
-			"persistent": true,
-			"protected": false,
-			"dbIndex": false,
-			"encrypted": false,
-			"redrawOn": "effectiveDateProtected",
-			"customDefaultValue": "",
-			"calculateValue": "var test = data.effectiveDateProtected;\nvalue = test.split(' ')[0] || test.split('T')[0];\nconsole.log(value);",
-			"calculateServer": false,
-			"key": "effectiveDate",
-			"tags": [],
-			"properties": {
-				"data_type": "Date"
-			},
-			"logic": [],
-			"attributes": {},
-			"overlay": {
-				"style": "",
-				"page": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
-			"type": "hidden",
-			"input": true,
-			"tableView": false,
-			"hideOnChildrenHidden": false,
-			"placeholder": "",
-			"prefix": "",
-			"suffix": "",
-			"multiple": false,
-			"unique": false,
-			"hidden": false,
-			"clearOnHide": true,
-			"refreshOn": "",
-			"labelPosition": "top",
-			"description": "",
-			"errorLabel": "",
-			"tooltip": "",
-			"hideLabel": false,
-			"tabindex": "",
-			"disabled": false,
-			"autofocus": false,
-			"widget": {
-				"type": "input"
-			},
-			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
-			},
-			"conditional": {
-				"show": null,
-				"when": null,
-				"eq": ""
-			},
-			"allowCalculateOverride": false,
-			"showCharCount": false,
-			"showWordCount": false,
-			"allowMultipleMasks": false,
-			"inputType": "hidden",
-			"id": "e1hna8zt"
-		}, {
 			"title": "Independent Contractor Information",
 			"breadcrumbClickable": true,
 			"buttonSettings": {
@@ -1035,7 +964,7 @@
 						"unique": false,
 						"validateOn": "change",
 						"errorLabel": "",
-						"key": "effectiveDateProtected",
+						"key": "effectiveDate",
 						"tags": [],
 						"properties": {},
 						"conditional": {
@@ -1086,7 +1015,7 @@
 						"showWordCount": false,
 						"allowMultipleMasks": false,
 						"datepickerMode": "day",
-						"id": "e0vh4u5"
+						"id": "et81r0n"
 					}],
 					"size": "md",
 					"width": 3,
@@ -4253,7 +4182,7 @@
 		"id": "eowvkd8"
 	}],
 	"revisions": "current",
-	"_vid": 99,
+	"_vid": 100,
 	"title": "HUB Compliance Checklist",
 	"display": "wizard",
 	"access": [{
@@ -4272,6 +4201,6 @@
 	"path": "hubcompliancechecklist",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-04-22T04:57:04.358Z",
-	"modified": "2021-05-17T11:40:12.391Z",
+	"modified": "2021-05-17T12:08:46.403Z",
 	"machineName": "insuranceprocurement-eoxvantage:hubComplianceChecklist"
 }
