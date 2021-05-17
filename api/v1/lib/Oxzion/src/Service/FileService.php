@@ -18,6 +18,7 @@ use Oxzion\Model\FileAttachmentTable;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\SubscriberService;
 use Oxzion\Utils\StringUtils;
+use Oxzion\Utils\FilterUtils;
 
 class FileService extends AbstractService
 {
@@ -2456,12 +2457,21 @@ class FileService extends AbstractService
         return $result[0];
     }
 
-    public function getAuditLog($fileId)
+    public function getAuditLog($fileId, $filterParams = null)
     {
         try {
-            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified is NOT NULL then ofal.date_modified else ofal.date_created end as file_date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id WHERE ofal.uuid = :uuid";
-            $params = array('uuid' => $fileId);
-            $resultSet = $this->executeQuerywithBindParameters($select, $params)->toArray();
+            $where = " WHERE ofal.uuid = '$fileId' ";
+            if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
+                $filterArray = json_decode($filterParams['filter'], true);
+                if (isset($filterArray[0]['filter'])) {
+                    $filterlogic = isset($filterArray[0]['filter']['filters'][0]['logic']) ? $filterArray[0]['filter']['filters'][0]['logic'] : "AND";
+                    $filterList = $filterArray[0]['filter']['filters'][0]['filters'];
+                    $filter = FilterUtils::filterArray($filterList, $filterlogic, array('version'=>'ofal.version','modifiedUser'=>'mu.name','modified_by'=>'ofal.modified_by','action'=>'ofal.action', 'file_date_modified'=>'DATE(ofal.date_created)'));
+                    $where .= " AND " . $filter;
+                }
+            }
+            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified is NOT NULL then ofal.date_modified else ofal.date_created end as file_date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id $where ";
+            $resultSet = $this->executeQuerywithParams($select);
             if (count($resultSet) == 0) {
                 return 0;
             }
