@@ -587,4 +587,54 @@ class WidgetService extends AbstractService
             throw $e;
         }
     }
+
+    public function previewWidget($params) {
+        $uuidList = array();
+        if (isset($params['queries'])) {
+            $queries = json_decode($params['queries'],1);
+            if (!is_array($queries['queries'])) {
+                $uuidList = array($queries['queries']);
+            } else {
+                $uuidList = $queries['queries'];
+            }           
+        } 
+        $donotcombine =0;
+        $template = null;
+        if (isset($params['configuration'])) {
+            $config = json_decode($params['configuration'],1);
+        }        
+        if (isset($config['template'])) {
+                if (!empty($config['donotcombine'])) {
+                    $donotcombine = 1;
+                    $data = $this->queryService->runMultipleQueriesWithoutCombine($uuidList,null);
+                } 
+                $template =  $config['template'];
+        } 
+        if (!$donotcombine) {
+            $data = $this->queryService->runMultipleQueries($uuidList,null);
+        }
+        if ($this->queryService->getTotalCount()) {
+            $response['widget']['total_count']=$this->queryService->getTotalCount();
+        }
+        if (isset($params['expression'])) {
+            $expressionTmp = json_decode($params['expression'],1);
+            $expression = $expressionTmp['expression'];
+            if (!is_array($expression)) {
+                $expressions = array($expression);
+            }
+            foreach ($expressions as $expression) {
+                $data = $this->evaluteExpression($data, $expression);
+            }
+        }
+
+        if (isset($data[0]['calculated']) && count($data) == 1) {
+            //Send only the calculated value if left oprand not specified and aggregate values
+            $data = $data[0]['calculated'];
+        }
+        $response['widget']['data'] = $data;
+        if ($template) {
+           $response['widget']['data'] =  $this->applyTemplate($response['widget'],$template);
+        }
+        return $response;
+    }
 }
