@@ -243,9 +243,6 @@ class ProjectService extends AbstractService
         $account = $this->accountService->getAccount($obj->account_id);
         try {
             $this->beginTransaction();
-            echo "<pre>data=>";
-            print_r($data);
-            exit;
             $count = $this->table->save($form);
             if ($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_project where user_id =" . $data['manager_id'] . " AND project_id = (SELECT id from ox_project where uuid = '" . $id . "')";
