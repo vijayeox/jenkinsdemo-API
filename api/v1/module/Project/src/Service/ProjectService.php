@@ -205,20 +205,19 @@ class ProjectService extends AbstractService
             }
         }
         $parent_uuid = null;
-        if (isset($data['parentId'])) {
-            $projParentId = $data['parentId'];
-        }
         if (isset($data['parent_id'])) {
             $projParentId = $data['parent_id'];
+        } else {
+            $projParentId = $data['parentId'];
         }
-        if (isset($projParentId)) {
-            $parentId = $this->getIdFromUuid('ox_project', $projParentId);
-            $parent_uuid = $projParentId;
-            $data['parent_id'] = $parentId;
-            if ($parentId == 0) {
-                throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
-            }
+        
+        $parentId = $this->getIdFromUuid('ox_project', $projParentId);
+        $parent_uuid = $projParentId;
+        $data['parent_id'] = $parentId;
+        if ($parentId === 0) {
+            throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
         }
+        
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             throw new ServiceException("Updating non-existent Project", "non.existent.project", OxServiceException::ERR_CODE_NOT_FOUND);
@@ -244,6 +243,9 @@ class ProjectService extends AbstractService
         $account = $this->accountService->getAccount($obj->account_id);
         try {
             $this->beginTransaction();
+            echo "<pre>data=>";
+            print_r($data);
+            exit;
             $count = $this->table->save($form);
             if ($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_project where user_id =" . $data['manager_id'] . " AND project_id = (SELECT id from ox_project where uuid = '" . $id . "')";
