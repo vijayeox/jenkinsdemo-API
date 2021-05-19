@@ -667,18 +667,6 @@ class UserService extends AbstractService
         }
         $account = $this->getAccount($form->account_id);
         $originalArray = array();
-        $queryString = "SELECT e.* FROM ox_employee e
-        INNER JOIN ox_user u ON u.person_id = e.manager_id
-        WHERE u.uuid = :userId";
-        $params = ['userId' => $id['userId']];
-        $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-        if (isset($resultSet[0]['manager_id'])) {
-            $sql = $this->getSqlObject();
-            $updatedData['manager_id'] = NULL;
-            $update = $sql->update('ox_employee')->set($updatedData)
-                ->where(array('ox_employee.manager_id' => $resultSet[0]['manager_id']));
-            $this->executeUpdate($update);
-        }
         $originalArray['status'] = 'Inactive';
         $originalArray['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $originalArray['date_modified'] = date('Y-m-d H:i:s');
