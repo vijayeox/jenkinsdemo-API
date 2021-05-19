@@ -27,7 +27,7 @@ class TemplateService extends AbstractService
             //     return 0;
             // }
             FileUtils::createDirectory($UploadTemplatepath);
-            if(!isset($data['name'])) {
+            if (!isset($data['name'])) {
                 return 1;
             }
             if (strlen($data['name']) > 0 && strlen($data['content']) > 0) {
@@ -62,7 +62,7 @@ class TemplateService extends AbstractService
         } catch (Exception $e) {
             throw $e;
         }
-        return array('data' => $fileContent);
+        return array('content' => $fileContent);
     }
 
     public function getTemplateList($params = null)
