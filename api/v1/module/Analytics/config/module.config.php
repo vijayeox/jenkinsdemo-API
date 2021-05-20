@@ -97,21 +97,6 @@ return [
                     ],
                 ],
             ],
-            'createWidgetTarget' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/analytics/target/createwidgettarget',
-                    'defaults' => [
-                        'controller' => Controller\TargetController::class,
-                        'method' => 'POST',
-                        'action' => 'createWidgetTarget',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            // 'getKRAResult' => 'MANAGE_TARGET_READ'
-                        ],
-                    ],
-                ],
-            ],
             'getKRAResult' => [
                 'type' => Segment::class,
                 'options' => [
@@ -170,6 +155,20 @@ return [
                             'put' => 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'post' => 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'delete' => 'MANAGE_ANALYTICS_WIDGET_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'previewWidget' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/analytics/widget/preview',
+                    'defaults' => [
+                        'controller' => Controller\WidgetController::class,
+                        'method' => 'POST',
+                        'action' => 'previewWidget',
+                        'access' => [
+                            'previewWidget' => 'MANAGE_ANALYTICS_WIDGET_WRITE',
                         ],
                     ],
                 ],
