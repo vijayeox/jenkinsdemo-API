@@ -1,5 +1,5 @@
 <?php
-namespace Oxzion\Service;
+namespace Oxzion\Insurance\Ims;
 
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\SOAPUtils;
@@ -8,7 +8,7 @@ use Oxzion\OxServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Messaging\MessageProducer;
 
-class ImsService extends AbstractService
+class Service extends AbstractService
 {
     private $messageProducer;
     private $soapClient;
@@ -37,8 +37,9 @@ class ImsService extends AbstractService
         if ($this->token) {
             return $this->token;
         }
-        $soapClient = new SOAPUtils($this->getConfig()['apiUrl']."logon.asmx?wsdl");
-        $LoginIMSUser = $soapClient->makeCall('LoginIMSUser', $this->getConfig());
+        $config = $this->getConfig();
+        $soapClient = new SOAPUtils($config['apiUrl']."logon.asmx?wsdl");
+        $LoginIMSUser = $soapClient->makeCall('LoginIMSUser', $config);
         $this->token = $LoginIMSUser['LoginIMSUserResult']['Token'];
         // echo "<pre>";print_r($this->token);exit;
         return $this->token;
