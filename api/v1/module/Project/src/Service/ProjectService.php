@@ -205,17 +205,22 @@ class ProjectService extends AbstractService
             }
         }
         $parent_uuid = null;
-        if (isset($data['parent_id'])) {
-            $projParentId = $data['parent_id'];
-        } else {
+        if (isset($data['parentId'])) {
             $projParentId = $data['parentId'];
         }
-        
-        $parentId = $this->getIdFromUuid('ox_project', $projParentId);
-        $parent_uuid = $projParentId;
-        $data['parent_id'] = $parentId;
-        if ($parentId === 0) {
-            throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
+        if (isset($data['parent_id'])) {
+            $projParentId = $data['parent_id'];
+        }
+
+        if (isset($projParentId)) {
+            $parentId = $this->getIdFromUuid('ox_project', $projParentId);
+            $parent_uuid = $projParentId;
+            $data['parent_id'] = $parentId;
+            if ($parentId === 0) {
+                throw new ServiceException("Project parent is invalid", "project.parent.invalid", OxServiceException::ERR_CODE_NOT_FOUND);
+            }
+        } else {
+            $data['parent_id'] = NULL;
         }
         
         $obj = $this->table->getByUuid($id, array());
