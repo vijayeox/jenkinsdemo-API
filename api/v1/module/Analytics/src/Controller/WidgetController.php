@@ -3,6 +3,7 @@
 namespace Analytics\Controller;
 
 use Analytics\Model\Widget;
+use Analytics\Service\WidgetService;
 use Exception;
 use Oxzion\Controller\AbstractApiController;
 
@@ -13,7 +14,7 @@ class WidgetController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct($widgetService)
+    public function __construct(WidgetService $widgetService)
     {
         parent::__construct(null, __class__, Widget::class);
         $this->setIdentifierName('widgetUuid');
@@ -189,7 +190,6 @@ class WidgetController extends AbstractApiController
             return $this->exceptionToResponse($e);
         }
     }
-
 
     /**
      * Preview Widget Template API
