@@ -167,9 +167,9 @@ return [
                         'controller' => Controller\WidgetController::class,
                         'method' => 'POST',
                         'action' => 'previewWidget',
-                        'access' => [
-                            'previewWidget' => 'MANAGE_ANALYTICS_WIDGET_WRITE',
-                        ],
+                        // 'access' => [
+                            // 'previewWidget' => 'MANAGE_ANALYTICS_WIDGET_WRITE',
+                        // ],
                     ],
                 ],
             ],

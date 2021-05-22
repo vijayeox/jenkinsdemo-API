@@ -9,7 +9,6 @@ use Oxzion\Utils\FileUtils;
 
 class TemplateService extends AbstractService
 {
-    private $table;
     public function __construct($config, $dbAdapter)
     {
         parent::__construct($config, $dbAdapter);
@@ -22,10 +21,6 @@ class TemplateService extends AbstractService
         try {
             $templateFolderPath = $this->config['TEMPLATE_FOLDER'];
             $UploadTemplatepath = FileUtils::truepath($templateFolderPath . "/OITemplate");
-            // print_r($UploadTemplatepath);exit;
-            // if (file_exists($UploadTemplatepath . "/" . $data['name'] . ".tpl")) {
-            //     return 0;
-            // }
             FileUtils::createDirectory($UploadTemplatepath);
             if (!isset($data['name'])) {
                 return 1;
@@ -63,6 +58,20 @@ class TemplateService extends AbstractService
             throw $e;
         }
         return array('content' => $fileContent);
+    }
+
+    public function getTemplatePath($name)
+    {
+        $template = array();
+        try {
+            $templateFolderPath = $this->config['TEMPLATE_FOLDER'];
+            $UploadTemplatepath = realpath($templateFolderPath . "/OITemplate/");
+            $template['templatePath'] = $UploadTemplatepath;
+            $template['templateNameWithExt'] = $name;
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return $template;
     }
 
     public function getTemplateList($params = null)
