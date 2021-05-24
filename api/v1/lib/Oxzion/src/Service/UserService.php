@@ -1501,4 +1501,14 @@ class UserService extends AbstractService
             return null;
         }
     }
+
+    public function getUserDataByIdentifier($appId, $identifier, $identifierField){
+        $select = "SELECT oxu.uuid as userId, oxa.uuid as accountId FROM ox_wf_user_identifier owui
+                    INNER JOIN ox_user oxu ON oxu.id = owui.user_id
+                    INNER JOIN ox_account oxa ON oxa.id = owui.account_id
+                    WHERE identifier_name = :identityField AND 
+                    app_id = :appId AND identifier = :identifier";
+        $selectQuery = array("identityField" => $identifierField, "appId" => $appId, "identifier" => $identifier);
+        return $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+    }
 }

@@ -19,6 +19,7 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Service\SubscriberService;
 use Oxzion\Utils\StringUtils;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\Service\BusinessParticipantService;
 
 class FileService extends AbstractService
 {
@@ -26,10 +27,11 @@ class FileService extends AbstractService
     protected $fieldDetails;
     protected $entityService;
     protected $subscriberService;
+    protected $businessParticipantService;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService, EntityService $entityService, FileAttachmentTable $attachmentTable, SubscriberService $subscriberService)
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService, EntityService $entityService, FileAttachmentTable $attachmentTable, SubscriberService $subscriberService, BusinessParticipantService $businessParticipantService)
     {
         parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
@@ -41,6 +43,7 @@ class FileService extends AbstractService
         $this->attachmentTable = $attachmentTable;
         $this->entityService = $entityService;
         $this->subscriberService = $subscriberService;
+        $this->businessParticipantService = $businessParticipantService;
         // $emailService = new EmailService($config, $dbAdapter, Oxzion\Model\Email);
     }
 
@@ -95,7 +98,7 @@ class FileService extends AbstractService
         $fields = $data = $this->cleanData($data);
         $jsonData = json_encode($data);
         $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
-        $accountId = $this->entityService->getEntityOfferingAccount($entityId);
+        $accountId = $this->businessParticipantService->getEntitySellerAccount($entityId);
         $data['uuid'] = $uuid;
         $data['account_id'] = $accountId ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -380,11 +383,13 @@ class FileService extends AbstractService
     {
         $entityId = $file['entity_id'];
         $fileData = json_decode($file['data'], true);
-        $query = "INSERT INTO ox_file_participant (file_id, account_id, business_role_id) 
-                  (SELECT $fileId, ob.account_id, ob.business_role_id
+        $accountId = $file['account_id'];
+        $query = "INSERT IGNORE INTO ox_file_participant (file_id, account_id, business_role_id) 
+                  (SELECT $fileId, $accountId, ob.business_role_id
                   from ox_account_business_role ob inner join ox_account_offering oo on ob.id = oo.account_business_role_id
                   WHERE oo.entity_id = :entityId)";
         $queryParams = ['entityId' => $entityId];
+        $this->logger->info("File Part-- $query with params---".print_r($queryParams,true));
         $this->executeUpdateWithBindParameters($query, $queryParams);
         $query = "select identifier from ox_entity_identifier where entity_id = :entityId";
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
@@ -399,7 +404,7 @@ class FileService extends AbstractService
         }
 
         if ($identifier) {
-            $query = "INSERT INTO ox_file_participant (file_id, account_id, business_role_id)
+            $query = "INSERT IGNORE INTO ox_file_participant (file_id, account_id, business_role_id)
                        (SELECT $fileId, ui.account_id, ep.business_role_id
                         FROM ox_wf_user_identifier ui inner join ox_entity_identifier ei on ei.identifier = ui.identifier_name
                         inner join ox_entity_participant_role ep on ep.entity_id = ei.entity_id

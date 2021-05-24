@@ -155,8 +155,8 @@ class AccountService extends AbstractService
         $params = $data;
         $params['preferences'] = array();
         $appId = null;
-        if (isset($params['app_id'])) {
-            $appId = $this->getAppId($params['app_id']);
+        if (isset($params['appId'])) {
+            $appId = $this->getAppId($params['appId']);
             $params['app_id'] = $appId;
         }
         if (!$appId) {
