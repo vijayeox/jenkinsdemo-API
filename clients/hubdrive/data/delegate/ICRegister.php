@@ -18,12 +18,16 @@ class ICRegister extends AbstractAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing IC Registration with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
+        $data['businessRole'] = 'Independent Contractor';
+        $data['sellerBusinessRole'] = 'Contract Carrier';
+        $data['appId'] = self::APPID; // UUID use Camelcase
+
         // Add logs for created by id and producer name who triggered submission
-        if(!isset($data['isICRegisterationOver']) || ($data['isICRegisterationOver'] === false || $data['isICRegisterationOver'] === 'false')) {
+        if(!isset($data['user_exists']) || ($data['user_exists'] === false || $data['user_exists'] === 0|| $data['user_exists'] === 'false')) {
             $dataForIC = array();
-            if (!isset($dataForIC['uuid'])) {
-                $dataForIC['uuid'] = UuidUtil::uuid();
-            }
+            $dataForIC['businessRole'] = $data['businessRole'];
+            $dataForIC['sellerBusinessRole'] = $data['sellerBusinessRole'];
+            $dataForIC['appId'] = $data['appId'];
             $dataForIC['name'] = $data['name'];
             $dataForIC['email'] = $dataForIC['iCEmail'] = $data['iCEmail'];
             $dataForIC['firstname'] = $data['iCFirstName'];
@@ -47,13 +51,15 @@ class ICRegister extends AbstractAppDelegate
             if (!isset($dataForIC['preferences'])) {
                 $dataForIC['preferences'] = '{}';
             }
-            $dataForIC['app_id'] = self::APPID;
             $dataForIC['type'] = 'BUSINESS';
             $dataForIC['identifier_field'] = $data['identifier_field'];
-            $dataForIC['businessRole'] = 'Independent Contractor';
             $this->registerAccount($dataForIC);
+            $data['buyerAccountId'] = $dataForIC['accountId'];
+        } else{
+            // Get accountId based on identiier - call verifyUser from Commandservice
+            //Check BusinessRelationship exits throw error
         }
-        $data['isICRegisterationOver'] = true;
+        // $data['isICRegisterationOver'] = true;
         return $data;
     }
 
