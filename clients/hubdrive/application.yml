@@ -47,7 +47,28 @@ org:
             -
                 businessRole: 'Contract Carrier'
                 entity:
-                    - 'On Trac Compliance'
+                    - Independent Contractor
+        preferences: '{}'
+    -
+        name: IGGI
+        uuid: 48037656-b78e-11eb-8529-0242ac130003
+        email: admin@Iggi.com
+        address1: 'IGGI Addr1'
+        address2: 'IGGI Addr2'
+        city: 'IGGI City'
+        state: CA
+        zip: 90623
+        country: 'United States of America'
+        contact:
+            username: IggiAdmin
+            firstname: Admin
+            lastname: User
+            email: admin@Iggi.com
+        businessOffering:
+            -
+                businessRole: 'Contract Carrier'
+                entity:
+                    - Independent Contractor
         preferences: '{}'
 businessRole:
     -
@@ -288,7 +309,7 @@ entity:
                         useRowData: false
             metadata: {  }
     -
-        name: 'On Trac Compliance'
+        name: Compliance
         start_date_field: start_date
         end_date_field: end_date
         status_field: status
@@ -682,9 +703,9 @@ pages:
                                         type: Form
                                         form_id: 385dea4d-64d6-487e-ac23-359c5265f791
     -
-        name: 'View Compliances'
+        name: 'Independent Contractors'
         uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
-        description: 'Shows a list of Compliances'
+        description: 'Shows a list of Independent Contractor'
         content:
             -
                 type: List
@@ -757,11 +778,11 @@ pages:
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
                     operations:
-                        title: 'Create Compliance'
+                        title: 'Create Independent Contractor'
                         icon: 'fa fa-plus'
                         actions:
                             -
-                                name: 'Create New Compliance'
+                                name: 'Create New Independent Contractor'
                                 icon: 'fa fa-plus'
                                 rule: 'true'
                                 details:
@@ -783,18 +804,18 @@ pages:
                             filterFormat: YYYY-MM-DD
 menu:
     -
-        name: Compliance
+        name: Independent Contractor
         icon: 'fas fa-list'
         page_uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
         uuid: 00a0c261-4283-4eb3-85db-753692c27172
-        privilege: MANAGE_COMPLIANCE
+        privilege: MANAGE_IC
 form:
     -
         name: 'Compliance CheckList Form'
         uuid: e26bd719-f47f-455b-9be4-9b26c18a0b78
         description: Compliance
         template_file: hubComplianceChecklist.json
-        entity: 'On Trac Compliance'
+        entity: Compliance
     -
         name: 'Driver Employement Application Form'
         uuid: 6c7d8cff-a5ec-4921-b182-75253f734712
