@@ -18,6 +18,8 @@ use Oxzion\Model\FileAttachmentTable;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\SubscriberService;
 use Oxzion\Utils\StringUtils;
+use Oxzion\Utils\FilterUtils;
+use Oxzion\Service\BusinessParticipantService;
 
 class FileService extends AbstractService
 {
@@ -25,10 +27,11 @@ class FileService extends AbstractService
     protected $fieldDetails;
     protected $entityService;
     protected $subscriberService;
+    protected $businessParticipantService;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService, EntityService $entityService, FileAttachmentTable $attachmentTable, SubscriberService $subscriberService)
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService, EntityService $entityService, FileAttachmentTable $attachmentTable, SubscriberService $subscriberService, BusinessParticipantService $businessParticipantService)
     {
         parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
@@ -40,6 +43,7 @@ class FileService extends AbstractService
         $this->attachmentTable = $attachmentTable;
         $this->entityService = $entityService;
         $this->subscriberService = $subscriberService;
+        $this->businessParticipantService = $businessParticipantService;
         // $emailService = new EmailService($config, $dbAdapter, Oxzion\Model\Email);
     }
 
@@ -94,7 +98,7 @@ class FileService extends AbstractService
         $fields = $data = $this->cleanData($data);
         $jsonData = json_encode($data);
         $this->logger->info("Data From Fileservice after encoding - " . print_r($jsonData, true));
-        $accountId = $this->entityService->getEntityOfferingAccount($entityId);
+        $accountId = $this->businessParticipantService->getEntitySellerAccount($entityId);
         $data['uuid'] = $uuid;
         $data['account_id'] = $accountId ? $accountId : AuthContext::get(AuthConstants::ACCOUNT_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -379,11 +383,13 @@ class FileService extends AbstractService
     {
         $entityId = $file['entity_id'];
         $fileData = json_decode($file['data'], true);
-        $query = "INSERT INTO ox_file_participant (file_id, account_id, business_role_id) 
-                  (SELECT $fileId, ob.account_id, ob.business_role_id
+        $accountId = $file['account_id'];
+        $query = "INSERT IGNORE INTO ox_file_participant (file_id, account_id, business_role_id) 
+                  (SELECT $fileId, $accountId, ob.business_role_id
                   from ox_account_business_role ob inner join ox_account_offering oo on ob.id = oo.account_business_role_id
                   WHERE oo.entity_id = :entityId)";
         $queryParams = ['entityId' => $entityId];
+        $this->logger->info("File Part-- $query with params---".print_r($queryParams,true));
         $this->executeUpdateWithBindParameters($query, $queryParams);
         $query = "select identifier from ox_entity_identifier where entity_id = :entityId";
         $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
@@ -398,7 +404,7 @@ class FileService extends AbstractService
         }
 
         if ($identifier) {
-            $query = "INSERT INTO ox_file_participant (file_id, account_id, business_role_id)
+            $query = "INSERT IGNORE INTO ox_file_participant (file_id, account_id, business_role_id)
                        (SELECT $fileId, ui.account_id, ep.business_role_id
                         FROM ox_wf_user_identifier ui inner join ox_entity_identifier ei on ei.identifier = ui.identifier_name
                         inner join ox_entity_participant_role ep on ep.entity_id = ei.entity_id
@@ -2467,12 +2473,21 @@ class FileService extends AbstractService
         return $result[0];
     }
 
-    public function getAuditLog($fileId)
+    public function getAuditLog($fileId, $filterParams = null)
     {
         try {
-            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified is NOT NULL then ofal.date_modified else ofal.date_created end as file_date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id WHERE ofal.uuid = :uuid";
-            $params = array('uuid' => $fileId);
-            $resultSet = $this->executeQuerywithBindParameters($select, $params)->toArray();
+            $where = " WHERE ofal.uuid = '$fileId' ";
+            if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
+                $filterArray = json_decode($filterParams['filter'], true);
+                if (isset($filterArray[0]['filter'])) {
+                    $filterlogic = isset($filterArray[0]['filter']['filters'][0]['logic']) ? $filterArray[0]['filter']['filters'][0]['logic'] : "AND";
+                    $filterList = $filterArray[0]['filter']['filters'][0]['filters'];
+                    $filter = FilterUtils::filterArray($filterList, $filterlogic, array('version'=>'ofal.version','modifiedUser'=>'mu.name','modified_by'=>'ofal.modified_by','action'=>'ofal.action', 'file_date_modified'=>'DATE(ofal.date_created)'));
+                    $where .= " AND " . $filter;
+                }
+            }
+            $select = " SELECT DISTINCT ofal.version,ofal.action,ofal.status,ofal.is_active,case when ofal.date_modified is NOT NULL then ofal.date_modified else ofal.date_created end as file_date_modified ,ofal.created_by,ofal.modified_by,ofal.date_modified,cu.name as createdUser,mu.name as modifiedUser ,ofal.id as fileId FROM ox_file_audit_log ofal inner join ox_user as cu on ofal.created_by = cu.id left join ox_user as mu on ofal.modified_by = mu.id $where ";
+            $resultSet = $this->executeQuerywithParams($select);
             if (count($resultSet) == 0) {
                 return 0;
             }

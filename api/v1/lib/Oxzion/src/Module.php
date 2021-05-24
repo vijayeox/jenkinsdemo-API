@@ -126,7 +126,8 @@ class Module
                         $container->get(\Oxzion\Service\FieldService::class),
                         $container->get(\Oxzion\Service\EntityService::class),
                         $container->get(\Oxzion\Model\FileAttachmentTable::class),
-                        $container->get(\Oxzion\Service\SubscriberService::class)
+                        $container->get(\Oxzion\Service\SubscriberService::class),
+                        $container->get(\Oxzion\Service\BusinessParticipantService::class)
                     );
                 },
                 Service\RoleService::class => function ($container) {
@@ -313,7 +314,7 @@ class Module
                         $container->get(Service\OrganizationService::class),
                         $container->get(Service\EntityService::class),
                         $container->get(Service\AppRegistryService::class),
-                        $container->get(Messaging\MessageProducer::class)
+                        $container->get(Messaging\MessageProducer::class)                     
                     );
                 },
                 Model\OrganizationTable::class => function ($container) {
@@ -509,6 +510,12 @@ class Module
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\AppRegistryService($config, $dbAdapter);
+                },
+                Service\BusinessParticipantService::class => function ($container) {
+                    $config = $container->get('config');
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $entityService = $container->get(\Oxzion\Service\EntityService::class);
+                    return new Service\BusinessParticipantService($config, $dbAdapter, $entityService);
                 },
                 AppDelegate\AppDelegateService::class => function ($container) {
                     return new AppDelegate\AppDelegateService(
@@ -706,7 +713,8 @@ class Module
                         $container->get(Service\WorkflowService::class),
                         $container->get(Service\UserService::class),
                         $container->get(Service\UserCacheService::class),
-                        $container->get(Service\RegistrationService::class)
+                        $container->get(Service\RegistrationService::class),
+                        $container->get(Service\BusinessParticipantService::class)   
                     );
                 },
                 Model\ServiceTaskInstanceTable::class => function ($container) {

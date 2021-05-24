@@ -155,8 +155,8 @@ class AccountService extends AbstractService
         $params = $data;
         $params['preferences'] = array();
         $appId = null;
-        if (isset($params['app_id'])) {
-            $appId = $this->getAppId($params['app_id']);
+        if (isset($params['appId'])) {
+            $appId = $this->getAppId($params['appId']);
             $params['app_id'] = $appId;
         }
         if (!$appId) {
@@ -270,7 +270,7 @@ class AccountService extends AbstractService
         }
         $bRole .=")";
         
-        $query = "INSERT INTO ox_account_business_role (account_id, business_role_id)
+        $query = "INSERT IGNORE INTO ox_account_business_role (account_id, business_role_id)
                     SELECT ".$accountId.", id from ox_business_role 
                     WHERE app_id = :appId and name in $bRole";
                     

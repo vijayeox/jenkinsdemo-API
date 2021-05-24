@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use App\Controller\AppRegisterController;
 use Oxzion\Service\AppService;
 use Oxzion\Service\RegistrationService;
+use Oxzion\Service\FileService;
 use Mockery;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Utils\FileUtils;
@@ -100,6 +101,11 @@ class AppControllerTest extends ControllerTest
         return $this->getApplicationServiceLocator()->get(RegistrationService::class);
     }
 
+    public function getFileService(){
+        return $this->getApplicationServiceLocator()->get(FileService::class);
+    }
+
+
     private function cleanFile()
     {
         if (file_exists(__DIR__ . '/../../sampleapp/data/template/COINewFooter.htm')) {
@@ -115,6 +121,44 @@ class AppControllerTest extends ControllerTest
         $contentTypeHeader = $this->getResponseHeader('content-type')->toString();
         $contentTypeRegex = '/application\/json(;? *?charset=utf-8)?/i';
         $this->assertTrue(preg_match($contentTypeRegex, $contentTypeHeader) ? true : false);
+    }
+
+        public function testDeployAppWithCreateFile()
+    {
+        $this->setUpTearDownHelper->setupAppDescriptor('applicationhdowithforms.yml');
+        $this->initAuthToken($this->adminUser);
+        if (enableCamundaForDeployApp == 0) {
+            $mockProcessManager = $this->getMockProcessManager();
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+        }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $mockRestClient->expects('postWithHeader')->with("setupjob", Mockery::any())->once()->andReturn(array('body' => '{"Success":true,"Message":"Job Scheduled Successfully!","JobId":"3a289705-763d-489a-b501-0755b9d4b64b","JobGroup":"autoRenewalJob"}'));
+        }
+        $path = __DIR__ . '/../../sampleapp/';
+        $data = ['path' => $path];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $sel = "select * from ox_app where uuid = 'a4b1f073-fc20-477f-a804-1aa206938c42'";
+        $res1 = $this->executeQueryTest($sel);
+        $data = '{"IcLastName":"Gordon","autoInsuranceCompany":"","autoInsuranceExpirationDate":"","autoLiability":false,"autoPolicy":"","cargoInsurance":false,"cargoInsuranceCompany":"","cargoInsuranceExpirationDate":"","cargoInsurancePolicy":"","city1IC":"Quae eos alias obcaecati dignissimos unde vero con","companyName":"","dataGrid":[{"nameDriverUnit":"Nehru","driverLastName":"Gordon","street1DriverUnitInfo":"87 Green Oak Lane","city1DriverUnitInfo":"d","stateDriverUnitInfo":{"name":"Alabama","abbreviation":"AL"},"driverEmail":"tazocaj@mailinator.com","pleaseSelectDriverType":{"":false,"rsp":false,"rspEmployee":false},"rspContactInformation":"","fmcsaMc":"","dot":"","zipCode1DriverUnitInfo":10906}],"dataGrid1":[{"vinDriverInfo":"","makeVin":"","modelVin":""}],"documents":[],"driverEmailWarning":"Please Note : Driver email must be unique","effectiveDate":"2021-05-20T00:00:00+05:30","iCEmail":"vitufunaj@mailinator.com","iCFirstName":"Nehru","identifier_field":"iCEmail","name":"Nehru Gordon","nonOwnedAndHiredAutoInsuranceCompany":"","nonOwnedAndHiredAutoInsuranceExpirationDate":"","pleaseSelectTheFacility":"","state":{"name":"California","abbreviation":"CA"},"stateJsonList":[{"name":"Alabama","abbreviation":"AL"},{"name":"Arizona","abbreviation":"AZ"},{"name":"Arkansas","abbreviation":"AR"},{"name":"California","abbreviation":"CA"},{"name":"Colorado","abbreviation":"CO"},{"name":"Connecticut","abbreviation":"CT"},{"name":"Delaware","abbreviation":"DE"},{"name":"District Of Columbia","abbreviation":"DC"},{"name":"Florida","abbreviation":"FL"},{"name":"Georgia","abbreviation":"GA"},{"name":"Hawaii","abbreviation":"HI"},{"name":"Idaho","abbreviation":"ID"},{"name":"Illinois","abbreviation":"IL"},{"name":"Indiana","abbreviation":"IN"},{"name":"Iowa","abbreviation":"IA"},{"name":"Kansas","abbreviation":"KS"},{"name":"Kentucky","abbreviation":"KY"},{"name":"Louisiana","abbreviation":"LA"},{"name":"Maine","abbreviation":"ME"},{"name":"Maryland","abbreviation":"MD"},{"name":"Massachusetts","abbreviation":"MA"},{"name":"Michigan","abbreviation":"MI"},{"name":"Minnesota","abbreviation":"MN"},{"name":"Mississippi","abbreviation":"MS"},{"name":"Missouri","abbreviation":"MO"},{"name":"Montana","abbreviation":"MT"},{"name":"Nebraska","abbreviation":"NE"},{"name":"Nevada","abbreviation":"NV"},{"name":"New Hampshire","abbreviation":"NH"},{"name":"New Jersey","abbreviation":"NJ"},{"name":"New Mexico","abbreviation":"NM"},{"name":"New York","abbreviation":"NY"},{"name":"North Carolina","abbreviation":"NC"},{"name":"North Dakota","abbreviation":"ND"},{"name":"Ohio","abbreviation":"OH"},{"name":"Oklahoma","abbreviation":"OK"},{"name":"Oregon","abbreviation":"OR"},{"name":"Pennsylvania","abbreviation":"PA"},{"name":"Rhode Island","abbreviation":"RI"},{"name":"South Carolina","abbreviation":"SC"},{"name":"South Dakota","abbreviation":"SD"},{"name":"Tennessee","abbreviation":"TN"},{"name":"Texas","abbreviation":"TX"},{"name":"Utah","abbreviation":"UT"},{"name":"Vermont","abbreviation":"VT"},{"name":"Virginia","abbreviation":"VA"},{"name":"Washington","abbreviation":"WA"},{"name":"West Virginia","abbreviation":"WV"},{"name":"Wisconsin","abbreviation":"WI"},{"name":"Wyoming","abbreviation":"WY"}],"status":"Non-Compliant","street1IC":"87 Green Oak Lane","textFieldNonOwnedAndHiredAutoInsurancePolicy":"","zipCode1IC":10906,"appId":"a4b1f073-fc20-477f-a804-1aa206938c42","app_id":"'.$res1[0]['id'].'","entity_name":"Compliance","accountId":null,"workFlowId":null,"filterParams":{"filter":[{"filter":{"filters":[{"field":"iCEmail","operator":"eq","value":"vitufunaj@mailinator.com"}]}}]},"entityName":"Compliance"}';
+        $data = json_decode($data, true);
+        $fileService = $this->getFileService();
+        $fileService->createFile($data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $sel = "select * from ox_file order by id desc";
+        $resFile = $this->executeQueryTest($sel);
+        $sel = "select * from ox_file_participant";
+        $resFileParticipant = $this->executeQueryTest($sel);
+        $sel = "select * from ox_file_participant";
+        $resFileParticipant = $this->executeQueryTest($sel);
+        $this->assertEquals(1, count($resFileParticipant));       
+        $this->assertEquals($resFileParticipant[0]['file_id'], $resFile[0]['id']); 
+        $this->assertEquals(1, $resFileParticipant[0]['account_id']); 
     }
 
 

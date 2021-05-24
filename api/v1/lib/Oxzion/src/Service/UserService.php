@@ -666,6 +666,18 @@ class UserService extends AbstractService
             throw new ServiceException('Not allowed to delete the project manager', 'project.manager', OxServiceException::ERR_CODE_FORBIDDEN);
         }
         $account = $this->getAccount($form->account_id);
+        $queryString = "SELECT e.* FROM ox_employee e
+        INNER JOIN ox_user u ON u.person_id = e.manager_id
+        WHERE u.uuid = :userId";
+        $params = ['userId' => $id['userId']];
+        $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+        if (isset($resultSet[0]['manager_id'])) {
+            $sql = $this->getSqlObject();
+            $updatedData['manager_id'] = NULL;
+            $update = $sql->update('ox_employee')->set($updatedData)
+                ->where(array('ox_employee.manager_id' => $resultSet[0]['manager_id']));
+            $this->executeUpdate($update);
+        }
         $originalArray = array();
         $originalArray['status'] = 'Inactive';
         $originalArray['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
@@ -1488,5 +1500,15 @@ class UserService extends AbstractService
         }else{
             return null;
         }
+    }
+
+    public function getUserDataByIdentifier($appId, $identifier, $identifierField){
+        $select = "SELECT oxu.uuid as userId, oxa.uuid as accountId FROM ox_wf_user_identifier owui
+                    INNER JOIN ox_user oxu ON oxu.id = owui.user_id
+                    INNER JOIN ox_account oxa ON oxa.id = owui.account_id
+                    WHERE identifier_name = :identityField AND 
+                    app_id = :appId AND identifier = :identifier";
+        $selectQuery = array("identityField" => $identifierField, "appId" => $appId, "identifier" => $identifier);
+        return $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
     }
 }
