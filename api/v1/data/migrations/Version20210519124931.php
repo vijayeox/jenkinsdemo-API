@@ -27,6 +27,13 @@ final class Version20210519124931 extends AbstractMigration
             FOREIGN KEY (`buyer_account_business_role_id`) REFERENCES ox_account_business_role(`id`)
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
+        $this->addSql("DELETE S1 FROM ox_file_participant AS S1 
+                       INNER JOIN ox_file_participant AS S2
+                       WHERE S1.id > S2.id AND 
+                       S1.`business_role_id` = S2.`business_role_id` AND
+                       S1.`account_id` = S2.`account_id` AND
+                       S1.`file_id` = S2.`file_id`;");
+                       
         $this->addSql("ALTER TABLE `ox_file_participant` ADD UNIQUE `accountFileBusinessRole` (`account_id`, `business_role_id`,`file_id`);");
 
 
