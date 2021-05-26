@@ -80,6 +80,13 @@ class CommandService extends AbstractService
         if (isset($data['appId'])) {
             $appId = $this->getIdFromUuid('ox_app', $data['appId']);
             $accountId = isset($data['accountId']) && !empty($data['accountId']) ? $this->getIdFromUuid('ox_account', $data['accountId']) : AuthContext::get(AuthConstants::ACCOUNT_ID);
+            if(empty($accountId) && isset($data['accountName'])) {
+                $select = "SELECT id from ox_account where `name` = :accountName";
+                $selectQuery = array("accountName" => $data['accountName']);
+                $this->logger->info("Executing query $select with params - ".json_encode($selectQuery));
+                $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+                $accountId = !empty($result) ? $result[0]['id'] : null;
+            }
             if ($accountId) {
                 $select = "SELECT * from ox_app_registry where account_id = :accountId AND app_id = :appId";
                 $selectQuery = array("accountId" => $accountId, "appId" => $appId);
@@ -134,7 +141,7 @@ class CommandService extends AbstractService
                     if (is_array($result)) {
                         $inputData = $result;
                         $inputData['app_id'] = isset($data['app_id']) ? $data['app_id'] : null;
-                        $inputData['accountId'] = isset($data['accountId']) ? $data['accountId'] : null;
+                        $inputData['accountId'] = isset($data['accountId']) ? $data['accountId'] : (isset($inputData['accountId']) ? $inputData['accountId'] : null);
                         $inputData['workFlowId'] = isset($data['workFlowId']) ? $data['workFlowId'] : null;
                         $outputData = array_merge($outputData, $result);
                     }
@@ -271,7 +278,7 @@ class CommandService extends AbstractService
         } else {
             $sellerAccountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
         }
-        $buyerAccountId = $data['buyerAccountId'];
+        $buyerAccountId = isset($data['buyerAccountId']) ? $data['buyerAccountId'] : (isset($data['accountId']) ? $data['accountId'] : null);
         $buyerBusinessRole  = $data['businessRole'];
         $sellerBusinessRole = $data['sellerBusinessRole'];
         $appId = $data['appId'];

@@ -11,19 +11,13 @@ export default class Register extends React.Component {
     this.productName = this.props.productName;
     this.appId = this.proc.metadata.appId;
     this.formContent = this.props.form;
+    this.accountName = this.props.accountName;
   }
 
 
   render() {
     return (
       <div className="signUpWrapper">
-        <style
-          type="text/css"
-          dangerouslySetInnerHTML={{
-            __html:
-              "\n   .logo{\n    text-align: center;\n    margin:25px;\n    height:100px;\n  }\n  .logo > img{\n    width:auto;\n    height: 100px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
-          }}
-        />
         <div className="container hub-registration">
            <ul className="tab-group">
                

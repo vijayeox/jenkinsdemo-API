@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
           .then(response => {
             if (response.status == 417) {
-              Swal.showValidationMessage(`We do not have an email on your account.<br/>Contact Us:Helpline Ph: +1 216-452-0324 | Email: padi-professionals@hubinternational.com`);
+              Swal.showValidationMessage(`We do not have an email on your account.<br/>Contact Us at support@eoxvantage.com`);
               return;
             }
             if (!response.ok) {
@@ -274,11 +274,7 @@ console.log("form load");
      form.on("submit", function(submission, next) {
       console.log("Submission start...............");
       
-      submission.data.app_id = appId;
-      submission.data.address1 = "Rapid Trading Intl 1048 Main St";
-      submission.data.city = "Fairbanks";
-      submission.data.zip = "99708";
-      submission.data.state = "AK";
+      submission.data.appId = appId;
       
       submission.data.preferences = JSON.stringify({timezone:moment.tz.guess()});
       console.log("data", submission.data); 

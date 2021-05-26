@@ -12,10 +12,10 @@
     "defaultAppforOrgs": true,
     "server": "server.js",
     "title": {
-        "en_EN": "Compliance"
+        "en_EN": "HubDriveOnline"
     },
     "description": {
-        "en_EN": "Compliance"
+        "en_EN": "HubDriveOnline"
     },
     "files": [
         "main.js",

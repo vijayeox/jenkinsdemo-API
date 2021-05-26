@@ -47,7 +47,7 @@ org:
             -
                 businessRole: 'Contract Carrier'
                 entity:
-                    - Independent Contractor
+                    - 'Independent Contractor'
         preferences: '{}'
     -
         name: IGGI
@@ -68,7 +68,7 @@ org:
             -
                 businessRole: 'Contract Carrier'
                 entity:
-                    - Independent Contractor
+                    - 'Independent Contractor'
         preferences: '{}'
 businessRole:
     -
@@ -804,7 +804,7 @@ pages:
                             filterFormat: YYYY-MM-DD
 menu:
     -
-        name: Independent Contractor
+        name: 'Independent Contractor'
         icon: 'fas fa-list'
         page_uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
         uuid: 00a0c261-4283-4eb3-85db-753692c27172
