@@ -531,7 +531,8 @@ class Module
                         $container->get(Service\CommentService::class),
                         $container->get(Service\EsignService::class),
                         $container->get(Service\FieldService::class),
-                        $container->get(Service\AccountService::class)
+                        $container->get(Service\AccountService::class),
+                        $container->get(Service\BusinessParticipantService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {

@@ -1503,12 +1503,16 @@ class UserService extends AbstractService
     }
 
     public function getUserDataByIdentifier($appId, $identifier, $identifierField){
-        $select = "SELECT oxu.uuid as userId, oxa.uuid as accountId FROM ox_wf_user_identifier owui
+        $select = "SELECT oxu.uuid as userId, oxa.uuid as accountId,oxa.id as account_id, oxae.id as entityId
+                    FROM ox_wf_user_identifier owui
                     INNER JOIN ox_user oxu ON oxu.id = owui.user_id
                     INNER JOIN ox_account oxa ON oxa.id = owui.account_id
-                    WHERE identifier_name = :identityField AND 
-                    app_id = :appId AND identifier = :identifier";
+                    INNER JOIN ox_app app ON app.id = owui.app_id
+                    INNER JOIN ox_app_entity oxae ON oxae.app_id = app.id
+                    WHERE owui.identifier_name = :identityField AND 
+                    app.uuid = :appId AND owui.identifier = :identifier";
         $selectQuery = array("identityField" => $identifierField, "appId" => $appId, "identifier" => $identifier);
+        $this->logger->info("INFO---$select with Parasm--".print_r($selectQuery,true));
         return $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
     }
 }

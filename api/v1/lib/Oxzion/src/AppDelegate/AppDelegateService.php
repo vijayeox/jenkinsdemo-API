@@ -21,6 +21,7 @@ use Oxzion\Service\CommentService;
 use Oxzion\Service\EsignService;
 use Oxzion\Service\AccountService;
 use Oxzion\EntityNotFoundException;
+use Oxzion\Service\BusinessParticipantService;
 
 class AppDelegateService extends AbstractService
 {
@@ -45,7 +46,8 @@ class AppDelegateService extends AbstractService
         CommentService $commentService,
         EsignService $esignService,
         FieldService $fieldService,
-        AccountService $accountService
+        AccountService $accountService,
+        BusinessParticipantService $businessParticipantService
     )
     {
         $this->templateService = $templateService;
@@ -64,6 +66,7 @@ class AppDelegateService extends AbstractService
             mkdir($this->delegateDir, 0777, true);
         }
         $this->accountService = $accountService;
+        $this->businessParticipantService = $businessParticipantService;
     }
 
     public function setPersistence($appId, $persistence)
@@ -157,6 +160,9 @@ class AppDelegateService extends AbstractService
                 }
                 if (method_exists($obj, "setAccountService")) {
                     $obj->setAccountService($this->accountService);
+                }
+                if (method_exists($obj, "setBusinessParticipantService")) {
+                    $obj->setBusinessParticipantService($this->businessParticipantService);
                 }
                 if (method_exists($obj, "setAppDelegateService")) {
                     $obj->setAppDelegateService($this->setAppDelegateService());
