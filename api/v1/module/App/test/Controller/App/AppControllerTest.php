@@ -159,6 +159,14 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(1, count($resFileParticipant));       
         $this->assertEquals($resFileParticipant[0]['file_id'], $resFile[0]['id']); 
         $this->assertEquals(1, $resFileParticipant[0]['account_id']); 
+        $entityId = $resFile[0]['entity_id'];
+        $accountId = $resFileParticipant[0]['account_id'];
+        $sel = "SELECT obr.account_id 
+                   from ox_account_offering oof 
+                   inner join ox_account_business_role obr on obr.id = oof.account_business_role_id
+                   where oof.entity_id = $entityId and obr.account_id = $accountId";
+        $resEntitySellerAccount = $this->executeQueryTest($sel);
+        $this->assertEquals(1, count($resEntitySellerAccount)); 
     }
 
 

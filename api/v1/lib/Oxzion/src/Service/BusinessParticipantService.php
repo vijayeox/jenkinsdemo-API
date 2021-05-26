@@ -26,6 +26,11 @@ class BusinessParticipantService extends AbstractService
     public function getEntitySellerAccount($entityId)
     {
         $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+        $result = $this->getBusinessRelationship($entityId, $accountId);
+        if (count($result) > 0) {
+            return $result[0]['sellerAccountId'];
+        }
+
         $select = "SELECT obr.account_id 
                    from ox_account_offering oof 
                    inner join ox_account_business_role obr on obr.id = oof.account_business_role_id
@@ -37,20 +42,23 @@ class BusinessParticipantService extends AbstractService
             return $result[0]['account_id'];
         }
         
-        $select = "SELECT sbr.account_id 
+         return $this->entityService->getEntityOfferingAccount($entityId);
+    }
+
+    private function getBusinessRelationship($entityId, $buyerAccountId, $sellerAccountId = null){
+        $select = "SELECT sbr.account_id as sellerAccountId, bbr.account_id as buyerAccountId
                    from ox_business_relationship obr 
                    inner join ox_account_business_role sbr on sbr.id = obr.seller_account_business_role_id
                    inner join ox_account_business_role bbr on bbr.id = obr.buyer_account_business_role_id
                    inner join ox_account_offering oof on sbr.id = oof.account_business_role_id
                    where oof.entity_id = :entityId and bbr.account_id = :accountId";
-        $params = ["entityId" => $entityId, "accountId" => $accountId];
-        $this->logger->info("Query 2--- $select with Params--".print_r($params,true));
-        $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
-        if (count($result) > 0) {
-            return $result[0]['account_id'];
+        $params = ["entityId" => $entityId, "accountId" => $buyerAccountId];
+        if(isset($sellerAccountId)){
+            $select .= " AND sbr.account_id = :sellerAccountId";
+            $params['sellerAccountId'] = $sellerAccountId;
         }
-
-        return $this->entityService->getEntityOfferingAccount($entityId);
+        $this->logger->info("Query 2--- $select with Params--".print_r($params,true));
+        return $this->executeQueryWithBindParameters($select, $params)->toArray();
     }
 
     public function setupBusinessRelationship($buyerAccountId, $sellerAccountId, $buyerBusinessRole, $sellerBusinessRole, $appId){
@@ -81,5 +89,11 @@ class BusinessParticipantService extends AbstractService
             throw new ServiceException("Account Business Role Not Found", "account.businessRole.notfound", OxServiceException::ERR_CODE_NOT_FOUND );
         }
         return $result[0]['id'];
+    }
+
+    public function checkIfBusinessRelationshipExists($entityId, $buyerAccountId, $sellerAccountId){
+       $result = $this->getBusinessRelationship($entityId, $buyerAccountId, $sellerAccountId); 
+       $this->logger->info("Result---".print_r(count($result),true));
+       return count($result) > 0;
     }
 }
