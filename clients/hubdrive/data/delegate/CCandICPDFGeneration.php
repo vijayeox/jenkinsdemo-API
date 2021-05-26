@@ -38,8 +38,14 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
                 foreach ($fieldTypeMappingPDF[$selectedTemplate]["text"] as  $formField => $pdfField) {
                 isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
                 }
-                $data['pdfDate'] = explode('T',$data['freightBrokerDetailsDate'])[0];
-                $pdfData['freightBrokerDetailsDate'] = date("m/d/Y", strtotime($data['pdfDate']));
+                if(isset($data['freightBrokerDetailsDate'])){
+                $data['pdfDateCC'] = explode('T',$data['freightBrokerDetailsDate'])[0];
+                $pdfData['Date'] = date("m/d/Y", strtotime($data['pdfDateCC']));
+                }
+                if(isset($data['motorCarrierDetailsDate'])){
+                $data['pdfDateIC'] = explode('T',$data['motorCarrierDetailsDate'])[0];
+                $pdfData['Date'] = date("m/d/Y", strtotime($data['pdfDateIC']));
+                }
                 $pdfData = array_filter($pdfData);
                 $pdfData['appId'] = $data['appId'];
                 $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
