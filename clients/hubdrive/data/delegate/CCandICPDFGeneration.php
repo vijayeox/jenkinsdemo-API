@@ -10,7 +10,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Model\Field;
 
-class CCandICPDFGeneration extends AbstractDocumentAppDelegate
+class ICPDFGeneration extends AbstractDocumentAppDelegate
 {
     use FileTrait;
     use CommentTrait;
@@ -25,7 +25,7 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
     {
         $fieldTypeMappingPDF = include(__DIR__ . "/FieldMappingCCPDF.php");
         $this->logger->info("PDF MAPPING DATA : ". print_r($data, true));
-        $PDFTemplateList = array("CC");
+        $PDFTemplateList = array("IC");
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
         $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
@@ -38,13 +38,11 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
                 foreach ($fieldTypeMappingPDF[$selectedTemplate]["text"] as  $formField => $pdfField) {
                 isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
                 }
-                if(isset($data['freightBrokerDetailsDate'])){
-                $data['pdfDateCC'] = explode('T',$data['freightBrokerDetailsDate'])[0];
-                $pdfData['Date'] = date("m/d/Y", strtotime($data['pdfDateCC']));
-                }
                 if(isset($data['motorCarrierDetailsDate'])){
                 $data['pdfDateIC'] = explode('T',$data['motorCarrierDetailsDate'])[0];
-                $pdfData['Date'] = date("m/d/Y", strtotime($data['pdfDateIC']));
+                $pdfData['contractDate'] = date("m/d/Y", strtotime($data['pdfDateIC']));
+                $pdfData['dayMonth'] = date("m/d", strtotime($data['pdfDateIC']));
+                $pdfData['year'] = date("y", strtotime($data['pdfDateIC']));
                 }
                 $pdfData = array_filter($pdfData);
                 $pdfData['appId'] = $data['appId'];
@@ -55,18 +53,70 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
                 $documentDestination
             );
             $documentpdf = $fileDestination['relativePath'] . $selectedTemplate.".pdf";
+            switch ($selectedTemplate) {
+                case "IC":  
+                    $field = array(
+                        array(
+                        "name"=>"esignICForm",
+                        "height"=>80,
+                        "width"=>20,
+                        "x"=>60,
+                        "y"=>24,
+                        "pageNumber"=>13,
+                        ),
+                        array(
+                            "name"=>"esignICForm",
+                            "height"=>80,
+                            "width"=>15,
+                            "x"=>77,
+                            "y"=>31,
+                            "pageNumber"=>6,
+                        ),
+                        array(
+                            "name"=>"esignICForm",
+                            "height"=>80,
+                            "width"=>15,
+                            "x"=>77,
+                            "y"=>38,
+                            "pageNumber"=>6,
+                        ),
+                         array(
+                            "name"=>"esignICForm",
+                            "height"=>80,
+                            "width"=>15,
+                            "x"=>77,
+                            "y"=>45,
+                            "pageNumber"=>6,
+                         )
+                        );
+                    break;
+                default:
+                  echo "Invalid document name!";
+              }
+        $signers = array(
+                "name"=>$selectedTemplate,
+                "message"=>"Please sign",
+                "signers"=>[['participant' => ["email"=>$data['personalInfoEmail'], 'name' => $data['personalInfoFirstName']],
+                            "fields"=> $field]]);
+        $docId = $this->setupDocument($fileUUID."_".$selectedTemplate,$documentDestination,$signers);
+        $signingLink = $this->getDocumentSigningLink($docId);
             array_push(
                 $generatedPDFList,
                 array(
                     "fullPath" => $documentDestination,
                     "file" => $documentpdf,
                     "originalName" => $selectedTemplate.".pdf",
+                    "type" => "file/pdf",
+                    "docId"=>$docId,
+                    "signingLink"=>$signingLink,
+                    "status"=>"UNSIGNED"
                 )
             );  
     }
     $data['attachments'] = $generatedPDFList;
-        $this->logger->info("PDF MAPPING : ". print_r($data['attachments'], true));
-        $this->saveFile($data, $fileUUID);
-        return $data;
+    $this->logger->info("PDF MAPPING : ". print_r($data['attachments'], true));
+    $this->logger->info("Completed signature document with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    $this->saveFile($data, $fileUUID);
+    return $data;
 }
 }
