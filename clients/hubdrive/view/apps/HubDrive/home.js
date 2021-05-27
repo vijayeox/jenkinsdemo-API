@@ -25,12 +25,27 @@ class Home extends React.Component {
       if (cache) {
         if (cache.workflow_uuid) {
           this.setState({ workflowId: cache.workflow_uuid });
-          this.getFormData(cache.workflow_uuid).then((formResponse) => {
+          this.getWorkflowForm(cache.workflow_uuid).then((formResponse) => {
             if (formResponse.data) {
               this.setState({
                 formContent: JSON.parse(formResponse.data.template),
                 cachePage: cache.page,
                 formID: formResponse.data.id,
+                cacheData: cache
+              });
+            } else {
+              this.setState({
+                showMenuPage: true
+              });
+            }
+          });
+        } else if(cache.formId) {
+          this.getFormData(cache.formId).then((formResponse) => {
+            if (formResponse.data) {
+              this.setState({
+                formContent: JSON.parse(formResponse.data.template),
+                cachePage: 0,
+                formID: formResponse.data.uuid,
                 cacheData: cache
               });
             } else {
@@ -82,10 +97,20 @@ class Home extends React.Component {
     return cacheData;
   }
 
-  async getFormData(workflow_id) {
+  async getWorkflowForm(workflow_id) {
     let formData = await this.helper.request(
       "v1",
       "/app/" + application_id + "/workflow/" + workflow_id + "/startform",
+      {},
+      "get"
+    );
+    return formData;
+  }
+
+  async getFormData(formId) {
+    let formData = await this.helper.request(
+      "v1",
+      "/app/" + application_id + "/form/" + formId,
       {},
       "get"
     );

@@ -439,24 +439,41 @@
 			"id": "eqf8oeh"
 		}, {
 			"label": "identifier_field",
+			"customClass": "",
+			"modalEdit": false,
 			"defaultValue": "email",
-			"key": "identifierField",
+			"persistent": true,
+			"protected": false,
+			"dbIndex": false,
+			"encrypted": false,
+			"redrawOn": "",
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"calculateServer": false,
+			"key": "identifier_field",
+			"tags": [],
+			"properties": {},
+			"logic": [],
+			"attributes": {},
+			"overlay": {
+				"style": "",
+				"page": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false,
 			"placeholder": "",
 			"prefix": "",
-			"customClass": "",
 			"suffix": "",
 			"multiple": false,
-			"protected": false,
 			"unique": false,
-			"persistent": true,
 			"hidden": false,
 			"clearOnHide": true,
 			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
 			"labelPosition": "top",
 			"description": "",
 			"errorLabel": "",
@@ -465,14 +482,9 @@
 			"tabindex": "",
 			"disabled": false,
 			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"calculateServer": false,
 			"widget": {
 				"type": "input"
 			},
-			"attributes": {},
 			"validateOn": "change",
 			"validate": {
 				"required": false,
@@ -487,21 +499,12 @@
 				"when": null,
 				"eq": ""
 			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
 			"allowCalculateOverride": false,
-			"encrypted": false,
 			"showCharCount": false,
 			"showWordCount": false,
-			"properties": {},
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "exqrpkn"
+			"id": "e7nto5j"
 		}, {
 			"label": "seller account name",
 			"customClass": "",
@@ -1901,7 +1904,7 @@
 		"id": "e6vclmm"
 	}],
 	"revisions": "current",
-	"_vid": 32,
+	"_vid": 33,
 	"title": "ICRegistration",
 	"display": "form",
 	"access": [{
@@ -1916,6 +1919,6 @@
 	"path": "icregistration",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2021-05-18T07:58:28.572Z",
-	"modified": "2021-05-26T10:57:10.974Z",
+	"modified": "2021-05-27T10:51:01.417Z",
 	"machineName": "testdivehub:registration"
 }

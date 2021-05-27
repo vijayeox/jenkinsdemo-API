@@ -233,6 +233,12 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        identifiers:
+            -
+                identifier: email
+        participantRole:
+            -
+                businessRole: 'Independent Contractor'
         pageContent:
             data:
                 content:
@@ -802,6 +808,85 @@ pages:
                             cell: '<td>{formatDate(item.effectiveDate)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+    -
+        name: 'Independent Contractor View'
+        uuid: 1cc7f23c-539b-488d-97da-1f02f7dc2090
+        description: 'Shows the Independent Contractor'
+        content:
+            -
+                type: List
+                content:
+                    route: file
+                    filterable: true
+                    defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: ''
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: ''
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            rule: 'row.status == "Pending Review" || row.status == "Review"'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                    columnConfig:
+                        -
+                            title: Name
+                            field: name
 menu:
     -
         name: 'Independent Contractor'
@@ -809,6 +894,12 @@ menu:
         page_uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
         uuid: 00a0c261-4283-4eb3-85db-753692c27172
         privilege: MANAGE_IC
+    -
+        name: 'Independent Contractor'
+        icon: 'fas fa-list'
+        page_uuid: 1cc7f23c-539b-488d-97da-1f02f7dc2090
+        uuid: 86ebed31-7acf-4a98-993b-830c440d2bca
+        privilege: '{"eq" : "MANAGE_EMPLOYEE_READ","neq" : "MANAGE_IC_READ"}'
 form:
     -
         name: 'Compliance CheckList Form'
