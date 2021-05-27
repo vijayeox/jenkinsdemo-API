@@ -10,7 +10,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Model\Field;
 
-class ICPDFGeneration extends AbstractDocumentAppDelegate
+class CCandICPDFGeneration extends AbstractDocumentAppDelegate
 {
     use FileTrait;
     use CommentTrait;
