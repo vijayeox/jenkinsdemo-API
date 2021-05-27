@@ -22,7 +22,9 @@ class OnboardingCompletionMail extends MailDelegate
         $mailOptions['subject'] = 'Onboarding Completion';
         $template = 'OnboardingCompletionMail';
         if (isset($data['attachments'])) {
+            if(is_string($data['attachments'])){
             $data['attachments'] = json_decode($data['attachments'],true);
+            }
             foreach ($data['attachments'] as $key => $value) {
                 $mailOptions['attachments'][$key] = $value['fullPath'];
             }
