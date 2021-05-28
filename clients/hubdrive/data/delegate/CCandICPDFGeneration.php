@@ -96,7 +96,7 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
         $signers = array(
                 "name"=>$selectedTemplate,
                 "message"=>"Please sign",
-                "signers"=>[['participant' => ["email"=>$data['personalInfoEmail'], 'name' => $data['personalInfoFirstName']],
+                "signers"=>[['participant' => ["email"=>$data['email'], 'name' => $data['firstname']],
                             "fields"=> $field]]);
         $docId = $this->setupDocument($fileUUID."_".$selectedTemplate,$documentDestination,$signers);
         $signingLink = $this->getDocumentSigningLink($docId);
