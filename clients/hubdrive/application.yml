@@ -68,7 +68,7 @@ org:
             -
                 businessRole: 'Contract Carrier'
                 entity:
-                    - 'Independent Contractor'
+                    - Onboarding
         preferences: '{}'
 businessRole:
     -
@@ -222,7 +222,7 @@ role:
             name: 'Independent Contractor'
 entity:
     -
-        name: 'Independent Contractor'
+        name: Onboarding
         start_date_field: start_date
         end_date_field: end_date
         status_field: status
@@ -711,7 +711,7 @@ pages:
     -
         name: 'Independent Contractors'
         uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
-        description: 'Shows a list of Independent Contractor'
+        description: 'Shows a list of Independent Contractors'
         content:
             -
                 type: List
@@ -907,6 +907,18 @@ form:
         description: Compliance
         template_file: hubComplianceChecklist.json
         entity: Compliance
+    -
+        name: 'Part Time IC Registration Form'
+        uuid: 02510bad-981c-43a9-a83d-c7436c9aba1a
+        description: 'Onboarding IC'
+        template_file: partTimeICRegistration.json
+        entity: Onboarding
+    -
+        name: 'Full Time IC Registration Form'
+        uuid: cfc8cd3f-58c4-400f-b9f1-e1916506f5e6
+        description: 'Onboarding IC'
+        template_file: fullTimeICRegistration.json
+        entity: Onboarding
     -
         name: 'Driver Employement Application Form'
         uuid: 6c7d8cff-a5ec-4921-b182-75253f734712
