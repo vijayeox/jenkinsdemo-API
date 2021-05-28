@@ -4,11 +4,20 @@ return array(
         "text" =>
         [
             'companyName' => 'companyName',
-            'personalInfoFirstName' => 'personalInfoFirstName',
-            'personalInfoLastName' => 'personalInfoLastName',
+            'firstname' => 'firstname',
+            'lastname' => 'personalInfoLastName',
             'personalInfoDOT' => 'personalInfoDOT',
+            'mc' => 'untitled3'
+        ],
+    ],
+    "IC" => [    
+        "text" =>
+        [
+            'companyName' => 'companyname',
+            'title' => 'title',
         ],
     ]
+
 );
 
 
