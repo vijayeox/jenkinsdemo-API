@@ -17309,7 +17309,7 @@
 		"key": "esign",
 		"tags": [],
 		"properties": {
-			"commands": "[{ \t\"command\": \"fileSave\", \t\"entity_name\": \"Independent Contractor Onboarding\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Independent Contractor Onboarding\", \t\"delegate\": \"CCandICPDFGeneration\" }]",
+			"commands": "[{ \t\"command\": \"delegate\", \t\"entity_name\": \"Independent Contractor Onboarding\", \t\"delegate\": \"CCandICPDFGeneration\" },{ \t\"command\": \"fileSave\", \t\"entity_name\": \"Independent Contractor Onboarding\" }]",
 			"post_delegate_refresh": "documentspreview"
 		},
 		"customConditional": "",
