@@ -29,7 +29,8 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
         $this->logger->info("PDF MAPPING DATA : ". print_r($data, true));
         $PDFTemplateList = array("IC");
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
-        $accountId = $this->getAccountByName($data['accountName']) ? $this->getAccountByName($data['accountName']) : AuthContext::get(AuthConstants::ACCOUNT_UUID);
+        $currentAccount = isset($data['accountId']) ? $data['accountId'] : null;
+        $accountId = isset($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
         $this->logger->info("ACCOUT IS ____" .$accountId);
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('accountId' => $accountId));
         $this->logger->info("GenerateFilledPDF Dest" . json_encode($fileDestination, JSON_UNESCAPED_SLASHES));
