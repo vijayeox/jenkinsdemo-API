@@ -376,7 +376,7 @@
                         <tr>
                         <td>
                             <p>Hello,</p>
-                            <p>This is an automated email to notify that {firstname}{$lastname} has completed the On-Boarding process.the attached documents are for your review.</p>
+                            <p>This is an automated email to notify that {$firstname}{$lastname} has completed the On-Boarding process.the attached documents are for your review.</p>
                             <p>Thank you</p>
                             <br />
                             <br />
