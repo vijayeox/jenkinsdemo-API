@@ -4,7 +4,7 @@ return array(
         "text" =>
         [
             'companyName' => 'companyName',
-            'firstname' => 'firstname',
+            'firstname' => 'personalInfoFirsttName',
             'lastname' => 'personalInfoLastName',
             'personalInfoDOT' => 'personalInfoDOT',
             'mc' => 'untitled3'
