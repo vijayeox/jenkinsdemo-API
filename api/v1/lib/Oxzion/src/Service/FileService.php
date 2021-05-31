@@ -737,13 +737,26 @@ class FileService extends AbstractService
             $this->logger->info("ACCOUNT ID-----".json_encode($accountId));
             // $accountId = isset($accountId) ? $this->getIdFromUuid('ox_account', $accountId) :
             // AuthContext::get(AuthConstants::ACCOUNT_ID);
-            $params = array('id' => $id,
-                'accountId' => $accountId);
-            $select = "SELECT oxf.id, oxf.uuid, oxf.data, oae.uuid as entity_id, oxf.fileTitle as title from ox_file oxf 
-                        inner join ox_app_entity oae on oae.id = oxf.entity_id
-                        where oxf.uuid = :id AND oxf.account_id = :accountId";
-            $this->logger->info("Executing query $select with params " . json_encode($params));
-            $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
+            $params = array('id' => $id);
+            // 
+            $select = "SELECT oxf.id, oxf.uuid, oxf.data, oae.uuid as entity_id,oae.id as entityId, oxf.fileTitle as title from ox_file oxf 
+                        inner join ox_app_entity oae on oae.id = oxf.entity_id";
+            $where = " where oxf.uuid = :id ";
+            $result = $this->executeQueryWithBindParameters($select.$where, $params)->toArray();
+            if (count($result) == 0) {
+                return 0;
+            }
+            $res = $this-> checkIfEntityIsOfferedByBusiness($result[0]['entityId']);
+            if($res){
+                $select .= " inner join ox_file_participant oxfp on oxfp.file_id = oxf.id";
+                $where .= "AND oxfp.account_id = :accountId";
+            }else{
+                $where .= "AND oxf.account_id = :accountId";
+            }
+            $params['accountId'] = $accountId;
+            $selectQuery = $select.$where;
+            $this->logger->info("Executing query $selectQuery with params " . json_encode($params));
+            $result = $this->executeQueryWithBindParameters($selectQuery, $params)->toArray();
             $this->logger->info("FILE DATA ------" . json_encode($result));
             if (count($result) > 0) {
                 $this->logger->info("FILE ID  ------" . json_encode($result));
@@ -759,6 +772,13 @@ class FileService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
+    }
+
+    private function checkIfEntityIsOfferedByBusiness($entityId){
+        $select = "SELECT entity_id from ox_account_offering where entity_id =:entityId";
+        $params = ['entityId' => $entityId];
+        $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
+        return count($response) > 0;
     }
 
     public function getFileByWorkflowInstanceId($workflowInstanceId, $isProcessInstanceId = true)

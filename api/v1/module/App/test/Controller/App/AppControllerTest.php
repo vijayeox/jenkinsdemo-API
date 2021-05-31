@@ -154,8 +154,6 @@ class AppControllerTest extends ControllerTest
         $resFile = $this->executeQueryTest($sel);
         $sel = "select * from ox_file_participant";
         $resFileParticipant = $this->executeQueryTest($sel);
-        $sel = "select * from ox_file_participant";
-        $resFileParticipant = $this->executeQueryTest($sel);
         $this->assertEquals(1, count($resFileParticipant));       
         $this->assertEquals($resFileParticipant[0]['file_id'], $resFile[0]['id']); 
         $this->assertEquals(1, $resFileParticipant[0]['account_id']); 

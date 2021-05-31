@@ -440,6 +440,7 @@ class PipelineControllerTest extends ControllerTest
         $result = $this->executeQueryTest($query);
         $buyerAccountId = $result[2]['id'];
         $sellerAccountId = $result[4]['id'];
+        AuthContext::put(AuthConstants::ACCOUNT_ID, $buyerAccountId);
         $this->initAuthToken($this->adminUser);
         $entityId = 1;
         $getBusinessParticipantService = $this->getBusinessParticipantService();
