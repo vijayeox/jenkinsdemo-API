@@ -693,7 +693,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Independent Contractor Onboarding"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -809,7 +809,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Independent Contractor Onboarding"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -897,7 +897,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Compliance"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -1018,13 +1018,13 @@ form:
         uuid: 02510bad-981c-43a9-a83d-c7436c9aba1a
         description: 'Onboarding IC'
         template_file: partTimeICRegistration.json
-        entity: Onboarding
+        entity: 'Independent Contractor Onboarding'
     -
         name: 'Full Time IC Registration Form'
         uuid: cfc8cd3f-58c4-400f-b9f1-e1916506f5e6
         description: 'Onboarding IC'
         template_file: fullTimeICRegistration.json
-        entity: Onboarding
+        entity: 'Independent Contractor Onboarding'
     -
         name: 'Driver Employement Application Form'
         uuid: 6c7d8cff-a5ec-4921-b182-75253f734712
