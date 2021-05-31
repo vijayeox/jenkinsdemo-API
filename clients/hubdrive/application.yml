@@ -69,6 +69,7 @@ org:
                 businessRole: 'Contract Carrier'
                 entity:
                     - 'Independent Contractor Onboarding'
+                    - 'PartTime Independent Contractor Onboarding'
         preferences: '{}'
 businessRole:
     -
@@ -224,6 +225,42 @@ role:
         businessRole:
             name: 'Independent Contractor'
 entity:
+    -
+        name: 'PartTime Independent Contractor Onboarding'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: true
+        identifiers:
+            -
+                identifier: email
+        participantRole:
+            -
+                businessRole: 'Independent Contractor'
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        useRowData: false
+            metadata: {  }
+        page_uuid: dc9a67e9-1611-41e9-adbe-a5d21940e556
     -
         name: 'Independent Contractor Onboarding'
         start_date_field: start_date
@@ -693,7 +730,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Independent Contractor Onboarding"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Independent Contractor Onboarding"},{"field": "entity_name","operator": "eq","value": "PartTime Independent Contractor Onboarding"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -809,7 +846,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Independent Contractor Onboarding"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Independent Contractor Onboarding"},{"field": "entity_name","operator": "eq","value": "PartTime Independent Contractor Onboarding"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -1018,7 +1055,7 @@ form:
         uuid: 02510bad-981c-43a9-a83d-c7436c9aba1a
         description: 'Onboarding IC'
         template_file: partTimeICRegistration.json
-        entity: 'Independent Contractor Onboarding'
+        entity: 'PartTime Independent Contractor Onboarding'
     -
         name: 'Full Time IC Registration Form'
         uuid: cfc8cd3f-58c4-400f-b9f1-e1916506f5e6
