@@ -2093,12 +2093,23 @@ class FileService extends AbstractService
         }
     }
 
+    private function isJson($string) {
+        $array = json_decode($string, true);
+        if(is_array($array) && json_last_error() == JSON_ERROR_NONE){
+            return true;
+        }
+        return false;
+    }
+
     private function deleteAttachmentRecordWithUuid(&$data, $uuid)
     {
         if (isset($data['uuid']) && $data['uuid'] == $uuid) {
             return true;
         }
         foreach ($data as $key => &$value) {
+            if(gettype($value) == 'string' && $this->isJson($value)) {
+                $data[$key] = json_decode($value,true);
+            }
             if (is_array($value) && $this->deleteAttachmentRecordWithUuid($value, $uuid)) {
                 unset($data[$key]);
                 $data = array_filter($data);

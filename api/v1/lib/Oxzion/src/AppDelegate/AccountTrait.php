@@ -32,7 +32,12 @@ trait AccountTrait
     {
         return $this->accountService->registerAccount($data);
     }
+
     protected function checkIfBusinessRelationshipExists($businessRole,$appId,$accountId){
         return $this->businessParticipantService->checkIfBusinessRelationshipExists($businessRole,$appId,$accountId);
+    }
+
+    protected function getAccountByName($name) {
+        return $this->accountService->getAccountByName($name);
     }
 }
