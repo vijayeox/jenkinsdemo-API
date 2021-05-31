@@ -29,7 +29,7 @@ class OnboardingCompletionMail extends MailDelegate
             }
         }
         $currentAccount = isset($data['accountId']) ? $data['accountId'] : null;
-        $data['accountId'] = $this->getAccountByName($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
+        $data['accountId'] = isset($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
         $response = $this->sendMail($data, $template, $mailOptions);
             $this->logger->info("Mail Response" . $response);
         $data['accountId'] = $currentAccount;
