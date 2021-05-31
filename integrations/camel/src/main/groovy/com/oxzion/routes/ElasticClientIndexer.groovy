@@ -52,7 +52,7 @@ class ElasticClientIndexer extends RouteBuilder {
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody())
                         def HOST = env.getProperty("elastic.host")
                         def CORE = env.getProperty("elastic.core")
-                        def USERNAME = env.getProperty("elastic.username")
+                        def USERNAME = env.getProperty("elastic.user")
                         def PASSWORD = env.getProperty("elastic.password")
                         int PORT = env.getProperty("elastic.port").toInteger()
                         def idList,deleteList
