@@ -1507,6 +1507,7 @@ class FileService extends AbstractService
         $pageSize = " LIMIT 10";
         $offset = " OFFSET 0";
         $this->processFilterParams($fromQuery, $whereQuery, $sort, $pageSize, $offset, $field, $filterParams);
+        $this->processFileDataFilter($params, $filterParams, $whereQuery, $queryParams);
         $this->getFileFilterClause($whereQuery, $where);
         $where .= $snooze==false?" AND COALESCE(is_snoozed,0) !=1 ":" AND COALESCE(is_snoozed,0) !=0 ";
         try {
@@ -2411,6 +2412,23 @@ class FileService extends AbstractService
             $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
             $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             $whereQuery = rtrim($whereQuery, " AND ");
+        }
+    }
+
+    private function processFileDataFilter($params, $filterParams, &$whereQuery, &$queryParams)
+    {
+        if (isset($params['fieldContains'])) {
+            foreach (explode(',', $params['fieldContains']) as $field) {
+                $whereQuery .= strpos(strtolower(substr($whereQuery, -6)), ' and') != false ? " " : " AND ";
+                $whereQuery .= "JSON_VALUE(`of`.data, '$.$field') like '%".$filterParams[$field]."%'";
+            }
+        }
+        if (isset($params['fieldEq'])) {
+            foreach (explode(',', $params['fieldEq']) as $field) {
+                $whereQuery .= strpos(strtolower(substr($whereQuery, -6)), ' and') != false ? " " : " AND ";
+                $whereQuery .= "JSON_VALUE(`of`.data, '$.$field') = :data".$field;
+                $queryParams['data'.$field] = $filterParams[$field];
+            }
         }
     }
 
