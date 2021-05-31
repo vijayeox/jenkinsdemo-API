@@ -168,7 +168,7 @@ class FileIndexerService extends AbstractService
                     $select = 'SELECT file.id from ox_file as file
                     INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
                     INNER JOIN ox_app as app on entity.app_id = app.id
-                    where file.id in ('.$fileIds.') AND app.id ='.$appID.' and file.is_active = 1';
+                    where file.id in ('.$fileIds.') AND app.id ='.$appID.' and file.is_active = 0';
                     $list = $this->executeQuerywithParams($select)->toArray();
                     $deleteIdList = array_column($list, 'id');
 
