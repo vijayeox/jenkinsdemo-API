@@ -1,6 +1,7 @@
 <?php
 
 use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
+use Oxzion\AppDelegate\AccountTrait;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\AppDelegate\FileTrait;
@@ -15,6 +16,7 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
     use FileTrait;
     use CommentTrait;
     use EsignTrait;
+    use AccountTrait;
 
     public function __construct()
     {
@@ -27,8 +29,9 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
         $this->logger->info("PDF MAPPING DATA : ". print_r($data, true));
         $PDFTemplateList = array("IC");
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
-        $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID);
-        $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
+        $accountId = $this->getAccountByName($data['accountName']) ? $this->getAccountByName($data['accountName']) : AuthContext::get(AuthConstants::ACCOUNT_UUID);
+        $this->logger->info("ACCOUT IS ____" .$accountId);
+        $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('accountId' => $accountId));
         $this->logger->info("GenerateFilledPDF Dest" . json_encode($fileDestination, JSON_UNESCAPED_SLASHES));
         $generatedPDFList = array();
         foreach ($PDFTemplateList as $selectedTemplate) {
@@ -44,6 +47,7 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
                 $pdfData['dayMonth'] = date("m/d", strtotime($data['pdfDateIC']));
                 $pdfData['year'] = date("y", strtotime($data['pdfDateIC']));
                 }
+                $pdfData['accountId'] = $accountId;
                 $pdfData = array_filter($pdfData);
                 $pdfData['appId'] = $data['appId'];
                 $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
