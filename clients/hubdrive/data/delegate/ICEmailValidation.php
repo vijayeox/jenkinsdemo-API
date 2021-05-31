@@ -21,7 +21,7 @@ class ICEmailValidation extends AbstractAppDelegate
         $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'iCEmail','operator'=>'eq','value'=> $data['iCEmail']);
 
         $data['filterParams'] = $filterParams;
-        $data['entityName'] = 'On Trac Compliance';
+        $data['entityName'] = 'Compliance';
 
         $pageSize = 1000;
         $filterParams['filter'][0]['take'] = $pageSize;

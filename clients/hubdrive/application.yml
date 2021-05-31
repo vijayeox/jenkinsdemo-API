@@ -45,9 +45,9 @@ org:
             email: admin@OnTrac.com
         businessOffering:
             -
-                businessRole: 'Contract Carrier'
+                businessRole: 'Contract Carrier - Compliance only'
                 entity:
-                    - 'Independent Contractor'
+                    - Compliance
         preferences: '{}'
     -
         name: IGGI
@@ -68,7 +68,7 @@ org:
             -
                 businessRole: 'Contract Carrier'
                 entity:
-                    - Onboarding
+                    - 'Independent Contractor Onboarding'
         preferences: '{}'
 businessRole:
     -
@@ -83,6 +83,9 @@ businessRole:
     -
         name: Driver
         uuid: eee9f35d-acef-4b38-81b5-f48be17acc7a
+    -
+        name: 'Contract Carrier - Compliance only'
+        uuid: b01e2f50-0d65-4940-9070-62ed710dd2ca
 privilege:
     -
         name: MANAGE_COMPLIANCE
@@ -182,7 +185,7 @@ role:
                 permission: 3
         uuid: 7d73ada4-8e1c-436d-8c27-17503ac7e254
         businessRole:
-            name: 'Contract Carrier'
+            name: 'Contract Carrier - Compliance only'
     -
         name: 'Safety Director'
         privileges:
@@ -222,7 +225,7 @@ role:
             name: 'Independent Contractor'
 entity:
     -
-        name: Onboarding
+        name: 'Independent Contractor Onboarding'
         start_date_field: start_date
         end_date_field: end_date
         status_field: status
@@ -232,7 +235,7 @@ entity:
         title: '${entity_name} ${name}'
         enable_documents: true
         enable_comments: true
-        enable_view: false
+        enable_view: true
         identifiers:
             -
                 identifier: email
@@ -245,7 +248,7 @@ entity:
                     -
                         type: HTMLViewer
                         page_id: ''
-                        htmlContent: ''
+                        htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
                         externalDataSource: ''
                         formSource: ''
                         form_name: {  }
@@ -253,9 +256,10 @@ entity:
                         urlPostParams: ''
                         dashboard_uuid: ''
                         url: ''
-                        content: ''
+                        content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
                         useRowData: false
             metadata: {  }
+        page_uuid: 788ee1ca-f850-4e2c-ae68-e20a85c0cdf0
     -
         name: 'Driver Application'
         start_date_field: start_date
@@ -658,35 +662,6 @@ entity:
                         content: ''
                         useRowData: false
             metadata: {  }
-    -
-        name: 'Independent Contractor Pages'
-        start_date_field: start_date
-        end_date_field: end_date
-        status_field: status
-        subscriber_field: observers
-        ryg_rule: ''
-        statusField: ''
-        title: '${entity_name} ${name}'
-        enable_documents: true
-        enable_comments: true
-        enable_view: false
-        pageContent:
-            data:
-                content:
-                    -
-                        type: HTMLViewer
-                        page_id: ''
-                        htmlContent: ''
-                        externalDataSource: ''
-                        formSource: ''
-                        form_name: {  }
-                        formUrl: ''
-                        urlPostParams: ''
-                        dashboard_uuid: ''
-                        url: ''
-                        content: ''
-                        useRowData: false
-            metadata: {  }
 pages:
     -
         uuid: 7074d8e0-a3a2-4d4c-8215-779ac4709f75
@@ -740,7 +715,7 @@ pages:
                                 -
                                     type: EntityViewer
                                     page_id: ''
-                                    htmlContent: ''
+                                    htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
                                     externalDataSource: ''
                                     formSource: ''
                                     form_name: {  }
@@ -748,7 +723,7 @@ pages:
                                     urlPostParams: ''
                                     dashboard_uuid: ''
                                     url: ''
-                                    content: ''
+                                    content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
                                     useRowData: false
                             paramsDuplicate:
                                 -
@@ -776,25 +751,41 @@ pages:
                             defaultAction: true
                         -
                             name: Edit
-                            rule: 'row.status == "Pending Review" || row.status == "Review"'
+                            rule: 'false'
                             details:
                                 -
                                     type: Form
-                                    form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
+                                    form_id: 02510bad-981c-43a9-a83d-c7436c9aba1a
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                        -
+                            name: Edit
+                            rule: 'false'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: cfc8cd3f-58c4-400f-b9f1-e1916506f5e6
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
                     operations:
                         title: 'Create Independent Contractor'
-                        icon: 'fa fa-plus'
                         actions:
                             -
-                                name: 'Create New Independent Contractor'
+                                name: 'Create New PartTime IC'
                                 icon: 'fa fa-plus'
                                 rule: 'true'
                                 details:
                                     -
                                         type: Form
-                                        form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
+                                        form_id: 02510bad-981c-43a9-a83d-c7436c9aba1a
+                            -
+                                name: 'Create New FullTime IC'
+                                icon: 'fa fa-plus'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: cfc8cd3f-58c4-400f-b9f1-e1916506f5e6
                     columnConfig:
                         -
                             title: Name
@@ -812,6 +803,94 @@ pages:
         name: 'Independent Contractor View'
         uuid: 1cc7f23c-539b-488d-97da-1f02f7dc2090
         description: 'Shows the Independent Contractor'
+        content:
+            -
+                type: List
+                content:
+                    route: file
+                    filterable: true
+                    defaultFilters: '{"sort":[{"field":"date_created","dir":"desc"}]}'
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            rule: 'false'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: 02510bad-981c-43a9-a83d-c7436c9aba1a
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                        -
+                            name: Edit
+                            rule: 'false'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: cfc8cd3f-58c4-400f-b9f1-e1916506f5e6
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                    columnConfig:
+                        -
+                            title: Name
+                            field: name
+    -
+        name: 'View Compliances'
+        uuid: d81809b0-bd0f-11eb-8529-0242ac130003
+        description: 'Shows a list of Compliances'
         content:
             -
                 type: List
@@ -883,10 +962,31 @@ pages:
                                     form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
+                    operations:
+                        title: 'Create Compliance'
+                        icon: 'fa fa-plus'
+                        actions:
+                            -
+                                name: 'Create New Compliance'
+                                icon: 'fa fa-plus'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
                     columnConfig:
                         -
                             title: Name
                             field: name
+                        -
+                            title: Status
+                            field: status
+                        -
+                            title: 'Policy Effective Date'
+                            field: effectiveDate
+                            cell: '<td>{formatDate(item.effectiveDate)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
 menu:
     -
         name: 'Independent Contractor'
@@ -900,6 +1000,12 @@ menu:
         page_uuid: 1cc7f23c-539b-488d-97da-1f02f7dc2090
         uuid: 86ebed31-7acf-4a98-993b-830c440d2bca
         privilege: '{"eq" : "MANAGE_EMPLOYEE_READ","neq" : "MANAGE_IC_READ"}'
+    -
+        name: Compliance
+        icon: 'fas fa-list'
+        page_uuid: d81809b0-bd0f-11eb-8529-0242ac130003
+        uuid: d8180a96-bd0f-11eb-8529-0242ac130003
+        privilege: MANAGE_COMPLIANCE
 form:
     -
         name: 'Compliance CheckList Form'
