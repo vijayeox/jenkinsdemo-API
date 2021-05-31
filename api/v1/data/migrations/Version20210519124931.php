@@ -20,6 +20,7 @@ final class Version20210519124931 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
+        // Table to keep track of relationship between offering entity and a buying entity
          $this->addSql("CREATE TABLE IF NOT EXISTS `ox_business_relationship` (
             `seller_account_business_role_id` int(32) NOT NULL,
             `buyer_account_business_role_id` int(32) NOT NULL,
@@ -35,8 +36,6 @@ final class Version20210519124931 extends AbstractMigration
                        S1.`file_id` = S2.`file_id`;");
                        
         $this->addSql("ALTER TABLE `ox_file_participant` ADD UNIQUE `accountFileBusinessRole` (`account_id`, `business_role_id`,`file_id`);");
-
-
     }
 
     public function down(Schema $schema) : void

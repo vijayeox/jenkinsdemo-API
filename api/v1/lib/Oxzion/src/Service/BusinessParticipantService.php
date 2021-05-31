@@ -46,12 +46,13 @@ class BusinessParticipantService extends AbstractService
     }
 
     private function getBusinessRelationship($entityId, $buyerAccountId, $sellerAccountId = null){
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
         $select = "SELECT sbr.account_id as sellerAccountId, bbr.account_id as buyerAccountId
                    from ox_business_relationship obr 
                    inner join ox_account_business_role sbr on sbr.id = obr.seller_account_business_role_id
                    inner join ox_account_business_role bbr on bbr.id = obr.buyer_account_business_role_id
                    inner join ox_account_offering oof on sbr.id = oof.account_business_role_id
-                   where oof.entity_id = :entityId and bbr.account_id = :accountId";
+                   where oof.entity_id = :entityId and bbr.account_id = :accountId AND sbr.account_id <> $accountId";
         $params = ["entityId" => $entityId, "accountId" => $buyerAccountId];
         if(isset($sellerAccountId)){
             $select .= " AND sbr.account_id = :sellerAccountId";
