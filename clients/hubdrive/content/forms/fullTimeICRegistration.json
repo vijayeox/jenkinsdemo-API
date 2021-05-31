@@ -15901,7 +15901,7 @@
 		"key": "esign",
 		"tags": [],
 		"properties": {
-			"commands": "[{ \t\"command\": \"fileSave\", \t\"entity_name\": \"Independent Contractor Onboarding\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Independent Contractor Onboarding\", \t\"delegate\": \"CCPDFGeneration\" }]",
+			"commands": "[{ \t\"command\": \"delegate\", \t\"entity_name\": \"Independent Contractor Onboarding\", \t\"delegate\": \"CCPDFGeneration\" }]",
 			"post_delegate_refresh": "documentspreview"
 		},
 		"customConditional": "",
