@@ -2,13 +2,12 @@
 
 use Oxzion\AppDelegate\MailDelegate;
 use Oxzion\Db\Persistence\Persistence;
-use Oxzion\AppDelegate\FileTrait;
-use Oxzion\AppDelegate\AppDelegateTrait;
-use Oxzion\AppDelegate\HttpClientTrait;
+use Oxzion\AppDelegate\AccountTrait;
 
 class OnboardingCompletionMail extends MailDelegate
 {
 
+    use AccountTrait;
     public function setDocumentPath($destination)
     {
         $this->destination = $destination;
@@ -17,7 +16,7 @@ class OnboardingCompletionMail extends MailDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("Executing Onboarding Completion Mail with data- " . print_r($data,true));
-        $mailOptions = array();
+        $mailOptions = array();    
         $mailOptions['to'] = 'support@eoxvantage.com';
         $mailOptions['subject'] = 'Onboarding Completion';
         $template = 'OnboardingCompletionMail';
@@ -29,8 +28,11 @@ class OnboardingCompletionMail extends MailDelegate
                 $mailOptions['attachments'][$key] = $value['fullPath'];
             }
         }
+        $currentAccount = isset($data['accountId']) ? $data['accountId'] : null;
+        $data['accountId'] = $this->getAccountByName($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
         $response = $this->sendMail($data, $template, $mailOptions);
             $this->logger->info("Mail Response" . $response);
+        $data['accountId'] = $currentAccount;
         return $data;
     }
 }
