@@ -1,10 +1,8 @@
 <?php
 namespace Ims\Controller;
 
-use Exception;
-use Oxzion\Service\ImsService;
-use Zend\Db\Adapter\AdapterInterface;
 use Ims\Controller\AbstractController;
+use Oxzion\Insurance\Ims\Service as ImsService;
 
 class InsuredController extends AbstractController
 {

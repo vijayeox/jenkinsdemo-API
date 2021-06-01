@@ -1,14 +1,14 @@
 <?php
+namespace Oxzion\Insurance\Ims;
 
-namespace Oxzion\Service;
-
-use Oxzion\Messaging\MessageProducer;
-use Oxzion\OxServiceException;
-use Oxzion\ServiceException;
-use Oxzion\Service\AbstractService;
+use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\SOAPUtils;
+use Oxzion\ServiceException;
+use Oxzion\OxServiceException;
+use Oxzion\Service\AbstractService;
+use Oxzion\Messaging\MessageProducer;
 
-class ImsService extends AbstractService
+class Service extends AbstractService
 {
     private $messageProducer;
     private $soapClient;
@@ -22,31 +22,28 @@ class ImsService extends AbstractService
         parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
     }
-
     private function getConfig()
     {
         return $this->config['ims'];
     }
-
     public function setSoapClient($handle)
     {
         $this->handle = $handle;
         $this->soapClient = new SOAPUtils($this->getConfig()['apiUrl'] . $this->handle . ".asmx?wsdl");
         $this->soapClient->setHeader('http://tempuri.org/IMSWebServices/' . $this->handle, 'TokenHeader', ['Token' => $this->getToken()]);
     }
-
     private function getToken()
     {
         if ($this->token) {
             return $this->token;
         }
-        $soapClient = new SOAPUtils($this->getConfig()['apiUrl'] . "logon.asmx?wsdl");
-        $LoginIMSUser = $soapClient->makeCall('LoginIMSUser', $this->getConfig());
+        $config = $this->getConfig();
+        $soapClient = new SOAPUtils($config['apiUrl']."logon.asmx?wsdl");
+        $LoginIMSUser = $soapClient->makeCall('LoginIMSUser', $config);
         $this->token = $LoginIMSUser['LoginIMSUserResult']['Token'];
         // echo "<pre>";print_r($this->token);exit;
         return $this->token;
     }
-
     public function makeCall(string $method, array $data)
     {
         return $this->soapClient->makeCall($method, $data);
@@ -110,13 +107,14 @@ class ImsService extends AbstractService
         }
         $InsuredResult = $this->makeCall($searchMethod, $data);
         $InsuredGuid = array('InsuredGuid' => current($InsuredResult));
+
         $GetInsured = $this->makeCall('GetInsured', array('insuredGuid' => current($InsuredGuid)));
         $GetInsuredPolicyInfo = $this->makeCall('GetInsuredPolicyInfo', array('insuredGuid' => current($InsuredGuid)));
         $GetInsuredPrimaryLocation = $this->makeCall('GetInsuredPrimaryLocation', array('insuredGuid' => current($InsuredGuid)));
         $HasSubmissions = $this->makeCall('HasSubmissions', array('insuredguid' => current($InsuredGuid)));
+
         return array_merge($InsuredGuid, $GetInsured, $GetInsuredPrimaryLocation, $HasSubmissions, $GetInsuredPolicyInfo);
     }
-
     public function createInsured($data)
     {
         return $this->makeCall('AddInsured', $data);
@@ -127,7 +125,7 @@ class ImsService extends AbstractService
         $searchMethod = 'ProducerSearch';
         $searchMethods = array(
             'producerLocationGuid' => 'GetProducerInfo',
-            'producerContactGuid' => 'GetProducerInfoByContact',
+            'producerContactGuid' => 'GetProducerInfoByContact'
         );
         foreach ($searchMethods as $key => $method) {
             if (isset($data[$key])) {
@@ -136,6 +134,7 @@ class ImsService extends AbstractService
             }
         }
         $ProducerInfo = $this->makeCall($searchMethod, $data);
+
         if (!current($ProducerInfo)) {
             throw new ServiceException("Producer not found", 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
         }
@@ -152,25 +151,9 @@ class ImsService extends AbstractService
         }
         return array_values($ProducerInfo);
     }
-
     public function createProducer($data)
     {
-        /**
-         * First we need to create producer
-         * @param array $data Array of elements as shown</br>
-         * https://ws2.mgasystems.com/ims_demo/ProducerFunctions.asmx?op=AddProducer
-         * <code>
-         *  producerName : string,
-         *  businessType : string, (Unknown or Corporation or Partnership or LimitedPartnership)
-         *  businessTypeID : int,
-         * </code>
-         */
-        $producerDetal = $this->makeCall('AddProducerWithLocation', $data['location']);
-
-        //Using the UUID of producer we need to create Producer Location, Producer Contact,
-        //https://ws2.mgasystems.com/ims_demo/ProducerFunctions.asmx?op=AddProducerLocation
-
-        $producerDetal = $this->makeCall('AddProducerContact', $data['contact']);
+        return $this->makeCall('AddProducer', $data);
     }
 
     public function createQuote($data)

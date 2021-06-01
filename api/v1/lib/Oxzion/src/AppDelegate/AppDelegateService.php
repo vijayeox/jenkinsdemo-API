@@ -19,7 +19,9 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
 use Oxzion\Service\CommentService;
 use Oxzion\Service\EsignService;
+use Oxzion\Service\AccountService;
 use Oxzion\EntityNotFoundException;
+use Oxzion\Service\BusinessParticipantService;
 
 class AppDelegateService extends AbstractService
 {
@@ -43,7 +45,9 @@ class AppDelegateService extends AbstractService
         UserService $userService,
         CommentService $commentService,
         EsignService $esignService,
-        FieldService $fieldService
+        FieldService $fieldService,
+        AccountService $accountService,
+        BusinessParticipantService $businessParticipantService
     )
     {
         $this->templateService = $templateService;
@@ -61,6 +65,8 @@ class AppDelegateService extends AbstractService
         if (!is_dir($this->delegateDir)) {
             mkdir($this->delegateDir, 0777, true);
         }
+        $this->accountService = $accountService;
+        $this->businessParticipantService = $businessParticipantService;
     }
 
     public function setPersistence($appId, $persistence)
@@ -80,7 +86,7 @@ class AppDelegateService extends AbstractService
 
     public function setAppDelegateService()
     {
-        $appDelegateService = new AppDelegateService($this->config, $this->dbAdapter, $this->documentBuilder, $this->templateService, $this->messageProducer, $this->fileService, $this->workflowInstanceService, $this->activityInstanceService, $this->userService, $this->commentService, $this->esignService, $this->fieldService);
+        $appDelegateService = new AppDelegateService($this->config, $this->dbAdapter, $this->documentBuilder, $this->templateService, $this->messageProducer, $this->fileService, $this->workflowInstanceService, $this->activityInstanceService, $this->userService, $this->commentService, $this->esignService, $this->fieldService, $this->accountService);
         return $appDelegateService;
     }
 
@@ -151,6 +157,12 @@ class AppDelegateService extends AbstractService
                 }
                 if (method_exists($obj, "setEsignService")) {
                     $obj->setEsignService($this->esignService);
+                }
+                if (method_exists($obj, "setAccountService")) {
+                    $obj->setAccountService($this->accountService);
+                }
+                if (method_exists($obj, "setBusinessParticipantService")) {
+                    $obj->setBusinessParticipantService($this->businessParticipantService);
                 }
                 if (method_exists($obj, "setAppDelegateService")) {
                     $obj->setAppDelegateService($this->setAppDelegateService());
