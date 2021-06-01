@@ -12,13 +12,13 @@ class InsuredController extends AbstractController
         parent::__construct($imsService, 'InsuredFunctions');
     }
 
-    public function insuredFunctionAction()
+    public function createInsuredFunctionAction()
     {
         $params = $this->params()->fromRoute(); // This will capture the operation that we are going to perform
         $data = $this->extractPostData(); //This will extract the POST parameters
         try {
-            $this->log->info(__CLASS__ . "-> Add Insured with Location - " . print_r($params, true));
-            $response = $this->imsService->createAPIFunction($params, $data);
+            $this->log->info(__CLASS__ . "-> Add Insured with Location - " . print_r($params, true) . "\n Data: " . print_r($data, true));
+            $response = $this->imsService->createAPI($params, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);

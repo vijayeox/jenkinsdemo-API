@@ -14,13 +14,13 @@ class ProducerController extends AbstractController
         $this->imsService = $imsService;
     }
 
-    public function producerFunctionAction()
+    public function createProducerAction()
     {
         $params = $this->params()->fromRoute(); // This will capture the operation that we are going to perform
         $data = $this->extractPostData(); //This will extract the POST parameters
         try {
-            $this->log->info(__CLASS__ . "-> Add Producer with Location - " . print_r($params, true));
-            $response = $this->imsService->producerFunctionAction($params['operation'], $data);
+            $this->log->info(__CLASS__ . "-> Add Producer with Location - " . print_r($params, true) . "\n Data: " . print_r($data, true));
+            $response = $this->imsService->createAPI($params['operation'], $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
