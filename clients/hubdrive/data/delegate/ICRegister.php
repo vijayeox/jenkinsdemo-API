@@ -46,7 +46,7 @@ class ICRegister extends AbstractAppDelegate
                 $stateDecoded = json_decode($data['stateObj'],true);
                 $this->logger->info("stateDecoded- " . print_r($stateDecoded, true));
             }
-            $dataForIC['state'] = isset($stateDecoded['abbreviation']) ? $stateDecoded['abbreviation'] : $data['stateObj']['abbreviation'];
+            $dataForIC['state'] = isset($stateDecoded['abbreviation']) ? $stateDecoded['abbreviation'] : ($data['stateObj'] ? $data['stateObj']['abbreviation'] : null);
             $dataForIC['zip'] = $data['zip'];
             $dataForIC['country'] = 'United States of America';
             if (!isset($dataForIC['contact'])) {
