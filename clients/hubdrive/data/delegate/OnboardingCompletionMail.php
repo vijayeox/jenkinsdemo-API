@@ -3,6 +3,8 @@
 use Oxzion\AppDelegate\MailDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\AccountTrait;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 class OnboardingCompletionMail extends MailDelegate
 {
