@@ -3,7 +3,7 @@ namespace Ims\Controller;
 
 use Exception;
 use Ims\Controller\AbstractController;
-use Oxzion\Service\ImsService;
+use Oxzion\Insurance\Ims\Service as ImsService;
 
 class DocumentController extends AbstractController
 {

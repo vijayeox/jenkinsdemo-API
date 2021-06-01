@@ -3,7 +3,7 @@ namespace Ims\Controller;
 
 use Exception;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Service\ImsService;
+use Oxzion\Insurance\Ims\Service as ImsService;
 
 class AbstractController extends AbstractApiController
 {
