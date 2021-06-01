@@ -15,8 +15,8 @@ class Service extends AbstractService
     private $handle;
     private $token;
     /**
-    * @ignore __construct
-    */
+     * @ignore __construct
+     */
     public function __construct($config, $dbAdapter, MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
@@ -29,8 +29,8 @@ class Service extends AbstractService
     public function setSoapClient($handle)
     {
         $this->handle = $handle;
-        $this->soapClient = new SOAPUtils($this->getConfig()['apiUrl'].$this->handle.".asmx?wsdl");
-        $this->soapClient->setHeader('http://tempuri.org/IMSWebServices/'.$this->handle, 'TokenHeader', ['Token' => $this->getToken()]);
+        $this->soapClient = new SOAPUtils($this->getConfig()['apiUrl'] . $this->handle . ".asmx?wsdl");
+        $this->soapClient->setHeader('http://tempuri.org/IMSWebServices/' . $this->handle, 'TokenHeader', ['Token' => $this->getToken()]);
     }
     private function getToken()
     {
@@ -63,8 +63,11 @@ class Service extends AbstractService
             case 'ProducerFunctions':
                 $response = $this->searchProducer($data);
                 break;
+            case 'QuoteFunctions':
+                $response = $this->searchQuote($data);
+                break;
             default:
-                throw new ServiceException("Search not avaliable for ".$this->handle, 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+                throw new ServiceException("Search not avaliable for " . $this->handle, 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
                 break;
         }
         return $response;
@@ -79,8 +82,11 @@ class Service extends AbstractService
             case 'ProducerFunctions':
                 $response = $this->createProducer($data);
                 break;
+            case 'QuoteFunctions':
+                $response = $this->createQuote($data);
+                break;
             default:
-                throw new ServiceException("Create not avaliable for ".$this->handle, 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+                throw new ServiceException("Create not avaliable for " . $this->handle, 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
                 break;
         }
         return $response;
@@ -148,5 +154,22 @@ class Service extends AbstractService
     public function createProducer($data)
     {
         return $this->makeCall('AddProducer', $data);
+    }
+
+    public function createQuote($data)
+    {
+        //Get all the producer information from IMS/DB
+
+        //Get all the Insured information from IMS/DB
+
+        // Create a submission record in IMS first and use the uuid from there to create the quote
+
+        //Use the information from Producer and Insured info to create a Quote
+        return $this->makeCall('AddQuote', $data);
+    }
+
+    public function searchQuote()
+    {
+
     }
 }
