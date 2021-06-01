@@ -111,6 +111,50 @@ return [
                     ],
                 ],
             ],
+            'getInsured' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ims/getInsured[/:operation]',
+                    'defaults' => [
+                        'controller' => Controller\InsuredController::class,
+                        'action' => 'getInsured',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
+            'getProducer' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ims/getProducer[/:operation]',
+                    'defaults' => [
+                        'controller' => Controller\ProducerController::class,
+                        'action' => 'getProducer',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
+            'getQuote' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ims/getQuote[/:operation]',
+                    'defaults' => [
+                        'controller' => Controller\QuoteController::class,
+                        'action' => 'getQuote',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
+            'getDocument' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ims/getDocument[/:operation]',
+                    'defaults' => [
+                        'controller' => Controller\QuoteController::class,
+                        'action' => 'getDocument',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
 
         ],
     ],
