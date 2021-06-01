@@ -2,9 +2,8 @@
 namespace Ims\Controller;
 
 use Exception;
-use Oxzion\Service\ImsService;
-use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
+use Oxzion\Service\ImsService;
 
 class AbstractController extends AbstractApiController
 {
@@ -44,6 +43,17 @@ class AbstractController extends AbstractApiController
     {
         try {
             $response = $this->imsService->create($data);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+        return $this->getSuccessResponseWithData($response, 201);
+    }
+
+    public function createAPI($functionName, $data)
+    {
+        try {
+            $response = $this->imsService->createAPI($functionName, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
