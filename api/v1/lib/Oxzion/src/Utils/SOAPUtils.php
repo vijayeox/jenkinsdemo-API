@@ -23,6 +23,7 @@ class SOAPUtils
         $this->options = array_merge($defaultOptions, array_intersect_key($options, $defaultOptions));
         $this->options['prefix'] = array_flip($this->xml->getDocNamespaces())[$this->options['defaultNamespace']];
     }
+
     private function setWsdl($wsdl)
     {
         if (substr($wsdl, 0, 4) === 'http') {
@@ -41,6 +42,7 @@ class SOAPUtils
         }
         $this->xml = simplexml_load_string($wsdl);
     }
+
     public function setHeader(string $namespace, string $name, array $data)
     {
         $header = new SoapHeader($namespace, $name, $data);
@@ -62,6 +64,7 @@ class SOAPUtils
         }
         return $response;
     }
+
     private function cleanResponse($response)
     {
         if (is_object($response)) {
@@ -74,6 +77,7 @@ class SOAPUtils
     {
         return in_array($function, $this->getFunctions());
     }
+
     public function getFunctions()
     {
         $functions = array();
@@ -169,6 +173,7 @@ class SOAPUtils
         }
         return $parameters;
     }
+
     private function processElements($type)
     {
         $parameters = array();
@@ -183,6 +188,7 @@ class SOAPUtils
         }
         return $parameters;
     }
+
     private function processElementType($element)
     {
         $type = explode(':', $element->attributes()['type']);
@@ -216,6 +222,7 @@ class SOAPUtils
             }
         }
     }
+
     private function processSimpleType($type)
     {
         $parameters = array();

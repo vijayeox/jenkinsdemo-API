@@ -4,13 +4,11 @@ namespace Ims;
 
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Insurance\Ims\Service as ImsService;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Db\ResultSet\ResultSet;
+use Oxzion\Service\ImsService;
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Mvc\ModuleRouteListener;
+use Zend\Mvc\MvcEvent;
 
 class Module implements ConfigProviderInterface
 {
@@ -54,6 +52,16 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\InsuredController::class => function ($container) {
                     return new Controller\InsuredController(
+                        $container->get(ImsService::class)
+                    );
+                },
+                Controller\QuoteController::class => function ($container) {
+                    return new Controller\QuoteController(
+                        $container->get(ImsService::class)
+                    );
+                },
+                Controller\DocumentController::class => function ($container) {
+                    return new Controller\DocumentController(
                         $container->get(ImsService::class)
                     );
                 },

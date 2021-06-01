@@ -172,4 +172,39 @@ class Service extends AbstractService
     {
 
     }
+
+    public function producerFunctionAction($functionName, $data)
+    {
+        return $this->makeCall($functionName, $data);
+    }
+
+    // public function insuredFunctionAction($functionName, $data)
+    // {
+    //     return $this->makeCall($functionName, $data);
+    // }
+
+    // public function quoteFunctionAction($functionName, $data)
+    // {
+    //     return $this->makeCall($functionName, $data);
+    // }
+
+    // public function documentFunctionAction($functionName, $data)
+    // {
+    //     return $this->makeCall($functionName, $data);
+    // }
+
+    public function createAPI($functionName, $data)
+    {
+        return $this->makeCall($functionName, $data);
+    }
+
+    public function getAPI($functionName, $data)
+    {
+        return $this->makeCall($functionName, $data);
+    }
+
+    public function updateAPI($functionName, $data)
+    {
+        return $this->makeCall($functionName, $data);
+    }
 }

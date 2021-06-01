@@ -5,30 +5,30 @@ use Exception;
 use Ims\Controller\AbstractController;
 use Oxzion\Service\ImsService;
 
-class InsuredController extends AbstractController
+class DocumentController extends AbstractController
 {
     public function __construct(ImsService $imsService)
     {
-        parent::__construct($imsService, 'InsuredFunctions');
+        parent::__construct($imsService, 'DocumentFunctions');
     }
 
     /**
-     * Create Insured Functions
-     * The common function to create all the apis for insured, this includes insured, contact and Location as well
+     * Create Document Functions
+     * The common function to create all the apis for Document, this includes Document and submission
      * @api
-     * @link /ims/createInsured[/:operation]
+     * @link /ims/createDocument[/:operation]
      * @method POST
      * @param List of all the fields that are mentioned in the IMS API. Required fields are also mentioned there
-     * @see  https://ws2.mgasystems.com/ims_demo/InsuredFunctions.asmx
+     * @see  https://ws2.mgasystems.com/ims_demo/DocumentFunctions.asmx
      * @param $data
-     * @return array Returns a JSON Response with Status Code and Created IMS Insured.
+     * @return array Returns a JSON Response with Status Code and Created IMS Document.
      */
-    public function createInsuredAction()
+    public function createDocumentAction()
     {
         $params = $this->params()->fromRoute(); // This will capture the operation that we are going to perform
         $data = $this->extractPostData(); //This will extract the POST parameters
         try {
-            $this->log->info(__CLASS__ . "-> Add Insured - " . print_r($params, true) . "\n Data: " . print_r($data, true));
+            $this->log->info(__CLASS__ . "-> Document Function - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->createAPI($params, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -38,22 +38,22 @@ class InsuredController extends AbstractController
     }
 
     /**
-     * Get Insured Functions
-     * The common function to create all the apis for insured, this includes insured, contact and Location as well
+     * Get Document Functions
+     * The common function to create all the apis for Document, this includes Document and submission
      * @api
-     * @link /ims/getInsured[/:operation]
+     * @link /ims/createDocument[/:operation]
      * @method POST
      * @param List of all the fields that are mentioned in the IMS API. Required fields are also mentioned there
-     * @see  https://ws2.mgasystems.com/ims_demo/InsuredFunctions.asmx
+     * @see  https://ws2.mgasystems.com/ims_demo/DocumentFunctions.asmx
      * @param $data
-     * @return array Returns a JSON Response with Status Code and Created IMS Insured.
+     * @return array Returns a JSON Response with Status Code and Created IMS Document.
      */
-    public function getInsuredAction()
+    public function getDocumentAction()
     {
         $params = $this->params()->fromRoute(); // This will capture the operation that we are going to perform
         $data = $this->extractPostData(); //This will extract the POST parameters
         try {
-            $this->log->info(__CLASS__ . "-> Get Insured - " . print_r($params, true) . "\n Data: " . print_r($data, true));
+            $this->log->info(__CLASS__ . "-> Document Function - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->getAPI($params, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
