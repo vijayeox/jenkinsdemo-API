@@ -5,30 +5,30 @@ use Exception;
 use Ims\Controller\AbstractController;
 use Oxzion\Service\ImsService;
 
-class InsuredController extends AbstractController
+class QuoteController extends AbstractController
 {
     public function __construct(ImsService $imsService)
     {
-        parent::__construct($imsService, 'InsuredFunctions');
+        parent::__construct($imsService, 'QuoteFunctions');
     }
 
     /**
-     * Create Insured Functions
-     * The common function to create all the apis for insured, this includes insured, contact and Location as well
+     * Create Quote Functions
+     * The common function to create all the apis for Quote, this includes Quote and submission
      * @api
-     * @link /ims/createInsured[/:operation]
+     * @link /ims/createQuote[/:operation]
      * @method POST
      * @param List of all the fields that are mentioned in the IMS API. Required fields are also mentioned there
-     * @see  https://ws2.mgasystems.com/ims_demo/InsuredFunctions.asmx
+     * @see  https://ws2.mgasystems.com/ims_demo/QuoteFunctions.asmx
      * @param $data
-     * @return array Returns a JSON Response with Status Code and Created IMS Insured.
+     * @return array Returns a JSON Response with Status Code and Created IMS Quote.
      */
-    public function createInsuredAction()
+    public function createQuoteAction()
     {
         $params = $this->params()->fromRoute(); // This will capture the operation that we are going to perform
         $data = $this->extractPostData(); //This will extract the POST parameters
         try {
-            $this->log->info(__CLASS__ . "-> Add Insured - " . print_r($params, true) . "\n Data: " . print_r($data, true));
+            $this->log->info(__CLASS__ . "-> Create Quote - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->createAPI($params, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
@@ -38,22 +38,22 @@ class InsuredController extends AbstractController
     }
 
     /**
-     * Get Insured Functions
-     * The common function to create all the apis for insured, this includes insured, contact and Location as well
+     * Get Quote Functions
+     * The common function to create all the apis for Quote, this includes Quote and submission
      * @api
-     * @link /ims/getInsured[/:operation]
+     * @link /ims/getQuote[/:operation]
      * @method POST
      * @param List of all the fields that are mentioned in the IMS API. Required fields are also mentioned there
-     * @see  https://ws2.mgasystems.com/ims_demo/InsuredFunctions.asmx
+     * @see  https://ws2.mgasystems.com/ims_demo/QuoteFunctions.asmx
      * @param $data
-     * @return array Returns a JSON Response with Status Code and Created IMS Insured.
+     * @return array Returns a JSON Response with Status Code and Created IMS Quote.
      */
-    public function getInsuredAction()
+    public function getQuoteAction()
     {
         $params = $this->params()->fromRoute(); // This will capture the operation that we are going to perform
         $data = $this->extractPostData(); //This will extract the POST parameters
         try {
-            $this->log->info(__CLASS__ . "-> Get Insured - " . print_r($params, true) . "\n Data: " . print_r($data, true));
+            $this->log->info(__CLASS__ . "-> Get Quote - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->getAPI($params, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
