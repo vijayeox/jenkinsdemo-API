@@ -276,6 +276,7 @@ class AppService extends AbstractService
                     $temp = $this->createOrUpdateApp($ymlData);
                     if ($temp) {
                         FileUtils::copyDir($path, $temp);
+                        $originalPath = $path;
                         $path = $temp;
                     }
                     $this->processBusinessRoles($ymlData);
@@ -328,7 +329,10 @@ class AppService extends AbstractService
             $this->removeViewAppOnError($path);
             throw $e;
         } finally {
-            $this->createOrUpdateApplicationDescriptor($path, $ymlData);
+            $this->setupOrUpdateApplicationDirectoryStructure($ymlData);
+            if (isset($originalPath)) {
+                $this->createOrUpdateApplicationDescriptor($originalPath, $ymlData);
+            }
         }
         return $ymlData;
     }
@@ -441,6 +445,8 @@ class AppService extends AbstractService
             } else {
                 throw new ServiceException('Failed Installing Organisation','org.install.failed');
             }
+        } elseif (isset($yamlData['app']['autoinstall']) && $yamlData['app']['autoinstall'] == true && App::PRE_BUILT == $yamlData['app']['type']) {
+            $this->installApp(AuthContext::get(AuthConstants::ACCOUNT_UUID), $yamlData, $path);
         }
     }
 
@@ -1205,10 +1211,9 @@ class AppService extends AbstractService
     {
         $pageSize = 20;
         $offset = 0;
-        $where = "";
         $sort = "name";
+        $where = " WHERE ox_app.status != 1";
 
-        $cntQuery = "SELECT count(ox_app.id) as count FROM `ox_app` inner join ox_user oc on oc.id=ox_app.created_by left join ox_user om on om.id=ox_app.modified_by ";
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
             $filterArray = json_decode($filterParams['filter'], true);
             if (isset($filterArray[0]['filter'])) {
@@ -1230,7 +1235,7 @@ class AppService extends AbstractService
                     $filterList = $filterArray[0]['filter']['filters'];
                 }
                 $filter = FilterUtils::filterArray($filterList, $filterlogic, array('name'=>'ox_app.name','date_modified'=>'DATE(ox_app.date_modified)','modified_user'=>'om.name','created_user'=>'oc.name'));
-                $where = " WHERE " . $filter;
+                $where .= " AND " . $filter;
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $filterArray[0]['sort'];
@@ -1239,15 +1244,16 @@ class AppService extends AbstractService
             $pageSize = isset($filterArray[0]['take']) ? $filterArray[0]['take'] : 10;
             $offset = isset($filterArray[0]['skip']) ? $filterArray[0]['skip'] : 0;
         }
-        $where .= strlen($where) > 0 ? " AND ox_app.status!=1" : "WHERE ox_app.status!=1";
-        $sort = " ORDER BY " . $sort;
-        $limit = " LIMIT " . $pageSize . " offset " . $offset;
+        $fromTable = " FROM `ox_app` inner join ox_user oc on oc.id=ox_app.created_by left join ox_user om on om.id=ox_app.modified_by";
+        $cntQuery = "SELECT count(ox_app.id) as count" . $fromTable;
         $resultSet = $this->executeQuerywithParams($cntQuery . $where);
         $count = $resultSet->toArray()[0]['count'];
         if (0 == $count) {
             return;
         }
-        $query = "SELECT ox_app.*,oc.name as created_user,om.name as modified_user FROM `ox_app` inner join ox_user oc on oc.id=ox_app.created_by left join ox_user om on om.id=ox_app.modified_by " . $where . " " . $sort . " " . $limit;
+        $sort = " ORDER BY " . $sort;
+        $limit = " LIMIT " . $pageSize . " offset " . $offset;
+        $query = "SELECT ox_app.*,oc.name as created_user,om.name as modified_user" . $fromTable . $where . $sort . $limit;
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
         for ($x = 0; $x < sizeof($result); $x++) {
