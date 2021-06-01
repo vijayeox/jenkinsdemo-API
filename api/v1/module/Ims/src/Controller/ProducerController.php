@@ -3,7 +3,7 @@ namespace Ims\Controller;
 
 use Exception;
 use Ims\Controller\AbstractController;
-use Oxzion\Service\ImsService;
+use Oxzion\Insurance\Ims\Service as ImsService;
 
 class ProducerController extends AbstractController
 {
@@ -48,7 +48,7 @@ class ProducerController extends AbstractController
      * @param $ List of all the fields that are mentioned in the IMS API. Required fields are also mentioned there
      * @see  https://ws2.mgasystems.com/ims_demo/ProducerFunctions.asmx
      * @param $data
-     * @return array Returns a JSON Response with Status Code and Producer and their details. This depends on which api we are referring to. 
+     * @return array Returns a JSON Response with Status Code and Producer and their details. This depends on which api we are referring to.
      */
     public function getProducerAction()
     {
