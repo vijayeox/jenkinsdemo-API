@@ -4,11 +4,11 @@ namespace Ims;
 
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Service\ImsService;
+use Oxzion\Insurance\Ims\Service as ImsService;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\ModuleRouteListener;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
 
 class Module implements ConfigProviderInterface
 {

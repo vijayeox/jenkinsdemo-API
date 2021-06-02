@@ -1,9 +1,8 @@
 <?php
 namespace Ims\Controller;
 
-use Exception;
 use Ims\Controller\AbstractController;
-use Oxzion\Service\ImsService;
+use Oxzion\Insurance\Ims\Service as ImsService;
 
 class InsuredController extends AbstractController
 {
@@ -30,7 +29,7 @@ class InsuredController extends AbstractController
         try {
             $this->log->info(__CLASS__ . "-> Add Insured - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->createAPI($params, $data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -55,10 +54,11 @@ class InsuredController extends AbstractController
         try {
             $this->log->info(__CLASS__ . "-> Get Insured - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->getAPI($params, $data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($response, 201);
     }
+
 }
