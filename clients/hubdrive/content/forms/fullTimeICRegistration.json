@@ -15453,7 +15453,8 @@
 			"tree": false,
 			"theme": "default",
 			"breadcrumb": "default",
-			"id": "eym3izd"
+			"id": "eym3izd",
+			"nextPage": "next = (data.subcontractorAgreementAck == \"yes\") ? 'insurancePanel' : 'independentContractorAgreementPanel';"
 		}],
 		"allowPrevious": false,
 		"placeholder": "",
@@ -16059,7 +16060,7 @@
 		"id": "e3deb4"
 	}],
 	"revisions": "current",
-	"_vid": 61,
+	"_vid": 62,
 	"title": "fullTimeICRegistration",
 	"display": "wizard",
 	"access": [{
@@ -16076,6 +16077,6 @@
 	"path": "fulltimeicregistration",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-02-24T02:58:47.306Z",
-	"modified": "2021-06-02T10:14:58.414Z",
+	"modified": "2021-06-02T10:20:02.367Z",
 	"machineName": "insuranceprocurement-eoxvantage:iggiCc"
 }
