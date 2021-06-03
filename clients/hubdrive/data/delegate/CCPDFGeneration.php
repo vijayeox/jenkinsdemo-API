@@ -38,8 +38,8 @@ class CCPDFGeneration extends AbstractDocumentAppDelegate
                 foreach ($fieldTypeMappingPDF[$selectedTemplate]["text"] as  $formField => $pdfField) {
                 isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
                 }
-                if(isset($data['freightBrokerDetailsDate'])){
-                $data['pdfDateCC'] = explode('T',$data['freightBrokerDetailsDate'])[0];
+                if(isset($data['contractDate'])){
+                $data['pdfDateCC'] = explode('T',$data['contractDate'])[0];
                 $pdfData['Date'] = date("m/d/Y", strtotime($data['pdfDateCC']));
                 }
                 $pdfData = array_filter($pdfData);
