@@ -44,8 +44,8 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
                 }
                 if(isset($data['motorCarrierDetailsDate'])){
                 $data['pdfDateIC'] = explode('T',$data['motorCarrierDetailsDate'])[0];
-                $pdfData['contractDate'] = date("d/m/Y", strtotime($data['pdfDateIC']));
-                $pdfData['dayMonth'] = date("d/m", strtotime($data['pdfDateIC']));
+                $pdfData['contractDate'] = date("m/d/Y", strtotime($data['pdfDateIC']));
+                $pdfData['dayMonth'] = date("jS,F", strtotime($data['pdfDateIC']));
                 $pdfData['year'] = date("y", strtotime($data['pdfDateIC']));
                 }
                 $pdfData['accountId'] = $accountId;
