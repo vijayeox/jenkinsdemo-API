@@ -237,6 +237,16 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
+        field:
+            -
+                name: name
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: contractDate
+                data_type: datetime
+                index: true
         identifiers:
             -
                 identifier: email
@@ -273,6 +283,16 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
+        field:
+            -
+                name: name
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: contractDate
+                data_type: datetime
+                index: true
         identifiers:
             -
                 identifier: email
@@ -832,8 +852,8 @@ pages:
                             field: status
                         -
                             title: 'Policy Effective Date'
-                            field: effectiveDate
-                            cell: '<td>{formatDate(item.effectiveDate)}</td>'
+                            field: contractDate
+                            cell: '<td>{formatDate(item.contractDate)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
     -
