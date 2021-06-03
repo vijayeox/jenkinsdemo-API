@@ -70,10 +70,10 @@ class ProfileService extends AbstractService
     }
 
 
-    public function updateProfile($id, $data)
+    public function updateProfile($uuid, $data)
     {
         $form = new Profile($this->table);
-        $form->loadById($id);
+        $form->loadByUuid($uuid);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $form->assign($data);
@@ -86,5 +86,26 @@ class ProfileService extends AbstractService
             throw $e;
         }
     }
+
+    public function deleteProfile($uuid)
+    {
+        try {
+            $this->beginTransaction();
+            $sql = $this->getSqlObject();
+            $delete = $sql->delete('ox_profile');
+            $delete->where(['uuid' => $uuid]);
+            $result = $this->executeUpdate($delete);
+            if ($result->getAffectedRows() == 0) {
+                throw new ServiceException("Profile not found", "profile.not.found", OxServiceException::ERR_CODE_NOT_FOUND);
+            }
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+     
+    }
+
  
 }

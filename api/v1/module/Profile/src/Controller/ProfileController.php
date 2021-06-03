@@ -92,17 +92,17 @@ class ProfileController extends AbstractApiController
     /**
      * Update Profile API
      * @api
-     * @link /profile[/:profileId]
+     * @link /profile[/:profileUuid]
      * @method PUT
-     * @param array $id ID of Profile to update
+     * @param array $uuid  of Profile to update
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created Profile.
      */
-    public function update($id, $data)
+    public function update($uuid, $data)
     {
         $this->log->info(__CLASS__ . "-> Update Profile - " . json_encode($data, true));
         try {
-            $this->profileService->updateProfile($id, $data);
+            $this->profileService->updateProfile($uuid, $data);
         } catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
@@ -111,7 +111,26 @@ class ProfileController extends AbstractApiController
     }
 
 
-
+    /**
+     * Delete Profile API
+     * @api
+     * @link /profile[/:profileUuid]
+     * @method DELETE
+     * @param $uuid of Profile to Delete
+     * @return array success|failure response
+     */
+    public function delete($uuid)
+    {
+        $params = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . "-> \nDelete profile - " . print_r($uuid, true) . "Parameters - " . print_r($params, true));
+        try {
+            $this->profileService->deleteProfile($uuid, $params);
+            return $this->getSuccessResponse();
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->exceptionToResponse($e);
+        }
+    }
 
 
 }
