@@ -606,7 +606,7 @@ return [
             'filelistfilter' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]][/createdBy/:createdBy][/fieldFilter[/fieldContains/:fieldContains][/fieldEq/:fieldEq]]',
+                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/assoc/:assocId][/created[/gte/:gtCreatedDate][/lte/:ltCreatedDate]][/createdBy/:createdBy]',
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
