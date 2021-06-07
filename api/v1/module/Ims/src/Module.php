@@ -5,8 +5,6 @@ namespace Ims;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Insurance\Ims\Service as ImsService;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\ModuleRouteListener;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
