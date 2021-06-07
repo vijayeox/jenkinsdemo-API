@@ -7,8 +7,6 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Insurance\Ims\Service as ImsService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
 
 class Module implements ConfigProviderInterface
 {

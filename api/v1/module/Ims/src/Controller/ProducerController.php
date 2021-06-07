@@ -1,7 +1,6 @@
 <?php
 namespace Ims\Controller;
 
-use Exception;
 use Ims\Controller\AbstractController;
 use Oxzion\Insurance\Ims\Service as ImsService;
 
@@ -32,7 +31,7 @@ class ProducerController extends AbstractController
         try {
             $this->log->info(__CLASS__ . "-> Add Producer - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->createAPI($params['operation'], $data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
@@ -57,10 +56,11 @@ class ProducerController extends AbstractController
         try {
             $this->log->info(__CLASS__ . "-> Get Producer - " . print_r($params, true) . "\n Data: " . print_r($data, true));
             $response = $this->imsService->getAPI($params['operation'], $data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }
         return $this->getSuccessResponseWithData($response, 201);
     }
+
 }
