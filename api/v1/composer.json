@@ -110,7 +110,8 @@
       "Esign\\":"module/Esign/src/",
       "Import\\":"module/Import/src/",
       "Ims\\":"module/Ims/src/",
-      "Kra\\":"module/Kra/src/"
+      "Kra\\":"module/Kra/src/",
+      "Profile\\":"module/Profile/src"
     }
   },
   "autoload-dev": {

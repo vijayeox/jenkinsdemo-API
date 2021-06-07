@@ -341,7 +341,7 @@ class WidgetService extends AbstractService
             }
             $donotcombine = 0;
             $template = null;
-            if (strtoupper(($firstRow['renderer'])) == 'HTML') {
+            if (strtoupper(($firstRow['type'])) == 'HTML') {
                 $config = json_decode($firstRow['configuration'], 1);
                 if (isset($config['template'])) {
                     if (!empty($config['donotcombine'])) {
@@ -381,7 +381,7 @@ class WidgetService extends AbstractService
             }
             $response['widget']['data'] = $data;
             if ($template) {
-                $response['widget']['data'] = $this->applyTemplate($response['widget'], $template);
+                $response['widget']['data'] = $this->applyOITemplate($response['widget'], $template);
             }
         }
         return $response;

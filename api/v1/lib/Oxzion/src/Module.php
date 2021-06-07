@@ -197,6 +197,28 @@ class Module
                         $resultSetPrototype
                     );
                 },
+                Service\ProfileService::class => function ($container) {
+                    return new Service\ProfileService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\ProfileTable::class)
+                    );
+                },
+                Model\ProfileTable::class => function ($container) {
+                    return new Model\ProfileTable(
+                        $container->get(Model\ProfileTableGateway::class)
+                    );
+                },
+                Model\ProfileTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Profile());
+                    return new TableGateway(
+                        'ox_profile',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
                 \Oxzion\Service\CommentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new \Oxzion\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\CommentTable::class), $container->get(Messaging\MessageProducer::class));
