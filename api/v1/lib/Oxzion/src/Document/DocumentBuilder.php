@@ -68,6 +68,7 @@ class DocumentBuilder
 
     public function fillPDFForm($template, $data, $destination)
     {
+        header("Cache-Control: no-cache, must-revalidate"); 
         $templatePath =$this->templateService->getTemplatePath($template, $data);
         $this->logger->info("fillPDFForm Full Template Path \n" . $templatePath . "/" . $template);
         return $this->documentGenerator->fillPDFForm($templatePath."/".$template, $data, $destination);
