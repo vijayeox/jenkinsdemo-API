@@ -3,10 +3,12 @@
 namespace Ims;
 
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Messaging\MessageProducer;
 use Oxzion\Insurance\Ims\Service as ImsService;
+use Oxzion\Messaging\MessageProducer;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Mvc\ModuleRouteListener;
+use Zend\Mvc\MvcEvent;
 
 class Module implements ConfigProviderInterface
 {
@@ -14,6 +16,7 @@ class Module implements ConfigProviderInterface
     {
         return include __DIR__ . '/../config/module.config.php';
     }
+
     public function onBootstrap(MvcEvent $e)
     {
         $eventManager = $e->getApplication()->getEventManager();
@@ -72,6 +75,7 @@ class Module implements ConfigProviderInterface
     {
         return ErrorHandler::getJsonModelError($e);
     }
+
     public function onRenderError($e)
     {
         return ErrorHandler::getJsonModelError($e);
