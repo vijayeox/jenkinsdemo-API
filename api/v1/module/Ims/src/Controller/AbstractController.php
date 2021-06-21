@@ -2,7 +2,7 @@
 namespace Ims\Controller;
 
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Insurance\Ims\Service as ImsService;
+use Oxzion\Insurance\Ims\ImsService;
 
 class AbstractController extends AbstractApiController
 {
@@ -53,7 +53,7 @@ class AbstractController extends AbstractApiController
     {
         try {
             $response = $this->imsService->createAPI($functionName, $data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);
         }

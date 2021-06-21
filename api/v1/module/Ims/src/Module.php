@@ -3,7 +3,7 @@
 namespace Ims;
 
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Insurance\Ims\Service as ImsService;
+use Oxzion\Insurance\Ims\ImsService;
 use Oxzion\Messaging\MessageProducer;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;

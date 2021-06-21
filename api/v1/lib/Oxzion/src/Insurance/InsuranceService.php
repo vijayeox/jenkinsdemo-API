@@ -5,9 +5,9 @@ use Oxzion\ServiceException;
 use Oxzion\OxServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Insurance\Ims\Service as ImsService;
+use Oxzion\Insurance\Ims\ImsService;
 
-class Service extends AbstractService
+class InsuranceService extends AbstractService
 {
     private $services;
 
@@ -32,6 +32,11 @@ class Service extends AbstractService
             $service->setConfig($config);
         }
         return $service;
+    }
+
+    public function setService(String $serviceName, $serviceObj)
+    {
+        $this->services[$serviceName] = $serviceObj;
     }
 
 }

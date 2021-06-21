@@ -6,7 +6,7 @@ use Oxzion\Utils\SOAPUtils;
 use Oxzion\ServiceException;
 use Oxzion\OxServiceException;
 
-class Service
+class ImsService
 {
     private $soapClient;
     private $config;
@@ -77,6 +77,7 @@ class Service
 
     public function create(&$data)
     {
+        print_r($data);exit;
         $response = array();
         switch ($this->handle) {
             case 'InsuredFunctions':
@@ -175,7 +176,7 @@ class Service
         return array_values($ProducerInfo);
     }
     public function createProducer($data)
-    {
+    {print_r($data);exit;
         return $this->makeCall('AddProducer', $data);
     }
 

@@ -2,7 +2,7 @@
 namespace Ims\Controller;
 
 use Ims\Controller\AbstractController;
-use Oxzion\Insurance\Ims\Service as ImsService;
+use Oxzion\Insurance\Ims\ImsService;
 
 class ProducerController extends AbstractController
 {

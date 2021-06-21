@@ -3,7 +3,7 @@ namespace Oxzion\AppDelegate;
 
 use Oxzion\ServiceException;
 use Oxzion\OxServiceException;
-use Oxzion\Insurance\Service as InsuranceService;
+use Oxzion\Insurance\InsuranceService;
 use Logger;
 
 trait InsuranceTrait
@@ -24,7 +24,7 @@ trait InsuranceTrait
     public function setServiceType($data)
     {
         $this->logger->info("Set Service -> " . print_r($data, true));
-        $this->service = $this->insuranceService->getService($data['service'], $data['config']);;
+        $this->service = $this->insuranceService->getService($data['service'], $data['config']);
     }
 
     // eg. call $service->search(["searchString" => "demo", "startWith" => true]);
