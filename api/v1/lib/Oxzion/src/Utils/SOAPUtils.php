@@ -38,6 +38,8 @@ class SOAPUtils
             if (!$wsdl) {
                 ob_clean();
                 throw new ServiceException('Cannot fetch the service from '.$temp_wsdl, 'soap.call.errors', OxServiceException::ERR_CODE_INTERNAL_SERVER_ERROR);
+            }else{
+                ob_end_flush();
             }
         }
         $this->xml = simplexml_load_string($wsdl);
@@ -114,6 +116,11 @@ class SOAPUtils
                             }
                         }
                         break;
+                    case 'decimal':
+                        if (!is_float($data[$key])) {
+                            $errors[$key] = 'Decimal value Expected';
+                        }
+                        break;    
                     case 'boolean':
                         if (!is_bool($data[$key])) {
                             if (preg_match('/^(true|false)$/m', strtolower($data[$key]))) {
@@ -130,7 +137,7 @@ class SOAPUtils
                         break;
                     case 'date':
                         if ($data[$key]) {
-                            if ((strlen($data[$key]) != 10) || checkdate(date('m', strtotime($data[$key])), date('d', strtotime($data[$key])), date('Y', strtotime($data[$key]))))
+                            if ((strlen($data[$key]) != 10) || !checkdate(date('m', strtotime($data[$key])), date('d', strtotime($data[$key])), date('Y', strtotime($data[$key]))))
                                 $errors[$key] = 'Invalid Date';
                         }
                         break;
