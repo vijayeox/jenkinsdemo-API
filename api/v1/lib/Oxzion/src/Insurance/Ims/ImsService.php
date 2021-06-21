@@ -77,7 +77,6 @@ class ImsService
 
     public function create(&$data)
     {
-        print_r($data);exit;
         $response = array();
         switch ($this->handle) {
             case 'InsuredFunctions':
@@ -176,7 +175,7 @@ class ImsService
         return array_values($ProducerInfo);
     }
     public function createProducer($data)
-    {print_r($data);exit;
+    {
         return $this->makeCall('AddProducer', $data);
     }
 
