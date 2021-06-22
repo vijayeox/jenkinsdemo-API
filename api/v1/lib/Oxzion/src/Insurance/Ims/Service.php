@@ -1,7 +1,6 @@
 <?php
 namespace Oxzion\Insurance\Ims;
 
-use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\SOAPUtils;
 use Oxzion\ServiceException;
 use Oxzion\OxServiceException;

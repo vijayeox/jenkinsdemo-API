@@ -1,7 +1,7 @@
 <?php
 namespace Oxzion\Utils;
 
-use Symfony\Component\Config\Util\XmlUtils as sXmlUtils;
+// use Symfony\Component\Config\Util\XmlUtils as sXmlUtils;
 
 class XMLUtils
 {

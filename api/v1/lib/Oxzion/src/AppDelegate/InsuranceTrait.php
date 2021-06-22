@@ -3,7 +3,7 @@ namespace Oxzion\AppDelegate;
 
 use Oxzion\ServiceException;
 use Oxzion\OxServiceException;
-use Oxzion\Insurance\InsuranceService;
+use Oxzion\Insurance\Service as InsuranceService;
 use Logger;
 
 trait InsuranceTrait
