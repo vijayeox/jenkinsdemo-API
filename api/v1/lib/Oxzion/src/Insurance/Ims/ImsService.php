@@ -5,13 +5,17 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\SOAPUtils;
 use Oxzion\ServiceException;
 use Oxzion\OxServiceException;
+use Oxzion\Insurance\Engine;
+use Oxzion\Utils\ValidationUtils;
 
-class ImsService
+class Service implements Engine
 {
     private $soapClient;
     private $config;
-    private $handle;
     private $token;
+    private $handle;
+    private $initialHandle;
+
     /**
      * @ignore __construct
      */
@@ -23,9 +27,9 @@ class ImsService
     {
         return $this->config['ims'];
     }
-    public function setConfig($config)
+    public function setConfig($handle)
     {
-        $this->setSoapClient($config);
+        $this->setSoapClient($handle);
     }
     public function setSoapClient($handle)
     {
@@ -41,18 +45,45 @@ class ImsService
         $config = $this->getConfig();
         $soapClient = new SOAPUtils($config['apiUrl']."logon.asmx?wsdl");
         $LoginIMSUser = $soapClient->makeCall('LoginIMSUser', $config);
-        $this->token = $LoginIMSUser['LoginIMSUserResult']['Token'];
+        $this->token = current($LoginIMSUser)['Token'];
         // echo "<pre>";print_r($this->token);exit;
         return $this->token;
     }
-    public function makeCall(string $method, array $data)
+    public function makeCall(string $method, array $data, bool $suppressError = false)
     {
-        return $this->soapClient->makeCall($method, $data);
+        $this->checkHandle($method);
+        $xmlToArray = isset($data['xmlToArray']) ? $data['xmlToArray'] : null;
+        if ($suppressError) {
+            try {
+                $response = $this->soapClient->makeCall($method, $data);
+            } catch (\Exception $e) {}
+        } else {
+            $response = $this->soapClient->makeCall($method, $data);
+        }
+        if (!isset($response) || !$response) {
+            $response = [];
+        }
+
+        if ($xmlToArray) {
+            $tmpResponse = $response;
+            foreach (explode(',', $xmlToArray) as $value) {
+                if (isset($tmpResponse[$value]))
+                    $tmpResponse = &$tmpResponse[$value];
+                else
+                    break;
+            }
+            if (is_string($tmpResponse) && \Oxzion\Utils\ValidationUtils::isValid('xml', $tmpResponse)) {
+                $response = \Oxzion\Utils\XMLUtils::parseString($tmpResponse, true);
+            }
+        }
+
+        return $response;
     }
 
-    public function getFunctionStructure($function)
+    public function getFunctionStructure($method)
     {
-        return $this->soapClient->getFunctionStruct($function);
+        $this->checkHandle($method);
+        return $this->soapClient->getFunctionStruct($method);
     }
 
     public function search($data)
@@ -68,6 +99,9 @@ class ImsService
             case 'QuoteFunctions':
                 $response = $this->searchQuote($data);
                 break;
+            case 'DocumentFunctions':
+                $response = $this->searchDocument($data);
+                break;
             default:
                 throw new ServiceException("Search not avaliable for " . $this->handle, 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
                 break;
@@ -75,52 +109,12 @@ class ImsService
         return $response;
     }
 
-    public function create(&$data)
-    {
-        $response = array();
-        switch ($this->handle) {
-            case 'InsuredFunctions':
-                $response = $this->createInsured($data);
-                break;
-            case 'ProducerFunctions':
-                $response = $this->createProducer($data);
-                break;
-            case 'QuoteFunctions':
-                $response = $this->createQuote($data);
-                break;
-            default:
-                throw new ServiceException("Create not avaliable for " . $this->handle, 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
-                break;
-        }
-        return $response;
-    }
-
-    public function update(&$data) {
-        $response = array();
-        switch ($this->handle) {
-            default:
-                throw new ServiceException("Update not avaliable for " . $this->handle, 'update.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
-                break;
-        }
-        return $response;
-    }
-
-    public function delete(&$data) {
-        $response = array();
-        switch ($this->handle) {
-            default:
-                throw new ServiceException("Delete not avaliable for " . $this->handle, 'delete.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
-                break;
-        }
-        return $response;
-    }
-
     public function searchInsured($data)
     {
-        $searchMethod = 'FindInsuredByName';
+        $searchMethod = 'ClearInsuredAsXml';
         $searchMethods = array(
-            'SSN' => 'FindInsuredBySSN',
-            'insuredContactGuid' => 'GetInsuredGuidFromContactGuid',
+            'insuredGuid' => 'InsuredGuid',
+            'insuredContactGuid' => 'GetInsuredGuidFromContactGuid'
         );
         foreach ($searchMethods as $key => $method) {
             if (isset($data[$key])) {
@@ -128,27 +122,39 @@ class ImsService
                 break;
             }
         }
-        $InsuredResult = $this->makeCall($searchMethod, $data);
-        $InsuredGuid = array('InsuredGuid' => current($InsuredResult));
+        switch ($searchMethod) {
+            case 'InsuredGuid':
+                $insureds = array(['InsuredGuid' => $data['insuredGuid']]);
+                break;
+            case 'GetInsuredGuidFromContactGuid':
+                $insureds = array(['InsuredGuid' => current($this->makeCall($searchMethod, $data))]);
+                break;
+            case 'ClearInsuredAsXml':
+                $InsuredList = $this->makeCall($searchMethod, $data + ['xmlToArray'=>'ClearInsuredAsXmlResult']);
+                $insureds = array_map(function($insured){
+                    return ['InsuredGuid' => $insured['InsuredGuid'], 'Clearance' => $insured];
+                }, (isset($InsuredList['Clearance']['Insured']) ? $InsuredList['Clearance']['Insured'] : []));
+                unset($InsuredList);
+                break;
+        }
+        $responseArray = [];
+        foreach ($insureds as $key => $insured) {
+            $GetInsured = $this->makeCall('GetInsured', array('insuredGuid' => $insured['InsuredGuid']));
+            $GetInsuredPolicyInfo = $this->makeCall('GetInsuredPolicyInfo', array('insuredGuid' => $insured['InsuredGuid']));
+            $GetInsuredPrimaryLocation = $this->makeCall('GetInsuredPrimaryLocation', array('insuredGuid' => $insured['InsuredGuid']));
+            $HasSubmissions = $this->makeCall('HasSubmissions', array('insuredguid' => $insured['InsuredGuid']));
 
-        $GetInsured = $this->makeCall('GetInsured', array('insuredGuid' => current($InsuredGuid)));
-        $GetInsuredPolicyInfo = $this->makeCall('GetInsuredPolicyInfo', array('insuredGuid' => current($InsuredGuid)));
-        $GetInsuredPrimaryLocation = $this->makeCall('GetInsuredPrimaryLocation', array('insuredGuid' => current($InsuredGuid)));
-        $HasSubmissions = $this->makeCall('HasSubmissions', array('insuredguid' => current($InsuredGuid)));
-
-        return array_merge($InsuredGuid, $GetInsured, $GetInsuredPrimaryLocation, $HasSubmissions, $GetInsuredPolicyInfo);
+            $responseArray[] = array_merge($insured, $GetInsured, $GetInsuredPrimaryLocation, $HasSubmissions, $GetInsuredPolicyInfo);
+        }
+        return $responseArray;
     }
-    public function createInsured($data)
-    {
-        return $this->makeCall('AddInsured', $data);
-    }
-
     public function searchProducer($data)
     {
-        $searchMethod = 'ProducerSearch';
+        $searchMethod = 'ProducerClearance';
         $searchMethods = array(
-            'producerLocationGuid' => 'GetProducerInfo',
-            'producerContactGuid' => 'GetProducerInfoByContact'
+            'producerLocationGuid' => 'ProducerLocationGuid',
+            'producerContactGuid' => 'GetProducerInfoByContact',
+            'searchString' => 'ProducerSearch'
         );
         foreach ($searchMethods as $key => $method) {
             if (isset($data[$key])) {
@@ -156,74 +162,141 @@ class ImsService
                 break;
             }
         }
-        $ProducerInfo = $this->makeCall($searchMethod, $data);
-
-        if (!current($ProducerInfo)) {
-            throw new ServiceException("Producer not found", 'search.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+        switch ($searchMethod) {
+            case 'ProducerLocationGuid':
+                $producers = array(['ProducerLocationGuid' => $data['producerLocationGuid']]);
+                break;
+            case 'GetProducerInfoByContact':
+                $GetProducerInfoByContactResult = current($this->makeCall($searchMethod, $data));
+                $producers = array(['ProducerLocationGuid' => $GetProducerInfoByContactResult['ProducerLocationGuid']]);
+                break;
+            case 'ProducerSearch':
+                $ProducerSearchResult = current($this->makeCall($searchMethod, $data));
+                $producers = array_map(function($ProducerLocation){
+                    return ['ProducerLocationGuid' => $ProducerLocation['ProducerLocationGuid'], 'GetProducerInfoResult' => $ProducerLocation];
+                }, (isset($ProducerSearchResult['ProducerLocation']) ? $ProducerSearchResult['ProducerLocation'] : []));
+                unset($ProducerSearchResult);
+                break;
+            case 'ProducerClearance':
+                $ProducerClearanceResult = $this->makeCall($searchMethod, $data);
+                if (isset(current($ProducerClearanceResult)['guid'])) {
+                    foreach (current($ProducerClearanceResult)['guid'] as $guid) {
+                        $GetProducerResult[$guid] = ['ProducerGuid' => $guid];
+                        $GetProducerResult[$guid] += $this->makeCall('GetProducerUnderwriter', ['ProducerEntity' => $guid, 'LineGuid' => '00000000-0000-0000-0000-000000000000']);
+                    }
+                }
+                return isset($GetProducerResult) ? array_values($GetProducerResult) : [];
+                break;
         }
-        if ($searchMethod == 'ProducerSearch') {
-            $ProducerSearchResult = &$ProducerInfo[key($ProducerInfo)];
-            $ProducerInfo = &$ProducerSearchResult[key($ProducerSearchResult)];
+        if (!$producers) {
+            throw new ServiceException("Producer not found", 'producer.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
         }
-        foreach ($ProducerInfo as &$Producer) {
-            if (isset($Producer['LocationCode'])) {
-                $GetProducerContactByLocationCode = $this->makeCall('GetProducerContactByLocationCode', array('locationCode' => $Producer['LocationCode']));
-                $Producer += $GetProducerContactByLocationCode;
-                $Producer += $this->makeCall('GetProducerContactInfo', array('producerContactGuid' => current($GetProducerContactByLocationCode)['GetProducerContactByLocationCodeResult']));
+        foreach ($producers as &$producer) {
+            if (ValidationUtils::isValid('uuidStrict', $producer['ProducerLocationGuid'])) {
+                if (!isset($producer['GetProducerInfoResult'])) {
+                    $producer += $this->makeCall('GetProducerInfo', array('producerLocationGuid' => $producer['ProducerLocationGuid']));
+                }
+                if (isset(($producer['GetProducerInfoResult']['LocationCode'])) && $producer['GetProducerInfoResult']['LocationCode']) {
+                    $GetProducerContactByLocationCodeResult = $this->makeCall('GetProducerContactByLocationCode', array('locationCode' => $producer['GetProducerInfoResult']['LocationCode']));
+                    $producer += $GetProducerContactByLocationCodeResult;
+                    $producer += $this->makeCall('GetProducerContactInfo', array('producerContactGuid' => current($GetProducerContactByLocationCodeResult)));
+                }
+            }
+            unset($producer['ProducerLocationGuid']);
+        }
+        return array_filter($producers);
+    }
+    public function searchQuote($data)
+    {
+        $quote = [];
+        if (isset($data['quoteGuid']) && ValidationUtils::isValid('uuidStrict', $data['quoteGuid'])) {
+            $quote += ['QuoteGuid' => $data['quoteGuid']];
+            $quote += $this->makeCall('AutoAddQuoteOptions', array('quoteGuid' => $quote['QuoteGuid']));
+            $quote += $this->makeCall('GetPolicyInformation', array('quoteGuid' => $quote['QuoteGuid'], 'xmlToArray' => 'GetPolicyInformationResult'));
+            $quote += $this->makeCall('GetControlNumber', array('quoteGuid' => $quote['QuoteGuid']));
+            // if (isset($quote['GetControlNumberResult']) && ValidationUtils::isValid('int', $quote['GetControlNumberResult'])) {
+            //     $quote += $this->makeCall('GetControlInformation', array('controls' => (String) $quote['GetControlNumberResult']));
+            // }
+            $quote += $this->makeCall('GetSubmissionGroupGuidFromQuoteGuid', array('quoteGuid' => $quote['QuoteGuid']));
+            $quote += $this->makeCall('GetAvailableInstallmentOptions', array('quoteGuid' => $quote['QuoteGuid']));
+        } else {
+            throw new ServiceException("Invalid Quote uuid", 'quote.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+        }
+        return $quote;
+    }
+    public function searchDocument($data)
+    {
+        $searchMethod = '';
+        $searchMethods = array(
+            'docGuid' => 'GetDocumentFromStore',
+            'quoteGuid' => 'QuoteGuid'
+        );
+        foreach ($searchMethods as $key => $method) {
+            if (isset($data[$key])) {
+                $searchMethod = $method;
+                break;
             }
         }
-        return array_values($ProducerInfo);
+        switch ($searchMethod) {
+            case 'GetDocumentFromStore':
+                return $this->makeCall($searchMethod, $data);
+                break;
+            case 'QuoteGuid':
+                $document = ['QuoteGuid' => $data['quoteGuid']];
+                break;
+            default;
+                throw new ServiceException("Invalid search request", 'document.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+                break;
+        }
+        if (isset($document['QuoteGuid']) && ValidationUtils::isValid('uuidStrict', $document['QuoteGuid'])) {
+            if (isset($data['folderID'])) {
+                $document += $this->makeCall('GetDocumentFromFolder', array('quoteGuid' => $document['QuoteGuid'], 'folderID' => $data['folderID']));
+            } else {
+                $document += $this->makeCall('GetPolicyDocumentsList', array('QuoteGuid' => $document['QuoteGuid'], 'xmlToArray' => 'GetPolicyDocumentsListResult'));
+            }
+            if (isset($data['RaterID'])) {
+                $document += $this->makeCall('GetPolicyRatingSheetByRater', array('QuoteGuid' => $document['QuoteGuid'], 'RaterID' => $data['RaterID']));
+            } else {
+                $document += $this->makeCall('GetPolicyRatingSheet', array('QuoteGuid' => $document['QuoteGuid']), true);
+            }
+            unset($document['QuoteGuid']);
+        } else {
+            throw new ServiceException("Invalid Quote uuid", 'document.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+        }
+        return $document;
     }
-    public function createProducer($data)
+
+    public function perform(String $method, array $data)
     {
-        return $this->makeCall('AddProducer', $data);
+        return $this->makeCall($method, $data);
     }
 
-    public function searchQuote() {}
-    public function createQuote($data)
-    {
-        //Get all the producer information from IMS/DB
-
-        //Get all the Insured information from IMS/DB
-
-        // Create a submission record in IMS first and use the uuid from there to create the quote
-
-        //Use the information from Producer and Insured info to create a Quote
-        return $this->makeCall('AddQuote', $data);
+    private function checkHandle(String $method) {
+        if (!$this->initialHandle) {
+            $this->initialHandle = $this->handle;
+        }
+        switch ($method) {
+            case 'ClearActiveInsured':
+            case 'ClearActiveInsuredAsXml':
+            case 'ClearInsured':
+            case 'ClearInsuredAsXml':
+            case 'ClearLocation':
+            case 'ClearLocationAsXml':
+            case 'ClearActiveLocationAsXml':
+                $handle = 'Clearance';
+                break;
+            case 'ExecuteCommand':
+            case 'ExecuteDataSet':
+                $handle = 'dataaccess';
+                break;
+            default:
+                $handle = $this->initialHandle;
+                $this->initialHandle = null;
+                break;
+        }
+        if ($this->handle != $handle) {
+            $this->setConfig($handle);
+        }
     }
 
-    public function producerFunctionAction($functionName, $data)
-    {
-        return $this->makeCall($functionName, $data);
-    }
-
-    // public function insuredFunctionAction($functionName, $data)
-    // {
-    //     return $this->makeCall($functionName, $data);
-    // }
-
-    // public function quoteFunctionAction($functionName, $data)
-    // {
-    //     return $this->makeCall($functionName, $data);
-    // }
-
-    // public function documentFunctionAction($functionName, $data)
-    // {
-    //     return $this->makeCall($functionName, $data);
-    // }
-
-    public function createAPI($functionName, $data)
-    {
-        return $this->makeCall($functionName, $data);
-    }
-
-    public function getAPI($functionName, $data)
-    {
-        return $this->makeCall($functionName, $data);
-    }
-
-    public function updateAPI($functionName, $data)
-    {
-        return $this->makeCall($functionName, $data);
-    }
 }
