@@ -5,9 +5,9 @@ use Ims\Controller\AbstractController;
 
 class DocumentController extends AbstractController
 {
-    public function __construct($imsService)
+    public function __construct($insuranceService)
     {
-        parent::__construct($imsService, 'DocumentFunctions');
+        parent::__construct($insuranceService, 'DocumentFunctions');
     }
 
 }

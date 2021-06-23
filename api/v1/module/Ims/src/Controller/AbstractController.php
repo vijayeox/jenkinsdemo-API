@@ -1,17 +1,16 @@
 <?php
 namespace Ims\Controller;
 
+use Oxzion\Insurance\InsuranceService;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Insurance\Ims\Service as ImsService;
 
 class AbstractController extends AbstractApiController
 {
     protected $imsService;
-    public function __construct(ImsService $imsService, string $functionClass)
+    public function __construct(InsuranceService $insuranceService, String $functionClass)
     {
         parent::__construct();
-        $this->imsService = $imsService;
-        $this->imsService->setSoapClient($functionClass);
+        $this->imsService = $insuranceService->getService('IMS', $functionClass);
     }
 
     public function getFunctionStructureAction()
@@ -47,10 +46,10 @@ class AbstractController extends AbstractApiController
     {
         try {
             $route = $this->params()->fromRoute();
-            if (/* isset */($route['operation'])) {
+            if (isset($route['operation'])) {
                 $response = $this->imsService->perform($route['operation'], $data);
             } else {
-                // $response = $this->imsService->create($data);
+                $response = $this->imsService->create($data);
             }
         } catch (\Exception $e) {
             $this->log->error($e->getMessage(), $e);

@@ -1,13 +1,13 @@
 <?php
 namespace Oxzion\Insurance\Ims;
 
-use Oxzion\Utils\SOAPUtils;
 use Oxzion\ServiceException;
 use Oxzion\OxServiceException;
-use Oxzion\Insurance\Engine;
+use Oxzion\Utils\SOAPUtils;
 use Oxzion\Utils\ValidationUtils;
+use Oxzion\Insurance\InsuranceEngine;
 
-class Service implements Engine
+class ImsEngineImpl implements InsuranceEngine
 {
     private $soapClient;
     private $config;
@@ -30,7 +30,7 @@ class Service implements Engine
     {
         $this->setSoapClient($handle);
     }
-    public function setSoapClient($handle)
+    private function setSoapClient($handle)
     {
         $this->handle = $handle;
         $this->soapClient = new SOAPUtils($this->getConfig()['apiUrl'] . $this->handle . ".asmx?wsdl");
@@ -45,10 +45,9 @@ class Service implements Engine
         $soapClient = new SOAPUtils($config['apiUrl']."logon.asmx?wsdl");
         $LoginIMSUser = $soapClient->makeCall('LoginIMSUser', $config);
         $this->token = current($LoginIMSUser)['Token'];
-        // echo "<pre>";print_r($this->token);exit;
         return $this->token;
     }
-    public function makeCall(string $method, array $data, bool $suppressError = false)
+    private function makeCall(string $method, array $data, bool $suppressError = false)
     {
         $this->checkHandle($method);
         $xmlToArray = isset($data['xmlToArray']) ? $data['xmlToArray'] : null;
@@ -107,7 +106,6 @@ class Service implements Engine
         }
         return $response;
     }
-
     public function searchInsured($data)
     {
         $searchMethod = 'ClearInsuredAsXml';
@@ -263,6 +261,26 @@ class Service implements Engine
             throw new ServiceException("Invalid Quote uuid", 'document.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
         }
         return $document;
+    }
+
+    public function create($data)
+    {
+        $response = array();
+        switch ($this->handle) {
+            case 'InsuredFunctions':
+                $response = $this->makeCall('AddInsuredWithContact', $data);
+                break;
+            case 'ProducerFunctions':
+                $response = $this->makeCall('AddProducerWithLocation', $data);
+                break;
+            case 'QuoteFunctions':
+                $response = $this->makeCall('AddQuoteWithAutocalculateDetails', $data);
+                break;
+            default:
+                throw new ServiceException("Create not avaliable for " . $this->handle, 'create.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
+                break;
+        }
+        return $response;
     }
 
     public function perform(String $method, array $data)

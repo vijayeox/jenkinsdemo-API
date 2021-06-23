@@ -5,9 +5,9 @@ use Ims\Controller\AbstractController;
 
 class QuoteController extends AbstractController
 {
-    public function __construct($imsService)
+    public function __construct($insuranceService)
     {
-        parent::__construct($imsService, 'QuoteFunctions');
+        parent::__construct($insuranceService, 'QuoteFunctions');
     }
 
 }

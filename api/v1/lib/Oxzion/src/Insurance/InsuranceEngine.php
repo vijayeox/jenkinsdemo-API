@@ -1,7 +1,7 @@
 <?php
 namespace Oxzion\Insurance;
 
-interface Engine
+interface InsuranceEngine
 {
     public function setConfig($config);
 

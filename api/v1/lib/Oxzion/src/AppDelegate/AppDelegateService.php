@@ -23,7 +23,7 @@ use Oxzion\Service\AccountService;
 use Oxzion\EntityNotFoundException;
 use Oxzion\Service\BusinessParticipantService;
 use \Analytics\Service\QueryService;
-use oxzion\Insurance\Service as InsuranceService;
+use oxzion\Insurance\InsuranceService;
 
 class AppDelegateService extends AbstractService
 {

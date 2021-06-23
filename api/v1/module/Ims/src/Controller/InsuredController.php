@@ -5,9 +5,9 @@ use Ims\Controller\AbstractController;
 
 class InsuredController extends AbstractController
 {
-    public function __construct($imsService)
+    public function __construct($insuranceService)
     {
-        parent::__construct($imsService, 'InsuredFunctions');
+        parent::__construct($insuranceService, 'InsuredFunctions');
     }
 
 }
