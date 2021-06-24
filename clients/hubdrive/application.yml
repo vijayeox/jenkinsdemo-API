@@ -1044,6 +1044,15 @@ pages:
                             cell: '<td>{formatDate(item.effectiveDate)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+                        -
+                            title: Company Name
+                            field: companyName
+                        -
+                            title: Date Created
+                            field: date_created
+                            cell: '<td>{formatDate(item.date_created)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD    
 menu:
     -
         name: 'Independent Contractor'
