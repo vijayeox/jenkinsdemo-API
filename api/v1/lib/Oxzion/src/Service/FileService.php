@@ -572,6 +572,7 @@ class FileService extends AbstractService
         $fields = $this->processMergeData($entityId, $fileObject, $data);
         $file = new File($this->table);
         $file->loadByUuid($id);
+        $uuid = $id;
         $result = $file->getGenerated(true);
         $id = $result['id'];
         $validFields = $this->checkFields($entityId, $fields, $id, false);
@@ -642,7 +643,7 @@ class FileService extends AbstractService
             } else {
                 if (isset($id)) {
                     $this->logger->info("FILE_UPDATED THE FILE ID TO BE INDEXED IS ".$id);
-                    $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_UPDATED');
+                    $this->messageProducer->sendQueue(json_encode(array('uuid' => $uuid)), 'FILE_UPDATED');
                 }
             }
         } catch (Exception $e) {
