@@ -163,7 +163,7 @@ class FileService extends AbstractService
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
 
             if (isset($result['id'])) {
-                $this->logger->info("THE FILE ID TO BE INDEXED IS ".$result['uuid']);
+                $this->logger->info("FILE_ADDED THE FILE ID TO BE INDEXED IS ".$result['uuid']);
                 $this->messageProducer->sendQueue(json_encode(array('uuid' => $result['uuid'])), 'FILE_ADDED');
             }
         } catch (Exception $e) {
@@ -637,9 +637,11 @@ class FileService extends AbstractService
             $this->logger->info("FILE DATA CHECK AFTER DATA --".print_r($result, true));
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (($latestcheck == 1) && isset($id)) {
+                $this->logger->info("FILE_DELETED THE FILE ID TO BE INDEXED IS ".$id);
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
             } else {
                 if (isset($id)) {
+                    $this->logger->info("FILE_UPDATED THE FILE ID TO BE INDEXED IS ".$id);
                     $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_UPDATED');
                 }
             }
@@ -706,6 +708,7 @@ class FileService extends AbstractService
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
             if (isset($id)) {
+                $this->logger->info("FILE_DELETED THE FILE ID TO BE INDEXED IS ".$id);
                 $this->messageProducer->sendQueue(json_encode(array('id' => $id)), 'FILE_DELETED');
             }
         } catch (Exception $e) {

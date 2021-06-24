@@ -33,7 +33,7 @@ class FileIndexerService extends AbstractService
     public function getRelevantDetails($fileId)
     {
         if (isset($fileId)) {
-            $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
+            $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entityName,
             file.data as file_data, file.uuid as file_uuid, file.is_active, file.account_id,
             CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields
             from ox_file as file
