@@ -24,6 +24,8 @@ class ErrorLog {
             sql.close()
             System.out.println("handling ex")
             prop.load(input)
+        }  catch (java.sql.SQLException ex) {
+            ex.getMessage()
         }  catch (IOException ex) {
             ex.printStackTrace()
         }
