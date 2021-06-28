@@ -2,12 +2,12 @@
 namespace Ims\Controller;
 
 use Ims\Controller\AbstractController;
-use Oxzion\Insurance\Ims\Service as ImsService;
 
 class ProducerController extends AbstractController
 {
-    public function __construct(ImsService $imsService)
+    public function __construct($insuranceService)
     {
-        parent::__construct($imsService, 'ProducerFunctions');
+        parent::__construct($insuranceService, 'ProducerFunctions');
     }
+
 }
