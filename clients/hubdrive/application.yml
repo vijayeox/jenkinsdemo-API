@@ -719,6 +719,55 @@ entity:
                         content: ''
                         useRowData: false
             metadata: {  }
+    -
+        name: Excess Liability
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        field:
+            -
+                name: attachments
+                text: Attachment
+                data_type: document
+            -
+                name: name
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: email
+                text: Email
+                data_type: text
+                index: true
+            -
+                name: effectiveDate
+                data_type: datetime
+                index: true
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        useRowData: false
+            metadata: {  }
+        page_uuid: 29f8c79a-d89c-11eb-b8bc-0242ac130003
 pages:
     -
         uuid: 7074d8e0-a3a2-4d4c-8215-779ac4709f75
@@ -1052,7 +1101,103 @@ pages:
                             field: date_created
                             cell: '<td>{formatDate(item.date_created)}</td>'
                             filter: date
-                            filterFormat: YYYY-MM-DD    
+                            filterFormat: YYYY-MM-DD   
+    -
+        name: 'Excess Liability'
+        uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
+        description: 'Shows a list of Excess Liability'
+        content:
+            -
+                type: List
+                content:
+                    route: file
+                    filterable: true
+                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            rule: 'false'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                    operations:
+                        title: 'Create Excess Liability'
+                        actions:
+                            -
+                                name: 'Create Excess Liability'
+                                icon: 'fa fa-plus'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
+                    columnConfig:
+                        -
+                            title: Name
+                            field: insuredName
+                        -
+                            title: 'Policy Effective Date'
+                            field: desiredPolicyEffectiveDate
+                            cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD                         
 menu:
     -
         name: 'Independent Contractor'
@@ -1072,7 +1217,19 @@ menu:
         page_uuid: d81809b0-bd0f-11eb-8529-0242ac130003
         uuid: d8180a96-bd0f-11eb-8529-0242ac130003
         privilege: MANAGE_COMPLIANCE
+    -
+        name: Excess Liability
+        icon: 'fas fa-list'
+        page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
+        uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
+        privilege: MANAGE_ACCOUNT_MANAGER    
 form:
+    -
+        name: 'Excess Liability Form'
+        uuid: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
+        description: Excess Liability
+        template_file: abExcessLiability.json
+        entity: Excess Liability
     -
         name: 'Compliance CheckList Form'
         uuid: e26bd719-f47f-455b-9be4-9b26c18a0b78
