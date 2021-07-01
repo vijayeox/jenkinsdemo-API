@@ -428,6 +428,9 @@
                     "label": "MC Docket",
                     "tableView": true,
                     "key": "mcDocket",
+                    "attributes": {
+                        "style": "text-align:right"
+                    },
                     "type": "textfield",
                     "input": true
                 }],
@@ -2002,6 +2005,7 @@
                         "pull": 0,
                         "currentWidth": 2
                     }],
+                    "hideLabel": true,
                     "key": "columns25",
                     "type": "columns",
                     "input": false,
@@ -2168,28 +2172,19 @@
                         "currentWidth": 3
                     }, {
                         "components": [{
-                            "label": "Select",
-                            "widget": "choicesjs",
+                            "label": "Private Passenger",
                             "hideLabel": true,
-                            "tableView": true,
-                            "data": {
-                                "values": [{
-                                    "label": "1",
-                                    "value": "1"
-                                }, {
-                                    "label": "2",
-                                    "value": "2"
-                                }]
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "key": "noOfPrivatePassengers",
+                            "attributes": {
+                                "style": "text-align:right"
                             },
-                            "selectThreshold": 0.3,
-                            "validate": {
-                                "onlyAvailableItems": false
-                            },
-                            "key": "select1",
-                            "type": "select",
-                            "indexeddb": {
-                                "filter": {}
-                            },
+                            "type": "number",
                             "input": true
                         }],
                         "size": "md",
@@ -2273,28 +2268,19 @@
                         "currentWidth": 3
                     }, {
                         "components": [{
-                            "label": "Select",
-                            "widget": "choicesjs",
+                            "label": "Light Truck",
                             "hideLabel": true,
-                            "tableView": true,
-                            "data": {
-                                "values": [{
-                                    "label": "1",
-                                    "value": "1"
-                                }, {
-                                    "label": "2",
-                                    "value": "2"
-                                }]
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "key": "noOfLightTruck",
+                            "attributes": {
+                                "style": "text-align:right"
                             },
-                            "selectThreshold": 0.3,
-                            "validate": {
-                                "onlyAvailableItems": false
-                            },
-                            "key": "select2",
-                            "type": "select",
-                            "indexeddb": {
-                                "filter": {}
-                            },
+                            "type": "number",
                             "input": true
                         }],
                         "size": "md",
@@ -2378,25 +2364,19 @@
                         "currentWidth": 3
                     }, {
                         "components": [{
-                            "label": "Select",
-                            "widget": "choicesjs",
+                            "label": "Medium Truck",
                             "hideLabel": true,
-                            "tableView": true,
-                            "data": {
-                                "values": [{
-                                    "label": "",
-                                    "value": ""
-                                }]
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "key": "noOfMediumTruck",
+                            "attributes": {
+                                "style": "text-align:right"
                             },
-                            "selectThreshold": 0.3,
-                            "validate": {
-                                "onlyAvailableItems": false
-                            },
-                            "key": "select",
-                            "type": "select",
-                            "indexeddb": {
-                                "filter": {}
-                            },
+                            "type": "number",
                             "input": true
                         }],
                         "size": "md",
@@ -2465,25 +2445,19 @@
                         "currentWidth": 3
                     }, {
                         "components": [{
-                            "label": "Select",
-                            "widget": "choicesjs",
+                            "label": "Heavy Truck",
                             "hideLabel": true,
-                            "tableView": true,
-                            "data": {
-                                "values": [{
-                                    "label": "",
-                                    "value": ""
-                                }]
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "key": "noOfHeavyTruck",
+                            "attributes": {
+                                "style": "text-align:right"
                             },
-                            "selectThreshold": 0.3,
-                            "validate": {
-                                "onlyAvailableItems": false
-                            },
-                            "key": "select3",
-                            "type": "select",
-                            "indexeddb": {
-                                "filter": {}
-                            },
+                            "type": "number",
                             "input": true
                         }],
                         "size": "md",
@@ -2552,25 +2526,19 @@
                         "currentWidth": 3
                     }, {
                         "components": [{
-                            "label": "Select",
-                            "widget": "choicesjs",
+                            "label": "Extra Heavy",
                             "hideLabel": true,
-                            "tableView": true,
-                            "data": {
-                                "values": [{
-                                    "label": "",
-                                    "value": ""
-                                }]
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "key": "noOfExtraHeavy",
+                            "attributes": {
+                                "style": "text-align:right"
                             },
-                            "selectThreshold": 0.3,
-                            "validate": {
-                                "onlyAvailableItems": false
-                            },
-                            "key": "select4",
-                            "type": "select",
-                            "indexeddb": {
-                                "filter": {}
-                            },
+                            "type": "number",
                             "input": true
                         }],
                         "size": "md",
@@ -2639,24 +2607,19 @@
                         "currentWidth": 3
                     }, {
                         "components": [{
-                            "label": "Select",
+                            "label": "Cargo Van/Sprinter",
                             "hideLabel": true,
-                            "tableView": true,
-                            "data": {
-                                "values": [{
-                                    "label": "",
-                                    "value": ""
-                                }]
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "key": "noOfCargoVan",
+                            "attributes": {
+                                "style": "text-align:right"
                             },
-                            "selectThreshold": 0.3,
-                            "validate": {
-                                "onlyAvailableItems": false
-                            },
-                            "key": "select5",
-                            "type": "select",
-                            "indexeddb": {
-                                "filter": {}
-                            },
+                            "type": "number",
                             "input": true
                         }],
                         "size": "md",
@@ -2678,11 +2641,12 @@
                             "suffix": "%",
                             "mask": false,
                             "spellcheck": true,
+                            "disabled": true,
                             "tableView": false,
                             "delimiter": false,
                             "requireDecimal": false,
                             "inputFormat": "plain",
-                            "calculateValue": "value = (data.flatbed ? data.flatbed : 0 )+( data.intermodal ? data.intermodal + 0) +( data.dryVan ? data.dryVan +0)+ \n  \n  ( data.tanker ? data.tanker +0) + ( data.refrigerated ? data.refrigerated +0) + ( data.dump ? data.dump +0)\n  ;",
+                            "calculateValue": "value = (data.flatbed ? data.flatbed : 0 )\n      +( data.intermodal ? data.intermodal : 0) +( data.dryVan ? data.dryVan :0)+ \n  \n  ( data.tanker ? data.tanker :0) + ( data.refrigerated ? data.refrigerated :0) + ( data.dump ? data.dump :0)\n  ;",
                             "key": "total",
                             "attributes": {
                                 "style": "text-align:right"
@@ -2726,15 +2690,17 @@
                         "currentWidth": 3
                     }, {
                         "components": [{
-                            "label": "Number",
+                            "label": "Total",
                             "hideLabel": true,
                             "mask": false,
                             "spellcheck": true,
+                            "disabled": true,
                             "tableView": false,
                             "delimiter": false,
                             "requireDecimal": false,
                             "inputFormat": "plain",
-                            "key": "number",
+                            "calculateValue": "value = (data.noOfPrivatePassengers ? data.noOfPrivatePassengers : 0 )+( data.noOfLightTruck ? data.noOfLightTruck : 0) +( data.noOfMediumTruck ? data.noOfMediumTruck :0) + (data.noOfHeavyTruck ? data.noOfHeavyTruck :0) + (data.noOfExtraHeavy ? data.noOfExtraHeavy : 0) + (data.noOfCargoVan ? data.noOfCargoVan : 0);",
+                            "key": "finalTotal",
                             "attributes": {
                                 "style": "text-align:right"
                             },
@@ -4194,11 +4160,12 @@
                             "hideLabel": true,
                             "mask": false,
                             "spellcheck": true,
+                            "disabled": true,
                             "tableView": false,
                             "delimiter": false,
                             "requireDecimal": false,
                             "inputFormat": "plain",
-                            "calculateValue": "value = (data.employees1 ? data.employees1 : 0 )+( data.ownerOperators1 ? data.ownerOperators1 + 0) +( data.subhaulers8 ? data.subhaulers8 +0);",
+                            "calculateValue": "value = (data.employees1 ? data.employees1 : 0 )+( data.ownerOperators1 ? data.ownerOperators1 : 0) +( data.subhaulers8 ? data.subhaulers8 :0);",
                             "key": "total3",
                             "attributes": {
                                 "style": "text-align:right"
@@ -4794,6 +4761,9 @@
                                 "currency": "USD",
                                 "inputFormat": "plain",
                                 "key": "averageAnnualDriverPay",
+                                "attributes": {
+                                    "style": "text-align:right"
+                                },
                                 "type": "currency",
                                 "input": true,
                                 "delimiter": true
@@ -5086,6 +5056,9 @@
                     "requireDecimal": false,
                     "inputFormat": "plain",
                     "key": "yearsWithCompany",
+                    "attributes": {
+                        "style": "text-align:right"
+                    },
                     "type": "number",
                     "input": true
                 }],
@@ -5105,6 +5078,9 @@
                     "requireDecimal": false,
                     "inputFormat": "plain",
                     "key": "yearsInMaintenance",
+                    "attributes": {
+                        "style": "text-align:right"
+                    },
                     "type": "number",
                     "input": true
                 }],
@@ -5124,6 +5100,9 @@
                     "requireDecimal": false,
                     "inputFormat": "plain",
                     "key": "ofFullTimeMaintenancePersonnel",
+                    "attributes": {
+                        "style": "text-align:right"
+                    },
                     "type": "number",
                     "input": true
                 }],
@@ -5329,6 +5308,9 @@
                     "requireDecimal": false,
                     "inputFormat": "plain",
                     "key": "yearsWithCompany1",
+                    "attributes": {
+                        "style": "text-align:right"
+                    },
                     "type": "number",
                     "input": true
                 }],
@@ -5348,6 +5330,9 @@
                     "requireDecimal": false,
                     "inputFormat": "plain",
                     "key": "yearsInSafetyField",
+                    "attributes": {
+                        "style": "text-align:right"
+                    },
                     "type": "number",
                     "input": true
                 }],
@@ -5389,6 +5374,9 @@
                     "requireDecimal": false,
                     "inputFormat": "plain",
                     "key": "ofTimeSpentOnSafety",
+                    "attributes": {
+                        "style": "text-align:right"
+                    },
                     "type": "number",
                     "input": true
                 }],
@@ -5552,6 +5540,9 @@
                             "max": 100
                         },
                         "key": "number1",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -5621,6 +5612,9 @@
                             "max": 100
                         },
                         "key": "number2",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -5691,6 +5685,9 @@
                             "max": 100
                         },
                         "key": "number3",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -5760,6 +5757,9 @@
                             "max": 100
                         },
                         "key": "number4",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -5829,6 +5829,9 @@
                             "max": 100
                         },
                         "key": "number5",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -5898,6 +5901,9 @@
                             "max": 100
                         },
                         "key": "number6",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -5967,6 +5973,9 @@
                             "max": 100
                         },
                         "key": "number7",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -6036,6 +6045,9 @@
                             "max": 100
                         },
                         "key": "number8",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }]
@@ -6099,6 +6111,7 @@
             "layoutFixed": false,
             "enableRowGroups": false,
             "initEmpty": false,
+            "hideLabel": true,
             "tableView": false,
             "defaultValue": [{
                 "address7": {},
@@ -6179,6 +6192,9 @@
                 "requireDecimal": false,
                 "inputFormat": "plain",
                 "key": "ofEmployees",
+                "attributes": {
+                    "style": "text-align:right"
+                },
                 "type": "number",
                 "input": true
             }, {
@@ -6294,7 +6310,6 @@
                 "columns": [{
                     "components": [{
                         "label": "General Aggregate Limit (other than products-completed operations)",
-                        "hideLabel": true,
                         "mask": false,
                         "spellcheck": true,
                         "tableView": false,
@@ -6302,6 +6317,9 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "key": "generalAggregateLimitOtherThanProductsCompletedOperations",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }],
@@ -6321,6 +6339,9 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "key": "productCompletedOperationsAggregateLimit",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }],
@@ -6340,6 +6361,9 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "key": "personalAdvertisingInjuryLimit",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }],
@@ -6366,6 +6390,9 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "key": "eachOccurrenceLimit",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }],
@@ -6385,6 +6412,9 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "key": "fireDamageLimit",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }],
@@ -6404,6 +6434,9 @@
                         "requireDecimal": false,
                         "inputFormat": "plain",
                         "key": "medicalExpenseLimit",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
                         "type": "number",
                         "input": true
                     }],
@@ -6466,426 +6499,406 @@
             "input": false,
             "tableView": false
         }, {
-            "label": "Data Grid",
-            "reorder": false,
-            "addAnotherPosition": "bottom",
-            "layoutFixed": false,
-            "enableRowGroups": false,
-            "initEmpty": false,
-            "hideLabel": true,
-            "tableView": false,
-            "defaultValue": [{
-                "generalLiability1": false,
-                "autoLiability1": false,
-                "landlord": false,
-                "lossPayee": false,
-                "waiverOfSubrogation": false,
-                "primaryNonContributoryWording": false,
-                "other3": "",
-                "name": "",
-                "city1": "",
-                "state1": "",
-                "address1": {},
-                "address2": {}
-            }],
-            "validate": {
-                "minLength": "0",
-                "maxLength": "3"
+            "title": "Additional Information",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+                "previous": true,
+                "cancel": true,
+                "next": true
             },
-            "key": "dataGrid2",
-            "type": "datagrid",
-            "input": true,
+            "scrollToTop": false,
+            "collapsible": false,
+            "key": "panel1",
+            "conditional": {
+                "show": true,
+                "when": "notApplicable",
+                "eq": "false"
+            },
+            "type": "panel",
+            "label": "Additional Information",
+            "input": false,
+            "tableView": false,
             "components": [{
-                "title": "Additional Information",
-                "breadcrumbClickable": true,
-                "buttonSettings": {
-                    "previous": true,
-                    "cancel": true,
-                    "next": true
-                },
-                "scrollToTop": false,
-                "collapsible": false,
-                "key": "panel1",
-                "type": "panel",
-                "label": "Panel",
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "General Liability   ",
+                        "tableView": false,
+                        "key": "generalLiability1",
+                        "type": "checkbox",
+                        "input": true,
+                        "defaultValue": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Auto Liability",
+                        "tableView": false,
+                        "key": "autoLiability1",
+                        "type": "checkbox",
+                        "input": true,
+                        "defaultValue": false
+                    }],
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4,
+                    "width": 4
+                }, {
+                    "components": [],
+                    "size": "md",
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 4
+                }],
+                "key": "columns68",
+                "type": "columns",
                 "input": false,
-                "tableView": false,
-                "components": [{
-                    "label": "Columns",
-                    "columns": [{
-                        "components": [{
-                            "label": "General Liability   ",
-                            "tableView": false,
-                            "key": "generalLiability1",
-                            "type": "checkbox",
-                            "input": true,
-                            "defaultValue": false
-                        }],
-                        "width": 4,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 4
-                    }, {
-                        "components": [{
-                            "label": "Auto Liability",
-                            "tableView": false,
-                            "key": "autoLiability1",
-                            "type": "checkbox",
-                            "input": true,
-                            "defaultValue": false
-                        }],
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 4,
-                        "width": 4
-                    }, {
-                        "components": [],
-                        "size": "md",
-                        "width": 4,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "currentWidth": 4
+                "tableView": false
+            }, {
+                "label": "HTML",
+                "attrs": [{
+                    "attr": "",
+                    "value": ""
+                }],
+                "content": "Additional Insured",
+                "refreshOnChange": false,
+                "customClass": "BOLD",
+                "key": "html19",
+                "type": "htmlelement",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Landlord",
+                        "tableView": false,
+                        "key": "landlord",
+                        "type": "checkbox",
+                        "input": true,
+                        "defaultValue": false
                     }],
-                    "key": "columns68",
-                    "type": "columns",
-                    "input": false,
-                    "tableView": false
+                    "width": 2,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 2
                 }, {
-                    "label": "HTML",
-                    "attrs": [{
-                        "attr": "",
-                        "value": ""
+                    "components": [{
+                        "label": "Loss Payee",
+                        "tableView": false,
+                        "key": "lossPayee",
+                        "type": "checkbox",
+                        "input": true,
+                        "defaultValue": false
                     }],
-                    "content": "Additional Insured",
-                    "refreshOnChange": false,
-                    "customClass": "BOLD",
-                    "key": "html19",
-                    "type": "htmlelement",
-                    "input": false,
-                    "tableView": false
+                    "width": 2,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 2
                 }, {
-                    "label": "Columns",
-                    "columns": [{
-                        "components": [{
-                            "label": "Landlord",
-                            "tableView": false,
-                            "key": "landlord",
-                            "type": "checkbox",
-                            "input": true,
-                            "defaultValue": false
-                        }],
-                        "width": 2,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 2
-                    }, {
-                        "components": [{
-                            "label": "Loss Payee",
-                            "tableView": false,
-                            "key": "lossPayee",
-                            "type": "checkbox",
-                            "input": true,
-                            "defaultValue": false
-                        }],
-                        "width": 2,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 2
-                    }, {
-                        "components": [{
-                            "label": "Waiver of Subrogation",
-                            "tableView": false,
-                            "key": "waiverOfSubrogation",
-                            "type": "checkbox",
-                            "input": true,
-                            "defaultValue": false
-                        }],
-                        "size": "md",
-                        "width": 3,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "currentWidth": 3
-                    }, {
-                        "components": [{
-                            "label": "Primary/Non-contributory Wording",
-                            "tableView": false,
-                            "key": "primaryNonContributoryWording",
-                            "type": "checkbox",
-                            "input": true,
-                            "defaultValue": false
-                        }],
-                        "size": "md",
-                        "width": 3,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "currentWidth": 3
-                    }, {
-                        "components": [{
-                            "label": "Other",
-                            "tableView": true,
-                            "key": "other3",
-                            "type": "textfield",
-                            "input": true
-                        }],
-                        "size": "md",
-                        "width": 2,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "currentWidth": 2
+                    "components": [{
+                        "label": "Waiver of Subrogation",
+                        "tableView": false,
+                        "key": "waiverOfSubrogation",
+                        "type": "checkbox",
+                        "input": true,
+                        "defaultValue": false
                     }],
-                    "key": "columns67",
-                    "type": "columns",
-                    "input": false,
-                    "tableView": false
+                    "size": "md",
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 3
                 }, {
-                    "label": "Columns",
-                    "columns": [{
-                        "components": [{
-                            "label": "Location #",
-                            "mask": false,
-                            "spellcheck": true,
-                            "tableView": false,
-                            "delimiter": false,
-                            "requireDecimal": false,
-                            "inputFormat": "plain",
-                            "key": "location",
-                            "type": "number",
-                            "input": true
-                        }],
-                        "width": 3,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 3
-                    }, {
-                        "components": [{
-                            "label": "Name",
-                            "tableView": true,
-                            "key": "name",
-                            "type": "textfield",
-                            "input": true
-                        }],
-                        "width": 3,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 3
-                    }, {
-                        "components": [{
-                            "label": "City",
-                            "tableView": true,
-                            "key": "city1",
-                            "type": "textfield",
-                            "input": true
-                        }],
-                        "size": "md",
-                        "width": 3,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "currentWidth": 3
-                    }, {
-                        "components": [{
-                            "label": "State",
-                            "widget": "choicesjs",
-                            "tableView": true,
-                            "dataSrc": "custom",
-                            "data": {
-                                "custom": "values = data.stateListJson;"
-                            },
-                            "template": "<span>{{ item.name }}</span>",
-                            "selectThreshold": 0.3,
-                            "validate": {
-                                "onlyAvailableItems": false
-                            },
-                            "key": "state1",
-                            "type": "select",
-                            "indexeddb": {
-                                "filter": {}
-                            },
-                            "input": true
-                        }],
-                        "size": "md",
-                        "width": 3,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "currentWidth": 3
+                    "components": [{
+                        "label": "Primary/Non-contributory Wording",
+                        "tableView": false,
+                        "key": "primaryNonContributoryWording",
+                        "type": "checkbox",
+                        "input": true,
+                        "defaultValue": false
                     }],
-                    "key": "columns69",
-                    "type": "columns",
-                    "input": false,
-                    "tableView": false
+                    "size": "md",
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 3
                 }, {
-                    "label": "Columns",
-                    "columns": [{
+                    "components": [{
+                        "label": "Other",
+                        "tableView": true,
+                        "key": "other3",
+                        "type": "textfield",
+                        "input": true
+                    }],
+                    "size": "md",
+                    "width": 2,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 2
+                }],
+                "key": "columns67",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Location #",
+                        "mask": false,
+                        "spellcheck": true,
+                        "tableView": false,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "key": "location",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
+                        "type": "number",
+                        "input": true
+                    }],
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "Name",
+                        "tableView": true,
+                        "key": "name",
+                        "type": "textfield",
+                        "input": true
+                    }],
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "City",
+                        "tableView": true,
+                        "key": "city1",
+                        "type": "textfield",
+                        "input": true
+                    }],
+                    "size": "md",
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "State",
+                        "widget": "choicesjs",
+                        "tableView": true,
+                        "dataSrc": "custom",
+                        "data": {
+                            "custom": "values = data.stateListJson;"
+                        },
+                        "template": "<span>{{ item.name }}</span>",
+                        "selectThreshold": 0.3,
+                        "validate": {
+                            "onlyAvailableItems": false
+                        },
+                        "key": "state1",
+                        "type": "select",
+                        "indexeddb": {
+                            "filter": {}
+                        },
+                        "input": true
+                    }],
+                    "size": "md",
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 3
+                }],
+                "key": "columns69",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Address 1",
+                        "tableView": false,
+                        "provider": "nominatim",
+                        "key": "address1",
+                        "type": "address",
+                        "providerOptions": {
+                            "params": {
+                                "autocompleteOptions": {}
+                            }
+                        },
+                        "input": true,
                         "components": [{
                             "label": "Address 1",
                             "tableView": false,
-                            "provider": "nominatim",
                             "key": "address1",
-                            "type": "address",
-                            "providerOptions": {
-                                "params": {
-                                    "autocompleteOptions": {}
-                                }
-                            },
+                            "type": "textfield",
                             "input": true,
-                            "components": [{
-                                "label": "Address 1",
-                                "tableView": false,
-                                "key": "address1",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "Address 2",
-                                "tableView": false,
-                                "key": "address2",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "City",
-                                "tableView": false,
-                                "key": "city",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "State",
-                                "tableView": false,
-                                "key": "state",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "Country",
-                                "tableView": false,
-                                "key": "country",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "Zip Code",
-                                "tableView": false,
-                                "key": "zip",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }]
-                        }],
-                        "width": 4,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 4
-                    }, {
-                        "components": [{
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
                             "label": "Address 2",
                             "tableView": false,
-                            "provider": "nominatim",
                             "key": "address2",
-                            "type": "address",
-                            "providerOptions": {
-                                "params": {
-                                    "autocompleteOptions": {}
-                                }
-                            },
+                            "type": "textfield",
                             "input": true,
-                            "components": [{
-                                "label": "Address 1",
-                                "tableView": false,
-                                "key": "address1",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "Address 2",
-                                "tableView": false,
-                                "key": "address2",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "City",
-                                "tableView": false,
-                                "key": "city",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "State",
-                                "tableView": false,
-                                "key": "state",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "Country",
-                                "tableView": false,
-                                "key": "country",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }, {
-                                "label": "Zip Code",
-                                "tableView": false,
-                                "key": "zip",
-                                "type": "textfield",
-                                "input": true,
-                                "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
-                            }]
-                        }],
-                        "width": 4,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "size": "md",
-                        "currentWidth": 4
-                    }, {
-                        "components": [{
-                            "label": "Zip Code",
-                            "mask": false,
-                            "spellcheck": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "City",
                             "tableView": false,
-                            "delimiter": false,
-                            "requireDecimal": false,
-                            "inputFormat": "plain",
-                            "validate": {
-                                "custom": "valid = (input!=null && input !='')?(input.toString().length === 5) ? true : 'ZIP code must be of 5 digit':true;"
-                            },
-                            "key": "zipCode1",
-                            "type": "number",
-                            "input": true
-                        }],
-                        "size": "md",
-                        "width": 4,
-                        "offset": 0,
-                        "push": 0,
-                        "pull": 0,
-                        "currentWidth": 4
+                            "key": "city",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "State",
+                            "tableView": false,
+                            "key": "state",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "Country",
+                            "tableView": false,
+                            "key": "country",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "Zip Code",
+                            "tableView": false,
+                            "key": "zip",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }]
                     }],
-                    "key": "columns70",
-                    "type": "columns",
-                    "input": false,
-                    "tableView": false
-                }]
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Address 2",
+                        "tableView": false,
+                        "provider": "nominatim",
+                        "key": "address2",
+                        "type": "address",
+                        "providerOptions": {
+                            "params": {
+                                "autocompleteOptions": {}
+                            }
+                        },
+                        "input": true,
+                        "components": [{
+                            "label": "Address 1",
+                            "tableView": false,
+                            "key": "address1",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "Address 2",
+                            "tableView": false,
+                            "key": "address2",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "City",
+                            "tableView": false,
+                            "key": "city",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "State",
+                            "tableView": false,
+                            "key": "state",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "Country",
+                            "tableView": false,
+                            "key": "country",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }, {
+                            "label": "Zip Code",
+                            "tableView": false,
+                            "key": "zip",
+                            "type": "textfield",
+                            "input": true,
+                            "customConditional": "show = _.get(instance, 'parent.manualMode', false);"
+                        }]
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Zip Code",
+                        "mask": false,
+                        "spellcheck": true,
+                        "tableView": false,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "validate": {
+                            "custom": "valid = (input!=null && input !='')?(input.toString().length === 5) ? true : 'ZIP code must be of 5 digit':true;"
+                        },
+                        "key": "zipCode1",
+                        "attributes": {
+                            "style": "text-align:right"
+                        },
+                        "type": "number",
+                        "input": true
+                    }],
+                    "size": "md",
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 4
+                }],
+                "key": "columns70",
+                "type": "columns",
+                "input": false,
+                "tableView": false
             }]
         }]
     }, {
@@ -6922,7 +6935,7 @@
         }]
     }],
     "revisions": "current",
-    "_vid": 3,
+    "_vid": 20,
     "title": "AB Excess Liability",
     "display": "wizard",
     "access": [{
@@ -6930,7 +6943,7 @@
         "type": "read_all"
     }],
     "submissionAccess": [],
-    "controller": "",
+    "controller": "var s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function(e) {\n\tvar appendCustomButtonTimer = setInterval(() => {\n\t\tif (\n\t\t\tdocument.getElementById(\n\t\t\t\t\"formio_loader_29f8c4a2-d89c-11eb-b8bc-0242ac130003\"\n\t\t\t)\n\t\t) {\n\t\t\tvar dataGridDeleteIcons =\n\t\t\t\tdocument.getElementsByClassName(\"fa-times-circle-o\");\n\t\t\tdataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n\t\t\tif (dataGridDeleteIcons.length > 0) {\n\t\t\t\tdataGridDeleteIcons.map((item) => {\n\t\t\t\t\titem.classList.add(\"fa-times-circle\");\n\t\t\t\t\titem.classList.remove(\"fa-times-circle-o\");\n\t\t\t\t});\n\t\t\t}\n\t\t} else {\n\t\t\tappendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n\t\t}\n\t}, 1000);\n};\ndocument.head.appendChild(s);",
     "properties": {
         "submission_commands": "[{ \t\"command\": \"fileSave\", \t\"entity_name\": \"Excess Liability\" }]"
     },
@@ -6939,6 +6952,6 @@
     "path": "abexcessliability",
     "project": "5dc1489e4f668513e9535090",
     "created": "2021-06-22T08:23:13.475Z",
-    "modified": "2021-06-29T08:40:32.390Z",
+    "modified": "2021-06-30T17:04:58.473Z",
     "machineName": "eoxproductsupport:abExcessLiability"
 }
