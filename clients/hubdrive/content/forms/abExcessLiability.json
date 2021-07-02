@@ -6945,7 +6945,7 @@
     "submissionAccess": [],
     "controller": "var s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function(e) {\n\tvar appendCustomButtonTimer = setInterval(() => {\n\t\tif (\n\t\t\tdocument.getElementById(\n\t\t\t\t\"formio_loader_29f8c4a2-d89c-11eb-b8bc-0242ac130003\"\n\t\t\t)\n\t\t) {\n\t\t\tvar dataGridDeleteIcons =\n\t\t\t\tdocument.getElementsByClassName(\"fa-times-circle-o\");\n\t\t\tdataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n\t\t\tif (dataGridDeleteIcons.length > 0) {\n\t\t\t\tdataGridDeleteIcons.map((item) => {\n\t\t\t\t\titem.classList.add(\"fa-times-circle\");\n\t\t\t\t\titem.classList.remove(\"fa-times-circle-o\");\n\t\t\t\t});\n\t\t\t}\n\t\t} else {\n\t\t\tappendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n\t\t}\n\t}, 1000);\n};\ndocument.head.appendChild(s);",
     "properties": {
-        "submission_commands": "[{ \t\"command\": \"fileSave\", \t\"entity_name\": \"Excess Liability\" }]"
+        "submission_commands": "[{ \t\"command\": \"fileSave\", \t\"entity_name\": \"Excess Liability\" },{ \t\"command\": \"delegate\", \t\"entity_name\": \"Excess Liability\", \t\"delegate\": \"ComplianceMail\" }]"
     },
     "settings": {},
     "name": "abExcessLiability",
