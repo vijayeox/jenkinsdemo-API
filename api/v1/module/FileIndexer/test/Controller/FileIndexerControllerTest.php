@@ -60,8 +60,8 @@ class FileIndexerControllerTest extends ControllerTest
     {
         //Scenario where both workflow_instance_id and activity_instance_id exists
         $this->initAuthToken($this->adminUser);
-        $data = ['id' => 102];
-        $this->dispatch('/fileindexer', 'POST', $data);
+        $data = ['uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c'];
+        $this->dispatch('/fileindexer/file', 'POST', $data);
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'elastic')->once()->andReturn();
@@ -81,32 +81,33 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '102',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'entity_name' => 'sampleEntity1',
+                'entityName' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
                 'account_id' => '1',
-                'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
+                'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text","date" : "datetext"}',
                 'field3' => 3,
                 'field4' => 4,
+                'date' => '2019-12-19 11:03:08',
             ),
           ))));
         }
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('index');
+        $this->assertMatchedRouteName('indexfile');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], $data['id']);
-        $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
-        $this->assertEquals($content['data']['fields'], '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}');
+        $this->assertEquals($content['data']['id'], 102);
+        $this->assertEquals($content['data']['entityName'], 'sampleEntity1');
+        $this->assertEquals($content['data']['fields'], '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text","date" : "datetext"}');
     }
 
     public function testCreateScenario2()
     {
         //Scenario where workflow_instance_id exists and activity_instance_id does not
         $this->initAuthToken($this->adminUser);
-        $data = ['id' => 101];
-        $this->dispatch('/fileindexer', 'POST', $data);
+        $data = ['uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b'];
+        $this->dispatch('/fileindexer/file', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
             $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/101")->once()->andReturn(array("body" => json_encode(array(
@@ -122,7 +123,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '101',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'entity_name' => 'sampleEntity1',
+                'entityName' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
                 'parent_id' => null,
@@ -139,20 +140,20 @@ class FileIndexerControllerTest extends ControllerTest
         }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('index');
+        $this->assertMatchedRouteName('indexfile');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], $data['id']);
+        $this->assertEquals($content['data']['id'], 101);
         $this->arrayHasKey($content['data']['account_id'], 1);
-        $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
+        $this->assertEquals($content['data']['entityName'], 'sampleEntity1');
     }
 
     public function testCreateScenario3()
     {
         //scenario where both workflow_instance_id and activity_instance_id does not
         $this->initAuthToken($this->adminUser);
-        $data = ['id' => 103];
-        $this->dispatch('/fileindexer', 'POST', $data);
+        $data = ['uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d'];
+        $this->dispatch('/fileindexer/file', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
             $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/103")->once()->andReturn(array("body" => json_encode(array(
@@ -168,7 +169,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '103',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'entity_name' => 'sampleEntity1',
+                'entityName' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
                 'account_id' => '1',
@@ -183,11 +184,11 @@ class FileIndexerControllerTest extends ControllerTest
         }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('index');
+        $this->assertMatchedRouteName('indexfile');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], $data['id']);
-        $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
+        $this->assertEquals($content['data']['id'], 103);
+        $this->assertEquals($content['data']['entityName'], 'sampleEntity1');
         $this->assertEquals($content['data']['field4'], 4);
     }
 
@@ -195,8 +196,8 @@ class FileIndexerControllerTest extends ControllerTest
     {
         //Scenario where file id does not exist
         $this->initAuthToken($this->adminUser);
-        $data = ['id' => 35];
-        $this->dispatch('/fileindexer', 'POST', $data);
+        $data = ['uuid' => '35'];
+        $this->dispatch('/fileindexer/file', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
             $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/35")->once()->andReturn(array("body" => json_encode(array(
@@ -210,12 +211,37 @@ class FileIndexerControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), '/topic/elastic')->once()->andReturn();
         }
-        $this->assertResponseStatusCode(400);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('index');
+        $this->assertMatchedRouteName('indexfile');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Failure to Index File ');
+        $this->assertEquals($content['message'], 'Failure to Index File as incorrect uuid is specified');
+    }
+
+    public function  testCreateWithMissingDate() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145f'];
+        $this->dispatch('/fileindexer/file', 'POST', $data);
+        if (enableElastic==0) {
+            $mockRestClient = $this->getMockRestClientForFileIndexerService();
+            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/35")->once()->andReturn(array("body" => json_encode(array(
+              '_index' => 'sampleapp_index',
+              '_type' => '_doc',
+              '_id' => '35',
+              'found' => false
+          ))));
+        }
+        if (enableActiveMQ == 0) {
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), '/topic/elastic')->once()->andReturn();
+        }
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('indexfile');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Failure to Index File as incorrect uuid is specified');
     }
 
     public function testDelete()
@@ -456,7 +482,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
                 'account_id' => '1',
-                'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}',
+                'fields' => '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text","date" : "datetext"}',
                 'user_id' => null,
                 'workflow_instance_id' => '1',
                 'status' => 'In Progress',
@@ -465,6 +491,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'activities' => '{"Task" : "In Progress","Test Form 2" : "In Progress"}',
                 'field3' => 3,
                 'field4' => 4,
+                'date' => '2019-12-19 11:03:08',
             ),
             ))));
         }
@@ -480,7 +507,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['id'], 102);
         $this->assertEquals($content['data'][0]['field3'], 3);
         $this->assertEquals($content['data'][0]['entity_name'], 'sampleEntity1');
-        $this->assertEquals($content['data'][0]['fields'], '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}');
+        $this->assertEquals($content['data'][0]['fields'], '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text","date" : "datetext"}');
     }
 
     public function testBatchIndexScenario4()
