@@ -344,6 +344,14 @@ label {
   font-size: small;
 }
 
+.osjs-window-breadcrumb {
+  display: flex;
+  line-height: 0;
+  flex-grow: 25;
+  height: auto !important;
+  align-items: baseline;
+}
+
 .PageRender .breadcrumbs-item a {
   font-size: 20px;
   color: $primary;
