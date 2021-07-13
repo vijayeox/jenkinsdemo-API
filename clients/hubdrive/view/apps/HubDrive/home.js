@@ -153,20 +153,6 @@ class Home extends React.Component {
             appId={application_id}
           />
         ) : null}
-        <div id="floater">
-          <img src="./apps/HubDrive/img/poweredby.png"></img>
-          <div className="helpText">
-            <p>
-              Support Email:
-              <a
-                target="_blank"
-                href="mailto:support@eoxvantage.com?subject=HUB AutoDealer App - Help Desk&body=Hi, %0APlease help me with the following query with the new Auto Dealer Application%0A%0A"
-              >
-                support@eoxvantage.com
-              </a>
-            </p>
-          </div>
-        </div>
       </div>
     );
   }
