@@ -3,11 +3,13 @@
     <testsuites>
         <testsuite name="HubDrive Fixtures">
         <directory>test/OnTarcPDFGenerationTest.php</directory>
+        <directory>test/FtniApisTest.php</directory>
         <directory>test/CCandICPDFGenerationTest.php</directory>
         </testsuite>
     </testsuites> 
     <php>
         <ini name="memory_limit" value="1G" />
+        <const name="enableSoapClient" value="0"/>
     </php>
     <listeners>
         <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>
